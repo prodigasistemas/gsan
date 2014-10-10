@@ -994,49 +994,140 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public Collection pesquisarDadosRelacaoImoveisRetornoPorRota(String idLocalidade, String cdSetorComercial, String cdRota)
+	public Collection pesquisarDadosImoveisPorRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
 			throws ErroRepositorioException {
 		
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
 		
 		try {
-			consulta = " SELECT ir.loca_id as idLocalidade, "
-					+ " imre_cdsetorcomercial as codigoSetorComercial, "
-					+ " imre_nnquadra as numQuadra, "
-					+ " i.imov_nnlote as numLote, "
-					+ " i.imov_nnsublote as numSubLote, "
-					+ " ir.imov_id as idImovel, "
-					+ " la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
-					+ " sac.siac_dssituacao as descSituacaoImovelRecadastramento, "
-					+ " l.loca_nmlocalidade as nomeLocalidade, "
-					+ " ir.imac_tipooperacao as tipoOperacao "
-					+ " FROM atualizacaocadastral.imovel_retorno ir "
-					+ " INNER JOIN cadastro.imovel i on ir.imov_id = i.imov_id "
-					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la on ir.last_id = la.last_id "
-					+ " INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac on ir.imov_id = icac.imov_id "
+			String consultaImovelControle = ""
+					+ " SELECT icac.imov_id "
+					+ " FROM atualizacaocadastral.imovel_controle_atlz_cad icac "
+					+ " INNER JOIN cadastro.imovel i ON i.imov_id = icac.imov_id "
+	  	            + " INNER JOIN cadastro.localidade l ON l.loca_id = i.loca_id "
+	  	            + " INNER JOIN cadastro.setor_comercial st ON st.stcm_id = i.stcm_id " 
+	  	            + " INNER JOIN cadastro.quadra q ON q.qdra_id = i.qdra_id " 
+	  	            + " INNER JOIN micromedicao.rota r ON r.rota_id = q.rota_id " 
+	  	            + " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota ";
+			
+			String consultaImoveisForaDoRecadastramento = ""
+					+ " SELECT i.imov_id as idImovel, "
+					+ " 	   i.loca_id as idLocalidade, "
+					+ " 	   l.loca_nmlocalidade as nomeLocalidade, "
+					+ " 	   st.stcm_cdsetorcomercial as codigoSetorComercial, "
+					+ " 	   q.qdra_nnquadra as numQuadra, "
+					+ " 	   i.imov_nnlote as numLote, "
+					+ " 	   i.imov_nnsublote as numSubLote, "
+					+ " 	   la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
+					+ " 	   'NÃO ESTÁ EM RECADASTRAMENTO' as descSituacaoImovelRecadastramento, "
+					+ " 	   0 as tipoOperacao, "
+					+ " 	   0 as idImovelRetorno "
+					+ " FROM cadastro.imovel i "
+					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la ON i.last_id = la.last_id " 
+					+ " INNER JOIN cadastro.localidade l ON i.loca_id = l.loca_id "
+					+ " INNER JOIN cadastro.setor_comercial st ON st.stcm_id = i.stcm_id " 
+					+ " INNER JOIN cadastro.quadra q ON q.qdra_id = i.qdra_id "
+					+ " INNER JOIN micromedicao.rota r ON r.rota_id = q.rota_id " 
+					+ " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
+					+ " AND imov_icexclusao = :indicadorExclusao "
+					+ " AND imov_id NOT IN (" + consultaImovelControle + ")";
+			
+			
+			String consultaImovelControleComRetorno = ""
+					+ " SELECT icac.imov_id "
+					+ " FROM atualizacaocadastral.imovel_controle_atlz_cad icac "
+					+ " INNER JOIN cadastro.imovel i ON i.imov_id = icac.imov_id "
+					+ " INNER JOIN atualizacaocadastral.imovel_retorno ir ON ir.imov_id = icac.imov_id "
+	  	            + " INNER JOIN cadastro.localidade l ON l.loca_id = i.loca_id "
+	  	            + " INNER JOIN cadastro.setor_comercial st ON st.stcm_id = i.stcm_id " 
+	  	            + " INNER JOIN cadastro.quadra q ON q.qdra_id = i.qdra_id " 
+	  	            + " INNER JOIN micromedicao.rota r ON r.rota_id = q.rota_id " 
+	  	            + " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota ";
+			
+			String consultaImoveisRecadastramento = ""
+					+ "SELECT i.imov_id as idImovel, "
+					+ "       i.loca_id as idLocalidade, "
+					+ "       l.loca_nmlocalidade as nomeLocalidade, "
+					+ "       st.stcm_cdsetorcomercial as codigoSetorComercial, "
+					+ "       q.qdra_nnquadra as numQuadra, "
+					+ "       i.imov_nnlote as numLote, "
+					+ "       i.imov_nnsublote as numSubLote, "
+					+ "       la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
+					+ "       sac.siac_dssituacao as descSituacaoImovelRecadastramento, "
+					+ "       0 as tipoOperacao, "
+					+ "       0 as idImovelRetorno "
+					+ " FROM cadastro.imovel i "
+					+ " INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac ON icac.imov_id = i.imov_id "
 					+ " INNER JOIN cadastro.situacao_atlz_cadastral sac on icac.siac_id = sac.siac_id "
-					+ " INNER JOIN micromedicao.rota r on ir.rota_id = r.rota_id "
-					+ " INNER JOIN cadastro.localidade l on ir.loca_id = l.loca_id "
-					+ " WHERE ir.loca_id = :idLocalidade AND ir.imre_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
-					+ " ORDER BY ir.imov_id ";
+					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la ON i.last_id = la.last_id " 
+					+ " INNER JOIN cadastro.localidade l ON i.loca_id = l.loca_id "
+					+ " INNER JOIN cadastro.setor_comercial st ON st.stcm_id = i.stcm_id " 
+					+ " INNER JOIN cadastro.quadra q ON q.qdra_id = i.qdra_id "
+					+ " INNER JOIN micromedicao.rota r ON r.rota_id = q.rota_id " 
+					+ " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
+					+ " AND imov_icexclusao = :indicadorExclusao "
+					+ " AND i.imov_id NOT IN ("+ consultaImovelControleComRetorno + ")";
 
-			retorno = (Collection) session.createSQLQuery(consulta)
+			String consultarImoveisRetorno = ""
+					+ "SELECT ir.imov_id as idImovel, "
+					+ "       ir.loca_id as idLocalidade, "
+					+ "       l.loca_nmlocalidade as nomeLocalidade, "
+					+ "       imre_cdsetorcomercial as codigoSetorComercial, "
+					+ "       imre_nnquadra as numQuadra, "
+					+ "       i.imov_nnlote as numLote, "
+					+ "       i.imov_nnsublote as numSubLote, "
+					+ "       la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
+					+ "       sac.siac_dssituacao as descSituacaoImovelRecadastramento, "
+					+ "       ir.imac_tipooperacao as tipoOperacao, "
+					+ "       ir.imre_id as idImovelRetorno "
+					+ " FROM atualizacaocadastral.imovel_retorno ir " 
+					+ " INNER JOIN cadastro.imovel i on i.imov_id = ir.imov_id "
+					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la on la.last_id = ir.last_id "
+					+ " INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac on icac.imov_id = ir.imov_id "
+					+ " INNER JOIN cadastro.situacao_atlz_cadastral sac on sac.siac_id = icac.siac_id "
+					+ " INNER JOIN micromedicao.rota r on r.rota_id = ir.rota_id "
+					+ " INNER JOIN cadastro.localidade l on l.loca_id = ir.loca_id "
+					+ " WHERE ir.loca_id = :idLocalidade AND ir.imre_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota ";
+			
+			String consultaPrincipal = ""
+					+ " SELECT idImovel, "
+					+ "        idLocalidade, "
+					+ "        nomeLocalidade, "
+					+ "        codigoSetorComercial, "
+					+ "        numQuadra, "
+					+ "        numLote, "
+					+ "        numSubLote, "
+					+ "        descSituacaoLigacaoAgua, "
+					+ "        descSituacaoImovelRecadastramento, "
+					+ "        tipoOperacao, "
+					+ "        idImovelRetorno "
+					+ " FROM ("
+					+ consultaImoveisForaDoRecadastramento
+					+ " UNION "
+					+ consultaImoveisRecadastramento
+					+ " UNION "
+					+ consultarImoveisRetorno
+					+ ") as imoveis "
+					+ " ORDER BY idLocalidade, codigoSetorComercial, numQuadra, numLote, numSubLote";
+			
+			retorno = (Collection) session.createSQLQuery(consultaPrincipal)
+					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
 					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
 					.addScalar("numQuadra", Hibernate.INTEGER)
 					.addScalar("numLote", Hibernate.INTEGER)
 					.addScalar("numSubLote", Hibernate.INTEGER)
-					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("descSituacaoLigacaoAgua", Hibernate.STRING)
 					.addScalar("descSituacaoImovelRecadastramento", Hibernate.STRING)
-					.addScalar("nomeLocalidade", Hibernate.STRING)
 					.addScalar("tipoOperacao", Hibernate.INTEGER)
+					.addScalar("idImovelRetorno", Hibernate.INTEGER)
 					.setInteger("idLocalidade", Integer.parseInt(idLocalidade))
 					.setInteger("cdSetorComercial", Integer.parseInt(cdSetorComercial))
 					.setInteger("cdRota", Integer.parseInt(cdRota))
+					.setShort("indicadorExclusao", ConstantesSistema.NAO)
 					.list();
 
 		} catch (HibernateException e) {
@@ -1048,58 +1139,26 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public Collection pesquisarDadosRelacaoImoveisPorRota(String idLocalidade, String cdSetorComercial, String cdRota)
-			throws ErroRepositorioException {
-		
-		Collection retorno = null;
-
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelSubcategoriaRetorno> pesquisarSubcategoriasImovelRetorno(Integer idImovelRetorno) throws ErroRepositorioException { 
+		Collection<ImovelSubcategoriaRetorno> retorno = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
 		
+		String consulta = null;
 		try {
-			consulta = "SELECT i.loca_id as idLocalidade, "
-					+ " st.stcm_cdsetorcomercial as codigoSetorComercial, "
-					+ " q.qdra_nnquadra as numQuadra, "
-					+ " i.imov_nnlote as numLote, "
-					+ " i.imov_nnsublote as numSubLote, "
-					+ " i.imov_id as idImovel, "
-					+ " la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
-					+ " 'NÃO ESTÁ EM RECADASTRAMENTO' as descSituacaoImovelRecadastramento, "
-					+ " l.loca_nmlocalidade as nomeLocalidade "
-					+ " FROM cadastro.imovel i "
-					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la on i.last_id = la.last_id "
-					+ " INNER JOIN cadastro.localidade l on i.loca_id = l.loca_id "
-					+ " INNER JOIN cadastro.setor_comercial st on st.stcm_id = i.stcm_id "
-					+ " INNER JOIN cadastro.quadra q on q.qdra_id = i.qdra_id "
-					+ " INNER JOIN micromedicao.rota r on r.rota_id = q.rota_id "
-					+ " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
-					+ " AND imov_icexclusao = 2 "
-					+ " AND imov_id NOT IN (SELECT imov_id FROM atualizacaocadastral.imovel_retorno ir "
-					+ " 					INNER JOIN micromedicao.rota r on ir.rota_id = r.rota_id "
-					+ " 					WHERE ir.loca_id = :idLocalidade AND ir.imre_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota) "
-					+ " ORDER BY i.imov_id";
-
-			retorno = (Collection) session.createSQLQuery(consulta)
-					.addScalar("idLocalidade", Hibernate.INTEGER)
-					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
-					.addScalar("numQuadra", Hibernate.INTEGER)
-					.addScalar("numLote", Hibernate.INTEGER)
-					.addScalar("numSubLote", Hibernate.INTEGER)
-					.addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("descSituacaoLigacaoAgua", Hibernate.STRING)
-					.addScalar("descSituacaoImovelRecadastramento", Hibernate.STRING)
-					.addScalar("nomeLocalidade", Hibernate.STRING)
-					.setInteger("idLocalidade", Integer.parseInt(idLocalidade))
-					.setInteger("cdSetorComercial", Integer.parseInt(cdSetorComercial))
-					.setInteger("cdRota", Integer.parseInt(cdRota))
-					.list();
-
+			
+			consulta = "from ImovelSubcategoriaRetorno imovelSubcategoria "
+					+ " inner join fetch imovelSubcategoria.subcategoria subcategoria "
+					+ " inner join fetch subcategoria.categoria categoria "
+					+ " where imovelSubcategoria.idImovelRetorno = :idImovelRetorno " ;
+			
+			retorno = (Collection<ImovelSubcategoriaRetorno>) session.createQuery(consulta).setInteger("idImovelRetorno", idImovelRetorno).list();
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel subcategoria.");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-
+		
 		return retorno;
 	}
 }

@@ -433,7 +433,6 @@ import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioAcompanhamentoBolet
 import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioOSSituacaoHelper;
 import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
 import gcom.gui.relatorio.cadastro.GerarRelatorioAlteracoesCpfCnpjHelper;
-import gcom.gui.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaActionForm;
 import gcom.gui.relatorio.cadastro.micromedicao.FiltrarRelatorioColetaMedidorEnergiaHelper;
 import gcom.gui.relatorio.cobranca.FiltroRelatorioDocumentosAReceberHelper;
 import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTextoHelper;
@@ -655,7 +654,6 @@ import javax.mail.SendFailedException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.struts.action.ActionForm;
 
 public class Fachada {
 
@@ -44116,9 +44114,9 @@ public class Fachada {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosRelatorioRelacaoImoveisRota(String idLocalidade, String cdSetorComercial, String cdRota) {
+	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota) {
 		try {
-			return this.getControladorAtualizacaoCadastral().pesquisarDadosRelatorioRelacaoImoveisRota(idLocalidade, cdSetorComercial, cdRota);
+			return this.getControladorAtualizacaoCadastral().pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(idLocalidade, cdSetorComercial, cdRota);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
