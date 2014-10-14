@@ -275,9 +275,7 @@ public interface IControladorCadastro {
 	public Collection pesquisarLocalidades() throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
-			String idEmpresa, String idLocalidade, String idAgenteComercial,
-			String idSituacaoTransmissao) throws ControladorException;
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ControladorException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ControladorException;

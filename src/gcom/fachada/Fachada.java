@@ -31136,10 +31136,11 @@ public class Fachada {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String idAgenteComercial, String idSituacaoTransmissao) {
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, 
+			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) {
 		try {
-			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, idAgenteComercial, idSituacaoTransmissao);
+			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade,
+					codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
