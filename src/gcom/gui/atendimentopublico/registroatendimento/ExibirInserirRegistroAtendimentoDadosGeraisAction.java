@@ -164,8 +164,6 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends GcomActio
 			filtroSolicitacaoTipoEspecificacao.setConsultaSemLimites(true);
 			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
 					ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO_INDICADOR_USO,
-					ConstantesSistema.INDICADOR_USO_ATIVO));
 
 			Collection colecaoSolicitacaoTipoEspecificacao = fachada.pesquisar(filtroSolicitacaoTipoEspecificacao,
 					SolicitacaoTipoEspecificacao.class.getName());
