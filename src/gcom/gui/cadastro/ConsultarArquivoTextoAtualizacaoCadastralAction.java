@@ -37,11 +37,9 @@ public class ConsultarArquivoTextoAtualizacaoCadastralAction extends GcomAction 
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
 		
 		String empresaID = form.getIdEmpresa();
-		
 		String idLocalidade = form.getIdLocalidade();
-
+		String codigoSetorComercial = form.getCodigoSetorComercial();
 		String idSituacaoTransmissao = form.getIdSituacaoTransmissao();
-
 		String leiturista = form.getLeituristaID();
 
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
@@ -54,7 +52,8 @@ public class ConsultarArquivoTextoAtualizacaoCadastralAction extends GcomAction 
 			sessao.setAttribute("permissao", "2");
 		}
 
-		Collection colecaoArquivoTextoAtualizacaoCadastral = fachada.pesquisarArquivoTextoAtualizacaoCadastro(empresaID, idLocalidade, leiturista, idSituacaoTransmissao);
+		Collection colecaoArquivoTextoAtualizacaoCadastral = fachada.pesquisarArquivoTextoAtualizacaoCadastro(
+				empresaID, idLocalidade, codigoSetorComercial, leiturista, idSituacaoTransmissao);
 		
 		if (colecaoArquivoTextoAtualizacaoCadastral == null || colecaoArquivoTextoAtualizacaoCadastral.isEmpty()) {
 			throw new ActionServletException(

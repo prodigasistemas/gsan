@@ -77,12 +77,27 @@
 	  		form.nomeLocalidade.value = descricaoRegistro;     		
 	  		form.nomeLocalidade.style.color = "#000000";  		
 		}
+		
+		if (tipoConsulta == 'setorComercial') {
+      		
+      		form.codigoSetorComercial.value = codigoRegistro;
+	  		form.nomeSetorComercial.value = descricaoRegistro;     		
+	  		form.nomeSetorComercial.style.color = "#000000";  		
+		}
 	}	
 	
-	function limparBorracha(){
+	function limparLocalidade(){
 		var form = document.forms[0];
 		form.idLocalidade.value = "";
 		form.nomeLocalidade.value = "";
+		
+		limparSetorComercial();
+	}
+	
+	function limparSetorComercial(){
+		var form = document.forms[0];
+		form.codigoSetorComercial.value = "";
+		form.nomeSetorComercial.value = "";
 	}	
 	
     function facilitador(objeto){
@@ -240,7 +255,7 @@
 					<td width="150"><strong>Localidade:</strong></td>
 					<td>
 						<html:text tabindex="8" maxlength="3" property="idLocalidade" size="5"
-							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=1', 'idLocalidade');"
+							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=1', 'idLocalidade'); limparSetorComercial();"
 							 />
 						<a href="javascript:chamarPopup('exibirPesquisarLocalidadeAction.do', 'origem', null, null, 275, 480, '',document.forms[0].idLocalidade);" id="btPesqLocalidadeInicial">
 							<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"
@@ -248,7 +263,7 @@
 						<logic:present name="corLocalidadeOrigem">
 							<logic:equal name="corLocalidadeOrigem" value="exception">
 								<html:text property="nomeLocalidade" size="30" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #000000" />
+									style="background-color:#EFEFEF; border:0; color: #FF0000" />
 							</logic:equal>
 	
 							<logic:notEqual name="corLocalidadeOrigem" value="exception">
@@ -270,7 +285,48 @@
 							</logic:notEmpty>
 						</logic:notPresent>
 						
-						<a href="javascript:limparBorracha();">
+						<a href="javascript:limparLocalidade();">
+							<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+								border="0" title="Apagar" />
+						</a>
+					</td>
+				</tr>
+				
+				<tr>
+					<td width="150"><strong>Setor Comercial:</strong></td>
+					<td>
+						<html:text tabindex="8" maxlength="3" property="codigoSetorComercial" size="5"
+							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=2', 'codigoSetorComercial');"
+							 />
+						<a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'origem', null, null, 275, 480, '',document.forms[0].codigoSetorComercial);" id="btPesqSetorComercialInicial">
+							<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+							title="Pesquisar" /></a>
+						<logic:present name="corSetorComercialOrigem">
+							<logic:equal name="corSetorComercialOrigem" value="exception">
+								<html:text property="nomeSetorComercial" size="30" readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #FF0000" />
+							</logic:equal>
+	
+							<logic:notEqual name="corSetorComercialOrigem" value="exception">
+								<html:text property="nomeSetorComercial" size="30" readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #000000" />
+							</logic:notEqual>
+						</logic:present>						
+						<logic:notPresent name="corSetorComercialOrigem">
+							<logic:empty name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+								property="codigoSetorComercial">
+								<html:text property="nomeSetorComercial" value="" size="30" readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #000000" />
+							</logic:empty>
+
+							<logic:notEmpty name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+								property="codigoSetorComercial">
+								<html:text property="nomeSetorComercial" size="30" readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #000000" />
+							</logic:notEmpty>
+						</logic:notPresent>
+						
+						<a href="javascript:limparSetorComercial();">
 							<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
 								border="0" title="Apagar" />
 						</a>

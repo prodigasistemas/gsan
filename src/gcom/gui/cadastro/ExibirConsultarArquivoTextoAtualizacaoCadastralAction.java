@@ -3,7 +3,9 @@ package gcom.gui.cadastro;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.localidade.FiltroLocalidade;
+import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.SetorComercial;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -44,21 +46,22 @@ public class ExibirConsultarArquivoTextoAtualizacaoCadastralAction extends GcomA
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
 
 		String objetoConsulta = (String) httpServletRequest.getParameter("objetoConsulta");
-		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("")) {
-			pesquisarLocalidade(form, fachada, httpServletRequest);			
+		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("") && (objetoConsulta.trim().equals("1"))) {
+			pesquisarLocalidade(form, httpServletRequest);			
 		}
 		
-
+		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("") && (objetoConsulta.trim().equals("2"))) {
+			pesquisarSetorComercial(form, httpServletRequest);			
+		}
+		
 		FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
 		filtroEmpresa.setCampoOrderBy(FiltroEmpresa.DESCRICAO);
-		Collection colecaoEmpresa = fachada.pesquisar(filtroEmpresa,
-				Empresa.class.getName());
+		Collection colecaoEmpresa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
 		
 		if (colecaoEmpresa != null && !colecaoEmpresa.isEmpty()) {
 			sessao.setAttribute("colecaoEmpresa", colecaoEmpresa);
 		} else {
-			throw new ActionServletException("atencao.naocadastrado", null,
-			"Empresa");
+			throw new ActionServletException("atencao.naocadastrado", null, "Empresa");
 		}
 		
 		sessao.removeAttribute("permissao");
@@ -75,8 +78,7 @@ public class ExibirConsultarArquivoTextoAtualizacaoCadastralAction extends GcomA
 		
 		Collection colecaoLeiturista = new ArrayList();
 		
-		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1")
-				&& !form.getIdEmpresa().equals("")) {
+		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
 			
 			FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.ID);
 			filtroLeiturista.adicionarParametro(new ParametroSimples(
@@ -117,37 +119,50 @@ public class ExibirConsultarArquivoTextoAtualizacaoCadastralAction extends GcomA
 
 	}
 	
-	private void pesquisarLocalidade(
-			ConsultarArquivoTextoAtualizacaoCadastralActionForm form,
-			Fachada fachada,
-			HttpServletRequest httpServletRequest) {
-
-		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-
-		String localidadeID = (String) form.getIdLocalidade();		
-		filtroLocalidade.adicionarParametro(new ParametroSimples(
-				FiltroLocalidade.ID, localidadeID));
-		filtroLocalidade.adicionarParametro(new ParametroSimples(
-				FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+	private void pesquisarLocalidade(ConsultarArquivoTextoAtualizacaoCadastralActionForm form, HttpServletRequest request) {
+		FiltroLocalidade filtro = new FiltroLocalidade();
+		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, (String) form.getIdLocalidade()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 		
-		Collection colecaoPesquisa = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtro, Localidade.class.getName());
 		
-		if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+		if (pesquisa == null || pesquisa.isEmpty()) {
 			form.setIdLocalidade("");
 			form.setNomeLocalidade("Localidade inexistente");
 			
-			httpServletRequest.setAttribute("corLocalidadeOrigem", "exception");
-			httpServletRequest.setAttribute("nomeCampo","localidadeInicial");
+			request.setAttribute("corLocalidadeOrigem", "exception");
+			request.setAttribute("nomeCampo","localidadeInicial");
 			
 		} else {
-			Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(colecaoPesquisa);
+			Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(pesquisa);
 			form.setIdLocalidade(String.valueOf(objetoLocalidade.getId()));
 			form.setNomeLocalidade(objetoLocalidade.getDescricao());
 			
-			httpServletRequest.setAttribute("corLocalidadeOrigem", "valor");
-			httpServletRequest.setAttribute("nomeCampo","codigoSetorComercialInicial");
+			request.setAttribute("corLocalidadeOrigem", "valor");
+			request.setAttribute("nomeCampo","nomeLocalidadeInicial");
+		}
+	}
+	
+	private void pesquisarSetorComercial(ConsultarArquivoTextoAtualizacaoCadastralActionForm form, HttpServletRequest request) {
+		FiltroSetorComercial filtro = new FiltroSetorComercial();
+		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCodigoSetorComercial()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.LOCALIDADE, form.getIdLocalidade()));
+		
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtro, SetorComercial.class.getName());
+		
+		if (pesquisa == null || pesquisa.isEmpty()) {
+			form.setCodigoSetorComercial("");
+			form.setNomeSetorComercial("Setor inexistente");
 			
-			httpServletRequest.setAttribute("corLocalidadeDestino", "valor");
+			request.setAttribute("corSetorComercialOrigem", "exception");
+			request.setAttribute("nomeCampo","nomeSetorComercialInicial");
+		} else {
+			SetorComercial objetoSetorComercial = (SetorComercial) Util.retonarObjetoDeColecao(pesquisa);
+			form.setCodigoSetorComercial(String.valueOf(objetoSetorComercial.getCodigo()));
+			form.setNomeSetorComercial(objetoSetorComercial.getDescricao());
+			
+			request.setAttribute("corSetorComercialOrigem", "valor");
+			request.setAttribute("nomeCampo","nomeSetorComercialInicial");
 		}
 	}
 }
