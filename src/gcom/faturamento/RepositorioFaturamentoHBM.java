@@ -89,8 +89,11 @@ import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
+import gcom.relatorio.faturamento.DataLeituraAnteriorHelper;
+import gcom.relatorio.faturamento.DataLeituraPrevistaHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
+import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
@@ -61097,6 +61100,184 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT cronograma_mensal.ftgr_id as idGrupo, to_date(atividade.ftac_dtprevista, 'YYYY-MM-DD') dataPrevista "
+					+ " FROM faturamento.fatur_ativ_cronograma atividade, "
+					+ " faturamento.fatur_grupo_crg_mensal cronograma_mensal, "
+					+ " faturamento.faturamento_grupo grupo "
+					+ " WHERE atividade.ftcm_id = cronograma_mensal.ftcm_id "
+					+ " and cronograma_mensal.ftgr_id = grupo.ftgr_id "
+					+ " and atividade.ftat_id = 2 "
+					+ " and cronograma_mensal.ftcm_amreferencia = :anoMesReferencia "
+					+ " and grupo.ftgr_icuso = 1 ";
+					
+			if(idGrupo != null) {
+				consulta += "and grupo.ftgr_id in (:idGrupo)";
+
+				retorno = (Collection) session.createSQLQuery(consulta)
+						.addScalar("idGrupo", Hibernate.INTEGER)
+						.addScalar("dataPrevista", Hibernate.DATE)
+						.setInteger("anoMesReferencia", anoMesReferencia)
+						.setInteger("idGrupo", idGrupo)
+						.list();
+			} else {
+				retorno = (Collection) session.createSQLQuery(consulta)
+						.addScalar("idGrupo", Hibernate.INTEGER)
+						.addScalar("dataPrevista", Hibernate.DATE)
+						.setInteger("anoMesReferencia", anoMesReferencia)
+						.list();
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT cronograma_mensal.ftgr_id as idGrupo, to_date(atividade.ftac_dtprevista, 'YYYY-MM-DD') as dataAnterior "
+					+ " FROM faturamento.fatur_ativ_cronograma atividade, "
+					+ " faturamento.fatur_grupo_crg_mensal cronograma_mensal, "
+					+ " faturamento.faturamento_grupo grupo "
+					+ " WHERE atividade.ftcm_id = cronograma_mensal.ftcm_id "
+					+ " and cronograma_mensal.ftgr_id = grupo.ftgr_id "
+					+ " and atividade.ftat_id = 2 "
+					+ " and cronograma_mensal.ftcm_amreferencia = :anoMesReferencia "
+					+ " and grupo.ftgr_icuso = 1 ";
+				
+			if (idGrupo != null) {
+				consulta += "and grupo.ftgr_id in (:idGrupo)";
+
+				retorno = (Collection) session.createSQLQuery(consulta)
+						.addScalar("idGrupo", Hibernate.INTEGER)
+						.addScalar("dataAnterior", Hibernate.DATE)
+						.setInteger("anoMesReferencia", Util.subtrairMesDoAnoMes(anoMesReferencia, 1))
+						.setInteger("idGrupo", idGrupo)
+						.list();
+			} else {
+				retorno = (Collection) session.createSQLQuery(consulta)
+						.addScalar("idGrupo", Hibernate.INTEGER)
+						.addScalar("dataAnterior", Hibernate.DATE)
+						.setInteger("anoMesReferencia", Util.subtrairMesDoAnoMes(anoMesReferencia, 1))
+						.list();
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT ftgr_id as idGrupo, sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
+				+ " (SELECT ftgr_id, sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
+				+ " FROM faturamento.conta as conta, "
+				+ " cadastro.cliente_imovel cliente_imovel, " 
+				+ " cadastro.cliente cliente "
+				+ " WHERE cnta_amreferenciaconta = :anoMesReferencia "
+				+ " and dcst_idatual in (0, 1, 2, 5) "
+				+ " and conta.imov_id = cliente_imovel.imov_id " 
+				+ " and cliente.clie_id = cliente_imovel.clie_id "
+				+ " and cliente_imovel.crtp_id = 2 " 
+				+ " and cliente_imovel.clim_dtrelacaofim is null "
+				+ " group by conta.ftgr_id "
+				+ " UNION  "
+				+ " SELECT ftgr_id, sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
+				+ " FROM faturamento.conta_historico as conta_historico, "
+				+ " cadastro.cliente_imovel cliente_imovel, "
+				+ " cadastro.cliente cliente "
+				+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia "
+				+ " and dcst_idatual in (0, 1, 2, 5) "
+				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
+				+ " and cliente.clie_id = cliente_imovel.clie_id "
+				+ " and cliente_imovel.crtp_id = 2 "
+				+ " and cliente_imovel.clim_dtrelacaofim is null "
+				+ " group by conta_historico.ftgr_id) as conta "
+				+ " group by ftgr_id "
+				+ " order by ftgr_id ";
+
+			retorno = (Collection) session.createSQLQuery(consulta)
+				.addScalar("idGrupo", Hibernate.INTEGER)
+				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
+				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+				.setInteger("anoMesReferencia", anoMesReferencia)
+				.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT valorAgua as valorAgua, valorEsgoto as valorEsgoto, "
+					+ " imovel as imovel, nomeCliente as nomeCliente from( "
+					+ " SELECT conta.imov_id as imovel, cliente.clie_nmcliente as nomeCliente, cnta_vlagua as valorAgua, "
+					+ " cnta_vlesgoto as valorEsgoto "
+					+ " FROM faturamento.conta as conta, "
+					+ " cadastro.cliente_imovel cliente_imovel, "
+					+ " cadastro.cliente cliente "
+					+ " WHERE cnta_amreferenciaconta = :anoMesReferencia " 
+					+ " and dcst_idatual in (0, 1, 2, 5) "
+					+ " and ftgr_id = :idGrupo "
+					+ " and conta.imov_id = cliente_imovel.imov_id "
+					+ " and cliente.clie_id = cliente_imovel.clie_id "
+					+ " and cliente_imovel.crtp_id = 2 "
+					+ " and cliente_imovel.clim_dtrelacaofim is null "
+					+ " UNION  "
+					+ " SELECT  conta_historico.imov_id as imovel, cliente.clie_nmcliente as nomeCliente, cnhi_vlagua as valorAgua, "
+					+ " cnhi_vlesgoto as valorEsgoto "
+					+ " FROM faturamento.conta_historico as conta_historico, "
+					+ " cadastro.cliente_imovel cliente_imovel, "
+					+ " cadastro.cliente cliente "
+					+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia  "
+					+ " and dcst_idatual in (0, 1, 2, 5) "
+					+ " and ftgr_id = :idGrupo "
+					+ " and conta_historico.imov_id = cliente_imovel.imov_id "
+					+ " and cliente.clie_id = cliente_imovel.clie_id "
+					+ " and cliente_imovel.crtp_id = 2 "
+					+ " and cliente_imovel.clim_dtrelacaofim is null "
+					+ " ) as conta ";
+				
+				retorno = (Collection) session.createSQLQuery(consulta)
+						.addScalar("imovel", Hibernate.INTEGER)
+						.addScalar("nomeCliente", Hibernate.STRING)
+						.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
+						.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+						.setInteger("anoMesReferencia", anoMesReferencia)
+						.setInteger("idGrupo", idGrupo)
+						.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
 }
