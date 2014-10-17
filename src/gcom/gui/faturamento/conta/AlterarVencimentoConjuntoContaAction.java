@@ -21,8 +21,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 
 public class AlterarVencimentoConjuntoContaAction extends GcomAction {
 
@@ -124,12 +122,6 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
     			codigoCliente = new Integer( (String) sessao.getAttribute("codigoCliente"));                
     		}            
             
-    		// -------------------------------------------------------------------------------------------
-			// Alterado por :  Hugo Leonardo - data : 19/08/2010 
-			// Analista :  Aryed Lins.
-        	// [FS0007] - Validar data de vencimento.		
-			// -------------------------------------------------------------------------------------------
-    		
     		Date dataCorrente = new Date();	
     		
     		Integer diasAdicionais = 0;
@@ -148,30 +140,19 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
 				throw new ActionServletException("atencao.necessario_permissao_especial_para_data_vencimento_posterior_permitido");
 			}
 			
-	      // if(!temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao){
-		  //				
-	      // 	if(sistemaParametro.getIndicadorCalculaVencimento() == 1){
-		  //		Date dataUltimoDiaMes = Util.obterUltimaDataMes(Util.getMes(dataCorrente), Util.getAno(dataCorrente));
-		  //		        	
-		  //		if(Util.compararData(dataVencimentoConta, dataUltimoDiaMes) == 1){
-		  //			dataVencimentoConta = dataUltimoDiaMes;
-		  //		}	
-		  //	}
-		  // }
-		  // -------------------------------------------------------------------------------------------
- 
             if(codigoCliente != null || codigoClienteSuperior != null ) {
 				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
 					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
 							usuarioLogado, codigoClienteSuperior, (Boolean) sessao.getAttribute("debitoAutomatico"));
+				} else {
+					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
+							usuarioLogado, codigoClienteSuperior, false);
 				}
-        	}
-        	else if (idGrupoFaturamento != null){
+        	} else if (idGrupoFaturamento != null){
         		
         		fachada.alterarVencimentoConjuntoConta(idGrupoFaturamento, dataVencimentoConta, anoMes, anoMesFim,
                 dataVencimentoContaInicio, dataVencimentoContaFim,usuarioLogado);
-        	}
-        	else {        		
+        	} else {        		
 				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
 					fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
 							dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos,
@@ -184,7 +165,6 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
         	
         	//Realizar um reload na tela de manter conjunto conta
         	httpServletRequest.setAttribute("reloadPage", "OK");
-        	
         }
               
         sessao.removeAttribute("anoMes");
@@ -195,6 +175,4 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
         
         return retorno;
     }
-
 }
-
