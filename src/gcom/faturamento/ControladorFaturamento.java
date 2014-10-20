@@ -16588,10 +16588,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			helper.setDiasNaoFaturados(diasNaoFaturados);
 			
 			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
-			BigDecimal valorDiarioAgua = helper.getValorAgua().setScale(2).divide(bdDiferencaDias, 2, RoundingMode.HALF_EVEN);
-			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().setScale(2).divide(bdDiferencaDias, 2, RoundingMode.HALF_EVEN);
-			helper.setValorAguaDiario(valorDiarioAgua);
-			helper.setValorEsgotoDiario(valorDiarioEsgoto);
+			BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+			helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
 			
 			BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
 			helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
@@ -16642,10 +16642,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			helper.setDiasNaoFaturados(diasNaoFaturados);
 			
 			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
-			BigDecimal valorDiarioAgua = helper.getValorAgua().setScale(2).divide(bdDiferencaDias, 2, RoundingMode.HALF_EVEN);
-			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().setScale(2).divide(bdDiferencaDias, 2, RoundingMode.HALF_EVEN);
-			helper.setValorAguaDiario(valorDiarioAgua);
-			helper.setValorEsgotoDiario(valorDiarioEsgoto);
+			BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+			helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
 			
 			BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
 			helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
