@@ -7,6 +7,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -747,10 +748,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		String consulta = null;
 		
 		String subqueryImoveisAprovados = "select imovelControle.imovel.id "
-						+ " from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
+						+ " from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel, ImovelRetorno imovelRetorno "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 						+ " and imovel.id = imovelControle.imovel.id  "
-						+ " and imovelControle.dataProcessamento is null";
+						+ " and imovelRetorno.id = imovelControle.imovelRetorno.id "
+						+ " and imovelControle.dataProcessamento is null "
+						+ " and imovelRetorno.tipoOperacao <> " + AlteracaoTipo.INCLUSAO;
 		
 		String subqueryClientesImovelRetorno = " select clienteImovelRetorno.cliente.id "
 					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "

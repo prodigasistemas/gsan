@@ -246,15 +246,18 @@ public class RABuilder {
 								.idSetorComercial(idSetorComercial)
 								.idQuadra(imovel.getNumeroQuadra())
 								.idUnidadeDestino(UNIDADE_ATENDIMENTO_UNAM)
-								.parecerUnidadeDestino("")
-								.idImovel(imovel.getIdImovel());
+								.parecerUnidadeDestino("");
+		
+		if (alteracaoTipo == AlteracaoTipo.ALTERACAO) {
+			raLocalOcorrenciaHelper.idImovel(imovel.getIdImovel());
+		}
 								
-		if(alteracaoTipo == AlteracaoTipo.INCLUSAO){
+		if (alteracaoTipo == AlteracaoTipo.INCLUSAO) {
 			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão - Origem: RECADASTRAMENTO");
 		}
 		
-		if(alteracaoTipo == AlteracaoTipo.EXCLUSAO){
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusão - Origem: RECADASTRAMENTO");
+		if (alteracaoTipo == AlteracaoTipo.EXCLUSAO) {
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusão - Origem: RECADASTRAMENTO").idImovel(imovel.getIdImovel());
 		}
 		
 		return raLocalOcorrenciaHelper;
@@ -562,9 +565,12 @@ public class RABuilder {
 		observacao.append(imovelRetorno.getNumeroQuadra() + ". ");
 		observacao.append("Setor Comercial: ");
 		observacao.append(imovelRetorno.getCodigoSetorComercial() + ". ");
-		observacao.append("Local de Instalacao de Ramal: ");
-		String descricaoRamalLocalInstalacao = ((ImovelRetorno) imovelRetorno).getRamalLocalInstalacao().getDescricao();
-		observacao.append(descricaoRamalLocalInstalacao + ". ");
+		
+		RamalLocalInstalacao ramalLocalInstalacao = ((ImovelRetorno) imovelRetorno).getRamalLocalInstalacao();
+		if (ramalLocalInstalacao != null) {
+			observacao.append("Local de Instalacao de Ramal: ");
+			observacao.append(ramalLocalInstalacao.getDescricao() + ". ");
+		}
 		
 		return observacao.toString();
 	}
