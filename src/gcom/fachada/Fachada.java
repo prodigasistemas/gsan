@@ -44114,6 +44114,13 @@ public class Fachada {
 		}
 	}
 	
+	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMesReferencia) {
+		try {
+			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturar(idGrupo, anoMesReferencia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota) {
 		try {

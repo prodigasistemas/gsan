@@ -26,7 +26,6 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
@@ -158,6 +157,8 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.relatorio.ConstantesRelatorios;
 import gcom.relatorio.RelatorioDataSource;
+import gcom.relatorio.faturamento.DataLeituraAnteriorHelper;
+import gcom.relatorio.faturamento.DataLeituraPrevistaHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
@@ -167,8 +168,10 @@ import gcom.relatorio.faturamento.RelatorioErrosMovimentosContaPreFaturadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioMedicaoFaturamentoHelper;
 import gcom.relatorio.faturamento.RelatorioMultasAutosInfracaoPendentesBean;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultanea;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
+import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.PermissaoEspecial;
@@ -202,6 +205,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -220,6 +224,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJBException;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
 
@@ -16519,5 +16524,137 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
+	}
+	
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException {
+		try {
+			Collection<RelatorioReceitasAFaturarHelper> retorno;
+			
+			if(idGrupo == null)
+				retorno = gerarDadosRelatorioReceitasAFaturar(anoMes);
+			else
+				retorno = gerarDadosRelatorioReceitasAFaturar(idGrupo, anoMes);
+
+			return retorno;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
+	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturar(Integer anoMes)
+			throws ErroRepositorioException {
+		
+		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
+
+		ArrayList<DataLeituraPrevistaHelper> datasLeituraPrevista = DataLeituraPrevistaHelper
+				.getListaDatasLeituraPrevistaHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(null, anoMes));
+		
+		ArrayList<DataLeituraAnteriorHelper> datasLeituraAnterior = DataLeituraAnteriorHelper
+				.getListaDatasLeituraAnteriorHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(null, anoMes));
+		
+		ArrayList<ValorAFaturarHelper> valoresAFaturar = ValorAFaturarHelper.getListaValoresAFaturarHelper(repositorioFaturamento
+				.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(anoMes));
+		
+		for (DataLeituraPrevistaHelper dataLeituraPrevistaHelper : datasLeituraPrevista) {
+			
+			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
+			helper.setIdGrupo(dataLeituraPrevistaHelper.getIdGrupo());
+			helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
+			
+			for (DataLeituraAnteriorHelper dataLeituraAnteriorHelper : datasLeituraAnterior) {
+				if(dataLeituraAnteriorHelper.getIdGrupo().equals(dataLeituraPrevistaHelper.getIdGrupo())) {
+					helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
+				}
+			}
+			
+			for (ValorAFaturarHelper valorAFaturarHelper : valoresAFaturar) {
+				if(valorAFaturarHelper.getIdGrupo().equals(dataLeituraPrevistaHelper.getIdGrupo())) {
+					helper.setValorAgua(valorAFaturarHelper.getValorAgua());
+					helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+				}
+			}
+			retorno.add(helper);
+		}
+
+		for (RelatorioReceitasAFaturarHelper helper : retorno) {
+			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+			helper.setDiferencaDias(diferencaDias);			
+			
+			int mes = Integer.parseInt(anoMes.toString().substring(4));
+			int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
+			Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
+			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+			helper.setDiasNaoFaturados(diasNaoFaturados);
+			
+			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
+			BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+			helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
+			
+			BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
+			helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
+			helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
+		}
+		
+		BeanComparator fieldComparator = new BeanComparator("idGrupo");
+		Collections.sort((ArrayList)retorno, fieldComparator);
+		
+		return retorno;
+	}
+	
+	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes)
+			throws ErroRepositorioException {
+		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
+
+		ArrayList<DataLeituraPrevistaHelper> datasLeituraPrevista = DataLeituraPrevistaHelper
+				.getListaDatasLeituraPrevistaHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(idGrupo, anoMes));
+		
+		ArrayList<DataLeituraAnteriorHelper> datasLeituraAnterior = DataLeituraAnteriorHelper
+				.getListaDatasLeituraAnteriorHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(idGrupo, anoMes));
+		
+		ArrayList<ValorAFaturarHelper> valoresAFaturar = ValorAFaturarHelper.getListaValoresAFaturarHelperPorGrupo(idGrupo, repositorioFaturamento
+				.pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(idGrupo, anoMes));
+		
+		for (ValorAFaturarHelper valorAFaturarHelper : valoresAFaturar) {
+			
+			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
+			helper.setIdGrupo(valorAFaturarHelper.getIdGrupo());
+			helper.setImovel(valorAFaturarHelper.getImovel());
+			helper.setNomeCliente(valorAFaturarHelper.getNomeCliente());
+			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
+			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+			helper.setDataLeituraAnterior(datasLeituraAnterior.get(0).getDataAnterior());
+			helper.setDataLeituraPrevista(datasLeituraPrevista.get(0).getDataPrevista());
+			
+			retorno.add(helper);
+		}
+
+		for (RelatorioReceitasAFaturarHelper helper : retorno) {
+			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+			helper.setDiferencaDias(diferencaDias);			
+			
+			int mes = Integer.parseInt(anoMes.toString().substring(4));
+			int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
+			Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
+			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+			helper.setDiasNaoFaturados(diasNaoFaturados);
+			
+			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
+			BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+			helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+			helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
+			
+			BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
+			helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
+			helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
+		}
+		
+		BeanComparator fieldComparator = new BeanComparator("nomeCliente");
+		Collections.sort((ArrayList)retorno, fieldComparator);
+		
+		return retorno;
 	}
 }

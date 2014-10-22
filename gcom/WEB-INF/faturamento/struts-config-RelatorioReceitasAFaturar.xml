@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="RelatorioReceitasAFaturarActionForm"
+			type="gcom.gui.relatorio.faturamento.RelatorioReceitasAFaturarActionForm" />					
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="RelatorioReceitasAFaturarActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioReceitasAFaturarAction"
+			validate="false"
+			scope="session"
+			path="/exibirGerarRelatorioReceitasAFaturar">
+			<forward name="exibirGerarRelatorioReceitasAFaturar"
+				path="/jsp/relatorio/faturamento/gerar_relatorio_receitas_a_faturar.jsp" />
+		</action>
+		
+		<action name="RelatorioReceitasAFaturarActionForm"
+				type="gcom.gui.relatorio.faturamento.GerarRelatorioReceitasAFaturarAction"
+				validate="false" 
+				scope="session"
+				path="/gerarRelatorioReceitasAFaturarAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

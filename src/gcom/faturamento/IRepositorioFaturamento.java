@@ -3001,4 +3001,13 @@ public interface IRepositorioFaturamento {
 	public Collection<IClienteConta> pesquisarClienteContaHistorico(Integer idConta) throws ErroRepositorioException;
 	
 	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
+
 }
