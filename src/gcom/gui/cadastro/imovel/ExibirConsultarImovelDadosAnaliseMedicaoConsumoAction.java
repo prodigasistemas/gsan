@@ -607,7 +607,8 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 			Collection<Object[]> colecaoParmsMedicaoHistorico,
 			int consumoMedioHidrometro) {
 		
-		Object[] arrayParmsMedicaoHistorico = colecaoParmsMedicaoHistorico.iterator().next();
+		Object[] arrayParmsMedicaoHistorico = null;
+		arrayParmsMedicaoHistorico = colecaoParmsMedicaoHistorico.iterator().next();
 
 		// descrição tipo medicao
 		if (arrayParmsMedicaoHistorico[0] != null) {
@@ -837,6 +838,15 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 			consultarImovelActionForm
 			.setConsumoMesEsgoto("");
 		}
+		// leitura do hidrometro no ato da instalação
+		if (arrayParmsMedicaoHistorico[22] != null) {
+			consultarImovelActionForm
+					.setLeituraInstalacaoHidrometro(((Integer) arrayParmsMedicaoHistorico[22])
+							.toString());
+		}else{
+			consultarImovelActionForm
+			.setLeituraInstalacaoHidrometro("");
+		}
 
 		if (consumoFaturado != 0 && consumoMedioHidrometro != 0) {
 			int operacaoSubMult = (consumoFaturado - consumoMedioHidrometro) * 100;
@@ -1017,6 +1027,13 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 		}else{
 			consultarImovelActionForm
 			.setProtecaoHidrometroPoco("");
+		}
+		// leitura na data da instalação do hidrometro
+		if (arrayParmsClienteImovel[56] != null) {
+			consultarImovelActionForm
+					.setLeituraInstalacaoHidrometroPoco(((Integer) arrayParmsClienteImovel[56]).toString());
+		}else{
+			consultarImovelActionForm.setLeituraInstalacaoHidrometroPoco("");
 		}
 		// indicador cavalete do hidrometro instalação histórico
 		if (arrayParmsClienteImovel[17] != null) {
@@ -1627,6 +1644,8 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 		consultarImovelActionForm.setDiasConsumoEsgoto(null);
 		consultarImovelActionForm.setConsumoTipoEsgoto(null);
 		consultarImovelActionForm.setDataSupressaoParcialAgua(null);
+		consultarImovelActionForm.setLeituraInstalacaoHidrometro(null);
+		consultarImovelActionForm.setLeituraInstalacaoHidrometroPoco(null);
 	}
 
 	/**
