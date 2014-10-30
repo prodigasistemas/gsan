@@ -16657,4 +16657,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		return retorno;
 	}
+	
+	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException {
+		try{
+		  return repositorioFaturamento.pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
 }

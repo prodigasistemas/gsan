@@ -15,6 +15,7 @@ import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.fachada.Fachada;
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
@@ -176,15 +177,17 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					throw new ActionServletException("atencao.debito.ja.parcelado.mes.faturamento.corrente");
 				}
 
+				FaturamentoGrupo grupo = fachada.pesquisarGrupoImovel(Integer.valueOf(codigoImovel));
+				int referenciaCronograma = fachada.pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(grupo.getId());
+				
 				// [UC0067] Obter Débito do Imóvel ou Cliente
-				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada
-						.obterDebitoImovelOuCliente(1, // Indicador débito imóvel
+				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada.obterDebitoImovelOuCliente(1, // Indicador débito imóvel
 								codigoImovel, // Matrícula do imóvel
 								null, // Código do cliente
 								null, // Tipo de relação do cliento com o
 								// imóvel
 								"000101", // Referência inicial do débito
-								"999912", // Referência final do débito
+								String.valueOf(referenciaCronograma), // Referência final do débito
 								Util.converteStringParaDate("01/01/0001"), // Inicio
 								// Vencimento
 								Util.converteStringParaDate("31/12/9999"), // Final
@@ -505,20 +508,15 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						if ((efetuarParcelamentoDebitosActionForm.get("inicioIntervaloParcelamento") == null
 								|| efetuarParcelamentoDebitosActionForm.get("inicioIntervaloParcelamento").equals(""))) {
 							sessao.setAttribute("bloqueiaIntervaloParcelamento","nao");
-							efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento",
-									Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
+							efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
 						}
 					}
-//					efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento",
-//									Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
 					
 					if (maiorAnoMesReferencia != 0) {
 						if ((efetuarParcelamentoDebitosActionForm
 								.get("fimIntervaloParcelamento") == null || efetuarParcelamentoDebitosActionForm
 								.get("fimIntervaloParcelamento").equals(""))) {
-							efetuarParcelamentoDebitosActionForm
-									.set("fimIntervaloParcelamento",
-											Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
+							efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
 							sessao.setAttribute("bloqueiaIntervaloParcelamento","nao");
 						}
 					} else {
@@ -659,11 +657,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.CONSUMO_TARIFA);
 
-		/*Collection<Imovel> imovelPesquisado = fachada.pesquisar(filtroImovel,
-				Imovel.class.getName());
-*/
-		/** alterado por pedro alexandre dia 27/11/2006 
-		 * alteração realizada para acoplar o esquema de abrangência*/
 		Usuario usuarioLogado = (Usuario)sessao.getAttribute(Usuario.USUARIO_LOGADO);
 		Collection<Imovel> imovelPesquisado = fachada.pesquisarImovelEfetuarParcelamento(filtroImovel,usuarioLogado);
 		
@@ -687,33 +680,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				httpServletRequest.setAttribute("nomeCampo", "resolucaoDiretoria");
 				// Verifica se Usuário está com débito em cobrança administrativa
                 
-                //comentado por Viviann Sousa 18/03/2008
-                //analista responsavel: Fatima
-//				FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
-//				filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacao");
-//				filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(
-//								FiltroImovelCobrancaSituacao.IMOVEL_ID, imovel.getId()));
-//
-//				Collection imovelCobrancaSituacaoEncontrada = fachada
-//						.pesquisar(filtroImovelCobrancaSituacao, ImovelCobrancaSituacao.class.getName());
-//
-//				// Verifica se o Imóvel tem débito em cobrança administrativa
-//				if (imovelCobrancaSituacaoEncontrada != null
-//						&& !imovelCobrancaSituacaoEncontrada.isEmpty()) {
-//
-//					if (((ImovelCobrancaSituacao) ((List) 
-//                            imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao() != null) {
-//
-//						if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada)
-//						        .get(0)).getCobrancaSituacao().getId().equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
-//								&& ((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada)
-//										.get(0)).getDataRetiradaCobranca() == null) {
-//							throw new ActionServletException(
-//									"atencao.pesquisa.imovel.cobranca_administrativa");
-//						}
-//					}
-//				}
-
 				// Verifica situação ligação de água e esgoto
 				if ((imovel.getLigacaoAguaSituacao() != null)
 						&& ((imovel.getLigacaoAguaSituacao().getId() == LigacaoAguaSituacao.POTENCIAL) ||
@@ -820,15 +786,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
                 efetuarParcelamentoDebitosActionForm.set("areaConstruidaImovel",
                         imovel.getAreaConstruidaFaixa().getMaiorFaixa().toString());
             }
-			
-            //comentado por Vivianne Sousa
-            //analista responsavel:Fatima Sampaio
-            //[FS0021]-Verificar situação de cobrança
-			//efetuar o parcelamento de um imovel com cobrancaSituacao 
-//			fachada.verificarPermissaoEspecial(PermissaoEspecial.IMOVEL_EM_SITUACAO_COBRANCA,usuario,imovel) ;
-            
 		}
-		
 		
 		return existeImovel;
 	}
