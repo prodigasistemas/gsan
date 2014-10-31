@@ -130,6 +130,8 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	private Collection<ImovelMicromedicao> imoveisMicromedicaoEsgoto;
 	private String ligacaoAguaSituacaoId;
 	private String ligacaoEsgotoSituacaoId;
+	private String leituraInstalacaoHidrometro;
+	
 	
 	
 	//dados do hidrometro da ligacao agua
@@ -245,6 +247,7 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	private String idLigacaoAgua;
 	private String idAnormalidade;
 	private String descricaoAnormalidade;
+	private String leituraInstalacaoHidrometroPoco;
 
 	//Dados da medição do mes do poço
 	private String dtLeituraAnteriorPoco;
@@ -714,7 +717,15 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 			String descricaoAnormalidadeDadosComplementares) {
 		this.descricaoAnormalidadeDadosComplementares = descricaoAnormalidadeDadosComplementares;
 	}
+	
+	public String getLeituraInstalacaoHidrometroPoco() {
+		return leituraInstalacaoHidrometroPoco;
+	}
 
+
+	public void setLeituraInstalacaoHidrometroPoco(String leituraInstalacaoHidrometroPoco) {
+		this.leituraInstalacaoHidrometroPoco = leituraInstalacaoHidrometroPoco;
+	}
 
 	public String getDescricaoOcorrenciaDadosComplementares() {
 		return descricaoOcorrenciaDadosComplementares;
@@ -3999,6 +4010,15 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 
 	public void setLigacaoEsgotoSituacaoId(String ligacaoEsgotoSituacaoId) {
 		this.ligacaoEsgotoSituacaoId = ligacaoEsgotoSituacaoId;
+	}
+	
+	public String getLeituraInstalacaoHidrometro() {
+		return leituraInstalacaoHidrometro;
+	}
+
+
+	public void setLeituraInstalacaoHidrometro(String leituraInstalacaoHidrometro) {
+		this.leituraInstalacaoHidrometro = leituraInstalacaoHidrometro;
 	}
 
 

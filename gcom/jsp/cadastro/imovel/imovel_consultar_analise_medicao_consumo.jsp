@@ -495,15 +495,22 @@ function pesquisarImovel() {
 						</tr>
 
 						<tr bgcolor="#99CCFF" class="styleFontePeqNegrito">
-							<td colspan="2" align="center">Prote&ccedil;&atilde;o</td>
+							<td align="center">Prote&ccedil;&atilde;o</td>
+							
+							<td align="center">Leitura Instala&ccedil;&atilde;o Hidrometro</td>
+							
 							<td align="center">Indicador de Cavalete</td>
 							<td align="center">Ano de Fabrica&ccedil;&atilde;o</td>
 
 						</tr>
 
 						<tr bgcolor="#FFFFFF" class="styleFontePequena">
-							<td colspan="2" align="center">${sessionScope.consultarImovelActionForm.protecaoHidrometro}
+							<td align="center">${sessionScope.consultarImovelActionForm.protecaoHidrometro}
 							&nbsp;</td>
+							
+							<td align="center">${sessionScope.consultarImovelActionForm.leituraInstalacaoHidrometro}
+							&nbsp;</td>
+							
 							<td align="center">${sessionScope.consultarImovelActionForm.indicadorCavalete}
 							&nbsp;</td>
 							<td align="center">${sessionScope.consultarImovelActionForm.anoFabricacao}
@@ -640,15 +647,22 @@ function pesquisarImovel() {
 						</tr>
 
 						<tr bgcolor="#99CCFF" class="styleFontePeqNegrito">
-							<td colspan="2" align="center">Prote&ccedil;&atilde;o</td>
+							<td align="center">Prote&ccedil;&atilde;o</td>
+							
+							<td align="center">Leitura Instala&ccedil;&atilde;o Hidrometro</td>
+							
 							<td align="center">Indicador de Cavalete</td>
 							<td align="center">Ano de Fabrica&ccedil;&atilde;o</td>
 
 						</tr>
 
 						<tr bgcolor="#FFFFFF" class="styleFontePequena">
-							<td colspan="2" align="center">${sessionScope.consultarImovelActionForm.protecaoHidrometroPoco}
+							<td align="center">${sessionScope.consultarImovelActionForm.protecaoHidrometroPoco}
 							&nbsp;</td>
+							
+							<td align="center">${sessionScope.consultarImovelActionForm.leituraInstalacaoHidrometroPoco}
+							&nbsp;</td>
+							
 							<td align="center">${sessionScope.consultarImovelActionForm.indicadorCavaletePoco}
 							&nbsp;</td>
 							<td align="center">${sessionScope.consultarImovelActionForm.anoFabricacaoPoco}
