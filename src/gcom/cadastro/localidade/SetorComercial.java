@@ -11,7 +11,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class SetorComercial extends ObjetoTransacao implements Serializable, DescriptorEntity{
 	
 	private static final long serialVersionUID = 1L;
@@ -19,33 +18,24 @@ public class SetorComercial extends ObjetoTransacao implements Serializable, Des
 	public final static Short BLOQUEIO_INSERIR_IMOVEL_SIM = new Short("1");
 	public final static Short BLOQUEIO_INSERIR_IMOVEL_NAO = new Short("2");
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private int codigo;
-
-    /** persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Municipio municipio;
-
-    /** persistent field */
-    private gcom.cadastro.localidade.Localidade localidade;
-    
-    /** nullable persistent field */
+    private Localidade localidade;
     private Short indicadorSetorAlternativo;
     
     private Short indicadorBloqueio = BLOQUEIO_INSERIR_IMOVEL_NAO;
 
-	/** full constructor */
+    public SetorComercial() {
+    }
+    
+    public SetorComercial(Integer id) {
+    	this.id = id;
+    }
+    
     public SetorComercial(int codigo, String descricao, Short indicadorUso,
             Date ultimaAlteracao, Municipio municipio,
             gcom.cadastro.localidade.Localidade localidade, Short indicadorSetorAlternativo) {
@@ -58,9 +48,6 @@ public class SetorComercial extends ObjetoTransacao implements Serializable, Des
         this.indicadorSetorAlternativo = indicadorSetorAlternativo;
     }
 
-    public SetorComercial() {
-    }
-
     public SetorComercial(int codigo, String descricao, Municipio municipio,
             gcom.cadastro.localidade.Localidade localidade) {
         this.codigo = codigo;
@@ -69,7 +56,6 @@ public class SetorComercial extends ObjetoTransacao implements Serializable, Des
         this.localidade = localidade;
     }
 
-    /** constructor */
     public SetorComercial(Integer id, int codigo, String descricao) {
         this.id = id;
         this.codigo = codigo;
@@ -168,7 +154,6 @@ public class SetorComercial extends ObjetoTransacao implements Serializable, Des
 		return filtroSetorComercial; 
 	}
 	
-	// método para exibir a descricao de um Setor comercial no registrar transacao
 	public String getDescricaoParaRegistroTransacao(){
 		if (getDescricao() != null){
 			return getCodigo() + " - " + getDescricao();
