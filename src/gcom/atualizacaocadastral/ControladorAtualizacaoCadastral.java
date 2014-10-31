@@ -75,6 +75,8 @@ import javax.ejb.SessionContext;
 
 import org.apache.log4j.Logger;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoCadastral, SessionBean {
 
 
@@ -1136,51 +1138,14 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	public Collection pesquisarDadosRelatorioRelacaoImoveisRota(String idLocalidade, String cdSetorComercial, String cdRota)
+	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
 			throws ControladorException {
 		
 		Collection retorno = new ArrayList();
 		
 		try {
-			Collection colecaoImoveis = repositorioAtualizacaoCadastral.pesquisarDadosRelacaoImoveisPorRota(idLocalidade, cdSetorComercial, cdRota);
-			
-			if (colecaoImoveis != null && !colecaoImoveis.isEmpty()) {
-				for (Iterator iteratorImoveis = colecaoImoveis.iterator(); iteratorImoveis.hasNext();) {
-					RelatorioRelacaoImoveisRotaBean bean = new RelatorioRelacaoImoveisRotaBean();
-					Object[] objeto = (Object[]) iteratorImoveis.next();
-					
-					bean.setIdLocalidade(objeto[0].toString());
-					bean.setCodigoSetorComercial(objeto[1].toString());
-					bean.setNumQuadra(objeto[2].toString());
-					bean.setNumLote(objeto[3].toString());
-					bean.setNumSubLote(objeto[4].toString());
-					bean.setIdImovel(objeto[5].toString());
-					
-					String categorias = "";
-					Collection colecaoCategorias = getControladorImovel().pesquisarCategoriasImovel(Integer.valueOf(objeto[5].toString()));
-					for (Iterator iteratorCategorias = colecaoCategorias.iterator(); iteratorCategorias.hasNext();) {
-						ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) iteratorCategorias.next();
-						String descCategoria = imovelSubcategoria.getComp_id().getSubcategoria().getCategoria().getDescricao();
-						
-						if (!categorias.contains(descCategoria))
-							categorias += descCategoria + "\n";
-						
-						if (!iteratorCategorias.hasNext()) {
-							int index = categorias.lastIndexOf("\n");
-							categorias = categorias.substring(0, index);
-						}
-					}
-					bean.setDescCategorias(categorias);
-					
-					bean.setDescSituacaoLigacaoAgua(objeto[6].toString());
-					bean.setDescSituacaoImovelRecadastramento(objeto[7].toString());
-					bean.setNomeLocalidade(objeto[8].toString());
-					
-					retorno.add(bean);
-				}
-			}
-			
-			Collection colecaoImoveisRetorno = repositorioAtualizacaoCadastral.pesquisarDadosRelacaoImoveisRetornoPorRota(idLocalidade, cdSetorComercial, cdRota);
+			Collection colecaoImoveisRetorno = repositorioAtualizacaoCadastral.pesquisarDadosImoveisPorRotaAtualizacaoCadastral(
+					idLocalidade, cdSetorComercial, cdRota);
 			
 			if (colecaoImoveisRetorno != null && !colecaoImoveisRetorno.isEmpty()) {
 				Iterator iterator = colecaoImoveisRetorno.iterator();
@@ -1189,41 +1154,35 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					RelatorioRelacaoImoveisRotaBean bean = new RelatorioRelacaoImoveisRotaBean();
 					Object[] objeto = (Object[]) iterator.next();
 					
-					bean.setIdLocalidade(objeto[0].toString());
-					bean.setCodigoSetorComercial(objeto[1].toString());
-					bean.setNumQuadra(objeto[2].toString());
-					bean.setNumLote(objeto[3].toString());
-					bean.setNumSubLote(objeto[4].toString());
+					String idImovel = objeto[0].toString();
+					Integer idImovelRetorno = (Integer) objeto[10];
 					
 					Integer tipoOperacao = (Integer) objeto[9];
 					if (tipoOperacao.equals(AlteracaoTipo.INCLUSAO)) {
 						bean.setIdImovel("NOVO");
+						bean.setDescCategorias(this.getCategoriasImovelRetornoRelatorioPorRota(idImovelRetorno));
+						
 					} else if (tipoOperacao.equals(AlteracaoTipo.ALTERACAO)) {
-						bean.setIdImovel(objeto[5].toString());
-					} else if (tipoOperacao.equals(AlteracaoTipo.ALTERACAO)) {
-						bean.setIdImovel(objeto[5].toString() + " - EXCLUÍDO");
+						bean.setIdImovel(idImovel);
+						bean.setDescCategorias(this.getCategoriasImovelRetornoRelatorioPorRota(idImovelRetorno));
+						
+					} else if (tipoOperacao.equals(AlteracaoTipo.EXCLUSAO)) {
+						bean.setIdImovel(idImovel + " - EXCLUÍDO");
+						bean.setDescCategorias(this.getCategoriasImovelRetornoRelatorioPorRota(idImovelRetorno));
+						
+					} else if (tipoOperacao.equals(new Integer(0))) {
+						bean.setIdImovel(idImovel);
+						bean.setDescCategorias(this.getCategoriasImovelRelatorioPorRota(Integer.valueOf(idImovel)));
 					}
 					
-					String categorias = "";
-					Collection colecaoCategorias = getControladorImovel().pesquisarCategoriasImovel(Integer.valueOf(objeto[5].toString()));
-					for (Iterator iteratorCategorias = colecaoCategorias.iterator(); iteratorCategorias.hasNext();) {
-						ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) iteratorCategorias.next();
-						
-						String descCategoria = imovelSubcategoria.getComp_id().getSubcategoria().getCategoria().getDescricao();
-						
-						if (!categorias.contains(descCategoria))
-							categorias += descCategoria + "\n";
-						
-						if (!iteratorCategorias.hasNext()) {
-							int index = categorias.lastIndexOf("\n");
-							categorias = categorias.substring(0, index);
-						}
-					}
-					bean.setDescCategorias(categorias);
-					
-					bean.setDescSituacaoLigacaoAgua(objeto[6].toString());
-					bean.setDescSituacaoImovelRecadastramento(objeto[7].toString());
-					bean.setNomeLocalidade(objeto[8].toString());
+					bean.setIdLocalidade(objeto[1].toString());
+					bean.setNomeLocalidade(objeto[2].toString());
+					bean.setCodigoSetorComercial(objeto[3].toString());
+					bean.setNumQuadra(objeto[4].toString());
+					bean.setNumLote(objeto[5].toString());
+					bean.setNumSubLote(objeto[6].toString());
+					bean.setDescSituacaoLigacaoAgua(objeto[7].toString());
+					bean.setDescSituacaoImovelRecadastramento(objeto[8].toString());
 					
 					retorno.add(bean);
 				}
@@ -1234,5 +1193,53 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+
+	private String getCategoriasImovelRelatorioPorRota(Integer idImovel) throws ControladorException {
+		String categorias = "";
+		
+		Collection colecaoCategorias = getControladorImovel().pesquisarCategoriasImovel(idImovel);
+		for (Iterator iteratorCategorias = colecaoCategorias.iterator(); iteratorCategorias.hasNext();) {
+			ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) iteratorCategorias.next();
+			
+			String descCategoria = imovelSubcategoria.getComp_id().getSubcategoria().getCategoria().getDescricao();
+			
+			if (!categorias.contains(descCategoria))
+				categorias += descCategoria + "\n";
+			
+			if (!iteratorCategorias.hasNext()) {
+				int index = categorias.lastIndexOf("\n");
+				categorias = categorias.substring(0, index);
+			}
+		}
+		
+		return categorias;
+	}
+	
+	private String getCategoriasImovelRetornoRelatorioPorRota(Integer idImovelRetorno) {
+		String categorias = "";
+		
+		Collection<ImovelSubcategoriaRetorno> subcategorias;
+		try {
+			subcategorias = repositorioAtualizacaoCadastral.pesquisarSubcategoriasImovelRetorno(idImovelRetorno);
+			
+			for (Iterator iterator = subcategorias.iterator(); iterator.hasNext();) {
+				ImovelSubcategoriaRetorno subcategoria = (ImovelSubcategoriaRetorno) iterator.next();
+				
+				String descCategoria = subcategoria.getSubcategoria().getCategoria().getDescricao();
+				
+				if (!categorias.contains(descCategoria))
+					categorias += descCategoria + "\n";
+				
+				if (!iterator.hasNext()) {
+					int index = categorias.lastIndexOf("\n");
+					categorias = categorias.substring(0, index);
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
+		return categorias;
 	}
 }

@@ -4585,9 +4585,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
-			String idEmpresa, String idLocalidade, String idAgenteComercial,
-			String idSituacaoTransmissao) throws ErroRepositorioException {
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
+			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ErroRepositorioException {
 
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -4607,6 +4606,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 			if (idLocalidade != null && !idLocalidade.equals("")) {
 				consulta = consulta + " and txac.localidade.id = " + idLocalidade;
+			}
+			
+			if (codigoSetorComercial != null && !codigoSetorComercial.equals("")) {
+				consulta = consulta + " and txac.codigoSetorComercial = " + codigoSetorComercial;
 			}
 
 			if (idAgenteComercial != null

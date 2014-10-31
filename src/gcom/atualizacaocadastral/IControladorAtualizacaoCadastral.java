@@ -48,5 +48,5 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public Collection<ImagemRetorno> pesquisarImagensRetornoPorIdImovel(Integer idImovel) throws ControladorException;
 	
-	public Collection pesquisarDadosRelatorioRelacaoImoveisRota(String localidade, String setorComercial, String rota) throws ControladorException;
+	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String localidade, String setorComercial, String rota) throws ControladorException;
 }

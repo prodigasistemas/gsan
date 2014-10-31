@@ -50,7 +50,8 @@ public class RelatorioRelacaoImoveisRotaBO {
 		String cdSetorComercial = form.getCdSetorComercialInicial();
 		String cdRota = form.getCdRotaInicial();
 		
-		Collection colecaoDadosRelacaoImoveisRota = Fachada.getInstancia().pesquisarDadosRelatorioRelacaoImoveisRota(idLocalidade, cdSetorComercial, cdRota);
+		Collection colecaoDadosRelacaoImoveisRota = Fachada.getInstancia().pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(
+				idLocalidade, cdSetorComercial, cdRota);
 		
 		if(colecaoDadosRelacaoImoveisRota.isEmpty()){
 			throw new ActionServletException("atencao.relatorio.vazio");

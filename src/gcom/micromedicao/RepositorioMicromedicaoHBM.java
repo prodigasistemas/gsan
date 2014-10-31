@@ -3422,9 +3422,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		String ligacaoHidrometro = "";
 		if (ligacaoAgua) {
-			ligacaoHidrometro = " ligacaoAgua.hidi_id = hidrometroIstalacaoHistorico.hidi_id";
+			ligacaoHidrometro = " ligacaoAgua.hidi_id = hidrometroIstalacaoHistorico.hidi_id ";
 		} else {
-			ligacaoHidrometro = " imovel.hidi_id = hidrometroIstalacaoHistorico.hidi_id";
+			ligacaoHidrometro = " imovel.hidi_id = hidrometroIstalacaoHistorico.hidi_id ";
 		}
 
 		String sql = "select faturamentoGrupo.ftgr_id as idFaturamentoGrupo,"// 0
@@ -3493,15 +3493,19 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				+ " rotaAlternativa.ftgr_id as faturamentoGrupoAlternativa, " // 52
 				+ " faturamentoGrupoAlternativa.ftgr_amreferencia as amFaturamentoGrupoAlternativo, "// 53
 				+ " empresaAlternativa.empr_nmempresa as nomeEmpresaAlternativa, "// 54
-				+ " faturamentoGrupoAlternativa.ftgr_nndiavencimento as vencimentofaturamentogrupoalte " // 55
+				+ " faturamentoGrupoAlternativa.ftgr_nndiavencimento as vencimentofaturamentogrupoalte, " // 55
 				
 				/*
 				 * Fim Campos Adicionados por Raphael Rossiter
 				 */
+				
+				+ " hidrometroIstalacaoHistorico.hidi_nnleitinstalacaohidmt as leituraInstHidrometro "//56
 
 				+ " from cadastro.cliente_imovel clienteImovel "
 				+ " inner join cadastro.imovel imovel on clienteImovel.imov_id=imovel.imov_id and imovel.imov_id = "
 				+ idImovel
+//				+ " inner join micromedicao.hidrometro_inst_hist hidrometroInstHist on hidrometroInstHist.lagu_id = clienteImovel.imov_id "
+//				+ " and hidrometroInstHist.hidi_dtretiradahidrometro is null "
 				+ "	left outer join micromedicao.rota rotaAlternativa on imovel.rota_idalternativa=rotaAlternativa.rota_id "
 				+ "	left outer join faturamento.faturamento_grupo faturamentoGrupoAlternativa on rotaAlternativa.ftgr_id=faturamentoGrupoAlternativa.ftgr_id "
 				+ "	left outer join cadastro.empresa empresaAlternativa on rotaAlternativa.empr_id=empresaAlternativa.empr_id  "
@@ -3589,25 +3593,19 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					.addScalar("codigoRota", Hibernate.SHORT)
 					.addScalar("sequencialRota", Hibernate.INTEGER)
 					.addScalar("tipoRelojoaria", Hibernate.STRING)
-					.addScalar("nomeusuarioresponsavelinstalac",
-							Hibernate.STRING)
+					.addScalar("nomeusuarioresponsavelinstalac", Hibernate.STRING)
 					.addScalar("numeroLacre", Hibernate.STRING)
-					.addScalar("descricaoligacaoesgotoesgotame",
-							Hibernate.STRING)
-					.addScalar("descricaoligacaoesgotocaixains",
-							Hibernate.STRING)
-					.addScalar("descricaoligacaoesgotodestinod",
-							Hibernate.STRING)
-					.addScalar("descricaoligacaoesgotodestinoa",
-							Hibernate.STRING)
-
+					.addScalar("descricaoligacaoesgotoesgotame", Hibernate.STRING)
+					.addScalar("descricaoligacaoesgotocaixains", Hibernate.STRING)
+					.addScalar("descricaoligacaoesgotodestinod", Hibernate.STRING)
+					.addScalar("descricaoligacaoesgotodestinoa", Hibernate.STRING)
 					.addScalar("codigoRotaAlternativa", Hibernate.SHORT)
 					.addScalar("faturamentoGrupoAlternativa", Hibernate.INTEGER)
-					.addScalar("amFaturamentoGrupoAlternativo",
-							Hibernate.INTEGER).addScalar(
-							"nomeEmpresaAlternativa", Hibernate.STRING)
-							.addScalar("vencimentofaturamentogrupoalte",
-									Hibernate.SHORT).list();
+					.addScalar("amFaturamentoGrupoAlternativo",Hibernate.INTEGER)
+					.addScalar("nomeEmpresaAlternativa", Hibernate.STRING)
+					.addScalar("vencimentofaturamentogrupoalte", Hibernate.SHORT)
+					.addScalar("leituraInstHidrometro", Hibernate.INTEGER)
+					.list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -3897,10 +3895,13 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				+ "consumoTipo.cstp_dsconsumotipo as descricaoConsumoTipo, " // 18
 				+ "medicaoHistorico.mdhi_nnconsumomediohidrometro as consumoMedioHidrometro, " // 19
 				+ "consumoHistorico.cshi_nnconsumomedio as consumoMedioImovel, " // 20
-				+ "consumoHistoricoEsgoto.cshi_nnconsumofaturadomes as consumoFaturadoEsgoto "// 21
+				+ "consumoHistoricoEsgoto.cshi_nnconsumofaturadomes as consumoFaturadoEsgoto, "// 21
+				+ "hidrometroInstHist.hidi_nnleitinstalacaohidmt as leituraInstHidrometro "//22
 				+ "from cadastro.imovel imovel "
-				+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id=consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento = "
+				+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id = consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento = "
 				+ anoMesReferencia + " and  consumoHistorico.lgti_id = " + LigacaoTipo.LIGACAO_AGUA
+				+ " inner join micromedicao.hidrometro_inst_hist hidrometroInstHist on hidrometroInstHist.lagu_id = imovel.imov_id "
+				+ " and hidrometroInstHist.hidi_dtretiradahidrometro is null "
 				+ " left outer join micromedicao.medicao_historico medicaoHistorico on medicaoHistorico.mdhi_amleitura = "
 				+ anoMesReferencia
 				+ "  AND "
@@ -3954,6 +3955,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					.addScalar("consumoMedioHidrometro", Hibernate.INTEGER)
 					.addScalar("consumoMedioImovel", Hibernate.INTEGER)
 					.addScalar("consumoFaturadoEsgoto", Hibernate.INTEGER)
+					.addScalar("leituraInstHidrometro", Hibernate.INTEGER)
 					.list();
 
 		} catch (HibernateException e) {

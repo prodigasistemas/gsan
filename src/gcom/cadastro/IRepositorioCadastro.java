@@ -154,8 +154,7 @@ public interface IRepositorioCadastro {
     public Collection pesquisarLocalidades() throws ErroRepositorioException ;
 
  	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, 
-			String idLocalidade, String idAgenteComercial, String idSituacaoTransmissao)throws ErroRepositorioException;
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao)throws ErroRepositorioException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt)
 		throws ErroRepositorioException;

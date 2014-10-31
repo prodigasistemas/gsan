@@ -5960,83 +5960,23 @@ public interface IRepositorioCobranca {
 			Integer idGrupoCobranca,Integer idItemServicoContrato, Integer referencia) 
 			throws ErroRepositorioException;
 	
-	/**
-	 * [UC1151] Gerar Boletim de Medição
-	 * 
-	 * 
-	 * @author Sávio Luiz
-	 * @throws ControladorException 
-	 * @data 23/03/2011
-	 * 
-	 * @throws ControladorException 
-	 * */
 	public Collection pesquisarOSEncerradasPorBoletimRepCalcadaRotaAlternativa(
 			Integer idGrupoCobranca,Integer idItemServicoContrato, Integer referencia) 
 			throws ErroRepositorioException;
 	
-	/**
-	 * [UC1151] Gerar Boletim de Medição
-	 * 
-	 * 
-	 * @author Sávio Luiz
-	 * @throws ControladorException 
-	 * @data 23/03/2011
-	 * 
-	 * @throws ControladorException 
-	 * */
 	public Collection pesquisarOSEncerradasPorBoletimPorDescontoRotaAlternativa(
 			Integer idGrupoCobranca,Integer idItemServicoContrato,Integer referencia) 
 			throws ErroRepositorioException;
 	
-	/**
-	 * [UC1151] Gerar Boletim de Medição
-	 * 
-	 * 
-	 * @author Sávio Luiz
-	 * @throws ControladorException 
-	 * @data 23/03/2011
-	 * 
-	 * @throws ControladorException 
-	 * */
 	public Collection pesquisarOSEncerradasPorBoletimPorDescontoSemDecursoPrazoRotaAlternativa(
 			Integer idGrupoCobranca,Integer idItemServicoContrato,Integer referencia) 
 			throws ErroRepositorioException;
 	
-	/**
-	 * [UC 0869] Gerar Arqv Texto das Contas em Cobrança por Empresa
-	 * 
-	 * @author Paulo Diniz
-	 * @data 03/08/2011
-	 * 
-	 */
-	public Collection<CmdEmpresaCobrancaContaLigacaoAguaSituacao> pesquisarColecaoLigacaoAguaSituacaoPorComandoEmpresaCobrancaConta(Integer idComando)
-	throws ErroRepositorioException;
+	public Collection<CmdEmpresaCobrancaContaLigacaoAguaSituacao> pesquisarColecaoLigacaoAguaSituacaoPorComandoEmpresaCobrancaConta(Integer idComando) throws ErroRepositorioException;
 	
-	/**
-	 * [UC0067] Obter Débito do Imóvel ou Cliente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 19/09/2011
-	 * 
-	 * @param idImovel
-	 * @return Short
-	 * @throws ErroRepositorioException
-	 */
 	public Short obterIndicadorAcrescimosClienteResponsavel(Integer idImovel) throws ErroRepositorioException ;
 	
-	/**
-	 * [UC0067] Obter Débito do Imóvel ou Cliente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 19/09/2011
-	 * 
-	 * @param idImovel
-	 * @return Short
-	 * @throws ErroRepositorioException
-	 */
 	public Short obterIndicadorAcrescimosCliente(Integer idCliente) throws ErroRepositorioException ;
-	
-	
 
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoEmitirEtiquetasEnderecoAlternativo(
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando,
@@ -6044,10 +5984,5 @@ public interface IRepositorioCobranca {
 			throws ErroRepositorioException;
 	
 	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
-	
-	public Collection pesquisarContasImovelSemGrupoNaoFaturado(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
-			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada,
-			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito,
-			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException;
 	
 }

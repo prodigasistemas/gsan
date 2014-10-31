@@ -906,6 +906,7 @@
 				/WEB-INF/relatorio/cadastro/atualizacaocadastral/struts-config-RelatorioImoveisSituacaoPeriodo.xml,
 				/WEB-INF/faturamento/struts-config-AtualizarVencimentoFaturaClienteResponsavel.xml,
 				/WEB-INF/faturamento/struts-config-FaturamentoSeletivo.xml,
+				/WEB-INF/faturamento/struts-config-RelatorioReceitasAFaturar.xml,
 				/WEB-INF/cadastro/atualizacaocadastral/struts-config-RelatorioRelacaoImoveisRota.xml
 				
 			</param-value>

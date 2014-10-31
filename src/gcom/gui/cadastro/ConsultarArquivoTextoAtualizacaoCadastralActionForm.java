@@ -5,59 +5,43 @@ import javax.servlet.ServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Consultar Arquivo Texto da Atualização Cadastral
- * 
- * @author Ana Maria 
- * @date 02/03/2009
- */
 public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionForm {
+	
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private String idLocalidade;
-	
+
 	private String nomeLocalidade;
+	
+	private String codigoSetorComercial;
+
+	private String nomeSetorComercial;
 
 	private String idEmpresa;
-	
+
 	private String leituristaID;
 
 	private String sitTransmissao;
-	
+
 	private String[] idsRegistros;
-	
+
 	private String idSituacaoTransmissao;
 
-	/**
-	 * @return Returns the idsRegistros.
-	 */
 	public String[] getIdsRegistros() {
 		return idsRegistros;
 	}
 
-	/**
-	 * @param idsRegistros The idsRegistros to set.
-	 */
 	public void setIdsRegistros(String[] idsRegistros) {
 		this.idsRegistros = idsRegistros;
 	}
 
-	/**
-	 * @return Returns the leituristaID.
-	 */
 	public String getLeituristaID() {
 		return leituristaID;
 	}
 
-	/**
-	 * @param leituristaID The leituristaID to set.
-	 */
 	public void setLeituristaID(String leituristaID) {
 		this.leituristaID = leituristaID;
 	}
-	
-	
 
 	public String getIdSituacaoTransmissao() {
 		return idSituacaoTransmissao;
@@ -77,17 +61,11 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 
 	@Override
 	public void reset(ActionMapping arg0, ServletRequest arg1) {
-		
 		super.reset(arg0, arg1);
-
-		this.sitTransmissao="";
-		
-		this.idsRegistros=new String[0];
-		
-		this.leituristaID="";
-		
-		this.idSituacaoTransmissao="";
-
+		this.sitTransmissao = "";
+		this.idsRegistros = new String[0];
+		this.leituristaID = "";
+		this.idSituacaoTransmissao = "";
 	}
 
 	public String getIdEmpresa() {
@@ -114,7 +92,19 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 		this.nomeLocalidade = nomeLocalidade;
 	}
 
-	
-	
-	
+	public String getCodigoSetorComercial() {
+		return codigoSetorComercial;
+	}
+
+	public void setCodigoSetorComercial(String codigoSetorComercial) {
+		this.codigoSetorComercial = codigoSetorComercial;
+	}
+
+	public String getNomeSetorComercial() {
+		return nomeSetorComercial;
+	}
+
+	public void setNomeSetorComercial(String nomeSetorComercial) {
+		this.nomeSetorComercial = nomeSetorComercial;
+	}
 }

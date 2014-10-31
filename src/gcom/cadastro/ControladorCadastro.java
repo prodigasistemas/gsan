@@ -10055,16 +10055,15 @@ public class ControladorCadastro implements SessionBean {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
-			String idEmpresa, String idLocalidade, String idAgenteComercial,
-			String idSituacaoTransmissao) throws ControladorException {
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
+			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ControladorException {
 
 		try {
 			Collection colecao = new ArrayList();
 			
 			Collection<ArquivoTextoAtualizacaoCadastral> colecaoArquivoTexto = 
-				this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
-						idEmpresa, idLocalidade, idAgenteComercial, idSituacaoTransmissao);
+				this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, 
+						codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao);
 			
 			if (colecaoArquivoTexto != null && !colecaoArquivoTexto.isEmpty()) {
 				for (ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral : colecaoArquivoTexto) {
