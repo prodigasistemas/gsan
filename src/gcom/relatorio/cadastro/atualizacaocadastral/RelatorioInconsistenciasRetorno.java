@@ -88,7 +88,6 @@ public class RelatorioInconsistenciasRetorno extends TarefaRelatorio {
 	}
 
 	private String getErrosImovel(Entry<String, List<String>> entry) {
-		
 		List<String> listaErros = entry.getValue();
 		
 		String errosImovel = "\n";
@@ -97,16 +96,6 @@ public class RelatorioInconsistenciasRetorno extends TarefaRelatorio {
 			errosImovel += erro + "\n";
 		}
 		
-//		for (int i = 0; i < listaErros.size(); i++) {
-//			String erro = listaErros.get(i);
-//			errosImovel += erro;
-//			
-//			if (i < listaErros.size() - 1) {
-//				errosImovel += "\n";
-//			}
-//		}
-		
 		return errosImovel;
 	}
-
 }

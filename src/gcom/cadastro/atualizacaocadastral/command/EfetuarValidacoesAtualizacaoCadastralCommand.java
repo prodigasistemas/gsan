@@ -96,7 +96,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 		new ValidadorTipoOperacaoCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
 		new ValidadorTipoLogradouroCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
 		new ValidadorLogradouroCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
-		new ValidadorCoordenadasCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
+//		new ValidadorCoordenadasCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 		new ValidadorEconomiasCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 	}
 

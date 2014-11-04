@@ -5688,4 +5688,8 @@ public interface IControladorFaturamento {
 	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ControladorException;
 
 	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException;
+	
+	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException;
+	
+	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
 }

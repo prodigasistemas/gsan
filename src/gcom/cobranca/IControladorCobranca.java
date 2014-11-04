@@ -5430,17 +5430,4 @@ public interface IControladorCobranca {
 	 */
 	
 	public Collection pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) throws ControladorException;
-	
-	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
-			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
-			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
-			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
-			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
-			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException;
-	
-	public Collection<ContaValoresHelper> pesquisarContasDebito(Integer idCliente, Short relacaoTipo, Integer idImovel,
-			Collection idImoveis, Collection idImoveisAtuais, int indicadorDebito, int indicadorPagamento, int indicadorConta,
-			int indicadorCalcularAcrescimoImpontualidade, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
-			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, String anoMesArrecadacao, int indicadorDividaAtiva,
-			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException;
 }
