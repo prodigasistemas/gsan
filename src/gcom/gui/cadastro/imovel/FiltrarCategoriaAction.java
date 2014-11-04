@@ -77,11 +77,16 @@ public class FiltrarCategoriaAction extends GcomAction {
         if(tipoCategoria != null && !tipoCategoria.trim().equalsIgnoreCase("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
             peloMenosUmParametroInformado = true;
             
+<<<<<<< HEAD
             filtroCategoria.adicionarParametro(new ParametroSimples(
             		FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
             
            /* filtroCategoria.adicionarParametro(new ComparacaoTexto(
                     FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));*/
+=======
+            filtroCategoria.adicionarParametro(new ParametroSimples(FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
+            //filtroCategoria.adicionarParametro(new ComparacaoTexto(FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
+>>>>>>> 9c98e7d79a2f002fa123757ee12108a9c086c053
         }
         if(descricao != null && !descricao.trim().equalsIgnoreCase("")) {
             peloMenosUmParametroInformado = true;

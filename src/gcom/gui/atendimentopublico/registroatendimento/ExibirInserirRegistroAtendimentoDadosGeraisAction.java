@@ -32,19 +32,14 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Esta classe tem por finalidade exibir para o usuário a tela que receberá os
  * parâmetros para realização da inserção de um R.A (Aba nº 01 - Dados gerais)
- * 
- * @author Raphael Rossiter
- * @date 24/07/2006
  */
-public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
-		GcomAction {
+public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+	@SuppressWarnings("rawtypes")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		ActionForward retorno = actionMapping
-				.findForward("inserirRegistroAtendimentoDadosGerais");
+		ActionForward retorno = actionMapping.findForward("inserirRegistroAtendimentoDadosGerais");
 
 		InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm = (InserirRegistroAtendimentoActionForm) actionForm;
 
@@ -54,54 +49,28 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 
 		sessao.removeAttribute("gis");
 
-		/*
-		 * Tipo de Atendimento (exibir a tela com a opção “on-line” selecionada
-		 * e permitir que o usuário selecione entre “on-line” ou “manual”)
-		 * 
-		 * [SB0001 - Habilita/Desabilita Dados do Momento do Atendimento]
-		 */
-		if (inserirRegistroAtendimentoActionForm.getTipo() == null
-				|| inserirRegistroAtendimentoActionForm.getTipo()
-						.equalsIgnoreCase("")) {
+		if (inserirRegistroAtendimentoActionForm.getTipo() == null || inserirRegistroAtendimentoActionForm.getTipo().equalsIgnoreCase("")) {
 
 			inserirRegistroAtendimentoActionForm.setTipo("1");
-
-			/*
-			 * Unidade de Atendimento (exibir a tela com a unidade associada ao
-			 * usuário que estiver efetuando o registro de atendimento. (Tela
-			 * inicial)
-			 * 
-			 * Meio de Solicitação (exibir na tela com o meio de solicitação
-			 * associado à unidade de atendimento)
-			 */
 
 			// Usuário logado no sistema
 			Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 
-			UnidadeOrganizacional unidadeOrganizacionalUsuario = fachada
-					.obterUnidadeOrganizacionalAberturaRAAtivoUsuario(usuario
-							.getLogin());
+			UnidadeOrganizacional unidadeOrganizacionalUsuario = fachada.obterUnidadeOrganizacionalAberturaRAAtivoUsuario(usuario.getLogin());
 
 			if (unidadeOrganizacionalUsuario != null) {
 
-				inserirRegistroAtendimentoActionForm
-						.setUnidade(unidadeOrganizacionalUsuario.getId()
-								.toString());
-				inserirRegistroAtendimentoActionForm
-						.setDescricaoUnidade(unidadeOrganizacionalUsuario
-								.getDescricao());
+				inserirRegistroAtendimentoActionForm.setUnidade(unidadeOrganizacionalUsuario.getId().toString());
+				inserirRegistroAtendimentoActionForm.setDescricaoUnidade(unidadeOrganizacionalUsuario.getDescricao());
 
 				if (unidadeOrganizacionalUsuario.getMeioSolicitacao() != null) {
 
-					inserirRegistroAtendimentoActionForm
-							.setMeioSolicitacao(unidadeOrganizacionalUsuario
-									.getMeioSolicitacao().getId().toString());
+					inserirRegistroAtendimentoActionForm.setMeioSolicitacao(unidadeOrganizacionalUsuario.getMeioSolicitacao().getId().toString());
 				}
 			}
 
 			// [SB0001 - Habilita/Desabilita Dados do Momento do Atendimento]
-			habilitacaoDadosMomentoAtendimento(
-					inserirRegistroAtendimentoActionForm, httpServletRequest);
+			habilitacaoDadosMomentoAtendimento(inserirRegistroAtendimentoActionForm, httpServletRequest);
 		}
 
 		String mudarTipo = httpServletRequest.getParameter("mudarTipo");
@@ -109,212 +78,124 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 		if (mudarTipo != null && !mudarTipo.equalsIgnoreCase("")) {
 
 			// [SB0001 - Habilita/Desabilita Dados do Momento do Atendimento]
-			habilitacaoDadosMomentoAtendimento(
-					inserirRegistroAtendimentoActionForm, httpServletRequest);
+			habilitacaoDadosMomentoAtendimento(inserirRegistroAtendimentoActionForm, httpServletRequest);
 		}
 
 		/*
-		 * Unidade de Atendimento (Permite que o usuário informe ou selecione
-		 * outra)
-		 * 
+		 * Unidade de Atendimento (Permite que o usuário informe ou selecione outra)
 		 * [FS0004] - Verificar existência da unidade de atendimento
-		 * 
-		 * [FS0033] - Verificar autorização da unidade de atendimento para
-		 * abertura de registro de atendimento
+		 * [FS0033] - Verificar autorização da unidade de atendimento para abertura de registro de atendimento
 		 */
-		String pesquisarUnidade = httpServletRequest
-				.getParameter("pesquisarUnidade");
+		String pesquisarUnidade = httpServletRequest.getParameter("pesquisarUnidade");
 
 		if (pesquisarUnidade != null && !pesquisarUnidade.equalsIgnoreCase("")) {
 
-			UnidadeOrganizacional unidadeOrganizacionalSelecionada = fachada
-					.verificarAutorizacaoUnidadeAberturaRA(new Integer(
-							inserirRegistroAtendimentoActionForm.getUnidade()),
-							false);
+			UnidadeOrganizacional unidadeOrganizacionalSelecionada = fachada.verificarAutorizacaoUnidadeAberturaRA(new Integer(
+					inserirRegistroAtendimentoActionForm.getUnidade()), false);
 
 			if (unidadeOrganizacionalSelecionada != null) {
-				inserirRegistroAtendimentoActionForm
-						.setUnidade(unidadeOrganizacionalSelecionada.getId()
-								.toString());
-				inserirRegistroAtendimentoActionForm
-						.setDescricaoUnidade(unidadeOrganizacionalSelecionada
-								.getDescricao());
+				inserirRegistroAtendimentoActionForm.setUnidade(unidadeOrganizacionalSelecionada.getId().toString());
+				inserirRegistroAtendimentoActionForm.setDescricaoUnidade(unidadeOrganizacionalSelecionada.getDescricao());
 
 				if (unidadeOrganizacionalSelecionada.getMeioSolicitacao() != null) {
-
-					inserirRegistroAtendimentoActionForm
-							.setMeioSolicitacao(unidadeOrganizacionalSelecionada
-									.getMeioSolicitacao().getId().toString());
+					inserirRegistroAtendimentoActionForm.setMeioSolicitacao(unidadeOrganizacionalSelecionada.getMeioSolicitacao().getId().toString());
 				}
 
 				httpServletRequest.setAttribute("nomeCampo", "meioSolicitacao");
-
 			} else {
-
 				inserirRegistroAtendimentoActionForm.setUnidade("");
-				inserirRegistroAtendimentoActionForm
-						.setDescricaoUnidade("Unidade Inexistente");
-
+				inserirRegistroAtendimentoActionForm.setDescricaoUnidade("Unidade Inexistente");
 				httpServletRequest.setAttribute("corUnidade", "exception");
 				httpServletRequest.setAttribute("nomeCampo", "unidade");
 			}
-
 		}
 
 		/*
-		 * Meio de Solicitação - Carregando a coleção que irá ficar disponível
-		 * para escolha do usuário
-		 * 
+		 * Meio de Solicitação - Carregando a coleção que irá ficar disponível para escolha do usuário
 		 * [FS0003] - Verificar existência de dados
 		 */
-		Collection colecaoMeioSolicitacao = (Collection) sessao
-				.getAttribute("colecaoMeioSolicitacao");
+		Collection colecaoMeioSolicitacao = (Collection) sessao.getAttribute("colecaoMeioSolicitacao");
 
 		if (colecaoMeioSolicitacao == null) {
-
-			FiltroMeioSolicitacao filtroMeioSolicitacao = new FiltroMeioSolicitacao(
-					FiltroMeioSolicitacao.DESCRICAO);
-
+			FiltroMeioSolicitacao filtroMeioSolicitacao = new FiltroMeioSolicitacao(FiltroMeioSolicitacao.DESCRICAO);
 			filtroMeioSolicitacao.setConsultaSemLimites(true);
+			filtroMeioSolicitacao.adicionarParametro(new ParametroSimples(FiltroMeioSolicitacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			filtroMeioSolicitacao.adicionarParametro(new ParametroSimples(
-					FiltroMeioSolicitacao.INDICADOR_USO,
-					ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			colecaoMeioSolicitacao = fachada.pesquisar(filtroMeioSolicitacao,
-					MeioSolicitacao.class.getName());
-
-			if (colecaoMeioSolicitacao == null
-					|| colecaoMeioSolicitacao.isEmpty()) {
-				throw new ActionServletException(
-						"atencao.entidade_sem_dados_para_selecao", null,
-						"MEIO_SOLICITACAO");
+			colecaoMeioSolicitacao = fachada.pesquisar(filtroMeioSolicitacao, MeioSolicitacao.class.getName());
+			if (colecaoMeioSolicitacao == null || colecaoMeioSolicitacao.isEmpty()) {
+				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "MEIO_SOLICITACAO");
 			} else {
-				sessao.setAttribute("colecaoMeioSolicitacao",
-						colecaoMeioSolicitacao);
+				sessao.setAttribute("colecaoMeioSolicitacao", colecaoMeioSolicitacao);
 			}
 		}
 
 		/*
-		 * Tipo de Solicitação - Carregando a coleção que irá ficar disponível
-		 * para escolha do usuário
-		 * 
+		 * Tipo de Solicitação - Carregando a coleção que irá ficar disponível para escolha do usuário
 		 * [FS0003] - Verificar existência de dados
 		 */
-		Collection colecaoSolicitacaoTipo = (Collection) sessao
-				.getAttribute("colecaoSolicitacaoTipo");
+		Collection colecaoSolicitacaoTipo = (Collection) sessao.getAttribute("colecaoSolicitacaoTipo");
 
 		if (colecaoSolicitacaoTipo == null) {
-
-			FiltroSolicitacaoTipo filtroSolicitacaoTipo = new FiltroSolicitacaoTipo(
-					FiltroSolicitacaoTipo.DESCRICAO);
-
+			FiltroSolicitacaoTipo filtroSolicitacaoTipo = new FiltroSolicitacaoTipo(FiltroSolicitacaoTipo.DESCRICAO);
 			filtroSolicitacaoTipo.setConsultaSemLimites(true);
-
-			filtroSolicitacaoTipo.adicionarParametro(new ParametroSimples(
-					FiltroSolicitacaoTipo.INDICADOR_USO,
-					ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			filtroSolicitacaoTipo.adicionarParametro(new ParametroSimples(
-					FiltroSolicitacaoTipo.INDICADOR_USO_SISTEMA,
+			filtroSolicitacaoTipo.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroSolicitacaoTipo.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipo.INDICADOR_USO_SISTEMA,
 					SolicitacaoTipo.INDICADOR_USO_SISTEMA_NAO));
 
-			colecaoSolicitacaoTipo = fachada.pesquisar(filtroSolicitacaoTipo,
-					SolicitacaoTipo.class.getName());
-
-			if (colecaoSolicitacaoTipo == null
-					|| colecaoSolicitacaoTipo.isEmpty()) {
-				throw new ActionServletException(
-						"atencao.entidade_sem_dados_para_selecao", null,
-						"SOLICITACAO_TIPO");
+			colecaoSolicitacaoTipo = fachada.pesquisar(filtroSolicitacaoTipo, SolicitacaoTipo.class.getName());
+			if (colecaoSolicitacaoTipo == null || colecaoSolicitacaoTipo.isEmpty()) {
+				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "SOLICITACAO_TIPO");
 			} else {
-				sessao.setAttribute("colecaoSolicitacaoTipo",
-						colecaoSolicitacaoTipo);
+				sessao.setAttribute("colecaoSolicitacaoTipo", colecaoSolicitacaoTipo);
 			}
 		}
 
 		/*
-		 * Especificação - Carregando a coleção que irá ficar disponível para
-		 * escolha do usuário
-		 * 
-		 * [FS0003] - Verificar existência de dados [SB0036] –
-		 * Habilita/Desabilita Conta
+		 * Especificação - Carregando a coleção que irá ficar disponível para escolha do usuário
+		 * [FS0003] - Verificar existência de dados [SB0036] Habilita/Desabilita Conta
 		 */
-		String pesquisarEspecificacao = httpServletRequest
-				.getParameter("pesquisarEspecificacao");
+		String pesquisarEspecificacao = httpServletRequest.getParameter("pesquisarEspecificacao");
 
-		if (pesquisarEspecificacao != null
-				&& !pesquisarEspecificacao.equalsIgnoreCase("")) {
-
+		if (pesquisarEspecificacao != null && !pesquisarEspecificacao.equalsIgnoreCase("")) {
 			FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao(
 					FiltroSolicitacaoTipoEspecificacao.DESCRICAO);
-
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID,
-							new Integer(inserirRegistroAtendimentoActionForm
-									.getTipoSolicitacao())));
-
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID, new Integer(
+					inserirRegistroAtendimentoActionForm.getTipoSolicitacao())));
 			filtroSolicitacaoTipoEspecificacao.setConsultaSemLimites(true);
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO_INDICADOR_USO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
-							ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			Collection colecaoSolicitacaoTipoEspecificacao = fachada.pesquisar(
-					filtroSolicitacaoTipoEspecificacao,
+			Collection colecaoSolicitacaoTipoEspecificacao = fachada.pesquisar(filtroSolicitacaoTipoEspecificacao,
 					SolicitacaoTipoEspecificacao.class.getName());
-
-			if (colecaoSolicitacaoTipoEspecificacao == null
-					|| colecaoSolicitacaoTipoEspecificacao.isEmpty()) {
+			if (colecaoSolicitacaoTipoEspecificacao == null || colecaoSolicitacaoTipoEspecificacao.isEmpty()) {
 				sessao.removeAttribute("colecaoSolicitacaoTipoEspecificacao");
 				inserirRegistroAtendimentoActionForm.setDataPrevista("");
-				throw new ActionServletException(
-						"atencao.entidade_sem_dados_para_selecao", null,
-						"SOLICITACAO_TIPO_ESPECIFICACAO");
+				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "SOLICITACAO_TIPO_ESPECIFICACAO");
 			} else {
-				sessao.setAttribute("colecaoSolicitacaoTipoEspecificacao",
-						colecaoSolicitacaoTipoEspecificacao);
+				sessao.setAttribute("colecaoSolicitacaoTipoEspecificacao", colecaoSolicitacaoTipoEspecificacao);
 			}
-
 		}
 
 		/*
-		 * Data Prevista - (exibir a data prevista calculada no SB0003 e não
-		 * permitir alteração).
-		 * 
+		 * Data Prevista - (exibir a data prevista calculada no SB0003 e não permitir alteração).
 		 * [SB0003 - Define Data Prevista e Unidade Destino da Especificação]
 		 * [FS0018] - Verificar existência da unidade centralizadora
 		 */
-		String definirDataPrevista = httpServletRequest
-				.getParameter("definirDataPrevista");
+		String definirDataPrevista = httpServletRequest.getParameter("definirDataPrevista");
 
-		if (definirDataPrevista != null
-				&& !definirDataPrevista.equalsIgnoreCase("")
-				&& inserirRegistroAtendimentoActionForm.getDataAtendimento() != null
-				&& !inserirRegistroAtendimentoActionForm.getDataAtendimento()
-						.equalsIgnoreCase("")
-				&& !inserirRegistroAtendimentoActionForm
-						.getEspecificacao()
-						.equalsIgnoreCase(
-								String
-										.valueOf(ConstantesSistema.NUMERO_NAO_INFORMADO))) {
+		if (definirDataPrevista != null && !definirDataPrevista.equalsIgnoreCase("") && inserirRegistroAtendimentoActionForm.getDataAtendimento() != null
+				&& !inserirRegistroAtendimentoActionForm.getDataAtendimento().equalsIgnoreCase("")
+				&& !inserirRegistroAtendimentoActionForm.getEspecificacao().equalsIgnoreCase(String.valueOf(ConstantesSistema.NUMERO_NAO_INFORMADO))) {
 
-			this.definirDataPrevistaUnidadeDestinoEspecificacao(
-					inserirRegistroAtendimentoActionForm, fachada, sessao);
+			this.definirDataPrevistaUnidadeDestinoEspecificacao(inserirRegistroAtendimentoActionForm, fachada, sessao);
 
-			// Verifica se o cliente é obrigatório
-			if (fachada
-					.clienteObrigatorioInserirRegistroAtendimento(new Integer(
-							inserirRegistroAtendimentoActionForm
-									.getEspecificacao()))) {
-
+			if (fachada.clienteObrigatorioInserirRegistroAtendimento(new Integer(inserirRegistroAtendimentoActionForm.getEspecificacao()))) {
 				inserirRegistroAtendimentoActionForm.setClienteObrigatorio("1");
 			} else {
 				inserirRegistroAtendimentoActionForm.setClienteObrigatorio("2");
 			}
-
 			httpServletRequest.setAttribute("nomeCampo", "observacao");
 		}
 
@@ -323,13 +204,10 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 		 * Inicial para Atendimento esteja preenchido, atribuir o valor
 		 * correspondente à hora corrente e não permitir alteração
 		 */
-		String tempoEsperaFinalDesabilitado = httpServletRequest
-				.getParameter("tempoEsperaFinalDesabilitado");
+		String tempoEsperaFinalDesabilitado = httpServletRequest.getParameter("tempoEsperaFinalDesabilitado");
 
-		if (tempoEsperaFinalDesabilitado != null
-				&& !tempoEsperaFinalDesabilitado.equalsIgnoreCase("")) {
-			this
-					.atribuirHoraCorrenteTempoEsperaFinal(inserirRegistroAtendimentoActionForm);
+		if (tempoEsperaFinalDesabilitado != null && !tempoEsperaFinalDesabilitado.equalsIgnoreCase("")) {
+			this.atribuirHoraCorrenteTempoEsperaFinal(inserirRegistroAtendimentoActionForm);
 			httpServletRequest.setAttribute("nomeCampo", "unidade");
 		}
 
@@ -342,42 +220,27 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 
 			sessao.setAttribute("generalizada", "OK");
 
-			SolicitacaoTipoEspecificacao especificacao = fachada
-					.pesquisarTipoEspecificacaoFaltaAguaGeneralizada();
+			SolicitacaoTipoEspecificacao especificacao = fachada.pesquisarTipoEspecificacaoFaltaAguaGeneralizada();
 
 			FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao(
 					FiltroSolicitacaoTipoEspecificacao.DESCRICAO);
-
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID,
-							especificacao.getSolicitacaoTipo().getId()));
-
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(
+					FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID, especificacao.getSolicitacaoTipo().getId()));
 			filtroSolicitacaoTipoEspecificacao.setConsultaSemLimites(true);
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
-							ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			Collection colecaoSolicitacaoTipoEspecificacao = fachada.pesquisar(
-					filtroSolicitacaoTipoEspecificacao,
+			Collection colecaoSolicitacaoTipoEspecificacao = fachada.pesquisar(filtroSolicitacaoTipoEspecificacao,
 					SolicitacaoTipoEspecificacao.class.getName());
 
-			sessao.setAttribute("colecaoSolicitacaoTipoEspecificacao",
-					colecaoSolicitacaoTipoEspecificacao);
+			sessao.setAttribute("colecaoSolicitacaoTipoEspecificacao", colecaoSolicitacaoTipoEspecificacao);
 
-			inserirRegistroAtendimentoActionForm
-					.setTipoSolicitacao(especificacao.getSolicitacaoTipo()
-							.getId().toString());
-			inserirRegistroAtendimentoActionForm.setEspecificacao(especificacao
-					.getId().toString());
+			inserirRegistroAtendimentoActionForm.setTipoSolicitacao(especificacao.getSolicitacaoTipo().getId().toString());
+			inserirRegistroAtendimentoActionForm.setEspecificacao(especificacao.getId().toString());
 
 			if (inserirRegistroAtendimentoActionForm.getDataAtendimento() != null
-					&& !inserirRegistroAtendimentoActionForm
-							.getDataAtendimento().equalsIgnoreCase("")) {
-				this.definirDataPrevistaUnidadeDestinoEspecificacao(
-						inserirRegistroAtendimentoActionForm, fachada, sessao);
+					&& !inserirRegistroAtendimentoActionForm.getDataAtendimento().equalsIgnoreCase("")) {
+				this.definirDataPrevistaUnidadeDestinoEspecificacao(inserirRegistroAtendimentoActionForm, fachada, sessao);
 			}
 		}
 
@@ -386,32 +249,19 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
-	 * 
-	 * Habilitar ou desabilitar os campos Tempo de Espera para Atendimento, Data
-	 * do Atendimento e Hora do Atendimento
-	 * 
+	 * Habilitar ou desabilitar os campos Tempo de Espera para Atendimento, Data do Atendimento e Hora do Atendimento
 	 * [SF0001] Habilita/Desabilita Dados do Momento do Atendimento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 25/07/2006
-	 * 
-	 * @param InserirRegistroAtendimentoActionForm
-	 * @return void
 	 */
-	private void habilitacaoDadosMomentoAtendimento(
-			InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm,
+	private void habilitacaoDadosMomentoAtendimento(InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm,
 			HttpServletRequest httpServletRequest) {
 
 		// On-line
-		if (inserirRegistroAtendimentoActionForm.getTipo()
-				.equalsIgnoreCase("1")) {
+		if (inserirRegistroAtendimentoActionForm.getTipo().equalsIgnoreCase("1")) {
 			Date dataCorrente = new Date();
 
 			inserirRegistroAtendimentoActionForm.setNumeroAtendimentoManual("");
-			inserirRegistroAtendimentoActionForm.setDataAtendimento(Util
-					.formatarData(dataCorrente));
-			inserirRegistroAtendimentoActionForm.setHora(Util
-					.formatarHoraSemSegundos(dataCorrente));
+			inserirRegistroAtendimentoActionForm.setDataAtendimento(Util.formatarData(dataCorrente));
+			inserirRegistroAtendimentoActionForm.setHora(Util.formatarHoraSemSegundos(dataCorrente));
 
 			httpServletRequest.setAttribute("nomeCampo", "tempoEsperaInicial");
 		}
@@ -422,122 +272,65 @@ public class ExibirInserirRegistroAtendimentoDadosGeraisAction extends
 			inserirRegistroAtendimentoActionForm.setTempoEsperaFinal("");
 			inserirRegistroAtendimentoActionForm.setDataPrevista("");
 
-			httpServletRequest.setAttribute("nomeCampo",
-					"numeroAtendimentoManual");
+			httpServletRequest.setAttribute("nomeCampo", "numeroAtendimentoManual");
 		}
 	}
 
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
-	 * 
 	 * Atribui o valor correspondente à hora corrente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 27/07/2006
-	 * 
-	 * @param InserirRegistroAtendimentoActionForm
-	 * @return void
 	 */
-	private void atribuirHoraCorrenteTempoEsperaFinal(
-			InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm) {
-
+	private void atribuirHoraCorrenteTempoEsperaFinal(InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm) {
 		Date dataCorrente = new Date();
-
-		inserirRegistroAtendimentoActionForm.setTempoEsperaFinal(Util
-				.formatarHoraSemSegundos(dataCorrente));
+		inserirRegistroAtendimentoActionForm.setTempoEsperaFinal(Util.formatarHoraSemSegundos(dataCorrente));
 	}
 
-	private void definirDataPrevistaUnidadeDestinoEspecificacao(
-			InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm,
-			Fachada fachada, HttpSession sessao) {
+	@SuppressWarnings("rawtypes")
+	private void definirDataPrevistaUnidadeDestinoEspecificacao(InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm, Fachada fachada,
+			HttpSession sessao) {
 
-		Date dataAtendimento = Util
-				.converteStringParaDate(inserirRegistroAtendimentoActionForm
-						.getDataAtendimento());
-
-		DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper dataPrevistaUnidadeDestino = fachada
-				.definirDataPrevistaUnidadeDestinoEspecificacao(
-						dataAtendimento, new Integer(
-								inserirRegistroAtendimentoActionForm
-										.getEspecificacao()));
+		Date dataAtendimento = Util.converteStringParaDate(inserirRegistroAtendimentoActionForm.getDataAtendimento());
+		DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper dataPrevistaUnidadeDestino = fachada.definirDataPrevistaUnidadeDestinoEspecificacao(
+				dataAtendimento, new Integer(inserirRegistroAtendimentoActionForm.getEspecificacao()));
 
 		if (dataPrevistaUnidadeDestino.getDataPrevista() != null) {
-			inserirRegistroAtendimentoActionForm
-					.setDataPrevista(Util
-							.formatarData(dataPrevistaUnidadeDestino
-									.getDataPrevista()));
+			inserirRegistroAtendimentoActionForm.setDataPrevista(Util.formatarData(dataPrevistaUnidadeDestino.getDataPrevista()));
 		}
 
 		if (dataPrevistaUnidadeDestino.getUnidadeOrganizacional() != null) {
-			inserirRegistroAtendimentoActionForm
-					.setIdUnidadeDestino(dataPrevistaUnidadeDestino
-							.getUnidadeOrganizacional().getId().toString());
-			inserirRegistroAtendimentoActionForm
-					.setDescricaoUnidadeDestino(dataPrevistaUnidadeDestino
-							.getUnidadeOrganizacional().getDescricao());
+			inserirRegistroAtendimentoActionForm.setIdUnidadeDestino(dataPrevistaUnidadeDestino.getUnidadeOrganizacional().getId().toString());
+			inserirRegistroAtendimentoActionForm.setDescricaoUnidadeDestino(dataPrevistaUnidadeDestino.getUnidadeOrganizacional().getDescricao());
 		}
 
-		inserirRegistroAtendimentoActionForm
-				.setIndFaltaAgua(dataPrevistaUnidadeDestino.getIndFaltaAgua());
+		inserirRegistroAtendimentoActionForm.setIndFaltaAgua(dataPrevistaUnidadeDestino.getIndFaltaAgua());
+		inserirRegistroAtendimentoActionForm.setIndMatricula(dataPrevistaUnidadeDestino.getIndMatricula());
+		inserirRegistroAtendimentoActionForm.setImovelObrigatorio(dataPrevistaUnidadeDestino.getImovelObrigatorio());
+		inserirRegistroAtendimentoActionForm.setPavimentoRuaObrigatorio(dataPrevistaUnidadeDestino.getPavimentoRuaObrigatorio());
+		inserirRegistroAtendimentoActionForm.setPavimentoCalcadaObrigatorio(dataPrevistaUnidadeDestino.getPavimentoCalcadaObrigatorio());
 
-		inserirRegistroAtendimentoActionForm
-				.setIndMatricula(dataPrevistaUnidadeDestino.getIndMatricula());
-
-		inserirRegistroAtendimentoActionForm
-				.setImovelObrigatorio(dataPrevistaUnidadeDestino
-						.getImovelObrigatorio());
-
-		inserirRegistroAtendimentoActionForm
-				.setPavimentoRuaObrigatorio(dataPrevistaUnidadeDestino
-						.getPavimentoRuaObrigatorio());
-
-		inserirRegistroAtendimentoActionForm
-				.setPavimentoCalcadaObrigatorio(dataPrevistaUnidadeDestino
-						.getPavimentoCalcadaObrigatorio());
-
-		// Identificar tipo de geração da ordem de serviço (AUTOMÁTICA, OPCIONAL
-		// ou NÃO GERAR)
-		Integer idEspecificacao = Util
-				.converterStringParaInteger(inserirRegistroAtendimentoActionForm
-						.getEspecificacao());
+		// Identificar tipo de geração da ordem de serviço (AUTOMÁTICA, OPCIONAL ou NÃO GERAR)
+		Integer idEspecificacao = Util.converterStringParaInteger(inserirRegistroAtendimentoActionForm.getEspecificacao());
 
 		if (this.getFachada().gerarOrdemServicoAutomatica(idEspecificacao)) {
-
 			FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao();
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarCaminhoParaCarregamentoEntidade("servicoTipo");
+			filtroSolicitacaoTipoEspecificacao.adicionarCaminhoParaCarregamentoEntidade("servicoTipo");
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.ID,
+					inserirRegistroAtendimentoActionForm.getEspecificacao()));
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroNaoNulo(FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO_ID));
+			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.ID,
-							inserirRegistroAtendimentoActionForm
-									.getEspecificacao()));
+			Collection colecaoSolicitacaoTipoEspecificacao = this.getFachada().pesquisar(filtroSolicitacaoTipoEspecificacao,
+					SolicitacaoTipoEspecificacao.class.getName());
 
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroNaoNulo(
-							FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO_ID));
+			ServicoTipo servicoTipo = ((SolicitacaoTipoEspecificacao) colecaoSolicitacaoTipoEspecificacao.iterator().next()).getServicoTipo();
 
-			filtroSolicitacaoTipoEspecificacao
-					.adicionarParametro(new ParametroSimples(
-							FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO,
-							ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			Collection colecaoSolicitacaoTipoEspecificacao = this.getFachada()
-					.pesquisar(filtroSolicitacaoTipoEspecificacao,
-							SolicitacaoTipoEspecificacao.class.getName());
-
-			ServicoTipo servicoTipo = ((SolicitacaoTipoEspecificacao) colecaoSolicitacaoTipoEspecificacao
-					.iterator().next()).getServicoTipo();
-
-			String valorServico = Util
-					.formatarMoedaReal(servicoTipo.getValor());
+			String valorServico = Util.formatarMoedaReal(servicoTipo.getValor());
 			inserirRegistroAtendimentoActionForm.setValorSugerido(valorServico);
 
 			sessao.setAttribute("servicoTipo", servicoTipo.getId());
 		} else {
 			sessao.removeAttribute("servicoTipo");
 		}
-
 	}
-
 }

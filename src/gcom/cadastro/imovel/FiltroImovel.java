@@ -207,7 +207,11 @@ public class FiltroImovel extends Filtro implements Serializable {
 	/**
 	 * Description of the Field
 	 */
+	public final static String QUADRA_ROTA = "quadra.rota";
+	
 	public final static String QUADRA_ROTA_ID = "quadra.rota.id";
+	
+	public final static String QUADRA_ROTA_CODIGO = "quadra.rota.codigo";
 
 	/**
 	 * Description of the Field
