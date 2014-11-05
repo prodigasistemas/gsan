@@ -9,7 +9,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class LancamentoItemContabil extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,28 +25,14 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	public final static Integer TARIFA_DE_AGUA = new Integer(10);
 	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
 
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private String descricao;
-
-	/** persistent field */
 	private String descricaoAbreviada;
-
-	/** nullable persistent field */
 	private Short sequenciaImpressao;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
+	private LancamentoItem lancamentoItem;
 
-	/** persistent field */
-	private gcom.financeiro.lancamento.LancamentoItem lancamentoItem;
-
-	/** full constructor */
 	public LancamentoItemContabil(String descricao, String descricaoAbreviada,
 			Short sequenciaImpressao, Date ultimaAlteracao, Short indicadorUso,
 			gcom.financeiro.lancamento.LancamentoItem lancamentoItem) {
@@ -67,6 +52,11 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 		this.id = id;
 	}
 
+	public LancamentoItemContabil(Integer id, Short sequenciaImpressao) {
+		this.id = id;
+		this.sequenciaImpressao = sequenciaImpressao;
+	}
+	
 	public LancamentoItemContabil(String descricao, String descricaoAbreviada,
 			gcom.financeiro.lancamento.LancamentoItem lancamentoItem,
 			ContaContabil contaContabil) {

@@ -35,6 +35,7 @@ import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoTipo;
+import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.micromedicao.bean.ConsultarArquivoTextoRoteiroEmpresaHelper;
 import gcom.relatorio.arrecadacao.GuiaDevolucaoRelatorioHelper;
 import gcom.relatorio.arrecadacao.RelatorioAnaliseArrecadacaoBean;
@@ -4827,7 +4828,8 @@ public interface IRepositorioArrecadacao {
      * @return
      * @throws ErroRepositorioException
      */
-    public BigDecimal acumularValorDebitoCobradoPagamentosClassificadosContaPorFinanciamentoTipo(Integer idLocalidade, Integer anoMesReferenciaArrecadacao, Integer idLancamentoItemContabil, Integer idCategoria, Collection<Integer> colecaoIdsFinanciamentoTipo) throws ErroRepositorioException ;
+    public BigDecimal acumularValorDebitoCobradoPagamentosClassificadosContaPorFinanciamentoTipo(Integer idLocalidade, Integer anoMesReferenciaArrecadacao, 
+    		Integer idLancamentoItemContabil, Integer idCategoria, Collection<Integer> colecaoIdsFinanciamentoTipo) throws ErroRepositorioException ;
 
     /**
      * Sequencial do tipo lançamento igual a 3700
@@ -6959,4 +6961,12 @@ public interface IRepositorioArrecadacao {
 	public Collection<DebitoAutomatico> pesquisarDebitoAutomaticoSemDataExclusao(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento) throws ErroRepositorioException;
+	
+	public Object[] acumularValorAguaEsgotoPagamentosClassificadosRecuperacaoCreditoConta(Integer idLocalidade, Integer referenciaArrecadacao, Integer idCategoria) throws ErroRepositorioException;
+	
+	public Collection<LancamentoItemContabil> pesquisarLancamentosItemContabil() throws ErroRepositorioException;
+	
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
 }
