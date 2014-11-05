@@ -90,6 +90,7 @@ public class LancamentoItem implements Serializable {
 	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer(82);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(83);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(84);
+	public final static Integer RECUPERACAO_CREDITO = new Integer(85);
 	
     private Integer id;
     private String descricao;

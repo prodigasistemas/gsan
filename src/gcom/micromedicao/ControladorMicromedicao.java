@@ -26858,27 +26858,22 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public Integer obterConsumoNaoMedidoSemTarifa(Integer idImovel,
-			Integer anoMesReferencia) throws ControladorException {
+ Integer anoMesReferencia) throws ControladorException {
 
 		Integer consumoNaoMedido = 0;
 
 		// [UC0801] - Obter Quantidade de Economias por Subcategoria
-		Collection<Subcategoria> colecaoSubcategoria = this
-				.getControladorImovel().obterQuantidadeEconomiasSubCategoria(
-						idImovel);
+		Collection<Subcategoria> colecaoSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasSubCategoria(idImovel);
 
 		// [UC0810] Obter Quantidade de Economias Virtuais
-		Integer qtdEconomiasVirtuais = this.getControladorImovel()
-				.obterQuantidadeEconomiasVirtuais(idImovel);
+		Integer qtdEconomiasVirtuais = this.getControladorImovel().obterQuantidadeEconomiasVirtuais(idImovel);
 
 		// [FS0001] - Verificar Área Não Informada
 		BigDecimal areaConstruida = this.verificarAreaNaoInformada(idImovel);
 
 		// Área Virtual = área construída do imóvel / quantidade de economias
 		// virtuais
-		BigDecimal areaConstruidaVirtual = areaConstruida.divide(
-				new BigDecimal(qtdEconomiasVirtuais), 2,
-				BigDecimal.ROUND_HALF_UP);
+		BigDecimal areaConstruidaVirtual = areaConstruida.divide(new BigDecimal(qtdEconomiasVirtuais), 2, BigDecimal.ROUND_HALF_UP);
 
 		if (colecaoSubcategoria != null && !colecaoSubcategoria.isEmpty()) {
 
@@ -26888,25 +26883,18 @@ public class ControladorMicromedicao implements SessionBean {
 
 				Subcategoria subcategoria = (Subcategoria) iterator.next();
 
-				Integer consumoMinimo = this.pesquisarConsumoMinimoArea(
-						areaConstruidaVirtual, anoMesReferencia, subcategoria,
-						null);
+				Integer consumoMinimo = this.pesquisarConsumoMinimoArea(areaConstruidaVirtual, anoMesReferencia, subcategoria, null);
 
-				// Caso a categoria associada à subcategoria tenha fator de
-				// economias diferente de NULO
+				// Caso a categoria associada à subcategoria tenha fator de economias diferente de NULO
 				if (subcategoria.getCategoria().getFatorEconomias() != null) {
 
 					// Multiplica o consumo mínimo pelo fator obtido.
-					consumoNaoMedido = consumoNaoMedido
-							+ (consumoMinimo * subcategoria.getCategoria()
-									.getFatorEconomias().intValue());
+					consumoNaoMedido = consumoNaoMedido + (consumoMinimo * subcategoria.getCategoria().getFatorEconomias().intValue());
 				} else {
 
 					// Multiplica o consumo mínimo pela quantidade de economias
 					// da subcategoria.
-					consumoNaoMedido = consumoNaoMedido
-							+ (consumoMinimo * subcategoria
-									.getQuantidadeEconomias());
+					consumoNaoMedido = consumoNaoMedido + (consumoMinimo * subcategoria.getQuantidadeEconomias());
 				}
 			}
 		}

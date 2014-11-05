@@ -10,35 +10,25 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class Arrecadador extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String numeroInscricaoEstadual;
-
-    /** nullable persistent field */
     private Short codigoAgente;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** persistent field */
     private Cliente cliente;
-
-    /** persistent field */
     private Imovel imovel;
 
+    public Arrecadador() {
+    }
     
-    /** full constructor */
+    public Arrecadador(Integer id) {
+    	this.id = id;
+    }
+    
     public Arrecadador(String numeroInscricaoEstadual, Short codigoAgente, Date ultimaAlteracao, Short indicadorUso, Cliente cliente, Imovel imovel) {
         this.numeroInscricaoEstadual = numeroInscricaoEstadual;
         this.codigoAgente = codigoAgente;
@@ -48,26 +38,15 @@ public class Arrecadador extends ObjetoTransacao {
         this.imovel = imovel;
     }
 
-    /** default constructor */
-    public Arrecadador() {
-    }
-
-    /** minimal constructor */
     public Arrecadador(Cliente cliente, Imovel imovel) {
         this.cliente = cliente;
         this.imovel = imovel;
     }
 
-    /**
-	 * @return Retorna o campo indicadorUso.
-	 */
 	public Short getIndicadorUso() {
 		return indicadorUso;
 	}
 
-	/**
-	 * @param indicadorUso O indicadorUso a ser setado.
-	 */
 	public void setIndicadorUso(Short indicadorUso) {
 		this.indicadorUso = indicadorUso;
 	}
@@ -141,5 +120,4 @@ public class Arrecadador extends ObjetoTransacao {
 				new ParametroSimples(FiltroArrecadador.ID, this.getId()));
 		return filtroArrecadador; 
 	}
-
 }
