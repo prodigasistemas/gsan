@@ -60,105 +60,80 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Action que define o pré-processamento da página de consultar RA
- * 
- * @author Rafael Pinto
- * @created 25/07/2006
- */
 public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
-	/**
-	 * Description of the Method
-	 * 
-	 * @param actionMapping
-	 *            Description of the Parameter
-	 * @param actionForm
-	 *            Description of the Parameter
-	 * @param httpServletRequest
-	 *            Description of the Parameter
-	 * @param httpServletResponse
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+
 		ActionForward retorno = actionMapping.findForward("consultarRegistroAtendimento");
-		
+
 		Fachada fachada = Fachada.getInstancia();
-		
+
 		HttpSession sessao = httpServletRequest.getSession(false);
-		
-		ConsultarRegistroAtendimentoActionForm consultarRegistroAtendimentoActionForm = 
-		(ConsultarRegistroAtendimentoActionForm) actionForm;
-		
-		
+
+		ConsultarRegistroAtendimentoActionForm form = (ConsultarRegistroAtendimentoActionForm) actionForm;
+
 		Integer idRA = null;
-		if (consultarRegistroAtendimentoActionForm.getNumeroRA() != null &&
-			!consultarRegistroAtendimentoActionForm.getNumeroRA().equalsIgnoreCase("")){
-				
-			idRA = new Integer(consultarRegistroAtendimentoActionForm.getNumeroRA());
-			
-			if (httpServletRequest.getParameter("pesquisaUnitaria") != null){
-				consultarRegistroAtendimentoActionForm.reset(actionMapping, httpServletRequest);
+		if (form.getNumeroRA() != null && !form.getNumeroRA().equalsIgnoreCase("")) {
+
+			idRA = new Integer(form.getNumeroRA());
+
+			if (httpServletRequest.getParameter("pesquisaUnitaria") != null) {
+				form.reset(actionMapping, httpServletRequest);
 				sessao.removeAttribute("colecaoCompleta");
 				sessao.setAttribute("naoHabilitarNavegacao", "OK");
-			}
-			else if (sessao.getAttribute("colecaoRAHelper") != null){
+			} else if (sessao.getAttribute("colecaoRAHelper") != null) {
 				sessao.removeAttribute("naoHabilitarNavegacao");
-			}
-			else{
+			} else {
 				sessao.setAttribute("naoHabilitarNavegacao", "OK");
 			}
-		}
-		else {
+		} else {
 			idRA = (Integer) sessao.getAttribute("numeroOS");
 			sessao.removeAttribute("colecaoCompleta");
-			
+
 			sessao.setAttribute("naoHabilitarNavegacao", "OK");
 		}
-		
+
 		System.out.println(sessao.getAttribute("colecaoCompleta"));
-		
+
 		if (sessao.getAttribute("colecaoRAHelper") != null) {
 			FiltrarRegistroAtendimentoHelper filtro = (FiltrarRegistroAtendimentoHelper) sessao.getAttribute("filtroRA");
 			List<RAFiltroHelper> colecao = (List<RAFiltroHelper>) sessao.getAttribute("colecaoRAHelper");
 			System.out.println("colecaoRAHelper: " + colecao.size());
-			
+
 			Integer totalRegistros = (Integer) sessao.getAttribute("totalRegistros");
 			System.out.println("totalRegistros: " + totalRegistros);
 			Integer numeroPaginasPesquisa = (int) Math.ceil((double) totalRegistros / 10.0);
 			System.out.println("numeropaginas: " + numeroPaginasPesquisa);
 			Integer page = (Integer) sessao.getAttribute("page.offset");
 			System.out.println("page: " + page);
-			
+
 			boolean anterior = (httpServletRequest.getParameter("raAnterior") != null) ? true : false;
 			boolean proximo = (httpServletRequest.getParameter("proximoRA") != null) ? true : false;
-			
+
 			int index = obterIndexRAColecao(idRA, colecao);
 			if (index != -1) {
-				
-				if (anterior) index--;
-				if (proximo) index++;
+
+				if (anterior)
+					index--;
+				if (proximo)
+					index++;
 				System.out.println("Index: " + index);
 				boolean mudaPagina = false;
 				if (index > 9 && page < numeroPaginasPesquisa) {
 					index = 0;
-					page = page +1;
+					page = page + 1;
 					mudaPagina = true;
-				}
-				else if (index < 0 && page > 1) {
+				} else if (index < 0 && page > 1) {
 					index = 9;
-					page = page -1;
+					page = page - 1;
 					mudaPagina = true;
 				}
 				if (mudaPagina) {
 					System.out.println("mudaPagina");
-					filtro.setNumeroPagina(page -1);
+					filtro.setNumeroPagina(page - 1);
 					sessao.setAttribute("page.offset", page);
-					
+
 					Collection<RegistroAtendimento> colecaoRA = fachada.filtrarRegistroAtendimento(filtro);
 					if (colecaoRA != null && colecaoRA.size() > 0) {
 						colecao = (List<RAFiltroHelper>) loadColecaoRAHelper(colecaoRA);
@@ -168,23 +143,23 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 						httpServletRequest.setAttribute("desabilitaBotaoProximo", "true");
 					}
 				}
-				
+
 				if (page == 1 && index == 0) {
 					httpServletRequest.setAttribute("desabilitaBotaoAnterior", "true");
 				}
-				if ((page >= numeroPaginasPesquisa) && index >= colecao.size() -1) {
+				if ((page >= numeroPaginasPesquisa) && index >= colecao.size() - 1) {
 					System.out.println("EEK!");
 					httpServletRequest.setAttribute("desabilitaBotaoProximo", "true");
 				}
-				
+
 				if (index >= 0 && index <= 9) {
-					if (index > colecao.size() -1) {
+					if (index > colecao.size() - 1) {
 						httpServletRequest.setAttribute("desabilitaBotaoProximo", "true");
 					}
 					idRA = colecao.get(index).getRegistroAtendimento().getId();
-					
+
 				}
-				
+
 			} else {
 				httpServletRequest.setAttribute("desabilitaBotaoAnterior", "true");
 				httpServletRequest.setAttribute("desabilitaBotaoProximo", "true");
@@ -192,718 +167,640 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		} else {
 			httpServletRequest.setAttribute("naoHabilitarNavegacao", "OK");
 		}
-		
-		
-		ObterDadosRegistroAtendimentoHelper obterDadosRegistroAtendimentoHelper = 
-		fachada.obterDadosRegistroAtendimento(new Integer(idRA));
-		
-		if (obterDadosRegistroAtendimentoHelper == null || 
-				obterDadosRegistroAtendimentoHelper.getRegistroAtendimento() == null) {
-			
-			throw new ActionServletException("atencao.naocadastrado",null, "Registro Atendimento");
+
+		ObterDadosRegistroAtendimentoHelper obterDadosRegistroAtendimentoHelper = fachada.obterDadosRegistroAtendimento(new Integer(idRA));
+
+		if (obterDadosRegistroAtendimentoHelper == null || obterDadosRegistroAtendimentoHelper.getRegistroAtendimento() == null) {
+
+			throw new ActionServletException("atencao.naocadastrado", null, "Registro Atendimento");
 		}
 
-			
+		form = limparCampos(form);
+		
 		RegistroAtendimento registroAtendimento = obterDadosRegistroAtendimentoHelper.getRegistroAtendimento();
-		
-		
-		//Dados Gerais do Registro de Atendimento
-		consultarRegistroAtendimentoActionForm.setNumeroRAPesquisado(""+registroAtendimento.getId());
-		
-		if (registroAtendimento.getManual() != null){
+
+		// Dados Gerais do Registro de Atendimento
+		form.setNumeroRAPesquisado("" + registroAtendimento.getId());
+
+		if (registroAtendimento.getManual() != null) {
 			int tamanhoNumeracao = registroAtendimento.getManual().toString().length();
 			String numeracao = registroAtendimento.getManual().toString().substring(0, tamanhoNumeracao - 1);
-			consultarRegistroAtendimentoActionForm.setNumeroRAManual(
-			Util.formatarNumeracaoRAManual(new Integer(numeracao)));
+			form.setNumeroRAManual(Util.formatarNumeracaoRAManual(new Integer(numeracao)));
+		} else {
+			form.setNumeroRAManual("");
 		}
-		else{
-			consultarRegistroAtendimentoActionForm.setNumeroRAManual("");
-		}
-		
-		consultarRegistroAtendimentoActionForm.setCodigoSituacao(""+registroAtendimento.getCodigoSituacao());
-		
-		//Caso de Uso [UC0420]
-		ObterDescricaoSituacaoRAHelper situacaoRA = 
-			fachada.obterDescricaoSituacaoRA(registroAtendimento.getId());
-		
-		consultarRegistroAtendimentoActionForm.setSituacaoRA(situacaoRA.getDescricaoSituacao());		
 
-		//Caso de Uso [UC0433]		
+		form.setCodigoSituacao("" + registroAtendimento.getCodigoSituacao());
+
+		// Caso de Uso [UC0420]
+		ObterDescricaoSituacaoRAHelper situacaoRA = fachada.obterDescricaoSituacaoRA(registroAtendimento.getId());
+
+		form.setSituacaoRA(situacaoRA.getDescricaoSituacao());
+
+		// Caso de Uso [UC0433]
 		ObterRAAssociadoHelper obterRAAssociadoHelper = fachada.obterRAAssociadoConsultarRA(registroAtendimento.getId());
-		
-		if(obterRAAssociadoHelper != null && obterRAAssociadoHelper.getRegistroAtendimentoAssociado() != null){
-			consultarRegistroAtendimentoActionForm.setNumeroRaAssociado(""+obterRAAssociadoHelper.getRegistroAtendimentoAssociado().getId());
 
-			ObterDescricaoSituacaoRAHelper situacaoRAssociado = 
-				fachada.obterDescricaoSituacaoRA(obterRAAssociadoHelper.getRegistroAtendimentoAssociado().getId());
-			
-			consultarRegistroAtendimentoActionForm.setSituacaoRaAssociado(situacaoRAssociado.getDescricaoSituacao());
-			
-			if(obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_REFERENCIA){
-				consultarRegistroAtendimentoActionForm.setDescricaoRAAssociada("Número do RA de Referência:");
-				consultarRegistroAtendimentoActionForm.setDescricaoSituacaoRAAssociada("Situação do RA de Referência:");
-			}else if(obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ATUAL){
-				consultarRegistroAtendimentoActionForm.setDescricaoRAAssociada("Número do RA Atual:");
-				consultarRegistroAtendimentoActionForm.setDescricaoSituacaoRAAssociada("Situação do RA Atual:");
-			}else if(obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ANTERIOR){
-				consultarRegistroAtendimentoActionForm.setDescricaoRAAssociada("Número do RA Anterior:");
-				consultarRegistroAtendimentoActionForm.setDescricaoSituacaoRAAssociada("Situação do RA Anterior:");
+		if (obterRAAssociadoHelper != null && obterRAAssociadoHelper.getRegistroAtendimentoAssociado() != null) {
+			form.setNumeroRaAssociado("" + obterRAAssociadoHelper.getRegistroAtendimentoAssociado().getId());
+
+			ObterDescricaoSituacaoRAHelper situacaoRAssociado = fachada.obterDescricaoSituacaoRA(
+					obterRAAssociadoHelper.getRegistroAtendimentoAssociado().getId());
+
+			form.setSituacaoRaAssociado(situacaoRAssociado.getDescricaoSituacao());
+
+			if (obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_REFERENCIA) {
+				form.setDescricaoRAAssociada("Número do RA de Referência:");
+				form.setDescricaoSituacaoRAAssociada("Situação do RA de Referência:");
+			} else if (obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ATUAL) {
+				form.setDescricaoRAAssociada("Número do RA Atual:");
+				form.setDescricaoSituacaoRAAssociada("Situação do RA Atual:");
+			} else if (obterRAAssociadoHelper.getCodigoExistenciaRAAssociado() == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ANTERIOR) {
+				form.setDescricaoRAAssociada("Número do RA Anterior:");
+				form.setDescricaoSituacaoRAAssociada("Situação do RA Anterior:");
 			}
-			
-			httpServletRequest.setAttribute("existeRaAssociado",true);
+
+			httpServletRequest.setAttribute("existeRaAssociado", true);
 		}
-		
-		
-		SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao = 
-			registroAtendimento.getSolicitacaoTipoEspecificacao();
-		
-		if(solicitacaoTipoEspecificacao != null){
-			
-			if(solicitacaoTipoEspecificacao.getSolicitacaoTipo() != null){
-				consultarRegistroAtendimentoActionForm.setIdTipoSolicitacao(""+solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId());
-				consultarRegistroAtendimentoActionForm.setTipoSolicitacao(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getDescricao());	
+
+		SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao = registroAtendimento.getSolicitacaoTipoEspecificacao();
+		if (solicitacaoTipoEspecificacao != null) {
+			if (solicitacaoTipoEspecificacao.getSolicitacaoTipo() != null) {
+				form.setIdTipoSolicitacao("" + solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId());
+				form.setTipoSolicitacao(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getDescricao());
 			}
-			
-			if(solicitacaoTipoEspecificacao.getServicoTipo() != null){
+
+			if (solicitacaoTipoEspecificacao.getServicoTipo() != null) {
 				String valorPrevisto = Util.formatarMoedaReal(solicitacaoTipoEspecificacao.getServicoTipo().getValor());
-				consultarRegistroAtendimentoActionForm.setValorSugerido(valorPrevisto);
+				form.setValorSugerido(valorPrevisto);
 			}
-			
-			consultarRegistroAtendimentoActionForm.setIdEspecificacao(""+solicitacaoTipoEspecificacao.getId());
-			consultarRegistroAtendimentoActionForm.setEspecificacao(solicitacaoTipoEspecificacao.getDescricao());		
+
+			form.setIdEspecificacao("" + solicitacaoTipoEspecificacao.getId());
+			form.setEspecificacao(solicitacaoTipoEspecificacao.getDescricao());
 		}
 
-		//Perfil do Imovel
-		if(registroAtendimento.getImovel()!= null){
-			ImovelPerfil imovelPerfil = 
-				registroAtendimento.getImovel().getImovelPerfil();
-			
-			if(imovelPerfil != null){				
-				consultarRegistroAtendimentoActionForm.setPerfilImovel(imovelPerfil.getDescricao());		
-			}
-			
-		}
-		
+		// Perfil do Imovel
+		if (registroAtendimento.getImovel() != null) {
+			ImovelPerfil imovelPerfil = registroAtendimento.getImovel().getImovelPerfil();
 
-		consultarRegistroAtendimentoActionForm.setTipoAtendimento(""+registroAtendimento.getIndicadorAtendimentoOnline());
-		
+			if (imovelPerfil != null) {
+				form.setPerfilImovel(imovelPerfil.getDescricao());
+			}
+		}
+
+		form.setTipoAtendimento("" + registroAtendimento.getIndicadorAtendimentoOnline());
+
 		Date dataAtendimento = registroAtendimento.getRegistroAtendimento();
-		
-		consultarRegistroAtendimentoActionForm.setDataAtendimento(Util.formatarData(dataAtendimento));		
-		consultarRegistroAtendimentoActionForm.setHoraAtendimento(Util.formatarHoraSemSegundos(dataAtendimento));
-		
-		consultarRegistroAtendimentoActionForm.setTempoEsperaInicio(Util.formatarHoraSemSegundos(registroAtendimento.getDataInicioEspera()));		
-		consultarRegistroAtendimentoActionForm.setTempoEsperaTermino(Util.formatarHoraSemSegundos(registroAtendimento.getDataFimEspera()));
-		
-		consultarRegistroAtendimentoActionForm.setDataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
-		
-		if(registroAtendimento.getMeioSolicitacao() != null){
-			consultarRegistroAtendimentoActionForm.setIdMeioSolicitacao(""+registroAtendimento.getMeioSolicitacao().getId());
-			consultarRegistroAtendimentoActionForm.setMeioSolicitacao(registroAtendimento.getMeioSolicitacao().getDescricao());	
+
+		form.setDataAtendimento(Util.formatarData(dataAtendimento));
+		form.setHoraAtendimento(Util.formatarHoraSemSegundos(dataAtendimento));
+
+		form.setTempoEsperaInicio(Util.formatarHoraSemSegundos(registroAtendimento.getDataInicioEspera()));
+		form.setTempoEsperaTermino(Util.formatarHoraSemSegundos(registroAtendimento.getDataFimEspera()));
+
+		form.setDataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
+
+		if (registroAtendimento.getMeioSolicitacao() != null) {
+			form.setIdMeioSolicitacao("" + registroAtendimento.getMeioSolicitacao().getId());
+			form.setMeioSolicitacao(registroAtendimento.getMeioSolicitacao().getDescricao());
 		}
-		
-		//Caso de Uso [UC0421]
+
+		// Caso de Uso [UC0421]
 		UnidadeOrganizacional unidadeAtendimento = fachada.obterUnidadeAtendimentoRA(registroAtendimento.getId());
-		
-		if(unidadeAtendimento != null){
-			
-			consultarRegistroAtendimentoActionForm.setIdUnidadeAtendimento(""+unidadeAtendimento.getId());
-			consultarRegistroAtendimentoActionForm.setUnidadeAtendimento(unidadeAtendimento.getDescricao());
-			
-			RegistroAtendimentoUnidade registroAtendimentoUnidade = 
-				this.consultarRegistroAtendimentoUnidade(registroAtendimento.getId(),unidadeAtendimento.getId(),
-						AtendimentoRelacaoTipo.ABRIR_REGISTRAR);
-			
+
+		if (unidadeAtendimento != null) {
+
+			form.setIdUnidadeAtendimento("" + unidadeAtendimento.getId());
+			form.setUnidadeAtendimento(unidadeAtendimento.getDescricao());
+
+			RegistroAtendimentoUnidade registroAtendimentoUnidade = this.consultarRegistroAtendimentoUnidade(registroAtendimento.getId(),
+					unidadeAtendimento.getId(), AtendimentoRelacaoTipo.ABRIR_REGISTRAR);
+
 			Usuario usuario = registroAtendimentoUnidade.getUsuario();
-			
-			if(usuario != null){
-				consultarRegistroAtendimentoActionForm.setIdUsuario(""+usuario.getId());
-				consultarRegistroAtendimentoActionForm.setUsuario(usuario.getNomeUsuario());
+
+			if (usuario != null) {
+				form.setIdUsuario("" + usuario.getId());
+				form.setUsuario(usuario.getNomeUsuario());
 			}
-			
-			
+
 		}
 
-		//Caso de Uso [UC0418]
+		// Caso de Uso [UC0418]
 		UnidadeOrganizacional unidadeAtual = fachada.obterUnidadeAtualRA(registroAtendimento.getId());
-		
-		if(unidadeAtual != null){
-			consultarRegistroAtendimentoActionForm.setIdUnidadeAtual(""+unidadeAtual.getId());
-			consultarRegistroAtendimentoActionForm.setUnidadeAtual(unidadeAtual.getDescricao());
+
+		if (unidadeAtual != null) {
+			form.setIdUnidadeAtual("" + unidadeAtual.getId());
+			form.setUnidadeAtual(unidadeAtual.getDescricao());
 		}
-		
+
 		UnidadeOrganizacional unidadeAnterior = fachada.verificaUnidadeAnteriorRA(registroAtendimento.getId());
-		if(unidadeAnterior != null){
-			consultarRegistroAtendimentoActionForm.setIdUnidadeAnterior(""+unidadeAnterior.getId());
-			consultarRegistroAtendimentoActionForm.setUnidadeAnterior(unidadeAnterior.getDescricao());
-		}else{
-			consultarRegistroAtendimentoActionForm.setIdUnidadeAnterior("");
-			consultarRegistroAtendimentoActionForm.setUnidadeAnterior("");
+		if (unidadeAnterior != null) {
+			form.setIdUnidadeAnterior("" + unidadeAnterior.getId());
+			form.setUnidadeAnterior(unidadeAnterior.getDescricao());
+		} else {
+			form.setIdUnidadeAnterior("");
+			form.setUnidadeAnterior("");
 		}
-		
-		consultarRegistroAtendimentoActionForm.setObservacao(registroAtendimento.getObservacao());
-		
-		
-		//Dados do Local da Ocorrencia
+
+		form.setObservacao(registroAtendimento.getObservacao());
+
+		// Dados do Local da Ocorrencia
 		Imovel imovel = registroAtendimento.getImovel();
-		if(imovel != null){
-			
-			consultarRegistroAtendimentoActionForm.setMatriculaImovel(""+imovel.getId());
-			consultarRegistroAtendimentoActionForm.setInscricaoImovel(imovel.getInscricaoFormatada());
-			consultarRegistroAtendimentoActionForm.setRota(obterDadosRegistroAtendimentoHelper.getCodigoRota().toString());
-			
+		if (imovel != null) {
+
+			form.setMatriculaImovel("" + imovel.getId());
+			form.setInscricaoImovel(imovel.getInscricaoFormatada());
+			form.setRota(obterDadosRegistroAtendimentoHelper.getCodigoRota().toString());
+
 			if (obterDadosRegistroAtendimentoHelper.getSequencialRota() != null) {
-				consultarRegistroAtendimentoActionForm.setSequencialRota(obterDadosRegistroAtendimentoHelper.getSequencialRota().toString());
+				form.setSequencialRota(obterDadosRegistroAtendimentoHelper.getSequencialRota().toString());
 			}
 		}
 
-		//Caso de Uso [UC0422]		
+		// Caso de Uso [UC0422]
 		String enderecoOcorrencia = fachada.obterEnderecoOcorrenciaRA(registroAtendimento.getId());
-		
-		consultarRegistroAtendimentoActionForm.setEnderecoOcorrencia(enderecoOcorrencia);
-		consultarRegistroAtendimentoActionForm.setPontoReferencia(registroAtendimento.getPontoReferencia());
-		
-		//*******************************************************************
-		// Por: Ivan Sergio
-		// Data: 09/09/2009
-		// CRC2621
-		//*******************************************************************
+
+		form.setEnderecoOcorrencia(enderecoOcorrencia);
+		form.setPontoReferencia(registroAtendimento.getPontoReferencia());
+
 		if (registroAtendimento.getNnCoordenadaNorte() != null) {
-			consultarRegistroAtendimentoActionForm.setNumeroCoordenadaNorte(
-					"" + registroAtendimento.getNnCoordenadaNorte());
-		}else {
-			consultarRegistroAtendimentoActionForm.setNumeroCoordenadaNorte("");
+			form.setNumeroCoordenadaNorte("" + registroAtendimento.getNnCoordenadaNorte());
+		} else {
+			form.setNumeroCoordenadaNorte("");
 		}
 		if (registroAtendimento.getNnCoordenadaLeste() != null) {
-			consultarRegistroAtendimentoActionForm.setNumeroCoordenadaLeste(
-					"" + registroAtendimento.getNnCoordenadaLeste());
-		}else {
-			consultarRegistroAtendimentoActionForm.setNumeroCoordenadaLeste("");
+			form.setNumeroCoordenadaLeste("" + registroAtendimento.getNnCoordenadaLeste());
+		} else {
+			form.setNumeroCoordenadaLeste("");
 		}
-		//*******************************************************************
-		
-		
-		//Caso o registro atendimento esteja associado a uma área de bairro,
-		//obter os dados da área do bairro
+
+		// Caso o registro atendimento esteja associado a uma área de bairro, obter os dados da área do bairro
 		BairroArea bairroArea = registroAtendimento.getBairroArea();
-		
-		if(bairroArea != null){
+		if (bairroArea != null) {
 
-			consultarRegistroAtendimentoActionForm.setIdMunicipio(""+bairroArea.getBairro().getMunicipio().getId());
-			consultarRegistroAtendimentoActionForm.setMunicipio(bairroArea.getBairro().getMunicipio().getNome());
-			
-			consultarRegistroAtendimentoActionForm.setIdBairro(""+bairroArea.getBairro().getId());
-			consultarRegistroAtendimentoActionForm.setBairro(bairroArea.getBairro().getNome());
-			
-			consultarRegistroAtendimentoActionForm.setIdAreaBairro(""+bairroArea.getId());
-			consultarRegistroAtendimentoActionForm.setAreaBairro(bairroArea.getNome());
-			
+			form.setIdMunicipio("" + bairroArea.getBairro().getMunicipio().getId());
+			form.setMunicipio(bairroArea.getBairro().getMunicipio().getNome());
+
+			form.setIdBairro("" + bairroArea.getBairro().getId());
+			form.setBairro(bairroArea.getBairro().getNome());
+
+			form.setIdAreaBairro("" + bairroArea.getId());
+			form.setAreaBairro(bairroArea.getNome());
 		}
-		
+
 		Localidade localidade = registroAtendimento.getLocalidade();
-		
-		if(localidade != null){
-			
-			consultarRegistroAtendimentoActionForm.setIdLocalidade(""+localidade.getId());
-			consultarRegistroAtendimentoActionForm.setLocalidade(localidade.getDescricao());
-		}
-		
-		SetorComercial setorComercial = registroAtendimento.getSetorComercial();
-		
-		if(setorComercial != null){
-			consultarRegistroAtendimentoActionForm.setIdSetorComercial(""+setorComercial.getCodigo());
-			consultarRegistroAtendimentoActionForm.setSetorComercial(setorComercial.getDescricao());
-		}
-		
-		Quadra quadra = registroAtendimento.getQuadra();
-		
-		if(quadra != null){
-			consultarRegistroAtendimentoActionForm.setIdQuadra(""+quadra.getNumeroQuadra());
-		}
-		
-		DivisaoEsgoto divisaoEsgoto = registroAtendimento.getDivisaoEsgoto();
-		
-		if(divisaoEsgoto != null){
 
-			consultarRegistroAtendimentoActionForm.setIdDivisaoEsgoto(""+divisaoEsgoto.getId());
-			consultarRegistroAtendimentoActionForm.setDivisaoEsgoto(divisaoEsgoto.getDescricao());			
+		if (localidade != null) {
+			form.setIdLocalidade("" + localidade.getId());
+			form.setLocalidade(localidade.getDescricao());
 		}
-		
+
+		SetorComercial setorComercial = registroAtendimento.getSetorComercial();
+
+		if (setorComercial != null) {
+			form.setIdSetorComercial("" + setorComercial.getCodigo());
+			form.setSetorComercial(setorComercial.getDescricao());
+		}
+
+		Quadra quadra = registroAtendimento.getQuadra();
+
+		if (quadra != null) {
+			form.setIdQuadra("" + quadra.getNumeroQuadra());
+		}
+
+		DivisaoEsgoto divisaoEsgoto = registroAtendimento.getDivisaoEsgoto();
+
+		if (divisaoEsgoto != null) {
+
+			form.setIdDivisaoEsgoto("" + divisaoEsgoto.getId());
+			form.setDivisaoEsgoto(divisaoEsgoto.getDescricao());
+		}
+
 		LocalOcorrencia localOcorrencia = registroAtendimento.getLocalOcorrencia();
-		
-		if(localOcorrencia != null){
-			consultarRegistroAtendimentoActionForm.setLocalOcorrencia(localOcorrencia.getDescricao());
+
+		if (localOcorrencia != null) {
+			form.setLocalOcorrencia(localOcorrencia.getDescricao());
 		}
-		
+
 		PavimentoRua pavimentoRua = registroAtendimento.getPavimentoRua();
-		
-		if(pavimentoRua != null){
-			consultarRegistroAtendimentoActionForm.setPavimentoRua(pavimentoRua.getDescricao());
+
+		if (pavimentoRua != null) {
+			form.setPavimentoRua(pavimentoRua.getDescricao());
 		}
 
 		PavimentoCalcada pavimentoCalcada = registroAtendimento.getPavimentoCalcada();
-		
-		if(pavimentoCalcada != null){
-			consultarRegistroAtendimentoActionForm.setPavimentoCalcada(pavimentoCalcada.getDescricao());
+
+		if (pavimentoCalcada != null) {
+			form.setPavimentoCalcada(pavimentoCalcada.getDescricao());
 		}
 
-		consultarRegistroAtendimentoActionForm.setDescricaoLocalOcorrencia(registroAtendimento.getDescricaoLocalOcorrencia());
-		
-		//Dados do Solicitante
-		
-		RegistroAtendimentoSolicitante registroAtendimentoSolicitante = 
-			this.consultarRegistroAtendimentoSolicitante(registroAtendimento.getId());
-		
-		if(registroAtendimentoSolicitante != null){
-			
+		form.setDescricaoLocalOcorrencia(registroAtendimento.getDescricaoLocalOcorrencia());
+
+		// Dados do Solicitante
+		RegistroAtendimentoSolicitante registroAtendimentoSolicitante = this.consultarRegistroAtendimentoSolicitante(registroAtendimento.getId());
+
+		if (registroAtendimentoSolicitante != null) {
+
 			Cliente cliente = registroAtendimentoSolicitante.getCliente();
 			UnidadeOrganizacional unidadeSolicitante = registroAtendimentoSolicitante.getUnidadeOrganizacional();
 
-			//PROTOCOLO DE ATENDIMENTO
-			if (registroAtendimentoSolicitante.getNumeroProtocoloAtendimento() != null &&
-				!registroAtendimentoSolicitante.getNumeroProtocoloAtendimento().equals("")){
-				
-				consultarRegistroAtendimentoActionForm.setNumeroProtocolo(
-				registroAtendimentoSolicitante.getNumeroProtocoloAtendimento());
+			// PROTOCOLO DE ATENDIMENTO
+			if (registroAtendimentoSolicitante.getNumeroProtocoloAtendimento() != null
+					&& !registroAtendimentoSolicitante.getNumeroProtocoloAtendimento().equals("")) {
+
+				form.setNumeroProtocolo(registroAtendimentoSolicitante.getNumeroProtocoloAtendimento());
 			}
-			
-			//Caso o principal solicitante do registro de atendimento seja um cliente
-			//obter os dados do cliente
-			if(cliente != null){
-			
-				consultarRegistroAtendimentoActionForm.setIdClienteSolicitante(""+cliente.getId());
-				consultarRegistroAtendimentoActionForm.setClienteSolicitante(cliente.getNome());	
 
-			//Caso o principal solicitante do registro de atendimento seja uma unidade
-			//obter os dados da unidade
-			}else if(unidadeSolicitante != null){
+			// Caso o principal solicitante do registro de atendimento seja um cliente obter os dados do cliente
+			if (cliente != null) {
 
-				consultarRegistroAtendimentoActionForm.setIdUnidadeSolicitante(""+unidadeSolicitante.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeSolicitante(unidadeSolicitante.getDescricao());	
+				form.setIdClienteSolicitante("" + cliente.getId());
+				form.setClienteSolicitante(cliente.getNome());
 
-			//Caso o principal solicitante do registro de atendimento não seja um cliente, nem uma unidade
-			//obter os dados do solicitante
-			}else{
-				consultarRegistroAtendimentoActionForm.setNomeSolicitante(registroAtendimentoSolicitante.getSolicitante());
+				// Caso o principal solicitante do registro de atendimento seja uma unidade obter os dados da unidade
+			} else if (unidadeSolicitante != null) {
+
+				form.setIdUnidadeSolicitante("" + unidadeSolicitante.getId());
+				form.setUnidadeSolicitante(unidadeSolicitante.getDescricao());
+
+				// Caso o principal solicitante do registro de atendimento não seja um cliente, nem uma unidade obter os dados do solicitante
+			} else {
+				form.setNomeSolicitante(registroAtendimentoSolicitante.getSolicitante());
 			}
-			
+
 			Funcionario funcionario = registroAtendimentoSolicitante.getFuncionario();
-			
-			if(funcionario != null){
-				consultarRegistroAtendimentoActionForm.setIdFuncionarioResponsavel(""+funcionario.getId());
-				consultarRegistroAtendimentoActionForm.setFuncionarioResponsavel(funcionario.getNome());
+			if (funcionario != null) {
+				form.setIdFuncionarioResponsavel("" + funcionario.getId());
+				form.setFuncionarioResponsavel(funcionario.getNome());
 			}
 
-			//Caso de Uso [UC0423]
+			// Caso de Uso [UC0423]
 			String enderecoSolicitante = fachada.obterEnderecoSolicitanteRA(registroAtendimentoSolicitante.getID());
-			
-			consultarRegistroAtendimentoActionForm.setEnderecoSolicitante(enderecoSolicitante);
-			consultarRegistroAtendimentoActionForm.setPontoReferenciaSolicitante(
-				registroAtendimentoSolicitante.getPontoReferencia());
+
+			form.setEnderecoSolicitante(enderecoSolicitante);
+			form.setPontoReferenciaSolicitante(registroAtendimentoSolicitante.getPontoReferencia());
 
 			SolicitanteFone solicitanteFone = consultarSolicitanteFone(registroAtendimentoSolicitante.getID());
-			
-			if(solicitanteFone != null){
-				consultarRegistroAtendimentoActionForm.setFoneDDD(""+solicitanteFone.getDdd());
-				consultarRegistroAtendimentoActionForm.setFone(solicitanteFone.getFone());
-				consultarRegistroAtendimentoActionForm.setFoneRamal(solicitanteFone.getRamal());
-				
+
+			if (solicitanteFone != null) {
+				form.setFoneDDD("" + solicitanteFone.getDdd());
+				form.setFone(solicitanteFone.getFone());
+				form.setFoneRamal(solicitanteFone.getRamal());
+
 			}
-			
-			//[RM1094] Questionario de Satisfacao do Cliente
-			if(registroAtendimentoSolicitante != null && registroAtendimentoSolicitante.getIndicadorEnvioEmailPesquisa() != null){
+
+			// [RM1094] Questionario de Satisfacao do Cliente
+			if (registroAtendimentoSolicitante != null && registroAtendimentoSolicitante.getIndicadorEnvioEmailPesquisa() != null) {
 				sessao.setAttribute("habilitarCampoSatisfacaoEmail", true);
-    			consultarRegistroAtendimentoActionForm.setEnviarEmailSatisfacao(registroAtendimentoSolicitante.getIndicadorEnvioEmailPesquisa().intValue()+"");
-    			consultarRegistroAtendimentoActionForm.setEnderecoEmail(registroAtendimentoSolicitante.getEnderecoEmail());
-	    	}else{
-	    		sessao.setAttribute("habilitarCampoSatisfacaoEmail", false);
-	    	}
-			
+				form
+						.setEnviarEmailSatisfacao(registroAtendimentoSolicitante.getIndicadorEnvioEmailPesquisa().intValue() + "");
+				form.setEnderecoEmail(registroAtendimentoSolicitante.getEnderecoEmail());
+			} else {
+				sessao.setAttribute("habilitarCampoSatisfacaoEmail", false);
+			}
+
 		}
-		
-		
+
 		/*
 		 * ANEXOS
-		 * -----------------------------------------------------------------------------------------------------------
+		 * ----------------------------------------------------------------
+		 * -------------------------------------------
 		 */
-		//CARREGANDO OS ANEXOS QUE ESTÃO CADASTRADOS NA BASE
+		// CARREGANDO OS ANEXOS QUE ESTÃO CADASTRADOS NA BASE
 		String visualizar = httpServletRequest.getParameter("visualizar");
-		
-		FiltroRegistroAtendimentoAnexo filtroRegistroAtendimentoAnexo = new FiltroRegistroAtendimentoAnexo();
-			
-		filtroRegistroAtendimentoAnexo.adicionarParametro(new ParametroSimples(
-		FiltroRegistroAtendimentoAnexo.REGISTRO_ATENDIMENTO_ID,
-		registroAtendimento.getId()));
 
-		Collection colecaoRegistroAtendimentoAnexo = fachada.pesquisar(filtroRegistroAtendimentoAnexo,
-		RegistroAtendimentoAnexo.class.getName());
-			
+		FiltroRegistroAtendimentoAnexo filtroRegistroAtendimentoAnexo = new FiltroRegistroAtendimentoAnexo();
+
+		filtroRegistroAtendimentoAnexo.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoAnexo.REGISTRO_ATENDIMENTO_ID, registroAtendimento
+				.getId()));
+
+		Collection colecaoRegistroAtendimentoAnexo = fachada.pesquisar(filtroRegistroAtendimentoAnexo, RegistroAtendimentoAnexo.class.getName());
+
 		httpServletRequest.setAttribute("colecaoRegistroAtendimentoAnexo", colecaoRegistroAtendimentoAnexo);
-		
-		//OBTENDO ARQUIVO PARA VISUALIZAÇÃO
-		RegistroAtendimentoAnexo registroAtendimentoAnexo = this.obterArquivoParaVisualizacao(visualizar, 
-		colecaoRegistroAtendimentoAnexo);
-		
-		//PREPARANDO VISUALIZAÇÃO DO ARQUIVO
-		if (registroAtendimentoAnexo != null){
-			
+
+		// OBTENDO ARQUIVO PARA VISUALIZAÇÃO
+		RegistroAtendimentoAnexo registroAtendimentoAnexo = this.obterArquivoParaVisualizacao(visualizar, colecaoRegistroAtendimentoAnexo);
+
+		// PREPARANDO VISUALIZAÇÃO DO ARQUIVO
+		if (registroAtendimentoAnexo != null) {
+
 			OutputStream out = null;
-			
+
 			String mimeType = ConstantesSistema.CONTENT_TYPE_GENERICO;
-			
-			if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_DOC)){
+
+			if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_DOC)) {
 				mimeType = ConstantesSistema.CONTENT_TYPE_MSWORD;
-			}
-			else if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_PDF)){
+			} else if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_PDF)) {
 				mimeType = ConstantesSistema.CONTENT_TYPE_PDF;
-			}
-			else if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_JPG)){
+			} else if (registroAtendimentoAnexo.getNomeExtensaoDocumento().equals(ConstantesSistema.EXTENSAO_JPG)) {
 				mimeType = ConstantesSistema.CONTENT_TYPE_JPEG;
 			}
-			
+
 			try {
 				httpServletResponse.setContentType(mimeType);
 				out = httpServletResponse.getOutputStream();
-				
+
 				out.write(registroAtendimentoAnexo.getImagemDocumento());
 				out.flush();
 				out.close();
-			} 
-			catch (IOException e) {
+			} catch (IOException e) {
 				throw new ActionServletException("erro.sistema", e);
 			}
 		}
 		/*
 		 * FIM DOS ANEXOS
-		 * -----------------------------------------------------------------------------------------------------------
+		 * --------------------------------------------------------
+		 * ---------------------------------------------------
 		 */
-		
-		
-		//Dados da Ultima Tramitação
 
-		Tramite tramite = 
-			fachada.recuperarTramiteMaisAtualPorRA(registroAtendimento.getId());
-		
-		if(tramite != null){
-			
+		// Dados da Ultima Tramitação
+
+		Tramite tramite = fachada.recuperarTramiteMaisAtualPorRA(registroAtendimento.getId());
+
+		if (tramite != null) {
+
 			UnidadeOrganizacional unidadeOrigem = tramite.getUnidadeOrganizacionalOrigem();
-			
-			if(unidadeOrigem != null){
-				
-				consultarRegistroAtendimentoActionForm.setIdUnidadeOrigem(""+unidadeOrigem.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeOrigem(unidadeOrigem.getDescricao());
+
+			if (unidadeOrigem != null) {
+
+				form.setIdUnidadeOrigem("" + unidadeOrigem.getId());
+				form.setUnidadeOrigem(unidadeOrigem.getDescricao());
 			}
-			
+
 			UnidadeOrganizacional unidadeDestino = tramite.getUnidadeOrganizacionalDestino();
-			
-			if(unidadeDestino != null){
-			
-				consultarRegistroAtendimentoActionForm.setIdUnidadeAtualTramitacao(""+unidadeDestino.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeAtualTramitacao(unidadeDestino.getDescricao());
 
-			}			
-			
+			if (unidadeDestino != null) {
+
+				form.setIdUnidadeAtualTramitacao("" + unidadeDestino.getId());
+				form.setUnidadeAtualTramitacao(unidadeDestino.getDescricao());
+
+			}
+
 			Date dataTramite = tramite.getDataTramite();
-			
-			consultarRegistroAtendimentoActionForm.setDataTramite(Util.formatarData(dataTramite));
-			consultarRegistroAtendimentoActionForm.setHoraTramite(Util.formatarHoraSemSegundos(dataTramite));
 
-			consultarRegistroAtendimentoActionForm.setParecerTramite(tramite.getParecerTramite());
-			
-			Usuario usuarioResponsavel =  tramite.getUsuarioResponsavel();
-			
-			if(usuarioResponsavel != null){
-				consultarRegistroAtendimentoActionForm.setIdUsuarioResponsavel(""+usuarioResponsavel.getId());
-				consultarRegistroAtendimentoActionForm.setUsuarioResponsavel(usuarioResponsavel.getNomeUsuario());
+			form.setDataTramite(Util.formatarData(dataTramite));
+			form.setHoraTramite(Util.formatarHoraSemSegundos(dataTramite));
+
+			form.setParecerTramite(tramite.getParecerTramite());
+
+			Usuario usuarioResponsavel = tramite.getUsuarioResponsavel();
+
+			if (usuarioResponsavel != null) {
+				form.setIdUsuarioResponsavel("" + usuarioResponsavel.getId());
+				form.setUsuarioResponsavel(usuarioResponsavel.getNomeUsuario());
 			}
 		}
-		
-		//Dados da Reiteração
-		
-		//Caso o registro atendimento tenha sido reiterado,
-		//exibir os dados da reiteração
-		if(registroAtendimento.getQuantidadeReiteracao() != null){
-			
+
+		// Dados da Reiteração
+
+		// Caso o registro atendimento tenha sido reiterado,
+		// exibir os dados da reiteração
+		if (registroAtendimento.getQuantidadeReiteracao() != null) {
+
 			Date dataUltimaReiteracao = registroAtendimento.getUltimaReiteracao();
 
-			consultarRegistroAtendimentoActionForm.setQuantidade(""+registroAtendimento.getQuantidadeReiteracao());
-			consultarRegistroAtendimentoActionForm.setDataUltimaReiteracao(Util.formatarData(dataUltimaReiteracao));
-			consultarRegistroAtendimentoActionForm.setHoraUltimaReiteracao(Util.formatarHoraSemSegundos(dataUltimaReiteracao));
+			form.setQuantidade("" + registroAtendimento.getQuantidadeReiteracao());
+			form.setDataUltimaReiteracao(Util.formatarData(dataUltimaReiteracao));
+			form.setHoraUltimaReiteracao(Util.formatarHoraSemSegundos(dataUltimaReiteracao));
 
 		}
-		
-		obterDadosReiteracaoRa(registroAtendimento.getId(),fachada,sessao);
-		
-		//Dados da Reativação
-		
-		//Caso o registro atendimento tenha sido reativado
-		//exibir os dados da reativação
+
+		obterDadosReiteracaoRa(registroAtendimento.getId(), fachada, sessao);
+
+		// Dados da Reativação
+
+		// Caso o registro atendimento tenha sido reativado
+		// exibir os dados da reativação
 		Short codigoAssociado = obterRAAssociadoHelper.getCodigoExistenciaRAAssociado();
-		
-		RegistroAtendimento registroAtendimentoAssociado = 
-			obterRAAssociadoHelper.getRegistroAtendimentoAssociado();
-			
-		//Caso de Uso [UC0420]
+
+		RegistroAtendimento registroAtendimentoAssociado = obterRAAssociadoHelper.getRegistroAtendimentoAssociado();
+
+		// Caso de Uso [UC0420]
 		ObterDescricaoSituacaoRAHelper situacaoRAAssociado = null;
-		if(registroAtendimentoAssociado != null){
+		if (registroAtendimentoAssociado != null) {
 			situacaoRAAssociado = fachada.obterDescricaoSituacaoRA(registroAtendimentoAssociado.getId());
 		}
 
-		if(codigoAssociado == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ATUAL && registroAtendimentoAssociado != null){
-			
-			consultarRegistroAtendimentoActionForm.setNumeroRaAtual(""+registroAtendimentoAssociado.getId());
-			consultarRegistroAtendimentoActionForm.setSituacaoRaAtual(situacaoRAAssociado.getDescricaoSituacao());
-			
+		if (codigoAssociado == RegistroAtendimento.CODIGO_ASSOCIADO_RA_ATUAL && registroAtendimentoAssociado != null) {
+
+			form.setNumeroRaAtual("" + registroAtendimentoAssociado.getId());
+			form.setSituacaoRaAtual(situacaoRAAssociado.getDescricaoSituacao());
+
 			RaMotivoReativacao raMotivoReativacao = registroAtendimentoAssociado.getRaMotivoReativacao();
-			if(raMotivoReativacao!= null){
-				consultarRegistroAtendimentoActionForm.setIdMotivoReativacao(""+raMotivoReativacao.getId());
-				consultarRegistroAtendimentoActionForm.setMotivoReativacao(raMotivoReativacao.getDescricao());
+			if (raMotivoReativacao != null) {
+				form.setIdMotivoReativacao("" + raMotivoReativacao.getId());
+				form.setMotivoReativacao(raMotivoReativacao.getDescricao());
 			}
-			
+
 			Date dataRegistro = registroAtendimentoAssociado.getRegistroAtendimento();
 			Date dataPrevista = registroAtendimentoAssociado.getDataPrevistaAtual();
-			
-			consultarRegistroAtendimentoActionForm.setDataReativacao(Util.formatarData(dataRegistro));
-			consultarRegistroAtendimentoActionForm.setHoraReativacao(Util.formatarHoraSemSegundos(dataRegistro));
-			
-			consultarRegistroAtendimentoActionForm.setDataPrevistaRaAtual(Util.formatarData(dataPrevista));
 
-			//Caso de Uso [UC0421]			
-			UnidadeOrganizacional unidadeReativacao = 
-				fachada.obterUnidadeAtendimentoRA(registroAtendimentoAssociado.getId());
-			
-			if(unidadeReativacao != null){
-				consultarRegistroAtendimentoActionForm.setIdUnidadeReativacao(""+unidadeReativacao.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeReativacao(unidadeReativacao.getDescricao());		
+			form.setDataReativacao(Util.formatarData(dataRegistro));
+			form.setHoraReativacao(Util.formatarHoraSemSegundos(dataRegistro));
+
+			form.setDataPrevistaRaAtual(Util.formatarData(dataPrevista));
+
+			// Caso de Uso [UC0421]
+			UnidadeOrganizacional unidadeReativacao = fachada.obterUnidadeAtendimentoRA(registroAtendimentoAssociado.getId());
+
+			if (unidadeReativacao != null) {
+				form.setIdUnidadeReativacao("" + unidadeReativacao.getId());
+				form.setUnidadeReativacao(unidadeReativacao.getDescricao());
 			}
-			
-			//Caso de Uso [UC0418]			
-			UnidadeOrganizacional unidadeRAAtual = 
-				fachada.obterUnidadeAtualRA(registroAtendimentoAssociado.getId());
-			
-			if(unidadeRAAtual != null){
-				consultarRegistroAtendimentoActionForm.setIdUnidadeRaAtual(""+unidadeRAAtual.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeRaAtual(unidadeRAAtual.getDescricao());
+
+			// Caso de Uso [UC0418]
+			UnidadeOrganizacional unidadeRAAtual = fachada.obterUnidadeAtualRA(registroAtendimentoAssociado.getId());
+
+			if (unidadeRAAtual != null) {
+				form.setIdUnidadeRaAtual("" + unidadeRAAtual.getId());
+				form.setUnidadeRaAtual(unidadeRAAtual.getDescricao());
 			}
-			
-			consultarRegistroAtendimentoActionForm.setObservacaoReativacao(registroAtendimentoAssociado.getObservacao());
+
+			form.setObservacaoReativacao(registroAtendimentoAssociado.getObservacao());
 		}
-		
-		//Dados do encerramento
-		
-		//Caso o registro atendimento seja encerrado,
-		//exibir os dados do encerramento
-		AtendimentoMotivoEncerramento atendimentoMotivoEncerramento = 
-			registroAtendimento.getAtendimentoMotivoEncerramento();
-		
-		if(atendimentoMotivoEncerramento != null){
-			
-			consultarRegistroAtendimentoActionForm.setIdMotivoEncerramento(""+atendimentoMotivoEncerramento.getId());	
-			consultarRegistroAtendimentoActionForm.setMotivoEncerramento(atendimentoMotivoEncerramento.getDescricao());
 
-			if(codigoAssociado == RegistroAtendimento.CODIGO_ASSOCIADO_RA_REFERENCIA && registroAtendimentoAssociado != null){
-				
-				consultarRegistroAtendimentoActionForm.setNumeroRaReferencia(""+registroAtendimentoAssociado.getId());
+		// Dados do encerramento
 
-				//Caso de Uso [UC0420]
-				consultarRegistroAtendimentoActionForm.setSituacaoRaReferencia(situacaoRAAssociado.getDescricaoSituacao());
-				
+		// Caso o registro atendimento seja encerrado,
+		// exibir os dados do encerramento
+		AtendimentoMotivoEncerramento atendimentoMotivoEncerramento = registroAtendimento.getAtendimentoMotivoEncerramento();
+
+		if (atendimentoMotivoEncerramento != null) {
+
+			form.setIdMotivoEncerramento("" + atendimentoMotivoEncerramento.getId());
+			form.setMotivoEncerramento(atendimentoMotivoEncerramento.getDescricao());
+
+			if (codigoAssociado == RegistroAtendimento.CODIGO_ASSOCIADO_RA_REFERENCIA && registroAtendimentoAssociado != null) {
+
+				form.setNumeroRaReferencia("" + registroAtendimentoAssociado.getId());
+
+				// Caso de Uso [UC0420]
+				form.setSituacaoRaReferencia(situacaoRAAssociado.getDescricaoSituacao());
+
 			}
 
-			//Caso de Uso [UC0434]
-			UnidadeOrganizacional unidadeEncerramento = 
-				fachada.obterUnidadeEncerramentoRA(registroAtendimento.getId());
-			
-			if(unidadeEncerramento != null){
-				
-				consultarRegistroAtendimentoActionForm.setIdUnidadeEncerramento(""+unidadeEncerramento.getId());
-				consultarRegistroAtendimentoActionForm.setUnidadeEncerramento(unidadeEncerramento.getDescricao());		
+			// Caso de Uso [UC0434]
+			UnidadeOrganizacional unidadeEncerramento = fachada.obterUnidadeEncerramentoRA(registroAtendimento.getId());
 
-				RegistroAtendimentoUnidade registroAtendimentoUnidade = 
-					this.consultarRegistroAtendimentoUnidade(
-							registroAtendimento.getId(),
-							unidadeEncerramento.getId(),
-							AtendimentoRelacaoTipo.ENCERRAR);
-				
+			if (unidadeEncerramento != null) {
+
+				form.setIdUnidadeEncerramento("" + unidadeEncerramento.getId());
+				form.setUnidadeEncerramento(unidadeEncerramento.getDescricao());
+
+				RegistroAtendimentoUnidade registroAtendimentoUnidade = this.consultarRegistroAtendimentoUnidade(registroAtendimento.getId(),
+						unidadeEncerramento.getId(), AtendimentoRelacaoTipo.ENCERRAR);
+
 				Usuario usuario = registroAtendimentoUnidade.getUsuario();
-				if(usuario != null){
-					
-					consultarRegistroAtendimentoActionForm.setIdUsuarioEncerramento(""+usuario.getId());
-					consultarRegistroAtendimentoActionForm.setUsuarioEncerramento(usuario.getNomeUsuario());
+				if (usuario != null) {
+
+					form.setIdUsuarioEncerramento("" + usuario.getId());
+					form.setUsuarioEncerramento(usuario.getNomeUsuario());
 				}
 			}
-			
+
 			Date dataEncerramento = registroAtendimento.getDataEncerramento();
-			
-			consultarRegistroAtendimentoActionForm.setDataEncerramento(Util.formatarData(dataEncerramento));
-			consultarRegistroAtendimentoActionForm.setHoraEncerramento(Util.formatarHoraSemSegundos(dataEncerramento));
-			
-			consultarRegistroAtendimentoActionForm.setDataPrevistaEncerramento(
-				Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
-			
-			consultarRegistroAtendimentoActionForm.setParecerEncerramento(registroAtendimento.getParecerEncerramento());
-			
-			if(registroAtendimento.getServicoNaoCobrancaMotivo() != null){
-				consultarRegistroAtendimentoActionForm.setMotivoNaoCobranca(
-						registroAtendimento.getServicoNaoCobrancaMotivo().getDescricao());
+
+			form.setDataEncerramento(Util.formatarData(dataEncerramento));
+			form.setHoraEncerramento(Util.formatarHoraSemSegundos(dataEncerramento));
+
+			form.setDataPrevistaEncerramento(Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
+
+			form.setParecerEncerramento(registroAtendimento.getParecerEncerramento());
+
+			if (registroAtendimento.getServicoNaoCobrancaMotivo() != null) {
+				form.setMotivoNaoCobranca(registroAtendimento.getServicoNaoCobrancaMotivo().getDescricao());
 			}
 		}
-		
+
 		// Dados das Contas relacionados
 		// Mariana Victor em 28/01/2011
 		FiltroRegistroAtendimentoConta filtroRegistroAtendimentoConta = new FiltroRegistroAtendimentoConta();
-		filtroRegistroAtendimentoConta.adicionarCaminhoParaCarregamentoEntidade(
-				FiltroRegistroAtendimentoConta.CONTA);
-		filtroRegistroAtendimentoConta.adicionarCaminhoParaCarregamentoEntidade(
-				FiltroRegistroAtendimentoConta.REGISTRO_ATENDIMENTO);
-		filtroRegistroAtendimentoConta.adicionarParametro(
-				new ParametroSimples(FiltroRegistroAtendimentoConta.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
-		
-		Collection colecaoRAContas = fachada.pesquisar(
-				filtroRegistroAtendimentoConta, RegistroAtendimentoConta.class.getName());
-		
+		filtroRegistroAtendimentoConta.adicionarCaminhoParaCarregamentoEntidade(FiltroRegistroAtendimentoConta.CONTA);
+		filtroRegistroAtendimentoConta.adicionarCaminhoParaCarregamentoEntidade(FiltroRegistroAtendimentoConta.REGISTRO_ATENDIMENTO);
+		filtroRegistroAtendimentoConta.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoConta.REGISTRO_ATENDIMENTO_ID, registroAtendimento
+				.getId()));
+
+		Collection colecaoRAContas = fachada.pesquisar(filtroRegistroAtendimentoConta, RegistroAtendimentoConta.class.getName());
+
 		if (colecaoRAContas != null && !colecaoRAContas.isEmpty()) {
 			sessao.setAttribute("colecaoRAContas", colecaoRAContas);
 		} else {
 			sessao.removeAttribute("colecaoRAContas");
 		}
-		
-		//Colocado por Raphael Rossiter em 26/10/2006
-		consultarRegistroAtendimentoActionForm.setNumeroRA("");
+
+		// Colocado por Raphael Rossiter em 26/10/2006
+		form.setNumeroRA("");
 		httpServletRequest.setAttribute("nomeCampo", "numeroRA");
-		
-		//Pagamentos Duplicidade
-		FiltroRegistroAtendimentoPagamentoDuplicidade filtroRegistroAtendimentoPagamentoDuplicidade = 
-			new FiltroRegistroAtendimentoPagamentoDuplicidade();
-		filtroRegistroAtendimentoPagamentoDuplicidade.adicionarParametro(
-			new ParametroSimples(
+
+		// Pagamentos Duplicidade
+		FiltroRegistroAtendimentoPagamentoDuplicidade filtroRegistroAtendimentoPagamentoDuplicidade = new FiltroRegistroAtendimentoPagamentoDuplicidade();
+		filtroRegistroAtendimentoPagamentoDuplicidade.adicionarParametro(new ParametroSimples(
 				FiltroRegistroAtendimentoPagamentoDuplicidade.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
-		
-		Collection<RegistroAtendimentoPagamentoDuplicidade> colecaoRAPagamentoDuplicidade = 
-			this.getFachada().pesquisar(filtroRegistroAtendimentoPagamentoDuplicidade, RegistroAtendimentoPagamentoDuplicidade.class.getName());
-		
-		if (colecaoRAPagamentoDuplicidade != null && !colecaoRAPagamentoDuplicidade.isEmpty()){
+
+		Collection<RegistroAtendimentoPagamentoDuplicidade> colecaoRAPagamentoDuplicidade = this.getFachada().pesquisar(
+				filtroRegistroAtendimentoPagamentoDuplicidade, RegistroAtendimentoPagamentoDuplicidade.class.getName());
+
+		if (colecaoRAPagamentoDuplicidade != null && !colecaoRAPagamentoDuplicidade.isEmpty()) {
 			sessao.setAttribute("colecaoRAPagamentoDuplicidade", colecaoRAPagamentoDuplicidade);
 		} else {
 			sessao.removeAttribute("colecaoRAPagamentoDuplicidade");
-		}		
-		
-		
+		}
+
 		return retorno;
 	}
 
 	/**
-	 * Consulta o registro atendimento solicitante pelo id do registro atendimento
-	 * 
-	 * @author Rafael Pinto
-	 * @created 09/08/2006
+	 * Consulta o registro atendimento solicitante pelo id do registro
+	 * atendimento
 	 */
-	private RegistroAtendimentoSolicitante consultarRegistroAtendimentoSolicitante(Integer idRegistroAtendimento){
+	private RegistroAtendimentoSolicitante consultarRegistroAtendimentoSolicitante(Integer idRegistroAtendimento) {
 
 		RegistroAtendimentoSolicitante retorno = null;
-		
+
 		Fachada fachada = Fachada.getInstancia();
 
-		Collection colecaoRegistroAtendimento = null; 
+		Collection colecaoRegistroAtendimento = null;
 
 		FiltroRegistroAtendimentoSolicitante filtroRegistroAtendimento = new FiltroRegistroAtendimentoSolicitante();
 
-		filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(
-				FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID,idRegistroAtendimento));
+		filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID, idRegistroAtendimento));
 
-		filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(
-			FiltroRegistroAtendimentoSolicitante.INDICADOR_SOLICITANTE_PRINCIPAL,
+		filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoSolicitante.INDICADOR_SOLICITANTE_PRINCIPAL,
 				ConstantesSistema.INDICADOR_USO_ATIVO));
-		
+
 		filtroRegistroAtendimento.adicionarCaminhoParaCarregamentoEntidade("cliente");
 		filtroRegistroAtendimento.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacional");
 		filtroRegistroAtendimento.adicionarCaminhoParaCarregamentoEntidade("funcionario");
-		
-		colecaoRegistroAtendimento = fachada.pesquisar(filtroRegistroAtendimento,
-				RegistroAtendimentoSolicitante.class.getName());
+
+		colecaoRegistroAtendimento = fachada.pesquisar(filtroRegistroAtendimento, RegistroAtendimentoSolicitante.class.getName());
 
 		if (colecaoRegistroAtendimento != null && !colecaoRegistroAtendimento.isEmpty()) {
 			retorno = (RegistroAtendimentoSolicitante) Util.retonarObjetoDeColecao(colecaoRegistroAtendimento);
-			
-		} 
-		
+
+		}
+
 		return retorno;
 	}
 
 	/**
 	 * Consulta o solicitante fone pelo id do registro atendimentoSolicitante
-	 * 
-	 * @author Rafael Pinto
-	 * @created 09/08/2006
 	 */
-	private SolicitanteFone consultarSolicitanteFone(Integer idRegistroAtendimentoSolicitante){
+	private SolicitanteFone consultarSolicitanteFone(Integer idRegistroAtendimentoSolicitante) {
 
 		SolicitanteFone retorno = null;
-		
+
 		Fachada fachada = Fachada.getInstancia();
 
-		Collection colecaoSolicitanteFone = null; 
+		Collection colecaoSolicitanteFone = null;
 
 		FiltroSolicitanteFone filtroSolicitanteFone = new FiltroSolicitanteFone();
 
-		filtroSolicitanteFone.adicionarParametro(
-			new ParametroSimples(FiltroSolicitanteFone.REGISTRO_ATENDIMENTO_SOLICITANTE_ID,
-					idRegistroAtendimentoSolicitante));
-		
-		colecaoSolicitanteFone = fachada.pesquisar(filtroSolicitanteFone,
-				SolicitanteFone.class.getName());
+		filtroSolicitanteFone.adicionarParametro(new ParametroSimples(FiltroSolicitanteFone.REGISTRO_ATENDIMENTO_SOLICITANTE_ID,
+				idRegistroAtendimentoSolicitante));
+
+		colecaoSolicitanteFone = fachada.pesquisar(filtroSolicitanteFone, SolicitanteFone.class.getName());
 
 		if (colecaoSolicitanteFone != null && !colecaoSolicitanteFone.isEmpty()) {
 			retorno = (SolicitanteFone) Util.retonarObjetoDeColecao(colecaoSolicitanteFone);
-			
-		} 
-		
+
+		}
+
 		return retorno;
 	}
 
 	/**
 	 * Consulta o Registro Atendimento Unidade pelo id da RA
-	 * 
-	 * @author Rafael Pinto
-	 * @created 09/08/2006
 	 */
-	private RegistroAtendimentoUnidade consultarRegistroAtendimentoUnidade(
-			Integer idRA,Integer idUnidade,Integer atendimentoRelacaoTipoId){
+	private RegistroAtendimentoUnidade consultarRegistroAtendimentoUnidade(Integer idRA, Integer idUnidade, Integer atendimentoRelacaoTipoId) {
 
 		RegistroAtendimentoUnidade retorno = null;
-		
+
 		Fachada fachada = Fachada.getInstancia();
 
-		Collection colecaoRegistroAtendimentoUnidade = null; 
+		Collection colecaoRegistroAtendimentoUnidade = null;
 
 		FiltroRegistroAtendimentoUnidade filtroRegistroAtendimentoUnidade = new FiltroRegistroAtendimentoUnidade();
 
-		filtroRegistroAtendimentoUnidade.adicionarParametro(
-			new ParametroSimples(FiltroRegistroAtendimentoUnidade.REGISTRO_ATENDIMENTO_ID,idRA));
+		filtroRegistroAtendimentoUnidade.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.REGISTRO_ATENDIMENTO_ID, idRA));
 
-		filtroRegistroAtendimentoUnidade.adicionarParametro(
-				new ParametroSimples(FiltroRegistroAtendimentoUnidade.UNIDADE_ORGANIZACIONAL_ID,idUnidade));
-		
-		if(atendimentoRelacaoTipoId!=null){
-			filtroRegistroAtendimentoUnidade.adicionarParametro(
-					new ParametroSimples(FiltroRegistroAtendimentoUnidade.ATENDIMENTO_RELACAO_TIPO,atendimentoRelacaoTipoId));
+		filtroRegistroAtendimentoUnidade.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.UNIDADE_ORGANIZACIONAL_ID, idUnidade));
+
+		if (atendimentoRelacaoTipoId != null) {
+			filtroRegistroAtendimentoUnidade.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.ATENDIMENTO_RELACAO_TIPO,
+					atendimentoRelacaoTipoId));
 		}
-		
+
 		filtroRegistroAtendimentoUnidade.adicionarCaminhoParaCarregamentoEntidade("usuario");
-		
-		colecaoRegistroAtendimentoUnidade = 
-			fachada.pesquisar(filtroRegistroAtendimentoUnidade,RegistroAtendimentoUnidade.class.getName());
+
+		colecaoRegistroAtendimentoUnidade = fachada.pesquisar(filtroRegistroAtendimentoUnidade, RegistroAtendimentoUnidade.class.getName());
 
 		if (colecaoRegistroAtendimentoUnidade != null && !colecaoRegistroAtendimentoUnidade.isEmpty()) {
 			retorno = (RegistroAtendimentoUnidade) Util.retonarObjetoDeColecao(colecaoRegistroAtendimentoUnidade);
-			
-		} 
-		
+
+		}
+
 		return retorno;
 	}
-	
-	
-	
+
 	private int obterIndexRAColecao(Integer idRA, Collection<RAFiltroHelper> colecao) {
 		int index = 0;
 		for (RAFiltroHelper helper : colecao) {
@@ -914,7 +811,7 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		}
 		return -1;
 	}
-	
+
 	private Collection loadColecaoRAHelper(Collection<RegistroAtendimento> colecaoRegistroAtendimento) {
 		Fachada fachada = Fachada.getInstancia();
 		Collection colecaoRAHelper = new ArrayList();
@@ -923,7 +820,7 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		RAFiltroHelper helper = null;
 		for (Iterator iter = colecaoRegistroAtendimento.iterator(); iter.hasNext();) {
 			RegistroAtendimento registroAtendimento = (RegistroAtendimento) iter.next();
-			
+
 			situacao = fachada.obterDescricaoSituacaoRA(registroAtendimento.getId());
 			unidadeAtual = fachada.obterUnidadeAtualRA(registroAtendimento.getId());
 			helper = new RAFiltroHelper();
@@ -934,55 +831,154 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		}
 		return colecaoRAHelper;
 	}
-	
+
 	/**
 	 * Removendo um arquivo da coleção
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 30/07/2009
-	 * 
-	 * @param String
-	 * @param HttpSession
 	 */
-	private RegistroAtendimentoAnexo obterArquivoParaVisualizacao(String identificacao, 
-			Collection colecaoRegistroAtendimentoAnexo){
-		
+	private RegistroAtendimentoAnexo obterArquivoParaVisualizacao(String identificacao, Collection colecaoRegistroAtendimentoAnexo) {
+
 		RegistroAtendimentoAnexo registroAtendimentoAnexo = null;
-		
-		if (identificacao != null && !identificacao.equals("")){
-			
+
+		if (identificacao != null && !identificacao.equals("")) {
+
 			Iterator it = colecaoRegistroAtendimentoAnexo.iterator();
 			RegistroAtendimentoAnexo anexoColecao = null;
-			
-			while (it.hasNext()){
-				
+
+			while (it.hasNext()) {
+
 				anexoColecao = (RegistroAtendimentoAnexo) it.next();
-				
-				if (obterTimestampIdObjeto(anexoColecao) == Long.parseLong(identificacao)){
+
+				if (obterTimestampIdObjeto(anexoColecao) == Long.parseLong(identificacao)) {
 					registroAtendimentoAnexo = anexoColecao;
 					break;
 				}
 			}
 		}
-		
+
 		return registroAtendimentoAnexo;
 	}
 
-	/**
-	 * @author Vivianne Sousa
-	 * @date 16/05/2011
-	 */	
-	private void obterDadosReiteracaoRa(Integer numeroRA, 
-			Fachada fachada,HttpSession sessao) {
-		
+	private void obterDadosReiteracaoRa(Integer numeroRA, Fachada fachada, HttpSession sessao) {
+
 		sessao.removeAttribute("colecaoDadosReiteracao");
-		
-		if(numeroRA != null){
+
+		if (numeroRA != null) {
 			Collection colecaoDadosReiteracao = fachada.pesquisarDadosReiteracaoRA(numeroRA);
 
-			if(colecaoDadosReiteracao != null && !colecaoDadosReiteracao.isEmpty()){
-				sessao.setAttribute("colecaoDadosReiteracao",colecaoDadosReiteracao);
+			if (colecaoDadosReiteracao != null && !colecaoDadosReiteracao.isEmpty()) {
+				sessao.setAttribute("colecaoDadosReiteracao", colecaoDadosReiteracao);
 			}
 		}
+	}
+	
+	private ConsultarRegistroAtendimentoActionForm limparCampos(ConsultarRegistroAtendimentoActionForm form) {
+		form.setPerfilImovel(null);
+		form.setSituacaoRA(null);
+		form.setNumeroRaAssociado(null);
+		form.setSituacaoRaAssociado(null);
+		form.setNumeroRAManual(null);
+		form.setIdTipoSolicitacao(null);
+		form.setTipoSolicitacao(null);
+		form.setIdEspecificacao(null);
+		form.setEspecificacao(null);
+		form.setTipoAtendimento(null);
+		form.setDataAtendimento(null);
+		form.setHoraAtendimento(null);
+		form.setTempoEsperaInicio(null);
+		form.setTempoEsperaTermino(null);
+		form.setDataPrevista(null);
+		form.setValorSugerido(null);
+		form.setIdMeioSolicitacao(null);
+		form.setMeioSolicitacao(null);
+		form.setIdUnidadeAtendimento(null);
+		form.setUnidadeAtendimento(null);
+		form.setIdUsuario(null);
+		form.setUsuario(null);
+		form.setIdUnidadeAtual(null);
+		form.setUnidadeAtual(null);
+		form.setIdUnidadeAnterior(null);
+		form.setUnidadeAnterior(null);
+		form.setObservacao(null);
+		
+		form.setMatriculaImovel(null);
+		form.setInscricaoImovel(null);
+		form.setRota(null);
+		form.setSequencialRota(null);
+		
+		form.setEnderecoOcorrencia(null);
+		form.setPontoReferencia(null);
+		form.setNumeroCoordenadaNorte(null);
+		form.setNumeroCoordenadaLeste(null);
+		form.setIdMunicipio(null);
+		form.setMunicipio(null);
+		form.setIdBairro(null);
+		form.setBairro(null);
+		form.setIdAreaBairro(null);
+		form.setAreaBairro(null);
+		form.setIdLocalidade(null);
+		form.setLocalidade(null);
+		form.setIdSetorComercial(null);
+		form.setSetorComercial(null);
+		form.setIdQuadra(null);
+		form.setIdDivisaoEsgoto(null);
+		form.setDivisaoEsgoto(null);
+		form.setLocalOcorrencia(null);
+		form.setPavimentoRua(null);
+		form.setPavimentoCalcada(null);
+		form.setDescricaoLocalOcorrencia(null);
+		
+		form.setNumeroProtocolo(null);
+		form.setIdClienteSolicitante(null);
+		form.setClienteSolicitante(null);
+		form.setIdUnidadeSolicitante(null);
+		form.setUnidadeSolicitante(null);
+		form.setIdFuncionarioResponsavel(null);
+		form.setFuncionarioResponsavel(null);
+		form.setNomeSolicitante(null);
+		form.setEnderecoEmail(null);
+		form.setEnderecoSolicitante(null);
+		form.setPontoReferencia(null);
+		form.setFoneDDD(null);
+		form.setFone(null);
+		form.setFoneRamal(null);
+		
+		form.setIdUnidadeOrigem(null);
+		form.setUnidadeOrigem(null);
+		form.setIdUnidadeAtualTramitacao(null);
+		form.setUnidadeAtualTramitacao(null);
+		form.setDataTramite(null);
+		form.setHoraTramite(null);
+		form.setIdUsuarioResponsavel(null);
+		form.setUsuarioResponsavel(null);
+		form.setParecerTramite(null);
+		
+		form.setNumeroRaAtual(null);
+		form.setSituacaoRaAtual(null);
+		form.setIdMotivoReativacao(null);
+		form.setMotivoReativacao(null);
+		form.setDataReativacao(null);
+		form.setHoraReativacao(null);
+		form.setDataPrevistaRaAtual(null);
+		form.setIdUnidadeReativacao(null);
+		form.setUnidadeReativacao(null);
+		form.setIdUnidadeRaAtual(null);
+		form.setUnidadeRaAtual(null);
+		form.setObservacaoReativacao(null);
+		
+		form.setIdMotivoEncerramento(null);
+		form.setMotivoEncerramento(null);
+		form.setNumeroRaReferencia(null);
+		form.setSituacaoRaReferencia(null);
+		form.setDataEncerramento(null);
+		form.setHoraEncerramento(null);
+		form.setDataPrevistaEncerramento(null);
+		form.setIdUnidadeEncerramento(null);
+		form.setUnidadeEncerramento(null);
+		form.setIdUsuarioEncerramento(null);
+		form.setUsuarioEncerramento(null);
+		form.setParecerEncerramento(null);
+		form.setMotivoNaoCobranca(null);
+		
+		return form;
 	}
 }
