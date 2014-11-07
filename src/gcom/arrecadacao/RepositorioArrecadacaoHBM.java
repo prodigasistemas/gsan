@@ -2415,7 +2415,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = null;
 
 		try {
-			consulta = "SELECT pgmt "
+			consulta = "SELECT pgmt.id, pgmt.documentoTipo.id, pgmt.localidade.id, pgmt.valorPagamento, pgst.id, pgmt.dataPagamento, pgmt.anoMesReferenciaPagamento, pgmt.indicadorClassificadoRecuperacaoCredito "
 					+ "FROM Pagamento as pgmt "
 					+ "LEFT JOIN pgmt.imovel as imov "
 					+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
