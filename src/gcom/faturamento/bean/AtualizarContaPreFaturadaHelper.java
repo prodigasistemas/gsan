@@ -252,13 +252,11 @@ public class AtualizarContaPreFaturadaHelper {
 		// Tipo de registro
 		retorno.tipoRegistro = linha.substring(index, index + REGISTRO_TIPO);
 		index += REGISTRO_TIPO;
-		System.out.println("Tipo de Retorno: " + retorno.tipoRegistro);
 
 		// Matricula do imovel
 		retorno.matriculaImovel = linha.substring(index, index
 				+ MATRICULA_IMOVEL);
 		index += MATRICULA_IMOVEL;
-		System.out.println("Matricula do Imovel: " + retorno.matriculaImovel);
 
 		// Tipo de medição
 		retorno.tipoMedicao = linha.substring(index, index
@@ -517,13 +515,11 @@ public class AtualizarContaPreFaturadaHelper {
 		// Tipo de registro
 		retorno.tipoRegistro = linha.substring(index, index + REGISTRO_TIPO);
 		index += REGISTRO_TIPO;
-		System.out.println("Tipo de Retorno: " + retorno.tipoRegistro);
 
 		// Matricula do imovel
 		retorno.matriculaImovel = linha.substring(index, index
 				+ MATRICULA_IMOVEL);
 		index += MATRICULA_IMOVEL;
-		System.out.println("Matricula: " + retorno.matriculaImovel);
 
 		// Codigo da Categoria
 		retorno.codigoCategoria = linha.substring(index, index

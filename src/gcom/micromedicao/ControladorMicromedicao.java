@@ -6611,7 +6611,6 @@ public class ControladorMicromedicao implements SessionBean {
 
 		try {
 
-			System.out.println("Ajustando imóvel " + imovel.getId());
 			int quantidadeDiasConsumoAjustado = 0;
 
 			int quantidadeDiasConsumo = 0;
