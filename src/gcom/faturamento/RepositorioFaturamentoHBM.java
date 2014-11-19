@@ -61308,4 +61308,35 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno.intValue();
 	}
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException {
+		boolean faturado = false;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			consulta = "SELECT EXISTS (" 
+					+ " SELECT ftcm.ftcm_id "
+					+ " FROM faturamento.fatur_grupo_crg_mensal ftcm "
+					+ " INNER JOIN faturamento.fatur_ativ_cronograma ftac ON ftac.ftcm_id = ftcm.ftcm_id "
+					+ " WHERE ftgr_id = :idGrupo "
+					+ " AND ftcm_amreferencia = :referencia "
+					+ " AND ftat_id = :faturamentoAtividade "
+					+ " AND ftac_tmrealizacao IS NOT NULL)";
+				
+			faturado = (Boolean) session.createSQLQuery(consulta)
+						.addScalar("exists", Hibernate.BOOLEAN)
+						.setInteger("idGrupo", idGrupo)
+						.setInteger("referencia", referencia)
+						.setInteger("faturamentoAtividade", FaturamentoAtividade.FATURAR_GRUPO)
+						.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return faturado;
+	}
 }
