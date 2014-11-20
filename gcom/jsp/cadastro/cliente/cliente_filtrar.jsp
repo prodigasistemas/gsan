@@ -294,7 +294,7 @@ function valorCheckAtualizar(){
 				</tr>
 			</table>
 			<p>&nbsp;</p>
-			<table bordercolor="#000000" width="100%" cellspacing="0">
+			<table width="100%" cellspacing="0">
 				<tr>
 					<td colspan="2">
 						<p>Para filtrar um cliente no sistema, informe os dados abaixo:</p>
@@ -311,7 +311,7 @@ function valorCheckAtualizar(){
 					</tr>
 	        </table>
 	        
-	        <table bordercolor="#000000" width="100%" cellspacing="0">
+	        <table width="100%" cellspacing="0">
 				<tr>
 					<td width="20%" height="30">
 						<strong>CPF:</strong>
