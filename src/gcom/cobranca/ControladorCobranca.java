@@ -28434,6 +28434,13 @@ public class ControladorCobranca implements SessionBean {
 				} else {
 					parcelamentoRelatorioHelper.setSetorComercial("");
 				}
+				
+				// CPF Usuario
+				if (dadosParcelamento[40] != null) {
+					parcelamentoRelatorioHelper.setCpfUsuario(String.valueOf(dadosParcelamento[40]));
+				} else {
+					parcelamentoRelatorioHelper.setCpfUsuario("");
+				}
 
 			}
 

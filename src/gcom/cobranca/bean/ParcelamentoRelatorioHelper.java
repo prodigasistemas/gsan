@@ -224,6 +224,8 @@ public class ParcelamentoRelatorioHelper {
     
     private String setorComercial;
     
+    private String cpfUsuario;
+    
 	/**
 	 * Valor Total dos Descontos sem Valor dos Creditos
 	 */
@@ -703,5 +705,15 @@ public class ParcelamentoRelatorioHelper {
 	public void setSetorComercial(String setorComercial) {
 		this.setorComercial = setorComercial;
 	}
+
+	public String getCpfUsuario() {
+		return cpfUsuario;
+	}
+
+	public void setCpfUsuario(String cpfUsuario) {
+		this.cpfUsuario = cpfUsuario;
+	}
+	
+	
 
 }

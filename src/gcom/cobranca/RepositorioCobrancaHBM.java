@@ -4996,7 +4996,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ // 37
 					"localidade.descricao, "
 					+ // 38
-					"setor.codigo " // 39
+					"setor.codigo, " // 39
+					+ "usur.cpf " // 40
 					+ "from Parcelamento parc " + "left join parc.cliente clie " + "left join clie.profissao prof "
 					+ "left join parc.usuario usur " + "left join usur.funcionario func " + "inner join parc.imovel imov "
 					+ "inner join imov.localidade localidade " + "inner join imov.setorComercial setor "
