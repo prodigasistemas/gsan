@@ -33751,7 +33751,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	protected Object[] classificarPagamentosConta(Collection colecaoPagamentosConta, Imovel imovel, Integer anoMesArrecadacao, Integer anoMesFaturamento)
+	protected Object[] classificarPagamentosConta(Collection<Pagamento> colecaoPagamentosConta, Imovel imovel, Integer anoMesArrecadacao, Integer anoMesFaturamento)
 			throws ControladorException {
 
 		Object[] arrayDadosProcessarPagamentosConta = null;
@@ -33788,57 +33788,58 @@ public class ControladorArrecadacao implements SessionBean {
 			/**
 			 * Laço para montar os pagamentos e acumular.
 			 */
-			while (iteratorColecaoPagamentosConta.hasNext()) {
+			for (Pagamento pagamento : colecaoPagamentosConta) {
+			//while (iteratorColecaoPagamentosConta.hasNext()) {
 
-				Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosConta.next();
-
-				DocumentoTipo documentoTipo = null;
-				if (pagamentoArray[1] != null) {
-					documentoTipo = new DocumentoTipo();
-					documentoTipo.setId((Integer) pagamentoArray[1]);
-				}
-
-				Localidade localidade = null;
-				if (pagamentoArray[2] != null) {
-					localidade = new Localidade();
-					localidade.setId((Integer) pagamentoArray[2]);
-				}
-
-				BigDecimal valorPagamento = null;
-				if (pagamentoArray[3] != null) {
-					valorPagamento = (BigDecimal) pagamentoArray[3];
-				}
-
-				PagamentoSituacao pagamentoSituacaoAtual = null;
-				if (pagamentoArray[4] != null) {
-					pagamentoSituacaoAtual = new PagamentoSituacao();
-					pagamentoSituacaoAtual.setId((Integer) pagamentoArray[4]);
-				}
-
-				Date dataPagamento = null;
-				if (pagamentoArray[5] != null) {
-					dataPagamento = (Date) pagamentoArray[5];
-				}
-
-				if (pagamentoArray[6] != null) {
-					anoMesReferenciaPagamento = (Integer) pagamentoArray[6];
-				} else {
-					anoMesReferenciaPagamento = null;
-				}
-
-				if (pagamentoArray[7] != null) {
-					indicadorClassificadoRecuperacaoCredito = (Short) pagamentoArray[7];
-				} 
-				
-				Pagamento pagamento = new Pagamento();
-				pagamento.setId((Integer) pagamentoArray[0]);
-				pagamento.setDocumentoTipo(documentoTipo);
-				pagamento.setLocalidade(localidade);
-				pagamento.setImovel(imovel);
-				pagamento.setPagamentoSituacaoAtual(pagamentoSituacaoAtual);
-				pagamento.setValorPagamento(valorPagamento);
-				pagamento.setDataPagamento(dataPagamento);
-				pagamento.setIndicadorClassificadoRecuperacaoCredito(indicadorClassificadoRecuperacaoCredito);
+//				Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosConta.next();
+//
+//				DocumentoTipo documentoTipo = null;
+//				if (pagamentoArray[1] != null) {
+//					documentoTipo = new DocumentoTipo();
+//					documentoTipo.setId((Integer) pagamentoArray[1]);
+//				}
+//
+//				Localidade localidade = null;
+//				if (pagamentoArray[2] != null) {
+//					localidade = new Localidade();
+//					localidade.setId((Integer) pagamentoArray[2]);
+//				}
+//
+//				BigDecimal valorPagamento = null;
+//				if (pagamentoArray[3] != null) {
+//					valorPagamento = (BigDecimal) pagamentoArray[3];
+//				}
+//
+//				PagamentoSituacao pagamentoSituacaoAtual = null;
+//				if (pagamentoArray[4] != null) {
+//					pagamentoSituacaoAtual = new PagamentoSituacao();
+//					pagamentoSituacaoAtual.setId((Integer) pagamentoArray[4]);
+//				}
+//
+//				Date dataPagamento = null;
+//				if (pagamentoArray[5] != null) {
+//					dataPagamento = (Date) pagamentoArray[5];
+//				}
+//
+//				if (pagamentoArray[6] != null) {
+//					anoMesReferenciaPagamento = (Integer) pagamentoArray[6];
+//				} else {
+//					anoMesReferenciaPagamento = null;
+//				}
+//
+//				if (pagamentoArray[7] != null) {
+//					indicadorClassificadoRecuperacaoCredito = (Short) pagamentoArray[7];
+//				} 
+//				
+//				Pagamento pagamento = new Pagamento();
+//				pagamento.setId((Integer) pagamentoArray[0]);
+//				pagamento.setDocumentoTipo(documentoTipo);
+//				pagamento.setLocalidade(localidade);
+//				pagamento.setImovel(imovel);
+//				pagamento.setPagamentoSituacaoAtual(pagamentoSituacaoAtual);
+//				pagamento.setValorPagamento(valorPagamento);
+//				pagamento.setDataPagamento(dataPagamento);
+//				pagamento.setIndicadorClassificadoRecuperacaoCredito(indicadorClassificadoRecuperacaoCredito);
 				colecaoConjuntoPagamentos.add(pagamento);
 			}
 
