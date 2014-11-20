@@ -3012,4 +3012,5 @@ public interface IRepositorioFaturamento {
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
 }

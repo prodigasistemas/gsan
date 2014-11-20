@@ -16665,4 +16665,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
 	}
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException {
+		try{
+		  return repositorioFaturamento.verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo, referencia);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
 }

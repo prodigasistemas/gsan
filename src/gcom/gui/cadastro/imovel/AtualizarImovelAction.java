@@ -649,7 +649,7 @@ public class AtualizarImovelAction extends GcomAction {
 
 		fachada.atualizarImovel(inserirImovelHelper);
 		
-		String mensagemSucesso  = "Imï¿½vel de matrï¿½cula "
+		String mensagemSucesso  = "Imóvel de matrícula "
 			+ imovelAtualizar.getId().toString()
 			+ " atualizado com sucesso.";
 		
@@ -657,23 +657,23 @@ public class AtualizarImovelAction extends GcomAction {
 		// tenha confirmado na tela de confirmaï¿½ao sera acrescentado a mensagem de conclusï¿½o
 		// aviso de nï¿½o alteraï¿½ï¿½o dos dados da inscriï¿½ï¿½o.
 		if(flagNaoConfirmado){
-			mensagemSucesso  = "Imï¿½vel de matrï¿½cula "
+			mensagemSucesso  = "Imóvel de matrícula "
 				+ imovelAtualizar.getId().toString()
 				+ " atualizado com sucesso. \n"
-				+ " Atenï¿½ï¿½o! Dados da inscriï¿½ï¿½o nï¿½o alterados devido ao imï¿½vel estar em processo de faturamento.";
+				+ " Atenção! Dados da inscrição não alterados devido ao imóvel estar em processo de faturamento.";
 		}
 		
 		if(sessao.getAttribute("caminhoVoltarPromais")!=null){
 		
-			montarPaginaSucesso(httpServletRequest, "Imï¿½vel de matrï¿½cula "
+			montarPaginaSucesso(httpServletRequest, "Imóvel de matrícula "
 					+ imovelAtualizar.getId().toString()
 					+ " atualizado com sucesso.",
-					"Realizar outra Manutenï¿½ï¿½o de Imï¿½vel",
+					"Realizar outra Manutenção de Imóvel",
 					"exibirFiltrarImovelAction.do?menu=sim",
 					"exibirInformarOcorrenciaCadastroAnormalidadeEloAction.do?idImovel="
 							+ imovelAtualizar.getId().toString(),
-					"Informar Ocorrï¿½ncias / Anormalidades",
-					"Retornar ao Consultar Imï¿½vel.",
+					"Informar Ocorrências / Anormalidades",
+					"Retornar ao Consultar Imóvel.",
 					(String)sessao.getAttribute("caminhoVoltarPromais")+".do?promais=nao");
 			
 			sessao.setAttribute("promaisExecutado", "sim");
@@ -682,7 +682,7 @@ public class AtualizarImovelAction extends GcomAction {
 			
 		}else{
 			montarPaginaSucesso(httpServletRequest, mensagemSucesso,
-					"Realizar outra Manutenï¿½ï¿½o de Imï¿½vel",
+					"Realizar outra Manutenção de Imóvel",
 					"exibirFiltrarImovelAction.do?menu=sim",
 					"exibirInformarOcorrenciaCadastroAnormalidadeEloAction.do?idImovel="
 							+ imovelAtualizar.getId().toString(),
@@ -757,7 +757,7 @@ public class AtualizarImovelAction extends GcomAction {
 					
 					httpServletRequest.setAttribute("cancelamento", "TRUE");
 					httpServletRequest.setAttribute("nomeBotao1", "Sim");
-					httpServletRequest.setAttribute("nomeBotao2", "Nï¿½o");
+					httpServletRequest.setAttribute("nomeBotao2", "Não");
 					sessao.setAttribute("idImovel",imovelAtualizar.getId().toString());
 					
 					//Monta o array de variaveis que sera montada na mensagem de confirmaï¿½ï¿½o 
@@ -873,7 +873,7 @@ public class AtualizarImovelAction extends GcomAction {
 			//if (fachada.verificarImovelEmProcessoDeFaturamento(imovel.getId())){
 				
 				httpServletRequest.setAttribute("nomeBotao1", "Sim");
-				httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+				httpServletRequest.setAttribute("nomeBotao3", "Não");
 				httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 				sessao.setAttribute("remove" , "nao");
@@ -908,7 +908,7 @@ public class AtualizarImovelAction extends GcomAction {
 						//1.3.1.1.1 
 						//1.3.1.1.2
 						httpServletRequest.setAttribute("nomeBotao1", "Sim");
-						httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+						httpServletRequest.setAttribute("nomeBotao3", "Não");
 						httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 						
 						sessao.setAttribute("remove" , "nao");
@@ -928,7 +928,7 @@ public class AtualizarImovelAction extends GcomAction {
 								//1.3.1.2.1.1.1 
 								//1.3.1.2.1.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+								httpServletRequest.setAttribute("nomeBotao3", "Não");
 								httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 								sessao.setAttribute("remove" , "nao");
@@ -952,7 +952,7 @@ public class AtualizarImovelAction extends GcomAction {
 								//1.3.1.2.2.1.1 
 								//1.3.1.2.2.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+								httpServletRequest.setAttribute("nomeBotao3", "Não");
 								httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 								sessao.setAttribute("remove" , "nao");
@@ -976,7 +976,7 @@ public class AtualizarImovelAction extends GcomAction {
 						//1.3.2.1.1
 						//1.3.2.1.2
 						httpServletRequest.setAttribute("nomeBotao1", "Sim");
-						httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+						httpServletRequest.setAttribute("nomeBotao3", "Não");
 						httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 						sessao.setAttribute("remove" , "nao");
@@ -992,7 +992,7 @@ public class AtualizarImovelAction extends GcomAction {
 							//1.3.2.2.1.1
 							//1.3.2.2.1.2
 							httpServletRequest.setAttribute("nomeBotao1", "Sim");
-							httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+							httpServletRequest.setAttribute("nomeBotao3", "Não");
 							httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 							sessao.setAttribute("remove" , "nao");
@@ -1008,7 +1008,7 @@ public class AtualizarImovelAction extends GcomAction {
 								//1.3.2.2.2.1.1
 								//1.3.2.2.2.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
+								httpServletRequest.setAttribute("nomeBotao3", "Não");
 								httpServletRequest.setAttribute("confirmacaoDupla", "ok");
 
 								sessao.setAttribute("remove" , "nao");

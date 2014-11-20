@@ -44122,4 +44122,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) {
+		try {
+			return this.getControladorFaturamento().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo, referencia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
