@@ -29,31 +29,24 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        //Seta o mapeamento de retorno
-        ActionForward retorno = actionMapping
-                .findForward("exibirManterConjuntoConta");
+        ActionForward retorno = actionMapping.findForward("exibirManterConjuntoConta");
         
         HttpSession sessao = httpServletRequest.getSession(false);
         
-        //Instância do formulário que está sendo utilizado
-        AlterarVencimentoContaActionForm alterarVencimentoContaActionForm = (AlterarVencimentoContaActionForm) actionForm;
+        AlterarVencimentoContaActionForm form = (AlterarVencimentoContaActionForm) actionForm;
 
         Fachada fachada = Fachada.getInstancia();
         
         //Data de vencimento
         SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-        
         Date dataVencimentoConta;
-        
         try{
-        	dataVencimentoConta = formatoData.parse(alterarVencimentoContaActionForm.getDataVencimento());
+        	dataVencimentoConta = formatoData.parse(form.getDataVencimento());
         } catch (ParseException ex) {
         	dataVencimentoConta = null;
         }
         
-        
         if (sessao.getAttribute("colecaoImovel") != null){
-        
         	Collection colecaoImovel = (Collection) sessao.getAttribute("colecaoImovel");        	
              
         	SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
@@ -140,30 +133,19 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
 				throw new ActionServletException("atencao.necessario_permissao_especial_para_data_vencimento_posterior_permitido");
 			}
 			
-            if(codigoCliente != null || codigoClienteSuperior != null ) {
-				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
-					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
-							usuarioLogado, codigoClienteSuperior, (Boolean) sessao.getAttribute("debitoAutomatico"));
-				} else {
-					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
-							usuarioLogado, codigoClienteSuperior, false);
-				}
-        	} else if (idGrupoFaturamento != null){
-        		
-        		fachada.alterarVencimentoConjuntoConta(idGrupoFaturamento, dataVencimentoConta, anoMes, anoMesFim,
-                dataVencimentoContaInicio, dataVencimentoContaFim,usuarioLogado);
-        	} else {        		
-				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
-					fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
-							dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos,
-							(Boolean) sessao.getAttribute("debitoAutomatico"));
-				} else {
-					fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
-							dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos);
-				}
-        	}
+			boolean somenteDebitoAutomatico = (Boolean) sessao.getAttribute("debitoAutomatico");
+			
+			if (codigoCliente != null || codigoClienteSuperior != null) {
+				fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
+						usuarioLogado, codigoClienteSuperior, somenteDebitoAutomatico);
+			} else if (idGrupoFaturamento != null) {
+				fachada.alterarVencimentoConjuntoConta(idGrupoFaturamento, dataVencimentoConta, anoMes, anoMesFim, dataVencimentoContaInicio,
+						dataVencimentoContaFim, usuarioLogado, somenteDebitoAutomatico);
+			} else {
+				fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
+						dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos, somenteDebitoAutomatico);
+			}
         	
-        	//Realizar um reload na tela de manter conjunto conta
         	httpServletRequest.setAttribute("reloadPage", "OK");
         }
               

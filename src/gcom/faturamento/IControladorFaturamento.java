@@ -2810,7 +2810,8 @@ public interface IControladorFaturamento {
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,Usuario usuarioLogado)
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico)
 			throws ControladorException ;
 	
 	

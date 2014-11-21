@@ -24300,10 +24300,10 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento, Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado, boolean somenteDebitoAutomatico) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] {
-				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado });
+				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado, somenteDebitoAutomatico });
 	}
 
 	/**

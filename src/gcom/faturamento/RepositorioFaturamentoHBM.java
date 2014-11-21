@@ -27160,15 +27160,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public void alterarVencimentoContaGrupoFaturamento(Date dataVencimento,
 			Date dataValidade, Short indicadorAlteracaoVencimento,
 			Integer idGrupoFaturamento, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim)
-			throws ErroRepositorioException {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			boolean somenteDebitoAutomatico) throws ErroRepositorioException {
 
 		String update;
 		Session session = HibernateUtil.getSession();
 
 		PreparedStatement st = null;
-		
-		boolean indicadorBloqueioContasContratoParcelManterConta = false;
 
 		try {
 			RepositorioUtilHBM repositorioUtilHBM = RepositorioUtilHBM.getInstancia();
@@ -27176,14 +27174,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta
-			 * 3. Caso o indicador de bloqueio de contas vinculadas a contrato de parcelamento no manter contas esteja ativo
-			 *   retirar da lista de contas selecionadas as contas vinculadas a algum contrato de parcelamento ativo
-			 *    
-			 * RM 1887 - Contrato Parcelamento por Cliente
-			 * Adicionado por: Mariana Victor
-			 * Data: 14/07/2011
-			 *  
+			 * 
+			 * 3. Caso o indicador de bloqueio de contas vinculadas a 
+			 * contrato de parcelamento no manter contas esteja ativo
+			 * retirar da lista de contas selecionadas as contas vinculadas
+			 * a algum contrato de parcelamento ativo
 			 * */
+			boolean indicadorBloqueioContasContratoParcelManterConta = false;
 			if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
 					&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
 				indicadorBloqueioContasContratoParcelManterConta = true;
@@ -27209,9 +27206,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			if (dataVencimentoContaInicio != null) {
 				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";//12, 13
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
+				if (indicadorBloqueioContasContratoParcelManterConta) 
 					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";//14
-				}
+				
+				if (somenteDebitoAutomatico)
+					update += " AND cnta.cnta_icdebitoconta = ? "; // 15
 
 				update += ")";
 				
@@ -27233,9 +27232,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
 					st.setDate(13, Util.getSQLDate(dataVencimentoContaFim));
 					
-					if (indicadorBloqueioContasContratoParcelManterConta) {
+					if (indicadorBloqueioContasContratoParcelManterConta) 
 						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
-					}
+					
+					if (somenteDebitoAutomatico)
+						st.setShort(15, ConstantesSistema.SIM);
 				
 				} else {
 
@@ -27259,14 +27260,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 					
+					if (somenteDebitoAutomatico)
+						st.setShort(15, ConstantesSistema.SIM);
+					
 					st.executeUpdate();
 
 				}
 			} else {
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
-					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";
-				}
+				if (indicadorBloqueioContasContratoParcelManterConta) 
+					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) "; // 12
+				
+				if (somenteDebitoAutomatico)
+					update += " AND cnta.cnta_icdebitoconta = ? "; // 13
 				
 				update += ")";
 
@@ -27284,17 +27290,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
 				st.setDate(11, Util.getSQLDate(dataVencimento));
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
+				if (indicadorBloqueioContasContratoParcelManterConta)
 					st.setInt(12, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
-				}
+				
+				if (somenteDebitoAutomatico)
+					st.setShort(13, ConstantesSistema.SIM);
 				
 				st.executeUpdate();
 
 			}
-
-			// erro no hibernate
 		} catch (SQLException e) {
-			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
