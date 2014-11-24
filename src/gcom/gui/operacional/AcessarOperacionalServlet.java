@@ -31,7 +31,7 @@ public class AcessarOperacionalServlet extends HttpServlet {
 			StringBuilder builder = new StringBuilder();
 			builder.append("http://")
 				.append(fachada.getInstancia().retornaIpServidorOperacional())
-				.append("/GoperaWeb/")
+				.append("/gsan-operacional/")
 				.append("?usuario=").append(nomeUsuario)
 				.append("&token=").append(token);
 			response.sendRedirect(builder.toString());
