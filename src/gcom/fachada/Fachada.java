@@ -44003,9 +44003,9 @@ public class Fachada {
 	}
 
 	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem,
-			boolean indicadorIncluirCredito) throws ControladorException {
+			boolean indicadorIncluirCredito, Integer idSituacaoPagamento) throws ControladorException {
 		try {
-			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito);
+			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito, idSituacaoPagamento);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

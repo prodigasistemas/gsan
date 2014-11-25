@@ -19,9 +19,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.CONTAS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 		
 		return resumo;
 	}
@@ -34,9 +32,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CONTAS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 		
 		return resumo;
 	}
@@ -49,9 +45,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -64,9 +58,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.IMPOSTOS_RETIDOS_NAS_CONTAS_RECEBIDAS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -79,9 +71,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.GUIAS_PAGAMENTO);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -94,9 +84,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.DOACOES_RECEBIDAS_EM_CONTA);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -109,9 +97,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.DEBITOS_A_COBRAR);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -124,9 +110,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_CREDITOS_REALIZADOS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -139,9 +123,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_DOS_RECEBIMENTOS_CLASSIFICADOS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -154,9 +136,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_DOS_RECEBIMENTOS_DE_CONTA_CLASSIFICADOS);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -169,9 +149,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS_RECUPERACAO_CREDITO);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.RECUPERACAO_CREDITO);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 		
 		return resumo;
 	}
@@ -184,9 +162,7 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS_RECUPERACAO_CREDITO_MESES_ANTERIORES);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.RECUPERACAO_CREDITO);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
@@ -199,15 +175,14 @@ public class ResumoArrecadacaoBuilder {
 		RecebimentoTipo recebimentoTipo = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_NAO_CLASSIFICADOS);
 		LancamentoTipo lancamentoTipo = new LancamentoTipo(LancamentoTipo.PAGAMENTO_EM_DUPLICIDADE);
 		
-		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
-		resumo.setRecebimentoTipo(recebimentoTipo);
-		resumo.setLancamentoTipo(lancamentoTipo);
+		ResumoArrecadacao resumo = buildResumo(localidade, categoria, referencia, valor, recebimentoTipo, lancamentoTipo, lancamentoItem, lancamentoItemContabil, seqTipoLancamento, seqItemTipoLancamento);
 
 		return resumo;
 	}
 	
 	private static ResumoArrecadacao buildResumo(Localidade localidade, Categoria categoria, 
 			Integer referencia, BigDecimal valor,
+			RecebimentoTipo recebimentoTipo, LancamentoTipo lancamentoTipo,
 			LancamentoItem lancamentoItem, LancamentoItemContabil lancamentoItemContabil, 
 			Short seqTipoLancamento, Short seqItemTipoLancamento) {
 		
@@ -217,6 +192,8 @@ public class ResumoArrecadacaoBuilder {
 		resumo.setLocalidade(localidade);
 		resumo.setCategoria(categoria);
 		resumo.setAnoMesReferencia(referencia);
+		resumo.setRecebimentoTipo(recebimentoTipo);
+		resumo.setLancamentoTipo(lancamentoTipo);
 		resumo.setLancamentoItem(lancamentoItem);
 		resumo.setLancamentoItemContabil(lancamentoItemContabil);
 		resumo.setSequenciaTipoLancamento(seqTipoLancamento);

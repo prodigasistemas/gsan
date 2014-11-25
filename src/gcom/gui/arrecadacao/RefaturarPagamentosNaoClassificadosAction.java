@@ -68,7 +68,7 @@ public class RefaturarPagamentosNaoClassificadosAction extends GcomAction {
 		try {
 			
 			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, 
-					this.creditoTipo, this.creditoOrigem, false);
+					this.creditoTipo, this.creditoOrigem, false, new Integer(classificarPagamentosActionForm.getIdSituacaoPagamento()));
 			
 		} catch (ControladorException e) {
 			e.printStackTrace();

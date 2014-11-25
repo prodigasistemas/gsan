@@ -43,10 +43,12 @@ public class ClassificarPagamentosAction extends GcomAction {
 		
 		String[] registrosClassificacao = form.getIdRegistrosClassificacao();
 		Collection<Pagamento> colecaoPagamentos = obterPagamentosSelecionados(form, registrosClassificacao);
+		Integer idSituacaoPagamento = new Integer(form.getIdSituacaoPagamento());
 		
 		try {
 			
-			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, this.creditoTipo, this.creditoOrigem, isDevolucao(sessao, parametroDevolver));
+			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, this.creditoTipo, 
+					this.creditoOrigem, isDevolucao(sessao, parametroDevolver), idSituacaoPagamento);
 			
 		} catch (ControladorException e) {
 			e.printStackTrace();

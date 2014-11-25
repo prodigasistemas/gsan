@@ -14035,6 +14035,9 @@ public class ControladorArrecadacao implements SessionBean {
 				Integer anoMesArrecadacao = getSistemaParametro().getAnoMesArrecadacao();
 				Integer anoMesFaturamento = getSistemaParametro().getAnoMesFaturamento();
 
+				
+			//	colecaoIdsLocalidades = new ArrayList<Integer>();
+			//	colecaoIdsLocalidades.add(new Integer(5));
 				/**
 				 * Caso a coleção de ids de localidade não esteja vazia
 				 * classifica os pagamentos por localidade.
@@ -14131,7 +14134,7 @@ public class ControladorArrecadacao implements SessionBean {
 													 * 2 - Array com 4 coleções de pagamentos para atualizar.
 													 */
 													Object[] arrayDadosProcessarContas = this.classificarPagamentosConta(colecaoPagamentosConta, imovel,
-															anoMesArrecadacao, anoMesFaturamento);
+															anoMesArrecadacao, anoMesFaturamento, anoMesReferenciaPagamento);
 
 													if (arrayDadosProcessarContas[5] != null) {
 														colecaoPagamentosDocumentoInexistenteDebitoPrescrito.addAll((Collection) arrayDadosProcessarContas[5]);
@@ -19177,8 +19180,14 @@ public class ControladorArrecadacao implements SessionBean {
 
 					mapValorDevolucaoDescontosPagamentoAVista.putAll(agruparValoresPorCategoriaParaContabilizar(colecaoDevolucoesDescontosPagamentoAVista));
 
-					Map<Integer, BigDecimal> mapValoresRecuperacaoCredito = acumularValoresRecebimentosClassificadosRecuperacaoCredito(localidade, anoMesReferenciaArrecadacao);
-					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoMesesAnteriores = acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade, anoMesReferenciaArrecadacao);
+					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoDuplicidade = acumularValoresRecebimentosClassificadosRecuperacaoCredito(localidade, 
+							anoMesReferenciaArrecadacao, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE);
+					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoCancelado = acumularValoresRecebimentosClassificadosRecuperacaoCredito(localidade, 
+							anoMesReferenciaArrecadacao, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
+					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoDuplicidadeMesesAnteriores = acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade, 
+							anoMesReferenciaArrecadacao, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE);
+					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoCanceladoMesesAnteriores = acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade, 
+							anoMesReferenciaArrecadacao, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
 					
 					//Seqüêncial de Tipo de Lançamento 2450 Para as devoluções do tipo desconto por pagamento a vista pela campanha da criança
 					Integer idRDComPercentualDoacao = getControladorCobranca().pesquisarResolucaoDiretoriaComPercentualDoacao();
@@ -20756,17 +20765,26 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 						
 						RecebimentosClassificadosRecuperacaoCredito recebimentos = contabilizarRecebimentosClassificadosRecuperacaoCredito(localidade, 
-								anoMesReferenciaArrecadacao, categoria, mapValoresRecuperacaoCredito, mapValoresRecuperacaoCreditoMesesAnteriores);
+								anoMesReferenciaArrecadacao, categoria, mapValoresRecuperacaoCreditoDuplicidade, mapValoresRecuperacaoCreditoCancelado,
+								mapValoresRecuperacaoCreditoDuplicidadeMesesAnteriores, mapValoresRecuperacaoCreditoCanceladoMesesAnteriores);
 						
 						
-						if (recebimentos.getRecuperacaoCredito() != null) {
-							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCredito());
-							//diferencaEntreSequencialTipoIgual2500e3300 = diferencaEntreSequencialTipoIgual2500e3300.add(recebimentos.getRecuperacaoCredito().getValorItemArrecadacao());
-							valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400.add(recebimentos.getRecuperacaoCredito().getValorItemArrecadacao());
+						if (recebimentos.getRecuperacaoCreditoDuplicidade() != null) {
+							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoDuplicidade());
+							valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400.add(recebimentos.getRecuperacaoCreditoDuplicidade().getValorItemArrecadacao());
 						}
 						
-						if (recebimentos.getRecuperacaoCreditoMesesAnteriores() != null) {
-							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoMesesAnteriores());
+						if (recebimentos.getRecuperacaoCreditoCancelado() != null) {
+							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoCancelado());
+							valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400.add(recebimentos.getRecuperacaoCreditoCancelado().getValorItemArrecadacao());
+						}
+						
+						if (recebimentos.getRecuperacaoCreditoDuplicidadeMesesAnteriores() != null) {
+							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoDuplicidadeMesesAnteriores());
+						}
+						
+						if (recebimentos.getRecuperacaoCreditoCanceladoMesesAnteriores() != null) {
+							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoCanceladoMesesAnteriores());
 						}
 						
 						/*
@@ -25127,8 +25145,10 @@ public class ControladorArrecadacao implements SessionBean {
 						mapValorPagamentoNoMesEMesesAnterioresCampanhaSolidariedadeCrianca.put(categoria.getId(), BigDecimal.ZERO);
 						mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.put(categoria.getId(), BigDecimal.ZERO);
 						
-						mapValoresRecuperacaoCredito.put(categoria.getId(), BigDecimal.ZERO);
-						mapValoresRecuperacaoCreditoMesesAnteriores.put(categoria.getId(), BigDecimal.ZERO);
+						mapValoresRecuperacaoCreditoCancelado.put(categoria.getId(), BigDecimal.ZERO);
+						mapValoresRecuperacaoCreditoDuplicidade.put(categoria.getId(), BigDecimal.ZERO);
+						mapValoresRecuperacaoCreditoCanceladoMesesAnteriores.put(categoria.getId(), BigDecimal.ZERO);
+						mapValoresRecuperacaoCreditoDuplicidadeMesesAnteriores.put(categoria.getId(), BigDecimal.ZERO);
 
 					}// FIM POR CATEGORIA
 
@@ -25221,6 +25241,18 @@ public class ControladorArrecadacao implements SessionBean {
 			pagamentosDocumentoInexistente.addAll(pagamentosDocumentoAContabilizar);
 		}
 		
+			System.out.println("---------------------------");
+			if (pagamentosDocumentoInexistente != null
+					&& pagamentosDocumentoInexistente.size() > 0) {
+
+				for (Object dadosPagamento : pagamentosDocumentoInexistente) {
+					Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
+					Integer idImovel = (Integer) arrayDadosPagamento[1];
+					System.out.println(idImovel);
+				}
+			}
+			System.out.println("---------------------------");
+		
 		mapValorPagamento.putAll(this.retornarValorPagamentosSituacaoAtualPorPagamentoSituacao(mapValorPagamento,pagamentosDocumentoInexistente));
 		
 		return mapValorPagamento;
@@ -25241,6 +25273,19 @@ public class ControladorArrecadacao implements SessionBean {
 			pagamentosDocumentoInexistente.addAll(pagamentosDocumentoAContabilizar);
 		}
 
+		if (idLocalidade.equals(new Integer(5))) {
+			System.out.println("---------------------------");
+			if (pagamentosDocumentoInexistente != null
+					&& pagamentosDocumentoInexistente.size() > 0) {
+
+				for (Object dadosPagamento : pagamentosDocumentoInexistente) {
+					Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
+					Integer idImovel = (Integer) arrayDadosPagamento[1];
+					System.out.println(idImovel);
+				}
+			}
+			System.out.println("---------------------------");
+		}
 		mapValorPagamento.putAll(this.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(mapValorPagamento,pagamentosDocumentoInexistente));
 		
 		return mapValorPagamento;
@@ -25354,51 +25399,40 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	private RecebimentosClassificadosRecuperacaoCredito contabilizarRecebimentosClassificadosRecuperacaoCredito(Localidade localidade , Integer referencia, 
-			Categoria categoria, Map<Integer, BigDecimal> mapValoresRC, Map<Integer, BigDecimal> mapValoresRCMesesAnteriores) 
+			Categoria categoria, Map<Integer, BigDecimal> mapValoresRCDuplicidade, Map<Integer, BigDecimal> mapValoresRCCancelado, 
+			Map<Integer, BigDecimal> mapValoresRCDuplicidadeMesesAnteriores, Map<Integer, BigDecimal> mapValoresRCCanceladoMesesAnteriores) 
 			throws ErroRepositorioException, ControladorException {
 		
 		RecebimentosClassificadosRecuperacaoCreditoBuilder builder = new RecebimentosClassificadosRecuperacaoCreditoBuilder();
 		
-		builder.buildRecebimentosRecuperacaoCredito(localidade, categoria, referencia, mapValoresRC);
-		builder.buildRecebimentosRecuperacaoCreditoMesesAnteriores(localidade, categoria, referencia, mapValoresRCMesesAnteriores);
+		builder.buildRecebimentosRecuperacaoCredito(localidade, categoria, referencia, mapValoresRCDuplicidade, mapValoresRCCancelado);
+		builder.buildRecebimentosRecuperacaoCreditoMesesAnteriores(localidade, categoria, referencia, mapValoresRCDuplicidadeMesesAnteriores, mapValoresRCCanceladoMesesAnteriores);
 		
 		return builder.recebimentos;
 	}
 	
-	private Map<Integer, BigDecimal> acumularValoresRecebimentosClassificadosRecuperacaoCredito(Localidade localidade , Integer referencia) 
-			throws ControladorException, ErroRepositorioException {
+	private Map<Integer, BigDecimal> acumularValoresRecebimentosClassificadosRecuperacaoCredito(Localidade localidade , Integer referencia,
+			Integer idPagamentoSituacao) throws ControladorException, ErroRepositorioException {
 		
 		Map<Integer, BigDecimal> mapValor = new HashMap();
-		Collection contas = repositorioArrecadacao.pesquisarContasPagamentosClassificadosRecuperacaoCredito(localidade.getId(),referencia);
+		Collection contas = repositorioArrecadacao.pesquisarContasPagamentosClassificadosRecuperacaoCredito(localidade.getId(),referencia, idPagamentoSituacao);
 		
 		if (contas != null && contas.size() > 0) {
-			for (Object dadosPagamento : contas) {
-				Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
-
-				BigDecimal valorExcedente = (BigDecimal) arrayDadosPagamento[0];
-				Integer idImovel = (Integer) arrayDadosPagamento[1];
-			}
+			mapValor.putAll(this.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(mapValor,contas));
 		}
-		mapValor.putAll(this.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(mapValor,contas));
 		
 		return mapValor;
 	}
 	
-	private Map<Integer, BigDecimal> acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(Localidade localidade , Integer referencia) 
-			throws ErroRepositorioException, ControladorException {
+	private Map<Integer, BigDecimal> acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(Localidade localidade , Integer referencia,
+			Integer idPagamentoSituacao) throws ErroRepositorioException, ControladorException {
 
 		Map<Integer, BigDecimal> mapValor = new HashMap();
-		Collection contas = repositorioArrecadacao.pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade.getId(),referencia);
+		Collection contas = repositorioArrecadacao.pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade.getId(),referencia, idPagamentoSituacao);
 		
 		if (contas != null && contas.size() > 0) {
-			for (Object dadosPagamento : contas) {
-				Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
-
-				BigDecimal valorExcedente = (BigDecimal) arrayDadosPagamento[0];
-				Integer idImovel = (Integer) arrayDadosPagamento[1];
-			}
+			mapValor.putAll(this.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(mapValor,contas));
 		}
-		mapValor.putAll(this.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(mapValor,contas));
 		
 		return mapValor;
 	}
@@ -33751,7 +33785,8 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	protected Object[] classificarPagamentosConta(Collection<Pagamento> colecaoPagamentosConta, Imovel imovel, Integer anoMesArrecadacao, Integer anoMesFaturamento)
+	protected Object[] classificarPagamentosConta(Collection<Pagamento> colecaoPagamentosConta, Imovel imovel, Integer anoMesArrecadacao, 
+			Integer anoMesFaturamento, Integer referenciaPagamento)
 			throws ControladorException {
 
 		Object[] arrayDadosProcessarPagamentosConta = null;
@@ -33782,68 +33817,7 @@ public class ControladorArrecadacao implements SessionBean {
 			Conta conta = null;
 			ContaHistorico contaHistorico = null;	
 			
-			Integer anoMesReferenciaPagamento = null;
-			Short indicadorClassificadoRecuperacaoCredito = null;
-			Collection colecaoConjuntoPagamentos = new ArrayList();
-			/**
-			 * Laço para montar os pagamentos e acumular.
-			 */
-			for (Pagamento pagamento : colecaoPagamentosConta) {
-			//while (iteratorColecaoPagamentosConta.hasNext()) {
-
-//				Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosConta.next();
-//
-//				DocumentoTipo documentoTipo = null;
-//				if (pagamentoArray[1] != null) {
-//					documentoTipo = new DocumentoTipo();
-//					documentoTipo.setId((Integer) pagamentoArray[1]);
-//				}
-//
-//				Localidade localidade = null;
-//				if (pagamentoArray[2] != null) {
-//					localidade = new Localidade();
-//					localidade.setId((Integer) pagamentoArray[2]);
-//				}
-//
-//				BigDecimal valorPagamento = null;
-//				if (pagamentoArray[3] != null) {
-//					valorPagamento = (BigDecimal) pagamentoArray[3];
-//				}
-//
-//				PagamentoSituacao pagamentoSituacaoAtual = null;
-//				if (pagamentoArray[4] != null) {
-//					pagamentoSituacaoAtual = new PagamentoSituacao();
-//					pagamentoSituacaoAtual.setId((Integer) pagamentoArray[4]);
-//				}
-//
-//				Date dataPagamento = null;
-//				if (pagamentoArray[5] != null) {
-//					dataPagamento = (Date) pagamentoArray[5];
-//				}
-//
-//				if (pagamentoArray[6] != null) {
-//					anoMesReferenciaPagamento = (Integer) pagamentoArray[6];
-//				} else {
-//					anoMesReferenciaPagamento = null;
-//				}
-//
-//				if (pagamentoArray[7] != null) {
-//					indicadorClassificadoRecuperacaoCredito = (Short) pagamentoArray[7];
-//				} 
-//				
-//				Pagamento pagamento = new Pagamento();
-//				pagamento.setId((Integer) pagamentoArray[0]);
-//				pagamento.setDocumentoTipo(documentoTipo);
-//				pagamento.setLocalidade(localidade);
-//				pagamento.setImovel(imovel);
-//				pagamento.setPagamentoSituacaoAtual(pagamentoSituacaoAtual);
-//				pagamento.setValorPagamento(valorPagamento);
-//				pagamento.setDataPagamento(dataPagamento);
-//				pagamento.setIndicadorClassificadoRecuperacaoCredito(indicadorClassificadoRecuperacaoCredito);
-				colecaoConjuntoPagamentos.add(pagamento);
-			}
-
-			Object retornoPesquisa = this.selecionarContaPorImovelAnoMesReferencia(imovel,anoMesReferenciaPagamento, anoMesFaturamento);
+			Object retornoPesquisa = this.selecionarContaPorImovelAnoMesReferencia(imovel,referenciaPagamento, anoMesFaturamento);
 
 			if (retornoPesquisa == null) {			
 				while (iteratorColecaoPagamentosConta.hasNext()) {
@@ -33959,7 +33933,7 @@ public class ControladorArrecadacao implements SessionBean {
 									|| processarPagamentoConta) {
 						// [SF0002] Processar Pagamento de Conta
 						
-						arrayDadosProcessarPagamentosConta = this.processarPagamentoConta(conta,colecaoConjuntoPagamentos);
+						arrayDadosProcessarPagamentosConta = this.processarPagamentoConta(conta,colecaoPagamentosConta);
 						processarPagamentoConta = false;
 					}
 				}
@@ -52066,7 +52040,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @throws ControladorException 
 	 */
 	public void recuperarCredito(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, 
-			boolean indicadorIncluirCredito) throws ControladorException {
+			boolean indicadorIncluirCredito, Integer idSituacaoPagamento) throws ControladorException {
 		try {
 			
 			if (indicadorIncluirCredito) {
@@ -52077,8 +52051,11 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentos = atualizarIndicacaoClassificacaoReuperacaoCredito(pagamentos);
 			
-			repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO);
-			
+			if(idSituacaoPagamento.equals(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE)) {
+				repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE);
+			} else {
+				repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
+			}
 		} catch(Exception e) {
 			throw new ControladorException("Erro ao recuperar credito", e);
 		}
