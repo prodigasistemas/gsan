@@ -24300,10 +24300,10 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento, Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado, boolean somenteDebitoAutomatico) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] {
-				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado });
+				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado, somenteDebitoAutomatico });
 	}
 
 	/**
@@ -44003,9 +44003,9 @@ public class Fachada {
 	}
 
 	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem,
-			boolean indicadorIncluirCredito) throws ControladorException {
+			boolean indicadorIncluirCredito, Integer idSituacaoPagamento) throws ControladorException {
 		try {
-			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito);
+			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito, idSituacaoPagamento);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

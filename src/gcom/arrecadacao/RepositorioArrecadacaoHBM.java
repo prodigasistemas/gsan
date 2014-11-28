@@ -2421,6 +2421,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "LEFT JOIN pgmt.imovel as imov "
 					+ "LEFT JOIN pgmt.localidade as localidade "
 					+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
+					+ "LEFT JOIN pgmt.documentoTipo as documentoTipo "
+					+ "LEFT JOIN pgmt.localidade as localidade "
 					+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia AND imov.id = :idImovel "
 					+ "AND pgmt.anoMesReferenciaPagamento = :anoMesReferenciaPagamento "
 					+ "AND (pgst.id is null or pgst.id <> :idValorABaixar) "
@@ -18562,14 +18564,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
 					.append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
 					.append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
-					.append(" or (pgmt.pagamentoSituacaoAtual.id = :classificadoRecuperacaoCredito) ")
+					.append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
 					.append(" order by pgmt.id");
 
 			retorno = session.createQuery(consulta.toString())
 				.setInteger("idLocalidade", idLocalidade)
 				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
 				.setInteger("situacaoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-				.setInteger("classificadoRecuperacaoCredito", PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO)
+				.setInteger("classificadoRecuperacaoCreditoDuplicidade", PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE)
+				.setInteger("classificadoRecuperacaoCreditoCancelado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO)
 				.setInteger("situacaoValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR)
 				.setInteger("situacaoDuplicidadeExcessoDevolvido", PagamentoSituacao.DUPLICIDADE_EXCESSO_DEVOLVIDO)
 				.setFirstResult(numeroIndice).setMaxResults(quantidadeRegistros).list();
@@ -31564,9 +31567,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			consultaConta.append("select distinct pgmt.cnta_id ") 
 						.append("from arrecadacao.pagamento pgmt ") 
-						//.append("where pgmt.pgmt_amreferenciaarrecadacao= :anoMesReferenciaArrecadacao ")
 						.append("where pgmt.loca_id= :idLocalidade  ")
-						.append("and pgmt.pgst_idatual = :idPagamentoClassificado ") 
+						.append("and (pgmt.pgst_idatual in (:idPagamentoClassificadoDuplicidade , :idPagamentoClassificadoCancelado)) ")
 						.append("and pgmt.cnta_id is not null ");
 
 			consulta.append("select sum(ctcg.ctcg_vlagua) as col_0, sum(ctcg.ctcg_vlesgoto) as col_1 ")
@@ -31581,9 +31583,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			    .addScalar("col_0",Hibernate.BIG_DECIMAL)
 			    .addScalar("col_1",Hibernate.BIG_DECIMAL)
 				.setInteger("idCategoria", idCategoria)
-				//.setInteger("anoMesReferenciaArrecadacao", referenciaArrecadacao)
 				.setInteger("idLocalidade", idLocalidade)
-				.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO)
+				.setInteger("idPagamentoClassificadoDuplicidade",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE)
+				.setInteger("idPagamentoClassificadoCancelado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO)
 				.setMaxResults(1)
 				.uniqueResult();
 
@@ -31615,7 +31617,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
-	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
+			Integer idPagamentoSituacao) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
 
@@ -31638,7 +31641,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		.addScalar("col_1", Hibernate.INTEGER)
 		.setInteger("idLocalidade",idLocalidade)
 		.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-		.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO)
+		.setInteger("idPagamentoClassificado", idPagamentoSituacao)
 		.list();
 
 		} catch (HibernateException e) {
@@ -31649,7 +31652,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
-	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
 
@@ -31671,7 +31675,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				.addScalar("col_1", Hibernate.INTEGER)
 				.setInteger("idLocalidade",idLocalidade)
 				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-				.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO)
+				.setInteger("idPagamentoClassificado", idPagamentoSituacao)
 				.list();
 			
 		} catch (HibernateException e) {

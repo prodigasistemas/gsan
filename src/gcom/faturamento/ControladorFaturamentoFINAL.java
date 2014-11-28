@@ -59209,16 +59209,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
-	 * 
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Usuario usuarioLogado) throws ControladorException {
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico) throws ControladorException {
 
 		try {
 
@@ -59228,30 +59224,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
 					idGrupoFaturamento, anoMes, anoMesFim,
-					dataVencimentoContaInicio, dataVencimentoContaFim);
+					dataVencimentoContaInicio, dataVencimentoContaFim,
+					somenteDebitoAutomatico);
 
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS ALTERADO COM SUCESSO.";
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(), "CONTAS_ALTERADAS",
-						mensagem);
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(),
+						"CONTAS_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
 			}
 
 		} catch (ErroRepositorioException ex) {
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS NÃO FOI ALTERADO DEVIDO A UM ERRO DE SISTEMA.";
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(),
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(), 
 						"CONTAS_NÃO_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
@@ -59259,14 +59250,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
 		}
-
 	}
 
 	/**
 	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
 	 * 
 	 * @throws ControladorException
 	 */
