@@ -44,6 +44,19 @@ function validarForm(){
 	
 }
 
+document.onreadystatechange = function () {
+	 var state = document.readyState
+	 if (state == 'complete') {
+		 var radios = document.getElementsByName( 'indicadorInclusaoValorSemParcelas' );
+			for (i = 0; i < radios.length; i++) {
+		        if (radios[i].type == 'radio' && radios[i].value == 1) {
+		            radios[i].checked = 'checked';
+		            break;
+		        }
+		    }
+	 }
+}
+
 function validateFaixaRequired(form){
 	var retorno = true;
 	
