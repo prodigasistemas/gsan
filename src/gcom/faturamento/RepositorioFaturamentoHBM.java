@@ -22857,6 +22857,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "cntHist.valorCreditos, "
 					+ "cntHist.valorImposto, "
 					+ "cntHist.dataValidadeConta, "
+					+ "cntHist.valorRateioAgua, "
+					+ "cntHist.valorRateioEsgoto, "
 					+ "imovel.id, "
 					+ "loc.id, "
 					+ "gerenciaRegional.id, "

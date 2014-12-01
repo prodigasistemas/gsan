@@ -50873,21 +50873,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// 2.3.2.
 
 						descricaoServicosTarifas3 = " CONSUMO DE ÁGUA";
-						consumoFaixa3 = Util.completaStringComEspacoAEsquerda(
-								"" + contaCategoria.getConsumoAgua(), 6)
-								+ " M3";
-						valor3 = Util.formatarMoedaReal(contaCategoria
-								.getValorAgua());
+						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
+						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua();
+						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas3);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa(consumoFaixa3.trim());
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor3);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas3);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa(consumoFaixa3.trim());
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor3);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 
 				}
