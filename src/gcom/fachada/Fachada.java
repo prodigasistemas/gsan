@@ -1617,7 +1617,6 @@ public class Fachada {
 
 	public void atualizarImovel(Imovel imovel) {
 		try {
-
 			this.getControladorUtil().atualizar(imovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
@@ -1663,6 +1662,7 @@ public class Fachada {
 
 	public void inserirImovelSubCategoria(ImovelSubcategoria imovelSubcategoria) {
 		try {
+			this.validarImovelEmCampo(imovelSubcategoria.getImovel().getId());
 			this.getControladorUtil().inserir(imovelSubcategoria);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());

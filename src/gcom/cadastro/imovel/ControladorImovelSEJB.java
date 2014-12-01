@@ -1463,6 +1463,8 @@ public class ControladorImovelSEJB implements SessionBean {
 					|| imovelnaBase.getQuadra().getNumeroQuadra() != imovelHelper.getImovel().getQuadra().getNumeroQuadra()
 					|| imovelnaBase.getLote() != imovelHelper.getImovel().getLote()
 					|| imovelnaBase.getSubLote() != imovelHelper.getImovel().getSubLote() 
+					|| (imovelHelper.getColecaoImovelSubcategoriasRemovidas() != null && !imovelHelper.getColecaoImovelSubcategoriasRemovidas().isEmpty())
+					|| imovelnaBase.getImovelSubcategorias().size() != imovelHelper.getSubcategorias().size()
 					|| !imovelnaBase.getQuantidadeEconomias().equals(imovelHelper.getImovel().getQuantidadeEconomias())) {
 				getControladorMicromedicao().validarImovelEmCampo(imovelHelper.getImovel().getId());
 			}
@@ -13391,6 +13393,8 @@ public class ControladorImovelSEJB implements SessionBean {
 			throw new ControladorException("atencao.nenhuma_subcategoria");
         }
 		
+		//ImovelSubcategoria imovelSub = (ImovelSubcategoria) colecaoSubcategorias.iterator().next();
+		//getControladorMicromedicao().validarImovelEmCampo(imovelSub.getComp_id().getImovel().getId());
 		//[FS0020] - Permissão Especial para Categoria.
 		ImovelSubcategoria imovelSubcategoria = null;
 		Categoria categoria = null;
