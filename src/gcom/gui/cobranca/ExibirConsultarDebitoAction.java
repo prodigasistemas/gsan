@@ -59,38 +59,14 @@ public class ExibirConsultarDebitoAction extends GcomAction {
         Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
         
         if (httpServletRequest.getParameter("menu") != null && !httpServletRequest.getParameter("menu").equals("")) {
-        	consultarDebitoActionForm.setResponsavel("1");
+        	consultarDebitoActionForm.setResponsavel("0");
         }
         
         if (httpServletRequest.getParameter("voltar") != null && !httpServletRequest.getParameter("voltar").equals("")) {
         	consultarDebitoActionForm.setTipoRelacao("-1");
         }
         
-//        if (httpServletRequest.getParameter("voltar") != null && !httpServletRequest.getParameter("voltar").equals("")) {
-//        	
-//        	if (sessao.getAttribute("tipoPesquisa") != null && sessao.getAttribute("tipoPesquisa").equals("cliente")) {
-//        		consultarDebitoActionForm.setCodigoClienteSuperior(null);
-//        		consultarDebitoActionForm.setCodigoClienteSuperiorClone(null);
-//        	} else if (sessao.getAttribute("tipoPesquisa") != null && sessao.getAttribute("tipoPesquisa").equals("clienteSuperior")) {
-//        		consultarDebitoActionForm.setCodigoCliente(null);
-//        		consultarDebitoActionForm.setCodigoClienteClone(null);
-//        		consultarDebitoActionForm.setTipoRelacao("-1");
-//        	} else {
-//        		consultarDebitoActionForm.setCodigoClienteSuperior(null);
-//        		consultarDebitoActionForm.setCodigoClienteSuperiorClone(null);
-//        		consultarDebitoActionForm.setCodigoCliente(null);
-//        		consultarDebitoActionForm.setCodigoClienteClone(null);
-//        		consultarDebitoActionForm.setTipoRelacao("-1");        		
-//        	}
-//        	
-//        	sessao.removeAttribute("tipoPesquisa");
-//        	
-//        	if (consultarDebitoActionForm.getCodigoClienteSuperior() != null && !consultarDebitoActionForm.getCodigoClienteSuperior().trim().equals("")) {
-//        		consultarDebitoActionForm.setTipoRelacao("-1");
-//        	}
-//        }
-        
-        if (!fachada.verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(usuario)) {
+        if (!fachada.verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(usuario)) {
 			sessao.setAttribute("semPermissao", true);
 		}
         

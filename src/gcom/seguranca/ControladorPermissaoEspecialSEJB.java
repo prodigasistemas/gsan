@@ -602,13 +602,8 @@ public class ControladorPermissaoEspecialSEJB implements SessionBean {
 	 * @author Rafael Corrêa
 	 * @since 13/09/2007
 	 */
-	public boolean verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(Usuario usuario) throws ControladorException {
-
-		boolean verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos = this
-				.verificarPermissaoEspecial(
-						PermissaoEspecial.CONSULTAR_DEBITOS_INDICADO_NA_CONTA_OU_TODOS, usuario);
-
-		return verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos;
+	public boolean verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(Usuario usuario) throws ControladorException {
+		return verificarPermissaoEspecial(PermissaoEspecial.CONSULTAR_DEBITOS_ATUAL_DO_IMOVEL_OU_TODOS, usuario);
 	}
 	
 	

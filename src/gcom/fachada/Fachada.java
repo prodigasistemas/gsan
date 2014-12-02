@@ -20919,9 +20919,9 @@ public class Fachada {
 	 * @param httpServletRequest
 	 * @param usuario
 	 */
-	public boolean verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(Usuario usuario) {
+	public boolean verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(Usuario usuario) {
 		try {
-			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(usuario);
+			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(usuario);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
