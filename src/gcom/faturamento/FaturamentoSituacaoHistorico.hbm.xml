@@ -23,6 +23,7 @@
 		<property name="numeroVolumeEsgotoNaoMedido" type="java.lang.Integer" column="ftsh_nnvolumeesgotonaomedido" length="4"/>
 		<property name="observacaoInforma" type="java.lang.String" column="ftsh_dsobservacaoinforma" length="100"/>
 		<property name="observacaoRetira" type="java.lang.String" column="ftsh_dsobservacaoretira" length="100"/>
+		<property name="dataInclusao" type="java.sql.Timestamp" column="ftsh_tminclusao" length="8"/>
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to FaturamentoSituacaoMotivo -->
 		<many-to-one name="faturamentoSituacaoMotivo" class="gcom.faturamento.FaturamentoSituacaoMotivo" not-null="true">

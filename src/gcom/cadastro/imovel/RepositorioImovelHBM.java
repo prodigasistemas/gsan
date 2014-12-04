@@ -13608,11 +13608,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "end, " 
 					+ // 7
 					
-					"faturamentoSituacaoHistorico.id "
+					"faturamentoSituacaoHistorico.id, " // 8
 					
-					+ // 8
+					+"faturamentoSituacaoHistorico.dataInclusao " // 9
+					
+					
 
-					"from FaturamentoSituacaoHistorico faturamentoSituacaoHistorico "
+					+"from FaturamentoSituacaoHistorico faturamentoSituacaoHistorico "
 
 					+ "left join faturamentoSituacaoHistorico.faturamentoSituacaoTipo faturamentoSituacaoTipo "
 

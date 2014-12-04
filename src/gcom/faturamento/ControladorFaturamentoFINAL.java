@@ -73010,39 +73010,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					imovel.setId(new Integer(id));
 					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoRetirada(null);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setObservacaoInforma(situacaoEspecialFaturamentoHelper
-									.getObservacaoInforma());
-					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar
-							.getInstance().getTime());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaNaoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoNaoMedido());
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setObservacaoInforma(situacaoEspecialFaturamentoHelper.getObservacaoInforma());
+					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar.getInstance().getTime());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaMedido());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaNaoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoNaoMedido());
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setDataInclusao(new Date());
 
 					collectionFaturmentoSituaoHistorico
 							.add(faturamentoSituacaoHistorico);

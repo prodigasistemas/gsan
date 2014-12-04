@@ -1010,31 +1010,42 @@
 	
 							border="0">
 							<tr>
-								<td colspan="6" bordercolor="#79bbfd" align="center"
+								<td colspan="7" bordercolor="#79bbfd" align="center"
 									bgcolor="#79bbfd"><strong>Situa&ccedil;&otilde;es Especiais de
 								Faturamento </strong></td>
 							</tr>
 							<tr bgcolor="#90c7fc">
-								<td align="center" bgcolor="#90c7fc" width="26%">
+								<td align="center" bgcolor="#90c7fc" width="24%">
 								<div class="style9"><font style="font-size: 9px;" color="#000000"
 									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Tipo</strong></font></div>
 								</td>
+								
 								<td align="center" bgcolor="#90c7fc" width="18%"><font
 									style="font-size: 9px;" color="#000000"
 									face="Verdana, Arial, Helvetica, sans-serif"><strong>Motivo</strong></font></td>
-								<td align="center" bgcolor="#90c7fc" width="12%">
+								
+								<td align="center" bgcolor="#90c7fc" width="14%">
 								<div class="style9"><font style="font-size: 9px;" color="#000000"
 									face="Verdana, Arial, Helvetica, sans-serif"> <strong>M&ecirc;s/Ano
 								In&iacute;cio&nbsp;</strong> </font></div>
 								</td>
-								<td align="center" bgcolor="#90c7fc" width="12%"><font
-									style="font-size: 9px;" color="#000000"
-									face="Verdana, Arial, Helvetica, sans-serif"><strong>M&ecirc;s/Ano
-								Fim</strong></font></td>
-								<td align="center" bgcolor="#90c7fc" width="18%"><font
-									style="font-size: 9px;" color="#000000"
-									face="Verdana, Arial, Helvetica, sans-serif"><strong>M&ecirc;s/Ano
-								Retirada</strong></font></td>
+								
+								<td align="center" bgcolor="#90c7fc" width="11%">
+								<div class="style9"><font style="font-size: 9px;" color="#000000"
+									face="Verdana, Arial, Helvetica, sans-serif"> <strong>M&ecirc;s/Ano
+								Fim</strong> </font></div>
+								</td>
+								
+								<td align="center" bgcolor="#90c7fc" width="14%">
+								<div class="style9"><font style="font-size: 9px;" color="#000000"
+									face="Verdana, Arial, Helvetica, sans-serif"> <strong>M&ecirc;s/Ano
+								Retirada</strong> </font></div>
+								</td>
+								
+								<td align="center" bgcolor="#90c7fc" width="6%">
+								<div class="style9"><font style="font-size: 9px;" color="#000000"
+									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Data inclusão</strong></font></div>
+								</td>
 								<td align="center" bgcolor="#90c7fc">
 								<div class="style9"><font style="font-size: 9px;" color="#000000"
 									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Usu&aacute;rio</strong></font></div>
@@ -1042,7 +1053,7 @@
 							</tr>
 	
 							<tr>
-								<td colspan="6">
+								<td colspan="7">
 								<div style="width: 100%; height: 100%; overflow: auto;">
 								<table width="100%" align="left" bgcolor="#99CCFF">
 									<!--corpo da segunda tabela-->
@@ -1111,7 +1122,7 @@
 												.getAnoMesFaturamentoSituacaoFim())%>
 												</font></td>
 												
-												<td align="center" width="18%">
+												<td align="center" width="12%">
 												<font style="font-size: 9px;"
 													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 												<% if(faturamentosSituacaoHistorico.getAnoMesFaturamentoRetirada() != null){ %>
@@ -1122,6 +1133,17 @@
 												<%} %>
 												
 												</font></td>
+												
+												<td align="center" width="10%">
+												<div class="style9"><font style="font-size: 9px;"
+													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+												<logic:present name="faturamentosSituacaoHistorico"
+													property="dataInclusao">
+													<bean:write name="faturamentosSituacaoHistorico"
+														property="dataInclusao" formatKey="date.format"/>
+												</logic:present></font></div>
+												</td>
+												
 												<td align="center">
 												<div class="style9"><font style="font-size: 9px;"
 													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">

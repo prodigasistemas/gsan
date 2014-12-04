@@ -7251,6 +7251,11 @@ public class ControladorImovelSEJB implements SessionBean {
 				if (array[8] != null) {
 					faturamentoSituacaoHistorico.setId((Integer) array[8]);
 				}
+				
+				// 9 - data da inclusao
+				if (array[9] != null) {
+					faturamentoSituacaoHistorico.setDataInclusao((Date) array[9]);
+				}
 
 				imoveisFaturamentosSituacaoHistorico
 						.add(faturamentoSituacaoHistorico);
