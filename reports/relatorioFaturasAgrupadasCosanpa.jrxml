@@ -137,7 +137,7 @@
 						key="textField-8"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{enderecoEmpresa} +  " - Fone " + $P{telefoneEmpresa}]]></textFieldExpression>
 				</textField>
@@ -163,7 +163,7 @@
 						key="textField-10"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["CGC " + $P{cgc} +  " Insc. Est. " + $P{inscricaoEstadual}]]></textFieldExpression>
 				</textField>
@@ -185,7 +185,7 @@
 						key="textField-11"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Favor informar na Ordem Bancária, após o pagamento desta Fatura, o número da Fatura impresso abaixo. \n"
 + "caso contrário fica impossível a baixa do mesmo. \n"
@@ -210,7 +210,7 @@
 						key="staticText-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[NOME]]></text>
 				</staticText>
@@ -223,7 +223,7 @@
 						key="textField-13"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="7"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNomeResponsavel}]]></textFieldExpression>
 				</textField>
@@ -245,7 +245,7 @@
 						key="staticText-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[ENDEREÇO]]></text>
 				</staticText>
@@ -258,7 +258,7 @@
 						key="textField-14"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="7"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getEnderecoResponsavel}]]></textFieldExpression>
 				</textField>
@@ -271,7 +271,7 @@
 						key="staticText-5"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Aviso Importante:]]></text>
 				</staticText>
@@ -293,7 +293,7 @@
 						key="staticText-6"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[NÚMERO DA FATURA]]></text>
 				</staticText>
@@ -306,7 +306,7 @@
 						key="textField-15"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNumeroFatura}]]></textFieldExpression>
 				</textField>
@@ -328,7 +328,7 @@
 						key="textField-16"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["CONTROLE " + $P{nomeAbreviadoEmpresa}]]></textFieldExpression>
 				</textField>
@@ -376,7 +376,7 @@
 						key="staticText-7"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[REFERÊNCIA]]></text>
 				</staticText>
@@ -398,7 +398,7 @@
 						key="staticText-8"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[EMISSÃO]]></text>
 				</staticText>
@@ -433,7 +433,7 @@
 						key="staticText-9"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[VENCIMENTO]]></text>
 				</staticText>
@@ -468,7 +468,7 @@
 						key="staticText-10"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[PÁGINA]]></text>
 				</staticText>
@@ -490,7 +490,7 @@
 						key="staticText-11"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[MATRÍCULA]]></text>
 				</staticText>
@@ -512,7 +512,7 @@
 						key="staticText-12"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[NOME]]></text>
 				</staticText>
@@ -534,7 +534,7 @@
 						key="staticText-13"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[ENDEREÇO]]></text>
 				</staticText>
@@ -556,7 +556,7 @@
 						key="staticText-14"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[UNIDADE]]></text>
 				</staticText>
@@ -578,7 +578,7 @@
 						key="staticText-15"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[SISTEMA]]></text>
 				</staticText>
@@ -600,7 +600,7 @@
 						key="staticText-16"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[H]]></text>
 				</staticText>
@@ -622,7 +622,7 @@
 						key="staticText-17"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[TIPO]]></text>
 				</staticText>
@@ -644,7 +644,7 @@
 						key="staticText-18"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[LEITURA]]></text>
 				</staticText>
@@ -666,7 +666,7 @@
 						key="staticText-19"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[CONSUMO]]></text>
 				</staticText>
@@ -688,7 +688,7 @@
 						key="staticText-20"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[RETENÇÃO]]></text>
 				</staticText>
@@ -701,7 +701,7 @@
 						key="staticText-21"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
 				<text><![CDATA[VALOR]]></text>
 				</staticText>
@@ -739,7 +739,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[      CEF: Ag. 027 - 821-6]]></text>
 				</staticText>
@@ -757,7 +757,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[BANCOS-BRASIL: Ag. 3846-6 - 5972-2]]></text>
 				</staticText>
@@ -770,7 +770,7 @@
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center">
-						<font fontName="Courier New"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getIdFatura}]]></textFieldExpression>
 				</textField>
@@ -783,7 +783,7 @@
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="7"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getEmissao}]]></textFieldExpression>
 				</textField>
@@ -821,7 +821,7 @@
 						key="textField-23"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getMatricula}]]></textFieldExpression>
 				</textField>
@@ -834,7 +834,7 @@
 						key="textField-24"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNomeUsuario}]]></textFieldExpression>
 				</textField>
@@ -847,7 +847,7 @@
 						key="textField-25"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getEnderecoUsuario}]]></textFieldExpression>
 				</textField>
@@ -860,7 +860,7 @@
 						key="textField-26"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getUnidade}]]></textFieldExpression>
 				</textField>
@@ -873,7 +873,7 @@
 						key="textField-27"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getSistema}]]></textFieldExpression>
 				</textField>
@@ -886,7 +886,7 @@
 						key="textField-28"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getHidrometro}]]></textFieldExpression>
 				</textField>
@@ -899,7 +899,7 @@
 						key="textField-29"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getTipo}]]></textFieldExpression>
 				</textField>
@@ -912,7 +912,7 @@
 						key="textField-30"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getLeitura}]]></textFieldExpression>
 				</textField>
@@ -925,7 +925,7 @@
 						key="textField-31"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getConsumo}]]></textFieldExpression>
 				</textField>
@@ -938,7 +938,7 @@
 						key="textField-32"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getRetencao}]]></textFieldExpression>
 				</textField>
@@ -951,7 +951,7 @@
 						key="textField-33"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValor}]]></textFieldExpression>
 				</textField>
@@ -984,7 +984,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorTotalExtenso}]]></textFieldExpression>
 				</textField>
@@ -1000,7 +1000,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorTotal}]]></textFieldExpression>
 				</textField>
@@ -1016,7 +1016,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalRetencao}]]></textFieldExpression>
 				</textField>
@@ -1050,7 +1050,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorTotal}.add($V{valorTotalRetencao})]]></textFieldExpression>
 				</textField>
@@ -1104,7 +1104,7 @@
 						key="textField-47"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{enderecoEmpresa} +  " - Fone " + $P{telefoneEmpresa}]]></textFieldExpression>
 				</textField>
@@ -1117,7 +1117,7 @@
 						key="textField-48"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["CNPJ: " + $P{cgc} +  " INSCRIÇÃO ESTADUAL " + $P{inscricaoEstadual}]]></textFieldExpression>
 				</textField>
@@ -1130,7 +1130,7 @@
 						key="textField-49"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getControle}]]></textFieldExpression>
 				</textField>
@@ -1161,7 +1161,7 @@
 						key="staticText-29"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Autenticação Mecânica]]></text>
 				</staticText>
@@ -1174,7 +1174,7 @@
 						key="staticText-30"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor por Extenso]]></text>
 				</staticText>
@@ -1196,7 +1196,7 @@
 						key="staticText-31"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Quantidade]]></text>
 				</staticText>
@@ -1218,7 +1218,7 @@
 						key="staticText-32"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Total da Fatura]]></text>
 				</staticText>
@@ -1240,7 +1240,7 @@
 						key="staticText-33"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[% Retenção]]></text>
 				</staticText>
@@ -1262,7 +1262,7 @@
 						key="staticText-34"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor da Retenção]]></text>
 				</staticText>
@@ -1284,7 +1284,7 @@
 						key="staticText-35"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<text><![CDATA[TOTAL A PAGAR]]></text>
 				</staticText>
@@ -1300,7 +1300,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*******"]]></textFieldExpression>
 				</textField>
@@ -1315,7 +1315,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*** Continua na próxima página ***"]]></textFieldExpression>
 				</textField>
@@ -1330,7 +1330,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*** Continua na próxima página ***"]]></textFieldExpression>
 				</textField>
@@ -1346,7 +1346,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*******"]]></textFieldExpression>
 				</textField>
@@ -1362,7 +1362,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*******"]]></textFieldExpression>
 				</textField>
@@ -1378,7 +1378,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["*******"]]></textFieldExpression>
 				</textField>
@@ -1393,7 +1393,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
-						<font fontName="Courier New" pdfFontName="Courier"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getRepresentacaoNumericaCodBarraFormatada}]]></textFieldExpression>
 				</textField>
@@ -1408,7 +1408,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[/]]></text>
 				</staticText>
@@ -1426,7 +1426,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[PÁGINA:]]></text>
 				</staticText>
@@ -1444,7 +1444,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" isStyledText="true" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{pagina}]]></textFieldExpression>
 				</textField>
@@ -1462,7 +1462,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{pagina}]]></textFieldExpression>
 				</textField>
@@ -1475,7 +1475,7 @@
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
-						<font fontName="Courier New" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{percentualAliquota}]]></textFieldExpression>
 				</textField>
@@ -1536,7 +1536,7 @@
 						key="textField-63"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{enderecoEmpresa} +  " - Fone " + $P{telefoneEmpresa}]]></textFieldExpression>
 				</textField>
@@ -1562,7 +1562,7 @@
 						key="textField-65"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["CGC " + $P{cgc} +  " Insc. Est. " + $P{inscricaoEstadual}]]></textFieldExpression>
 				</textField>
@@ -1584,7 +1584,7 @@
 						key="textField-66"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Favor informar na Ordem Bancária, após o pagamento desta Fatura, o número da Fatura impresso abaixo. \n"
 + "caso contrário fica impossível a baixa do mesmo. \n"
@@ -1636,7 +1636,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
@@ -1665,7 +1665,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalRelatorio}]]></textFieldExpression>
 				</textField>
@@ -1681,7 +1681,7 @@
 						key="staticText-45"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[      CEF: Ag. 027 - 821-6]]></text>
 				</staticText>
@@ -1697,7 +1697,7 @@
 						key="staticText-46"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[BANCOS-BRASIL: Ag. 3846-6 - 5972-2]]></text>
 				</staticText>
@@ -1713,7 +1713,7 @@
 						key="staticText-47"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[CONTAS DA COSANPA]]></text>
 				</staticText>
