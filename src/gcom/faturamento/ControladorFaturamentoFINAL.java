@@ -64905,8 +64905,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ControladorException
 	 */
 	protected DebitoACobrar gerarDebitoACobrarParaConta(
-			Integer anoMesReferenciaArrecadacao,
-			Integer anoMesReferenciaFaturamento, Imovel imovel,
+			Integer anoMesReferenciaArrecadacao, Imovel imovel,
 			Localidade localidade, Quadra quadra, Integer setorComercial,
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
