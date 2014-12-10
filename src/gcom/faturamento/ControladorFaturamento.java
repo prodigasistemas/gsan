@@ -4149,7 +4149,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -4200,7 +4199,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -4249,7 +4247,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
