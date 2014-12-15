@@ -50873,21 +50873,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// 2.3.2.
 
 						descricaoServicosTarifas3 = " CONSUMO DE ÁGUA";
-						consumoFaixa3 = Util.completaStringComEspacoAEsquerda(
-								"" + contaCategoria.getConsumoAgua(), 6)
-								+ " M3";
-						valor3 = Util.formatarMoedaReal(contaCategoria
-								.getValorAgua());
+						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
+						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua();
+						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas3);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa(consumoFaixa3.trim());
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor3);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas3);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa(consumoFaixa3.trim());
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor3);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 
 				}
@@ -59215,16 +59209,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
-	 * 
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Usuario usuarioLogado) throws ControladorException {
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico) throws ControladorException {
 
 		try {
 
@@ -59234,30 +59224,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
 					idGrupoFaturamento, anoMes, anoMesFim,
-					dataVencimentoContaInicio, dataVencimentoContaFim);
+					dataVencimentoContaInicio, dataVencimentoContaFim,
+					somenteDebitoAutomatico);
 
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS ALTERADO COM SUCESSO.";
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(), "CONTAS_ALTERADAS",
-						mensagem);
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(),
+						"CONTAS_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
 			}
 
 		} catch (ErroRepositorioException ex) {
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS NÃO FOI ALTERADO DEVIDO A UM ERRO DE SISTEMA.";
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(),
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(), 
 						"CONTAS_NÃO_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
@@ -59265,14 +59250,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
 		}
-
 	}
 
 	/**
 	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
 	 * 
 	 * @throws ControladorException
 	 */
@@ -64924,8 +64905,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ControladorException
 	 */
 	protected DebitoACobrar gerarDebitoACobrarParaConta(
-			Integer anoMesReferenciaArrecadacao,
-			Integer anoMesReferenciaFaturamento, Imovel imovel,
+			Integer anoMesReferenciaArrecadacao, Imovel imovel,
 			Localidade localidade, Quadra quadra, Integer setorComercial,
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
@@ -73029,39 +73009,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					imovel.setId(new Integer(id));
 					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoRetirada(null);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setObservacaoInforma(situacaoEspecialFaturamentoHelper
-									.getObservacaoInforma());
-					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar
-							.getInstance().getTime());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaNaoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoNaoMedido());
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setObservacaoInforma(situacaoEspecialFaturamentoHelper.getObservacaoInforma());
+					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar.getInstance().getTime());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaMedido());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaNaoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoNaoMedido());
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setDataInclusao(new Date());
 
 					collectionFaturmentoSituaoHistorico
 							.add(faturamentoSituacaoHistorico);

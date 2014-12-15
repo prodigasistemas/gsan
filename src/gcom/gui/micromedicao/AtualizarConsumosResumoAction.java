@@ -11,7 +11,6 @@ import gcom.gui.GcomAction;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraSituacao;
-import gcom.micromedicao.medicao.FiltroMedicaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.seguranca.acesso.Operacao;
@@ -93,20 +92,14 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 			Date dataLeituraAtual = null;
 			Date dataLeituraAnterior = null;
 
-			String anoMesReferencia = ""
-					+ medicaoHistorico.getAnoMesReferencia();
+			String anoMesReferencia = "" + medicaoHistorico.getAnoMesReferencia();
 
-			if (imovel.getHidrometroInstalacaoHistorico() != null
-					|| (imovel.getLigacaoAgua() != null && imovel
-							.getLigacaoAgua()
-							.getHidrometroInstalacaoHistorico() != null)) {
+			if (isImovelHidrometrado(imovel)) {
 
-				if (dataLeituraAtualInformada != null
-						&& !dataLeituraAtualInformada.equals("")) {
+				if (dataLeituraAtualInformada != null && !dataLeituraAtualInformada.equals("")) {
 
 					try {
-						dataLeituraAtual = dataFormatada
-								.parse(dataLeituraAtualInformada);
+						dataLeituraAtual = dataFormatada.parse(dataLeituraAtualInformada);
 					} catch (ParseException ex) {
 						throw new ActionServletException("erro.sistema");
 					}
@@ -122,37 +115,14 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 
 					anoMesAtual += mes;
 
-					/*
-					 * String anoMesReferenciaMaisUmMes = "" +
-					 * Util.somarData(medicaoHistorico .getAnoMesReferencia());
-					 */
-
-					// Comparando a data atual informada no form com o ano
-					// mês
-					// referência e com o ano mês seguinte
-					/*
-					 * if (!((Util.compararAnoMesReferencia(new Integer(
-					 * anoMesReferencia), new Integer(anoMesAtual), "=")) ||
-					 * (Util.compararAnoMesReferencia( new
-					 * Integer(anoMesReferenciaMaisUmMes), new
-					 * Integer(anoMesAtual), "=")))) { sessao
-					 * .setAttribute("nomeCampo", "dataLeituraAtual"); throw new
-					 * ActionServletException(
-					 * "atencao.faturamento_data_incompativel", null,
-					 * "Data de Leitura Atual Informada"); }
-					 */
-					boolean mesAnoValido = fachada
-							.validaDataFaturamentoIncompativel(
-									anoMesReferencia, anoMesAtual);
+					boolean mesAnoValido = fachada.validaDataFaturamentoIncompativel(anoMesReferencia, anoMesAtual);
+					
 					if (!mesAnoValido) {
 						sessao.setAttribute("nomeCampo", "dataLeituraAtual");
-						throw new ActionServletException(
-								"atencao.faturamento_data_incompativel", null,
-								"Data de Leitura Atual Informada");
+						throw new ActionServletException("atencao.faturamento_data_incompativel", null,"Data de Leitura Atual Informada");
 					}
 
-					if (dataLeituraAnteriorInformada != null
-							&& !dataLeituraAnteriorInformada.equals("")) {
+					if (dataLeituraAnteriorInformada != null && !dataLeituraAnteriorInformada.equals("")) {
 						try {
 							if (Util.validarDiaMesAno(dataLeituraAnteriorInformada)) {
 								throw new ActionServletException("atencao.data.invalida", null, "Data Anterior");
@@ -182,6 +152,7 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 					} catch (ParseException ex) {
 						throw new ActionServletException("erro.sistema");
 					}
+					
 					Calendar dataAnterior = new GregorianCalendar();
 					dataAnterior.setTime(dataLeituraAnterior);
 					String anoMesAnterior = ""+ dataAnterior.get(Calendar.YEAR);
@@ -194,61 +165,46 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 					anoMesAnterior += mesAnterior;
 
 					boolean anoMesInferiorValido = fachada.validaDataFaturamentoIncompativelInferior(anoMesReferencia, anoMesAnterior);
+
 					if (!anoMesInferiorValido) {
 						sessao.setAttribute("nomeCampo", "dataLeituraAnterior");
-
 						throw new ActionServletException("atencao.faturamento_data_incompativel", null, "Data de Leitura Anterior de Faturamento");
 					}
 
 					medicaoHistorico.setDataLeituraAnteriorFaturamento(dataLeituraAnterior);
 				}
 
-				if (((imovel.getHidrometroInstalacaoHistorico() == null ? 
-						imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()
-						: imovel.getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()) >= leituraAtual.length())
-						&& ((imovel.getHidrometroInstalacaoHistorico() == null ? 
-								imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()
-								: imovel.getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()) >= leituraAnterior.length())) {
+				if ((obterNumeroDigitosLeituraHidrometro(imovel) >= leituraAtual.length()) 
+					&& (obterNumeroDigitosLeituraHidrometro(imovel) >= leituraAnterior.length())) {
 
 					if (!("" + medicaoHistorico.getLeituraAnteriorFaturamento()).equals(leituraAnterior)) {
-						LeituraSituacao leituraSituacaoAnterior = new LeituraSituacao();
-						leituraSituacaoAnterior.setId(LeituraSituacao.LEITURA_ALTERADA);
+						LeituraSituacao leituraSituacaoAnterior = new LeituraSituacao(LeituraSituacao.LEITURA_ALTERADA);
 						medicaoHistorico.setLeituraSituacaoAnterior(leituraSituacaoAnterior);
 					}
-
 					medicaoHistorico.setLeituraAnteriorFaturamento(new Integer(leituraAnterior));
-
+				
 				} else {
-
 					sessao.setAttribute("nomeCampo", "leituraAnterior");
-
 					throw new ActionServletException("atencao.digitos.leitura.maior.hidrometro");
 				}
 
 				if (possuiAnormalidadeLeitura(idAnormalidadeLeitura)) {
 					
 					Collection anormalidadeLeituraEncontrada = obterAnormalidadeLeitura(fachada, idAnormalidadeLeitura);
+					
 					if (anormalidadeLeituraEncontrada != null && !anormalidadeLeituraEncontrada.isEmpty()) {
-
 						medicaoHistorico.setLeituraAnormalidadeInformada(((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)));
 						medicaoHistorico.setLeituraAnormalidadeFaturamento(((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)));
-
 					} else {
-
 						sessao.setAttribute("nomeCampo", "idAnormalidade");
-
 						throw new ActionServletException("atencao.pesquisa_inexistente", null, "Anormalidade de Leitura");
 					}
-
 				} else {
 					medicaoHistorico.setLeituraAnormalidadeInformada(null);
 					medicaoHistorico.setLeituraAnormalidadeFaturamento(null);
 				}
 
-				// Testando se o número de dígitos do hidrometro é menor que o número de dígitos da leitura
-				if ((imovel.getHidrometroInstalacaoHistorico() == null ? 
-						imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()
-						: imovel.getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()) >= leituraAtual.length()) {
+				if (obterNumeroDigitosLeituraHidrometro(imovel) >= leituraAtual.length()) {
 					medicaoHistorico.setLeituraAtualInformada(leituraAtual.equals("") ? null : new Integer(leituraAtual));
 				
 				} else {
@@ -261,16 +217,14 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 
 				if (consumoInformado != null && !consumoInformado.equalsIgnoreCase("")) {
 					medicaoHistorico.setNumeroConsumoInformado(new Integer(consumoInformado));
-
 				}
-
 			} else {
 				if (possuiAnormalidadeLeitura(idAnormalidadeLeitura)) {
 					Collection anormalidadeLeituraEncontrada = obterAnormalidadeLeitura(fachada, idAnormalidadeLeitura);
 
 					if (anormalidadeLeituraEncontrada != null && !anormalidadeLeituraEncontrada.isEmpty()) {
 
-						if (((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)).getIndicadorImovelSemHidrometro().equals(new Short("2"))) {
+						if (((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)).getIndicadorImovelSemHidrometro().equals(ConstantesSistema.NAO)) {
 							sessao.setAttribute("nomeCampo", "idAnormalidade");
 							throw new ActionServletException("atencao.leitura.anormalidade.nao.permitida");
 						}
@@ -360,30 +314,27 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 			}
 
 			if(leituraSituacao.getId().equals(LeituraSituacao.CONFIRMADA)){
-				fachada.calcularLeituraConfirmada(new Integer(leituraAnterior), new Integer(leituraAtual), leituraSituacao, 
-						new Integer(idImovel), medicaoHistorico.getAnoMesReferencia(), faturamentoGrupo, sistemaParametro,
-						dataLeituraAtualInformada, idLeituraAnormalidade, alterouAnormalidade);
+				fachada.calcularLeituraConfirmada(new Integer(leituraAnterior), new Integer(leituraAtual), leituraSituacao, new Integer(idImovel), 
+						medicaoHistorico.getAnoMesReferencia(), faturamentoGrupo, sistemaParametro, dataLeituraAtualInformada, idLeituraAnormalidade, alterouAnormalidade);
 			} else {
 
-				fachada.atualizarLeituraConsumoResumido(new Integer(idImovel),
-						medicaoHistorico.getMesAno().toString(),
-						dataLeituraAnteriorInformada, leituraAnterior,
-						dataLeituraAtualInformada, leituraAtual, consumoInformado,
-						ligacaoAgua, idLeituraAnormalidade, /*
-															 * new Integer(
-															 * indicadorConfirmacao)
-															 */leituraSituacao
-								.getId(), faturamentoGrupo, usuarioLogado,
-						alterouAnormalidade, motivoInterferenciaTipo, new Integer(
-								tipoMedicao));
+				fachada.atualizarLeituraConsumoResumido(new Integer(idImovel), medicaoHistorico.getMesAno().toString(), dataLeituraAnteriorInformada, 
+						leituraAnterior, dataLeituraAtualInformada, leituraAtual, consumoInformado, ligacaoAgua, idLeituraAnormalidade, leituraSituacao.getId(), 
+						faturamentoGrupo, usuarioLogado, alterouAnormalidade, motivoInterferenciaTipo, new Integer(tipoMedicao));
 			}
-			
-
 			httpServletRequest.setAttribute("sucesso", true);
-
 		}
-
 		return retorno;
+	}
+
+	private int obterNumeroDigitosLeituraHidrometro(Imovel imovel) {
+		return imovel.getHidrometroInstalacaoHistorico() == null ? 
+				imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue()
+				: imovel.getHidrometroInstalacaoHistorico().getHidrometro().getNumeroDigitosLeitura().intValue();
+	}
+
+	private boolean isImovelHidrometrado(Imovel imovel) {
+		return imovel.getHidrometroInstalacaoHistorico() != null || (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null);
 	}
 
 	private boolean possuiAnormalidadeLeitura(String idAnormalidadeLeitura) {
@@ -399,54 +350,18 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 		return anormalidadeLeituraEncontrada;
 	}
 
-	private LeituraSituacao obterSituacaoLeitura(String leituraAtual,
-			String indicadorConfirmacao, LeituraSituacao leituraSituacao) {
+	private LeituraSituacao obterSituacaoLeitura(String leituraAtual, String indicadorConfirmacao, LeituraSituacao leituraSituacao) {
+		
 		if (!leituraAtual.equals("") && new Integer(leituraAtual).intValue() == 0) {
 			leituraSituacao.setId(LeituraSituacao.NAO_REALIZADA);
-
 		} else {
-
 			if (indicadorConfirmacao.equals(ConstantesSistema.CONFIRMADA)) {
 				leituraSituacao.setId(LeituraSituacao.CONFIRMADA);
-
 			} else {
 				leituraSituacao.setId(LeituraSituacao.REALIZADA);
 			}
 		}
-		
 		return leituraSituacao;
-	}
-
-	private Calendar obterDataLeituraAtualFormatada(Fachada fachada, HttpSession sessao, String dataLeituraAtualInformada, String anoMesReferencia) {
-		Date dataLeituraAtual = null;
-		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
-		
-		Calendar dataAtual = new GregorianCalendar();
-		//dataAtual.setTime(dataLeituraAtual);
-
-		try {
-			dataLeituraAtual = dataFormatada.parse(dataLeituraAtualInformada);
-		} catch (ParseException ex) {
-			throw new ActionServletException("erro.sistema");
-		}
-		
-		String anoMesAtual = "" + dataAtual.get(Calendar.YEAR);
-		String mes = "" + (dataAtual.get(Calendar.MONTH) + 1);
-
-		if (!(mes.length() == 2)) {
-			mes = "0" + mes;
-		}
-
-		anoMesAtual += mes;
-
-		boolean mesAnoValido = fachada.validaDataFaturamentoIncompativel(anoMesReferencia, anoMesAtual);
-		if (!mesAnoValido) {
-			sessao.setAttribute("nomeCampo", "dataLeituraAtual");
-			throw new ActionServletException(
-					"atencao.faturamento_data_incompativel", null,
-					"Data de Leitura Atual Informada");
-		}
-		return dataAtual;
 	}
 
 	private boolean existeAltracaoAnormalidade(String idAnormalidadeLeitura, MedicaoHistorico medicaoHistorico) {

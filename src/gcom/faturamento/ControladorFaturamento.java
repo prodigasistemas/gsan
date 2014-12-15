@@ -4149,7 +4149,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -4200,7 +4199,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -4249,7 +4247,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -16661,6 +16658,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException {
 		try{
 		  return repositorioFaturamento.pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException {
+		try{
+		  return repositorioFaturamento.verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo, referencia);
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }

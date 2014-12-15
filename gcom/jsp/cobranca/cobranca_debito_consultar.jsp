@@ -123,7 +123,7 @@ function limparForm(tipo){
 		ObjNomeClienteSuperior.value = "";
 		
 		<% if (semPermissao == null || !semPermissao.equals(new Boolean(true))) {	%>
-			form.responsavel[0].disabled = false;
+			form.responsavel[1].disabled = false;
 			form.responsavel[2].disabled = false;
 		<% } %>		
 	}
@@ -167,8 +167,8 @@ function validaEnterClienteSuperior(tecla, caminhoActionReload, nomeCampo) {
 		form.codigoClienteClone.value = "";	
 		form.nomeCliente.value = "";
 		form.tipoRelacao.value = <%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>;
-		form.responsavel[1].checked = true;
-		form.responsavel[0].disabled = true;
+		form.responsavel[0].checked = true;
+		form.responsavel[1].disabled = true;
 		form.responsavel[2].disabled = true;
     } else {
 		form.codigoImovel.readOnly = false;
@@ -183,7 +183,7 @@ function validaEnterClienteSuperior(tecla, caminhoActionReload, nomeCampo) {
 		form.tipoRelacao.disabled = false;
 		
 		<% if (semPermissao == null || !semPermissao.equals(new Boolean(true))) {	%>
-			form.responsavel[0].disabled = false;
+			form.responsavel[1].disabled = false;
 			form.responsavel[2].disabled = false;
 		<% } %>
 	}
@@ -288,7 +288,7 @@ function controleClienteSuperior(){
 		form.tipoRelacao.disabled = true;
 		
 		//form.responsavel[1].checked = true;
-		form.responsavel[0].disabled = false;
+		form.responsavel[1].disabled = false;
 		form.responsavel[2].disabled = false;
 		
 	}
@@ -301,7 +301,7 @@ function controleClienteSuperior(){
 		}
 		
 		<% if (semPermissao == null || !semPermissao.equals(new Boolean(true))) {	%>
-			form.responsavel[0].disabled = false;
+			form.responsavel[1].disabled = false;
 			form.responsavel[2].disabled = false;
 		<% } %>
 	}
@@ -586,16 +586,17 @@ function validarForm(form)
                 <td><strong>Responsável:</strong></td>
                 <td colspan="6"><span class="style2"><strong> 
                   <label>
-                  <logic:present name="semPermissao" scope="session">
-                  <html:radio property="responsavel" value="0" disabled="true" />
+				  <html:radio property="responsavel" value="0" onclick="javascript: reload();"/>
+ 				  Indicado na Conta</label>
+ 				  
+ 				  <logic:present name="semPermissao" scope="session">
+                  <html:radio property="responsavel" value="1" disabled="true" />
                   </logic:present>
                   <logic:notPresent name="semPermissao" scope="session">
-				  <html:radio property="responsavel" value="0" onclick="javascript: reload();"/>
-				  </logic:notPresent>
- 				  Indicado na Conta</label>
-                  <label> 
 				  <html:radio property="responsavel" value="1" onclick="javascript: reload();"/>
+				  </logic:notPresent>
  				  Atual do Imóvel</label>
+ 				  
                   <label>
                   <logic:present name="semPermissao" scope="session">
                   <html:radio property="responsavel" value="2" disabled="true" /> 

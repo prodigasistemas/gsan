@@ -2810,7 +2810,8 @@ public interface IControladorFaturamento {
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,Usuario usuarioLogado)
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico)
 			throws ControladorException ;
 	
 	
@@ -5692,4 +5693,6 @@ public interface IControladorFaturamento {
 	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException;
 	
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException;
 }

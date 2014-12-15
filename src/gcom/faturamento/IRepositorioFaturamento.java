@@ -1231,8 +1231,8 @@ public interface IRepositorioFaturamento {
 	public void alterarVencimentoContaGrupoFaturamento(Date dataVencimento,
 			Date dataValidade, Short indicadorAlteracaoVencimento,
 			Integer idGrupoFaturamento, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim)
-			throws ErroRepositorioException;
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			boolean somenteDebitoAutomatico) throws ErroRepositorioException;
 
 	public Integer pesquisarTipoConta(Integer idConta) throws ErroRepositorioException;
 
@@ -3012,4 +3012,5 @@ public interface IRepositorioFaturamento {
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
 }

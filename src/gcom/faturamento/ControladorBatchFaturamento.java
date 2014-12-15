@@ -114,7 +114,8 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 									(Integer) ((Object[]) objectMessage.getObject())[3],
 									(Date) ((Object[]) objectMessage.getObject())[4],
 									(Date) ((Object[]) objectMessage.getObject())[5],
-									(Usuario) ((Object[]) objectMessage.getObject())[6]);
+									(Usuario) ((Object[]) objectMessage.getObject())[6],
+									(Boolean) ((Object[]) objectMessage.getObject())[7]);
 					usuarioLogado = (Usuario) ((Object[]) objectMessage.getObject())[6];
 					assuntoEmail = 	"ALTERAR VENCIMENTO DE CONJUNTO DE CONTAS";								
 					break;
@@ -239,10 +240,10 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 					try {
 						EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.AVISO_CONCLUSAO_BATCH_AVULSO);
 						try {
-							ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado
-									.getDescricaoEmail(), assuntoEmail, mensagemEmail);
+							ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(),
+									assuntoEmail, mensagemEmail);
 						} catch (ErroEmailException e) {
-//							throw new ControladorException("erro.envio.mensagem");
+							throw new ControladorException("erro.envio.mensagem");
 						}
 					} catch (ControladorException e) {
 						e.printStackTrace();

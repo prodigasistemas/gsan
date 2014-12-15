@@ -6966,7 +6966,9 @@ public interface IRepositorioArrecadacao {
 	
 	public Collection<LancamentoItemContabil> pesquisarLancamentosItemContabil() throws ErroRepositorioException;
 	
-	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao, 
+			Integer idPagamentoSituacao) throws ErroRepositorioException;
 	
-	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException;
 }

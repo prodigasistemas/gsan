@@ -63,6 +63,9 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
     private Integer numeroVolumeEsgotoNaoMedido;
     
     /** persistent field */
+    private Date dataInclusao;
+    
+    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private String observacaoInforma;
     
@@ -162,8 +165,16 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
     }
+    
+    public Date getDataInclusao() {
+		return dataInclusao;
+	}
 
-    public gcom.faturamento.FaturamentoSituacaoMotivo getFaturamentoSituacaoMotivo() {
+	public void setDataInclusao(Date dataInclusao) {
+		this.dataInclusao = dataInclusao;
+	}
+
+	public gcom.faturamento.FaturamentoSituacaoMotivo getFaturamentoSituacaoMotivo() {
         return this.faturamentoSituacaoMotivo;
     }
 

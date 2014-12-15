@@ -1288,8 +1288,7 @@ public class RelatorioParcelamento extends TarefaRelatorio {
 	     				!parcelamentoRelatorioHelper.getNomeUsuarioParcelamento().equals("")){
 	     		
 	     			FiltroFuncionario filtroFuncionarioUsuario = new FiltroFuncionario();
-	     			filtroFuncionarioUsuario.adicionarParametro(new ParametroSimples(FiltroFuncionario.NOME, 
-	     					parcelamentoRelatorioHelper.getNomeUsuarioParcelamento()));
+	     			filtroFuncionarioUsuario.adicionarParametro(new ParametroSimples(FiltroFuncionario.NUMERO_CPF, parcelamentoRelatorioHelper.getCpfUsuario()));
 	     			filtroFuncionarioUsuario.adicionarCaminhoParaCarregamentoEntidade("funcionarioCargo");
 	     			Collection colecaoFuncionario = fachada.pesquisar(filtroFuncionarioUsuario, Funcionario.class.getName());
 	     			Funcionario funcionario = (Funcionario) Util.retonarObjetoDeColecao(colecaoFuncionario);

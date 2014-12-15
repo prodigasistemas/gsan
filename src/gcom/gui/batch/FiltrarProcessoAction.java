@@ -100,7 +100,7 @@ public class FiltrarProcessoAction extends GcomAction {
 		}
 
 		FiltroProcessoIniciado filtroProcessoIniciado = 
-			new FiltroProcessoIniciado(FiltroProcessoIniciado.DATA_HORA_AGENDAMENTO);
+			new FiltroProcessoIniciado(FiltroProcessoIniciado.DATA_HORA_AGENDAMENTO_DESC);
 		
 		//CRC-1466
 		if(usuarioId != null && !usuarioId.trim().equals("")){

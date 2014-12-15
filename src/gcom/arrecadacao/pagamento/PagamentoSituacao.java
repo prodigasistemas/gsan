@@ -25,7 +25,8 @@ public class PagamentoSituacao extends ObjetoGcom {
     public final static Integer DOCUMENTO_INEXISTENTE_CONTA_PARCELADA = new Integer(12);
     public final static Integer DOCUMENTO_INEXISTENTE_CONTA_CANCELADA = new Integer(13);
     public final static Integer DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO = new Integer(14);
-    public final static Integer PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO = new Integer(15);
+    public final static Integer PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO = new Integer(15);
+    public final static Integer PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE = new Integer(16);
 	
     private Integer id;
     private String descricao;
