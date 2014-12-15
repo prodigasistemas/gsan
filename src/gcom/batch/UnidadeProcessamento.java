@@ -3,9 +3,9 @@ package gcom.batch;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class UnidadeProcessamento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,48 +31,44 @@ public class UnidadeProcessamento implements Serializable {
 	public static final int COB_ACAO_ATIV_CRONOG = 10;
 
 	public static final int COB_ACAO_ATIV_COMAND = 11;
-	
+
 	public static final int RA_ENCERRAMENTO_COM = 12;
-	
+
 	public static final int NEGATIVADOR_MOVIMENTO_REG = 14;
-	
+
 	public static final int COMANDO_EMPRESA_COBRANCA_CONTA = 15;
-	
+
 	public static final int COMANDO_EMPRESA_COBRANCA_CONTA_EXTENSAO = 16;
-	
+
 	public static final int UNIDADE_NEGOCIO = 17;
-	
+
 	public static final int HIDROMETRO = 18;
-	
+
 	public static final int EMPRESA = 19;
-	
+
 	public static final int QUADRA = 20;
 
-	/** identifier field */
+	public static final int FATURAMENTO_GRUPO = 21;
+
 	private Integer id;
 
-	/** nullable persistent field */
 	private String descricaoUnidadeProcessamento;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private short indicadorUso;
 
-	/** nullable persistent field */
 	private String descricaoAbreviada;
 
-	/** persistent field */
 	private Set unidadesIniciadas;
 
-	/** persistent field */
 	private Set processosFuncionalidades;
 
-	/** full constructor */
 	public UnidadeProcessamento(String descricaoUnidadeProcessamento,
-			Date ultimaAlteracao, short indicadorUso,
-			String descricaoAbreviada, Set unidadesIniciadas,
+			Date ultimaAlteracao,
+			short indicadorUso,
+			String descricaoAbreviada,
+			Set unidadesIniciadas,
 			Set processosFuncionalidades) {
 		this.descricaoUnidadeProcessamento = descricaoUnidadeProcessamento;
 		this.ultimaAlteracao = ultimaAlteracao;
@@ -82,13 +78,10 @@ public class UnidadeProcessamento implements Serializable {
 		this.processosFuncionalidades = processosFuncionalidades;
 	}
 
-	/** default constructor */
 	public UnidadeProcessamento() {
 	}
 
-	/** minimal constructor */
-	public UnidadeProcessamento(short indicadorUso, Set unidadesIniciadas,
-			Set processosFuncionalidades) {
+	public UnidadeProcessamento(short indicadorUso, Set unidadesIniciadas, Set processosFuncionalidades) {
 		this.indicadorUso = indicadorUso;
 		this.unidadesIniciadas = unidadesIniciadas;
 		this.processosFuncionalidades = processosFuncionalidades;
@@ -106,8 +99,7 @@ public class UnidadeProcessamento implements Serializable {
 		return this.descricaoUnidadeProcessamento;
 	}
 
-	public void setDescricaoUnidadeProcessamento(
-			String descricaoUnidadeProcessamento) {
+	public void setDescricaoUnidadeProcessamento(String descricaoUnidadeProcessamento) {
 		this.descricaoUnidadeProcessamento = descricaoUnidadeProcessamento;
 	}
 

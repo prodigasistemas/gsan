@@ -13,13 +13,14 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class RelatorioReceitasAFaturar extends TarefaRelatorio {
+	
+	private static final long serialVersionUID = 1L;
 	
 	public RelatorioReceitasAFaturar(Usuario usuario, String nomeRelatorio) {
 		super(usuario, nomeRelatorio);
@@ -32,7 +33,7 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 
 	@Override
 	public Object executar() throws TarefaException {
-		Collection colecaoDados = (Collection) getParametro("colecaoDadosRelacaoImoveisRota");
+		Collection colecaoDados = (Collection) getParametro("colecaoDadosRelatorio");
 		Collection<RelatorioReceitasAFaturarBean> colecaoBean = this.inicializarBeanRelatorio(colecaoDados);
 
 		if (colecaoBean == null || colecaoBean.isEmpty()) {
@@ -68,9 +69,7 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 	}
 
 	@Override
-	public void agendarTarefaBatch() {
-		
-	}
+	public void agendarTarefaBatch() {}
 	
 	private Collection<RelatorioReceitasAFaturarBean> inicializarBeanRelatorio(Collection colecaoDados) {
 		
@@ -89,5 +88,4 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 
 		return retorno;
 	}
-
 }

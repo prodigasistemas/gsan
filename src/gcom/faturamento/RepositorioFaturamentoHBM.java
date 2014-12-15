@@ -61125,7 +61125,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " and cronograma_mensal.ftcm_amreferencia = :anoMesReferencia "
 					+ " and grupo.ftgr_icuso = 1 ";
 					
-			if(idGrupo != null) {
+			if (idGrupo != null) {
 				consulta += "and grupo.ftgr_id in (:idGrupo)";
 
 				retorno = (Collection) session.createSQLQuery(consulta)
@@ -61188,44 +61188,42 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia)
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia)
 			throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 		try {
-			consulta = " SELECT ftgr_id as idGrupo, sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
-				+ " (SELECT ftgr_id, sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
+			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
+				+ " (SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
 				+ " FROM faturamento.conta as conta, "
 				+ " cadastro.cliente_imovel cliente_imovel, " 
 				+ " cadastro.cliente cliente "
 				+ " WHERE cnta_amreferenciaconta = :anoMesReferencia "
 				+ " and dcst_idatual in (0, 1, 2, 5) "
+				+ " and ftgr_id = :idGrupo "
 				+ " and conta.imov_id = cliente_imovel.imov_id " 
 				+ " and cliente.clie_id = cliente_imovel.clie_id "
 				+ " and cliente_imovel.crtp_id = 2 " 
 				+ " and cliente_imovel.clim_dtrelacaofim is null "
-				+ " group by conta.ftgr_id "
 				+ " UNION  "
-				+ " SELECT ftgr_id, sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
+				+ " SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
 				+ " FROM faturamento.conta_historico as conta_historico, "
 				+ " cadastro.cliente_imovel cliente_imovel, "
 				+ " cadastro.cliente cliente "
 				+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia "
 				+ " and dcst_idatual in (0, 1, 2, 5) "
+				+ " and ftgr_id = :idGrupo "
 				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
 				+ " and cliente.clie_id = cliente_imovel.clie_id "
 				+ " and cliente_imovel.crtp_id = 2 "
-				+ " and cliente_imovel.clim_dtrelacaofim is null "
-				+ " group by conta_historico.ftgr_id) as conta "
-				+ " group by ftgr_id "
-				+ " order by ftgr_id ";
+				+ " and cliente_imovel.clim_dtrelacaofim is null) as conta ";
 
 			retorno = (Collection) session.createSQLQuery(consulta)
-				.addScalar("idGrupo", Hibernate.INTEGER)
 				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
 				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
 				.setInteger("anoMesReferencia", anoMesReferencia)
+				.setInteger("idGrupo", idGrupo)
 				.list();
 			
 		} catch (HibernateException e) {

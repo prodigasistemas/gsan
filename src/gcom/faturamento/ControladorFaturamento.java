@@ -16527,10 +16527,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Collection<RelatorioReceitasAFaturarHelper> retorno;
 			
-			if(idGrupo == null)
-				retorno = gerarDadosRelatorioReceitasAFaturar(anoMes);
-			else
-				retorno = gerarDadosRelatorioReceitasAFaturar(idGrupo, anoMes);
+			if (idGrupo != null) {
+				retorno = gerarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMes);
+			}
+			else {
+				retorno = gerarDadosRelatorioReceitasAFaturarSintetico(anoMes);
+			}
 
 			return retorno;
 		} catch (ErroRepositorioException e) {
@@ -16539,42 +16541,51 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturar(Integer anoMes)
-			throws ErroRepositorioException {
+	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes)
+			throws ControladorException {
 		
 		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
-
-		ArrayList<DataLeituraPrevistaHelper> datasLeituraPrevista = DataLeituraPrevistaHelper
-				.getListaDatasLeituraPrevistaHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(null, anoMes));
 		
-		ArrayList<DataLeituraAnteriorHelper> datasLeituraAnterior = DataLeituraAnteriorHelper
-				.getListaDatasLeituraAnteriorHelper(repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(null, anoMes));
+		FiltroReceitasAFaturarResumo filtro = new FiltroReceitasAFaturarResumo(FiltroReceitasAFaturarResumo.GRUPO_ID);
+		filtro.adicionarParametro(new ParametroSimples(FiltroReceitasAFaturarResumo.ANO_MES_REFERENCIA, anoMes));
 		
-		ArrayList<ValorAFaturarHelper> valoresAFaturar = ValorAFaturarHelper.getListaValoresAFaturarHelper(repositorioFaturamento
-				.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(anoMes));
+		Collection<ReceitasAFaturarResumo> colecao = getControladorUtil().pesquisar(filtro, ReceitasAFaturarResumo.class.getName());
 		
-		for (DataLeituraPrevistaHelper dataLeituraPrevistaHelper : datasLeituraPrevista) {
-			
-			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
-			helper.setIdGrupo(dataLeituraPrevistaHelper.getIdGrupo());
-			helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
-			
-			for (DataLeituraAnteriorHelper dataLeituraAnteriorHelper : datasLeituraAnterior) {
-				if(dataLeituraAnteriorHelper.getIdGrupo().equals(dataLeituraPrevistaHelper.getIdGrupo())) {
-					helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
-				}
-			}
-			
-			for (ValorAFaturarHelper valorAFaturarHelper : valoresAFaturar) {
-				if(valorAFaturarHelper.getIdGrupo().equals(dataLeituraPrevistaHelper.getIdGrupo())) {
-					helper.setValorAgua(valorAFaturarHelper.getValorAgua());
-					helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
-				}
-			}
+		for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
+			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper(receitasAFaturarResumo);
 			retorno.add(helper);
 		}
+		
+		return retorno;
+	}
 
-		for (RelatorioReceitasAFaturarHelper helper : retorno) {
+	public void gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) 
+			throws ControladorException, ErroRepositorioException {
+		
+		int idUnidadeIniciada = 0;
+		
+		try {
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.FATURAMENTO_GRUPO, idGrupo);
+			
+			this.apagarReceitasAFaturarResumoPorReferenciaEGrupo(idGrupo, anoMes);
+
+			DataLeituraPrevistaHelper dataLeituraPrevistaHelper = DataLeituraPrevistaHelper.getListaDatasLeituraPrevistaHelperPorGrupo(
+					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(idGrupo, anoMes));
+			
+			DataLeituraAnteriorHelper dataLeituraAnteriorHelper = DataLeituraAnteriorHelper.getListaDatasLeituraAnteriorHelperPorGrupo(
+					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(idGrupo, anoMes));
+			
+			ValorAFaturarHelper valorAFaturarHelper = ValorAFaturarHelper.getListaValoresAFaturarHelper(
+					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(idGrupo, anoMes));
+			
+			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
+			helper.setIdGrupo(idGrupo);
+			helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
+			helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
+			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
+			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+
 			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
 			helper.setDiferencaDias(diferencaDias);			
 			
@@ -16593,15 +16604,35 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
 			helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
 			helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
+			
+			ReceitasAFaturarResumo receitasAFaturarResumo = new ReceitasAFaturarResumo(helper);
+			receitasAFaturarResumo.setAnoMesReferencia(anoMes);
+			receitasAFaturarResumo.setUltimaAlteracao(new Date());
+			getControladorUtil().inserir(receitasAFaturarResumo);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
+			System.out.println("Erro no processamento do GRUPO: " + idGrupo);
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
 		}
+	}
+
+	private void apagarReceitasAFaturarResumoPorReferenciaEGrupo(Integer idGrupo, Integer anoMes)
+			throws ControladorException {
 		
-		BeanComparator fieldComparator = new BeanComparator("idGrupo");
-		Collections.sort((ArrayList)retorno, fieldComparator);
+		FiltroReceitasAFaturarResumo filtro = new FiltroReceitasAFaturarResumo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroReceitasAFaturarResumo.GRUPO_ID, idGrupo));
+		filtro.adicionarParametro(new ParametroSimples(FiltroReceitasAFaturarResumo.ANO_MES_REFERENCIA, anoMes));
+		Collection<ReceitasAFaturarResumo> colecao = getControladorUtil().pesquisar(filtro, ReceitasAFaturarResumo.class.getName());
 		
-		return retorno;
+		for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
+			getControladorUtil().remover(receitasAFaturarResumo);
+		}
 	}
 	
-	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes)
+	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes)
 			throws ErroRepositorioException {
 		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
 
