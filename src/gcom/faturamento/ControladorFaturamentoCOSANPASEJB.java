@@ -2084,7 +2084,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -2114,7 +2113,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,
@@ -2144,7 +2142,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
-														anoMesReferenciaFaturamento,
 														imovel,
 														localidade,
 														quadra,

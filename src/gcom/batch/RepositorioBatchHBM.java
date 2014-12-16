@@ -169,24 +169,18 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		Collection<Object> ids = null;
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		
+	 	
 		try {
+			
 			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
-					+ "inner join func.unidadesIniciadas as iniciada "
-					+ "inner join fetch func.processoFuncionalidade as procFunc "
-					+ "inner join fetch procFunc.funcionalidade "
-					+ "where iniciada.id is not null and "
-					+ "func.funcionalidadeSituacao.id <> :situacaoFuncionalidadeConcluida "
-					+ "and func.id not in ("
-					+ "select distinct func.id from FuncionalidadeIniciada as func "
-					+ "inner join func.unidadesIniciadas as iniciada "
-					+ "inner join iniciada.unidadeSituacao as situacao "
-					+ "where situacao.id <> :situacaoConcluida)";
+			+ "inner join func.unidadesIniciadas as iniciada "
+			+ "inner join iniciada.unidadeSituacao as situacao "
+			+ "where func.funcionalidadeSituacao = :situacaoFuncionalidade "
+			+ "and situacao = :situacaoUnidade";
 		
-			ids = session.createQuery(consulta).setInteger(
-					"situacaoConcluida", UnidadeSituacao.CONCLUIDA).setInteger(
-					"situacaoFuncionalidadeConcluida",
-					FuncionalidadeSituacao.CONCLUIDA).list();
+			ids = session.createQuery(consulta)
+					.setInteger("situacaoUnidade", UnidadeSituacao.CONCLUIDA)
+					.setInteger("situacaoFuncionalidade",FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
 			
 			Iterator iter = ids.iterator();
 			

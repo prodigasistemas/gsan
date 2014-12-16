@@ -186,6 +186,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
     public static final int ATUALIZACAO_CADASTRAL = 16006;
 
     public static final int TESTE_OPERACIONAL = 12000;
+    
+    public static final int GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO = 16025;
 	
 	private Integer id;
 

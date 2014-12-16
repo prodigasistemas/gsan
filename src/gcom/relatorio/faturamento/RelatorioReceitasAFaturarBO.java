@@ -48,7 +48,7 @@ public class RelatorioReceitasAFaturarBO {
 		Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio = getColecaoDadosRelatorio();
 		String totalResgistros = String.valueOf(colecaoDadosRelatorio.size());
 
-		relatorioReceitasAFaturar.addParametro("colecaoDadosRelacaoImoveisRota", colecaoDadosRelatorio);
+		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
 		relatorioReceitasAFaturar.addParametro("idGrupo", this.grupoFaturamentoID);
 		relatorioReceitasAFaturar.addParametro("ano", this.mesAno.substring(3));
 		relatorioReceitasAFaturar.addParametro("mes", this.mesAno.substring(0, 2));
@@ -73,7 +73,7 @@ public class RelatorioReceitasAFaturarBO {
 		Collection colecaoDadosRelatorio = Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturar(this.grupoFaturamentoID,
 				Integer.parseInt(getAnoMesReferencia()));
 
-		if (colecaoDadosRelatorio.isEmpty()) {
+		if (colecaoDadosRelatorio == null || colecaoDadosRelatorio.isEmpty()) {
 			throw new ActionServletException("atencao.relatorio.vazio");
 		}
 

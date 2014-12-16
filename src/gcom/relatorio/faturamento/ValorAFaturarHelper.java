@@ -3,7 +3,6 @@ package gcom.relatorio.faturamento;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 public class ValorAFaturarHelper {
@@ -18,9 +17,8 @@ public class ValorAFaturarHelper {
 		super();
 	}
 
-	public ValorAFaturarHelper(Integer idGrupo, BigDecimal valorAgua, BigDecimal valorEsgoto) {
+	public ValorAFaturarHelper(BigDecimal valorAgua, BigDecimal valorEsgoto) {
 		super();
-		this.idGrupo = idGrupo;
 		this.valorAgua = valorAgua;
 		this.valorEsgoto = valorEsgoto;
 	}
@@ -74,18 +72,13 @@ public class ValorAFaturarHelper {
 		this.valorEsgoto = valorEsgoto;
 	}
 
-	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelper(Collection colecao) {
-		ArrayList<ValorAFaturarHelper> lista = new ArrayList<ValorAFaturarHelper>();
+	public static ValorAFaturarHelper getListaValoresAFaturarHelper(Collection colecao) {
+		ValorAFaturarHelper helper = new ValorAFaturarHelper();
 		if (colecao != null && !colecao.isEmpty()) {
-			Iterator iterator = colecao.iterator();
-
-			while (iterator.hasNext()) {
-				Object[] objeto = (Object[]) iterator.next();
-				ValorAFaturarHelper helper = new ValorAFaturarHelper((Integer) objeto[0], (BigDecimal) objeto[1], (BigDecimal) objeto[2]);
-				lista.add(helper);
-			}
+			Object[] objeto = (Object[]) colecao.iterator().next();
+			helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1]);
 		}
-		return lista;
+		return helper;
 	}
 	
 	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelperPorGrupo(Integer idGrupo, Collection colecao) {
