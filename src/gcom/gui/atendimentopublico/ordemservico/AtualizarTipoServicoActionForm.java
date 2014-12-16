@@ -71,6 +71,10 @@ public class AtualizarTipoServicoActionForm extends ValidatorForm {
 	private String perfilServico;
 
 	private String descricaoPerfilServico;
+	
+	private String idOperacao;
+	
+	private String descricaoOperacao;
 
 	private String idTipoServicoReferencia;
 
@@ -718,6 +722,23 @@ public class AtualizarTipoServicoActionForm extends ValidatorForm {
 	public void setIndicadorProgramacaoAutomaticaValor(
 			String indicadorProgramacaoAutomaticaValor) {
 		this.indicadorProgramacaoAutomaticaValor = indicadorProgramacaoAutomaticaValor;
-	}	
+	}
+
+	public String getIdOperacao() {
+		return idOperacao;
+	}
+
+	public void setIdOperacao(String idOperacao) {
+		this.idOperacao = idOperacao;
+	}
+
+	public String getDescricaoOperacao() {
+		return descricaoOperacao;
+	}
+
+	public void setDescricaoOperacao(String descricaoOperacao) {
+		this.descricaoOperacao = descricaoOperacao;
+	}
+	
 	
 }

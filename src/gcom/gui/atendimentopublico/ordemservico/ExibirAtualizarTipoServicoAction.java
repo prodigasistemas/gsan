@@ -4,6 +4,7 @@ import gcom.atendimentopublico.ordemservico.FiltroServicoTipoAtividade;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoBoletim;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoMaterial;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoMotivoEncerramento;
+import gcom.atendimentopublico.ordemservico.FiltroServicoTipoOperacao;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoPrioridade;
 import gcom.atendimentopublico.ordemservico.FiltroTipoServico;
 import gcom.atendimentopublico.ordemservico.ServicoPerfilTipo;
@@ -12,6 +13,7 @@ import gcom.atendimentopublico.ordemservico.ServicoTipoAtividade;
 import gcom.atendimentopublico.ordemservico.ServicoTipoBoletim;
 import gcom.atendimentopublico.ordemservico.ServicoTipoMaterial;
 import gcom.atendimentopublico.ordemservico.ServicoTipoMotivoEncerramento;
+import gcom.atendimentopublico.ordemservico.ServicoTipoOperacao;
 import gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade;
 import gcom.atendimentopublico.ordemservico.ServicoTipoReferencia;
 import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
@@ -20,6 +22,8 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Operacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.FachadaException;
 import gcom.util.Util;
@@ -35,6 +39,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
 import java.util.Iterator;
 
 /**
@@ -264,6 +269,32 @@ public class ExibirAtualizarTipoServicoAction extends GcomAction {
 			}
 			atualizarTipoServicoActionForm.setIndicadorUso(""+servicoTipo.getIndicadorUso());
 			
+			// Operacao
+			
+			FiltroServicoTipoOperacao filtroServicoTipoOperacao = new FiltroServicoTipoOperacao();
+			filtroServicoTipoOperacao.adicionarParametro(new ParametroSimples(FiltroServicoTipoOperacao.ID_SERVICO_TIPO, servicoTipo.getId()));
+			
+			Collection collection = getFachada().pesquisar(filtroServicoTipoOperacao, ServicoTipoOperacao.class.getName());
+			
+			if (collection != null & collection.size() > 0) {
+				ServicoTipoOperacao sto = (ServicoTipoOperacao) collection.iterator().next();
+				
+				if (sto != null) {
+					FiltroOperacao filtroOperacao = new FiltroOperacao();
+					filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, sto.getComp_id().getIdOperacao()));
+					
+					Operacao operacao = (Operacao) getFachada().pesquisar(filtroOperacao, Operacao.class.getName()).iterator().next();
+					
+					if (operacao != null) {
+						atualizarTipoServicoActionForm.setIdOperacao(String.valueOf(sto.getComp_id().getIdOperacao()));
+						atualizarTipoServicoActionForm.setDescricaoOperacao(operacao.getDescricao());
+						sessao.setAttribute("idOperacao", operacao.getId());
+					}
+				}
+			}
+			
+			
+			
 		}else{
 		
 			
@@ -302,6 +333,33 @@ public class ExibirAtualizarTipoServicoAction extends GcomAction {
 				} catch (FachadaException e) {
 					servicoTipo.setServicoPerfilTipo(null);
 					atualizarTipoServicoActionForm.setDescricaoPerfilServico("Tipo do Perfil Inexistente");
+				}
+			}
+			
+			
+			// Operacao
+			
+			Integer idOperacao = Util.converterStringParaInteger(atualizarTipoServicoActionForm.getIdOperacao());
+			
+			if (Util.validarNumeroMaiorQueZERO(idOperacao)) {
+				try {
+					FiltroOperacao filtroOperacao = new FiltroOperacao();
+		        	filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, idOperacao));
+		        	
+		        	Collection colecaoOperacao = fachada.pesquisar(filtroOperacao, Operacao.class.getName());
+		        	
+		        	if(colecaoOperacao.isEmpty()) {
+		        		atualizarTipoServicoActionForm.setDescricaoOperacao("Operação Inexistente");
+		        		sessao.setAttribute("idOperacao", "");
+		        	} else {
+		        		Operacao operacao = (Operacao) colecaoOperacao.iterator().next();
+		        		atualizarTipoServicoActionForm.setIdOperacao(operacao.getId().toString());
+		        		atualizarTipoServicoActionForm.setDescricaoOperacao(operacao.getDescricao());
+		        		sessao.setAttribute("idOperacao", operacao.getId());
+		        	}
+				} catch (FachadaException e) {
+					sessao.setAttribute("idOperacao", "");
+					atualizarTipoServicoActionForm.setDescricaoOperacao("Operacao Inexistente");
 				}
 			}
 			

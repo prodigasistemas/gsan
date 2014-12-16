@@ -11,6 +11,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.Operacao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class AtualizarTipoServicoAction extends GcomAction{
 		String debitoTipo = atualizarTipoServicoActionForm.getIdTipoDebito();
 		String creditoTipo = atualizarTipoServicoActionForm.getIdTipoCredito();
 		String perfilTipo = atualizarTipoServicoActionForm.getPerfilServico();
+		String idOperacao = atualizarTipoServicoActionForm.getIdOperacao();
 		String referenciaTipo = atualizarTipoServicoActionForm.getIdTipoServicoReferencia();
 		String indicadorUso = atualizarTipoServicoActionForm.getIndicadorUso();
 		String idPrioridadeServico = atualizarTipoServicoActionForm.getIdPrioridadeServico();
@@ -143,6 +145,12 @@ public class AtualizarTipoServicoAction extends GcomAction{
 		ServicoPerfilTipo servicoPerfilTipo = new ServicoPerfilTipo();
 		servicoPerfilTipo.setId(new Integer(perfilTipo));
 		servicoTipo.setServicoPerfilTipo(servicoPerfilTipo);
+		
+		if (idOperacao != null && !idOperacao.equals("")) {
+			Operacao operacao = new Operacao();
+			operacao.setId(new Integer(idOperacao));
+			servicoTipo.setOperacao(operacao);
+		}
 		
 		if(referenciaTipo != null && !referenciaTipo.trim().equals("")){
 			ServicoTipoReferencia servicoTipoReferencia = new ServicoTipoReferencia();

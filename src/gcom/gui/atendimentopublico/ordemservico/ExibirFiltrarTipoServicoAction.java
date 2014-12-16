@@ -18,6 +18,8 @@ import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Operacao;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -145,6 +147,24 @@ public class ExibirFiltrarTipoServicoAction extends GcomAction {
 				httpServletRequest.setAttribute("corPerfilTipo", "valor");
         	}
         	
+        }
+        
+        if (form.getIdOperacao() != null && !form.getIdOperacao().trim().equals("")) {
+        	FiltroOperacao filtroOperacao = new FiltroOperacao();
+        	filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, form.getIdOperacao()));
+        	
+        	Collection colecaoOperacao = fachada.pesquisar(filtroOperacao, Operacao.class.getName());
+        	
+        	if(colecaoOperacao.isEmpty()) {
+        		form.setIdOperacao("");
+        		httpServletRequest.setAttribute("corOperacao", "exception");
+        		form.setDescricaoOperacao("Operação Inexistente");
+        	} else {
+        		Operacao operacao = (Operacao) colecaoOperacao.iterator().next();
+        		form.setIdOperacao(operacao.getId().toString());
+        		form.setDescricaoOperacao(operacao.getDescricao());
+        		httpServletRequest.setAttribute("corOperacao", "valor");
+        	}
         }
         
         if(form.getIdTipoServicoReferencia() != null && !form.getIdTipoServicoReferencia().trim().equals("")){
