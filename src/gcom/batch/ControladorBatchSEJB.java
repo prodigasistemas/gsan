@@ -3933,6 +3933,7 @@ public class ControladorBatchSEJB implements SessionBean {
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						
+						break;
 					}
 					
 					case Funcionalidade.GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO: {

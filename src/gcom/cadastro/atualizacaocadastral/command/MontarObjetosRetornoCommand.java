@@ -308,7 +308,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			}
 			
 			imagemRetorno.setNomeImagem(imagem.getName());
-			imagemRetorno.setPathImagem(imagem.getAbsolutePath());
+			imagemRetorno.setPathImagem(pasta + "/" + nomeImagem);
 			imagemRetorno.setUltimaAlteracao(new Date());
 
 			controladorUtil.inserir(imagemRetorno);
