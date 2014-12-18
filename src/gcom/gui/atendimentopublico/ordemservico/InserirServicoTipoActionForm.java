@@ -48,6 +48,8 @@ public class InserirServicoTipoActionForm extends ValidatorActionForm {
 	String prioridadeServico;
 	String idPerfilServico;
 	String descricaoPerfilServico;
+	String idOperacao;
+	String descricaoOperacao;
 	String idTipoServicoReferencia;
 	String descricaoTipoServicoReferencia;
 	String atividadeUnica;
@@ -506,6 +508,8 @@ public class InserirServicoTipoActionForm extends ValidatorActionForm {
 		 prioridadeServico = null;
 		 idPerfilServico = null;
 		 descricaoPerfilServico = null;
+		 idOperacao = null;
+		 descricaoOperacao = null;
 		 idTipoServicoReferencia = null;
 		 descricaoTipoServicoReferencia = null;
 		 atividadeUnica = null;
@@ -698,5 +702,18 @@ public class InserirServicoTipoActionForm extends ValidatorActionForm {
 			String indicativoObrigatoriedadeAtividadeValor) {
 		this.indicativoObrigatoriedadeAtividadeValor = indicativoObrigatoriedadeAtividadeValor;
 	}
+	public String getIdOperacao() {
+		return idOperacao;
+	}
+	public void setIdOperacao(String idOperacao) {
+		this.idOperacao = idOperacao;
+	}
+	public String getDescricaoOperacao() {
+		return descricaoOperacao;
+	}
+	public void setDescricaoOperacao(String descricaoOperacao) {
+		this.descricaoOperacao = descricaoOperacao;
+	}
+	
 	
 }

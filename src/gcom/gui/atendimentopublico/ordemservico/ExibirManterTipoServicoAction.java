@@ -1,9 +1,14 @@
 package gcom.gui.atendimentopublico.ordemservico;
 
+import gcom.atendimentopublico.ordemservico.FiltroServicoTipoOperacao;
 import gcom.atendimentopublico.ordemservico.FiltroTipoServico;
 import gcom.atendimentopublico.ordemservico.ServicoTipo;
+import gcom.atendimentopublico.ordemservico.ServicoTipoOperacao;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Operacao;
+import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
 import java.util.Map;
@@ -89,6 +94,7 @@ public class ExibirManterTipoServicoAction extends GcomAction {
 				// caso o resultado do filtro só retorne um registro 
 				// e o check box Atualizar estiver selecionado
 				//o sistema não exibe a tela de manter, exibe a de atualizar 
+				
 				retorno = actionMapping.findForward("exibirAtualizarTipoServico");
 				ServicoTipo servicoTipo = (ServicoTipo) colecaoServicoTipo.iterator().next();
 				sessao.setAttribute("servicoTipo", servicoTipo);

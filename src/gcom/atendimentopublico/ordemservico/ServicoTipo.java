@@ -4,6 +4,7 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.seguranca.acesso.Operacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -218,7 +219,9 @@ public class ServicoTipo extends ObjetoTransacao {
 
 	/** persistent field */
 	private DebitoTipo debitoTipo;
+
 	
+	private Operacao operacao;
 
 	private Collection servicoTipoAtividades;
 
@@ -661,6 +664,15 @@ public class ServicoTipo extends ObjetoTransacao {
 			Short indicadorPermiteAlteracaoImovelEmCampo) {
 		this.indicadorPermiteAlteracaoImovelEmCampo = indicadorPermiteAlteracaoImovelEmCampo;
 	}
+
+	public Operacao getOperacao() {
+		return operacao;
+	}
+
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
+	}
+	
 	
 	
 }
