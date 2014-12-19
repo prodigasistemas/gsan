@@ -3940,7 +3940,7 @@ public class ControladorBatchSEJB implements SessionBean {
 						TarefaBatchGerarDadosReceitasAFaturarResumo gerarDadosReceitasAFaturarResumo = new TarefaBatchGerarDadosReceitasAFaturarResumo(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesFaturamento());
+						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
 
 						FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
 						filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);
