@@ -9739,6 +9739,17 @@ public class ControladorMicromedicao implements SessionBean {
 						usuario.setNomeUsuario((String) arrayObject[26]);
 						medicaoHistorico.setUsuarioAlteracao(usuario);
 					}
+					
+					if (arrayObject[29] != null) {
+						LigacaoAguaSituacao situacaoLigacaoAgua = new LigacaoAguaSituacao((Integer)arrayObject[29]);
+						imovel.setLigacaoAguaSituacao(situacaoLigacaoAgua);
+						
+					}
+					
+					if (arrayObject[30] != null) {
+						LigacaoEsgotoSituacao situacaoLigacaoEsgoto = new LigacaoEsgotoSituacao((Integer)arrayObject[30]);
+						imovel.setLigacaoEsgotoSituacao(situacaoLigacaoEsgoto);
+					}
 
 					medicaoHistorico.setMedicaoTipo(medicaoTipo);
 					medicaoHistorico.setLeiturista(leiturista);
