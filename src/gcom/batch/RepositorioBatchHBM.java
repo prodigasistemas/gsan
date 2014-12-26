@@ -35,7 +35,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -162,52 +164,48 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked"})
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasProntasParaEncerramento()
 	throws ErroRepositorioException {
-		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
-		Collection<Object> ids = null;
+		Set<FuncionalidadeIniciada> funcionalidades = new HashSet<FuncionalidadeIniciada>();
+		Set<FuncionalidadeIniciada> funcionalidadesNaoConcluidas = new HashSet<FuncionalidadeIniciada>();
+
 		Session session = HibernateUtil.getSession();
 		String consulta;
 	 	
 		try {
-			
-			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
-			+ "inner join func.unidadesIniciadas as iniciada "
-			+ "inner join iniciada.unidadeSituacao as situacao "
-			+ "where func.funcionalidadeSituacao = :situacaoFuncionalidade "
-			+ "and situacao = :situacaoUnidade";
+			consulta = "select func.id, situacao.id from FuncionalidadeIniciada as func "
+					+ "inner join func.unidadesIniciadas as iniciada "
+					+ "inner join iniciada.unidadeSituacao as situacao "
+					+ "where func.funcionalidadeSituacao = :situacaoFuncionalidade "
+					+ "group by func.id, situacao.id";
 		
-			ids = session.createQuery(consulta)
-					.setInteger("situacaoUnidade", UnidadeSituacao.CONCLUIDA)
-					.setInteger("situacaoFuncionalidade",FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
+			Collection<Object[]> ids = session.createQuery(consulta).setInteger("situacaoFuncionalidade",FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
 			
-			Iterator iter = ids.iterator();
-			
-			while (iter.hasNext()) {
-				Object objeto = (Object) iter.next();
+			for (Object[] objects : ids) {
+				Integer idFuncionalidade = (Integer) objects[0];
+				Integer idSituacao = (Integer) objects[1];
+
+				FuncionalidadeIniciada funcionalidade = new FuncionalidadeIniciada();
+				funcionalidade.setId(idFuncionalidade);
+
+				funcionalidades.add(funcionalidade);
 				
-				Integer id = (Integer) objeto;
-				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
-				funcionalidadeIniciada.setId(id);
-				
-				retorno.add(funcionalidadeIniciada);
-				
+				if (idSituacao != UnidadeSituacao.CONCLUIDA) {
+					funcionalidadesNaoConcluidas.add(funcionalidade);
+				}
 			}
 			
+			funcionalidades.removeAll(funcionalidadesNaoConcluidas);
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
-	}
+		}
 	
-	return retorno;
-	
+		return funcionalidades;
 	}
-
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasExecucaoFalha()
