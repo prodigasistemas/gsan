@@ -52,43 +52,6 @@ public class BatchGerarAtividadeAcaoCobrancaMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-
-				/*
-				 * gerarAtividadeAcaoCobranca( CobrancaGrupo grupoCobranca, int
-				 * anoMesReferenciaCicloCobranca, Integer
-				 * idCronogramaAtividadeAcaoCobranca, Integer
-				 * idComandoAtividadeAcaoCobranca, Collection<Rota> rotas,
-				 * CobrancaAcao acaoCobranca, CobrancaAtividade
-				 * atividadeCobranca, Integer indicadorCriterio,
-				 * CobrancaCriterio criterioCobranca, Cliente cliente,
-				 * ClienteRelacaoTipo relacaoClienteImovel, String
-				 * anoMesReferenciaInicial, String anoMesReferenciaFinal, Date
-				 * dataVencimentoInicial, Date dataVencimentoFinal)
-				 */
-
-//				this.getControladorCobranca().gerarAtividadeAcaoCobranca(
-//								(CobrancaGrupo) ((Object[]) objectMessage.getObject())[0],
-//								(Integer) ((Object[]) objectMessage.getObject())[1],
-//								(CobrancaAcaoAtividadeCronograma) ((Object[]) objectMessage.getObject())[2],
-//								(CobrancaAcaoAtividadeComando) ((Object[]) objectMessage.getObject())[3],
-//								(Collection) ((Object[]) objectMessage.getObject())[4],
-//								(CobrancaAcao) ((Object[]) objectMessage.getObject())[5],
-//								(CobrancaAtividade) ((Object[]) objectMessage.getObject())[6],
-//								(Integer) ((Object[]) objectMessage.getObject())[7],
-//								(CobrancaCriterio) ((Object[]) objectMessage.getObject())[8],
-//								(Cliente) ((Object[]) objectMessage.getObject())[9],
-//								(ClienteRelacaoTipo) ((Object[]) objectMessage.getObject())[10],
-//								(String) ((Object[]) objectMessage.getObject())[11],
-//								(String) ((Object[]) objectMessage.getObject())[12],
-//								(Date) ((Object[]) objectMessage.getObject())[13],
-//								(Date) ((Object[]) objectMessage.getObject())[14],
-//								(Date) ((Object[]) objectMessage.getObject())[15],
-//								(Integer) ((Object[]) objectMessage.getObject())[16],
-//								(Cliente) ((Object[]) objectMessage.getObject())[17]
-//
-//						);
-
-				
 				this.getControladorCobranca().gerarAtividadeAcaoCobranca(
 						(CobrancaAcaoAtividadeCronograma) ((Object[]) objectMessage.getObject())[0],
 						(CobrancaAcaoAtividadeComando) ((Object[]) objectMessage.getObject())[1],
@@ -109,13 +72,6 @@ public class BatchGerarAtividadeAcaoCobrancaMDB
 						(Integer) ((Object[]) objectMessage.getObject())[16]
 
 				);
-				
-				
-
-				
-				
-				
-				
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
