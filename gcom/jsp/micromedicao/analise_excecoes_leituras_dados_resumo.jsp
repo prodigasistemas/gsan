@@ -71,7 +71,9 @@
   			form.calculoConsumo.disabled = false;
 			form.analisado.disabled = false;
 			form.motivoInterferenciaTipo.disabled = false;
-	  
+	  		form.gerarAviso = false;
+	  		form.gerarRelatorio = false;
+	  		form.gerarOS = false;
 
 	  
 	  		for (i = 0; i < totalFields; i++) {
