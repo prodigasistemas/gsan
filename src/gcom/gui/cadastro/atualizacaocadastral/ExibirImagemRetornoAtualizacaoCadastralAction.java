@@ -2,7 +2,6 @@ package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.atualizacaocadastral.FiltroImagemRetorno;
 import gcom.atualizacaocadastral.ImagemRetorno;
-import gcom.cadastro.imovel.ImovelImagem;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.filtro.ParametroSimples;
@@ -37,7 +36,8 @@ public class ExibirImagemRetornoAtualizacaoCadastralAction extends GcomAction {
 		ImagemRetorno imagemRetorno = (ImagemRetorno) colecaoImagemRetorno.iterator().next();
 		
 		try {
-			FileInputStream in = new FileInputStream(new File(imagemRetorno.getPathImagem()));
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			FileInputStream in = new FileInputStream(new File(caminhoJboss + imagemRetorno.getPathImagem()));
 
 			httpServletResponse.setContentType("image/jpeg");
 

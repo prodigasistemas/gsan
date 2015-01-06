@@ -3933,13 +3933,14 @@ public class ControladorBatchSEJB implements SessionBean {
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						
+						break;
 					}
 					
 					case Funcionalidade.GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO: {
 						TarefaBatchGerarDadosReceitasAFaturarResumo gerarDadosReceitasAFaturarResumo = new TarefaBatchGerarDadosReceitasAFaturarResumo(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesFaturamento());
+						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
 
 						FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
 						filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);

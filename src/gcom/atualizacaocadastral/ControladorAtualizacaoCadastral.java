@@ -341,6 +341,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
 		Collection<ImagemRetorno> colecaoImagemRetorno = this.pesquisarImagensRetornoPorIdImovel(idImovel);
 		
+		int ordemImagem = 0;
+		
 		for (ImagemRetorno imagemRetorno : colecaoImagemRetorno) {
 			File imagem = null;
 			try {
@@ -352,25 +354,31 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			ImovelImagem imovelImagem = new ImovelImagem();
 			imovelImagem.setIdImovel(idImovel);
 			imovelImagem.setNomeImagem(imagem.getName());
-			imovelImagem.setCaminhoImagem(imagem.getAbsolutePath());
+			String caminhoImagem = imagem.getAbsolutePath();
+			String caminhoFinal = caminhoImagem.substring(caminhoImagem.indexOf("/imovel_imagem"));
+			imovelImagem.setCaminhoImagem(caminhoFinal);
 			imovelImagem.setUltimaAlteracao(new Date());
 			
 			Integer idImovelImagem = (Integer) getControladorUtil().inserir(imovelImagem);
 			
 			imovelImagem.setId(idImovelImagem);
-			renomearImovelImagem(imagem, imovelImagem);
+			
+			ordemImagem++;
+			renomearImovelImagem(imagem, imovelImagem, ordemImagem);
 		}
 	}
 
-	private void renomearImovelImagem(File imagem, ImovelImagem imovelImagem) throws ControladorException {
+	private void renomearImovelImagem(File imagem, ImovelImagem imovelImagem, int ordemImagem) throws ControladorException {
 		String nomeImagem = imagem.getName();
 		String extensao = nomeImagem.substring(nomeImagem.indexOf("."), nomeImagem.length());
-		String novoNome = imovelImagem.getIdImovel() + "_" + imovelImagem.getId() + extensao;
+		String novoNome = imovelImagem.getIdImovel() + "-" + ordemImagem + extensao;
 		File imagemRenomeada = new File(imagem.getParentFile().getAbsolutePath(), novoNome);
 		imagem.renameTo(imagemRenomeada);
 		
 		imovelImagem.setNomeImagem(imagemRenomeada.getName());
-		imovelImagem.setCaminhoImagem(imagemRenomeada.getAbsolutePath());
+		String caminhoImagem = imagemRenomeada.getAbsolutePath();
+		String caminhoFinal = caminhoImagem.substring(caminhoImagem.indexOf("/imovel_imagem"));
+		imovelImagem.setCaminhoImagem(caminhoFinal);
 		getControladorUtil().atualizar(imovelImagem);
 	}
 	
@@ -385,7 +393,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws IOException {
-		File arquivoOrigem = new File(imagemRetorno.getPathImagem());
+		String caminhoJboss = System.getProperty("jboss.server.home.dir");
+		File arquivoOrigem = new File(caminhoJboss + imagemRetorno.getPathImagem());
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
 
 		FileChannel origemChannel = null;

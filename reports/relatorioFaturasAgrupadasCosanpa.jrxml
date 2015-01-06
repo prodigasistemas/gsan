@@ -1393,7 +1393,7 @@
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getRepresentacaoNumericaCodBarraFormatada}]]></textFieldExpression>
 				</textField>

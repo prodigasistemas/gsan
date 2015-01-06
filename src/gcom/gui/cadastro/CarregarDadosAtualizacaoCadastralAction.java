@@ -52,7 +52,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 		
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		
-		this.salvarArquivoZip(arquivo, nomeArquivoZip, caminhoJboss);
+//		this.salvarArquivoZip(arquivo, nomeArquivoZip, caminhoJboss);
 
 		if (nomeArquivoZip.toLowerCase().endsWith(".zip")) {
 			try {
@@ -158,6 +158,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			out.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			throw new ActionServletException("atencao.erro_salvar_arquivo_zip");
 		}
 	}
 
