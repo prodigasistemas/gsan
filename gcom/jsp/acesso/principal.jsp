@@ -162,9 +162,6 @@
                     </tr>
                   </table>
                  
-                 
-
-                 
                  <logic:equal name="RAUrgencia" value="true" scope="session">
                  
 	                 <logic:present name="msgUrgencia1" scope="session">
