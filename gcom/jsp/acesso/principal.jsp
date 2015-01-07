@@ -20,7 +20,6 @@
           var empresa;
           interval *= 1000;
 
-
           var image_index = 0;
          
           image_list = new Array();
