@@ -139,7 +139,7 @@ public class ResumoArrecadacao {
     		this.sequenciaTipoLancamento = sequenciaTipoLancamento;
     	}
 	}
-
+	
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
 	}

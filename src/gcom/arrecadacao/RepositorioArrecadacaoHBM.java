@@ -53,6 +53,7 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
+import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.micromedicao.bean.ConsultarArquivoTextoRoteiroEmpresaHelper;
 import gcom.relatorio.arrecadacao.GuiaDevolucaoRelatorioHelper;
@@ -2414,10 +2415,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = null;
 
 		try {
-			consulta = "SELECT pgmt.id, pgmt.documentoTipo.id, pgmt.localidade.id, pgmt.valorPagamento, pgst.id, pgmt.dataPagamento, pgmt.anoMesReferenciaPagamento "
+			consulta = //"SELECT pgmt.id, pgmt.documentoTipo.id, pgmt.localidade.id, pgmt.valorPagamento, pgst.id, pgmt.dataPagamento, pgmt.anoMesReferenciaPagamento, pgmt.indicadorClassificadoRecuperacaoCredito "
+					"SELECT pgmt "
 					+ "FROM Pagamento as pgmt "
 					+ "LEFT JOIN pgmt.imovel as imov "
+					+ "LEFT JOIN pgmt.localidade as localidade "
 					+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
+					+ "LEFT JOIN pgmt.documentoTipo as documentoTipo "
+					+ "LEFT JOIN pgmt.localidade as localidade "
 					+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia AND imov.id = :idImovel "
 					+ "AND pgmt.anoMesReferenciaPagamento = :anoMesReferenciaPagamento "
 					+ "AND (pgst.id is null or pgst.id <> :idValorABaixar) "
@@ -5819,7 +5824,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		return retorno;
 	}
-
+	
 	/**
 	 * Sequencial do tipo lançamento igual a 1700
 	 * 
@@ -18540,68 +18545,41 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * 
 	 * Pesquisar os pagamentos classificados ou com valor excedente baixado e
 	 * com valor excedente maior do que zero para transferir para o histórico.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 10/01/2007
-	 * 
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idLocalidade
-	 * @param numeroIndice
-	 * @param quantidadeRegistros
-	 * @return
-	 * @throws ErroRepositorioException
 	 */
-	public Collection<Integer> pesquisarPagamentosClassificadosOuValorExcedenteBaixado(
-			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
-			int numeroIndice, int quantidadeRegistros)
-			throws ErroRepositorioException {
+	public Collection<Integer> pesquisarPagamentosClassificadosOuValorExcedenteBaixado(Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
+			int numeroIndice, int quantidadeRegistros) throws ErroRepositorioException {
 
-		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
 		Collection<Integer> retorno = null;
-
-		// Cria uma instância da sessão
 		Session session = HibernateUtil.getSession();
-
-		// Cria a variável que vai conter o hql
-		String consulta = "";
+		StringBuilder consulta = new StringBuilder();
 		
-		/**
-		 * Alguns pagamentos foram para histórico indevidamente
-		 * Alterada a clausula where do anoMesArrecadacao de <= para <
-		 * 
-		 * @author Wellington Rocha
-		 * @date 18/09/2012
-		 * */
-
 		try {
 
-			// Cria o hql de pesquisa
-			consulta = "select pgmt.id from Pagamento pgmt "
-						+ "inner join pgmt.localidade loca "
-						+ "where ((loca.id= :idLocalidade) and "
-						+ "(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) " +
-							"and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))"
-						+ " or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) " +
-								"and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) "
-						+ " or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) " +
-							 " and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) "
-						+ " order by pgmt.id";
+			consulta.append("select pgmt.id from Pagamento pgmt ")
+					.append("inner join pgmt.localidade loca ")
+					.append("where ((loca.id= :idLocalidade) and ")
+					.append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
+					.append("and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))")
+					.append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
+					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
+					.append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
+					.append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
+					.append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
+					.append(" order by pgmt.id");
 
-			// Executa o hql
-			retorno = session.createQuery(consulta)
+			retorno = session.createQuery(consulta.toString())
 				.setInteger("idLocalidade", idLocalidade)
 				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
 				.setInteger("situacaoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+				.setInteger("classificadoRecuperacaoCreditoDuplicidade", PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE)
+				.setInteger("classificadoRecuperacaoCreditoCancelado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO)
 				.setInteger("situacaoValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR)
 				.setInteger("situacaoDuplicidadeExcessoDevolvido", PagamentoSituacao.DUPLICIDADE_EXCESSO_DEVOLVIDO)
 				.setFirstResult(numeroIndice).setMaxResults(quantidadeRegistros).list();
 
-			// Erro no hibernate
 		} catch (HibernateException e) {
-			// Levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sessão com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20263,13 +20241,21 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		BigDecimal retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a variável que vai conter o hql
 		String consulta = "";
+		StringBuilder conta = new StringBuilder();
+		StringBuilder pgClassificado = new StringBuilder();
+		StringBuilder pgRecuperacaoCredito = new StringBuilder();
 
 		try {
+
+			conta.append("select  distinct pgmt.cnta_id ") 
+			.append("from arrecadacao.pagamento pgmt ") 
+			.append("where pgmt.pgmt_amreferenciaarrecadacao= :anoMesReferenciaArrecadacao ") 
+			.append("and pgmt.loca_id= :idLocalidade  ")
+			.append("and (pgmt.pgst_idatual= :idPagamentoClassificado or (pgmt.pgst_idatual= :idPagamentoValorABaixar and pgmt.pgst_idanterior = :idPagamentoValorNaoConfere)) ") 
+			.append("and (pgmt.cnta_id is not null) ");
 
 			consulta  = "select " +
 						  "sum(dccg.dccg_vlcategoria) as col_0 " +
@@ -20285,18 +20271,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						 				"where " +
 						 				"dbcb.fntp_id=:idFinanciamentoTipo  " +
 						 				"and (dbcb.cnta_id in (" +
-												 				"select " +
-												 				"distinct pgmt.cnta_id " + 
-												 				"from " +
-												 				"arrecadacao.pagamento pgmt " + 
-												 				"where " +
-												 				"pgmt.pgmt_amreferenciaarrecadacao= :anoMesReferenciaArrecadacao " + 
-												 				"and pgmt.loca_id= :idLocalidade  " +
-												 				"and (pgmt.pgst_idatual= :idPagamentoClassificado or ( " +
-												 				"pgmt.pgst_idatual= :idPagamentoValorABaixar and pgmt.pgst_idanterior = :idPagamentoValorNaoConfere)) " + 
-												 				"and (pgmt.cnta_id is not null) " +			
+												 				conta.toString() + 			
 						 				") ))" +
 						   ")";
+			
+			
+			pgClassificado.append("and (pgmt.pgst_idatual= :idPagamentoClassificado or (pgmt.pgst_idatual= :idPagamentoValorABaixar and pgmt.pgst_idanterior = :idPagamentoValorNaoConfere)) ");
+			pgRecuperacaoCredito.append("and pgmt.pgst_idatual= :idPagamentoClassificado or (pgmt.pgst_idatual= :idPagamentoValorABaixar and pgmt.pgst_idanterior = :idPagamentoValorNaoConfere)) ");
 			
 			retorno = (BigDecimal) session.createSQLQuery(consulta)
 			 		.addScalar("col_0",Hibernate.BIG_DECIMAL)
@@ -20306,11 +20287,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-					.setInteger("idLocalidade", idLocalidade)
-					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
 					.setInteger("idPagamentoValorNaoConfere",PagamentoSituacao.VALOR_NAO_CONFERE)
+					.setInteger("idLocalidade", idLocalidade)
 					.setMaxResults(1)
 					.uniqueResult();
 
@@ -22725,23 +22703,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	}
 
-	/**
-	 * Sequencial do tipo lançamento igual a 100
-	 * 
-	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Acumula o valor de água e esgoto por categoria 
-	 * e localidade paa os pagamentos classificados de conta
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 22/05/2008
-	 * 
-	 * @param idLocalidade
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idCategoria
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Object[] acumularValorAguaEsgotoPagamentosClassificadosConta(
 			Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao,
@@ -31591,6 +31552,137 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+	
+	public Object[] acumularValorAguaEsgotoPagamentosClassificadosRecuperacaoCreditoConta(Integer idLocalidade, Integer referenciaArrecadacao, Integer idCategoria) throws ErroRepositorioException {
+
+		Object[] retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+		StringBuilder consultaConta = new StringBuilder();
+
+		try {
+
+			consultaConta.append("select distinct pgmt.cnta_id ") 
+						.append("from arrecadacao.pagamento pgmt ") 
+						.append("where pgmt.loca_id= :idLocalidade  ")
+						.append("and (pgmt.pgst_idatual in (:idPagamentoClassificadoDuplicidade , :idPagamentoClassificadoCancelado)) ")
+						.append("and pgmt.cnta_id is not null ");
+
+			consulta.append("select sum(ctcg.ctcg_vlagua) as col_0, sum(ctcg.ctcg_vlesgoto) as col_1 ")
+					  .append("from faturamento.conta_categoria ctcg ") 
+					  .append("where ctcg.catg_id= :idCategoria  ")
+					  .append("and (ctcg.cnta_id in (")
+					  .append(consultaConta)		
+					  .append(")) ") ; 
+					  
+
+			retorno = (Object[]) session.createSQLQuery(consulta.toString())
+			    .addScalar("col_0",Hibernate.BIG_DECIMAL)
+			    .addScalar("col_1",Hibernate.BIG_DECIMAL)
+				.setInteger("idCategoria", idCategoria)
+				.setInteger("idLocalidade", idLocalidade)
+				.setInteger("idPagamentoClassificadoDuplicidade",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_DUPLICIDADE)
+				.setInteger("idPagamentoClassificadoCancelado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO)
+				.setMaxResults(1)
+				.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection<LancamentoItemContabil> pesquisarLancamentosItemContabil() throws ErroRepositorioException {
+
+		Collection<LancamentoItemContabil> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = "select lict from LancamentoItemContabil lict order by lict.id";
+
+			retorno = (Collection<LancamentoItemContabil>) session.createQuery(consulta).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCredito(Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
+			Integer idPagamentoSituacao) throws ErroRepositorioException {
+
+		Collection retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+		StringBuilder conta = new StringBuilder();
+
+		try {
+
+			consulta.append("select sum(pgmt.pgmt_vlexcedente) as col_0, pgmt.imov_id as col_1 ") 
+			 .append("from arrecadacao.pagamento pgmt ") 
+			 .append("where pgmt.loca_id= :idLocalidade  ")
+			 .append("and pgmt.pgmt_amreferenciaarrecadacao = :anoMesReferenciaArrecadacao ")
+			 .append("and pgmt.pgst_idatual = :idPagamentoClassificado ")
+			 .append("group by pgmt.imov_id ");
+
+	retorno = session.createSQLQuery(consulta.toString())
+		.addScalar("col_0",Hibernate.BIG_DECIMAL)
+		.addScalar("col_1", Hibernate.INTEGER)
+		.setInteger("idLocalidade",idLocalidade)
+		.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+		.setInteger("idPagamentoClassificado", idPagamentoSituacao)
+		.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException {
+
+		Collection retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("select sum(pgmt.pgmt_vlexcedente) as col_0, pgmt.imov_id as col_1 ") 
+					 .append("from arrecadacao.pagamento pgmt ") 
+					 .append("where pgmt.loca_id= :idLocalidade  ")
+					 .append("and pgmt.pgmt_amreferenciaarrecadacao < :anoMesReferenciaArrecadacao ")
+					 .append("and pgmt.pgst_idatual = :idPagamentoClassificado ")
+					 .append("group by pgmt.imov_id ");
+
+			retorno = session.createSQLQuery(consulta.toString())
+				.addScalar("col_0",Hibernate.BIG_DECIMAL)
+				.addScalar("col_1", Hibernate.INTEGER)
+				.setInteger("idLocalidade",idLocalidade)
+				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+				.setInteger("idPagamentoClassificado", idPagamentoSituacao)
+				.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
 }

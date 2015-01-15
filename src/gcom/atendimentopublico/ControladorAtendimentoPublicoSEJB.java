@@ -35,6 +35,7 @@ import gcom.atendimentopublico.ordemservico.FiltroServicoTipo;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoAtividade;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoBoletim;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoMaterial;
+import gcom.atendimentopublico.ordemservico.FiltroServicoTipoOperacao;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoPrioridade;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoReferencia;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipoSubgrupo;
@@ -55,6 +56,8 @@ import gcom.atendimentopublico.ordemservico.ServicoTipoBoletim;
 import gcom.atendimentopublico.ordemservico.ServicoTipoMaterial;
 import gcom.atendimentopublico.ordemservico.ServicoTipoMaterialPK;
 import gcom.atendimentopublico.ordemservico.ServicoTipoMotivoEncerramento;
+import gcom.atendimentopublico.ordemservico.ServicoTipoOperacao;
+import gcom.atendimentopublico.ordemservico.ServicoTipoOperacaoPK;
 import gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade;
 import gcom.atendimentopublico.ordemservico.ServicoTipoReferencia;
 import gcom.atendimentopublico.ordemservico.ServicoTipoSubgrupo;
@@ -162,6 +165,7 @@ import gcom.relatorio.atendimentopublico.ordemservico.FiltrarRelatorioReligacaoC
 import gcom.relatorio.atendimentopublico.ordemservico.RelatorioReligacaoClientesInadiplentesHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
+import gcom.seguranca.acesso.FiltroOperacao;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.FiltroUsuario;
@@ -4344,6 +4348,21 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				FiltroServicoPerfilTipo.ID, idServicoPerfilTipo));
 		return pesquisar(filtro, ServicoPerfilTipo.class, "Tipo do Perfil");
 	}
+	
+	/**
+	 * 
+	 * [UC0410] - Inserir Operacao
+	 * 
+	 * [FS0004] - Validar Operacao
+	 * 
+	 * @author lms
+	 * @date 01/08/2006
+	 */
+	public Operacao pesquisarOperacao(Integer idOperacao) throws ControladorException {
+		FiltroOperacao filtro = new FiltroOperacao();
+		filtro.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, idOperacao));
+		return pesquisar(filtro, Operacao.class, "Operação");
+	}
 
 	/**
 	 * 
@@ -4601,6 +4620,17 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				getControladorUtil().inserir(sta);
 			}
 		}
+		
+		if (servicoTipo.getOperacao() != null) {
+			ServicoTipoOperacao sto = new ServicoTipoOperacao();
+			sto.setOperacao(servicoTipo.getOperacao());
+			sto.setServicoTipo(servicoTipo);
+			sto.setUltimaAlteracao(dataUltimaAlteracao);
+			sto.setComp_id(new ServicoTipoOperacaoPK(servicoTipo.getId(), sto.getOperacao().getId()));
+			
+			getControladorUtil().inserir(sto);
+		}
+		
 
 		if (colecaoServicoTipoMateriais != null
 				&& !colecaoServicoTipoMateriais.isEmpty()) {
@@ -4698,7 +4728,54 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 			pesquisarServicoPerfilTipo(servicoTipo.getServicoPerfilTipo()
 					.getId());
 		}
-
+		
+		// Validar Operacao
+		if (servicoTipo.getOperacao() != null) {
+			pesquisarOperacao(servicoTipo.getOperacao().getId());
+			
+			FiltroServicoTipoOperacao filtroServicoTipoOperacao = new FiltroServicoTipoOperacao();
+			filtroServicoTipoOperacao.adicionarParametro(new ParametroSimples(FiltroServicoTipoOperacao.ID_SERVICO_TIPO, servicoTipo.getId()));
+			
+			Collection collection = getControladorUtil().pesquisar(filtroServicoTipoOperacao, ServicoTipoOperacao.class.getName());
+			
+			if (collection != null && !collection.isEmpty()) { //atualiza a operacao do servico tipo
+				ServicoTipoOperacao sto = (ServicoTipoOperacao) collection.iterator().next();
+				
+				if (sto != null) {
+					getControladorUtil().remover(sto);
+					
+					ServicoTipoOperacao stoNovo = new ServicoTipoOperacao();
+					stoNovo.setOperacao(servicoTipo.getOperacao());
+					stoNovo.setServicoTipo(servicoTipo);
+					stoNovo.setUltimaAlteracao(new Date());
+					stoNovo.setComp_id(new ServicoTipoOperacaoPK(servicoTipo.getId(), stoNovo.getOperacao().getId()));
+					
+					getControladorUtil().inserir(stoNovo);
+					
+				}
+			} else { //insere a operacao do servico tipo
+				ServicoTipoOperacao stoNovo = new ServicoTipoOperacao();
+				stoNovo.setOperacao(servicoTipo.getOperacao());
+				stoNovo.setServicoTipo(servicoTipo);
+				stoNovo.setUltimaAlteracao(new Date());
+				stoNovo.setComp_id(new ServicoTipoOperacaoPK(servicoTipo.getId(), stoNovo.getOperacao().getId()));
+				
+				getControladorUtil().inserir(stoNovo);
+			}
+			
+			
+		} else {
+			FiltroServicoTipoOperacao filtroServicoTipoOperacao = new FiltroServicoTipoOperacao();
+			filtroServicoTipoOperacao.adicionarParametro(new ParametroSimples(FiltroServicoTipoOperacao.ID_SERVICO_TIPO, servicoTipo.getId()));
+			
+			ServicoTipoOperacao sto = (ServicoTipoOperacao) getControladorUtil().pesquisar(filtroServicoTipoOperacao, ServicoTipoOperacao.class.getName()).iterator().next();
+			
+			if (sto != null) {
+				getControladorUtil().remover(sto);
+			}
+		}
+			
+			
 		// [FS0006] - Validar Ordem de Execução
 
 		// [FS0009] - Validar Atividade

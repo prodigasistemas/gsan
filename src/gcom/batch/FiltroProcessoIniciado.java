@@ -34,6 +34,8 @@ public class FiltroProcessoIniciado extends Filtro implements Serializable {
 	public final static String PROCESSO_SITUACAO = "processoSituacao";
 
 	public final static String DATA_HORA_AGENDAMENTO = "dataHoraAgendamento";
+	
+	public final static String DATA_HORA_AGENDAMENTO_DESC = "dataHoraAgendamento DESC";
 
 	public final static String DATA_HORA_INICIO = "dataHoraInicio";
 

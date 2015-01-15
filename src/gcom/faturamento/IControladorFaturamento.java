@@ -74,6 +74,7 @@ import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.relatorio.faturamento.RelatorioFaturasAgrupadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -2810,7 +2811,8 @@ public interface IControladorFaturamento {
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,Usuario usuarioLogado)
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico)
 			throws ControladorException ;
 	
 	
@@ -5692,4 +5694,11 @@ public interface IControladorFaturamento {
 	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException;
 	
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
+<<<<<<< HEAD
+=======
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException;
+	
+	public Collection<RelatorioReceitasAFaturarHelper> gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) throws ControladorException, ErroRepositorioException;
+>>>>>>> prodigasistemas-master
 }

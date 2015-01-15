@@ -46,4 +46,16 @@ public class DataLeituraAnteriorHelper {
 		}
 		return lista;		
 	}
+<<<<<<< HEAD
+=======
+
+	public static DataLeituraAnteriorHelper getListaDatasLeituraAnteriorHelperPorGrupo(Collection colecao) {
+		DataLeituraAnteriorHelper helper = new DataLeituraAnteriorHelper();
+		if (colecao != null && !colecao.isEmpty()) {
+			Object[] objeto = (Object[]) colecao.iterator().next();
+			helper = new DataLeituraAnteriorHelper((Integer) objeto[0], (Date) objeto[1]);
+		}
+		return helper;
+	}
+>>>>>>> prodigasistemas-master
 }

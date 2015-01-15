@@ -280,7 +280,7 @@ public interface ControladorPermissaoEspecialLocal
 	 * @author Rafael Corrêa
 	 * @since 13/09/2007
 	 */
-	public boolean verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(Usuario usuario) throws ControladorException;
+	public boolean verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(Usuario usuario) throws ControladorException;
 
 	
 	/**

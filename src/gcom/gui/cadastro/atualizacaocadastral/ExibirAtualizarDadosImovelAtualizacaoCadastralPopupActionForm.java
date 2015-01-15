@@ -118,5 +118,6 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 		this.setDescricaoLocalidade("");
 		this.setDescricaoSetorComercial("");
 		this.setNumeroQuadra("");
+		this.setSituacao("");
 	}
 }

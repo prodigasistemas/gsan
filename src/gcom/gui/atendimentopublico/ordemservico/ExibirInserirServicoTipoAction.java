@@ -13,6 +13,8 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Operacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.FachadaException;
 import gcom.util.Util;
@@ -132,6 +134,34 @@ public class ExibirInserirServicoTipoAction extends GcomAction {
 				form.setDescricaoPerfilServico("Tipo do Perfil Inexistente");
 			}
 		}
+		
+		
+		// Operacao
+		
+		Integer idOperacao = Util.converterStringParaInteger(form.getIdOperacao());
+		
+		if (Util.validarNumeroMaiorQueZERO(idOperacao)) {
+			try {
+				FiltroOperacao filtroOperacao = new FiltroOperacao();
+	        	filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, idOperacao));
+	        	
+	        	Collection colecaoOperacao = fachada.pesquisar(filtroOperacao, Operacao.class.getName());
+	        	
+	        	if(colecaoOperacao.isEmpty()) {
+	        		form.setDescricaoOperacao("Operação Inexistente");
+	        		sessao.setAttribute("idOperacao", "");
+	        	} else {
+	        		Operacao operacao = (Operacao) colecaoOperacao.iterator().next();
+	        		form.setIdOperacao(operacao.getId().toString());
+	        		form.setDescricaoOperacao(operacao.getDescricao());
+	        		sessao.setAttribute("idOperacao", operacao.getId());
+	        	}
+			} catch (FachadaException e) {
+				sessao.setAttribute("idOperacao", "");
+				form.setDescricaoOperacao("Operacao Inexistente");
+			}
+		}
+		
 		
 		//Tipo do Serviço Referência
 		

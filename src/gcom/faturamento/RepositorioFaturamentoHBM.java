@@ -22857,6 +22857,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "cntHist.valorCreditos, "
 					+ "cntHist.valorImposto, "
 					+ "cntHist.dataValidadeConta, "
+					+ "cntHist.valorRateioAgua, "
+					+ "cntHist.valorRateioEsgoto, "
 					+ "imovel.id, "
 					+ "loc.id, "
 					+ "gerenciaRegional.id, "
@@ -27160,15 +27162,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public void alterarVencimentoContaGrupoFaturamento(Date dataVencimento,
 			Date dataValidade, Short indicadorAlteracaoVencimento,
 			Integer idGrupoFaturamento, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim)
-			throws ErroRepositorioException {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			boolean somenteDebitoAutomatico) throws ErroRepositorioException {
 
 		String update;
 		Session session = HibernateUtil.getSession();
 
 		PreparedStatement st = null;
-		
-		boolean indicadorBloqueioContasContratoParcelManterConta = false;
 
 		try {
 			RepositorioUtilHBM repositorioUtilHBM = RepositorioUtilHBM.getInstancia();
@@ -27176,14 +27176,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta
-			 * 3. Caso o indicador de bloqueio de contas vinculadas a contrato de parcelamento no manter contas esteja ativo
-			 *   retirar da lista de contas selecionadas as contas vinculadas a algum contrato de parcelamento ativo
-			 *    
-			 * RM 1887 - Contrato Parcelamento por Cliente
-			 * Adicionado por: Mariana Victor
-			 * Data: 14/07/2011
-			 *  
+			 * 
+			 * 3. Caso o indicador de bloqueio de contas vinculadas a 
+			 * contrato de parcelamento no manter contas esteja ativo
+			 * retirar da lista de contas selecionadas as contas vinculadas
+			 * a algum contrato de parcelamento ativo
 			 * */
+			boolean indicadorBloqueioContasContratoParcelManterConta = false;
 			if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
 					&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
 				indicadorBloqueioContasContratoParcelManterConta = true;
@@ -27209,9 +27208,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			if (dataVencimentoContaInicio != null) {
 				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";//12, 13
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
+				if (indicadorBloqueioContasContratoParcelManterConta) 
 					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";//14
-				}
+				
+				if (somenteDebitoAutomatico)
+					update += " AND cnta.cnta_icdebitoconta = ? "; // 15
 
 				update += ")";
 				
@@ -27233,9 +27234,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
 					st.setDate(13, Util.getSQLDate(dataVencimentoContaFim));
 					
-					if (indicadorBloqueioContasContratoParcelManterConta) {
+					if (indicadorBloqueioContasContratoParcelManterConta) 
 						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
-					}
+					
+					if (somenteDebitoAutomatico)
+						st.setShort(15, ConstantesSistema.SIM);
 				
 				} else {
 
@@ -27259,14 +27262,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 					
+					if (somenteDebitoAutomatico)
+						st.setShort(15, ConstantesSistema.SIM);
+					
 					st.executeUpdate();
 
 				}
 			} else {
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
-					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";
-				}
+				if (indicadorBloqueioContasContratoParcelManterConta) 
+					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) "; // 12
+				
+				if (somenteDebitoAutomatico)
+					update += " AND cnta.cnta_icdebitoconta = ? "; // 13
 				
 				update += ")";
 
@@ -27284,17 +27292,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
 				st.setDate(11, Util.getSQLDate(dataVencimento));
 
-				if (indicadorBloqueioContasContratoParcelManterConta) {
+				if (indicadorBloqueioContasContratoParcelManterConta)
 					st.setInt(12, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
-				}
+				
+				if (somenteDebitoAutomatico)
+					st.setShort(13, ConstantesSistema.SIM);
 				
 				st.executeUpdate();
 
 			}
-
-			// erro no hibernate
 		} catch (SQLException e) {
-			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -61118,7 +61125,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " and cronograma_mensal.ftcm_amreferencia = :anoMesReferencia "
 					+ " and grupo.ftgr_icuso = 1 ";
 					
+<<<<<<< HEAD
 			if(idGrupo != null) {
+=======
+			if (idGrupo != null) {
+>>>>>>> prodigasistemas-master
 				consulta += "and grupo.ftgr_id in (:idGrupo)";
 
 				retorno = (Collection) session.createSQLQuery(consulta)
@@ -61181,31 +61192,50 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
+<<<<<<< HEAD
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia)
+=======
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia)
+>>>>>>> prodigasistemas-master
 			throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 		try {
+<<<<<<< HEAD
 			consulta = " SELECT ftgr_id as idGrupo, sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
 				+ " (SELECT ftgr_id, sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
+=======
+			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
+				+ " (SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
+>>>>>>> prodigasistemas-master
 				+ " FROM faturamento.conta as conta, "
 				+ " cadastro.cliente_imovel cliente_imovel, " 
 				+ " cadastro.cliente cliente "
 				+ " WHERE cnta_amreferenciaconta = :anoMesReferencia "
 				+ " and dcst_idatual in (0, 1, 2, 5) "
+<<<<<<< HEAD
+=======
+				+ " and ftgr_id = :idGrupo "
+>>>>>>> prodigasistemas-master
 				+ " and conta.imov_id = cliente_imovel.imov_id " 
 				+ " and cliente.clie_id = cliente_imovel.clie_id "
 				+ " and cliente_imovel.crtp_id = 2 " 
 				+ " and cliente_imovel.clim_dtrelacaofim is null "
+<<<<<<< HEAD
 				+ " group by conta.ftgr_id "
 				+ " UNION  "
 				+ " SELECT ftgr_id, sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
+=======
+				+ " UNION  "
+				+ " SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
+>>>>>>> prodigasistemas-master
 				+ " FROM faturamento.conta_historico as conta_historico, "
 				+ " cadastro.cliente_imovel cliente_imovel, "
 				+ " cadastro.cliente cliente "
 				+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia "
 				+ " and dcst_idatual in (0, 1, 2, 5) "
+<<<<<<< HEAD
 				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
 				+ " and cliente.clie_id = cliente_imovel.clie_id "
 				+ " and cliente_imovel.crtp_id = 2 "
@@ -61219,6 +61249,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
 				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
 				.setInteger("anoMesReferencia", anoMesReferencia)
+=======
+				+ " and ftgr_id = :idGrupo "
+				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
+				+ " and cliente.clie_id = cliente_imovel.clie_id "
+				+ " and cliente_imovel.crtp_id = 2 "
+				+ " and cliente_imovel.clim_dtrelacaofim is null) as conta ";
+
+			retorno = (Collection) session.createSQLQuery(consulta)
+				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
+				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+				.setInteger("anoMesReferencia", anoMesReferencia)
+				.setInteger("idGrupo", idGrupo)
+>>>>>>> prodigasistemas-master
 				.list();
 			
 		} catch (HibernateException e) {
@@ -61308,4 +61351,38 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno.intValue();
 	}
+<<<<<<< HEAD
+=======
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException {
+		boolean faturado = false;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			consulta = "SELECT EXISTS (" 
+					+ " SELECT ftcm.ftcm_id "
+					+ " FROM faturamento.fatur_grupo_crg_mensal ftcm "
+					+ " INNER JOIN faturamento.fatur_ativ_cronograma ftac ON ftac.ftcm_id = ftcm.ftcm_id "
+					+ " WHERE ftgr_id = :idGrupo "
+					+ " AND ftcm_amreferencia = :referencia "
+					+ " AND ftat_id = :faturamentoAtividade "
+					+ " AND ftac_tmrealizacao IS NOT NULL)";
+				
+			faturado = (Boolean) session.createSQLQuery(consulta)
+						.addScalar("exists", Hibernate.BOOLEAN)
+						.setInteger("idGrupo", idGrupo)
+						.setInteger("referencia", referencia)
+						.setInteger("faturamentoAtividade", FaturamentoAtividade.FATURAR_GRUPO)
+						.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return faturado;
+	}
+>>>>>>> prodigasistemas-master
 }

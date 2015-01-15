@@ -9,6 +9,8 @@ import gcom.atendimentopublico.ordemservico.ServicoTipoReferencia;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
@@ -54,9 +56,26 @@ public class InserirServicoTipoAction extends GcomAction {
 		Fachada fachada = Fachada.getInstancia();		
 		HttpSession sessao = httpServletRequest.getSession(false);
 		
+		String idOperacao = form.getIdOperacao();
+		
 		//Atualiza a entidade com os valores do formulário
 		ServicoTipo servicoTipo = form.getServicoTipo();
-
+		
+		FiltroOperacao filtroOperacao = new FiltroOperacao();
+    	filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, idOperacao));
+    	
+    	Collection colecaoOperacao = fachada.pesquisar(filtroOperacao, Operacao.class.getName());
+    	
+    	if(colecaoOperacao.isEmpty()) {
+    		servicoTipo.setOperacao(null);
+    	} else {
+    		Operacao operacao = new Operacao();
+			operacao.setId(Integer.parseInt(idOperacao));
+			operacao.setDescricao(form.getDescricaoOperacao());
+			
+			servicoTipo.setOperacao(operacao);
+    	}
+    	
 		if(servicoTipo.getServicoTipoAtividades() == null
 				|| servicoTipo.getServicoTipoAtividades().isEmpty()){
 			
@@ -69,6 +88,7 @@ public class InserirServicoTipoAction extends GcomAction {
 				
 				Collection colecaoAtividade = 
 					fachada.pesquisar(filtroAtividade,Atividade.class.getName());
+				
 				
 				if(colecaoAtividade.isEmpty()){
 					throw new ActionServletException("atencao.naocadastrado",null, "Atividade");

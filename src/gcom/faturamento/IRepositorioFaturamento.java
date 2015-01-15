@@ -1231,8 +1231,8 @@ public interface IRepositorioFaturamento {
 	public void alterarVencimentoContaGrupoFaturamento(Date dataVencimento,
 			Date dataValidade, Short indicadorAlteracaoVencimento,
 			Integer idGrupoFaturamento, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim)
-			throws ErroRepositorioException;
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			boolean somenteDebitoAutomatico) throws ErroRepositorioException;
 
 	public Integer pesquisarTipoConta(Integer idConta) throws ErroRepositorioException;
 
@@ -3006,10 +3006,18 @@ public interface IRepositorioFaturamento {
 	
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
 	
+<<<<<<< HEAD
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia) throws ErroRepositorioException;
+=======
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
+>>>>>>> prodigasistemas-master
 	
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
+<<<<<<< HEAD
+=======
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
+>>>>>>> prodigasistemas-master
 }

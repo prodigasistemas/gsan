@@ -25,6 +25,8 @@ public class RecebimentoTipo implements Serializable {
 	public final static Integer TOTAL_DESCONTOS = new Integer(14);
 	public final static Integer RECEBIMENTO_DE_VALORES_DA_CAMPANHA_SOLIDARIEDADE_DA_CRIANCA = new Integer(15);
 	public final static Integer RECEBIMENTO_MESES_ATE_31_12_2012_CLASSIFICADOS_NO_MES = new Integer (16);
+	public final static Integer RECEBIMENTOS_CLASSIFICADOS_RECUPERACAO_CREDITO = new Integer(17);
+	public final static Integer RECEBIMENTOS_CLASSIFICADOS_RECUPERACAO_CREDITO_MESES_ANTERIORES = new Integer(18);
 
     private Integer id;
     private String descricao;

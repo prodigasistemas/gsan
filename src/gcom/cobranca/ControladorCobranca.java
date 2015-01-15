@@ -24906,16 +24906,6 @@ public class ControladorCobranca implements SessionBean {
 
 		BigDecimal valorTaxa = new BigDecimal("0.00");
 		
-		if(imovel != null) {
-			logger.info("[ imovel: " + imovel.getId() + "	- gerarDocumentoCobranca]");
-			
-		}
-		
-		if(cliente != null) {
-			logger.info("[ cliente: " + cliente.getId() + "	- gerarDocumentoCobranca]");
-			
-		}
-		
 		/*
 		 * Caso tenha sido passado o parâmetro imovel, bem como esteja indicado que é para gerar a taxa de cobrança (indicador de geração de taxa de
 		 * cobrança = 1 ou 3), o sistema gera o debito a cobrar para o imóvel relativo a taxa de cobrança
@@ -25068,16 +25058,6 @@ public class ControladorCobranca implements SessionBean {
 			documentoCobranca.setValorAcrescimos(new BigDecimal("0.00"));
 		}
 		
-		if(imovel != null) {
-			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
-			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
-		}
-		
-		if(cliente != null) {
-			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
-			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
-		}
-		
 		documentoCobranca.setDocumentoEmissaoForma(documentoEmissaoForma);
 		documentoCobranca.setMotivoNaoEntregaDocumento(null);
 
@@ -25108,47 +25088,11 @@ public class ControladorCobranca implements SessionBean {
 		documentoCobranca.setCliente(cliente);
 		documentoCobranca.setResolucaoDiretoria(resolucaoDiretoria);
 		
-		if (resolucaoDiretoria != null) {
-			if (resolucaoDiretoria.getId() != null) {
-				if(imovel != null) {
-					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
-				}
-				
-				if(cliente != null) {
-					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
-				}
-			} else {
-				if(imovel != null) {
-					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
-				}
-				
-				if(cliente != null) {
-					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
-				}
-			}
-		} else {
-			if(imovel != null) {
-				logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
-			}
-			
-			if(cliente != null) {
-				logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
-			}
-		}
-
 		documentoCobranca.setDataEmissaoPredecessor(dataEmissaoPredecessor);
 
 		Integer idDocumentoCobranca = (Integer) getControladorUtil().inserir(documentoCobranca);
 		documentoCobranca.setId(idDocumentoCobranca);
 
-		if(imovel != null) {
-			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
-		}
-		
-		if(cliente != null) {
-			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
-		}
-		
 		extratoDebitoRelatorioHelper.setDocumentoCobranca(documentoCobranca);
 
 		CobrancaDocumentoItem cobrancaDocumentoItem = new CobrancaDocumentoItem();
@@ -25158,14 +25102,6 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorAcrescimos = null;
 		BigDecimal valorImpostos = null;
 		if (colecaoContas != null && !colecaoContas.isEmpty()) {
-			
-			if(imovel != null) {
-				logger.info("[ " + imovel.getId() + "	- 	CONTAS:  ]");
-			}
-			
-			if(cliente != null) {
-				logger.info("[ " + cliente.getId() + "	- 	CONTAS:  ]");
-			}
 			
 			valorImpostos = new BigDecimal("0.00");
 
@@ -25224,13 +25160,6 @@ public class ControladorCobranca implements SessionBean {
 
 				getControladorUtil().inserir(cobrancaDocumentoItem);
 				
-				if(imovel != null) {
-					logger.info("[ " + imovel.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
-				
-				if(cliente != null) {
-					logger.info("[ " + cliente.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemContas().add(cobrancaDocumentoItem);
 			}
 
@@ -25253,13 +25182,6 @@ public class ControladorCobranca implements SessionBean {
 		documentoTipoDebito.setId(DocumentoTipo.DEBITO_A_COBRAR);
 		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
 
-			if(imovel != null) {
-				logger.info("[ " + imovel.getId() + "	- 	DEBITOS A COBRAR:  ]");
-			}
-			
-			if(cliente != null) {
-				logger.info("[ " + cliente.getId() + "	- 	DEBITOS A COBRAR:  ]");
-			}
 			for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
@@ -25290,14 +25212,6 @@ public class ControladorCobranca implements SessionBean {
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
 				
-				if(imovel != null) {
-					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
-				
-				if(cliente != null) {
-					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
-				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemDebitosACobrar().add(cobrancaDocumentoItem);
 			}
 		}
@@ -25306,15 +25220,6 @@ public class ControladorCobranca implements SessionBean {
 		DocumentoTipo documentoTipoGuia = new DocumentoTipo();
 		documentoTipoGuia.setId(DocumentoTipo.GUIA_PAGAMENTO);
 		if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
-			
-			
-			if(imovel != null) {
-				logger.info("[ " + imovel.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
-			}
-			
-			if(cliente != null) {
-				logger.info("[ " + cliente.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
-			}
 			
 			for (GuiaPagamentoValoresHelper guiaPagamentoValorHelper : colecaoGuiasPagamento) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
@@ -25358,15 +25263,6 @@ public class ControladorCobranca implements SessionBean {
 
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
-				
-				
-				if(imovel != null) {
-					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
-				
-				if(cliente != null) {
-					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
-				}
 				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemGuiasPagamento().add(cobrancaDocumentoItem);
 			}
@@ -25651,16 +25547,6 @@ public class ControladorCobranca implements SessionBean {
 			Collection<CreditoARealizar> colecaoCreditoARealizar, Cliente cliente, ResolucaoDiretoria resolucaoDiretoria,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoDebitosDeParcelamento,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento) throws ControladorException {
-		
-		if(imovel != null) {
-			logger.info("[ imovel: " + imovel.getId() + "	- gerarEmitirExtratoDebito]");
-			
-		}
-		
-		if(cliente!= null) {
-			logger.info("[ cliente: " + cliente.getId() + "	- gerarEmitirExtratoDebito]");
-			
-		}
 		
 		// [SB0001] - Gerar Documento de Cobrança
 		DocumentoEmissaoForma documentoEmissaoForma = new DocumentoEmissaoForma();
@@ -28433,6 +28319,13 @@ public class ControladorCobranca implements SessionBean {
 					parcelamentoRelatorioHelper.setSetorComercial(String.valueOf(setorCodigo));
 				} else {
 					parcelamentoRelatorioHelper.setSetorComercial("");
+				}
+				
+				// CPF Usuario
+				if (dadosParcelamento[40] != null) {
+					parcelamentoRelatorioHelper.setCpfUsuario(String.valueOf(dadosParcelamento[40]));
+				} else {
+					parcelamentoRelatorioHelper.setCpfUsuario("");
 				}
 
 			}

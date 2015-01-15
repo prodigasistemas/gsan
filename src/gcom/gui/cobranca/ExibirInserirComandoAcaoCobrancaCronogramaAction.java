@@ -327,28 +327,6 @@ public class ExibirInserirComandoAcaoCobrancaCronogramaAction  extends GcomActio
             		filtroCobrancaAcaoCronograma.adicionarParametro(new ParametroSimples(FiltroCobrancaAcaoCronograma.ID_COBRANCA_GRUPO_CRONOGRAMA_MES,idCobrancaGrupoCronogramaMensalSelecionado));
             		Collection colecaoCobrancaAcaoCronograma = fachada.pesquisar(filtroCobrancaAcaoCronograma,CobrancaAcaoCronograma.class.getName()); 
             		
-            		//[FS0004 - Verificar existência da ação no cronograma do grupo do mÊs]
-//					if(colecaoCobrancaAcaoCronograma != null && colecaoCobrancaAcaoCronograma.isEmpty()){
-  //      			throw new ActionServletException("atencao.nenhuma.atividade_grupo_acao",
-    //         				null,cobrancaGrupo.getId() + " no mês corrente " + cobrancaGrupo.getAnoMesReferencia() + ", não existe a Ação " + cobrancaAcao.getDescricaoCobrancaAcao());
-		//			
-			//		}
-	        		//fim da validação cobrança ação
-					
-	            	//FiltroCobrancaAcaoCronogama filtroCobrancaAcaoCronogama = new FiltroCobrancaAcaoCronogama();
-	            	//filtroCobrancaAcaoCronogama.adicionarParametro(
-	                //		new ParametroSimples("id", idAcaoConbranca));
-	            	//filtroCobrancaAcaoCronogama.adicionarParametro(
-	                //    		new ParametroSimples("cobrancaGrupoCronogramaMensal.id", cobrancaGrupoCronogramaMensal.getId()));
-	                	
-	               // Collection colecaoCobrancaAcaoCronogama = (Collection) fachada.pesquisar(filtroCobrancaAcaoCronogama,CobrancaAcaoCronogama.class.getName());
-	            	
-	               // if(!(colecaoCobrancaAcaoCronogama != null && colecaoCobrancaAcaoCronogama.isEmpty())){
-	        		//	throw new ActionServletException("atencao.cronograma_acao.inexistente",
-	        		//		null, cobrancaGrupo.getId().toSting() + " no Mês Corrente " + cobrancaGrupo.getAnoMesReferencia());
-	        		//}        		
-	        	
-	                
 	                CobrancaAcaoCronograma cobrancaAcaoCronograma = (CobrancaAcaoCronograma) colecaoCobrancaAcaoCronograma.iterator().next();
 	                sessao.setAttribute("cobrancaAcaoCronogama",cobrancaAcaoCronograma);
 	        	

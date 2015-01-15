@@ -50873,21 +50873,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// 2.3.2.
 
 						descricaoServicosTarifas3 = " CONSUMO DE ÁGUA";
-						consumoFaixa3 = Util.completaStringComEspacoAEsquerda(
-								"" + contaCategoria.getConsumoAgua(), 6)
-								+ " M3";
-						valor3 = Util.formatarMoedaReal(contaCategoria
-								.getValorAgua());
+						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
+						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua();
+						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas3);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa(consumoFaixa3.trim());
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor3);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas3);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa(consumoFaixa3.trim());
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor3);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 
 				}
@@ -59215,16 +59209,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
-	 * 
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento,
 			Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Usuario usuarioLogado) throws ControladorException {
+			Usuario usuarioLogado, boolean somenteDebitoAutomatico) throws ControladorException {
 
 		try {
 
@@ -59234,30 +59224,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
 					idGrupoFaturamento, anoMes, anoMesFim,
-					dataVencimentoContaInicio, dataVencimentoContaFim);
+					dataVencimentoContaInicio, dataVencimentoContaFim,
+					somenteDebitoAutomatico);
 
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS ALTERADO COM SUCESSO.";
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(), "CONTAS_ALTERADAS",
-						mensagem);
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(),
+						"CONTAS_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
 			}
 
 		} catch (ErroRepositorioException ex) {
 			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS NÃO FOI ALTERADO DEVIDO A UM ERRO DE SISTEMA.";
-			EnvioEmail envioEmail = getControladorCadastro()
-					.pesquisarEnvioEmail(
-							EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 
 			try {
-				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(),
-						usuarioLogado.getDescricaoEmail(),
+				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(), 
 						"CONTAS_NÃO_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
@@ -59265,14 +59250,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
 		}
-
 	}
 
 	/**
 	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
 	 * 
 	 * @throws ControladorException
 	 */
@@ -64924,8 +64905,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ControladorException
 	 */
 	protected DebitoACobrar gerarDebitoACobrarParaConta(
-			Integer anoMesReferenciaArrecadacao,
-			Integer anoMesReferenciaFaturamento, Imovel imovel,
+			Integer anoMesReferenciaArrecadacao, Imovel imovel,
 			Localidade localidade, Quadra quadra, Integer setorComercial,
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
@@ -68859,677 +68839,549 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param dataComando
 	 * @throws ControladorException
 	 */
-	public void gerarArquivoTextoParaFaturamento(Rota rota,
-			Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo,
-			Date dataComando, Boolean regerar) throws ControladorException,
-			ErroRepositorioException {
-
-		boolean rotaSoComImoveisInformativos = true;
-
-		UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento
-				.getInstancia(repositorioFaturamento, sessionContext,
-						repositorioCobranca);
-
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		// [FS0005] - Verificar existência do arquivo texto por rota
-		boolean gerarArquivoTexto = gerarArquivoTextoFaturamento
-				.verificarExistenciaArquivoTextoRota(rota.getId(),
-						anoMesFaturamento);
-
-		if (gerarArquivoTexto || regerar) {
-			/*
-			 * Variáveis para a paginação da pesquisa de Imovel, acumulação da
-			 * quantidade de imóveis por rota e geração do arquivo txt.
-			 */
-			// ========================================================================
-			boolean flagTerminou = false;
-			final int quantidadeRegistros = 3000;
-			int numeroIndice = 0;
-			Imovel imovel = null;
-			int tamanhoArquivo = 0;
-
-			int tamanhoArquivoDiv = 0;
-
-			List<Integer> imoveisDivididos = new ArrayList<Integer>();
-
-			StringBuilder arquivoTexto = null;
-			StringBuilder arquivoTextoDiv = null;
-
-			Collection<Imovel> colecaoImoveis = new ArrayList();
-
-			// colecao de Arquivo Texto Roteiro Empresa Divisao
-			Collection<ArquivoTextoRoteiroEmpresaDivisao> colecaoArquivoDivisao = new ArrayList();
-
-			while (!flagTerminou) {
-
-				Object[] dadosImoveis = gerarArquivoTextoFaturamento
-						.pesquisarImovelGerarArquivoTextoFaturamento(rota,
-								numeroIndice, quantidadeRegistros,
-								sistemaParametro, faturamentoGrupo, null);
-
-				Collection colecaoImovel = (Collection) dadosImoveis[0];
-				int quantidadeImoveis = (Integer) dadosImoveis[1];
-
-				// PERFORMANCE
-				dadosImoveis = null;
-
-				/*
-				 * Caso exista ids de imóveis para a rota atual determina a
-				 * geração do arquivo texto para cada imóvel retornado.
-				 */
-				if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
-
-					Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
-
-					// LAÇO PARA DETERMINAR O ARQUIVO TEXTO DE TODOS OS IMOVEIS
-					// DA ROTA ATUAL
-					imovel = null;
-					while (iteratorColecaoImoveis.hasNext()) {
-
-						imovel = (Imovel) iteratorColecaoImoveis.next();
-						Conta conta = null;
-
-						if (arquivoTexto == null) {
-							arquivoTexto = new StringBuilder();
-						}
-
-						if (arquivoTextoDiv == null) {
-							arquivoTextoDiv = new StringBuilder();
-						}
-
-						if (imovel.getIndicadorImovelCondominio().equals(
-								ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-
-							Object[] retornoArquivo = carregarArquivoImpressaoSimultanea(
-									gerarArquivoTextoFaturamento, imovel,
-									anoMesFaturamento, rota, faturamentoGrupo,
-									sistemaParametro, dataComando);
-							int tamanhoArquivoRetorno = 0;
-							if (retornoArquivo != null
-									&& !retornoArquivo.equals("")) {
-								if (arquivoTexto.length() != 0) {
-									arquivoTexto.append(System
-											.getProperty("line.separator"));
-								}
-								arquivoTexto.append(retornoArquivo[0]);
-								tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
-								tamanhoArquivo = tamanhoArquivo
-										+ tamanhoArquivoRetorno;
-
-								// verifica se existe número limite de imoveis
-								// para a Rota.
-								// se existir, divide o arquivo em partes
-								// definidas pelo número limite de imoveis.
-								// Sempre observando os Critérios da UC0745 no
-								// Fluxo 3.2
-								if (rota.getNumeroLimiteImoveis() != null
-										&& !rota.getNumeroLimiteImoveis()
-												.equals("")) {
-
-									if (arquivoTextoDiv.length() != 0) {
-										arquivoTextoDiv.append(System
-												.getProperty("line.separator"));
-									}
-
-									if (arquivoTextoDiv != null) {
-										arquivoTextoDiv
-												.append(retornoArquivo[0]);
-										imoveisDivididos.add(imovel.getId());
-										tamanhoArquivoDiv = tamanhoArquivoDiv
-												+ tamanhoArquivoRetorno;
-									}
-								}
-							}
-
-							// inserir o id do imóvel na coleção
-							if (tamanhoArquivoRetorno != 0) {
-								colecaoImoveis.add(imovel);
-
-							}
-
-							// ----------------------------------------------------------------------------------
-						} else {
-
-							// ----------------------------------------------------------------------------------
-
-							// Caso o imóvel condomínio MACRO não seja não
-							// medido
-							if (imovel.getHidrometroInstalacaoHistorico() != null
-									|| (imovel.getLigacaoAgua() != null && imovel
-											.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico() != null)) {
-
-								// Recupera os imóveis micro dos imóveis Macro
-								Object[] dadosImoveisMicros = gerarArquivoTextoFaturamento
-										.pesquisarImovelGerarArquivoTextoFaturamento(
-												rota, numeroIndice,
-												quantidadeRegistros,
-												sistemaParametro,
-												faturamentoGrupo,
-												imovel.getId());
-
-								Collection colecaoImovelMicro = (Collection) dadosImoveisMicros[0];
-								// quantidadeImoveis = quantidadeImoveis +
-								// (Integer)dadosImoveisMicros[1];
-
-								// PERFORMANCE
-								dadosImoveisMicros = null;
-
-								/*
-								 * Caso exista ids de imóveis para a rota atual
-								 * determina a geração do arquivo texto para
-								 * cada imóvel retornado.
-								 */
-								if (colecaoImovelMicro != null
-										&& !colecaoImovelMicro.isEmpty()) {
-
-									/*
-									 * Colocado por Raphael Rossiter e Sávio
-									 * Cavalcante em 30/08/2011 OBJ: Evitar que
-									 * o arquivo seja regerado com apenas uma
-									 * parte dos imóveis micros do condominio.
-									 */
-									boolean imovelMicroNAOProcessado = true;
-
-									if (regerar) {
-
-										Integer qtdMovimentoContaPrefaturada = gerarArquivoTextoFaturamento
-												.pesquisarMovimentoContaPrefaturadaArquivoTextoFaturamento(
-														imovel.getId(),
-														anoMesFaturamento);
-
-										if (qtdMovimentoContaPrefaturada
-												.intValue() > 0) {
-
-											imovelMicroNAOProcessado = false;
-										}
-									}
-
-									// Verifica se os imóveis micro tem conta,
-									// caso não tenha então o imóvel macro não
-									// vai
-									// para o condomínio
-
-									Iterator iteratorColecaoImoveisMicroConta = colecaoImovelMicro
-											.iterator();
-
-									boolean imovelMicroComConta = false;
-
-									Imovel imovelMicroConta = null;
-									Conta contaMicro = null;
-									while (iteratorColecaoImoveisMicroConta
-											.hasNext()) {
-
-										imovelMicroConta = (Imovel) iteratorColecaoImoveisMicroConta
-												.next();
-
-										contaMicro = gerarArquivoTextoFaturamento
-												.pesquisarContaGerarArquivoTextoFaturamento(
-														imovelMicroConta,
-														anoMesFaturamento,
-														faturamentoGrupo
-																.getId());
-
-										if (contaMicro != null) {
-											imovelMicroComConta = true;
-											break;
-										}
-									}
-
-									imovelMicroConta = null;
-									contaMicro = null;
-
-									if (imovelMicroComConta
-											&& imovelMicroNAOProcessado) {
-
-										// inserir o id do imóvel na coleção
-										// IMOVEIS MACROS dos condomínios
-										colecaoImoveis.add(imovel);
-
-										// GERAR ARQUIVO TEXTO
-										// --------------------------------------------------------------
-										if (arquivoTexto != null) {
-											Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
-													.gerarArquivoTexto(imovel,
-															conta,
-															anoMesFaturamento,
-															rota,
-															faturamentoGrupo,
-															sistemaParametro,
-															dataComando);
-											if (arquivoTexto.length() != 0) {
-												arquivoTexto
-														.append(System
-																.getProperty("line.separator"));
-											}
-											arquivoTexto = arquivoTexto
-													.append(registroArquivoTexto[0]);
-											int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
-											tamanhoArquivo = tamanhoArquivo
-													+ quantidadeRegistroArquivo;
-
-											// verifica se existe número limite
-											// de imoveis para a Rota.
-											// se existir, divide o arquivo em
-											// partes definidas pelo número
-											// limite de imoveis.
-											// Sempre observando os Critérios da
-											// UC0745 no Fluxo 3.2
-											if (rota.getNumeroLimiteImoveis() != null
-													&& !rota.getNumeroLimiteImoveis()
-															.equals("")) {
-
-												if (arquivoTextoDiv != null) {
-													if (arquivoTextoDiv
-															.length() != 0) {
-														arquivoTextoDiv
-																.append(System
-																		.getProperty("line.separator"));
-													}
-													arquivoTextoDiv = arquivoTextoDiv
-															.append(registroArquivoTexto[0]);
-													int quantidadeRegistroArquivoDiv = (Integer) registroArquivoTexto[1];
-													imoveisDivididos.add(imovel
-															.getId());
-													tamanhoArquivoDiv = tamanhoArquivoDiv
-															+ quantidadeRegistroArquivoDiv;
-												}
-											}
-
-										}
-										// ----------------------------------------------------------------------------------
-
-										Iterator iteratorColecaoImoveisMicro = colecaoImovelMicro
-												.iterator();
-
-										Imovel imovelMicro = null;
-										while (iteratorColecaoImoveisMicro
-												.hasNext()) {
-
-											imovelMicro = (Imovel) iteratorColecaoImoveisMicro
-													.next();
-											conta = null;
-
-											Object[] retornoArquivo = carregarArquivoImpressaoSimultanea(
-													gerarArquivoTextoFaturamento,
-													imovelMicro,
-													anoMesFaturamento, rota,
-													faturamentoGrupo,
-													sistemaParametro,
-													dataComando);
-											int tamanhoArquivoRetorno = 0;
-											if (retornoArquivo != null
-													&& !retornoArquivo
-															.equals("")) {
-												if (arquivoTexto.length() != 0) {
-													arquivoTexto
-															.append(System
-																	.getProperty("line.separator"));
-												}
-												arquivoTexto
-														.append(retornoArquivo[0]);
-												tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
-												tamanhoArquivo = tamanhoArquivo
-														+ tamanhoArquivoRetorno;
-
-												// verifica se existe número
-												// limite de imoveis para a
-												// Rota.
-												// se existir, divide o arquivo
-												// em partes definidas pelo
-												// número limite de imoveis.
-												// Sempre observando os
-												// Critérios da UC0745 no Fluxo
-												// 3.2
-												if (rota.getNumeroLimiteImoveis() != null
-														&& !rota.getNumeroLimiteImoveis()
-																.equals("")) {
-
-													if (arquivoTextoDiv
-															.length() != 0) {
-														arquivoTextoDiv
-																.append(System
-																		.getProperty("line.separator"));
-													}
-													if (arquivoTextoDiv != null) {
-														arquivoTextoDiv
-																.append(retornoArquivo[0]);
-														imoveisDivididos
-																.add(imovel
-																		.getId());
-														tamanhoArquivoDiv = tamanhoArquivoDiv
-																+ tamanhoArquivoRetorno;
-													}
-												}
-											}
-
-											// inserir o id do imóvel na coleção
-											if (tamanhoArquivoRetorno != 0) {
-												colecaoImoveis.add(imovelMicro);
-											}
-										}
-										// FIM ColecaoImoveisMicro
-
-									}// Fim imóvel micro com conta
-								}
-
-								// PERFORMANCE
-								colecaoImovelMicro = null;
-
-							}
-
-						}// FIM do else
-
-						// Caso exista número limite de imoveis para a Rota e
-						// se o contador numeroImoveisDiv for maior que o número
-						// definido
-						// pelo número limite de imoveis da Rota. Então,
-						// finaliza o arquivoDividido,
-						// gera o ArquivoTextoRoteiroEmpresaDivisao e adiciona
-						// na Coleção colecaoArquivoDivisao.
-						// Em seguida reinicia as variáveis Ultilizadas.
-						// Sempre observando os Critérios da UC0745 no Fluxo 3.2
-						if (rota.getNumeroLimiteImoveis() != null) {
-							/**
-							 * Alteracao para corrigir a
-							 * finalizacao de rotas divididas - Salvar a qtd de
-							 * imoveis com conta PF nas rotas divididas, e não a
-							 * quantidade de imóveis na rota - Finalizar a rota
-							 * por parte do arquivo e não pelo IMEI do celular
-							 */
-							if (imoveisDivididos.size() >= rota
-									.getNumeroLimiteImoveis().intValue()) {
-
-								Integer qtdArquivosDividido = colecaoArquivoDivisao
-										.size() + 1;
-								Object[] dadosRetorno = this.gerarPassosFinais(
-										gerarArquivoTextoFaturamento,
-										sistemaParametro, imovel,
-										qtdArquivosDividido, anoMesFaturamento);
-
-								StringBuilder dadosFinais = new StringBuilder();
-								dadosFinais.append(dadosRetorno[0]);
-								int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
-								tamanhoArquivoFinal = tamanhoArquivoFinal
-										+ tamanhoArquivoDiv;
-
-								StringBuilder arquivoDivCompleto = new StringBuilder();
-								arquivoDivCompleto.append(tamanhoArquivoFinal);
-								arquivoDivCompleto.append(System
-										.getProperty("line.separator"));
-								arquivoDivCompleto.append(arquivoTextoDiv);
-								arquivoDivCompleto.append(dadosFinais);
-
-								Integer qtdImoveisDivididos = repositorioFaturamento
-										.obterQtdImoveisRotaDivididaComContaPF(
-												anoMesFaturamento,
-												imoveisDivididos);
-
-								ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento
-										.inserirArquivoTextoRoteiroEmpresaDivisao(
-												anoMesFaturamento,
-												faturamentoGrupo, rota, imovel,
-												qtdImoveisDivididos,
-												arquivoDivCompleto);
-
-								arquivoDividido
-										.setNumeroSequenciaArquivo(qtdArquivosDividido);
-
-								colecaoArquivoDivisao.add(arquivoDividido);
-
-								qtdImoveisDivididos = 0;
-								imoveisDivididos.clear();
-
-								// numeroImoveisDiv = 0;
-								tamanhoArquivoDiv = 0;
-								arquivoTextoDiv = null;
-								dadosFinais = null;
-								tamanhoArquivoFinal = 0;
-								dadosRetorno = null;
-								arquivoDivCompleto = null;
-
-							}
-						}
-
-					}// FIM DO LOOP DE IMOVEIS
-
-				}// FIM DO LOOP DE IMOVEIS
-
-				/**
-				 * Incrementa o nº do indice da páginação
-				 */
-				numeroIndice = numeroIndice + quantidadeRegistros;
-
-				/**
-				 * Caso a coleção de imoveis retornados for menor que a
-				 * quantidade de registros seta a flag indicando que a paginação
-				 * terminou.
-				 */
-				if (quantidadeImoveis == 0
-						|| quantidadeImoveis < quantidadeRegistros) {
-
-					flagTerminou = true;
-				}
-
-				if (colecaoImovel != null) {
-					colecaoImovel.clear();
-					colecaoImovel = null;
-				}
-
-			}// FIM DO LOOP DA PAGINAÇÃO
-
-			// Se chegar ao final da coleção de imoveis e o número definido
-			// pelo número limite de imoveis da Rota ainda não tenha sido
-			// alcançado, então:
-			// finaliza o arquivoDividido, gera o
-			// ArquivoTextoRoteiroEmpresaDivisao e adiciona
-			// na Coleção colecaoArquivoDivisao. Em seguida reinicia as
-			// variáveis Ultilizadas.
-			// Sempre observando os Critérios da UC0745 no Fluxo 3.2
-			if (arquivoTextoDiv != null && arquivoTextoDiv.length() > 0) {
-
-				Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
-
-				Object[] dadosRetorno = this.gerarPassosFinais(
-						gerarArquivoTextoFaturamento, sistemaParametro, imovel,
-						qtdArquivosDividido, anoMesFaturamento);
-
-				StringBuilder dadosFinais = new StringBuilder();
-				dadosFinais.append(dadosRetorno[0]);
-				int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
-				tamanhoArquivoFinal = tamanhoArquivoFinal + tamanhoArquivoDiv;
-
-				StringBuilder arquivoDivCompleto = new StringBuilder();
-				arquivoDivCompleto.append(tamanhoArquivoFinal);
-				arquivoDivCompleto.append(System.getProperty("line.separator"));
-				arquivoDivCompleto.append(arquivoTextoDiv);
-				arquivoDivCompleto.append(dadosFinais);
-
-				Integer qtdImoveisDivididos = repositorioFaturamento
-						.obterQtdImoveisRotaDivididaComContaPF(
-								anoMesFaturamento, imoveisDivididos);
-
-				ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento
-						.inserirArquivoTextoRoteiroEmpresaDivisao(
-								anoMesFaturamento, faturamentoGrupo, rota,
-								imovel, qtdImoveisDivididos, arquivoDivCompleto);
-
-				arquivoDividido.setNumeroSequenciaArquivo(qtdArquivosDividido);
-
-				colecaoArquivoDivisao.add(arquivoDividido);
-
-				qtdImoveisDivididos = 0;
-				imoveisDivididos.clear();
-
-				// numeroImoveisDiv = 0;
-				tamanhoArquivoDiv = 0;
-				arquivoTextoDiv = null;
-				dadosFinais = null;
-				tamanhoArquivoFinal = 0;
-				dadosRetorno = null;
-				arquivoDivCompleto = null;
-
-			}
-
-			if (arquivoTexto != null && arquivoTexto.length() > 0) {
-
-				Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
-
-				Object[] dadosRetorno = this.gerarPassosFinais(
-						gerarArquivoTextoFaturamento, sistemaParametro, imovel,
-						qtdArquivosDividido, anoMesFaturamento);
-
-				StringBuilder dadosFinais = new StringBuilder();
-				dadosFinais.append(dadosRetorno[0]);
-				int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
-				tamanhoArquivoFinal = tamanhoArquivoFinal + tamanhoArquivo;
-
-				StringBuilder arquivoCompleto = new StringBuilder();
-				arquivoCompleto.append(tamanhoArquivoFinal);
-				arquivoCompleto.append(System.getProperty("line.separator"));
-				arquivoCompleto.append(arquivoTexto);
-				arquivoCompleto.append(dadosFinais);
-
-				// QUEBRA POR ROTA
-				if (colecaoImoveis != null && colecaoImoveis.size() > 0) {
-
-					/*
-					 *  Alteração feita para salvar no arquivo
-					 * texto somente a quantidade de imóveis que possuem conta
-					 * pré-faturada, e não a quantidade de imóveis total da
-					 * rota.
-					 */
-
-					Collection imoveisComContaPF = repositorioFaturamento
-							.obterImoveisComContaPF(anoMesFaturamento, rota);
-
-					Integer qtdImoveiComContaPF = 0;
-
-					List<Imovel> imoveisConvertidosComContaPF = this
-							.converterImoveis(imoveisComContaPF,
-									sistemaParametro, faturamentoGrupo, rota);
-
-					if (imoveisComContaPF != null
-							&& !imoveisComContaPF.isEmpty()) {
-						qtdImoveiComContaPF = imoveisConvertidosComContaPF
-								.size();
-					}
-
-					/*
-					 * Verificar se todos os imóveis da rota são apenas
-					 * informativos, se forem, gerar o arquivo já finalizado
-					 */
-					if (qtdImoveiComContaPF > 0) {
-						rotaSoComImoveisInformativos = false;
-					}
-
-					Integer idArquivoTextoRoteiroEmpresa = gerarArquivoTextoFaturamento
-							.inserirArquivoTextoRoteiroEmpresa(
-									anoMesFaturamento, faturamentoGrupo, rota,
-									imovel, qtdImoveiComContaPF,
-									arquivoCompleto, regerar,
-									rotaSoComImoveisInformativos);
-
-					dadosFinais = null;
-					tamanhoArquivoFinal = 0;
-					dadosRetorno = null;
-
-					Iterator iteratorcolecaoArquivoDivisao = colecaoArquivoDivisao
-							.iterator();
-
-					ArquivoTextoRoteiroEmpresaDivisao arquivoTextoRoteiroEmpresaDivisao = null;
-					ArquivoTextoRoteiroEmpresa arquivoTextoRoteiroEmpresa = new ArquivoTextoRoteiroEmpresa();
-					arquivoTextoRoteiroEmpresa
-							.setId(idArquivoTextoRoteiroEmpresa);
-
-					int sequencialArquivo = 0;
-					while (iteratorcolecaoArquivoDivisao.hasNext()) {
-
-						// adiciona o número sequencial ao objeto
-						// ArquivoTextoRoteiroEmpresaDivisao.
-						arquivoTextoRoteiroEmpresaDivisao = (ArquivoTextoRoteiroEmpresaDivisao) iteratorcolecaoArquivoDivisao
-								.next();
-
-						arquivoTextoRoteiroEmpresaDivisao
-								.setArquivoTextoRoteiroEmpresa(arquivoTextoRoteiroEmpresa);
-
-					}
-
-					// INSERINDO NA BASE OS OBJETOS
-					// ArquivoTextoRoteiroEmpresaDivisao.
-					this.getControladorBatch().inserirColecaoObjetoParaBatch(
-							colecaoArquivoDivisao);
-
-					/**
-					 * [SB0004]-Recuperar Dados para inclusao na Tabela
-					 */
-					if (colecaoArquivoDivisao != null) {
-						colecaoArquivoDivisao.clear();
-						colecaoArquivoDivisao = null;
-					}
-
-					if (!regerar) {
-						getControladorMicromedicao()
-								.removerMovimentoRoteiroEmpresa(
-										anoMesFaturamento,
-										faturamentoGrupo.getId(), rota);
-
-						Integer idLeituraTipo = rota.getLeituraTipo().getId();
-
-						/**
-						 *  Alteração feita para corrigir o
-						 * problema de incluir na tabela Movimento Roteiro
-						 * Empresa os imóveis informativos, e não somente os
-						 * imóveis que geraram conta PF
-						 */
-						Collection<Imovel> colecaoImoveisAGerar = getControladorMicromedicao()
-								.verificarImoveisProcessadosEmMovimentoRoteiroEmpresa(
-										imoveisConvertidosComContaPF,
-										faturamentoGrupo.getId(),
-										anoMesFaturamento);
-
-						getControladorMicromedicao()
-								.inserirDadosImoveisMovimentoRoteiroEmpresa(
-										colecaoImoveisAGerar,
-										anoMesFaturamento, sistemaParametro,
-										idLeituraTipo);
-
-						if (colecaoImoveisAGerar != null) {
-							colecaoImoveisAGerar.clear();
-							colecaoImoveisAGerar = null;
-						}
-					}
-				}
-
-				// PERFORMANCE
-				arquivoCompleto = null;
-			}
-
-			/*
-			 * Colocado por Raphael Rossiter e Sávio Cavalcante em 30/08/2011
-			 * OBJ: Evitar que o arquivo seja regerado com apenas uma parte dos
-			 * imóveis micros do condominio.
-			 */
-			if (regerar
-					&& (colecaoImoveis == null || colecaoImoveis.size() == 0)) {
-
-				throw new ControladorException(
-						"atencao.nenhum_imovel_selecionado_regeracao");
-			}
-
-			// PERFORMANCE
-			if (colecaoImoveis != null) {
-				colecaoImoveis.clear();
-				colecaoImoveis = null;
-			}
-
-			// PERFORMANCE
-			arquivoTexto = null;
-		}
-
-	}
+	public void gerarArquivoTextoParaFaturamento(Rota rota, Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo,
+			Date dataComando, Boolean regerar) throws ControladorException, ErroRepositorioException {
+
+        boolean rotaSoComImoveisInformativos = true;
+
+        UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento.getInstancia(repositorioFaturamento,
+                sessionContext, repositorioCobranca);
+
+        SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+
+        // [FS0005] - Verificar existência do arquivo texto por rota
+        boolean gerarArquivoTexto = gerarArquivoTextoFaturamento.verificarExistenciaArquivoTextoRota(rota.getId(), anoMesFaturamento);
+
+        if (gerarArquivoTexto || regerar) {
+            /*
+             * Variáveis para a paginação da pesquisa de Imovel, acumulação da
+             * quantidade de imóveis por rota e geração do arquivo txt.
+             */
+            // ========================================================================
+            boolean flagTerminou = false;
+            final int quantidadeRegistros = 3000;
+            int numeroIndice = 0;
+            Imovel imovel = null;
+            int tamanhoArquivo = 0;
+
+            int tamanhoArquivoDiv = 0;
+
+            List<Integer> imoveisDivididos = new ArrayList<Integer>();
+
+            StringBuilder arquivoTexto = null;
+            StringBuilder arquivoTextoDiv = null;
+
+            Collection<Imovel> colecaoImoveis = new ArrayList();
+
+            // colecao de Arquivo Texto Roteiro Empresa Divisao
+            Collection<ArquivoTextoRoteiroEmpresaDivisao> colecaoArquivoDivisao = new ArrayList();
+
+            while (!flagTerminou) {
+
+                Object[] dadosImoveis = gerarArquivoTextoFaturamento.pesquisarImovelGerarArquivoTextoFaturamento(rota, numeroIndice, quantidadeRegistros,
+                        sistemaParametro, faturamentoGrupo, null);
+
+                Collection colecaoImovel = (Collection) dadosImoveis[0];
+                int quantidadeImoveis = (Integer) dadosImoveis[1];
+
+                // PERFORMANCE
+                dadosImoveis = null;
+
+                /*
+                 * Caso exista ids de imóveis para a rota atual determina a
+                 * geração do arquivo texto para cada imóvel retornado.
+                 */
+                if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
+
+                    Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
+
+                    // LAÇO PARA DETERMINAR O ARQUIVO TEXTO DE TODOS OS IMOVEIS
+                    // DA ROTA ATUAL
+                    imovel = null;
+                    while (iteratorColecaoImoveis.hasNext()) {
+
+                        imovel = (Imovel) iteratorColecaoImoveis.next();
+                        Conta conta = null;
+
+                        if (arquivoTexto == null) {
+                            arquivoTexto = new StringBuilder();
+                        }
+
+                        if (arquivoTextoDiv == null) {
+                            arquivoTextoDiv = new StringBuilder();
+                        }
+
+                        if (imovel.getIndicadorImovelCondominio().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+
+                            Object[] retornoArquivo = carregarArquivoImpressaoSimultanea(gerarArquivoTextoFaturamento, imovel, anoMesFaturamento, rota,
+                                    faturamentoGrupo, sistemaParametro, dataComando);
+                            int tamanhoArquivoRetorno = 0;
+                            if (retornoArquivo != null && !retornoArquivo.equals("")) {
+                                if (arquivoTexto.length() != 0) {
+                                    arquivoTexto.append(System.getProperty("line.separator"));
+                                }
+                                arquivoTexto.append(retornoArquivo[0]);
+                                tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
+                                tamanhoArquivo = tamanhoArquivo + tamanhoArquivoRetorno;
+
+                                // verifica se existe número limite de imoveis
+                                // para a Rota.
+                                // se existir, divide o arquivo em partes
+                                // definidas pelo número limite de imoveis.
+                                // Sempre observando os Critérios da UC0745 no
+                                // Fluxo 3.2
+                                if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
+
+                                    if (arquivoTextoDiv.length() != 0) {
+                                        arquivoTextoDiv.append(System.getProperty("line.separator"));
+                                    }
+
+                                    if (arquivoTextoDiv != null) {
+                                        arquivoTextoDiv.append(retornoArquivo[0]);
+                                        imoveisDivididos.add(imovel.getId());
+                                        tamanhoArquivoDiv = tamanhoArquivoDiv + tamanhoArquivoRetorno;
+                                    }
+                                }
+                            }
+
+                            // inserir o id do imóvel na coleção
+                            if (tamanhoArquivoRetorno != 0) {
+                                colecaoImoveis.add(imovel);
+
+                            }
+
+                            // ----------------------------------------------------------------------------------
+                        } else {
+
+                            // ----------------------------------------------------------------------------------
+
+                            // Caso o imóvel condomínio MACRO não seja não
+                            // medido
+                            if (imovel.getHidrometroInstalacaoHistorico() != null
+                                    || (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null)) {
+
+                                // Recupera os imóveis micro dos imóveis Macro
+                                Object[] dadosImoveisMicros = gerarArquivoTextoFaturamento.pesquisarImovelGerarArquivoTextoFaturamento(rota, numeroIndice,
+                                        quantidadeRegistros, sistemaParametro, faturamentoGrupo, imovel.getId());
+
+                                Collection colecaoImovelMicro = (Collection) dadosImoveisMicros[0];
+                                // quantidadeImoveis = quantidadeImoveis +
+                                // (Integer)dadosImoveisMicros[1];
+
+                                // PERFORMANCE
+                                dadosImoveisMicros = null;
+
+                                /*
+                                 * Caso exista ids de imóveis para a rota atual
+                                 * determina a geração do arquivo texto para
+                                 * cada imóvel retornado.
+                                 */
+                                if (colecaoImovelMicro != null && !colecaoImovelMicro.isEmpty()) {
+
+                                    /*
+                                     * Colocado por Raphael Rossiter e Sávio
+                                     * Cavalcante em 30/08/2011 OBJ: Evitar que
+                                     * o arquivo seja regerado com apenas uma
+                                     * parte dos imóveis micros do condominio.
+                                     */
+                                    boolean imovelMicroNAOProcessado = true;
+
+                                    if (regerar) {
+
+                                        Integer qtdMovimentoContaPrefaturada = gerarArquivoTextoFaturamento
+                                                .pesquisarMovimentoContaPrefaturadaArquivoTextoFaturamento(imovel.getId(), anoMesFaturamento);
+
+                                        if (qtdMovimentoContaPrefaturada.intValue() > 0) {
+
+                                            imovelMicroNAOProcessado = false;
+                                        }
+                                    }
+
+                                    // Verifica se os imóveis micro tem conta,
+                                    // caso não tenha então o imóvel macro não
+                                    // vai
+                                    // para o condomínio
+
+                                    Iterator iteratorColecaoImoveisMicroConta = colecaoImovelMicro.iterator();
+
+                                    boolean imovelMicroComConta = false;
+
+                                    Imovel imovelMicroConta = null;
+                                    Conta contaMicro = null;
+                                    while (iteratorColecaoImoveisMicroConta.hasNext()) {
+
+                                        imovelMicroConta = (Imovel) iteratorColecaoImoveisMicroConta.next();
+
+                                        contaMicro = gerarArquivoTextoFaturamento.pesquisarContaGerarArquivoTextoFaturamento(imovelMicroConta,
+                                                anoMesFaturamento, faturamentoGrupo.getId());
+
+                                        if (contaMicro != null) {
+                                            imovelMicroComConta = true;
+                                            break;
+                                        }
+                                    }
+
+                                    imovelMicroConta = null;
+                                    contaMicro = null;
+
+                                    if (imovelMicroComConta && imovelMicroNAOProcessado) {
+
+                                        // inserir o id do imóvel na coleção
+                                        // IMOVEIS MACROS dos condomínios
+                                        colecaoImoveis.add(imovel);
+
+                                        // GERAR ARQUIVO TEXTO
+                                        // --------------------------------------------------------------
+                                        if (arquivoTexto != null) {
+                                            Object[] registroArquivoTexto = gerarArquivoTextoFaturamento.gerarArquivoTexto(imovel, conta, anoMesFaturamento,
+                                                    rota, faturamentoGrupo, sistemaParametro, dataComando);
+                                            if (arquivoTexto.length() != 0) {
+                                                arquivoTexto.append(System.getProperty("line.separator"));
+                                            }
+                                            arquivoTexto = arquivoTexto.append(registroArquivoTexto[0]);
+                                            int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
+                                            tamanhoArquivo = tamanhoArquivo + quantidadeRegistroArquivo;
+
+                                            // verifica se existe número limite
+                                            // de imoveis para a Rota.
+                                            // se existir, divide o arquivo em
+                                            // partes definidas pelo número
+                                            // limite de imoveis.
+                                            // Sempre observando os Critérios da
+                                            // UC0745 no Fluxo 3.2
+                                            if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
+
+                                                if (arquivoTextoDiv != null) {
+                                                    if (arquivoTextoDiv.length() != 0) {
+                                                        arquivoTextoDiv.append(System.getProperty("line.separator"));
+                                                    }
+                                                    arquivoTextoDiv = arquivoTextoDiv.append(registroArquivoTexto[0]);
+                                                    int quantidadeRegistroArquivoDiv = (Integer) registroArquivoTexto[1];
+                                                    imoveisDivididos.add(imovel.getId());
+                                                    tamanhoArquivoDiv = tamanhoArquivoDiv + quantidadeRegistroArquivoDiv;
+                                                }
+                                            }
+
+                                        }
+                                        // ----------------------------------------------------------------------------------
+
+                                        Iterator iteratorColecaoImoveisMicro = colecaoImovelMicro.iterator();
+
+                                        Imovel imovelMicro = null;
+                                        while (iteratorColecaoImoveisMicro.hasNext()) {
+
+                                            imovelMicro = (Imovel) iteratorColecaoImoveisMicro.next();
+                                            conta = null;
+
+                                            Object[] retornoArquivo = carregarArquivoImpressaoSimultanea(gerarArquivoTextoFaturamento, imovelMicro,
+                                                    anoMesFaturamento, rota, faturamentoGrupo, sistemaParametro, dataComando);
+                                            int tamanhoArquivoRetorno = 0;
+                                            if (retornoArquivo != null && !retornoArquivo.equals("")) {
+                                                if (arquivoTexto.length() != 0) {
+                                                    arquivoTexto.append(System.getProperty("line.separator"));
+                                                }
+                                                arquivoTexto.append(retornoArquivo[0]);
+                                                tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
+                                                tamanhoArquivo = tamanhoArquivo + tamanhoArquivoRetorno;
+
+                                                // verifica se existe número
+                                                // limite de imoveis para a
+                                                // Rota.
+                                                // se existir, divide o arquivo
+                                                // em partes definidas pelo
+                                                // número limite de imoveis.
+                                                // Sempre observando os
+                                                // Critérios da UC0745 no Fluxo
+                                                // 3.2
+                                                if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
+
+                                                    if (arquivoTextoDiv.length() != 0) {
+                                                        arquivoTextoDiv.append(System.getProperty("line.separator"));
+                                                    }
+                                                    if (arquivoTextoDiv != null) {
+                                                        arquivoTextoDiv.append(retornoArquivo[0]);
+                                                        imoveisDivididos.add(imovel.getId());
+                                                        tamanhoArquivoDiv = tamanhoArquivoDiv + tamanhoArquivoRetorno;
+                                                    }
+                                                }
+                                            }
+
+                                            // inserir o id do imóvel na coleção
+                                            if (tamanhoArquivoRetorno != 0) {
+                                                colecaoImoveis.add(imovelMicro);
+                                            }
+                                        }
+                                        // FIM ColecaoImoveisMicro
+
+                                    }// Fim imóvel micro com conta
+                                }
+
+                                // PERFORMANCE
+                                colecaoImovelMicro = null;
+
+                            }
+
+                        }// FIM do else
+
+                        // Caso exista número limite de imoveis para a Rota e
+                        // se o contador numeroImoveisDiv for maior que o número
+                        // definido
+                        // pelo número limite de imoveis da Rota. Então,
+                        // finaliza o arquivoDividido,
+                        // gera o ArquivoTextoRoteiroEmpresaDivisao e adiciona
+                        // na Coleção colecaoArquivoDivisao.
+                        // Em seguida reinicia as variáveis Ultilizadas.
+                        // Sempre observando os Critérios da UC0745 no Fluxo 3.2
+                        if (rota.getNumeroLimiteImoveis() != null) {
+                            /**
+                             * Alteracao para corrigir a finalizacao de rotas
+                             * divididas - Salvar a qtd de imoveis com conta PF
+                             * nas rotas divididas, e não a quantidade de
+                             * imóveis na rota - Finalizar a rota por parte do
+                             * arquivo e não pelo IMEI do celular
+                             */
+                            if (imoveisDivididos.size() >= rota.getNumeroLimiteImoveis().intValue()) {
+
+                                Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
+                                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido,
+                                        anoMesFaturamento);
+
+                                StringBuilder dadosFinais = new StringBuilder();
+                                dadosFinais.append(dadosRetorno[0]);
+                                int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
+                                tamanhoArquivoFinal = tamanhoArquivoFinal + tamanhoArquivoDiv;
+
+                                StringBuilder arquivoDivCompleto = new StringBuilder();
+                                arquivoDivCompleto.append(tamanhoArquivoFinal);
+                                arquivoDivCompleto.append(System.getProperty("line.separator"));
+                                arquivoDivCompleto.append(arquivoTextoDiv);
+                                arquivoDivCompleto.append(dadosFinais);
+
+                                Integer qtdImoveisDivididos = repositorioFaturamento.obterQtdImoveisRotaDivididaComContaPF(anoMesFaturamento, imoveisDivididos);
+
+                                ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento.inserirArquivoTextoRoteiroEmpresaDivisao(
+                                        anoMesFaturamento, faturamentoGrupo, rota, imovel, qtdImoveisDivididos, arquivoDivCompleto);
+
+                                arquivoDividido.setNumeroSequenciaArquivo(qtdArquivosDividido);
+
+                                colecaoArquivoDivisao.add(arquivoDividido);
+
+                                qtdImoveisDivididos = 0;
+                                imoveisDivididos.clear();
+
+                                // numeroImoveisDiv = 0;
+                                tamanhoArquivoDiv = 0;
+                                arquivoTextoDiv = null;
+                                dadosFinais = null;
+                                tamanhoArquivoFinal = 0;
+                                dadosRetorno = null;
+                                arquivoDivCompleto = null;
+
+                            }
+                        }
+
+                    }// FIM DO LOOP DE IMOVEIS
+
+                }// FIM DO LOOP DE IMOVEIS
+
+                /**
+                 * Incrementa o nº do indice da páginação
+                 */
+                numeroIndice = numeroIndice + quantidadeRegistros;
+
+                /**
+                 * Caso a coleção de imoveis retornados for menor que a
+                 * quantidade de registros seta a flag indicando que a paginação
+                 * terminou.
+                 */
+                if (quantidadeImoveis == 0 || quantidadeImoveis < quantidadeRegistros) {
+
+                    flagTerminou = true;
+                }
+
+                if (colecaoImovel != null) {
+                    colecaoImovel.clear();
+                    colecaoImovel = null;
+                }
+
+            }// FIM DO LOOP DA PAGINAÇÃO
+
+            // Se chegar ao final da coleção de imoveis e o número definido
+            // pelo número limite de imoveis da Rota ainda não tenha sido
+            // alcançado, então:
+            // finaliza o arquivoDividido, gera o
+            // ArquivoTextoRoteiroEmpresaDivisao e adiciona
+            // na Coleção colecaoArquivoDivisao. Em seguida reinicia as
+            // variáveis Ultilizadas.
+            // Sempre observando os Critérios da UC0745 no Fluxo 3.2
+            if (arquivoTextoDiv != null && arquivoTextoDiv.length() > 0) {
+
+                Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
+
+                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento);
+
+                StringBuilder dadosFinais = new StringBuilder();
+                dadosFinais.append(dadosRetorno[0]);
+                int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
+                tamanhoArquivoFinal = tamanhoArquivoFinal + tamanhoArquivoDiv;
+
+                StringBuilder arquivoDivCompleto = new StringBuilder();
+                arquivoDivCompleto.append(tamanhoArquivoFinal);
+                arquivoDivCompleto.append(System.getProperty("line.separator"));
+                arquivoDivCompleto.append(arquivoTextoDiv);
+                arquivoDivCompleto.append(dadosFinais);
+
+                Integer qtdImoveisDivididos = repositorioFaturamento.obterQtdImoveisRotaDivididaComContaPF(anoMesFaturamento, imoveisDivididos);
+
+                ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento.inserirArquivoTextoRoteiroEmpresaDivisao(anoMesFaturamento,
+                        faturamentoGrupo, rota, imovel, qtdImoveisDivididos, arquivoDivCompleto);
+
+                arquivoDividido.setNumeroSequenciaArquivo(qtdArquivosDividido);
+
+                colecaoArquivoDivisao.add(arquivoDividido);
+
+                qtdImoveisDivididos = 0;
+                imoveisDivididos.clear();
+
+                // numeroImoveisDiv = 0;
+                tamanhoArquivoDiv = 0;
+                arquivoTextoDiv = null;
+                dadosFinais = null;
+                tamanhoArquivoFinal = 0;
+                dadosRetorno = null;
+                arquivoDivCompleto = null;
+
+            }
+
+            if (arquivoTexto != null && arquivoTexto.length() > 0) {
+
+                Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
+
+                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento);
+
+                StringBuilder dadosFinais = new StringBuilder();
+                dadosFinais.append(dadosRetorno[0]);
+                int tamanhoArquivoFinal = (Integer) dadosRetorno[1];
+                tamanhoArquivoFinal = tamanhoArquivoFinal + tamanhoArquivo;
+
+                StringBuilder arquivoCompleto = new StringBuilder();
+                arquivoCompleto.append(tamanhoArquivoFinal);
+                arquivoCompleto.append(System.getProperty("line.separator"));
+                arquivoCompleto.append(arquivoTexto);
+                arquivoCompleto.append(dadosFinais);
+
+                // QUEBRA POR ROTA
+                if (colecaoImoveis != null && colecaoImoveis.size() > 0) {
+
+                    /*
+                     * Alteração feita para salvar no arquivo texto somente a
+                     * quantidade de imóveis que possuem conta pré-faturada, e
+                     * não a quantidade de imóveis total da rota.
+                     */
+
+                    Collection imoveisComContaPF = repositorioFaturamento.obterImoveisComContaPF(anoMesFaturamento, rota);
+
+                    Integer qtdImoveiComContaPF = 0;
+
+                    List<Imovel> imoveisConvertidosComContaPF = this.converterImoveis(imoveisComContaPF, sistemaParametro, faturamentoGrupo, rota);
+
+                    if (imoveisComContaPF != null && !imoveisComContaPF.isEmpty()) {
+                        qtdImoveiComContaPF = imoveisConvertidosComContaPF.size();
+                    }
+
+                    /*
+                     * Verificar se todos os imóveis da rota são apenas
+                     * informativos, se forem, gerar o arquivo já finalizado
+                     */
+                    if (qtdImoveiComContaPF > 0) {
+                        rotaSoComImoveisInformativos = false;
+                    }
+
+                    Integer idArquivoTextoRoteiroEmpresa = gerarArquivoTextoFaturamento.inserirArquivoTextoRoteiroEmpresa(anoMesFaturamento, faturamentoGrupo,
+                            rota, imovel, qtdImoveiComContaPF, arquivoCompleto, regerar, rotaSoComImoveisInformativos);
+
+                    dadosFinais = null;
+                    tamanhoArquivoFinal = 0;
+                    dadosRetorno = null;
+
+                    Iterator iteratorcolecaoArquivoDivisao = colecaoArquivoDivisao.iterator();
+
+                    ArquivoTextoRoteiroEmpresaDivisao arquivoTextoRoteiroEmpresaDivisao = null;
+                    ArquivoTextoRoteiroEmpresa arquivoTextoRoteiroEmpresa = new ArquivoTextoRoteiroEmpresa();
+                    arquivoTextoRoteiroEmpresa.setId(idArquivoTextoRoteiroEmpresa);
+
+                    int sequencialArquivo = 0;
+                    while (iteratorcolecaoArquivoDivisao.hasNext()) {
+
+                        // adiciona o número sequencial ao objeto
+                        // ArquivoTextoRoteiroEmpresaDivisao.
+                        arquivoTextoRoteiroEmpresaDivisao = (ArquivoTextoRoteiroEmpresaDivisao) iteratorcolecaoArquivoDivisao.next();
+
+                        arquivoTextoRoteiroEmpresaDivisao.setArquivoTextoRoteiroEmpresa(arquivoTextoRoteiroEmpresa);
+
+                    }
+
+                    // INSERINDO NA BASE OS OBJETOS
+                    // ArquivoTextoRoteiroEmpresaDivisao.
+                    this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoArquivoDivisao);
+
+                    /**
+                     * [SB0004]-Recuperar Dados para inclusao na Tabela
+                     */
+                    if (colecaoArquivoDivisao != null) {
+                        colecaoArquivoDivisao.clear();
+                        colecaoArquivoDivisao = null;
+                    }
+
+                    if (!regerar) {
+                        getControladorMicromedicao().removerMovimentoRoteiroEmpresa(anoMesFaturamento, faturamentoGrupo.getId(), rota);
+
+                        Integer idLeituraTipo = rota.getLeituraTipo().getId();
+
+                        /**
+                         * Alteração feita para corrigir o problema de incluir
+                         * na tabela Movimento Roteiro Empresa os imóveis
+                         * informativos, e não somente os imóveis que geraram
+                         * conta PF
+                         */
+                        Collection<Imovel> colecaoImoveisAGerar = getControladorMicromedicao().verificarImoveisProcessadosEmMovimentoRoteiroEmpresa(
+                                imoveisConvertidosComContaPF, faturamentoGrupo.getId(), anoMesFaturamento);
+
+                        getControladorMicromedicao().inserirDadosImoveisMovimentoRoteiroEmpresa(colecaoImoveisAGerar, anoMesFaturamento, sistemaParametro,
+                                idLeituraTipo);
+
+                        if (colecaoImoveisAGerar != null) {
+                            colecaoImoveisAGerar.clear();
+                            colecaoImoveisAGerar = null;
+                        }
+                    }
+                }
+
+                // PERFORMANCE
+                arquivoCompleto = null;
+            }
+
+            /*
+             * Colocado por Raphael Rossiter e Sávio Cavalcante em 30/08/2011
+             * OBJ: Evitar que o arquivo seja regerado com apenas uma parte dos
+             * imóveis micros do condominio.
+             */
+            if (regerar && (colecaoImoveis == null || colecaoImoveis.size() == 0)) {
+
+                throw new ControladorException("atencao.nenhum_imovel_selecionado_regeracao");
+            }
+
+            // PERFORMANCE
+            if (colecaoImoveis != null) {
+                colecaoImoveis.clear();
+                colecaoImoveis = null;
+            }
+
+            // PERFORMANCE
+            arquivoTexto = null;
+        }
+
+    }
 
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
@@ -73029,39 +72881,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					imovel.setId(new Integer(id));
 					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoRetirada(null);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setObservacaoInforma(situacaoEspecialFaturamentoHelper
-									.getObservacaoInforma());
-					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar
-							.getInstance().getTime());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaNaoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoMedido());
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoNaoMedido());
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setObservacaoInforma(situacaoEspecialFaturamentoHelper.getObservacaoInforma());
+					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar.getInstance().getTime());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaMedido());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaNaoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoNaoMedido());
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico.setDataInclusao(new Date());
 
 					collectionFaturmentoSituaoHistorico
 							.add(faturamentoSituacaoHistorico);

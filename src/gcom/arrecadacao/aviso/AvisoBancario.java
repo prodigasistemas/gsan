@@ -16,7 +16,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class AvisoBancario extends ObjetoTransacao {
 	
@@ -28,95 +27,61 @@ public class AvisoBancario extends ObjetoTransacao {
 	public static final int ATUALIZAR_AVISO_BANCARIO = 1714; //Operacao.OPERACAO_ATUALIZAR_AVISO_BANCARIO
 	public static final int AVISO_BANCARIO_REMOVER = 501; //Operacao.OPERACAO_REMOVER_AVISO_BANCARIO
 	
-	/** identifier field */
 	private Integer id;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private Date dataLancamento;
 
-	/** persistent field */
 	private BigDecimal valorContabilizado;
-
-	/** persistent field */
 	private int anoMesReferenciaArrecadacao;
-
-	/** persistent field */
 	private Short indicadorCreditoDebito;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private int numeroDocumento;
 
-	/** nullable persistent field */
-	//private BigDecimal valorDevolucao;
-
-	/** nullable persistent field */
-	//private BigDecimal valorArrecadacao;
-
-	/** nullable persistent field */
 	private Short numeroSequencial;
-
-	/** nullable persistent field */
 	private BigDecimal valorRealizado;
-
-	/** nullable persistent field */
 	private Date dataPrevista;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private Date dataRealizada;
 
-	/** nullable persistent field */
-	//private BigDecimal valorPrevisto;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private ContaBancaria contaBancaria;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroAvisoBancario.ARRECADADOR, funcionalidade={AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private Arrecadador arrecadador;
 
-	/** persistent field */
 	private ArrecadadorMovimento arrecadadorMovimento;
-	
-	/** nullable persistent field */
 	private BigDecimal valorArrecadacaoCalculado;
-
-	/** nullable persistent field */
 	private BigDecimal valorDevolucaoCalculado;
 	
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private BigDecimal valorArrecadacaoInformado;
 	
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private BigDecimal valorDevolucaoInformado;
 	
-	/** persistent field */
 	@ControleAlteracao(value=FiltroAvisoBancario.ARRECADACAO_FORMA, funcionalidade={ATUALIZAR_AVISO_BANCARIO, AVISO_BANCARIO_INSERIR, AVISO_BANCARIO_REMOVER})
 	private ArrecadacaoForma arrecadacaoForma;
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static Short INDICADOR_CREDITO = new Short("1");
 	public final static String CREDITO = "CRÉDITO";
 	public final static String SIGLA_CREDITO = "C";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static Short INDICADOR_DEBITO = new Short("2");
 	public final static String DEBITO = "DÉBITO";
 	public final static String SIGLA_DEBITO = "D";
 	
 
-	/** full constructor */
+	public AvisoBancario() {
+	}
+	
+	public AvisoBancario(Integer id) {
+		this.id = id;
+	}
+	
 	public AvisoBancario(Date dataLancamento, BigDecimal valorContabilizado,
 			int anoMesReferenciaArrecadacao, Short indicadorCreditoDebito,
 			int numeroDocumento, BigDecimal valorDevolucao,
@@ -130,24 +95,16 @@ public class AvisoBancario extends ObjetoTransacao {
 		this.anoMesReferenciaArrecadacao = anoMesReferenciaArrecadacao;
 		this.indicadorCreditoDebito = indicadorCreditoDebito;
 		this.numeroDocumento = numeroDocumento;
-		/*this.valorDevolucao = valorDevolucao;
-		this.valorArrecadacao = valorArrecadacao;*/
 		this.numeroSequencial = numeroSequencial;
 		this.valorRealizado = valorRealizado;
 		this.dataPrevista = dataPrevista;
 		this.dataRealizada = dataRealizada;
-		//this.valorPrevisto = valorPrevisto;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.contaBancaria = contaBancaria;
 		this.arrecadador = arrecadador;
 		this.arrecadadorMovimento = arrecadadorMovimento;
 	}
 
-	/** default constructor */
-	public AvisoBancario() {
-	}
-
-	/** minimal constructor */
 	public AvisoBancario(Date dataLancamento, BigDecimal valorContabilizado,
 			int anoMesReferenciaArrecadacao, Short indicadorCreditoDebito,
 			int numeroDocumento, ContaBancaria contaBancaria,
@@ -210,22 +167,6 @@ public class AvisoBancario extends ObjetoTransacao {
 		this.numeroDocumento = numeroDocumento;
 	}
 
-	/*public BigDecimal getValorDevolucao() {
-		return this.valorDevolucao;
-	}
-
-	public void setValorDevolucao(BigDecimal valorDevolucao) {
-		this.valorDevolucao = valorDevolucao;
-	}
-
-	public BigDecimal getValorArrecadacao() {
-		return this.valorArrecadacao;
-	}
-
-	public void setValorArrecadacao(BigDecimal valorArrecadacao) {
-		this.valorArrecadacao = valorArrecadacao;
-	}*/
-
 	public Short getNumeroSequencial() {
 		return this.numeroSequencial;
 	}
@@ -257,14 +198,6 @@ public class AvisoBancario extends ObjetoTransacao {
 	public void setDataRealizada(Date dataRealizada) {
 		this.dataRealizada = dataRealizada;
 	}
-
-	/*public BigDecimal getValorPrevisto() {
-		return this.valorPrevisto;
-	}
-
-	public void setValorPrevisto(BigDecimal valorPrevisto) {
-		this.valorPrevisto = valorPrevisto;
-	}*/
 
 	public Date getUltimaAlteracao() {
 		return this.ultimaAlteracao;
@@ -316,58 +249,34 @@ public class AvisoBancario extends ObjetoTransacao {
 		return ids;
 	}
 
-	/**
-	 * @return Retorna o campo valorArrecadacaoCalculado.
-	 */
 	public BigDecimal getValorArrecadacaoCalculado() {
 		return valorArrecadacaoCalculado;
 	}
 
-	/**
-	 * @param valorArrecadacaoCalculado O valorArrecadacaoCalculado a ser setado.
-	 */
 	public void setValorArrecadacaoCalculado(BigDecimal valorArrecadacaoCalculado) {
 		this.valorArrecadacaoCalculado = valorArrecadacaoCalculado;
 	}
 
-	/**
-	 * @return Retorna o campo valorArrecadacaoInformado.
-	 */
 	public BigDecimal getValorArrecadacaoInformado() {
 		return valorArrecadacaoInformado;
 	}
 
-	/**
-	 * @param valorArrecadacaoInformado O valorArrecadacaoInformado a ser setado.
-	 */
 	public void setValorArrecadacaoInformado(BigDecimal valorArrecadacaoInformado) {
 		this.valorArrecadacaoInformado = valorArrecadacaoInformado;
 	}
 
-	/**
-	 * @return Retorna o campo valorDevolucaoCalculado.
-	 */
 	public BigDecimal getValorDevolucaoCalculado() {
 		return valorDevolucaoCalculado;
 	}
 
-	/**
-	 * @param valorDevolucaoCalculado O valorDevolucaoCalculado a ser setado.
-	 */
 	public void setValorDevolucaoCalculado(BigDecimal valorDevolucaoCalculado) {
 		this.valorDevolucaoCalculado = valorDevolucaoCalculado;
 	}
 
-	/**
-	 * @return Retorna o campo valorDevolucaoInformado.
-	 */
 	public BigDecimal getValorDevolucaoInformado() {
 		return valorDevolucaoInformado;
 	}
 
-	/**
-	 * @param valorDevolucaoInformado O valorDevolucaoInformado a ser setado.
-	 */
 	public void setValorDevolucaoInformado(BigDecimal valorDevolucaoInformado) {
 		this.valorDevolucaoInformado = valorDevolucaoInformado;
 	}

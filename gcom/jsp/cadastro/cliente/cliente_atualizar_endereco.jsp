@@ -25,7 +25,7 @@ function validateClienteActionForm(form) {
 	if (bCancel)
 		return true;
 	else
-		return validaEndereco();
+		return true;
 }
 
 function validaEndereco() {

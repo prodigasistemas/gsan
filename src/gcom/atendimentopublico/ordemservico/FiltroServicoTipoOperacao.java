@@ -36,6 +36,11 @@ public class FiltroServicoTipoOperacao extends Filtro implements Serializable {
      */
     public final static String ID_SERVICO_TIPO = "comp_id.idServicoTipo";
     
+    /**
+     * Id da Operacao
+     */
+    public final static String ID_OPERACAO = "comp_id.idOperacao";
+    
    
    
 }

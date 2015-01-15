@@ -1617,7 +1617,6 @@ public class Fachada {
 
 	public void atualizarImovel(Imovel imovel) {
 		try {
-
 			this.getControladorUtil().atualizar(imovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
@@ -1663,6 +1662,7 @@ public class Fachada {
 
 	public void inserirImovelSubCategoria(ImovelSubcategoria imovelSubcategoria) {
 		try {
+			this.validarImovelEmCampo(imovelSubcategoria.getImovel().getId());
 			this.getControladorUtil().inserir(imovelSubcategoria);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
@@ -20919,9 +20919,9 @@ public class Fachada {
 	 * @param httpServletRequest
 	 * @param usuario
 	 */
-	public boolean verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(Usuario usuario) {
+	public boolean verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(Usuario usuario) {
 		try {
-			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarDebitosIndicadoNaContaOuTodos(usuario);
+			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarDebitosAtualDoImovelOuTodos(usuario);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -24300,10 +24300,10 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoConta(Integer idGrupoFaturamento, Date dataVencimentoInformada, Integer anoMes, Integer anoMesFim,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Usuario usuarioLogado, boolean somenteDebitoAutomatico) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] {
-				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado });
+				idGrupoFaturamento, dataVencimentoInformada, anoMes, anoMesFim, dataVencimentoContaInicio, dataVencimentoContaFim, usuarioLogado, somenteDebitoAutomatico });
 	}
 
 	/**
@@ -44003,9 +44003,9 @@ public class Fachada {
 	}
 
 	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem,
-			boolean indicadorIncluirCredito) throws ControladorException {
+			boolean indicadorIncluirCredito, Integer idSituacaoPagamento) throws ControladorException {
 		try {
-			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito);
+			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito, idSituacaoPagamento);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -44122,4 +44122,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+<<<<<<< HEAD
+=======
+	
+	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) {
+		try {
+			return this.getControladorFaturamento().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(idGrupo, referencia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+>>>>>>> prodigasistemas-master
 }

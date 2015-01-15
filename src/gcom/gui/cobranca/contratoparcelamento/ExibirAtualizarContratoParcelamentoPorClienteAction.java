@@ -2132,7 +2132,7 @@ public class ExibirAtualizarContratoParcelamentoPorClienteAction extends GcomAct
         
         // objetos utilizados na terceira etapa
     	boolean permissaoEspecial = Fachada.getInstancia().verificarPermissaoEspecial(
-				PermissaoEspecial.CONSULTAR_DEBITOS_INDICADO_NA_CONTA_OU_TODOS,
+				PermissaoEspecial.CONSULTAR_DEBITOS_ATUAL_DO_IMOVEL_OU_TODOS,
 				usuarioLogado);
     	sessao.setAttribute("permissaoEspecial", permissaoEspecial);
         

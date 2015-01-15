@@ -13608,11 +13608,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "end, " 
 					+ // 7
 					
-					"faturamentoSituacaoHistorico.id "
+					"faturamentoSituacaoHistorico.id, " // 8
 					
-					+ // 8
+					+"faturamentoSituacaoHistorico.dataInclusao " // 9
+					
+					
 
-					"from FaturamentoSituacaoHistorico faturamentoSituacaoHistorico "
+					+"from FaturamentoSituacaoHistorico faturamentoSituacaoHistorico "
 
 					+ "left join faturamentoSituacaoHistorico.faturamentoSituacaoTipo faturamentoSituacaoTipo "
 
@@ -19348,156 +19350,51 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 	
-	
-
-	/**
-	 * 
-	 * Obtém o quantidade de economias da subCategoria por imovel
-	 * 
-	 * 
-	 * 
-	 * @autor Rômulo Aurélio
-	 * 
-	 * @param idImovel
-	 * 
-	 * O identificador do imóvel
-	 * 
-	 * @return Coleção de imovelSubCategorias
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 * @date 08/02/2007
-	 * 
-	 */
-
-	// public Collection pesquisarImoveisEconomias(Integer idImovel)
-	// throws ErroRepositorioException {
-	//
-	// Collection retorno = null;
-	// Session session = HibernateUtil.getSession();
-	//
-	// try {
-	// String consulta = "select imovSub"
-	// + "from ImovelSubcategoria imovSub "
-	// + "left join fetch imovSub.comp_id.imovel imovel "
-	// + "left join fetch imovSub.comp_id.subcategoria subcategoria "
-	// + "where imovel.id = :idImovel";
-	//
-	// retorno = session.createQuery(consulta).setInteger("idImovel",
-	// idImovel).list();
-	//
-	// } catch (HibernateException e) {
-	// throw new ErroRepositorioException(e, "Erro no Hibernate");
-	// } finally {
-	// HibernateUtil.closeSession(session);
-	// }
-	//
-	// return retorno;
-	//
-	// }
-	/**
-	 * 
-	 * @date 21/02/2007
-	 * 
-	 * @author Vivianne Sousa, Ivan Sérgio
-	 * 
-	 * @alteracao: Adicionado LigacaoEsgoto; LigacaoEsgotoSituacao, LigacaoAguaSituacao,
-	 * 			   hidrometroLocalInstalacao, hidrometroProtecao
-	 * 
-	 * @throws ErroRepositorioException
-	 * 
-	 */
-
-	public Imovel pesquisarImovel(Integer idImovel)
-
-	throws ErroRepositorioException {
-
-		// cria a coleção de retorno
+	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException {
 
 		Imovel imovel = null;
-
-		// Query
-
-		String consulta = "";
-
-		// obtém a sessão
+		StringBuilder consulta = new StringBuilder();
 
 		Session session = HibernateUtil.getSession();
 
 		try {
-
-			 consulta = "SELECT imov " + " FROM Imovel imov "
-
-			 + " LEFT JOIN FETCH imov.imovelPerfil imovelPerfil "
-
-			 + " LEFT JOIN FETCH imov.localidade lo"
-			 + " LEFT JOIN FETCH lo.gerenciaRegional geRe"
-
-			 + " LEFT JOIN FETCH imov.setorComercial sc"
-
-			 + " LEFT JOIN FETCH imov.quadra qu"
-			 + " LEFT JOIN FETCH imov.quadraFace qdfa"
-
-			 + " LEFT JOIN FETCH qu.rota rota"
-
-			 + " LEFT JOIN FETCH imov.logradouroBairro logBairro"
-
-			 + " LEFT JOIN FETCH logBairro.bairro bairro"
-
-			 + " LEFT JOIN FETCH bairro.municipio"
-			 + " LEFT JOIN FETCH imov.ligacaoEsgoto lesg"
-			 + " LEFT JOIN FETCH imov.ligacaoEsgotoSituacao lest"
-
-			 + " LEFT JOIN FETCH imov.ligacaoAgua lagu"
-			 + " LEFT JOIN FETCH imov.ligacaoAguaSituacao last"
-			 
-			 + " LEFT JOIN FETCH imov.fonteAbastecimento ftab"
-
-			 + " LEFT JOIN FETCH lagu.hidrometroInstalacaoHistorico hih"
-			 + " LEFT JOIN FETCH hih.hidrometroLocalInstalacao hil"
-			 + " LEFT JOIN FETCH hih.hidrometroProtecao hip"
-			 + " LEFT JOIN FETCH hih.hidrometro hid" 
-			 + " LEFT JOIN FETCH hid.hidrometroMarca him"
-			 + " LEFT JOIN FETCH hid.hidrometroCapacidade hic"
-			 
-			 + " LEFT JOIN FETCH imov.cadastroOcorrencia co"
-			 
-			 + " LEFT JOIN FETCH imov.cobrancaSituacaoTipo cbst"
-			 
-			 + " INNER JOIN FETCH imov.imovelContaEnvio icte "
-			 
-			 
-			 
-			 + " LEFT JOIN FETCH hih.hidrometro" + "" + " WHERE "
-
-			 + " imov.id = :idImovel";
-
-			 imovel = (Imovel) session.createQuery(consulta).setInteger(
-
-			 "idImovel", idImovel).setMaxResults(1).uniqueResult();
-
-			// erro no hibernate
+			consulta.append("SELECT imov FROM Imovel imov ")
+		      .append(" LEFT JOIN FETCH imov.imovelPerfil imovelPerfil ")
+		      .append(" LEFT JOIN FETCH imov.localidade lo")
+		      .append(" LEFT JOIN FETCH lo.gerenciaRegional geRe")
+		      .append(" LEFT JOIN FETCH imov.setorComercial sc")
+		      .append(" LEFT JOIN FETCH imov.quadra qu")
+		      .append(" LEFT JOIN FETCH imov.quadraFace qdfa")
+		      .append(" LEFT JOIN FETCH qu.rota rota")
+		      .append(" LEFT JOIN FETCH imov.logradouroBairro logBairro")
+		      .append(" LEFT JOIN FETCH logBairro.bairro bairro")
+		      .append(" LEFT JOIN FETCH bairro.municipio")
+		      .append(" LEFT JOIN FETCH imov.ligacaoEsgoto lesg")
+		      .append(" LEFT JOIN FETCH imov.ligacaoEsgotoSituacao lest")
+		      .append(" LEFT JOIN FETCH imov.ligacaoAgua lagu")
+		      .append(" LEFT JOIN FETCH imov.ligacaoAguaSituacao last")
+		      .append(" LEFT JOIN FETCH imov.fonteAbastecimento ftab")
+		      .append(" LEFT JOIN FETCH lagu.hidrometroInstalacaoHistorico hih")
+		      .append(" LEFT JOIN FETCH hih.hidrometroLocalInstalacao hil")
+		      .append(" LEFT JOIN FETCH hih.hidrometroProtecao hip")
+		      .append(" LEFT JOIN FETCH hih.hidrometro hid")
+		      .append(" LEFT JOIN FETCH hid.hidrometroMarca him")
+		      .append(" LEFT JOIN FETCH hid.hidrometroCapacidade hic")
+		      .append(" LEFT JOIN FETCH imov.cadastroOcorrencia co")
+		      .append(" LEFT JOIN FETCH imov.cobrancaSituacaoTipo cbst")
+		      .append(" LEFT JOIN FETCH imov.imovelSubcategorias subcategorias ")
+		      .append(" INNER JOIN FETCH imov.imovelContaEnvio icte ")
+		      .append(" LEFT JOIN FETCH hih.hidrometro")
+		      .append(" WHERE  imov.id = :idImovel");
+			
+			imovel = (Imovel) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
-		// retorna o imóvel
-
 		return imovel;
-
 	}
 
 	/**

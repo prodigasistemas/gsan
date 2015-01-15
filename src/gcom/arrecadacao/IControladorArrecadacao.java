@@ -4354,7 +4354,7 @@ public interface IControladorArrecadacao {
 		public Collection<Pagamento> obterPagamentos(Collection<Integer> pagamentos) throws ControladorException;
 		
 		public void recuperarCredito(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
-				CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
+				CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito, Integer idSituacaoPagamento) 
 			throws ControladorException;
 		
 		public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException;

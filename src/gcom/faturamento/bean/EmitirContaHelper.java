@@ -986,6 +986,88 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 	}
 	
+	
+	/**
+	 * Autor: Matheus Cruz
+	 * Descrição: Adicao dos valores de rateio de agua e esgoto na 2ª via da conta historico
+	 * Data: 26/11/2014*/
+	public EmitirContaHelper(
+			Integer idContaHistorico, 
+			String nomeCliente,
+			Date dataVencimentoConta,
+			int amReferencia,
+			short digitoVerificadorConta,
+			Integer codigoSetorComercialConta,
+			Integer idQuadraConta, 
+			Short loteConta, 
+			Short subLoteConta,
+			Integer consumoAgua, 
+			Integer consumoEsgoto, 
+			BigDecimal valorAgua,
+			BigDecimal valorEsgoto, 
+			BigDecimal debitos,
+			BigDecimal valorCreditos, 
+			BigDecimal valorImpostos,
+			Date dataValidadeConta, 
+			BigDecimal valorRateioAgua,
+			BigDecimal valorRateioEsgoto,
+			Integer idImovel, 
+			Integer idLocalidade,
+			Integer idGerenciaRegional, 
+			String nomeGerenciaRegional, 
+			Integer idLigacaoAguaSituacao, 
+			Integer idLigacaoEsgotoSituacao,
+			Integer idImovelPerfil, 
+			Integer idSetorComercial,
+			Integer idFaturamentoGrupo, 
+			Integer idEmpresa,
+			String descricaoLocalidade, 
+			String descricaoLigacaoAguaSituacao,
+			String descricaoLigacaoEsgotoSituacao,
+			Integer idImovelContaEnvio,
+			BigDecimal percentualEsgotoConta,
+			String nomeImovel,
+			Integer codDebitoAutomatico,
+			Integer anoMesFaturamentoGrupo){
+		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
+		this.idConta = idContaHistorico;
+		this.nomeCliente = nomeCliente;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.valorRateioAgua = valorRateioAgua;
+		this.valorRateioEsgoto = valorRateioEsgoto;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.idImovelContaEnvio = idImovelContaEnvio;
+		this.nomeImovel = nomeImovel;
+		this.codigoDebitoAutomatico = codDebitoAutomatico;
+	}
+	
 	public Integer getIdOrigem() {
 		return idOrigem;
 	}

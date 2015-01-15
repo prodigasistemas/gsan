@@ -70,7 +70,7 @@ public class PermissaoEspecial extends ObjetoTransacao {
 
 	public static final int RETIRAR_TAXA_COBRANCA_DO_EXTRATO_DE_DEBITOS = 44;
 
-	public static final int CONSULTAR_DEBITOS_INDICADO_NA_CONTA_OU_TODOS = 45;
+	public static final int CONSULTAR_DEBITOS_ATUAL_DO_IMOVEL_OU_TODOS = 45;
 
 	public static final int INSERIR_DEBITO_A_COBRAR_IMOVEL_SITUACAO = 46;
 
