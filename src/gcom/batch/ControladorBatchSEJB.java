@@ -88,6 +88,7 @@ import gcom.batch.faturamento.TarefaBatchGerarArquivoTextoDeclaracaoQuitacaoAnua
 import gcom.batch.faturamento.TarefaBatchGerarBonusTarifaSocial;
 import gcom.batch.faturamento.TarefaBatchGerarCreditoSituacaoEspecialFaturamento;
 import gcom.batch.faturamento.TarefaBatchGerarDadosDeclaracaoQuitacaoAnualDebitos;
+import gcom.batch.faturamento.TarefaBatchGerarDadosReceitasAFaturarResumo;
 import gcom.batch.faturamento.TarefaBatchGerarDebitosACobrarAcrescimosImpontualidade;
 import gcom.batch.faturamento.TarefaBatchGerarDebitosACobrarDoacao;
 import gcom.batch.faturamento.TarefaBatchGerarFaturaClienteResponsavel;
@@ -194,6 +195,7 @@ import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividadeCronograma;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FiltroFaturamentoAtividadeCronograma;
+import gcom.faturamento.FiltroFaturamentoGrupo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -267,6 +269,8 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+
+import org.apache.commons.beanutils.BeanComparator;
 
 /**
  * Controlador que possui os metodos de negocio de toda a parte que da suporte
@@ -3929,6 +3933,30 @@ public class ControladorBatchSEJB implements SessionBean {
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						
+						break;
+					}
+					
+					case Funcionalidade.GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO: {
+						TarefaBatchGerarDadosReceitasAFaturarResumo gerarDadosReceitasAFaturarResumo = new TarefaBatchGerarDadosReceitasAFaturarResumo(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
+						filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);
+						filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(
+								FiltroFaturamentoGrupo.INDICADOR_USO, ConstantesSistema.SIM));
+						Collection<FaturamentoGrupo> colecaoFaturamentoGrupos = getControladorUtil().pesquisar(
+								filtroFaturamentoGrupo, FaturamentoGrupo.class.getName());
+
+						gerarDadosReceitasAFaturarResumo.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoFaturamentoGrupos);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosReceitasAFaturarResumo));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
 					}
 
 					default:

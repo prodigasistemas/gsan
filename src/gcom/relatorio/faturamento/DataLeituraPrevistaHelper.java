@@ -47,4 +47,13 @@ public class DataLeituraPrevistaHelper {
 		}
 		return lista;		
 	}
+
+	public static DataLeituraPrevistaHelper getListaDatasLeituraPrevistaHelperPorGrupo(Collection colecao) {
+		DataLeituraPrevistaHelper helper = new DataLeituraPrevistaHelper();
+		if (colecao != null && !colecao.isEmpty()) {
+			Object[] objeto = (Object[]) colecao.iterator().next();
+			helper = new DataLeituraPrevistaHelper((Integer) objeto[0], (Date) objeto[1]);
+		}
+		return helper;
+	}
 }

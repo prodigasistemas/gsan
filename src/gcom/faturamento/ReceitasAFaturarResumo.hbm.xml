@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="gcom.faturamento.ReceitasAFaturarResumo"
+		table="faturamento.receitas_a_faturar_resumo">
+
+		<id name="id" type="java.lang.Integer" column="rafr_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_receitas_a_faturar_resumo</param>
+			</generator>
+		</id>
+		
+		<property name="anoMesReferencia" type="java.lang.Integer" column="rafr_amreferencia" not-null="true" length="6" />
+		
+		<property name="idGrupo" type="java.lang.Integer" column="ftgr_id" not-null="true" length="5" />
+		
+		<property name="dataLeituraAnterior" type="java.sql.Date" column="rafr_dtleituraanterior" not-null="true" length="10"/>
+		
+		<property name="dataLeituraAtual" type="java.sql.Date" column="rafr_dtleituraatual" not-null="true" length="10"/>
+		
+		<property name="diferencaDias" type="java.lang.Integer" column="rafr_diferencadias" not-null="true" length="8" />
+		
+		<property name="diasNaoFaturados" type="java.lang.Integer" column="rafr_diasnaofaturados" not-null="true" length="8" />
+		
+		<property name="valorAgua" type="java.math.BigDecimal" column="rafr_vlagua" not-null="true" length="13"/>
+		
+		<property name="valorAguaDiario" type="java.math.BigDecimal" column="rafr_vlaguadiario" not-null="true" length="13"/>
+		
+		<property name="valorAguaAFaturar" type="java.math.BigDecimal" column="rafr_vlaguaafaturar" not-null="true" length="13"/>
+		
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="rafr_vlesgoto" not-null="true" length="13"/>
+		
+		<property name="valorEsgotoDiario" type="java.math.BigDecimal" column="rafr_vlesgotodiario" not-null="true" length="13"/>
+		
+		<property name="valorEsgotoAFaturar" type="java.math.BigDecimal" column="rafr_vlesgotoafaturar" not-null="true" length="13"/>
+			
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rafr_tmultimaalteracao" length="15" />
+
+	</class>
+</hibernate-mapping>

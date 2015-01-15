@@ -343,8 +343,8 @@ import gcom.cobranca.CobrancaCriterio;
 import gcom.cobranca.CobrancaCriterioLinha;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
-import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.CobrancaDocumentoFisc;
+import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.CobrancaDocumentoImpressao;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.CobrancaDocumentoItemHistorico;
@@ -468,6 +468,7 @@ import gcom.faturamento.MovimentoContaPrefaturadaCategoria;
 import gcom.faturamento.Prescricao;
 import gcom.faturamento.QualidadeAgua;
 import gcom.faturamento.QualidadeAguaPadrao;
+import gcom.faturamento.ReceitasAFaturarResumo;
 import gcom.faturamento.ResumoFaturamentoSimulacao;
 import gcom.faturamento.ResumoFaturamentoSimulacaoCredito;
 import gcom.faturamento.ResumoFaturamentoSimulacaoDebito;
@@ -1241,6 +1242,7 @@ public class HibernateUtil {
 					.addClass(HistogramaAguaEconomiaSemQuadra.class)
 					.addClass(HistogramaAguaLigacaoSemQuadra.class)
 					.addClass(HistogramaEsgotoLigacaoSemQuadra.class)
+					.addClass(ReceitasAFaturarResumo.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

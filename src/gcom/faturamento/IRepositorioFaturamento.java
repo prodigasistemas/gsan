@@ -3006,7 +3006,7 @@ public interface IRepositorioFaturamento {
 	
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
 	
-	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer anoMesReferencia) throws ErroRepositorioException;
+	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
 	
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
 

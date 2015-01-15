@@ -57,6 +57,10 @@ public class FiltrarTipoServicoActionForm extends ValidatorActionForm {
     private String perfilServico;
     
     private String descricaoPerfilServico;
+    
+    private String idOperacao;
+    
+    private String descricaoOperacao;
 
     private String idTipoServicoReferencia;
     
@@ -754,5 +758,20 @@ public class FiltrarTipoServicoActionForm extends ValidatorActionForm {
 			String indicadorEncAutomaticoRAQndEncOS) {
 		this.indicadorEncAutomaticoRAQndEncOS = indicadorEncAutomaticoRAQndEncOS;
 	}
+	public String getIdOperacao() {
+		return idOperacao;
+	}
+	public void setIdOperacao(String idOperacao) {
+		this.idOperacao = idOperacao;
+	}
+	public String getDescricaoOperacao() {
+		return descricaoOperacao;
+	}
+	public void setDescricaoOperacao(String descricaoOperacao) {
+		this.descricaoOperacao = descricaoOperacao;
+	}
+	
+	
+	
 	
 }

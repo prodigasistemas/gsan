@@ -54,7 +54,7 @@
 			form.idTipoServicoReferencia.value = codigoRegistro;
 			form.descricaoTipoServicoReferencia.value = descricaoRegistro; 
 	 	  	form.descricaoTipoServicoReferencia.style.color = "#000000";	 			
-		}
+		}[]
   	}	
   	
   	function recuperarDadosQuatroParametros(codigoRegistro, descricaoRegistro, codigoAuxiliar, tipoConsulta) {
@@ -99,7 +99,7 @@
 	function popupPerfilServico() {
 		chamarPopup('exibirPesquisarTipoPerfilServicoAction.do', 'perfilServico', null, null, 550, 760, '',document.forms[0].perfilServico);
 	}
-	
+
 	function popupServicoTipoReferencia() {
 		chamarPopup('exibirPesquisarTipoServicoReferenciaAction.do?menu=sim', 'referencia', null, null, 550, 760, '',document.forms[0].idTipoServicoReferencia);
 	}
@@ -520,6 +520,7 @@
 					<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
 						border="0" title="Apagar" /></a></td>
 				</tr>
+				
 				<!-- Tipo do Serviço Referência -->
 				<tr>
 					<td><strong>Tipo de Servi&ccedil;o de Refer&ecirc;ncia:</strong></td>

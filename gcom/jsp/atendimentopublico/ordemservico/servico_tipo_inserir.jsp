@@ -55,6 +55,10 @@
 			form.descricaoTipoServicoReferencia.value = descricaoRegistro; 
       		form.descricaoTipoServicoReferencia	.style.color = "#000000";				
 			controlaTipoServicoReferenciaOnKeyUp();
+		} else if (tipoConsulta == 'operacao') {
+			form.idOperacao.value = codigoRegistro;
+			form.descricaoOperacao.value = descricaoRegistro; 
+	 	  	form.descricaoOperacao.style.color = "#000000";
 		}
   	}	
   	
@@ -84,6 +88,9 @@
 			form.descricaoTipoServicoReferencia.value = ""; 
 			form.idTipoServicoReferencia.disabled = false;
 			form.lupaServicoTipoReferencia.disabled = false;
+		} else if (tipo == 'operacao') {
+			form.idOperacao.value = "";
+			form.descricaoOperacao.value = ""; 
 		}
 	}  
 	
@@ -106,6 +113,10 @@
 	
 	function popupPerfilServico() {
 		chamarPopup('exibirPesquisarTipoPerfilServicoAction.do?limparCampos=ok', 'perfilServico', null, null, 550, 760, '',document.forms[0].idPerfilServico);
+	}
+
+	function popupOperacao() {
+		chamarPopup('exibirPesquisarOperacaoAction.do', 'operacao', null, null, 550, 760, '',document.forms[0].idOperacao);
 	}
 	
 	function popupServicoTipoReferencia() {
@@ -854,7 +865,40 @@
 						src="imagens/limparcampo.gif" width="23" height="21" border="0"
 						title="Apagar"></a> </span></td>
 				</tr>
-
+				
+				
+				<!-- Operacao -->
+				
+				<tr>
+					<td><strong>Opera&ccedil;&atilde;o:<font color="#FF0000">*</font></strong>
+					</td>
+					<td colspan="3"><span class="style2"> 
+					
+					<html:text
+						property="idOperacao" size="4" maxlength="4"
+						onkeyup="validaEnterComMensagem(event, 'exibirInserirServicoTipoAction.do', 'idOperacao', 'Operacao');" />
+					<a href="javascript:popupOperacao();"> <img
+						src="imagens/pesquisa.gif" width="23" height="21" border="0"
+						title="Pesquisar"></a> 
+						<c:if test="${not empty idOperacao}">
+							<html:text property="descricaoOperacao" readonly="true"
+								style="background-color:#EFEFEF; border:0; color: #000000"
+								size="40" maxlength="40" />
+						</c:if> 
+						
+						<c:if test="${empty idOperacao}">
+							<html:text property="descricaoOperacao" readonly="true"
+								style="background-color:#EFEFEF; border:0; color: #ff0000"
+								size="40" maxlength="40" />
+						</c:if> 
+						<a href="javascript:limpar('operacao');"> 
+							<img src="imagens/limparcampo.gif" width="23" height="21" border="0" title="Apagar">
+						</a> 
+						</span>
+					</td>
+				</tr>
+				
+				
 				<!-- Tipo do Serviço Referência -->
 
 				<tr>

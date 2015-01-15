@@ -36,7 +36,8 @@ public class ExibirImovelImagemAction extends GcomAction {
 		ImovelImagem imovelImagem = (ImovelImagem) colecaoImovelImagem.iterator().next();
 		
 		try {
-			FileInputStream in = new FileInputStream(new File(imovelImagem.getCaminhoImagem()));
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			FileInputStream in = new FileInputStream(new File(caminhoJboss + imovelImagem.getCaminhoImagem()));
 
 			httpServletResponse.setContentType("image/jpeg");
 
