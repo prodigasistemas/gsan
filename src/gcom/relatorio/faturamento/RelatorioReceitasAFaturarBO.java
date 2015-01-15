@@ -48,11 +48,7 @@ public class RelatorioReceitasAFaturarBO {
 		Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio = getColecaoDadosRelatorio();
 		String totalResgistros = String.valueOf(colecaoDadosRelatorio.size());
 
-<<<<<<< HEAD
-		relatorioReceitasAFaturar.addParametro("colecaoDadosRelacaoImoveisRota", colecaoDadosRelatorio);
-=======
 		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
->>>>>>> prodigasistemas-master
 		relatorioReceitasAFaturar.addParametro("idGrupo", this.grupoFaturamentoID);
 		relatorioReceitasAFaturar.addParametro("ano", this.mesAno.substring(3));
 		relatorioReceitasAFaturar.addParametro("mes", this.mesAno.substring(0, 2));
@@ -77,11 +73,7 @@ public class RelatorioReceitasAFaturarBO {
 		Collection colecaoDadosRelatorio = Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturar(this.grupoFaturamentoID,
 				Integer.parseInt(getAnoMesReferencia()));
 
-<<<<<<< HEAD
-		if (colecaoDadosRelatorio.isEmpty()) {
-=======
 		if (colecaoDadosRelatorio == null || colecaoDadosRelatorio.isEmpty()) {
->>>>>>> prodigasistemas-master
 			throw new ActionServletException("atencao.relatorio.vazio");
 		}
 

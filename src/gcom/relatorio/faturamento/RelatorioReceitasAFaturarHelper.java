@@ -1,10 +1,6 @@
 package gcom.relatorio.faturamento;
 
-<<<<<<< HEAD
-import gcom.util.Util;
-=======
 import gcom.faturamento.ReceitasAFaturarResumo;
->>>>>>> prodigasistemas-master
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,8 +24,6 @@ public class RelatorioReceitasAFaturarHelper {
 	public RelatorioReceitasAFaturarHelper() {
 		super();
 	}
-<<<<<<< HEAD
-=======
 	
 	public RelatorioReceitasAFaturarHelper(ReceitasAFaturarResumo receitasAFaturarResumo) {
 		this.idGrupo = receitasAFaturarResumo.getIdGrupo();
@@ -44,7 +38,6 @@ public class RelatorioReceitasAFaturarHelper {
 		this.valorEsgotoDiario = receitasAFaturarResumo.getValorEsgotoDiario();
 		this.valorEsgotoAFaturar = receitasAFaturarResumo.getValorEsgotoAFaturar();
 	}
->>>>>>> prodigasistemas-master
 
 	public Integer getIdGrupo() {
 		return idGrupo;

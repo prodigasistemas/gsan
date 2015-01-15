@@ -44122,8 +44122,6 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-<<<<<<< HEAD
-=======
 	
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) {
 		try {
@@ -44132,5 +44130,4 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
->>>>>>> prodigasistemas-master
 }

@@ -47,8 +47,6 @@ public class DataLeituraPrevistaHelper {
 		}
 		return lista;		
 	}
-<<<<<<< HEAD
-=======
 
 	public static DataLeituraPrevistaHelper getListaDatasLeituraPrevistaHelperPorGrupo(Collection colecao) {
 		DataLeituraPrevistaHelper helper = new DataLeituraPrevistaHelper();
@@ -58,5 +56,4 @@ public class DataLeituraPrevistaHelper {
 		}
 		return helper;
 	}
->>>>>>> prodigasistemas-master
 }

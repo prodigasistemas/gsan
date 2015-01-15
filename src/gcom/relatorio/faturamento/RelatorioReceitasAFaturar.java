@@ -13,10 +13,6 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-<<<<<<< HEAD
-import java.util.Date;
-=======
->>>>>>> prodigasistemas-master
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,11 +20,8 @@ import java.util.Map;
 
 public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 	
-<<<<<<< HEAD
-=======
 	private static final long serialVersionUID = 1L;
 	
->>>>>>> prodigasistemas-master
 	public RelatorioReceitasAFaturar(Usuario usuario, String nomeRelatorio) {
 		super(usuario, nomeRelatorio);
 	}
@@ -40,11 +33,7 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 
 	@Override
 	public Object executar() throws TarefaException {
-<<<<<<< HEAD
-		Collection colecaoDados = (Collection) getParametro("colecaoDadosRelacaoImoveisRota");
-=======
 		Collection colecaoDados = (Collection) getParametro("colecaoDadosRelatorio");
->>>>>>> prodigasistemas-master
 		Collection<RelatorioReceitasAFaturarBean> colecaoBean = this.inicializarBeanRelatorio(colecaoDados);
 
 		if (colecaoBean == null || colecaoBean.isEmpty()) {
@@ -80,13 +69,7 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 	}
 
 	@Override
-<<<<<<< HEAD
-	public void agendarTarefaBatch() {
-		
-	}
-=======
 	public void agendarTarefaBatch() {}
->>>>>>> prodigasistemas-master
 	
 	private Collection<RelatorioReceitasAFaturarBean> inicializarBeanRelatorio(Collection colecaoDados) {
 		
@@ -105,8 +88,4 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 
 		return retorno;
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> prodigasistemas-master
 }

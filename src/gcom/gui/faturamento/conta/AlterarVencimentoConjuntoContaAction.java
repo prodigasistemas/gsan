@@ -124,7 +124,7 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
         	}
     		
     		Date dataCorrenteComDias = Util.adicionarNumeroDiasDeUmaData(dataCorrente, diasAdicionais.intValue());
-    		// E o usuário não tenha permissão especial.	
+    		// E o usuario nao tenha permissao especial.	
 			boolean temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao = fachada.verificarPermissaoEspecial(PermissaoEspecial.RETIFICAR_DATA_VENCIMENTO_ALEM_PRAZO_PADRAO,
 					usuarioLogado);		
 				
@@ -133,30 +133,6 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
 				throw new ActionServletException("atencao.necessario_permissao_especial_para_data_vencimento_posterior_permitido");
 			}
 			
-<<<<<<< HEAD
-            if(codigoCliente != null || codigoClienteSuperior != null ) {
-				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
-					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
-							usuarioLogado, codigoClienteSuperior, (Boolean) sessao.getAttribute("debitoAutomatico"));
-				} else {
-					fachada.alterarVencimentoConjuntoContaCliente(codigoCliente, null, dataVencimentoConta, anoMes, null, null, anoMesFim,
-							usuarioLogado, codigoClienteSuperior, false);
-				}
-        	} else if (idGrupoFaturamento != null){
-        		
-        		fachada.alterarVencimentoConjuntoConta(idGrupoFaturamento, dataVencimentoConta, anoMes, anoMesFim,
-                dataVencimentoContaInicio, dataVencimentoContaFim,usuarioLogado);
-        	} else {        		
-				if (sessao.getAttribute("debitoAutomatico") != null && sessao.getAttribute("debitoAutomatico").equals(true)) {
-					fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
-							dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos,
-							(Boolean) sessao.getAttribute("debitoAutomatico"));
-				} else {
-					fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
-							dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos);
-				}
-        	}
-=======
 			boolean somenteDebitoAutomatico = (Boolean) sessao.getAttribute("debitoAutomatico");
 			
 			if (codigoCliente != null || codigoClienteSuperior != null) {
@@ -169,7 +145,6 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
 				fachada.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoConta, anoMes, dataVencimentoContaInicio,
 						dataVencimentoContaFim, anoMesFim, usuarioLogado, indicadorContaPaga, bancos, somenteDebitoAutomatico);
 			}
->>>>>>> prodigasistemas-master
         	
         	httpServletRequest.setAttribute("reloadPage", "OK");
         }
