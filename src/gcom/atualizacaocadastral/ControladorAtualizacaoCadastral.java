@@ -2,10 +2,12 @@ package gcom.atualizacaocadastral;
 
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -74,8 +76,6 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import org.apache.log4j.Logger;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoCadastral, SessionBean {
 
@@ -773,6 +773,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				imovelRetorno.setIdImovel(null);
 				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 				
+				if (isRAGerada(imovelRetorno.getId())) {
+					continue;
+				}
+				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
 				HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel = this.obterClientesImovel(imovelRetorno.getId());
@@ -792,6 +796,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 		}
 	}
+	
+	
 	
 	private HashMap<ClienteRelacaoTipo, ICliente> obterClientesImovel(Integer idImovelRetorno) throws ControladorException {
 		HashMap<ClienteRelacaoTipo, ICliente> mapClientes = new HashMap<ClienteRelacaoTipo, ICliente>();
@@ -822,6 +828,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				if (!isImovelEmCampo(imovelRetorno.getIdImovel())) {
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+					
+					if (isRAGerada(imovelRetorno.getId())) {
+						continue;
+					}
 					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
@@ -965,6 +975,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 					
+					if (isRAGerada(clienteImovelRetorno.getImovel().getId())) {
+						continue;
+					}
+					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
 					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
@@ -981,6 +995,29 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
+	private boolean isRAGerada(Integer matricula) {
+		
+		try {
+			FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
+			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.IMOVEL, matricula));
+			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.CODIGO_SITUACAO, String.valueOf(RegistroAtendimento.SITUACAO_PENDENTE)));
+			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.SOLICITACAO_TIPO_ESPECIFICACAO, 1227)); // "ATUALIZACAO CADASTRAL GSAN"
+			
+			Collection<RegistroAtendimento> colecaoRegistroAtendimento = getControladorUtil().pesquisar(filtroRegistroAtendimento, RegistroAtendimento.class.getName());
+			
+			if (!colecaoRegistroAtendimento.isEmpty()) {
+				return true;
+			}
+			
+			return false;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	private void excluirClientes() throws ControladorException {
 		Collection<IClienteImovel> clientesImovelExcluirRelacao = this.obterClientesParaExcluirRelacao();
 		
@@ -990,6 +1027,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				Imovel imovel = getControladorImovel().pesquisarImovel(clienteImovel.getImovel().getId());
 				
 				Integer idSetorComercial = imovel.getSetorComercia().getId();
+				
+				if (isRAGerada(clienteImovel.getImovel().getId())) {
+					continue;
+				}
 				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
