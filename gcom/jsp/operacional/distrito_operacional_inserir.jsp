@@ -29,19 +29,19 @@
 <script language="JavaScript">
   
     function validarForm() {
-    var form = document.forms[0];
-	  if(validateInserirDistritoOperacionalActionForm(form)){	     
-		  submeterFormPadrao(form); 
-		  }
-   	  }
-       
+    	var form = document.forms[0];
+	  	if	(validateInserirDistritoOperacionalActionForm(form)) {	     
+		  	submeterFormPadrao(form); 
+		}
+   	}
+      
   	function limparForm() {
 		var form = document.forms[0];
 		form.descricao.value = "";
 	    form.descricaoAbreviada.value = "";
+	    form.sistemaAbastecimento.value = "-1";  	
         form.setorAbastecimento.value = "-1";
-	    form.zonaAbastecimento.value = "-1";  	
-	 }
+	}
 	 
 </script>
 
