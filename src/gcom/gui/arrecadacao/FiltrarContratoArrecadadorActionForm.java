@@ -25,13 +25,21 @@ public class FiltrarContratoArrecadadorActionForm extends ValidatorActionForm {
 
 	private String numeroContrato;
 
-	private String idContaBancariaArrecadador; 
+	private String idContaBancariaArrecadador;
+	
+	private String idContaBancariaArrecadador2;
 	
 	private String bcoArrecadadorConta;
+	
+	private String bcoArrecadadorConta2;
 
 	private String agArrecadadorConta;
+	
+	private String agArrecadadorConta2;
 
 	private String numeroArrecadadorConta;
+	
+	private String numeroArrecadadorConta2;
 
 	private String idContaBancariaTarifa;
 	
@@ -60,6 +68,10 @@ public class FiltrarContratoArrecadadorActionForm extends ValidatorActionForm {
 	private String dataContratoEncerramento;
 	
 	private String contratoMotivoCancelamento;
+	
+	private String tamanhoMaximoIdentificacaoImovel;
+	
+	private String tamanhoColecao = "0"; 
 	
 	public String getContratoMotivoCancelamento() {
 		return contratoMotivoCancelamento;
@@ -244,4 +256,53 @@ public class FiltrarContratoArrecadadorActionForm extends ValidatorActionForm {
 	public void setIdContaBancariaTarifa(String idContaBancariaTarifa) {
 		this.idContaBancariaTarifa = idContaBancariaTarifa;
 	}
+
+	public String getIdContaBancariaArrecadador2() {
+		return idContaBancariaArrecadador2;
+	}
+
+	public void setIdContaBancariaArrecadador2(String idContaBancariaArrecadador2) {
+		this.idContaBancariaArrecadador2 = idContaBancariaArrecadador2;
+	}
+
+	public String getBcoArrecadadorConta2() {
+		return bcoArrecadadorConta2;
+	}
+
+	public void setBcoArrecadadorConta2(String bcoArrecadadorConta2) {
+		this.bcoArrecadadorConta2 = bcoArrecadadorConta2;
+	}
+
+	public String getAgArrecadadorConta2() {
+		return agArrecadadorConta2;
+	}
+
+	public void setAgArrecadadorConta2(String agArrecadadorConta2) {
+		this.agArrecadadorConta2 = agArrecadadorConta2;
+	}
+
+	public String getNumeroArrecadadorConta2() {
+		return numeroArrecadadorConta2;
+	}
+
+	public void setNumeroArrecadadorConta2(String numeroArrecadadorConta2) {
+		this.numeroArrecadadorConta2 = numeroArrecadadorConta2;
+	}
+
+	public String getTamanhoMaximoIdentificacaoImovel() {
+		return tamanhoMaximoIdentificacaoImovel;
+	}
+
+	public void setTamanhoMaximoIdentificacaoImovel(String tamanhoMaximoIdentificacaoImovel) {
+		this.tamanhoMaximoIdentificacaoImovel = tamanhoMaximoIdentificacaoImovel;
+	}
+
+	public String getTamanhoColecao() {
+		return tamanhoColecao;
+	}
+
+	public void setTamanhoColecao(String tamanhoColecao) {
+		this.tamanhoColecao = tamanhoColecao;
+	}
+	
 }

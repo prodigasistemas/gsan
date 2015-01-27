@@ -26,6 +26,10 @@
 		<many-to-one name="arrecadadorContrato" class="gcom.arrecadacao.ArrecadadorContrato" update="false" insert="false">
 			<column name="arct_id"/>
 		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaBancaria -->
+		<many-to-one name="contaBancariaDepositoArrecadacao" class="gcom.arrecadacao.banco.ContaBancaria" not-null="true">
+			<column name="ctbc_iddepositoarrecadacao"/>
+		</many-to-one>
 		<!-- end of derived association(s) -->
 	</class>
 </hibernate-mapping>
