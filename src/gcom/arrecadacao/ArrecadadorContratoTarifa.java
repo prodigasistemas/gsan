@@ -1,8 +1,11 @@
 package gcom.arrecadacao;
 
+import gcom.arrecadacao.banco.ContaBancaria;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -33,6 +36,12 @@ public class ArrecadadorContratoTarifa implements Serializable {
     
     /** nullable persistent field */
     private BigDecimal valorTarifaPercentual;
+
+	private ContaBancaria contaBancariaDepositoArrecadacao;
+	
+	private String agArrecadadorConta2;
+	
+	private String numeroArrecadadorConta2;
 
     /** full constructor */
     public ArrecadadorContratoTarifa(gcom.arrecadacao.ArrecadadorContratoTarifaPK comp_id, BigDecimal valorTarifa, Short numeroDiaFloat, Date ultimaAlteracao, gcom.arrecadacao.ArrecadacaoForma arrecadacaoForma, gcom.arrecadacao.ArrecadadorContrato arrecadadorContrato) {
@@ -128,5 +137,29 @@ public class ArrecadadorContratoTarifa implements Serializable {
 
 	public void setValorTarifaPercentual(BigDecimal valorTarifaPercentual) {
 		this.valorTarifaPercentual = valorTarifaPercentual;
+	}
+	
+	public ContaBancaria getContaBancariaDepositoArrecadacao() {
+		return contaBancariaDepositoArrecadacao;
+	}
+
+	public void setContaBancariaDepositoArrecadacao(ContaBancaria contaBancariaDepositoArrecadacao) {
+		this.contaBancariaDepositoArrecadacao = contaBancariaDepositoArrecadacao;
+	}
+
+	public String getAgArrecadadorConta2() {
+		return agArrecadadorConta2;
+	}
+
+	public void setAgArrecadadorConta2(String agArrecadadorConta2) {
+		this.agArrecadadorConta2 = agArrecadadorConta2;
+	}
+
+	public String getNumeroArrecadadorConta2() {
+		return numeroArrecadadorConta2;
+	}
+
+	public void setNumeroArrecadadorConta2(String numeroArrecadadorConta2) {
+		this.numeroArrecadadorConta2 = numeroArrecadadorConta2;
 	}
 }

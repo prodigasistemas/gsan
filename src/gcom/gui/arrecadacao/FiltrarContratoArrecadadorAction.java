@@ -81,12 +81,10 @@ public class FiltrarContratoArrecadadorAction extends GcomAction {
 		boolean peloMenosUmParametroInformado = false;
 		FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
 
-		filtroArrecadadorContrato
-				.adicionarCaminhoParaCarregamentoEntidade("arrecadador.cliente");
-		filtroArrecadadorContrato
-				.adicionarCaminhoParaCarregamentoEntidade("cliente");
-		filtroArrecadadorContrato
-				.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoArrecadacao");
+		filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("arrecadador.cliente");
+		filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoArrecadacao");
+		filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoArrecadacao.agencia");
 		// filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoTarifa");
 
 		// Código do Arrecadador
