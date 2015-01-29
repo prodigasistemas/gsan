@@ -17,6 +17,26 @@ Módulos do GSAN
 * Módulo de Arrecadação
 * Módulo de Atendimento ao Público
 
+Requisitos de Infra-Estrutura
+===
+
+* PostgreSQL 9.3.4
+* JBoss 4.0.1sp1
+* Java 1.5 / 1.6
+
+Configurações do Banco de Dados
+===
+
+Para a configuração do banco de dados utilizamos o MyBatis Migration, onde as configurações da biblioteca se encontram na Wiki - https://github.com/prodigasistemas/gsan/wiki/Criando-Migra%C3%A7%C3%B5es-na-Base-de-Dados - após configurar a biblioteca basta seguir as instruções abaixo:
+
+A partir da pasta gsan/migrations-start/ executar os comandos:
+
+``> migrate bootstrap``
+
+``> migrate up``
+
+Esses comandos irão executar os scripts SQL para iniciar a base de dados do “comercial”.
+
 Scripts de Build
 ===
 
