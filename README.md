@@ -37,6 +37,39 @@ A partir da pasta gsan/migrations-start/ executar os comandos:
 
 Esses comandos irão executar os scripts SQL para iniciar a base de dados do “comercial”.
 
+Configurações no JBoss
+===
+
+O primeiro passo é adicionar as configurações do datasource para a conexão com o banco de dados.
+
+Para configurar o datasource, crie o arquivo postgres-ds.xml:
+
+	<?xml version="1.0" encoding="UTF-8"?>
+
+	<datasources>
+		<local-tx-datasource>
+			<jndi-name>PostgresDS</jndi-name>
+			<connection-url>jdbc:postgresql://0.0.0.0/gsan_comercial</connection-url>
+		    	<driver-class>org.postgresql.Driver</driver-class>
+			<user-name>login</user-name>
+			<password>senha</password>
+			<min-pool-size>5</min-pool-size>
+			<max-pool-size>200</max-pool-size>
+			<idle-timeout-minutes>2</idle-timeout-minutes>
+			<prepared-statement-cache-size>40</prepared-statement-cache-size>
+		</local-tx-datasource>
+
+ 		<local-tx-datasource>
+			<jndi-name>PostgresGerencialDS</jndi-name>
+			<connection-url>jdbc:postgresql://0.0.0.0/gsan_gerencial</connection-url>
+		    	<driver-class>org.postgresql.Driver</driver-class>
+			<user-name>login</user-name>
+			<password>senha</password>
+		</local-tx-datasource>
+	</datasources>
+
+Substitua os dados de conexão do banco de dados, como *ip*, *porta*, *login* e *senha*.
+
 Scripts de Build
 ===
 
