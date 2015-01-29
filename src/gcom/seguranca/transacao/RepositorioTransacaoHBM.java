@@ -34,6 +34,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -625,6 +626,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				} else if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.APROVADO.toString())) {
 					sql.append(" and tcac.tcac_dtvalidacao is not null ");
 				}
+			} else {
+				sql.append(" and ctrl.siac_id not in (:listaSituacao) ");
 			}
 			
 			sql.append(" order by tatc.tatc_cdimovel");
@@ -649,23 +652,29 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
 			
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
-					&& exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos())) {
 				
-				List<Integer> listaSituacao = new ArrayList<Integer>();
 				
-				if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
-					listaSituacao.add(SituacaoAtualizacaoCadastral.TRANSMITIDO);
-					query.setParameterList("listaSituacao", listaSituacao);
-				} else {
-					listaSituacao.add(exibirCampos);
+				if (exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+					List<Integer> listaSituacao = new ArrayList<Integer>();
 					
-					if (exibirCampos.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
-						listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+					if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
+						listaSituacao.add(SituacaoAtualizacaoCadastral.TRANSMITIDO);
+						query.setParameterList("listaSituacao", listaSituacao);
+					} else {
+						listaSituacao.add(exibirCampos);
+						
+						if (exibirCampos.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
+							listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+						}
+						
+						query.setParameterList("listaSituacao", listaSituacao);
 					}
-					
-					query.setParameterList("listaSituacao", listaSituacao);
+				
+				} else {
+					query.setParameterList("listaSituacao", Arrays.asList(SituacaoAtualizacaoCadastral.ATUALIZADO));
 				}
+				
 			}
 			
 			Collection retornoConsulta = query.list();
