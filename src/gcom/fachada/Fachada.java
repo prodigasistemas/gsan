@@ -44103,4 +44103,16 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Collection executarComandoAcaoCobranca(String periodoInicialConta, String periodoFinalConta, String periodoVencimentoContaInicial,
+			String periodoVencimentoContaFinal, String[] idsCobrancaAcao, String idCobrancaAtividade, String idCobrancaGrupo, String idGerenciaRegional,
+			String localidadeOrigemID, String localidadeDestinoID, String setorComercialOrigemCD, String setorComercialDestinoCD, String idCliente,
+			String clienteRelacaoTipo, String indicador, String rotaInicial, String rotaFinal, String setorComercialOrigemID, String setorComercialDestinoID,
+			String idComando, Usuario usuarioLogado, String titulo, String descricaoSolicitacao, String prazoExecucao, String quantidadeMaximaDocumentos,
+			String indicadorImoveisDebito, String indicadorGerarBoletimCadastro, String codigoClienteSuperior, String codigoRotaInicial,
+			String codigoRotaFinal, String numeroQuadraInicial, String numeroQuadraFinal) {
+
+		return null;
+	}
+	
 }

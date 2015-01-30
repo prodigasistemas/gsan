@@ -7801,6 +7801,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						|| (debitoACobrar.getPercentualTaxaJurosFinanciamento()
 								.compareTo(BigDecimal.ZERO) != 0 && numeroPrestacoes
 								.intValue() == 1)) {
+					System.out.println("---> " + debitoACobrar.getImovel().getId());
 					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
 							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
 						throw new ControladorException(

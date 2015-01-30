@@ -20326,7 +20326,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "where cnta.referencia BETWEEN :anoMes AND :anoMesFim "
 					+ "and imov.id in (:idsImovel) "
 					+ "and cnta.debitoCreditoSituacaoAtual in(:normal, :incluida, :retificada) "
-					+ "and cnta.dataVencimentoConta < :dataVencimentoInformada";
+					+ "and cnta.dataVencimentoConta < :dataVencimentoInformada ";
 
 			if (dataVencimentoContaInicio != null) {
 				if (dataVencimentoContaFim != null) {
