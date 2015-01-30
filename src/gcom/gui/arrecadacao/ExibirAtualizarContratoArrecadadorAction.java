@@ -20,6 +20,7 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.filtro.ParametroSimplesIn;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,37 +47,30 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 
 	private Collection colecaoPesquisa;
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		ActionForward retorno = actionMapping
-				.findForward("atualizarContratoArrecadador");
+		ActionForward retorno = actionMapping.findForward("atualizarContratoArrecadador");
 
 		AtualizarContratoArrecadadorActionForm atualizarContratoArrecadadorActionForm = (AtualizarContratoArrecadadorActionForm) actionForm;
 
 		HttpSession sessao = httpServletRequest.getSession(false);
 
-		
-		
 		Fachada fachada = Fachada.getInstancia();
 
-		String idContratoArrecadador = httpServletRequest
-				.getParameter("idRegistroAtualizacao");
+		String idContratoArrecadador = httpServletRequest.getParameter("idRegistroAtualizacao");
 
 		if (idContratoArrecadador == null) {
 
 			if (sessao.getAttribute("idRegistroAtualizacao") != null) {
-				idContratoArrecadador = (String) sessao
-						.getAttribute("idRegistroAtualizacao");
+				idContratoArrecadador = (String) sessao.getAttribute("idRegistroAtualizacao");
 			}
 
 			if (idContratoArrecadador == null) {
-				idContratoArrecadador = (String) httpServletRequest
-						.getAttribute("idRegistroAtualizacao");
+				idContratoArrecadador = (String) httpServletRequest.getAttribute("idRegistroAtualizacao");
 			}
 
-		}else {
+		} else {
 			sessao.setAttribute("idRegistroAtualizacao", idContratoArrecadador);
 			sessao.setAttribute("i", true);
 		}
@@ -88,85 +82,63 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 		// Inclui a objeto de cliente no filtro de arrecadador
 		filtroArrecadador.adicionarCaminhoParaCarregamentoEntidade("cliente");
 		// Preenche colecao de arrecadador
-		Collection<Arrecadador> colecaoArrecadador = fachada.pesquisar(
-				filtroArrecadador, Arrecadador.class.getName());
+		Collection<Arrecadador> colecaoArrecadador = fachada.pesquisar(filtroArrecadador, Arrecadador.class.getName());
 		if (colecaoArrecadador == null || colecaoArrecadador.isEmpty()) {
-			throw new ActionServletException(
-					"atencao.entidade_sem_dados_para_selecao", null,
-					"Arrecadador");
+			throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "Arrecadador");
 		} else {
 			FiltroCliente filtroCliente = new FiltroCliente();
 			Iterator iteratorColecaoArrecadador = colecaoArrecadador.iterator();
 			Cliente cliente = new Cliente();
 			while (iteratorColecaoArrecadador.hasNext()) {
-				Arrecadador arrecadador = (Arrecadador) iteratorColecaoArrecadador
-						.next();
+				Arrecadador arrecadador = (Arrecadador) iteratorColecaoArrecadador.next();
 				cliente = arrecadador.getCliente();
-				filtroCliente.adicionarParametro(new ParametroSimples(
-						FiltroCliente.ID, cliente.getId(),
-						ParametroSimples.CONECTOR_OR));
+				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, cliente.getId(), ParametroSimples.CONECTOR_OR));
 			}
-			Collection colecaoClienteArrecadador = fachada.pesquisar(
-					filtroCliente, Cliente.class.getName());
-			sessao.setAttribute("colecaoClienteArrecadador",
-					colecaoClienteArrecadador);
+			Collection colecaoClienteArrecadador = fachada.pesquisar(filtroCliente, Cliente.class.getName());
+			sessao.setAttribute("colecaoClienteArrecadador", colecaoClienteArrecadador);
 		}
 
-		Collection collectionArrecadadorContrato = (Collection) httpServletRequest
-				.getAttribute("colecaoArrecadadorContrato");
-		ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato) Util
-				.retonarObjetoDeColecao(collectionArrecadadorContrato);
+		Collection collectionArrecadadorContrato = (Collection) httpServletRequest.getAttribute("colecaoArrecadadorContrato");
+		ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato) Util.retonarObjetoDeColecao(collectionArrecadadorContrato);
 
 		String idCliente = null;
 
 		// ///////////////////// VALIDACAO DE CLIENTE ///////////////////
-		String objetoConsulta = (String) httpServletRequest
-				.getParameter("objetoConsulta");
+		String objetoConsulta = (String) httpServletRequest.getParameter("objetoConsulta");
 
-		if (objetoConsulta != null
-				&& !objetoConsulta.trim().equalsIgnoreCase("")) {
+		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("")) {
 
 			switch (Integer.parseInt(objetoConsulta)) {
 
 			// Cliente
 			case 1:
 				// Recebe o valor do campo bancoID do formulário.
-				idCliente = atualizarContratoArrecadadorActionForm
-						.getIdCliente();
+				idCliente = atualizarContratoArrecadadorActionForm.getIdCliente();
 
 				FiltroCliente filtroCliente1 = new FiltroCliente();
 
-				filtroCliente1.adicionarParametro(new ParametroSimples(
-						FiltroCliente.ID, idCliente));
+				filtroCliente1.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
 
-				filtroCliente1.adicionarParametro(new ParametroSimples(
-						FiltroCliente.INDICADOR_USO,
-						ConstantesSistema.INDICADOR_USO_ATIVO));
+				filtroCliente1.adicionarParametro(new ParametroSimples(FiltroCliente.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
 				// Retorna Cliente
-				colecaoPesquisa = fachada.pesquisar(filtroCliente1,
-						Cliente.class.getName());
+				colecaoPesquisa = fachada.pesquisar(filtroCliente1, Cliente.class.getName());
 
 				if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
 
 					// Limpa o campo clienteID do formulário
 					atualizarContratoArrecadadorActionForm.setIdCliente("");
-					atualizarContratoArrecadadorActionForm
-							.setNomeCliente("Cliente inexistente.");
-					httpServletRequest.setAttribute("existeCliente",
-							"exception");
+					atualizarContratoArrecadadorActionForm.setNomeCliente("Cliente inexistente.");
+					httpServletRequest.setAttribute("existeCliente", "exception");
 
 					httpServletRequest.setAttribute("nomeCampo", "clienteID");
 
 				} else {
 
-					Cliente objetoCliente = (Cliente) Util
-							.retonarObjetoDeColecao(colecaoPesquisa);
+					Cliente objetoCliente = (Cliente) Util.retonarObjetoDeColecao(colecaoPesquisa);
 
-					atualizarContratoArrecadadorActionForm.setIdCliente(String
-							.valueOf(objetoCliente.getId()));
-					atualizarContratoArrecadadorActionForm
-							.setNomeCliente(objetoCliente.getDescricao());
+					atualizarContratoArrecadadorActionForm.setIdCliente(String.valueOf(objetoCliente.getId()));
+					atualizarContratoArrecadadorActionForm.setNomeCliente(objetoCliente.getDescricao());
 
 					httpServletRequest.setAttribute("existeCliente", "valor");
 					httpServletRequest.setAttribute("nomeCampo", "clienteID");
@@ -183,48 +155,40 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 
 			// Filtro para descobrir id do Cliente
 			FiltroCliente filtroCliente = new FiltroCliente();
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.ID, idCliente));
-			filtroCliente
-					.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
+			filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 
-			Collection colecaoCliente = fachada.pesquisar(filtroCliente,
-					Cliente.class.getName());
+			Collection colecaoCliente = fachada.pesquisar(filtroCliente, Cliente.class.getName());
 
 			if (colecaoCliente == null || colecaoCliente.isEmpty()) {
 
 				atualizarContratoArrecadadorActionForm.setIdCliente("");
 				httpServletRequest.setAttribute("existeCliente", "exception");
 
-				//throw new ActionServletException("atencao.cliente.inexistente");
+				// throw new
+				// ActionServletException("atencao.cliente.inexistente");
 
 			} else {
 
-				Cliente cliente = (Cliente) Util
-						.retonarObjetoDeColecao(colecaoCliente);
+				Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(colecaoCliente);
 
 				// [FS0004]-Verificar se pessoa física
 				if (cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica() != null
-						&& cliente.getClienteTipo()
-								.getIndicadorPessoaFisicaJuridica().equals(
-										new Short("2"))) {
+						&& cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().equals(new Short("2"))) {
 
-					throw new ActionServletException(
-							"atencao.cliente_arrecadador_pessoa_fisica");
+					throw new ActionServletException("atencao.cliente_arrecadador_pessoa_fisica");
 				}
 
-				atualizarContratoArrecadadorActionForm.setIdCliente(cliente
-						.getId().toString());
+				atualizarContratoArrecadadorActionForm.setIdCliente(cliente.getId().toString());
 				httpServletRequest.setAttribute("nomeCampo", "idCliente");
 			}
 		}
 
 		// ///////////////////// FIM VALIDACAO DE CLIENTE ///////////////////
 
-		if (idContratoArrecadador != null
-				&& !idContratoArrecadador.trim().equals("") &&
+		if (idContratoArrecadador != null && !idContratoArrecadador.trim().equals("") &&
 
-				Integer.parseInt(idContratoArrecadador) > 0) {
+		Integer.parseInt(idContratoArrecadador) > 0) {
 
 			FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
 
@@ -234,157 +198,107 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 			// então é preciso carregar o cliente)
 			// o mesmo para Imovel.
 
-			filtroArrecadadorContrato
-					.adicionarCaminhoParaCarregamentoEntidade("arrecadador.cliente");
-			filtroArrecadadorContrato
-					.adicionarCaminhoParaCarregamentoEntidade("cliente");
+			filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("arrecadador.cliente");
+			filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("cliente");
 
-			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(
-					FiltroArrecadadorContrato.ID, idContratoArrecadador));
-			Collection<ArrecadadorContrato> colecaoArrecadadorContrato = fachada
-					.pesquisar(filtroArrecadadorContrato,
-							ArrecadadorContrato.class.getName());
+			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(FiltroArrecadadorContrato.ID, idContratoArrecadador));
+			Collection<ArrecadadorContrato> colecaoArrecadadorContrato = fachada.pesquisar(filtroArrecadadorContrato,
+					ArrecadadorContrato.class.getName());
 
-			if (colecaoArrecadadorContrato != null
-					&& !colecaoArrecadadorContrato.isEmpty()) {
-				arrecadadorContrato = (ArrecadadorContrato) Util
-						.retonarObjetoDeColecao(colecaoArrecadadorContrato);
-				atualizarContratoArrecadadorActionForm
-						.setIdClienteCombo(arrecadadorContrato.getArrecadador()
-								.getCliente().getId().toString());
-				atualizarContratoArrecadadorActionForm
-						.setIdArrecadador(arrecadadorContrato.getArrecadador()
-								.getId().toString());
+			if (colecaoArrecadadorContrato != null && !colecaoArrecadadorContrato.isEmpty()) {
+				arrecadadorContrato = (ArrecadadorContrato) Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
+				atualizarContratoArrecadadorActionForm.setIdClienteCombo(arrecadadorContrato.getArrecadador().getCliente().getId()
+						.toString());
+				atualizarContratoArrecadadorActionForm.setIdArrecadador(arrecadadorContrato.getArrecadador().getId().toString());
 				// atualizarContratoArrecadadorActionForm.setNomeCliente(arrecadadorContrato.getArrecadador().getCliente().getNome());
 			}
 		}
 
-		atualizarContratoArrecadadorActionForm
-				.setNumeroContrato(arrecadadorContrato.getNumeroContrato());
+		atualizarContratoArrecadadorActionForm.setNumeroContrato(arrecadadorContrato.getNumeroContrato());
 
-		ContaBancaria contaBancariaArrecadacao = arrecadadorContrato
-				.getContaBancariaDepositoArrecadacao();
+		ContaBancaria contaBancariaArrecadacao = arrecadadorContrato.getContaBancariaDepositoArrecadacao();
 		if (contaBancariaArrecadacao != null) {
-			String idContaBancaria = contaBancariaArrecadacao.getId()
-					.toString();
+			String idContaBancaria = contaBancariaArrecadacao.getId().toString();
 			FiltroContaBancaria filtroContaBancaria = new FiltroContaBancaria();
-			filtroContaBancaria.adicionarParametro(new ParametroSimples(
-					FiltroContaBancaria.ID, idContaBancaria));
-			filtroContaBancaria
-					.adicionarCaminhoParaCarregamentoEntidade("agencia");
-			filtroContaBancaria
-					.adicionarCaminhoParaCarregamentoEntidade("agencia.banco");
-			Collection coll = Fachada.getInstancia().pesquisar(
-					filtroContaBancaria, ContaBancaria.class.getSimpleName());
+			filtroContaBancaria.adicionarParametro(new ParametroSimples(FiltroContaBancaria.ID, idContaBancaria));
+			filtroContaBancaria.adicionarCaminhoParaCarregamentoEntidade("agencia");
+			filtroContaBancaria.adicionarCaminhoParaCarregamentoEntidade("agencia.banco");
+			Collection coll = Fachada.getInstancia().pesquisar(filtroContaBancaria, ContaBancaria.class.getSimpleName());
 
 			contaBancariaArrecadacao = (ContaBancaria) coll.iterator().next();
-			atualizarContratoArrecadadorActionForm
-					.setBcoArrecadadorConta(contaBancariaArrecadacao
-							.getAgencia().getBanco().getId().toString());
-			atualizarContratoArrecadadorActionForm
-					.setAgArrecadadorConta(contaBancariaArrecadacao
-							.getAgencia().getCodigoAgencia());
-			atualizarContratoArrecadadorActionForm
-					.setNumeroArrecadadorConta(contaBancariaArrecadacao
-							.getNumeroConta());
+			atualizarContratoArrecadadorActionForm.setBcoArrecadadorConta(contaBancariaArrecadacao.getAgencia().getBanco().getId()
+					.toString());
+			atualizarContratoArrecadadorActionForm.setAgArrecadadorConta(contaBancariaArrecadacao.getAgencia().getCodigoAgencia());
+			atualizarContratoArrecadadorActionForm.setNumeroArrecadadorConta(contaBancariaArrecadacao.getNumeroConta());
 		}
 
-		ContaBancaria contaBancariaTarifa = arrecadadorContrato
-				.getContaBancariaDepositoTarifa();
+		ContaBancaria contaBancariaTarifa = arrecadadorContrato.getContaBancariaDepositoTarifa();
 		if (contaBancariaTarifa != null) {
 			String idContaBancaria = contaBancariaTarifa.getId().toString();
 			FiltroContaBancaria filtroContaBancaria = new FiltroContaBancaria();
-			filtroContaBancaria.adicionarParametro(new ParametroSimples(
-					FiltroContaBancaria.ID, idContaBancaria));
-			filtroContaBancaria
-					.adicionarCaminhoParaCarregamentoEntidade("agencia");
-			filtroContaBancaria
-					.adicionarCaminhoParaCarregamentoEntidade("agencia.banco");
-			Collection coll = Fachada.getInstancia().pesquisar(
-					filtroContaBancaria, ContaBancaria.class.getSimpleName());
+			filtroContaBancaria.adicionarParametro(new ParametroSimples(FiltroContaBancaria.ID, idContaBancaria));
+			filtroContaBancaria.adicionarCaminhoParaCarregamentoEntidade("agencia");
+			filtroContaBancaria.adicionarCaminhoParaCarregamentoEntidade("agencia.banco");
+			Collection coll = Fachada.getInstancia().pesquisar(filtroContaBancaria, ContaBancaria.class.getSimpleName());
 
 			contaBancariaTarifa = (ContaBancaria) coll.iterator().next();
-			atualizarContratoArrecadadorActionForm
-					.setBcoTarifaConta(contaBancariaTarifa.getAgencia()
-							.getBanco().getId().toString());
-			atualizarContratoArrecadadorActionForm
-					.setAgTarifaConta(contaBancariaTarifa.getAgencia()
-							.getCodigoAgencia());
-			atualizarContratoArrecadadorActionForm
-					.setNumeroTarifaConta(contaBancariaTarifa.getNumeroConta());
+			atualizarContratoArrecadadorActionForm.setBcoTarifaConta(contaBancariaTarifa.getAgencia().getBanco().getId().toString());
+			atualizarContratoArrecadadorActionForm.setAgTarifaConta(contaBancariaTarifa.getAgencia().getCodigoAgencia());
+			atualizarContratoArrecadadorActionForm.setNumeroTarifaConta(contaBancariaTarifa.getNumeroConta());
 		}
 
 		if (idCliente == null || idCliente.trim().equals("")) {
-			atualizarContratoArrecadadorActionForm
-					.setIdCliente(arrecadadorContrato.getCliente().getId()
-							.toString());
-			atualizarContratoArrecadadorActionForm
-					.setNomeCliente(arrecadadorContrato.getCliente().getNome());
+			atualizarContratoArrecadadorActionForm.setIdCliente(arrecadadorContrato.getCliente().getId().toString());
+			atualizarContratoArrecadadorActionForm.setNomeCliente(arrecadadorContrato.getCliente().getNome());
 		}
 
-		atualizarContratoArrecadadorActionForm
-				.setIdConvenio(arrecadadorContrato.getCodigoConvenio());
+		atualizarContratoArrecadadorActionForm.setIdConvenio(arrecadadorContrato.getCodigoConvenio());
 
 		if (arrecadadorContrato.getIndicadorCobrancaIss() != null
-				&& !arrecadadorContrato.getIndicadorCobrancaIss().toString()
-						.trim().equals("")) {
-			atualizarContratoArrecadadorActionForm
-					.setIndicadorCobranca(arrecadadorContrato
-							.getIndicadorCobrancaIss().toString());
+				&& !arrecadadorContrato.getIndicadorCobrancaIss().toString().trim().equals("")) {
+			atualizarContratoArrecadadorActionForm.setIndicadorCobranca(arrecadadorContrato.getIndicadorCobrancaIss().toString());
 		}
 		if (arrecadadorContrato.getDataContratoInicio() != null) {
-			atualizarContratoArrecadadorActionForm.setDtInicioContrato(Util
-					.formatarData(arrecadadorContrato.getDataContratoInicio()));
+			atualizarContratoArrecadadorActionForm.setDtInicioContrato(Util.formatarData(arrecadadorContrato.getDataContratoInicio()));
 		}
 		if (arrecadadorContrato.getDataContratoFim() != null) {
-			atualizarContratoArrecadadorActionForm.setDtFimContrato(Util
-					.formatarData(arrecadadorContrato.getDataContratoFim()));
+			atualizarContratoArrecadadorActionForm.setDtFimContrato(Util.formatarData(arrecadadorContrato.getDataContratoFim()));
 		}
 		if (arrecadadorContrato.getDataContratoEncerramento() != null) {
-			atualizarContratoArrecadadorActionForm
-					.setDataContratoEncerramento(Util
-							.formatarData(arrecadadorContrato
-									.getDataContratoEncerramento()));
+			atualizarContratoArrecadadorActionForm.setDataContratoEncerramento(Util.formatarData(arrecadadorContrato
+					.getDataContratoEncerramento()));
 		}
 
 		// Motivo Cancelamento
 		FiltroMotivoCancelamento filtroMotivoCancelamento = new FiltroMotivoCancelamento();
 
 		// Ordena filtro de motivo cancelamento
-		filtroMotivoCancelamento
-				.setCampoOrderBy(FiltroMotivoCancelamento.INDICADOR_USO);
+		filtroMotivoCancelamento.setCampoOrderBy(FiltroMotivoCancelamento.INDICADOR_USO);
 
 		// Preenche colecao de motivos
-		Collection<FiltroMotivoCancelamento> colecaoFiltroMotivoCancelamento = fachada
-				.pesquisar(filtroMotivoCancelamento,
-						ContratoMotivoCancelamento.class.getName());
+		Collection<FiltroMotivoCancelamento> colecaoFiltroMotivoCancelamento = fachada.pesquisar(filtroMotivoCancelamento,
+				ContratoMotivoCancelamento.class.getName());
 
-		if (colecaoFiltroMotivoCancelamento == null
-				|| colecaoFiltroMotivoCancelamento.isEmpty()) {
-			throw new ActionServletException(
-					"atencao.entidade_sem_dados_para_selecao", null,
-					"Motivo Cancelamento");
+		if (colecaoFiltroMotivoCancelamento == null || colecaoFiltroMotivoCancelamento.isEmpty()) {
+			throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "Motivo Cancelamento");
 		} else {
 			ContratoMotivoCancelamento contratoMotivoCancelamento = (ContratoMotivoCancelamento) Util
 					.retonarObjetoDeColecao(colecaoFiltroMotivoCancelamento);
-			atualizarContratoArrecadadorActionForm
-					.setContratoMotivoCancelamento(contratoMotivoCancelamento
-							.getDescricaoMotivoCancelContrato());
+			atualizarContratoArrecadadorActionForm.setContratoMotivoCancelamento(contratoMotivoCancelamento
+					.getDescricaoMotivoCancelContrato());
 			if (arrecadadorContrato.getDataContratoEncerramento() != null) {
-				atualizarContratoArrecadadorActionForm
-						.setContratoMotivoCancelamento(arrecadadorContrato
-								.getDataContratoEncerramento().toString());
+				atualizarContratoArrecadadorActionForm.setContratoMotivoCancelamento(arrecadadorContrato.getDataContratoEncerramento()
+						.toString());
 			}
-			sessao.setAttribute("colecaoFiltroMotivoCancelamento",
-					colecaoFiltroMotivoCancelamento);
+			sessao.setAttribute("colecaoFiltroMotivoCancelamento", colecaoFiltroMotivoCancelamento);
 		}
-		atualizarContratoArrecadadorActionForm
-				.setTamanhoMaximoIdentificacaoImovel(arrecadadorContrato
-						.getTamanhoMaximoIdentificacaoImovel().toString());
+		atualizarContratoArrecadadorActionForm.setTamanhoMaximoIdentificacaoImovel(arrecadadorContrato
+				.getTamanhoMaximoIdentificacaoImovel().toString());
 		sessao.setAttribute("arrecadadorContrato", arrecadadorContrato);
 
 		/**
 		 * Atualizar Arrecadador Contrato Tarifa
+		 * 
 		 * @date 12/06/09
 		 * @author Arthur Carvalho
 		 */
@@ -393,9 +307,8 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 
 			FiltroArrecadacaoForma filtroArrecadadorForma = new FiltroArrecadacaoForma();
 			filtroArrecadadorForma.setCampoOrderBy(FiltroArrecadacaoForma.CODIGO);
-			
-			Collection colecaoArrecadacaoForma = fachada.pesquisar( filtroArrecadadorForma,
-					ArrecadacaoForma.class.getName() );
+
+			Collection colecaoArrecadacaoForma = fachada.pesquisar(filtroArrecadadorForma, ArrecadacaoForma.class.getName());
 
 			if (colecaoArrecadacaoForma == null || colecaoArrecadacaoForma.isEmpty()) {
 				throw new ActionServletException(
@@ -407,190 +320,213 @@ public class ExibirAtualizarContratoArrecadadorAction extends GcomAction {
 				sessao.setAttribute("colecaoFormaArrecadacao", colecaoArrecadacaoForma);
 			}
 		}
-		
-		
-		//ArrayList colecaoArrecadadorContratoTarifaSelecionados ;
+
+		// ArrayList colecaoArrecadadorContratoTarifaSelecionados ;
 		ArrecadadorContratoTarifa arrecadadorContratoTarifa = new ArrecadadorContratoTarifa();
-		
-		ArrayList colecaoArrecadadorContratoTarifaSelecionados = new ArrayList();
-		//Caso volte a funcionalidade e seja feito uma nova pesquisa, limpar as tarifas que ficam na sessão
-		//e não entrar novamente nesse metodo, a nao ser que seja a primeira vez que carregue a pagina.
-		if ( sessao.getAttribute("menu") != null &&sessao.getAttribute("menu").equals("sim") ) {
+
+		ArrayList<ArrecadadorContratoTarifa> colecaoArrecadadorContratoTarifaSelecionados = new ArrayList();
+		// Caso volte a funcionalidade e seja feito uma nova pesquisa, limpar as
+		// tarifas que ficam na sessão
+		// e não entrar novamente nesse metodo, a nao ser que seja a primeira
+		// vez que carregue a pagina.
+		if (sessao.getAttribute("menu") != null && sessao.getAttribute("menu").equals("sim")) {
 			sessao.setAttribute("menu", "nao");
 			sessao.setAttribute("colecaoArrecadadorContratoTarifaSelecionados", null);
 		}
-		if(  sessao.getAttribute("colecaoArrecadadorContratoTarifaSelecionados") == null &&
-				httpServletRequest.getParameter("acao") == null ) {
+		if (sessao.getAttribute("colecaoArrecadadorContratoTarifaSelecionados") == null && httpServletRequest.getParameter("acao") == null) {
 
-			FiltroArrecadadorContratoTarifa filtroArrecadadorContratoTarifa = 
-				new FiltroArrecadadorContratoTarifa();
-			filtroArrecadadorContratoTarifa.adicionarParametro(
-				new ParametroSimples(
-					FiltroArrecadadorContratoTarifa.ARRECADADOR_CONTRATO_ID, 
-					idContratoArrecadador));
-			
+			FiltroArrecadadorContratoTarifa filtroArrecadadorContratoTarifa = new FiltroArrecadadorContratoTarifa();
+			filtroArrecadadorContratoTarifa.adicionarParametro(new ParametroSimples(
+					FiltroArrecadadorContratoTarifa.ARRECADADOR_CONTRATO_ID, idContratoArrecadador));
+
 			filtroArrecadadorContratoTarifa.adicionarCaminhoParaCarregamentoEntidade("arrecadacaoForma");
+			filtroArrecadadorContratoTarifa.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoArrecadacao");
+			filtroArrecadadorContratoTarifa.adicionarCaminhoParaCarregamentoEntidade("contaBancariaDepositoArrecadacao.agencia");
 
-			colecaoArrecadadorContratoTarifaSelecionados = 
-				(ArrayList) fachada.pesquisar(filtroArrecadadorContratoTarifa, 
+			colecaoArrecadadorContratoTarifaSelecionados = (ArrayList<ArrecadadorContratoTarifa>) fachada.pesquisar(filtroArrecadadorContratoTarifa,
 					ArrecadadorContratoTarifa.class.getName());
-			
+
 		} else {
-			colecaoArrecadadorContratoTarifaSelecionados = 
-				(ArrayList) sessao.getAttribute("colecaoArrecadadorContratoTarifaSelecionados");
+			colecaoArrecadadorContratoTarifaSelecionados = (ArrayList) sessao.getAttribute("colecaoArrecadadorContratoTarifaSelecionados");
 		}
-		//Forma de Arrecadacao
+		
+		// Forma de Arrecadacao
 		if (atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao() != null
-				&& !"-1".equals( atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao() ) ) {
-			
+				&& !"-1".equals(atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao())) {
+
 			FiltroArrecadacaoForma filtroArrecadadorForma = new FiltroArrecadacaoForma();
-			filtroArrecadadorForma.adicionarParametro(new ParametroSimples(FiltroArrecadacaoForma.CODIGO, atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao()));
-			
-			Collection colecaoArrecadacaoForma = fachada.pesquisar( filtroArrecadadorForma,
-					ArrecadacaoForma.class.getName() );
-			
+			filtroArrecadadorForma.adicionarParametro(new ParametroSimples(FiltroArrecadacaoForma.CODIGO,
+					atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao()));
+
+			Collection colecaoArrecadacaoForma = fachada.pesquisar(filtroArrecadadorForma, ArrecadacaoForma.class.getName());
+
 			if (colecaoArrecadacaoForma != null && !colecaoArrecadacaoForma.isEmpty()) {
 				ArrecadacaoForma arrecadacaoForma = (ArrecadacaoForma) Util.retonarObjetoDeColecao(colecaoArrecadacaoForma);
 				arrecadadorContratoTarifa.setArrecadacaoForma(arrecadacaoForma);
 			}
-			 
-			
+
 		}
-		
-		//Valor Tarifa
+
+		// Valor Tarifa
 		BigDecimal valorTarifa = null;
 		if (atualizarContratoArrecadadorActionForm.getValorTarifa() != null
-				&& !"".equals( atualizarContratoArrecadadorActionForm.getValorTarifa() ) ) {
-			valorTarifa =  Util.formatarMoedaRealparaBigDecimal( atualizarContratoArrecadadorActionForm.getValorTarifa() ) ;
-			
-			arrecadadorContratoTarifa.setValorTarifa( valorTarifa );
+				&& !"".equals(atualizarContratoArrecadadorActionForm.getValorTarifa())) {
+			valorTarifa = Util.formatarMoedaRealparaBigDecimal(atualizarContratoArrecadadorActionForm.getValorTarifa());
+
+			arrecadadorContratoTarifa.setValorTarifa(valorTarifa);
 		}
-		
-		//Valor Tarifa Percentual
+
+		// Valor Tarifa Percentual
 		BigDecimal valorTarifaPercentual = null;
-		if ( atualizarContratoArrecadadorActionForm.getValorTarifaPercentual() != null &&
-				!atualizarContratoArrecadadorActionForm.getValorTarifaPercentual().equals("")){
-			
+		if (atualizarContratoArrecadadorActionForm.getValorTarifaPercentual() != null
+				&& !atualizarContratoArrecadadorActionForm.getValorTarifaPercentual().equals("")) {
+
 			valorTarifaPercentual = Util.formatarMoedaRealparaBigDecimal(atualizarContratoArrecadadorActionForm.getValorTarifaPercentual());
 			arrecadadorContratoTarifa.setValorTarifaPercentual(valorTarifaPercentual);
-			
+
 		}
-		
-		//Numero de dias Float
+
+		// Numero de dias Float
 		Short nmDiasFloat = null;
 		if (atualizarContratoArrecadadorActionForm.getNumeroDiaFloat() != null
-				&& !"".equals( atualizarContratoArrecadadorActionForm.getNumeroDiaFloat() ) ) {
-			nmDiasFloat =  new Short( atualizarContratoArrecadadorActionForm.getNumeroDiaFloat() ) ;
+				&& !"".equals(atualizarContratoArrecadadorActionForm.getNumeroDiaFloat())) {
+			nmDiasFloat = new Short(atualizarContratoArrecadadorActionForm.getNumeroDiaFloat());
 			arrecadadorContratoTarifa.setNumeroDiaFloat(nmDiasFloat);
 		}
 		
-		//Verifica se a Data Final é maior que a Inicial
-        if ( atualizarContratoArrecadadorActionForm.getDtFimContrato() != null && 
-        		!atualizarContratoArrecadadorActionForm.getDtFimContrato().equals("")
-        		&& atualizarContratoArrecadadorActionForm.getDtInicioContrato() != null 
-        		&& !atualizarContratoArrecadadorActionForm.getDtInicioContrato().equals("")){
-        	
-        	Date dtInicial = Util.converteStringParaDate(atualizarContratoArrecadadorActionForm.getDtInicioContrato());
-        	Date dtFinal = Util.converteStringParaDate(atualizarContratoArrecadadorActionForm.getDtFimContrato());
-        	
-        	if (Util.compararData(dtFinal, dtInicial)== -1){
-        		
-        		throw new ActionServletException("atencao.data.intervalo.invalido", null ,"Data Invalida" );
-        		
-        	}
-        	
-        }
+		for (ArrecadadorContratoTarifa act : colecaoArrecadadorContratoTarifaSelecionados) {
+			act.setAgArrecadadorConta2(act.getContaBancariaDepositoArrecadacao().getAgencia().getCodigoAgencia());
+			act.setNumeroArrecadadorConta2(act.getContaBancariaDepositoArrecadacao().getNumeroConta());
+		}
 		
-        //Verifica se o usuario clicou no botao adicionar
-        if ( httpServletRequest.getParameter("acao") != null && 
-        	httpServletRequest.getParameter("acao").equals("adicionar") &&
-        	!atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao().equals("-1") &&
-        	( !atualizarContratoArrecadadorActionForm.getValorTarifa().equals("") || 
-                	!atualizarContratoArrecadadorActionForm.getValorTarifaPercentual().equals("") )
-            &&!atualizarContratoArrecadadorActionForm.getNumeroDiaFloat().equals("") ) {
-        	
-	        	arrecadadorContratoTarifa.setUltimaAlteracao(new Date());
-	 
-	        	if ( colecaoArrecadadorContratoTarifaSelecionados != null ) {
-		        	Iterator iteratorColecaoArrecadadorContratoTarifa = colecaoArrecadadorContratoTarifaSelecionados.iterator();
-		    		ArrecadadorContratoTarifa contratoTarifa = null;
-		    		
-		    		if (atualizarContratoArrecadadorActionForm.getValorTarifaPercentual() != null && 
-		    				!atualizarContratoArrecadadorActionForm.getValorTarifaPercentual().equals("")){
-		    			
-		    			//Validação do valor da tarifa percentual
-			    		BigDecimal valorTarifaPerc = Util.formatarMoedaRealparaBigDecimal
-			    			(atualizarContratoArrecadadorActionForm.getValorTarifaPercentual());
-			    		//Variaveis para comparar valorTarifaPercentual
-			    		BigDecimal igualZero = new BigDecimal(0);
-			    		BigDecimal maiorQue100 = new BigDecimal(100);
-			    		if (valorTarifaPerc.compareTo(igualZero) == 0){
-			    			
-			    			throw new ActionServletException("atencao.tarifa_invalida", null ,"Tarifa de Contrato" );
-			    			
-			    		}else if ( valorTarifaPerc.compareTo(maiorQue100) == 1){
-			    			
-			    			throw new ActionServletException("atencao.tarifa_invalida", null ,"Tarifa de Contrato" );
-			    			
-			    		}
-		    			
-		    		}
+		// Agencia
+		String agArrecadadorConta2;
+		if (atualizarContratoArrecadadorActionForm.getAgArrecadadorConta2() != null
+				&& !atualizarContratoArrecadadorActionForm.getAgArrecadadorConta2().equals("")) {
+			agArrecadadorConta2 = atualizarContratoArrecadadorActionForm.getAgArrecadadorConta2();
+			arrecadadorContratoTarifa.setAgArrecadadorConta2(agArrecadadorConta2);
+		}
+
+		// Numero da Conta
+		String numeroArrecadadorConta2;
+		if (atualizarContratoArrecadadorActionForm.getNumeroArrecadadorConta2() != null
+				&& !atualizarContratoArrecadadorActionForm.getNumeroArrecadadorConta2().equals("")) {
+			numeroArrecadadorConta2 = atualizarContratoArrecadadorActionForm.getNumeroArrecadadorConta2();
+			arrecadadorContratoTarifa.setNumeroArrecadadorConta2(numeroArrecadadorConta2);
+		}
 		
-		    		//Valida se ja existe forma de arrecadacao
-		    		while (iteratorColecaoArrecadadorContratoTarifa.hasNext()) {
-		    			
-		    			contratoTarifa = (ArrecadadorContratoTarifa) iteratorColecaoArrecadadorContratoTarifa.next();
-		    			
-		    			if ( arrecadadorContratoTarifa.getArrecadacaoForma().getId().intValue() == contratoTarifa.getArrecadacaoForma().getId().intValue() ) {
-		    				throw new ActionServletException("atencao.forma_ja_cadastrada", null ,"Tarifa de Contrato" );
-		    			} 
-		        	
-		    		}
-	        	} else {
-	        		colecaoArrecadadorContratoTarifaSelecionados = new ArrayList();
-	        	}
-				colecaoArrecadadorContratoTarifaSelecionados.add(arrecadadorContratoTarifa);
-				
-				atualizarContratoArrecadadorActionForm.setTamanhoColecao("" + colecaoArrecadadorContratoTarifaSelecionados.size());
-				atualizarContratoArrecadadorActionForm.setNumeroDiaFloat("");
-				atualizarContratoArrecadadorActionForm.setValorTarifa("");
-				atualizarContratoArrecadadorActionForm.setValorTarifaPercentual("");
-	    		atualizarContratoArrecadadorActionForm.setFormaDeArrecadacao("-1");
-        }
-        
-        //Remover o Contrato Tarifa da Colecao
-        if ( httpServletRequest.getParameter("acao") != null && 
-        	httpServletRequest.getParameter("acao").equals("remover") ) {
-        	int obj = new Integer(httpServletRequest.getParameter("id")).intValue();
-        	
-        	if (colecaoArrecadadorContratoTarifaSelecionados.size() >= obj) {
-        		
-        		colecaoArrecadadorContratoTarifaSelecionados.remove(obj-1);
-        	}
-        	
-        }
-        
-        if ( httpServletRequest.getParameter("desfazer") != null &&
-        		httpServletRequest.getParameter("desfazer").equals("S") ) {
-        
-        	FiltroArrecadadorContratoTarifa filtroArrecadadorContratoTarifa = 
-				new FiltroArrecadadorContratoTarifa();
-			filtroArrecadadorContratoTarifa.adicionarParametro(
-				new ParametroSimples(
-					FiltroArrecadadorContratoTarifa.ARRECADADOR_CONTRATO_ID, 
-					idContratoArrecadador));
-			
+		if ((atualizarContratoArrecadadorActionForm.getIdContaBancariaArrecadador2() != null && !atualizarContratoArrecadadorActionForm
+				.getIdContaBancariaArrecadador2().equals(""))) {
+			ContaBancaria contaBancaria = new ContaBancaria();
+			contaBancaria.setId(Integer.parseInt(atualizarContratoArrecadadorActionForm.getIdContaBancariaArrecadador2()));
+			arrecadadorContratoTarifa.setContaBancariaDepositoArrecadacao(contaBancaria);
+
+		}
+
+		// Verifica se a Data Final é maior que a Inicial
+		if (atualizarContratoArrecadadorActionForm.getDtFimContrato() != null
+				&& !atualizarContratoArrecadadorActionForm.getDtFimContrato().equals("")
+				&& atualizarContratoArrecadadorActionForm.getDtInicioContrato() != null
+				&& !atualizarContratoArrecadadorActionForm.getDtInicioContrato().equals("")) {
+
+			Date dtInicial = Util.converteStringParaDate(atualizarContratoArrecadadorActionForm.getDtInicioContrato());
+			Date dtFinal = Util.converteStringParaDate(atualizarContratoArrecadadorActionForm.getDtFimContrato());
+
+			if (Util.compararData(dtFinal, dtInicial) == -1) {
+
+				throw new ActionServletException("atencao.data.intervalo.invalido", null, "Data Invalida");
+
+			}
+
+		}
+
+		// Verifica se o usuario clicou no botao adicionar
+		if (httpServletRequest.getParameter("acao") != null
+				&& httpServletRequest.getParameter("acao").equals("adicionar")
+				&& !atualizarContratoArrecadadorActionForm.getFormaDeArrecadacao().equals("-1")
+				&& (!atualizarContratoArrecadadorActionForm.getValorTarifa().equals("") || !atualizarContratoArrecadadorActionForm
+						.getValorTarifaPercentual().equals("")) && !atualizarContratoArrecadadorActionForm.getNumeroDiaFloat().equals("")) {
+
+			arrecadadorContratoTarifa.setUltimaAlteracao(new Date());
+
+			if (colecaoArrecadadorContratoTarifaSelecionados != null) {
+				Iterator iteratorColecaoArrecadadorContratoTarifa = colecaoArrecadadorContratoTarifaSelecionados.iterator();
+				ArrecadadorContratoTarifa contratoTarifa = null;
+
+				if (atualizarContratoArrecadadorActionForm.getValorTarifaPercentual() != null
+						&& !atualizarContratoArrecadadorActionForm.getValorTarifaPercentual().equals("")) {
+
+					// Validação do valor da tarifa percentual
+					BigDecimal valorTarifaPerc = Util.formatarMoedaRealparaBigDecimal(atualizarContratoArrecadadorActionForm
+							.getValorTarifaPercentual());
+					// Variaveis para comparar valorTarifaPercentual
+					BigDecimal igualZero = new BigDecimal(0);
+					BigDecimal maiorQue100 = new BigDecimal(100);
+					if (valorTarifaPerc.compareTo(igualZero) == 0) {
+
+						throw new ActionServletException("atencao.tarifa_invalida", null, "Tarifa de Contrato");
+
+					} else if (valorTarifaPerc.compareTo(maiorQue100) == 1) {
+
+						throw new ActionServletException("atencao.tarifa_invalida", null, "Tarifa de Contrato");
+
+					}
+
+				}
+
+				// Valida se ja existe forma de arrecadacao
+				while (iteratorColecaoArrecadadorContratoTarifa.hasNext()) {
+
+					contratoTarifa = (ArrecadadorContratoTarifa) iteratorColecaoArrecadadorContratoTarifa.next();
+
+					if (arrecadadorContratoTarifa.getArrecadacaoForma().getId().intValue() == contratoTarifa.getArrecadacaoForma().getId()
+							.intValue()) {
+						throw new ActionServletException("atencao.forma_ja_cadastrada", null, "Tarifa de Contrato");
+					}
+
+				}
+			} else {
+				colecaoArrecadadorContratoTarifaSelecionados = new ArrayList();
+			}
+			colecaoArrecadadorContratoTarifaSelecionados.add(arrecadadorContratoTarifa);
+
+			atualizarContratoArrecadadorActionForm.setTamanhoColecao("" + colecaoArrecadadorContratoTarifaSelecionados.size());
+			atualizarContratoArrecadadorActionForm.setNumeroDiaFloat("");
+			atualizarContratoArrecadadorActionForm.setValorTarifa("");
+			atualizarContratoArrecadadorActionForm.setValorTarifaPercentual("");
+			atualizarContratoArrecadadorActionForm.setBcoArrecadadorConta2("");
+			atualizarContratoArrecadadorActionForm.setAgArrecadadorConta2("");
+			atualizarContratoArrecadadorActionForm.setNumeroArrecadadorConta2("");
+			atualizarContratoArrecadadorActionForm.setFormaDeArrecadacao("-1");
+		}
+
+		// Remover o Contrato Tarifa da Colecao
+		if (httpServletRequest.getParameter("acao") != null && httpServletRequest.getParameter("acao").equals("remover")) {
+			int obj = new Integer(httpServletRequest.getParameter("id")).intValue();
+
+			if (colecaoArrecadadorContratoTarifaSelecionados.size() >= obj) {
+
+				colecaoArrecadadorContratoTarifaSelecionados.remove(obj - 1);
+			}
+
+		}
+
+		if (httpServletRequest.getParameter("desfazer") != null && httpServletRequest.getParameter("desfazer").equals("S")) {
+
+			FiltroArrecadadorContratoTarifa filtroArrecadadorContratoTarifa = new FiltroArrecadadorContratoTarifa();
+			filtroArrecadadorContratoTarifa.adicionarParametro(new ParametroSimples(
+					FiltroArrecadadorContratoTarifa.ARRECADADOR_CONTRATO_ID, idContratoArrecadador));
+
 			filtroArrecadadorContratoTarifa.adicionarCaminhoParaCarregamentoEntidade("arrecadacaoForma");
 
-			colecaoArrecadadorContratoTarifaSelecionados = 
-				(ArrayList) fachada.pesquisar(filtroArrecadadorContratoTarifa, 
+			colecaoArrecadadorContratoTarifaSelecionados = (ArrayList) fachada.pesquisar(filtroArrecadadorContratoTarifa,
 					ArrecadadorContratoTarifa.class.getName());
-        }
-        
-        sessao.setAttribute("colecaoArrecadadorContratoTarifaSelecionados", colecaoArrecadadorContratoTarifaSelecionados );
-		
-        atualizarContratoArrecadadorActionForm.setFormaDeArrecadacao("-1");
-		
+		}
+
+		sessao.setAttribute("colecaoArrecadadorContratoTarifaSelecionados", colecaoArrecadadorContratoTarifaSelecionados);
+
+		atualizarContratoArrecadadorActionForm.setFormaDeArrecadacao("-1");
+
 		return retorno;
 	}
 
