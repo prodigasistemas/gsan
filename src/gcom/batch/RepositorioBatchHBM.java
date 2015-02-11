@@ -35,7 +35,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -162,25 +164,46 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked"})
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasProntasParaEncerramento()
 	throws ErroRepositorioException {
 		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
 		Collection<Object> ids = null;
 		Session session = HibernateUtil.getSession();
 		String consulta;
-	 	
+			 	
 		try {
-			
-			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
-			+ "inner join func.unidadesIniciadas as iniciada "
-			+ "inner join iniciada.unidadeSituacao as situacao "
-			+ "where func.funcionalidadeSituacao = :situacaoFuncionalidade "
-			+ "and situacao = :situacaoUnidade";
+//			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
+//					+ "inner join func.unidadesIniciadas as iniciada "
+//					+ "inner join fetch func.processoFuncionalidade as procFunc "
+//					+ "inner join fetch procFunc.funcionalidade "
+//					+ "where iniciada.id is not null and "
+//					//+ "func.funcionalidadeSituacao.id <> :situacaoFuncionalidadeConcluida "
+//					+ "func.funcionalidadeSituacao.id = :situacaoFuncionalidadeEmProcessamento "
+//					+ "and func.id not in ("
+//					+ "select distinct func.id from FuncionalidadeIniciada as func2 "
+//					+ "inner join func2.unidadesIniciadas as iniciada "
+//					+ "inner join iniciada.unidadeSituacao as situacao "
+//					+ "where situacao.id <> :situacaoConcluida and and func2.id = func.id)";
 		
-			ids = session.createQuery(consulta)
-					.setInteger("situacaoUnidade", UnidadeSituacao.CONCLUIDA)
-					.setInteger("situacaoFuncionalidade",FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
+			consulta = "select distinct func.fuin_id as idFuncionalidade "
+					+ " from batch.funcionalidade_iniciada func "
+					+ " inner join batch.unidade_iniciada iniciada on iniciada.fuin_id = func.fuin_id "
+					+ " inner join batch.processo_funcionalidade procFunc on procFunc.prfn_id = func.prfn_id "
+					+ " inner join seguranca.funcionalidade funcionalidade on funcionalidade.fncd_id = procFunc.fncd_id "
+					+ " where iniciada.undi_id is not null "
+					+ " and func.fnst_id <> :situacaoFuncionalidadeConcluida " 
+					+ " and func.fuin_id not in (select func.fuin_id "
+						+ " from batch.funcionalidade_iniciada func2 "
+						+ " inner join batch.unidade_iniciada iniciada on iniciada.fuin_id = func2.fuin_id "
+						+ " inner join batch.unidade_situacao situacao on situacao.unst_id = iniciada.unst_id "
+						+ " where situacao.unst_id <> :situacaoConcluida and func2.fuin_id = func.fuin_id) ";
+			ids = session.createSQLQuery(consulta)
+					.addScalar("idFuncionalidade", Hibernate.INTEGER)
+					.setInteger("situacaoConcluida", UnidadeSituacao.CONCLUIDA)
+					.setInteger("situacaoFuncionalidadeConcluida",FuncionalidadeSituacao.CONCLUIDA)
+					//.setInteger("situacaoFuncionalidadeEmProcessamento",FuncionalidadeSituacao.EM_PROCESSAMENTO)
+					.list();
 			
 			Iterator iter = ids.iterator();
 			
@@ -193,21 +216,15 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 				
 				retorno.add(funcionalidadeIniciada);
 				
-			}
-			
-		
+			}		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
-	}
+		}
 	
-	return retorno;
-	
+		return retorno;
 	}
-
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasExecucaoFalha()

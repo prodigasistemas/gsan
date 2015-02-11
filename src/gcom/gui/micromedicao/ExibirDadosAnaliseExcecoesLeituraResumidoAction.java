@@ -1,5 +1,6 @@
 package gcom.gui.micromedicao;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
@@ -612,19 +613,22 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				sessao.removeAttribute("desabilitaBotaoProximo");
 			}
 			
-			Integer anoMes = Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa);
+		 	Integer anoMes = Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa);
 			
 			if (imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() != LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue()) {
 				if (!isFaturamentoGrupoAberto(Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa), faturamentoGrupo)) {
 					verificarAbrangenciaUsuario(httpServletRequest, usuarioLogado, imovelAtual);
+					desabilitaAtualizarImovel = true;
+				} else if (!imovelAtual.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)) {
+					httpServletRequest.setAttribute("habilitaCampos", false);
 					desabilitaAtualizarImovel = true;
 				}
 			}
 			else if(isTipoLeituraImpressaoSimultanea(imovelAtual, imovelPerfil)) {
 				if (isFaturamentoGrupoAberto(Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa), faturamentoGrupo)
 						&& imovelPossuiMedicaoHistorico(idMedicaoTipo, imovelAtual, anoMes) 
-						&& imovelPossuiContaPreFaturada(imovelAtual, anoMes)
-						&& imovelPossuiContaGerada(imovelAtual, anoMes)){
+						&& imovelPossuiConta(imovelAtual, anoMes, DebitoCreditoSituacao.PRE_FATURADA)
+						&& imovelPossuiContaImpressaoSimultaneaGerada(imovelAtual, anoMes)){
 					desabilitaAtualizarImovel = false;
 				} else {
 					httpServletRequest.setAttribute("habilitaCampos", false);
@@ -648,7 +652,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		return retorno;
 	}
 
-	private boolean imovelPossuiContaGerada(Imovel imovelAtual, Integer anoMes) {
+	private boolean imovelPossuiContaImpressaoSimultaneaGerada(Imovel imovelAtual, Integer anoMes) {
 		MovimentoContaPrefaturada mcpf = this.getFachada().obterMovimentoImovel(imovelAtual.getId(), anoMes);
 		
 		if ((mcpf != null && mcpf.getId() != null
@@ -661,10 +665,10 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		}
 	}
 
-	private boolean imovelPossuiContaPreFaturada(Imovel imovelAtual, Integer anoMes) {
+	private boolean imovelPossuiConta(Imovel imovelAtual, Integer anoMes, Integer idSituacao) {
 		Conta conta = this.getFachada().obterContaImovel(imovelAtual.getId(), anoMes);
 		
-		if(conta != null && conta.getId() != null && conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+		if(conta != null && conta.getId() != null && conta.getDebitoCreditoSituacaoAtual().getId().equals(idSituacao)) {
 			return true;
 		} else {
 			return false;

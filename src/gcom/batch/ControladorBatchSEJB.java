@@ -5488,82 +5488,30 @@ public class ControladorBatchSEJB implements SessionBean {
 								}
 							}
 						}
-						// ******************************************************
-						// Seta os parametros para rodar a funcionalidade
 
-						// acaoCobranca.addParametro("anoMesReferenciaCicloCobranca",
-						// getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento());
-
-						acaoCobranca.addParametro(
-								"comandoAtividadeAcaoComando",
-								cobrancaAcaoAtividadeComando);
-
+						acaoCobranca.addParametro("comandoAtividadeAcaoComando", cobrancaAcaoAtividadeComando);
 						acaoCobranca.addParametro("colecaoRotas", colecaoRotas);
 
 						if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
-							acaoCobranca
-									.addParametro(
-											ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-											colecaoRotas);
+							acaoCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoRotas);
 						} else {
-							acaoCobranca
-									.addParametro(
-											ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-											Collections
-													.singletonList(cobrancaAcaoAtividadeComando
-															.getId()));
+							acaoCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, Collections.singletonList(cobrancaAcaoAtividadeComando.getId()));
 						}
-						acaoCobranca.addParametro("acaoCobranca",
-								cobrancaAcaoAtividadeComando.getCobrancaAcao());
-
-						acaoCobranca.addParametro("atividadeCobranca",
-								cobrancaAcaoAtividadeComando
-										.getCobrancaAtividade());
-
-						acaoCobranca.addParametro("indicadorCriterio",
-								cobrancaAcaoAtividadeComando
-										.getIndicadorCriterio());
-
-						acaoCobranca.addParametro("criterioCobranca",
-								cobrancaAcaoAtividadeComando
-										.getCobrancaCriterio());
-
-						acaoCobranca.addParametro("cliente",
-								cobrancaAcaoAtividadeComando.getCliente());
-
-						acaoCobranca.addParametro("clienteSuperior",
-								cobrancaAcaoAtividadeComando.getSuperior());
-
-						acaoCobranca.addParametro("clienteRelacaoTipo",
-								cobrancaAcaoAtividadeComando
-										.getClienteRelacaoTipo());
-
-						acaoCobranca.addParametro("anoMesReferenciaInicial",
-								cobrancaAcaoAtividadeComando
-										.getAnoMesReferenciaContaInicial());
-
-						acaoCobranca.addParametro("anoMesReferenciaFinal",
-								cobrancaAcaoAtividadeComando
-										.getAnoMesReferenciaContaFinal());
-
-						acaoCobranca.addParametro("dataVencimentoInicial",
-								cobrancaAcaoAtividadeComando
-										.getDataVencimentoContaInicial());
-
-						acaoCobranca.addParametro("dataVencimentoFinal",
-								cobrancaAcaoAtividadeComando
-										.getDataVencimentoContaFinal());
-
+						acaoCobranca.addParametro("acaoCobranca",cobrancaAcaoAtividadeComando.getCobrancaAcao());
+						acaoCobranca.addParametro("atividadeCobranca",cobrancaAcaoAtividadeComando.getCobrancaAtividade());
+						acaoCobranca.addParametro("indicadorCriterio",cobrancaAcaoAtividadeComando.getIndicadorCriterio());
+						acaoCobranca.addParametro("criterioCobranca",cobrancaAcaoAtividadeComando .getCobrancaCriterio());
+						acaoCobranca.addParametro("cliente", cobrancaAcaoAtividadeComando.getCliente());
+						acaoCobranca.addParametro("clienteSuperior", cobrancaAcaoAtividadeComando.getSuperior());
+						acaoCobranca.addParametro("clienteRelacaoTipo",cobrancaAcaoAtividadeComando .getClienteRelacaoTipo());
+						acaoCobranca.addParametro("anoMesReferenciaInicial",cobrancaAcaoAtividadeComando.getAnoMesReferenciaContaInicial());
+						acaoCobranca.addParametro("anoMesReferenciaFinal", cobrancaAcaoAtividadeComando.getAnoMesReferenciaContaFinal());
+						acaoCobranca.addParametro("dataVencimentoInicial", cobrancaAcaoAtividadeComando.getDataVencimentoContaInicial());
+						acaoCobranca.addParametro("dataVencimentoFinal",cobrancaAcaoAtividadeComando .getDataVencimentoContaFinal());
 						acaoCobranca.addParametro("dataAtual", dataAtual);
+						acaoCobranca.addParametro("idCobrancaDocumentoControleGeracao", idCobrancaDocumentoControleGeracao);
 
-						acaoCobranca.addParametro(
-								"idCobrancaDocumentoControleGeracao",
-								idCobrancaDocumentoControleGeracao);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada.setTarefaBatch(IoUtil
-								.transformarObjetoParaBytes(acaoCobranca));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(acaoCobranca));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 

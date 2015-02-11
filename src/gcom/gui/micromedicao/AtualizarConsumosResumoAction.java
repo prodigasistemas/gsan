@@ -166,9 +166,13 @@ public class AtualizarConsumosResumoAction extends GcomAction {
 
 					boolean anoMesInferiorValido = fachada.validaDataFaturamentoIncompativelInferior(anoMesReferencia, anoMesAnterior);
 
-					if (!anoMesInferiorValido) {
-						sessao.setAttribute("nomeCampo", "dataLeituraAnterior");
-						throw new ActionServletException("atencao.faturamento_data_incompativel", null, "Data de Leitura Anterior de Faturamento");
+					try {
+						if (!anoMesInferiorValido && !fachada.verificarInstalacaoSubstituicaoHidrometro(new Integer(idImovel), new MedicaoTipo(new Integer(tipoMedicao)))) {
+							sessao.setAttribute("nomeCampo", "dataLeituraAnterior");
+							throw new ActionServletException("atencao.faturamento_data_incompativel", null, "Data de Leitura Anterior de Faturamento");
+						}
+					} catch (NumberFormatException e) {
+					} catch (ControladorException e) {
 					}
 
 					medicaoHistorico.setDataLeituraAnteriorFaturamento(dataLeituraAnterior);

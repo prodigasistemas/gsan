@@ -2592,19 +2592,17 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 			FaturamentoGrupo faturamentoGrupo, Integer numeroPagina,
 			boolean todosRegistros, String anoMes, String valorAguaEsgotoInicial,
 			String valorAguaEsgotoFinal, boolean pesquisarPorRotaAlternativa)
-			throws ErroRepositorioException {
+ throws ErroRepositorioException {
 
 		Collection retorno = null;
 
-		Collection medicaohistoricoParametros = filtroMedicaoHistoricoSql
-				.getParametros();
+		Collection medicaohistoricoParametros = filtroMedicaoHistoricoSql.getParametros();
 
 		Session session = HibernateUtil.getSession();
 
 		String sqlRota = "";
 
-		if (!medicaohistoricoParametros.isEmpty()
-				&& medicaohistoricoParametros.size() >= 1) {
+		if (!medicaohistoricoParametros.isEmpty() && medicaohistoricoParametros.size() >= 1) {
 
 			sqlRota = "select  distinct(imovel.imov_id) as idImovel,"// 0
 					+ " imovel.loca_id as idLocalidade, " // 01
@@ -2634,7 +2632,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " usuario.usur_nmlogin as loginUsuario, usuario.usur_nmusuario as nomeUsuario, " // 25,
 					// 26
 					+ " rota.rota_id as idRota, " // 27
-					+ " tipoLeitura.lttp_id as idTipoLeitura " // 28
+					+ " tipoLeitura.lttp_id as idTipoLeitura, " // 28
+					+ " imovel.last_id as ligacaoAguaSituacao, " // 29
+					+ " imovel.lest_id as ligacaoEsgotoSituacao " // 30
 					+ " from cadastro.imovel imovel"
 					+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id=consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento = "
 					+ anoMes
@@ -2663,15 +2663,20 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " left outer join cadastro.funcionario funcionario on leiturista.func_id=funcionario.func_id"
 					+ " left outer join cadastro.localidade localidade on localidade.loca_id=imovel.loca_id"
 					+ " left outer join seguranca.usuario usuario on medicaoHistorico.usur_idalteracao=usuario.usur_id"
-					
-/////////////////////////////////////////////////////
-					+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = " + anoMes
-					+ " and cnta.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-					+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = " + anoMes
-					+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-////////////////////////////////////////////////////					/
 
-					
+					// ///////////////////////////////////////////////////
+					+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = "
+					+ anoMes
+					+ " and cnta.dcst_idatual in ( "
+					+ DebitoCreditoSituacao.NORMAL
+					+ ","
+					+ DebitoCreditoSituacao.PRE_FATURADA
+					+ ")"
+					+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = "
+					+ anoMes
+					+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.PRE_FATURADA + ")"
+					// ////////////////////////////////////////////////// /
+
 					+ " where ";
 
 			String sqlRotaSegundaParte = " select  distinct(imovel.imov_id) as idImovel,imovel.loca_id as idLocalidade, setorComercial.stcm_cdsetorcomercial as codigoSetorComercial,"
@@ -2693,7 +2698,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " setorComercial.stcm_id as idSetorComercial, quadra.qdra_id as idQuadra, "
 					+ " usuario.usur_nmlogin as loginUsuario, usuario.usur_nmusuario as nomeUsuario, "
 					+ " rota.rota_id as idRota, " // 27
-					+ " tipoLeitura.lttp_id as idTipoLeitura " // 28
+					+ " tipoLeitura.lttp_id as idTipoLeitura, " // 28
+					+ " imovel.last_id as ligacaoAguaSituacao, " // 29
+					+ " imovel.lest_id as ligacaoEsgotoSituacao " // 30
 					+ " from cadastro.imovel imovel"
 					+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id=consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento =  "
 					+ anoMes
@@ -2722,19 +2729,24 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " left outer join cadastro.funcionario funcionario on leiturista.func_id=funcionario.func_id"
 					+ " left outer join cadastro.localidade localidade on localidade.loca_id=imovel.loca_id"
 					+ " left outer join seguranca.usuario usuario on medicaoHistorico.usur_idalteracao=usuario.usur_id"
-					
-/////////////////////////////////////////////////////
-					+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = " + anoMes
-					+ " and cnta.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-					+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = " + anoMes
-					+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-////////////////////////////////////////////////////
-					
+
+					// ///////////////////////////////////////////////////
+					+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = "
+					+ anoMes
+					+ " and cnta.dcst_idatual in ( "
+					+ DebitoCreditoSituacao.NORMAL
+					+ ","
+					+ DebitoCreditoSituacao.PRE_FATURADA
+					+ ")"
+					+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = "
+					+ anoMes
+					+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.PRE_FATURADA + ")"
+					// //////////////////////////////////////////////////
+
 					+ " where ";
 
-			sqlRota = criarCondicionalPesquisaAnaliseExcecoesLeituras(
-					medicaohistoricoParametros, sqlRota, sqlRotaSegundaParte,
-					pesquisarPorRotaAlternativa, false, valorAguaEsgotoInicial, valorAguaEsgotoFinal);
+			sqlRota = criarCondicionalPesquisaAnaliseExcecoesLeituras(medicaohistoricoParametros, sqlRota, sqlRotaSegundaParte, pesquisarPorRotaAlternativa,
+					false, valorAguaEsgotoInicial, valorAguaEsgotoFinal);
 
 			if (pesquisarPorRotaAlternativa) {
 
@@ -2766,7 +2778,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						+ " usuario.usur_nmlogin as loginUsuario, usuario.usur_nmusuario as nomeUsuario, " // 25,
 						// 26
 						+ " rota.rota_id as idRota, " // 27
-						+ " tipoLeitura.lttp_id as idTipoLeitura " // 28
+						+ " tipoLeitura.lttp_id as idTipoLeitura, " // 28
+						+ " imovel.last_id as ligacaoAguaSituacao, " // 29
+						+ " imovel.lest_id as ligacaoEsgotoSituacao " // 30
 						+ " from cadastro.imovel imovel"
 						+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id=consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento = "
 						+ anoMes
@@ -2795,14 +2809,20 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						+ " left outer join cadastro.funcionario funcionario on leiturista.func_id=funcionario.func_id"
 						+ " left outer join cadastro.localidade localidade on localidade.loca_id=imovel.loca_id"
 						+ " left outer join seguranca.usuario usuario on medicaoHistorico.usur_idalteracao=usuario.usur_id"
-						
-/////////////////////////////////////////////////////
-						+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = " + anoMes
-						+ " and cnta.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-						+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = " + anoMes
-						+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-//////////////////////////////////////////////////	//
-						
+
+						// ///////////////////////////////////////////////////
+						+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = "
+						+ anoMes
+						+ " and cnta.dcst_idatual in ( "
+						+ DebitoCreditoSituacao.NORMAL
+						+ ","
+						+ DebitoCreditoSituacao.PRE_FATURADA
+						+ ")"
+						+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = "
+						+ anoMes
+						+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.PRE_FATURADA + ")"
+						// //////////////////////////////////////////////// //
+
 						+ " where ";
 
 				String sqlRotaAlternativaSegundaParte = " select  distinct(imovel.imov_id) as idImovel,imovel.loca_id as idLocalidade, setorComercial.stcm_cdsetorcomercial as codigoSetorComercial,"
@@ -2824,7 +2844,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						+ " setorComercial.stcm_id as idSetorComercial, quadra.qdra_id as idQuadra, "
 						+ " usuario.usur_nmlogin as loginUsuario, usuario.usur_nmusuario as nomeUsuario, "
 						+ " rota.rota_id as idRota, " // 27
-						+ " tipoLeitura.lttp_id as idTipoLeitura " // 28
+						+ " tipoLeitura.lttp_id as idTipoLeitura, " // 28
+						+ " imovel.last_id as ligacaoAguaSituacao, " // 29
+						+ " imovel.lest_id as ligacaoEsgotoSituacao " // 30
 						+ " from cadastro.imovel imovel"
 						+ " inner join micromedicao.consumo_historico consumoHistorico on imovel.imov_id=consumoHistorico.imov_id and consumoHistorico.cshi_amfaturamento =  "
 						+ anoMes
@@ -2853,18 +2875,23 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						+ " left outer join cadastro.funcionario funcionario on leiturista.func_id=funcionario.func_id"
 						+ " left outer join cadastro.localidade localidade on localidade.loca_id=imovel.loca_id"
 						+ " left outer join seguranca.usuario usuario on medicaoHistorico.usur_idalteracao=usuario.usur_id"
-						
-/////////////////////////////////////////////////////
-						+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = " + anoMes
-						+ " and cnta.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-						+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = " + anoMes
-						+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL +"," + DebitoCreditoSituacao.PRE_FATURADA + ")"
-////////////////////////////////////////////////////
-						
+
+						// ///////////////////////////////////////////////////
+						+ " left outer join faturamento.conta cnta on cnta.imov_id = imovel.imov_id and cnta.cnta_amreferenciaconta = "
+						+ anoMes
+						+ " and cnta.dcst_idatual in ( "
+						+ DebitoCreditoSituacao.NORMAL
+						+ ","
+						+ DebitoCreditoSituacao.PRE_FATURADA
+						+ ")"
+						+ " left outer join faturamento.conta_historico cnhi on cnhi.imov_id = imovel.imov_id and cnhi.cnhi_amreferenciaconta = "
+						+ anoMes
+						+ " and cnhi.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.PRE_FATURADA + ")"
+						// //////////////////////////////////////////////////
+
 						+ " where ";
 
-				sqlRotaAlternativa = criarCondicionalPesquisaAnaliseExcecoesLeituras(
-						medicaohistoricoParametros, sqlRotaAlternativa,
+				sqlRotaAlternativa = criarCondicionalPesquisaAnaliseExcecoesLeituras(medicaohistoricoParametros, sqlRotaAlternativa,
 						sqlRotaAlternativaSegundaParte, false, false, valorAguaEsgotoInicial, valorAguaEsgotoFinal);
 
 				sqlRota = sqlRota + " UNION " + sqlRotaAlternativa;
@@ -2873,69 +2900,36 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		}
 		try {
 			if (todosRegistros) {
-				retorno = session.createSQLQuery(sqlRota).addScalar("idImovel",
-						Hibernate.INTEGER).addScalar("idLocalidade",
-						Hibernate.INTEGER).addScalar("codigoSetorComercial",
-						Hibernate.INTEGER).addScalar("numeroQuadra",
-						Hibernate.INTEGER).addScalar("lote", Hibernate.SHORT)
-						.addScalar("subLote", Hibernate.SHORT).addScalar(
-								"dsImovelPerfil", Hibernate.STRING).addScalar(
-								"dsMedicaoTipo", Hibernate.STRING).addScalar(
-								"numeroConsumoFaturadoMes", Hibernate.INTEGER)
-						.addScalar("dsleituraanormalidadefaturamen",
-								Hibernate.STRING).addScalar(
-								"dsConsumoAnormalidade", Hibernate.STRING)
-						.addScalar("idMedicaoTipo", Hibernate.INTEGER)
-						.addScalar("idMedicaoHistorico", Hibernate.INTEGER)
-						.addScalar("indicadorAnalisado", Hibernate.SHORT)
-						.addScalar("consumoMedioHidrometro", Hibernate.INTEGER)
-						.addScalar("leituraCampo", Hibernate.INTEGER)
-						.addScalar("dataLeituraCampo", Hibernate.DATE)
-						.addScalar("nomeCliente", Hibernate.STRING).addScalar(
-								"nomeFuncionario", Hibernate.STRING).addScalar(
-								"nomeLocalidade", Hibernate.STRING).addScalar(
-								"idPocoTipo", Hibernate.INTEGER).addScalar(
-								"pavimentoRua", Hibernate.INTEGER).addScalar(
-								"pavimentoCalcada", Hibernate.INTEGER)
-						.addScalar("idSetorComercial", Hibernate.INTEGER)
-						.addScalar("idQuadra", Hibernate.INTEGER).addScalar(
-								"loginUsuario", Hibernate.STRING).addScalar(
-								"nomeUsuario", Hibernate.STRING).addScalar(
-								"idRota", Hibernate.INTEGER).addScalar(
-								"idTipoLeitura", Hibernate.INTEGER).list();
+				retorno = session.createSQLQuery(sqlRota).addScalar("idImovel", Hibernate.INTEGER).addScalar("idLocalidade", Hibernate.INTEGER)
+						.addScalar("codigoSetorComercial", Hibernate.INTEGER).addScalar("numeroQuadra", Hibernate.INTEGER).addScalar("lote", Hibernate.SHORT)
+						.addScalar("subLote", Hibernate.SHORT).addScalar("dsImovelPerfil", Hibernate.STRING).addScalar("dsMedicaoTipo", Hibernate.STRING)
+						.addScalar("numeroConsumoFaturadoMes", Hibernate.INTEGER).addScalar("dsleituraanormalidadefaturamen", Hibernate.STRING)
+						.addScalar("dsConsumoAnormalidade", Hibernate.STRING).addScalar("idMedicaoTipo", Hibernate.INTEGER)
+						.addScalar("idMedicaoHistorico", Hibernate.INTEGER).addScalar("indicadorAnalisado", Hibernate.SHORT)
+						.addScalar("consumoMedioHidrometro", Hibernate.INTEGER).addScalar("leituraCampo", Hibernate.INTEGER)
+						.addScalar("dataLeituraCampo", Hibernate.DATE).addScalar("nomeCliente", Hibernate.STRING)
+						.addScalar("nomeFuncionario", Hibernate.STRING).addScalar("nomeLocalidade", Hibernate.STRING)
+						.addScalar("idPocoTipo", Hibernate.INTEGER).addScalar("pavimentoRua", Hibernate.INTEGER)
+						.addScalar("pavimentoCalcada", Hibernate.INTEGER).addScalar("idSetorComercial", Hibernate.INTEGER)
+						.addScalar("idQuadra", Hibernate.INTEGER).addScalar("loginUsuario", Hibernate.STRING).addScalar("nomeUsuario", Hibernate.STRING)
+						.addScalar("idRota", Hibernate.INTEGER).addScalar("idTipoLeitura", Hibernate.INTEGER)
+						.addScalar("ligacaoAguaSituacao", Hibernate.INTEGER).addScalar("ligacaoEsgotoSituacao", Hibernate.INTEGER).list();
 			} else {
-				retorno = session.createSQLQuery(sqlRota).addScalar("idImovel",
-						Hibernate.INTEGER).addScalar("idLocalidade",
-						Hibernate.INTEGER).addScalar("codigoSetorComercial",
-						Hibernate.INTEGER).addScalar("numeroQuadra",
-						Hibernate.INTEGER).addScalar("lote", Hibernate.SHORT)
-						.addScalar("subLote", Hibernate.SHORT).addScalar(
-								"dsImovelPerfil", Hibernate.STRING).addScalar(
-								"dsMedicaoTipo", Hibernate.STRING).addScalar(
-								"numeroConsumoFaturadoMes", Hibernate.INTEGER)
-						.addScalar("dsleituraanormalidadefaturamen",
-								Hibernate.STRING).addScalar(
-								"dsConsumoAnormalidade", Hibernate.STRING)
-						.addScalar("idMedicaoTipo", Hibernate.INTEGER)
-						.addScalar("idMedicaoHistorico", Hibernate.INTEGER)
-						.addScalar("indicadorAnalisado", Hibernate.SHORT)
-						.addScalar("consumoMedioHidrometro", Hibernate.INTEGER)
-						.addScalar("leituraCampo", Hibernate.INTEGER)
-						.addScalar("dataLeituraCampo", Hibernate.DATE)
-						.addScalar("nomeCliente", Hibernate.STRING).addScalar(
-								"nomeFuncionario", Hibernate.STRING).addScalar(
-								"nomeLocalidade", Hibernate.STRING).addScalar(
-								"idPocoTipo", Hibernate.INTEGER).addScalar(
-								"pavimentoRua", Hibernate.INTEGER).addScalar(
-								"pavimentoCalcada", Hibernate.INTEGER)
-						.addScalar("idSetorComercial", Hibernate.INTEGER)
-						.addScalar("idQuadra", Hibernate.INTEGER).addScalar(
-								"loginUsuario", Hibernate.STRING).addScalar(
-								"nomeUsuario", Hibernate.STRING).addScalar(
-								"idRota", Hibernate.INTEGER).addScalar(
-								"idTipoLeitura", Hibernate.INTEGER)
-						.setFirstResult(10 * numeroPagina).setMaxResults(10)
-						.list();
+				retorno = session.createSQLQuery(sqlRota).addScalar("idImovel", Hibernate.INTEGER).addScalar("idLocalidade", Hibernate.INTEGER)
+						.addScalar("codigoSetorComercial", Hibernate.INTEGER).addScalar("numeroQuadra", Hibernate.INTEGER).addScalar("lote", Hibernate.SHORT)
+						.addScalar("subLote", Hibernate.SHORT).addScalar("dsImovelPerfil", Hibernate.STRING).addScalar("dsMedicaoTipo", Hibernate.STRING)
+						.addScalar("numeroConsumoFaturadoMes", Hibernate.INTEGER).addScalar("dsleituraanormalidadefaturamen", Hibernate.STRING)
+						.addScalar("dsConsumoAnormalidade", Hibernate.STRING).addScalar("idMedicaoTipo", Hibernate.INTEGER)
+						.addScalar("idMedicaoHistorico", Hibernate.INTEGER).addScalar("indicadorAnalisado", Hibernate.SHORT)
+						.addScalar("consumoMedioHidrometro", Hibernate.INTEGER).addScalar("leituraCampo", Hibernate.INTEGER)
+						.addScalar("dataLeituraCampo", Hibernate.DATE).addScalar("nomeCliente", Hibernate.STRING)
+						.addScalar("nomeFuncionario", Hibernate.STRING).addScalar("nomeLocalidade", Hibernate.STRING)
+						.addScalar("idPocoTipo", Hibernate.INTEGER).addScalar("pavimentoRua", Hibernate.INTEGER)
+						.addScalar("pavimentoCalcada", Hibernate.INTEGER).addScalar("idSetorComercial", Hibernate.INTEGER)
+						.addScalar("idQuadra", Hibernate.INTEGER).addScalar("loginUsuario", Hibernate.STRING).addScalar("nomeUsuario", Hibernate.STRING)
+						.addScalar("idRota", Hibernate.INTEGER).addScalar("idTipoLeitura", Hibernate.INTEGER)
+						.addScalar("ligacaoAguaSituacao", Hibernate.INTEGER).addScalar("ligacaoEsgotoSituacao", Hibernate.INTEGER)
+						.setFirstResult(10 * numeroPagina).setMaxResults(10).list();
 			}
 
 		} catch (HibernateException e) {

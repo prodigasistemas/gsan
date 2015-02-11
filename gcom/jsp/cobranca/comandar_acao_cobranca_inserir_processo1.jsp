@@ -19,7 +19,6 @@
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript">
-<!-- Begin
 
 function selecionar(){
 
@@ -38,7 +37,6 @@ function selecionar(){
     		formulario.submit();
 		}
 }
--->
 </script>
 </head>
 
