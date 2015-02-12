@@ -35,4 +35,6 @@ public class FiltroTramite  extends Filtro implements Serializable {
 	 * Description of the Field
 	 */
 	public final static String ID = "id";
+	
+	public final static String REGISTRO_ATENDIMENTO_ID = "registroAtendimento.id";
 }
