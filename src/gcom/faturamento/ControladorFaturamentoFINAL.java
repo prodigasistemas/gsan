@@ -7803,6 +7803,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.intValue() == 1)) {
 					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
 							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
+						logger.info("Imóvel com taxa de juros não permitida: " + debitoACobrar.getImovel().getId());
 						throw new ControladorException(
 								"atencao.taxa_juros.nao.permitida", null,
 								(this.getControladorUtil()
@@ -47340,10 +47341,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditoRealizadoRemover = new ArrayList();
 		Collection colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
 
+		
+		Conta conta = (Conta)this.obterConta(idConta).iterator().next(); 
 		try {
 			// pesquisa os créditos realizados da conta cancelada
 			Collection<ICreditoRealizado> creditosRealizados = repositorioFaturamento
-					.pesquisarCreditosRealizados(idConta);
+					.pesquisarCreditosRealizados(conta);
 
 			// cria o crédito realizados histórico
 			CreditoRealizadoHistorico creditoRealizadoHistoricoTemp = null;
@@ -69412,8 +69415,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							anoMesFaturamento, faturamentoGrupo.getId());
 
 			/*
-			 *  Alteração feita para permitir que todos os imóveis
-			 * sejam gerados na rota de leitura e impressão simultanea
+			 *  Alteração feita para permitir que todos os imóveis sejam gerados na rota de leitura e impressão simultanea
 			 */
 			if (conta != null) {
 

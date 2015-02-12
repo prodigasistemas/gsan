@@ -6808,7 +6808,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		BigDecimal valorTotalCreditos = BigDecimal.ZERO;
 		
 		try{
-		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
+			
+		Conta conta = repositorioFaturamento.pesquisarExistenciaContaComSituacaoAtual(idConta);
+			
+		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(conta);
 		
 	//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
 		
@@ -16151,7 +16154,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	private void copiarCreditoRealizado(IConta contaAntiga, Conta contaNova) throws Exception {
-		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados(contaAntiga.getId());
+		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados((Conta)contaAntiga);
 		listaCreditosOrigem.addAll(repositorioFaturamento.pesquisarCreditosRealizadosHistorico(contaAntiga.getId()));
 				
 		for (ICreditoRealizado creditoRealizadoAntigo : listaCreditosOrigem) {

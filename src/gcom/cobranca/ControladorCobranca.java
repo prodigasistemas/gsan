@@ -6671,39 +6671,6 @@ public class ControladorCobranca implements SessionBean {
 	/**
 	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0001] Gerar Atividade de
 	 * Ação de Cobrança para os Imóveis do Cliente
-	 * 
-	 * @author Pedro Alexandre
-	 * @created 07/02/2006
-	 * 
-	 * @param cobrancaAcaoAtividadeCronograma
-	 *            Atividade de Ação de Cobrança de Cronograma
-	 * @param cobrancaAcaoAtividadeComando
-	 *            Atividade de Ação de Cobrança de Comando
-	 * @param cliente
-	 *            Cliente
-	 * @param relacaoClienteImovel
-	 *            Tipo de relação entre cliente e imóvel
-	 * @param indicadorCriterio
-	 *            Indicador do critério a ser utilizado
-	 * @param acaoCobranca
-	 *            Ação de Cobrança
-	 * @param atividadeCobranca
-	 *            Atividade de Cobrança
-	 * @param colecaoCobrancaCriterioLinhaComando
-	 *            Coleção de linha de critério de cobrança do comando
-	 * @param cobrancaCriterioComando
-	 *            Critério de Cobrança do Comando
-	 * @param anoMesReferenciaInicial
-	 *            Ano/Mês de referência inicial
-	 * @param anoMesReferenciaFinal
-	 *            Ano/Mês de referência final
-	 * @param dataVencimentoInicial
-	 *            Data de vencimento inicial
-	 * @param dataVencimentoFinal
-	 *            Data de vencimento final
-	 * 
-	 * @throws ControladorException
-	 *             Controlador Exception
 	 */
 	public GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaParaImoveisCliente(
 			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
@@ -6713,29 +6680,17 @@ public class ControladorCobranca implements SessionBean {
 			Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataAtual, Cliente clienteSuperior,
 			Integer idCobrancaDocumentoControleGeracao) throws ControladorException {
 
-		// cria o objeto que vai armazenas os dados
 		GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelper = new GerarAtividadeAcaoCobrancaHelper();
 
-		// inicializa os valores de quantidade de documentos, quantidade de
-		// itens cobrados e valor do documento de cobrança
 		gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(0);
 		gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(0);
 		gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(new BigDecimal("0.00"));
 
-		// cria o objeto de critério de cobrança
 		CobrancaCriterio cobrancaCriterio = null;
-
-		// cria a coleção que vai armazenar as linhas do critério de cobrança de
-		// cada imóvel
 		Collection<CobrancaCriterioLinha> colecaoCobrancaCriterioLinha = new ArrayList();
 
 		if (indicadorCriterio.intValue() != 1) {
-
-			// a coleção de linha de critério de cobrança vai ser a do
-			// comando
 			colecaoCobrancaCriterioLinha = colecaoCobrancaCriterioLinhaComando;
-
-			// o critério de cobrança vai ser o do comando
 			cobrancaCriterio = cobrancaCriterioComando;
 		}
 
@@ -6749,8 +6704,6 @@ public class ControladorCobranca implements SessionBean {
 			Collection colecaoImoveis = null;
 			Rota rota = null;
 
-			// item 1
-			// Alterado por Sávio Luiz data:26/11/2007
 			if (clienteSuperior != null) {
 
 				Collection<Integer> colecaoIdsClientes = getControladorCadastro().pesquisarClientesSubordinados(clienteSuperior.getId());
@@ -6765,13 +6718,6 @@ public class ControladorCobranca implements SessionBean {
 
 			} else {
 				colecaoImoveis = getControladorImovel().pesquisarImoveisClientesRelacao(cliente, relacaoClienteImovel, numeroInicial);
-
-				/*
-				 * Felipe Santos - 24/06/2013
-				 * 
-				 * Remove os imóveis da coleção caso o cliente não seja o atual
-				 * responsável pela conta
-				 */
 				colecaoImoveis = this.verificarClienteResponsavelImovel(colecaoImoveis, cliente);
 			}
 
@@ -6788,7 +6734,6 @@ public class ControladorCobranca implements SessionBean {
 				ImovelPerfil imovelPerfil = null;
 				Empresa empresa = null;
 				Quadra quadra = null;
-				// Rota rotaEmpresa = null;
 				Localidade localidade = null;
 				SetorComercial setorComercial = null;
 				CobrancaSituacaoTipo cobrancaSituacaoTipo = null;
@@ -6826,14 +6771,11 @@ public class ControladorCobranca implements SessionBean {
 					if (arrayImovel[4] != null) {
 						imovelPerfil.setId((Integer) arrayImovel[4]);
 					}
-					// caso a ação de cobrança gere a ordem de serviço
 					if (acaoCobranca.getServicoTipo() != null && acaoCobranca.getServicoTipo().getId() != null) {
-						// seta a empresa cobranca
 						if (arrayImovel[14] != null) {
 							empresa.setId((Integer) arrayImovel[14]);
 						}
 					} else {
-						// seta a empresa
 						if (arrayImovel[5] != null) {
 							empresa.setId((Integer) arrayImovel[5]);
 						}
@@ -6882,82 +6824,46 @@ public class ControladorCobranca implements SessionBean {
 
 					if (indicadorCriterio.intValue() == 1) {
 						try {
-							// O critério de cobrança a ser utilizado será o da
-							// rota
 							cobrancaCriterio = repositorioCobranca.pesquisarCriterioCobrancaRota(rota.getId(), acaoCobranca.getId());
-							colecaoCobrancaCriterioLinha = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(cobrancaCriterio
-									.getId());
-
+							colecaoCobrancaCriterioLinha = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(cobrancaCriterio.getId());
 						} catch (ErroRepositorioException ex) {
-							// levanta a exceção para a próxima camada
 							throw new ControladorException("erro.sistema", ex);
 						}
 					}
 
-					// cria o objeto que vai armazenar temporariamente os dados
-					// retornados
-					// pelo [SB0003], para cada imóvel
 					GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelperTemp = new GerarAtividadeAcaoCobrancaHelper();
 
-					// [SB0003] - Gerar Atividade de Ação de Cobrança para o
-					// imóvel
-					gerarAtividadeAcaoCobrancaHelperTemp = gerarAtividadeAcaoCobrancaParaImovel(cobrancaAcaoAtividadeCronograma,
-							cobrancaAcaoAtividadeComando, imovel, indicadorCriterio, acaoCobranca, atividadeCobranca, cobrancaCriterio,
-							colecaoCobrancaCriterioLinha, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,
-							dataVencimentoFinal, dataAtual);
+					gerarAtividadeAcaoCobrancaHelperTemp = gerarAtividadeAcaoCobrancaParaImovel(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando,
+							imovel, indicadorCriterio, acaoCobranca, atividadeCobranca, cobrancaCriterio, colecaoCobrancaCriterioLinha,
+							anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual);
 
-					// se o objeto retornado for diferente de nulo
 					if (gerarAtividadeAcaoCobrancaHelperTemp != null) {
-						// recupera a quantidade de documentos de cobrança,
-						// quantidade
-						// de itens cobrados e o valor do documento
-						// do objeto retornado pelo [SB0003]
-						gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper
-								.getQuantidadeDocumentosCobranca() + 1);
+						gerarAtividadeAcaoCobrancaHelper
+								.setQuantidadeDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca() + 1);
+						
 						gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(gerarAtividadeAcaoCobrancaHelper
-								.getQuantidadeItensCobradosDocumentos()
-								+ gerarAtividadeAcaoCobrancaHelperTemp.getQuantidadeItensCobradosDocumentos());
-						gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper
-								.getValorDocumentosCobranca().add(gerarAtividadeAcaoCobrancaHelperTemp.getValorDocumentosCobranca()));
+								.getQuantidadeItensCobradosDocumentos() + gerarAtividadeAcaoCobrancaHelperTemp.getQuantidadeItensCobradosDocumentos());
+						
+						gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca().add(
+								gerarAtividadeAcaoCobrancaHelperTemp.getValorDocumentosCobranca()));
 
-						/** alterado por pedro alexandre dia 16/11/2006 */
-						gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().addAll(
-								gerarAtividadeAcaoCobrancaHelperTemp.getColecaoDocumentosCobranca());
+						gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().addAll(gerarAtividadeAcaoCobrancaHelperTemp.getColecaoDocumentosCobranca());
 
-						// Caso seja um comando eventual e a quantidade de
-						// documentos gerados seja igual a quantidade máxima
-						// de documentos especificada no comando
-
-						// Alterado por Chico, 06/06/08, analista: Ana Breda
-						// caso seja um comando de cronograma, verificar é foi
-						// preenchida a quantidade
-						// maxima de documentos a ser gerada
+						// Caso seja um comando eventual e a quantidade de documentos gerados seja igual a quantidade máxima de documentos especificada no comando
+						// caso seja um comando de cronograma, verificar é foi preenchida a quantidade maxima de documentos a ser gerada
 						if ((cobrancaAcaoAtividadeComando != null && cobrancaAcaoAtividadeComando.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeComando
 								.getQuantidadeMaximaDocumentos().equals(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))
-								|| (cobrancaAcaoAtividadeCronograma != null
-										&& cobrancaAcaoAtividadeCronograma.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeCronograma
-										.getQuantidadeMaximaDocumentos().equals(
-												gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))) { // não
-																														// roda
-																														// mais
-																														// os
-																														// imóveis
-																														// das
-																														// rotas
-							// posteriores
+								|| (cobrancaAcaoAtividadeCronograma != null && cobrancaAcaoAtividadeCronograma.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeCronograma
+										.getQuantidadeMaximaDocumentos().equals(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))) { 
 							break labelRotasClientes;
 						}
-
 					}
 
-					// se o indicador do critério for igual a 2(dois) - "usa o
-					// critério do comando"
 					ligacaoAguaSituacao = null;
 					ligacaoEsgotoSituacao = null;
 					imovelPerfil = null;
 					empresa = null;
 					quadra = null;
-					// Rota rotaEmpresa = null;
 					localidade = null;
 					setorComercial = null;
 					cobrancaSituacaoTipo = null;
@@ -6971,20 +6877,10 @@ public class ControladorCobranca implements SessionBean {
 			colecaoImoveis = null;
 		}
 
-		// fim item 2
+		// atualizar a quantidade de documentos cobrados, a quantidade de itens cobrados e o valor total dos documentos na tabela cobranca_documento_controle_geracao
+		this.atualizarCobrancaDocumentoControleGeracao(idCobrancaDocumentoControleGeracao, gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca(),
+				gerarAtividadeAcaoCobrancaHelper.getQuantidadeItensCobradosDocumentos(), gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca());
 
-		// atualizar a quantidade de documentos cobrados, a quantidade de itens
-		// cobrados
-		// e o valor total dos documentos na tabela
-		// cobranca_documento_controle_geracao
-		this.atualizarCobrancaDocumentoControleGeracao(idCobrancaDocumentoControleGeracao,
-				gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca(),
-				gerarAtividadeAcaoCobrancaHelper.getQuantidadeItensCobradosDocumentos(),
-				gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca());
-
-		// retorna o objeto contendo o total de quantidades de documentos de
-		// cobrança, quantidade de itens cobrados e total do valor dos
-		// documentos de cobrança
 		return gerarAtividadeAcaoCobrancaHelper;
 	}
 
@@ -7033,39 +6929,26 @@ public class ControladorCobranca implements SessionBean {
 			Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataAtual, Cliente clienteSuperior,
 			Integer idCobrancaDocumentoControleGeracao) throws ControladorException {
 
-		// cria o objeto que vai armazenas os dados
 		GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelper = new GerarAtividadeAcaoCobrancaHelper();
 
-		// inicializa os valores de quantidade de documentos, quantidade de
-		// itens cobrados e valor do documento de cobrança
 		gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(0);
 		gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(0);
 		gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(new BigDecimal("0.00"));
 
-		// cria o objeto de critério de cobrança
 		CobrancaCriterio cobrancaCriterio = null;
-
-		// cria a coleção que vai armazenar as linhas do critério de cobrança de
-		// cada imóvel
 		Collection<CobrancaCriterioLinha> colecaoCobrancaCriterioLinha = new ArrayList();
 
 		Imovel fluxoImovel = null;
 		Collection colecaoImoveis = null;
 
 		if (indicadorCriterio.intValue() != 1) {
-
-			// a coleção de linha de critério de cobrança vai ser a do
-			// comando
 			colecaoCobrancaCriterioLinha = colecaoCobrancaCriterioLinhaComando;
-
-			// o critério de cobrança vai ser o do comando
 			cobrancaCriterio = cobrancaCriterioComando;
 		}
 
 		FiltroImovel filtroImovel = new FiltroImovel();
 
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.LOGRADOURO_ID, cobrancaAcaoAtividadeComando.getId()));
-
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("localidade");
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
@@ -7088,98 +6971,53 @@ public class ControladorCobranca implements SessionBean {
 
 				fluxoImovel = (Imovel) iteratorColecaoImoveis.next();
 
-				// caso a ação de cobrança gere a ordem de serviço
 				if (acaoCobranca.getServicoTipo() != null && acaoCobranca.getServicoTipo().getId() != null) {
-					// seta a empresa cobranca
 					fluxoImovel.getQuadra().getRota().setEmpresa(null);
-
 				} else {
-					// seta a empresa
 					fluxoImovel.getQuadra().getRota().setEmpresaCobranca(null);
 				}
 
 				if (indicadorCriterio.intValue() == 1) {
 					try {
-						// O critério de cobrança a ser utilizado será o da
-						// rota
-						cobrancaCriterio = repositorioCobranca.pesquisarCriterioCobrancaRota(fluxoImovel.getQuadra().getRota().getId(),
-								acaoCobranca.getId());
+						// O critério de cobrança a ser utilizado será o da rota
+						cobrancaCriterio = repositorioCobranca.pesquisarCriterioCobrancaRota(fluxoImovel.getQuadra().getRota().getId(), acaoCobranca.getId());
 						colecaoCobrancaCriterioLinha = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(cobrancaCriterio.getId());
-
 					} catch (ErroRepositorioException ex) {
-						// levanta a exceção para a próxima camada
 						throw new ControladorException("erro.sistema", ex);
 					}
 				}
 
-				// cria o objeto que vai armazenar temporariamente os dados
-				// retornados
-				// pelo [SB0003], para cada imóvel
 				GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelperTemp = new GerarAtividadeAcaoCobrancaHelper();
 
-				// [SB0003] - Gerar Atividade de Ação de Cobrança para o
-				// imóvel
-				gerarAtividadeAcaoCobrancaHelperTemp = gerarAtividadeAcaoCobrancaParaImovel(cobrancaAcaoAtividadeCronograma,
-						cobrancaAcaoAtividadeComando, fluxoImovel, indicadorCriterio, acaoCobranca, atividadeCobranca, cobrancaCriterio,
-						colecaoCobrancaCriterioLinha, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,
-						dataVencimentoFinal, dataAtual);
+				gerarAtividadeAcaoCobrancaHelperTemp = gerarAtividadeAcaoCobrancaParaImovel(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando,
+						fluxoImovel, indicadorCriterio, acaoCobranca, atividadeCobranca, cobrancaCriterio, colecaoCobrancaCriterioLinha,
+						anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual);
 
-				// se o objeto retornado for diferente de nulo
 				if (gerarAtividadeAcaoCobrancaHelperTemp != null) {
-					// recupera a quantidade de documentos de cobrança,
-					// quantidade
-					// de itens cobrados e o valor do documento
-					// do objeto retornado pelo [SB0003]
-					gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper
-							.getQuantidadeDocumentosCobranca() + 1);
+					// recupera a quantidade de documentos de cobrança,  quantidade de itens cobrados e o valor do documento do objeto retornado pelo [SB0003]
+					gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca() + 1);
 					gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(gerarAtividadeAcaoCobrancaHelper
-							.getQuantidadeItensCobradosDocumentos()
-							+ gerarAtividadeAcaoCobrancaHelperTemp.getQuantidadeItensCobradosDocumentos());
-					gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper
-							.getValorDocumentosCobranca().add(gerarAtividadeAcaoCobrancaHelperTemp.getValorDocumentosCobranca()));
+							.getQuantidadeItensCobradosDocumentos() + gerarAtividadeAcaoCobrancaHelperTemp.getQuantidadeItensCobradosDocumentos());
+					gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca().add(
+							gerarAtividadeAcaoCobrancaHelperTemp.getValorDocumentosCobranca()));
 
-					/** alterado por pedro alexandre dia 16/11/2006 */
-					gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().addAll(
-							gerarAtividadeAcaoCobrancaHelperTemp.getColecaoDocumentosCobranca());
+					gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().addAll(gerarAtividadeAcaoCobrancaHelperTemp.getColecaoDocumentosCobranca());
 
-					// Caso seja um comando eventual e a quantidade de
-					// documentos gerados seja igual a quantidade máxima
-					// de documentos especificada no comando
-
-					// Alterado por Chico, 06/06/08, analista: Ana Breda
-					// caso seja um comando de cronograma, verificar é foi
-					// preenchida a quantidade
-					// maxima de documentos a ser gerada
+					// Caso seja um comando eventual e a quantidade de documentos gerados seja igual a quantidade máxima de documentos especificada no comando
+					// caso seja um comando de cronograma, verificar é foi preenchida a quantidade maxima de documentos a ser gerada
 					if ((cobrancaAcaoAtividadeComando != null && cobrancaAcaoAtividadeComando.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeComando
 							.getQuantidadeMaximaDocumentos().equals(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))
-							|| (cobrancaAcaoAtividadeCronograma != null
-									&& cobrancaAcaoAtividadeCronograma.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeCronograma
-									.getQuantidadeMaximaDocumentos().equals(
-											gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))) {
-						// não roda mais os imóveis das rotas
-						// posteriores
+							|| (cobrancaAcaoAtividadeCronograma != null && cobrancaAcaoAtividadeCronograma.getQuantidadeMaximaDocumentos() != null && cobrancaAcaoAtividadeCronograma
+									.getQuantidadeMaximaDocumentos().equals(gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca()))) {
 						break labelRotasClientes;
 					}
-
 				}
-
 			}
 		}
 
-		// fim item 2
+		this.atualizarCobrancaDocumentoControleGeracao(idCobrancaDocumentoControleGeracao, gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca(),
+				gerarAtividadeAcaoCobrancaHelper.getQuantidadeItensCobradosDocumentos(), gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca());
 
-		// atualizar a quantidade de documentos cobrados, a quantidade de itens
-		// cobrados
-		// e o valor total dos documentos na tabela
-		// cobranca_documento_controle_geracao
-		this.atualizarCobrancaDocumentoControleGeracao(idCobrancaDocumentoControleGeracao,
-				gerarAtividadeAcaoCobrancaHelper.getQuantidadeDocumentosCobranca(),
-				gerarAtividadeAcaoCobrancaHelper.getQuantidadeItensCobradosDocumentos(),
-				gerarAtividadeAcaoCobrancaHelper.getValorDocumentosCobranca());
-
-		// retorna o objeto contendo o total de quantidades de documentos de
-		// cobrança, quantidade de itens cobrados e total do valor dos
-		// documentos de cobrança
 		return gerarAtividadeAcaoCobrancaHelper;
 	}
 
@@ -7560,57 +7398,19 @@ public class ControladorCobranca implements SessionBean {
 	}
 
 	/**
-	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0003] Gerar Atividade de
-	 * Ação de Cobrança para Imóvel
-	 * 
-	 * @author Pedro Alexandre
-	 * @created 08/02/2006
-	 * 
-	 * @param cobrancaAcaoAtividadeCronograma
-	 *            Atividade de Ação de Cobrança de Cronograma
-	 * @param cobrancaAcaoAtividadeComando
-	 *            Atividade de Ação de Cobrança de Comando
-	 * @param imovel
-	 *            Imóvel
-	 * @param indicadorCriterio
-	 *            Indicador do critério a ser utilizado
-	 * @param acaoCobranca
-	 *            Ação de Cobrança
-	 * @param atividadeCobranca
-	 *            Atividade de Cobrança
-	 * @param criterioCobranca
-	 *            Critériode cobrança para ser utilizado
-	 * @param colecaoCobrancaCriterioLinha
-	 *            Coleção de linha de critério de cobrança
-	 * @param anoMesReferenciaInicial
-	 *            Ano/Mês de referência inicial
-	 * @param anoMesReferenciaFinal
-	 *            Ano/Mês de referência final
-	 * @param dataVencimentoInicial
-	 *            Data de vencimento inicial
-	 * @param dataVencimentoFinal
-	 *            Data de vencimento final
-	 * 
-	 * @throws ControladorException
-	 *             Controlador Exception
+	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0003] Gerar Atividade de Ação de Cobrança para Imóvel
 	 */
 	public GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaParaImovel(
 			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
 			Imovel imovel, Integer indicadorCriterio, CobrancaAcao acaoCobranca, CobrancaAtividade atividadeCobranca,
 			CobrancaCriterio criterioCobranca, Collection<CobrancaCriterioLinha> colecaoCobrancaCriterioLinha,
-			String anoMesReferenciaInicial, String anoMesReferenciaFinal, Date dataVencimentoInicial, Date dataVencimentoFinal,
-			Date dataAtual) throws ControladorException {
+			String anoMesReferenciaInicial, String anoMesReferenciaFinal, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataAtual)
+			throws ControladorException {
 
 		try {
 
-			// cria o objeto que vai armazenar os dados de retorno do metódo
 			GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelper = null;
-
-			// cria a data corrente
 			Date dataCorrente = new Date();
-
-			// cria a variável que vai armazenar a coleção de débitos
-			// notificados
 			Collection<CobrancaDocumentoItem> colecaoDebitosNotificados = new ArrayList();
 
 			ImovelNaoGerado imovelNaoGerado = new ImovelNaoGerado();
@@ -7619,10 +7419,9 @@ public class ControladorCobranca implements SessionBean {
 			imovelNaoGerado.setImovel(imovel);
 			imovelNaoGerado.setUltimaAlteracao(new Date());
 
-			// Caso o imovel esteja excluido, passar para o proximo imovel
 			Integer idImovel = getControladorImovel().verificarExistenciaImovel(imovel.getId());
-			if (idImovel == null) {
 
+			if (idImovel == null) {
 				MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
 				motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.IMOVEL_EXCLUIDO);
 				imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
@@ -7632,68 +7431,24 @@ public class ControladorCobranca implements SessionBean {
 				return gerarAtividadeAcaoCobrancaHelper;
 			}
 
-			// item 1
-			// se a situação da ligação de água para a qual a ação de cobrança
-			// deve
-			// ser gerada esteja preenchida
-			// e seja diferente da situação da ligação de água do imóvel
+			// se a situação da ligação de água para a qual a ação de cobrança deve ser gerada esteja preenchida e seja diferente da situação da ligação de água do imóvel
+			// Validacao da situacao da ligacao de agua foi para o criterio de cobranca
 
-			// Validacao da situacao da ligacao de agua foi para o criterio de
-			// cobranca
-			// Francisco/Ana Breda, 10/06/08
+			// se a situação da ligação de esgoto para a qual a ação de cobrança deve ser gerada esteja preenchida e seja diferente da situação da ligação de esgoto do imóvel
+			// Validacao da situacao da ligacao de agua foi para o criterio de cobranca
 
-			// if ((acaoCobranca.getLigacaoAguaSituacao() != null)
-			// && (acaoCobranca.getLigacaoAguaSituacao().getId().intValue() !=
-			// imovel
-			// .getLigacaoAguaSituacao().getId().intValue())) {
-			// // retorna o objeto vazio e passa para o próximo imóvel
-			// return gerarAtividadeAcaoCobrancaHelper;
-			// }
-			// fim item 1
-
-			// item 2
-			// se a situação da ligação de esgoto para a qual a ação de cobrança
-			// deve ser gerada esteja preenchida
-			// e seja diferente da situação da ligação de esgoto do imóvel
-
-			// Validacao da situacao da ligacao de agua foi para o criterio de
-			// cobranca
-			// Francisco/Ana Breda, 10/06/08
-
-			// if ((acaoCobranca.getLigacaoEsgotoSituacao() != null)
-			// && (acaoCobranca.getLigacaoEsgotoSituacao().getId().intValue() !=
-			// imovel
-			// .getLigacaoEsgotoSituacao().getId().intValue())) {
-			// // retorna o objeto vazio e passa para o próximo imóvel
-			// return gerarAtividadeAcaoCobrancaHelper;
-			// }
-			// fim item 2
-
-			// item 3
-			// recupera a ação de cobrança precedente
 			CobrancaAcao cobrancaAcaoPrecedente = acaoCobranca.getCobrancaAcaoPredecessora();
 
 			CobrancaDocumento cobrancaDocumentoPredecessor = null;
 			boolean validacaoPorItemCobrado = false;
 			Integer idDocumentoCobrancaAcaoPrecedente = null;
 
-			// se a ação de cobrança precedente for diferente de nulo
-			// e não tenha validação por item cobrado (CBAC_ICVALITEMCOBRADO com
-			// valor igual a 2 (Não))
+			// se a ação de cobrança precedente for diferente de nulo e não tenha validação por item cobrado (CBAC_ICVALITEMCOBRADO com valor igual a 2 (Não))
 			if (cobrancaAcaoPrecedente != null && !cobrancaAcaoPrecedente.equals("")) {
 
-				// item 3.1
-				// calcula a data mínima de emissão/realização da ação
-				// precedente
-				Date dataMinimaEmissaoRealizacaoAcaoPrecente = Util.subtrairNumeroDiasDeUmaData(dataCorrente,
-						acaoCobranca.getNumeroDiasMinimoAcaoPrecedente());
-				// calcula a data minima de emissão/realização da ação
-				// precedente
-				// diminuindo o numero de dias da validade
-				Date dataEmissaoValidacaoAcaoPrecente = Util.subtrairNumeroDiasDeUmaData(dataCorrente,
-						cobrancaAcaoPrecedente.getNumeroDiasValidade());
+				Date dataMinimaEmissaoRealizacaoAcaoPrecente = Util.subtrairNumeroDiasDeUmaData(dataCorrente, acaoCobranca.getNumeroDiasMinimoAcaoPrecedente());
+				Date dataEmissaoValidacaoAcaoPrecente = Util.subtrairNumeroDiasDeUmaData(dataCorrente, cobrancaAcaoPrecedente.getNumeroDiasValidade());
 
-				// Formata adata para a última hora, minutos e segundos
 				Calendar dataCalendar = new GregorianCalendar();
 				dataCalendar.setTime(dataMinimaEmissaoRealizacaoAcaoPrecente);
 				dataCalendar.set(Calendar.HOUR, 23);
@@ -7702,7 +7457,6 @@ public class ControladorCobranca implements SessionBean {
 				dataCalendar.set(Calendar.MILLISECOND, 999);
 				dataMinimaEmissaoRealizacaoAcaoPrecente = dataCalendar.getTime();
 
-				// Formata a data para a última hora, minutos e segundos
 				dataCalendar = new GregorianCalendar();
 				dataCalendar.setTime(dataEmissaoValidacaoAcaoPrecente);
 				dataCalendar.set(Calendar.HOUR, 00);
@@ -7711,20 +7465,14 @@ public class ControladorCobranca implements SessionBean {
 				dataCalendar.set(Calendar.MILLISECOND, 000);
 				dataEmissaoValidacaoAcaoPrecente = dataCalendar.getTime();
 
-				// item 3.2
-
-				idDocumentoCobrancaAcaoPrecedente = repositorioCobranca.pesquisarDocumentoCobrancaRelativoAcaoPrecedente(imovel.getId(),
-						cobrancaAcaoPrecedente.getDocumentoTipo().getId(), dataMinimaEmissaoRealizacaoAcaoPrecente,
-						dataEmissaoValidacaoAcaoPrecente);
+				idDocumentoCobrancaAcaoPrecedente = repositorioCobranca.pesquisarDocumentoCobrancaRelativoAcaoPrecedente(imovel.getId(), cobrancaAcaoPrecedente
+						.getDocumentoTipo().getId(), dataMinimaEmissaoRealizacaoAcaoPrecente, dataEmissaoValidacaoAcaoPrecente);
 
 				if (!acaoCobranca.getIndicadorValidarItem().equals(ConstantesSistema.NAO)) {
 					validacaoPorItemCobrado = true;
 				}
 
 				if (!validacaoPorItemCobrado) {
-					// item 3.3.1
-					// se não existe documentos de ação de cobrança para o
-					// imóvel
 					if (idDocumentoCobrancaAcaoPrecedente == null) {
 
 						MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
@@ -7735,24 +7483,15 @@ public class ControladorCobranca implements SessionBean {
 
 						imovelNaoGerado = null;
 
-						// retorna o objeto vazio e passa para o próximo imóvel
 						return gerarAtividadeAcaoCobrancaHelper;
-
-						// item 3.3.2
-						// se o imóvel possui documento de cobrança
 					}
 				}
 
-				// se a ação de cobrança precedente gerar ordem de serviço
 				if (cobrancaAcaoPrecedente.getServicoTipo() != null) {
 
-					idDocumentoCobrancaAcaoPrecedente = repositorioCobranca.pesquisarDocumentoCobrancaAcaoPrecedente(imovel.getId(),
-							cobrancaAcaoPrecedente.getServicoTipo().getId(), AtendimentoMotivoEncerramento.INDICADOR_EXECUCAO_SIM,
-							dataMinimaEmissaoRealizacaoAcaoPrecente);
+					idDocumentoCobrancaAcaoPrecedente = repositorioCobranca.pesquisarDocumentoCobrancaAcaoPrecedente(imovel.getId(), cobrancaAcaoPrecedente
+							.getServicoTipo().getId(), AtendimentoMotivoEncerramento.INDICADOR_EXECUCAO_SIM, dataMinimaEmissaoRealizacaoAcaoPrecente);
 
-					// Caso não exista ordem de serviço, relativa a ação
-					// precedente
-					// passar para próximo imóvel
 					if (idDocumentoCobrancaAcaoPrecedente == null) {
 
 						MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
@@ -7767,23 +7506,17 @@ public class ControladorCobranca implements SessionBean {
 
 				}
 
-				colecaoDebitosNotificados = repositorioCobranca
-						.pesquisarCobrancaDocumentoItemContaGuiaPagamentoDebitoACobrar(idDocumentoCobrancaAcaoPrecedente);
+				colecaoDebitosNotificados = repositorioCobranca.pesquisarCobrancaDocumentoItemContaGuiaPagamentoDebitoACobrar(idDocumentoCobrancaAcaoPrecedente);
 
 				FiltroCobrancaDocumento filtroCobrancaDocumento = new FiltroCobrancaDocumento();
 				filtroCobrancaDocumento.adicionarParametro(new ParametroSimples("id", idDocumentoCobrancaAcaoPrecedente));
-				Collection<CobrancaDocumento> colecaoCobrancaDocumento = getControladorUtil().pesquisar(filtroCobrancaDocumento,
-						CobrancaDocumento.class.getName());
+				Collection<CobrancaDocumento> colecaoCobrancaDocumento = getControladorUtil().pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
 
 				cobrancaDocumentoPredecessor = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoCobrancaDocumento);
 
 			}
-			// parte nova alterada por Sávio Luiz data:28/02/2007
-			// não tem no caso de uso.
 			Collection colecaoParmsCobrancaAcao = null;
 
-			// pesquisa as ações cobranças que tem a ação cobrança,que é
-			// passada, como precedente
 			colecaoParmsCobrancaAcao = repositorioCobranca.pesqsuisarAcaoCobrancaPelaPrecedente(acaoCobranca.getId());
 
 			if (colecaoParmsCobrancaAcao != null && !colecaoParmsCobrancaAcao.isEmpty()) {
@@ -7800,11 +7533,9 @@ public class ControladorCobranca implements SessionBean {
 						if (parmsCobrancaAcao[1] != null) {
 							numeroDiasValidade = ((Short) parmsCobrancaAcao[1]).intValue();
 						}
-						// calcula a data minima de emissão/realização da ação
-						// precedente diminuindo o numero de dias da validade
 						Date dataEmissaoValidacao = Util.subtrairNumeroDiasDeUmaData(dataCorrente, numeroDiasValidade);
 						Calendar dataCalendar = new GregorianCalendar();
-						// Formata a data para a última hora, minutos e segundos
+
 						dataCalendar = new GregorianCalendar();
 						dataCalendar.setTime(dataEmissaoValidacao);
 						dataCalendar.set(Calendar.HOUR, 00);
@@ -7813,8 +7544,7 @@ public class ControladorCobranca implements SessionBean {
 						dataCalendar.set(Calendar.MILLISECOND, 000);
 						dataEmissaoValidacao = dataCalendar.getTime();
 
-						Object[] retorno = repositorioCobranca.pesquisarIdDocumentoCobranca(imovel.getId(), idDocumentoTipo,
-								dataEmissaoValidacao);
+						Object[] retorno = repositorioCobranca.pesquisarIdDocumentoCobranca(imovel.getId(), idDocumentoTipo, dataEmissaoValidacao);
 						if (retorno != null) {
 
 							MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
@@ -7823,9 +7553,6 @@ public class ControladorCobranca implements SessionBean {
 
 							getControladorUtil().inserir(imovelNaoGerado);
 
-							// retorna o objeto vazio e passa para o próximo
-							// imóvel
-
 							imovelNaoGerado = null;
 
 							return gerarAtividadeAcaoCobrancaHelper;
@@ -7833,10 +7560,6 @@ public class ControladorCobranca implements SessionBean {
 					}
 				}
 			}
-
-			// fim item 3
-
-			// item 4
 			CobrancaDocumento cobrancaDocumento = null;
 
 			int idTipoDocumentoAGerar = acaoCobranca.getDocumentoTipo().getId();
@@ -7870,16 +7593,10 @@ public class ControladorCobranca implements SessionBean {
 
 				cobrancaDocumento = repositorioCobranca.pesquisarCobrancaDocumento(imovel.getId(), idsTipoDocumentoAIgnorar[i]);
 
-				// laço para verificar se existe documento de cobrança para o
-				// imóvel
-				// ainda no periódo de validade
 				if (cobrancaDocumento != null) {
 
-					// calcula data de periodo de validade
-					Date dataEmissaoValidade = Util.adicionarNumeroDiasDeUmaData(cobrancaDocumento.getEmissao(),
-							acaoCobranca.getNumeroDiasValidade());
+					Date dataEmissaoValidade = Util.adicionarNumeroDiasDeUmaData(cobrancaDocumento.getEmissao(), acaoCobranca.getNumeroDiasValidade());
 
-					// se a data do documento for maior ou igual a data corrente
 					if (!(dataEmissaoValidade.compareTo(dataCorrente) < 0)) {
 						if (cobrancaDocumento.getCobrancaAcaoSituacao() == null) {
 
@@ -7891,8 +7608,6 @@ public class ControladorCobranca implements SessionBean {
 
 							imovelNaoGerado = null;
 
-							// retorna o objeto vazio e passa para o próximo
-							// imóvel
 							return gerarAtividadeAcaoCobrancaHelper;
 						} else {
 							if (cobrancaDocumento.getCobrancaAcaoSituacao().getId() != null
@@ -7906,70 +7621,44 @@ public class ControladorCobranca implements SessionBean {
 
 								imovelNaoGerado = null;
 
-								// retorna o objeto vazio e passa para o próximo
-								// imóvel
 								return gerarAtividadeAcaoCobrancaHelper;
 							}
 						}
 					}
 				}
-
 			}
-			// fim item 4
 
-			// item 5
-			// Caso seja um comando eventual e o indicador de selecionar apenas
-			// imóveis com débito for Não(2)
 			VerificarCriterioCobrancaParaImovelHelper verificarCriterioCobrancaParaImovelHelper = null;
-
 			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-			// item 6
-			// Caso Contrário verificar se o critério satisfaz o critério de
-			// cobrança e alguma das linhas do critério
-
-			// [SB0004] - Verificar Critério de Cobrança para o Imóvel
 			verificarCriterioCobrancaParaImovelHelper = this.verificarCriterioCobrancaParaImovel(imovel, acaoCobranca, criterioCobranca,
-					colecaoCobrancaCriterioLinha, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,
-					dataVencimentoFinal, colecaoDebitosNotificados, sistemaParametros, cobrancaAcaoAtividadeComando, imovelNaoGerado,
-					idDocumentoCobrancaAcaoPrecedente, validacaoPorItemCobrado);
+					colecaoCobrancaCriterioLinha, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal,
+					colecaoDebitosNotificados, sistemaParametros, cobrancaAcaoAtividadeComando, imovelNaoGerado, idDocumentoCobrancaAcaoPrecedente,
+					validacaoPorItemCobrado);
 
-			// recupera a flag para saber se o imóvel satisfaz o critério de
-			// cobrança
 			boolean flagCriterioCobrancaImovel = verificarCriterioCobrancaParaImovelHelper.isFlagCriterioCobrancaImovel();
 
-			// se o imóvel satisfaz o critério de cobrança
 			if (flagCriterioCobrancaImovel) {
 
 				gerarAtividadeAcaoCobrancaHelper = new GerarAtividadeAcaoCobrancaHelper();
 
-				// se a atividade de cobrança for "EMITIR"
 				if (atividadeCobranca.getId().intValue() == CobrancaAtividade.EMITIR) {
 
-					// [SB0005] - Gerar Documento de Cobrança
-					// Se for de cronograma
 					DocumentoEmissaoForma documentoEmissaoForma = new DocumentoEmissaoForma();
-					if (cobrancaAcaoAtividadeCronograma != null) {
-						// Seta a forma de emissão de documento para
-						// "cronograma"
-						documentoEmissaoForma.setId(DocumentoEmissaoForma.CRONOGRAMA);
 
-						// Se for de comando(eventual)
+					if (cobrancaAcaoAtividadeCronograma != null) {
+						documentoEmissaoForma.setId(DocumentoEmissaoForma.CRONOGRAMA);
 					} else {
-						// Seta a forma de emissão de documento para "eventual"
 						documentoEmissaoForma.setId(DocumentoEmissaoForma.EVENTUAL);
 					}
 
 					BigDecimal somatorioAcrescimos = new BigDecimal("0.00");
 
-					// alterado por Sávio Luiz data:23/05/2007
 					if (acaoCobranca.getIndicadorCobrancaDebACobrar() != null
 							&& acaoCobranca.getIndicadorCobrancaDebACobrar().equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
 
 						if (verificarCriterioCobrancaParaImovelHelper.getColecaoContasValores() != null
 								&& !verificarCriterioCobrancaParaImovelHelper.getColecaoContasValores().isEmpty()) {
-							// Cria os itens de cobrança de documento para
-							// contas
 							for (ContaValoresHelper contaValorHelper : verificarCriterioCobrancaParaImovelHelper.getColecaoContasValores()) {
 								if (contaValorHelper.getValorMulta() != null) {
 									somatorioAcrescimos = somatorioAcrescimos.add(contaValorHelper.getValorMulta());
@@ -7985,8 +7674,6 @@ public class ControladorCobranca implements SessionBean {
 
 						if (verificarCriterioCobrancaParaImovelHelper.getColecaoGuiasPagamentoValores() != null
 								&& !verificarCriterioCobrancaParaImovelHelper.getColecaoGuiasPagamentoValores().isEmpty()) {
-							// cria os itens de cobrança de documento para as
-							// guias de pagamento
 							for (GuiaPagamentoValoresHelper guiaPagamentoValorHelper : verificarCriterioCobrancaParaImovelHelper
 									.getColecaoGuiasPagamentoValores()) {
 
@@ -8001,7 +7688,6 @@ public class ControladorCobranca implements SessionBean {
 								}
 							}
 						}
-
 					}
 
 					Date dataEmissaoPredecessor = null;
@@ -8009,57 +7695,36 @@ public class ControladorCobranca implements SessionBean {
 						dataEmissaoPredecessor = cobrancaDocumentoPredecessor.getEmissao();
 					}
 
-					ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = this.gerarDocumentoCobranca(imovel, acaoCobranca
-							.getIndicadorGeracaoTaxa().shortValue(), verificarCriterioCobrancaParaImovelHelper.getColecaoContasValores(),
-							verificarCriterioCobrancaParaImovelHelper.getColecaoGuiasPagamentoValores(),
-							verificarCriterioCobrancaParaImovelHelper.getColecaoDebitoACobrar(), somatorioAcrescimos,
-							new BigDecimal("0.00"),
-							sistemaParametros.getAnoMesFaturamento(), // anoMesReferenciaDebito
-							documentoEmissaoForma, acaoCobranca.getDocumentoTipo(),
-							cobrancaAcaoAtividadeComando, // cobrancaAcaoAtividadeComando
+					ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = this.gerarDocumentoCobranca(imovel, acaoCobranca.getIndicadorGeracaoTaxa()
+							.shortValue(), verificarCriterioCobrancaParaImovelHelper.getColecaoContasValores(), verificarCriterioCobrancaParaImovelHelper
+							.getColecaoGuiasPagamentoValores(), verificarCriterioCobrancaParaImovelHelper.getColecaoDebitoACobrar(), somatorioAcrescimos,
+							new BigDecimal("0.00"), sistemaParametros.getAnoMesFaturamento(), // anoMesReferenciaDebito
+							documentoEmissaoForma, acaoCobranca.getDocumentoTipo(), cobrancaAcaoAtividadeComando, // cobrancaAcaoAtividadeComando
 							cobrancaAcaoAtividadeCronograma, // cobrancaAcaoAtividadeCronograma
 							imovel.getQuadra().getRota().getEmpresa(), // Empresa
 							criterioCobranca, // CobrancaCriterio
 							acaoCobranca, // CobrancaAcao
-							verificarCriterioCobrancaParaImovelHelper.getValorDebitoImovel(), dataAtual, null, null, null,
-							dataEmissaoPredecessor, null, null); // valorDocumento
+							verificarCriterioCobrancaParaImovelHelper.getValorDebitoImovel(), dataAtual, null, null, null, dataEmissaoPredecessor, null, null); // valorDocumento
 
 					if (extratoDebitoRelatorioHelper != null) {
-						gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().add(
-								extratoDebitoRelatorioHelper.getDocumentoCobranca());
+						gerarAtividadeAcaoCobrancaHelper.getColecaoDocumentosCobranca().add(extratoDebitoRelatorioHelper.getDocumentoCobranca());
 					}
 
 					extratoDebitoRelatorioHelper = null;
 
 				}
 
-				// seta a quantidade de documentos pra 1(um)
 				gerarAtividadeAcaoCobrancaHelper.setQuantidadeDocumentosCobranca(1);
-
-				// seta a quantidade de itens cobrados de documentos
-				gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(verificarCriterioCobrancaParaImovelHelper
-						.getQuantidadeItensEmDebito());
-
-				// seta o valor de documentos de cobrança
-				gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(verificarCriterioCobrancaParaImovelHelper
-						.getValorDebitoImovel());
-
-				// se o imóvel não satisfaz o critério de cobrança
+				gerarAtividadeAcaoCobrancaHelper.setQuantidadeItensCobradosDocumentos(verificarCriterioCobrancaParaImovelHelper.getQuantidadeItensEmDebito());
+				gerarAtividadeAcaoCobrancaHelper.setValorDocumentosCobranca(verificarCriterioCobrancaParaImovelHelper.getValorDebitoImovel());
 			} else {
-
-				// retorna o objeto nulo e passa para o próximo imóvel
 				return gerarAtividadeAcaoCobrancaHelper;
 			}
-			// fim item 5
 
 			imovelNaoGerado = null;
 
-			// retorna o objeto contendo todas as informações necessárias
 			return gerarAtividadeAcaoCobrancaHelper;
-
 		} catch (ErroRepositorioException ex) {
-
-			// levanta a exceção para a próxima camada
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
@@ -8144,12 +7809,6 @@ public class ControladorCobranca implements SessionBean {
 
 		if (colecaoImovelCobrancaSituacao != null && !colecaoImovelCobrancaSituacao.isEmpty()) {
 
-			// se o indicador de emissão da ação de cobrança para imóvel,com
-			// situação de cobrança correspondente a " 2-NÃO"
-			// e o imóvel esteja com algum tipo de situação de cobrança,
-			// passar o imovel, indicando q o imovel nao satisfaz o criterio de
-			// cobranca
-
 			if (cobrancaCriterio.getIndicadorEmissaoImovelSituacaoCobranca().shortValue() == 2) {
 
 				MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
@@ -8160,30 +7819,15 @@ public class ControladorCobranca implements SessionBean {
 
 				imovelNaoGerado = null;
 
-				// indica que o imóvel não satisfaz o critério de cobrança
 				return verificarCriterioCobrancaParaImovelHelper;
 			} else {
-				// Item 4.2 - Caso o indicado de emissao da acao de cobranca
-				// para imovel com situacao
-				// de cobranca, corresponder a SIM (1)
-				// Verificar se a situacao de cobranca do imovel esta contida
-				// nas
-				// situacoes de cobranca contempladas no criterio de cobranca
-
 				boolean situacaoCobrancaImovelContidaNasSelecionadas = false;
 
-				// pesquisar a colecao de criterios para situacao ligacao agua,
-				// esgoto e cobranca
 				FiltroCriterioSituacaoCobranca filtroCritSitCobranca = new FiltroCriterioSituacaoCobranca();
-				filtroCritSitCobranca.adicionarParametro(new ParametroSimples(FiltroCriterioSituacaoCobranca.COBRANCA_CRITERIO_ID,
-						cobrancaCriterio.getId()));
+				filtroCritSitCobranca.adicionarParametro(new ParametroSimples(FiltroCriterioSituacaoCobranca.COBRANCA_CRITERIO_ID,cobrancaCriterio.getId()));
 				filtroCritSitCobranca.adicionarCaminhoParaCarregamentoEntidade(FiltroCriterioSituacaoCobranca.COBRANCA_SITUACAO);
-				Collection colecaoSituacoesCobrancaSelecionadas = getControladorUtil().pesquisar(filtroCritSitCobranca,
-						CriterioSituacaoCobranca.class.getName());
-
-				// Collection colecaoSituacoesCobrancaSelecionadas =
-				// cobrancaCriterio
-				// .getCriteriosSituacaoCobranca();
+				
+				Collection colecaoSituacoesCobrancaSelecionadas = getControladorUtil().pesquisar(filtroCritSitCobranca,CriterioSituacaoCobranca.class.getName());
 
 				if (colecaoSituacoesCobrancaSelecionadas != null && !colecaoSituacoesCobrancaSelecionadas.isEmpty()) {
 
@@ -8216,26 +7860,16 @@ public class ControladorCobranca implements SessionBean {
 
 			}
 		}
-		// fim item 2
 
-		// item 3
-		// cria a flag que vai indicar se o perfil do imóvel exista na coleção
-		// de linhas de critério de cobrança
 		boolean flagPerfilImovel = false;
 
-		// laço para verificar todas as linhas
 		labelLoop: for (CobrancaCriterioLinha cobrancaCriterioLinha : colecaoCobrancaCriterioLinha) {
-			// se o perfil for igual
 			if (cobrancaCriterioLinha.getImovelPerfil().getId().intValue() == imovel.getImovelPerfil().getId().intValue()) {
-				// seta a flag par true
 				flagPerfilImovel = true;
-
-				// encerrar o laço
 				break labelLoop;
 			}
 		}
 
-		// se existe o perfil do imóvel em alguma linha de critério de cobrança
 		if (!flagPerfilImovel) {
 
 			MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
@@ -8246,14 +7880,9 @@ public class ControladorCobranca implements SessionBean {
 
 			imovelNaoGerado = null;
 
-			// indica que o imóvel não satisfaz o critério de cobrança
 			return verificarCriterioCobrancaParaImovelHelper;
 		}
-		// fim item 3
 
-		// item 4
-		// cria as variáveis que vão ser utilizadas para obter o débito do
-		// imóvel
 		final int indicadorDebitoImovel = 1;
 		String matriculaImovel = imovel.getId().toString();
 		String codigoCliente = null;
@@ -8286,102 +7915,64 @@ public class ControladorCobranca implements SessionBean {
 			e.printStackTrace();
 		}
 		
-		// obtém o débito do imóvel
 		ObterDebitoImovelOuClienteHelper debitoImovel = this.obterDebitoImovelOuCliente(indicadorDebitoImovel, matriculaImovel,
 				codigoCliente, clienteRelacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,
 				dataVencimentoFinal, indicadorPagamento, indicadorConta, indicadorDebitoACobrar, indicadorCreditoARalizar,
 				indicadorNotasPromissorias, indicadorGuiaPagamento, indicadorCalcularAcrescimoImpontualidade, null);
-		// fim item 4
 
-		// recupera as coleções de conta, guia de pagamento e débito a cobrar do
-		// imóvel
 		Collection<ContaValoresHelper> colecaoContasValores = debitoImovel.getColecaoContasValores();
 
-		/*
-		 * Felipe Santos e Wellington Rocha - 24/06/2013
-		 * 
-		 * Na geração do documento de cobrança não serão consideradas as contas
-		 * cujo titular seja diferente ao responsável do imóvel.
-		 */
+		// Na geração do documento de cobrança não serão consideradas as contas cujo titular seja diferente ao responsável do imóvel.
 		colecaoContasValores = retirarContasClienteResponsavelImovelDiferenteConta(colecaoContasValores);
 
 		Collection<DebitoACobrar> colecaoDebitoACobrar = debitoImovel.getColecaoDebitoACobrar();
 		Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamentoValores = debitoImovel.getColecaoGuiasPagamentoValores();
 
-		// item 5
-		// cria as coleções de contas, guia de pagamentoe débito a cobrar
-		// que vão ser excluídas das coleções anteriores
 		Collection<ContaValoresHelper> colecaoContasValoresParaRemocao = new ArrayList();
 		Collection<DebitoACobrar> colecaoDebitoACobrarParaRemocao = new ArrayList();
 		Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamentoValoresRemocao = new ArrayList();
 
 		if (colecaoContasValores != null) {
 
-			// laço para verificar quais contas não constam nos débitos
-			// notificados
 			for (ContaValoresHelper contaValorHelper : colecaoContasValores) {
-				// cria a flag que vai indicar se a conta consta nos débitos
-				// notificados
 
 				if (contaValorHelper.getValorPago() != null && contaValorHelper.getValorPago().compareTo(new BigDecimal(0)) == 1) {
-					// adiciona a conta na coleção que vai ser removida
 					colecaoContasValoresParaRemocao.add(contaValorHelper);
 				} else {
 					boolean flagAchouConta = false;
-					// se a coleção de débitos notificados não estiver vazia
 					if (colecaoDebitosNotificados != null && !colecaoDebitosNotificados.isEmpty()) {
-						// laço para verificar os items de documento de cobrança
+						
 						labelConta: for (CobrancaDocumentoItem cobrancaDocumentoItem : colecaoDebitosNotificados) {
-							// se o item é uma conta
+						
 							if (cobrancaDocumentoItem.getContaGeral() != null) {
-								// se a conta é a mesma do item
-								if (cobrancaDocumentoItem.getContaGeral().getId().intValue() == contaValorHelper.getConta().getId()
-										.intValue()) {
-									// seta que a conta consta nos débitos
-									// notificados
+								if (cobrancaDocumentoItem.getContaGeral().getId().intValue() == contaValorHelper.getConta().getId().intValue()) {
 									flagAchouConta = true;
 
-									// para o laço de item de documento de
-									// cobrança
-									// e passa para a próxima conta
 									break labelConta;
 								}
 							}
 						}
 					}
-					// se a conta não consta nos items
+
 					if (!flagAchouConta && acaoCobranca.getCobrancaAcaoPredecessora() != null) {
-						// adiciona a conta na coleção que vai ser removida
 						colecaoContasValoresParaRemocao.add(contaValorHelper);
 					}
-					// Alterado por Sávio Luiz Analista:Adriano Brito
-					// Data:11/10/2007
 					else {
 						if (contaValorHelper.getConta() != null) {
 							if (contaValorHelper.getConta().getDebitoCreditoSituacaoAtual() != null
-									&& contaValorHelper.getConta().getDebitoCreditoSituacaoAtual().getId()
-											.equals(DebitoCreditoSituacao.PARCELADA)) {
-								// adiciona a conta na coleção que vai ser
-								// removida
+									&& contaValorHelper.getConta().getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PARCELADA)) {
+
 								colecaoContasValoresParaRemocao.add(contaValorHelper);
 							}
-
 						}
 					}
-
 				}
-
 			}
 		}
 
-		// laço para verificar quais débitos a cobrar não constam nos
-		// débitos notificados
 		if (colecaoDebitoACobrar != null) {
 			for (DebitoACobrar debitoACobrar : colecaoDebitoACobrar) {
 
-				// cria a flag que vai indicar se o débito a cobrar consta
-				// nos
-				// débitos notificados
 				boolean flagAchouDebitoACobrar = false;
 				// se a coleção de débitos notificados não estiver vazia
 				if (colecaoDebitosNotificados != null && !colecaoDebitosNotificados.isEmpty()) {
@@ -8553,12 +8144,8 @@ public class ControladorCobranca implements SessionBean {
 
 			boolean naoAtendeAoCriterioDeConsumo = true;
 
-			// Caso possua consumo verifica se o mesm o atende
-			// ao intervalo informado.
 			if (consumoMes != null) {
 
-				// Verifica se consumo não esta no intervalo informado para
-				// criterio.
 				if (consumoMes.compareTo(cobrancaAcaoAtividadeComando.getConsumoMedioInicial()) >= 0
 						&& consumoMes.compareTo(cobrancaAcaoAtividadeComando.getConsumoMedioFinal()) <= 0) {
 
@@ -8580,32 +8167,20 @@ public class ControladorCobranca implements SessionBean {
 				}
 
 			}
-			// Caso não atenda ao criterio indica que o imóvel não satisfaz o
-			// critério de cobrança.
+
 			if (naoAtendeAoCriterioDeConsumo) {
 
 				MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
-
 				motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.CONSUMO_MEDIO_FORA_INTERVALO_DEFINIDO_CRITERIO);
-
 				imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
 
 				getControladorUtil().inserir(imovelNaoGerado);
-
 				imovelNaoGerado = null;
-
 				return verificarCriterioCobrancaParaImovelHelper;
 			}
 		}
-		// fim item 6
 
-		// inicio item Período de Fiscalização do Imóvel
-
-		// Desenvolvedor:Hugo Amorim Analista:Fatima Data:15/07/2010
-		// Verifica Consumo e Tipo de Medição,
-		// Caso consumo medio inicial, final e tipo de consumo
-		// tenham sido informados no comando eventual.
-
+		// Verifica Consumo e Tipo de Medição, Caso consumo medio inicial, final e tipo de consumo tenham sido informados no comando eventual.
 		boolean existeSituacaoFiscalizacaoFiltro = false;
 		Collection<CobrancaAcaoAtividadeComandoFiscalizacaoSituacao> colecaoCobrancaAcaoFisc = null;
 
@@ -8637,8 +8212,6 @@ public class ControladorCobranca implements SessionBean {
 
 			Collection<OrdemServico> colecaoOs = null;
 
-			// Caso o parâmetro Período de Fiscalização do Imóvel esteja
-			// informado.
 			if ((cobrancaAcaoAtividadeComando.getPeriodoInicialFiscalizacao() != null && !cobrancaAcaoAtividadeComando
 					.getPeriodoInicialFiscalizacao().equals(""))
 					|| (cobrancaAcaoAtividadeComando.getPeriodoFinalFiscalizacao() != null && !cobrancaAcaoAtividadeComando
@@ -8661,8 +8234,6 @@ public class ControladorCobranca implements SessionBean {
 
 				colecaoOs = this.getControladorUtil().pesquisar(filtroOrdemServico, OrdemServico.class.getName());
 
-				// Caso não exista fiscalização para o imóvel no período
-				// indicado
 				if (Util.isVazioOrNulo(colecaoOs)) {
 					MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
 					motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_FISCALIZACAO_NAO_ATENDE_CRITERIO);
@@ -8672,7 +8243,6 @@ public class ControladorCobranca implements SessionBean {
 
 					imovelNaoGerado = null;
 
-					// indica que o imóvel não satisfaz o critério de cobrança
 					return verificarCriterioCobrancaParaImovelHelper;
 				}
 				// Caso exista fiscalização para o imóvel
@@ -60819,10 +60389,6 @@ public class ControladorCobranca implements SessionBean {
 
 	/**
 	 * [UC0251] Gerar Atividade de Ação de Cobrança step1
-	 * 
-	 * @author Pedro Alexandre, Ivan Sergio, Raphael Rossiter,Vivianne Sousa
-	 * @date 01/02/2006, 18/05/2009, 20/07/2009 , 05/04/2010
-	 * 
 	 */
 	public void gerarAtividadeAcaoCobranca(CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma,
 			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Rota rota, CobrancaAcao acaoCobranca,
@@ -60836,28 +60402,18 @@ public class ControladorCobranca implements SessionBean {
 		System.out.println("INICIO DO GERAR ACAO DE COBRANCA");
 		System.out.println("*********************************");
 
-		if (cliente != null || clienteSuperior != null
-				|| (cobrancaAcaoAtividadeComando != null && cobrancaAcaoAtividadeComando.getLogradouro() != null)) {
-
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-					UnidadeProcessamento.FUNCIONALIDADE, 0);
+		if (cliente != null || clienteSuperior != null || (cobrancaAcaoAtividadeComando != null && cobrancaAcaoAtividadeComando.getLogradouro() != null)) {
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 		} else {
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA,
-					rota.getId());
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 		}
 
 		try {
-
 			Collection<CobrancaCriterioLinha> colecaoCobrancaCriterioLinhaComando = null;
 
-			// se o indicador do critério for igual a 2(dois) -
-			// "usa o critério do comando"
 			if (indicadorCriterio.intValue() == 2) {
-
 				try {
-					colecaoCobrancaCriterioLinhaComando = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(criterioCobranca
-							.getId());
-
+					colecaoCobrancaCriterioLinhaComando = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(criterioCobranca.getId());
 				} catch (ErroRepositorioException ex) {
 					ex.printStackTrace();
 					throw new ControladorException("erro.sistema", ex);
@@ -60870,58 +60426,51 @@ public class ControladorCobranca implements SessionBean {
 				System.out.println("*********************************");
 			}
 
-			// se o cliente for informado
 			if (cliente != null || clienteSuperior != null) {
-				// [SB0001] - Gerar Atividade de Ação de Cobrança para os
-				// Imóveis do Cliente
+			
 				System.out.println("*********************************");
 				System.out.println("INICIO gerarAtividadeAcaoCobrancaParaImoveisCliente:");
 				System.out.println("*********************************");
-				this.gerarAtividadeAcaoCobrancaParaImoveisCliente(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando, cliente,
-						relacaoClienteImovel, indicadorCriterio, acaoCobranca, atividadeCobranca, colecaoCobrancaCriterioLinhaComando,
-						criterioCobranca, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal,
-						dataAtual, clienteSuperior, idCobrancaDocumentoControleGeracao);
+				this.gerarAtividadeAcaoCobrancaParaImoveisCliente(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando, cliente, relacaoClienteImovel,
+						indicadorCriterio, acaoCobranca, atividadeCobranca, colecaoCobrancaCriterioLinhaComando, criterioCobranca, anoMesReferenciaInicial,
+						anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual, clienteSuperior, idCobrancaDocumentoControleGeracao);
 				System.out.println("*********************************");
 				System.out.println("FIM gerarAtividadeAcaoCobrancaParaImoveisCliente:");
 				System.out.println("*********************************");
+			
 			} else if (cobrancaAcaoAtividadeComando != null && cobrancaAcaoAtividadeComando.getLogradouro() != null) {
-				// Gerar Atividade de Ação de Cobrança para os Imóveis do
-				// Logradouro
+				
 				System.out.println("*********************************");
 				System.out.println("INICIO gerarAtividadeAcaoCobrancaParaImoveisLogradouro:");
 				System.out.println("*********************************");
-				this.gerarAtividadeAcaoCobrancaParaImoveisLogradouro(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando,
-						cliente, relacaoClienteImovel, indicadorCriterio, acaoCobranca, atividadeCobranca,
-						colecaoCobrancaCriterioLinhaComando, criterioCobranca, anoMesReferenciaInicial, anoMesReferenciaFinal,
-						dataVencimentoInicial, dataVencimentoFinal, dataAtual, clienteSuperior, idCobrancaDocumentoControleGeracao);
+				this.gerarAtividadeAcaoCobrancaParaImoveisLogradouro(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando, cliente,
+						relacaoClienteImovel, indicadorCriterio, acaoCobranca, atividadeCobranca, colecaoCobrancaCriterioLinhaComando, criterioCobranca,
+						anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual, clienteSuperior,
+						idCobrancaDocumentoControleGeracao);
 				System.out.println("*********************************");
 				System.out.println("FIM gerarAtividadeAcaoCobrancaParaImoveisLogradouro:");
 				System.out.println("*********************************");
 
 			} else {
-				// [SB0002] - Gerar Atividade de Ação de Cobrança para os
-				// imóveis da Lista de Rotas
-				Integer quantidadeMaxima = this.consideraQuantidadeMaximaDocumentos(cobrancaAcaoAtividadeCronograma,
-						cobrancaAcaoAtividadeComando, acaoCobranca);
+				Integer quantidadeMaxima = this.consideraQuantidadeMaximaDocumentos(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando, acaoCobranca);
 
 				if (quantidadeMaxima != null) {
-
 					System.out.println("*************************");
 					System.out.println("INICIO gerarAtividadeAcaoCobrancaParaImoveisListaRotasComQuantidadeMaxima");
 					System.out.println("*************************");
-					this.gerarAtividadeAcaoCobrancaParaImoveisListaRotasComQuantidadeMaxima(cobrancaAcaoAtividadeCronograma,
-							cobrancaAcaoAtividadeComando, rota, indicadorCriterio, acaoCobranca, atividadeCobranca,
-							colecaoCobrancaCriterioLinhaComando, criterioCobranca, anoMesReferenciaInicial, anoMesReferenciaFinal,
-							dataVencimentoInicial, dataVencimentoFinal, dataAtual, quantidadeMaxima, idCobrancaDocumentoControleGeracao);
+					this.gerarAtividadeAcaoCobrancaParaImoveisListaRotasComQuantidadeMaxima(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando,
+							rota, indicadorCriterio, acaoCobranca, atividadeCobranca, colecaoCobrancaCriterioLinhaComando, criterioCobranca,
+							anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual, quantidadeMaxima,
+							idCobrancaDocumentoControleGeracao);
 				} else {
 
 					System.out.println("*************************");
 					System.out.println("INICIO gerarAtividadeAcaoCobrancaParaImoveisListaRotasSemQuantidadeMaxima");
 					System.out.println("*************************");
-					this.gerarAtividadeAcaoCobrancaParaImoveisListaRotasSemQuantidadeMaxima(cobrancaAcaoAtividadeCronograma,
-							cobrancaAcaoAtividadeComando, rota, indicadorCriterio, acaoCobranca, atividadeCobranca,
-							colecaoCobrancaCriterioLinhaComando, criterioCobranca, anoMesReferenciaInicial, anoMesReferenciaFinal,
-							dataVencimentoInicial, dataVencimentoFinal, dataAtual, idCobrancaDocumentoControleGeracao);
+					this.gerarAtividadeAcaoCobrancaParaImoveisListaRotasSemQuantidadeMaxima(cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando,
+							rota, indicadorCriterio, acaoCobranca, atividadeCobranca, colecaoCobrancaCriterioLinhaComando, criterioCobranca,
+							anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial, dataVencimentoFinal, dataAtual,
+							idCobrancaDocumentoControleGeracao);
 				}
 
 				System.out.println("*********************************");
@@ -60932,17 +60481,10 @@ public class ControladorCobranca implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Throwable e) {
-			// Este catch serve para interceptar qualquer exceção que o processo
-			// batch venha a lançar e garantir que a unidade de processamento do
-			// batch será atualizada com o erro ocorrido
-
 			e.printStackTrace();
-
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -62126,37 +61668,6 @@ public class ControladorCobranca implements SessionBean {
 	/**
 	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0002] Gerar Atividade de
 	 * Ação de Cobrança para os Imóveis da Lista de Rotas
-	 * 
-	 * @author Pedro Alexandre, Vivianne Sousa
-	 * @created 07/02/2006, 07/04/2010
-	 * 
-	 * @param cobrancaAcaoAtividadeCronograma
-	 *            Atividade de Ação de Cobrança de Cronograma
-	 * @param cobrancaAcaoAtividadeComando
-	 *            Atividade de Ação de Cobrança de Comando
-	 * @param colecaoRotas
-	 *            Coleção de rotas
-	 * @param indicadorCriterio
-	 *            Indicador do critério a ser utilizado
-	 * @param acaoCobranca
-	 *            Ação de Cobrança
-	 * @param atividadeCobranca
-	 *            Atividade de Cobrança
-	 * @param colecaoCobrancaCriterioLinhaComando
-	 *            Coleção de linha de critério de cobrança do comando
-	 * @param cobrancaCriterioComando
-	 *            Critério de Cobrança do Comando
-	 * @param anoMesReferenciaInicial
-	 *            Ano/Mês de referência inicial
-	 * @param anoMesReferenciaFinal
-	 *            Ano/Mês de referência final
-	 * @param dataVencimentoInicial
-	 *            Data de vencimento inicial
-	 * @param dataVencimentoFinal
-	 *            Data de vencimento final
-	 * 
-	 * @throws ControladorException
-	 *             Controlador Exception
 	 */
 	private void gerarAtividadeAcaoCobrancaParaImoveisListaRotasComQuantidadeMaxima(
 			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
@@ -62167,62 +61678,38 @@ public class ControladorCobranca implements SessionBean {
 
 		try {
 
-			// pesquisar na tabela cobranca_documento_controle_geracao
-			Integer quantidadeCobrancaDocumento = repositorioCobranca
-					.pesquisarQuantidadeCobrancaDocumento(idCobrancaDocumentoControleGeracao);
-			// verifica se a quantidade de documento gerado é menor que a
-			// quantidade máxima permitida
+			Integer quantidadeCobrancaDocumento = repositorioCobranca.pesquisarQuantidadeCobrancaDocumento(idCobrancaDocumentoControleGeracao);
+			
 			if (quantidadeCobrancaDocumento.compareTo(quantidadeMaxima) < 0) {
 
 				Integer quantidadeCobrancaDocumentoItem = 0;
 				BigDecimal valorTotalDocumentoCobranca = new BigDecimal("0.00");
 
-				// cria a variável que vai armazenar o critério de cobrança
 				CobrancaCriterio cobrancaCriterio = null;
 
-				// cria a variável que vai armazenar a coleção de linhas de
-				// critério de cobrança
 				Collection<CobrancaCriterioLinha> colecaoCobrancaCriterioLinha = new ArrayList();
 
 				Object[] arrayImovel = null;
 
-				// item 2
-				// cria o objeto que vai armazenar temporariamente os dados
-				// retornados pelo [SB0003], para cada imóvel
 				GerarAtividadeAcaoCobrancaHelper gerarAtividadeAcaoCobrancaHelperTemp = new GerarAtividadeAcaoCobrancaHelper();
 
-				// se o indicador do critério for igual a 1(um) -
-				// "usa critério da rota"
 				if (indicadorCriterio.intValue() == 1) {
 
 					CobrancaCriterio cobrancaCriterioRota = null;
 
 					cobrancaCriterioRota = repositorioCobranca.pesquisarCriterioCobrancaRota(rota.getId(), acaoCobranca.getId());
-
-					// pesquisa a coleção de linhas de critério de cobrança
 					colecaoCobrancaCriterioLinha = repositorioCobranca.pesquisarCobrancaCriterioLinhaCriterio(cobrancaCriterioRota.getId());
 
-					// o critério de cobrança utilizado vai ser o da rota
 					cobrancaCriterio = cobrancaCriterioRota;
-
-					// se o indicador do critério for igual a 2(dois) -
-					// "usa o critério do comando"
 				} else {
-					// a coleção de linha de critério de cobrança vai ser a do
-					// comando
 					colecaoCobrancaCriterioLinha = colecaoCobrancaCriterioLinhaComando;
-
-					// o critério de cobrança utilizado vai ser o do comando
 					cobrancaCriterio = cobrancaCriterioComando;
 				}
 
-				// Verificar as situacoes de ligacao de agua e esgoto validas
-				// para o criterio ou acao de cobranca
 				Collection idsSituacaoLigacaoAgua = new ArrayList();
 				Collection idsSituacaoLigacaoEsgoto = new ArrayList();
 
-				Collection colecaoSituacoesLigacaoAgua = repositorioCobranca.pesquisarCobrancaCriterioSituacaoLigacaoAgua(cobrancaCriterio
-						.getId());
+				Collection colecaoSituacoesLigacaoAgua = repositorioCobranca.pesquisarCobrancaCriterioSituacaoLigacaoAgua(cobrancaCriterio.getId());
 				if (colecaoSituacoesLigacaoAgua != null && !colecaoSituacoesLigacaoAgua.isEmpty()) {
 					for (Iterator iter = colecaoSituacoesLigacaoAgua.iterator(); iter.hasNext();) {
 						CriterioSituacaoLigacaoAgua critSitLigAgua = (CriterioSituacaoLigacaoAgua) iter.next();
@@ -62278,9 +61765,6 @@ public class ControladorCobranca implements SessionBean {
 							arrayImovel = (Object[]) iteratorColecaoImoveis.next();
 
 							if (quantidadeCobrancaDocumento.compareTo(quantidadeMaxima) < 0) {
-								// se quantidadeCobrancaDocumentogerados for
-								// menor que a quantidadeMaxima
-
 								imovel = new Imovel();
 								ligacaoAguaSituacao = new LigacaoAguaSituacao();
 								ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
@@ -62305,15 +61789,12 @@ public class ControladorCobranca implements SessionBean {
 								if (arrayImovel[3] != null) {
 									imovelPerfil.setId((Integer) arrayImovel[3]);
 								}
-								// caso a ação de cobrança gere a ordem de
-								// serviço
+
 								if (acaoCobranca.getServicoTipo() != null && acaoCobranca.getServicoTipo().getId() != null) {
-									// seta a empresa cobranca
 									if (arrayImovel[13] != null) {
 										empresa.setId((Integer) arrayImovel[13]);
 									}
 								} else {
-									// seta a empresa
 									if (arrayImovel[4] != null) {
 										empresa.setId((Integer) arrayImovel[4]);
 									}
@@ -62360,8 +61841,6 @@ public class ControladorCobranca implements SessionBean {
 								imovel.setSetorComercial(setorComercial);
 								imovel.setCobrancaSituacaoTipo(cobrancaSituacaoTipo);
 
-								// [SB0003] - Gerar Atividade de Ação de
-								// Cobrança para o imóvel
 								gerarAtividadeAcaoCobrancaHelperTemp = gerarAtividadeAcaoCobrancaParaImovel(
 										cobrancaAcaoAtividadeCronograma, cobrancaAcaoAtividadeComando, imovel, indicadorCriterio,
 										acaoCobranca, atividadeCobranca, cobrancaCriterio, colecaoCobrancaCriterioLinha,
@@ -62450,22 +61929,9 @@ public class ControladorCobranca implements SessionBean {
 
 	/**
 	 * [UC0251] Gerar Atividade de Ação de Cobrança
-	 * 
-	 * @author Pedro Alexandre, Ivan Sergio, Raphael Rossiter,Vivianne Sousa
-	 * @date 01/02/2006, 18/05/2009, 20/07/2009 , 05/04/2010
-	 * 
 	 */
 	private Integer consideraQuantidadeMaximaDocumentos(CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma,
 			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, CobrancaAcao acaoCobranca) {
-
-		// Caso seja um comando eventual e a quantidade de
-		// documentos gerados seja igual a quantidade máxima
-		// de documentos especificada no comando
-
-		// Alterado por Chico, 06/06/08, analista: Ana Breda
-		// caso seja um comando de cronograma, verificar se foi preenchida a
-		// quantidade
-		// maxima de documentos a ser gerada
 
 		Integer quantidadeMaxima = null;
 		boolean possuiValorLimiteEventual = false;
@@ -62490,17 +61956,11 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		/*
-		 * Alteracao feita por Chico, em 21/05/09, analista: Ana Breda Caso o
-		 * eventual tenha valor limite obrigatorio preenchido ou a ação de
-		 * cobrança tenha indicador de uso de ordenamento igual a 1 (SIM) ENTAO:
-		 * nao devera ser considerada a quantidade maxima de documentos nesta
-		 * fase, deixara ser gerado todos os documentos normalmente e no final,
-		 * será analisado os que ficarão.
+		 * Caso o eventual tenha valor limite obrigatorio preenchido ou a ação de cobrança tenha indicador de uso de ordenamento igual a 1 (SIM) ENTAO: nao devera 
+		 * ser considerada a quantidade maxima de documentos nesta fase, deixara ser gerado todos os documentos normalmente e no final, será analisado os que ficarão.
 		 */
 		if (quantidadeMaxima != null) {
 			if (possuiValorLimiteEventual || usaOrdenamento) {
-				// se a quantidade maxima de documentos não for considerada,
-				// retorna null
 				quantidadeMaxima = null;
 			}
 		}
