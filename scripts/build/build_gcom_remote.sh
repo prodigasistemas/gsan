@@ -73,6 +73,29 @@ fi
 
 scp -P $porta $JBOSS_GSAN/server/default/deploy/gsan$SUFIXO$versao.ear.zip $usuario@$ip_remoto:$caminho_remoto
 
+clear
+
+# descompacta o ear remoto com nome proximo ao substituido
+ssh $usuario@$ip_remoto \ "unzip -d /tmp $caminho_remoto/gsan$SUFIXO$versao.ear.zip; mv /tmp/gsan$SUFIXO$versao.ear /tmp/gcom.ear"
+
+# compacta o EAR que está em produção gerando uma cópia caso haja falha na substituição
+echo "REALIZANDO BKP GCOM.EAR ( /home/jboss/backups.gcom.ear/backup_gcom-$DATE.ear.zip ):"
+ssh $usuario@$ip_remoto \ "zip -qr /home/jboss/backups.gcom.ear/gcom.ear-$DATE.zip /opt/servers/jboss-4.0.1sp1/server/default/deploy;"
+
+echo "Parando Servidor JBoss 4 (GSAN):"
+# parar o servidor
+ssh -t $usuario@$ip_remoto \ 'sh /opt/servers/jboss-4.0.1sp1/bin/jboss stop'
+
+echo "Substituindo GCOM.EAR (Deploying):"
+# renomeia o gcom.ear do /opt/servers/jboss-4.0.1sp1/server/default/deploy/
+ssh $usuario@$ip_remoto \ 'rm -rf /opt/servers/jboss-4.0.1sp1/server/default/deploy/gcom.ear'
+
+# move o /tmp/gcom.ear para dentro de /opt/servers/jboss-4.0.1sp1/server/default/deploy/
+ssh $usuario@$ip_remoto \ 'mv /tmp/gcom.ear /opt/servers/jboss-4.0.1sp1/server/default/deploy/'
+
+# start no servidor
+ssh -t $usuario@$ip_remoto \ 'sh /opt/servers/jboss-4.0.1sp1/bin/jboss start;'
+
 # Apaga o build transferido e volta ao local inicial
 rm -rf gsan$SUFIXO$versao.ear.zip
 
