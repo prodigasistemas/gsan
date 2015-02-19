@@ -27268,9 +27268,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					if (somenteDebitoAutomatico)
 						st.setShort(15, ConstantesSistema.SIM);
 					
-					st.executeUpdate();
-
 				}
+				
+				st.executeUpdate();
 			} else {
 
 				if (indicadorBloqueioContasContratoParcelManterConta) 
