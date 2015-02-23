@@ -368,11 +368,20 @@ function validarForm(form)
 	}
 }
 
+function habilitarResponsavel() {
+	var form = document.ConsultarDebitoActionForm;
+	if(form.codigoClienteSuperior.value.length > 0){
+		form.responsavel[0].disabled = true;
+		form.responsavel[2].disabled = true;
+		form.responsavel[1].checked = true;
+	}
+}
+
 
 --></script>
 </head>
 
-<body leftmargin="5" topmargin="5">
+<body leftmargin="5" topmargin="5" onload="habilitarResponsavel()">
 <html:form action="/consultarDebitoAction"   
 	name="ConsultarDebitoActionForm"
   	type="gcom.gui.cobranca.ConsultarDebitoActionForm"
