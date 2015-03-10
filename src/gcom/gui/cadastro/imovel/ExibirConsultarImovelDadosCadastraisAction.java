@@ -1,5 +1,8 @@
 package gcom.gui.cadastro.imovel;
 
+import java.text.SimpleDateFormat;
+
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.bean.IntegracaoQuadraFaceHelper;
@@ -8,9 +11,11 @@ import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -36,6 +41,7 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
     		httpServletRequest.removeAttribute("idImovelDadosCadastraisNaoEncontrado");
 
         	limparFormSessao(consultarImovelActionForm, sessao);
+        	consultarImovelActionForm.setDataProcessamento("");
 			
         }else if( isImovelInformadoTelaDadosCadastrais(consultarImovelActionForm) 
         			|| isImovelInformadoOutraTela(sessao) ){
@@ -52,8 +58,13 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
             	
                 sessao.setAttribute("imovelDadosCadastrais", imovel);
                 sessao.setAttribute("idImovelPrincipalAba", imovel.getId().toString());
+                ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = Fachada.getInstancia().pesquisarImovelControleAtualizacaoCadastral(imovel.getId());
+                SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
                
                 consultarImovelActionForm.setIdImovelDadosCadastrais(imovel.getId().toString());
+                if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getDataProcessamento() != null) {
+                	consultarImovelActionForm.setDataProcessamento(formatador.format(imovelControleAtualizacaoCadastral.getDataProcessamento()));
+                }
                 
                 if (imovel.getIndicadorExclusao().equals(ConstantesSistema.SIM)) {
 					httpServletRequest.setAttribute("imovelExcluido", true);
@@ -80,6 +91,7 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
             limparFormSessao(consultarImovelActionForm, sessao);
 
         	consultarImovelActionForm.setIdImovelDadosCadastrais(idImovelAux);
+        	consultarImovelActionForm.setDataProcessamento("");
         }
 
         return actionMapping.findForward("consultarImovelDadosCadastrais");
