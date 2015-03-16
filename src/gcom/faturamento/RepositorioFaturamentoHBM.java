@@ -21163,10 +21163,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			consulta = "select crrz from CreditoRealizado crrz "
-					//+ "inner join crrz.conta cnta "
+					+ "inner join crrz.conta cnta "
 					+ "INNER JOIN FETCH crrz.creditoTipo crtp "
 					+ "LEFT JOIN FETCH crrz.creditoARealizarGeral crgr "
-					+ "where cnta.imovel.id = :idImovel "
 					+ "where cnta.imovel.id = :idImovel "
 					+ " and cnta.referencia = :referencia "
 					+ "ORDER BY crtp.id, crrz.anoMesReferenciaCredito ";
