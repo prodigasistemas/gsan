@@ -2651,8 +2651,9 @@ public class RepositorioRegistroAtendimentoHBM implements
 					+ "  unid.id, " // 2
 					+ "  unid.descricao,  " // 3
 					+ "  user.id, " // 4
-					+ "  user.nomeUsuario " // 5
-					+ " FROM Tramite tram "
+					+ "  user.nomeUsuario, " // 5
+					+ "  tram.ultimaAlteracao " // 6
+					+ "FROM Tramite tram "
 					+ " INNER JOIN tram.registroAtendimento rgat  "
 					+ " INNER JOIN tram.unidadeOrganizacionalDestino unid  "
 					+ " INNER JOIN tram.usuarioResponsavel user "
@@ -2679,6 +2680,7 @@ public class RepositorioRegistroAtendimentoHBM implements
 					usuario.setId((Integer) element[4]);
 					usuario.setNomeUsuario((String) element[5]);
 					tramite.setUsuarioResponsavel(usuario);
+					tramite.setUltimaAlteracao((Date) element[6]); 
 					retorno.add(tramite);
 				}
 			}
@@ -2724,7 +2726,8 @@ public class RepositorioRegistroAtendimentoHBM implements
 					+ " func.id," // 7
 					+ " func.nome," // 8
 					+ " RASolicitante.solicitante, " // 9
-					+ " RASolicitante.numeroProtocoloAtendimento " // 10
+					+ " RASolicitante.numeroProtocoloAtendimento, " // 10
+					+ " RASolicitante.ultimaAlteracao " // 11
 					+ " FROM RegistroAtendimentoSolicitante RASolicitante"
 					+ " INNER JOIN RASolicitante.registroAtendimento rgat"
 					+ " LEFT JOIN RASolicitante.unidadeOrganizacional unid"
@@ -2786,6 +2789,10 @@ public class RepositorioRegistroAtendimentoHBM implements
 						registroAtendimentoSolicitante.setNumeroProtocoloAtendimento((String) element[10]);
 					}
 
+					if (element[11] != null) {
+						registroAtendimentoSolicitante.setUltimaAlteracao((Date) element[11]);
+					}
+					
 					retorno.add(registroAtendimentoSolicitante);
 				}
 			}

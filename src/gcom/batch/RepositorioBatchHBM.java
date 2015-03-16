@@ -167,44 +167,63 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	@SuppressWarnings({ "unchecked"})
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasProntasParaEncerramento()
 	throws ErroRepositorioException {
-		Set<FuncionalidadeIniciada> funcionalidades = new HashSet<FuncionalidadeIniciada>();
-		Set<FuncionalidadeIniciada> funcionalidadesNaoConcluidas = new HashSet<FuncionalidadeIniciada>();
-
+		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
+		Collection<Object> ids = null;
 		Session session = HibernateUtil.getSession();
 		String consulta;
-	 	
+			 	
 		try {
-			consulta = "select func.id, situacao.id from FuncionalidadeIniciada as func "
-					+ "inner join func.unidadesIniciadas as iniciada "
-					+ "inner join iniciada.unidadeSituacao as situacao "
-					+ "where func.funcionalidadeSituacao = :situacaoFuncionalidade "
-					+ "group by func.id, situacao.id";
+//			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
+//					+ "inner join func.unidadesIniciadas as iniciada "
+//					+ "inner join fetch func.processoFuncionalidade as procFunc "
+//					+ "inner join fetch procFunc.funcionalidade "
+//					+ "where iniciada.id is not null and "
+//					//+ "func.funcionalidadeSituacao.id <> :situacaoFuncionalidadeConcluida "
+//					+ "func.funcionalidadeSituacao.id = :situacaoFuncionalidadeEmProcessamento "
+//					+ "and func.id not in ("
+//					+ "select distinct func.id from FuncionalidadeIniciada as func2 "
+//					+ "inner join func2.unidadesIniciadas as iniciada "
+//					+ "inner join iniciada.unidadeSituacao as situacao "
+//					+ "where situacao.id <> :situacaoConcluida and and func2.id = func.id)";
 		
-			Collection<Object[]> ids = session.createQuery(consulta).setInteger("situacaoFuncionalidade",FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
+			consulta = "select distinct func.fuin_id as idFuncionalidade "
+					+ " from batch.funcionalidade_iniciada func "
+					+ " inner join batch.unidade_iniciada iniciada on iniciada.fuin_id = func.fuin_id "
+					+ " inner join batch.processo_funcionalidade procFunc on procFunc.prfn_id = func.prfn_id "
+					+ " inner join seguranca.funcionalidade funcionalidade on funcionalidade.fncd_id = procFunc.fncd_id "
+					+ " where iniciada.undi_id is not null "
+					+ " and func.fnst_id <> :situacaoFuncionalidadeConcluida " 
+					+ " and func.fuin_id not in (select func.fuin_id "
+						+ " from batch.funcionalidade_iniciada func2 "
+						+ " inner join batch.unidade_iniciada iniciada on iniciada.fuin_id = func2.fuin_id "
+						+ " inner join batch.unidade_situacao situacao on situacao.unst_id = iniciada.unst_id "
+						+ " where situacao.unst_id <> :situacaoConcluida and func2.fuin_id = func.fuin_id) ";
+			ids = session.createSQLQuery(consulta)
+					.addScalar("idFuncionalidade", Hibernate.INTEGER)
+					.setInteger("situacaoConcluida", UnidadeSituacao.CONCLUIDA)
+					.setInteger("situacaoFuncionalidadeConcluida",FuncionalidadeSituacao.CONCLUIDA)
+					//.setInteger("situacaoFuncionalidadeEmProcessamento",FuncionalidadeSituacao.EM_PROCESSAMENTO)
+					.list();
 			
-			for (Object[] objects : ids) {
-				Integer idFuncionalidade = (Integer) objects[0];
-				Integer idSituacao = (Integer) objects[1];
-
-				FuncionalidadeIniciada funcionalidade = new FuncionalidadeIniciada();
-				funcionalidade.setId(idFuncionalidade);
-
-				funcionalidades.add(funcionalidade);
+			Iterator iter = ids.iterator();
+			
+			while (iter.hasNext()) {
+				Object objeto = (Object) iter.next();
 				
-				if (idSituacao != UnidadeSituacao.CONCLUIDA) {
-					funcionalidadesNaoConcluidas.add(funcionalidade);
-				}
-			}
-			
-			funcionalidades.removeAll(funcionalidadesNaoConcluidas);
-		
+				Integer id = (Integer) objeto;
+				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
+				funcionalidadeIniciada.setId(id);
+				
+				retorno.add(funcionalidadeIniciada);
+				
+			}		
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 	
-		return funcionalidades;
+		return retorno;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jboss.logging.Logger;
 
@@ -388,30 +389,37 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(
-			Integer idSituacaoCadastral, Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Integer situacao, Date dataInicial, Date dataFinal) throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
 		
 		try {
-			String consulta = " SELECT i.imovel.id " 
-					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT i.imovel.id ")
+			   .append("FROM ImovelControleAtualizacaoCadastral i ")
+			   .append("WHERE i.situacaoAtualizacaoCadastral.id = :situacao ");
 			
-			if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.DISPONIVEL)) {
-				consulta += " AND date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal ";
-			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
-				consulta += " AND date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal ";
-			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.APROVADO)) {
-				consulta += " AND date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal ";
-			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.ATUALIZADO)) {
-				consulta += " AND date(i.dataProcessamento) BETWEEN :dataInicial AND :dataFinal ";
+			if (situacao.equals(SituacaoAtualizacaoCadastral.DISPONIVEL)) {
+				sql.append("AND date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal");
+			} else if (situacao.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
+				sql.append("AND date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal");
+			} else if (situacao.equals(SituacaoAtualizacaoCadastral.APROVADO)) {
+				sql.append("AND date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal");
+			} else if (situacao.equals(SituacaoAtualizacaoCadastral.ATUALIZADO)) {
+				sql.append("AND date(i.dataProcessamento) BETWEEN :dataInicial AND :dataFinal");
 			}
 			
-			return (Collection<Integer>) session.createQuery(consulta)
-					.setDate("dataInicial", dataInicial)
-					.setDate("dataFinal", dataFinal)
-					.setInteger("idSituacaoCadastral", idSituacaoCadastral).list();
+			Query query = session.createQuery(sql.toString()).setInteger("situacao", situacao);
+			
+			if (situacao.equals(SituacaoAtualizacaoCadastral.DISPONIVEL) 
+					|| situacao.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)
+					|| situacao.equals(SituacaoAtualizacaoCadastral.APROVADO)
+					|| situacao.equals(SituacaoAtualizacaoCadastral.ATUALIZADO)) {
+				
+				query.setDate("dataInicial", dataInicial).setDate("dataFinal", dataFinal);
+			}
+			
+			return (Collection<Integer>) query.list();
 		} catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {

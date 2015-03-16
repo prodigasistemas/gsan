@@ -16,77 +16,84 @@ import gcom.tarefa.TarefaRelatorio;
 import gcom.util.Util;
 
 public class RelatorioImoveisSituacaoPeriodoBO {
-	
+
 	private RelatorioImoveisSituacaoPeriodoActionForm form;
 	private String dataInicial;
 	private String dataFinal;
 	private String idSituacaoCadastral;
-	
+
 	private Usuario usuario;
 	private String tipoRelatorio;
-	
-	public RelatorioImoveisSituacaoPeriodoBO(ActionForm actionForm, HttpServletRequest httpServletRequest){
+
+	public RelatorioImoveisSituacaoPeriodoBO(ActionForm actionForm, HttpServletRequest request) {
 		this.form = (RelatorioImoveisSituacaoPeriodoActionForm) actionForm;
 		this.dataInicial = (String) form.getDataInicial();
 		this.dataFinal = (String) form.getDataFinal();
 		this.idSituacaoCadastral = (String) form.getIdSituacaoCadastral();
-				
-		this.usuario = (Usuario)(httpServletRequest.getSession(false)).getAttribute("usuarioLogado");
-		this.tipoRelatorio = httpServletRequest.getParameter("tipoRelatorio");
+
+		this.usuario = (Usuario) (request.getSession(false)).getAttribute("usuarioLogado");
+		this.tipoRelatorio = request.getParameter("tipoRelatorio");
 	}
-	
+
 	public RelatorioImoveisSituacaoPeriodo getRelatorioImoveisSituacaoPeriodo() {
-		if(idSituacaoCadastral.equals("-1"))
+		if (idSituacaoCadastral.equals("-1"))
 			throw new ActionServletException("atencao.campo_texto.obrigatorio", "Situação");
-		
-		if (dataInicial.equals(""))
-			throw new ActionServletException("atencao.data.inicial.invalida");
-		
-		if (dataFinal.equals(""))
-			throw new ActionServletException("atencao.data.final.invalida");
-		
+
+		if (temPeriodo()) {
+			if (dataInicial != null && dataInicial.equals(""))
+				throw new ActionServletException("atencao.data.inicial.invalida");
+
+			if (dataFinal != null && dataFinal.equals(""))
+				throw new ActionServletException("atencao.data.final.invalida");
+		}
+
 		RelatorioImoveisSituacaoPeriodo relatorio = new RelatorioImoveisSituacaoPeriodo(usuario);
-		Date dInicial = Util.converteStringParaDate(dataInicial);
-		Date dFinal = Util.converteStringParaDate(dataFinal);
-		
-		relatorio.addParametro("descricaoSituacaoCadastral",getSituacaoAtualizacaoCadastral());
+		relatorio.addParametro("descricaoSituacaoCadastral", getSituacaoAtualizacaoCadastral());
 		relatorio.addParametro("dataInicial", dataInicial);
 		relatorio.addParametro("dataFinal", dataFinal);
 		relatorio.addParametro("tipoFormatoRelatorio", getTipoFormatoRelatorio());
-		relatorio.addParametro("colecaoImoveis", getImoveis(dInicial, dFinal, Integer.valueOf(idSituacaoCadastral)));
+		relatorio.addParametro("colecaoImoveis", getImoveis(
+				Util.converteStringParaDate(dataInicial), Util.converteStringParaDate(dataFinal), Integer.valueOf(idSituacaoCadastral)));
 		return relatorio;
 	}
-	
+
+	private boolean temPeriodo() {
+		return idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.DISPONIVEL.toString())
+				|| idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO.toString())
+				|| idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.APROVADO.toString())
+				|| idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.ATUALIZADO.toString());
+	}
+
 	private String getSituacaoAtualizacaoCadastral() {
 		SituacaoAtualizacaoCadastral situacao = Fachada.getInstancia().pesquisarSituacaoAtualizacaoCadastralPorId(Integer.valueOf(idSituacaoCadastral));
 		return situacao.getDescricao();
 	}
 
-	private Collection<Integer> getImoveis(Date dInicial, Date dataFinal, Integer idSituacaoCadastral) {
-		return Fachada.getInstancia().pesquisarImoveisPorSituacaoPeriodo(dInicial, dataFinal, idSituacaoCadastral);
+	private Collection<Integer> getImoveis(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral) {
+		return Fachada.getInstancia().pesquisarImoveisPorSituacaoPeriodo(dataInicial, dataFinal, idSituacaoCadastral);
 	}
 
 	public RelatorioImoveisSituacaoPeriodoActionForm getForm() {
 		return form;
 	}
-	
+
 	public String getDataInicial() {
 		return dataInicial;
 	}
-	
+
 	public String getDataFinal() {
 		return dataFinal;
 	}
-	
+
 	public String getIdSituacaoCadastral() {
 		return idSituacaoCadastral;
 	}
-	
-	private int getTipoFormatoRelatorio(){
+
+	private int getTipoFormatoRelatorio() {
 		if (tipoRelatorio == null) {
 			tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
 		}
-		
+
 		return Integer.parseInt(tipoRelatorio);
 	}
 }

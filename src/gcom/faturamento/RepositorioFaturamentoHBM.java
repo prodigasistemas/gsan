@@ -55,6 +55,7 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
+import gcom.faturamento.conta.IConta;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -89,11 +90,8 @@ import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
-import gcom.relatorio.faturamento.DataLeituraAnteriorHelper;
-import gcom.relatorio.faturamento.DataLeituraPrevistaHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
-import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
@@ -21155,7 +21153,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
-	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(Integer idConta) throws ErroRepositorioException {
+	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(IConta conta) throws ErroRepositorioException {
 
 		Collection<ICreditoRealizado> retorno = null;
 
@@ -21168,9 +21166,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join crrz.conta cnta "
 					+ "INNER JOIN FETCH crrz.creditoTipo crtp "
 					+ "LEFT JOIN FETCH crrz.creditoARealizarGeral crgr "
-					+ "where cnta.id = :idConta "
+					+ "where cnta.imovel.id = :idImovel "
+					+ " and cnta.referencia = :referencia "
 					+ "ORDER BY crtp.id, crrz.anoMesReferenciaCredito ";
-			retorno = session.createQuery(consulta).setInteger("idConta", idConta).list();
+			retorno = session.createQuery(consulta)
+					.setInteger("idImovel", conta.getImovel().getId())
+					.setInteger("referencia", conta.getReferencia())
+					.list();
 			
 
 		} catch (HibernateException e) {
@@ -27265,9 +27267,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					if (somenteDebitoAutomatico)
 						st.setShort(15, ConstantesSistema.SIM);
 					
-					st.executeUpdate();
-
 				}
+				
+				st.executeUpdate();
 			} else {
 
 				if (indicadorBloqueioContasContratoParcelManterConta) 

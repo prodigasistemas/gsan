@@ -1,13 +1,23 @@
 package gcom.atualizacaocadastral;
 
+import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
+import gcom.atendimentopublico.ordemservico.FiltroOrdemServicoUnidade;
+import gcom.atendimentopublico.ordemservico.OrdemServico;
+import gcom.atendimentopublico.ordemservico.OrdemServicoUnidade;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoUnidade;
+import gcom.atendimentopublico.registroatendimento.FiltroTramite;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
+import gcom.atendimentopublico.registroatendimento.Tramite;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -86,6 +96,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
 	private IRepositorioSeguranca repositorioSeguranca;
+	private static List<Integer> listaRAParaExclusao = new ArrayList<Integer>();
 
 	
 	SessionContext sessionContext;
@@ -255,6 +266,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
+			
+			if (!listaRAParaExclusao.isEmpty()) {
+				deletarRAsPendente(listaRAParaExclusao);
+				listaRAParaExclusao.clear();
+			}
+			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new ControladorException("Erro ao atualizar imóveis aprovados.", e);
 		}
@@ -773,10 +790,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				imovelRetorno.setIdImovel(null);
 				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 				
-				if (isRAGerada(imovelRetorno.getId())) {
-					continue;
-				}
-				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
 				HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel = this.obterClientesImovel(imovelRetorno.getId());
@@ -785,7 +798,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 				
-				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				Integer[] retorno = getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				
+				listaRAParaExclusao.add(retorno[0]);
 				
 				atualizarImovelProcessado(imovelRetorno.getId());
 			}
@@ -829,17 +844,15 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				if (!isImovelEmCampo(imovelRetorno.getIdImovel())) {
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 					
-					if (isRAGerada(imovelRetorno.getId())) {
-						continue;
-					}
-					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
 					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
 					RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.EXCLUSAO);
 					RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 					
-					getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+					Integer[] retorno = getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+					
+					listaRAParaExclusao.add(retorno[0]);
 					
 					atualizarImovelProcessado(imovelRetorno.getId());
 				}
@@ -975,17 +988,16 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 					
-					if (isRAGerada(clienteImovelRetorno.getImovel().getId())) {
-						continue;
-					}
-					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
 					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
 					RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
 					RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 					
-					getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+					Integer[] retorno = getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+					
+					listaRAParaExclusao.add(retorno[0]);
+					
 				}
 			}
 		} catch (Exception e) {
@@ -993,6 +1005,147 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			throw new ControladorException("Erro ao inserir cliente.", e);
 			
 		}
+	}
+	
+	public void deletarRAsPendente(List<Integer> listaRAs) {
+		try {
+			
+			
+			for (Integer integer : listaRAs) {
+				
+				RegistroAtendimento registroAtendimento = getRegistroAtendimento(integer).iterator().next();
+
+				FiltroRegistroAtendimentoSolicitante filtroRegistroAtendimentoSolicitante = new FiltroRegistroAtendimentoSolicitante();
+				filtroRegistroAtendimentoSolicitante.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
+				
+				FiltroTramite filtroTramite = new FiltroTramite();
+				filtroTramite.adicionarParametro(new ParametroSimples(FiltroTramite.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
+				
+				FiltroOrdemServico filtroOrdemServico = new FiltroOrdemServico();
+				filtroOrdemServico.adicionarParametro(new ParametroSimples(FiltroOrdemServico.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
+				
+				FiltroRegistroAtendimentoUnidade filtroRegistroAtendimentoUnidade = new FiltroRegistroAtendimentoUnidade();
+				filtroRegistroAtendimentoUnidade.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.REGISTRO_ATENDIMENTO_ID, registroAtendimento.getId()));
+				
+				Collection rasHelper = getControladorUtil().pesquisar(filtroRegistroAtendimentoSolicitante, RegistroAtendimentoSolicitante.class.getName());
+				Collection tramiteHelper = getControladorUtil().pesquisar(filtroTramite, Tramite.class.getName());
+				Collection osHelper = getControladorUtil().pesquisar(filtroOrdemServico, OrdemServico.class.getName());
+				Collection raUnidadeHelper = getControladorUtil().pesquisar(filtroRegistroAtendimentoUnidade, RegistroAtendimentoUnidade.class.getName());
+				
+				if (osHelper != null && !osHelper.isEmpty()) {
+					
+					for (Object ordemServico : osHelper) {
+						Collection osuHelper = getOrdemServicoUnidade(((OrdemServico) ordemServico).getId());
+						
+						if (osuHelper == null)
+							continue;
+						
+						Iterator i = osuHelper.iterator();
+						while (i.hasNext()) {
+							getControladorUtil().remover(i.next());
+						}
+					}
+					
+					Iterator i = osHelper.iterator();
+					
+					while (i.hasNext()) {
+						getControladorUtil().remover(i.next());
+					}
+				}
+				
+				
+				
+				if (raUnidadeHelper != null) {
+					Iterator i = raUnidadeHelper.iterator();
+					
+					while (i.hasNext()) {
+						getControladorUtil().remover(i.next());
+					}
+				}
+				
+				if (tramiteHelper != null) {
+					Iterator i = tramiteHelper.iterator();
+					
+					while (i.hasNext()) {
+						getControladorUtil().remover(i.next());
+					}
+				}
+				
+				if (rasHelper != null) {
+					Iterator i = rasHelper.iterator();
+					
+					while (i.hasNext()) {
+						getControladorUtil().remover(i.next());
+					}
+				}
+				
+				getControladorUtil().remover(registroAtendimento);
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public Collection<OrdemServicoUnidade> getOrdemServicoUnidade(Integer numeroOS) throws Exception {
+		FiltroOrdemServicoUnidade filtroOrdemServicoUnidade = new FiltroOrdemServicoUnidade();
+		filtroOrdemServicoUnidade.adicionarParametro(new ParametroSimples(FiltroOrdemServicoUnidade.ORDEM_SERVICO_ID, numeroOS));
+		
+		Collection<OrdemServicoUnidade> colecaoOrdemServicoUnidade = getControladorUtil().pesquisar(filtroOrdemServicoUnidade, OrdemServicoUnidade.class.getName());
+		
+		if (colecaoOrdemServicoUnidade.isEmpty()) {
+			return null;
+		}
+		
+		return colecaoOrdemServicoUnidade;
+		
+		
+	}
+	
+	
+	
+	public Collection<RegistroAtendimento> getRegistroAtendimento(Integer idRA) {
+		try {
+			FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
+			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.ID, idRA));
+//			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.CODIGO_SITUACAO, String.valueOf(RegistroAtendimento.SITUACAO_PENDENTE)));
+//			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.SOLICITACAO_TIPO_ESPECIFICACAO, 1227)); // "ATUALIZACAO CADASTRAL GSAN"
+			
+			Collection<RegistroAtendimento> colecaoRegistroAtendimento = getControladorUtil().pesquisar(filtroRegistroAtendimento, RegistroAtendimento.class.getName());
+			
+			if (colecaoRegistroAtendimento.isEmpty()) {
+				return null;
+			}
+			
+			return colecaoRegistroAtendimento;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public Collection<RegistroAtendimentoUnidade> getRAUnidade(Integer numeroRA) {
+		try {
+			FiltroRegistroAtendimentoUnidade filtroRegistroAtendimentoUnidade = new FiltroRegistroAtendimentoUnidade();
+			filtroRegistroAtendimentoUnidade.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID, numeroRA));
+			
+			Collection<RegistroAtendimentoUnidade> colecaoRegistroAtendimentoUnidade = getControladorUtil().pesquisar(filtroRegistroAtendimentoUnidade, RegistroAtendimentoUnidade.class.getName());
+			
+			if (colecaoRegistroAtendimentoUnidade.isEmpty()) {
+				return null;
+			}
+			
+			return colecaoRegistroAtendimentoUnidade;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	private boolean isRAGerada(Integer matricula) {
@@ -1028,17 +1181,15 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				Integer idSetorComercial = imovel.getSetorComercia().getId();
 				
-				if (isRAGerada(clienteImovel.getImovel().getId())) {
-					continue;
-				}
-				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
 				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovel, cliente, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovel, idSetorComercial, AlteracaoTipo.EXCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 				
-				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				Integer[] retorno = getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				
+				listaRAParaExclusao.add(retorno[0]);
 			}
 		
 		}

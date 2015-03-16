@@ -29681,7 +29681,7 @@ public class ControladorMicromedicao implements SessionBean {
 	public void inserirDadosImoveisMovimentoRoteiroEmpresa(
 			Collection imoveisParaSerGerados, int anoMesCorrente,
 			SistemaParametro sistemaParametro, Integer idLeituraTipo)
-			throws ControladorException {
+ throws ControladorException {
 
 		/**
 		 * [SB0004]-Recuperar Dados para inclusao na Tabela
@@ -29701,8 +29701,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 			Integer quantidadeImoveis = 0;
 
-			ListIterator imovelParaSerGeradoIterator = ((List) imoveisParaSerGerados)
-					.listIterator(0);
+			ListIterator imovelParaSerGeradoIterator = ((List) imoveisParaSerGerados).listIterator(0);
 
 			Imovel imovelParaSerGerado = null;
 
@@ -29712,25 +29711,20 @@ public class ControladorMicromedicao implements SessionBean {
 					boolean ligacaoAgua = false;
 					boolean ligacaoPoco = false;
 
-					imovelParaSerGerado = (Imovel) imovelParaSerGeradoIterator
-							.next();
+					imovelParaSerGerado = (Imovel) imovelParaSerGeradoIterator.next();
 
 					// incrementa a quantidade de registros
 					quantidadeRegistros = quantidadeRegistros + 1;
 
 					quantidadeImoveis = quantidadeImoveis + 1;
 
-					if (imovelParaSerGerado.getLigacaoAgua() != null
-							&& imovelParaSerGerado.getLigacaoAgua().getId() != null
-							&& imovelParaSerGerado.getLigacaoAgua()
-									.getHidrometroInstalacaoHistorico() != null
-							&& imovelParaSerGerado.getLigacaoAgua()
-									.getHidrometroInstalacaoHistorico().getId() != null) {
+					if (imovelParaSerGerado.getLigacaoAgua() != null && imovelParaSerGerado.getLigacaoAgua().getId() != null
+							&& imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
+							&& imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null) {
 						ligacaoAgua = true;
 					}
 					if (imovelParaSerGerado.getHidrometroInstalacaoHistorico() != null
-							&& imovelParaSerGerado
-									.getHidrometroInstalacaoHistorico().getId() != null) {
+							&& imovelParaSerGerado.getHidrometroInstalacaoHistorico().getId() != null) {
 						ligacaoPoco = true;
 					}
 
@@ -29745,100 +29739,61 @@ public class ControladorMicromedicao implements SessionBean {
 
 					if (imovelParaSerGerado.getQuadra() != null) {
 
-						movimentoRoteiroEmpresa
-								.setRoteiroEmpresa(imovelParaSerGerado
-										.getQuadra().getRoteiroEmpresa());
-						movimentoRoteiroEmpresa
-								.setNumeroQuadra(imovelParaSerGerado
-										.getQuadra().getNumeroQuadra());
+						movimentoRoteiroEmpresa.setRoteiroEmpresa(imovelParaSerGerado.getQuadra().getRoteiroEmpresa());
+						movimentoRoteiroEmpresa.setNumeroQuadra(imovelParaSerGerado.getQuadra().getNumeroQuadra());
 
 						if (imovelParaSerGerado.getQuadra().getRota() != null) {
 							// id do grupo de faturamento
-							movimentoRoteiroEmpresa
-									.setFaturamentoGrupo(imovelParaSerGerado
-											.getQuadra().getRota()
-											.getFaturamentoGrupo());
+							movimentoRoteiroEmpresa.setFaturamentoGrupo(imovelParaSerGerado.getQuadra().getRota().getFaturamentoGrupo());
 						}
 
 						if (imovelParaSerGerado.getQuadra().getRoteiroEmpresa() != null) {
-							movimentoRoteiroEmpresa
-									.setEmpresa(imovelParaSerGerado.getQuadra()
-											.getRoteiroEmpresa().getEmpresa());
+							movimentoRoteiroEmpresa.setEmpresa(imovelParaSerGerado.getQuadra().getRoteiroEmpresa().getEmpresa());
 						} else {
-							movimentoRoteiroEmpresa
-									.setEmpresa(imovelParaSerGerado.getQuadra()
-											.getRota().getEmpresa());
+							movimentoRoteiroEmpresa.setEmpresa(imovelParaSerGerado.getQuadra().getRota().getEmpresa());
 						}
 
 						// LEITURISTA
-						movimentoRoteiroEmpresa
-								.setLeiturista(imovelParaSerGerado.getQuadra()
-										.getRota().getLeiturista());
+						movimentoRoteiroEmpresa.setLeiturista(imovelParaSerGerado.getQuadra().getRota().getLeiturista());
 					}
 
 					// QUADRA_FACE
 					if (imovelParaSerGerado.getQuadraFace() != null) {
 
-						movimentoRoteiroEmpresa
-								.setCodigoQuadraFace(imovelParaSerGerado
-										.getQuadraFace().getNumeroQuadraFace());
+						movimentoRoteiroEmpresa.setCodigoQuadraFace(imovelParaSerGerado.getQuadraFace().getNumeroQuadraFace());
 					}
 
-					movimentoRoteiroEmpresa.setLocalidade(imovelParaSerGerado
-							.getLocalidade());
+					movimentoRoteiroEmpresa.setLocalidade(imovelParaSerGerado.getLocalidade());
 
 					// DESCRI��O DA LOCALIDADE
-					movimentoRoteiroEmpresa
-							.setNomeLocalidade(imovelParaSerGerado
-									.getLocalidade().getDescricao());
+					movimentoRoteiroEmpresa.setNomeLocalidade(imovelParaSerGerado.getLocalidade().getDescricao());
 
 					FiltroImovel filtroDadosImovelRotaAlternativa = new FiltroImovel();
-					filtroDadosImovelRotaAlternativa
-							.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa.setorComercial");
-					filtroDadosImovelRotaAlternativa
-							.adicionarParametro(new ParametroSimples(
-									FiltroImovel.ID, imovelParaSerGerado
-											.getId()));
-					Collection<Imovel> colDadosImovelRotaAlternativa = this
-							.getControladorUtil().pesquisar(
-									filtroDadosImovelRotaAlternativa,
-									Imovel.class.getName());
-					Imovel dadosImovelRotaAlternativa = (Imovel) Util
-							.retonarObjetoDeColecao(colDadosImovelRotaAlternativa);
+					filtroDadosImovelRotaAlternativa.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa.setorComercial");
+					filtroDadosImovelRotaAlternativa.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovelParaSerGerado.getId()));
+					Collection<Imovel> colDadosImovelRotaAlternativa = this.getControladorUtil().pesquisar(filtroDadosImovelRotaAlternativa,
+							Imovel.class.getName());
+					Imovel dadosImovelRotaAlternativa = (Imovel) Util.retonarObjetoDeColecao(colDadosImovelRotaAlternativa);
 
 					if (dadosImovelRotaAlternativa.getRotaAlternativa() != null) {
-						imovelParaSerGerado
-								.setRotaAlternativa(dadosImovelRotaAlternativa
-										.getRotaAlternativa());
+						imovelParaSerGerado.setRotaAlternativa(dadosImovelRotaAlternativa.getRotaAlternativa());
 					}
 
 					if (imovelParaSerGerado.getRotaAlternativa() != null) {
-						movimentoRoteiroEmpresa
-								.setCodigoSetorComercial(imovelParaSerGerado
-										.getRotaAlternativa()
-										.getSetorComercial().getCodigo());
+						movimentoRoteiroEmpresa.setCodigoSetorComercial(imovelParaSerGerado.getRotaAlternativa().getSetorComercial().getCodigo());
 					} else {
-						movimentoRoteiroEmpresa
-								.setCodigoSetorComercial(imovelParaSerGerado
-										.getSetorComercial().getCodigo());
+						movimentoRoteiroEmpresa.setCodigoSetorComercial(imovelParaSerGerado.getSetorComercial().getCodigo());
 					}
 
-					movimentoRoteiroEmpresa.setNumeroLoteImovel(Util
-							.adicionarZerosEsquedaNumero(4, ""
-									+ imovelParaSerGerado.getLote()));
-					movimentoRoteiroEmpresa.setNumeroSubloteImovel(Util
-							.adicionarZerosEsquedaNumero(3, ""
-									+ imovelParaSerGerado.getSubLote()));
+					movimentoRoteiroEmpresa.setNumeroLoteImovel(Util.adicionarZerosEsquedaNumero(4, "" + imovelParaSerGerado.getLote()));
+					movimentoRoteiroEmpresa.setNumeroSubloteImovel(Util.adicionarZerosEsquedaNumero(3, "" + imovelParaSerGerado.getSubLote()));
 
-					movimentoRoteiroEmpresa.setImovelPerfil(imovelParaSerGerado
-							.getImovelPerfil());
+					movimentoRoteiroEmpresa.setImovelPerfil(imovelParaSerGerado.getImovelPerfil());
 
 					// N�MERO DE MORADORES
 					if (imovelParaSerGerado.getNumeroMorador() != null) {
 
-						movimentoRoteiroEmpresa
-								.setNumeroMoradores(imovelParaSerGerado
-										.getNumeroMorador().intValue());
+						movimentoRoteiroEmpresa.setNumeroMoradores(imovelParaSerGerado.getNumeroMorador().intValue());
 					}
 
 					// caso seja tipo ligação agua e poço cria a string
@@ -29848,21 +29803,11 @@ public class ControladorMicromedicao implements SessionBean {
 					// ligação agua
 					if (ligacaoAgua && ligacaoPoco) {
 
-						if (imovelParaSerGerado.getLigacaoAgua() != null
-								&& imovelParaSerGerado.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico() != null
-								&& imovelParaSerGerado.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico()
-										.getId() != null
-								&& !imovelParaSerGerado.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico()
-										.getId().equals("")) {
+						if (imovelParaSerGerado.getLigacaoAgua() != null && imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
+								&& imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null
+								&& !imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId().equals("")) {
 
-							movimentoRoteiroEmpresa
-									.setMedicaoTipo(imovelParaSerGerado
-											.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico()
-											.getMedicaoTipo());
+							movimentoRoteiroEmpresa.setMedicaoTipo(imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getMedicaoTipo());
 						}
 						// caso não seja
 					} else {
@@ -29870,20 +29815,11 @@ public class ControladorMicromedicao implements SessionBean {
 						// tipo
 						// ligação agua
 						if (ligacaoAgua) {
-							if (imovelParaSerGerado.getLigacaoAgua() != null
-									&& imovelParaSerGerado.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico() != null
-									&& imovelParaSerGerado.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico()
-											.getId() != null
-									&& !imovelParaSerGerado.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico()
-											.getId().equals("")) {
+							if (imovelParaSerGerado.getLigacaoAgua() != null && imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
+									&& imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null
+									&& !imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId().equals("")) {
 								movimentoRoteiroEmpresa
-										.setMedicaoTipo(imovelParaSerGerado
-												.getLigacaoAgua()
-												.getHidrometroInstalacaoHistorico()
-												.getMedicaoTipo());
+										.setMedicaoTipo(imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getMedicaoTipo());
 							}
 						} else {
 							// caso seja tipo ligação poço cria a string
@@ -29891,18 +29827,10 @@ public class ControladorMicromedicao implements SessionBean {
 							// tipo
 							// ligação poço
 							if (ligacaoPoco) {
-								if (imovelParaSerGerado
-										.getHidrometroInstalacaoHistorico() != null
-										&& imovelParaSerGerado
-												.getHidrometroInstalacaoHistorico()
-												.getId() != null
-										&& !imovelParaSerGerado
-												.getHidrometroInstalacaoHistorico()
-												.getId().equals("")) {
-									movimentoRoteiroEmpresa
-											.setMedicaoTipo(imovelParaSerGerado
-													.getHidrometroInstalacaoHistorico()
-													.getMedicaoTipo());
+								if (imovelParaSerGerado.getHidrometroInstalacaoHistorico() != null
+										&& imovelParaSerGerado.getHidrometroInstalacaoHistorico().getId() != null
+										&& !imovelParaSerGerado.getHidrometroInstalacaoHistorico().getId().equals("")) {
+									movimentoRoteiroEmpresa.setMedicaoTipo(imovelParaSerGerado.getHidrometroInstalacaoHistorico().getMedicaoTipo());
 								}
 							}
 						}
@@ -29912,17 +29840,14 @@ public class ControladorMicromedicao implements SessionBean {
 					movimentoRoteiroEmpresa.setImovel(imovelParaSerGerado);
 
 					// Perfil do imovel
-					movimentoRoteiroEmpresa.setImovelPerfil(imovelParaSerGerado
-							.getImovelPerfil());
+					movimentoRoteiroEmpresa.setImovelPerfil(imovelParaSerGerado.getImovelPerfil());
 
 					String nomeClienteUsuario = null;
 					// Pesquisa o nome do cliente que tem o tipo de
 					// relação
 					// usuário.
 					try {
-						nomeClienteUsuario = repositorioClienteImovel
-								.pesquisarNomeClientePorImovel(imovelParaSerGerado
-										.getId());
+						nomeClienteUsuario = repositorioClienteImovel.pesquisarNomeClientePorImovel(imovelParaSerGerado.getId());
 					} catch (ErroRepositorioException e) {
 
 						throw new ControladorException("erro.sistema", e);
@@ -29930,16 +29855,12 @@ public class ControladorMicromedicao implements SessionBean {
 					}
 
 					// nome do cliente usuario
-					movimentoRoteiroEmpresa.setNomeCliente(Util.completaString(
-							nomeClienteUsuario, 30));
+					movimentoRoteiroEmpresa.setNomeCliente(Util.completaString(nomeClienteUsuario, 30));
 
 					// Pesquisa o endereço do imovel passando o id
-					String enderecoImovel = getControladorEndereco()
-							.pesquisarEnderecoFormatado(
-									imovelParaSerGerado.getId());
+					String enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatado(imovelParaSerGerado.getId());
 
-					movimentoRoteiroEmpresa.setEnderecoImovel(Util
-							.completaString(enderecoImovel, 100));
+					movimentoRoteiroEmpresa.setEnderecoImovel(Util.completaString(enderecoImovel, 100));
 
 					// Dados do Hidrometro
 					// caso seja tipo liga��o agua e po�oo cria a string
@@ -29963,22 +29884,15 @@ public class ControladorMicromedicao implements SessionBean {
 
 						HidrometroCapacidade capacidade = new HidrometroCapacidade();
 						capacidade.setId(capacidadeHidrometro);
-						movimentoRoteiroEmpresa
-								.setHidrometroCapacidade(capacidade);
+						movimentoRoteiroEmpresa.setHidrometroCapacidade(capacidade);
 
 						HidrometroMarca hidrometroMarca = new HidrometroMarca();
 						hidrometroMarca.setId(marcaHidrometro);
-						movimentoRoteiroEmpresa
-								.setHidrometroMarca(hidrometroMarca);
+						movimentoRoteiroEmpresa.setHidrometroMarca(hidrometroMarca);
 
-						movimentoRoteiroEmpresa
-								.setNumeroHidrometro(Util
-										.completaString(
-												(String) dadosHidrometroNumeroLeitura[4],
-												10));
+						movimentoRoteiroEmpresa.setNumeroHidrometro(Util.completaString((String) dadosHidrometroNumeroLeitura[4], 10));
 
-						movimentoRoteiroEmpresa
-								.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
+						movimentoRoteiroEmpresa.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
 
 						// caso não seja
 					} else {
@@ -29996,22 +29910,15 @@ public class ControladorMicromedicao implements SessionBean {
 
 							HidrometroCapacidade capacidade = new HidrometroCapacidade();
 							capacidade.setId(capacidadeHidrometro);
-							movimentoRoteiroEmpresa
-									.setHidrometroCapacidade(capacidade);
+							movimentoRoteiroEmpresa.setHidrometroCapacidade(capacidade);
 
 							HidrometroMarca hidrometroMarca = new HidrometroMarca();
 							hidrometroMarca.setId(marcaHidrometro);
-							movimentoRoteiroEmpresa
-									.setHidrometroMarca(hidrometroMarca);
+							movimentoRoteiroEmpresa.setHidrometroMarca(hidrometroMarca);
 
-							movimentoRoteiroEmpresa
-									.setNumeroHidrometro(Util
-											.completaString(
-													(String) dadosHidrometroNumeroLeitura[4],
-													10));
+							movimentoRoteiroEmpresa.setNumeroHidrometro(Util.completaString((String) dadosHidrometroNumeroLeitura[4], 10));
 
-							movimentoRoteiroEmpresa
-									.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
+							movimentoRoteiroEmpresa.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
 
 							// caso não seja
 						} else {
@@ -30030,22 +29937,15 @@ public class ControladorMicromedicao implements SessionBean {
 
 								HidrometroCapacidade capacidade = new HidrometroCapacidade();
 								capacidade.setId(capacidadeHidrometro);
-								movimentoRoteiroEmpresa
-										.setHidrometroCapacidade(capacidade);
+								movimentoRoteiroEmpresa.setHidrometroCapacidade(capacidade);
 
 								HidrometroMarca hidrometroMarca = new HidrometroMarca();
 								hidrometroMarca.setId(marcaHidrometro);
-								movimentoRoteiroEmpresa
-										.setHidrometroMarca(hidrometroMarca);
+								movimentoRoteiroEmpresa.setHidrometroMarca(hidrometroMarca);
 
-								movimentoRoteiroEmpresa
-										.setNumeroHidrometro(Util
-												.completaString(
-														(String) dadosHidrometroNumeroLeitura[4],
-														10));
+								movimentoRoteiroEmpresa.setNumeroHidrometro(Util.completaString((String) dadosHidrometroNumeroLeitura[4], 10));
 
-								movimentoRoteiroEmpresa
-										.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
+								movimentoRoteiroEmpresa.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
 
 								// caso não seja nem um nem outro então
 								// pode
@@ -30057,8 +29957,7 @@ public class ControladorMicromedicao implements SessionBean {
 								// vazia e
 								// a data cpm zeros
 							} else {
-								Object[] dadosHidrometroNumeroLeitura = this
-										.pesquisarDadosHidrometroTipoPoco(imovelParaSerGerado);
+								Object[] dadosHidrometroNumeroLeitura = this.pesquisarDadosHidrometroTipoPoco(imovelParaSerGerado);
 
 								dadosHidrometro = (StringBuilder) dadosHidrometroNumeroLeitura[0];
 								numeroDigitosHidrometro = (Short) dadosHidrometroNumeroLeitura[1];
@@ -30067,111 +29966,69 @@ public class ControladorMicromedicao implements SessionBean {
 
 								HidrometroCapacidade capacidade = new HidrometroCapacidade();
 								capacidade.setId(capacidadeHidrometro);
-								movimentoRoteiroEmpresa
-										.setHidrometroCapacidade(capacidade);
+								movimentoRoteiroEmpresa.setHidrometroCapacidade(capacidade);
 
 								HidrometroMarca hidrometroMarca = new HidrometroMarca();
 								hidrometroMarca.setId(marcaHidrometro);
-								movimentoRoteiroEmpresa
-										.setHidrometroMarca(hidrometroMarca);
+								movimentoRoteiroEmpresa.setHidrometroMarca(hidrometroMarca);
 
-								movimentoRoteiroEmpresa
-										.setNumeroHidrometro(Util
-												.completaString(
-														(String) dadosHidrometroNumeroLeitura[4],
-														10));
+								movimentoRoteiroEmpresa.setNumeroHidrometro(Util.completaString((String) dadosHidrometroNumeroLeitura[4], 10));
 
-								movimentoRoteiroEmpresa
-										.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
+								movimentoRoteiroEmpresa.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
 							}
 						}
 					}
 
 					if (imovelParaSerGerado.getHidrometroInstalacaoHistorico() != null) {
 
-						movimentoRoteiroEmpresa
-								.setHidrometroLocalInstalacao(imovelParaSerGerado
-										.getHidrometroInstalacaoHistorico()
-										.getHidrometroLocalInstalacao());
+						movimentoRoteiroEmpresa.setHidrometroLocalInstalacao(imovelParaSerGerado.getHidrometroInstalacaoHistorico()
+								.getHidrometroLocalInstalacao());
 
-						movimentoRoteiroEmpresa
-								.setDataInstalacaoHidrometro(imovelParaSerGerado
-										.getHidrometroInstalacaoHistorico()
-										.getDataInstalacao());
+						movimentoRoteiroEmpresa.setDataInstalacaoHidrometro(imovelParaSerGerado.getHidrometroInstalacaoHistorico().getDataInstalacao());
 
-						movimentoRoteiroEmpresa
-								.setHidrometroProtecao(imovelParaSerGerado
-										.getHidrometroInstalacaoHistorico()
-										.getHidrometroProtecao());
+						movimentoRoteiroEmpresa.setHidrometroProtecao(imovelParaSerGerado.getHidrometroInstalacaoHistorico().getHidrometroProtecao());
 
 					}
 
-					if (imovelParaSerGerado.getLigacaoAgua() != null
-							&& imovelParaSerGerado.getLigacaoAgua()
-									.getHidrometroInstalacaoHistorico() != null) {
+					if (imovelParaSerGerado.getLigacaoAgua() != null && imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
 
-						movimentoRoteiroEmpresa
-								.setHidrometroLocalInstalacao(imovelParaSerGerado
-										.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico()
-										.getHidrometroLocalInstalacao());
+						movimentoRoteiroEmpresa.setHidrometroLocalInstalacao(imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico()
+								.getHidrometroLocalInstalacao());
 
-						movimentoRoteiroEmpresa
-								.setDataInstalacaoHidrometro(imovelParaSerGerado
-										.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico()
-										.getDataInstalacao());
+						movimentoRoteiroEmpresa.setDataInstalacaoHidrometro(imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico()
+								.getDataInstalacao());
 
-						movimentoRoteiroEmpresa
-								.setHidrometroProtecao(imovelParaSerGerado
-										.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico()
-										.getHidrometroProtecao());
+						movimentoRoteiroEmpresa.setHidrometroProtecao(imovelParaSerGerado.getLigacaoAgua().getHidrometroInstalacaoHistorico()
+								.getHidrometroProtecao());
 
 					}
 
 					// id da ligacao agua situação
-					if (imovelParaSerGerado.getLigacaoAguaSituacao() != null
-							&& imovelParaSerGerado.getLigacaoAguaSituacao()
-									.getId() != null) {
+					if (imovelParaSerGerado.getLigacaoAguaSituacao() != null && imovelParaSerGerado.getLigacaoAguaSituacao().getId() != null) {
 						// Situação da ligação de agua
-						movimentoRoteiroEmpresa
-								.setLigacaoAguaSituacao(imovelParaSerGerado
-										.getLigacaoAguaSituacao());
+						movimentoRoteiroEmpresa.setLigacaoAguaSituacao(imovelParaSerGerado.getLigacaoAguaSituacao());
 
 						// DESCRI��O
-						movimentoRoteiroEmpresa
-								.setDescricaoLigacaoAguaSituacao(imovelParaSerGerado
-										.getLigacaoAguaSituacao()
-										.getDescricao());
+						movimentoRoteiroEmpresa.setDescricaoLigacaoAguaSituacao(imovelParaSerGerado.getLigacaoAguaSituacao().getDescricao());
 					}
 
 					// id da ligacao esgoto situação
-					if (imovelParaSerGerado.getLigacaoEsgotoSituacao() != null
-							&& imovelParaSerGerado.getLigacaoEsgotoSituacao()
-									.getId() != null) {
+					if (imovelParaSerGerado.getLigacaoEsgotoSituacao() != null && imovelParaSerGerado.getLigacaoEsgotoSituacao().getId() != null) {
 						// Situação de ligação esgoto
-						movimentoRoteiroEmpresa
-								.setLigacaoEsgotoSituacao(imovelParaSerGerado
-										.getLigacaoEsgotoSituacao());
+						movimentoRoteiroEmpresa.setLigacaoEsgotoSituacao(imovelParaSerGerado.getLigacaoEsgotoSituacao());
 					}
 
 					// pega as descrições das categorias do imovel
 
-					Categoria categoria = getControladorImovel()
-							.obterDescricoesCategoriaImovel(imovelParaSerGerado);
+					Categoria categoria = getControladorImovel().obterDescricoesCategoriaImovel(imovelParaSerGerado);
 
 					// quantidade de economias
-					movimentoRoteiroEmpresa
-							.setDescricaoAbreviadaCategoriaImovel(categoria
-									.getDescricaoAbreviada());
+					movimentoRoteiroEmpresa.setDescricaoAbreviadaCategoriaImovel(categoria.getDescricaoAbreviada());
 
 					// [UC0086 - Obter quantidade de economias]
-					int quantidadeEconomias = getControladorImovel()
-							.obterQuantidadeEconomias(imovelParaSerGerado);
+					int quantidadeEconomias = getControladorImovel().obterQuantidadeEconomias(imovelParaSerGerado);
 					// quantidade de economias
-					movimentoRoteiroEmpresa.setQuantidadeEconomias(new Integer(
-							quantidadeEconomias).shortValue());
+					movimentoRoteiroEmpresa.setQuantidadeEconomias(new Integer(quantidadeEconomias).shortValue());
 
 					// Leitura anterior
 					Integer anoMesAnterior = Util.subtrairData(anoMesCorrente);
@@ -30179,8 +30036,7 @@ public class ControladorMicromedicao implements SessionBean {
 					Integer idMedicaoTipo = null;
 					MedicaoHistorico medicaoHistorico = null;
 
-					Object[] retorno = pesquisaLeituraAnterior(ligacaoAgua,
-							ligacaoPoco, anoMesAnterior, imovelParaSerGerado);
+					Object[] retorno = pesquisaLeituraAnterior(ligacaoAgua, ligacaoPoco, anoMesAnterior, imovelParaSerGerado);
 
 					// verifica se a leitura anterior é diferente de
 					// nula
@@ -30206,79 +30062,53 @@ public class ControladorMicromedicao implements SessionBean {
 					// jogado no arquivo
 					// txt
 					if (leituraAnterior != null) {
-						movimentoRoteiroEmpresa
-								.setNumeroLeituraAnterior(new Integer(
-										leituraAnterior));
+						movimentoRoteiroEmpresa.setNumeroLeituraAnterior(new Integer(leituraAnterior));
 						// caso contrario coloca a string com zeros
 					} else {
-						movimentoRoteiroEmpresa
-								.setNumeroLeituraAnterior(new Integer(0));
+						movimentoRoteiroEmpresa.setNumeroLeituraAnterior(new Integer(0));
 					}
 
 					// ANORMALIDADE DE LEITURA ANTERIOR
-					if (medicaoHistorico != null
-							&& medicaoHistorico
-									.getLeituraAnormalidadeInformada() != null) {
+					if (medicaoHistorico != null && medicaoHistorico.getLeituraAnormalidadeInformada() != null) {
 
-						movimentoRoteiroEmpresa
-								.setCodigoAnormalidadeAnterior(medicaoHistorico
-										.getLeituraAnormalidadeInformada()
-										.getId());
+						movimentoRoteiroEmpresa.setCodigoAnormalidadeAnterior(medicaoHistorico.getLeituraAnormalidadeInformada().getId());
 
-						movimentoRoteiroEmpresa
-								.setDescricaoAnormalidadeAnterior(medicaoHistorico
-										.getLeituraAnormalidadeInformada()
-										.getDescricao());
+						movimentoRoteiroEmpresa.setDescricaoAnormalidadeAnterior(medicaoHistorico.getLeituraAnormalidadeInformada().getDescricao());
 					}
 
 					// DATA DA LEITURA ANTERIOR
-					if (medicaoHistorico != null
-							&& medicaoHistorico
-									.getDataLeituraAtualFaturamento() != null) {
+					if (medicaoHistorico != null && medicaoHistorico.getDataLeituraAtualFaturamento() != null) {
 
-						movimentoRoteiroEmpresa
-								.setDataLeituraAnterior(medicaoHistorico
-										.getDataLeituraAtualFaturamento());
+						movimentoRoteiroEmpresa.setDataLeituraAnterior(medicaoHistorico.getDataLeituraAtualFaturamento());
 					}
 
 					// Faixa de leitura esperada
 
-					Object[] faixaInicialFinal = pesquisarFaixaEsperadaOuFalsaCelular(
-							imovelParaSerGerado, dadosHidrometro,
-							leituraAnterior, medicaoHistorico, idMedicaoTipo,
-							sistemaParametro, hidrometroSelecionado,
-							numeroDigitosHidrometro);
+					Object[] faixaInicialFinal = pesquisarFaixaEsperadaOuFalsaCelular(imovelParaSerGerado, dadosHidrometro, leituraAnterior, medicaoHistorico,
+							idMedicaoTipo, sistemaParametro, hidrometroSelecionado, numeroDigitosHidrometro);
 
-					hidrometroSelecionado = Boolean
-							.parseBoolean(faixaInicialFinal[1].toString());
+					hidrometroSelecionado = Boolean.parseBoolean(faixaInicialFinal[1].toString());
 
-					boolean faixaFalsaLeitura = Boolean
-							.parseBoolean(faixaInicialFinal[2].toString());
+					boolean faixaFalsaLeitura = Boolean.parseBoolean(faixaInicialFinal[2].toString());
 
 					int faixaInicialEsperada = 0;
 					int faixaFinalEsperada = 0;
 
 					if (!faixaFalsaLeitura) {
-						faixaInicialEsperada = Integer
-								.parseInt(faixaInicialFinal[3].toString());
+						faixaInicialEsperada = Integer.parseInt(faixaInicialFinal[3].toString());
 
-						faixaFinalEsperada = Integer
-								.parseInt(faixaInicialFinal[4].toString());
+						faixaFinalEsperada = Integer.parseInt(faixaInicialFinal[4].toString());
 					}
 
-					movimentoRoteiroEmpresa
-							.setNumeroFaixaLeituraEsperadaInicial(faixaInicialEsperada);
-					movimentoRoteiroEmpresa
-							.setNumeroFaixaLeituraEsperadaFinal(faixaFinalEsperada);
+					movimentoRoteiroEmpresa.setNumeroFaixaLeituraEsperadaInicial(faixaInicialEsperada);
+					movimentoRoteiroEmpresa.setNumeroFaixaLeituraEsperadaFinal(faixaFinalEsperada);
 
 					movimentoRoteiroEmpresa.setUltimaAlteracao(new Date());
 
 					if (imovelParaSerGerado.getRotaAlternativa() != null) {
-						movimentoRoteiroEmpresa.setRota(imovelParaSerGerado
-								.getRotaAlternativa());
+						movimentoRoteiroEmpresa.setRota(imovelParaSerGerado.getRotaAlternativa());
 					} else {
-						movimentoRoteiroEmpresa.setRota(imovelParaSerGerado
-								.getQuadra().getRota());
+						movimentoRoteiroEmpresa.setRota(imovelParaSerGerado.getQuadra().getRota());
 					}
 
 					/**
@@ -30286,17 +30116,13 @@ public class ControladorMicromedicao implements SessionBean {
 					 * 
 					 */
 
-					Collection colecaoSubCategoria = this
-							.getControladorImovel()
-							.obterQuantidadeEconomiasSubCategoria(
-									imovelParaSerGerado.getId());
+					Collection colecaoSubCategoria = this.getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovelParaSerGerado.getId());
 
 					// 1.10.1 - SubCategoria 01
 					// 1.10.2 - Quantidade 01
 					// 1.10.3 - SubCategoria 02
 					// 1.10.4 - Quantidade 02
-					if (colecaoSubCategoria != null
-							&& !colecaoSubCategoria.isEmpty()) {
+					if (colecaoSubCategoria != null && !colecaoSubCategoria.isEmpty()) {
 
 						Iterator itera = colecaoSubCategoria.iterator();
 
@@ -30304,8 +30130,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 							while (itera.hasNext()) {
 
-								Subcategoria subcategoria = (Subcategoria) itera
-										.next();
+								Subcategoria subcategoria = (Subcategoria) itera.next();
 
 								// tipoEconomia = categoria_id(1
 								// posição) +
@@ -30313,26 +30138,16 @@ public class ControladorMicromedicao implements SessionBean {
 
 								if (i == 0) {
 									// Código da subcategoria do imovel
-									movimentoRoteiroEmpresa
-											.setCodigoSubcategoria1(subcategoria
-													.getCodigo());
+									movimentoRoteiroEmpresa.setCodigoSubcategoria1(subcategoria.getCodigo());
 									// qtdeEconomia
-									movimentoRoteiroEmpresa
-											.setQuantidadeEconomias(subcategoria
-													.getQuantidadeEconomias()
-													.shortValue());
+									movimentoRoteiroEmpresa.setQuantidadeEconomias(subcategoria.getQuantidadeEconomias().shortValue());
 								} else {
 
 									// Código da 2 subcategoria do
 									// imovel
-									movimentoRoteiroEmpresa
-											.setCodigoSubcategoria2(subcategoria
-													.getCodigo());
+									movimentoRoteiroEmpresa.setCodigoSubcategoria2(subcategoria.getCodigo());
 									// qtdeEconomia
-									movimentoRoteiroEmpresa
-											.setQuantidadeEconomias2(subcategoria
-													.getQuantidadeEconomias()
-													.shortValue());
+									movimentoRoteiroEmpresa.setQuantidadeEconomias2(subcategoria.getQuantidadeEconomias().shortValue());
 								}
 
 							}
@@ -30341,114 +30156,78 @@ public class ControladorMicromedicao implements SessionBean {
 					// 1.11 - Consumo
 					Integer numeroConsumoFaturadoMes = null;
 
-					Integer anoMesFaturamento = sistemaParametro
-							.getAnoMesFaturamento();
+					Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
 
 					try {
 
 						// 1.11.1 - Consumo 01
-						int anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 6);
+						int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 6);
 
-						numeroConsumoFaturadoMes = repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-										imovelParaSerGerado.getId(),
-										anoMesSubtraido,
-										LigacaoTipo.LIGACAO_AGUA);
+						numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(imovelParaSerGerado.getId(),
+								anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 
 						// caso o numero consumo faturado do mes for
 						// diferente de nulo
 						if (numeroConsumoFaturadoMes != null) {
 
-							movimentoRoteiroEmpresa
-									.setNumeroConsumoFaturadoMenos6Meses(numeroConsumoFaturadoMes);
+							movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos6Meses(numeroConsumoFaturadoMes);
 
 						}
 
 						// 1.11.2 - Consumo 02
-						anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 5);
+						anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 5);
 
-						numeroConsumoFaturadoMes = repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-										imovelParaSerGerado.getId(),
-										anoMesSubtraido,
-										LigacaoTipo.LIGACAO_AGUA);
+						numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(imovelParaSerGerado.getId(),
+								anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 
 						// caso o numero consumo faturado do mes for
 						// diferente de nulo
 						if (numeroConsumoFaturadoMes != null) {
 
-							movimentoRoteiroEmpresa
-									.setNumeroConsumoFaturadoMenos5Meses(numeroConsumoFaturadoMes);
+							movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos5Meses(numeroConsumoFaturadoMes);
 
 						}
 
 						// 1.11.3 - Consumo 03
-						anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 4);
+						anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 4);
 
-						numeroConsumoFaturadoMes = repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-										imovelParaSerGerado.getId(),
-										anoMesSubtraido,
-										LigacaoTipo.LIGACAO_AGUA);
+						numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(imovelParaSerGerado.getId(),
+								anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 
 						// caso o numero consumo faturado do mes for
 						// diferente de nulo
 						if (numeroConsumoFaturadoMes != null) {
 
-							movimentoRoteiroEmpresa
-									.setNumeroConsumoFaturadoMenos4Meses(numeroConsumoFaturadoMes);
+							movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos4Meses(numeroConsumoFaturadoMes);
 
 						}
 
 						// 1.12 - Condição
 						String condicao = null;
 
-						condicao = this.repositorioMicromedicao
-								.obterDescricaoConsumoTipo(
-										imovelParaSerGerado.getId(),
-										LigacaoTipo.LIGACAO_AGUA);
+						condicao = this.repositorioMicromedicao.obterDescricaoConsumoTipo(imovelParaSerGerado.getId(), LigacaoTipo.LIGACAO_AGUA);
 
 						if (condicao != null) {
-							movimentoRoteiroEmpresa
-									.setDescricaoConsumoTipo(Util
-											.completaStringComEspacoAEsquerda(
-													"" + condicao, 15));
+							movimentoRoteiroEmpresa.setDescricaoConsumoTipo(Util.completaStringComEspacoAEsquerda("" + condicao, 15));
 						}
 
 						// 1.13 - Número do Lacre
-						if (imovelParaSerGerado.getLigacaoAgua() != null
-								&& imovelParaSerGerado.getLigacaoAgua()
-										.getNumeroLacre() != null) {
-							movimentoRoteiroEmpresa
-									.setNumeroLacreLigacaoAgua(Util
-											.completaStringComEspacoAEsquerda(
-													""
-															+ imovelParaSerGerado
-																	.getLigacaoAgua()
-																	.getNumeroLacre(),
-													6));
+						if (imovelParaSerGerado.getLigacaoAgua() != null && imovelParaSerGerado.getLigacaoAgua().getNumeroLacre() != null) {
+							movimentoRoteiroEmpresa.setNumeroLacreLigacaoAgua(Util.completaStringComEspacoAEsquerda(""
+									+ imovelParaSerGerado.getLigacaoAgua().getNumeroLacre(), 6));
 						}
 
 						// 1.14 - Sequencial da Rota
 
-						movimentoRoteiroEmpresa
-								.setNumeroSequencialRota(imovelParaSerGerado
-										.getNumeroSequencialRota());
+						movimentoRoteiroEmpresa.setNumeroSequencialRota(imovelParaSerGerado.getNumeroSequencialRota());
 
 						// 1.15 - Consumo 04
 
-						anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 3);
+						anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 3);
 
 						try {
-							numeroConsumoFaturadoMes = repositorioMicromedicao
-									.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-											imovelParaSerGerado.getId(),
-											anoMesSubtraido,
-											LigacaoTipo.LIGACAO_AGUA);
+							numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
+									imovelParaSerGerado.getId(), anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 						} catch (ErroRepositorioException e) {
 							throw new ControladorException("erro.sistema", e);
 						}
@@ -30458,20 +30237,15 @@ public class ControladorMicromedicao implements SessionBean {
 						// de nulo
 						if (numeroConsumoFaturadoMes != null) {
 
-							movimentoRoteiroEmpresa
-									.setNumeroConsumoFaturadoMenos3Meses(numeroConsumoFaturadoMes);
+							movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos3Meses(numeroConsumoFaturadoMes);
 
 						}
 
 						// 1.16 - Consumo 05
-						anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 2);
+						anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 2);
 						try {
-							numeroConsumoFaturadoMes = repositorioMicromedicao
-									.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-											imovelParaSerGerado.getId(),
-											anoMesSubtraido,
-											LigacaoTipo.LIGACAO_AGUA);
+							numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
+									imovelParaSerGerado.getId(), anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 
 						} catch (ErroRepositorioException e) {
 							throw new ControladorException("erro.sistema", e);
@@ -30482,20 +30256,15 @@ public class ControladorMicromedicao implements SessionBean {
 						// de nulo
 						if (numeroConsumoFaturadoMes != null) {
 
-							movimentoRoteiroEmpresa
-									.setNumeroConsumoFaturadoMenos2Meses(numeroConsumoFaturadoMes);
+							movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos2Meses(numeroConsumoFaturadoMes);
 
 						}
 
 						// 1.17 - Consumo 06
-						anoMesSubtraido = Util.subtrairMesDoAnoMes(
-								anoMesFaturamento, 1);
+						anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesFaturamento, 1);
 
-						numeroConsumoFaturadoMes = repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(
-										imovelParaSerGerado.getId(),
-										anoMesSubtraido,
-										LigacaoTipo.LIGACAO_AGUA);
+						numeroConsumoFaturadoMes = repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovelPeloTipoLogacao(imovelParaSerGerado.getId(),
+								anoMesSubtraido, LigacaoTipo.LIGACAO_AGUA);
 
 					} catch (ErroRepositorioException e) {
 						throw new ControladorException("erro.sistema", e);
@@ -30506,8 +30275,7 @@ public class ControladorMicromedicao implements SessionBean {
 					// de nulo
 					if (numeroConsumoFaturadoMes != null) {
 
-						movimentoRoteiroEmpresa
-								.setNumeroConsumoFaturadoMenos1Mes(numeroConsumoFaturadoMes);
+						movimentoRoteiroEmpresa.setNumeroConsumoFaturadoMenos1Mes(numeroConsumoFaturadoMes);
 
 					}
 
@@ -30516,417 +30284,278 @@ public class ControladorMicromedicao implements SessionBean {
 					Integer numeroConsumoMedio = null;
 					try {
 
-						numeroConsumoMedio = this.repositorioMicromedicao
-								.pesquisarNumeroConsumoMedioImovel(
-										imovelParaSerGerado.getId(),
-										anoMesAnterior,
-										LigacaoTipo.LIGACAO_AGUA);
+						numeroConsumoMedio = this.repositorioMicromedicao.pesquisarNumeroConsumoMedioImovel(imovelParaSerGerado.getId(), anoMesAnterior,
+								LigacaoTipo.LIGACAO_AGUA);
 
 					} catch (ErroRepositorioException e) {
 						throw new ControladorException("erro.sistema", e);
 					}
 
 					if (numeroConsumoMedio != null) {
-						movimentoRoteiroEmpresa
-								.setNumeroConsumoMedio(numeroConsumoMedio);
+						movimentoRoteiroEmpresa.setNumeroConsumoMedio(numeroConsumoMedio);
 					}
 
 					// 1.19 -Rota
 					if (imovelParaSerGerado.getRotaAlternativa() != null) {
-						movimentoRoteiroEmpresa
-								.setCodigoRota(imovelParaSerGerado
-										.getRotaAlternativa().getCodigo());
+						movimentoRoteiroEmpresa.setCodigoRota(imovelParaSerGerado.getRotaAlternativa().getCodigo());
 					} else {
-						movimentoRoteiroEmpresa
-								.setCodigoRota(imovelParaSerGerado.getQuadra()
-										.getRota().getCodigo());
+						movimentoRoteiroEmpresa.setCodigoRota(imovelParaSerGerado.getQuadra().getRota().getCodigo());
 					}
 
 					// 1.20 - Codigo Logradouro
 
 					Logradouro logradouro = new Logradouro();
-					logradouro.setId(imovelParaSerGerado.getLogradouroBairro()
-							.getLogradouro().getId());
+					logradouro.setId(imovelParaSerGerado.getLogradouroBairro().getLogradouro().getId());
 
 					movimentoRoteiroEmpresa.setLogradouro(logradouro);
 
 					// 1.21 - Nome do Logradouro
 
-					movimentoRoteiroEmpresa
-							.setNomeLogradouro(imovelParaSerGerado
-									.getLogradouroBairro().getLogradouro()
-									.getNome());
+					movimentoRoteiroEmpresa.setNomeLogradouro(imovelParaSerGerado.getLogradouroBairro().getLogradouro().getNome());
 
 					// 1.22 - Numero do Imovel
 
-					movimentoRoteiroEmpresa.setNumeroImovel(imovelParaSerGerado
-							.getNumeroImovel());
+					movimentoRoteiroEmpresa.setNumeroImovel(imovelParaSerGerado.getNumeroImovel());
 
 					// 1.23 - Complemento
 
-					movimentoRoteiroEmpresa
-							.setComplementoEndereco(imovelParaSerGerado
-									.getComplementoEndereco());
+					movimentoRoteiroEmpresa.setComplementoEndereco(imovelParaSerGerado.getComplementoEndereco());
 
 					// 1.24 - Nome do Bairro
 
-					movimentoRoteiroEmpresa.setNomeBairro(imovelParaSerGerado
-							.getLogradouroBairro().getBairro().getNome());
+					movimentoRoteiroEmpresa.setNomeBairro(imovelParaSerGerado.getLogradouroBairro().getBairro().getNome());
 
 					// 1.25 - Id da Categoria
 
-					Categoria categoria1 = (Categoria) getControladorImovel()
-							.obterPrincipalCategoriaImovel(
-									imovelParaSerGerado.getId());
+					Categoria categoria1 = (Categoria) getControladorImovel().obterPrincipalCategoriaImovel(imovelParaSerGerado.getId());
 
 					movimentoRoteiroEmpresa.setCategoriaPrincipal(categoria1);
 					// 1.1 Incricao do Imovel
-					movimentoRoteiroEmpresa
-							.setInscricaoImovel(imovelParaSerGerado
-									.getInscricaoFormatada());
+					movimentoRoteiroEmpresa.setInscricaoImovel(imovelParaSerGerado.getInscricaoFormatada());
 
 					// Id gerencia Regional
 
 					GerenciaRegional gerenciaRegional = new GerenciaRegional();
 
-					gerenciaRegional.setId(imovelParaSerGerado.getLocalidade()
-							.getGerenciaRegional().getId());
+					gerenciaRegional.setId(imovelParaSerGerado.getLocalidade().getGerenciaRegional().getId());
 
-					movimentoRoteiroEmpresa
-							.setGerenciaRegional(gerenciaRegional);
+					movimentoRoteiroEmpresa.setGerenciaRegional(gerenciaRegional);
 
 					// Caso Imovel tenha Ligacao de Agua e de Poço
 					if (ligacaoAgua && ligacaoPoco) {
 
 						MovimentoRoteiroEmpresa movimentoRoteiroEmpresaPoco = new MovimentoRoteiroEmpresa();
 
-						movimentoRoteiroEmpresaPoco
-								.setAnoMesMovimento(movimentoRoteiroEmpresa
-										.getAnoMesMovimento());
+						movimentoRoteiroEmpresaPoco.setAnoMesMovimento(movimentoRoteiroEmpresa.getAnoMesMovimento());
 
 						if (movimentoRoteiroEmpresa.getCategoria2() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setCategoria2(movimentoRoteiroEmpresa
-											.getCategoria2());
+							movimentoRoteiroEmpresaPoco.setCategoria2(movimentoRoteiroEmpresa.getCategoria2());
 						}
 
 						if (movimentoRoteiroEmpresa.getCategoriaPrincipal() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setCategoriaPrincipal(movimentoRoteiroEmpresa
-											.getCategoriaPrincipal());
+							movimentoRoteiroEmpresaPoco.setCategoriaPrincipal(movimentoRoteiroEmpresa.getCategoriaPrincipal());
 						}
 
-						movimentoRoteiroEmpresaPoco
-								.setCodigoRota(movimentoRoteiroEmpresa
-										.getCodigoRota());
+						movimentoRoteiroEmpresaPoco.setCodigoRota(movimentoRoteiroEmpresa.getCodigoRota());
 
-						movimentoRoteiroEmpresaPoco
-								.setCodigoSetorComercial(movimentoRoteiroEmpresa
-										.getCodigoSetorComercial());
+						movimentoRoteiroEmpresaPoco.setCodigoSetorComercial(movimentoRoteiroEmpresa.getCodigoSetorComercial());
 
 						if (movimentoRoteiroEmpresa.getCodigoSubcategoria1() != null) {
 
-							movimentoRoteiroEmpresaPoco
-									.setCodigoSubcategoria1(movimentoRoteiroEmpresa
-											.getCodigoSubcategoria1());
+							movimentoRoteiroEmpresaPoco.setCodigoSubcategoria1(movimentoRoteiroEmpresa.getCodigoSubcategoria1());
 
 						}
 						if (movimentoRoteiroEmpresa.getCodigoSubcategoria2() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setCodigoSubcategoria2(movimentoRoteiroEmpresa
-											.getCodigoSubcategoria2());
+							movimentoRoteiroEmpresaPoco.setCodigoSubcategoria2(movimentoRoteiroEmpresa.getCodigoSubcategoria2());
 						}
 
 						if (movimentoRoteiroEmpresa.getComplementoEndereco() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setComplementoEndereco(movimentoRoteiroEmpresa
-											.getComplementoEndereco());
+							movimentoRoteiroEmpresaPoco.setComplementoEndereco(movimentoRoteiroEmpresa.getComplementoEndereco());
 						}
 
 						if (movimentoRoteiroEmpresa.getDataHoraProcessamento() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDataHoraProcessamento(movimentoRoteiroEmpresa
-											.getDataHoraProcessamento());
+							movimentoRoteiroEmpresaPoco.setDataHoraProcessamento(movimentoRoteiroEmpresa.getDataHoraProcessamento());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getDataInstalacaoHidrometro() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDataInstalacaoHidrometro(movimentoRoteiroEmpresa
-											.getDataInstalacaoHidrometro());
+						if (movimentoRoteiroEmpresa.getDataInstalacaoHidrometro() != null) {
+							movimentoRoteiroEmpresaPoco.setDataInstalacaoHidrometro(movimentoRoteiroEmpresa.getDataInstalacaoHidrometro());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getDescricaoAbreviadaCategoriaImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDescricaoAbreviadaCategoriaImovel(movimentoRoteiroEmpresa
-											.getDescricaoAbreviadaCategoriaImovel());
+						if (movimentoRoteiroEmpresa.getDescricaoAbreviadaCategoriaImovel() != null) {
+							movimentoRoteiroEmpresaPoco.setDescricaoAbreviadaCategoriaImovel(movimentoRoteiroEmpresa.getDescricaoAbreviadaCategoriaImovel());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getDescricaoAbreviadaLogradouroTipo() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDescricaoAbreviadaLogradouroTipo(movimentoRoteiroEmpresa
-											.getDescricaoAbreviadaLogradouroTipo());
+						if (movimentoRoteiroEmpresa.getDescricaoAbreviadaLogradouroTipo() != null) {
+							movimentoRoteiroEmpresaPoco.setDescricaoAbreviadaLogradouroTipo(movimentoRoteiroEmpresa.getDescricaoAbreviadaLogradouroTipo());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getDescricaoAbreviadaLogradouroTitulo() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDescricaoAbreviadaLogradouroTitulo(movimentoRoteiroEmpresa
-											.getDescricaoAbreviadaLogradouroTitulo());
+						if (movimentoRoteiroEmpresa.getDescricaoAbreviadaLogradouroTitulo() != null) {
+							movimentoRoteiroEmpresaPoco.setDescricaoAbreviadaLogradouroTitulo(movimentoRoteiroEmpresa.getDescricaoAbreviadaLogradouroTitulo());
 						}
 
 						if (movimentoRoteiroEmpresa.getDescricaoConsumoTipo() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setDescricaoConsumoTipo(movimentoRoteiroEmpresa
-											.getDescricaoConsumoTipo());
+							movimentoRoteiroEmpresaPoco.setDescricaoConsumoTipo(movimentoRoteiroEmpresa.getDescricaoConsumoTipo());
 						}
 
 						if (movimentoRoteiroEmpresa.getEmpresa() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setEmpresa(movimentoRoteiroEmpresa
-											.getEmpresa());
+							movimentoRoteiroEmpresaPoco.setEmpresa(movimentoRoteiroEmpresa.getEmpresa());
 						}
 
 						if (movimentoRoteiroEmpresa.getEnderecoImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setEnderecoImovel(movimentoRoteiroEmpresa
-											.getEnderecoImovel());
+							movimentoRoteiroEmpresaPoco.setEnderecoImovel(movimentoRoteiroEmpresa.getEnderecoImovel());
 						}
 
 						if (movimentoRoteiroEmpresa.getFaturamentoGrupo() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setFaturamentoGrupo(movimentoRoteiroEmpresa
-											.getFaturamentoGrupo());
+							movimentoRoteiroEmpresaPoco.setFaturamentoGrupo(movimentoRoteiroEmpresa.getFaturamentoGrupo());
 						}
 
 						if (movimentoRoteiroEmpresa.getGerenciaRegional() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setGerenciaRegional(movimentoRoteiroEmpresa
-											.getGerenciaRegional());
+							movimentoRoteiroEmpresaPoco.setGerenciaRegional(movimentoRoteiroEmpresa.getGerenciaRegional());
 						}
 
 						if (movimentoRoteiroEmpresa.getHidrometroProtecao() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setHidrometroProtecao(movimentoRoteiroEmpresa
-											.getHidrometroProtecao());
+							movimentoRoteiroEmpresaPoco.setHidrometroProtecao(movimentoRoteiroEmpresa.getHidrometroProtecao());
 						}
 
 						if (movimentoRoteiroEmpresa.getImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setImovel(movimentoRoteiroEmpresa
-											.getImovel());
+							movimentoRoteiroEmpresaPoco.setImovel(movimentoRoteiroEmpresa.getImovel());
 						}
 
 						if (movimentoRoteiroEmpresa.getImovelPerfil() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setImovelPerfil(movimentoRoteiroEmpresa
-											.getImovelPerfil());
+							movimentoRoteiroEmpresaPoco.setImovelPerfil(movimentoRoteiroEmpresa.getImovelPerfil());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getIndicadorAtualizacaoLeitura() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setIndicadorAtualizacaoLeitura(movimentoRoteiroEmpresa
-											.getIndicadorAtualizacaoLeitura());
+						if (movimentoRoteiroEmpresa.getIndicadorAtualizacaoLeitura() != null) {
+							movimentoRoteiroEmpresaPoco.setIndicadorAtualizacaoLeitura(movimentoRoteiroEmpresa.getIndicadorAtualizacaoLeitura());
 						}
-						if (movimentoRoteiroEmpresa
-								.getIndicadorConfirmacaoLeitura() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setIndicadorConfirmacaoLeitura(movimentoRoteiroEmpresa
-											.getIndicadorConfirmacaoLeitura());
+						if (movimentoRoteiroEmpresa.getIndicadorConfirmacaoLeitura() != null) {
+							movimentoRoteiroEmpresaPoco.setIndicadorConfirmacaoLeitura(movimentoRoteiroEmpresa.getIndicadorConfirmacaoLeitura());
 						}
 
 						if (movimentoRoteiroEmpresa.getInscricaoImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setInscricaoImovel(movimentoRoteiroEmpresa
-											.getInscricaoImovel());
+							movimentoRoteiroEmpresaPoco.setInscricaoImovel(movimentoRoteiroEmpresa.getInscricaoImovel());
 						}
 
 						if (movimentoRoteiroEmpresa.getLeituraAnormalidade() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLeituraAnormalidade(movimentoRoteiroEmpresa
-											.getLeituraAnormalidade());
+							movimentoRoteiroEmpresaPoco.setLeituraAnormalidade(movimentoRoteiroEmpresa.getLeituraAnormalidade());
 						}
 
 						if (movimentoRoteiroEmpresa.getLeituraTipo() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLeituraTipo(movimentoRoteiroEmpresa
-											.getLeituraTipo());
+							movimentoRoteiroEmpresaPoco.setLeituraTipo(movimentoRoteiroEmpresa.getLeituraTipo());
 						}
 
 						if (movimentoRoteiroEmpresa.getLigacaoAguaSituacao() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLigacaoAguaSituacao(movimentoRoteiroEmpresa
-											.getLigacaoAguaSituacao());
+							movimentoRoteiroEmpresaPoco.setLigacaoAguaSituacao(movimentoRoteiroEmpresa.getLigacaoAguaSituacao());
 						}
 
 						if (movimentoRoteiroEmpresa.getLigacaoEsgotoSituacao() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLigacaoEsgotoSituacao(movimentoRoteiroEmpresa
-											.getLigacaoEsgotoSituacao());
+							movimentoRoteiroEmpresaPoco.setLigacaoEsgotoSituacao(movimentoRoteiroEmpresa.getLigacaoEsgotoSituacao());
 						}
 
 						if (movimentoRoteiroEmpresa.getLocalidade() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLocalidade(movimentoRoteiroEmpresa
-											.getLocalidade());
+							movimentoRoteiroEmpresaPoco.setLocalidade(movimentoRoteiroEmpresa.getLocalidade());
 						}
 
 						if (movimentoRoteiroEmpresa.getLogradouro() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setLogradouro(movimentoRoteiroEmpresa
-											.getLogradouro());
+							movimentoRoteiroEmpresaPoco.setLogradouro(movimentoRoteiroEmpresa.getLogradouro());
 						}
 
 						if (movimentoRoteiroEmpresa.getNomeBairro() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNomeBairro(movimentoRoteiroEmpresa
-											.getNomeBairro());
+							movimentoRoteiroEmpresaPoco.setNomeBairro(movimentoRoteiroEmpresa.getNomeBairro());
 						}
 
 						if (movimentoRoteiroEmpresa.getNomeCliente() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNomeCliente(movimentoRoteiroEmpresa
-											.getNomeCliente());
+							movimentoRoteiroEmpresaPoco.setNomeCliente(movimentoRoteiroEmpresa.getNomeCliente());
 						}
 
 						if (movimentoRoteiroEmpresa.getNomeLeiturista() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNomeLeiturista(movimentoRoteiroEmpresa
-											.getNomeLeiturista());
+							movimentoRoteiroEmpresaPoco.setNomeLeiturista(movimentoRoteiroEmpresa.getNomeLeiturista());
 						}
 
 						if (movimentoRoteiroEmpresa.getNomeLogradouro() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNomeLogradouro(movimentoRoteiroEmpresa
-											.getNomeLogradouro());
+							movimentoRoteiroEmpresaPoco.setNomeLogradouro(movimentoRoteiroEmpresa.getNomeLogradouro());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos1Mes() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos1Mes(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos1Mes());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos1Mes() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos1Mes(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos1Mes());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos2Meses() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos2Meses(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos2Meses());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos2Meses() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos2Meses(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos2Meses());
 						}
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos3Meses() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos3Meses(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos3Meses());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos3Meses() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos3Meses(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos3Meses());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos4Meses() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos4Meses(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos4Meses());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos4Meses() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos4Meses(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos4Meses());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos5Meses() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos5Meses(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos5Meses());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos5Meses() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos5Meses(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos5Meses());
 						}
 
-						if (movimentoRoteiroEmpresa
-								.getNumeroConsumoFaturadoMenos6Meses() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroConsumoFaturadoMenos6Meses(movimentoRoteiroEmpresa
-											.getNumeroConsumoFaturadoMenos6Meses());
+						if (movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos6Meses() != null) {
+							movimentoRoteiroEmpresaPoco.setNumeroConsumoFaturadoMenos6Meses(movimentoRoteiroEmpresa.getNumeroConsumoFaturadoMenos6Meses());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroImovel(movimentoRoteiroEmpresa
-											.getNumeroImovel());
+							movimentoRoteiroEmpresaPoco.setNumeroImovel(movimentoRoteiroEmpresa.getNumeroImovel());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroLacreLigacaoAgua() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroLacreLigacaoAgua(movimentoRoteiroEmpresa
-											.getNumeroLacreLigacaoAgua());
+							movimentoRoteiroEmpresaPoco.setNumeroLacreLigacaoAgua(movimentoRoteiroEmpresa.getNumeroLacreLigacaoAgua());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroLeituraAnterior() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroLeituraAnterior(movimentoRoteiroEmpresa
-											.getNumeroLeituraAnterior());
+							movimentoRoteiroEmpresaPoco.setNumeroLeituraAnterior(movimentoRoteiroEmpresa.getNumeroLeituraAnterior());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroLoteImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroLoteImovel(movimentoRoteiroEmpresa
-											.getNumeroLoteImovel());
+							movimentoRoteiroEmpresaPoco.setNumeroLoteImovel(movimentoRoteiroEmpresa.getNumeroLoteImovel());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroQuadra() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroQuadra(movimentoRoteiroEmpresa
-											.getNumeroQuadra());
+							movimentoRoteiroEmpresaPoco.setNumeroQuadra(movimentoRoteiroEmpresa.getNumeroQuadra());
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroSequencialRota() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroSequencialRota(movimentoRoteiroEmpresa
-											.getNumeroSequencialRota());
+							movimentoRoteiroEmpresaPoco.setNumeroSequencialRota(movimentoRoteiroEmpresa.getNumeroSequencialRota());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getNumeroSubloteImovel() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroSubloteImovel(movimentoRoteiroEmpresa
-											.getNumeroSubloteImovel());
+							movimentoRoteiroEmpresaPoco.setNumeroSubloteImovel(movimentoRoteiroEmpresa.getNumeroSubloteImovel());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getQuantidadeEconomias() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setQuantidadeEconomias(movimentoRoteiroEmpresa
-											.getQuantidadeEconomias());
+							movimentoRoteiroEmpresaPoco.setQuantidadeEconomias(movimentoRoteiroEmpresa.getQuantidadeEconomias());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getQuantidadeEconomias2() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setQuantidadeEconomias2(movimentoRoteiroEmpresa
-											.getQuantidadeEconomias2());
+							movimentoRoteiroEmpresaPoco.setQuantidadeEconomias2(movimentoRoteiroEmpresa.getQuantidadeEconomias2());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getRota() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setRota(movimentoRoteiroEmpresa.getRota());
+							movimentoRoteiroEmpresaPoco.setRota(movimentoRoteiroEmpresa.getRota());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getRoteiroEmpresa() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setRoteiroEmpresa(movimentoRoteiroEmpresa
-											.getRoteiroEmpresa());
+							movimentoRoteiroEmpresaPoco.setRoteiroEmpresa(movimentoRoteiroEmpresa.getRoteiroEmpresa());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getTempoLeitura() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setTempoLeitura(movimentoRoteiroEmpresa
-											.getTempoLeitura());
+							movimentoRoteiroEmpresaPoco.setTempoLeitura(movimentoRoteiroEmpresa.getTempoLeitura());
 
 						}
 
 						if (movimentoRoteiroEmpresa.getUltimaAlteracao() != null) {
-							movimentoRoteiroEmpresaPoco
-									.setUltimaAlteracao(movimentoRoteiroEmpresa
-											.getUltimaAlteracao());
+							movimentoRoteiroEmpresaPoco.setUltimaAlteracao(movimentoRoteiroEmpresa.getUltimaAlteracao());
 
 						}
 
@@ -30946,42 +30575,29 @@ public class ControladorMicromedicao implements SessionBean {
 						// Capacidade Hidrometro
 						HidrometroCapacidade capacidade = new HidrometroCapacidade();
 						capacidade.setId(capacidadeHidrometro);
-						movimentoRoteiroEmpresaPoco
-								.setHidrometroCapacidade(capacidade);
+						movimentoRoteiroEmpresaPoco.setHidrometroCapacidade(capacidade);
 
 						// Marca do Hidrometro
 						HidrometroMarca hidrometroMarca = new HidrometroMarca();
 						hidrometroMarca.setId(marcaHidrometro);
-						movimentoRoteiroEmpresaPoco
-								.setHidrometroMarca(hidrometroMarca);
+						movimentoRoteiroEmpresaPoco.setHidrometroMarca(hidrometroMarca);
 
 						// Numero Hidrometro
-						movimentoRoteiroEmpresaPoco
-								.setNumeroHidrometro((String) dadosHidrometroNumeroLeitura[4]);
+						movimentoRoteiroEmpresaPoco.setNumeroHidrometro((String) dadosHidrometroNumeroLeitura[4]);
 
-						movimentoRoteiroEmpresaPoco
-								.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
+						movimentoRoteiroEmpresaPoco.setDescricaoHidrometroMarca((String) dadosHidrometroNumeroLeitura[5]);
 
-						if (imovelParaSerGerado
-								.getHidrometroInstalacaoHistorico() != null) {
+						if (imovelParaSerGerado.getHidrometroInstalacaoHistorico() != null) {
 
 							// Local de Instalação
-							movimentoRoteiroEmpresaPoco
-									.setHidrometroLocalInstalacao(imovelParaSerGerado
-											.getHidrometroInstalacaoHistorico()
-											.getHidrometroLocalInstalacao());
+							movimentoRoteiroEmpresaPoco.setHidrometroLocalInstalacao(imovelParaSerGerado.getHidrometroInstalacaoHistorico()
+									.getHidrometroLocalInstalacao());
 
 							// Data de Instalação
-							movimentoRoteiroEmpresaPoco
-									.setDataInstalacaoHidrometro(imovelParaSerGerado
-											.getHidrometroInstalacaoHistorico()
-											.getDataInstalacao());
+							movimentoRoteiroEmpresaPoco.setDataInstalacaoHidrometro(imovelParaSerGerado.getHidrometroInstalacaoHistorico().getDataInstalacao());
 
 							// Proteção do Hidrometro
-							movimentoRoteiroEmpresaPoco
-									.setHidrometroProtecao(imovelParaSerGerado
-											.getHidrometroInstalacaoHistorico()
-											.getHidrometroProtecao());
+							movimentoRoteiroEmpresaPoco.setHidrometroProtecao(imovelParaSerGerado.getHidrometroInstalacaoHistorico().getHidrometroProtecao());
 
 						}
 
@@ -31015,41 +30631,29 @@ public class ControladorMicromedicao implements SessionBean {
 						// jogado no arquivo
 						// txt
 						if (leituraAnterior != null) {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroLeituraAnterior(new Integer(
-											leituraAnterior));
+							movimentoRoteiroEmpresaPoco.setNumeroLeituraAnterior(new Integer(leituraAnterior));
 							// caso contrario coloca a string com zeros
 						} else {
-							movimentoRoteiroEmpresaPoco
-									.setNumeroLeituraAnterior(new Integer(0));
+							movimentoRoteiroEmpresaPoco.setNumeroLeituraAnterior(new Integer(0));
 						}
 
 						// Faixa de leitura esperada
-						faixaInicialFinal = pesquisarFaixaEsperadaOuFalsaCelular(
-								imovelParaSerGerado, dadosHidrometro,
-								leituraAnterior, medicaoHistorico,
-								idMedicaoTipo, sistemaParametro,
-								hidrometroSelecionado, numeroDigitosHidrometro);
+						faixaInicialFinal = pesquisarFaixaEsperadaOuFalsaCelular(imovelParaSerGerado, dadosHidrometro, leituraAnterior, medicaoHistorico,
+								idMedicaoTipo, sistemaParametro, hidrometroSelecionado, numeroDigitosHidrometro);
 
 						faixaInicialEsperada = 0;
 						faixaFinalEsperada = 0;
 
-						faixaInicialEsperada = Integer
-								.parseInt(faixaInicialFinal[3].toString());
+						faixaInicialEsperada = Integer.parseInt(faixaInicialFinal[3].toString());
 
-						faixaFinalEsperada = Integer
-								.parseInt(faixaInicialFinal[4].toString());
+						faixaFinalEsperada = Integer.parseInt(faixaInicialFinal[4].toString());
 
-						movimentoRoteiroEmpresaPoco
-								.setNumeroFaixaLeituraEsperadaInicial(faixaInicialEsperada);
-						movimentoRoteiroEmpresaPoco
-								.setNumeroFaixaLeituraEsperadaFinal(faixaFinalEsperada);
+						movimentoRoteiroEmpresaPoco.setNumeroFaixaLeituraEsperadaInicial(faixaInicialEsperada);
+						movimentoRoteiroEmpresaPoco.setNumeroFaixaLeituraEsperadaFinal(faixaFinalEsperada);
 
-						movimentoRoteiroEmpresaPoco
-								.setUltimaAlteracao(new Date());
+						movimentoRoteiroEmpresaPoco.setUltimaAlteracao(new Date());
 
-						colecaoMovimentoRoteiroEmpresa
-								.add(movimentoRoteiroEmpresaPoco);
+						colecaoMovimentoRoteiroEmpresa.add(movimentoRoteiroEmpresaPoco);
 						// getControladorBatch().inserirObjetoParaBatch(
 						// movimentoRoteiroEmpresaPoco);
 
@@ -31091,8 +30695,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 				}
 
-				getControladorBatch().inserirColecaoObjetoParaBatch(
-						colecaoMovimentoRoteiroEmpresa);
+				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoMovimentoRoteiroEmpresa);
 
 			} catch (ControladorException e) {
 				// sessionContext.setRollbackOnly();
