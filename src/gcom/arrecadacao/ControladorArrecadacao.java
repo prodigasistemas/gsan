@@ -1977,7 +1977,8 @@ public class ControladorArrecadacao implements SessionBean {
                                                             codigoBanco,
                                                             dataGeracao,
                                                             dataPrevistaCredito,arrecadadorMovimento.getId(),
-                                                            idFormaArrecadacao);
+                                                            idFormaArrecadacao, 
+                                                            Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6)));
                                         } catch (ErroRepositorioException e) {
                                             throw new ControladorException(
                                                     "erro.sistema", e);
@@ -2522,8 +2523,6 @@ public class ControladorArrecadacao implements SessionBean {
                                                         dataPrevistaCredito,
                                                         registroHelperCodigoZ
                                                                 .getValorTotalRegistrosArquivo(),
-                                                        getSistemaParametro()
-                                                                .getAnoMesArrecadacao(),
                                                         registroHelperCodigoA
                                                                 .getCodigoBanco(),
                                                         valorInfPagamento,
@@ -2533,7 +2532,8 @@ public class ControladorArrecadacao implements SessionBean {
                                                         numeroSequencialAvisoBancario,
                                                         idFormaArrecadacao,
                                                         indicadorAceitacaoRegistroMovimento,
-                                                        arrecadadorContrato.getCodigoConvenio());
+                                                        arrecadadorContrato.getCodigoConvenio(),
+                                                        Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6)));
                                                 numeroSequencialAvisoBancario += 1;
     
                                                 // adiciona o aviso bancário
@@ -52182,5 +52182,73 @@ public class ControladorArrecadacao implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
+	}
+	
+	
+	public AvisoBancario gerarOcorrenciaAvisoBancario(Integer idMovimento,
+			RegistroHelperCodigoA registroHelperCodigoA,
+			Date dataPrevistaCredito, String valorTotalRegistrosArquivo,
+			String codigoBanco, BigDecimal valorArrecadacaoInf, BigDecimal valorArrecadacaoCalc,
+			BigDecimal valorDevolucaoCalc, BigDecimal valorDevolucaoInf,
+			Short numeroSequencialAvisoBancario, Integer idFormaArrecadacao, int indicadorDeAceitacaoDoMovimento,
+			String codigoConvenio, Integer anoMesReferenciaArrecadacao) throws ControladorException {
+		
+		AvisoBancario avisoBancario = new AvisoBancario();
+
+		FiltroArrecadador filtro = new FiltroArrecadador();
+		filtro.adicionarParametro(new ParametroSimples(FiltroArrecadador.CODIGO_AGENTE, new Integer(registroHelperCodigoA.getCodigoBanco())));
+		Collection colArrecadadores = Fachada.getInstancia().pesquisar( filtro, Arrecadador.class.getName() );
+		Arrecadador arrecadador = (Arrecadador) colArrecadadores.iterator().next();
+		
+		avisoBancario.setArrecadador(arrecadador);
+		
+		FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
+		filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(FiltroArrecadadorContrato.ARRECADADOR_ID, arrecadador.getId()));
+		Collection<ArrecadadorContrato> colecaoArrecadadorContrato = Fachada.getInstancia().pesquisar(filtroArrecadadorContrato, ArrecadadorContrato.class.getName());
+		
+		ArrecadadorContratoTarifa arrecContratoTarifa = pesquisarArrecadadorContratoTarifa(idFormaArrecadacao, colecaoArrecadadorContrato);
+		
+		ContaBancaria contaBancaria = new ContaBancaria();
+		if(arrecContratoTarifa != null)
+			contaBancaria.setId(arrecContratoTarifa.getContaBancariaDepositoArrecadacao().getId());
+		avisoBancario.setContaBancaria(contaBancaria);
+		
+		Date dataLancamento = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA
+						.getDataGeracaoArquivo());
+		avisoBancario.setDataLancamento(dataLancamento);
+		avisoBancario.setNumeroSequencial(numeroSequencialAvisoBancario);
+		avisoBancario.setDataPrevista(dataPrevistaCredito);
+		avisoBancario.setDataRealizada(dataPrevistaCredito);
+		if(indicadorDeAceitacaoDoMovimento==2){
+			avisoBancario.setValorRealizado(valorArrecadacaoCalc);
+			avisoBancario.setValorArrecadacaoCalculado(new BigDecimal("0.00"));
+			/**
+			 * @autor Adriana Muniz e Wellington Rocha
+			 * @data 04/11/2013
+			 * Correção do valor inserido no valor informado
+			 * */
+			avisoBancario.setValorArrecadacaoInformado(valorArrecadacaoInf);
+		}else{
+			avisoBancario.setValorRealizado(valorArrecadacaoInf);
+			avisoBancario.setValorArrecadacaoInformado(valorArrecadacaoInf);
+			avisoBancario.setValorArrecadacaoCalculado(valorArrecadacaoCalc);
+		}
+		avisoBancario.setValorDevolucaoCalculado(valorDevolucaoCalc);
+		avisoBancario.setValorDevolucaoInformado(valorDevolucaoInf);
+		avisoBancario.setValorContabilizado(new BigDecimal("0.00"));
+		avisoBancario.setAnoMesReferenciaArrecadacao(anoMesReferenciaArrecadacao);
+		avisoBancario.setIndicadorCreditoDebito(AvisoBancario.INDICADOR_CREDITO);
+		avisoBancario.setNumeroDocumento(0);
+		avisoBancario.setUltimaAlteracao(new Date());
+		
+		ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
+		arrecadadorMovimento.setId(idMovimento);
+		avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
+
+		ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
+		arrecadacaoForma.setId(idFormaArrecadacao);
+		avisoBancario.setArrecadacaoForma(arrecadacaoForma);
+		
+		return avisoBancario;
 	}
 }
