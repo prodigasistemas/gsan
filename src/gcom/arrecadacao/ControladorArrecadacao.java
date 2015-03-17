@@ -1826,6 +1826,7 @@ public class ControladorArrecadacao implements SessionBean {
                                 	
                                     RegistroHelperCodigoG registroHelperCodigoG = (RegistroHelperCodigoG) distribuirdadosRegistroMovimentoArrecadador(
                                             linhaRegistro, null);
+                                    Integer anoMesReferenciaArrecadacao =  Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6));
     
                                     dataExcludentes = false;
     
@@ -1978,7 +1979,7 @@ public class ControladorArrecadacao implements SessionBean {
                                                             dataGeracao,
                                                             dataPrevistaCredito,arrecadadorMovimento.getId(),
                                                             idFormaArrecadacao, 
-                                                            Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6)));
+                                                            anoMesReferenciaArrecadacao);
                                         } catch (ErroRepositorioException e) {
                                             throw new ControladorException(
                                                     "erro.sistema", e);
@@ -2430,79 +2431,51 @@ public class ControladorArrecadacao implements SessionBean {
                                             // prevista calculada
                                             // anteriormente
                                             boolean achou = false;
-                                            while (avisosBancarioIterator.hasNext()) {
-                                                AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator
-                                                        .next();
-                                                boolean comparaDataIguais = Util
-                                                        .datasIguais(
-                                                                avisoBancarioDaColecao
-                                                                        .getDataPrevista(),
-                                                                dataPrevistaCredito);
-                                                
-                                               
-                                                boolean formasArrecadacaoIguais = avisoBancarioDaColecao
-                                                	.getArrecadacaoForma().getId().intValue() ==
-                                                		idFormaArrecadacao.intValue();
-                                                
-                                                if (comparaDataIguais && formasArrecadacaoIguais) {
-    
-                                                    if (avisoBancarioDaColecao
-                                                            .getValorArrecadacaoCalculado() != null
-                                                            && !avisoBancarioDaColecao
-                                                                    .getValorArrecadacaoCalculado()
-                                                                    .equals("")) {
-                                                        BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao
-                                                                .getValorArrecadacaoCalculado()
-                                                                .add(
-                                                                        valorCalcPagamento);
-                                                        avisoBancarioDaColecao
-                                                                .setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
-                                                    } else {
-                                                        avisoBancarioDaColecao
-                                                                .setValorArrecadacaoCalculado(valorCalcPagamento);
-                                                    }
-    
-                                                    if (avisoBancarioDaColecao
-                                                            .getValorDevolucaoCalculado() != null
-                                                            && !avisoBancarioDaColecao
-                                                                    .getValorDevolucaoCalculado()
-                                                                    .equals("")) {
-                                                        BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao
-                                                                .getValorDevolucaoCalculado()
-                                                                .add(
-                                                                        valorCalcDevolucao);
-                                                        avisoBancarioDaColecao
-                                                                .setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                                                    } else {
-                                                        avisoBancarioDaColecao
-                                                                .setValorDevolucaoCalculado(valorCalcDevolucao);
-                                                    }
-    
-                                                    if (avisoBancarioDaColecao
-                                                            .getValorArrecadacaoInformado() != null
-                                                            && !avisoBancarioDaColecao
-                                                                    .getValorArrecadacaoInformado()
-                                                                    .equals("")) {
-                                                        BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao
-                                                                .getValorArrecadacaoInformado()
-                                                                .add(
-                                                                        valorInfPagamento);
-                                                        avisoBancarioDaColecao
-                                                                .setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                                                        avisoBancarioDaColecao
-                                                                .setValorRealizado(novoValorArrecadacaoInformado);
-                                                    } else {
-                                                        avisoBancarioDaColecao
-                                                                .setValorArrecadacaoInformado(valorInfPagamento);
-                                                        avisoBancarioDaColecao
-                                                                .setValorRealizado(valorInfPagamento);
-                                                    }
-    
-                                                    avisoBancario = avisoBancarioDaColecao;
-                                                    achou = true;
-                                                    break;
-                                                }
-                                            }
+											while (avisosBancarioIterator.hasNext()) {
+												AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator.next();
+												boolean comparaDataIguais = Util.datasIguais(avisoBancarioDaColecao.getDataPrevista(), dataPrevistaCredito);
+
+												boolean formasArrecadacaoIguais = avisoBancarioDaColecao.getArrecadacaoForma().getId().intValue() == idFormaArrecadacao
+														.intValue();
+												
+												boolean anoMesReferenciaArrecadacaoIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesReferenciaArrecadacao;
+
+												if (comparaDataIguais && formasArrecadacaoIguais && anoMesReferenciaArrecadacaoIguais) {
+
+													if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
+															&& !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
+														BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao.getValorArrecadacaoCalculado().add(
+																valorCalcPagamento);
+														avisoBancarioDaColecao.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+													} else {
+														avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
+													}
+
+													if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
+															&& !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
+														BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao.getValorDevolucaoCalculado().add(
+																valorCalcDevolucao);
+														avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+													} else {
+														avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
+													}
+
+													if (avisoBancarioDaColecao.getValorArrecadacaoInformado() != null
+															&& !avisoBancarioDaColecao.getValorArrecadacaoInformado().equals("")) {
+														BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorArrecadacaoInformado().add(
+																valorInfPagamento);
+														avisoBancarioDaColecao.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+														avisoBancarioDaColecao.setValorRealizado(novoValorArrecadacaoInformado);
+													} else {
+														avisoBancarioDaColecao.setValorArrecadacaoInformado(valorInfPagamento);
+														avisoBancarioDaColecao.setValorRealizado(valorInfPagamento);
+													}
+
+													avisoBancario = avisoBancarioDaColecao;
+													achou = true;
+													break;
+												}
+											}
                                             if (!achou) {
                                             	
                                             							
@@ -2533,7 +2506,7 @@ public class ControladorArrecadacao implements SessionBean {
                                                         idFormaArrecadacao,
                                                         indicadorAceitacaoRegistroMovimento,
                                                         arrecadadorContrato.getCodigoConvenio(),
-                                                        Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6)));
+                                                        anoMesReferenciaArrecadacao);
                                                 numeroSequencialAvisoBancario += 1;
     
                                                 // adiciona o aviso bancário
@@ -3576,11 +3549,11 @@ public class ControladorArrecadacao implements SessionBean {
                 
                 ZipUtil.adicionarArquivo(zos, leitura);
 				
-                ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor,
+               /* ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor,
                		emailRemetente, 
 	                tituloMensagem, 
 	                corpoMensagem, 
-	                leitura);
+	                leitura);*/
                 
                 leitura.delete();
 
