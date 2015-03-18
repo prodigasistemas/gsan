@@ -2,7 +2,7 @@
 
 CURRENT_PATH=$(pwd)
 
-# Limpa o JBoss e apaga a versão atual
+# Limpa o JBoss e apaga a versao atual
 rm -rf $JBOSS_GSAN/server/default/work
 rm -rf $JBOSS_GSAN/server/default/tmp
 rm -rf $JBOSS_GSAN/server/default/deploy/gcom*.ear
@@ -78,7 +78,7 @@ clear
 # descompacta o ear remoto com nome proximo ao substituido
 ssh $usuario@$ip_remoto \ "unzip -d /tmp $caminho_remoto/gsan$SUFIXO$versao.ear.zip; mv /tmp/gsan$SUFIXO$versao.ear /tmp/gcom.ear"
 
-# compacta o EAR que está em produção gerando uma cópia caso haja falha na substituição
+# compacta o EAR que esta em producao gerando uma copia caso haja falha na substituicao
 echo "REALIZANDO BKP GCOM.EAR ( /home/jboss/backups.gcom.ear/backup_gcom-$DATE.ear.zip ):"
 ssh $usuario@$ip_remoto \ "zip -qr /home/jboss/backups.gcom.ear/gcom.ear-$DATE.zip /opt/servers/jboss-4.0.1sp1/server/default/deploy;"
 
