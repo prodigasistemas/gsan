@@ -2875,7 +2875,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Imovel imovel = new Imovel();
 		imovel.setId(emitirConta.getIdImovel());
 
-		String msgQuitacaoAnualDebitos = this.obterMsgQuitacaoDebitos(imovel, sistemaParametro.getAnoMesFaturamento());
+		String msgQuitacaoAnualDebitos = this.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(emitirConta.getAmReferencia()));
 
 		if (msgQuitacaoAnualDebitos != null
 				&& !msgQuitacaoAnualDebitos.equals("")) {
