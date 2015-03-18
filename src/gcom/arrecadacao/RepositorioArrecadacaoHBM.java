@@ -31685,44 +31685,4 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 		return retorno;
 	}
-	
-	public AvisoBancario pesquisarAvisoBancario(Integer codigoBanco,
-			Date dataGeracaoArquivo, Date dataPrevistaCredito,Integer idArrecadadorMovimento,
-			Integer idFormaArrecadacao, Integer anoMesReferenciaArrecadacao)
-			throws ErroRepositorioException {
-		AvisoBancario retorno = null;
-
-		Session session = HibernateUtil.getSession();
-		String consulta;
-
-		try {
-			consulta = "SELECT ab "
-					+ "FROM AvisoBancario ab "
-					+ "INNER JOIN ab.arrecadador arrec "
-					+ "LEFT JOIN ab.arrecadadorMovimento arrecMov "
-					+ "WHERE arrec.codigoAgente = :codigoBanco AND "
-					+ "ab.dataLancamento = :dataGeracaoArquivo AND "
-					+ (idFormaArrecadacao != null ? "ab.arrecadacaoForma.id = :idFormaArrecadacao AND " : "")
-					+ "(ab.valorArrecadacaoCalculado = 0 OR arrecMov.id = :idArrecadadorMovimento) AND "
-					+ "(ab.dataPrevista = :dataPrevistaCredito OR ab.dataRealizada = :dataPrevistaCredito) AND "
-					+ " ab.anoMesReferenciaArrecadacao = :anoMesReferenciaArrecadacao ";
-
-			retorno = (AvisoBancario) session.createQuery(consulta)
-					.setInteger("codigoBanco", codigoBanco)
-					.setDate("dataGeracaoArquivo",dataGeracaoArquivo)
-					.setInteger("idFormaArrecadacao", idFormaArrecadacao)
-					.setDate("dataPrevistaCredito",dataPrevistaCredito)
-					.setInteger("idArrecadadorMovimento",idArrecadadorMovimento)
-					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-					.setMaxResults(1).uniqueResult();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-
-	}
 }
