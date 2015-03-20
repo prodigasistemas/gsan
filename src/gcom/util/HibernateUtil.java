@@ -714,6 +714,7 @@ import gcom.seguranca.Atributo;
 import gcom.seguranca.AtributoGrupo;
 import gcom.seguranca.ConsultaCdl;
 import gcom.seguranca.FuncionalidadeAtributo;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.ControleLiberacaoPermissaoEspecial;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.FuncionalidadeCategoria;
@@ -1430,6 +1431,7 @@ public class HibernateUtil {
 					.addClass(SolicitacaoAcessoGrupo.class).addClass(SolicitacaoAcesso.class).addClass(NegativacaoCriterioSituacaoEspecialCobranca.class)
 					.addClass(NegativacaoCriterioSituacaoCobranca.class).addClass(TarifaSocialCarta.class).addClass(TarifaSocialCartaDebito.class)
 					.addClass(TarifaSocialComandoCarta.class).addClass(TarifaSocialMotivoCarta.class)
+					.addClass(SegurancaParametro.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.atendimentopublico.portal //

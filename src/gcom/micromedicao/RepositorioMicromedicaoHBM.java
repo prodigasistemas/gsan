@@ -12319,23 +12319,14 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			consulta = "SELECT movRotEmp.mrem_ammovimento as anoMes, fatGrupo.ftgr_dsfaturamentogrupo as grupoFaturamento, " // 0, 1
-					+ " loca.loca_id as idLocalidade, loca.loca_nmlocalidade as nomeLocalidade, fatAtivCron.ftac_dtprevista as dataPrevista, " // 2,
-					// 3, 4
+					+ " loca.loca_id as idLocalidade, loca.loca_nmlocalidade as nomeLocalidade, fatAtivCron.ftac_dtprevista as dataPrevista, " // 2, 3, 4
 					+ " movRotEmp.mrem_cdrota as codigoRota, movRotEmp.mrem_nmleiturista as nomeLeiturista, " // 5, 6
-					+ " movRotEmp.mrem_enderecoimovel as endereco, movRotEmp.mrem_inscricaoimovel as inscricao, movRotEmp.mrem_nmcliente as nomeCliente, " // 7,
-					// 8, 9
-					+ " movRotEmp.mrem_dsabrevcatgimovel as categoria1, movRotEmp.mrem_qteconomias as qtdeEconomiasCat1, " // 10,
-					// 11
-					+ " cat2.catg_dsabreviado as categoria2, movRotEmp.mrem_qteconomias2 as qtdeEconomiasCat2, " // 12,
-					// 13
-					+ " ligAguaSit.last_dsligacaoaguasituacao as ligacaoAgua, ligEsgSit.lest_dsligacaoesgotosituacao as ligacaoEsgoto, " // 14,
-					// 15
-					+ " movRotEmp.iper_id as perfilImovel, movRotEmp.mrem_nnhidrometro as numeroHidrometro, movRotEmp.mrem_nnconsumomedio as consumoMedio, " // 16,
-					// 17,
-					// 18
-					+ " movRotEmp.mrem_nnsequencialrota as sequencialRota, movRotEmp.mrem_nnsubloteimovel as complementoSeqLeitura, imov.imov_id as idImovel " // 19,
-					// 20,
-					// 21
+					+ " movRotEmp.mrem_enderecoimovel as endereco, movRotEmp.mrem_inscricaoimovel as inscricao, movRotEmp.mrem_nmcliente as nomeCliente, " // 7, 8, 9
+					+ " movRotEmp.mrem_dsabrevcatgimovel as categoria1, movRotEmp.mrem_qteconomias as qtdeEconomiasCat1, " // 10 11 
+					+ " cat2.catg_dsabreviado as categoria2, movRotEmp.mrem_qteconomias2 as qtdeEconomiasCat2, " // 12, 13
+					+ " ligAguaSit.last_dsligacaoaguasituacao as ligacaoAgua, ligEsgSit.lest_dsligacaoesgotosituacao as ligacaoEsgoto, " // 14, 15
+					+ " movRotEmp.iper_id as perfilImovel, movRotEmp.mrem_nnhidrometro as numeroHidrometro, movRotEmp.mrem_nnconsumomedio as consumoMedio, " // 16, 17, 18
+					+ " movRotEmp.mrem_nnsequencialrota as sequencialRota, movRotEmp.mrem_nnsubloteimovel as complementoSeqLeitura, imov.imov_id as idImovel " // 19, 20, 21
 					+ " FROM micromedicao.movimento_roteiro_empr movRotEmp "
 					+ " INNER JOIN faturamento.faturamento_grupo fatGrupo "
 					+ " on fatGrupo.ftgr_id = movRotEmp.ftgr_id "
@@ -13553,7 +13544,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ // 2
 					"quadra.numeroQuadra,"
 					+ // 3
-					"imovel.lote,"
+					"imovel.lote,"	
 					+ // 4
 					"imovel.subLote,"
 					+ // 5
