@@ -166,7 +166,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private void salvarClienteUsuario() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.USUARIO);
 		
-		if (matriculaUsuario != 0) {
+		if (matriculaUsuario != 0 || StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeUsuario"))) {
 			salvarCliente(matriculaUsuario, clienteTxt, ClienteRelacaoTipo.USUARIO, ClienteBuilder.USUARIO);
 		}		
 	}
