@@ -5,11 +5,19 @@ import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.math.BigDecimal;
@@ -42,6 +50,10 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.axis.utils.IOUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
@@ -347,6 +359,9 @@ public class Util {
 		}
 	}
 
+	public static void main (String [] args) {
+		System.out.println(Util.subtrairMesDoAnoMes(201406, 24));
+	}
 	public static String formatarMesAnoParaAnoMes(String data) {
 
 		String mes = data.substring(0, 2);
@@ -6386,5 +6401,22 @@ public class Util {
 			 + numeroIPTU.substring(16, 19) + "/"
 			 + numeroIPTU.substring(19, 22) + "-"
 			 + numeroIPTU.substring(22, 24);
+	}
+	
+	public static void escreverArquivo(String nomeArquivo, HttpServletResponse response) throws Exception {
+		File arquivo = new File(nomeArquivo);
+		if (!arquivo.exists()){
+			throw new Exception("Arquivo nao existe");
+		}
+		
+		FileInputStream input = new FileInputStream(nomeArquivo);
+		int data = -1;
+		ServletOutputStream output = response.getOutputStream(); 
+		while ((data = input.read()) != -1){
+			output.write(data);
+		}
+		output.flush();
+		output.close();
+		input.close();
 	}
 }

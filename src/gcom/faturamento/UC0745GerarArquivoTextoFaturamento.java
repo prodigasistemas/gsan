@@ -1408,41 +1408,18 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 			if (clienteImovelOUConta instanceof ClienteImovel) {
 
-				/**
-				 * 
-				 * 
-				 * Pamela Gatinho - 27/09/2011
-				 * 
-				 * Alteracao para enviar na conta o nome selecionado no cadastro
-				 * do imóvel
-				 */
 				ClienteImovel clienteImovel = (ClienteImovel) clienteImovelOUConta;
+				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta).getClienteRelacaoTipo();
 
-				System.out.println("-- IMÓVEL --");
-
-				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta)
-						.getClienteRelacaoTipo();
-				/**
-				 * 
-				 * Clientes que saíram com o nome em branco 
-				 * nas contas.
-				 * 
-				 * @author Wellington Rocha
-				 * @date 19/09/2013*/
 				FiltroCliente filtroCliente = new FiltroCliente();
 				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID,new Integer(clienteImovel.getCliente().getId())));
 				Collection clientes = Fachada.getInstancia().pesquisarCliente(filtroCliente);
 				if(!clientes.isEmpty()){
 					cliente = (Cliente)clientes.iterator().next();
 				}
-				System.out.println("Id: " + clienteImovel.getCliente().getId());
-				System.out.println("IndicadorNomeConta: " + clienteImovel.getIndicadorNomeConta());
-				System.out.println("Imóvel: " + imovel.getId());
-				if (clienteImovel.getIndicadorNomeConta().equals(
-						ConstantesSistema.SIM)) {
+				if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
 					clienteNomeConta = cliente;
 				}
-				System.out.println("------------");
 			} else {
 
 				clienteRelacaoTipo = ((ClienteConta) clienteImovelOUConta)

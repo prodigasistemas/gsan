@@ -9,107 +9,44 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ArquivoTextoRoteiroEmpresa implements Serializable {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
     private Integer id;
-
-    /** persistent field */
     private Integer anoMesReferencia;
-
-    /** persistent field */
     private Integer codigoSetorComercial1;
-
-    /** persistent field */
     private Integer numeroQuadraInicial1;
-
-    /** persistent field */
     private Integer numeroQuadraFinal1;
-
-    /** nullable persistent field */
     private Integer codigoSetorComercial2;
-
-    /** nullable persistent field */
     private Integer numeroQuadraInicial2;
-
-    /** nullable persistent field */
     private Integer numeroQuadraFinal2;
-
-    /** nullable persistent field */
     private Integer codigoSetorComercial3;
-
-    /** nullable persistent field */
     private Integer numeroQuadraInicial3;
-
-    /** nullable persistent field */
     private Integer numeroQuadraFinal3;
-
-    /** persistent field */
     private Integer quantidadeImovel;
-
-    /** persistent field */
     private String nomeArquivo;
-
-    /** persistent field */
     private String codigoLeiturista;
-
-    /** persistent field */
     private String numeroFoneLeiturista;
-
-    /** nullable persistent field */
     private Date tempoEnvioEmpresa;
-
-    /** persistent field */
     private byte[] arquivoTexto;
-    
-    /** persistent field */
     private byte[] arquivoTextoNaoRecebido;
-
-    /** persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
-    private Localidade localidade;
-
-    /** persistent field */
-    private FaturamentoGrupo faturamentoGrupo;
-
-    /** persistent field */
-    private gcom.micromedicao.Leiturista leiturista;
-
-    /** persistent field */
-    private gcom.micromedicao.RoteiroEmpresa roteiroEmpresa;
-
-    /** persistent field */
-    private Empresa empresa;
-    
-    /** persistent field */
     private Long numeroImei;
-    
-    /** persistent field */
-    private Rota rota;
-
-    /** persistent field */
-    private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
-    
     private Integer numeroSequenciaLeitura;
-    
+    private String motivoFinalizacao;
+    private Integer leiturasRealizas;
+
+    private Localidade localidade;
+    private FaturamentoGrupo faturamentoGrupo;
+    private Leiturista leiturista;
+    private RoteiroEmpresa roteiroEmpresa;
+    private Empresa empresa;
+    private Rota rota;
+    private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
     private ServicoTipoCelular servicoTipoCelular;
     
-    private String motivoFinalizacao;
-    
-    private Integer leiturasRealizas;
-    
-    /**
-     * Description of the Field
-     */
+
     public final static int ARQUIVO_TEXTO_LIBERADO = 2;
     public final static int ARQUIVO_TEXTO_EM_CAMPO = 3;
     public final static int ARQUIVO_TEXTO_FINALIZADO = 4;
@@ -119,7 +56,6 @@ public class ArquivoTextoRoteiroEmpresa implements Serializable {
     	this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
     }
 
-    /** full constructor */
     public ArquivoTextoRoteiroEmpresa(Integer id, Integer anoMesReferencia, Integer codigoSetorComercial1, Integer numeroQuadraInicial1, Integer numeroQuadraFinal1, Integer codigoSetorComercial2, Integer numeroQuadraInicial2, Integer numeroQuadraFinal2, Integer codigoSetorComercial3, Integer numeroQuadraInicial3, Integer numeroQuadraFinal3, Integer quantidadeImovel, String nomeArquivo, String codigoLeiturista, String numeroFoneLeiturista, Date tempoEnvioEmpresa, byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, FaturamentoGrupo faturamentoGrupo, gcom.micromedicao.Leiturista leiturista, gcom.micromedicao.RoteiroEmpresa roteiroEmpresa, Empresa empresa, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
         this.id = id;
         this.anoMesReferencia = anoMesReferencia;
@@ -147,11 +83,9 @@ public class ArquivoTextoRoteiroEmpresa implements Serializable {
         this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
     }
 
-    /** default constructor */
     public ArquivoTextoRoteiroEmpresa() {
     }
 
-    /** minimal constructor */
     public ArquivoTextoRoteiroEmpresa(Integer id, Integer anoMesReferencia, Integer codigoSetorComercial1, Integer numeroQuadraInicial1, Integer numeroQuadraFinal1, Integer quantidadeImovel, String nomeArquivo, String codigoLeiturista, String numeroFoneLeiturista, byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, FaturamentoGrupo faturamentoGrupo, gcom.micromedicao.Leiturista leiturista, gcom.micromedicao.RoteiroEmpresa roteiroEmpresa, Empresa empresa, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
         this.id = id;
         this.anoMesReferencia = anoMesReferencia;
@@ -437,4 +371,7 @@ public class ArquivoTextoRoteiroEmpresa implements Serializable {
 	}
 
 
+	public boolean isArquivoNovoBatch() {
+		return this.arquivoTexto == null;
+	}
 }
