@@ -1211,7 +1211,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis) {
 			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(helper.getIdImovel());
-			listaImoveisRetorno.add(imovelRetorno);
+
+			if (imovelRetorno != null)
+				listaImoveisRetorno.add(imovelRetorno);
 		}
 		return listaImoveisRetorno;
 	}
