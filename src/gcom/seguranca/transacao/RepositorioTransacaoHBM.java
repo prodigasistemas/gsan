@@ -548,15 +548,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			
 			 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
-		
 	}
 	
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper)
@@ -596,6 +592,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" left join cadastro.situacao_atlz_cadastral siac on siac.siac_id = ctrl.siac_id")
 				.append(" left join cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel")
 				.append(" left join cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel")
+				.append(" left join cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id")
 				.append(" where 1 = 1 ");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
@@ -628,6 +625,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				}
 			} else {
 				sql.append(" and ctrl.siac_id not in (:listaSituacao) ");
+			}
+			
+			if (Integer.valueOf(filtroHelper.getOcorrenciaCadastro()) > 0) {
+				sql.append(" and cocr.cocr_icvalidacao = " + filtroHelper.getOcorrenciaCadastro());
 			}
 			
 			sql.append(" order by tatc.tatc_cdimovel");

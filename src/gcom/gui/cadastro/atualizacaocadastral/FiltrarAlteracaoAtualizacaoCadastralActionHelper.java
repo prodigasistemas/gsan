@@ -6,45 +6,47 @@ import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 
 public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
-	
-	private String idEmpresa;
-    
-    private String idLeiturista;
-    
-	private String exibirCampos;
-	
-	private String[] colunaImoveisSelecionados;
-	
-	private String idLocalidadeInicial;	
-	
-	private String nomeLocalidadeInicial;	
 
-	private String cdSetorComercialInicial;	
-	
+	private String idEmpresa;
+
+	private String idLeiturista;
+
+	private String exibirCampos;
+
+	private String[] colunaImoveisSelecionados;
+
+	private String idLocalidadeInicial;
+
+	private String nomeLocalidadeInicial;
+
+	private String cdSetorComercialInicial;
+
 	private String cdRotaInicial;
-	
+
 	private String idLocalidadeFinal;
-	
+
 	private String nomeLocalidadeFinal;
-	
+
 	private String cdSetorComercialFinal;
 
 	private String cdRotaFinal;
-	
+
 	private Boolean alteracaoHidrometro;
 
 	private Boolean alteracaoSituacaoAgua;
-	
+
 	private Boolean alteracaoSituacaoEsgoto;
-	
+
 	private Boolean alteracaoCategoria;
-	
+
 	private int totalImoveis;
 
+	private String ocorrenciaCadastro;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
-	
-	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form){
+
+	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
 		this.idEmpresa = form.getIdEmpresa();
 		this.idLeiturista = form.getIdLeiturista();
 		this.exibirCampos = form.getExibirCampos();
@@ -57,24 +59,26 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.idLocalidadeFinal = form.getIdLocalidadeFinal();
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
+
+		this.alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
+		this.alteracaoSituacaoAgua = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
+		this.alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
+		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
 		
-		alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
-		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
-		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
-		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
+		this.ocorrenciaCadastro = form.getOcorrenciaCadastro();
 	}
-	
-	private Boolean consisteAlteracao(String campo, String exibirCampos){
+
+	private Boolean consisteAlteracao(String campo, String exibirCampos) {
 		Boolean aplicaFiltro = null;
-		
+
 		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())) {
 			aplicaFiltro = true;
-		} else if (StringUtils.isNotEmpty(campo)){
+		} else if (StringUtils.isNotEmpty(campo)) {
 			Integer altera = Integer.parseInt(campo);
-			if (altera == 1){
+			if (altera == 1) {
 				aplicaFiltro = true;
 			}
-			if (altera == 2){
+			if (altera == 2) {
 				aplicaFiltro = false;
 			}
 		}
@@ -109,11 +113,11 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public Collection getColunaImoveisSelecionados() {
 		if (colunaImoveisSelecionados != null && colunaImoveisSelecionados.length > 0) {
 			Collection colecaoColunaImoveisSelecionados = new ArrayList();
-			
+
 			for (int i = 0; i < colunaImoveisSelecionados.length; i++) {
 				colecaoColunaImoveisSelecionados.add(colunaImoveisSelecionados[i]);
 			}
-			
+
 			return colecaoColunaImoveisSelecionados;
 		} else {
 			return null;
@@ -203,9 +207,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
 		this.alteracaoCategoria = alteracaoCategoria;
 	}
-	
+
 	public boolean isAprovacaoEmLote() {
-		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())? true : false;
+		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString()) ? true : false;
 	}
 
 	public int getTotalImoveis() {
@@ -231,5 +235,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
 		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
 	}
-	
- }
+
+	public String getOcorrenciaCadastro() {
+		return ocorrenciaCadastro;
+	}
+
+	public void setOcorrenciaCadastro(String ocorrenciaCadastro) {
+		this.ocorrenciaCadastro = ocorrenciaCadastro;
+	}
+}

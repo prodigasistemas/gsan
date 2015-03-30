@@ -317,6 +317,21 @@
       <td colspan="2"><hr></td>
     </tr>
 
+	<tr>
+      <td width="170"><strong>Com ocorr&ecirc;ncia de Cadastro:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="ocorrenciaCadastro" value="1" /> Sim  
+          <html:radio property="ocorrenciaCadastro" value="2" /> N&atilde;o 
+          <html:radio property="ocorrenciaCadastro" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+
+	<tr>
+      <td colspan="2"><hr></td>
+    </tr>
+
     <tr>
       <td width="170"><strong>Altera&ccedil;&atilde;o de Hidr&ocirc;metro:</strong></td>
       <td>
