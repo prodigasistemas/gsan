@@ -6971,4 +6971,5 @@ public interface IRepositorioArrecadacao {
 	
 	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException;
+
 }
