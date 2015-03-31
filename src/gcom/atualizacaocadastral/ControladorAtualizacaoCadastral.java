@@ -1,5 +1,7 @@
 package gcom.atualizacaocadastral;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
+import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServicoUnidade;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -347,12 +349,20 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	private void atualizarImovelAtualizacaoCadastral(IImovel imovelRetorno) throws ControladorException {
 		Imovel imovel = getControladorImovel().pesquisarImovel(imovelRetorno.getIdImovel());
+		
+		LigacaoAguaSituacao situacaoAgua = imovel.getLigacaoAguaSituacao();
+		LigacaoEsgotoSituacao situacaoEsgoto = imovel.getLigacaoEsgotoSituacao();
+		
 		MergeProperties.mergeProperties(imovel, imovelRetorno);
+		
 		imovel.setId(imovelRetorno.getIdImovel());
 		imovel.setUltimaAlteracao(new Date());
+		imovel.setLigacaoAguaSituacao(situacaoAgua);
+		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
+		
 		getControladorUtil().atualizar(imovel);
 		
-		inserirImovelImagens(imovel.getId());
+		//inserirImovelImagens(imovel.getId());
 	}
 	
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
