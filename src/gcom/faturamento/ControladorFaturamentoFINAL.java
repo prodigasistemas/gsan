@@ -66023,118 +66023,61 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
-	public void preFaturarGrupoFaturamento(Rota rota,
-			Integer anoMesFaturamento, Integer idFaturamentoGrupo,
-			int idFuncionalidadeIniciada) throws ControladorException {
+	public void preFaturarGrupoFaturamento(Rota rota, Integer anoMesFaturamento, Integer idFaturamentoGrupo, int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
-		// PROCESSO BATCH
-		// ------------------------------------------------------------------------------------
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.ROTA, rota.getId());
-		// ---------------------------------------------------------------------------------------------------
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.ROTA, rota.getId());
 
 		try {
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
-
-			FaturamentoGrupo faturamentoGrupo = new FaturamentoGrupo();
-			faturamentoGrupo.setId(idFaturamentoGrupo);
+			FaturamentoGrupo faturamentoGrupo = new FaturamentoGrupo(idFaturamentoGrupo);
 			faturamentoGrupo.setAnoMesReferencia(anoMesFaturamento);
 
-			// Objeto que armazenará as informações para deleção das contas
+			rota.setFaturamentoGrupo(faturamentoGrupo);
+
 			ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
 
-			// SITUAÇÃO PRÉ FATURADA
 			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
-			// GRUPO DE FATURAMENTO
 			helper.setFaturamentoGrupo(faturamentoGrupo);
-
 			helper.setRota(rota);
 			helper.setAnoMesFaturamento(anoMesFaturamento);
 
-			/*
-			 * Pesquisando o FaturamentoAtivCronRota para ser utilizando no
-			 * momento de definição do vencimento da conta.
-			 */
-			FaturamentoAtivCronRota faturamentoAtivCronRota = this
-					.pesquisarFaturamentoAtivCronRotaPara(rota.getId(),
-							FaturamentoAtividade.GERAR_ARQUIVO_LEITURA,
-							idFaturamentoGrupo, anoMesFaturamento);
-
-			rota.setFaturamentoGrupo(faturamentoGrupo);
+			// Pesquisando o FaturamentoAtivCronRota para ser utilizando no momento de definição do vencimento da conta.
+			FaturamentoAtivCronRota faturamentoAtivCronRota = this.pesquisarFaturamentoAtivCronRotaPara(rota.getId(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA, idFaturamentoGrupo, anoMesFaturamento);
 			faturamentoAtivCronRota.setRota(rota);
 
-			// APAGAR DADOS GERADOS PARA A ROTA NO ANO/MES DE REFERENCIA DO
-			// FATURAMENTO
-			// =================================================================================================
+			// APAGAR DADOS GERADOS PARA A ROTA NO ANO/MES DE REFERENCIA DO FATURAMENTO
+			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, FaturamentoAtividade.FATURAR_GRUPO);
 
-			this.apagarDadosGeradosFaturarGrupoFaturamento(helper,
-					FaturamentoAtividade.FATURAR_GRUPO);
 
-			// =================================================================================================
-
-			// Variáveis para a paginação da pesquisa de Imovel por Grupo
-			// Faturamento
-			// ========================================================================
+			// Variáveis para a paginação da pesquisa de Imovel por Grupo Faturamento
 			boolean flagTerminou = false;
 			final int quantidadeRegistros = 3000;
 			int numeroIndice = 0;
-			// ========================================================================
 
 			while (!flagTerminou) {
 
-				Collection colecaoImovel = this
-						.pesquisarImovelGrupoFaturamento(rota, numeroIndice,
-								quantidadeRegistros, true, false);
+				Collection colecaoImovel = this.pesquisarImovelGrupoFaturamento(rota, numeroIndice, quantidadeRegistros, true, false);
 
-				// Resumos de faturamento para simulação.
 				Collection colecaoResumoFaturamento = new ArrayList();
 
-				/*
-				 * Caso exista ids de imóveis para a rota atual determina o
-				 * faturamento para cada imóvel retornado.
-				 */
 				if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
-
 					Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
 
-					// LAÇO PARA DETERMINAR O FATURAMENTO DE TODOS OS IMOVEIS DA
-					// ROTA ATUAL
 					Imovel imovel = null;
 					while (iteratorColecaoImoveis.hasNext()) {
-
 						imovel = (Imovel) iteratorColecaoImoveis.next();
+						this.preFaturarImovel(anoMesFaturamento, sistemaParametro, faturamentoAtivCronRota, colecaoResumoFaturamento, imovel, false, faturamentoGrupo);
+					}
+				}
 
-						// FATURAMENTO ATUAL
-						// ----------------------------------------------------------------
-						this.preFaturarImovel(anoMesFaturamento,
-								sistemaParametro, faturamentoAtivCronRota,
-								colecaoResumoFaturamento, imovel, false,
-								faturamentoGrupo);
-						// ----------------------------------------------------------------------------------
-
-					}// FIM DO LOOP DE IMOVEIS
-
-				}// FIM DO LOOP DE IMOVEIS
-
-				/**
-				 * Incrementa o nº do indice da páginação
-				 */
+				//Incrementa o nº do indice da páginação
 				numeroIndice = numeroIndice + quantidadeRegistros;
 
-				/**
-				 * Caso a coleção de imoveis retornados for menor que a
-				 * quantidade de registros seta a flag indicando que a paginação
-				 * terminou.
-				 */
-				if (colecaoImovel == null
-						|| colecaoImovel.size() < quantidadeRegistros) {
-
+				// Caso a coleção de imoveis retornados for menor que a quantidade de registros seta a flag indicando que a paginação terminou.
+				if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 					flagTerminou = true;
 				}
 
@@ -66142,26 +66085,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoImovel.clear();
 					colecaoImovel = null;
 				}
-
-			}// FIM DO LOOP DA PAGINAÇÃO
-
-			// --------------------------------------------------------
-			//
-			// Registrar o fim da execução da Unidade de Processamento
-			//
-			// --------------------------------------------------------
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-
+			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
-
-			/*
-			 * Este catch serve para interceptar qualquer exceção que o processo
-			 * batch venha a lançar e garantir que a unidade de processamento do
-			 * batch será atualizada com o erro ocorrido.
-			 */
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 
@@ -66221,27 +66148,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	protected void preFaturarImovel(Integer anoMesFaturamento,
-			SistemaParametro sistemaParametro,
-			FaturamentoAtivCronRota faturamentoAtivCronRota,
-			Collection colecaoResumoFaturamento, Imovel imovel,
-			boolean faturamentoAntecipado, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException {
+	protected void preFaturarImovel(Integer anoMesFaturamento, SistemaParametro sistemaParametro, FaturamentoAtivCronRota faturamentoAtivCronRota,
+			Collection colecaoResumoFaturamento, Imovel imovel, boolean faturamentoAntecipado, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
 		// Verifica se existe conta para o imóvel para o ano/mês de faturamento.
-		Integer existeImovelConta = (Integer) getControladorImovel()
-				.pesquisarImovelIdComConta(imovel.getId(), anoMesFaturamento);
+		Integer existeImovelConta = (Integer) getControladorImovel().pesquisarImovelIdComConta(imovel.getId(), anoMesFaturamento);
 
 		// CASO NÃO EXISTA CONTA PARA O IMOVEL NO ANO/MES DE REFERENCIA
 		if (existeImovelConta == null) {
-
-			// TIPO DE ATIVIDADE
 			boolean gerarAtividadeGrupoFaturamento = true;
-
-			// [SF0001] - Determinar Faturamento para o Imóvel
-			this.preDeterminarFaturamentoImovel(imovel,
-					gerarAtividadeGrupoFaturamento, faturamentoAtivCronRota,
-					colecaoResumoFaturamento, sistemaParametro,
+			this.preDeterminarFaturamentoImovel(imovel, gerarAtividadeGrupoFaturamento, faturamentoAtivCronRota, colecaoResumoFaturamento, sistemaParametro,
 					faturamentoAntecipado, anoMesFaturamento, faturamentoGrupo);
 		}
 	}
@@ -66265,80 +66181,43 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param anoMesFaturamento
 	 * @throws ControladorException
 	 */
-	protected void preDeterminarFaturamentoImovel(Imovel imovel,
-			boolean gerarAtividadeGrupoFaturamento,
-			FaturamentoAtivCronRota faturamentoAtivCronRota,
-			Collection colecaoResumoFaturamento,
-			SistemaParametro sistemaParametro, boolean faturamentoAntecipado,
-			Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo)
+	protected void preDeterminarFaturamentoImovel(Imovel imovel, boolean gerarAtividadeGrupoFaturamento, FaturamentoAtivCronRota faturamentoAtivCronRota, 
+			Collection colecaoResumoFaturamento, SistemaParametro sistemaParametro, boolean faturamentoAntecipado, Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo)
 			throws ControladorException {
 
-		Collection colecaoCategorias = this.getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
-		Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
-				.obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
+		Collection colecaoCategorias = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
 		boolean temHidrometro = false;
-		if ((imovel.getHidrometroInstalacaoHistorico() != null && imovel
-				.getHidrometroInstalacaoHistorico().getId() != null)
-				|| (imovel.getLigacaoAgua() != null
-						&& imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico() != null && imovel
-						.getLigacaoAgua().getHidrometroInstalacaoHistorico()
-						.getId() != null)) {
+		if ((imovel.getHidrometroInstalacaoHistorico() != null && imovel.getHidrometroInstalacaoHistorico().getId() != null)
+			|| (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null)) {
 			temHidrometro = true;
 		}
 
-		/*
-		 * Alterado por Raphael Rossiter em 17/09/2007 (Analistas: Aryed Lins e
-		 * Eduardo Borges)
-		 * 
-		 * OBJ: Selecionar os imóveis que farão parte do faturamento de acordo
-		 * com o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situação da
-		 * ligação e água e esgoto do imóvel.
-		 */
-		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
-				.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
-				|| imovel.getLigacaoEsgotoSituacao()
-						.getIndicadorFaturamentoSituacao()
-						.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)
-				|| temHidrometro) {
+		//OBS: Selecionar os imóveis que farão parte do faturamento de acordo com o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situação da ligação e água e esgoto do imóvel.
+		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
+				|| imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO) || temHidrometro) {
 
 			// Verificar se é para faturar pela situação especial de faturamento
-
 			FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
-			filtroFaturamentoSituacaoHistorico
-					.adicionarParametro(new ParametroSimples(
-							FiltroFaturamentoSituacaoHistorico.ID_IMOVEL,
-							imovel.getId()));
-			filtroFaturamentoSituacaoHistorico
-					.adicionarParametro(new ParametroNulo(
-							FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
-			Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this
-					.getControladorUtil().pesquisar(
-							filtroFaturamentoSituacaoHistorico,
-							FaturamentoSituacaoHistorico.class.getName());
+			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL, imovel.getId()));
+			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
+			Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this.getControladorUtil().pesquisar(
+					filtroFaturamentoSituacaoHistorico, FaturamentoSituacaoHistorico.class.getName());
 
-			FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = (FaturamentoSituacaoHistorico) Util
-					.retonarObjetoDeColecao(colFiltroFaturamentoSituacaoHistorico);
+			FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = (FaturamentoSituacaoHistorico) Util.retonarObjetoDeColecao(colFiltroFaturamentoSituacaoHistorico);
 
 			boolean faturar = true;
 
-			if (imovel.getFaturamentoSituacaoTipo() != null
-					&& !imovel.getFaturamentoSituacaoTipo().equals("")) {
+			if (imovel.getFaturamentoSituacaoTipo() != null && !imovel.getFaturamentoSituacaoTipo().equals("")) {
 
-				if ((faturamentoSituacaoHistorico != null
-						&& anoMesFaturamento >= faturamentoSituacaoHistorico
-								.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
+				if ((faturamentoSituacaoHistorico != null && anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
 						.getAnoMesFaturamentoSituacaoFim())
 						&& (imovel.getFaturamentoSituacaoTipo() != null
-								&& imovel.getFaturamentoSituacaoTipo()
-										.getIndicadorParalisacaoFaturamento()
-										.intValue() == 1 && imovel
-								.getFaturamentoSituacaoTipo()
-								.getIndicadorValidoAgua().intValue() == 1)) {
+								&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1 && imovel
+								.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
 					faturar = false;
 				}
 			}
@@ -66354,22 +66233,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			// PERCENTUAL DE ESGOTO
-			helperValoresAguaEsgoto.setPercentualEsgoto(this
-					.verificarPercentualEsgotoAlternativo(imovel, null));
+			helperValoresAguaEsgoto.setPercentualEsgoto(this.verificarPercentualEsgotoAlternativo(imovel, null));
 
 			// PERCENTUAL COLETA DE ESGOTO
-			BigDecimal percentualColetaEsgoto = this
-					.obterPercentualColetaEsgotoImovel(imovel.getId());
+			BigDecimal percentualColetaEsgoto = this.obterPercentualColetaEsgotoImovel(imovel.getId());
 
-			helperValoresAguaEsgoto
-					.setPercentualColetaEsgoto(percentualColetaEsgoto);
+			helperValoresAguaEsgoto.setPercentualColetaEsgoto(percentualColetaEsgoto);
 
 		}
 
 		// [SB0003] - Verificar Não Geração da Conta
-		boolean gerarConta = this.verificarNaoGeracaoConta(imovel,
-				helperValoresAguaEsgoto.getValorTotalAgua(),
-				helperValoresAguaEsgoto.getValorTotalEsgoto(),
+		boolean gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), helperValoresAguaEsgoto.getValorTotalEsgoto(),
 				anoMesFaturamento, true);
 
 		if (gerarConta) {
@@ -66381,99 +66255,67 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			boolean preFaturamento = true;
 
 			// [SB0004] - Gerar os Débitos Cobrados
-			GerarDebitoCobradoHelper gerarDebitoCobradoHelper = this
-					.gerarDebitoCobrado(imovel, anoMesFaturamento,
-							sistemaParametro, gerarAtividadeGrupoFaturamento);
+			GerarDebitoCobradoHelper gerarDebitoCobradoHelper = this.gerarDebitoCobrado(imovel, anoMesFaturamento, sistemaParametro,
+					gerarAtividadeGrupoFaturamento);
 
 			// [SB0005] - Gerar os Créditos Realizados
-			GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper = this
-					.gerarCreditoRealizado(imovel, anoMesFaturamento,
-							helperValoresAguaEsgoto,
-							gerarDebitoCobradoHelper.getValorTotalDebito(),
-							gerarAtividadeGrupoFaturamento, preFaturamento);
+			GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper = this.gerarCreditoRealizado(imovel, anoMesFaturamento, helperValoresAguaEsgoto,
+					gerarDebitoCobradoHelper.getValorTotalDebito(), gerarAtividadeGrupoFaturamento, preFaturamento);
 
 			// ATIVIDADE FATURAR GRUPO
 			if (gerarAtividadeGrupoFaturamento) {
 
 				// [UC0351] - Gerar Impostos Deduzidos da Conta
-				GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this
-						.gerarImpostosDeduzidosConta(imovel.getId(),
-								anoMesFaturamento, helperValoresAguaEsgoto
-										.getValorTotalAgua(),
-								helperValoresAguaEsgoto.getValorTotalEsgoto(),
-								gerarDebitoCobradoHelper.getValorTotalDebito(),
-								gerarCreditoRealizadoHelper
-										.getValorTotalCredito(), preFaturamento);
+				GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this.gerarImpostosDeduzidosConta(imovel.getId(), anoMesFaturamento,
+						helperValoresAguaEsgoto.getValorTotalAgua(), helperValoresAguaEsgoto.getValorTotalEsgoto(),
+						gerarDebitoCobradoHelper.getValorTotalDebito(), gerarCreditoRealizadoHelper.getValorTotalCredito(), preFaturamento);
 
 				// [SB0006] - Gerar Dados da Conta
 				// -----------------------------------------------------------------------------------------------------
-				Conta conta = this.gerarConta(imovel, anoMesFaturamento,
-						sistemaParametro, faturamentoAtivCronRota,
-						helperValoresAguaEsgoto, gerarDebitoCobradoHelper,
-						gerarCreditoRealizadoHelper,
-						gerarImpostosDeduzidosContaHelper, faturamentoGrupo,
-						faturamentoAntecipado, preFaturamento);
+				Conta conta = this.gerarConta(imovel, anoMesFaturamento, sistemaParametro, faturamentoAtivCronRota, helperValoresAguaEsgoto,
+						gerarDebitoCobradoHelper, gerarCreditoRealizadoHelper, gerarImpostosDeduzidosContaHelper, faturamentoGrupo, faturamentoAntecipado,
+						preFaturamento);
 
-				GerarContaCategoriaHelper gerarContaCategoriaHelper = this
-						.gerarContaCategoriaValoresZerados(conta,
-								colecaoCategoriaOUSubcategoria,
-								sistemaParametro);
+				GerarContaCategoriaHelper gerarContaCategoriaHelper = this.gerarContaCategoriaValoresZerados(conta, colecaoCategoriaOUSubcategoria,
+						sistemaParametro);
 
 				// INSERINDO CONTA_CATEGORIA NA BASE
-				if (gerarContaCategoriaHelper.getColecaoContaCategoria() != null
-						&& !gerarContaCategoriaHelper
-								.getColecaoContaCategoria().isEmpty()) {
+				if (gerarContaCategoriaHelper.getColecaoContaCategoria() != null && !gerarContaCategoriaHelper.getColecaoContaCategoria().isEmpty()) {
 
-					this.getControladorBatch().inserirColecaoObjetoParaBatch(
-							gerarContaCategoriaHelper
-									.getColecaoContaCategoria());
+					this.getControladorBatch().inserirColecaoObjetoParaBatch(gerarContaCategoriaHelper.getColecaoContaCategoria());
 				}
 
 				// INSERINDO CONTA_CATEGORIA_CONSUMO_FAIXA
-				if (gerarContaCategoriaHelper
-						.getColecaoContaCategoriaConsumoFaixa() != null
-						&& !gerarContaCategoriaHelper
-								.getColecaoContaCategoriaConsumoFaixa()
-								.isEmpty()) {
+				if (gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa() != null
+						&& !gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa().isEmpty()) {
 
-					this.getControladorBatch().inserirColecaoObjetoParaBatch(
-							gerarContaCategoriaHelper
-									.getColecaoContaCategoriaConsumoFaixa());
+					this.getControladorBatch().inserirColecaoObjetoParaBatch(gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa());
 				}
 
 				// INSERINDO CLIENTE_CONTA
 				this.inserirClienteConta(conta, imovel);
 
 				// INSERINDO CONTA_IMPOSTOS_DEDUZIDOS
-				this.inserirContaImpostosDeduzidos(conta,
-						gerarImpostosDeduzidosContaHelper);
+				this.inserirContaImpostosDeduzidos(conta, gerarImpostosDeduzidosContaHelper);
 
 				// INSERINDO DEBITO_COBRADO E DEBITO_COBRADO_CATEGORIA
-				this.inserirDebitoCobrado(
-						gerarDebitoCobradoHelper.getMapDebitosCobrados(), conta);
+				this.inserirDebitoCobrado(gerarDebitoCobradoHelper.getMapDebitosCobrados(), conta);
 
 				// ATUALIZANDO DEBITO_A_COBRAR
-				this.atualizarDebitoACobrarFaturamento(gerarDebitoCobradoHelper
-						.getColecaoDebitoACobrar());
+				this.atualizarDebitoACobrarFaturamento(gerarDebitoCobradoHelper.getColecaoDebitoACobrar());
 
 				// INSERINDO CREDITO_REALIZADO E CREDITO_REALIZADO_CATEGORIA
-				this.inserirCreditoRealizado(
-						gerarCreditoRealizadoHelper.getMapCreditoRealizado(),
-						conta);
+				this.inserirCreditoRealizado(gerarCreditoRealizadoHelper.getMapCreditoRealizado(), conta);
 
 				// ATUALIZANDO CREDITO_A_REALIZAR
-				this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper
-						.getColecaoCreditoARealizar());
+				this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper.getColecaoCreditoARealizar());
 
 				// -----------------------------------------------------------------------------------------------------
 
 				// [SF0008] - Gerar Movimento De Débito Automático
-				if (imovel.getIndicadorDebitoConta().equals(
-						ConstantesSistema.SIM)
-						&& conta.getContaMotivoRevisao() == null) {
+				if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
 
-					this.gerarMovimentoDebitoAutomatico(imovel, conta,
-							faturamentoGrupo);
+					this.gerarMovimentoDebitoAutomatico(imovel, conta, faturamentoGrupo);
 				}
 			}
 
@@ -66483,13 +66325,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			// [SB0009] - Gerar Resumo da Simulação do Faturamento
-			this.gerarResumoFaturamentoSimulacao(colecaoCategorias,
-					helperValoresAguaEsgoto
-							.getColecaoCalcularValoresAguaEsgotoHelper(),
-					gerarDebitoCobradoHelper, gerarCreditoRealizadoHelper,
-					colecaoResumoFaturamento, imovel,
-					gerarAtividadeGrupoFaturamento, faturamentoAtivCronRota,
-					faturamentoGrupo, anoMesReferenciaResumoFaturamento, true);
+			this.gerarResumoFaturamentoSimulacao(colecaoCategorias, helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(),
+					gerarDebitoCobradoHelper, gerarCreditoRealizadoHelper, colecaoResumoFaturamento, imovel, gerarAtividadeGrupoFaturamento,
+					faturamentoAtivCronRota, faturamentoGrupo, anoMesReferenciaResumoFaturamento, true);
 		}
 	}
 
