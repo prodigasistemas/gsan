@@ -362,7 +362,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 		getControladorUtil().atualizar(imovel);
 		
-		//inserirImovelImagens(imovel.getId());
+		inserirImovelImagens(imovel.getId());
 	}
 	
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
