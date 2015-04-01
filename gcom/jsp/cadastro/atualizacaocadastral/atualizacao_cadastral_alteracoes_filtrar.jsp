@@ -318,7 +318,7 @@
     </tr>
 
 	<tr>
-      <td width="170"><strong>Com ocorr&ecirc;ncia de Cadastro:</strong></td>
+      <td width="170"><strong>Sem Ocorr&ecirc;ncia de Cadastro (Permite Aprova&ccedil;&atilde;o):</strong></td>
       <td>
         <strong> 
           <html:radio property="ocorrenciaCadastro" value="1" /> Sim  
