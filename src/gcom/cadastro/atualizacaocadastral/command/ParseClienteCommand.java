@@ -227,7 +227,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 				atualizacao.getImovelAtual().getMatricula());
 		
 		if (imovelControleAtualizacaoCadastral != null
-				&& imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
+				&& imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId().intValue() == SituacaoAtualizacaoCadastral.APROVADO.intValue()){
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
 		} else {
