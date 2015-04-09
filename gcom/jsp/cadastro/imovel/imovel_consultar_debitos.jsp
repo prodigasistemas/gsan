@@ -2064,7 +2064,48 @@ function pesquisarImovel() {
 				</tr>
 				<tr>
 					<td colspan="4">&nbsp;</td>
-				</tr>				
+				</tr>	
+				
+				<tr>
+					<td colspan="4">
+						<table  width="100%" align="center" bgcolor="#90c7fc" border="0">
+							<tr bordercolor="#79bbfd">
+								<td colspan="5" bgcolor="#79bbfd" align="center"><strong>Débitos Pretéritos</strong></td>
+							</tr>
+							<tr  bordercolor="#000000">
+								<td width="50%" bgcolor="#90c7fc">
+									<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+									<strong>Quantidade de contas</strong> </font></div>
+								</td>
+								<td width="50%" bgcolor="#90c7fc">
+									<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+									<strong>Valor Total</strong> </font></div>
+								</td>
+							</tr>
+							<%if((session.getAttribute("quantidadeDebitosPreteritos")!= null) || (session.getAttribute("valorDebitosPreteritos") != null)){ %>
+							<tr bgcolor="#FFFFFF">
+								<td>
+									<div align="right" class="style9"><font color="#000000"
+									style="font-size:9px"
+									face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("quantidadeDebitosPreteritos")!=null?session.getAttribute("quantidadeDebitosPreteritos"):""%>
+								</font></div>
+								</td>
+								<td>
+								<div align="right" class="style9"><font color="#000000"
+									style="font-size:9px"
+									face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorDebitosPreteritos")!=null?session.getAttribute("valorDebitosPreteritos"):""%>
+								</font></div>
+								</td>
+							</tr>
+							<%} %>
+						</table>
+					</td>
+				</tr>
+						
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+					
 				<tr>
 					<td colspan="4">
 					<table width="100%" align="center" bgcolor="#90c7fc" border="0">
@@ -2119,6 +2160,7 @@ function pesquisarImovel() {
 					</table>
 					</td>
 				</tr>
+				
 				<tr>
 					<td align="right">
 						  <div align="right">

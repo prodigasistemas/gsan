@@ -162,6 +162,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 				idImovelDebitos = null;
 				idImovelPrincipalAba = null;
 			}
+			
+			sessao.removeAttribute("quantidadeDebitosPreteritos");
+			sessao.removeAttribute("valorDebitosPreteritos");
 
 			//        }else if (idImovelDebitos != null && !idImovelDebitos.equalsIgnoreCase("")){
 		}
@@ -510,6 +513,13 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 
 					//pesquisa todas as situações de cobrança ativa do imovel
 					Collection colecaoCobrancaSituacao = fachada.pesquisarImovelCobrancaSituacaoPorImovel(new Integer(idImovelDebitos.trim()));
+					
+					Object[] arrayQtdeEValorDebitosPreteritos = fachada.pesquisarQtdeDebitosPreteritos(imovel.getId());
+					Integer qtde = ((Integer)arrayQtdeEValorDebitosPreteritos[0]) == 0 ? null : (Integer)arrayQtdeEValorDebitosPreteritos[0];
+					BigDecimal valor =	(BigDecimal)arrayQtdeEValorDebitosPreteritos[1];
+					
+					sessao.setAttribute("quantidadeDebitosPreteritos", qtde);
+					sessao.setAttribute("valorDebitosPreteritos", Util.formatarMoedaReal(valor));
 					
 					if ((colecaoContaValores == null)&& (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 							&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty()) && (colecaoGuiaPagamentoValores == null)) {
