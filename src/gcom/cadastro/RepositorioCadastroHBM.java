@@ -8850,5 +8850,35 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 		return ip;
-	}	
+	}
+	
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Object[] retorno = null;
+		try {
+			String consulta = " SELECT COUNT(clct_id) as qtde,"
+							+ " sum(c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos) as valorTotal "
+							+ " FROM cadastro.cliente_imovel ci "
+							+ " INNER JOIN cadastro.cliente_conta cc ON (ci.clie_id = cc.clie_id) "
+							+ " INNER JOIN faturamento.conta c ON (c.cnta_id = cc.cnta_id) "
+							+ " WHERE ci.imov_id = :idImovel "
+							+ " AND clim_dtrelacaofim IS NOT NULL "
+							+ " AND cc.crtp_id = :idClienteRelacaoTipo ";
+			
+			Query query = session.createSQLQuery(consulta)
+					.addScalar("qtde", Hibernate.INTEGER)
+					.addScalar("valorTotal", Hibernate.BIG_DECIMAL)
+					.setInteger("idImovel", idImovel)
+					.setShort("idClienteRelacaoTipo", ClienteRelacaoTipo.USUARIO);
+			retorno = (Object[]) query.uniqueResult();
+			
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar a quantidade de débitos pretéritos", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
 }

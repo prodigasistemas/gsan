@@ -16007,4 +16007,8 @@ public class ControladorCadastro implements SessionBean {
 	public String retornaIpServidorRelatorios() throws Exception{
 		return repositorioCadastro.retornaIpServidorRelatorios();
 	}	
+	
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws Exception {
+		return repositorioCadastro.pesquisarQtdeDebitosPreteritos(idImovel);
+	}
 }

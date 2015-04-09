@@ -44115,4 +44115,12 @@ public class Fachada {
 		return null;
 	}
 	
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) {
+		try {
+			return this.getControladorCadastro().pesquisarQtdeDebitosPreteritos(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
 }

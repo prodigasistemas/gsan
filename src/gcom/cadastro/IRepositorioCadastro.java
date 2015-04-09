@@ -395,4 +395,6 @@ public interface IRepositorioCadastro {
 	public String retornaIpServidorRelatorios() throws ErroRepositorioException;	
 
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
+	
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws ErroRepositorioException;
 }
