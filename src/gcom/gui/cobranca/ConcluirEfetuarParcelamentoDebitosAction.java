@@ -518,6 +518,13 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				cpfClienteParcelamentoDigitado,
 				descontoSancoesRDEspecial,
 				descontoTarifaSocialRDEspecial, colecaoContasEmAntiguidade);
+		
+		//Log
+		System.out.println(" ====== ConcluirEfetuarParcelamentoDebitosAction ====== "
+							+ "\n Matricula: " + imovel.getId()
+							+ "\n Acréscimos de Impontualidade: " + valorAcrescimosImpontualidade
+							+ "\n Descontos de acréscimos de impontualidade " + descontoAcrescimosImpontualidade);
+		
 		//=============================================================================================================
 		
 		Integer idParcelamento = fachada.concluirParcelamentoDebitos(
