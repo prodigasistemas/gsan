@@ -12146,6 +12146,10 @@ public class ControladorCobranca implements SessionBean {
 			}
 
 			if (valorTotalAcrescimosImpontualidade.compareTo(valorZero) != 0) {
+				
+				System.out.println(" ====== ControladorCobrança >> gerarDebitosACobrarParcelamento ====== "
+							+ "\n Matricula: " + imovel.getId()
+							+ "\n Acréscimos de Impontualidade: " + valorTotalAcrescimosImpontualidade);
 				// 3. Inclui o débito a cobrar para Parcelamento de Acrescimos
 				// por
 				// Impontualidade
