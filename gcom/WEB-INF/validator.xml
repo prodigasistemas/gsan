@@ -477,12 +477,6 @@
 			<field property="poco" depends="">
 				<arg0 key="Poço" resource="false" />
 			</field>
-			<field property="cordenadasUtmX" depends="decimal">
-				<arg0 key="Cordenadas Utm X" resource="false" />
-			</field>
-			<field property="cordenadasUtmY" depends="decimal">
-				<arg0 key="Cordenadas Utm Y" resource="false" />
-			</field>
 			<field property="sequencialRota"
 				depends="requiredif, long, caracteresespeciais">
 				<arg0 key="Sequencia na Rota" resource="false" />
@@ -624,12 +618,6 @@
 			</field>
 			<field property="perfilImovel" depends="required">
 				<arg0 key="Perfil do Imóvel" resource="false" />
-			</field>
-			<field property="cordenadasUtmX" depends="decimal">
-				<arg0 key="Cordenadas Utm X" resource="false" />
-			</field>
-			<field property="cordenadasUtmY" depends="decimal">
-				<arg0 key="Cordenadas Utm Y" resource="false" />
 			</field>
 			<field property="sequencialRota"
 				depends="requiredif, long, caracteresespeciais">
