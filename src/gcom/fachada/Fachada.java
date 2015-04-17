@@ -44118,5 +44118,12 @@ public class Fachada {
 	public String retornaIpServidorNovoBatch() throws Exception {
 		return this.getControladorBatch().getIpNovoBatch();
 	}
-	
+
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) {
+		try {
+			return this.getControladorCadastro().pesquisarQtdeDebitosPreteritos(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 }
