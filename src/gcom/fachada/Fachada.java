@@ -44115,4 +44115,8 @@ public class Fachada {
 		return null;
 	}
 	
+	public String retornaIpServidorNovoBatch() throws Exception {
+		return this.getControladorBatch().getIpNovoBatch();
+	}
+	
 }

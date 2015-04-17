@@ -91,28 +91,35 @@ public class MenuGCOM {
 
                 if (funcionalidade.getIndicadorPontoEntrada().equals(ConstantesSistema.SIM)) {
                 	
-                	if(funcionalidade.getIndicadorNovaJanela().equals(ConstantesSistema.SIM)){
-                       if (funcionalidade.getIndicadorOlap() != null && !funcionalidade.getIndicadorOlap().equals(ConstantesSistema.NAO)){
-                        	
-                        	menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
-	                        	funcionalidade.getDescricao() + "','" +
-	                        	"http://" + sistemaParametro.getIpServidorModuloGerencial()+ "/" + funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "','','_newblank');\n");
-                        } else { 
-                        	menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
-	                        	funcionalidade.getDescricao() + "','" +
-	                    		funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "','','_newblank');\n");
-                        }
-                	}else{
-                		if (funcionalidade.getIndicadorOlap() != null && !funcionalidade.getIndicadorOlap().equals(ConstantesSistema.NAO)){
-		                    menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
-		                    	funcionalidade.getDescricao() + "','" +
-		                        "http://" + sistemaParametro.getIpServidorModuloGerencial()+ "/" + funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "');\n");
-                        } else {
-                			menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
-    	                        funcionalidade.getDescricao() + "','" +
-    	                        funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "');\n");
-                		}
-                	}
+//                	if (funcionalidade.getId().intValue() == 16026) {
+//                		menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
+//	                        	funcionalidade.getDescricao() + "','" +
+//	                        	"http://" + sistemaParametro.getIpServidorModuloGerencial()+ "/" + funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?method=\"post\"&menu=sim")+  "','','_newblank');\n");
+//	                } else {
+	                		
+	                	if(funcionalidade.getIndicadorNovaJanela().equals(ConstantesSistema.SIM)){
+	                       if (funcionalidade.getIndicadorOlap() != null && !funcionalidade.getIndicadorOlap().equals(ConstantesSistema.NAO)){
+	                        	
+	                        	menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
+		                        	funcionalidade.getDescricao() + "','" +
+		                        	"http://" + sistemaParametro.getIpServidorModuloGerencial()+ "/" + funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "','','_newblank');\n");
+	                        } else { 
+	                        	menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
+		                        	funcionalidade.getDescricao() + "','" +
+		                    		funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "','','_newblank');\n");
+	                        }
+	                	}else{
+	                		if (funcionalidade.getIndicadorOlap() != null && !funcionalidade.getIndicadorOlap().equals(ConstantesSistema.NAO)){
+			                    menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
+			                    	funcionalidade.getDescricao() + "','" +
+			                        "http://" + sistemaParametro.getIpServidorModuloGerencial()+ "/" + funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "');\n");
+	                        } else {
+	                			menu.append("d.add(" + contadorId + "," + nivelArvore + ",'" +
+	    	                        funcionalidade.getDescricao() + "','" +
+	    	                        funcionalidade.getCaminhoUrl() + ((funcionalidade.getCaminhoUrl().indexOf("?") != -1) ? "" : "?menu=sim")+  "');\n");
+	                		}
+	                	}
+//	                }
                 } else {
                     contadorId--;
                 }

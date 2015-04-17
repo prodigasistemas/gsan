@@ -169,6 +169,8 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	public Integer inserirProcessoIniciadoParametrosLivresAguardandoAutorizacao(Map parametros, int idProcesso, Usuario usuario) throws ControladorException;
 	
 	public FaturamentoAtividadeCronograma pesquisarProcessoIniciadoParaGrupo(Integer idGrupo, Integer referencia, Integer idAtividadeFaturamento) throws ControladorException; 
+	
+	public String getIpNovoBatch();
 }
 
 
