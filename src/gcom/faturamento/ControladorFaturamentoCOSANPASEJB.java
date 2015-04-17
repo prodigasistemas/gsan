@@ -79,6 +79,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger logger = Logger.getLogger(ControladorFaturamentoCOSANPASEJB.class);
+	
+	private boolean isImovelEmDebito = false;
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
@@ -1231,16 +1233,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private StringBuilder preencherMensagensInstitucionais(SistemaParametro sistemaParametro,
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
+		
 		String[] parmsPartesContaMensagem = this.obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
-
+		
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[0], 100));
-		emitirContaHelper.setMsgLinha1Conta(parmsPartesContaMensagem[0]);
-
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[1], 100));
-		emitirContaHelper.setMsgLinha2Conta(parmsPartesContaMensagem[1]);
-
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[2], 100));
-		emitirContaHelper.setMsgLinha3Conta(parmsPartesContaMensagem[2]);
+		
+		// Caso o sistema preencha as mensagens com mensagens de debito, nao informar as mensagens institucionais
+		if (!isImovelEmDebito) {
+			emitirContaHelper.setMsgLinha1Conta(parmsPartesContaMensagem[0]);
+			emitirContaHelper.setMsgLinha2Conta(parmsPartesContaMensagem[1]);
+			emitirContaHelper.setMsgLinha3Conta(parmsPartesContaMensagem[2]);
+		}
 		
 		return contaTxt;
 	}
@@ -1282,10 +1287,18 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
 		String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
-
+		
 		contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
 		contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
 		contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
+
+		// Preencher somente se houver debitos
+		if (isImovelEmDebito) {
+			emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
+			emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
+			emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
+		}
+		
 		
 		return contaTxt;
 	}
@@ -2857,11 +2870,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
 			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
 			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
-
+			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
 			linhasImpostosRetidos[1] = "MUITO OBRIGADO.";
 			linhasImpostosRetidos[2] = "";
+			isImovelEmDebito = false;
 		}
 
 		return linhasImpostosRetidos;
