@@ -2690,7 +2690,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							 */
 							BigDecimal valorFaturadoAgua = new BigDecimal(0);
 							
-							if (valorRateioAgua != null 
+							System.out.println(helper.getMatriculaImovel());
+							if (valorRateioAgua != null && !valorRateioAgua.equals(new BigDecimal(0)) 
 									&& helper.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.SIM.shortValue()) {
 								valorFaturadoAgua = movimentoContaPrefaturadaCategoria.getValorFaturadoAgua().add(
 										helper.getValorRateioAgua());

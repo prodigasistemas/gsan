@@ -941,6 +941,15 @@
 		<url-pattern>/acessarOperacional</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>acessarNovoBatch</servlet-name>
+		<servlet-class>gcom.gui.batch.AcessarNovoBatchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>acessarNovoBatch</servlet-name>
+		<url-pattern>/acessarNovoBatch</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

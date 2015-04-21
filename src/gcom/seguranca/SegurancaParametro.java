@@ -11,7 +11,8 @@ public class SegurancaParametro implements Serializable {
 	private String valor;
 	
 	public enum NOME_PARAMETRO_SEGURANCA {
-		CAMINHO_ARQUIVOS;
+		CAMINHO_ARQUIVOS,
+		IP_NOVO_BATCH;
 	}
 	
 	public Integer getId() {

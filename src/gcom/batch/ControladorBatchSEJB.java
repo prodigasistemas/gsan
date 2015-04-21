@@ -218,6 +218,7 @@ import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gerencial.micromedicao.TarefaBatchGerarResumoHidrometro;
 import gcom.integracao.ControladorIntegracaoLocal;
 import gcom.integracao.ControladorIntegracaoLocalHome;
+import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
@@ -230,6 +231,8 @@ import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.TarefaBatchAtualizarConjuntoHidrometro;
 import gcom.relatorio.GerenciadorExecucaoTarefaRelatorio;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
@@ -10059,6 +10062,17 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 	
 		return faturamentoAtividadeCronograma;
+	}
+	
+	public String getIpNovoBatch() {
+		StringBuilder caminhoCompleto = new StringBuilder();
+		
+		FiltroSegurancaParametro filtroSegurancaParametro = new FiltroSegurancaParametro();
+		filtroSegurancaParametro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.IP_NOVO_BATCH.toString()));
+
+		Collection parametros = Fachada.getInstancia().pesquisar(filtroSegurancaParametro, SegurancaParametro.class.getName());
+
+		 return ((SegurancaParametro) parametros.iterator().next()).getValor();
 	}
 
 }
