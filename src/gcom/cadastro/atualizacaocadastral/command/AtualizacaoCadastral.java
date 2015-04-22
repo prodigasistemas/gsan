@@ -41,6 +41,7 @@ public class AtualizacaoCadastral {
 	
 	public AtualizacaoCadastralImovel novaAtualizacaoImovel(){
 		validacaoLiberada = false;
+		imovelValidado = false;
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
 		imoveisComErro.add(imovel);

@@ -460,6 +460,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @param quantidadeRegistros
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object[] pesquisarImovelGerarArquivoTextoFaturamento(Rota rota,
 			int numeroIndice, int quantidadeRegistros,
 			SistemaParametro sistemaParametro,
@@ -1000,6 +1001,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return Conta
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Conta pesquisarContaGerarArquivoTextoFaturamento(Imovel imovel,
 			Integer anoMesReferencia, Integer idFaturamentoGrupo)
 			throws ControladorException {
@@ -1254,24 +1256,11 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
-	 * 
 	 * [SB0001] - Gerar Arquivo Texto - Registro Tipo 01
-	 * 
-	 * @author Raphael Rossiter, Mariana Victor, Magno Gouveia
-	 * @date 23/04/2008, 11/03/2011, 24/08/2011
-	 * 
-	 * @param imovel
-	 * @param conta
-	 * @param anoMesReferencia
-	 * @return StringBuilder
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipo01(Imovel imovel,
-			Conta conta, Integer anoMesReferencia, Rota rota,
-			FaturamentoGrupo faturamentoGrupo,
-			SistemaParametro sistemaParametro,
-			CobrancaDocumento cobrancaDocumento) throws ControladorException {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public StringBuilder gerarArquivoTextoRegistroTipo01(Imovel imovel, Conta conta, Integer anoMesReferencia, Rota rota,
+			FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro, CobrancaDocumento cobrancaDocumento) throws ControladorException {
 
 		StringBuilder arquivoTextoRegistroTipo01 = new StringBuilder();
 
@@ -1297,26 +1286,19 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 		if (conta != null) {
 
-			nomeGerenciaRegional = conta.getLocalidade().getGerenciaRegional()
-					.getNome();
-			idGerenciaRegional = conta.getLocalidade().getGerenciaRegional()
-					.getId();
+			nomeGerenciaRegional = conta.getLocalidade().getGerenciaRegional().getNome();
+			idGerenciaRegional = conta.getLocalidade().getGerenciaRegional().getId();
 			idLocalidade = conta.getLocalidade().getId();
-			if (conta.getImovel() != null
-					&& conta.getImovel().getSetorComercial() != null) {
-				idSetorComercial = conta.getImovel().getSetorComercial()
-						.getId();
+			if (conta.getImovel() != null && conta.getImovel().getSetorComercial() != null) {
+				idSetorComercial = conta.getImovel().getSetorComercial().getId();
 			}
-			if (conta.getImovel() != null
-					&& conta.getImovel().getNumeroSequencialRota() != null) {
-				numeroSequencialRota = conta.getImovel()
-						.getNumeroSequencialRota();
+			if (conta.getImovel() != null && conta.getImovel().getNumeroSequencialRota() != null) {
+				numeroSequencialRota = conta.getImovel().getNumeroSequencialRota();
 			}
 			descricaoLocalidade = conta.getLocalidade().getDescricao();
 			colecaoClienteImovelOUConta = conta.getClienteContas();
 
 			// MONTANDO INSCRIÇÃO DO IMOVEL A PARTIR DA CONTA
-			// -----------------------------------------------------------------
 			Imovel imovelInscricao = new Imovel();
 			imovelInscricao.setLocalidade(conta.getLocalidade());
 
@@ -1332,24 +1314,16 @@ public class UC0745GerarArquivoTextoFaturamento {
 			imovelInscricao.setSubLote(conta.getSubLote());
 
 			inscricaoImovel = imovelInscricao.getInscricaoFormatadaSemPonto();
-			// -----------------------------------------------------------------
 
-			idLigacaoAguaSituacao = conta.getLigacaoAguaSituacao().getId()
-					.toString();
-			indicadorFaturamentoSituacaoAgua = conta.getLigacaoAguaSituacao()
-					.getIndicadorFaturamentoSituacao();
-			idLigacaoEsgotoSituacao = conta.getLigacaoEsgotoSituacao().getId()
-					.toString();
-			indicadorFaturamentoSituacaoEsgoto = conta
-					.getLigacaoEsgotoSituacao()
-					.getIndicadorFaturamentoSituacao();
+			idLigacaoAguaSituacao = conta.getLigacaoAguaSituacao().getId().toString();
+			indicadorFaturamentoSituacaoAgua = conta.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao();
+			idLigacaoEsgotoSituacao = conta.getLigacaoEsgotoSituacao().getId().toString();
+			indicadorFaturamentoSituacaoEsgoto = conta.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao();
 			idImovelPerfil = conta.getImovelPerfil().getId().toString();
 		} else {
 
-			nomeGerenciaRegional = imovel.getLocalidade().getGerenciaRegional()
-					.getNome();
-			idGerenciaRegional = imovel.getLocalidade().getGerenciaRegional()
-					.getId();
+			nomeGerenciaRegional = imovel.getLocalidade().getGerenciaRegional().getNome();
+			idGerenciaRegional = imovel.getLocalidade().getGerenciaRegional().getId();
 			idLocalidade = imovel.getLocalidade().getId();
 			if (imovel.getSetorComercial() != null) {
 				idSetorComercial = imovel.getSetorComercial().getId();
@@ -1360,42 +1334,30 @@ public class UC0745GerarArquivoTextoFaturamento {
 			descricaoLocalidade = imovel.getLocalidade().getDescricao();
 			colecaoClienteImovelOUConta = imovel.getClienteImoveis();
 			inscricaoImovel = imovel.getInscricaoFormatadaSemPonto();
-			idLigacaoAguaSituacao = imovel.getLigacaoAguaSituacao().getId()
-					.toString();
-			indicadorFaturamentoSituacaoAgua = imovel.getLigacaoAguaSituacao()
-					.getIndicadorFaturamentoSituacao();
-			idLigacaoEsgotoSituacao = imovel.getLigacaoEsgotoSituacao().getId()
-					.toString();
-			indicadorFaturamentoSituacaoEsgoto = imovel
-					.getLigacaoEsgotoSituacao()
-					.getIndicadorFaturamentoSituacao();
+			idLigacaoAguaSituacao = imovel.getLigacaoAguaSituacao().getId().toString();
+			indicadorFaturamentoSituacaoAgua = imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao();
+			idLigacaoEsgotoSituacao = imovel.getLigacaoEsgotoSituacao().getId().toString();
+			indicadorFaturamentoSituacaoEsgoto = imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao();
 			idImovelPerfil = imovel.getImovelPerfil().getId().toString();
 		}
 
-		/**
-		 * autor: Adriana Muniz Data: 04/05/2011 Preenche o id da
-		 * quadraFace - Utilizado na pesquisa da qualidade da agua
-		 * */
 		if (imovel.getQuadraFace() != null) {
 			idQuadraFace = imovel.getQuadraFace().getId();
 		}
+
 		// TIPO DO REGISTRO
 		arquivoTextoRegistroTipo01.append("01");
 
 		// MATRÍCULA DO IMÓVEL
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9,
-				imovel.getId().toString()));
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, imovel.getId().toString()));
 
 		// NOME DA GERÊNCIA REGIONAL
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				nomeGerenciaRegional, 25));
+		arquivoTextoRegistroTipo01.append(Util.completaString(nomeGerenciaRegional, 25));
 
 		// DESCRIÇÃO DA LOCALIDADE
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				descricaoLocalidade, 25));
+		arquivoTextoRegistroTipo01.append(Util.completaString(descricaoLocalidade, 25));
 
-		Iterator iteratorClienteImovelOUConta = colecaoClienteImovelOUConta
-				.iterator();
+		Iterator iteratorClienteImovelOUConta = colecaoClienteImovelOUConta.iterator();
 
 		Cliente clienteNomeConta = null;
 
@@ -1408,368 +1370,198 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 			if (clienteImovelOUConta instanceof ClienteImovel) {
 
-				/**
-				 * 
-				 * 
-				 * Pamela Gatinho - 27/09/2011
-				 * 
-				 * Alteracao para enviar na conta o nome selecionado no cadastro
-				 * do imóvel
-				 */
 				ClienteImovel clienteImovel = (ClienteImovel) clienteImovelOUConta;
+				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta).getClienteRelacaoTipo();
 
-				System.out.println("-- IMÓVEL --");
-
-				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta)
-						.getClienteRelacaoTipo();
-				/**
-				 * 
-				 * Clientes que saíram com o nome em branco 
-				 * nas contas.
-				 * 
-				 * @author Wellington Rocha
-				 * @date 19/09/2013*/
 				FiltroCliente filtroCliente = new FiltroCliente();
-				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID,new Integer(clienteImovel.getCliente().getId())));
+				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, new Integer(clienteImovel.getCliente().getId())));
 				Collection clientes = Fachada.getInstancia().pesquisarCliente(filtroCliente);
-				if(!clientes.isEmpty()){
-					cliente = (Cliente)clientes.iterator().next();
+				if (!clientes.isEmpty()) {
+					cliente = (Cliente) clientes.iterator().next();
 				}
-				System.out.println("Id: " + clienteImovel.getCliente().getId());
-				System.out.println("IndicadorNomeConta: " + clienteImovel.getIndicadorNomeConta());
-				System.out.println("Imóvel: " + imovel.getId());
-				if (clienteImovel.getIndicadorNomeConta().equals(
-						ConstantesSistema.SIM)) {
+				if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
 					clienteNomeConta = cliente;
 				}
-				System.out.println("------------");
 			} else {
 
-				clienteRelacaoTipo = ((ClienteConta) clienteImovelOUConta)
-						.getClienteRelacaoTipo();
+				clienteRelacaoTipo = ((ClienteConta) clienteImovelOUConta).getClienteRelacaoTipo();
 				cliente = ((ClienteConta) clienteImovelOUConta).getCliente();
 			}
 
-			if (clienteRelacaoTipo.getId().equals(
-					ClienteRelacaoTipo.USUARIO.intValue())) {
+			if (clienteRelacaoTipo.getId().equals(ClienteRelacaoTipo.USUARIO.intValue())) {
 				clienteUsuario = cliente;
 			} else {
 				clienteResponsavel = cliente;
 			}
 		}
 
-		/**
-		 * Imóveis com nomeImovel diferente de nulo
-		 * porém com valor vazio tiveram suas contas impressas com o nome do
-		 * cliente em branco. Para corrigir o problema não é mais testado o nome
-		 * do imóvel, passando a considerar sempre o nome do cliente usuário.
-		 * 
-		 * @author Wellington Rocha
-		 * @date 12/12/2012
-		 */
 		// NOME DO IMÓVEL OU NOME DO CLIENTE USUÁRIO
-		/*
-		 * if (imovel.getNomeImovel() != null){
-		 * arquivoTextoRegistroTipo01.append
-		 * (Util.completaString(imovel.getNomeImovel(), 30)); } else{
-		 */
+		arquivoTextoRegistroTipo01.append(Util.completaString(clienteUsuario.getNome(), 30));
 
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				clienteUsuario.getNome(), 30));
-		// }
-
+		// DATA DE VENCIMENTO E DATA DE VALIDADE DA CONTA
 		if (conta != null) {
-
-			// DATA DE VENCIMENTO
-			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(conta
-					.getDataVencimentoConta()));
-
-			// DATA DE VALIDADE
-			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(conta
-					.getDataValidadeConta()));
+			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(conta.getDataVencimentoConta()));
+			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(conta.getDataValidadeConta()));
 		} else {
-
-			// DATA DE VENCIMENTO E DATA DE VALIDADE
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 16));
 		}
 
 		// INSCRIÇÃO DO IMÓVEL
-		arquivoTextoRegistroTipo01.append(Util.completaString(inscricaoImovel,
-				17));
+		arquivoTextoRegistroTipo01.append(Util.completaString(inscricaoImovel, 17));
 
 		// ENDEREÇO DO IMÓVEL
-		// [UC0085] - Obter Endereço
-		String enderecoImovel = getControladorEndereco()
-				.pesquisarEnderecoFormatado(imovel.getId());
+		String enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatado(imovel.getId());
+		arquivoTextoRegistroTipo01.append(Util.completaString(enderecoImovel == null ? "" : enderecoImovel, 70));
 
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				enderecoImovel == null ? "" : enderecoImovel, 70));
-
+		// MÊS/ANO DE REFERÊNCIA DA CONTA E DIGITO VERIFICADOR
 		if (conta != null) {
-
-			// MÊS/ANO DE REFERÊNCIA DA CONTA E DIGITO VERIFICADOR
 			arquivoTextoRegistroTipo01.append("" + conta.getReferencia());
-			arquivoTextoRegistroTipo01
-					.append(conta.getDigitoVerificadorConta());
-
+			arquivoTextoRegistroTipo01.append(conta.getDigitoVerificadorConta());
 		} else {
-
-			// MÊS/ANO DE REFERÊNCIA DA CONTA E DIGITO VERIFICADOR
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 7));
 		}
 
-		/**
-		 *  Pamela Gatinho - 27/09/2011
-		 * 
-		 * Alteracao para enviar a conta para o endereco do imóvel ou do
-		 * responsável, de acordo com a opção selecionada no cadastro do imóvel
-		 */
 		// CLIENTE RESPONSÁVEL - CÓDIGO, NOME E ENDEREÇO
 		if (clienteResponsavel != null) {
-
 			if (clienteNomeConta != null) {
-
-				arquivoTextoRegistroTipo01.append(Util
-						.adicionarZerosEsquedaNumero(9, clienteNomeConta
-								.getId().toString()));
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						clienteNomeConta.getNome(), 25));
-
+				arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, clienteNomeConta.getId().toString()));
+				arquivoTextoRegistroTipo01.append(Util.completaString(clienteNomeConta.getNome(), 25));
 			} else {
-
-				arquivoTextoRegistroTipo01.append(Util
-						.adicionarZerosEsquedaNumero(9, clienteResponsavel
-								.getId().toString()));
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						clienteResponsavel.getNome(), 25));
-
+				arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, clienteResponsavel.getId().toString()));
+				arquivoTextoRegistroTipo01.append(Util.completaString(clienteResponsavel.getNome(), 25));
 			}
 
-			if (imovel.getImovelContaEnvio().getId()
-					.equals(ImovelContaEnvio.ENVIAR_IMOVEL)) {
-
-				// ENDEREÇO DO IMÓVEL
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						enderecoImovel == null ? "" : enderecoImovel, 75));
+			if (imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_IMOVEL)) {
+				arquivoTextoRegistroTipo01.append(Util.completaString(enderecoImovel == null ? "" : enderecoImovel, 75));
 			} else {
-
-				// [UC0085] - Obter Endereço
-				String enderecoCorrespondencia = getControladorEndereco()
-						.pesquisarEnderecoClienteAbreviado(
-								clienteResponsavel.getId());
-
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						enderecoCorrespondencia == null ? ""
-								: enderecoCorrespondencia, 75));
+				String enderecoCorrespondencia = getControladorEndereco().pesquisarEnderecoClienteAbreviado(clienteResponsavel.getId());
+				arquivoTextoRegistroTipo01.append(Util.completaString(enderecoCorrespondencia == null ? "" : enderecoCorrespondencia, 75));
 			}
 		} else {
-
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 109));
 		}
 
 		// LIGACAO_SITUACAO_AGUA
 		arquivoTextoRegistroTipo01.append(idLigacaoAguaSituacao);
 
-		// LIGACAO_SITUACAO_AGUA
+		// LIGACAO_SITUACAO_ESGOTO
 		arquivoTextoRegistroTipo01.append(idLigacaoEsgotoSituacao);
 
 		// BANCO E AGÊNCIA
-		Object[] parmsDebitoAutomatico = this.getControladorArrecadacao()
-				.pesquisarParmsDebitoAutomatico(imovel.getId());
-
+		Object[] parmsDebitoAutomatico = this.getControladorArrecadacao().pesquisarParmsDebitoAutomatico(imovel.getId());
 		if (parmsDebitoAutomatico != null) {
-
 			// NOME DO BANCO
 			if (parmsDebitoAutomatico[0] != null) {
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						(String) parmsDebitoAutomatico[0], 15));
+				arquivoTextoRegistroTipo01.append(Util.completaString((String) parmsDebitoAutomatico[0], 15));
 			} else {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 15));
 			}
-
 			// CÓDIGO DA AGÊNCIA
-			arquivoTextoRegistroTipo01.append(Util.completaString(
-					(String) parmsDebitoAutomatico[1], 5));
-
+			arquivoTextoRegistroTipo01.append(Util.completaString((String) parmsDebitoAutomatico[1], 5));
 		} else {
-
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 20));
 		}
 
 		// MATRÍCULA DO IMÓVEL CONDOMÍNIO
 		if (imovel.getImovelCondominio() != null) {
-
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					9, imovel.getImovelCondominio().getId().toString()));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, imovel.getImovelCondominio().getId().toString()));
 		} else {
-
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 9));
 		}
 
 		// INDICADOR IMÓVEL CONDOMÍNIO
-		arquivoTextoRegistroTipo01.append(imovel.getIndicadorImovelCondominio()
-				.toString());
+		arquivoTextoRegistroTipo01.append(imovel.getIndicadorImovelCondominio().toString());
 
 		// IMOVEL_PERFIL
-		/*
-		 * Acréscimo de uma caracter, para casos em que o id do
-		 * perfil do imovel tem dois carateres. Com essa alteração, a linha do
-		 * tipo 1 foi acrescida de uma caracter
-		 */
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(2,
-				idImovelPerfil));
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(2, idImovelPerfil));
 
-		/**
-		 *  Alterando o cálculo da média
-		 */
-		MedicaoTipo medicao = new MedicaoTipo();
-		medicao.setId(MedicaoTipo.LIGACAO_AGUA);
-		
-		boolean houveIntslacaoHidrometro = this
-				.getControladorMicromedicao()
-				.verificarInstalacaoSubstituicaoHidrometro(
-						imovel.getId(), medicao);
-		
+		MedicaoTipo medicao = new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA);
+
+		boolean houveIntslacaoHidrometro = this.getControladorMicromedicao().verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicao);
+
 		// CONSUMO MÉDIO DO IMÓVEL
-
-		// [UC1113 - Obter Volume Médio Água ou Esgoto]
-		int[] consumoMedioLigacaoAgua = this.getControladorMicromedicao()
-				.obterVolumeMedioAguaEsgoto(imovel.getId(),
-						faturamentoGrupo.getAnoMesReferencia(),
-						LigacaoTipo.LIGACAO_AGUA, houveIntslacaoHidrometro);
-
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6,
-				String.valueOf(consumoMedioLigacaoAgua[0])));
+		int[] consumoMedioLigacaoAgua = this.getControladorMicromedicao().obterVolumeMedioAguaEsgoto(imovel.getId(), faturamentoGrupo.getAnoMesReferencia(),
+				LigacaoTipo.LIGACAO_AGUA, houveIntslacaoHidrometro);
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, String.valueOf(consumoMedioLigacaoAgua[0])));
 
 		// INDICADOR_FATURAMENTO_ESGOTO
-		arquivoTextoRegistroTipo01.append(indicadorFaturamentoSituacaoAgua
-				.toString());
+		arquivoTextoRegistroTipo01.append(indicadorFaturamentoSituacaoAgua.toString());
 
 		// INDICADOR_FATURAMENTO_ESGOTO
-		arquivoTextoRegistroTipo01.append(indicadorFaturamentoSituacaoEsgoto
-				.toString());
+		arquivoTextoRegistroTipo01.append(indicadorFaturamentoSituacaoEsgoto.toString());
 
 		// INDICADOR_EMISSAO_CONTA
 		Short indicadorEmissaoConta = new Short("1");
-
-		/**
-		 * Alteração feita para corrigir o problema de emitir
-		 * conta de imóveis que possuem faturas agrupadas
-		 */
 		boolean naoEmitir = false;
-		if (sistemaParametro.getCodigoEmpresaFebraban().equals(
-				SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN)
-				|| sistemaParametro.getCodigoEmpresaFebraban().equals(
-						SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA)) {
-			if (imovel.getImovelContaEnvio() != null
-					&& (imovel.getImovelContaEnvio().getId()
-							.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO))) {
+		if (sistemaParametro.getCodigoEmpresaFebraban().equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN)
+				|| sistemaParametro.getCodigoEmpresaFebraban().equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA)) {
+			if (imovel.getImovelContaEnvio() != null && (imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO))) {
 				naoEmitir = true;
 			}
 		} else {
 			if (imovel.getImovelContaEnvio() != null
-					&& (imovel
-							.getImovelContaEnvio()
-							.getId()
-							.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
-							|| imovel
-									.getImovelContaEnvio()
-									.getId()
-									.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
-							|| imovel
-									.getImovelContaEnvio()
-									.getId()
-									.equals(ImovelContaEnvio.ENVIAR_CONTA_BRAILLE) || imovel
-							.getImovelContaEnvio()
-							.getId()
+					&& (imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+							|| imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+							|| imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CONTA_BRAILLE) || imovel.getImovelContaEnvio().getId()
 							.equals(ImovelContaEnvio.ENVIAR_CONTA_BRAILLE_RESPONSAVEL))) {
 				naoEmitir = true;
 			}
 		}
-
 		if (clienteResponsavel != null && naoEmitir) {
 			indicadorEmissaoConta = new Short("2");
 		}
-
 		arquivoTextoRegistroTipo01.append(indicadorEmissaoConta.toString());
 
 		// CONSUMO_MINIMO_AGUA
-		if (imovel.getLigacaoAgua() != null
-				&& imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua() != null
-				&& !imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua()
-						.equals("")) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua()
-							.toString()));
+		if (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua() != null
+				&& !imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua().equals("")) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua().toString()));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}
 
 		// CONSUMO_MINIMO_ESGOTO
-		if (imovel.getLigacaoEsgoto() != null
-				&& imovel.getLigacaoEsgoto().getConsumoMinimo() != null) {
-			arquivoTextoRegistroTipo01
-					.append(Util.adicionarZerosEsquedaNumero(6, imovel
-							.getLigacaoEsgoto().getConsumoMinimo().toString()));
+		if (imovel.getLigacaoEsgoto() != null && imovel.getLigacaoEsgoto().getConsumoMinimo() != null) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, imovel.getLigacaoEsgoto().getConsumoMinimo().toString()));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}
 
 		// PERCENTUAL_ESGOTO_LIGACAO
-		if (imovel.getLigacaoEsgoto() != null
-				&& imovel.getLigacaoEsgoto()
-						.getPercentualAguaConsumidaColetada() != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, Util.formatarBigDecimalComPonto(imovel
-							.getLigacaoEsgoto()
-							.getPercentualAguaConsumidaColetada())));
+		if (imovel.getLigacaoEsgoto() != null && imovel.getLigacaoEsgoto().getPercentualAguaConsumidaColetada() != null) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, Util.formatarBigDecimalComPonto(imovel.getLigacaoEsgoto().getPercentualAguaConsumidaColetada())));
 		} else {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, "0"));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "0"));
 		}
 
 		// PERCENTUAL_ESGOTO_COBRANCA
-		/**
-		 *  Pamela Gatinho - 19/07/2012 Alteração para informar o
-		 * percentual de esgoto para imóvel condomínio
-		 */
-//		BigDecimal percentualEsgoto = this.getControladorFaturamento().obterPercentualColetaEsgotoImovel(imovel.getId());
 		BigDecimal percentualEsgoto = this.getControladorFaturamento().verificarPercentualEsgotoAlternativo(imovel, null);
-
-		// if (conta != null){
 		if (percentualEsgoto != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6,
-					// Util.formatarBigDecimalComPonto(conta.getPercentualEsgoto())));
-					Util.formatarBigDecimalComPonto(percentualEsgoto)));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, Util.formatarBigDecimalComPonto(percentualEsgoto)));
 		} else {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, "0"));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "0"));
 		}
 
 		// TIPO_POÇO
 		if (imovel.getPocoTipo() != null) {
-			arquivoTextoRegistroTipo01.append(imovel.getPocoTipo().getId()
-					.toString());
+			arquivoTextoRegistroTipo01.append(imovel.getPocoTipo().getId().toString());
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 1));
 		}
 
 		// CONSUMO_TARIFA
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(2,
-				imovel.getConsumoTarifa().getId().toString()));
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(2, imovel.getConsumoTarifa().getId().toString()));
 
 		// CATEGORIA PRINCIPAL
 		Collection colecaoCategoria = null;
 
 		// Obtém a quantidade de economias por categoria
-		colecaoCategoria = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
+		colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-		int consumoTotalReferenciaAltoConsumo = 0;
-		int consumoTotalReferenciaEstouroConsumo = 0;
-		int consumoTotalReferenciaBaixoConsumo = 0;
-		int consumoMaximoCobrancaEstouroConsumo = 0;
+		int consumoReferenciaAltoConsumo = 0;
+		int consumoReferenciaEstouroConsumo = 0;
+		int consumoReferenciaBaixoConsumo = 0;
+		int consumoMaximoEstouroConsumo = 0;
 		int maiorQuantidadeEconomia = 0;
 		BigDecimal vezesMediaAltoConsumo = new BigDecimal(0);
 		BigDecimal vezesMediaEstouroConsumo = new BigDecimal(0);
@@ -1781,180 +1573,118 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 			Categoria categoria = (Categoria) colecaoCategoriaIterator.next();
 
-			// Multiplica o consumo por economia de referencia (consumo estouro)
-			// pr número de economias do imóvel
-			consumoTotalReferenciaAltoConsumo = consumoTotalReferenciaAltoConsumo
-					+ (categoria.getConsumoAlto().intValue() * categoria
-							.getQuantidadeEconomiasCategoria().intValue());
-
-			// Multiplica o consumo por economia de referencia (consumo estouro)
-			// pr número de economias do imóvel
-			consumoTotalReferenciaEstouroConsumo = consumoTotalReferenciaEstouroConsumo
-					+ (categoria.getConsumoEstouro().intValue() * categoria
-							.getQuantidadeEconomiasCategoria().intValue());
-
-			// Multiplica o consumo por economia de referencia (consumo estouro)
-			// pr número de economias do imóvel
-			consumoMaximoCobrancaEstouroConsumo = consumoMaximoCobrancaEstouroConsumo
-					+ (categoria.getNumeroConsumoMaximoEc().intValue() * categoria
-							.getQuantidadeEconomiasCategoria().intValue());
-
-			consumoTotalReferenciaBaixoConsumo = consumoTotalReferenciaBaixoConsumo
-					+ (categoria.getMediaBaixoConsumo().intValue() * categoria
-							.getQuantidadeEconomiasCategoria().intValue());
+			consumoReferenciaAltoConsumo    = consumoReferenciaAltoConsumo + (categoria.getConsumoAlto().intValue() * categoria.getQuantidadeEconomiasCategoria().intValue());
+			consumoReferenciaEstouroConsumo = consumoReferenciaEstouroConsumo + (categoria.getConsumoEstouro().intValue() * categoria.getQuantidadeEconomiasCategoria().intValue());
+			consumoMaximoEstouroConsumo     = consumoMaximoEstouroConsumo + (categoria.getNumeroConsumoMaximoEc().intValue() * categoria.getQuantidadeEconomiasCategoria().intValue());
+			consumoReferenciaBaixoConsumo   = consumoReferenciaBaixoConsumo + (categoria.getMediaBaixoConsumo().intValue() * categoria.getQuantidadeEconomiasCategoria().intValue());
 
 			// Obtém a maior quantidade de economias e a vezes média de estouro
-			if (maiorQuantidadeEconomia < categoria
-					.getQuantidadeEconomiasCategoria().intValue()) {
-
-				maiorQuantidadeEconomia = categoria
-						.getQuantidadeEconomiasCategoria().intValue();
-
+			if (maiorQuantidadeEconomia < categoria.getQuantidadeEconomiasCategoria().intValue()) {
+				maiorQuantidadeEconomia = categoria.getQuantidadeEconomiasCategoria().intValue();
 				vezesMediaAltoConsumo = categoria.getVezesMediaAltoConsumo();
 				vezesMediaEstouroConsumo = categoria.getVezesMediaEstouro();
-				percentualDeterminacaoBaixoConsumo = categoria
-						.getPorcentagemMediaBaixoConsumo();
+				percentualDeterminacaoBaixoConsumo = categoria.getPorcentagemMediaBaixoConsumo();
 			}
 		}
 
 		// CONSUMO_REFERENCIA_ESTOURO_CONSUMO
-		if (consumoTotalReferenciaEstouroConsumo <= 999999) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, consumoTotalReferenciaEstouroConsumo + ""));
+		if (consumoReferenciaEstouroConsumo <= 999999) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoReferenciaEstouroConsumo + ""));
 		} else {
 			arquivoTextoRegistroTipo01.append("999999");
 		}
 
 		// CONSUMO_REFERENCIA_ALTO_CONSUMO
-		if (consumoTotalReferenciaAltoConsumo <= 999999) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, consumoTotalReferenciaAltoConsumo + ""));
+		if (consumoReferenciaAltoConsumo <= 999999) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoReferenciaAltoConsumo + ""));
 		} else {
 			arquivoTextoRegistroTipo01.append("999999");
 		}
 
 		// CONSUMO_MEDIA_BAIXO_CONSUMO
-		if (consumoTotalReferenciaBaixoConsumo <= 999999) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, consumoTotalReferenciaBaixoConsumo + ""));
+		if (consumoReferenciaBaixoConsumo <= 999999) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoReferenciaBaixoConsumo + ""));
 		} else {
 			arquivoTextoRegistroTipo01.append("999999");
 		}
 
 		// FATOR_MULTIPLICACAO_MEDIA_ESTOURO_CONSUMO
 		if (vezesMediaEstouroConsumo != null) {
-			arquivoTextoRegistroTipo01.append(Util.completaString(
-					vezesMediaEstouroConsumo.toString(), 4));
+			arquivoTextoRegistroTipo01.append(Util.completaString(vezesMediaEstouroConsumo.toString(), 4));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 4));
 		}
 
 		// FATOR_MULTIPLICACAO_MEDIA_ALTO_CONSUMO
 		if (vezesMediaAltoConsumo != null) {
-			arquivoTextoRegistroTipo01.append(Util.completaString(
-					vezesMediaAltoConsumo.toString(), 4));
+			arquivoTextoRegistroTipo01.append(Util.completaString(vezesMediaAltoConsumo.toString(), 4));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 4));
 		}
 
 		// PERCENTUAL_DETERMINACAO_BAIXO_CONSUMO
 		if (percentualDeterminacaoBaixoConsumo != null) {
-			arquivoTextoRegistroTipo01
-					.append(Util.adicionarZerosEsquedaNumero(
-							6,
-							Util.formatarBigDecimalComPonto(percentualDeterminacaoBaixoConsumo)));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, Util.formatarBigDecimalComPonto(percentualDeterminacaoBaixoConsumo)));
 		} else {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, "0"));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "0"));
 		}
 
 		// CONSUMO_MAXIMO_COBRANCA_ESTOURO_CONSUMO
-		if (consumoMaximoCobrancaEstouroConsumo <= 999999) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, consumoMaximoCobrancaEstouroConsumo + ""));
+		if (consumoMaximoEstouroConsumo <= 999999) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoMaximoEstouroConsumo + ""));
 		} else {
 			arquivoTextoRegistroTipo01.append("999999");
 		}
 
 		// FATURAMENTO_GRUPO
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(3,
-				faturamentoGrupo.getId().toString()));
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(3, faturamentoGrupo.getId().toString()));
 
 		// CODIGO_ROTA
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(7,
-				rota.getCodigo().toString()));
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(7, rota.getCodigo().toString()));
 
 		// CÓDIGO DA CONTA
 		if (conta != null) {
 
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					9, conta.getId().toString()));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, conta.getId().toString()));
 		} else {
 
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 9));
 		}
 
-		// NÚMERO DA CONTA
-
-		// Tipo da calculo da tarifa
-		if (imovel.getConsumoTarifa() != null
-				&& imovel.getConsumoTarifa().getTarifaTipoCalculo() != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					2, ""
-							+ imovel.getConsumoTarifa().getTarifaTipoCalculo()
-									.getId()));
+		// TIPO DO CÁLCULO DA TARIFA
+		if (imovel.getConsumoTarifa() != null && imovel.getConsumoTarifa().getTarifaTipoCalculo() != null) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(2, "" + imovel.getConsumoTarifa().getTarifaTipoCalculo().getId()));
 		}
 
-		// Endereço Atendimento 1ª Parte
+		// ENDEREÇO ATENDIMENTO - 1ª Parte
 		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
-		filtroLocalidade.adicionarParametro(new ParametroSimples(
-				FiltroLocalidade.ID, idLocalidade));
+		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
 
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtroLocalidade
-				.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
 
-		Collection cLocalidade = (Collection) getControladorUtil().pesquisar(
-				filtroLocalidade, Localidade.class.getName());
-
+		Collection cLocalidade = (Collection) getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName());
 		Localidade localidade = (Localidade) cLocalidade.iterator().next();
+		String descricaoAtendimento = localidade.getEnderecoFormatadoTituloAbreviado();
+		
+		arquivoTextoRegistroTipo01.append(Util.completaString(descricaoAtendimento, 70));
 
-		String descricaoAtendimento = localidade
-				.getEnderecoFormatadoTituloAbreviado();
-
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				descricaoAtendimento, 70));
-
-		// Endereço Atendimento 2ª Parte
+		// ENDEREÇO ATENDIMENTO - 2ª Parte
 		String dddMunicipio = "";
-		if (localidade.getLogradouroBairro() != null
-				&& localidade.getLogradouroBairro().getBairro() != null
+		if (localidade.getLogradouroBairro() != null && localidade.getLogradouroBairro().getBairro() != null
 				&& localidade.getLogradouroBairro().getBairro().getMunicipio() != null
-				&& localidade.getLogradouroBairro().getBairro().getMunicipio()
-						.getDdd() != null) {
-			dddMunicipio = ""
-					+ localidade.getLogradouroBairro().getBairro()
-							.getMunicipio().getDdd();
+				&& localidade.getLogradouroBairro().getBairro().getMunicipio().getDdd() != null) {
+			dddMunicipio = "" + localidade.getLogradouroBairro().getBairro().getMunicipio().getDdd();
 		}
 
 		String fome = "";
@@ -1962,161 +1692,91 @@ public class UC0745GerarArquivoTextoFaturamento {
 			fome = localidade.getFone();
 		}
 
-		arquivoTextoRegistroTipo01.append(Util.completaString(dddMunicipio
-				+ fome, 11));
+		arquivoTextoRegistroTipo01.append(Util.completaString(dddMunicipio + fome, 11));
 
-		// Sequencial de rota
+		// SEQUENCIAL DA ROTA
 		if (numeroSequencialRota != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					9, "" + numeroSequencialRota));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, "" + numeroSequencialRota));
 		} else {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					9, ""));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, ""));
 		}
 
-		// Mensagem da conta em 3 partes
+		// MENSAGEM DA CONTA EM 3 PARTES
 		EmitirContaHelper emitirContaHelper = new EmitirContaHelper();
-		emitirContaHelper.setAmReferencia(faturamentoGrupo
-				.getAnoMesReferencia());
-		emitirContaHelper.setAnoMesFaturamentoGrupo(faturamentoGrupo
-				.getAnoMesReferencia());
+		emitirContaHelper.setAmReferencia(faturamentoGrupo.getAnoMesReferencia());
+		emitirContaHelper.setAnoMesFaturamentoGrupo(faturamentoGrupo.getAnoMesReferencia());
 		emitirContaHelper.setIdFaturamentoGrupo(faturamentoGrupo.getId());
 		emitirContaHelper.setIdGerenciaRegional(idGerenciaRegional);
 		emitirContaHelper.setIdLocalidade(idLocalidade);
 		emitirContaHelper.setIdSetorComercial(idSetorComercial);
 		emitirContaHelper.setIdImovel(imovel.getId());
+		
 		// Caso a empresa seja a CAER
-		if (sistemaParametro.getCodigoEmpresaFebraban().equals(
-				SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAER)) {
-			String[] mensagemContaDividida = getControladorFaturamento()
-					.obterMensagemConta(emitirContaHelper, sistemaParametro, 4,
-							null);
+		if (sistemaParametro.getCodigoEmpresaFebraban().equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAER)) {
+			String[] mensagemContaDividida = getControladorFaturamento().obterMensagemConta(emitirContaHelper, sistemaParametro, 4, null);
 			if (mensagemContaDividida != null) {
 				// Parte 1
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[0], 60));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[0], 60));
 				// Parte 2
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[1], 60));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[1], 60));
 				// Parte 3
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[2], 60));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[2], 60));
 				// Parte 4
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[3], 60));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[3], 60));
 				// Parte 5
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[4], 60));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[4], 60));
 
 			} else {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
 			}
 		} else {
-			String[] mensagemContaDividida = getControladorFaturamento()
-					.obterMensagemConta3Partes(emitirContaHelper,
-							sistemaParametro);
+			String[] mensagemContaDividida = getControladorFaturamento().obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
 			if (mensagemContaDividida != null) {
 				// Parte 1
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[0], 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[0], 100));
 				// Parte 2
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[1], 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[1], 100));
 				// Parte 3
-				arquivoTextoRegistroTipo01.append(Util.completaString(
-						mensagemContaDividida[2], 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[2], 100));
 
 			} else {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
 			}
 		}
 
-		// Incluir mensagem de quitação anual de débitos
-		String msgQuitacaoDebitos = getControladorFaturamento()
-				.obterMsgQuitacaoDebitos(imovel, anoMesReferencia);
+		// QUITAÇÃO ANUAL DE DÉBITOS
+		arquivoTextoRegistroTipo01.append(Util.completaString(getControladorFaturamento().obterMsgQuitacaoDebitos(imovel, anoMesReferencia), 120));
 
-		arquivoTextoRegistroTipo01.append(Util.completaString(
-				msgQuitacaoDebitos, 120));
-
-		// Qualidade Água
+		// QUALIDADE DA ÁGUA
 		Integer anoMesReferenciaQualidadeAgua = null;
-
-		if (sistemaParametro.getNomeEmpresa() != null
-				&& sistemaParametro.getNomeEmpresa().equals(
-						SistemaParametro.EMPRESA_COMPESA)) {
-			anoMesReferenciaQualidadeAgua = Util
-					.subtraiAteSeisMesesAnoMesReferencia(
-							faturamentoGrupo.getAnoMesReferencia(), 1);
+		if (sistemaParametro.getNomeEmpresa() != null && sistemaParametro.getNomeEmpresa().equals(SistemaParametro.EMPRESA_COMPESA)) {
+			anoMesReferenciaQualidadeAgua = Util.subtraiAteSeisMesesAnoMesReferencia(faturamentoGrupo.getAnoMesReferencia(), 1);
 		} else {
-			anoMesReferenciaQualidadeAgua = faturamentoGrupo
-					.getAnoMesReferencia();
+			anoMesReferenciaQualidadeAgua = faturamentoGrupo.getAnoMesReferencia();
 		}
-		/**
-		 * autor: Adriana Muniz Data: 04/05/2011 Como o critério de
-		 * preenchimento da qualidade da agua da cosanpa não é usa os campos
-		 * usados como filtros na consulta da qualidade da agua, foi necessário
-		 * acrescentar mais um parametro na assinatura no método, idQuadraFace,
-		 * que será usado na primeira opção de busca pela qualidade da água
-		 * 
-		 * Foi necessário acrescentar um parametro a mais na assinatura do
-		 * método, o sistema de parametro para que a rotina de consulta da
-		 * qualidade da agua seja diferente.
-		 * */
-		arquivoTextoRegistroTipo01 = arquivoTextoRegistroTipo01
-				.append(gerarArquivoTextoQualidadeAgua(idLocalidade,
-						idSetorComercial, anoMesReferenciaQualidadeAgua,
-						idQuadraFace));
+		arquivoTextoRegistroTipo01 = arquivoTextoRegistroTipo01.append(gerarArquivoTextoQualidadeAgua(idLocalidade, idSetorComercial, anoMesReferenciaQualidadeAgua, idQuadraFace));
 
-		Integer consumoMinimoImovel = null;
-		/*
-		 * Dentro desse método já verifica se o indicador tipo de consumo é por
-		 * categoria ou por subcategoria
-		 */
-		consumoMinimoImovel = getControladorMicromedicao()
-				.obterConsumoMinimoLigacao(imovel, null);
 
 		// CONSUMO MINIMO IMÓVEL
+		Integer consumoMinimoImovel = getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, null);
 		if (consumoMinimoImovel != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, "" + consumoMinimoImovel));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "" + consumoMinimoImovel));
 		} else {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, ""));
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, ""));
 
 		}
 
 		// CONSUMO MINIMO IMÓVEL NÃO MEDIDO
-		int consumoMinimoNaoMedido = getControladorMicromedicao()
-				.obterConsumoNaoMedido(imovel);
+		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "" + getControladorMicromedicao().obterConsumoNaoMedido(imovel)));
 
-		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6,
-				"" + consumoMinimoNaoMedido));
-
+		// DOCUMENTO DE COBRANÇA
 		if (cobrancaDocumento != null && !cobrancaDocumento.equals("")) {
-			// Documento de Cobrança
-			arquivoTextoRegistroTipo01.append(Util.completaString(
-					cobrancaDocumento.getId() + "", 9));
+			arquivoTextoRegistroTipo01.append(Util.completaString(cobrancaDocumento.getId() + "", 9));
 
-			String representacaoNumericaCodBarra = "";
-			// Obtém a representação numérica do
-			// códigode
-			// barra
-			representacaoNumericaCodBarra = this.getControladorArrecadacao()
-					.obterRepresentacaoNumericaCodigoBarra(
-							5,
-							cobrancaDocumento.getValorDocumento(),
-							cobrancaDocumento.getLocalidade().getId(),
-							cobrancaDocumento.getImovel().getId(),
-							null,
-							null,
-							null,
-							null,
-							String.valueOf(cobrancaDocumento
-									.getNumeroSequenciaDocumento()),
-							cobrancaDocumento.getDocumentoTipo().getId(), null,
-							null, null);
+			String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, cobrancaDocumento.getValorDocumento(),
+					cobrancaDocumento.getLocalidade().getId(), cobrancaDocumento.getImovel().getId(), null, null, null, null,
+					String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()), cobrancaDocumento.getDocumentoTipo().getId(), null, null, null);
 
-			// 57. Código de Barras do Documento do Cobrança
 			arquivoTextoRegistroTipo01.append(representacaoNumericaCodBarra);
 
 		} else {
@@ -2126,12 +1786,10 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// CPF ou CNPJ do CLIENTE
 		String cpfCnpj = "";
 		if (clienteUsuario != null && !clienteUsuario.equals("")) {
-			if (clienteUsuario.getCpf() != null
-					&& !clienteUsuario.getCpf().equals("")) {
+			if (clienteUsuario.getCpf() != null && !clienteUsuario.getCpf().equals("")) {
 				cpfCnpj = clienteUsuario.getCpf();
 			} else {
-				if (clienteUsuario.getCnpj() != null
-						&& !clienteUsuario.getCnpj().equals("")) {
+				if (clienteUsuario.getCnpj() != null && !clienteUsuario.getCnpj().equals("")) {
 					cpfCnpj = clienteUsuario.getCnpj();
 				}
 			}
@@ -2139,125 +1797,66 @@ public class UC0745GerarArquivoTextoFaturamento {
 		arquivoTextoRegistroTipo01.append(Util.completaString(cpfCnpj, 18));
 
 		// GERA AS COLUNAS DA SITUAÇÃO ESPECIAL DE FATURAMENTO
-		arquivoTextoRegistroTipo01
-				.append(gerarDadosSituacaoEspecialFaturamento(imovel,
-						faturamentoGrupo));
+		arquivoTextoRegistroTipo01.append(gerarDadosSituacaoEspecialFaturamento(imovel, faturamentoGrupo));
 
-		// DATA DE LEITURA ANTERIOR NÃO MEDIDO
-
-		// DATA LEITURA ANTERIOR E DATA LEITURA ATUAL
-		Integer anoMesFaturamentoAnterior = Util.subtrairMesDoAnoMes(
-				anoMesReferencia, 1);
-
+		// DATA LEITURA ANTERIOR FATURAMENTO
+		Integer anoMesFaturamentoAnterior = Util.subtrairMesDoAnoMes(anoMesReferencia, 1);
 		Date dataLeituraAnteriorFaturamento = null;
-
 		try {
-
-			dataLeituraAnteriorFaturamento = (Date) repositorioFaturamento
-					.pesquisarFaturamentoAtividadeCronogramaDataPrevista(
-							faturamentoGrupo.getId(),
-							FaturamentoAtividade.EFETUAR_LEITURA,
-							anoMesFaturamentoAnterior);
-
+			dataLeituraAnteriorFaturamento = (Date) repositorioFaturamento.pesquisarFaturamentoAtividadeCronogramaDataPrevista(faturamentoGrupo.getId(),FaturamentoAtividade.EFETUAR_LEITURA, anoMesFaturamentoAnterior);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-
-		if (dataLeituraAnteriorFaturamento == null
-				|| dataLeituraAnteriorFaturamento.equals("")) {
-			dataLeituraAnteriorFaturamento = Util.subtrairNumeroDiasDeUmaData(
-					new Date(), 30);
+		if (dataLeituraAnteriorFaturamento == null || dataLeituraAnteriorFaturamento.equals("")) {
+			dataLeituraAnteriorFaturamento = Util.subtrairNumeroDiasDeUmaData(new Date(), 30);
 		}
-
-		arquivoTextoRegistroTipo01.append(Util
-				.formatarDataAAAAMMDD(dataLeituraAnteriorFaturamento));
+		arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(dataLeituraAnteriorFaturamento));
 
 		// INDICADOR ABASTECIMENTO
-		if (imovel.getLigacaoAguaSituacao() != null
-				&& !imovel.getLigacaoAguaSituacao().equals("")) {
-			arquivoTextoRegistroTipo01.append(Util.completaString(imovel
-					.getLigacaoAguaSituacao().getIndicadorAbastecimento() + "",
-					1));
+		if (imovel.getLigacaoAguaSituacao() != null && !imovel.getLigacaoAguaSituacao().equals("")) {
+			arquivoTextoRegistroTipo01.append(Util.completaString(imovel.getLigacaoAguaSituacao().getIndicadorAbastecimento() + "", 1));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 1));
 		}
 
-		// verificar se o imóvel é Sazonal
+		// IMOVEL SAZONAL
 		boolean imovelSazonal = false;
-
-		// [UC0108] - Obter Quantidade de Economias por Subcategoria
-		Collection colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-				.obterQuantidadeEconomiasSubCategoria(imovel.getId());
-
+		Collection colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovel.getId());
 		Iterator itSubcategoria = colecaoCategoriaOUSubcategoria.iterator();
-
 		while (itSubcategoria.hasNext()) {
-
 			Subcategoria subcategoria = (Subcategoria) itSubcategoria.next();
-
-			if (subcategoria.getIndicadorSazonalidade().equals(
-					ConstantesSistema.SIM)) {
-
+			if (subcategoria.getIndicadorSazonalidade().equals(ConstantesSistema.SIM)) {
 				imovelSazonal = true;
 				break;
 			}
 		}
-
-		// IMOVEL SAZONAL
-		if (imovelSazonal) {
-			arquivoTextoRegistroTipo01.append("1");
-		} else {
-			arquivoTextoRegistroTipo01.append("2");
-		}
+		arquivoTextoRegistroTipo01.append(imovelSazonal ? "1" : "2");
 
 		// Verificar se é para faturar pela situação especial de faturamento
-		if (imovel.getFaturamentoSituacaoTipo() != null
-				&& !imovel.getFaturamentoSituacaoTipo().equals("")) {
+		if (imovel.getFaturamentoSituacaoTipo() != null && !imovel.getFaturamentoSituacaoTipo().equals("")) {
 			FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
-			filtroFaturamentoSituacaoHistorico
-					.adicionarParametro(new ParametroSimples(
-							FiltroFaturamentoSituacaoHistorico.ID_IMOVEL,
-							imovel.getId()));
-			filtroFaturamentoSituacaoHistorico
-					.adicionarParametro(new ParametroNulo(
-							FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
-			Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this
-					.getControladorUtil().pesquisar(
-							filtroFaturamentoSituacaoHistorico,
-							FaturamentoSituacaoHistorico.class.getName());
+			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL, imovel.getId()));
+			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
+			Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this.getControladorUtil().pesquisar(filtroFaturamentoSituacaoHistorico, FaturamentoSituacaoHistorico.class.getName());
 
 			FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = (FaturamentoSituacaoHistorico) Util
 					.retonarObjetoDeColecao(colFiltroFaturamentoSituacaoHistorico);
 
 			if ((faturamentoSituacaoHistorico != null
-					&& faturamentoGrupo.getAnoMesReferencia() >= faturamentoSituacaoHistorico
-							.getAnoMesFaturamentoSituacaoInicio() && faturamentoGrupo
-					.getAnoMesReferencia() <= faturamentoSituacaoHistorico
-					.getAnoMesFaturamentoSituacaoFim())) {
+					&& faturamentoGrupo.getAnoMesReferencia() >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() && faturamentoGrupo
+					.getAnoMesReferencia() <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())) {
 
-				// INDICADOR_PARALIZAÇÃO_ÁGUA
-				if (imovel.getFaturamentoSituacaoTipo()
-						.getIndicadorParalisacaoFaturamento() != null
-						&& imovel.getFaturamentoSituacaoTipo()
-								.getIndicadorParalisacaoFaturamento()
-								.equals(ConstantesSistema.INDICADOR_USO_ATIVO)
-						&& imovel.getFaturamentoSituacaoTipo()
-								.getIndicadorValidoAgua()
-								.equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
+				if (imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento() != null
+						&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().equals(ConstantesSistema.INDICADOR_USO_ATIVO)
+						&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
 
 					indicadorParalisacaoFaturamentoAgua = 1;
 				}
 
-				// INDICADOR_PARALIZAÇÃO_ESGOTO
-				if (imovel.getFaturamentoSituacaoTipo()
-						.getIndicadorParalisacaoFaturamento() != null
-						&& imovel.getFaturamentoSituacaoTipo()
-								.getIndicadorParalisacaoFaturamento()
-								.equals(ConstantesSistema.INDICADOR_USO_ATIVO)
-						&& imovel.getFaturamentoSituacaoTipo()
-								.getIndicadorValidoEsgoto()
-								.equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
+				if (imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento() != null
+						&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().equals(ConstantesSistema.INDICADOR_USO_ATIVO)
+						&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoEsgoto().equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
 
 					indicadorParalisacaoFaturamentoEsgoto = 1;
 				}
@@ -2265,87 +1864,39 @@ public class UC0745GerarArquivoTextoFaturamento {
 			}
 		}
 
-		arquivoTextoRegistroTipo01.append(""
-				+ indicadorParalisacaoFaturamentoAgua);
+		// INDICADOR_PARALIZAÇÃO_ÁGUA
+		arquivoTextoRegistroTipo01.append("" + indicadorParalisacaoFaturamentoAgua);
 
-		arquivoTextoRegistroTipo01.append(""
-				+ indicadorParalisacaoFaturamentoEsgoto);
+		// INDICADOR_PARALIZAÇÃO_ESGOTO
+		arquivoTextoRegistroTipo01.append("" + indicadorParalisacaoFaturamentoEsgoto);
 
-		if (imovel.getCodigoDebitoAutomatico() != null
-				&& !imovel.getCodigoDebitoAutomatico().equals("")) {
-			arquivoTextoRegistroTipo01.append(Util.completaString(
-					"" + imovel.getCodigoDebitoAutomatico(), 9));
+		//CÓDIGO DO DÉBITO AUTOMÁTICO
+		if (imovel.getCodigoDebitoAutomatico() != null && !imovel.getCodigoDebitoAutomatico().equals("")) {
+			arquivoTextoRegistroTipo01.append(Util.completaString("" + imovel.getCodigoDebitoAutomatico(), 9));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 9));
 		}
 
 		// PERCENTUAL_ALTERNATIVO_ESGOTO_LIGACAO
-		if (imovel.getLigacaoEsgoto() != null
-				&& imovel.getLigacaoEsgoto().getPercentualAlternativo() != null) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-					6, Util.formatarBigDecimalComPonto(imovel
-							.getLigacaoEsgoto().getPercentualAlternativo())));
+		if (imovel.getLigacaoEsgoto() != null && imovel.getLigacaoEsgoto().getPercentualAlternativo() != null) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6,Util.formatarBigDecimalComPonto(imovel.getLigacaoEsgoto().getPercentualAlternativo())));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}
 
 		// CONSUMO_PERCENTUAL_ALTERNATIVO_ESGOTO
-		if (imovel.getLigacaoEsgoto() != null
-				&& imovel.getLigacaoEsgoto()
-						.getNumeroConsumoPercentualAlternativo() != null) {
-			arquivoTextoRegistroTipo01
-					.append(Util
-							.adicionarZerosEsquedaNumero(6, imovel
-									.getLigacaoEsgoto()
-									.getNumeroConsumoPercentualAlternativo()
-									.toString()));
+		if (imovel.getLigacaoEsgoto() != null && imovel.getLigacaoEsgoto().getNumeroConsumoPercentualAlternativo() != null) {
+			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, imovel.getLigacaoEsgoto().getNumeroConsumoPercentualAlternativo().toString()));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}
 
 		// DATA DA EMISSÃO DO DOCUMENTO DE COBRANCA
 		if (cobrancaDocumento != null) {
-			arquivoTextoRegistroTipo01.append(Util
-					.formatarDataAAAAMMDD(cobrancaDocumento.getEmissao()));
+			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(cobrancaDocumento.getEmissao()));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 8));
 		}
-
-		// [UC1113 - Obter Volume Médio Água ou Esgoto]
-		int[] consumoMedioLigacaoEsgoto = this.getControladorMicromedicao()
-				.obterVolumeMedioAguaEsgoto(imovel.getId(),
-						faturamentoGrupo.getAnoMesReferencia(),
-						LigacaoTipo.LIGACAO_ESGOTO, houveIntslacaoHidrometro);
-
-//		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6,
-//				String.valueOf(consumoMedioLigacaoEsgoto[0])));
-
-		/*
-		 * Magno Gouveia em 30/08/2011
-		 */
-//		if (imovel.getLigacaoAguaSituacao().getIndicadorConsumoReal() != null) {
-//			arquivoTextoRegistroTipo01.append(String.valueOf(imovel
-//					.getLigacaoAguaSituacao().getIndicadorConsumoReal()));
-//		} else {
-//			arquivoTextoRegistroTipo01.append(Util.completaString("", 1));
-//		}
-
-//		if (imovel.getLigacaoAguaSituacao().getNumeroDiasCorte() != null) {
-//			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(
-//					2, String.valueOf(imovel.getLigacaoAguaSituacao()
-//							.getNumeroDiasCorte())));
-//		} else {
-//			arquivoTextoRegistroTipo01.append(Util.completaString("", 2));
-//		}
-//
-//		if (imovel.getLigacaoAgua() != null
-//				&& !imovel.getLigacaoAgua().equals("")
-//				&& imovel.getLigacaoAgua().getDataCorte() != null) {
-//			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(imovel
-//					.getLigacaoAgua().getDataCorte()));
-//		} else {
-//			arquivoTextoRegistroTipo01.append(Util.completaString("", 8));
-//		}
 
 		arquivoTextoRegistroTipo01.append(System.getProperty("line.separator"));
 
@@ -2365,6 +1916,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo02(Imovel imovel, Conta conta,
 			SistemaParametro sistemaParametro) throws ControladorException {
 
@@ -2556,6 +2108,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo03(Imovel imovel,
 			Integer anoMesReferencia) throws ControladorException {
 
@@ -2665,6 +2218,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo04(Conta conta)
 			throws ControladorException {
 
@@ -3059,6 +2613,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo05(Conta conta)
 			throws ControladorException {
 
@@ -3373,6 +2928,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo06(Conta conta)
 			throws ControladorException {
 
@@ -3569,6 +3125,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object[] gerarArquivoTextoRegistroTipo08(Imovel imovel,
 			Integer anoMesReferencia, SistemaParametro sistemaParametro)
 			throws ControladorException {
@@ -3612,12 +3169,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 				// TIPO DE MEDIÇÃO
 				MedicaoTipo medicaoTipo = new MedicaoTipo();
-
-				// Leitura Inicial do Hidrometro
-				Integer leituraInicialHidrometro = 0;
-				if (!arrayMedicaoHistorico[3].equals(null)) {
-					leituraInicialHidrometro = (Integer) arrayMedicaoHistorico[3];
-				}
 
 				if (arrayMedicaoHistorico[7] != null
 						&& !((Integer) arrayMedicaoHistorico[7]).equals(0)) {
@@ -3873,7 +3424,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 				}
 
 				// INDICADOR PARALISAR LEITURA
-				String indicadorParalisacaoLeituraHidrometroAgua = "2";
 				if (imovel.getFaturamentoSituacaoTipo() != null) {
 
 					FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
@@ -3903,9 +3453,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 								.getIndicadorParalisacaoLeitura()
 								.equals(new Short("1"))) {
 
-							// (tipoLigação=ÁGUA(lgti_id=1)_e_FTST_ICVALIDOAGUA=1)
-							// ou
-							// (tipoligação=POÇO(lgti_id=2)_e_FTST_ICVALIDOESGOTO=1)
 							if ((medicaoTipo.getId().equals(
 									MedicaoTipo.LIGACAO_AGUA) && imovel
 									.getFaturamentoSituacaoTipo()
@@ -3916,23 +3463,10 @@ public class UC0745GerarArquivoTextoFaturamento {
 											.getFaturamentoSituacaoTipo()
 											.getIndicadorValidoEsgoto()
 											.equals(ConstantesSistema.INDICADOR_USO_ATIVO))) {
-								indicadorParalisacaoLeituraHidrometroAgua = "1";
 							}
 						}
 					}
 				}
-//				arquivoTextoRegistroTipo08
-//						.append(indicadorParalisacaoLeituraHidrometroAgua);
-
-				// INDICADOR IMOVEL AREA COMUM
-//				if (imovel.getIndicadorImovelAreaComum() != null
-//						&& imovel.getIndicadorImovelAreaComum().equals(
-//								ConstantesSistema.SIM)) {
-//					arquivoTextoRegistroTipo08.append(imovel
-//							.getIndicadorImovelAreaComum());
-//				} else {
-//					arquivoTextoRegistroTipo08.append(ConstantesSistema.NAO);
-//				}
 
 				arquivoTextoRegistroTipo08.append(System
 						.getProperty("line.separator"));
@@ -3979,7 +3513,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		} else {
 
 			// [UC0086] - Calcular Faixa de Leitura Esperada
-			int[] faixaLeituraEsperada = faixaLeituraEsperada = this
+			int[] faixaLeituraEsperada = this
 					.getControladorMicromedicao().calcularFaixaLeituraEsperada(
 							consumoMedioHidrometro, null, hidrometro,
 							medicaoHistorico.getLeituraAnteriorFaturamento());
@@ -4057,6 +3591,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @throws ControladorException
 	 * @return idArquivoTextoRoteiroEmpresa
 	 */
+	@SuppressWarnings({ "resource", "unchecked" })
 	public Integer inserirArquivoTextoRoteiroEmpresa(Integer anoMesFaturamento,
 			FaturamentoGrupo faturamentoGrupo, Rota rota, Imovel imovel,
 			Integer qtdImoveis, StringBuilder arquivoTexto,
@@ -4373,6 +3908,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object[] gerarArquivoTextoRegistroDadosTarifa09(Imovel imovel,
 			SistemaParametro sistemaParametro, Integer anoMesReferencia,
 			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
@@ -4821,6 +4357,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object[] gerarArquivoTextoRegistroDadosTarifaFaixa10(
 			Collection idsConsumoTarifaCategoria, Short indicadorTarifaCategoria)
 			throws ControladorException {
@@ -4941,6 +4478,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public StringBuilder gerarArquivoTextoQualidadeAgua(Integer idLocalidade,
 			Integer idSetor, Integer anoMesReferencia, Integer idQuadraFace)
 			throws ControladorException {
@@ -5430,6 +4968,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		return arquivoTextoQualidadeAgua;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] formatarCobrancaDocumentoItemParaImpressaoSimultanea(
 			Integer idImovel, CobrancaDocumento cobrancaDocumento,
 			int quantidadeContas) throws ControladorException {
@@ -5887,6 +5426,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		return arquivoTextoRegistroTipo11;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private StringBuilder gerarDadosSituacaoEspecialFaturamento(Imovel imovel,
 			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
@@ -6181,6 +5721,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo12()
 			throws ControladorException {
 
@@ -6419,6 +5960,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo13()
 			throws ControladorException {
 
@@ -6506,6 +6048,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object[] gerarArquivoTextoRegistroTipo14()
 			throws ControladorException {
 
@@ -6705,6 +6248,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @param arquivoTexto
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("resource")
 	public ArquivoTextoRoteiroEmpresaDivisao inserirArquivoTextoRoteiroEmpresaDivisao(
 			Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo,
 			Rota rota, Imovel imovel, Integer qtdImoveis,

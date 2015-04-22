@@ -4,232 +4,101 @@ import gcom.util.filtro.Filtro;
 
 import java.io.Serializable;
 
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- */
 public class FiltroImovel extends Filtro implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor for the FiltroCliente object
-	 */
 	public FiltroImovel() {
 	}
 
-	/**
-	 * Constructor for the FiltroCliente object
-	 * 
-	 * @param campoOrderBy
-	 *            Description of the Parameter
-	 */
 	public FiltroImovel(String campoOrderBy) {
 		this.campoOrderBy = campoOrderBy;
 	}
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String ID = "id";
-
-	/**
-	 * Description of the Field
-	 */
 	public final static String LOCALIDADE_ID = "localidade.id";
-	
-	/**
-	 * Description of the Field
-	 */
 	public final static String LOCALIDADE = "localidade";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String SETOR_COMERCIAL_ID = "setorComercial.id";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String SETOR_COMERCIAL_CODIGO = "setorComercial.codigo";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String SETOR_COMERCIAL = "setorComercial";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_ID = "quadra.id";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA = "quadra";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_FACE = "quadraFace";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_NUMERO = "quadra.numeroQuadra";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String CLIENTE_CODIGO = "clienteImoveis.cliente.id";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String CEP_CODIGO = "logradouroCep.cep.codigo";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String CEP = "logradouroCep.cep";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String MUNICIPIO_ID = "logradouroBairro.bairro.municipio.id";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String MUNICIPIO = "logradouroBairro.bairro.municipio";
 
-	/**
-	 * Description of the Field
-	 */
-	//public final static String UNIDADE_FEDERACAO = "quadra.bairro.municipio.unidadeFederacao.id";
 	public final static String UNIDADE_FEDERACAO = "logradouroBairro.bairro.municipio.unidadeFederacao";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String BAIRRO_ID = "logradouroBairro.bairro.id";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String BAIRRO = "logradouroBairro.bairro";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String LOGRADOURO_NOME = "logradouroCep.logradouro.nome";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String IPTU = "numeroIptu";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String NUMERO_CELPE = "numeroCelpe";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String LIGACAO_AGUA_SITUACAO_ID = "ligacaoAguaSituacao.id";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String LIGACAO_AGUA_SITUACAO = "ligacaoAguaSituacao";
-	
 
 	public final static String LIGACAO_AGUA_ID = "ligacaoAgua.id";
 	
 	public final static String LIGACAO_AGUA = "ligacaoAgua";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String LIGACAO_ESGOTO_SITUACAO_ID = "ligacaoEsgotoSituacao.id";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String LIGACAO_ESGOTO_SITUACAO = "ligacaoEsgotoSituacao";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_ROTA_FATURAMENTO_GRUPO_ID = "quadra.rota.faturamento_grupo.id";
-	/**
-	 * Description of the Field
-	 */
+
 	public final static String FATURAMENTO_GRUPO = "quadra.rota.faturamentoGrupo";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String LOTE = "lote";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String COBRANCA_SITUACAO = "cobrancaSituacao";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String COBRANCA_SITUACAO_ID = "cobrancaSituacao.id";
-	/**
-	 * Description of the Field
-	 */
+
 	public final static String COBRANCA_SITUACAO_TIPO = "cobrancaSituacaoTipo";
 	
-	
-	/**
-	 * Description of the Field
-	 */
 	public final static String SUBLOTE = "subLote";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String COLECAO_CLIENTE_IMOVEL = "clienteImoveis";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String INDICADOR_IMOVEL_CONDOMINIO = "indicadorImovelCondominio";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_ROTA = "quadra.rota";
 	
 	public final static String QUADRA_ROTA_ID = "quadra.rota.id";
 	
 	public final static String QUADRA_ROTA_CODIGO = "quadra.rota.codigo";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String HIDROMETRO_INSTALACAO_HISTORICO_ID = "hidrometroInstalacaoHistorico.id";
 
-	/**
-	 * Description of the Field
-	 */
 	public final static String IMOVEL_CONDOMINIO_ID = "imovelCondominio.id";
 	
 	public final static String IMOVEL_CONDOMINIO = "imovelCondominio";
 
 	public final static String INDICADOR_IMOVEL_AREA_COMUM = "indicadorImovelAreaComum";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String MATRICULA = "matricula";
 
 	public final static String SETOR_COMERCIAL_MUNICIPIO_ID = "setorComercial.municipio.id";
@@ -325,12 +194,8 @@ public class FiltroImovel extends Filtro implements Serializable {
 	
 	public final static String INFORMACOES_COMPLEMENTARES = "informacoesComplementares";
 
-	
 	public final static String LOGRADOURO_BAIRRO = "logradouroBairro";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String LOCALIDADE_UNIDADE_NEGOCIO = "localidade.unidadeNegocio";
 	
 	public final static String IMOVEL_MEDIDOR_ENERGIA = "numeroMedidorEnergia";
@@ -339,9 +204,6 @@ public class FiltroImovel extends Filtro implements Serializable {
 	
 	public final static String CODIGO_DEBITO_AUTOMATICO = "codigoDebitoAutomatico";
 	
-	/**
-	 * Description of the Field
-	 */
 	public final static String QUADRA_FACE_ID = "quadraFace.id";
 	
 	public final static String LIGACAO_AGUA_HIDROMETRO_INSTALACAO_HISTORICO = "ligacaoAgua.hidrometroInstalacaoHistorico";

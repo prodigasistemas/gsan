@@ -63,7 +63,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String alteracaoCategoria = "-1";
 
-	
+	private String ocorrenciaCadastro = "-1";
 	
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
 		System.out.println("COnstrutor.");
@@ -259,6 +259,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setAlteracaoCategoria(String alteracaoCategoria) {
 		this.alteracaoCategoria = alteracaoCategoria;
+	}
+
+	public String getOcorrenciaCadastro() {
+		return ocorrenciaCadastro;
+	}
+
+	public void setOcorrenciaCadastro(String ocorrenciaCadastro) {
+		this.ocorrenciaCadastro = ocorrenciaCadastro;
 	}
 
 	public boolean existeParametroInformado() {

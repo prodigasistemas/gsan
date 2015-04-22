@@ -7735,6 +7735,18 @@ public class ControladorCadastro implements SessionBean {
 					}
 				}
 				
+//				if (atualizacao.getImovelAtual().getLinhaImovel() != null
+//						&& !atualizacao.getImovelAtual().getLinhaImovel().isEmpty()
+//						&& atualizacao.getImovelAtual().getLinhaImovel().get("matricula").equals("6803091")) {
+//					System.out.println("Achei um imovel sem retorno...");
+//				}
+				
+				if (atualizacao.getImovelAtual().getLinhaImovel() != null
+						&& !atualizacao.getImovelAtual().getLinhaImovel().isEmpty()
+						&& atualizacao.getImovelAtual().getLinhaImovel().get("matricula").equals("6794297")) {
+					System.out.println("Achei um imovel COM retorno...");
+				}
+				
 				if (atualizacao.validacaoLiberada()) {
 					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand(
 								parserConteudo,
@@ -15995,4 +16007,8 @@ public class ControladorCadastro implements SessionBean {
 	public String retornaIpServidorRelatorios() throws Exception{
 		return repositorioCadastro.retornaIpServidorRelatorios();
 	}	
+	
+	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws Exception {
+		return repositorioCadastro.pesquisarQtdeDebitosPreteritos(idImovel);
+	}
 }

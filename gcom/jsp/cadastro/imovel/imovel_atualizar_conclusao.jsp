@@ -20,8 +20,6 @@
 	src="<bean:message key="caminho.js"/>util.js"></script>
 <script>
 
-<!-- Begin
-
 	function validarUTM(){
     	var form = document.forms[0];
 		var retorno = true;
@@ -55,13 +53,11 @@
         		validateLong(form) && 
         		validateDecimal(form) && 
         		validarUTM() && 
-        		validateBigInteger(form); 
+        		validateBigInteger(form) &&
+        		validateFloatNegativoPositivo(form); 
 	}
 
    	function caracteresespeciais () {
-    	
-    	this.ad = new Array("cordenadasUtmX", "Cordenadas Utm X deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
-     	this.ae = new Array("cordenadasUtmY", "Cordenadas Utm Y deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.af = new Array("numeroPontos", "Número de Pontos deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ag = new Array("numeroMoradores", "Número de Moradores deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ah = new Array("numeroIptu", "Número de IPTU deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
@@ -87,10 +83,37 @@
 		this.az = new Array("idFuncionario", "Funcionário deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
     }
 
-    function FloatValidations () {
-    	this.an = new Array("cordenadasUtmX", "Cordenadas Utm X deve ser um número decimal.", new Function ("varName", " return this[varName];"));
-     	this.ap = new Array("cordenadasUtmY", "Cordenadas Utm Y deve ser um número decimal.", new Function ("varName", " return this[varName];"));
+    function isFloat(campo, evt) {
+        var valor = campo.value;
+    	var charCode = (evt.which) ? evt.which : evt.keyCode;
+    	
+    	if (charCode != 44 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+    	    return false;
+    	} else {
+    		if (charCode == 44) {
+    			var indexNegativo = valor.indexOf("-");
+				if (indexNegativo == 0 && valor.length == 1) {
+					return false;
+				}
+
+				if (valor.length == 0) {
+					return false;
+				}
+				
+    			var parts = evt.srcElement.value.split(',');
+        	    if (parts.length > 1) {
+            	    return false;
+        	    }
+    	    }
+    		
+    	    if (charCode == 45 && valor.length > 0) {
+        	    return false;
+    	    }
+    	    
+    	    return true;
+    	}
     }
+
     
     function InteiroZeroPositivoValidations () {
 	    this.av = new Array("sequencialRotaEntrega", "Sequencial da Rota de Entrega deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
@@ -103,11 +126,9 @@
         abrirPopup('exibirPesquisarInformarRotaLeituraAction.do?limparForm=sim', 400, 800);		
 	}
 
-//End -->
 </script>
 
 <script>
-<!-- Begin
 
 	function limparZero(){
   		var form = document.forms[0];
@@ -204,7 +225,6 @@
 	     redirecionarSubmit('atualizarImovelWizardAction.do?destino=6&action=exibirAtualizarImovelConclusaoAction');
 	}
 
-//End -->
 </script>
 </head>
 
@@ -481,18 +501,16 @@
 					<html:hidden property="sequencialRotaEntrega" />
 				</logic:notEqual>
 				<tr>
-					<td height="24"><strong>Coordenada Norte:</strong></td>
-					<td><html:text maxlength="16" property="cordenadasUtmX"
-						style="text-align: right;"
-						onkeyup="javaScript:formataValorGIS(this,16);"
-						onkeypress="return isCampoNumerico(event)" /></td>
+					<td height="24"><strong>Coordenada X:</strong></td>
+					<td><html:text maxlength="30" property="cordenadasUtmX"
+						style="text-align: right;" 
+						onkeypress="return isFloat(this, event)" /></td>
 				</tr>
 				<tr>
-					<td height="24"><strong>Coordenada Leste:</strong></td>
-					<td><html:text maxlength="16" property="cordenadasUtmY"
+					<td height="24"><strong>Coordenada Y:</strong></td>
+					<td><html:text maxlength="30" property="cordenadasUtmY"
 						style="text-align: right;"
-						onkeyup="javaScript:formataValorGIS(this,16);"
-						onkeypress="return isCampoNumerico(event)" /></td>
+						onkeypress="return isFloat(this, event)" /></td>
 					<td>
 						<input type="button" class="bottonRightCol" value="AcquaGIS" tabindex="3"  id="botaoGis" align="left" onclick="respostaGis();">
 					</td>

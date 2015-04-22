@@ -1210,6 +1210,8 @@ public class ControladorArrecadacao implements SessionBean {
                                      */
                                     RegistroHelperCodigoF registroHelperCodigoF = (RegistroHelperCodigoF) distribuirdadosRegistroMovimentoArrecadador(
                                             linhaRegistro, null);
+                                    
+                                    Integer anoMesArrecadacao = Integer.parseInt(registroHelperCodigoF.getDataDebito().substring(0,6));
     
                                     boolean dataExcludentes = false;
     
@@ -1636,8 +1638,10 @@ public class ControladorArrecadacao implements SessionBean {
     		                                            boolean formasArrecadacaoIguais = avisoBancarioDaColecao
     		                                            	.getArrecadacaoForma().getId().intValue() ==
     		                                            		idFormaArrecadacao.intValue();
+    		                                            
+    		                                            boolean anoMesReferenciaArrecadacaoIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesArrecadacao;
     	                                            
-    		                                            if (comparaDataIguais && formasArrecadacaoIguais) {
+    		                                            if (comparaDataIguais && formasArrecadacaoIguais && anoMesReferenciaArrecadacaoIguais) {
         
                                                             if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
                                                                     && !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
@@ -1725,8 +1729,6 @@ public class ControladorArrecadacao implements SessionBean {
                                                                 dataPrevistaCredito,
                                                                 registroHelperCodigoZ
                                                                         .getValorTotalRegistrosArquivo(),
-                                                                getSistemaParametro()
-                                                                        .getAnoMesArrecadacao(),
                                                                 registroHelperCodigoA
                                                                         .getCodigoBanco(),
                                                                 valorCalcPagamento,
@@ -1736,7 +1738,7 @@ public class ControladorArrecadacao implements SessionBean {
                                                                 numeroSequencialAvisoBancario,
                                                                 idFormaArrecadacao,
                                                                	indicadorAceitacaoRegistroMovimento,
-                                                               	arrecadadorContrato.getCodigoConvenio());
+                                                               	arrecadadorContrato.getCodigoConvenio(), anoMesArrecadacao);
         
                                                         numeroSequencialAvisoBancario += 1;
         

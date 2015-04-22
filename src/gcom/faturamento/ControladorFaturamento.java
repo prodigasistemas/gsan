@@ -2690,7 +2690,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							 */
 							BigDecimal valorFaturadoAgua = new BigDecimal(0);
 							
-							if (valorRateioAgua != null 
+							System.out.println(helper.getMatriculaImovel());
+							if (valorRateioAgua != null && !valorRateioAgua.equals(new BigDecimal(0)) 
 									&& helper.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.SIM.shortValue()) {
 								valorFaturadoAgua = movimentoContaPrefaturadaCategoria.getValorFaturadoAgua().add(
 										helper.getValorRateioAgua());
@@ -8961,23 +8962,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								ExtratoQuitacao extratoQuitacao = new ExtratoQuitacao();
 
-								extratoQuitacao.setImovel(new Imovel(helper
-										.getIdImovel()));
-								extratoQuitacao.setValorTotalDasContas(helper
-										.getValorTotalContas());
-								extratoQuitacao
-										.setIndicadorImpressao(ConstantesSistema.NAO
-												.intValue());
+								extratoQuitacao.setImovel(new Imovel(helper.getIdImovel()));
+								extratoQuitacao.setValorTotalDasContas(helper.getValorTotalContas());
+								extratoQuitacao.setIndicadorImpressao(ConstantesSistema.NAO.intValue());
 								extratoQuitacao.setIndicadorImpressaoNaConta(ConstantesSistema.NAO.intValue()); 
 								extratoQuitacao.setAnoReferencia(ano);
 								extratoQuitacao.setUltimaAlteracao(new Date());
-								extratoQuitacao
-										.setAnoMesMensagemConta(sistemaParametro
-												.getAnoMesFaturamento());
+								extratoQuitacao.setAnoMesMensagemConta(sistemaParametro.getAnoMesFaturamento());
 
-								Integer idextratoQuitacao = (Integer) this
-										.getControladorUtil().inserir(
-												extratoQuitacao);
+								Integer idextratoQuitacao = (Integer) this.getControladorUtil().inserir(extratoQuitacao);
 
 								extratoQuitacao.setId(idextratoQuitacao);
 
@@ -9425,22 +9418,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								DeclaracaoQuitacaoAnualDebitosHelper helper = new DeclaracaoQuitacaoAnualDebitosHelper();
 
 								ExtratoQuitacao extratoQuitacao = new ExtratoQuitacao();
-								extratoQuitacao.setId(new Integer(dados[0]
-										.toString()));
-								extratoQuitacao.setImovel(new Imovel(
-										(Integer) dados[1]));
-								extratoQuitacao.setAnoReferencia(new Integer(
-										dados[2].toString()));
-								extratoQuitacao
-										.setIndicadorImpressao(new Integer(
-												dados[5].toString()));
-								extratoQuitacao
-										.setUltimaAlteracao((Date) dados[6]);
-								extratoQuitacao
-										.setValorTotalDasContas(new BigDecimal(
-												dados[3].toString()));
-								extratoQuitacao
-										.setAnoMesMensagemConta(new Integer(
+								extratoQuitacao.setId(new Integer(dados[0].toString()));
+								extratoQuitacao.setImovel(new Imovel((Integer) dados[1]));
+								extratoQuitacao.setAnoReferencia(new Integer(dados[2].toString()));
+								extratoQuitacao.setIndicadorImpressao(new Integer(dados[5].toString()));
+								extratoQuitacao.setUltimaAlteracao((Date) dados[6]);
+								extratoQuitacao.setValorTotalDasContas(new BigDecimal(dados[3].toString()));
+								extratoQuitacao.setAnoMesMensagemConta(new Integer(
 												dados[7].toString()));
 								extratoQuitacao.setIndicadorImpressaoNaConta(new Integer(dados[8].toString()));
 								
