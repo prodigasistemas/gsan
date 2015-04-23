@@ -996,7 +996,7 @@ function validaEnterComMensagem(tecla, caminhoActionReload, nomeCampoForm, nomeC
 		else if (valorCampo.length > 0 && (isNaN(valorCampo) || valorCampo.indexOf(',') != -1 ||
 			valorCampo.indexOf('.') != -1)){
 
-			alert(nomeCampoMSG + " deve somente conter números positivos.");
+			alert(nomeCampoMSG + " deve somente conter nï¿½meros positivos.");
 			return false;
 		}
 		else{
@@ -1051,7 +1051,7 @@ function validaEnterComMensagemAceitaZERO(tecla, caminhoActionReload, nomeCampoF
 		else if (valorCampo.length > 0 && (isNaN(valorCampo) || valorCampo.indexOf(',') != -1 ||
 			valorCampo.indexOf('.') != -1)){
 
-			alert(nomeCampoMSG + " deve somente conter números positivos.");
+			alert(nomeCampoMSG + " deve somente conter nï¿½meros positivos.");
 			return false;
 		}
 		else{
@@ -1284,7 +1284,7 @@ function validaEnterDependenciaComMensagem(tecla, caminhoActionReload, nomeCampo
 		  else if (nomeCampo.value.length > 0 && (isNaN(nomeCampo.value) || nomeCampo.value.indexOf(',') != -1 ||
 					nomeCampo.value.indexOf('.') != -1)){
 
-			alert(nomeCampoMSG + " deve somente conter números positivos.");
+			alert(nomeCampoMSG + " deve somente conter nï¿½meros positivos.");
 			return false;
 		  
 		  }else{
@@ -1344,7 +1344,7 @@ function validaEnterDependenciaComMensagemAceitaZERO(tecla, caminhoActionReload,
 		  else if (nomeCampo.value.length > 0 && (isNaN(nomeCampo.value) || nomeCampo.value.indexOf(',') != -1 ||
 					nomeCampo.value.indexOf('.') != -1)){
 
-			alert(nomeCampoMSG + " deve somente conter números positivos.");
+			alert(nomeCampoMSG + " deve somente conter nï¿½meros positivos.");
 			return false;
 		  
 		  }else{
@@ -1537,7 +1537,7 @@ function testarCampoValorZero(valor, nomeCampo) {
 			}
 			
 			if (!retorno){
-				alert( nomeCampo + ' deve somente conter números positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros positivos.');
 			}
 		}
 		else {
@@ -1545,7 +1545,7 @@ function testarCampoValorZero(valor, nomeCampo) {
 			var intValorCampo = valor.value * 1;
 	
 			if (intValorCampo == 0) {
-				alert( nomeCampo + ' deve somente conter números positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros positivos.');
         		retorno =  false;
 			}
 		}
@@ -1578,7 +1578,7 @@ function testarCampoValorZeroDecimal(valor, nomeCampo) {
 			}
 			
 			if (!retorno){
-				alert( nomeCampo + ' deve somente conter números decimais positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros decimais positivos.');
 			}
 		}
 		else {
@@ -1586,7 +1586,7 @@ function testarCampoValorZeroDecimal(valor, nomeCampo) {
 			var intValorCampo = valor.value * 1;
 	
 			if (intValorCampo == 0) {
-				alert( nomeCampo + ' deve somente conter números  decimais positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros  decimais positivos.');
         		retorno =  false;
 			}
 		}
@@ -1605,7 +1605,7 @@ function testarCampoValorInteiroComZero(valor, nomeCampo) {
 	
 	if (trim(valor.value).length > 0){
 	    if (isNaN(valor.value)) {
-           	 alert( nomeCampo + ' deve somente conter números positivos.');
+           	 alert( nomeCampo + ' deve somente conter nï¿½meros positivos.');
         	 retorno =  false;
 			}
 		}
@@ -1624,7 +1624,7 @@ function testarCampoValorDecimalComZero(valor, nomeCampo) {
 	
 	if (trim(valor.value).length > 0){
 	    if (isNaN(iValue)) {
-           	alert( nomeCampo + ' deve somente conter números decimais positivos.');
+           	alert( nomeCampo + ' deve somente conter nï¿½meros decimais positivos.');
 			 retorno =  false;
 			}
 	}
@@ -1662,7 +1662,7 @@ function testarCampoDecimalValorZero(valor, nomeCampo) {
 			}
 			
 			if (!retorno){
-				alert( nomeCampo + ' deve somente conter números decimais positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros decimais positivos.');
 			}
 		}
 		else {
@@ -1670,7 +1670,7 @@ function testarCampoDecimalValorZero(valor, nomeCampo) {
 			var intValorCampo = valor.value * 1;
 	
 			if (intValorCampo == 0) {
-				alert( nomeCampo + ' deve somente conter números decimais positivos.');
+				alert( nomeCampo + ' deve somente conter nï¿½meros decimais positivos.');
         		retorno =  false;
 			}
 		}
@@ -1799,7 +1799,7 @@ function filtraCampo(campo){
 
 
 
-/** Desabilita a digitacao de caracteres que terao forem números **/
+/** Desabilita a digitacao de caracteres que terao forem nï¿½meros **/
 //	Recebe como parametro o evento realizado pelo usuario (comando event)
 //	Funciona em ambos os browsers (Firefox e IE)
 	
@@ -1870,7 +1870,7 @@ function validaHoraMinuto(timeStr) {
 	var matchArray = timeStr.match(timePat);
 
 	if (matchArray == null) {
-		alert("Hora inválida.");
+		alert("Hora invï¿½lida.");
 		return false;
 	}
 
@@ -1900,7 +1900,7 @@ function validaHoraMinutoMensagem(timeStr, campo) {
 	var matchArray = timeStr.match(timePat);
 
 	if (matchArray == null) {
-		alert(campo + " inválida.");
+		alert(campo + " invï¿½lida.");
 		return false;
 	}
 
@@ -1931,17 +1931,17 @@ function validarHoraCompleta(horaMinutoSegundo) {
           	   return true;
       	    }
    			else {
-   				alert ("Hora inválida.");
+   				alert ("Hora invï¿½lida.");
   				return false;
       		}
  		}
  		else {
- 			alert ("Hora inválida.");
+ 			alert ("Hora invï¿½lida.");
       		return false;
     	}
 	}
   	else {
-  		alert ("Hora inválida.");
+  		alert ("Hora invï¿½lida.");
  		return true;
   	}
 }
@@ -1958,17 +1958,17 @@ function validarHoraCompletaMensagem(horaMinutoSegundo, campo) {
           	   return true;
       	    }
    			else {
-   				alert (campo + " inválida.");
+   				alert (campo + " invï¿½lida.");
   				return false;
       		}
  		}
  		else {
- 			alert (campo + " inválida.");
+ 			alert (campo + " invï¿½lida.");
       		return false;
     	}
 	}
   	else {
-  		alert (campo + " inválida.");
+  		alert (campo + " invï¿½lida.");
  		return true;
   	}
 }
@@ -2141,7 +2141,7 @@ function mascaraAnoMes(mydata, tecla){
      //}
 } 
 
-//Valida um campo do tipo Ano mês           
+//Valida um campo do tipo Ano mï¿½s           
 function verificaAnoMes(mydata) {
 	
 	var situacao = true;
@@ -2184,7 +2184,7 @@ function verificaAnoMes(mydata) {
     }
     
     if (!situacao) { 
-	   alert("Mês/Ano inválidos.");
+	   alert("Mï¿½s/Ano invï¿½lidos.");
 	   mydata.value = "";
 	   mydata.focus(); 
 	}
@@ -2216,28 +2216,28 @@ function verificaAnoMesEspecial(mydata) {
 	    			if ((mes * 1) == 2 && ((dia * 1) < 1 || (dia * 1) > 29 
 	    				|| ((dia * 1) > 28 && (((ano * 1) / 4) != (ano * 1) / 4)))) { 
 	       				situacao = false;
-	       				alert("Mês e/ou Ano inválidos!");
+	       				alert("Mï¿½s e/ou Ano invï¿½lidos!");
 	   					mydata.value = "";
 	   					mydata.focus(); 
 	    			}
 	        	}
 	        	else{
 	        		situacao = false;
-	        		alert("Mês e/ou Ano inválidos!");
+	        		alert("Mï¿½s e/ou Ano invï¿½lidos!");
 	   				mydata.value = "";
 	   				mydata.focus();
 	        	} 
 	    	}
 	    	else{
 	    		situacao = false;
-	    		alert("Mês e/ou Ano inválidos!");
+	    		alert("Mï¿½s e/ou Ano invï¿½lidos!");
 	   			mydata.value = "";
 	   			mydata.focus();
 	    	} 
 		}
 		else{
 			situacao = false;
-			alert("Mês e/ou Ano inválidos!");
+			alert("Mï¿½s e/ou Ano invï¿½lidos!");
 	   		mydata.value = "";
 	   		mydata.focus();
 		}
@@ -2428,7 +2428,7 @@ function mascaraHora(mydata, tecla){
     	}
     	
     	if (!valido)  {
-			alert('Hora inválida.');
+			alert('Hora invï¿½lida.');
 			mydata.value =  '';
 			mydata.focus();
     	}
@@ -2493,7 +2493,7 @@ function mascaraHoraMensagem(mydata, tecla, campo){
     	}
     	
     	if (!valido)  {
-			alert(campo+' inválida.'  );
+			alert(campo+' invï¿½lida.'  );
 			mydata.value =  '';
 			mydata.focus();
     	}
@@ -2529,7 +2529,7 @@ function mascaraHoraMinutoSegundo(mydata, tecla){
     	}
     	
     	if (!valido)  {
-			alert('Hora inválida.');
+			alert('Hora invï¿½lida.');
 			mydata.value =  '';
 			mydata.focus();
     	}
@@ -2567,7 +2567,7 @@ function mascaraHoraMinutoSegundoMensagem(mydata, tecla, campo){
     	}
     	
     	if (!valido)  {
-			alert(campo+' inválida.');
+			alert(campo+' invï¿½lida.');
 			mydata.value =  '';
 			mydata.focus();
     	}
@@ -2688,7 +2688,7 @@ function verificaData (mydata) {
             } 
     
             if (situacao == false) { 
-                alert("Data inválida.");
+                alert("Data invï¿½lida.");
                 
                 mydata.value='';
                 mydata.focus(); 
@@ -3259,7 +3259,7 @@ function calculaValorParcela() {
 			}else if(form.percentualCobranca.value == "50"){
 				valor1 = valor1 * 0.5;
 			} else if (form.percentualCobranca.value == "-1") {
-				alert("Informe o percentual de cobrança.");
+				alert("Informe o percentual de cobranï¿½a.");
 				form.quantidadeParcelas.value = "";
 				return false;
 			}
@@ -3306,9 +3306,9 @@ function calculaValorParcela() {
 				if(form.percentualCobranca.value == "-1"
 					&& form.quantidadeParcelas.value == ""){
 					if(form.motivoNaoCobranca != null){
-					  alert("Informe Motivo da terao Cobrança \n Informe Percentual de Cobrança \n Informe Quantidade de Parcelas");
+					  alert("Informe Motivo da terao Cobranï¿½a \n Informe Percentual de Cobranï¿½a \n Informe Quantidade de Parcelas");
 					}else{
-					  alert("Informe Percentual de Cobrança \n Informe Quantidade de Parcelas");					
+					  alert("Informe Percentual de Cobranï¿½a \n Informe Quantidade de Parcelas");					
 					}
 					return false;
 				}else 
@@ -3322,7 +3322,7 @@ function calculaValorParcela() {
 			             //retira digitos nao numericos
 					 	for (i=0;i<qtdParcelas.length;i++){
 					 	 if(digitosValidos.indexOf(qtdParcelas.charAt(i))<0) {
-					 		alert("Quantidade de Parcelas deve ser numérico(a)");
+					 		alert("Quantidade de Parcelas deve ser numï¿½rico(a)");
 					 		return false;	
 					 	 }
 					 	}
@@ -3330,7 +3330,7 @@ function calculaValorParcela() {
 					   return true;			
 				}else if(form.percentualCobranca.value == "-1"
 					&& form.quantidadeParcelas.value != ""){
-					alert("Informe Percentual de Cobrança");
+					alert("Informe Percentual de Cobranï¿½a");
 					return false;	
 				}else{
 					return true;
@@ -3345,7 +3345,7 @@ function calculaValorParcela() {
 	  var valorAux = ""
 	  var valor = campo.value;
 	 if(valor.length > tamanhoMaximo){
-	  alert('Tamanho máximo atingido.');
+	  alert('Tamanho mï¿½ximo atingido.');
 	  valorAux = valor.substring(0,tamanhoMaximo);
 	  campo.value = valorAux;
 	 }
@@ -3397,7 +3397,7 @@ function calculaValorParcela() {
 						//O valor tem que ser superior  zero
 						if ((arrayCampo[0] * 1) == 0){
 						
-							alert(nomeCampo + " deve somente conter números positivos");
+							alert(nomeCampo + " deve somente conter nï¿½meros positivos");
 							campo.focus();
 							retorno = false;
 						}
@@ -3593,7 +3593,7 @@ function calculaValorParcela() {
 	
 				if (!outroCampoInformado){
 					aprovado = false;
-					alert("Informe pelo menos uma opção de seleção");
+					alert("Informe pelo menos uma opï¿½ï¿½o de seleï¿½ï¿½o");
 				}
 			}
 		}
@@ -3642,8 +3642,8 @@ function calculaValorParcela() {
 	
 		
 		/**
-		 * Caso o objeto camposDependencia seja informado, o objeto msgDependecia sera obrigatório e visse-versa.
-		 * Caso o objeto camposExclusao seja informado, o formulario sera obrigatório e visse-versa.
+		 * Caso o objeto camposDependencia seja informado, o objeto msgDependecia sera obrigatï¿½rio e visse-versa.
+		 * Caso o objeto camposExclusao seja informado, o formulario sera obrigatï¿½rio e visse-versa.
 		 */
 		//retorno = dependenciaPerformance(null, null, null, null);
 		
@@ -3736,7 +3736,7 @@ function calculaValorParcela() {
 	
 		var objetoCampo = eval("form." + nomeCampoForm);
 		var valorCampo = trim(eval("form." + nomeCampoForm + ".value"));
-		var indesejaveis = "~{}^%$[]@|`\\<?\#?!;*>\"\'=.:+-)¨_(";
+		var indesejaveis = "~{}^%$[]@|`\\<?\#?!;*>\"\'=.:+-)ï¿½_(";
 
 		var teste = true;
 		
@@ -3802,7 +3802,7 @@ function calculaValorParcela() {
 		} else if (valorCampo.length > 0 && (isNaN(valorCampo) || valorCampo.indexOf(',') != -1 ||
 			valorCampo.indexOf('.') != -1)){
 
-			alert(nomeCampoMSG + " deve somente conter números positivos.");
+			alert(nomeCampoMSG + " deve somente conter nï¿½meros positivos.");
 			return false;
 		} else{
 			return true;
@@ -3862,14 +3862,14 @@ function calculaValorParcela() {
                 resultado = (!isNaN(dia) && (dia > 0) && (dia < 32)) && (!isNaN(mes) && (mes > 0) && (mes < 13)) && (!isNaN(ano) && (ano.length == 4) && (ano <= anoAtual && ano >= 1900));
                 if (!resultado)
                 {
-                    alert("Data inválida.");
+                    alert("Data invï¿½lida.");
                     campo.focus();
                     return false;
                 }
              }
              else
              {
-                 alert("Data inválida.");
+                 alert("Data invï¿½lida.");
                  campo.focus();
                  return false;
              }
@@ -3976,7 +3976,7 @@ function calculaValorParcela() {
 		if( !isBrancoOuNulo(campo.value)){
 			var filtroNumero = /^[0-9]*$/;
 			if(!filtroNumero.test(campo.value)){
-				alert(nomeCampo + ' deve conter apenas números.');
+				alert(nomeCampo + ' deve conter apenas nï¿½meros.');
 				campo.focus();
 				return false;
 			}
@@ -4038,7 +4038,7 @@ function calculaValorParcela() {
 	}
 	
 	/**
-	 * Formata o valor do índice informado  
+	 * Formata o valor do ï¿½ndice informado  
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 03/05/2010
@@ -4194,7 +4194,7 @@ function comparaDataComDataAtual(data1, operador ){
 		valor = valorAuxiliar;
 		if(numeroInvalido) {
 			campo.value = "";
-			alert("Campo " + nome + " inválido.");
+			alert("Campo " + nome + " invï¿½lido.");
 		} else {
 			campo.value = valor;
 		}
@@ -4236,3 +4236,42 @@ function comparaDataComDataAtual(data1, operador ){
 		
 		campo.value = valor;
 	}
+	
+    function validarNumeroDecimal(campo, evt) {
+        var valor = campo.value;
+    	var charCode = (evt.which) ? evt.which : evt.keyCode;
+    	
+    	if (charCode != 44 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+    	    return false;
+    	} else {
+    		if (charCode == 44) {
+    			var indexNegativo = valor.indexOf("-");
+				if (indexNegativo == 0 && valor.length == 1) {
+					return false;
+				}
+
+				if (valor.length == 0) {
+					return false;
+				}
+				
+    			var parts = evt.srcElement.value.split(',');
+        	    if (parts.length > 1) {
+            	    return false;
+        	    }
+    	    }
+    		
+    	    if (charCode == 45 && valor.length > 0) {
+        	    return false;
+    	    }
+    	    
+    	    return true;
+    	}
+    }
+    
+    function limparVirgulaNumeroDecimal(campo) {
+    	var valor = campo.value;
+    	
+    	if (valor.indexOf(",") + 1 == valor.length) {
+    		campo.value = valor.replace(",", "");
+		}
+    }
