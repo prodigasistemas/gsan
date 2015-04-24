@@ -64,37 +64,6 @@
      	this.aq = new Array("informacoesComplementares", "Informações Complementares deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      
     }
-
-    function isFloat(campo, evt) {
-        var valor = campo.value;
-    	var charCode = (evt.which) ? evt.which : evt.keyCode;
-    	
-    	if (charCode != 44 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-    	    return false;
-    	} else {
-    		if (charCode == 44) {
-    			var indexNegativo = valor.indexOf("-");
-				if (indexNegativo == 0 && valor.length == 1) {
-					return false;
-				}
-
-				if (valor.length == 0) {
-					return false;
-				}
-				
-    			var parts = evt.srcElement.value.split(',');
-        	    if (parts.length > 1) {
-            	    return false;
-        	    }
-    	    }
-    		
-    	    if (charCode == 45 && valor.length > 0) {
-        	    return false;
-    	    }
-    	    
-    	    return true;
-    	}
-    }
     
     function required () {
     }
@@ -501,13 +470,15 @@
 					<td height="24"><strong>Coordenada X:</strong></td>
 					<td><html:text maxlength="30" property="cordenadasUtmX"
 						style="text-align: right;"
-						onkeypress="return isFloat(this, event)" /></td>
+						onkeypress="return validarNumeroDecimal(this, event)"
+						onblur="limparVirgulaNumeroDecimal(this)" /></td>
 				</tr>
 				<tr>
 					<td height="24"><strong>Coordenada Y:</strong></td>
 					<td><html:text maxlength="30" property="cordenadasUtmY"
 						style="text-align: right;"
-						onkeypress="return isFloat(this, event)" /></td>
+						onkeypress="return validarNumeroDecimal(this, event)"
+						onblur="limparVirgulaNumeroDecimal(this)" /></td>
 					<td>
 						<input type="button" class="bottonRightCol" value="AcquaGIS" tabindex="3"  id="botaoGis" align="left" onclick="respostaGis();">
 					</td>
