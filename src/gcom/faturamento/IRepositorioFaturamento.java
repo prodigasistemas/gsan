@@ -33,6 +33,7 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
@@ -3014,4 +3015,6 @@ public interface IRepositorioFaturamento {
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
+	
+	public Collection<ContaImpressaoTermicaQtde> pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 }

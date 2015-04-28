@@ -29,6 +29,7 @@ import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -148,6 +149,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
 						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
+				
+				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 
 				if (colecaoConta != null && !colecaoConta.isEmpty()) {
 
@@ -2984,5 +2987,20 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		return linhasImpostosRetidos;
 	}
-	
+
+	private void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) {
+		Collection<ContaImpressaoTermicaQtde> colecaoQtde = null;
+		
+		try {
+			colecaoQtde = repositorioFaturamento.pesquisarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
+			if(colecaoQtde != null) {
+				for(ContaImpressaoTermicaQtde qtde : colecaoQtde) {
+					qtde.setDataGeracao(new Date());
+					this.getControladorBatch().inserirObjetoParaBatch(qtde);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
