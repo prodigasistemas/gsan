@@ -48,7 +48,6 @@
        			validateCaracterEspecial(form) && 
        			validateRequired(form) && 
        			validateLong(form) && 
-       			validateDecimal(form) && 
        			validarUTM() && 
        			validateBigInteger(form); 
    	}
