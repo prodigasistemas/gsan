@@ -51,10 +51,8 @@
         		validateCaracterEspecial(form) && 
         		validateRequired(form) && 
         		validateLong(form) && 
-        		validateDecimal(form) && 
         		validarUTM() && 
-        		validateBigInteger(form) &&
-        		validateFloatNegativoPositivo(form); 
+        		validateBigInteger(form); 
 	}
 
    	function caracteresespeciais () {

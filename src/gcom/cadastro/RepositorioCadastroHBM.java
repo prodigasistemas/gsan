@@ -8858,11 +8858,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		try {
 			String consulta = " SELECT COUNT(clct_id) as qtde,"
 							+ " sum(c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos) as valorTotal "
-							+ " FROM cadastro.cliente_imovel ci "
-							+ " INNER JOIN cadastro.cliente_conta cc ON (ci.clie_id = cc.clie_id) "
+							+ " FROM cadastro.cliente_conta cc "
 							+ " INNER JOIN faturamento.conta c ON (c.cnta_id = cc.cnta_id) "
-							+ " WHERE ci.imov_id = :idImovel "
-							+ " AND clim_dtrelacaofim IS NOT NULL "
+							+ " WHERE c.imov_id = :idImovel "
+//							+ " AND clim_dtrelacaofim IS NOT NULL "
+							+ " AND cc.clie_id <> (select ci.clie_id from cadastro.cliente_imovel ci where c.imov_id = ci.imov_id and ci.crtp_id = :idClienteRelacaoTipo and ci.clim_dtrelacaofim is null)"
 							+ " AND cc.crtp_id = :idClienteRelacaoTipo ";
 			
 			Query query = session.createSQLQuery(consulta)

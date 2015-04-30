@@ -686,7 +686,7 @@ public class AtualizarImovelAction extends GcomAction {
 					"exibirFiltrarImovelAction.do?menu=sim",
 					"exibirInformarOcorrenciaCadastroAnormalidadeEloAction.do?idImovel="
 							+ imovelAtualizar.getId().toString(),
-					"Informar Ocorrï¿½ncias / Anormalidades");
+					"Informar Ocorrências / Anormalidades");
 		}
 
 		if ( sessao.getAttribute("remove") == null ){
