@@ -61348,29 +61348,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return faturado;
 	}
 	
-	public Collection<ContaImpressaoTermicaQtde> pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
-		Collection<ContaImpressaoTermicaQtde> retorno = null;
+	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
+		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
 		try {
-			consulta = "SELECT contaImpressao.ftgr_id AS idFaturamentoGrupo, "// 0
-					+ "cnt.cnta_amreferenciaconta AS amReferencia, "// 3
-					+ "loc.loca_id AS idLocalidade, "// 18
-					+ "loc.loca_nmlocalidade AS descricaoLocalidade, "// 27
-					+ "COUNT(cnt.cnta_id)  qtdeConta, "// 0
-					+ "FROM cadastro.cliente_conta cliCnt "
-					+ "INNER JOIN faturamento.conta cnt ON cliCnt.cnta_id=cnt.cnta_id "
-					+ "INNER JOIN faturamento.conta_impressao contaImpressao ON cnt.cnta_id = contaImpressao.cnta_id "
-					+ "INNER JOIN cadastro.localidade loc ON cnt.loca_id=loc.loca_id "
-					+ "WHERE contaImpressao.cnti_amreferenciaconta = :referencia AND "
-					+ "cnt.cnta_tmultimaalteracao > :data AND "
-					+ "contaImpressao.ftgr_id = :idFaturamentoGrupo AND "
-					+ "cliCnt.clct_icnomeconta = :indicadorNomeConta AND "
-					+ "imovel.icte_id not in (4,9) AND "
-					+ "cnt.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + ") "
-					+ "GROUP BY contaImpressao.ftgr_id, cnt.cnta_amreferenciaconta, loc.loca_id, loc.loca_nmlocalidade ";
+			consulta = " SELECT contaImpressao.ftgr_id AS idFaturamentoGrupo, "
+					+ " cnt.cnta_amreferenciaconta AS amReferencia, "
+					+ " loc.loca_id AS idLocalidade, "
+					+ " loc.loca_nmlocalidade AS descricaoLocalidade, "
+					+ " COUNT(cnt.cnta_id) AS qtdeConta "
+					+ " FROM cadastro.cliente_conta cliCnt "
+					+ " INNER JOIN faturamento.conta cnt ON cliCnt.cnta_id=cnt.cnta_id "
+					+ " INNER JOIN faturamento.conta_impressao contaImpressao ON cnt.cnta_id = contaImpressao.cnta_id "
+					+ " INNER JOIN cadastro.localidade loc ON cnt.loca_id=loc.loca_id "
+					+ " INNER JOIN cadastro.imovel imovel ON imovel.imov_id = cnt.imov_id "
+					+ " WHERE contaImpressao.cnti_amreferenciaconta = :referencia AND "
+					+ " cnt.cnta_tmultimaalteracao > :data AND "
+					+ " contaImpressao.ftgr_id = :idFaturamentoGrupo AND "
+					+ " cliCnt.clct_icnomeconta = :indicadorNomeConta AND "
+					+ " imovel.icte_id not in (4,9) AND "
+					+ " cnt.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + ") "
+					+ " GROUP BY contaImpressao.ftgr_id, cnt.cnta_amreferenciaconta, loc.loca_id, loc.loca_nmlocalidade ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idFaturamentoGrupo", Hibernate.INTEGER)

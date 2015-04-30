@@ -2989,15 +2989,26 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	private void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) {
-		Collection<ContaImpressaoTermicaQtde> colecaoQtde = null;
-		
+		Collection colecaoQtde = new ArrayList();
+		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
 		try {
 			colecaoQtde = repositorioFaturamento.pesquisarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
-			if(colecaoQtde != null) {
-				for(ContaImpressaoTermicaQtde qtde : colecaoQtde) {
-					qtde.setDataGeracao(new Date());
-					this.getControladorBatch().inserirObjetoParaBatch(qtde);
+			if(colecaoQtde != null && !colecaoQtde.isEmpty()) {
+				Iterator colecaoQtdeIterator = colecaoQtde.iterator();
+				while(colecaoQtdeIterator.hasNext()) {
+					Object[] arrayColecao = (Object[]) colecaoQtdeIterator.next();
+					
+					ContaImpressaoTermicaQtde contaImpressaoTermicaQtde = new ContaImpressaoTermicaQtde();
+					contaImpressaoTermicaQtde.setIdGrupoFaturamento((Integer)arrayColecao[0]);
+					contaImpressaoTermicaQtde.setReferencia((Integer)arrayColecao[1]);
+					contaImpressaoTermicaQtde.setIdLocalidade((Integer)arrayColecao[2]);
+					contaImpressaoTermicaQtde.setDescricaoLocalidade((String)arrayColecao[3]);
+					contaImpressaoTermicaQtde.setQtdeContas((Integer)arrayColecao[4]);
+					contaImpressaoTermicaQtde.setDataGeracao(new Date());
+					
+					colecaoContas.add(contaImpressaoTermicaQtde);
 				}
+				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoContas);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
