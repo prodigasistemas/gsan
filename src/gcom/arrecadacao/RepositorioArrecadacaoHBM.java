@@ -5647,7 +5647,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * @date 22/05/2006, 23/05/2008
 	 * 
 	 * @param idLocalidade
-	 * @param anoMesReferenciaArrecadacao
+	 * @param referencia
 	 * @param idCategoria
 	 * @param idLancamentoItemContabil
 	 * @return
@@ -5655,79 +5655,87 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 */
 	public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente(
 			Integer idLocalidade, 
-			Integer anoMesReferenciaArrecadacao,
+			Integer referencia,
 			Integer idCategoria, 
-			Integer idLancamentoItemContabil)
+			Integer idLancamentoItemContabil,
+			Collection idsCreditosOrigem)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		Collection idsCreditosOrigem = new ArrayList();
-		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_AGUA);
-		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO);
-		idsCreditosOrigem.add(CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE);
-		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
-
-		// cria a variável que vai conter o hql
-		String consulta = "";
-
 		try {
+			StringBuilder consultaPagamento = new StringBuilder();
+			consultaPagamento.append("SELECT distinct pgmt.cnta_id ")
+			                 .append("FROM arrecadacao.pagamento pgmt ")
+			                 .append("WHERE pgmt.pgmt_amreferenciaarrecadacao = :referencia ")
+			                 .append("and pgmt.loca_id= :idLocalidade ")
+			                 .append("and (pgmt.pgst_idatual = :classificado or (pgmt.pgst_idatual= :valorABaixar and pgmt.pgst_idanterior = :valorNaoConfere ) )")
+			                 .append("and pgmt.cnta_id is not null ");
 			
-			consulta = "select " +
-					  "sum(crcg.crcg_vlcategoria) as col_0 " +
-					  "from " +
-					   "faturamento.cred_realizado_catg crcg " + 
-					  "where " +
-					   "crcg.catg_id=:idCategoria  " +
-					   "and (crcg.crrz_id in ( " +
-					 			"select " +
-					 			"crrz.crrz_id " + 
-					 			"from " +
-					 			"faturamento.credito_realizado crrz " + 
-					 			"where " +
-					 			"crrz.lict_id=:idLancamentoItemContabil  " +
-					 			"and (crrz.crog_id in (:idsCreditosOrigem)) " + 
-					 			"and (crrz.cnta_id in (" +
-											 			"select " +
-											 			"distinct pgmt.cnta_id " + 
-											 			"from " +
-											 			"arrecadacao.pagamento pgmt " + 
-											 			"where " +
-											 			"pgmt.pgmt_amreferenciaarrecadacao= :anoMesReferenciaArrecadacao " + 
-											 			"and pgmt.loca_id= :idLocalidade  " +
-											 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or ( " +
-											 			"pgmt.pgst_idatual= :idPagamentoValorABaixar and pgmt.pgst_idanterior = :idPagamentoValorNaoConfere ) )" + 
-											 			"and (pgmt.cnta_id is not null) "	+		
-					 			")) " +
-					 				") " +
-					   ")";
+			StringBuilder consultaCredito = new StringBuilder();
+			consultaCredito.append("SELECT crrz.crrz_id ")
+						   .append("FROM faturamento.credito_realizado crrz ")
+						   .append("WHERE crrz.lict_id = :idLancamentoItemContabil ")
+						   .append("and crrz.crog_id in (:idsCreditosOrigem) ")
+						   .append("and crrz.cnta_id in (")
+						   .append(consultaPagamento.toString())
+						   .append(")");
+			
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT sum(crcg.crcg_vlcategoria) as col_0 ")
+			   		.append("FROM faturamento.cred_realizado_catg crcg ")
+			   		.append("WHERE crcg.catg_id = :idCategoria ")
+			   		.append("and crcg.crrz_id in ( ")
+			   		.append(consultaCredito.toString())
+			   		.append(")");
+			   
+//			String consulta = "select " +
+//					  "sum(crcg.crcg_vlcategoria) as col_0 " +
+//					  "from " +
+//					   "faturamento.cred_realizado_catg crcg " + 
+//					  "where " +
+//					   "crcg.catg_id=:idCategoria  " +
+//					   "and (crcg.crrz_id in ( " +
+//					 			"select " +
+//					 			"crrz.crrz_id " + 
+//					 			"from " +
+//					 			"faturamento.credito_realizado crrz " + 
+//					 			"where " +
+//					 			"crrz.lict_id=:idLancamentoItemContabil  " +
+//					 			"and (crrz.crog_id in (:idsCreditosOrigem)) " + 
+//					 			"and (crrz.cnta_id in (" +
+//											 			"select " +
+//											 			"distinct pgmt.cnta_id " + 
+//											 			"from " +
+//											 			"arrecadacao.pagamento pgmt " + 
+//											 			"where " +
+//											 			"pgmt.pgmt_amreferenciaarrecadacao= :referencia " + 
+//											 			"and pgmt.loca_id= :idLocalidade  " +
+//											 			"and (pgmt.pgst_idatual= :classificado or ( " +
+//											 			"pgmt.pgst_idatual= :valorABaixar and pgmt.pgst_idanterior = :valorNaoConfere ) )" + 
+//											 			"and (pgmt.cnta_id is not null) "	+		
+//					 			")) " +
+//					 				") " +
+//					   ")";
 
-			retorno = (BigDecimal) session.createSQLQuery(consulta)
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
 			        .addScalar("col_0",Hibernate.BIG_DECIMAL)
 					.setInteger("idCategoria", idCategoria)
 					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
 					.setParameterList("idsCreditosOrigem", idsCreditosOrigem)
 					.setInteger("idLocalidade", idLocalidade)
-					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
-					.setInteger("idLocalidade", idLocalidade)
-					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-					.setInteger("idPagamentoValorNaoConfere",PagamentoSituacao.VALOR_NAO_CONFERE)
-					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
+					.setInteger("referencia", referencia)
+					.setInteger("classificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("valorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setInteger("valorNaoConfere",PagamentoSituacao.VALOR_NAO_CONFERE)
 					.setMaxResults(1)
 					.uniqueResult();
 
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -31625,7 +31633,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		Session session = HibernateUtil.getSession();
 
 		StringBuilder consulta = new StringBuilder();
-		StringBuilder conta = new StringBuilder();
 
 		try {
 
