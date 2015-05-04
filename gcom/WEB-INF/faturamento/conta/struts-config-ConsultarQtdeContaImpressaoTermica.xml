@@ -11,9 +11,9 @@
 	<action-mappings>
 		<action name="ConsultarQtdeContaImpressaoTermicaActionForm"
 			type="gcom.gui.faturamento.conta.ExibirConsultarQtdeContaImpressaoTermicaAction"
-			scope="session" validate="true" path="/exibirConsultarQtdeContaImpressaoTermicaActionForm">
+			scope="session" validate="true" path="/exibirConsultarQtdeContaImpressaoTermicaAction">
 			<forward name="exibirConsultarQtdeContaImpressaoTermica"
-				path="/jsp/faturamento/conta/consultar_qtde_conta_impressao_termica.jsp" />
+				path="/jsp/faturamento/conta/consultar_qtde_contas_impressao_termica.jsp" />
 		</action>
 	</action-mappings>
 
