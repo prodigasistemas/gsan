@@ -1,5 +1,7 @@
 package gcom.faturamento.conta;
 
+import gcom.util.Util;
+
 import java.util.Date;
 
 public class ContaImpressaoTermicaQtde {
@@ -53,5 +55,9 @@ public class ContaImpressaoTermicaQtde {
 	}
 	public void setDataGeracao(Date dataGeracao) {
 		this.dataGeracao = dataGeracao;
+	}
+	
+	public String getReferenciaFormatada() {
+		return Util.formatarAnoMesParaMesAno(this.referencia);
 	}
 }

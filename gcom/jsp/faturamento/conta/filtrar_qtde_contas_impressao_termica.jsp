@@ -13,34 +13,24 @@
 <head>
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<html:javascript staticJavascript="false" formName="ConsultarQtdeContaImpressaoTermicaActionForm"
-	dynamicJavascript="false" />
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
-	
+	<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+	<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+	<html:javascript staticJavascript="false" formName="ConsultarQtdeContaImpressaoTermicaActionForm" dynamicJavascript="false" />
+	<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
+	<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
 	<script language="JavaScript">
 
-	
-function chamarFiltrar(form){
-  form.action = 'consultarQtdeContaImpressaoTermicaAction.do';
-	  	form.submit();
-}
+		function chamarFiltrar(form){
+		  form.action = 'consultarQtdeContaImpressaoTermicaAction.do';
+			  	form.submit();
+		}
 
-</script>
-
+	</script>
 </head>
 
-<body leftmargin="5" topmargin="5"
-	onload="setarFoco('${requestScope.nomeCampo}');">
-	<html:form action="/exibirFiltrarQtdeContaImpressaoTermicaAction"
-		method="post">
+<body leftmargin="5" topmargin="5" onload="setarFoco('${requestScope.nomeCampo}');">
+
+	<html:form action="/exibirFiltrarQtdeContaImpressaoTermicaAction" method="post">
 
 		<%@ include file="/jsp/util/cabecalho.jsp"%>
 		<%@ include file="/jsp/util/menu.jsp"%>
@@ -87,17 +77,11 @@ function chamarFiltrar(form){
 						</tr>
 					</table>
 
-					<table width="100%" border="0" align="center" cellpadding="0"
-						cellspacing="0">
+					<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 						<tr>
-							<td width="11"><img border="0"
-								src="<bean:message key="caminho.imagens"/>parahead_left.gif" />
-							</td>
-							<td class="parabg">Consultar Quantidade de Contas para
-								Impressao T&eacute;rmica</td>
-							<td width="11"><img border="0"
-								src="<bean:message key="caminho.imagens"/>parahead_right.gif" />
-							</td>
+							<td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_left.gif" /> </td>
+							<td class="parabg">Consultar Quantidade de Contas para Impressao T&eacute;rmica</td>
+							<td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_right.gif" /> </td>
 						</tr>
 					</table>
 					

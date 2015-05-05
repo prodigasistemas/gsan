@@ -15,8 +15,8 @@
 			<forward name="exibirFiltrarQtdeContaImpressaoTermica"
 				path="/jsp/faturamento/conta/filtrar_qtde_contas_impressao_termica.jsp" />
 				
-			<forward name="consultarQtdeContaImpressaoTermica"
-				path="/jsp/faturamento/conta/consultar_qtde_contas_impressao_termica.jsp" />
+<!-- 			<forward name="consultarQtdeContaImpressaoTermica" -->
+<!-- 				path="/jsp/faturamento/conta/consultar_qtde_contas_impressao_termica.jsp" /> -->
 		</action>
 		
 		<action name="ConsultarQtdeContaImpressaoTermicaActionForm"
