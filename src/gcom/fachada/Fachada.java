@@ -370,6 +370,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMensagem;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.ContaMotivoInclusao;
@@ -44122,6 +44123,14 @@ public class Fachada {
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) {
 		try {
 			return this.getControladorCadastro().pesquisarQtdeDebitosPreteritos(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) {
+		try {
+			return this.getControladorFaturamento().pesquisarQtdeContaImpressaoTermica(idGrupoFaturamento, referencia);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}

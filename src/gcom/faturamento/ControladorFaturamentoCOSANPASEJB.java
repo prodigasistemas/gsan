@@ -2988,11 +2988,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return linhasImpostosRetidos;
 	}
 
-	private void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) {
+	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ControladorException {
 		Collection colecaoQtde = new ArrayList();
 		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
 		try {
-			colecaoQtde = repositorioFaturamento.pesquisarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
+			colecaoQtde = repositorioFaturamento.pesquisarGerarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
 			if(colecaoQtde != null && !colecaoQtde.isEmpty()) {
 				Iterator colecaoQtdeIterator = colecaoQtde.iterator();
 				while(colecaoQtdeIterator.hasNext()) {
@@ -3014,4 +3014,5 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			e.printStackTrace();
 		}
 	}
+	
 }

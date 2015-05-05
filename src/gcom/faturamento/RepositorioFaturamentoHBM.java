@@ -61348,7 +61348,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return faturado;
 	}
 	
-	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
+	public Collection pesquisarGerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
@@ -61381,6 +61381,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("qtdeConta", Hibernate.INTEGER)
 					.setDate("data",Util.criarData(16, 05, 2007))
 					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
+					.setInteger("referencia", referencia)
+					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = " SELECT qtde "
+					+ " FROM ContaImpressaoTermicaQtde qtde"
+					+ " WHERE qtde.referencia = :referencia "
+					+ " AND qtde.idGrupoFaturamento = :idFaturamentoGrupo";
+
+			retorno = session.createQuery(consulta)
 					.setInteger("referencia", referencia)
 					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo).list();
 

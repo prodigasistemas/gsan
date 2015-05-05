@@ -24,12 +24,22 @@
 	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>util.js"></script>
+	
+	<script language="JavaScript">
+
+	
+function chamarFiltrar(form){
+  form.action = 'consultarQtdeContaImpressaoTermicaAction.do';
+	  	form.submit();
+}
+
+</script>
 
 </head>
 
 <body leftmargin="5" topmargin="5"
 	onload="setarFoco('${requestScope.nomeCampo}');">
-	<html:form action="/exibirConsultarQtdeContaImpressaoTermicaAction"
+	<html:form action="/exibirFiltrarQtdeContaImpressaoTermicaAction"
 		method="post">
 
 		<%@ include file="/jsp/util/cabecalho.jsp"%>
@@ -90,60 +100,55 @@
 							</td>
 						</tr>
 					</table>
+					
 					<p>&nbsp;</p>
 
-					<table width="100%" cellpadding="0" cellspacing="0">
+					<table width="100%" border="0">
 						<tr>
-							<td height="0">
-								<table width="100%" bgcolor="#99CCFF">
-									<!--header da tabela interna -->
-									<tr bordercolor="#FFFFFF">
-										<td width="8%" bgcolor="#90c7fc" align="center">
-											<div align="center">
-												<font color="#000000" style="font-size: 9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <strong>
-														Ano/Mês </strong>
-												</font>
-											</div>
-										</td>
-										<td width="16%" bgcolor="#90c7fc" align="center">
-											<div align="center">
-												<font color="#000000" style="font-size: 9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <strong>
-														Localidade </strong>
-												</font>
-											</div>
-										</td>
-										<td width="18%" bgcolor="#90c7fc" align="center">
-											<div align="center">
-												<font color="#000000" style="font-size: 9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <strong>
-														Qtde de Contas </strong>
-												</font>
-											</div>
-										</td>
+							<td width="100%" colspan=2>
+								<table width="100%" border="0">
+									<tr>
+										<td>Para consultar a quantidade de contas, informe os
+											dados abaixo:</td>
 									</tr>
 								</table>
-								<p>&nbsp;</p>
-						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td><input type="button" name="Button"
-								class="bottonRightCol" value="Limpar"
-								onclick="window.location.href='<html:rewrite page="/exibirConsultarQtdeContaImpressaoTermicaAction.do?menu=sim"/>'">
 							</td>
-							<td><div align="right">
-									<input type="button" name="Button" class="bottonLeftCol"
-										value="Filtrar" onclick="javascript:chamarFiltrar();"
-										url="ConsultarQtdeContaImpressaoTermicaAction.do" />
-								</div></td>
-						</tr>
-						</td>
 						</tr>
 
-					</table> <%@ include file="/jsp/util/rodape.jsp"%>
+						<tr>
+							<td width="10%"><strong>Grupo:</strong></td>
+							<td width="90%"><html:select property="idGrupoFaturamento">
+									<html:option value="-1">&nbsp;</html:option>
+									<html:options collection="faturamentoGrupos"
+										labelProperty="descricao" property="id" />
+								</html:select></td>
+						</tr>
+						<tr>
+							<td width="10%"><strong>Mês/Ano:</strong></td>
+							<td width="90%"><html:text property="referencia" size="7"
+									maxlength="7"
+									onkeypress="javascript:mascaraAnoMes(this, event);return isCampoNumerico(event);" />
+								&nbsp;mm/aaaa</td>
+						</tr>
+        				<tr>
+          					<td>
+          						<input type="button" name="Button" class="bottonRightCol"
+									value="Limpar"
+									onclick="window.location.href='<html:rewrite page="/exibirFiltrarQtdeContaImpressaoTermicaAction.do?menu=sim"/>'">
+          					</td>
+          					<td>
+          						<div align="right">
+         							<input type="button" name="Button" class="bottonLeftCol" value="Filtrar"
+										onclick="javascript:chamarFiltrar(document.forms[0]);"/>
+								</div>
+							</td>
+        				</tr>
+					</table>
+				</td>
+			
+		</table>
+
+		<%@ include file="/jsp/util/rodape.jsp"%>
 
 	</html:form>
 </body>

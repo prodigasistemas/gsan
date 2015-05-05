@@ -7,7 +7,7 @@ public class ConsultarQtdeContaImpressaoTermicaActionForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 
 	private Integer idGrupoFaturamento;
-	private Integer referencia;
+	private String referencia;
 	private Integer idLocalidade;
 	public Integer getIdGrupoFaturamento() {
 		return idGrupoFaturamento;
@@ -15,10 +15,10 @@ public class ConsultarQtdeContaImpressaoTermicaActionForm extends ActionForm {
 	public void setIdGrupoFaturamento(Integer idGrupoFaturamento) {
 		this.idGrupoFaturamento = idGrupoFaturamento;
 	}
-	public Integer getReferencia() {
+	public String getReferencia() {
 		return referencia;
 	}
-	public void setReferencia(Integer referencia) {
+	public void setReferencia(String referencia) {
 		this.referencia = referencia;
 	}
 	public Integer getIdLocalidade() {

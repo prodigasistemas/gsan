@@ -18,19 +18,16 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.ParametroSimples;
 
-public class ExibirConsultarQtdeContaImpressaoTermicaAction extends GcomAction {
+public class ExibirFiltrarQtdeContaImpressaoTermicaAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 		
-	       //Seta o mapeamento de retorno
-        ActionForward retorno = actionMapping
-                .findForward("exibirConsultarQtdeContaImpressaoTermica");
+        ActionForward retorno = actionMapping.findForward("exibirFiltrarQtdeContaImpressaoTermica");
 
         Fachada fachada = Fachada.getInstancia();
         
-        //Mudar isso quando tiver esquema de segurança
         HttpSession sessao = httpServletRequest.getSession(false);
         
         ConsultarQtdeContaImpressaoTermicaActionForm form = (ConsultarQtdeContaImpressaoTermicaActionForm) actionForm;
