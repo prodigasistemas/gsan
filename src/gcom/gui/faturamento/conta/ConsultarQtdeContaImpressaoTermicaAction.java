@@ -32,9 +32,12 @@ public class ConsultarQtdeContaImpressaoTermicaAction extends GcomAction {
 		Integer idGrupoFaturamento = (Integer) form.getIdGrupoFaturamento();
 		Integer referencia = Util.formatarMesAnoComBarraParaAnoMes(form.getReferencia());
 		
-		Collection<ContaImpressaoTermicaQtde> colecaoQtdeContas = fachada.pesquisarQtdeContaImpressaoTermica(idGrupoFaturamento, referencia);
-		
-		sessao.setAttribute("colecaoQtdeContas",colecaoQtdeContas);
+		if (idGrupoFaturamento != null && referencia != null) {
+			Collection<ContaImpressaoTermicaQtde> colecaoQtdeContas = fachada.pesquisarQtdeContaImpressaoTermica(idGrupoFaturamento, referencia);
+			sessao.setAttribute("colecaoQtdeContas",colecaoQtdeContas);
+		} else {
+			
+		}
         
         return retorno;
 		

@@ -33,18 +33,14 @@ public class ExibirFiltrarQtdeContaImpressaoTermicaAction extends GcomAction {
         ConsultarQtdeContaImpressaoTermicaActionForm form = (ConsultarQtdeContaImpressaoTermicaActionForm) actionForm;
         
         if(sessao.getAttribute("faturamentoGrupos") == null){
-	        //Carrega Coleçao de Faturamento Grupos
 	        FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
-	        filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(
-	                FiltroFaturamentoGrupo.INDICADOR_USO,
-	                ConstantesSistema.INDICADOR_USO_ATIVO));
+	        filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 	        filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.DESCRICAO);
-	        Collection faturamentoGrupos = fachada.pesquisar(
-	                filtroFaturamentoGrupo, FaturamentoGrupo.class.getName());
+	        
+	        Collection faturamentoGrupos = fachada.pesquisar( filtroFaturamentoGrupo, FaturamentoGrupo.class.getName());
 	
 	        if (faturamentoGrupos.isEmpty()) {
-	            throw new ActionServletException("atencao.naocadastrado", null,
-	                    "grupo de faturamento");
+	            throw new ActionServletException("atencao.naocadastrado", null, "grupo de faturamento");
 	        } else {
 	            sessao.setAttribute("faturamentoGrupos", faturamentoGrupos);
 	        }

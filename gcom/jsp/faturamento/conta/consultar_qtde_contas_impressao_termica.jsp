@@ -63,7 +63,7 @@
 					</div>
 				</td>
 
-				<td width="630" valign="top" class="centercoltext">
+				<td id="cabecalho" width="630" valign="top" class="centercoltext">
 					
 					<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 						<tr>
@@ -77,8 +77,27 @@
 					
 					</table>
 					
-					
-					<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+					<table id="descricaoPesquisa" width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<td height="23">
+								<font style="font-size: 10px;"color="#000000" face="Verdana, Arial, Helvetica, sans-serif"> 
+									<strong>Grupo de faturamento:</strong> 
+									<bean:write name="ConsultarQtdeContaImpressaoTermicaActionForm" property="idGrupoFaturamento"/>
+								</font>
+							</td>
+						</tr>
+							
+						<tr>
+							<td height="23">
+								<font style="font-size: 10px;"color="#000000" face="Verdana, Arial, Helvetica, sans-serif"> 
+									<strong>Referência:</strong> 
+									<bean:write name="ConsultarQtdeContaImpressaoTermicaActionForm" property="referencia"/> 
+								</font>
+							</td>
+						</tr>
+					</table>
+						
+					<table id="resultado" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 						<tr>
 			              <td height="0">
 			                <table width="100%" bgcolor="#99CCFF">

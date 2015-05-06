@@ -21,9 +21,17 @@
 	<script language="JavaScript">
 
 		function chamarFiltrar(form){
-		  form.action = 'consultarQtdeContaImpressaoTermicaAction.do';
-			  	form.submit();
+			if (validateRequired(form)) {
+			  form.action = 'consultarQtdeContaImpressaoTermicaAction.do';
+			  form.submit();
+			}
+			
 		}
+
+		function required() {
+			 this.aj = new Array("idGrupoFaturamento", "Informe o grupo de faturamento.", new Function ("varName", " return this[varName];"));
+			 this.al = new Array("referencia", "Informe a referencia.", new Function ("varName", " return this[varName];"));
+			}
 
 	</script>
 </head>
@@ -108,22 +116,20 @@
 								</html:select></td>
 						</tr>
 						<tr>
-							<td width="10%"><strong>Mês/Ano:</strong></td>
-							<td width="90%"><html:text property="referencia" size="7"
-									maxlength="7"
-									onkeypress="javascript:mascaraAnoMes(this, event);return isCampoNumerico(event);" />
-								&nbsp;mm/aaaa</td>
+							<td width="10%">
+								<strong>Mês/Ano:</strong>
+							</td>
+							<td width="90%"><html:text property="referencia" size="7" maxlength="7" onkeypress="javascript:mascaraAnoMes(this, event);return isCampoNumerico(event);" />
+								&nbsp;mm/aaaa
+							</td>
 						</tr>
         				<tr>
           					<td>
-          						<input type="button" name="Button" class="bottonRightCol"
-									value="Limpar"
-									onclick="window.location.href='<html:rewrite page="/exibirFiltrarQtdeContaImpressaoTermicaAction.do?menu=sim"/>'">
+          						<input type="button" name="Button" class="bottonRightCol" value="Limpar" onclick="window.location.href='<html:rewrite page="/exibirFiltrarQtdeContaImpressaoTermicaAction.do?menu=sim"/>'">
           					</td>
           					<td>
           						<div align="right">
-         							<input type="button" name="Button" class="bottonLeftCol" value="Filtrar"
-										onclick="javascript:chamarFiltrar(document.forms[0]);"/>
+         							<input type="button" name="Button" class="bottonLeftCol" value="Filtrar" onclick="javascript:chamarFiltrar(document.forms[0]);"/>
 								</div>
 							</td>
         				</tr>
