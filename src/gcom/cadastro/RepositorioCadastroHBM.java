@@ -26,6 +26,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialMotivoCarta;
 import gcom.cobranca.CobrancaSituacao;
+import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
 import gcom.gui.relatorio.cadastro.GerarRelatorioAlteracoesCpfCnpjHelper;
 import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
@@ -8861,7 +8862,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							+ " FROM cadastro.cliente_conta cc "
 							+ " INNER JOIN faturamento.conta c ON (c.cnta_id = cc.cnta_id) "
 							+ " WHERE c.imov_id = :idImovel "
-//							+ " AND clim_dtrelacaofim IS NOT NULL "
+							+ " AND c.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida, :situacaoParcelada) "
 							+ " AND cc.clie_id <> (select ci.clie_id from cadastro.cliente_imovel ci where c.imov_id = ci.imov_id and ci.crtp_id = :idClienteRelacaoTipo and ci.clim_dtrelacaofim is null)"
 							+ " AND cc.crtp_id = :idClienteRelacaoTipo ";
 			
@@ -8869,7 +8870,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.addScalar("qtde", Hibernate.INTEGER)
 					.addScalar("valorTotal", Hibernate.BIG_DECIMAL)
 					.setInteger("idImovel", idImovel)
-					.setShort("idClienteRelacaoTipo", ClienteRelacaoTipo.USUARIO);
+					.setShort("idClienteRelacaoTipo", ClienteRelacaoTipo.USUARIO)
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA);
 			retorno = (Object[]) query.uniqueResult();
 			
 		} catch (HibernateException e) {
