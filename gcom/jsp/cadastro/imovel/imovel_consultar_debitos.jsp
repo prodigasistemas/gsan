@@ -67,7 +67,7 @@ function verificarExibicaoRelatorio() {
 	 if (form.idImovelDebitos.value.length > 0 && form.matriculaImovelDebitos.value.length > 0) {
 		toggleBox('demodiv',1);
 	} else {
-		alert('Informe Imóvel');
+		alert('Informe Im&oacute;vel');
 	}
 	
 }
@@ -90,7 +90,7 @@ function gerarExtratoDebito() {
 			form.action = 'gerarRelatorioExtratoDebitoAction.do?consultarDebitoImovel=1';
 			form.submit();
 		} else {
-			alert("Pesquise o imóvel");
+			alert("Pesquise o im&oacute;vel");
 		}
 	
 
@@ -123,7 +123,7 @@ function habilitaMatricula() {
 	var form = document.forms[0];
 	
 	if (form.idImovelDebitos.value != null && form.matriculaImovelDebitos.value != null && form.matriculaImovelDebitos.value != "" &&
-	form.matriculaImovelDebitos.value != "IMÓVEL INEXISTENTE"){
+	form.matriculaImovelDebitos.value != "IM&oacute;VEL INEXISTENTE"){
 	
 		form.idImovelDebitos.disabled = true;
 	} else {
@@ -135,7 +135,7 @@ function pesquisarImovel() {
 	var form = document.forms[0];
  	
  	if (form.idImovelDebitos.disabled ) {
- 		alert("Para realizar uma pesquisa de imóvel é necessário apagar o imóvel atual.")
+ 		alert("Para realizar uma pesquisa de im&oacute;vel &eacute; necess&aacute;rio apagar o im&oacute;vel atual.")
 	} else {
 		abrirPopup('exibirPesquisarImovelAction.do', 400, 800)
 	}
@@ -204,7 +204,7 @@ function pesquisarImovel() {
 			</div>
 			</td>
 
-			<td valign="top" class="centercoltext"><!--Início Tabela Reference a Páginação da Tela de Processo-->
+			<td valign="top" class="centercoltext"><!--Inï¿½cio Tabela Reference a Pï¿½ginaï¿½ï¿½o da Tela de Processo-->
 			<p>&nbsp;</p>
 			
 			<table width="100%" border="0" align="center" cellpadding="0"
@@ -216,7 +216,7 @@ function pesquisarImovel() {
 						src="imagens/parahead_right.gif" /></td>
 				</tr>
 			</table>
-			<!--Fim Tabela Reference a Páginação da Tela de Processo-->
+			<!--Fim Tabela Reference a Pï¿½ginaï¿½ï¿½o da Tela de Processo-->
 			<p>&nbsp;</p>
 			<table width="100%" border="0">
 				<tr>
@@ -231,7 +231,7 @@ function pesquisarImovel() {
 												src="<bean:message key="caminho.imagens"/>informacao.gif"
 												onmouseover="this.T_BGCOLOR='whitesmoke';this.T_LEFT=true;return escape( '${ConsultarImovelActionForm.hint2}' ); "/>
 									    </td>						    						
-										<td align="center" width="96%"><strong>Dados do Imóvel<logic:present name="imovelExcluido" scope="request"><font color="#ff0000"> (Excluído)</font></logic:present></strong></td>
+										<td align="center" width="96%"><strong>Dados do Im&oacute;vel<logic:present name="imovelExcluido" scope="request"><font color="#ff0000"> (Exclu&iacute;do)</font></logic:present></strong></td>
 									</tr>
 								</table>
 							</td>
@@ -254,7 +254,7 @@ function pesquisarImovel() {
 										<a href="javascript:pesquisarImovel();">
 									<img width="23" height="21"
 										src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-										border="0" title="Pesquisar Imóvel"/></a>
+										border="0" title="Pesquisar Im&oacute;vel"/></a>
 										<logic:present
 										name="idImovelDebitosNaoEncontrado" scope="request">
 										<html:text property="matriculaImovelDebitos" size="40"
@@ -285,12 +285,12 @@ function pesquisarImovel() {
 								</tr>
 								<tr>
 									<td height="10">
-									<div class="style9"><strong>Situação de Água:</strong></div>
+									<div class="style9"><strong>Situa&ccedil;&atilde;o de &Aacute;gua:</strong></div>
 									</td>
 									<td><html:text property="situacaoAguaDebitos" readonly="true"
 										style="background-color:#EFEFEF; border:0; color: #000000"
 										size="15" maxlength="15" /></td>
-									<td width="146"><strong>Situação de Esgoto:</strong></td>
+									<td width="146"><strong>Situa&ccedil;&atilde;o de Esgoto:</strong></td>
 									<td width="123"><html:text property="situacaoEsgotoDebitos"
 										readonly="true"
 										style="background-color:#EFEFEF; border:0; color: #000000"
@@ -416,7 +416,7 @@ function pesquisarImovel() {
 													</logic:notEmpty> </font></td>
 													
 													<td width="9%" align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
-														${ (imovelCliente.cliente.indicadorUso != null) ? (imovelCliente.cliente.indicadorUso == 1 ? "SIM" : "NÃO" ) : "" }
+														${ (imovelCliente.cliente.indicadorUso != null) ? (imovelCliente.cliente.indicadorUso == 1 ? "SIM" : "N&atilde;O" ) : "" }
 													</font></td>
 												</tr>
 											</logic:iterate>
@@ -444,458 +444,59 @@ function pesquisarImovel() {
 							</td>
 						</tr>
 						<logic:notEmpty name="colecaoContaValores" scope="session">
-							<%if (((Collection) session.getAttribute("colecaoContaValores"))
-					.size() <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
+							<%if ( ((Integer)session.getAttribute("totalContas"))  <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
 							<tr bordercolor="#000000">
-								<td width="20%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>M&ecirc;s/Ano</strong>
-								</font></div>
-								</td>
-								<td width="7%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Vencimento</strong>
-								</font></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor de
-								&Aacute;gua </strong> </font></div>
-								</td>
 								<td width="9%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor de
-								Esgoto</strong> </font></div>
-								</td>
-								<td width="8%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor dos
-								D&eacute;bitos</strong> </font></div>
-								</td>
-								<td width="8%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor dos
-								Creditos</strong> </font></div>
-								</td>
-								
-								<td width="10%" bgcolor="#90c7fc" align="center">
-								  <div class="style9">
-								    <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								      <strong>Valor dos Impostos</strong> 
-								    </font>
-								  </div>
-								</td>
-								
-								<td width="10%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor da
-								Conta</strong> </font></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Acr&eacute;sc.
-								Impont.</strong><strong></strong> </font></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc" align="center">
-								<div class="style9"><font color="#000000" style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Sit.</strong>
-								</font></div>
-								</td>
-							</tr>
-							<logic:present name="colecaoContaValores">
-								<logic:iterate name="colecaoContaValores"
-									id="contavaloreshelper">
-									<%if (cor.equalsIgnoreCase("#cbe5fe")) {
-										cor = "#FFFFFF";%>
-									<tr bgcolor="#FFFFFF">
-										<%} else {
-										cor = "#cbe5fe";%>
-									<tr bgcolor="#cbe5fe">
-										<%}%>
-										
-										<td align="left">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-											
-																							
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="center">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="formatarAnoMesParaMesAno" /></a> 
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="center">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<font color="#ff0000"><bean:write name="conta" property="formatarAnoMesParaMesAno" /></font></a> 
-														</font>
-													</div>
-												</logic:notEmpty>
-											
-												
-											</logic:notEmpty>
-										</td>
-										<td align="left">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="center">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" /> 
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="center">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" /> 
-														</font>
-													</div>
-												</logic:notEmpty>
-											
-											</logic:notEmpty>
-										</td>
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-																							
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorAgua" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorAgua" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:notEmpty>
-											
-												
-											</logic:notEmpty>
-										</td>
-										<td align="rigth">
-											<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-												<div align="right">
-													<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-														<logic:notEmpty name="contavaloreshelper" property="conta">
-															<bean:define name="contavaloreshelper" property="conta" id="conta" />
-															<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
-														</logic:notEmpty> 
-													</font>
-												</div>
-											</logic:empty>
-
-											<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-												<div align="right">
-													<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-														<logic:notEmpty name="contavaloreshelper" property="conta">
-															<bean:define name="contavaloreshelper" property="conta" id="conta" />
-															<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
-														</logic:notEmpty> 
-													</font>
-												</div>	
-											</logic:notEmpty>
-										</td>
-										
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-																								
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="conta.debitos" value="0">
-																<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-																<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" /> </a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="conta.debitos" value="0">
-																<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" />
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="conta.debitos" value="0">
-																<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-																<font color="#ff0000"><bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" /></font> </a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="conta.debitos" value="0">
-																<font color="#ff0000"><bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" /></font>
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:notEmpty>
-												
-												
-											</logic:notEmpty>
-										</td>
-										
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="conta.valorCreditos" value="0">	
-																<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" />
-																	<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-																	<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
-																</a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="conta.valorCreditos" value="0">
-																<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="conta.valorCreditos" value="0">	
-																<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" />
-																	<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-																	<font color="#ff0000"><bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" /></font>
-																</a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="conta.valorCreditos" value="0">
-																<font color="#ff0000"><bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" /></font>
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:notEmpty>
-											</logic:notEmpty>
-										</td>
-										
-										
-										
-										
-										
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-																							
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorImposto" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:empty> 
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorImposto" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:notEmpty>
-												
-											</logic:notEmpty>
-										</td>
-										
-										
-										
-										
-										
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorTotal" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-															<bean:write name="conta" property="valorTotal" formatKey="money.format" />
-														</font>
-													</div>
-												</logic:notEmpty>
-											</logic:notEmpty>
-										</td>
-										<td align="right">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="valorTotalContaValores" value="0">
-																<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
-																	<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
-																</a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="valorTotalContaValores" value="0">
-																<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9">
-														<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<logic:notEqual name="contavaloreshelper" property="valorTotalContaValores" value="0">
-																<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
-																	<font color="#ff0000"><bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" /></font>
-																</a>
-															</logic:notEqual> 
-															<logic:equal name="contavaloreshelper" property="valorTotalContaValores" value="0">
-																<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
-															</logic:equal> 
-														</font>
-													</div>
-												</logic:notEmpty>
-											</logic:notEmpty>
-										</td>
-										<td align="left">
-											<logic:notEmpty name="contavaloreshelper" property="conta">
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="left" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}">
-													<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-														<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-														<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" /> 
-														<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" /> 
-													</font>
-												</div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="left" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}" >
-													<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-														<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
-														<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" /> 
-														<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" /> 
-													</font>
-												</div>
-												</logic:notEmpty>
-											</logic:notEmpty>
-										</td>
-									</tr>
-								</logic:iterate>
-								
-								<logic:notEmpty name="colecaoContaValores">
-									<%if (cor.equalsIgnoreCase("#cbe5fe")) {
-										cor = "#FFFFFF";%>
-									<tr bgcolor="#FFFFFF">
-										<%} else {
-									cor = "#cbe5fe";%>
-									<tr bgcolor="#cbe5fe">
-										<%}%>
-										<td bgcolor="#90c7fc" align="center">
-											<div class="style9" align="center">
-												<font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <strong>Total</strong>
-										</font></div>
-										</td>
-										<td align="left">
-										
-											<%=((Collection) session.getAttribute("colecaoContaValores")).size()%>
-												&nbsp;
-												doc(s)
-										</td>
-										<td align="right">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorAgua")%>
-										</font></div>
-										</td>
-										<td align="rigth">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorEsgoto")%>
-										</font></div>
-										</td>
-										<td align="right">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorDebito")%>
-										</font></div>
-										</td>
-										<td align="right">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorCredito")%>
-										</font></div>
-										</td>
-										<td align="right">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorImposto")%>
-										</font></div>
-										</td>
-										<td align="right">
-										<div align="right"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorConta")%>
-										</font></div>
-										</td>
-										<td align="right">
-										<div align="right" class="style9"><font color="#000000"
-											style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorAcrescimo")%>
-										</font></div>
-										</td>
-										<td align="left">
-										<div align="left"><font color="#000000" style="font-size:9px"
-											face="Verdana, Arial, Helvetica, sans-serif"> </font></div>
-										</td>
-									</tr>
-								</logic:notEmpty>
-							</logic:present>
-							<%} else {%>
+						<% } else { %>
 							<tr bordercolor="#000000">
-								<td width="9%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>M&ecirc;s/Ano</strong>
-								</font></div>
-								</td>
-								<td width="12%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Vencimento</strong>
-								</font></div>
-								</td>
-								<td width="8%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor de
-								&Aacute;gua </strong> </font></div>
-								</td>
-								<td width="8%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor de
-								Esgoto</strong> </font></div>
-								</td>
-								<td width="8%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor dos
-								<br>
-								D&eacute;bitos</strong> </font></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor dos
-								Creditos</strong> </font></div>
+								<td width="20%" bgcolor="#90c7fc">
+						<% } %>
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>M&ecirc;s/Ano</strong>
+										</font>
+									</div>
 								</td>
 								
+								<td width="12%" bgcolor="#90c7fc">
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Vencimento</strong>
+										</font>
+									</div>
+								</td>
+								
+								<td width="8%" bgcolor="#90c7fc">
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Valor de &Aacute;gua </strong> 
+										</font>
+									</div>
+								</td>
+								
+								<td width="8%" bgcolor="#90c7fc">
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Valor de Esgoto</strong> 
+										</font>
+									</div>
+								</td>
+								
+								<td width="8%" bgcolor="#90c7fc">
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Valor dos <br> D&eacute;bitos</strong> 
+										</font>
+									</div>
+								</td>
+								
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Valor dos Creditos</strong> 
+										</font>
+									</div>
+								</td>
 								
 								<td width="10%" bgcolor="#90c7fc">
 								  <div align="center" class="style9">
@@ -905,260 +506,226 @@ function pesquisarImovel() {
 								  </div>
 								</td>
 								
-								
-								
 								<td width="8%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor da
-								Conta</strong> </font></div>
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Valor da Conta</strong> 
+										</font>
+									</div>
 								</td>
+								
 								<td width="7%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Acr&eacute;sc.
-								Impont.</strong><strong></strong> </font></div>
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Acr&eacute;sc. Impont.</strong>
+											<strong></strong> 
+										</font>
+									</div>
 								</td>
+								
 								<td width="8%" bgcolor="#90c7fc">
-								<div align="center" class="style9"><font color="#000000"
-									style="font-size:9px"
-									face="Verdana, Arial, Helvetica, sans-serif"> <strong>Sit.</strong>
-								</font></div>
+									<div align="center" class="style9">
+										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+											<strong>Sit.</strong>
+										</font>
+									</div>
 								</td>
 							</tr>
 							
 							<tr>
-								<td height="100" colspan="10">
-								<div style="width: 100%; height: 100%; overflow: auto;">
+								<td height="auto" colspan="10">
+								<div style="width: 100%; max-height: 100px; overflow: auto;">
 								<table width="100%">
 									<logic:present name="colecaoContaValores">
 										<logic:iterate name="colecaoContaValores"
 											id="contavaloreshelper">
-											<%if (cor.equalsIgnoreCase("#cbe5fe")) {
-					cor = "#FFFFFF";%>
+											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
 											<tr bgcolor="#FFFFFF">
-												<%} else {
-					cor = "#cbe5fe";%>
+												<%} else {cor = "#cbe5fe";%>
 											<tr bgcolor="#cbe5fe">
 												<%}%>
+												
 												<td width="9%" align="left">
 													<div align="left" class="style9">
-													
-													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<font color="#000000"
-															style="font-size:9px"
-															face="Verdana, Arial, Helvetica, sans-serif"> 
-														<logic:notEmpty
-															name="contavaloreshelper" property="conta">
-															<a
-																href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-															<bean:define name="contavaloreshelper" property="conta"
-																id="conta" /> <bean:write name="conta"
-																property="formatarAnoMesParaMesAno" /></a>
-														</logic:notEmpty> </font>
-													</logic:empty>
-	
-													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<font color="#ff0000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif">
-														 <logic:notEmpty name="contavaloreshelper" property="conta">
-														<a
-															href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" /> <font color="#ff0000"><bean:write name="conta"
-															property="formatarAnoMesParaMesAno" /></font> </a>
-														</logic:notEmpty> </font>
-													</logic:notEmpty>
+														<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta"/>
+																		<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																		<bean:define name="contavaloreshelper" property="conta" id="conta" /> <bean:write name="conta" property="formatarAnoMesParaMesAno"/>
+																	</a>
+																</logic:notEmpty>
+															</font>
+														</logic:empty>
+		
+														<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																		<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																		<bean:define name="contavaloreshelper" property="conta" id="conta" /> 
+																		<font color="#ff0000">
+																			<bean:write name="conta" property="formatarAnoMesParaMesAno" />
+																		</font> 
+																	</a>
+																</logic:notEmpty> 
+															</font>
+														</logic:notEmpty>
 													</div>
 												</td>
 												
 												<td width="12%" align="left">
 													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="left" class="style9"><font color="#000000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="dataVencimentoConta"
-															formatKey="date.format" />
-													</logic:notEmpty> </font></div>
+														<div align="left" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:empty>
 	
 													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="left" class="style9"><font color="#ff0000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="dataVencimentoConta"
-															formatKey="date.format" />
-														</logic:notEmpty> </font></div>
-													</logic:notEmpty>
-												</td>
-												
-												<td width="8%" align="right">
-																								
-													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="right" class="style9"><font color="#000000"
-																style="font-size:9px"
-																face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-																name="contavaloreshelper" property="conta">
-																<bean:define name="contavaloreshelper" property="conta"
-																	id="conta" />
-																<bean:write name="conta" property="valorAgua"
-																	formatKey="money.format" />
-															</logic:notEmpty> </font></div>
-													</logic:empty>
-	
-													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="right" class="style9"><font color="#ff0000"
-															style="font-size:9px"
-															face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-															name="contavaloreshelper" property="conta">
-															<bean:define name="contavaloreshelper" property="conta"
-																id="conta" />
-															<bean:write name="conta" property="valorAgua"
-																formatKey="money.format" />
-														</logic:notEmpty> </font></div>
+														<div align="left" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:notEmpty>
 												</td>
 												
 												<td width="8%" align="right">
 													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="right" class="style9"><font color="#000000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="valorEsgoto"
-															formatKey="money.format" />
-													</logic:notEmpty> </font></div>
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorAgua" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:empty>
 	
 													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="right" class="style9"><font color="#ff0000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="valorEsgoto"
-															formatKey="money.format" />
-													</logic:notEmpty> </font></div>
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorAgua" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:notEmpty>
 												</td>
 												
 												<td width="8%" align="right">
-																								
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-										<div align="right" class="style9"><font color="#000000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<logic:notEqual name="contavaloreshelper"
-															property="conta.debitos" value="0">
-															<a
-																href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-															<bean:write name="contavaloreshelper"
-																property="conta.debitos" formatKey="money.format" /> </a>
-														</logic:notEqual>
-														<logic:equal name="contavaloreshelper"
-															property="conta.debitos" value="0">
-															<bean:write name="contavaloreshelper"
-																property="conta.debitos" formatKey="money.format" />
-														</logic:equal>
-													</logic:notEmpty> </font></div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9"><font color="#ff0000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<logic:notEqual name="contavaloreshelper"
-															property="conta.debitos" value="0">
-															<a
-																href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-															<font color="#ff0000"><bean:write name="contavaloreshelper"
-																property="conta.debitos" formatKey="money.format" /> </font></a>
-														</logic:notEqual>
-														<logic:equal name="contavaloreshelper"
-															property="conta.debitos" value="0">
-															<bean:write name="contavaloreshelper"
-																property="conta.debitos" formatKey="money.format" />
-														</logic:equal>
-													</logic:notEmpty> </font></div>
-												</logic:notEmpty>
-												
-												
-													
-												</td>
-												<td width="10%" align="right">
-																								
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-												<div align="right" class="style9"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-													name="contavaloreshelper" property="conta">
-													<logic:notEqual name="contavaloreshelper"
-														property="conta.valorCreditos" value="0">
-														<a
-															href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-														<bean:write name="contavaloreshelper"
-															property="conta.valorCreditos" formatKey="money.format" />
-														</a>
-													</logic:notEqual>
-													<logic:equal name="contavaloreshelper"
-														property="conta.valorCreditos" value="0">
-														<bean:write name="contavaloreshelper"
-															property="conta.valorCreditos" formatKey="money.format" />
-													</logic:equal>
-												</logic:notEmpty> </font></div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9"><font color="#ff0000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-													name="contavaloreshelper" property="conta">
-													<logic:notEqual name="contavaloreshelper"
-														property="conta.valorCreditos" value="0">
-														<a
-															href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
-														<font color="#ff0000"><bean:write name="contavaloreshelper"
-															property="conta.valorCreditos" formatKey="money.format" /></font>
-														</a>
-													</logic:notEqual>
-													<logic:equal name="contavaloreshelper"
-														property="conta.valorCreditos" value="0">
-														<bean:write name="contavaloreshelper"
-															property="conta.valorCreditos" formatKey="money.format" />
-													</logic:equal>
-												</logic:notEmpty> </font></div>
-												</logic:notEmpty>
-												
-												
-												
-												
+													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
 												</td>
 												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
+												<td width="8%" align="right">
+													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<logic:notEqual name="contavaloreshelper" property="conta.debitos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																			<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" /> 
+																		</a>
+																	</logic:notEqual>
+														
+																	<logic:equal name="contavaloreshelper" property="conta.debitos" value="0">
+																		<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+
+													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<logic:notEqual name="contavaloreshelper" property="conta.debitos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																			<bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<font color="#ff0000">
+																				<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" /> 
+																			</font>
+																		</a>
+																	</logic:notEqual>
+																	<logic:equal name="contavaloreshelper" property="conta.debitos" value="0">
+																		<bean:write name="contavaloreshelper" property="conta.debitos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+
+												<td width="10%" align="right">
+													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<logic:notEqual name="contavaloreshelper" property="conta.valorCreditos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
+																		</a>
+																	</logic:notEqual>
+																	<logic:equal name="contavaloreshelper" property="conta.valorCreditos" value="0">
+																		<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+
+													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta"> 
+																	<logic:notEqual name="contavaloreshelper" property="conta.valorCreditos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contavaloreshelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<font color="#ff0000">
+																				<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
+																			</font>
+																		</a>
+																	</logic:notEqual>
+																	<logic:equal name="contavaloreshelper" property="conta.valorCreditos" value="0">
+																		<bean:write name="contavaloreshelper" property="conta.valorCreditos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
 												
 												<td width="10%" align="right">
-																								
 													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
 														<div align="right" class="style9">
 														  <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
@@ -1180,175 +747,145 @@ function pesquisarImovel() {
 														  </font>
 														</div>
 													</logic:notEmpty>
-													
 												</td>
 												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
-												
 												<td width="8%" align="right">
-																								
 													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9"><font color="#000000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="valorTotal"
-															formatKey="money.format" />
-													</logic:notEmpty> </font></div>
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorTotal" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:empty>
 	
 													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-														<div align="right" class="style9"><font color="#ff0000"
-														style="font-size:9px"
-														face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-														name="contavaloreshelper" property="conta">
-														<bean:define name="contavaloreshelper" property="conta"
-															id="conta" />
-														<bean:write name="conta" property="valorTotal"
-															formatKey="money.format" />
-													</logic:notEmpty> </font></div>
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorTotal" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
 													</logic:notEmpty>
 												</td>
 												
 												<td width="8%" align="right">
-												
-																								
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-										<div align="right" class="style9"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEqual
-													name="contavaloreshelper" property="valorTotalContaValores"
-													value="0">
-													<a
-														href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
-													<bean:write name="contavaloreshelper"
-														property="valorTotalContaValores" formatKey="money.format" />
-													</a>
-												</logic:notEqual> <logic:equal name="contavaloreshelper"
-													property="valorTotalContaValores" value="0">
-													<bean:write name="contavaloreshelper"
-														property="valorTotalContaValores" formatKey="money.format" />
-												</logic:equal> </font></div>
-												</logic:empty>
-
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="right" class="style9"><font color="#ff0000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEqual
-													name="contavaloreshelper" property="valorTotalContaValores"
-													value="0">
-													<a
-														href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
-													<font color="#ff0000"><bean:write name="contavaloreshelper"
-														property="valorTotalContaValores" formatKey="money.format" /></font>
-													</a>
-												</logic:notEqual> <logic:equal name="contavaloreshelper"
-													property="valorTotalContaValores" value="0">
-													<bean:write name="contavaloreshelper"
-														property="valorTotalContaValores" formatKey="money.format" />
-												</logic:equal> </font></div>
-												</logic:notEmpty>
-												
-												
-												
+													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEqual name="contavaloreshelper" property="valorTotalContaValores" value="0">
+																	<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
+																		<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
+																	</a>
+																</logic:notEqual> 
+																
+																<logic:equal name="contavaloreshelper" property="valorTotalContaValores" value="0">
+																	<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
+																</logic:equal> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEqual name="contavaloreshelper" property="valorTotalContaValores" value="0">
+																	<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contavaloreshelper" property="valorMulta" />&juros=<bean:write name="contavaloreshelper" property="valorJurosMora" />&atualizacao=<bean:write name="contavaloreshelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
+																		<font color="#ff0000">
+																			<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
+																		</font>
+																	</a>
+																</logic:notEqual> 
+																<logic:equal name="contavaloreshelper" property="valorTotalContaValores" value="0">
+																	<bean:write name="contavaloreshelper" property="valorTotalContaValores" formatKey="money.format" />
+																</logic:equal> 
+															</font>
+														</div>
+													</logic:notEmpty>
 												</td>
-												<td width="7%" align="left">
-																								
-												<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-										<div align="left" class="style9" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <logic:notEmpty
-													name="contavaloreshelper" property="conta">
-													<bean:define name="contavaloreshelper" property="conta"
-														id="conta" />
-													<bean:define name="conta"
-														property="debitoCreditoSituacaoAtual"
-														id="debitoCreditoSituacaoAtual" />
-													<bean:write name="debitoCreditoSituacaoAtual"
-														property="descricaoAbreviada" />
-												</logic:notEmpty> </font></div>
-												</logic:empty>
 
-												<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
-													<div align="left" class="style9"><font color="#ff0000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}" > <logic:notEmpty
-													name="contavaloreshelper" property="conta">
-													<bean:define name="contavaloreshelper" property="conta"
-														id="conta" />
-													<bean:define name="conta"
-														property="debitoCreditoSituacaoAtual"
-														id="debitoCreditoSituacaoAtual" />
-													<bean:write name="debitoCreditoSituacaoAtual"
-														property="descricaoAbreviada" />
-												</logic:notEmpty> </font></div>
-												</logic:notEmpty>
-												
-												
-												
+												<td width="7%" align="left">
+													<logic:empty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" />
+																	<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contavaloreshelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif" title="${contavaloreshelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}" > 
+																<logic:notEmpty name="contavaloreshelper" property="conta">
+																	<bean:define name="contavaloreshelper" property="conta" id="conta" />
+																	<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" />
+																	<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
 												</td>
 											</tr>
 										</logic:iterate>
+										
+										
 										<logic:notEmpty name="colecaoContaValores">
-											<%if (cor.equalsIgnoreCase("#cbe5fe")) {
-					cor = "#FFFFFF";%>
+											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
 											<tr bgcolor="#FFFFFF">
-												<%} else {
-					cor = "#cbe5fe";%>
+												<%} else { cor = "#cbe5fe";%>
 											<tr bgcolor="#cbe5fe">
 												<%}%>
 												<td bgcolor="#90c7fc" align="center">
-												<div class="style9" align="center"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <strong>Total</strong>
-												</font></div>
+													<div class="style9" align="center">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<strong>Total</strong>
+														</font>
+													</div>
 												</td>
+												
 												<td align="left">
-												<%=((Collection) session.getAttribute("colecaoContaValores")).size()%>
-												&nbsp;
-												doc(s)
+													<%=((Collection) session.getAttribute("colecaoContaValores")).size()%> &nbsp; doc(s)
 												</td>
+												
 												<td align="right">
-												<div align="right"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorAgua")%>
-												</font></div>
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorAgua")%>
+														</font>
+													</div>
 												</td>
+												
 												<td align="rigth">
-												<div align="right"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorEsgoto")%>
-												</font></div>
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorEsgoto")%>
+														</font>
+													</div>
 												</td>
+												
 												<td align="right">
-												<div align="right"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorDebito")%>
-												</font></div>
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorDebito")%>
+														</font>
+													</div>
 												</td>
+												
 												<td align="right">
-												<div align="right"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorCredito")%>
-												</font></div>
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorCredito")%>
+														</font>
+													</div>
 												</td>
-												
-												
-												
-												
 												
 												<td align="right">
 												  <div align="right">
@@ -1358,39 +895,342 @@ function pesquisarImovel() {
 												  </div>
 												</td>
 												
-												
-												
-												
-												
-												
+												<td align="right">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorConta")%>
+														</font>
+													</div>
+												</td>
 												
 												<td align="right">
-												<div align="right"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorConta")%>
-												</font></div>
+													<div align="right" class="style9">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorAcrescimo")%>
+														</font>
+													</div>
 												</td>
-												<td align="right">
-												<div align="right" class="style9"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> <%=session.getAttribute("valorAcrescimo")%>
-												</font></div>
-												</td>
+												
 												<td align="left">
-												<div align="left"><font color="#000000"
-													style="font-size:9px"
-													face="Verdana, Arial, Helvetica, sans-serif"> </font></div>
+													<div align="left">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+														</font>
+													</div>
 												</td>
 											</tr>
 										</logic:notEmpty>
+									</logic:present>
+									
+									<logic:present name="colecaoContaValoresPreteritos">
+									<tr>
+										<td colspan="8">
+											<div align="center">
+												<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+													<strong>----------------- Contas de clientes anteriores -----------------</strong>
+												</font>
+											</div>
+										</td>
+									</tr>
+									
+									<logic:iterate name="colecaoContaValoresPreteritos" id="contaValoresPreteritosHelper">
+											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
+											<tr bgcolor="#FFFFFF">
+												<%} else { cor = "#cbe5fe";%>
+											<tr bgcolor="#cbe5fe">
+												<%}%>
+												<td width="9%" align="left">
+													<div align="left" class="style9">
+														<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																		<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /> 
+																		<bean:write name="conta" property="formatarAnoMesParaMesAno" />
+																	</a>
+																</logic:notEmpty> 
+															</font>
+														</logic:empty>
+		
+														<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																		<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /> 
+																		<font color="#ff0000">
+																			<bean:write name="conta" property="formatarAnoMesParaMesAno" />
+																		</font> 
+																	</a>
+																</logic:notEmpty> 
+															</font>
+														</logic:notEmpty>
+													</div>
+												</td>
+												
+												<td width="12%" align="left">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="dataVencimentoConta" formatKey="date.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="8%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorAgua" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorAgua" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="8%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorEsgoto" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="8%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<logic:notEqual name="contaValoresPreteritosHelper" property="conta.debitos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<bean:write name="contaValoresPreteritosHelper" property="conta.debitos" formatKey="money.format" /> 
+																		</a>
+																	</logic:notEqual>
+																	
+																	<logic:equal name="contaValoresPreteritosHelper" property="conta.debitos" value="0">
+																		<bean:write name="contaValoresPreteritosHelper" property="conta.debitos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<logic:notEqual name="contaValoresPreteritosHelper" property="conta.debitos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarDebitoCobradoAction.do?contaID=<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<font color="#ff0000">
+																				<bean:write name="contaValoresPreteritosHelper" property="conta.debitos" formatKey="money.format" /> 
+																			</font>
+																		</a>
+																	</logic:notEqual>
+															
+																	<logic:equal name="contaValoresPreteritosHelper" property="conta.debitos" value="0">
+																		<bean:write name="contaValoresPreteritosHelper" property="conta.debitos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="10%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<logic:notEqual name="contaValoresPreteritosHelper" property="conta.valorCreditos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contaValoresPreteritosHelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<bean:write name="contaValoresPreteritosHelper" property="conta.valorCreditos" formatKey="money.format" />
+																		</a>
+																	</logic:notEqual>
+																	
+																	<logic:equal name="contaValoresPreteritosHelper" property="conta.valorCreditos" value="0">
+																		<bean:write name="contaValoresPreteritosHelper" property="conta.valorCreditos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty>
+															</font>
+														</div>
+													</logic:empty>
+
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<logic:notEqual name="contaValoresPreteritosHelper" property="conta.valorCreditos" value="0">
+																		<a href="javascript:abrirPopup('exibirConsultarCreditoRealizadoAction.do?contaID=<bean:define name="contaValoresPreteritosHelper"	property="conta" id="conta" /><bean:write name="conta" property="id" />&tipoConsulta=conta', 600, 800);">
+																			<font color="#ff0000">
+																				<bean:write name="contaValoresPreteritosHelper" property="conta.valorCreditos" formatKey="money.format" />
+																			</font>
+																		</a>
+																	</logic:notEqual>
+																	<logic:equal name="contaValoresPreteritosHelper"property="conta.valorCreditos" value="0">
+																		<bean:write name="contaValoresPreteritosHelper"property="conta.valorCreditos" formatKey="money.format" />
+																	</logic:equal>
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="10%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+														  <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+														    <logic:notEmpty	name="contaValoresPreteritosHelper" property="conta">
+																<bean:define name="contaValoresPreteritosHelper" property="conta"	id="conta" />
+																<bean:write name="conta" property="valorImposto" formatKey="money.format" />
+															</logic:notEmpty> 
+														  </font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+														  <font color="#ff0000"	style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+														    <logic:notEmpty	name="contaValoresPreteritosHelper" property="conta">
+															  <bean:define name="contaValoresPreteritosHelper" property="conta"	id="conta" />
+															  <bean:write name="conta" property="valorImposto" formatKey="money.format" />
+														    </logic:notEmpty> 
+														  </font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="8%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorTotal" formatKey="money.format" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:write name="conta" property="valorTotal" formatKey="money.format" />
+																</logic:notEmpty>
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+												
+												<td width="8%" align="right">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEqual name="contaValoresPreteritosHelper" property="valorTotalContaValores" value="0">
+																	<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contaValoresPreteritosHelper" property="valorMulta" />&juros=<bean:write name="contaValoresPreteritosHelper" property="valorJurosMora" />&atualizacao=<bean:write name="contaValoresPreteritosHelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
+																		<bean:write name="contaValoresPreteritosHelper" property="valorTotalContaValores" formatKey="money.format" />
+																	</a>
+																</logic:notEqual> 
+																<logic:equal name="contaValoresPreteritosHelper" property="valorTotalContaValores" value="0">
+																	<bean:write name="contaValoresPreteritosHelper" property="valorTotalContaValores" formatKey="money.format" />
+																</logic:equal> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="right" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEqual name="contaValoresPreteritosHelper" property="valorTotalContaValores" value="0">
+																	<a href="javascript:abrirPopup('exibirValorAtualizacaoConsultarPopupAction.do?multa=<bean:write name="contaValoresPreteritosHelper" property="valorMulta" />&juros=<bean:write name="contaValoresPreteritosHelper" property="valorJurosMora" />&atualizacao=<bean:write name="contaValoresPreteritosHelper" property="valorAtualizacaoMonetaria" />', 300, 650);">
+																		<font color="#ff0000">
+																			<bean:write name="contaValoresPreteritosHelper" property="valorTotalContaValores" formatKey="money.format" />
+																		</font>
+																	</a>
+																</logic:notEqual> 
+																<logic:equal name="contaValoresPreteritosHelper" property="valorTotalContaValores" value="0">
+																	<bean:write name="contaValoresPreteritosHelper" property="valorTotalContaValores" formatKey="money.format" />
+																</logic:equal> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+
+												<td width="7%" align="left">
+													<logic:empty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9" title="${contaValoresPreteritosHelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" />
+																	<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:empty>
+	
+													<logic:notEmpty name="contaValoresPreteritosHelper" property="conta.contaMotivoRevisao">
+														<div align="left" class="style9">
+															<font color="#ff0000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif" title="${contaValoresPreteritosHelper.conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao}" >
+																<logic:notEmpty name="contaValoresPreteritosHelper" property="conta">
+																	<bean:define name="contaValoresPreteritosHelper" property="conta" id="conta" />
+																	<bean:define name="conta" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" />
+																	<bean:write name="debitoCreditoSituacaoAtual" property="descricaoAbreviada" />
+																</logic:notEmpty> 
+															</font>
+														</div>
+													</logic:notEmpty>
+												</td>
+											  </tr>
+											</logic:iterate>
+											
 									</logic:present>
 								</table>
 								</div>
 								</td>
 							</tr>
-							<%}
-
-			%>
 						</logic:notEmpty>
 					</table>
 					</td>
@@ -1398,38 +1238,27 @@ function pesquisarImovel() {
 				<tr>
 					<td colspan="4">&nbsp;</td>
 				</tr>				
-				<!--<tr>
-
-					<td align="left"><strong>Situa&ccedil;&atilde;o de Cobran&ccedil;a:</strong></td>
-
-					<td colspan="3" align="left"><html:text
-						property="situacaoCobrancaDadosComplementares" readonly="true"
-						style="background-color:#EFEFEF; border:0; color: #ff0000"
-						size="50" maxlength="50" /></td>
-
-				</tr>
-				-->
 				
-				<!-- Inicio da tabela de Situação de Cobranca - Vivianne Sousa -->
+				<!-- Inicio da tabela de Situaï¿½ï¿½o de Cobranca - Vivianne Sousa -->
 				  <tr>
 					<td colspan="4">
 					<table width="100%" align="center" bgcolor="#90c7fc" border="0">
 					
 						<tr bordercolor="#79bbfd">
-							<td colspan="4" bgcolor="#79bbfd" align="center"><strong>Situações de Cobrança </strong></td>
+							<td colspan="4" bgcolor="#79bbfd" align="center"><strong>Situa&ccedil;&otilde;es de Cobran&ccedil;a </strong></td>
 						</tr>
 						<tr bordercolor="#000000">
 							<td width="15%" bgcolor="#90c7fc">
 							<div align="left" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Código</strong> </font></div>
+								<strong>C&oacute;digo</strong> </font></div>
 							</td>
 							<td width="60%" bgcolor="#90c7fc">
 							<div align="left" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Descrição</strong> </font></div>
+								<strong>Descri&ccedil;&atilde;o</strong> </font></div>
 							</td>
 							<td width="25%" bgcolor="#90c7fc">
 							<div align="left" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Data de Implantação</strong> </font></div>
+								<strong>Data de Implanta&ccedil;&atilde;o</strong> </font></div>
 							
 						</tr>
 						
@@ -1533,20 +1362,20 @@ function pesquisarImovel() {
 					</table>
 					</td>
 				</tr>
-				<!-- Fim da tabela de Situação de Cobranca - Vivianne Sousa -->
+				<!-- Fim da tabela de Situaï¿½ï¿½o de Cobranca - Vivianne Sousa -->
 				
 				
 				<tr>
 					<td colspan="4">&nbsp;</td>
 				</tr>
 
-				<!-- Inicio da tabela de Histórico de Retorno de Negativações - Vivianne Sousa -->
+				<!-- Inicio da tabela de Histï¿½rico de Retorno de Negativaï¿½ï¿½es - Vivianne Sousa -->
 				  <tr>
 					<td colspan="4">
 					<table width="100%" align="center" bgcolor="#90c7fc" border="0">
 					
 						<tr bordercolor="#79bbfd">
-							<td colspan="4" bgcolor="#79bbfd" align="center"><strong>Histórico de Retorno de Negativações</strong></td>
+							<td colspan="4" bgcolor="#79bbfd" align="center"><strong>Hist&oacute;rico de Retorno de Negativa&ccedil;&atilde;es</strong></td>
 						</tr>
 						<tr bordercolor="#000000">
 							<td width="10%" bgcolor="#90c7fc">
@@ -1563,7 +1392,7 @@ function pesquisarImovel() {
 							</td>
 							<td width="15%" bgcolor="#90c7fc">
 							<div align="left" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Situação</strong> </font></div>
+								<strong>Situa&ccedil;&atilde;o</strong> </font></div>
 							</td>
 						</tr>
 						
@@ -1681,7 +1510,7 @@ function pesquisarImovel() {
 					</table>
 					</td>
 				</tr>
-				<!-- Fim da tabela de Histórico de Retorno de Negativações - Vivianne Sousa -->
+				<!-- Fim da tabela de Histï¿½rico de Retorno de Negativaï¿½ï¿½es - Vivianne Sousa -->
 
 				<tr>
 					<td colspan="4">&nbsp;</td>
@@ -1967,7 +1796,7 @@ function pesquisarImovel() {
 						</tr>
 						<tr bordercolor="#000000">
 							<td width="36%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Tipo do D&eacute;bito</strong> </font></div></td>
-							<td width="11%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Prestação</strong> </font></div></td>
+							<td width="11%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Presta&ccedil;&atilde;o</strong> </font></div></td>
 							<td width="13%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Data de Emiss&atilde;o</strong> </font></div></td>
 							<td width="13%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Data de Vencimento</strong> </font></div></td>
 							<td width="27%" bgcolor="#90c7fc"><div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> <strong>Valor da Guia de Pagamento</strong> </font></div></td>
@@ -2070,7 +1899,7 @@ function pesquisarImovel() {
 					<td colspan="4">
 						<table  width="100%" align="center" bgcolor="#90c7fc" border="0">
 							<tr bordercolor="#79bbfd">
-								<td colspan="5" bgcolor="#79bbfd" align="center"><strong>Débitos Pretéritos</strong></td>
+								<td colspan="5" bgcolor="#79bbfd" align="center"><strong>D&eacute;bitos Pret&eacute;ritos</strong></td>
 							</tr>
 							<tr  bordercolor="#000000">
 								<td width="50%" bgcolor="#90c7fc">
@@ -2112,19 +1941,19 @@ function pesquisarImovel() {
 						<tr bordercolor="#000000">
 							<td width="25%" bgcolor="#90c7fc">
 								<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Valor Total dos Débitos</strong> </font></div>
+								<strong>Valor Total dos D&eacute;bitos</strong> </font></div>
 							</td>
 							<td width="25%" bgcolor="#90c7fc">
 								<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Valor Total dos Débitos Atualizado</strong> </font></div>
+								<strong>Valor Total dos D&eacute;bitos Atualizado</strong> </font></div>
 							</td>
 							<td width="25%" bgcolor="#90c7fc">
 								<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Valor do Desconto para Pagamento à Vista</strong> </font></div>
+								<strong>Valor do Desconto para Pagamento &aacute; Vista</strong> </font></div>
 							</td>
 							<td width="25%" bgcolor="#90c7fc">
 								<div align="center" class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								<strong>Valor do Pagamento à Vista</strong> </font></div>
+								<strong>Valor do Pagamento &aacute; Vista</strong> </font></div>
 							</td>
 						</tr>
 						<%if((session.getAttribute("valorTotalSemAcrescimo")!= null) || (session.getAttribute("valorTotalComAcrescimo") != null)){ %>
@@ -2167,7 +1996,7 @@ function pesquisarImovel() {
 						   <a href="javascript:verificarExibicaoRelatorio();">
 							<img border="0"
 								src="<bean:message key="caminho.imagens"/>print.gif"
-								title="Imprimir Débitos" /> </a>
+								title="Imprimir D&eacute;bitos" /> </a>
 						  </div>
 					</td>
 				</tr>
@@ -2178,19 +2007,19 @@ function pesquisarImovel() {
 							<tr>  
 								<logic:empty name="colecaoContaValores">
 									<td align="right">
-										<input type="button" name="" value="Imprimir Extrato de Débito" class="bottonRightCol" disabled="true"/>
+										<input type="button" name="" value="Imprimir Extrato de D&eacute;bito" class="bottonRightCol" disabled="true"/>
 									</td>
 								</logic:empty>
 								<logic:notEmpty name="colecaoContaValores">
 									<logic:equal name="ConsultarImovelActionForm" property="indicadorEmissaoExtratoNaConsulta" value="<%=ConstantesSistema.SIM.toString()%>" >
 										<td align="right">
-											<input type="button" name="" value="Imprimir Extrato de Débito" class="bottonRightCol" onclick="gerarExtratoDebito()" >
+											<input type="button" name="" value="Imprimir Extrato de D&eacute;bito" class="bottonRightCol" onclick="gerarExtratoDebito()" >
 										</td>
 									</logic:equal>
 									
-									<logic:notEqual name="ConsultarImovelActionForm" property="indicadorEmissaoExtratoNaConsulta" value="<%=ConstantesSistema.SIM.toString()%>" >
+									<logic:notEqual name="ConsultarImovelActionForm" property="indicadorEmissaoExtratoNaConsulta" value="<%= ConstantesSistema.SIM.toString()%>" >
 										<td align="right">
-											<input type="button" name="" value="Imprimir Extrato de Débito" class="bottonRightCol" disabled="true" >
+											<input type="button" name="" value="Imprimir Extrato de D&eacute;bito" class="bottonRightCol" disabled="true" >
 										</td>
 									</logic:notEqual>
 								</logic:notEmpty>

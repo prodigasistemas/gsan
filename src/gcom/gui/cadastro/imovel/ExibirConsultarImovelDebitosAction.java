@@ -29,6 +29,7 @@ import gcom.util.filtro.ParametroSimplesIn;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -36,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.axis2.databinding.types.soapencoding.Array;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -87,6 +89,8 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 			
 			sessao.removeAttribute("imovelDebitos");
 			sessao.removeAttribute("colecaoContaValores");
+			sessao.removeAttribute("colecaoContaValoresPreteritos");
+			sessao.removeAttribute("totalContas");
 			sessao.removeAttribute("idImovelPrincipalAba");
 			sessao.removeAttribute("imovelClientes");
 
@@ -370,8 +374,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 											.intValue(), indicadorGuias
 											.intValue(), indicadorAtualizar
 											.intValue(), null);
-
+					
 					Collection<ContaValoresHelper> colecaoContaValores = colecaoDebitoImovel.getColecaoContasValores();
+					Collection<ContaValoresHelper> colecaoContaValoresPreteritos = colecaoDebitoImovel.getColecaoContasValoresPreteritos();
 
 					ContaValoresHelper dadosConta = null;
 
@@ -386,7 +391,47 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					BigDecimal valorJurosMora = new BigDecimal("0.00");
 					BigDecimal valorMulta = new BigDecimal("0.00");
 					
+					BigDecimal valorContaPreterito = new BigDecimal("0.00");
+					BigDecimal valorAcrescimoPreterito = new BigDecimal("0.00");
+					BigDecimal valorAguaPreterito = new BigDecimal("0.00");
+					BigDecimal valorEsgotoPreterito = new BigDecimal("0.00");
+					BigDecimal valorDebitoPreterito = new BigDecimal("0.00");
+					BigDecimal valorCreditoPreterito = new BigDecimal("0.00");
+					BigDecimal valorImpostoPreterito = new BigDecimal("0.00");
+					BigDecimal valorAtualizacaoMonetariaPreterito = new BigDecimal("0.00");
+					BigDecimal valorJurosMoraPreterito = new BigDecimal("0.00");
+					BigDecimal valorMultaPreterito = new BigDecimal("0.00");
+					
 					if (colecaoContaValores != null	&& !colecaoContaValores.isEmpty()) {
+						java.util.Iterator<ContaValoresHelper> colecaoContaValoresIterator = colecaoContaValoresPreteritos.iterator();
+						// percorre a colecao de conta somando o valor para obter um valor total
+						while (colecaoContaValoresIterator.hasNext()) {
+
+							dadosConta = (ContaValoresHelper) colecaoContaValoresIterator.next();
+							valorContaPreterito = valorContaPreterito.add(dadosConta.getConta().getValorTotal());
+							valorAcrescimoPreterito = valorAcrescimoPreterito.add(dadosConta.getValorTotalContaValores());
+							valorAguaPreterito = valorAguaPreterito.add(dadosConta.getConta().getValorAgua());
+							valorEsgotoPreterito = valorEsgotoPreterito.add(dadosConta.getConta().getValorEsgoto());
+							valorDebitoPreterito = valorDebitoPreterito.add(dadosConta.getConta().getDebitos());
+							valorCreditoPreterito = valorCreditoPreterito.add(dadosConta.getConta().getValorCreditos());
+							valorImpostoPreterito = valorImpostoPreterito.add(dadosConta.getConta().getValorImposto());
+							
+							if (dadosConta.getValorAtualizacaoMonetaria() != null && !dadosConta.getValorAtualizacaoMonetaria().equals("")) {
+								valorAtualizacaoMonetariaPreterito.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
+								valorAtualizacaoMonetariaPreterito = valorAtualizacaoMonetariaPreterito.add(dadosConta.getValorAtualizacaoMonetaria().setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO));
+							}
+							if (dadosConta.getValorJurosMora() != null	&& !dadosConta.getValorJurosMora().equals("")) {
+								valorJurosMoraPreterito.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
+								valorJurosMoraPreterito = valorJurosMoraPreterito.add(dadosConta.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO));
+							}
+							if (dadosConta.getValorMulta() != null && !dadosConta.getValorMulta().equals("")) {
+								valorMultaPreterito.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
+								valorMultaPreterito = valorMultaPreterito.add(dadosConta.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO));
+							}
+						}
+					}
+					
+					if (colecaoContaValoresPreteritos != null	&& !colecaoContaValoresPreteritos.isEmpty()) {
 						java.util.Iterator<ContaValoresHelper> colecaoContaValoresIterator = colecaoContaValores.iterator();
 						// percorre a colecao de conta somando o valor para obter um valor total
 						while (colecaoContaValoresIterator.hasNext()) {
@@ -562,7 +607,12 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					} else {
 						// Manda a colecao pelo request
 						sessao.setAttribute("colecaoContaValores",colecaoContaValores);
-
+						
+//						if (!colecaoContaValoresPreteritos.isEmpty()) {
+							sessao.setAttribute("colecaoContaValoresPreteritos", colecaoContaValoresPreteritos);
+//						}
+						sessao.setAttribute("totalContas", colecaoContaValores.size() + colecaoContaValoresPreteritos.size());
+								
 						// Manda a colecao e os valores total de conta pelo request
 						sessao.setAttribute("colecaoDebitoACobrar",colecaoDebitoACobrar);
 						sessao.setAttribute("valorConta", Util.formatarMoedaReal(valorConta));
@@ -573,6 +623,14 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 						sessao.setAttribute("valorCredito", Util.formatarMoedaReal(valorCredito));
 						sessao.setAttribute("valorContaAcrescimo", Util.formatarMoedaReal(valorConta.add(valorAcrescimo)));
 						sessao.setAttribute("valorImposto", Util.formatarMoedaReal(valorImposto));
+						
+						sessao.setAttribute("valorContaPreterito", Util.formatarMoedaReal(valorContaPreterito));
+						sessao.setAttribute("valorAcrescimoPreterito", Util.formatarMoedaReal(valorAcrescimoPreterito));
+						sessao.setAttribute("valorAguaPreterito", Util.formatarMoedaReal(valorAguaPreterito));
+						sessao.setAttribute("valorEsgotoPreterito", Util.formatarMoedaReal(valorEsgotoPreterito));
+						sessao.setAttribute("valorDebitoPreterito", Util.formatarMoedaReal(valorDebitoPreterito));
+						sessao.setAttribute("valorCreditoPreterito", Util.formatarMoedaReal(valorCreditoPreterito));
+						sessao.setAttribute("valorImpostoPreterito", Util.formatarMoedaReal(valorImpostoPreterito));
 
 						// Manda a colecao e o valor total de DebitoACobrar pelo request
 						sessao.setAttribute("colecaoDebitoACobrar",colecaoDebitoACobrar);
@@ -684,6 +742,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 						.setMatriculaImovelDebitos("IMÓVEL INEXISTENTE");
 				sessao.removeAttribute("imovelDebitos");
 				sessao.removeAttribute("colecaoContaValores");
+				sessao.removeAttribute("colecaoContaValoresPreteritos");
 				sessao.removeAttribute("idImovelPrincipalAba");
 
 				// Manda a colecao e os valores total de conta pelo request
@@ -760,6 +819,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					null);
 			sessao.removeAttribute("imovelDebitos");
 			sessao.removeAttribute("colecaoContaValores");
+			sessao.removeAttribute("colecaoContaValoresPreteritos");
 			sessao.removeAttribute("idImovelPrincipalAba");
 
 			// Manda a colecao e os valores total de conta pelo request

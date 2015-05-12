@@ -13,6 +13,7 @@ import java.util.Iterator;
 public class ObterDebitoImovelOuClienteHelper {
 	
 	private Collection<ContaValoresHelper> colecaoContasValores;
+	private Collection<ContaValoresHelper> colecaoContasValoresPreteritos;
 	private Collection<ContaValoresHelper> colecaoContasValoresImovel;
 	private Collection<DebitoACobrar> colecaoDebitoACobrar;
 	private Collection<CreditoARealizar> colecaoCreditoARealizar;
@@ -156,4 +157,14 @@ public class ObterDebitoImovelOuClienteHelper {
 	public void setAnoMesReferenciaFinalDebito(Integer anoMesReferenciaFinalDebito) {
 		this.anoMesReferenciaFinalDebito = anoMesReferenciaFinalDebito;
 	}
+
+	public Collection<ContaValoresHelper> getColecaoContasValoresPreteritos() {
+		return colecaoContasValoresPreteritos;
+	}
+
+	public void setColecaoContasValoresPreteritos(Collection<ContaValoresHelper> colecaoContasValoresPreteritos) {
+		this.colecaoContasValoresPreteritos = colecaoContasValoresPreteritos;
+	}
+	
+	
 }
