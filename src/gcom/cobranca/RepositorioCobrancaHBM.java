@@ -300,7 +300,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	public Collection pesquisarContasImovel(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
 			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada,
 			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito,
-			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException {
+			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva, boolean contaComDebitoPreterito) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
 
@@ -318,13 +318,22 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "conta.cnta_nnconsumoagua as consumoAgua, conta.cnta_vlimpostos as valorImpostos, conta.cnta_nnconsumoesgoto as consumoEsgoto, "
 					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, "
 					+ "min(pagto.pgmt_dtpagamento) as dataPagamento, conta.parc_id as idParcelamento "
-					+ "FROM faturamento.conta conta "
+					+ "FROM cadastro.cliente_conta cc "
+					+ "INNER JOIN faturamento.conta conta ON (conta.cnta_id = cc.cnta_id)  "
 					+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id "
-					+ "WHERE conta.imov_id = :idImovel "
-					+ "and conta.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida, :situacaoParcelada) "
-					+ "and conta.cnta_amreferenciaconta between :inicialReferencia and :finalReferencia "
-					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
-					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 ";
+					+ "WHERE conta.imov_id = :idImovel ";
+			
+			if (contaComDebitoPreterito) {
+				consulta += "AND cc.clie_id <> (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = :idClienteRelacaoTipo and ci.clim_dtrelacaofim is null) ";
+			} else {
+				consulta += "AND cc.clie_id = (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = :idClienteRelacaoTipo and ci.clim_dtrelacaofim is null) ";
+			}
+					
+			consulta += "and cc.crtp_id = :idClienteRelacaoTipo "
+						+ "and conta.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida, :situacaoParcelada) "
+						+ "and conta.cnta_amreferenciaconta between :inicialReferencia and :finalReferencia "
+						+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
+						+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 ";
 
 			if (indicadorConta == 2) {
 				consulta += "and conta.cnta_dtrevisao is null ";
@@ -362,7 +371,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.setInteger("situacaoParcelada", new Integer(contaSituacaoParcelada))
 					.setInteger("inicialReferencia", new Integer(anoMesInicialReferenciaDebito))
 					.setInteger("finalReferencia", new Integer(anoMesFinalReferenciaDebito))
-					.setDate("inicialVencimento", anoMesInicialVecimentoDebito).setDate("finalVencimento", anoMesFinalVencimentoDebito)
+					.setDate("inicialVencimento", anoMesInicialVecimentoDebito)
+					.setDate("finalVencimento", anoMesFinalVencimentoDebito)
+					.setShort("idClienteRelacaoTipo", ClienteRelacaoTipo.USUARIO)
 					.list();
 
 		} catch (HibernateException e) {

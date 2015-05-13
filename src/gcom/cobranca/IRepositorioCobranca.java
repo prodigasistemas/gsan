@@ -203,7 +203,7 @@ public interface IRepositorioCobranca {
 				String contaSituacaoIncluida, String contaSituacaoParcelada,
 				String anoMesInicialReferenciaDebito,
 				String anoMesFinalReferenciaDebito,
-				Date anoMesInicialVecimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva)
+				Date anoMesInicialVecimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva, boolean contaComDebitoPreterito)
 				throws ErroRepositorioException;
 	
 	public int pesquisarQuantidadeContasVencidasPorImovel(Integer idImovel, int indicadorPagamento, int indicadorConta, int indicadorDividaAtiva) throws ErroRepositorioException;
