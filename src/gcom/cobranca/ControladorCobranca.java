@@ -3533,6 +3533,18 @@ public class ControladorCobranca implements SessionBean {
 				indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
 				indicadorCalcularAcrescimoImpontualidade, indicadorContas, 3);
 	}
+	
+	public ObterDebitoImovelOuClienteHelper obterDebitoPreteritoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas) throws ControladorException {
+
+		return this.obterDebitoPreteritoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo, anoMesInicialReferenciaDebito,
+				anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
+				indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
+				indicadorCalcularAcrescimoImpontualidade, indicadorContas, 3);
+	}
 
 	// ///
 	/**
@@ -3657,6 +3669,39 @@ public class ControladorCobranca implements SessionBean {
 				obterDebitoImovelOuClienteHelper.setColecaoContasValores(colecaoContasValoresFinal);
 				obterDebitoImovelOuClienteHelper.setColecaoContasValoresImovel(colecaoContasValoresFinal);
 			}
+			
+			
+			// Contas preteritas
+			Collection<ContaValoresHelper> colecaoContasValoresPreteritos = this.pesquisarContasDebitoPreteritos(idCliente, clienteRelacaoTipo,
+					idImovelFormatado, idImoveis, idImoveisAtuais, indicadorDebito, indicadorPagamento, indicadorConta,
+					indicadorCalcularAcrescimoImpontualidade, anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito,
+					anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, anoMesArrecadacao, indicadorDividaAtiva);
+
+			// adcionando a colecao de contas de valores
+			if (colecaoContasValoresPreteritos != null) {
+
+				Collection<ContaValoresHelper> colecaoContasValoresFinal = new ArrayList<ContaValoresHelper>();
+
+				// Retira as contas em revisão vinculadas a um contrato
+				// parcelamento por cliente
+				if (sistemaParametro.getIndicadorBloqueioContasContratoParcelDebitos().intValue() == 1) {
+					for (ContaValoresHelper contaValoresHelper : colecaoContasValoresPreteritos) {
+						try {
+							if (repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo(contaValoresHelper.getConta().getId().intValue()) == false) {
+								colecaoContasValoresFinal.add(contaValoresHelper);
+							}
+						} catch (ErroRepositorioException e) {
+							sessionContext.setRollbackOnly();
+							throw new ControladorException("erro.sistema", e);
+						}
+					}
+				} else {
+					colecaoContasValoresFinal = colecaoContasValoresPreteritos;
+				}
+
+				obterDebitoImovelOuClienteHelper.setColecaoContasValoresPreteritos(colecaoContasValoresPreteritos);
+			}
+		
 		}// fim de if(contas != null && !contas.isEmpty()){
 
 		// //////////////////////////////////////////////////////////////////////
@@ -3751,6 +3796,199 @@ public class ControladorCobranca implements SessionBean {
 		return obterDebitoImovelOuClienteHelper;
 
 	}
+	
+	
+	
+	public ObterDebitoImovelOuClienteHelper obterDebitoPreteritoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) throws ControladorException {
+
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		String anoMesArrecadacao = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao() + "";
+
+		ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = new ObterDebitoImovelOuClienteHelper();
+
+		Collection idImoveis = null;
+		Collection idImoveisAtuais = null;
+
+		Integer idCliente = null;
+
+		if (codigoCliente != null && !codigoCliente.trim().equals("")) {
+			idCliente = new Integer(codigoCliente);
+		}
+
+		Integer idImovelFormatado = null;
+
+		if (idImovel != null && !idImovel.trim().equals("")) {
+			idImovelFormatado = new Integer(idImovel);
+		}
+
+		try {
+			if (indicadorDebito == 2) { // caso cliente
+
+				idImoveis = repositorioCobranca.pesquisarIDImoveisClienteImovel(codigoCliente, clienteRelacaoTipo);
+
+			} else if (indicadorDebito == 3) {
+
+				// Verifica se é pesquisa por cliente superior (o código 99 é
+				// apenas um identificador)
+				if (clienteRelacaoTipo != null && clienteRelacaoTipo.equals(new Short("99"))) {
+
+					clienteRelacaoTipo = null;
+
+					idImoveis = repositorioCobranca.pesquisarIdImoveisClienteSuperiorSemRelacaoFim(codigoCliente);
+				} else {
+					idImoveis = repositorioCobranca.pesquisarIdImoveisClienteSemRelacaoFim(codigoCliente, clienteRelacaoTipo);
+				}
+			} else if (indicadorDebito == 4) {
+				// Verifica se é pesquisa por cliente superior (o código 99 é
+				// apenas um identificador)
+				if (clienteRelacaoTipo != null && clienteRelacaoTipo.equals(new Short("99"))) {
+
+					clienteRelacaoTipo = null;
+
+					idImoveisAtuais = repositorioCobranca.pesquisarIdImoveisClienteSuperiorSemRelacaoFim(codigoCliente);
+				} else {
+					idImoveisAtuais = repositorioCobranca.pesquisarIdImoveisClienteSemRelacaoFim(codigoCliente, clienteRelacaoTipo);
+				}
+
+				idImoveis = repositorioCobranca.pesquisarIDImoveisClienteImovel(codigoCliente, clienteRelacaoTipo);
+			}
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		if (indicadorContas == null || indicadorContas) {
+
+			Collection<ContaValoresHelper> colecaoContasValores = this.pesquisarContasDebitoPreteritos(idCliente, clienteRelacaoTipo,
+					idImovelFormatado, idImoveis, idImoveisAtuais, indicadorDebito, indicadorPagamento, indicadorConta,
+					indicadorCalcularAcrescimoImpontualidade, anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito,
+					anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, anoMesArrecadacao, indicadorDividaAtiva);
+
+			// adcionando a colecao de contas de valores
+			if (colecaoContasValores != null) {
+
+				Collection<ContaValoresHelper> colecaoContasValoresFinal = new ArrayList<ContaValoresHelper>();
+
+				// Retira as contas em revisão vinculadas a um contrato
+				// parcelamento por cliente
+				if (sistemaParametro.getIndicadorBloqueioContasContratoParcelDebitos().intValue() == 1) {
+					for (ContaValoresHelper contaValoresHelper : colecaoContasValores) {
+						try {
+							if (repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo(contaValoresHelper.getConta().getId()
+									.intValue()) == false) {
+								colecaoContasValoresFinal.add(contaValoresHelper);
+							}
+						} catch (ErroRepositorioException e) {
+							sessionContext.setRollbackOnly();
+							throw new ControladorException("erro.sistema", e);
+						}
+					}
+				} else {
+					colecaoContasValoresFinal = colecaoContasValores;
+				}
+
+				obterDebitoImovelOuClienteHelper.setColecaoContasValores(colecaoContasValoresFinal);
+				obterDebitoImovelOuClienteHelper.setColecaoContasValoresImovel(colecaoContasValoresFinal);
+			}
+		}// fim de if(contas != null && !contas.isEmpty()){
+
+		// //////////////////////////////////////////////////////////////////////
+		if (indicadorDividaAtiva != 1) {
+			// Indicador de Debito A Cobrar
+			if (indicadorDebitoACobrar == 1) {
+				Collection<DebitoACobrar> debitosACobrar = this.pesquisarDebitosACobrarDebito(idImovel, idImoveis, indicadorDebito);
+
+				// adcionando a colecao de débitos a cobrar
+				if (debitosACobrar != null) {
+
+					Collection<DebitoACobrar> colecaoDebitosACobrarFinal = new ArrayList<DebitoACobrar>();
+
+					// 3.4. E caso o indicador de bloqueio de débitos a cobrar
+					// vinculados ao contrato de parcelamento
+					// na composição do débito do imóvel ou cliente esteja
+					// ativo, Retirar da lista de
+					// débitos a cobrar selecionadas os débitos a cobrar
+					// vinculados a algum contrato de parcelamento ativo
+					if (sistemaParametro.getIndicadorBloqueioDebitoACobrarContratoParcelDebito().intValue() == 1) {
+						for (DebitoACobrar debitoACobrar : debitosACobrar) {
+							try {
+								if (repositorioCobranca
+										.verificaDebitoACobrarVinculadoAContratoParcelAtivo(debitoACobrar.getId().intValue()) == false) {
+									colecaoDebitosACobrarFinal.add(debitoACobrar);
+								}
+							} catch (ErroRepositorioException e) {
+								sessionContext.setRollbackOnly();
+								throw new ControladorException("erro.sistema", e);
+							}
+						}
+					} else {
+						colecaoDebitosACobrarFinal = debitosACobrar;
+					}
+
+					obterDebitoImovelOuClienteHelper.setColecaoDebitoACobrar(colecaoDebitosACobrarFinal);
+
+				}
+
+			}
+
+			// Indicador de Credito a Realizar
+			if (indicadorCreditoARealizar == 1) {
+				Collection creditosARealizar = this.pesquisarCreditosARealizarDebito(idImovel, idImoveis, indicadorDebito);
+				obterDebitoImovelOuClienteHelper.setColecaoCreditoARealizar(creditosARealizar);
+			}
+
+			// Indicador de Notas Promissorias
+			if (indicadorNotasPromissorias == 1) {
+
+				if (indicadorDebito == 1) { // caso imovel
+				} else if (indicadorDebito == 2) { // caso cliente
+				}
+
+			}
+
+			// Indicador de Guias de Pagamentos
+			if (indicadorGuiasPagamento == 1) {
+
+				Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamentoValores = this.pesquisarGuiasPagamentoDebito(idCliente,
+						clienteRelacaoTipo, idImovelFormatado, idImoveis, idImoveisAtuais, indicadorDebito, indicadorPagamento,
+						indicadorCalcularAcrescimoImpontualidade, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito,
+						anoMesArrecadacao);
+
+				// adcionando a colecao de guias de pagamento de valores
+				if (colecaoGuiasPagamentoValores != null) {
+
+					Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamentoValoresFinal = new ArrayList<GuiaPagamentoValoresHelper>();
+					// Retira as contas em revisão vinculadas a um contrato
+					// parcelamento por cliente
+					if (sistemaParametro.getIndicadorBloqueioGuiasOuAcresContratoParcelDebito().intValue() == 1) {
+						for (GuiaPagamentoValoresHelper guiaPagamentoValoresHelper : colecaoGuiasPagamentoValores) {
+							try {
+								if (repositorioCobranca.verificaGuiaVinculadaAContratoParcelAtivo(guiaPagamentoValoresHelper
+										.getGuiaPagamento().getId().intValue()) == false) {
+									colecaoGuiasPagamentoValoresFinal.add(guiaPagamentoValoresHelper);
+								}
+							} catch (ErroRepositorioException e) {
+								sessionContext.setRollbackOnly();
+								throw new ControladorException("erro.sistema", e);
+							}
+						}
+					} else {
+						colecaoGuiasPagamentoValoresFinal = colecaoGuiasPagamentoValores;
+					}
+
+					obterDebitoImovelOuClienteHelper.setColecaoGuiasPagamentoValores(colecaoGuiasPagamentoValoresFinal);
+				}
+			}
+		}
+
+		return obterDebitoImovelOuClienteHelper;
+
+	}
+	
+	
 
 	/**
 	 * Permite a obtenção dos débitos de um imóvel ou de um cliente
@@ -3795,8 +4033,374 @@ public class ControladorCobranca implements SessionBean {
 						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
 						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
 						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+						anoMesFinalVencimentoDebito, indicadorDividaAtiva, false);
+				
+				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
+
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
+
+		} else if (indicadorDebito == 2) {
+			// contas do cliente
+			try {
+				contas = repositorioCobranca.pesquisarContasCliente(idCliente, relacaoTipo, indicadorPagamento, indicadorConta,
+						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
 						anoMesFinalVencimentoDebito, indicadorDividaAtiva);
 
+				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
+
+			} catch (ErroRepositorioException ex) {
+				throw new ControladorException("erro.sistema", ex);
+			}
+		} else if (indicadorDebito == 3) {
+			// contas do cliente responsável
+			try {
+				if (idImoveis != null && !idImoveis.isEmpty()) {
+					contas = repositorioCobranca.pesquisarContasImoveis(idImoveis, indicadorPagamento, indicadorConta,
+							DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+							DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+							anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
+
+					if (idCliente != null) {
+
+						indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
+					}
+				}
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
+
+		} else if (indicadorDebito == 4) {
+			try {
+
+				if (idImoveisAtuais != null && !idImoveisAtuais.isEmpty()) {
+					contas = repositorioCobranca.pesquisarDebitosCliente(idCliente, relacaoTipo, idImoveisAtuais, indicadorPagamento,
+							indicadorConta, DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+							DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+							anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
+
+					indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
+				}
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
+
+		}
+
+		if (contas != null && !contas.isEmpty()) {
+
+			Iterator icolecaoContas = contas.iterator();
+			Collection colecaoIdImoveisContas = new HashSet();
+			boolean temContaParcelada = false;
+			boolean verificaParcelamentoConfirmado = false;
+
+			// dados da conta
+			while (icolecaoContas.hasNext()) {
+
+				Conta conta = new Conta();
+				ContaValoresHelper contaValores = new ContaValoresHelper();
+				temContaParcelada = false;
+
+				Object[] dadosConta = (Object[]) icolecaoContas.next();
+
+				if (dadosConta[0] != null) {// 0
+					// Id de contas
+					conta.setId(new Integer(dadosConta[0].toString()));
+				}
+
+				if (dadosConta[1] != null) {// 1
+					// Valor Agua
+					conta.setValorAgua((BigDecimal) dadosConta[1]);
+				}
+
+				if (dadosConta[2] != null) {// 2
+					// Valor Esgoto
+					conta.setValorEsgoto((BigDecimal) dadosConta[2]);
+				}
+
+				if (dadosConta[3] != null) {// 3
+					// Valor Debitos
+					conta.setDebitos((BigDecimal) dadosConta[3]);
+				}
+
+				if (dadosConta[4] != null) {// 4
+					// Valor Creditos
+					conta.setValorCreditos((BigDecimal) dadosConta[4]);
+				} else {
+					conta.setValorCreditos(new BigDecimal("0.00"));
+				}
+
+				if (dadosConta[5] != null) {// 5
+					// Data Revisao
+					conta.setDataRevisao((Date) dadosConta[5]);
+				}
+
+				if (dadosConta[6] != null) {// 6
+					// Referencia
+					conta.setReferencia(((Integer) dadosConta[6]).intValue());
+				}
+
+				if (dadosConta[7] != null) {// 7
+					// Data Vencimento Conta
+					conta.setDataVencimentoConta((Date) dadosConta[7]);
+				}
+
+				if (dadosConta[8] != null) {// 8
+					// Indicador de Cobranca de Multa
+					conta.setIndicadorCobrancaMulta(((Short) dadosConta[8]).shortValue());
+				}
+
+				if (dadosConta[9] != null) {// 9
+					Integer idDebitoCreditoSituacaoAtual = (Integer) dadosConta[9];
+
+					FiltroDebitoCreditoSituacao filtroDebitoCreditoSituacao = new FiltroDebitoCreditoSituacao();
+					filtroDebitoCreditoSituacao.adicionarParametro(new ParametroSimples(FiltroDebitoCreditoSituacao.ID,
+							idDebitoCreditoSituacaoAtual));
+
+					Collection<DebitoCreditoSituacao> colecaoDebitoCreditoSituacao = this.getControladorUtil().pesquisar(
+							filtroDebitoCreditoSituacao, DebitoCreditoSituacao.class.getName());
+
+					if (colecaoDebitoCreditoSituacao != null && !colecaoDebitoCreditoSituacao.isEmpty()) {
+
+						DebitoCreditoSituacao debitoCreditoSituacao = (DebitoCreditoSituacao) Util
+								.retonarObjetoDeColecao(colecaoDebitoCreditoSituacao);
+						conta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+
+						if (debitoCreditoSituacao.getId().intValue() == DebitoCreditoSituacao.PARCELADA.intValue()) {
+							temContaParcelada = true;
+							verificaParcelamentoConfirmado = true;
+						}
+
+					}
+				}
+
+				if (dadosConta[10] != null) {// 10
+					// Digito Verificador
+					conta.setDigitoVerificadorConta(((Short) dadosConta[10]).shortValue());
+				}
+
+				if (dadosConta[11] != null) {// 11
+					// Conta Motivo Revisao
+					ContaMotivoRevisao contaMotivoRevisao = new ContaMotivoRevisao();
+					contaMotivoRevisao.setId((Integer) dadosConta[11]);
+					conta.setContaMotivoRevisao(contaMotivoRevisao);
+				} else {
+					conta.setContaMotivoRevisao(null);
+				}
+
+				if (dadosConta[12] != null) {// 12
+					// Última Alteração
+					conta.setUltimaAlteracao((Date) dadosConta[12]);
+				}
+
+				if (dadosConta[13] != null) {// 13
+					// Imovel
+					Imovel imovel = new Imovel();
+					imovel.setId((Integer) dadosConta[13]);
+					conta.setImovel(imovel);
+				}
+
+				if (dadosConta[14] != null) {
+					conta.setConsumoAgua((Integer) dadosConta[14]);
+				}
+
+				if (dadosConta[15] != null) {// 15
+					// Valor impostos
+					conta.setValorImposto((BigDecimal) (dadosConta[15]));
+				} else {
+					conta.setValorImposto(new BigDecimal("0.00"));
+				}
+
+				if (dadosConta[16] != null) {
+					conta.setConsumoEsgoto((Integer) dadosConta[16]);
+				}
+
+				// adicionado por Vivianne Sousa - 21/06/2010
+				// Parcelamento
+				if (dadosConta[19] != null) {
+					Parcelamento parcelamento = new Parcelamento();
+					parcelamento.setId((Integer) dadosConta[19]);
+					conta.setParcelamento(parcelamento);
+				}
+
+				contaValores.setConta(conta);
+
+				Date dataPagamento = null;
+
+				if (dadosConta[17] != null) {
+					BigDecimal valor = (BigDecimal) dadosConta[17];
+					if (valor.floatValue() != 0.0) {
+						contaValores.setValorPago(valor);
+					}
+				}
+
+				if (dadosConta[18] != null) {
+					dataPagamento = (Date) dadosConta[18];
+				}
+
+				boolean indicadorCobrancaAcrescimos = true;
+
+				/**
+				 * Colocado por Raphael Rossiter em 19/09/2011 Analista: Eduardo
+				 * Borges
+				 * 
+				 * Caso a principal categoria do imóvel esteja indicando que
+				 * somente deve ser gerado acréscimos por impontualidade para a
+				 * categoria (catg_icgeracaoacrescimos=NAO) da principal
+				 * categoria do imóvel, passa para o próximo imóvel.
+				 */
+				Categoria categoriaPrincipal = this.getControladorImovel().obterPrincipalCategoriaImovel(conta.getImovel().getId());
+
+				if (categoriaPrincipal.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.NAO)) {
+
+					indicadorCobrancaAcrescimos = false;
+				}
+
+				/**
+				 * Colocado por Raphael Rossiter em 19/09/2011 Analista: Eduardo
+				 * Borges
+				 * 
+				 * Caso esteja indicado que não de ve ser gerado acrécimos por
+				 * impontualidade para o cliente (CLIE_ICCOBRANCAACRESCIMOS=NAO)
+				 * , passar para o próximo imóvel
+				 */
+				Short indicadorAcrescimosClienteResponsavel = null;
+
+				if (indicadorAcrescimosCliente == null) {
+
+					indicadorAcrescimosClienteResponsavel = this.obterIndicadorAcrescimosClienteResponsavel(conta.getImovel().getId());
+				} else {
+
+					indicadorAcrescimosClienteResponsavel = indicadorAcrescimosCliente;
+				}
+
+				if (indicadorAcrescimosClienteResponsavel != null && indicadorAcrescimosClienteResponsavel.equals(ConstantesSistema.NAO)) {
+
+					indicadorCobrancaAcrescimos = false;
+				}
+
+				// Calcular o Acrescimo por Impontualidade
+				if (indicadorCalcularAcrescimoImpontualidade == 1 && indicadorCobrancaAcrescimos) {
+
+					/** alteração por pedro alexandre dia 21/05/2007 */
+					BigDecimal valorConta = conta.getValorTotal();
+
+					// Calcula o valor das multas cobradas para a conta
+					BigDecimal valorMultasCobradas = null;
+					valorMultasCobradas = getControladorFaturamento().pesquisarValorMultasCobradas(conta.getId());
+
+					CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = null;
+
+					calcularAcrescimoPorImpontualidade = this.calcularAcrescimoPorImpontualidade(conta.getReferencia(),
+							conta.getDataVencimentoConta(), dataPagamento, valorConta, valorMultasCobradas,
+							conta.getIndicadorCobrancaMulta(), anoMesArrecadacao, conta.getId(),
+							ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
+
+					// set os Valores
+					if (calcularAcrescimoPorImpontualidade != null) {
+
+						// seta valor de multa
+						contaValores.setValorMulta(calcularAcrescimoPorImpontualidade.getValorMulta());
+
+						// seta valor de juros mora
+						contaValores.setValorJurosMora(calcularAcrescimoPorImpontualidade.getValorJurosMora());
+
+						// seta valor de atualizacao monetaria
+						contaValores.setValorAtualizacaoMonetaria(calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria());
+
+					}
+				}
+
+				if (temContaParcelada) {
+
+					if (indicadorDebito == 2) {
+						colecaoIdImoveisContas.add(conta.getImovel().getId());
+					}
+				}
+
+				retorno.add(contaValores);
+
+			}// fim do loop
+
+			// Caso na lista de contas existam contas com situação atual
+			// correspondente a parcelada,
+			// o sitema verifica se o parcelamento está confirmado
+			if (verificaParcelamentoConfirmado) {
+
+				// Caso tenha sido recebido o cliente,sistema obtém os imóveis
+				// da
+				// lista das contas que possuem
+				// conta com a situacao atual com o valor correspondente a
+				// parcelada
+
+				// Caso contrário,considerar apenas o imóvel recebido
+				if (indicadorDebito == 1) {
+
+					colecaoIdImoveisContas = new HashSet();
+					colecaoIdImoveisContas.add(new Integer(idImovel));
+				}
+
+				retorno = this.verificarParcelamentoConfirmado(colecaoIdImoveisContas, retorno);
+			}
+
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * Permite a obtenção dos débitos de um imóvel ou de um cliente
+	 * 
+	 * [UC0067] Obter Débito do Imóvel ou Cliente
+	 * 
+	 * @author Rafael Santos ,Rafael Santos, Pedro Alexandre
+	 * @date 04/01/2006,22/03/2006,13/03/2007
+	 * 
+	 * @param idCliente
+	 * @param relacaoTipo
+	 * @param idImovel
+	 * @param idImoveis
+	 * @param idImoveisAtuais
+	 * @param indicadorDebito
+	 * @param indicadorPagamento
+	 * @param indicadorConta
+	 * @param indicadorCalcularAcrescimoImpontualidade
+	 * @param anoMesInicialReferenciaDebito
+	 * @param anoMesFinalReferenciaDebito
+	 * @param anoMesInicialVencimentoDebito
+	 * @param anoMesFinalVencimentoDebito
+	 * @param anoMesArrecadacao
+	 * @param indicadorDividaAtiva
+	 * @return
+	 * @throws ControladorException
+	 */
+	public Collection<ContaValoresHelper> pesquisarContasDebitoPreteritos(Integer idCliente, Short relacaoTipo, Integer idImovel,
+			Collection idImoveis, Collection idImoveisAtuais, int indicadorDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorCalcularAcrescimoImpontualidade, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, String anoMesArrecadacao, int indicadorDividaAtiva) throws ControladorException {
+
+		Collection<ContaValoresHelper> retorno = new ArrayList<ContaValoresHelper>();
+
+		Collection contas = null;
+		Short indicadorAcrescimosCliente = null;
+
+		if (indicadorDebito == 1) {
+			// contas do imovel
+			try {
+				contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
+						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+						anoMesFinalVencimentoDebito, indicadorDividaAtiva, true);
+				
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
 
 			} catch (ErroRepositorioException ex) {

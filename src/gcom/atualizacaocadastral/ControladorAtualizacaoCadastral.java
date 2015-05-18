@@ -422,13 +422,17 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws IOException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
-		File arquivoOrigem = new File(caminhoJboss + imagemRetorno.getPathImagem());
+		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
 
 		FileChannel origemChannel = null;
 		FileChannel destinoChannel = null;
 
 		try {
+			if (!arquivoOrigem.exists()) {
+				arquivoOrigem = new File(caminhoJboss, "images/" + arquivoOrigem.getName());
+			}
+			
 			origemChannel = new FileInputStream(arquivoOrigem).getChannel();
 			destinoChannel = new FileOutputStream(arquivoDestino).getChannel();
 			
