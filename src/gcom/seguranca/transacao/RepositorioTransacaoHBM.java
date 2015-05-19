@@ -627,7 +627,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and ctrl.siac_id not in (:listaSituacao) ");
 			}
 			
-			if (Integer.valueOf(filtroHelper.getOcorrenciaCadastro()) > 0) {
+			if (filtroHelper.isAprovacaoEmLote()) {
+				sql.append(" and cocr.cocr_icvalidacao = " + ConstantesSistema.SIM);
+			} else if (Integer.valueOf(filtroHelper.getOcorrenciaCadastro()) > 0) {
 				sql.append(" and cocr.cocr_icvalidacao = " + filtroHelper.getOcorrenciaCadastro());
 			}
 			

@@ -17,7 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public class AtualizarImoveiEmLoteAction extends GcomAction{
+public class AtualizarImoveisEmLoteAction extends GcomAction{
 	
 	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
