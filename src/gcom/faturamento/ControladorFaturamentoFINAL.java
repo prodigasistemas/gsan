@@ -253,7 +253,6 @@ import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
-import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
 import gcom.interceptor.Interceptador;
 import gcom.interceptor.ObjetoTransacao;
@@ -279,8 +278,6 @@ import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
-import gcom.micromedicao.leitura.LeituraAnormalidade;
-import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -20206,11 +20203,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// realizado com origem do crédito igual a serviços
 					// devolução de juros de parcelamento e situação da
 					// conta igual a normal
-					idsCreditosOrigem = null;
 					idsCreditosOrigem = new Integer[1];
 					idsCreditosOrigem[0] = CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO;
 
-					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
 									anoMesFaturamento, idLocalidade,
@@ -20222,47 +20217,33 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
 						// cria o resumo de faturamento
 						lancamentoTipo = new LancamentoTipo();
-						lancamentoTipo
-								.setId(LancamentoTipo.VALORES_COBRADOS_INDEVIDAMENTE);
+						lancamentoTipo.setId(LancamentoTipo.VALORES_COBRADOS_INDEVIDAMENTE);
 						lancamentoItem = new LancamentoItem();
-						lancamentoItem.setId(LancamentoItem.JUROS);
+						lancamentoItem.setId(LancamentoItem.BONUS_SOCIAL);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento
-								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade
-								.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade
-								.getUnidadeNegocio());
+						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento
-								.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short(
-								"2300"));
-						resumoFaturamento
-								.setSequenciaItemTipoLancamento(maxSequencialImpressaoMais10);
+						resumoFaturamento.setSequenciaTipoLancamento(new Short("2300"));
+						resumoFaturamento.setSequenciaItemTipoLancamento(maxSequencialImpressaoMais10);
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2300 ao total cobrado nas
 						// contas
-						resumoFaturamentoTotalCobradoNasContas
-								.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas
-										.getValorItemFaturamento()
-										.subtract(
-												resumoFaturamento
-														.getValorItemFaturamento()));
+						resumoFaturamentoTotalCobradoNasContas.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas.getValorItemFaturamento()
+								.subtract(resumoFaturamento.getValorItemFaturamento()));
 
 						// adiciona o sequência igual 2200 ao total devolvidos
 						// nas contas
-						resumoFaturamentoValoresDevolvidosNasContas
-								.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas
-										.getValorItemFaturamento()
-										.add(resumoFaturamento
-												.getValorItemFaturamento()));
+						resumoFaturamentoValoresDevolvidosNasContas.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas
+								.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}

@@ -22035,9 +22035,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.FINANCIAMENTOS_COBRADOS);
 
-								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-								//lancamentoTipoTemp.setId(LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CONTAS);
-								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosParcelamentosCobrados(localidade, categoria, 
 										anoMesReferenciaArrecadacao, somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados, 
 										lancamentoItemTemp, lancamentoItemContabil, new Short("600"), sequencialImpressao);
@@ -22053,9 +22050,16 @@ public class ControladorArrecadacao implements SessionBean {
 							 * e gera o resumo da arrecadação caso o valor
 							 * acumulado seja maior que 0(zero)
 							 */
+							
+							Collection<Integer> idsCreditosOrigem = new ArrayList<Integer>();
+							idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_AGUA);
+							idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO);
+							idsCreditosOrigem.add(CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE);
+//							idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+							
 							BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente = repositorioArrecadacao
 									.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente(idLocalidade,
-											anoMesReferenciaArrecadacao, idCategoria, idLancamentoItemContabil);
+											anoMesReferenciaArrecadacao, idCategoria, idLancamentoItemContabil, idsCreditosOrigem);
 
 							if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente != null
 									&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente.doubleValue() > 0.00) {
@@ -22064,9 +22068,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE);
 
-								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-								//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
 										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente,
 										lancamentoItemTemp, lancamentoItemContabil, new Short("900"), sequencialImpressao);
@@ -22074,6 +22075,26 @@ public class ControladorArrecadacao implements SessionBean {
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 							}
 
+							idsCreditosOrigem = new ArrayList<Integer>();
+							idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+							
+							BigDecimal somaValorCreditoRealizadoBonusSocial = repositorioArrecadacao
+									.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente(idLocalidade,
+											anoMesReferenciaArrecadacao, idCategoria, idLancamentoItemContabil, idsCreditosOrigem);
+
+							if (somaValorCreditoRealizadoBonusSocial != null && somaValorCreditoRealizadoBonusSocial.doubleValue() > 0.00) {
+								valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(somaValorCreditoRealizadoBonusSocial);
+
+								lancamentoItemTemp = new LancamentoItem(LancamentoItem.BONUS_SOCIAL);
+
+								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
+										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoBonusSocial, lancamentoItemTemp, lancamentoItemContabil,
+										new Short("900"), sequencialImpressao);
+								
+								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+							}
+							
+							
 							/*
 							 * Seqüêncial de Tipo de Lançamento 1550 Para os
 							 * pagamento classificados de conta acumula o valor
@@ -22094,9 +22115,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
 
-								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-								//lancamentoTipoTemp.setId(LancamentoTipo.DOACOES_RECEBIDAS_EM_CONTA);
-								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosDoacoes(localidade, categoria,
 										anoMesReferenciaArrecadacao, somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoDoacoes,
 										lancamentoItemTemp, lancamentoItemContabil, new Short("1550"), sequencialImpressao);
@@ -22124,9 +22142,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
 
-								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-								//lancamentoTipoTemp.setId(LancamentoTipo.GUIAS_PAGAMENTO);
-								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosGuiasPagamento(localidade, categoria,
 										anoMesReferenciaArrecadacao, somaValorEntradaParcelamentoPagamentosClassificadosGuiaPagamentoFinanciamentoTipoServico,
 										lancamentoItemTemp, lancamentoItemContabil, new Short("1800"), sequencialImpressao);
