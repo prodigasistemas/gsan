@@ -3349,7 +3349,8 @@ public class Fachada {
 		}
 
 	}
-
+	
+	
 	/**
 	 * Permite a obtenção dos débitos de um imóvel ou de um cliente
 	 * 
