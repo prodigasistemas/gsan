@@ -267,6 +267,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			processarImoveis();
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			listaRAParaExclusao.clear();
 		} catch (Exception e) {
 			
 			if (!listaRAParaExclusao.isEmpty()) {
