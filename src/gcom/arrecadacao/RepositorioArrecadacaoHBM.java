@@ -5671,7 +5671,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			                 .append("FROM arrecadacao.pagamento pgmt ")
 			                 .append("WHERE pgmt.pgmt_amreferenciaarrecadacao = :referencia ")
 			                 .append("and pgmt.loca_id= :idLocalidade ")
-			                 .append("and (pgmt.pgst_idatual = :classificado or (pgmt.pgst_idatual= :valorABaixar and pgmt.pgst_idanterior = :valorNaoConfere ) )")
+			                 .append("and (pgmt.pgst_idatual = :classificado or (pgmt.pgst_idatual= :valorABaixar and pgmt.pgst_idanterior = :valorNaoConfere ) ) ")
 			                 .append("and pgmt.cnta_id is not null ");
 			
 			StringBuilder consultaCredito = new StringBuilder();
@@ -5679,9 +5679,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						   .append("FROM faturamento.credito_realizado crrz ")
 						   .append("WHERE crrz.lict_id = :idLancamentoItemContabil ")
 						   .append("and crrz.crog_id in (:idsCreditosOrigem) ")
-						   .append("and crrz.cnta_id in (")
+						   .append("and crrz.cnta_id in ( ")
 						   .append(consultaPagamento.toString())
-						   .append(")");
+						   .append(" ) ");
 			
 			StringBuilder consulta = new StringBuilder();
 			consulta.append("SELECT sum(crcg.crcg_vlcategoria) as col_0 ")
@@ -5689,37 +5689,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			   		.append("WHERE crcg.catg_id = :idCategoria ")
 			   		.append("and crcg.crrz_id in ( ")
 			   		.append(consultaCredito.toString())
-			   		.append(")");
+			   		.append(" ) ");
 			   
-//			String consulta = "select " +
-//					  "sum(crcg.crcg_vlcategoria) as col_0 " +
-//					  "from " +
-//					   "faturamento.cred_realizado_catg crcg " + 
-//					  "where " +
-//					   "crcg.catg_id=:idCategoria  " +
-//					   "and (crcg.crrz_id in ( " +
-//					 			"select " +
-//					 			"crrz.crrz_id " + 
-//					 			"from " +
-//					 			"faturamento.credito_realizado crrz " + 
-//					 			"where " +
-//					 			"crrz.lict_id=:idLancamentoItemContabil  " +
-//					 			"and (crrz.crog_id in (:idsCreditosOrigem)) " + 
-//					 			"and (crrz.cnta_id in (" +
-//											 			"select " +
-//											 			"distinct pgmt.cnta_id " + 
-//											 			"from " +
-//											 			"arrecadacao.pagamento pgmt " + 
-//											 			"where " +
-//											 			"pgmt.pgmt_amreferenciaarrecadacao= :referencia " + 
-//											 			"and pgmt.loca_id= :idLocalidade  " +
-//											 			"and (pgmt.pgst_idatual= :classificado or ( " +
-//											 			"pgmt.pgst_idatual= :valorABaixar and pgmt.pgst_idanterior = :valorNaoConfere ) )" + 
-//											 			"and (pgmt.cnta_id is not null) "	+		
-//					 			")) " +
-//					 				") " +
-//					   ")";
-
 			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
 			        .addScalar("col_0",Hibernate.BIG_DECIMAL)
 					.setInteger("idCategoria", idCategoria)

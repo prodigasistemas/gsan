@@ -22075,7 +22075,9 @@ public class ControladorArrecadacao implements SessionBean {
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 							}
 
-							idsCreditosOrigem = new ArrayList<Integer>(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+							idsCreditosOrigem = new ArrayList<Integer>();
+							idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+							
 							BigDecimal somaValorCreditoRealizadoBonusSocial = repositorioArrecadacao
 									.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente(idLocalidade,
 											anoMesReferenciaArrecadacao, idCategoria, idLancamentoItemContabil, idsCreditosOrigem);
