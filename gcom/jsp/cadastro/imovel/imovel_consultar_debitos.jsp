@@ -443,13 +443,13 @@ function pesquisarImovel() {
 							<strong>Contas</strong>
 							</td>
 						</tr>
-						<logic:notEmpty name="colecaoContaValores" scope="session">
+						<logic:notEmpty name="colecaoContas" scope="session">
 							<%if ( ((Integer)session.getAttribute("totalContas"))  <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
 							<tr bordercolor="#000000">
 								<td width="9%" bgcolor="#90c7fc" align="center">
 						<% } else { %>
 							<tr bordercolor="#000000">
-								<td width="20%" bgcolor="#90c7fc">
+								<td width="10%" bgcolor="#90c7fc">
 						<% } %>
 									<div align="center" class="style9">
 										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
@@ -837,100 +837,21 @@ function pesquisarImovel() {
 										</logic:iterate>
 										
 										
-										<logic:notEmpty name="colecaoContaValores">
-											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
-											<tr bgcolor="#FFFFFF">
-												<%} else { cor = "#cbe5fe";%>
-											<tr bgcolor="#cbe5fe">
-												<%}%>
-												<td bgcolor="#90c7fc" align="center">
-													<div class="style9" align="center">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<strong>Total</strong>
-														</font>
-													</div>
-												</td>
-												
-												<td align="left">
-													<%=((Collection) session.getAttribute("colecaoContaValores")).size()%> &nbsp; doc(s)
-												</td>
-												
-												<td align="right">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorAgua")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="rigth">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorEsgoto")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="right">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorDebito")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="right">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorCredito")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="right">
-												  <div align="right">
-												    <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-												      <%=session.getAttribute("valorImposto")%>
-												    </font>
-												  </div>
-												</td>
-												
-												<td align="right">
-													<div align="right">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorConta")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="right">
-													<div align="right" class="style9">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-															<%=session.getAttribute("valorAcrescimo")%>
-														</font>
-													</div>
-												</td>
-												
-												<td align="left">
-													<div align="left">
-														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+									</logic:present>
+									
+									<logic:present name="colecaoContaValoresPreteritos">
+										<logic:notEmpty name="colecaoContaValoresPreteritos" scope="session">
+											<tr>
+												<td colspan="8">
+													<div align="center">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+															<strong>----------------- Contas de clientes anteriores -----------------</strong>
 														</font>
 													</div>
 												</td>
 											</tr>
 										</logic:notEmpty>
-									</logic:present>
 									
-									<logic:present name="colecaoContaValoresPreteritos">
-									<tr>
-										<td colspan="8">
-											<div align="center">
-												<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
-													<strong>----------------- Contas de clientes anteriores -----------------</strong>
-												</font>
-											</div>
-										</td>
-									</tr>
 									
 									<logic:iterate name="colecaoContaValoresPreteritos" id="contaValoresPreteritosHelper">
 											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
@@ -1227,6 +1148,89 @@ function pesquisarImovel() {
 											</logic:iterate>
 											
 									</logic:present>
+									
+									<logic:notEmpty name="colecaoContas">
+											<%if (cor.equalsIgnoreCase("#cbe5fe")) { cor = "#FFFFFF";%>
+											<tr bgcolor="#FFFFFF">
+												<%} else { cor = "#cbe5fe";%>
+											<tr bgcolor="#cbe5fe">
+												<%}%>
+												<td bgcolor="#90c7fc" align="center">
+													<div class="style9" align="center">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<strong>Total</strong>
+														</font>
+													</div>
+												</td>
+												
+												<td align="left">
+													<%=((Collection) session.getAttribute("colecaoContaValores")).size()%> &nbsp; doc(s)
+												</td>
+												
+												<td align="right">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorAgua")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="rigth">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorEsgoto")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="right">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorDebito")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="right">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorCredito")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="right">
+												  <div align="right">
+												    <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+												      <%=session.getAttribute("valorImposto")%>
+												    </font>
+												  </div>
+												</td>
+												
+												<td align="right">
+													<div align="right">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorConta")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="right">
+													<div align="right" class="style9">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+															<%=session.getAttribute("valorAcrescimo")%>
+														</font>
+													</div>
+												</td>
+												
+												<td align="left">
+													<div align="left">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+														</font>
+													</div>
+												</td>
+											</tr>
+										</logic:notEmpty>
 								</table>
 								</div>
 								</td>
