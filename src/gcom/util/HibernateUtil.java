@@ -492,6 +492,7 @@ import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpostosDeduzidosHistorico;
 import gcom.faturamento.conta.ContaImpressao;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMensagem;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.ContaMotivoInclusao;
@@ -1244,6 +1245,7 @@ public class HibernateUtil {
 					.addClass(HistogramaAguaLigacaoSemQuadra.class)
 					.addClass(HistogramaEsgotoLigacaoSemQuadra.class)
 					.addClass(ReceitasAFaturarResumo.class)
+					.addClass(ContaImpressaoTermicaQtde.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

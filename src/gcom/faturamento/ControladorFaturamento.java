@@ -71,6 +71,7 @@ import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpressao;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoInclusao;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaTipo;
@@ -16687,5 +16688,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
+	}
+
+	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) {
+		Collection<ContaImpressaoTermicaQtde> colecaoQtdeContas = null;
+		try {
+			colecaoQtdeContas = repositorioFaturamento.pesquisarQuantidadeContasImpressaoTermica(referencia, idGrupoFaturamento);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return colecaoQtdeContas;
 	}
 }

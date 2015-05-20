@@ -1267,28 +1267,6 @@ public interface IRepositorioArrecadacao {
 			Integer idCategoria) throws ErroRepositorioException;
 
 	/**
-	 * Sequencial do tipo lançamento igual a 800
-	 * 
-	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Acumula o valor dos créditos realizados por localidade e categoria para
-	 * os pagamentos classificados de contas, para origem de crédito igual a
-	 * contas pagas em duplicidade/excesso.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 22/05/2006
-	 * 
-	 * @param idLocalidade
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idCategoria
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	/*public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso(
-			Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
-			Integer idCategoria) throws ErroRepositorioException;*/
-
-	/**
 	 * Sequencial do tipo lançamento igual a 900
 	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
@@ -1309,7 +1287,7 @@ public interface IRepositorioArrecadacao {
 	 */
 	public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoValoresCobradosIndevidamente(
 			Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
-			Integer idCategoria, Integer idLancamentoItemContabil)
+			Integer idCategoria, Integer idLancamentoItemContabil, Collection<Integer> idsCreditosOrigem)
 			throws ErroRepositorioException;
 
 	/**

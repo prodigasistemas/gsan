@@ -42,6 +42,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMensagem;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.ContaMotivoInclusao;
@@ -5698,4 +5699,6 @@ public interface IControladorFaturamento {
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException;
 	
 	public Collection<RelatorioReceitasAFaturarHelper> gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) throws ControladorException, ErroRepositorioException;
+
+	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) throws ControladorException;
 }
