@@ -316,7 +316,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException {
 		try {
-			this.aprovarImoveis(converterListaEmImovelRetorno(listaImoveis));
+			this.aprovarImoveis(converterListaEmImovelRetorno(listaImoveis), usuarioLogado);
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao pesquisar atualizar imóveis em lote.", e);
 			throw new ControladorException("Erro ao atualizar imóveis em lote.", e);
@@ -1210,9 +1210,25 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void aprovarImoveis(Collection<IImovel> imoveisParaAprovar) throws ControladorException {
+	private void aprovarImoveis(Collection<IImovel> imoveisParaAprovar, Usuario usuarioLogado) throws ControladorException {
 		try {
 			repositorioAtualizacaoCadastral.aprovarImoveis(imoveisParaAprovar);
+			
+			for(IImovel imovel : imoveisParaAprovar) {
+				Collection<TabelaAtualizacaoCadastral> colecaoTabelaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaAtualizacaoCadastralPorImovel(imovel.getIdImovel());
+				for(TabelaAtualizacaoCadastral tabela : colecaoTabelaAtualizacaoCadastral) {
+					Collection<TabelaColunaAtualizacaoCadastral> colecaoTabelaColuna = repositorioSeguranca.pesquisaTabelaColunaAtualizacaoCadastral(tabela.getId());
+					for(TabelaColunaAtualizacaoCadastral tabelaColuna : colecaoTabelaColuna ) {
+						tabelaColuna.setUsuario(usuarioLogado);
+						getControladorUtil().atualizar(tabelaColuna);
+					}
+				}
+			}
+			/*Iterator imoveisIterator = (IImovel) imoveisParaAprovar.iterator();
+			while(imoveisIterator.hasNext()) {
+				
+			}
+			*/
 		} catch (Exception e) {
 			logger.error("Erro ao aprovar imóveis em lote. " + e);
 			throw new ControladorException("Erro ao aprovar imóveis em lote.", e);
