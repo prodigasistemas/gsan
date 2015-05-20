@@ -796,6 +796,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	private void incluirImoveis() throws ControladorException {
 		Integer idImovel = null;
+		Integer idUsuario = null;
 
 		try {
 			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
@@ -808,6 +809,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
 				HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel = this.obterClientesImovel(imovelRetorno.getId());
+				
+				Usuario usuario = repositorioSeguranca.pesquisarUsuarioAutorizadorImoveis(imovelRetorno.getIdImovel());
 				
 				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastralInclusaoImovel(imovelRetorno, mapClientesImovel, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
