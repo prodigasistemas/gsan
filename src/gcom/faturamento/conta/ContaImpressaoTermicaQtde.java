@@ -56,7 +56,6 @@ public class ContaImpressaoTermicaQtde {
 	public void setDataGeracao(Date dataGeracao) {
 		this.dataGeracao = dataGeracao;
 	}
-	
 	public String getReferenciaFormatada() {
 		return Util.formatarAnoMesParaMesAno(this.referencia);
 	}
