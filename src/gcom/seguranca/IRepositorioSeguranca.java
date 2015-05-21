@@ -15,5 +15,5 @@ public interface IRepositorioSeguranca {
 	
 	public void autorizarAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 	
-	public Usuario pesquisarUsuarioAutorizadorImoveis(Integer idImovel) throws ErroRepositorioException;
+	public Integer pesquisarIdUsuarioAutorizadorImoveis(Integer idImovel) throws ErroRepositorioException;
 }

@@ -334,9 +334,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	/************************************************************
 	 *PRIVATE METHODS 
+	 * @throws ErroRepositorioException 
 	 ************************************************************/
 	
-	private void processarClientes() throws ControladorException {
+	private void processarClientes() throws ControladorException, ErroRepositorioException {
 		atualizarClientes();
 		incluirClientes();
 		excluirClientes();
@@ -810,8 +811,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel = this.obterClientesImovel(imovelRetorno.getId());
 				
-				Usuario usuario = repositorioSeguranca.pesquisarUsuarioAutorizadorImoveis(imovelRetorno.getIdImovel());
-				
 				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastralInclusaoImovel(imovelRetorno, mapClientesImovel, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
@@ -864,7 +863,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
-					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
+					Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(imovelRetorno.getIdImovel());
+					
+					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, AlteracaoTipo.EXCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
 					RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.EXCLUSAO);
 					RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 					
@@ -966,7 +967,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			
 			String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 			
-			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
+			Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(imovelRetorno.getIdImovel());
+			
+			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
 			RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
 			RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 			
@@ -1008,7 +1011,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 					
-					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
+					Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(imovelRetorno.getIdImovel());
+					
+					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
 					RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO);
 					RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 					
@@ -1189,7 +1194,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return false;
 	}
 	
-	private void excluirClientes() throws ControladorException {
+	private void excluirClientes() throws ControladorException, ErroRepositorioException {
 		Collection<IClienteImovel> clientesImovelExcluirRelacao = this.obterClientesParaExcluirRelacao();
 		
 		for (IClienteImovel clienteImovel : clientesImovelExcluirRelacao) {
@@ -1201,7 +1206,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
-				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovel, cliente, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
+				Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(imovel.getId());
+				
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovel, cliente, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovel, idSetorComercial, AlteracaoTipo.EXCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
 				
