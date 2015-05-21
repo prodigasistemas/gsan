@@ -912,7 +912,8 @@
 				/WEB-INF/faturamento/struts-config-AtualizarVencimentoFaturaClienteResponsavel.xml,
 				/WEB-INF/faturamento/struts-config-FaturamentoSeletivo.xml,
 				/WEB-INF/faturamento/struts-config-RelatorioReceitasAFaturar.xml,
-				/WEB-INF/cadastro/atualizacaocadastral/struts-config-RelatorioRelacaoImoveisRota.xml
+				/WEB-INF/cadastro/atualizacaocadastral/struts-config-RelatorioRelacaoImoveisRota.xml,
+				/WEB-INF/faturamento/conta/struts-config-ConsultarQtdeContaImpressaoTermica.xml
 				
 			</param-value>
 		</init-param>

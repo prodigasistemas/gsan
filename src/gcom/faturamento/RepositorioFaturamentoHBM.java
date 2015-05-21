@@ -52,6 +52,7 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
@@ -61345,5 +61346,73 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return faturado;
+	}
+	
+	public Collection pesquisarGerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = " SELECT contaImpressao.ftgr_id AS idFaturamentoGrupo, "
+					+ " cnt.cnta_amreferenciaconta AS amReferencia, "
+					+ " loc.loca_id AS idLocalidade, "
+					+ " loc.loca_nmlocalidade AS descricaoLocalidade, "
+					+ " COUNT(cnt.cnta_id) AS qtdeConta "
+					+ " FROM cadastro.cliente_conta cliCnt "
+					+ " INNER JOIN faturamento.conta cnt ON cliCnt.cnta_id=cnt.cnta_id "
+					+ " INNER JOIN faturamento.conta_impressao contaImpressao ON cnt.cnta_id = contaImpressao.cnta_id "
+					+ " INNER JOIN cadastro.localidade loc ON cnt.loca_id=loc.loca_id "
+					+ " INNER JOIN cadastro.imovel imovel ON imovel.imov_id = cnt.imov_id "
+					+ " WHERE contaImpressao.cnti_amreferenciaconta = :referencia AND "
+					+ " cnt.cnta_tmultimaalteracao > :data AND "
+					+ " contaImpressao.ftgr_id = :idFaturamentoGrupo AND "
+					+ " cliCnt.clct_icnomeconta = :indicadorNomeConta AND "
+					+ " imovel.icte_id not in (4,9) AND "
+					+ " cnt.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + ") "
+					+ " GROUP BY contaImpressao.ftgr_id, cnt.cnta_amreferenciaconta, loc.loca_id, loc.loca_nmlocalidade ";
+
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idFaturamentoGrupo", Hibernate.INTEGER)
+					.addScalar("amReferencia",Hibernate.INTEGER)
+					.addScalar("idLocalidade",Hibernate.INTEGER)
+					.addScalar("descricaoLocalidade", Hibernate.STRING)
+					.addScalar("qtdeConta", Hibernate.INTEGER)
+					.setDate("data",Util.criarData(16, 05, 2007))
+					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
+					.setInteger("referencia", referencia)
+					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = " SELECT qtde "
+					+ " FROM ContaImpressaoTermicaQtde qtde"
+					+ " WHERE qtde.referencia = :referencia "
+					+ " AND qtde.idGrupoFaturamento = :idFaturamentoGrupo";
+
+			retorno = session.createQuery(consulta)
+					.setInteger("referencia", referencia)
+					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
 }

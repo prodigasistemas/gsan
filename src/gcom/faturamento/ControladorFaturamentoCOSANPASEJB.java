@@ -29,6 +29,7 @@ import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
+import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -148,6 +149,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
 						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
+				
+				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 
 				if (colecaoConta != null && !colecaoConta.isEmpty()) {
 
@@ -2983,6 +2986,33 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			linhasImpostosRetidos[2] = "";
 		}
 		return linhasImpostosRetidos;
+	}
+
+	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ControladorException {
+		Collection colecaoQtde = new ArrayList();
+		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
+		try {
+			colecaoQtde = repositorioFaturamento.pesquisarGerarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
+			if(colecaoQtde != null && !colecaoQtde.isEmpty()) {
+				Iterator colecaoQtdeIterator = colecaoQtde.iterator();
+				while(colecaoQtdeIterator.hasNext()) {
+					Object[] arrayColecao = (Object[]) colecaoQtdeIterator.next();
+					
+					ContaImpressaoTermicaQtde contaImpressaoTermicaQtde = new ContaImpressaoTermicaQtde();
+					contaImpressaoTermicaQtde.setIdGrupoFaturamento((Integer)arrayColecao[0]);
+					contaImpressaoTermicaQtde.setReferencia((Integer)arrayColecao[1]);
+					contaImpressaoTermicaQtde.setIdLocalidade((Integer)arrayColecao[2]);
+					contaImpressaoTermicaQtde.setDescricaoLocalidade((String)arrayColecao[3]);
+					contaImpressaoTermicaQtde.setQtdeContas((Integer)arrayColecao[4]);
+					contaImpressaoTermicaQtde.setDataGeracao(new Date());
+					
+					colecaoContas.add(contaImpressaoTermicaQtde);
+				}
+				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoContas);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
