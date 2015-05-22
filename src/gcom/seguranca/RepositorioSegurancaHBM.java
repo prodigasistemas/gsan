@@ -1,5 +1,6 @@
 package gcom.seguranca;
 
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
@@ -8,6 +9,7 @@ import gcom.util.HibernateUtil;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -68,6 +70,25 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 				.setShort("autorizacao", ConstantesSistema.SIM)
 				.setInteger("idImovel", idImovel)
 				.executeUpdate();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Integer pesquisarIdUsuarioAutorizadorImoveis(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT distinct(tcac.usur_id) as usuarioLogado");
+			sql.append(" FROM seguranca.tab_col_atlz_cadastral tcac");
+			sql.append(" inner join seguranca.tab_atlz_cadastral tac on (tac.tatc_id = tcac.tatc_id)");
+			sql.append(" where tac.tatc_cdimovel = :idImovel");
+
+			return (Integer) (session.createSQLQuery(sql.toString())
+									.addScalar("usuarioLogado", Hibernate.INTEGER)
+									.setInteger("idImovel", idImovel).uniqueResult());
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
