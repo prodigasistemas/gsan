@@ -1133,6 +1133,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 
 	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 	        				 
+	        				 System.out.println("**============ 1 - Credito a Realizar ===============**"
+	        				 				   + "\n Imovel: " + contaAtualizacao.getImovel().getId()
+	        				 				   + "\n Valor Créditos: " + contaAtualizacao.getValorCreditos());
+	        				 
 	        				 Collection indicadorRetransmissaoColecao = repositorioFaturamento.pesquisaIndicadorRetransmissaoMovimentoContaPF(contaAtualizacao.getImovel().getId(),
 	        						 helper.getFaturamentoGrupo().getAnoMesReferencia());
 	        				 Integer indicadorRetransmissao = null;
@@ -1147,6 +1151,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        							 contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        							 valorTotalContaSemCreditos);
 	        					 contaAtualizacao.setValorCreditos(valorTotalCreditos);
+	        					 
+	        					 System.out.println("**============ 2 - Credito a Realizar ===============**"
+      				 				   + "\n Imovel: " + contaAtualizacao.getImovel().getId()
+      				 				   + "\n Valor Créditos: " + contaAtualizacao.getValorCreditos()
+      				 				   + "\n Valor Total dos Créditos: " + valorTotalCreditos);
+	        					 
 	        					 /**
 	        					  * Autor: Wellington Rocha
 	        					  * Data: 30/08/2011
@@ -1158,6 +1168,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 && indicadorRetransmissao.equals(2)) 
 	        						 && (valorCreditos.compareTo(valorTotalContaSemCreditos)==0 
 	        						 || valorCreditos.compareTo(valorTotalContaSemCreditos)== -1 )){
+	        					 
+	        					 System.out.println("**============ 3 - Credito a Realizar ===============**"
+	      				 				   + "\n Imovel: " + contaAtualizacao.getImovel().getId()
+	      				 				   + "\n Valor Créditos: " + contaAtualizacao.getValorCreditos());
 
 					            	/**
 					            	 * Autor: Adriana Muniz
@@ -1171,14 +1185,25 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            	Collection colecaoCreditosARealizar = repositorioFaturamento
 					            		.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(contaAtualizacao.getImovel().getId());
 					            	
+					            	
 					            	if(!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
 
+					            		System.out.println("**============ 4 - Credito a Realizar ===============**"
+					            				+ "\n Qtde de créditos com valor residual diferente de zero: " + colecaoCreditosARealizar.size()
+					            				+ "\n Imovel: " + contaAtualizacao.getImovel().getId());
+					            		
 					            		Iterator creditoIterator = colecaoCreditosARealizar.iterator();
 
 					            		while(creditoIterator.hasNext()) {
 					            			CreditoARealizar credito = (CreditoARealizar)creditoIterator.next();
 
 					            			credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+
+						            		System.out.println("**============ 5 - Credito a Realizar ===============**"
+						            						+ "\n Imovel: " + credito.getImovel().getId()
+						            						+ "\n Valor Créditos: " + credito.getValorCredito()
+						            						+ "\n Valor Residual Concedido no Mês: " + credito.getValorResidualConcedidoMes()
+						            						+ "\n Valor Residual Concedido no Mês Anterior: " + credito.getValorResidualMesAnterior());
 
 					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
@@ -6963,6 +6988,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															
 												}
 												
+												System.out.println("**============ 1 - Credito a Realizar:atualizarCreditoResidual ===============**"
+					            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
+					            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
+					            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
+					            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
+												
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 												// Acumula o valor do crédito
 												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
@@ -6990,6 +7021,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										} else {
 											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
+											System.out.println("**============ 2 - Credito a Realizar:atualizarCreditoResidual ===============**"
+				            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
+				            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
+				            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
+				            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
+										
 											// atualiza o credito a realizar
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
@@ -7055,6 +7092,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															.getValorResidualMesAnterior());
 
 											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+										
+											System.out.println("**============ 3 - Credito a Realizar:atualizarCreditoResidual ===============**"
+													+ "\n Imovel: " + creditoARealizar.getImovel().getId()
+													+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
+													+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
+													+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
 
 											// atualiza o credito a realizar
 											repositorioFaturamento
@@ -7077,6 +7120,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										} else {
 											creditoARealizar
 													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+											
+											System.out.println("**============ 4 - Credito a Realizar:atualizarCreditoResidual ===============**"
+				            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
+				            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
+				            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
+				            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
+										
 											repositorioFaturamento
 													.atualizarCreditoARealizar(creditoARealizar);
 										}
@@ -7107,6 +7157,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									// referência da conta
 									creditoARealizar
 											.setAnoMesReferenciaPrestacao(null);
+									
+									System.out.println("**============ 5 - Credito a Realizar:atualizarCreditoResidual ===============**"
+		            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
+		            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
+		            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
+		            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
+								
 
 									repositorioFaturamento
 											.atualizarCreditoARealizar(creditoARealizar);
