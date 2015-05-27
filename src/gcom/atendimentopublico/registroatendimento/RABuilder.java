@@ -37,7 +37,7 @@ public class RABuilder {
 	public static Integer USUARIO_ADMIN = new Integer(1); 
 	
 	
-	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, Integer alteracaoTipo, String protocoloAtendimento, Integer idUsuarioAprovacao) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
 		Date dataAtual = new Date();
@@ -52,14 +52,14 @@ public class RABuilder {
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
 					.observacao(getObservacaoImovelAntigo(imovelRetorno, alteracaoTipo))
 					.indicadorRaAtualizacaoCadastral(true)
-					.idUsuarioLogado(USUARIO_ADMIN)
+					.idUsuarioLogado(idUsuarioAprovacao)
 					.protocoloAtendimento(protocoloAtendimento);
 		
 		return raDadosGerais;
 	}
 	
 	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, 
-											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
+											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento, Integer idUsuarioAutorizacao) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
 		Date dataAtual = new Date();
@@ -74,7 +74,7 @@ public class RABuilder {
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
 					.observacao(getObservacaoCliente(clienteRetorno, imovelRetorno, clienteImovelRetorno, alteracaoTipo))
 					.indicadorRaAtualizacaoCadastral(true)
-					.idUsuarioLogado(USUARIO_ADMIN)
+					.idUsuarioLogado(idUsuarioAutorizacao)
 					.protocoloAtendimento(protocoloAtendimento);
 		
 		return raDadosGerais;

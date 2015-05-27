@@ -2,6 +2,7 @@ package gcom.seguranca;
 
 import java.util.List;
 
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
@@ -13,4 +14,6 @@ public interface IRepositorioSeguranca {
 	public List<TabelaColunaAtualizacaoCadastral> pesquisaTabelaColunaAtualizacaoCadastral(Integer idTabelaAtualizacaoCadastral) throws ErroRepositorioException;
 	
 	public void autorizarAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+	
+	public Integer pesquisarIdUsuarioAutorizadorImoveis(Integer idImovel) throws ErroRepositorioException;
 }
