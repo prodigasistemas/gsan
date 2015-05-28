@@ -5,23 +5,17 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class CreditoRealizadoCategoriaHistoricoPK implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer creditoRealizadoHistoricoId;
 
-    /** identifier field */
+	private Integer creditoRealizadoHistoricoId;
     private Integer categoriaId;
 
-    /** full constructor */
     public CreditoRealizadoCategoriaHistoricoPK(Integer creditoRealizadoHistoricoId, Integer categoriaId) {
         this.creditoRealizadoHistoricoId = creditoRealizadoHistoricoId;
         this.categoriaId = categoriaId;
     }
 
-    /** default constructor */
     public CreditoRealizadoCategoriaHistoricoPK() {
     }
 

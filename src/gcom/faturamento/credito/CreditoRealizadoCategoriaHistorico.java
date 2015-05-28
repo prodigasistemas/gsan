@@ -32,6 +32,11 @@ public class CreditoRealizadoCategoriaHistorico implements Serializable, ICredit
     public CreditoRealizadoCategoriaHistorico() {
     }
 
+    public CreditoRealizadoCategoriaHistorico(Integer creditoId, Integer categoriaId) {
+    	CreditoRealizadoCategoriaHistoricoPK comp_id = new CreditoRealizadoCategoriaHistoricoPK(creditoId, categoriaId);
+    	this.comp_id = comp_id;
+    }
+    
     public CreditoRealizadoCategoriaHistorico(CreditoRealizadoCategoriaHistoricoPK comp_id) {
         this.comp_id = comp_id;
     }

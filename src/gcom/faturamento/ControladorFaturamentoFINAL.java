@@ -47325,143 +47325,76 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditoRealizadoRemover = new ArrayList();
 		Collection colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
 
-		
-		Conta conta = (Conta)this.obterConta(idConta).iterator().next(); 
+		Conta conta = (Conta) this.obterConta(idConta).iterator().next();
 		try {
-			// pesquisa os créditos realizados da conta cancelada
-			Collection<ICreditoRealizado> creditosRealizados = repositorioFaturamento
-					.pesquisarCreditosRealizados(conta);
+			Collection<ICreditoRealizado> creditosRealizados = repositorioFaturamento.pesquisarCreditosRealizados(conta);
 
-			// cria o crédito realizados histórico
 			CreditoRealizadoHistorico creditoRealizadoHistoricoTemp = null;
 
 			if (creditosRealizados != null && !creditosRealizados.isEmpty()) {
 
-				colecaoCreditoRealizadoRemover.addAll(creditosRealizados);
-
-				// laço para inserir todos os históricos dos créditos
-				// realizados
 				for (ICreditoRealizado creditoRealizado : creditosRealizados) {
-					// cria o histórico do crédito realizado da conta
-					// cancelada
 					creditoRealizadoHistoricoTemp = new CreditoRealizadoHistorico();
-					creditoRealizadoHistoricoTemp.setId(creditoRealizado
-							.getId());
-					creditoRealizadoHistoricoTemp
-							.setCreditoRealizado(creditoRealizado
-									.getCreditoRealizado());
-					creditoRealizadoHistoricoTemp
-							.setCodigoSetorComercial(creditoRealizado
-									.getCodigoSetorComercial());
-					creditoRealizadoHistoricoTemp
-							.setNumeroQuadra(creditoRealizado.getNumeroQuadra());
-					creditoRealizadoHistoricoTemp
-							.setNumeroLote(creditoRealizado.getNumeroLote());
-					creditoRealizadoHistoricoTemp
-							.setNumeroSubLote(creditoRealizado
-									.getNumeroSubLote());
-					creditoRealizadoHistoricoTemp
-							.setAnoMesReferenciaCredito(creditoRealizado
-									.getAnoMesReferenciaCredito());
-					creditoRealizadoHistoricoTemp
-							.setAnoMesCobrancaCredito(creditoRealizado
-									.getAnoMesCobrancaCredito());
-					creditoRealizadoHistoricoTemp
-							.setValorCredito(creditoRealizado.getValorCredito());
-					creditoRealizadoHistoricoTemp
-							.setNumeroPrestacao(creditoRealizado
-									.getNumeroPrestacao());
-					creditoRealizadoHistoricoTemp
-							.setNumeroPrestacaoCredito(creditoRealizado
-									.getNumeroPrestacaoCredito());
-					creditoRealizadoHistoricoTemp
-							.setNumeroParcelaBonus(creditoRealizado
-									.getNumeroParcelaBonus());
-					creditoRealizadoHistoricoTemp
-							.setUltimaAlteracao(new Date());
-					creditoRealizadoHistoricoTemp.setQuadra(creditoRealizado
-							.getQuadra());
-					creditoRealizadoHistoricoTemp
-							.setLocalidade(creditoRealizado.getLocalidade());
-					creditoRealizadoHistoricoTemp
-							.setCreditoTipo(creditoRealizado.getCreditoTipo());
-					creditoRealizadoHistoricoTemp
-							.setContaHistorico(contaHistoricoTemp);
-					creditoRealizadoHistoricoTemp
-							.setLancamentoItemContabil(creditoRealizado
-									.getLancamentoItemContabil());
-					creditoRealizadoHistoricoTemp
-							.setCreditoOrigem(creditoRealizado
-									.getCreditoOrigem());
-					creditoRealizadoHistoricoTemp
-							.setCreditoARealizarGeral(creditoRealizado
-									.getCreditoARealizarGeral());
+					creditoRealizadoHistoricoTemp.setId(creditoRealizado.getId());
+					creditoRealizadoHistoricoTemp.setCreditoRealizado(creditoRealizado.getCreditoRealizado());
+					creditoRealizadoHistoricoTemp.setCodigoSetorComercial(creditoRealizado.getCodigoSetorComercial());
+					creditoRealizadoHistoricoTemp.setNumeroQuadra(creditoRealizado.getNumeroQuadra());
+					creditoRealizadoHistoricoTemp.setNumeroLote(creditoRealizado.getNumeroLote());
+					creditoRealizadoHistoricoTemp.setNumeroSubLote(creditoRealizado.getNumeroSubLote());
+					creditoRealizadoHistoricoTemp.setAnoMesReferenciaCredito(creditoRealizado.getAnoMesReferenciaCredito());
+					creditoRealizadoHistoricoTemp.setAnoMesCobrancaCredito(creditoRealizado.getAnoMesCobrancaCredito());
+					creditoRealizadoHistoricoTemp.setValorCredito(creditoRealizado.getValorCredito());
+					creditoRealizadoHistoricoTemp.setNumeroPrestacao(creditoRealizado.getNumeroPrestacao());
+					creditoRealizadoHistoricoTemp.setNumeroPrestacaoCredito(creditoRealizado.getNumeroPrestacaoCredito());
+					creditoRealizadoHistoricoTemp.setNumeroParcelaBonus(creditoRealizado.getNumeroParcelaBonus());
+					creditoRealizadoHistoricoTemp.setUltimaAlteracao(new Date());
+					creditoRealizadoHistoricoTemp.setQuadra(creditoRealizado.getQuadra());
+					creditoRealizadoHistoricoTemp.setLocalidade(creditoRealizado.getLocalidade());
+					creditoRealizadoHistoricoTemp.setCreditoTipo(creditoRealizado.getCreditoTipo());
+					creditoRealizadoHistoricoTemp.setContaHistorico(contaHistoricoTemp);
+					creditoRealizadoHistoricoTemp.setLancamentoItemContabil(creditoRealizado.getLancamentoItemContabil());
+					creditoRealizadoHistoricoTemp.setCreditoOrigem(creditoRealizado.getCreditoOrigem());
+					creditoRealizadoHistoricoTemp.setCreditoARealizarGeral(creditoRealizado.getCreditoARealizarGeral());
 
-					colecaoCreditoRealizadoHistoricoInserir
-							.add(creditoRealizadoHistoricoTemp);
+					colecaoCreditoRealizadoHistoricoInserir.add(creditoRealizadoHistoricoTemp);
 
 					Collection<CreditoRealizadoCategoria> colecaoCreditoRealizadoCategoria = this.repositorioFaturamento
-							.pesquisarCreditoRealizadoCategoria(creditoRealizado
-									.getId());
+							.pesquisarCreditoRealizadoCategoria(creditoRealizado.getId());
 
-					if (colecaoCreditoRealizadoCategoria != null
-							&& !colecaoCreditoRealizadoCategoria.isEmpty()) {
+					if (colecaoCreditoRealizadoCategoria != null && !colecaoCreditoRealizadoCategoria.isEmpty()) {
 
 						colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
-						colecaoCreditoRealizadoCategoriaRemover
-								.addAll(colecaoCreditoRealizadoCategoria);
+						
+						if (!conta.isContaCanceladaPorRetificacao()) {
+							colecaoCreditoRealizadoRemover.addAll(creditosRealizados);
+							colecaoCreditoRealizadoCategoriaRemover.addAll(colecaoCreditoRealizadoCategoria);
+						}
 
 						for (CreditoRealizadoCategoria creditoRelizadoCategoria : colecaoCreditoRealizadoCategoria) {
-							CreditoRealizadoCategoriaHistorico creditoRealizadoCategoriaHistorico = new CreditoRealizadoCategoriaHistorico();
-							creditoRealizadoCategoriaHistorico
-									.setComp_id(new CreditoRealizadoCategoriaHistoricoPK(
-											creditoRealizadoHistoricoTemp
-													.getId(),
-											creditoRelizadoCategoria
-													.getCategoria().getId()));
-							creditoRealizadoCategoriaHistorico
-									.setCategoria(creditoRelizadoCategoria
-											.getCategoria());
-							creditoRealizadoCategoriaHistorico
-									.setCreditoRealizadoHistorico(creditoRealizadoHistoricoTemp);
-							creditoRealizadoCategoriaHistorico
-									.setQuantidadeEconomia(creditoRelizadoCategoria
-											.getQuantidadeEconomia());
-							creditoRealizadoCategoriaHistorico
-									.setUltimaAlteracao(new Date());
-							creditoRealizadoCategoriaHistorico
-									.setValorCategoria(creditoRelizadoCategoria
-											.getValorCategoria());
+							CreditoRealizadoCategoriaHistorico creditoRealizadoCategoriaHistorico = new CreditoRealizadoCategoriaHistorico(
+									creditoRealizadoHistoricoTemp.getId(),creditoRelizadoCategoria.getCategoria().getId());
+							creditoRealizadoCategoriaHistorico.setCategoria(creditoRelizadoCategoria.getCategoria());
+							creditoRealizadoCategoriaHistorico.setCreditoRealizadoHistorico(creditoRealizadoHistoricoTemp);
+							creditoRealizadoCategoriaHistorico.setQuantidadeEconomia(creditoRelizadoCategoria.getQuantidadeEconomia());
+							creditoRealizadoCategoriaHistorico.setUltimaAlteracao(new Date());
+							creditoRealizadoCategoriaHistorico.setValorCategoria(creditoRelizadoCategoria.getValorCategoria());
 
-							colecaoCreditoRealizadoCategoriaHistoricoInserir
-									.add(creditoRealizadoCategoriaHistorico);
+							colecaoCreditoRealizadoCategoriaHistoricoInserir.add(creditoRealizadoCategoriaHistorico);
 						}
-						// System.out.println("REMOVENDO CREDITO REALIZADO
-						// CATEGORIA");
-						getControladorBatch()
-								.removerColecaoCreditoRealizadoCategoriaParaBatch(
-										colecaoCreditoRealizadoCategoriaRemover);
+						getControladorBatch().removerColecaoCreditoRealizadoCategoriaParaBatch(colecaoCreditoRealizadoCategoriaRemover);
 
 						colecaoCreditoRealizadoCategoriaRemover = null;
 					}
 				}
 			}
 
-			// System.out.println("REMOVENDO CREDITO REALIZADO");
-			getControladorBatch().removerColecaoCreditoRealizadoParaBatch(
-					colecaoCreditoRealizadoRemover);
+			getControladorBatch().removerColecaoCreditoRealizadoParaBatch(colecaoCreditoRealizadoRemover);
 			colecaoCreditoRealizadoRemover = null;
 
-			// System.out.println("TRANSFERINDO CREDITO REALIZADO PARA O
-			// HISTORICO");
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					colecaoCreditoRealizadoHistoricoInserir);
+			getControladorBatch().inserirColecaoObjetoParaBatch(colecaoCreditoRealizadoHistoricoInserir);
 			colecaoCreditoRealizadoHistoricoInserir = null;
 
-			// System.out.println("TRANSFERINDO CREDITO REALIZADO CATEGORIA PARA
-			// O HISTORICO");
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					colecaoCreditoRealizadoCategoriaHistoricoInserir);
+			getControladorBatch().inserirColecaoObjetoParaBatch(colecaoCreditoRealizadoCategoriaHistoricoInserir);
 			colecaoCreditoRealizadoCategoriaHistoricoInserir = null;
 
 		} catch (Exception ex) {
