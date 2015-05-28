@@ -47365,7 +47365,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 						colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
 						
-						if (!conta.isContaCanceladaPorRetificacao()) {
+						if (!conta.isContaRetificada()) {
 							colecaoCreditoRealizadoRemover.addAll(creditosRealizados);
 							colecaoCreditoRealizadoCategoriaRemover.addAll(colecaoCreditoRealizadoCategoria);
 						}

@@ -1201,7 +1201,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return conta;
 	}
 	
-	public boolean isContaCanceladaPorRetificacao() {
-		return this.debitoCreditoSituacaoAtual.getId().intValue() == DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO.intValue();
+	public boolean isContaRetificada() {
+		return this.debitoCreditoSituacaoAtual.getId().intValue() == DebitoCreditoSituacao.RETIFICADA.intValue();
 	}
 }
