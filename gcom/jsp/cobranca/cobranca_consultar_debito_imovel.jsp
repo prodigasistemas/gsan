@@ -483,9 +483,9 @@ function validaCheckGuia(){
 												<tr bordercolor="#79bbfd">
 													<td colspan="11" align="center" bgcolor="#79bbfd"><strong>Contas</strong></td>
 												</tr>
-												<logic:notEmpty name="colecaoContaValores" scope="request">
+												<logic:notEmpty name="colecaoContas" scope="request">
 													<%if (((Collection) request
-								.getAttribute("colecaoContaValores")).size() <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
+								.getAttribute("colecaoContas")).size() <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
 													<tr bordercolor="#000000">
 													
 														<td width="5%" bgcolor="#90c7fc" align="center">
@@ -560,8 +560,8 @@ function validaCheckGuia(){
 														</font></div>
 														</td>
 													</tr>
-													<logic:present name="colecaoContaValores">
-														<logic:iterate name="colecaoContaValores"
+													<logic:present name="colecaoContas">
+														<logic:iterate name="colecaoContas"
 															id="contaValoresHelper" type="ContaValoresHelper">
 															<%if (cor.equalsIgnoreCase("#cbe5fe")) {
 										cor = "#FFFFFF";%>
@@ -863,7 +863,7 @@ function validaCheckGuia(){
 																</logic:notEmpty></td>
 															</tr>
 														</logic:iterate>
-														<logic:notEmpty name="colecaoContaValores">
+														<logic:notEmpty name="colecaoContas">
 															<%if (cor.equalsIgnoreCase("#cbe5fe")) {
 										cor = "#FFFFFF";%>
 															<tr bgcolor="#FFFFFF">
@@ -1017,8 +1017,8 @@ function validaCheckGuia(){
 														<td height="100" colspan="11">
 														<div style="width: 100%; height: 100%; overflow: auto;">
 														<table width="100%">
-															<logic:present name="colecaoContaValores">
-																<logic:iterate name="colecaoContaValores"
+															<logic:present name="colecaoContas">
+																<logic:iterate name="colecaoContas"
 																	id="contaValoresHelper" type="ContaValoresHelper">
 																	<%if (cor.equalsIgnoreCase("#cbe5fe")) {
 										cor = "#FFFFFF";%>
@@ -1320,7 +1320,7 @@ function validaCheckGuia(){
 																		</td>
 																	</tr>
 																</logic:iterate>
-																<logic:notEmpty name="colecaoContaValores">
+																<logic:notEmpty name="colecaoContas">
 																	<%if (cor.equalsIgnoreCase("#cbe5fe")) {
 										cor = "#FFFFFF";%>
 																	<tr bgcolor="#FFFFFF">
@@ -1903,12 +1903,12 @@ function validaCheckGuia(){
 												<td height="23">
 													<table width="100%">
 														<tr>  
-															<logic:empty name="colecaoContaValores">
+															<logic:empty name="colecaoContas">
 																<td align="right">
 																	<input type="button" name="" value="Imprimir Extrato de Débito" class="bottonRightCol" disabled="true"/>
 																</td>
 															</logic:empty>
-															<logic:notEmpty name="colecaoContaValores">
+															<logic:notEmpty name="colecaoContas">
 																<logic:equal name="ConsultarDebitoImovelActionForm" property="indicadorEmissaoExtratoNaConsulta" value="<%=ConstantesSistema.SIM.toString()%>" >
 																	<td align="right">
 																		<input type="button" name="" value="Imprimir Extrato de Débito" class="bottonRightCol"

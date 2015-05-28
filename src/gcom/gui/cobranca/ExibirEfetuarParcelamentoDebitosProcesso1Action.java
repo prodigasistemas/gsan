@@ -242,6 +242,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 				// Dados do Débito do Imóvel - Contas
 				Collection<ContaValoresHelper> colecaoContasImovel = colecaoDebitoImovel.getColecaoContasValoresImovel();
+				colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
 
 				if (colecaoContasImovel != null	&& !colecaoContasImovel.isEmpty()) {
 					
