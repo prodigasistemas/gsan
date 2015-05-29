@@ -204,6 +204,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				// [FS0014] Verificar existência de débitos para o imóvel
 				// Caso não exista débito
 				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
+						&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)
 						&& (colecaoDebitoImovel.getColecaoGuiasPagamentoValores() == null || colecaoDebitoImovel.getColecaoGuiasPagamentoValores().size() == 0)	&& 
 						(colecaoDebitoImovel.getColecaoDebitoACobrar() == null || colecaoDebitoImovel.getColecaoDebitoACobrar().size() == 0)) {
 					throw new ActionServletException("atencao.imovel.sem.debitos", null, codigoImovel);
