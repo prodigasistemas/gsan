@@ -2009,12 +2009,12 @@ function pesquisarImovel() {
 					<td height="23">
 						<table width="100%">
 							<tr>  
-								<logic:empty name="colecaoContaValores">
+								<logic:empty name="colecaoContas">
 									<td align="right">
 										<input type="button" name="" value="Imprimir Extrato de D&eacute;bito" class="bottonRightCol" disabled="true"/>
 									</td>
 								</logic:empty>
-								<logic:notEmpty name="colecaoContaValores">
+								<logic:notEmpty name="colecaoContas">
 									<logic:equal name="ConsultarImovelActionForm" property="indicadorEmissaoExtratoNaConsulta" value="<%=ConstantesSistema.SIM.toString()%>" >
 										<td align="right">
 											<input type="button" name="" value="Imprimir Extrato de D&eacute;bito" class="bottonRightCol" onclick="gerarExtratoDebito()" >

@@ -337,7 +337,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
 		
-		colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValores");
+		colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContas");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoValores");
 		colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizar");
@@ -388,14 +388,14 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
 		
-		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValores");
+		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContas");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
 		colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizar");
 
 		valorDescontoCredito = (BigDecimal) sessao.getAttribute("valorCreditoARealizar");
 		valorDesconto = (BigDecimal) sessao.getAttribute("valorTotalDescontoPagamentoAVista");
-		valorDocumento = (BigDecimal) sessao.getAttribute("valorPagamentoAVista");
+		valorDocumento = (BigDecimal) sessao.getAttribute("valorPagamentoAVistaConsultarDebitos");
 		valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimo");
 
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarSemJurosParcelamento(colecaoDebitosACobrar);
