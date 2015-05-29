@@ -997,7 +997,7 @@ public interface IRepositorioFaturamento {
 
 	public Collection<IDebitoCobrado> pesquisarDebitosCobrados(Integer idConta) throws ErroRepositorioException;
 
-	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(IConta conta) throws ErroRepositorioException;
+	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(Integer idConta) throws ErroRepositorioException;
 
 	public int pesquisarQuantidadeDebitosCobradosComParcelamento(Collection<ContaValoresHelper> colecaoContasValores) throws ErroRepositorioException;
 
