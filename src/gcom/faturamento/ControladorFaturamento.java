@@ -7086,7 +7086,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 										
-											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel().getId() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMÓVEL...") 
 													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
 													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
 													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
