@@ -6988,11 +6988,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															
 												}
 												
-												System.out.println("**============ 1 - Credito a Realizar:atualizarCreditoResidual ===============**"
-					            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
-					            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
-					            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
-					            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
+												logger.info(" 1 - Credito a Realizar: Imovel: " + creditoARealizar.getImovel().getId() 
+														+ " | Créditos: " + creditoARealizar.getValorCredito()
+														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 												
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 												// Acumula o valor do crÃ©dito
@@ -7021,12 +7020,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										} else {
 											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
-											System.out.println("**============ 2 - Credito a Realizar:atualizarCreditoResidual ===============**"
-				            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
-				            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
-				            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
-				            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
-										
+											logger.info(" 2 - Credito a Realizar: Imovel: " + creditoARealizar.getImovel().getId() 
+													+ " | Créditos: " + creditoARealizar.getValorCredito()
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
 											// atualiza o credito a realizar
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
@@ -7093,15 +7091,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 										
-											System.out.println("**============ 3 - Credito a Realizar:atualizarCreditoResidual ===============**"
-													+ "\n Imovel: " + creditoARealizar.getImovel().getId()
-													+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
-													+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
-													+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
-
+											logger.info(" 3 - Credito a Realizar: Imovel: " + creditoARealizar.getImovel().getId() 
+													+ " | Créditos: " + creditoARealizar.getValorCredito()
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
 											// atualiza o credito a realizar
-											repositorioFaturamento
-													.atualizarCreditoARealizar(creditoARealizar);
+											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 											
 											/**
 											 * @author Adriana Muniz e Wellington Rocha
@@ -7121,14 +7117,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											creditoARealizar
 													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 											
-											System.out.println("**============ 4 - Credito a Realizar:atualizarCreditoResidual ===============**"
-				            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
-				            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
-				            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
-				            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
-										
-											repositorioFaturamento
-													.atualizarCreditoARealizar(creditoARealizar);
+											logger.info(" 4 - Credito a Realizar: Imovel: " + creditoARealizar.getImovel().getId() 
+													+ " | Créditos: " + creditoARealizar.getValorCredito()
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
+											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
 
 										// Acumula o valor do crÃ©dito
@@ -7158,15 +7152,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									creditoARealizar
 											.setAnoMesReferenciaPrestacao(null);
 									
-									System.out.println("**============ 5 - Credito a Realizar:atualizarCreditoResidual ===============**"
-		            						+ "\n Imovel: " + creditoARealizar.getImovel().getId()
-		            						+ "\n Valor Créditos: " + creditoARealizar.getValorCredito()
-		            						+ "\n Valor Residual Concedido no Mês: " + creditoARealizar.getValorResidualConcedidoMes()
-		            						+ "\n Valor Residual Concedido no Mês Anterior: " + creditoARealizar.getValorResidualMesAnterior());
-								
-
-									repositorioFaturamento
-											.atualizarCreditoARealizar(creditoARealizar);
+									logger.info(" 5 - Credito a Realizar: Imovel: " + creditoARealizar.getImovel().getId() 
+											+ " | Créditos: " + creditoARealizar.getValorCredito()
+											+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+											+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+									
+									repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 								}
 								
 							}// fim laÃ§o que verifica se o credito a realizar jÃ¡ foi analisado
