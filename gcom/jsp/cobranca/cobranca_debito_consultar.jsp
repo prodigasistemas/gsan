@@ -254,6 +254,9 @@ function controleImovel(){
 		form.codigoCliente.readOnly = true;
 		form.tipoRelacao.disabled = true;
 		form.codigoClienteSuperior.readOnly = true;
+		form.responsavel[0].disabled = true;
+		form.responsavel[1].disabled = true;
+		form.responsavel[2].checked = true;
 	}
 	else
 	{
@@ -270,6 +273,7 @@ function controleCliente(){
 	if(form.codigoCliente.value.length > 0){
 		form.codigoImovel.readOnly = true;
 		form.codigoClienteSuperior.readOnly = true;
+		form.responsavel[0].checked = true;
 	}
 	else
 	{
