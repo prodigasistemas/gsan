@@ -1164,7 +1164,7 @@ function pesquisarImovel() {
 												</td>
 												
 												<td align="left">
-													<%=((Collection) session.getAttribute("colecaoContaValores")).size()%> &nbsp; doc(s)
+													<%=((Collection) session.getAttribute("colecaoContas")).size()%> &nbsp; doc(s)
 												</td>
 												
 												<td align="right">
