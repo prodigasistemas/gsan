@@ -7469,7 +7469,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
+				System.out.println("Nenhum imï¿½vel encontrado. ARQUIVO Nï¿½O GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -9470,7 +9470,7 @@ public class ControladorCadastro implements SessionBean {
 
 		// FaturamentoGrupo
 		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				2, rota.getFaturamentoGrupo().getId() + ""));
+				3, rota.getFaturamentoGrupo().getId() + ""));
 
 		arquivoTextoRegistroTipoGeral.append(System
 				.getProperty("line.separator"));
