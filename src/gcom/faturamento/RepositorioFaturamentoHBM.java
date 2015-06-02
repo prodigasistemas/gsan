@@ -20879,8 +20879,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join cnta.imovel imo "
 					+ "where imo.setorComercial =:idSetorComercial "
 					+ "and cnta.referenciaContabil <= :anoMesReferenciaContabil "
-					+ "and ((cnta.debitoCreditoSituacaoAtual in (:cancelada , :retificacao , :parcelada , :debitoPrescrito , :debitoPrescritoContasIncluidas) "
-					//+ "and ((cnta.debitoCreditoSituacaoAtual = :situacaoCancelada or cnta.debitoCreditoSituacaoAtual = :situacaoRetificacao or cnta.debitoCreditoSituacaoAtual = :situacaoParcelada or cnta.debitoCreditoSituacaoAtual = :situacaoDebitoPrescrito or cnta.debitoCreditoSituacaoAtual = :situacaoDebitoPrescritoContasIncluidas) "
+					+ "and ((cnta.debitoCreditoSituacaoAtual = :cancelada or cnta.debitoCreditoSituacaoAtual = :retificacao or cnta.debitoCreditoSituacaoAtual = :parcelada or cnta.debitoCreditoSituacaoAtual = :debitoPrescrito or cnta.debitoCreditoSituacaoAtual = :debitoPrescritoContasIncluidas) "
 					+ "or (cnta.valorAgua + cnta.valorEsgoto + cnta.debitos - cnta.valorCreditos - cnta.valorImposto = 0) )";
 
 			retorno = session.createQuery(consulta)
