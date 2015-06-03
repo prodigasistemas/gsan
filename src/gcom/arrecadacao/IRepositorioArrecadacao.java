@@ -44,6 +44,7 @@ import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
+import gcom.relatorio.arrecadacao.resumocreditosavisosbancarios.ResumoCreditosAvisosBancariosDTO;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -6950,4 +6951,5 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException;
 
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ErroRepositorioException;
 }
