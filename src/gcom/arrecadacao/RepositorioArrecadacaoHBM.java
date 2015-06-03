@@ -31667,12 +31667,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ErroRepositorioException {
 		
-		List<ResumoCreditosAvisosBancariosDTO> retorno = null;
+		List<ResumoCreditosAvisosBancariosDTO> retorno = new ArrayList<ResumoCreditosAvisosBancariosDTO>();
 		Session session = HibernateUtil.getSession();
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT new gcom.relatorio.arrecadacao.resumocreditosavisosbancarios.ResumoCreditosAvisosBancariosDTO ( ")
-		   .append("data_pagamento_previsto, data_realizada, descricao_arrecadador, sum(valor_pagamento) as total )")
+		sql.append("SELECT data_pagamento_previsto, data_realizada, descricao_arrecadador, sum(valor_pagamento) as total ")
 		   .append("FROM (");
 		
 		StringBuilder consultaPagamentos = new StringBuilder();
@@ -31742,10 +31741,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								   .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
 			 					   .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
 		
-		sql.append(consultaPagamentosHistorico.toString());
+		sql.append(consultaPagamentosHistorico.toString())
+		   .append(") as resumo ")
+		   .append("GROUP BY data_pagamento_previsto, data_realizada, id_arrecadador, descricao_arrecadador ")
+		   .append("ORDER BY data_pagamento_previsto, data_realizada, id_arrecadador;");
 
 		try {
-			retorno = session.createSQLQuery(sql.toString())
+			Collection colecao = session.createSQLQuery(sql.toString())
 					.addScalar("data_pagamento_previsto", Hibernate.DATE)
 					.addScalar("data_realizada", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
@@ -31753,6 +31755,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("referencia", referencia)
 					.setInteger("ano", Util.obterAno(referencia))
 					.setInteger("mes", Util.obterMes(referencia)).list();
+			
+			for (Object dadosResumo : colecao) {
+				Object[] arrayDadosResumo = (Object[]) dadosResumo;
+				
+				ResumoCreditosAvisosBancariosDTO dto = new ResumoCreditosAvisosBancariosDTO((Date) arrayDadosResumo[0], (Date) arrayDadosResumo[1],
+						(String) arrayDadosResumo[2], (BigDecimal) arrayDadosResumo[3]);
+				
+				retorno.add(dto);
+			}
 			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

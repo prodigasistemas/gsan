@@ -158,6 +158,15 @@
 		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
 			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosDocumentoAgregadorAction"
 			scope="session" path="/gerarRelatorioDadosDiariosDocumentoAgregadorAction" />
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioResumoCreditosAvisosBancariosAction"
+			path="/gerarRelatorioResumoCreditosAvisosBancariosAction"	>
+			
+			<forward name="gerarRelatorioResumoCreditosAvisosBancariosAction"
+					path="/gerarRelatorioResumoCreditosAvisosBancariosAction.do" />		
+		</action>
+		
 	</action-mappings>
 
 	<message-resources null="false"

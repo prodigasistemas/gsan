@@ -22,19 +22,24 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
-function avancar(){
-	document.forms[0].proximoPasso.value = 'avancar';
-	enviar();
-}
 
-function verificarExibicaoRelatorio() {
+	function avancar(){
+		document.forms[0].proximoPasso.value = 'avancar';
+		enviar();
+	}
 	
-	toggleBox('demodiv',1);
+	function verificarExibicaoRelatorio() {
+		
+		toggleBox('demodiv',1);
+		
+	}
 	
-}
+	function gerarResumoCreditosAvisosBancarios(){
+	  	var form = document.forms[0];
+	  	form.action = "/gsan/gerarRelatorioResumoCreditosAvisosBancariosAction.do";
+	  	form.submit();
+	}
 
--->
 </script>
 </head>
 <body leftmargin="5" topmargin="5">
@@ -304,6 +309,12 @@ function verificarExibicaoRelatorio() {
               	</table>
 	            <table width="100%" border="0">
 					<tr>
+						<td align="left">
+							  <div align="left">
+							  	<input type="Button" value="Resumo" onclick="javascript:gerarResumoCreditosAvisosBancarios();" class="bottonRightCol" />
+							  </div>
+						</td>
+						
 						<td align="right">
 							  <div align="right">
 							   <a href="javascript:verificarExibicaoRelatorio();">

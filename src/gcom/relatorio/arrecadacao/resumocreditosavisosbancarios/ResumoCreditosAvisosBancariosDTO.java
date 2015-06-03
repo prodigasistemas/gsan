@@ -22,6 +22,8 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 	@ReportElementType(description="Valor Pagamento")
 	private BigDecimal valorPagamento;
 
+	public ResumoCreditosAvisosBancariosDTO() {}
+	
 	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento) {
 		super();
 		this.dataPagamentoPrevisto = dataPagamentoPrevisto;
