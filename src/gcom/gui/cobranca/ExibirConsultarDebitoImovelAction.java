@@ -27,6 +27,7 @@ import gcom.util.filtro.ParametroSimples;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -264,18 +265,19 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 		}
 
 		// Obtendo os débitos do imovel
-		ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada
-				.obterDebitoImovelOuCliente(tipoImovel.intValue(),
+		ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada.obterDebitoImovelOuCliente(tipoImovel.intValue(),
 						codigoImovel, null, tipoRelacao, anoMesInicial,
 						anoMesFinal, dataVencimentoDebitoI,
 						dataVencimentoDebitoF, indicadorPagamento.intValue(),
 						indicadorConta.intValue(), indicadorDebito.intValue(),
 						indicadorCredito.intValue(), indicadorNotas.intValue(),
-						indicadorGuias.intValue(), indicadorAtualizar
-								.intValue(), null);
+						indicadorGuias.intValue(), indicadorAtualizar.intValue(), null);
 
-		Collection<ContaValoresHelper> colecaoContaValores = colecaoDebitoImovel
-				.getColecaoContasValores();
+		Collection<ContaValoresHelper> colecaoContaValores = colecaoDebitoImovel.getColecaoContasValores();
+		Collection<ContaValoresHelper> colecaoContaValoresPreteritos = colecaoDebitoImovel.getColecaoContasValoresPreteritos();
+		Collection<ContaValoresHelper> colecaoContas = new ArrayList<ContaValoresHelper>();
+		colecaoContas.addAll(colecaoContaValores);
+		colecaoContas.addAll(colecaoContaValoresPreteritos);
 
 		ContaValoresHelper dadosConta = null;
 
@@ -290,8 +292,9 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 		BigDecimal valorJurosMora = new BigDecimal("0.00");
 		BigDecimal valorMulta = new BigDecimal("0.00");
 
-		if (colecaoContaValores != null && !colecaoContaValores.isEmpty()) {
-			java.util.Iterator<ContaValoresHelper> colecaoContaValoresIterator = colecaoContaValores.iterator();
+		if (colecaoContas != null && !colecaoContas.isEmpty()) {
+			java.util.Iterator<ContaValoresHelper> colecaoContaValoresIterator = colecaoContas.iterator();
+			
 			// percorre a colecao de conta somando o valor para obter um valor total
 			while (colecaoContaValoresIterator.hasNext()) {
 
@@ -408,17 +411,16 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 			}
 		}
 
-		if ((colecaoContaValores == null)&& (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
+		if ((colecaoContaValores == null || colecaoContaValoresPreteritos == null) && (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 			&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty())
 			&& (colecaoGuiaPagamentoValores == null)) {
 
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
-			// throw new ActionServletException(
-			// "atencao.imovel.sem.debito", null, ""
-			// + codigoImovel);
 		} else {
 			// Manda a colecao pelo request
-			httpServletRequest.setAttribute("colecaoContaValores",colecaoContaValores);
+			httpServletRequest.setAttribute("colecaoContaValores", colecaoContaValores);
+			httpServletRequest.setAttribute("colecaoContaValoresPreteritos", colecaoContaValoresPreteritos);
+			httpServletRequest.setAttribute("colecaoContas", colecaoContas);
 
 			// Manda a colecao e os valores total de conta pelo request
 			httpServletRequest.setAttribute("colecaoDebitoACobrar",	colecaoDebitoACobrar);
@@ -484,7 +486,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 						imovelPerfil.getId(), 
 						"01/0001", 
 						new Integer("2"),//indicador de restabelecimento 
-						colecaoContaValores, 
+						colecaoContas, 
 						valorTotalComAcrescimo, 
 						valorMulta, 
 						valorJurosMora, 
@@ -508,29 +510,35 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 //				consultarDebitoImovelActionForm.setValorPagamentoAVista(Util.formatarMoedaReal(valorPagamentoAVista));
 //				
 				httpServletRequest.setAttribute("valorTotalDescontoPagamentoAVista", Util.formatarMoedaReal(valorTotalDescontoPagamentoAVista));
-				httpServletRequest.setAttribute("valorPagamentoAVista", Util.formatarMoedaReal(valorPagamentoAVista));
+				httpServletRequest.setAttribute("valorPagamentoAVistaConsultarDebitos", Util.formatarMoedaReal(valorPagamentoAVista));
 				
 				//seta na sessão para emitir o extrato de débito
 				sessao.setAttribute("colecaoContaValores",colecaoContaValores);
+				sessao.setAttribute("colecaoContaValoresPreteritos",colecaoContaValoresPreteritos);
+				sessao.setAttribute("colecaoContas",colecaoContas);
+				
 				sessao.setAttribute("colecaoDebitoACobrar",	colecaoDebitoACobrar);
 				sessao.setAttribute("colecaoCreditoARealizar",colecaoCreditoARealizar);
 				sessao.setAttribute("colecaoGuiaPagamentoValores", colecaoGuiaPagamentoValores);
 
 				sessao.setAttribute("valorAcrescimo", valorAcrescimo);
 				sessao.setAttribute("valorTotalDescontoPagamentoAVista",valorTotalDescontoPagamentoAVista);
-				sessao.setAttribute("valorPagamentoAVista", valorPagamentoAVista);
+				sessao.setAttribute("valorPagamentoAVistaConsultarDebitos", valorPagamentoAVista);
 				sessao.setAttribute("valorCreditoARealizar", valorCreditoARealizar);
 				sessao.setAttribute("idImovel", codigoImovel);
 			}else{
 				//seta na sessão para emitir o extrato de débito
 				sessao.setAttribute("colecaoContaValores",colecaoContaValores);
+				sessao.setAttribute("colecaoContaValoresPreteritos",colecaoContaValoresPreteritos);
+				sessao.setAttribute("colecaoContas",colecaoContas);
+				
 				sessao.setAttribute("colecaoDebitoACobrar",	colecaoDebitoACobrar);
 				sessao.setAttribute("colecaoCreditoARealizar",colecaoCreditoARealizar);
 				sessao.setAttribute("colecaoGuiaPagamentoValores", colecaoGuiaPagamentoValores);
 
 //				sessao.setAttribute("valorAcrescimo", valorAcrescimo);
 //				sessao.setAttribute("valorTotalDescontoPagamentoAVista",valorTotalDescontoPagamentoAVista);
-				sessao.setAttribute("valorPagamentoAVista", valorTotalSemAcrescimo);
+				sessao.setAttribute("valorPagamentoAVistaConsultarDebitos", valorTotalSemAcrescimo);
 				sessao.setAttribute("valorCreditoARealizar", valorCreditoARealizar);
 				sessao.setAttribute("idImovel", codigoImovel);
 				
@@ -538,7 +546,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 			sessao.setAttribute("indicadorContasRevisao",indicadorContasRevisao);
 		}
 		
-		Short indicadorEmissaoExtratoNaConsulta = indicadorEmissaoExtratoNaConsulta = fachada.pesquisarParametrosDoSistema().getIndicadorEmissaoExtratoNaConsulta();
+		Short indicadorEmissaoExtratoNaConsulta = fachada.pesquisarParametrosDoSistema().getIndicadorEmissaoExtratoNaConsulta();
 		consultarDebitoImovelActionForm.setIndicadorEmissaoExtratoNaConsulta(indicadorEmissaoExtratoNaConsulta.toString());
 		
 		if (httpServletRequest.getAttribute("caminhoRetornoTelaConsultaDebito") != null) {

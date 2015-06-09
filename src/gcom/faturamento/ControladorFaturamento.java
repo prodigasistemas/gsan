@@ -976,6 +976,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 
 	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 	        				 
+	        				 logger.info(" 1 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
+										+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
+	        				 
 	        				 Collection indicadorRetransmissaoColecao = repositorioFaturamento.pesquisaIndicadorRetransmissaoMovimentoContaPF(contaAtualizacao.getImovel().getId(),
 	        						 helper.getFaturamentoGrupo().getAnoMesReferencia());
 	        				 Integer indicadorRetransmissao = null;
@@ -990,7 +993,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        							 contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        							 valorTotalContaSemCreditos);
 	        					 contaAtualizacao.setValorCreditos(valorTotalCreditos);
-	        					
+	        					 logger.info(" 2 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
+											+ " | Valor creditos: " + contaAtualizacao.getValorCreditos()
+											+ " | Valor total creditos: " + valorTotalCreditos);
+	        					 
 	        					 /**
 	        					  * Autor: Wellington Rocha
 	        					  * Data: 30/08/2011
@@ -1002,7 +1008,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 && indicadorRetransmissao.equals(2)) 
 	        						 && (valorCreditos.compareTo(valorTotalContaSemCreditos)==0 
 	        						 || valorCreditos.compareTo(valorTotalContaSemCreditos)== -1 )){
-
+	        					 
+	        					 logger.info(" 3 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
+											+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
+	        					 
 					            	/**
 					            	 * Autor: Adriana Muniz
 					            	 * Data: 09/08/2011
@@ -1015,8 +1024,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            	Collection colecaoCreditosARealizar = repositorioFaturamento
 					            		.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(contaAtualizacao.getImovel().getId());
 					            	
+					            	
 					            	if(!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
 
+					            		logger.info(" 4 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
+												+ " | Qtde de créditos com valor residual diferente de zero: " + colecaoCreditosARealizar.size());
+					            		
 					            		Iterator creditoIterator = colecaoCreditosARealizar.iterator();
 
 					            		while(creditoIterator.hasNext()) {
@@ -1024,6 +1037,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					            			credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 
+					            			logger.info(" 5 - Credito a Realizar: Imovel: " + (credito.getImovel() != null ? credito.getImovel().getId() : "NULL") 
+													+ " | Créditos: " + (credito.getValorCredito() != null ? credito.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mês: " + (credito.getValorResidualConcedidoMes() != null ? credito.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
+					            			
 					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
 					            	}
@@ -6807,6 +6825,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															
 												}
 												
+												logger.info(" 1 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+														+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+														+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+												
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 												// Acumula o valor do crédito
 												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
@@ -6834,6 +6857,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										} else {
 											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
+											logger.info(" 2 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
 											// atualiza o credito a realizar
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
@@ -6899,10 +6927,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															.getValorResidualMesAnterior());
 
 											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-
+										
+											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMÓVEL...") 
+													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
 											// atualiza o credito a realizar
-											repositorioFaturamento
-													.atualizarCreditoARealizar(creditoARealizar);
+											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 											
 											/**
 											 * @author Adriana Muniz e Wellington Rocha
@@ -6921,8 +6953,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										} else {
 											creditoARealizar
 													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-											repositorioFaturamento
-													.atualizarCreditoARealizar(creditoARealizar);
+											
+											logger.info(" 4 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											
+											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
 
 										// Acumula o valor do crédito
@@ -6951,9 +6988,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									// referência da conta
 									creditoARealizar
 											.setAnoMesReferenciaPrestacao(null);
-
-									repositorioFaturamento
-											.atualizarCreditoARealizar(creditoARealizar);
+									
+									logger.info(" 5 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+											+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+											+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+											+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+									
+									repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 								}
 								
 							}// fim laço que verifica se o credito a realizar já foi analisado

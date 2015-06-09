@@ -42233,7 +42233,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throws ControladorException {
 
 		if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
-
+			
 			Integer quantidadeContas = null;
 			try {
 
@@ -42247,6 +42247,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			if (quantidadeContas != null && quantidadeContas.intValue() > 0) {
+				
+				System.out.println("**============ 1 - apagarDadosGeradosFaturarGrupoFaturamento ===============**"
+									+ "\n Imovel: " + helper.getIdImovel());
 
 				/*
 				 * Caso a situação atual NÃO seja PRÉ-FATURAMENTO:

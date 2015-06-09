@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axis2.databinding.types.soapencoding.Array;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -662,7 +661,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 									imovelPerfil.getId(), 
 									"01/0001", 
 									new Integer("2"),//indicador de restabelecimento 
-									colecaoContaValores, 
+									colecaoContas, 
 									valorTotalComAcrescimo, 
 									valorMulta, 
 									valorJurosMora, 
