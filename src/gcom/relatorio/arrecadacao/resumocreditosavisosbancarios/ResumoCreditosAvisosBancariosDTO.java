@@ -1,5 +1,7 @@
 package gcom.relatorio.arrecadacao.resumocreditosavisosbancarios;
 
+import gcom.util.Util;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,41 +12,41 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 
 	private static final long serialVersionUID = 7599238519918851586L;
 	
-	@ReportElementType(description="Data pagamento previsto", group=true)
-	private Date dataPagamentoPrevisto;
+	@ReportElementType(description="Data do Crédito Previsto", group=true)
+	private String dataPagamentoPrevisto;
 	
-	@ReportElementType(description="Data realizada")
-	private Date dataRealizada;
+	@ReportElementType(description="Data do Aviso")
+	private String dataRealizada;
 	
-	@ReportElementType(description="Descrição arrecadador")
+	@ReportElementType(description="Arrecadador")
 	private String descricaoArrecadador;
 	
-	@ReportElementType(description="Valor Pagamento")
-	private BigDecimal valorPagamento;
+	@ReportElementType(description="Valor do Pagamento (R$)")
+	private String valorPagamento;
 
 	public ResumoCreditosAvisosBancariosDTO() {}
 	
 	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento) {
 		super();
-		this.dataPagamentoPrevisto = dataPagamentoPrevisto;
-		this.dataRealizada = dataRealizada;
+		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto);
+		this.dataRealizada = Util.formatarData(dataRealizada);
 		this.descricaoArrecadador = descricaoArrecadador;
-		this.valorPagamento = valorPagamento;
+		this.valorPagamento = Util.formatarMoedaReal(valorPagamento);
 	}
 
-	public Date getDataPagamentoPrevisto() {
+	public String getDataPagamentoPrevisto() {
 		return dataPagamentoPrevisto;
 	}
 
-	public void setDataPagamentoPrevisto(Date dataPagamentoPrevisto) {
+	public void setDataPagamentoPrevisto(String dataPagamentoPrevisto) {
 		this.dataPagamentoPrevisto = dataPagamentoPrevisto;
 	}
 
-	public Date getDataRealizada() {
+	public String getDataRealizada() {
 		return dataRealizada;
 	}
 
-	public void setDataRealizada(Date dataRealizada) {
+	public void setDataRealizada(String dataRealizada) {
 		this.dataRealizada = dataRealizada;
 	}
 
@@ -56,11 +58,11 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 		this.descricaoArrecadador = descricaoArrecadador;
 	}
 
-	public BigDecimal getValorPagamento() {
+	public String getValorPagamento() {
 		return valorPagamento;
 	}
 
-	public void setValorPagamento(BigDecimal valorPagamento) {
+	public void setValorPagamento(String valorPagamento) {
 		this.valorPagamento = valorPagamento;
 	}
 }
