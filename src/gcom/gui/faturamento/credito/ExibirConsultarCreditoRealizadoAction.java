@@ -190,6 +190,8 @@ public class ExibirConsultarCreditoRealizadoAction extends GcomAction {
 
 				// remove a coleção de créditos realizados
 				sessao.removeAttribute("colecaoContaCreditosRealizados");
+				
+				sessao.removeAttribute("colecaoContaCreditosRealizadosHistorico");
 			}
 
 			/*

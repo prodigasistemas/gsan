@@ -246,6 +246,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				
 				// Dados do Débito do Imóvel - Contas
 				Collection<ContaValoresHelper> colecaoContaValores = colecaoDebitoCliente.getColecaoContasValores();
+				colecaoContaValores.addAll(colecaoDebitoCliente.getColecaoContasValoresPreteritos());
 				
 				ParcelamentoPerfil parcelamentoPerfil = (ParcelamentoPerfil)sessao.getAttribute("parcelamentoPerfil");
 				//[SB0011] Verificar Única Fatura

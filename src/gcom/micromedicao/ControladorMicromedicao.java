@@ -40517,7 +40517,7 @@ public class ControladorMicromedicao implements SessionBean {
 	
 			if (consumoLigacaoImovelCondominio != null) {
 				consumoImovelCondomino = consumoLigacaoImovelCondominio;
-		}
+			}
 		
 		/*
 		 * O consumo de água a ser rateado vai ser igual ao consumo da ligação
@@ -40589,19 +40589,10 @@ public class ControladorMicromedicao implements SessionBean {
 		return consumoImoveisVinculados;
 	}
 	
-	/**
-	 * 
-	 * Pamela Gatinho - 31/05/2012
-	 * Refatoracao do metodo efetuarRateioDeConsumo
-	 * 
-	 * @param dadosImovelVinculado
-	 * @return Imovel
-	 */
 	private Imovel converterImovelVinculado(Object[] dadosImovelVinculado) {
 
 		Integer idImovelVinculado = (Integer) dadosImovelVinculado[0];
 		
-		// Obtem quantidade de economias
 		Short quantidadeEconomia = (Short) dadosImovelVinculado[1];
 		Integer idSituacaoLigacaoAguaImovelVinculado = (Integer) dadosImovelVinculado[2];
 		Short indFatSitLigacaoAguaImovelVinculado = (Short) dadosImovelVinculado[8];
@@ -40993,7 +40984,7 @@ public class ControladorMicromedicao implements SessionBean {
 		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
 		Integer anoMesAnterior = Util.subtrairMesDoAnoMes(new Integer(grupo.getAnoMesReferencia()).intValue(), 1);
 		
-		MedicaoHistorico medicaoAnterior = this.pesquisarMedicaoHistoricoAnterior(ligacaoAgua.getId(),anoMesAnterior, medicaoTipo.getId());
+		//MedicaoHistorico medicaoAnterior = this.pesquisarMedicaoHistoricoAnterior(ligacaoAgua.getId(),anoMesAnterior, medicaoTipo.getId());
 		
 		boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(ligacaoAgua.getId(),medicaoTipo);
 		
@@ -41002,15 +40993,17 @@ public class ControladorMicromedicao implements SessionBean {
 		
 		MedicaoHistorico medicaoHistorico = new MedicaoHistorico();
 		
+		//medicaoHistorico = verificarExistenciaHistoricoMedicao(grupo,medicaoHistorico, imovel, medicaoTipo, sistemaParametro);
+		
 		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
 		Date dataLeituraInformada = dataFormatada.parse(imovelFaturamentoSeletivo.getDataLeitura());
 		
 		medicaoHistorico.setAnoMesReferencia(grupo.getAnoMesReferencia());
 		medicaoHistorico.setConsumoMedioHidrometro(consumoMedioHidrometro[0]);
-		medicaoHistorico.setDataLeituraAnteriorFaturamento(medicaoAnterior.getDataLeituraAtualFaturamento());
-		medicaoHistorico.setLeituraAnteriorFaturamento(medicaoAnterior.getLeituraAtualFaturamento());
-		medicaoHistorico.setLeituraAnteriorInformada(medicaoAnterior.getLeituraAnteriorInformada());
-		medicaoHistorico.setLeituraSituacaoAnterior(medicaoAnterior.getLeituraSituacaoAtual());
+		//medicaoHistorico.setDataLeituraAnteriorFaturamento(medicaoAnterior.getDataLeituraAtualFaturamento());
+		//medicaoHistorico.setLeituraAnteriorFaturamento(medicaoAnterior.getLeituraAtualFaturamento());
+		//medicaoHistorico.setLeituraAnteriorInformada(medicaoAnterior.getLeituraAnteriorInformada());
+		//medicaoHistorico.setLeituraSituacaoAnterior(medicaoAnterior.getLeituraSituacaoAtual());
 		medicaoHistorico.setDataLeituraAtualInformada(dataLeituraInformada);
 		medicaoHistorico.setHidrometroInstalacaoHistorico(ligacaoAgua.getHidrometroInstalacaoHistorico());
 		medicaoHistorico.setLeituraSituacaoAtual(new LeituraSituacao(LeituraSituacao.REALIZADA));
@@ -41027,5 +41020,49 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 		
 		getControladorUtil().inserirComCommit(medicaoHistorico);
+	}
+	
+	public void processarMovimentoContaPreFaturadaFaturamentoSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException {
+		
+		Imovel imovel = getControladorImovel().pesquisarImovel(imovelFaturamentoSeletivo.getIdImovel());
+		Rota rota = this.buscarRotaDoImovel(imovel.getId());
+		LeituraAnormalidade anormalidade = new LeituraAnormalidade(imovelFaturamentoSeletivo.getAnormalidade());
+
+		MovimentoContaPrefaturada movimento = new MovimentoContaPrefaturada();
+		movimento.setImovel(imovel);
+		movimento.setLeituraAnormalidadeLeitura(anormalidade);
+		movimento.setLeituraHidrometro(imovelFaturamentoSeletivo.getLeitura());
+		movimento.setDataHoraLeitura(Util.converteStringParaDate(imovelFaturamentoSeletivo.getDataLeitura()));
+		movimento.setMedicaoTipo(new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA));
+		movimento.setFaturamentoGrupo(rota.getFaturamentoGrupo());
+		movimento.setRota(rota);
+		movimento.setIndicadorSituacaoLeitura(ConstantesSistema.SIM);
+		movimento.setLeituraAnormalidadeLeitura(anormalidade);
+		movimento.setMovimentoContaPrefaturadaCategorias(null);
+		movimento.setIndicadorGeracaoConta(ConstantesSistema.SIM);
+		movimento.setIndicadorEmissaoConta(ConstantesSistema.NAO);
+		movimento.setValorRateioAgua(new BigDecimal("0.00"));
+		movimento.setValorRateioEsgoto(new BigDecimal("0.00"));
+		movimento.setAnoMesReferenciaPreFaturamento(rota.getFaturamentoGrupo().getAnoMesReferencia());
+		movimento.setDataHoraGeracaoMovimento(new Date());
+		movimento.setIndicadorAtualizacaoFaturamento(ConstantesSistema.SIM);
+		movimento.setIndicadorRetransmissao(ConstantesSistema.NAO);
+		movimento.setIndicadorAlteracao(ConstantesSistema.NAO);
+		movimento.setUtlimaAlteracao(new Date());
+		
+		Collection<MovimentoContaPrefaturada> colecaoMovimentos = new ArrayList<MovimentoContaPrefaturada>();
+		
+		Integer id = (Integer) getControladorUtil().inserir(movimento);
+		movimento.setId(id);
+		
+		//FiltroMovimentoContaPrefaturada filtro = new FiltroMovimentoContaPrefaturada();
+		//filtro.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ID, id));
+		
+		//colecaoMovimentos = getControladorUtil().pesquisar(filtro, MovimentoContaPrefaturada.class.getName());
+	
+//		movimento = getControladorFaturamento().obterMovimentoImovel(imovel.getId(), rota.getFaturamentoGrupo().getAnoMesReferencia(), movimento.getMedicaoTipo().getId());
+//		colecaoMovimentos.add(movimento);
+//		
+//		getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colecaoMovimentos, true, true);
 	}
 }
