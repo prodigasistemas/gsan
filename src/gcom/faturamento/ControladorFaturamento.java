@@ -758,6 +758,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				  * categoria do movimento e SCAT_ID = cÃ³digo da
 	        				  * subcategoria do movimento) , com os seguintes dados
 	        				  */
+<<<<<<< HEAD
 	        				 for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
 	        					 FiltroContaCategoria filtroContaCategoria = new FiltroContaCategoria();
 	        					 filtroContaCategoria
@@ -906,6 +907,88 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 
 	        					 }
 	        				 }
+=======
+							for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
+								FiltroContaCategoria filtroContaCategoria = new FiltroContaCategoria();
+								
+								filtroContaCategoria.adicionarParametro(new ParametroSimples(FiltroContaCategoria.CATEGORIA_ID, helperCategoria.getComp_id().getCategoria().getId()));
+								filtroContaCategoria.adicionarParametro(new ParametroSimples(FiltroContaCategoria.CONTA_ID, contaAtualizacao.getId()));
+
+								Integer idSubcategoria = null;
+								if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+									idSubcategoria = 0;
+								} else {
+									idSubcategoria = helperCategoria.getComp_id().getSubcategoria().getId();
+								}
+								filtroContaCategoria.adicionarParametro(new ParametroSimples(FiltroContaCategoria.SUBCATEGORIA_ID, idSubcategoria));
+								Collection<ContaCategoria> colContaCategoria = this.getControladorUtil().pesquisar(filtroContaCategoria,ContaCategoria.class.getName());
+
+								ContaCategoria contaCategoria = (ContaCategoria) Util.retonarObjetoDeColecao(colContaCategoria);
+
+								if (contaCategoria != null && !contaCategoria.equals("")) {
+									contaCategoria.setValorAgua(helperCategoria.getValorFaturadoAgua());
+									contaCategoria.setConsumoAgua(helperCategoria.getConsumoFaturadoAgua());
+									contaCategoria.setValorEsgoto(helperCategoria.getValorFaturadoEsgoto());
+									contaCategoria.setConsumoEsgoto(helperCategoria.getConsumoFaturadoEsgoto());
+									contaCategoria.setValorTarifaMinimaAgua(helperCategoria.getValorTarifaMinimaAgua());
+									contaCategoria.setConsumoMinimoAgua(helperCategoria.getConsumoMinimoAgua());
+									contaCategoria.setValorTarifaMinimaEsgoto(helperCategoria.getValorTarifaMinimaEsgoto());
+									contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
+									contaCategoria.setUltimaAlteracao(new Date());
+
+									try {
+										repositorioFaturamento.atualizarContaCategoriaProcessoMOBILE(contaCategoria);
+									} catch (ErroRepositorioException e) {
+										throw new ControladorException("erro.sistema", e);
+									}
+
+									/*
+									 * 3. Para cada registro do tipo 3, alterar na tabela CONTA_CATEGORIA_CONSUMO_FAIXA o
+									 * seu correspondente (CNTA_ID = Conta do movimento em processamento e CATG_ID =
+									 * cï¿½digo da categoria do movimento e SCAT_ID = cï¿½digo da subcategoria do movimento)
+									 */
+									FiltroMovimentoContaCategoriaConsumoFaixa filtroMovimentoContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
+
+									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
+											FiltroMovimentoContaCategoriaConsumoFaixa.MOVIMENTO_CONTA_PREFATURADA_ID, helper.getId()));
+
+									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
+											FiltroMovimentoContaCategoriaConsumoFaixa.CATEGORIA_ID, helperCategoria.getComp_id().getCategoria().getId()));
+
+									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
+											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, idSubcategoria));
+
+									Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = this.getControladorUtil()
+											.pesquisar(filtroMovimentoContaCategoriaConsumoFaixa, MovimentoContaCategoriaConsumoFaixa.class.getName());
+
+									for (MovimentoContaCategoriaConsumoFaixa helperMovimentoContaCategoriaConsumoFaixa : colMovimentoContaCategoriaConsumoFaixa) {
+
+										ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = new ContaCategoriaConsumoFaixa();
+										contaCategoriaConsumoFaixa.setCategoria(helperMovimentoContaCategoriaConsumoFaixa
+												.getMovimentoContaPrefaturadaCategoria().getComp_id().getCategoria());
+
+										contaCategoriaConsumoFaixa.setSubcategoria(helperMovimentoContaCategoriaConsumoFaixa
+												.getMovimentoContaPrefaturadaCategoria().getComp_id().getSubcategoria());
+
+										contaCategoriaConsumoFaixa.setContaCategoria(contaCategoria);
+
+										contaCategoriaConsumoFaixa.setValorAgua(helperMovimentoContaCategoriaConsumoFaixa.getValorFaturadoAguaNaFaixa());
+										contaCategoriaConsumoFaixa.setConsumoAgua(helperMovimentoContaCategoriaConsumoFaixa.getConsumoFaturadoAguaNaFaixa());
+										contaCategoriaConsumoFaixa.setValorEsgoto(helperMovimentoContaCategoriaConsumoFaixa.getValorFaturadoEsgotoNaFaixa());
+										contaCategoriaConsumoFaixa
+												.setConsumoEsgoto(helperMovimentoContaCategoriaConsumoFaixa.getConsumoFaturadoEsgotoNaFaixa());
+										contaCategoriaConsumoFaixa.setConsumoFaixaInicio(helperMovimentoContaCategoriaConsumoFaixa
+												.getLimiteInicialConsumoNaFaixa());
+										contaCategoriaConsumoFaixa.setConsumoFaixaFim(helperMovimentoContaCategoriaConsumoFaixa.getLimiteFinalConsumoNaFaixa());
+										contaCategoriaConsumoFaixa.setValorTarifaFaixa(helperMovimentoContaCategoriaConsumoFaixa.getValorTarifaNaFaixa());
+										contaCategoriaConsumoFaixa.setUltimaAlteracao(new Date());
+
+										this.getControladorBatch().inserirObjetoParaBatch(contaCategoriaConsumoFaixa);
+									}
+
+								}
+							}
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        				 
 	        				 /*
 	        				  * 
@@ -936,64 +1019,42 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 - contaAtualizacao.getValorCreditos()
 	        						 .doubleValue());
 	        				 
-	        				 for (MovimentoContaImpostoDeduzido helperMovimentoContaImpostoDeduzido : colMovimentoContaImpostoDeduzido) {
-	        					 
-	        					 FiltroContaImpostosDeduzidos filtroContaImpostosDeduzidos = new FiltroContaImpostosDeduzidos();
-	        					 
-	        					 filtroContaImpostosDeduzidos
-	        					 .adicionarParametro(new ParametroSimples(
-	        							 FiltroContaImpostosDeduzidos.CONTA_ID,
-	        							 helper.getConta().getId()));
-	        					 
-	        					 filtroContaImpostosDeduzidos
-	        					 .adicionarParametro(new ParametroSimples(
-	        							 FiltroContaImpostosDeduzidos.IMPOSTO_TIPO,
-	        							 helperMovimentoContaImpostoDeduzido
-	        							 .getImpostoTipo().getId()));
-	        					 
-	        					 Collection<ContaImpostosDeduzidos> colContaImpostosDeduzidos = this
-	        					 .getControladorUtil().pesquisar(
-	        							 filtroContaImpostosDeduzidos,
-	        							 ContaImpostosDeduzidos.class
-	        							 .getName());
-	        					 
-	        					 ContaImpostosDeduzidos contaImpostosDeduzidos = (ContaImpostosDeduzidos) Util
-	        					 .retonarObjetoDeColecao(colContaImpostosDeduzidos);
-	        					 
-	        					 if (contaImpostosDeduzidos != null
-	        							 && !contaImpostosDeduzidos.equals("")) {
-	        						 contaImpostosDeduzidos
-	        						 .setValorImposto(helperMovimentoContaImpostoDeduzido
-	        								 .getValorImposto());
-	        						 valorImposto = valorImposto
-	        						 .add(helperMovimentoContaImpostoDeduzido
-	        								 .getValorImposto());
-	        						 
-	        						 contaImpostosDeduzidos
-	        						 .setPercentualAliquota(helperMovimentoContaImpostoDeduzido
-	        								 .getPercentualAliquota());
-	        						 
-	        						 contaImpostosDeduzidos
-	        						 .setValorBaseCalculo(valorTotalMenosImposto);
-	        						 contaImpostosDeduzidos
-	        						 .setUltimaAlteracao(new Date());
-	        						 
-	        						 try {
-	        							 repositorioFaturamento
-	        							 .atualizarContaImpostosDeduzidosProcessoMOBILE(contaImpostosDeduzidos);
-	        						 } catch (ErroRepositorioException e) {
-	        							 throw new ControladorException(
-	        									 "erro.sistema", e);
-	        						 }
-	        					 }
-	        				 }
+							for (MovimentoContaImpostoDeduzido helperMovimentoContaImpostoDeduzido : colMovimentoContaImpostoDeduzido) {
+
+								FiltroContaImpostosDeduzidos filtroContaImpostosDeduzidos = new FiltroContaImpostosDeduzidos();
+								filtroContaImpostosDeduzidos.adicionarParametro(new ParametroSimples(FiltroContaImpostosDeduzidos.CONTA_ID, helper.getConta().getId()));
+								filtroContaImpostosDeduzidos.adicionarParametro(new ParametroSimples(FiltroContaImpostosDeduzidos.IMPOSTO_TIPO,
+										helperMovimentoContaImpostoDeduzido.getImpostoTipo().getId()));
+
+								Collection<ContaImpostosDeduzidos> colContaImpostosDeduzidos = this.getControladorUtil().pesquisar(
+										filtroContaImpostosDeduzidos, ContaImpostosDeduzidos.class.getName());
+
+								ContaImpostosDeduzidos contaImpostosDeduzidos = (ContaImpostosDeduzidos) Util.retonarObjetoDeColecao(colContaImpostosDeduzidos);
+
+								if (contaImpostosDeduzidos != null && !contaImpostosDeduzidos.equals("")) {
+									contaImpostosDeduzidos.setValorImposto(helperMovimentoContaImpostoDeduzido.getValorImposto());
+									
+									valorImposto = valorImposto.add(helperMovimentoContaImpostoDeduzido.getValorImposto());
+
+									contaImpostosDeduzidos.setPercentualAliquota(helperMovimentoContaImpostoDeduzido.getPercentualAliquota());
+									contaImpostosDeduzidos.setValorBaseCalculo(valorTotalMenosImposto);
+									contaImpostosDeduzidos.setUltimaAlteracao(new Date());
+
+									try {
+										repositorioFaturamento.atualizarContaImpostosDeduzidosProcessoMOBILE(contaImpostosDeduzidos);
+									} catch (ErroRepositorioException e) {
+										throw new ControladorException("erro.sistema", e);
+									}
+								}
+							}
 	        				 
-	        				 // Atualiza os dados da conta
-	        				 
+<<<<<<< HEAD
 	        				 // Consumo de Ã¡gua calculado do movimento.
+=======
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        				 contaAtualizacao.setConsumoAgua(consumoAgua);
-	        				 // Consumo de esgoto calculado do movimento.
 	        				 contaAtualizacao.setConsumoEsgoto(consumoEsgoto);
+<<<<<<< HEAD
 	        				 // Rateio do consumo de Ã¡gua calculado do movimento
 	        				 contaAtualizacao
 	        				 .setConsumoRateioAgua(consumoRateioAgua);
@@ -1037,30 +1098,36 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 // SÃ³ irÃ¡ atualizar o nitrato na conta caso o mesmo
 	        				 // ainda nao tenha sido
 	        				 // atualizado
+=======
+	        				 contaAtualizacao.setConsumoRateioAgua(consumoRateioAgua);
+	        				 contaAtualizacao.setConsumoRateioEsgoto(consumoRateioEsgoto);
+	        				 contaAtualizacao.setValorAgua(valorAgua);
+	        				 contaAtualizacao.setValorEsgoto(valorEsgoto);
+	        				 contaAtualizacao.setValorImposto(valorImposto);
+	        				 contaAtualizacao.setDataEmissao(helper.getDataHoraLeitura());
+	        				 contaAtualizacao.setUltimaAlteracao(new Date());
+	        				 contaAtualizacao.setNumeroLeituraAtual(helper.getLeituraFaturamento());
+	        				 contaAtualizacao.setNumeroLeituraAnterior(helper.getLeituraHidrometroAnterior());
+	        				 contaAtualizacao.setValorRateioAgua(helper.getValorRateioAgua());
+					         contaAtualizacao.setValorRateioEsgoto(helper.getValorRateioEsgoto());
+					            
+	        				 DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+	        				 debitoCreditoSituacao.setId( DebitoCreditoSituacao.NORMAL );
+	        				 contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+	        				 
+	        				 // Sï¿½ irï¿½ atualizar o nitrato na conta caso o mesmo ainda nao tenha sido atualizado
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        				 FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
-	        				 filtroCreditoARealizar
-	        				 .adicionarParametro(new ParametroSimples(
-	        						 FiltroCreditoARealizar.IMOVEL_ID,
-	        						 helper.getImovel().getId()));
-	        				 filtroCreditoARealizar
-	        				 .adicionarParametro(new ParametroSimples(
-	        						 FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,
-	        						 helper.getAnoMesReferenciaPreFaturamento()));
-	        				 filtroCreditoARealizar
-	        				 .adicionarParametro(new ParametroSimples(
-	        						 FiltroCreditoARealizar.CREDITO_TIPO,
-	        						 CreditoTipo.CREDITO_NITRATO));
+	        				 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID,helper.getImovel().getId()));
+	        				 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,helper.getAnoMesReferenciaPreFaturamento()));
+	        				 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.CREDITO_TIPO,CreditoTipo.CREDITO_NITRATO));
 	        				 
-	        				 Collection<CreditoARealizar> colCreditoARealizar = this
-	        				 .getControladorUtil().pesquisar(
-	        						 filtroCreditoARealizar,
-	        						 CreditoARealizar.class.getName());
+	        				 Collection<CreditoARealizar> colCreditoARealizar = this.getControladorUtil().pesquisar(filtroCreditoARealizar,CreditoARealizar.class.getName());
 	        				 
-	        				 if (colCreditoARealizar != null
-	        						 && colCreditoARealizar.size() > 0) {
-	        					 CreditoARealizar credito = (CreditoARealizar) Util
-	        					 .retonarObjetoDeColecao(colCreditoARealizar);
+	        				 if (colCreditoARealizar != null && colCreditoARealizar.size() > 0) {
+	        					 CreditoARealizar credito = (CreditoARealizar) Util.retonarObjetoDeColecao(colCreditoARealizar);
 	        					 
+<<<<<<< HEAD
 	        					 if (credito.getValorCredito() == null
 	        							 || credito.getValorCredito().floatValue() == 0) {
 	        						 // Verifica se o imÃ³vel possui situaÃ§Ã£o especial
@@ -1074,20 +1141,27 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 // Caso o valor do crÃ©dito de nitrato esteja
 	        						 // diferente de nulo,
 	        						 // atualizar o valor do crÃ©dito
+=======
+	        					 if (credito.getValorCredito() == null || credito.getValorCredito().floatValue() == 0) {
+	        						 BigDecimal valorCreditoNitrato = this.atualizarCreditoARealizarNitrato(helper.getImovel(),
+	        								 helper.getAnoMesReferenciaPreFaturamento(), valorAgua, helper.getConta());
+	        						 
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        						 if (valorCreditoNitrato != null) {
-	        							 BigDecimal valorCreditos = contaAtualizacao
-	        							 .getValorCreditos();
-	        							 valorCreditos = valorCreditos
-	        							 .add(valorCreditoNitrato);
-	        							 contaAtualizacao
-	        							 .setValorCreditos(valorCreditos);
+	        							 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
+	        							 valorCreditos = valorCreditos.add(valorCreditoNitrato);
+	        							 contaAtualizacao.setValorCreditos(valorCreditos);
 	        						 }
 	        					 }
 	        				 }
 	        				 
+<<<<<<< HEAD
 	        				 // verifica se o valor crÃ©dito Ã© maior que o valor da
 	        				 // conta caso seja chamar atualizar os creditos a realizar e
 	        				 // os creditos realizados
+=======
+	        				 // verifica se o valor crï¿½dito ï¿½ maior que o valor da conta caso seja chamar atualizar os creditos a realizar e os creditos realizados
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        				 BigDecimal valorTotalContaSemCreditos = valorAgua.add(valorEsgoto);
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
@@ -1104,29 +1178,25 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        					 
 	        					 if (imovel.getImovelPerfil().getId().equals(ImovelPerfil.TARIFA_SOCIAL)) {
 	        						 
-	        						 //verificar consumo
 	        						 if(contaAtualizacao.getConsumoAgua() > 10) {
+<<<<<<< HEAD
 	        							 //verificar se tem crÃ©dito realizado
+=======
+>>>>>>> 1de17a33c9f33fc93df16316f2a3ac36adc3553c
 	        							 CreditoRealizado creditoRealizadoBS = null;
 	        							 creditoRealizadoBS = repositorioFaturamento.pesquisarCreditoRealizadoBonusSocial(contaAtualizacao.getId());
+
 	        							 if(creditoRealizadoBS != null) {
-	        								 //verificar se tem credito a realizar
-	        								 CreditoARealizar creditoARealizarBS = repositorioFaturamento
-	        								 .pesquisarCreditoARealizarBonusSocial(contaAtualizacao.getImovel().getId(), contaAtualizacao.getReferencia());
-	        								 //excluir credito realizado
+	        								 CreditoARealizar creditoARealizarBS = repositorioFaturamento .pesquisarCreditoARealizarBonusSocial(contaAtualizacao.getImovel().getId(), contaAtualizacao.getReferencia());
 	        								 repositorioFaturamento.excluirCreditoRealizadoBonusSocial(creditoRealizadoBS.getId());
-	        								 ///excluir credito a realizar
 	        								 repositorioFaturamento.excluirCreditoARealizarBonusSocial(creditoARealizarBS.getId());
 	        								 
-	        								 //subtrai o valor do credito do valor dos creditos da conta
 	        								 BigDecimal valorAtualizadoCredito = contaAtualizacao.getValorCreditos().subtract(creditoARealizarBS.getValorCredito());
 	        								 if(valorAtualizadoCredito.compareTo(ConstantesSistema.VALOR_ZERO) == -1 )
 	        									 contaAtualizacao.setValorCreditos(valorAtualizadoCredito.multiply(new BigDecimal("-1")));
-	        								 
 	        								 else
 	        									 contaAtualizacao.setValorCreditos(valorAtualizadoCredito);
 	        							 }
-	        							 
 	        						 }
 	        					 }
 	        				 }
@@ -1150,7 +1220,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        							 contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        							 valorTotalContaSemCreditos);
 	        					 contaAtualizacao.setValorCreditos(valorTotalCreditos);
-	        					 
 	        					 logger.info(" 2 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
 											+ " | Valor creditos: " + contaAtualizacao.getValorCreditos()
 											+ " | Valor total creditos: " + valorTotalCreditos);
@@ -1186,7 +1255,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            	if(!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
 
 					            		logger.info(" 4 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
-												+ " | Qtde de créditos com valor residual diferente de zero: " + colecaoCreditosARealizar.size());
+												+ " | Qtde de crï¿½ditos com valor residual diferente de zero: " + colecaoCreditosARealizar.size());
 					            		
 					            		Iterator creditoIterator = colecaoCreditosARealizar.iterator();
 
@@ -1196,9 +1265,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            			credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 
 					            			logger.info(" 5 - Credito a Realizar: Imovel: " + (credito.getImovel() != null ? credito.getImovel().getId() : "NULL") 
-													+ " | Créditos: " + (credito.getValorCredito() != null ? credito.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (credito.getValorResidualConcedidoMes() != null ? credito.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
+													+ " | Crï¿½ditos: " + (credito.getValorCredito() != null ? credito.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mï¿½s: " + (credito.getValorResidualConcedidoMes() != null ? credito.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mï¿½s Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
 					            			
 					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
@@ -6831,9 +6900,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		try{
 			
-		Conta conta = repositorioFaturamento.pesquisarExistenciaContaComSituacaoAtual(idConta);
-			
-		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(conta);
+		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
 		
 	//	System.out.println("Atualizar valor residual. Id imÃ³vel: " + imovel != null ? imovel.getId():"");
 		
@@ -6984,9 +7051,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												}
 												
 												logger.info(" 1 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-														+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-														+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+														+ " | Crï¿½ditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+														+ " | Residual Concedido no Mï¿½s: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+														+ " | Residual Concedido no Mï¿½s Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 												
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 												// Acumula o valor do crÃ©dito
@@ -7016,9 +7083,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										} else {
 											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
 											logger.info(" 2 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+													+ " | Crï¿½ditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mï¿½s: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mï¿½s Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 											
 											// atualiza o credito a realizar
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
@@ -7086,10 +7153,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 										
-											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMÓVEL...") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMï¿½VEL...") 
+													+ " | Crï¿½ditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mï¿½s: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mï¿½s Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 											
 											// atualiza o credito a realizar
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
@@ -7113,9 +7180,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 											
 											logger.info(" 4 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+													+ " | Crï¿½ditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+													+ " | Residual Concedido no Mï¿½s: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+													+ " | Residual Concedido no Mï¿½s Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 											
 											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 										}
@@ -7148,9 +7215,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											.setAnoMesReferenciaPrestacao(null);
 									
 									logger.info(" 5 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-											+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-											+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-											+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+											+ " | Crï¿½ditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+											+ " | Residual Concedido no Mï¿½s: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+											+ " | Residual Concedido no Mï¿½s Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 									
 									repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 								}
@@ -16182,7 +16249,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	private void copiarCreditoRealizado(IConta contaAntiga, Conta contaNova) throws Exception {
-		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados((Conta)contaAntiga);
+		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados(((Conta)contaAntiga).getId());
 		listaCreditosOrigem.addAll(repositorioFaturamento.pesquisarCreditosRealizadosHistorico(contaAntiga.getId()));
 				
 		for (ICreditoRealizado creditoRealizadoAntigo : listaCreditosOrigem) {

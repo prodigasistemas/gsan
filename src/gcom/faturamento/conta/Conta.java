@@ -1200,4 +1200,8 @@ public class Conta extends ObjetoTransacao implements IConta {
 		conta.setQuadraConta(this.getQuadraConta());
 		return conta;
 	}
+	
+	public boolean isContaRetificada() {
+		return this.debitoCreditoSituacaoAtual.getId().intValue() == DebitoCreditoSituacao.RETIFICADA.intValue();
+	}
 }

@@ -24479,111 +24479,62 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @author Pedro Alexandre, Raphael Rossiter
 	 * @date 06/02/2007, 10/02/2009
 	 * 
-	 * @param anoMesFaturamentoSistemaParametro
+	 * @param anoMesFaturamento
 	 * @param idSetorComercial
 	 * @throws ControladorException
 	 */
 	public void gerarHistoricoParaEncerrarFaturamento(
-			int anoMesFaturamentoSistemaParametro, Integer idSetorComercial,
+			int anoMesFaturamento, Integer idSetorComercial,
 			int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.SETOR_COMERCIAL, idSetorComercial);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.SETOR_COMERCIAL, idSetorComercial);
 		try {
 
-			/*
-			 * O sistema verifica a existência do resumo do faturamento [FS0001
-			 * - Verificar a existência do resumo do faturamento]
-			 */
-			SistemaParametro sistemaParametro = this.getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
-			Integer resumoFaturamento = repositorioFaturamento
-					.pesquisarResumoFaturamento(sistemaParametro
-							.getAnoMesFaturamento());
+			Integer resumoFaturamento = repositorioFaturamento.pesquisarResumoFaturamento(sistemaParametro.getAnoMesFaturamento());
 
 			if (resumoFaturamento != null && resumoFaturamento.intValue() > 0) {
 
-				// item 4
-				// atualiza os imóveis com situação especial de faturamento
-				// finalizada
-				repositorioFaturamento
-						.atualizarImoveisSituacaoEspecialFaturamentoFinalizada(
-								anoMesFaturamentoSistemaParametro,
-								idSetorComercial);
-				// fim item 4
-
-				// item 5
-				// atualiza os imóveis com situação especial de cobrança
-				// finalizada
-				repositorioFaturamento
-						.atualizarImoveisSituacaoEspecialCobrancaFinalizada(
-								anoMesFaturamentoSistemaParametro,
-								idSetorComercial);
-				// fim item 5
+				repositorioFaturamento.atualizarImoveisSituacaoEspecialFaturamentoFinalizada(anoMesFaturamento,idSetorComercial);
+				repositorioFaturamento.atualizarImoveisSituacaoEspecialCobrancaFinalizada(anoMesFaturamento, idSetorComercial);
 
 				boolean flagTerminou = false;
 				final int quantidadeRegistros = 1000;
 				int numeroIndice = 0;
 
 				while (!flagTerminou) {
-					// item 6
-					// cria os históricos das contas canceladas,assim como seus
-					// débitos cobrados e seus créditos realizados
-					// pesquisa a coleção de contas canceladas
-					List contasCanceladas = (List) repositorioFaturamento
-							.pesquisarContasCanceladasPorMesAnoReferenciaContabil(
-									anoMesFaturamentoSistemaParametro,
-									idSetorComercial, numeroIndice,
+					List contasCanceladas = (List) repositorioFaturamento.pesquisarContasCanceladasPorMesAnoReferenciaContabil(
+									anoMesFaturamento,
+									idSetorComercial, 
+									numeroIndice,
 									quantidadeRegistros);
 
-					if (contasCanceladas == null
-							|| contasCanceladas.size() < quantidadeRegistros) {
+					if (contasCanceladas == null || contasCanceladas.size() < quantidadeRegistros) {
 						flagTerminou = true;
 					}
 
-					/*
-					 * Colocado por Raphael Rossiter em 08/02/2011 OBJ: Corrigir
-					 * o problema do tempo de transação que estava muito
-					 * elevado.
-					 */
-					this.gerarHistoricoDeContasCanceladasParaEncerrarFaturamento(
-							contasCanceladas, anoMesFaturamentoSistemaParametro);
-
+					this.gerarHistoricoDeContasCanceladasParaEncerrarFaturamento(contasCanceladas, anoMesFaturamento);
 					contasCanceladas = null;
 				}
 
-				// criar os histórico dos débitos a cobrar cancelados
-				List debitosACobrar = (List) repositorioFaturamento
-						.pesquisarDebitosACobrarCanceladosPorMesAnoReferenciaContabil(
-								anoMesFaturamentoSistemaParametro,
-								idSetorComercial);
+				List debitosACobrar = (List) repositorioFaturamento.pesquisarDebitosACobrarCanceladosPorMesAnoReferenciaContabil(anoMesFaturamento, idSetorComercial);
 
 				int limiteSuperiorDebito;
 				int limiteInferiorDebito;
 				int limiteMaximoDebito = debitosACobrar.size();
 				int quantidadeMaximaPorColecaoDebito = 50;
 
-				for (int i = 0; i < limiteMaximoDebito; i = i
-						+ quantidadeMaximaPorColecaoDebito) {
+				for (int i = 0; i < limiteMaximoDebito; i = i + quantidadeMaximaPorColecaoDebito) {
 
 					if (limiteMaximoDebito < quantidadeMaximaPorColecaoDebito) {
 						limiteInferiorDebito = 0;
 						limiteSuperiorDebito = limiteMaximoDebito;
 					} else {
 						limiteInferiorDebito = i;
-						limiteSuperiorDebito = i
-								+ quantidadeMaximaPorColecaoDebito;
+						limiteSuperiorDebito = i + quantidadeMaximaPorColecaoDebito;
 
 						if (limiteSuperiorDebito > limiteMaximoDebito) {
 							limiteSuperiorDebito = limiteMaximoDebito;
@@ -24591,36 +24542,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					List colecaoDebitosTemporaria = new ArrayList();
-					colecaoDebitosTemporaria.addAll(debitosACobrar.subList(
-							limiteInferiorDebito, limiteSuperiorDebito));
+					colecaoDebitosTemporaria.addAll(debitosACobrar.subList(limiteInferiorDebito, limiteSuperiorDebito));
 
-					/*
-					 * Colocado por Raphael Rossiter em 08/02/2011 OBJ: Corrigir
-					 * o problema do tempo de transação que estava muito
-					 * elevado.
-					 */
 					this.gerarHistoricoDeDebitosACobrarCanceladosParaEncerrarFaturamento(colecaoDebitosTemporaria);
 
 					colecaoDebitosTemporaria = null;
 				}
 				debitosACobrar = null;
 
-				// item 8
-
-				// item 10
-				// cria os histórico dos créditos a realizar cancelados
-				List creditosARealizar = (List) repositorioFaturamento
-						.pesquisarCreditosARealizarCanceladosPorMesAnoReferenciaContabil(
-								anoMesFaturamentoSistemaParametro,
-								idSetorComercial);
+				List creditosARealizar = (List) repositorioFaturamento.pesquisarCreditosARealizarCanceladosPorMesAnoReferenciaContabil(anoMesFaturamento, idSetorComercial);
 
 				int limiteSuperiorCredito;
 				int limiteInferiorCredito;
 				int limiteMaximoCredito = creditosARealizar.size();
 				int quantidadeMaximaPorColecaoCredito = 50;
 
-				for (int i = 0; i < limiteMaximoCredito; i = i
-						+ quantidadeMaximaPorColecaoCredito) {
+				for (int i = 0; i < limiteMaximoCredito; i = i + quantidadeMaximaPorColecaoCredito) {
 
 					if (limiteMaximoCredito < quantidadeMaximaPorColecaoCredito) {
 						limiteInferiorCredito = 0;
@@ -24636,38 +24573,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					List colecaoCreditosTemporaria = new ArrayList();
-					colecaoCreditosTemporaria.addAll(creditosARealizar.subList(
-							limiteInferiorCredito, limiteSuperiorCredito));
+					colecaoCreditosTemporaria.addAll(creditosARealizar.subList(limiteInferiorCredito, limiteSuperiorCredito));
 
-					/*
-					 * Colocado por Raphael Rossiter em 08/02/2011 OBJ: Corrigir
-					 * o problema do tempo de transação que estava muito
-					 * elevado.
-					 */
 					this.gerarHistoricoDeCreditosARealizarCanceladosParaEncerrarFaturamento(colecaoCreditosTemporaria);
 
 					colecaoCreditosTemporaria = null;
 				}
 				creditosARealizar = null;
 
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-						idUnidadeIniciada, false);
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-
-				// RESUMO FATURAMENTO INEXISTENTE
-				throw new ControladorException(
-						"atencao.resumo_faturamento_inexistente");
+				throw new ControladorException("atencao.resumo_faturamento_inexistente");
 			}
 
 		} catch (Exception e) {
-
-			/*
-			 * Este catch serve para interceptar qualquer exceção que o processo
-			 * batch venha a lançar e garantir que a unidade de processamento do
-			 * batch será atualizada com o erro ocorrido.
-			 */
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 	}
@@ -39072,204 +38992,104 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param anoMesFaturamentoSistemaParametro
 	 * @throws ControladorException
 	 */
-	public void transferirContasParaHistorico(Collection<Conta> contas,
-			int anoMesFaturamentoSistemaParametro) throws ControladorException {
+	public void transferirContasParaHistorico(Collection<Conta> contas, int anoMesFaturamentoSistemaParametro) throws ControladorException {
 
 		try {
-			// cria um objeto de histórico da conta
 			ContaHistorico contaHistoricoTemp = null;
-			// Collection colecaoContaHistoricoInserir = new ArrayList();
 			Collection colecaoContasRemover = new ArrayList();
 
 			if (contas != null && !contas.isEmpty()) {
 
 				colecaoContasRemover.addAll(contas);
 				int cont = 0;
-				// laço para criar os históricos das contas canceladas
+
 				for (Conta conta : contas) {
 					cont++;
 
 					Integer idConta = conta.getId();
 
-					/**
-					 * apaga as referências da conta nos pagamentos para poder
-					 * remover
-					 */
-					// *******************************************************
-					// Autor: Ivan Sergio
-					// 12/05/2010
-					// CRC1722
-					// Alterado o relacionamento de Pagamento.Conta para
-					// ContaGeral
-					// nao sendo mais necessario remover o id da conta em
-					// pagamento.
-					// *******************************************************
-					// this.repositorioFaturamento
-					// .apagarIdContaPagamentos(idConta);
-					// *******************************************************
-
-					// seta a conta histórico com os dados da conta cancelada
 					contaHistoricoTemp = new ContaHistorico();
 					contaHistoricoTemp.setId(idConta);
-					contaHistoricoTemp.setAnoMesReferenciaConta(conta
-							.getReferencia());
+					contaHistoricoTemp.setAnoMesReferenciaConta(conta.getReferencia());
 					contaHistoricoTemp.setContaHistorico(new Date());
 					contaHistoricoTemp.setImovel(conta.getImovel());
 					contaHistoricoTemp.setLote(conta.getLote());
 					contaHistoricoTemp.setSubLote(conta.getSubLote());
-					contaHistoricoTemp.setSetorComercial(conta
-							.getCodigoSetorComercial());
+					contaHistoricoTemp.setSetorComercial(conta.getCodigoSetorComercial());
 					contaHistoricoTemp.setNumeroQuadra(conta.getQuadra());
-					contaHistoricoTemp.setVerificadorConta(conta
-							.getDigitoVerificadorConta());
-					contaHistoricoTemp.setIndicadorCobrancaMulta(conta
-							.getIndicadorCobrancaMulta());
-					contaHistoricoTemp.setIndicadorAlteracaoVencimento(conta
-							.getIndicadorAlteracaoVencimento());
+					contaHistoricoTemp.setVerificadorConta(conta.getDigitoVerificadorConta());
+					contaHistoricoTemp.setIndicadorCobrancaMulta(conta.getIndicadorCobrancaMulta());
+					contaHistoricoTemp.setIndicadorAlteracaoVencimento(conta.getIndicadorAlteracaoVencimento());
 					contaHistoricoTemp.setConsumoAgua(conta.getConsumoAgua());
-					contaHistoricoTemp.setConsumoEsgoto(conta
-							.getConsumoEsgoto());
-					contaHistoricoTemp.setConsumoRateioAgua(conta
-							.getConsumoRateioAgua());
-					contaHistoricoTemp.setConsumoRateioEsgoto(conta
-							.getConsumoRateioEsgoto());
+					contaHistoricoTemp.setConsumoEsgoto(conta.getConsumoEsgoto());
+					contaHistoricoTemp.setConsumoRateioAgua(conta.getConsumoRateioAgua());
+					contaHistoricoTemp.setConsumoRateioEsgoto(conta.getConsumoRateioEsgoto());
 					contaHistoricoTemp.setValorAgua(conta.getValorAgua());
 					contaHistoricoTemp.setValorEsgoto(conta.getValorEsgoto());
 					contaHistoricoTemp.setValorDebitos(conta.getDebitos());
-					contaHistoricoTemp.setValorCreditos(conta
-							.getValorCreditos());
-					contaHistoricoTemp.setPercentualEsgoto(conta
-							.getPercentualEsgoto());
-					contaHistoricoTemp.setDataVencimentoConta(conta
-							.getDataVencimentoConta());
-					contaHistoricoTemp.setDataValidadeConta(conta
-							.getDataValidadeConta());
+					contaHistoricoTemp.setValorCreditos(conta.getValorCreditos());
+					contaHistoricoTemp.setPercentualEsgoto(conta.getPercentualEsgoto());
+					contaHistoricoTemp.setDataVencimentoConta(conta.getDataVencimentoConta());
+					contaHistoricoTemp.setDataValidadeConta(conta.getDataValidadeConta());
 					contaHistoricoTemp.setDataInclusao(conta.getDataInclusao());
 					contaHistoricoTemp.setDataRevisao(conta.getDataRevisao());
-					contaHistoricoTemp.setDataRetificacao(conta
-							.getDataRetificacao());
-					contaHistoricoTemp.setDataCancelamento(conta
-							.getDataCancelamento());
+					contaHistoricoTemp.setDataRetificacao(conta.getDataRetificacao());
+					contaHistoricoTemp.setDataCancelamento(conta.getDataCancelamento());
 					contaHistoricoTemp.setDataEmissao(conta.getDataEmissao());
-					contaHistoricoTemp.setAnoMesReferenciaContabil(conta
-							.getReferenciaContabil());
-					contaHistoricoTemp.setAnoMesReferenciaBaixaContabil(conta
-							.getReferenciaBaixaContabil());
-					contaHistoricoTemp.setLigacaoEsgotoSituacao(conta
-							.getLigacaoEsgotoSituacao());
-					contaHistoricoTemp.setLigacaoAguaSituacao(conta
-							.getLigacaoAguaSituacao());
-					contaHistoricoTemp.setMotivoNaoEntregaDocumento(conta
-							.getMotivoNaoEntregaDocumento());
+					contaHistoricoTemp.setAnoMesReferenciaContabil(conta.getReferenciaContabil());
+					contaHistoricoTemp.setAnoMesReferenciaBaixaContabil(conta.getReferenciaBaixaContabil());
+					contaHistoricoTemp.setLigacaoEsgotoSituacao(conta.getLigacaoEsgotoSituacao());
+					contaHistoricoTemp.setLigacaoAguaSituacao(conta.getLigacaoAguaSituacao());
+					contaHistoricoTemp.setMotivoNaoEntregaDocumento(conta.getMotivoNaoEntregaDocumento());
 					contaHistoricoTemp.setLocalidade(conta.getLocalidade());
 					contaHistoricoTemp.setQuadra(conta.getQuadraConta());
-					contaHistoricoTemp.setContaMotivoInclusao(conta
-							.getContaMotivoInclusao());
-					contaHistoricoTemp.setContaMotivoRevisao(conta
-							.getContaMotivoRevisao());
-					contaHistoricoTemp.setContaMotivoRetificacao(conta
-							.getContaMotivoRetificacao());
-					contaHistoricoTemp.setContaMotivoCancelamento(conta
-							.getContaMotivoCancelamento());
-					contaHistoricoTemp.setFaturamentoTipo(conta
-							.getFaturamentoTipo());
+					contaHistoricoTemp.setContaMotivoInclusao(conta.getContaMotivoInclusao());
+					contaHistoricoTemp.setContaMotivoRevisao(conta.getContaMotivoRevisao());
+					contaHistoricoTemp.setContaMotivoRetificacao(conta.getContaMotivoRetificacao());
+					contaHistoricoTemp.setContaMotivoCancelamento(conta.getContaMotivoCancelamento());
+					contaHistoricoTemp.setFaturamentoTipo(conta.getFaturamentoTipo());
 					contaHistoricoTemp.setImovelPerfil(conta.getImovelPerfil());
-					contaHistoricoTemp.setRegistroAtendimento(conta
-							.getRegistroAtendimento());
-					contaHistoricoTemp.setConsumoTarifa(conta
-							.getConsumoTarifa());
-					contaHistoricoTemp.setIndicadorDebitoConta(conta
-							.getIndicadorDebitoConta());
-					contaHistoricoTemp.setFuncionarioEntrega(conta
-							.getFuncionarioEntrega());
-					contaHistoricoTemp.setFuncionarioLeitura(conta
-							.getFuncionarioLeitura());
+					contaHistoricoTemp.setRegistroAtendimento(conta.getRegistroAtendimento());
+					contaHistoricoTemp.setConsumoTarifa(conta.getConsumoTarifa());
+					contaHistoricoTemp.setIndicadorDebitoConta(conta.getIndicadorDebitoConta());
+					contaHistoricoTemp.setFuncionarioEntrega(conta.getFuncionarioEntrega());
+					contaHistoricoTemp.setFuncionarioLeitura(conta.getFuncionarioLeitura());
 					contaHistoricoTemp.setUltimaAlteracao(new Date());
-					contaHistoricoTemp.setDebitoCreditoSituacaoAtual(conta
-							.getDebitoCreditoSituacaoAtual());
-					contaHistoricoTemp.setDebitoCreditoSituacaoAnterior(conta
-							.getDebitoCreditoSituacaoAnterior());
-					contaHistoricoTemp.setDocumentoTipo(conta
-							.getDocumentoTipo());
-					contaHistoricoTemp.setContaBancaria(conta
-							.getContaBancaria());
-					contaHistoricoTemp.setDataVencimentoOriginal(conta
-							.getDataVencimentoOriginal());
+					contaHistoricoTemp.setDebitoCreditoSituacaoAtual(conta.getDebitoCreditoSituacaoAtual());
+					contaHistoricoTemp.setDebitoCreditoSituacaoAnterior(conta.getDebitoCreditoSituacaoAnterior());
+					contaHistoricoTemp.setDocumentoTipo(conta.getDocumentoTipo());
+					contaHistoricoTemp.setContaBancaria(conta.getContaBancaria());
+					contaHistoricoTemp.setDataVencimentoOriginal(conta.getDataVencimentoOriginal());
 					contaHistoricoTemp.setParcelamento(conta.getParcelamento());
 					contaHistoricoTemp.setValorImposto(conta.getValorImposto());
 					contaHistoricoTemp.setUsuario(conta.getUsuario());
-					contaHistoricoTemp.setNumeroRetificacoes(conta
-							.getNumeroRetificacoes());
-
+					contaHistoricoTemp.setNumeroRetificacoes(conta.getNumeroRetificacoes());
 					contaHistoricoTemp.setNumeroFatura(conta.getNumeroFatura());
-					contaHistoricoTemp.setFaturamentoGrupo(conta
-							.getFaturamentoGrupo());
+					contaHistoricoTemp.setFaturamentoGrupo(conta.getFaturamentoGrupo());
 					contaHistoricoTemp.setRota(conta.getRota());
-					contaHistoricoTemp.setNumeroLeituraAnterior(conta
-							.getNumeroLeituraAnterior());
-					contaHistoricoTemp.setNumeroLeituraAtual(conta
-							.getNumeroLeituraAtual());
-
-					contaHistoricoTemp.setNumeroLeituraAtualPoco(conta
-							.getNumeroLeituraAtualPoco());
-					contaHistoricoTemp.setNumeroLeituraAnteriorPoco(conta
-							.getNumeroLeituraAnteriorPoco());
-					contaHistoricoTemp.setPercentualColeta(conta
-							.getPercentualColeta());
-					contaHistoricoTemp.setNumeroVolumePoco(conta
-							.getNumeroVolumePoco());
-
+					contaHistoricoTemp.setNumeroLeituraAnterior(conta.getNumeroLeituraAnterior());
+					contaHistoricoTemp.setNumeroLeituraAtual(conta.getNumeroLeituraAtual());
+					contaHistoricoTemp.setNumeroLeituraAtualPoco(conta.getNumeroLeituraAtualPoco());
+					contaHistoricoTemp.setNumeroLeituraAnteriorPoco(conta.getNumeroLeituraAnteriorPoco());
+					contaHistoricoTemp.setPercentualColeta(conta.getPercentualColeta());
+					contaHistoricoTemp.setNumeroVolumePoco(conta.getNumeroVolumePoco());
 					contaHistoricoTemp.setNumeroBoleto(conta.getNumeroBoleto());
+					contaHistoricoTemp.setDataEnvioEmailConta(conta.getDataEnvioEmailConta());
+					contaHistoricoTemp.setValorRateioAgua(conta.getValorRateioAgua());
+					contaHistoricoTemp.setValorRateioEsgoto(conta.getValorRateioEsgoto());
 
-					contaHistoricoTemp.setDataEnvioEmailConta(conta
-							.getDataEnvioEmailConta());
-
-					/**
-					 * Enviando para historico os
-					 * dados referentes a rateio de água e esgoto
-					 * 
-					 * @author: Wellington Rocha
-					 * @date 09/11/2012
-					 */
-					contaHistoricoTemp.setValorRateioAgua(conta
-							.getValorRateioAgua());
-					contaHistoricoTemp.setValorRateioEsgoto(conta
-							.getValorRateioEsgoto());
-
-					// System.out.println("TRANSFERINDO CONTAS PARA O
-					// HISTORICO");
 					getControladorUtil().inserir(contaHistoricoTemp);
 
-					this.enviarContaCategoriaParaHistorico(contaHistoricoTemp,
-							idConta);
-					this.enviarDebitoCobradoParaHistorico(
-							anoMesFaturamentoSistemaParametro,
-							contaHistoricoTemp, idConta);
-					this.enviarCreditoRealizadoParaHistorico(
-							anoMesFaturamentoSistemaParametro,
-							contaHistoricoTemp, idConta);
-					this.enviarContaImpostosDeduzidosParaHistorico(
-							contaHistoricoTemp, idConta);
-					this.enviarClienteContaParaHistorico(contaHistoricoTemp,
-							idConta);
+					this.enviarContaCategoriaParaHistorico(contaHistoricoTemp, idConta);
+					this.enviarDebitoCobradoParaHistorico(anoMesFaturamentoSistemaParametro, contaHistoricoTemp, idConta);
+					this.enviarCreditoRealizadoParaHistorico(anoMesFaturamentoSistemaParametro, contaHistoricoTemp, idConta);
+					this.enviarContaImpostosDeduzidosParaHistorico(contaHistoricoTemp, idConta);
+					this.enviarClienteContaParaHistorico(contaHistoricoTemp,idConta);
 
-					// CRC2725 - alterado por Vivianne Sousa - 28/09/2009
-					// analista:Fátima
-					getControladorSpcSerasa()
-							.verificarRelacaoDaTransfereciaPHistoricoComItensNegativacao(
-									contaHistoricoTemp);
-
-				}// fim conta
+					getControladorSpcSerasa().verificarRelacaoDaTransfereciaPHistoricoComItensNegativacao(contaHistoricoTemp);
+				}
 			}
-
-			/*
-			 * Remove as contas , débitos a cobrar e créditos a realizar que
-			 * iram para o histórico e remove todos os objetos relacionados com
-			 * eles.
-			 */
-			// System.out.println("REMOVENDO CONTAS");
-			getControladorBatch().removerColecaoContaParaBatch(
-					colecaoContasRemover);
+			getControladorBatch().removerColecaoContaParaBatch(colecaoContasRemover);
 
 			colecaoContasRemover = null;
 
@@ -39291,7 +39111,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 */
 	public void transferirDebitosACobrarParaHistorico(
 			Collection<DebitoACobrar> debitosACobrar)
-			throws ControladorException {
+ throws ControladorException {
 
 		try {
 
@@ -39301,147 +39121,81 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Collection colecaoDebitoACobrarRemover = new ArrayList();
 			Collection colecaoDebitoACobrarCategoriaRemover = new ArrayList();
 
-			// cria débito a cobrar histórico
 			DebitoACobrarHistorico debitoACobrarHistoricoTemp = null;
 
 			if (debitosACobrar != null && !debitosACobrar.isEmpty()) {
 
 				int cont = 0;
-				// laço para cria todo os históricos de débito a cobrar
 				for (DebitoACobrar debitoACobrar : debitosACobrar) {
 					cont++;
 
-					// seta os dados do histórico de débito a cobrar
 					debitoACobrarHistoricoTemp = new DebitoACobrarHistorico();
 					debitoACobrarHistoricoTemp.setId(debitoACobrar.getId());
-					debitoACobrarHistoricoTemp
-							.setDebitoGeradoRealizar(debitoACobrar
-									.getGeracaoDebito());
-					debitoACobrarHistoricoTemp
-							.setAnoMesReferenciaDebito(debitoACobrar
-									.getAnoMesReferenciaDebito());
-					debitoACobrarHistoricoTemp
-							.setAnoMesCobrancaDebito(debitoACobrar
-									.getAnoMesCobrancaDebito());
-					debitoACobrarHistoricoTemp
-							.setAnoMesReferenciaContabil(debitoACobrar
-									.getAnoMesReferenciaContabil());
-					debitoACobrarHistoricoTemp.setValorDebito(debitoACobrar
-							.getValorDebito());
-					debitoACobrarHistoricoTemp.setPrestacaoDebito(debitoACobrar
-							.getNumeroPrestacaoDebito());
-					debitoACobrarHistoricoTemp
-							.setPrestacaoCobradas(debitoACobrar
-									.getNumeroPrestacaoCobradas());
-					debitoACobrarHistoricoTemp
-							.setCodigoSetorComercial(debitoACobrar
-									.getCodigoSetorComercial());
-					debitoACobrarHistoricoTemp.setNumeroQuadra(debitoACobrar
-							.getNumeroQuadra());
-					debitoACobrarHistoricoTemp.setLote(debitoACobrar
-							.getNumeroLote());
-					debitoACobrarHistoricoTemp.setSublote(debitoACobrar
-							.getNumeroSubLote());
+					debitoACobrarHistoricoTemp.setDebitoGeradoRealizar(debitoACobrar.getGeracaoDebito());
+					debitoACobrarHistoricoTemp.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
+					debitoACobrarHistoricoTemp.setAnoMesCobrancaDebito(debitoACobrar.getAnoMesCobrancaDebito());
+					debitoACobrarHistoricoTemp.setAnoMesReferenciaContabil(debitoACobrar.getAnoMesReferenciaContabil());
+					debitoACobrarHistoricoTemp.setValorDebito(debitoACobrar.getValorDebito());
+					debitoACobrarHistoricoTemp.setPrestacaoDebito(debitoACobrar.getNumeroPrestacaoDebito());
+					debitoACobrarHistoricoTemp.setPrestacaoCobradas(debitoACobrar.getNumeroPrestacaoCobradas());
+					debitoACobrarHistoricoTemp.setCodigoSetorComercial(debitoACobrar.getCodigoSetorComercial());
+					debitoACobrarHistoricoTemp.setNumeroQuadra(debitoACobrar.getNumeroQuadra());
+					debitoACobrarHistoricoTemp.setLote(debitoACobrar.getNumeroLote());
+					debitoACobrarHistoricoTemp.setSublote(debitoACobrar.getNumeroSubLote());
 					debitoACobrarHistoricoTemp.setUltimaAlteracao(new Date());
-					debitoACobrarHistoricoTemp
-							.setLancamentoItemContabil(debitoACobrar
-									.getLancamentoItemContabil());
-					debitoACobrarHistoricoTemp
-							.setDebitoCreditoSituacaoAtual(debitoACobrar
-									.getDebitoCreditoSituacaoAtual());
-					debitoACobrarHistoricoTemp
-							.setDebitoCreditoSituacaoAnterior(debitoACobrar
-									.getDebitoCreditoSituacaoAnterior());
-					debitoACobrarHistoricoTemp
-							.setRegistroAtendimento(debitoACobrar
-									.getRegistroAtendimento());
-					debitoACobrarHistoricoTemp.setImovel(debitoACobrar
-							.getImovel());
-					debitoACobrarHistoricoTemp
-							.setFinanciamentoTipo(debitoACobrar
-									.getFinanciamentoTipo());
-					debitoACobrarHistoricoTemp.setOrdemServico(debitoACobrar
-							.getOrdemServico());
-					debitoACobrarHistoricoTemp.setCobrancaForma(debitoACobrar
-							.getCobrancaForma());
-					debitoACobrarHistoricoTemp.setQuadra(debitoACobrar
-							.getQuadra());
-					debitoACobrarHistoricoTemp.setLocalidade(debitoACobrar
-							.getLocalidade());
-					debitoACobrarHistoricoTemp
-							.setParcelamentoGrupo(debitoACobrar
-									.getParcelamentoGrupo());
-					debitoACobrarHistoricoTemp.setDocumentoTipo(debitoACobrar
-							.getDocumentoTipo());
-					debitoACobrarHistoricoTemp.setParcelamento(debitoACobrar
-							.getParcelamento());
-					debitoACobrarHistoricoTemp.setDebitoTipo(debitoACobrar
-							.getDebitoTipo());
+					debitoACobrarHistoricoTemp.setLancamentoItemContabil(debitoACobrar.getLancamentoItemContabil());
+					debitoACobrarHistoricoTemp.setDebitoCreditoSituacaoAtual(debitoACobrar.getDebitoCreditoSituacaoAtual());
+					debitoACobrarHistoricoTemp.setDebitoCreditoSituacaoAnterior(debitoACobrar.getDebitoCreditoSituacaoAnterior());
+					debitoACobrarHistoricoTemp.setRegistroAtendimento(debitoACobrar.getRegistroAtendimento());
+					debitoACobrarHistoricoTemp.setImovel(debitoACobrar.getImovel());
+					debitoACobrarHistoricoTemp.setFinanciamentoTipo(debitoACobrar.getFinanciamentoTipo());
+					debitoACobrarHistoricoTemp.setOrdemServico(debitoACobrar.getOrdemServico());
+					debitoACobrarHistoricoTemp.setCobrancaForma(debitoACobrar.getCobrancaForma());
+					debitoACobrarHistoricoTemp.setQuadra(debitoACobrar.getQuadra());
+					debitoACobrarHistoricoTemp.setLocalidade(debitoACobrar.getLocalidade());
+					debitoACobrarHistoricoTemp.setParcelamentoGrupo(debitoACobrar.getParcelamentoGrupo());
+					debitoACobrarHistoricoTemp.setDocumentoTipo(debitoACobrar.getDocumentoTipo());
+					debitoACobrarHistoricoTemp.setParcelamento(debitoACobrar.getParcelamento());
+					debitoACobrarHistoricoTemp.setDebitoTipo(debitoACobrar.getDebitoTipo());
+					debitoACobrarHistoricoTemp.setPercentualTaxaJurosFinanciamento(debitoACobrar.getPercentualTaxaJurosFinanciamento());
+					debitoACobrarHistoricoTemp.setUsuario(debitoACobrar.getUsuario());
 
-					debitoACobrarHistoricoTemp
-							.setPercentualTaxaJurosFinanciamento(debitoACobrar
-									.getPercentualTaxaJurosFinanciamento());
+					colecaoDebitoACobrarHistoricoInserir.add(debitoACobrarHistoricoTemp);
 
-					debitoACobrarHistoricoTemp.setUsuario(debitoACobrar
-							.getUsuario());
+					Collection<DebitoACobrarCategoria> colecaoDebitoACobrarCategoria = this.repositorioFaturamento.pesquisarDebitosACobrarCategoria(debitoACobrar);
 
-					colecaoDebitoACobrarHistoricoInserir
-							.add(debitoACobrarHistoricoTemp);
-
-					Collection<DebitoACobrarCategoria> colecaoDebitoACobrarCategoria = this.repositorioFaturamento
-							.pesquisarDebitosACobrarCategoria(debitoACobrar);
-
-					if (colecaoDebitoACobrarCategoria != null
-							&& !colecaoDebitoACobrarCategoria.isEmpty()) {
+					if (colecaoDebitoACobrarCategoria != null && !colecaoDebitoACobrarCategoria.isEmpty()) {
 
 						colecaoDebitoACobrarCategoriaRemover = new ArrayList();
-						colecaoDebitoACobrarCategoriaRemover
-								.addAll(colecaoDebitoACobrarCategoria);
+						colecaoDebitoACobrarCategoriaRemover.addAll(colecaoDebitoACobrarCategoria);
 
 						for (DebitoACobrarCategoria debitoACobrarCategoria : colecaoDebitoACobrarCategoria) {
 
 							DebitoACobrarCategoriaHistorico debitoACobrarCategoriaHistorico = new DebitoACobrarCategoriaHistorico();
-							debitoACobrarCategoriaHistorico
-									.setComp_id(new DebitoACobrarCategoriaHistoricoPK(
-											debitoACobrarHistoricoTemp.getId(),
-											debitoACobrarCategoria
-													.getCategoria().getId()));
-							debitoACobrarCategoriaHistorico
-									.setCategoria(debitoACobrarCategoria
-											.getCategoria());
-							debitoACobrarCategoriaHistorico
-									.setDebitoACobrarHistorico(debitoACobrarHistoricoTemp);
-							debitoACobrarCategoriaHistorico
-									.setQuantidadeEconomia(debitoACobrarCategoria
-											.getQuantidadeEconomia());
-							debitoACobrarCategoriaHistorico
-									.setUltimaAlteracao(new Date());
-							debitoACobrarCategoriaHistorico
-									.setValorCategoria(debitoACobrarCategoria
-											.getValorCategoria());
+							debitoACobrarCategoriaHistorico.setComp_id(new DebitoACobrarCategoriaHistoricoPK(debitoACobrarHistoricoTemp.getId(),
+									debitoACobrarCategoria.getCategoria().getId()));
+							debitoACobrarCategoriaHistorico.setCategoria(debitoACobrarCategoria.getCategoria());
+							debitoACobrarCategoriaHistorico.setDebitoACobrarHistorico(debitoACobrarHistoricoTemp);
+							debitoACobrarCategoriaHistorico.setQuantidadeEconomia(debitoACobrarCategoria.getQuantidadeEconomia());
+							debitoACobrarCategoriaHistorico.setUltimaAlteracao(new Date());
+							debitoACobrarCategoriaHistorico.setValorCategoria(debitoACobrarCategoria.getValorCategoria());
 
-							colecaoDebitoACobrarCategoriaHistoricoInserir
-									.add(debitoACobrarCategoriaHistorico);
+							colecaoDebitoACobrarCategoriaHistoricoInserir.add(debitoACobrarCategoriaHistorico);
 						}
-						getControladorBatch()
-								.removerColecaoDebitoACobrarCategoriaParaBatch(
-										colecaoDebitoACobrarCategoriaRemover);
+						getControladorBatch().removerColecaoDebitoACobrarCategoriaParaBatch(colecaoDebitoACobrarCategoriaRemover);
 						colecaoDebitoACobrarCategoriaRemover = null;
 					}
 				}
 
 				colecaoDebitoACobrarRemover.addAll(debitosACobrar);
 				debitosACobrar = null;
-				getControladorBatch().removerColecaoDebitoACobrarParaBatch(
-						colecaoDebitoACobrarRemover);
+				getControladorBatch().removerColecaoDebitoACobrarParaBatch(colecaoDebitoACobrarRemover);
 
 				colecaoDebitoACobrarRemover = null;
 
-				getControladorBatch().inserirColecaoObjetoParaBatch(
-						colecaoDebitoACobrarHistoricoInserir);
+				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarHistoricoInserir);
 				colecaoDebitoACobrarHistoricoInserir = null;
-				getControladorBatch().inserirColecaoObjetoParaBatch(
-						colecaoDebitoACobrarCategoriaHistoricoInserir);
+				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarCategoriaHistoricoInserir);
 				colecaoDebitoACobrarCategoriaHistoricoInserir = null;
 			}
 
@@ -39645,8 +39399,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoContas
 	 * @throws ControladorException
 	 */
-	public void atualizarIndicadorContaNoHistorico(Collection colecaoContas)
-			throws ControladorException {
+	public void atualizarIndicadorContaNoHistorico(Collection colecaoContas) throws ControladorException {
 		List colecaoTotalContas = (List) colecaoContas;
 		int limiteSuperior;
 		int limiteInferior;
@@ -39670,11 +39423,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 
 				List colecaoContasTemporaria = new ArrayList();
-				colecaoContasTemporaria.addAll(colecaoTotalContas.subList(
-						limiteInferior, limiteSuperior));
+				colecaoContasTemporaria.addAll(colecaoTotalContas.subList(limiteInferior, limiteSuperior));
 
-				this.repositorioFaturamento
-						.atualizarIndicadorContaNoHistorico(colecaoContasTemporaria);
+				this.repositorioFaturamento.atualizarIndicadorContaNoHistorico(colecaoContasTemporaria);
 
 			}
 
@@ -47325,143 +47076,74 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditoRealizadoRemover = new ArrayList();
 		Collection colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
 
-		
-		Conta conta = (Conta)this.obterConta(idConta).iterator().next(); 
+		Conta conta = (Conta) this.obterConta(idConta).iterator().next();
 		try {
-			// pesquisa os créditos realizados da conta cancelada
-			Collection<ICreditoRealizado> creditosRealizados = repositorioFaturamento
-					.pesquisarCreditosRealizados(conta);
+			Collection<ICreditoRealizado> creditosRealizados = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
 
-			// cria o crédito realizados histórico
 			CreditoRealizadoHistorico creditoRealizadoHistoricoTemp = null;
 
 			if (creditosRealizados != null && !creditosRealizados.isEmpty()) {
 
 				colecaoCreditoRealizadoRemover.addAll(creditosRealizados);
-
-				// laço para inserir todos os históricos dos créditos
-				// realizados
+				
 				for (ICreditoRealizado creditoRealizado : creditosRealizados) {
-					// cria o histórico do crédito realizado da conta
-					// cancelada
 					creditoRealizadoHistoricoTemp = new CreditoRealizadoHistorico();
-					creditoRealizadoHistoricoTemp.setId(creditoRealizado
-							.getId());
-					creditoRealizadoHistoricoTemp
-							.setCreditoRealizado(creditoRealizado
-									.getCreditoRealizado());
-					creditoRealizadoHistoricoTemp
-							.setCodigoSetorComercial(creditoRealizado
-									.getCodigoSetorComercial());
-					creditoRealizadoHistoricoTemp
-							.setNumeroQuadra(creditoRealizado.getNumeroQuadra());
-					creditoRealizadoHistoricoTemp
-							.setNumeroLote(creditoRealizado.getNumeroLote());
-					creditoRealizadoHistoricoTemp
-							.setNumeroSubLote(creditoRealizado
-									.getNumeroSubLote());
-					creditoRealizadoHistoricoTemp
-							.setAnoMesReferenciaCredito(creditoRealizado
-									.getAnoMesReferenciaCredito());
-					creditoRealizadoHistoricoTemp
-							.setAnoMesCobrancaCredito(creditoRealizado
-									.getAnoMesCobrancaCredito());
-					creditoRealizadoHistoricoTemp
-							.setValorCredito(creditoRealizado.getValorCredito());
-					creditoRealizadoHistoricoTemp
-							.setNumeroPrestacao(creditoRealizado
-									.getNumeroPrestacao());
-					creditoRealizadoHistoricoTemp
-							.setNumeroPrestacaoCredito(creditoRealizado
-									.getNumeroPrestacaoCredito());
-					creditoRealizadoHistoricoTemp
-							.setNumeroParcelaBonus(creditoRealizado
-									.getNumeroParcelaBonus());
-					creditoRealizadoHistoricoTemp
-							.setUltimaAlteracao(new Date());
-					creditoRealizadoHistoricoTemp.setQuadra(creditoRealizado
-							.getQuadra());
-					creditoRealizadoHistoricoTemp
-							.setLocalidade(creditoRealizado.getLocalidade());
-					creditoRealizadoHistoricoTemp
-							.setCreditoTipo(creditoRealizado.getCreditoTipo());
-					creditoRealizadoHistoricoTemp
-							.setContaHistorico(contaHistoricoTemp);
-					creditoRealizadoHistoricoTemp
-							.setLancamentoItemContabil(creditoRealizado
-									.getLancamentoItemContabil());
-					creditoRealizadoHistoricoTemp
-							.setCreditoOrigem(creditoRealizado
-									.getCreditoOrigem());
-					creditoRealizadoHistoricoTemp
-							.setCreditoARealizarGeral(creditoRealizado
-									.getCreditoARealizarGeral());
+					creditoRealizadoHistoricoTemp.setId(creditoRealizado.getId());
+					creditoRealizadoHistoricoTemp.setCreditoRealizado(creditoRealizado.getCreditoRealizado());
+					creditoRealizadoHistoricoTemp.setCodigoSetorComercial(creditoRealizado.getCodigoSetorComercial());
+					creditoRealizadoHistoricoTemp.setNumeroQuadra(creditoRealizado.getNumeroQuadra());
+					creditoRealizadoHistoricoTemp.setNumeroLote(creditoRealizado.getNumeroLote());
+					creditoRealizadoHistoricoTemp.setNumeroSubLote(creditoRealizado.getNumeroSubLote());
+					creditoRealizadoHistoricoTemp.setAnoMesReferenciaCredito(creditoRealizado.getAnoMesReferenciaCredito());
+					creditoRealizadoHistoricoTemp.setAnoMesCobrancaCredito(creditoRealizado.getAnoMesCobrancaCredito());
+					creditoRealizadoHistoricoTemp.setValorCredito(creditoRealizado.getValorCredito());
+					creditoRealizadoHistoricoTemp.setNumeroPrestacao(creditoRealizado.getNumeroPrestacao());
+					creditoRealizadoHistoricoTemp.setNumeroPrestacaoCredito(creditoRealizado.getNumeroPrestacaoCredito());
+					creditoRealizadoHistoricoTemp.setNumeroParcelaBonus(creditoRealizado.getNumeroParcelaBonus());
+					creditoRealizadoHistoricoTemp.setUltimaAlteracao(new Date());
+					creditoRealizadoHistoricoTemp.setQuadra(creditoRealizado.getQuadra());
+					creditoRealizadoHistoricoTemp.setLocalidade(creditoRealizado.getLocalidade());
+					creditoRealizadoHistoricoTemp.setCreditoTipo(creditoRealizado.getCreditoTipo());
+					creditoRealizadoHistoricoTemp.setContaHistorico(contaHistoricoTemp);
+					creditoRealizadoHistoricoTemp.setLancamentoItemContabil(creditoRealizado.getLancamentoItemContabil());
+					creditoRealizadoHistoricoTemp.setCreditoOrigem(creditoRealizado.getCreditoOrigem());
+					creditoRealizadoHistoricoTemp.setCreditoARealizarGeral(creditoRealizado.getCreditoARealizarGeral());
 
-					colecaoCreditoRealizadoHistoricoInserir
-							.add(creditoRealizadoHistoricoTemp);
+					colecaoCreditoRealizadoHistoricoInserir.add(creditoRealizadoHistoricoTemp);
 
 					Collection<CreditoRealizadoCategoria> colecaoCreditoRealizadoCategoria = this.repositorioFaturamento
-							.pesquisarCreditoRealizadoCategoria(creditoRealizado
-									.getId());
+							.pesquisarCreditoRealizadoCategoria(creditoRealizado.getId());
 
-					if (colecaoCreditoRealizadoCategoria != null
-							&& !colecaoCreditoRealizadoCategoria.isEmpty()) {
+					if (colecaoCreditoRealizadoCategoria != null && !colecaoCreditoRealizadoCategoria.isEmpty()) {
 
 						colecaoCreditoRealizadoCategoriaRemover = new ArrayList();
-						colecaoCreditoRealizadoCategoriaRemover
-								.addAll(colecaoCreditoRealizadoCategoria);
+						colecaoCreditoRealizadoCategoriaRemover.addAll(colecaoCreditoRealizadoCategoria);
 
 						for (CreditoRealizadoCategoria creditoRelizadoCategoria : colecaoCreditoRealizadoCategoria) {
-							CreditoRealizadoCategoriaHistorico creditoRealizadoCategoriaHistorico = new CreditoRealizadoCategoriaHistorico();
-							creditoRealizadoCategoriaHistorico
-									.setComp_id(new CreditoRealizadoCategoriaHistoricoPK(
-											creditoRealizadoHistoricoTemp
-													.getId(),
-											creditoRelizadoCategoria
-													.getCategoria().getId()));
-							creditoRealizadoCategoriaHistorico
-									.setCategoria(creditoRelizadoCategoria
-											.getCategoria());
-							creditoRealizadoCategoriaHistorico
-									.setCreditoRealizadoHistorico(creditoRealizadoHistoricoTemp);
-							creditoRealizadoCategoriaHistorico
-									.setQuantidadeEconomia(creditoRelizadoCategoria
-											.getQuantidadeEconomia());
-							creditoRealizadoCategoriaHistorico
-									.setUltimaAlteracao(new Date());
-							creditoRealizadoCategoriaHistorico
-									.setValorCategoria(creditoRelizadoCategoria
-											.getValorCategoria());
+							CreditoRealizadoCategoriaHistorico creditoRealizadoCategoriaHistorico = new CreditoRealizadoCategoriaHistorico(
+									creditoRealizadoHistoricoTemp.getId(),creditoRelizadoCategoria.getCategoria().getId());
+							creditoRealizadoCategoriaHistorico.setCategoria(creditoRelizadoCategoria.getCategoria());
+							creditoRealizadoCategoriaHistorico.setCreditoRealizadoHistorico(creditoRealizadoHistoricoTemp);
+							creditoRealizadoCategoriaHistorico.setQuantidadeEconomia(creditoRelizadoCategoria.getQuantidadeEconomia());
+							creditoRealizadoCategoriaHistorico.setUltimaAlteracao(new Date());
+							creditoRealizadoCategoriaHistorico.setValorCategoria(creditoRelizadoCategoria.getValorCategoria());
 
-							colecaoCreditoRealizadoCategoriaHistoricoInserir
-									.add(creditoRealizadoCategoriaHistorico);
+							colecaoCreditoRealizadoCategoriaHistoricoInserir.add(creditoRealizadoCategoriaHistorico);
 						}
-						// System.out.println("REMOVENDO CREDITO REALIZADO
-						// CATEGORIA");
-						getControladorBatch()
-								.removerColecaoCreditoRealizadoCategoriaParaBatch(
-										colecaoCreditoRealizadoCategoriaRemover);
+						getControladorBatch().removerColecaoCreditoRealizadoCategoriaParaBatch(colecaoCreditoRealizadoCategoriaRemover);
 
 						colecaoCreditoRealizadoCategoriaRemover = null;
 					}
 				}
 			}
 
-			// System.out.println("REMOVENDO CREDITO REALIZADO");
-			getControladorBatch().removerColecaoCreditoRealizadoParaBatch(
-					colecaoCreditoRealizadoRemover);
+			getControladorBatch().removerColecaoCreditoRealizadoParaBatch(colecaoCreditoRealizadoRemover);
 			colecaoCreditoRealizadoRemover = null;
 
-			// System.out.println("TRANSFERINDO CREDITO REALIZADO PARA O
-			// HISTORICO");
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					colecaoCreditoRealizadoHistoricoInserir);
+			getControladorBatch().inserirColecaoObjetoParaBatch(colecaoCreditoRealizadoHistoricoInserir);
 			colecaoCreditoRealizadoHistoricoInserir = null;
 
-			// System.out.println("TRANSFERINDO CREDITO REALIZADO CATEGORIA PARA
-			// O HISTORICO");
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					colecaoCreditoRealizadoCategoriaHistoricoInserir);
+			getControladorBatch().inserirColecaoObjetoParaBatch(colecaoCreditoRealizadoCategoriaHistoricoInserir);
 			colecaoCreditoRealizadoCategoriaHistoricoInserir = null;
 
 		} catch (Exception ex) {
@@ -73782,32 +73464,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param anoMesFaturamentoSistemaParametro
 	 * @throws ControladorException
 	 */
-	protected void gerarHistoricoDeContasCanceladasParaEncerrarFaturamento(
-			List contasCanceladas, int anoMesFaturamentoSistemaParametro)
-			throws ControladorException {
-
+	protected void gerarHistoricoDeContasCanceladasParaEncerrarFaturamento(List contasCanceladas, int anoMesFaturamentoSistemaParametro) throws ControladorException {
 		try {
-
 			Iterator iteratorContasCanceladas = contasCanceladas.iterator();
 
 			while (iteratorContasCanceladas.hasNext()) {
 				Conta conta = (Conta) iteratorContasCanceladas.next();
 
-				this.transferirContasParaHistorico(
-						Collections.singletonList(conta),
-						anoMesFaturamentoSistemaParametro);
-
-				// item 7
-				this.atualizarIndicadorContaNoHistorico(Collections
-						.singletonList(conta));
-				// fim item 7
+				this.transferirContasParaHistorico(Collections.singletonList(conta), anoMesFaturamentoSistemaParametro);
+				this.atualizarIndicadorContaNoHistorico(Collections.singletonList(conta));
 
 				iteratorContasCanceladas.remove();
 				conta = null;
 			}
 
 		} catch (Exception e) {
-			// sessionContext.setRollbackOnly();
 			throw new EJBException(e);
 		}
 	}
@@ -73823,24 +73494,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoDebitosTemporaria
 	 * @throws ControladorException
 	 */
-	protected void gerarHistoricoDeDebitosACobrarCanceladosParaEncerrarFaturamento(
-			List colecaoDebitosTemporaria) throws ControladorException {
-
+	protected void gerarHistoricoDeDebitosACobrarCanceladosParaEncerrarFaturamento(List colecaoDebitosTemporaria) throws ControladorException {
 		try {
 
-			if (colecaoDebitosTemporaria != null
-					&& !colecaoDebitosTemporaria.isEmpty()) {
-				// item 8
+			if (colecaoDebitosTemporaria != null && !colecaoDebitosTemporaria.isEmpty()) {
 				this.transferirDebitosACobrarParaHistorico(colecaoDebitosTemporaria);
-				// fim item 8
-
-				// item 9
 				this.atualizarIndicadorDebitoACobrarNoHistorico(colecaoDebitosTemporaria);
-				// fim item 9
 			}
-
 		} catch (Exception e) {
-			// sessionContext.setRollbackOnly();
 			throw new EJBException(e);
 		}
 	}
