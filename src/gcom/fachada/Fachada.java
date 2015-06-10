@@ -44145,4 +44145,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
+	
+	public String getSegurancaParametro(String parametro) {
+		try {
+			return this.getControladorAcesso().getSegurancaParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 }
