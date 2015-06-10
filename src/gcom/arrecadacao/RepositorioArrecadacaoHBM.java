@@ -31669,83 +31669,65 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		
 		List<ResumoCreditosAvisosBancariosDTO> retorno = new ArrayList<ResumoCreditosAvisosBancariosDTO>();
 		Session session = HibernateUtil.getSession();
-
+		
+		StringBuilder select = new StringBuilder();
+		select.append("SELECT a.avbc_id as id_aviso, ")
+			  .append("a.avbc_dtrealizada as data_realizada, ")    
+			  .append("a.arrc_id as id_arrecadador, ")    
+			  .append("c.clie_nmcliente as descricao_arrecadador, ")   
+			  .append("a.arfm_id as id_arrecadacao_forma, ")    
+			  .append("af.arfm_dsarrecadacaoforma as descricao_arrecadacao_forma, ")   
+			  .append("b.bnco_id as id_banco, ")   
+			  .append("cb.ctbc_id as id_conta, ")
+			  .append("a.avbc_dtlancamento as data_lancamento, ")
+			  .append("( CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END ) as credito, ")   
+			  .append("( CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END ) as debito, ")   
+			  .append("a.avbc_amreferenciaarrecadacao as ano_mes_arrecadacao, ")
+			  .append("tarifa.actf_nndiafloat as dias_float, ");
+		
+		StringBuilder from = new StringBuilder();
+		from.append("FROM arrecadacao.aviso_bancario a ")   
+			.append("LEFT JOIN arrecadacao.arrecadador ar ON (a.arrc_id = ar.arrc_id) ")
+			.append("LEFT JOIN cadastro.cliente c ON (ar.clie_id = c.clie_id) ")
+			.append("LEFT JOIN arrecadacao.arrecadacao_forma af ON (a.arfm_id = af.arfm_id) ")
+			.append("INNER JOIN arrecadacao.conta_bancaria cb ON (a.ctbc_id = cb.ctbc_id) ")
+			.append("INNER JOIN arrecadacao.agencia ag ON (cb.agen_id = ag.agen_id) ")
+			.append("INNER JOIN arrecadacao.banco b ON (ag.bnco_id = b.bnco_id) ")
+			.append("INNER JOIN arrecadacao.arrecadador_contrato contrato on ar.arrc_id = contrato.arrc_id ")
+			.append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ");
+		
+		StringBuilder where = new StringBuilder();
+		where.append("WHERE (a.avbc_amreferenciaarrecadacao = :referencia OR ")
+	      	 .append("      (date_part('year', a.avbc_dtrealizada) = :ano AND date_part('month', a.avbc_dtrealizada) = :mes)) ")
+	      	 .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
+	      	 .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT data_pagamento_previsto, data_realizada, descricao_arrecadador, sum(valor_pagamento) as total ")
-		   .append("FROM (");
-		
-		StringBuilder consultaPagamentos = new StringBuilder();
-		consultaPagamentos.append("SELECT a.avbc_id as id_aviso, ")
-       					  .append("a.avbc_dtrealizada as data_realizada, ")    
-       					  .append("a.arrc_id as id_arrecadador, ")    
-       					  .append("c.clie_nmcliente as descricao_arrecadador, ")   
-       					  .append("a.arfm_id as id_arrecadacao_forma, ")    
-       					  .append("af.arfm_dsarrecadacaoforma as descricao_arrecadacao_forma, ")   
-       					  .append("b.bnco_id as id_banco, ")   
-       					  .append("cb.ctbc_id as id_conta, ")
-       					  .append("a.avbc_dtlancamento as data_lancamento, ")
-       					  .append("( CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END ) as credito, ")   
-       					  .append("( CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END ) as debito, ")   
-       					  .append("a.avbc_amreferenciaarrecadacao as ano_mes_arrecadacao, ")
-       					  .append("tarifa.actf_nndiafloat as dias_float, ")
-       					  .append("p.pgmt_dtpagamento as data_pagamento, ")
-       					  .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
-       					  .append("sum(p.pgmt_vlpagamento) as valor_pagamento ")
-					      .append("FROM arrecadacao.aviso_bancario a ")   
-					      .append("LEFT JOIN arrecadacao.arrecadador ar ON (a.arrc_id = ar.arrc_id) ")
-					      .append("LEFT JOIN cadastro.cliente c ON (ar.clie_id = c.clie_id) ")
-					      .append("LEFT JOIN arrecadacao.arrecadacao_forma af ON (a.arfm_id = af.arfm_id) ")
-					      .append("INNER JOIN arrecadacao.conta_bancaria cb ON (a.ctbc_id = cb.ctbc_id) ")
-					      .append("INNER JOIN arrecadacao.agencia ag ON (cb.agen_id = ag.agen_id) ")
-					      .append("INNER JOIN arrecadacao.banco b ON (ag.bnco_id = b.bnco_id) ")
-					      .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")  
-					      .append("INNER JOIN arrecadacao.arrecadador_contrato contrato on ar.arrc_id = contrato.arrc_id ")
-					      .append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ")
-					      .append("WHERE (a.avbc_amreferenciaarrecadacao = :referencia OR ")
-					      .append("      (date_part('year', a.avbc_dtrealizada) = :ano AND date_part('month', a.avbc_dtrealizada) = :mes)) ")
-					      .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
-					      .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
-		
-		sql.append(consultaPagamentos.toString())
-		   .append("UNION ");
-		
-		StringBuilder consultaPagamentosHistorico = new StringBuilder();
-		consultaPagamentosHistorico.append("SELECT a.avbc_id as id_aviso, ")
-                                   .append("a.avbc_dtrealizada as data_realizada, ")    
-                                   .append("a.arrc_id as id_arrecadador, ")    
-                                   .append("c.clie_nmcliente as descricao_arrecadador, ")   
-                                   .append("a.arfm_id as id_arrecadacao_forma, ")    
-                                   .append("af.arfm_dsarrecadacaoforma as descricao_arrecadacao_forma, ")   
-                                   .append("b.bnco_id as id_banco, ")   
-                                   .append("cb.ctbc_id as id_conta, ")
-                                   .append("a.avbc_dtlancamento as data_lancamento, ")
-		       					   .append("( CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END ) as credito, ")   
-		       					   .append("( CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END ) as debito, ")   
-		       					   .append("a.avbc_amreferenciaarrecadacao as ano_mes_arrecadacao, ")
-		       					   .append("tarifa.actf_nndiafloat as dias_float, ")
-		       					   .append("p.pghi_dtpagamento as data_pagamento, ")
-		       					   .append("p.pghi_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
-		       					   .append("sum(p.pghi_vlpagamento) as valor_pagamento ")
-								   .append("FROM arrecadacao.aviso_bancario a ")   
-								   .append("LEFT JOIN arrecadacao.arrecadador ar ON (a.arrc_id = ar.arrc_id) ")
-								   .append("LEFT JOIN cadastro.cliente c ON (ar.clie_id = c.clie_id) ")
-								   .append("LEFT JOIN arrecadacao.arrecadacao_forma af ON (a.arfm_id = af.arfm_id) ")
-								   .append("INNER JOIN arrecadacao.conta_bancaria cb ON (a.ctbc_id = cb.ctbc_id) ")
-								   .append("INNER JOIN arrecadacao.agencia ag ON (cb.agen_id = ag.agen_id) ")
-								   .append("INNER JOIN arrecadacao.banco b ON (ag.bnco_id = b.bnco_id) ")
-								   .append("INNER JOIN arrecadacao.pagamento_historico p ON (a.avbc_id = p.avbc_id) ")  
-								   .append("INNER JOIN arrecadacao.arrecadador_contrato contrato on ar.arrc_id = contrato.arrc_id ")
-								   .append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ")
-								   .append("WHERE (a.avbc_amreferenciaarrecadacao = :referencia OR ")
-								   .append("      (date_part('year', a.avbc_dtrealizada) = :ano AND date_part('month', a.avbc_dtrealizada) = :mes)) ")
-								   .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
-			 					   .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
-		
-		sql.append(consultaPagamentosHistorico.toString())
+		   .append("FROM (")
+		   
+		   .append(select)
+		   .append("p.pgmt_dtpagamento as data_pagamento, ")
+		   .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
+		   .append("sum(p.pgmt_vlpagamento) as valor_pagamento ")
+		   .append(from)
+		   .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
+		   .append(where)
+		   
+		   .append("UNION ")
+		   
+		   .append(select)
+		   .append("p.pghi_dtpagamento as data_pagamento, ")
+		   .append("p.pghi_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
+		   .append("sum(p.pghi_vlpagamento) as valor_pagamento ")
+		   .append(from)
+		   .append("INNER JOIN arrecadacao.pagamento_historico p ON (a.avbc_id = p.avbc_id) ")
+		   .append(where)
+		   
 		   .append(") as resumo ")
 		   .append("GROUP BY data_pagamento_previsto, data_realizada, id_arrecadador, descricao_arrecadador ")
 		   .append("ORDER BY data_pagamento_previsto, data_realizada, id_arrecadador;");
-
+		
 		try {
 			Collection colecao = session.createSQLQuery(sql.toString())
 					.addScalar("data_pagamento_previsto", Hibernate.DATE)
@@ -31759,12 +31741,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			for (Object dadosResumo : colecao) {
 				Object[] arrayDadosResumo = (Object[]) dadosResumo;
 				
-				ResumoCreditosAvisosBancariosDTO dto = new ResumoCreditosAvisosBancariosDTO((Date) arrayDadosResumo[0], (Date) arrayDadosResumo[1],
-						(String) arrayDadosResumo[2], (BigDecimal) arrayDadosResumo[3]);
+				ResumoCreditosAvisosBancariosDTO dto = new ResumoCreditosAvisosBancariosDTO(
+						(Date) arrayDadosResumo[0],
+						(Date) arrayDadosResumo[1],
+						(String) arrayDadosResumo[2],
+						(BigDecimal) arrayDadosResumo[3]);
 				
 				retorno.add(dto);
 			}
-			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
