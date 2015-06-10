@@ -6951,5 +6951,5 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarContasPagamentosClassificadosRecuperacaoCreditoMesesAnteriores(Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao, Integer idPagamentoSituacao) throws ErroRepositorioException;
 
-	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ErroRepositorioException;
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ErroRepositorioException;
 }

@@ -31665,7 +31665,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
-	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ErroRepositorioException {
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ErroRepositorioException {
 		
 		List<ResumoCreditosAvisosBancariosDTO> retorno = new ArrayList<ResumoCreditosAvisosBancariosDTO>();
 		Session session = HibernateUtil.getSession();
@@ -31680,8 +31680,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			  .append("b.bnco_id as id_banco, ")   
 			  .append("cb.ctbc_id as id_conta, ")
 			  .append("a.avbc_dtlancamento as data_lancamento, ")
-			  .append("( CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END ) as credito, ")   
-			  .append("( CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END ) as debito, ")   
+			  .append("(CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END) as credito, ")   
+			  .append("(CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END) as debito, ")   
 			  .append("a.avbc_amreferenciaarrecadacao as ano_mes_arrecadacao, ")
 			  .append("tarifa.actf_nndiafloat as dias_float, ");
 		
@@ -31697,8 +31697,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			.append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ");
 		
 		StringBuilder where = new StringBuilder();
-		where.append("WHERE (a.avbc_amreferenciaarrecadacao = :referencia OR ")
-	      	 .append("      (date_part('year', a.avbc_dtrealizada) = :ano AND date_part('month', a.avbc_dtrealizada) = :mes)) ")
+		where.append("WHERE a.avbc_dtrealizada >= :data ")
 	      	 .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
 	      	 .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
 		
@@ -31734,9 +31733,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("data_realizada", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
 					.addScalar("total", Hibernate.BIG_DECIMAL)
-					.setInteger("referencia", referencia)
-					.setInteger("ano", Util.obterAno(referencia))
-					.setInteger("mes", Util.obterMes(referencia)).list();
+					.setDate("data", data)
+					.list();
 			
 			for (Object dadosResumo : colecao) {
 				Object[] arrayDadosResumo = (Object[]) dadosResumo;

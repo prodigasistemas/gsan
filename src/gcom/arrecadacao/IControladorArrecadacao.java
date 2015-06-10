@@ -4362,5 +4362,5 @@ public interface IControladorArrecadacao {
 		
 		public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException;
 		
-		public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ControladorException;
+		public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException;
 }

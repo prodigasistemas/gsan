@@ -21,10 +21,10 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		
-		FiltrarDadosDiariosArrecadacaoActionForm form = (FiltrarDadosDiariosArrecadacaoActionForm) actionForm;
+		GerarRelatorioResumoCreditosAvisosBancariosActionForm form = (GerarRelatorioResumoCreditosAvisosBancariosActionForm) actionForm;
 		
 		ResumoCreditosAvisosBancariosBO bo = new ResumoCreditosAvisosBancariosBO();
-		bo.gerarRelatorioPDF(Integer.valueOf(Util.formatarMesAnoComBarraParaAnoMes(form.getPeriodoArrecadacaoInicio())));
+		bo.gerarRelatorioPDF(Util.formatarMesAnoComBarraParaAnoMes(form.getDataConsulta()));
 		
 		String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_GSAN_RELATORIOS.toString());
 		

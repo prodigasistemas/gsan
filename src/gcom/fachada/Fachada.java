@@ -44138,9 +44138,9 @@ public class Fachada {
 		}
 	}
 	
-	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) {
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) {
 		try {
-			return this.getControladorArrecadacao().pesquisarResumoCreditosAvisosBancarios(referencia);
+			return this.getControladorArrecadacao().pesquisarResumoCreditosAvisosBancarios(data);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}

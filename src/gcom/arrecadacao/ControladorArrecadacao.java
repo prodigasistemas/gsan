@@ -52242,9 +52242,9 @@ public class ControladorArrecadacao implements SessionBean {
 		return avisoBancario;
 	}
 	
-	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Integer referencia) throws ControladorException {
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException {
 		try{
-		  return repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(referencia);
+		  return repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(data);
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
