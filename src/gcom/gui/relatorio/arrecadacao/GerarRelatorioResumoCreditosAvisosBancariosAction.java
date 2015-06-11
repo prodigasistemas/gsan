@@ -4,6 +4,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.relatorio.arrecadacao.resumocreditosavisosbancarios.ResumoCreditosAvisosBancariosBO;
 import gcom.seguranca.SegurancaParametro;
+import gcom.util.Util;
 
 import java.io.IOException;
 
@@ -22,8 +23,7 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 		GerarRelatorioResumoCreditosAvisosBancariosActionForm form = (GerarRelatorioResumoCreditosAvisosBancariosActionForm) actionForm;
 		
 		ResumoCreditosAvisosBancariosBO bo = new ResumoCreditosAvisosBancariosBO();
-		//bo.gerarRelatorioPDF(Util.  formatarMesAnoComBarraParaAnoMes(form.getDataConsulta()));
-		bo.gerarRelatorioPDF(form.getDataConsulta());
+		bo.gerarRelatorioPDF(Util.converteStringParaDate(form.getDataConsulta()));
 		
 		String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_GSAN_RELATORIOS.toString());
 		
@@ -34,5 +34,11 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 		}
 		
 		return null;
+	}
+	
+	public static void main (String [] args) {
+		 String data = "01/06/2015";
+		 
+		 Util.converteStringParaDate(data);
 	}
 }

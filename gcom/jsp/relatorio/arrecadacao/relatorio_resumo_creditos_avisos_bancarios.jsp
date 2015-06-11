@@ -16,12 +16,11 @@
 	<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 	<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 	
-	<html:javascript staticJavascript="false"  formName="RelatorioResumoCreditosAvisosBancariosActionForm" />
+	<html:javascript staticJavascript="false"  formName="GerarRelatorioResumoCreditosAvisosBancariosActionForm" />
 	<script>
 
 		function gerarResumoCreditosAvisosBancarios(){
 		  	var form = document.forms[0];
-		  //	form.action = "/gsan/gerarRelatorioResumoCreditosAvisosBancariosAction.do";
 		  	form.submit();
 		}
 	
