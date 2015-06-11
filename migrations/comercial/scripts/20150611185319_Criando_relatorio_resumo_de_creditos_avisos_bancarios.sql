@@ -10,6 +10,8 @@ VALUES ((nextval('seguranca.seq_operacao')), currval('seguranca.seq_operacao'), 
 
 INSERT INTO seguranca.grupo_func_operacao VALUES (1, currval('seguranca.seq_operacao'), currval('seguranca.seq_funcionalidade'), now());
 
+INSERT INTO seguranca.parametro(id, nome, valor) VALUES (nextval('seguranca.seq_seguranca_parametro'), 'URL_GSAN_RELATORIOS', 'http://hrelatorios.cosanpa.pa.gov.br/relatorios/');
+
 -- //@UNDO
 -- SQL to undo the change goes here.
 
@@ -19,3 +21,5 @@ DELETE FROM seguranca.grupo_func_operacao
 
 DELETE FROM seguranca.operacao WHERE oper_dsoperacao LIKE 'Gerar Resumo Creditos Avisos Bancarios';
 DELETE FROM seguranca.funcionalidade WHERE fncd_dsfuncionalidade LIKE 'Gerar Resumo Creditos Avisos Bancarios';
+
+DELETE FROM seguranca.parametro WHERE nome = 'URL_GSAN_RELATORIOS';
