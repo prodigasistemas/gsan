@@ -21,7 +21,7 @@
 
 		function gerarResumoCreditosAvisosBancarios(){
 		  	var form = document.forms[0];
-		  	form.action = "/gsan/gerarRelatorioResumoCreditosAvisosBancariosAction.do";
+		  //	form.action = "/gsan/gerarRelatorioResumoCreditosAvisosBancariosAction.do";
 		  	form.submit();
 		}
 	
