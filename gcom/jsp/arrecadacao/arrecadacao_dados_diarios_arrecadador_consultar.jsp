@@ -34,12 +34,6 @@
 		
 	}
 	
-	function gerarResumoCreditosAvisosBancarios(){
-	  	var form = document.forms[0];
-	  	form.action = "/gsan/gerarRelatorioResumoCreditosAvisosBancariosAction.do";
-	  	form.submit();
-	}
-
 </script>
 </head>
 <body leftmargin="5" topmargin="5">
@@ -309,12 +303,6 @@
               	</table>
 	            <table width="100%" border="0">
 					<tr>
-						<td align="left">
-							  <div align="left">
-							  	<input type="Button" value="Resumo" onclick="javascript:gerarResumoCreditosAvisosBancarios();" class="bottonRightCol" />
-							  </div>
-						</td>
-						
 						<td align="right">
 							  <div align="right">
 							   <a href="javascript:verificarExibicaoRelatorio();">
