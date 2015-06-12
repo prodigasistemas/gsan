@@ -158,6 +158,7 @@
 		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
 			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosDocumentoAgregadorAction"
 			scope="session" path="/gerarRelatorioDadosDiariosDocumentoAgregadorAction" />
+		
 	</action-mappings>
 
 	<message-resources null="false"

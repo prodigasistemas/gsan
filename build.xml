@@ -30,6 +30,7 @@
 	<property name="JSTL.home" value="lib/JSTL 1.1" />
 	<property name="Quartz.home" value="lib/quartz-1.5.2" />
 	<property name="JavaHelp.home" value="lib/help" />
+	<property name="GsanRelatorios.home" value="lib/gsan-relatorios" />
 	<property name="src" value="src" />
 
 	<path id="project.class.path">
@@ -176,6 +177,9 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${deploy.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${GsanRelatorios.home}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>

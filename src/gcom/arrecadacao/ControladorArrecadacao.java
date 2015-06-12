@@ -141,6 +141,7 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.RepositorioLocalidadeHBM;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
@@ -175,7 +176,6 @@ import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
-import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
@@ -195,7 +195,6 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
-import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
@@ -230,6 +229,7 @@ import gcom.relatorio.arrecadacao.RelatorioMovimentoDebitoAutomaticoBanco;
 import gcom.relatorio.arrecadacao.RelatorioPagamentoEntidadesBeneficentesAnaliticoBean;
 import gcom.relatorio.arrecadacao.RelatorioPagamentoEntidadesBeneficentesSinteticoBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.relatorio.big.RelatorioBIGHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
@@ -52241,5 +52241,27 @@ public class ControladorArrecadacao implements SessionBean {
 		avisoBancario.setArrecadacaoForma(arrecadacaoForma);
 		
 		return avisoBancario;
+	}
+	
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException {
+		try {
+			Collection<NacionalFeriado> feriadosNacionais = repositorioUtil.pesquisarFeriadosNacionais();
+
+			List<ResumoCreditosAvisosBancariosDTO> resumos = repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(data);
+
+			for (ResumoCreditosAvisosBancariosDTO resumo : resumos) {
+				Date dataPagamentoPrevisto = Util.converteStringParaDate(resumo.getDataPagamentoPrevisto());
+
+				while (!Util.ehDiaUtil(dataPagamentoPrevisto, feriadosNacionais, null)) {
+					dataPagamentoPrevisto = Util.adicionarNumeroDiasDeUmaData(dataPagamentoPrevisto, 1);
+
+					resumo.setDataPagamentoPrevisto(Util.formatarData(dataPagamentoPrevisto));
+				}
+			}
+
+			return resumos;
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
 }
