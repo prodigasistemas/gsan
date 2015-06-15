@@ -2113,7 +2113,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosConta[2]);
 				
 				if (anoMes <= referenciaArrecadacao) {
-					Conta conta = buildContaAcrescimoImpontualidade(dadosConta);
+					Conta conta = buildContaAcrescimoImpontualidade(dadosConta, imovel);
 					
 					Date pagamentoContasMenorData = null;
 					Integer idArrecadacaoForma = null;
@@ -2136,7 +2136,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 						
 						BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(conta.getId());
 						
-						Date vencimentoConta = calculaVencimentoConta(conta);
+						Date vencimentoConta = calculaVencimentoConta(conta, existePagamentoClassificadoConta);
 						
 						CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
 								.calcularAcrescimoPorImpontualidade(
@@ -2202,17 +2202,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return colecaoDebitoACobrarInserir;
 	}
 	
-	private Date calculaVencimentoConta(Conta conta) throws ControladorException {
+	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta) throws ControladorException {
 		Date vencimento = conta.getDataVencimentoConta();
 		
 		Fatura fatura = pesquisarFaturaDeConta(conta.getId());
 		
-		if (fatura != null) {
-			Pagamento pagamento = getControladorArrecadacao().pesquisarPagamentoDeConta(conta.getId());
-			
-			if (pagamento.isPagamentoClassificado()) {
-				vencimento = fatura.getVencimento();
-			}
+		if (fatura != null && pagamentoClassificadoConta ) {
+			vencimento = fatura.getVencimento();
 		}
 		
 		return vencimento;
@@ -2250,7 +2246,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 	}
 
-	private Conta buildContaAcrescimoImpontualidade(Object[] dadosConta) {
+	private Conta buildContaAcrescimoImpontualidade(Object[] dadosConta, Imovel imovel) {
 		Conta conta = new Conta();
 		if (dadosConta[0] != null) {
 			conta.setId((Integer) dadosConta[0]);
@@ -2276,6 +2272,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		if (dadosConta[7] != null) {
 			conta.setIndicadorCobrancaMulta((Short) dadosConta[7]);
 		}
+		
+		conta.setImovel(imovel);
+		
 		return conta;
 	}
 
