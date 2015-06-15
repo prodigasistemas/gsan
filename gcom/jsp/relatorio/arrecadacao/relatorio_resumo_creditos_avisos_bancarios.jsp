@@ -19,7 +19,7 @@
 	<html:javascript staticJavascript="false"  formName="GerarRelatorioResumoCreditosAvisosBancariosActionForm" />
 	<script>
 
-		function gerarResumoCreditosAvisosBancarios(){
+		function gerar(){
 		  	var form = document.forms[0];
 		  	form.submit();
 		}
@@ -62,7 +62,7 @@
 				<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 					<tr>
 						<td width="11"><img src="<bean:message key="caminho.imagens"/>parahead_left.gif" border="0" /></td>
-						<td class="parabg">Relatório Resumo de Arrecadação</td>
+						<td class="parabg">Relat&oacute;rio de Resumo de Cr&eacute;ditos dos Avisos Banc&aacute;rios</td>
 						<td width="11" valign="top"><img src="<bean:message key="caminho.imagens"/>parahead_right.gif" border="0" /></td>
 					</tr>
 				</table>
@@ -71,50 +71,39 @@
 
 				<table width="100%" border="0">
 					<tr>
-						<td colspan="3">Informe a data desejada para gerar o relatório</td>
+						<td colspan="3">Informe a data desejada para gerar o relatório:</td>
 					</tr>
+					
 					<tr>
-						<td width="189">
-						<html:text onkeyup="mascaraData(this, event);somente_numero(this);"
-							property="dataConsulta" 
-							size="10" 
-							maxlength="10"
-							onkeypress="javascript:return isCampoNumerico(event);"
-							 /> 
-						<a href="javascript:abrirCalendario('GerarRelatorioResumoCreditosAvisosBancariosActionForm', 'dataConsulta')">
-							<img border="0" 
-								width="16" 
-								height="15"
-								src="<bean:message key="caminho.imagens"/>calendario.gif"
-								width="20" 
-								border="0" 
-								align="absmiddle" 
-								alt="Exibir Calendário" /></a> (dd/mm/aaaa)
-					</td>
-					</tr>
-					<tr>
-						<td> <p>&nbsp;</p> </td>
-						<td colspan="2"></td>
-					</tr>
-				</table>  
-				
-				<table>
-					<tr>
-						<td width="100%">
-							<table width="30%" border="0" align="right" cellpadding="0" cellspacing="2">
-								<tr>
-									<td width="61">		
-										<input type="Button" class="bottonRightCol" value="Gerar Relat&oacute;rio" onclick="javascript:gerarResumoCreditosAvisosBancarios();" class="bottonRightCol" />
-									</td>
-									<td width="82">&nbsp;</td>
-								</tr>
-							</table>
+						<tr><td> <p>&nbsp;</p></td><td colspan="2"></td></tr>
+						<td width="30%"><strong>Data do Cr&eacute;dito Previsto:<font color="#FF0000">*</font></strong></td>
+						<td width="70%">
+							<html:text onkeyup="mascaraData(this, event);somente_numero(this);"
+								property="dataConsulta" 
+								size="10" 
+								maxlength="10"
+								onkeypress="javascript:return isCampoNumerico(event);" /> 
+							<a href="javascript:abrirCalendario('GerarRelatorioResumoCreditosAvisosBancariosActionForm', 'dataConsulta')">
+								<img border="0" 
+									width="16" 
+									height="15"
+									src="<bean:message key="caminho.imagens"/>calendario.gif"
+									width="20" 
+									border="0" 
+									align="absmiddle" 
+									alt="Exibir Calendário" /></a> (dd/mm/aaaa)
 						</td>
 					</tr>
-				</table>
-
-				<p>&nbsp;</p>
-			
+					
+					<tr><td> <p>&nbsp;</p></td><td colspan="2"></td></tr>
+					
+					<tr>
+						<td><div align="left"></div></td>
+						<td>
+							<div align="right"><input type="Button" value="Gerar" onclick="javascript:gerar();" class="bottonRightCol" /></div>
+						</td>
+					</tr>
+				</table>  
 			</td>
 		</tr>
 	</table>

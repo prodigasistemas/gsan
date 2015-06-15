@@ -43,8 +43,8 @@ import gcom.relatorio.arrecadacao.RelatorioAnaliseAvisosBancariosBean;
 import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
-import gcom.relatorio.arrecadacao.resumocreditosavisosbancarios.ResumoCreditosAvisosBancariosDTO;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 

@@ -1,4 +1,4 @@
-package gcom.relatorio.arrecadacao.resumocreditosavisosbancarios;
+package gcom.relatorio.arrecadacao.dto;
 
 import gcom.util.Util;
 

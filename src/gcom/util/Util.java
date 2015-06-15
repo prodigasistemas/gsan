@@ -5,17 +5,21 @@ import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -6411,5 +6415,21 @@ public class Util {
 		output.flush();
 		output.close();
 		input.close();
+	}
+	
+	public static File salvarArquivoDeURL(final String url, final String nome) throws MalformedURLException, IOException {
+		BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+		FileOutputStream out = new FileOutputStream(nome);
+		
+		final byte data[] = new byte[1024];
+		int count;
+		while ((count = in.read(data, 0, 1024)) != -1) {
+			out.write(data, 0, count);
+		}
+		
+		in.close();
+		out.close();
+		
+		return new File(nome);
 	}
 }

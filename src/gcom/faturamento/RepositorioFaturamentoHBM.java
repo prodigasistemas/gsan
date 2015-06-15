@@ -6377,18 +6377,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 *             Erro no hibernate
 	 */
 	public Collection<CreditoARealizar> pesquisarCreditosARealizarCanceladosPorMesAnoReferenciaContabil(
-			int anoMesReferenciaContabil, Integer idSetorComercial)
-			throws ErroRepositorioException {
+			int anoMesReferenciaContabil, Integer idSetorComercial) throws ErroRepositorioException {
 		Collection<CreditoARealizar> retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
-
-		// cria a variável que vai conter o hql
 		String consulta;
 
 		try {
-			// constroi o hql
 			consulta = "select crar "
 					+ "from CreditoARealizar crar "
 					+ "inner join crar.imovel imo "
@@ -6400,30 +6395,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " or "
 					+ "((crar.numeroPrestacaoCredito = (crar.numeroPrestacaoRealizada + coalesce(crar.numeroParcelaBonus,0))) "
 					+ "and crar.valorResidualMesAnterior = 0 and (crar.valorResidualConcedidoMes = 0 or crar.valorResidualConcedidoMes is null) "
-
-					/*
-					 * Colocado por Raphael Rossiter em 30/11/2009 Analista:
-					 * Aryed
-					 */
 					+ " and crar.anoMesReferenciaPrestacao <= :anoMesReferenciaContabil)";
 
-			// executa o hql
-			retorno = session.createQuery(consulta).setInteger(
-					"idSetorComercial", idSetorComercial).setInteger(
-					"anoMesReferenciaContabil", anoMesReferenciaContabil)
-					.setInteger("idSituacaoCancelada",
-							DebitoCreditoSituacao.CANCELADA).setInteger(
-							"idSituacaoParcelada",
-							DebitoCreditoSituacao.PARCELADA).list();
+			retorno = session.createQuery(consulta)
+							.setInteger("idSetorComercial", idSetorComercial)
+							.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+							.setInteger("idSituacaoCancelada",DebitoCreditoSituacao.CANCELADA)
+							.setInteger("idSituacaoParcelada",DebitoCreditoSituacao.PARCELADA).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-
 		return retorno;
 	}
 
@@ -20815,47 +20799,33 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<Conta> retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a variável que vai conter o hql
 		String consulta;
 
 		try {
-			// constroi o hql
 			consulta = "select cnta "
 					+ "from Conta cnta "
 					+ "inner join cnta.imovel imo "
 					+ "where imo.setorComercial =:idSetorComercial "
 					+ "and cnta.referenciaContabil <= :anoMesReferenciaContabil "
-					+ "and ((cnta.debitoCreditoSituacaoAtual = :situacaoCancelada or cnta.debitoCreditoSituacaoAtual = :situacaoRetificacao or cnta.debitoCreditoSituacaoAtual = :situacaoParcelada or cnta.debitoCreditoSituacaoAtual = :situacaoDebitoPrescrito or cnta.debitoCreditoSituacaoAtual = :situacaoDebitoPrescritoContasIncluidas) "
+					+ "and ((cnta.debitoCreditoSituacaoAtual = :cancelada or cnta.debitoCreditoSituacaoAtual = :retificacao or cnta.debitoCreditoSituacaoAtual = :parcelada or cnta.debitoCreditoSituacaoAtual = :debitoPrescrito or cnta.debitoCreditoSituacaoAtual = :debitoPrescritoContasIncluidas) "
 					+ "or (cnta.valorAgua + cnta.valorEsgoto + cnta.debitos - cnta.valorCreditos - cnta.valorImposto = 0) )";
 
-			// executa o hql
-			retorno = session.createQuery(consulta).setInteger(
-					"idSetorComercial", idSetorComercial).setInteger(
-					"anoMesReferenciaContabil", anoMesReferenciaContabil)
-					.setInteger("situacaoCancelada",
-							DebitoCreditoSituacao.CANCELADA).setInteger(
-							"situacaoRetificacao",
-							DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-					.setInteger("situacaoParcelada",
-							DebitoCreditoSituacao.PARCELADA).setInteger(
-							"situacaoDebitoPrescrito",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**
-					 * Alteração necessária para as contas incluidas canceladas 
-					 * por débito prescrito também possm ir pra histórico*/
-					.setInteger("situacaoDebitoPrescritoContasIncluidas",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
-					.setMaxResults(quantidadeRegistros).setFirstResult(
-							numeroIndice).list();
+			retorno = session.createQuery(consulta)
+					.setInteger("idSetorComercial", idSetorComercial)
+					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+					.setInteger("cancelada",DebitoCreditoSituacao.CANCELADA)
+					.setInteger("retificacao",DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+					.setInteger("parcelada",DebitoCreditoSituacao.PARCELADA)
+					.setInteger("debitoPrescrito",DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					.setInteger("debitoPrescritoContasIncluidas",DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setMaxResults(quantidadeRegistros)
+					.setFirstResult(numeroIndice).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21084,7 +21054,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
-	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(IConta conta) throws ErroRepositorioException {
+	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(Integer idConta) throws ErroRepositorioException {
 
 		Collection<ICreditoRealizado> retorno = null;
 
@@ -21097,12 +21067,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join crrz.conta cnta "
 					+ "INNER JOIN FETCH crrz.creditoTipo crtp "
 					+ "LEFT JOIN FETCH crrz.creditoARealizarGeral crgr "
-					+ "where cnta.imovel.id = :idImovel "
-					+ " and cnta.referencia = :referencia "
+					+ "where cnta.id = :idConta "
 					+ "ORDER BY crtp.id, crrz.anoMesReferenciaCredito ";
 			retorno = session.createQuery(consulta)
-					.setInteger("idImovel", conta.getImovel().getId())
-					.setInteger("referencia", conta.getReferencia())
+					.setInteger("idConta", idConta)
 					.list();
 			
 
