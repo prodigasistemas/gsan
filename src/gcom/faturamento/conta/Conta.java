@@ -920,6 +920,28 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return getValorTotalContaBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP);	
 	}
 
+	public BigDecimal getValorTotalContaSemImposto() {
+		BigDecimal valorTotalConta = new BigDecimal("0.00");
+
+		if (this.getValorAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorAgua());
+		}
+
+		if (this.getValorEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
+		}
+
+		if (this.getDebitos() != null) {
+			valorTotalConta = valorTotalConta.add(this.getDebitos());
+		}
+
+		if (this.getValorCreditos() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
+		}
+
+		return valorTotalConta.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
 	public String getFormatarAnoMesParaMesAno() {
 
 		String anoMesRecebido = "" + this.getReferencia();

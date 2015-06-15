@@ -52,7 +52,6 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
-import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
@@ -133,27 +132,13 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador 
- */
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	protected static IRepositorioFaturamento instancia;
 
-	/**
-	 * 
-	 * Construtor da classe RepositorioFaturamentoHBM
-	 */
 	protected RepositorioFaturamentoHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instance
-	 * 
-	 * @return O valor de instance
-	 */
 	public static RepositorioFaturamentoHBM getInstancia() {
 		String dialect = HibernateUtil.getDialect();
 		
@@ -175,10 +160,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * tabela de faturamento_grupo - caso exista o id passado como parâmetro na
 	 * tabela, retorna true, caso contrário retorna false
 	 * 
-	 * @param Integer
-	 *            id - id de um FaturamentoGrupo
-	 * @return boolean - true para existir o id na tabela, false para não
-	 *         existir
+	 * @param Integer id - id de um FaturamentoGrupo
+	 * @return boolean - true para existir o id na tabela, false para não existir
 	 */
 	public boolean verificarExistenciaIdGrupoFaturamento(Integer id)
 			throws ErroRepositorioException {
@@ -199,7 +182,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -239,7 +221,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"imovel", anoMesReferencia).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -285,10 +266,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					faturamentoAtividade.getId()).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -378,7 +357,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					10 * numeroPagina).setMaxResults(10).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -426,7 +405,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) session.createQuery(consulta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -462,7 +440,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = session.createQuery(consulta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -503,7 +480,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			// fecha a sessão
@@ -538,10 +514,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -580,10 +554,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -611,10 +583,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setDate("dataLeituraAtual", dataLeituraAtual).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -651,10 +621,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -683,10 +651,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -715,10 +681,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							Subcategoria.SUBCATEGORIA_ZERO.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -744,10 +708,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					consumoTarifaCategoria.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -789,10 +751,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -827,10 +787,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -870,10 +828,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							idConsumoTarifaVigencia).setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -919,10 +875,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -960,10 +914,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1008,10 +960,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1045,10 +995,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					imovel.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1080,10 +1028,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -1115,10 +1061,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -1252,10 +1196,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -1326,10 +1268,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -1415,10 +1355,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -7930,23 +7868,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			String consulta = "select imovel.id,"
-					+ // 0
-					"localidade.id,"
-					+ // 1
-					"setorComercial.codigo,"
-					+ // 2
-					"quadra.numeroQuadra,"
-					+ // 3
-					"imovel.lote,"
-					+ // 4
-					"imovel.subLote,"
-					+ // 5
-					"rota.id, "
-					+ // 6
-					"quadra.id, "
-					+ // 7
-					"imovel.indicadorDebitoConta " // 8
+			String consulta = "select imovel.id," // 0
+					+ "localidade.id," // 1
+					+ "setorComercial.codigo," // 2
+					+ "quadra.numeroQuadra," // 3
+					+ "imovel.lote," // 4
+					+ "imovel.subLote," // 5
+					+ "rota.id, " // 6
+					+ "quadra.id, " // 7
+					+ "imovel.indicadorDebitoConta " // 8
 
 					+ "from Imovel imovel "
 					+ "left join imovel.localidade localidade "
@@ -23871,8 +23801,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Object[]
 	 * @throws ErroRepositorioException
 	 */
-	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(
-			Integer conta, Integer idImovel, Integer anoMesReferenciaConta)
+	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(Conta conta)
 			throws ErroRepositorioException {
 
 		Object[] retorno = null;
@@ -23894,8 +23823,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "WHERE cnta.id = :idConta "
 					+ "GROUP BY pgmt.arrecadacaoForma.id " + "ORDER BY 2 ";
 
-			pesquisa1 = (Object[]) session.createQuery(consulta).setInteger(
-					"idConta", conta).setMaxResults(1).uniqueResult();
+			pesquisa1 = (Object[]) session.createQuery(consulta).setInteger("idConta", conta.getId()).setMaxResults(1).uniqueResult();
 
 			consulta = "SELECT pgmt.arrecadacaoForma.id , MIN(pgmt.dataPagamento) "
 					+ "FROM Pagamento pgmt "
@@ -23905,9 +23833,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "WHERE pgmt.imovel.id= :idImovel and pgmt.anoMesReferenciaPagamento = :anoMesReferenciaConta "
 					+ "GROUP BY pgmt.arrecadacaoForma.id " + "ORDER BY 2 ";
 
-			pesquisa2 = (Object[]) session.createQuery(consulta).setInteger(
-					"idImovel", idImovel).setInteger("anoMesReferenciaConta",
-					anoMesReferenciaConta).setMaxResults(1).uniqueResult();
+			pesquisa2 = (Object[]) session.createQuery(consulta)
+					.setInteger("idImovel", conta.getImovel().getId())
+					.setInteger("anoMesReferenciaConta",conta.getReferencia()).setMaxResults(1).uniqueResult();
 
 			if (pesquisa1 != null) {
 				data1 = (Date) pesquisa1[1];
@@ -61413,6 +61341,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+		return retorno;
+	}
+	
+	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		Fatura retorno = null;
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT fatura FROM FaturaItem faturaItem ")
+					.append("INNER JOIN faturaItem.fatura fatura ")
+					.append("WHERE faturaItem.contaGeral.id = :idConta ");
+
+			retorno = (Fatura) session.createQuery(consulta.toString()).setInteger("idConta",idConta.intValue()).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
 		return retorno;
 	}
 }

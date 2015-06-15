@@ -3,6 +3,7 @@ package gcom.faturamento;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -31,8 +32,10 @@ import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaTipo;
+import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
+import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.micromedicao.FiltroLeituraSituacao;
@@ -1885,11 +1888,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(
-			Collection rotas, Short indicadorGeracaoMulta,
-			Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
-			int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao)
-			throws ControladorException {
+	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(Collection rotas, Short indicadorMulta, Short indicadorJuros, 
+			Short indicadorAtualizacao, int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
@@ -1898,462 +1898,43 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.ROTA, rota.getId());
 
-			Collection imoveisPorRota = null;
-			Collection colecaoDebitoACobrarInserir = new ArrayList();
-			Collection colecaoDebitoACobrarCategoriaInserir = new ArrayList();
-
-			imoveisPorRota = this.pesquisarImovelGerarAcrescimosImpontualidade(rota);
-
+			Collection imoveisPorRota = this.pesquisarImovelGerarAcrescimosImpontualidade(rota);
+			Collection<DebitoACobrar> debitosACobrarInserir = new ArrayList<DebitoACobrar>();
+			Collection<DebitoACobrarCategoria> debitosACobrarCategoriaInserir = new ArrayList<DebitoACobrarCategoria>();
+			
 			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
-
-			Integer anoMesReferenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
-			Integer anoMesReferenciaFaturamento = sistemaParametros.getAnoMesFaturamento();
 			Short codigoEmpresaFebraban = sistemaParametros.getCodigoEmpresaFebraban();
 
 			Iterator imovelPorRotaIterator = imoveisPorRota.iterator();
 
-			Map<Integer, Categoria> mapImovelPrincipalCategoria = this.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota);
+			Map<Integer, Categoria> mapPrincipalCategoriaImoveis = this.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota);
 
 			Map<Integer, Short> mapIndicadorAcrescimoCliente = this.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
 
 			while (imovelPorRotaIterator.hasNext()) {
-				Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
+				Imovel imovel = buildImovelAcrescimoImpontualidade(imovelPorRotaIterator);
 
-				Imovel imovel = new Imovel();
-				if (arrayImoveisPorRota[0] != null) {
-					imovel.setId((Integer) arrayImoveisPorRota[0]);
-				}
-				if (arrayImoveisPorRota[4] != null) {
-					imovel.setLote((Short) arrayImoveisPorRota[4]);
-				}
-				if (arrayImoveisPorRota[5] != null) {
-					imovel.setSubLote((Short) arrayImoveisPorRota[5]);
-				}
+				Categoria principalCategoria = mapPrincipalCategoriaImoveis.get(imovel.getId());
 
-				Localidade localidade = new Localidade();
-				if (arrayImoveisPorRota[1] != null) {
-					localidade.setId((Integer) arrayImoveisPorRota[1]);
-					imovel.setLocalidade(localidade);
-				}
+				boolean cobrarAcrescimo = verificarCondicoesImovelCobrarAcrescimo(indicadorEncerrandoArrecadacao, mapIndicadorAcrescimoCliente, imovel, principalCategoria);
 
-				Quadra quadra = new Quadra();
-				if (arrayImoveisPorRota[3] != null) {
-					Integer numeroQuadra = (Integer) arrayImoveisPorRota[3];
-					Integer idQuadra = (Integer) arrayImoveisPorRota[7];
-					quadra.setId(idQuadra);
-					quadra.setNumeroQuadra(numeroQuadra);
-					imovel.setQuadra(quadra);
-				}
+				if (cobrarAcrescimo) {
+					
+					debitosACobrarInserir = gerarAcrescimosConta(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel, indicadorEncerrandoArrecadacao);
+					debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosACobrarInserir));
 
-				Integer setorComercial = null;
-				if (arrayImoveisPorRota[2] != null) {
-					setorComercial = (Integer) arrayImoveisPorRota[2];
-				}
-
-				if (arrayImoveisPorRota[8] != null) {
-					imovel.setIndicadorDebitoConta((Short) arrayImoveisPorRota[8]);
-				}
-
-				Categoria principalCategoria = mapImovelPrincipalCategoria.get(imovel.getId());
-
-				boolean flagProximoImovel = false;
-
-				if (principalCategoria.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.NAO)) {
-					flagProximoImovel = true;
-				}
-
-				if ((principalCategoria != null && principalCategoria.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.ENCERRAMENTO_ARRECADACAO))
-						&& !indicadorEncerrandoArrecadacao) {
-					flagProximoImovel = true;
-				}
-
-				Short indicadorCobrancaAcrescimos = mapIndicadorAcrescimoCliente.get(imovel.getId());
-				if (indicadorCobrancaAcrescimos != null	&& indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
-					flagProximoImovel = true;
-				}
-
-				if (indicadorCobrancaAcrescimos != null && (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
-					flagProximoImovel = true;
-				}
-
-				if (!flagProximoImovel) {
-					Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(anoMesReferenciaArrecadacao);
-
-					Collection<Integer> colecaoIdsContasAtualizarIndicadorMulta = new ArrayList();
-
-					Collection colecaoContaImovel = null;
-
-					if (!indicadorEncerrandoArrecadacao) {
-						colecaoContaImovel = repositorioFaturamento
-								.obterContasImovel(imovel.getId(),
-										DebitoCreditoSituacao.NORMAL,
-										DebitoCreditoSituacao.INCLUIDA,
-										DebitoCreditoSituacao.RETIFICADA,
-										dataAnoMesReferenciaUltimoDia);
-					} else {
-						colecaoContaImovel = repositorioFaturamento
-								.obterContasImovelComPagamento(imovel.getId(),
-										DebitoCreditoSituacao.NORMAL,
-										DebitoCreditoSituacao.INCLUIDA,
-										DebitoCreditoSituacao.RETIFICADA,
-										dataAnoMesReferenciaUltimoDia,
-										anoMesReferenciaArrecadacao);
-					}
-
-					Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(
-									colecaoContaImovel,	anoMesReferenciaArrecadacao);
-
-					Short numeroPrestacaoDebito = 1;
-					Short numeroPrestacaoCobradas = 0;
-
-					if (!Util.isVazioOrNulo(colecaoContaImovel)) {
-
-						Iterator contasIterator = colecaoContaImovel.iterator();
-
-						while (contasIterator.hasNext()) {
-							Object[] dadosConta = (Object[]) contasIterator.next();
-
-							Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosConta[2]);
-
-							if (anoMes <= anoMesReferenciaArrecadacao) {
-
-								Integer idConta = (Integer) dadosConta[0];
-								Conta conta = new Conta();
-								if (dadosConta[0] != null) {
-									conta.setId((Integer) dadosConta[0]);
-								}
-								if (dadosConta[1] != null) {
-									conta.setReferencia((Integer) dadosConta[1]);
-								}
-								if (dadosConta[2] != null) {
-									conta.setDataVencimentoConta((Date) dadosConta[2]);
-								}
-								if (dadosConta[3] != null) {
-									conta.setValorAgua((BigDecimal) dadosConta[3]);
-								}
-								if (dadosConta[4] != null) {
-									conta.setValorEsgoto((BigDecimal) dadosConta[4]);
-								}
-								if (dadosConta[5] != null) {
-									conta.setDebitos((BigDecimal) dadosConta[5]);
-								}
-								if (dadosConta[6] != null) {
-									conta.setValorCreditos((BigDecimal) dadosConta[6]);
-								}
-								if (dadosConta[7] != null) {
-									conta.setIndicadorCobrancaMulta((Short) dadosConta[7]);
-								}
-
-								Date pagamentoContasMenorData = null;
-								Integer idArrecadacaoForma = null;
-
-								Object[] arrayPagamentoContasMenorData = repositorioFaturamento
-										.obterArrecadacaoFormaPagamentoContasMenorData(
-												idConta, imovel.getId(), conta.getReferencia());
-
-								if (arrayPagamentoContasMenorData != null) {
-									idArrecadacaoForma = (Integer) arrayPagamentoContasMenorData[0];
-									pagamentoContasMenorData = (Date) arrayPagamentoContasMenorData[1];
-								}
-
-								if (idArrecadacaoForma == null
-										|| (idArrecadacaoForma != null && !idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO))) {
-
-									boolean indicadorExistePagamentoClassificadoConta;
-									if (mapIndicadorExistePagamentoConta.containsKey(idConta)) {
-										indicadorExistePagamentoClassificadoConta = true;
-									} else {
-										indicadorExistePagamentoClassificadoConta = false;
-									}
-
-									CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
-
-									BigDecimal valorConta = conta
-											.getValorAgua()
-											.add(conta.getValorEsgoto())
-											.add(conta.getDebitos())
-											.subtract(conta.getValorCreditos());
-
-									BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(idConta);
-
-									calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
-											.calcularAcrescimoPorImpontualidade(
-													conta.getReferencia(),
-													conta.getDataVencimentoConta(),
-													pagamentoContasMenorData,
-													valorConta,
-													valorMultasCobradas,
-													conta.getIndicadorCobrancaMulta(),
-													"" + anoMesReferenciaArrecadacao,
-													conta.getId(),
-													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-
-									DebitoTipo debitoTipo = null;
-
-									if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
-
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
-
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao,
-														imovel,
-														localidade,
-														quadra,
-														setorComercial,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorMulta(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
-
-										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-
-										colecaoDebitoACobrarInserir.add(debitoACobrar);
-										colecaoDebitoACobrarCategoriaInserir.addAll(
-												this.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
-									}
-
-									if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
-
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.JUROS_MORA);
-
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao,
-														imovel,
-														localidade,
-														quadra,
-														setorComercial,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorJurosMora(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
-
-										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-
-										colecaoDebitoACobrarInserir.add(debitoACobrar);
-										colecaoDebitoACobrarCategoriaInserir.addAll(
-												this.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
-									}
-
-									if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
-
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
-
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao,
-														imovel,
-														localidade,
-														quadra,
-														setorComercial,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
-
-										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-
-										colecaoDebitoACobrarInserir.add(debitoACobrar);
-										colecaoDebitoACobrarCategoriaInserir.addAll(this
-												.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
-									}
-								}
-							} 
-						} 
-					} 
-
-					if (colecaoIdsContasAtualizarIndicadorMulta != null && !colecaoIdsContasAtualizarIndicadorMulta.isEmpty()) {
-						repositorioFaturamento.atualizarIndicadorMultaDeConta(colecaoIdsContasAtualizarIndicadorMulta);
-					}
-
-					Collection colecaoGuiasPagamentoImovel = null;
-					Collection<Integer> colecaoIdsGuiasPagamentosAtualizarIndicadorMulta = new ArrayList();
-
-					colecaoGuiasPagamentoImovel = repositorioFaturamento
-							.obterGuiasPagamentoImovel(imovel.getId(),
-									DebitoCreditoSituacao.NORMAL,
-									DebitoCreditoSituacao.INCLUIDA,
-									DebitoCreditoSituacao.RETIFICADA,
-									anoMesReferenciaArrecadacao);
-
-					if (!Util.isVazioOrNulo(colecaoGuiasPagamentoImovel)) {
-
-						Iterator guiasPagamentoIterator = colecaoGuiasPagamentoImovel.iterator();
-
-						while (guiasPagamentoIterator.hasNext()) {
-							Object[] dadosGuiasPagamento = (Object[]) guiasPagamentoIterator.next();
-
-							Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosGuiasPagamento[2]);
-
-							if (anoMes <= anoMesReferenciaArrecadacao) {
-
-								GuiaPagamento guiaPagamento = new GuiaPagamento();
-								if (dadosGuiasPagamento[0] != null) {
-									guiaPagamento.setId((Integer) dadosGuiasPagamento[0]);
-								}
-								if (dadosGuiasPagamento[1] != null) {
-									guiaPagamento.setAnoMesReferenciaContabil((Integer) dadosGuiasPagamento[1]);
-								}
-								if (dadosGuiasPagamento[2] != null) {
-									guiaPagamento.setDataVencimento((Date) dadosGuiasPagamento[2]);
-								}
-								if (dadosGuiasPagamento[3] != null) {
-									guiaPagamento.setValorDebito((BigDecimal) dadosGuiasPagamento[3]);
-								}
-								if (dadosGuiasPagamento[4] != null) {
-									guiaPagamento.setIndicadoCobrancaMulta((Short) dadosGuiasPagamento[4]);
-								}
-
-								DebitoTipo debitoTipoGuiaPagamento = new DebitoTipo();
-								if (dadosGuiasPagamento[5] != null) {
-									debitoTipoGuiaPagamento.setId((Integer) dadosGuiasPagamento[5]);
-									guiaPagamento.setDebitoTipo(debitoTipoGuiaPagamento);
-								}
-
-								Date menorDataPagamento = repositorioCobranca
-										.pesquisarMenorDataPagamentoGuiaPagamento(
-												guiaPagamento.getId(), imovel
-												.getId(), guiaPagamento.getDebitoTipo().getId());
-
-								boolean indicadorExistePagamentoClassificadoGuiaPagamento = repositorioFaturamento
-										.obterIndicadorPagamentosClassificadosGuiaPagamentoReferenciaMenorIgualAtual(
-												guiaPagamento.getId(), imovel
-														.getId(), guiaPagamento
-														.getDebitoTipo()
-														.getId(),
-												anoMesReferenciaArrecadacao);
-
-								CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
-								calcularAcrescimoPorImpontualidade = this
-										.getControladorCobranca()
-										.calcularAcrescimoPorImpontualidade(
-												guiaPagamento.getAnoMesReferenciaContabil(),
-												guiaPagamento.getDataVencimento(),
-												menorDataPagamento,
-												guiaPagamento.getValorDebito(),
-												BigDecimal.ZERO,
-												guiaPagamento.getIndicadoCobrancaMulta(),
-												""+ anoMesReferenciaArrecadacao,
-												null,
-												ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-
-								DebitoTipo debitoTipo = null;
-
-								if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
-										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-
-									debitoTipo = new DebitoTipo();
-									debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
-
-									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel, localidade, quadra,
-											setorComercial,
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
-											calcularAcrescimoPorImpontualidade.getValorMulta(),
-											debitoTipo, Usuario.USUARIO_BATCH);
-
-									colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
-
-									colecaoDebitoACobrarInserir.add(debitoACobrar);
-									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-													debitoACobrar,debitoACobrar.getImovel()));
-								}
-
-								if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
-										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-
-									debitoTipo = new DebitoTipo();
-									debitoTipo.setId(DebitoTipo.JUROS_MORA);
-
-									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel, localidade, quadra,
-											setorComercial,
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
-											calcularAcrescimoPorImpontualidade.getValorJurosMora(),
-											debitoTipo, Usuario.USUARIO_BATCH);
-
-									colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
-
-									colecaoDebitoACobrarInserir.add(debitoACobrar);
-									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-												debitoACobrar,debitoACobrar.getImovel()));
-								}
-
-								if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-
-									debitoTipo = new DebitoTipo();
-									debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
-
-									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel,
-											localidade,
-											quadra,
-											setorComercial,
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
-											calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria(),
-											debitoTipo, Usuario.USUARIO_BATCH);
-
-									colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
-
-									colecaoDebitoACobrarInserir.add(debitoACobrar);
-									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-												debitoACobrar,debitoACobrar.getImovel()));
-								}
-							}
-						}
-					}
-
-					if (colecaoIdsGuiasPagamentosAtualizarIndicadorMulta != null
-							&& !colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.isEmpty()) {
-						repositorioFaturamento.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
-					}
+					Collection<DebitoACobrar> debitosGuias = gerarAcrescimosGuiaPagamento(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel); 
+					debitosACobrarInserir.addAll(debitosGuias);
+					debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosGuias));
 				}
 			}
 
-			if (colecaoDebitoACobrarInserir != null && !colecaoDebitoACobrarInserir.isEmpty()) {
-				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarInserir);
+			if (debitosACobrarInserir != null && !debitosACobrarInserir.isEmpty()) {
+				this.getControladorBatch().inserirColecaoObjetoParaBatch(debitosACobrarInserir);
 			}
 
-			if (colecaoDebitoACobrarCategoriaInserir != null && !colecaoDebitoACobrarCategoriaInserir.isEmpty()) {
-				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarCategoriaInserir);
+			if (debitosACobrarCategoriaInserir != null && !debitosACobrarCategoriaInserir.isEmpty()) {
+				this.getControladorBatch().inserirColecaoObjetoParaBatch(debitosACobrarCategoriaInserir);
 			}
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
@@ -2366,6 +1947,393 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throw new EJBException(e);
 		}
 
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Collection<DebitoACobrar> gerarAcrescimosGuiaPagamento(Short indicadorMulta, Short indicadorJuros, Short indicadorAtualizacao,
+			Imovel imovel) throws ErroRepositorioException, ControladorException {
+		Short numeroPrestacaoDebito = 1;
+		Short numeroPrestacaoCobradas = 0;
+		
+		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+		Integer referenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
+		Integer referenciaFaturamento = sistemaParametros.getAnoMesFaturamento();
+		
+		Collection<Integer> colecaoIdsGuiasPagamentosAtualizarIndicadorMulta = new ArrayList<Integer>();
+		Collection<DebitoACobrar> debitosACobrarInserir = new ArrayList<DebitoACobrar>();
+
+		Collection guiasPagamentoImovel = repositorioFaturamento
+				.obterGuiasPagamentoImovel(imovel.getId(),
+						DebitoCreditoSituacao.NORMAL,
+						DebitoCreditoSituacao.INCLUIDA,
+						DebitoCreditoSituacao.RETIFICADA,
+						referenciaArrecadacao);
+		
+
+		if (!Util.isVazioOrNulo(guiasPagamentoImovel)) {
+
+			
+			Iterator guiasPagamentoIterator = guiasPagamentoImovel.iterator();
+			
+			while (guiasPagamentoIterator.hasNext()) {
+				Object[] dadosGuiasPagamento = (Object[]) guiasPagamentoIterator.next();
+				
+				Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosGuiasPagamento[2]);
+				
+				if (anoMes <= referenciaArrecadacao) {
+					
+					GuiaPagamento guiaPagamento = new GuiaPagamento();
+					if (dadosGuiasPagamento[0] != null) {
+						guiaPagamento.setId((Integer) dadosGuiasPagamento[0]);
+					}
+					if (dadosGuiasPagamento[1] != null) {
+						guiaPagamento.setAnoMesReferenciaContabil((Integer) dadosGuiasPagamento[1]);
+					}
+					if (dadosGuiasPagamento[2] != null) {
+						guiaPagamento.setDataVencimento((Date) dadosGuiasPagamento[2]);
+					}
+					if (dadosGuiasPagamento[3] != null) {
+						guiaPagamento.setValorDebito((BigDecimal) dadosGuiasPagamento[3]);
+					}
+					if (dadosGuiasPagamento[4] != null) {
+						guiaPagamento.setIndicadoCobrancaMulta((Short) dadosGuiasPagamento[4]);
+					}
+					
+					DebitoTipo debitoTipoGuiaPagamento = new DebitoTipo();
+					if (dadosGuiasPagamento[5] != null) {
+						debitoTipoGuiaPagamento.setId((Integer) dadosGuiasPagamento[5]);
+						guiaPagamento.setDebitoTipo(debitoTipoGuiaPagamento);
+					}
+					
+					Date menorDataPagamento = repositorioCobranca
+							.pesquisarMenorDataPagamentoGuiaPagamento(
+									guiaPagamento.getId(), imovel
+									.getId(), guiaPagamento.getDebitoTipo().getId());
+					
+					boolean indicadorExistePagamentoClassificadoGuiaPagamento = repositorioFaturamento
+							.obterIndicadorPagamentosClassificadosGuiaPagamentoReferenciaMenorIgualAtual(
+									guiaPagamento.getId(), imovel
+									.getId(), guiaPagamento
+									.getDebitoTipo()
+									.getId(),
+									referenciaArrecadacao);
+					
+					CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
+					calcularAcrescimoPorImpontualidade = this
+							.getControladorCobranca()
+							.calcularAcrescimoPorImpontualidade(
+									guiaPagamento.getAnoMesReferenciaContabil(),
+									guiaPagamento.getDataVencimento(),
+									menorDataPagamento,
+									guiaPagamento.getValorDebito(),
+									BigDecimal.ZERO,
+									guiaPagamento.getIndicadoCobrancaMulta(),
+									""+ referenciaArrecadacao,
+									null,
+									ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
+					
+					DebitoTipo debitoTipo = null;
+					BigDecimal valorDebito = new BigDecimal(0.00);
+					
+					if (indicadorMulta.equals(ConstantesSistema.SIM)
+							&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
+							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
+						
+						debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
+						valorDebito = calcularAcrescimoPorImpontualidade.getValorMulta();
+					}
+					
+					if (indicadorJuros.equals(ConstantesSistema.SIM)
+							&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
+							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
+						
+						debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
+						valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
+					}
+					
+					if (indicadorAtualizacao.equals(ConstantesSistema.SIM)
+							&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
+							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
+						
+						debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
+						valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
+					}
+					
+					if (valorDebito.intValue() > 0) {
+						DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
+								referenciaArrecadacao,
+								referenciaFaturamento,
+								imovel, 
+								numeroPrestacaoDebito,
+								numeroPrestacaoCobradas,
+								guiaPagamento,
+								valorDebito,
+								debitoTipo, Usuario.USUARIO_BATCH);
+						
+						colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
+						
+						debitosACobrarInserir.add(debitoACobrar);
+					}
+				}
+			}
+			
+			if (colecaoIdsGuiasPagamentosAtualizarIndicadorMulta != null && !colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.isEmpty()) {
+				repositorioFaturamento.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
+			}
+		}
+		return debitosACobrarInserir;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Collection<DebitoACobrar> gerarAcrescimosConta(Short indicadorGeracaoMulta, Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
+			Imovel imovel, boolean indicadorEncerrandoArrecadacao) throws ErroRepositorioException, ControladorException {
+		
+		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+		Integer referenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
+
+		Collection colecaoContaImovel = obterContasParaGerarAcrescimos(referenciaArrecadacao, imovel, indicadorEncerrandoArrecadacao);
+		
+		Iterator contasIterator = colecaoContaImovel.iterator();
+
+		Collection<DebitoACobrar> colecaoDebitoACobrarInserir = new ArrayList<DebitoACobrar>();
+		
+		Collection<Integer> colecaoIdsContasAtualizarIndicadorMulta = new ArrayList<Integer>();
+		
+		
+		if (!Util.isVazioOrNulo(colecaoContaImovel)) { 
+			@SuppressWarnings("unchecked")
+			Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(colecaoContaImovel,	referenciaArrecadacao);
+			
+			Short numeroPrestacaoDebito = 1;
+			Short numeroPrestacaoCobradas = 0;
+			
+			while (contasIterator.hasNext()) {
+				Object[] dadosConta = (Object[]) contasIterator.next();
+				
+				Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosConta[2]);
+				
+				if (anoMes <= referenciaArrecadacao) {
+					Conta conta = buildContaAcrescimoImpontualidade(dadosConta);
+					
+					Date pagamentoContasMenorData = null;
+					Integer idArrecadacaoForma = null;
+					
+					Object[] arrayPagamentoContasMenorData = repositorioFaturamento.obterArrecadacaoFormaPagamentoContasMenorData(conta);
+					
+					if (arrayPagamentoContasMenorData != null) {
+						idArrecadacaoForma = (Integer) arrayPagamentoContasMenorData[0];
+						pagamentoContasMenorData = (Date) arrayPagamentoContasMenorData[1];
+					}
+					
+					if (idArrecadacaoForma == null || (idArrecadacaoForma != null && !idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO))) {
+						
+						boolean existePagamentoClassificadoConta;
+						if (mapIndicadorExistePagamentoConta.containsKey(conta.getId())) {
+							existePagamentoClassificadoConta = true;
+						} else {
+							existePagamentoClassificadoConta = false;
+						}
+						
+						BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(conta.getId());
+						
+						Date vencimentoConta = calculaVencimentoConta(conta);
+						
+						CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
+								.calcularAcrescimoPorImpontualidade(
+										conta.getReferencia(),
+										//conta.getDataVencimentoConta(),
+										vencimentoConta,
+										pagamentoContasMenorData,
+										conta.getValorTotalContaSemImposto(),
+										valorMultasCobradas,
+										conta.getIndicadorCobrancaMulta(),
+										"" + referenciaArrecadacao,
+										conta.getId(),
+										ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
+						
+						DebitoTipo debitoTipo = null;
+						BigDecimal valorDebito = new BigDecimal(0.00);
+						
+						if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
+								&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
+								&& existePagamentoClassificadoConta) {
+							
+							debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
+							valorDebito = calcularAcrescimoPorImpontualidade.getValorMulta();
+						}
+						
+						if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
+								&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
+								&& existePagamentoClassificadoConta) {
+							
+							debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
+							valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
+						}
+						
+						if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
+								&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
+								&& existePagamentoClassificadoConta) {
+							
+							debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
+							valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
+						}
+						
+						if (valorDebito.intValue() > 0) {
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+									referenciaArrecadacao, imovel,
+									numeroPrestacaoDebito,
+									numeroPrestacaoCobradas,
+									conta, valorDebito, debitoTipo,
+									Usuario.USUARIO_BATCH);
+							
+							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
+							
+							colecaoDebitoACobrarInserir.add(debitoACobrar);
+						}
+					}
+				} 
+			}
+			
+			if (colecaoIdsContasAtualizarIndicadorMulta != null && !colecaoIdsContasAtualizarIndicadorMulta.isEmpty()) {
+				repositorioFaturamento.atualizarIndicadorMultaDeConta(colecaoIdsContasAtualizarIndicadorMulta);
+			}
+		}
+		
+		return colecaoDebitoACobrarInserir;
+	}
+	
+	private Date calculaVencimentoConta(Conta conta) throws ControladorException {
+		Date vencimento = conta.getDataVencimentoConta();
+		
+		Fatura fatura = pesquisarFaturaDeConta(conta.getId());
+		
+		if (fatura != null) {
+			Pagamento pagamento = getControladorArrecadacao().pesquisarPagamentoDeConta(conta.getId());
+			
+			if (pagamento.isPagamentoClassificado()) {
+				vencimento = fatura.getVencimento();
+			}
+		}
+		
+		return vencimento;
+		
+	}
+	
+	private Collection obterContasParaGerarAcrescimos(Integer referenciaArrecadacao, Imovel imovel, boolean indicadorEncerrandoArrecadacao) {
+		Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(referenciaArrecadacao);
+
+		Collection colecaoContaImovel = null;
+
+		try {
+			if (!indicadorEncerrandoArrecadacao) {
+					colecaoContaImovel = repositorioFaturamento
+							.obterContasImovel(imovel.getId(),
+									DebitoCreditoSituacao.NORMAL,
+									DebitoCreditoSituacao.INCLUIDA,
+									DebitoCreditoSituacao.RETIFICADA,
+									dataAnoMesReferenciaUltimoDia);
+			} else {
+				colecaoContaImovel = repositorioFaturamento
+						.obterContasImovelComPagamento(imovel.getId(),
+								DebitoCreditoSituacao.NORMAL,
+								DebitoCreditoSituacao.INCLUIDA,
+								DebitoCreditoSituacao.RETIFICADA,
+								dataAnoMesReferenciaUltimoDia,
+								referenciaArrecadacao);
+			}
+		} catch (ErroRepositorioException e) {
+			logger.error(e);
+			throw new EJBException(e);
+		}
+		
+		return colecaoContaImovel;
+
+	}
+
+	private Conta buildContaAcrescimoImpontualidade(Object[] dadosConta) {
+		Conta conta = new Conta();
+		if (dadosConta[0] != null) {
+			conta.setId((Integer) dadosConta[0]);
+		}
+		if (dadosConta[1] != null) {
+			conta.setReferencia((Integer) dadosConta[1]);
+		}
+		if (dadosConta[2] != null) {
+			conta.setDataVencimentoConta((Date) dadosConta[2]);
+		}
+		if (dadosConta[3] != null) {
+			conta.setValorAgua((BigDecimal) dadosConta[3]);
+		}
+		if (dadosConta[4] != null) {
+			conta.setValorEsgoto((BigDecimal) dadosConta[4]);
+		}
+		if (dadosConta[5] != null) {
+			conta.setDebitos((BigDecimal) dadosConta[5]);
+		}
+		if (dadosConta[6] != null) {
+			conta.setValorCreditos((BigDecimal) dadosConta[6]);
+		}
+		if (dadosConta[7] != null) {
+			conta.setIndicadorCobrancaMulta((Short) dadosConta[7]);
+		}
+		return conta;
+	}
+
+	private boolean verificarCondicoesImovelCobrarAcrescimo(boolean indicadorEncerrandoArrecadacao, Map<Integer, Short> mapIndicadorAcrescimoCliente,
+			Imovel imovel, Categoria principalCategoria) {
+		boolean cobrar = true;
+
+		if (!principalCategoria.categoriaCobraAcrescimo()) {
+			cobrar = false;
+		}
+
+		if ((principalCategoria.categoriaCobraAcrescimoEncerramento()) && !indicadorEncerrandoArrecadacao) {
+			cobrar = false;
+		}
+
+		Short indicadorCobrancaAcrescimos = mapIndicadorAcrescimoCliente.get(imovel.getId());
+		if (indicadorCobrancaAcrescimos != null	&& indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
+			cobrar = false;
+		}
+
+		if (indicadorCobrancaAcrescimos != null && (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
+			cobrar = false;
+		}
+		return cobrar;
+	}
+
+	private Imovel buildImovelAcrescimoImpontualidade(Iterator imovelPorRotaIterator) {
+		Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
+
+		Imovel imovel = new Imovel();
+		if (arrayImoveisPorRota[0] != null) {
+			imovel.setId((Integer) arrayImoveisPorRota[0]);
+		}
+		if (arrayImoveisPorRota[4] != null) {
+			imovel.setLote((Short) arrayImoveisPorRota[4]);
+		}
+		if (arrayImoveisPorRota[5] != null) {
+			imovel.setSubLote((Short) arrayImoveisPorRota[5]);
+		}
+
+		if (arrayImoveisPorRota[1] != null) {
+			imovel.setLocalidade(new Localidade((Integer) arrayImoveisPorRota[1]));
+		}
+
+		if (arrayImoveisPorRota[3] != null) {
+			Quadra quadra = new Quadra((Integer) arrayImoveisPorRota[7]);
+			quadra.setNumeroQuadra((Integer) arrayImoveisPorRota[3]);
+			imovel.setQuadra(quadra);
+		}
+
+		if (arrayImoveisPorRota[2] != null) {
+			imovel.setCodigoSetorComercial((Integer) arrayImoveisPorRota[2]);
+		}
+
+		if (arrayImoveisPorRota[8] != null) {
+			imovel.setIndicadorDebitoConta((Short) arrayImoveisPorRota[8]);
+		}
+		return imovel;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -3013,6 +2981,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Collection<DebitoACobrarCategoria> inserirDebitosACobrarCategoriaBatch(Collection<DebitoACobrar> debitos) throws ControladorException {
+
+		Collection<DebitoACobrarCategoria> colecaoDebitosACobrarCategorias = new ArrayList();
+
+		for (DebitoACobrar debito : debitos) {
+			inserirDebitoACobrarCategoriaBatch(debito, debito.getImovel());
+		}
+		return colecaoDebitosACobrarCategorias;
 	}
 	
 }

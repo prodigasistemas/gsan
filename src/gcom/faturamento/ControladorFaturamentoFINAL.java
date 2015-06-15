@@ -8240,44 +8240,31 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param debitoACobrar
 	 *            Debito A Cobrar
 	 */
-	public Collection inserirDebitoACobrarCategoriaBatch(
-			DebitoACobrar debitoACobrar, Imovel imovel)
+	public Collection inserirDebitoACobrarCategoriaBatch(DebitoACobrar debitoACobrar, Imovel imovel)
 			throws ControladorException {
 
-		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategorias = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
-
-		Collection colecaoValoresPorCategoria = getControladorImovel()
-				.obterValorPorCategoria(colecaoCategorias,
-						debitoACobrar.getValorDebito());
+		Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategorias,debitoACobrar.getValorDebito());
+		
 		Iterator icolecaoCategorias = colecaoCategorias.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
-				.iterator();
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
 
 		Collection colecaoDebitosACobrarCategorias = new ArrayList();
 
-		while (icolecaoValoresPorCategoria.hasNext()
-				&& icolecaoCategorias.hasNext()) {
+		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
 
 			DebitoACobrarCategoria debitoACobrarCategoria = new DebitoACobrarCategoria();
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
-			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria
-					.next();
+			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(
-					debitoACobrar, categoria));
-			debitoACobrarCategoria.setQuantidadeEconomia(categoria
-					.getQuantidadeEconomiasCategoria());
+			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(debitoACobrar, categoria));
+			debitoACobrarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			debitoACobrarCategoria.setUltimaAlteracao(new Date());
 			debitoACobrarCategoria.setValorCategoria(valorPorCategoria);
 
 			colecaoDebitosACobrarCategorias.add(debitoACobrarCategoria);
-			// getControladorUtil().inserir(debitoACobrarCategoria);
 		}
-
 		return colecaoDebitosACobrarCategorias;
-
 	}
 
 	/**
@@ -64893,21 +64880,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 */
 	protected DebitoACobrar gerarDebitoACobrarParaConta(
 			Integer anoMesReferenciaArrecadacao, Imovel imovel,
-			Localidade localidade, Quadra quadra, Integer setorComercial,
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
 			Usuario usuario) throws ControladorException {
 
 		DebitoACobrar debitoACobrar;
-		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
-		CobrancaForma cobrancaForma = new CobrancaForma();
-		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
+		
+		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
+		CobrancaForma cobrancaForma = new CobrancaForma(CobrancaForma.COBRANCA_EM_CONTA);
+		
 		Object[] obterDebitoTipo;
 
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo
-					.getId());
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
 			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 			if (obterDebitoTipo[0] != null) {
@@ -64922,14 +64907,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			debitoACobrar
-					.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
-			debitoACobrar.setLocalidade(localidade);
-			debitoACobrar.setQuadra(quadra);
-			debitoACobrar.setCodigoSetorComercial(setorComercial);
-			debitoACobrar.setNumeroQuadra(quadra.getNumeroQuadra());
+			debitoACobrar.setLocalidade(imovel.getLocalidade());
+			debitoACobrar.setQuadra(imovel.getQuadra());
+			debitoACobrar.setCodigoSetorComercial(imovel.getCodigoSetorComercial());
+			debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
 			debitoACobrar.setNumeroLote(imovel.getLote());
 			debitoACobrar.setNumeroSubLote(imovel.getSubLote());
 			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
@@ -64952,8 +64936,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
 
-			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
-					.inserir(debitoACobrarGeral);
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
 			debitoACobrar.setId(idDebitoACobrarGeral);
@@ -65712,7 +65695,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected DebitoACobrar gerarDebitoACobrarParaGuiaPagamento(
 			Integer anoMesReferenciaArrecadacao,
 			Integer anoMesReferenciaFaturamento, Imovel imovel,
-			Localidade localidade, Quadra quadra, Integer setorComercial,
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
 			GuiaPagamento guiaPagamento, BigDecimal valorDebito,
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
@@ -65742,14 +65724,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			debitoACobrar
-					.setAnoMesReferenciaContabil(anoMesReferenciaFaturamento);
+			debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaFaturamento);
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
-			debitoACobrar.setLocalidade(localidade);
-			debitoACobrar.setQuadra(quadra);
-			debitoACobrar.setCodigoSetorComercial(setorComercial);
-			debitoACobrar.setNumeroQuadra(quadra.getNumeroQuadra());
+			debitoACobrar.setLocalidade(imovel.getLocalidade());
+			debitoACobrar.setQuadra(imovel.getQuadra());
+			debitoACobrar.setCodigoSetorComercial(imovel.getCodigoSetorComercial());
+			debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
 			debitoACobrar.setNumeroLote(imovel.getLote());
 			debitoACobrar.setNumeroSubLote(imovel.getSubLote());
 			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
@@ -65762,8 +65743,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setDebitoTipo(debitoTipo);
 			debitoACobrar.setUltimaAlteracao(new Date());
 			debitoACobrar.setGeracaoDebito(new Date());
-			debitoACobrar.setAnoMesReferenciaDebito(guiaPagamento
-					.getAnoMesReferenciaContabil());
+			debitoACobrar.setAnoMesReferenciaDebito(guiaPagamento.getAnoMesReferenciaContabil());
 			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
 			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
 			debitoACobrar.setValorDebito(valorDebito);
@@ -65798,53 +65778,28 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	protected Map<Integer, Categoria> pesquisarPrincipalCategoriaImovelPorRota(
-			Short codigoEmpresaFebraban, Rota rota) throws ControladorException {
+	protected Map<Integer, Categoria> pesquisarPrincipalCategoriaImovelPorRota(Short codigoEmpresaFebraban, Rota rota) throws ControladorException {
 
 		Map<Integer, Categoria> retorno = new HashMap();
 
 		try {
 			Collection<Object[]> colecaoDadosImovelCategoria = null;
 
-			/*
-			 * Caso a rota não esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imóveis será feita a partir de sua quadra.
-			 */
-			if (!rota.getIndicadorRotaAlternativa().equals(
-					ConstantesSistema.SIM)) {
-
-				colecaoDadosImovelCategoria = repositorioFaturamento
-						.pesquisarPrincipalCategoriaImovelPorRota(
-								codigoEmpresaFebraban, rota.getId());
-
-			}
-			/*
-			 * Caso contrário; a pesquisa dos imóveis será feita a partir da
-			 * rota alternativa que estará associada ao mesmo.
-			 */
-			else {
-
-				colecaoDadosImovelCategoria = repositorioFaturamento
-						.pesquisarPrincipalCategoriaImovelPorRotaAlternativa(
-								codigoEmpresaFebraban, rota.getId());
+			if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
+				colecaoDadosImovelCategoria = repositorioFaturamento.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota.getId());
+			} else {
+				colecaoDadosImovelCategoria = repositorioFaturamento.pesquisarPrincipalCategoriaImovelPorRotaAlternativa(codigoEmpresaFebraban, rota.getId());
 			}
 
-			if (colecaoDadosImovelCategoria != null
-					&& !colecaoDadosImovelCategoria.isEmpty()) {
+			if (colecaoDadosImovelCategoria != null && !colecaoDadosImovelCategoria.isEmpty()) {
+				
 				for (Object[] dadosImovelCategoria : colecaoDadosImovelCategoria) {
 					Integer idImovel = (Integer) dadosImovelCategoria[0];
 
 					if (!retorno.containsKey(idImovel)) {
-						Categoria categoria = new Categoria();
-						Integer idCategoria = (Integer) dadosImovelCategoria[1];
-						Integer quantidadeEconomia = (Integer) dadosImovelCategoria[2];
-						Short indicadorCobrancaAcrescimo = (Short) dadosImovelCategoria[3];
-
-						categoria.setId(idCategoria);
-						categoria
-								.setQuantidadeEconomiasCategoria(quantidadeEconomia);
-						categoria
-								.setIndicadorCobrancaAcrescimos(indicadorCobrancaAcrescimo);
+						Categoria categoria = new Categoria((Integer) dadosImovelCategoria[1]);
+						categoria.setQuantidadeEconomiasCategoria((Integer) dadosImovelCategoria[2]);
+						categoria.setIndicadorCobrancaAcrescimos((Short) dadosImovelCategoria[3]);
 
 						retorno.put(idImovel, categoria);
 
@@ -65870,9 +65825,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	protected Map<Integer, Boolean> pesquisarIndicadorPagamentoConta(
-			Collection<Object[]> colecaoContas, Integer anoMesReferenciaAtual)
-			throws ControladorException {
+	protected Map<Integer, Boolean> pesquisarIndicadorPagamentoConta(Collection<Object[]> colecaoContas, Integer anoMesReferenciaAtual){
+		
 		Map<Integer, Boolean> retorno = new HashMap();
 		Collection<Integer> idsContas = new ArrayList();
 
@@ -65884,9 +65838,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			try {
 				Collection<Integer> colecaoRetorno = null;
-				colecaoRetorno = this.repositorioFaturamento
-						.obterIndicadorPagamentosClassificadosContaReferenciaMenorIgualAtual(
-								idsContas, anoMesReferenciaAtual);
+				colecaoRetorno = this.repositorioFaturamento.obterIndicadorPagamentosClassificadosContaReferenciaMenorIgualAtual(idsContas, anoMesReferenciaAtual);
 				if (colecaoRetorno != null && !colecaoRetorno.isEmpty()) {
 
 					for (Integer idConta : colecaoRetorno) {
@@ -65917,33 +65869,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	protected Map<Integer, Short> obterIndicadorGeracaoAcrescimosClienteImovel(
-			Rota rota) throws ControladorException {
+	protected Map<Integer, Short> obterIndicadorGeracaoAcrescimosClienteImovel(Rota rota) throws ControladorException {
 		Map<Integer, Short> retorno = new HashMap();
 
 		try {
 			Collection<Object[]> colecaoRetorno = null;
 
-			/*
-			 * Caso a rota não esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imóveis será feita a partir de sua quadra.
-			 */
-			if (!rota.getIndicadorRotaAlternativa().equals(
-					ConstantesSistema.SIM)) {
-
-				colecaoRetorno = this.repositorioFaturamento
-						.obterIndicadorGeracaoAcrescimosClienteImovel(rota
-								.getId());
-			}
-			/*
-			 * Caso contrário; a pesquisa dos imóveis será feita a partir da
-			 * rota alternativa que estará associada ao mesmo.
-			 */
-			else {
-
-				colecaoRetorno = this.repositorioFaturamento
-						.obterIndicadorGeracaoAcrescimosClienteImovelPorRotaAlternativa(rota
-								.getId());
+			if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
+				colecaoRetorno = this.repositorioFaturamento.obterIndicadorGeracaoAcrescimosClienteImovel(rota.getId());
+			} else {
+				colecaoRetorno = this.repositorioFaturamento.obterIndicadorGeracaoAcrescimosClienteImovelPorRotaAlternativa(rota.getId());
 			}
 
 			if (colecaoRetorno != null && !colecaoRetorno.isEmpty()) {

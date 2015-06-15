@@ -5226,14 +5226,7 @@ public class ControladorCobranca implements SessionBean {
 	}
 
 	/**
-	 * [UC0216] Calcular Acrescimo por Impontualidade
-	 * 
-	 * @Author: Rafael Santos, Raphael Rossiter, Pedro Alexandre, Raphael
-	 *          Rossiter
-	 * @date 22/03/2006, 12/02/2008, 21/05/2008
-	 * 
-	 *       Calcula os acrescimmos por Impontualidade(multa,juros de mora e
-	 *       atualização monetaria)
+	 * Calcula os acrescimmos por Impontualidade(multa,juros de mora e atualização monetaria)
 	 * 
 	 * @param anoMesReferenciaDebito
 	 * @param dataVencimento
@@ -5258,60 +5251,37 @@ public class ControladorCobranca implements SessionBean {
 
 		boolean calcular = true;
 
-		/*
-		 * Caso a conta venha nula retorna os valores de multa, juros de mora e
-		 * atualizacao iguais a zero Analista: Aryed Lins - 19/02/2008
-		 */
 		if (idConta != null) {
 
 			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-			// PESQUISANDO OS DADOS DO IMÓVEL QUE ESTÁ RELACIONADO A CONTA
-			// INFORMADA
 			Object[] parmsConta = null;
 			try {
-
 				parmsConta = repositorioFaturamento.pesquisarContaParaAcrescimoPorImpontualidade(idConta);
 
 				if (parmsConta != null) {
 
-					Integer idMunicipio = (Integer) parmsConta[1];
-
-					Municipio municipio = new Municipio();
-					municipio.setId(idMunicipio);
+					Municipio municipio = new Municipio((Integer) parmsConta[1]);
 
 					/*
-					 * Caso o imóvel tenha débito automático e o recebimento,
-					 * mesmo em atraso, tenha sido através de débito automático,
+					 * Caso o imóvel tenha débito automático e o recebimento, mesmo em atraso, tenha sido através de débito automático,
 					 * o sistema não calcula os acréscimos de impontualidade
-					 * 
-					 * (ARMV_DSIDENTIFICACAOSERVICO da tabela
-					 * ARRECADADOR_MOVIMENTO com valor igual a "DEBITO
-					 * AUTOMATICO" com ARMV_ID = ARMV_ID da tabela
-					 * ARRECADADOR_MOVIMENTO_ITEM com AMIT_ID = AMIT_ID da
-					 * tabela PAGAMENTO com CNTA_ID = CNTA_ID recebido)
 					 */
 					Integer pagamentoPorDebitoAutomatico = null;
 
 					try {
-
 						pagamentoPorDebitoAutomatico = this.repositorioCobranca.pesquisarPagamentoDeContaPorDebitoAutomatico(idConta);
-
 					} catch (ErroRepositorioException ex) {
 						sessionContext.setRollbackOnly();
 						throw new ControladorException("erro.sistema", ex);
 					}
 
 					if (pagamentoPorDebitoAutomatico != null && pagamentoPorDebitoAutomatico.intValue() > 0) {
-
 						calcular = false;
 					} else {
-
 						/*
-						 * Caso a data de pagamento não seja nula, passar a data
-						 * de pagamento, caso contrário, passar a data corrente
-						 * menos a quantidade mínima de dias para início da
-						 * cobrança da conta parm_nndiasvenctocobranca.
+						 * Caso a data de pagamento não seja nula, passar a data de pagamento, caso contrário, passar a data corrente
+						 * menos a quantidade mínima de dias para início da cobrança da conta parm_nndiasvenctocobranca.
 						 */
 						if (dataPagamento == null) {
 							dataPagamento = new Date();
@@ -5319,22 +5289,17 @@ public class ControladorCobranca implements SessionBean {
 							Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
 						}
 
-						// [UC0747] - Calcular diferença de dias úteis entre
-						// duas datas
-						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataPagamento,
-								municipio);
+						// [UC0747] - Calcular diferença de dias úteis entre duas datas
+						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataPagamento, municipio);
 
 						/*
-						 * Caso a diferença retornada seja igual ou menor que o
-						 * valor da coluna parm_nndiascalculoacrescimos da
+						 * Caso a diferença retornada seja igual ou menor que o valor da coluna parm_nndiascalculoacrescimos da
 						 * tabela SISTEMA_PARAMETROS não calcular acréscimos
 						 */
 						if (qtdDiasUteis.intValue() <= sistemaParametros.getNumeroDiasCalculoAcrescimos()) {
-
 							calcular = false;
 						}
 					}
-
 				} else {
 					calcular = false;
 				}
@@ -5355,12 +5320,7 @@ public class ControladorCobranca implements SessionBean {
 
 					Integer mesAnoDataReferenciaConta = Util.recuperaAnoMesDaData(dataVencimento);
 
-					/**
-					 *
-					 * 
-					 * Considerar mêsAno anterior ao de vencimento
-					 * da conta no calculo de atualização monetária
-					 */
+					// Considerar mêsAno anterior ao de vencimento da conta no calculo de atualização monetária
 					mesAnoDataReferenciaConta = Util.subtrairMesDoAnoMes(mesAnoDataReferenciaConta, 1);
 
 					indicesAcrescimosImpontualidade = repositorioCobranca.pesquisarIndiceAcrescimoImpontualidade(mesAnoDataReferenciaConta);
