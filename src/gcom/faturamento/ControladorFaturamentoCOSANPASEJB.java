@@ -2305,6 +2305,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
 		Imovel imovel = new Imovel();
+			
 		if (arrayImoveisPorRota[0] != null) {
 			imovel.setId((Integer) arrayImoveisPorRota[0]);
 		}
@@ -2326,7 +2327,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		if (arrayImoveisPorRota[2] != null) {
-			imovel.setCodigoSetorComercial((Integer) arrayImoveisPorRota[2]);
+			SetorComercial setor = new SetorComercial();
+			setor.setId((Integer) arrayImoveisPorRota[2]);
+			imovel.setSetorComercial(setor);
 		}
 
 		if (arrayImoveisPorRota[8] != null) {
