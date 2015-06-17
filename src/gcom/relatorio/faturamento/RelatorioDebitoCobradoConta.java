@@ -68,15 +68,23 @@ public class RelatorioDebitoCobradoConta extends TarefaRelatorio {
 				 * */
 				if(debitoCobrado.getAnoMesReferenciaDebito() != null)
 					bean.setMesAnoReferencia(Util.formatarMesAnoReferencia(debitoCobrado.getAnoMesReferenciaDebito()));
-			    bean.setMesAnoCobranca(Util.formatarMesAnoReferencia(debitoCobrado.getAnoMesCobrancaDebito()));
-			    bean.setParcela(debitoCobrado.getNumeroPrestacaoDebito()+"/"+debitoCobrado.getNumeroTotalParcelasMenosBonus());
+				
+				if(debitoCobrado.getAnoMesCobrancaDebito() != null)
+					bean.setMesAnoCobranca(Util.formatarMesAnoReferencia(debitoCobrado.getAnoMesCobrancaDebito()));
+
+				bean.setParcela(debitoCobrado.getNumeroPrestacaoDebito()+"/"+debitoCobrado.getNumeroTotalParcelasMenosBonus());
 			    bean.setValorParcela(Util.formataBigDecimal(debitoCobrado.getValorPrestacao(),2,true));
 			    
 			}else if (tipo == 2){
 				debitoCobradoHistorico = (DebitoCobradoHistorico) iter.next();
 				bean.setTipoDebito(debitoCobradoHistorico.getDebitoTipo().getDescricao());
-			    bean.setMesAnoReferencia(Util.formatarMesAnoReferencia(debitoCobradoHistorico.getAnoMesReferenciaDebito()));
-			    bean.setMesAnoCobranca(Util.formatarMesAnoReferencia(debitoCobradoHistorico.getAnoMesCobrancaDebito()));
+				
+				if(debitoCobrado.getAnoMesReferenciaDebito() != null)
+					bean.setMesAnoReferencia(Util.formatarMesAnoReferencia(debitoCobradoHistorico.getAnoMesReferenciaDebito()));
+				
+				if(debitoCobrado.getAnoMesCobrancaDebito() != null)
+					bean.setMesAnoCobranca(Util.formatarMesAnoReferencia(debitoCobradoHistorico.getAnoMesCobrancaDebito()));
+				
 			    bean.setParcela(debitoCobradoHistorico.getNumeroPrestacaoDebito()+"/"+debitoCobradoHistorico.getNumeroTotalParcelasMenosBonus());
 			    bean.setValorParcela(Util.formataBigDecimal(debitoCobradoHistorico.getValorPrestacao(),2,true));
 			}				
