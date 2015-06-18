@@ -2160,25 +2160,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							
 							debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 							valorDebito = calcularAcrescimoPorImpontualidade.getValorMulta();
-						}
-						
-						if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
-								&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
-								&& existePagamentoClassificadoConta) {
 							
-							debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
-							valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
-						}
-						
-						if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-								&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-								&& existePagamentoClassificadoConta) {
-							
-							debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
-							valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
-						}
-						
-						if (valorDebito.intValue() > 0) {
 							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
 									referenciaArrecadacao, imovel,
 									numeroPrestacaoDebito,
@@ -2187,9 +2169,46 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									Usuario.USUARIO_BATCH);
 							
 							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-							
 							colecaoDebitoACobrarInserir.add(debitoACobrar);
 						}
+						
+						if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
+								&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
+								&& existePagamentoClassificadoConta) {
+							
+							debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
+							valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
+							
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+									referenciaArrecadacao, imovel,
+									numeroPrestacaoDebito,
+									numeroPrestacaoCobradas,
+									conta, valorDebito, debitoTipo,
+									Usuario.USUARIO_BATCH);
+							
+							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
+							colecaoDebitoACobrarInserir.add(debitoACobrar);
+						}
+						
+						if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
+								&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
+								&& existePagamentoClassificadoConta) {
+							
+							debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
+							valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
+							
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+									referenciaArrecadacao, imovel,
+									numeroPrestacaoDebito,
+									numeroPrestacaoCobradas,
+									conta, valorDebito, debitoTipo,
+									Usuario.USUARIO_BATCH);
+							
+							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
+							colecaoDebitoACobrarInserir.add(debitoACobrar);
+						}
+						
+						
 					}
 				} 
 			}
