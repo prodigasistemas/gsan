@@ -64594,7 +64594,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
 			debitoACobrar.setLocalidade(imovel.getLocalidade());
 			debitoACobrar.setQuadra(imovel.getQuadra());
-			debitoACobrar.setCodigoSetorComercial(imovel.getCodigoSetorComercial());
+			debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercia().getCodigo());
 			debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
 			debitoACobrar.setNumeroLote(imovel.getLote());
 			debitoACobrar.setNumeroSubLote(imovel.getSubLote());

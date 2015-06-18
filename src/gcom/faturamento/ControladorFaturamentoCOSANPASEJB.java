@@ -2326,7 +2326,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		if (arrayImoveisPorRota[2] != null) {
-			imovel.setCodigoSetorComercial((Integer) arrayImoveisPorRota[2]);
+			SetorComercial setor = new SetorComercial();
+			setor.setCodigo((Integer) arrayImoveisPorRota[2]);
+			imovel.setSetorComercia(setor);
 		}
 
 		if (arrayImoveisPorRota[8] != null) {
