@@ -46,6 +46,8 @@ public class InserirAnormalidadeLeituraActionForm extends ValidatorActionForm {
 	private String numeroFatorComLeitura;
 
 	private String indicadorLeitura;
+	
+	private String indicadorImpressaoSimultanea;
 
 	/**
 	 * Quantidade de ocorrências para uma mesma anormalidade em um imóvel
@@ -202,4 +204,13 @@ public class InserirAnormalidadeLeituraActionForm extends ValidatorActionForm {
 	public void setNumeroVezesSuspendeLeitura(String numeroVezesSuspendeLeitura) {
 		this.numeroVezesSuspendeLeitura = numeroVezesSuspendeLeitura;
 	}
+
+	public String getIndicadorImpressaoSimultanea() {
+		return indicadorImpressaoSimultanea;
+	}
+
+	public void setIndicadorImpressaoSimultanea(String indicadorImpressaoSimultanea) {
+		this.indicadorImpressaoSimultanea = indicadorImpressaoSimultanea;
+	}
+	
 }
