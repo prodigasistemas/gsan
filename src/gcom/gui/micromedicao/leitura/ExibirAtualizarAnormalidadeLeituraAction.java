@@ -33,13 +33,11 @@ import org.apache.struts.action.ActionMapping;
 public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 	@Override
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("atualizarAnormalidadeLeitura");
+		ActionForward retorno = actionMapping.findForward("atualizarAnormalidadeLeitura");
 
 		HttpSession sessao = httpServletRequest.getSession(false);
 
@@ -55,9 +53,7 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 		String idLeituraAnormalidade = null;
 
-		if (httpServletRequest.getParameter("idRegistroAtualizacao") != null
-				&& !httpServletRequest.getParameter("idRegistroAtualizacao")
-						.equals("")) {
+		if (httpServletRequest.getParameter("idRegistroAtualizacao") != null && !httpServletRequest.getParameter("idRegistroAtualizacao").equals("")) {
 
 			sessao.removeAttribute("objetoLeituraAnormalidade");
 			sessao.removeAttribute("colecaoLeituraAnormalidadeTela");
@@ -83,58 +79,35 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 			if (sessao.getAttribute("objetoLeituraAnormalidade") != null) {
 
-				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) sessao
-						.getAttribute("objetoLeituraAnormalidade");
+				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) sessao.getAttribute("objetoLeituraAnormalidade");
 
-				sessao.setAttribute("idLeituraAnormalidade",
-						leituraAnormalidade.getId().toString());
+				sessao.setAttribute("idLeituraAnormalidade", leituraAnormalidade.getId().toString());
 
 				sessao.setAttribute("leituraAnormalidade", leituraAnormalidade);
 
 				form.setDescricao(leituraAnormalidade.getDescricao());
 				form.setAbreviatura(leituraAnormalidade.getDescricaoAbreviada());
-				form.setIndicadorRelativoHidrometro(""
-						+ leituraAnormalidade.getIndicadorRelativoHidrometro());
-				form.setIndicadorImovelSemHidrometro(""
-						+ leituraAnormalidade.getIndicadorImovelSemHidrometro());
-				form.setUsoRestritoSistema(""
-						+ leituraAnormalidade.getIndicadorSistema());
-				form.setPerdaTarifaSocial(""
-						+ leituraAnormalidade.getIndicadorPerdaTarifaSocial());
-				form.setOsAutomatico(""
-						+ leituraAnormalidade.getIndicadorEmissaoOrdemServico());
-				form.setTipoServico(leituraAnormalidade.getServicoTipo()
-						.getId().toString());
-				form.setConsumoLeituraNaoInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoSemleitura().getId()
-						.toString());
-				form.setConsumoLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoComleitura().getId()
-						.toString());
-				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraSemleitura().getId()
-						.toString());
-				form.setLeituraLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraComleitura().getId()
-						.toString());
-				form.setDataUltimaAlteracao(Util
-						.formatarData(leituraAnormalidade.getUltimaAlteracao()));
+				form.setIndicadorRelativoHidrometro("" + leituraAnormalidade.getIndicadorRelativoHidrometro());
+				form.setIndicadorImovelSemHidrometro("" + leituraAnormalidade.getIndicadorImovelSemHidrometro());
+				form.setUsoRestritoSistema("" + leituraAnormalidade.getIndicadorSistema());
+				form.setPerdaTarifaSocial("" + leituraAnormalidade.getIndicadorPerdaTarifaSocial());
+				form.setOsAutomatico("" + leituraAnormalidade.getIndicadorEmissaoOrdemServico());
+				form.setTipoServico(leituraAnormalidade.getServicoTipo().getId().toString());
+				form.setConsumoLeituraNaoInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoSemleitura().getId().toString());
+				form.setConsumoLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoComleitura().getId().toString());
+				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraSemleitura().getId().toString());
+				form.setLeituraLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraComleitura().getId().toString());
+				form.setDataUltimaAlteracao(Util.formatarData(leituraAnormalidade.getUltimaAlteracao()));
 				form.setIndicadorUso("" + leituraAnormalidade.getIndicadorUso());
-				form.setNumeroFatorSemLeitura(""
-						+ leituraAnormalidade.getNumeroFatorSemLeitura());
-				form.setNumeroFatorComLeitura(""
-						+ leituraAnormalidade.getNumeroFatorComLeitura());
-				form.setIndicadorLeitura(""
-						+ leituraAnormalidade.getIndicadorLeitura());
-				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade
-						.getNumeroVezesSuspendeLeitura().toString());
-				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade
-						.getNumeroMesesLeituraSuspensa().toString());
+				form.setNumeroFatorSemLeitura("" + leituraAnormalidade.getNumeroFatorSemLeitura());
+				form.setNumeroFatorComLeitura("" + leituraAnormalidade.getNumeroFatorComLeitura());
+				form.setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
+				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade.getNumeroVezesSuspendeLeitura().toString());
+				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade.getNumeroMesesLeituraSuspensa().toString());
 
 				id = leituraAnormalidade.getId().toString();
 
-				sessao.setAttribute("leituraAnormalidadeAtualizar",
-						leituraAnormalidade);
+				sessao.setAttribute("leituraAnormalidadeAtualizar", leituraAnormalidade);
 				sessao.removeAttribute("objetoLeituraAnormalidade");
 
 			} else {
@@ -143,16 +116,11 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 				idLeituraAnormalidade = null;
 
-				if (httpServletRequest.getParameter("idRegistroAtualizacao") == null
-						|| httpServletRequest.getParameter(
-								"idRegistroAtualizacao").equals("")) {
-					leituraAnormalidade = (LeituraAnormalidade) sessao
-							.getAttribute("objetoLeituraAnormalidade");
+				if (httpServletRequest.getParameter("idRegistroAtualizacao") == null || httpServletRequest.getParameter("idRegistroAtualizacao").equals("")) {
+					leituraAnormalidade = (LeituraAnormalidade) sessao.getAttribute("objetoLeituraAnormalidade");
 				} else {
-					idLeituraAnormalidade = (String) httpServletRequest
-							.getParameter("idRegistroAtualizacao");
-					sessao.setAttribute("idRegistroAtualizacao",
-							idLeituraAnormalidade);
+					idLeituraAnormalidade = (String) httpServletRequest.getParameter("idRegistroAtualizacao");
+					sessao.setAttribute("idRegistroAtualizacao", idLeituraAnormalidade);
 				}
 
 				if (idLeituraAnormalidade != null) {
@@ -160,48 +128,32 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 					id = idLeituraAnormalidade;
 
 					FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
-					filtroLeituraAnormalidade
-							.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoSemleitura");
-					filtroLeituraAnormalidade
-							.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoComleitura");
-					filtroLeituraAnormalidade
-							.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeLeituraSemleitura");
-					filtroLeituraAnormalidade
-							.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeLeituraComleitura");
+					filtroLeituraAnormalidade.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoSemleitura");
+					filtroLeituraAnormalidade.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoComleitura");
+					filtroLeituraAnormalidade.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeLeituraSemleitura");
+					filtroLeituraAnormalidade.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeLeituraComleitura");
 
-					filtroLeituraAnormalidade
-							.adicionarParametro(new ParametroSimples(
-									FiltroLeituraAnormalidade.ID,
-									idLeituraAnormalidade));
+					filtroLeituraAnormalidade.adicionarParametro(new ParametroSimples(FiltroLeituraAnormalidade.ID, idLeituraAnormalidade));
 
-					Collection<LeituraAnormalidade> colecaoLeituraAnormalidade = fachada
-							.pesquisar(filtroLeituraAnormalidade,
-									LeituraAnormalidade.class.getName());
+					Collection<LeituraAnormalidade> colecaoLeituraAnormalidade = fachada.pesquisar(filtroLeituraAnormalidade,
+							LeituraAnormalidade.class.getName());
 
-					if (colecaoLeituraAnormalidade == null
-							|| colecaoLeituraAnormalidade.isEmpty()) {
-						throw new ActionServletException(
-								"atencao.atualizacao.timestamp");
+					if (colecaoLeituraAnormalidade == null || colecaoLeituraAnormalidade.isEmpty()) {
+						throw new ActionServletException("atencao.atualizacao.timestamp");
 					}
 
-					httpServletRequest.setAttribute(
-							"colecaoLeituraAnormalidade",
-							colecaoLeituraAnormalidade);
+					httpServletRequest.setAttribute("colecaoLeituraAnormalidade", colecaoLeituraAnormalidade);
 
-					leituraAnormalidade = (LeituraAnormalidade) colecaoLeituraAnormalidade
-							.iterator().next();
+					leituraAnormalidade = (LeituraAnormalidade) colecaoLeituraAnormalidade.iterator().next();
 
 				}
 
 				if (idLeituraAnormalidade == null) {
 					if (sessao.getAttribute("idRegistroAtualizacao") != null) {
-						idLeituraAnormalidade = (String) sessao
-								.getAttribute("idRegistroAtualizacao");
+						idLeituraAnormalidade = (String) sessao.getAttribute("idRegistroAtualizacao");
 					} else {
-						leituraAnormalidade = (LeituraAnormalidade) sessao
-								.getAttribute("leituraAnormalidade");
-						idLeituraAnormalidade = leituraAnormalidade.getId()
-								.toString();
+						leituraAnormalidade = (LeituraAnormalidade) sessao.getAttribute("leituraAnormalidade");
+						idLeituraAnormalidade = leituraAnormalidade.getId().toString();
 					}
 				}
 
@@ -209,124 +161,89 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 				form.setAbreviatura(leituraAnormalidade.getDescricaoAbreviada());
 
-				form.setIndicadorRelativoHidrometro(""
-						+ leituraAnormalidade.getIndicadorRelativoHidrometro());
-				form.setIndicadorImovelSemHidrometro(""
-						+ leituraAnormalidade.getIndicadorImovelSemHidrometro());
-				form.setUsoRestritoSistema(""
-						+ leituraAnormalidade.getIndicadorSistema());
-				form.setPerdaTarifaSocial(""
-						+ leituraAnormalidade.getIndicadorPerdaTarifaSocial());
-				form.setOsAutomatico(""
-						+ leituraAnormalidade.getIndicadorEmissaoOrdemServico());
+				form.setIndicadorRelativoHidrometro("" + leituraAnormalidade.getIndicadorRelativoHidrometro());
+				form.setIndicadorImovelSemHidrometro("" + leituraAnormalidade.getIndicadorImovelSemHidrometro());
+				form.setUsoRestritoSistema("" + leituraAnormalidade.getIndicadorSistema());
+				form.setPerdaTarifaSocial("" + leituraAnormalidade.getIndicadorPerdaTarifaSocial());
+				form.setOsAutomatico("" + leituraAnormalidade.getIndicadorEmissaoOrdemServico());
 
 				if (leituraAnormalidade.getServicoTipo() != null) {
-					form.setTipoServico(leituraAnormalidade.getServicoTipo()
-							.getId().toString());
+					form.setTipoServico(leituraAnormalidade.getServicoTipo().getId().toString());
 				} else {
 					form.setTipoServico("");
 				}
 
-				if (leituraAnormalidade
-						.getLeituraAnormalidadeConsumoSemleitura() != null) {
-					form.setConsumoLeituraNaoInformado(leituraAnormalidade
-							.getLeituraAnormalidadeConsumoSemleitura().getId()
-							.toString());
+				if (leituraAnormalidade.getLeituraAnormalidadeConsumoSemleitura() != null) {
+					form.setConsumoLeituraNaoInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoSemleitura().getId().toString());
 				} else {
 					form.setConsumoLeituraNaoInformado("");
 				}
 
-				if (leituraAnormalidade
-						.getLeituraAnormalidadeConsumoComleitura() != null) {
-					form.setConsumoLeituraInformado(leituraAnormalidade
-							.getLeituraAnormalidadeConsumoComleitura().getId()
-							.toString());
+				if (leituraAnormalidade.getLeituraAnormalidadeConsumoComleitura() != null) {
+					form.setConsumoLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoComleitura().getId().toString());
 				} else {
 					form.setConsumoLeituraInformado("");
 				}
 
-				if (leituraAnormalidade
-						.getLeituraAnormalidadeLeituraSemleitura() != null) {
-					form.setLeituraLeituraNaoturaInformado(leituraAnormalidade
-							.getLeituraAnormalidadeLeituraSemleitura().getId()
-							.toString());
+				if (leituraAnormalidade.getLeituraAnormalidadeLeituraSemleitura() != null) {
+					form.setLeituraLeituraNaoturaInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraSemleitura().getId().toString());
 				} else {
 					form.setLeituraLeituraNaoturaInformado("");
 				}
 
-				if (leituraAnormalidade
-						.getLeituraAnormalidadeLeituraComleitura() != null) {
-					form.setLeituraLeituraInformado(leituraAnormalidade
-							.getLeituraAnormalidadeLeituraComleitura().getId()
-							.toString());
+				if (leituraAnormalidade.getLeituraAnormalidadeLeituraComleitura() != null) {
+					form.setLeituraLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraComleitura().getId().toString());
 				} else {
 					form.setLeituraLeituraInformado("");
 				}
 
 				form.setIndicadorUso("" + leituraAnormalidade.getIndicadorUso());
-				form.setDataUltimaAlteracao(Util
-						.formatarDataComHora(leituraAnormalidade
-								.getUltimaAlteracao()));
+				form.setDataUltimaAlteracao(Util.formatarDataComHora(leituraAnormalidade.getUltimaAlteracao()));
 
 				if (leituraAnormalidade.getNumeroFatorSemLeitura() != null) {
-					form.setNumeroFatorSemLeitura(""
-							+ leituraAnormalidade.getNumeroFatorSemLeitura());
+					form.setNumeroFatorSemLeitura("" + leituraAnormalidade.getNumeroFatorSemLeitura());
 				}
 				if (leituraAnormalidade.getNumeroFatorComLeitura() != null) {
-					form.setNumeroFatorComLeitura(""
-							+ leituraAnormalidade.getNumeroFatorComLeitura());
+					form.setNumeroFatorComLeitura("" + leituraAnormalidade.getNumeroFatorComLeitura());
 				}
 				if (leituraAnormalidade.getIndicadorLeitura() != null) {
-					form.setIndicadorLeitura(""
-							+ leituraAnormalidade.getIndicadorLeitura());
+					form.setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
 				}
 
-				if (leituraAnormalidade.getNumeroVezesSuspendeLeitura() != null
-						&& !leituraAnormalidade.getNumeroVezesSuspendeLeitura()
-								.equals("")) {
-					form.setNumeroVezesSuspendeLeitura(leituraAnormalidade
-							.getNumeroVezesSuspendeLeitura().toString());
+				if (leituraAnormalidade.getNumeroVezesSuspendeLeitura() != null && !leituraAnormalidade.getNumeroVezesSuspendeLeitura().equals("")) {
+					form.setNumeroVezesSuspendeLeitura(leituraAnormalidade.getNumeroVezesSuspendeLeitura().toString());
 				} else {
 					form.setNumeroVezesSuspendeLeitura("0");
 				}
 
-				if (leituraAnormalidade.getNumeroMesesLeituraSuspensa() != null
-						&& !leituraAnormalidade.getNumeroMesesLeituraSuspensa()
-								.equals("")) {
-					form.setNumeroMesesLeituraSuspensa(leituraAnormalidade
-							.getNumeroMesesLeituraSuspensa().toString());
+				if (leituraAnormalidade.getNumeroMesesLeituraSuspensa() != null && !leituraAnormalidade.getNumeroMesesLeituraSuspensa().equals("")) {
+					form.setNumeroMesesLeituraSuspensa(leituraAnormalidade.getNumeroMesesLeituraSuspensa().toString());
 				} else {
 					form.setNumeroMesesLeituraSuspensa("0");
 				}
 
 				/**
 				 * 
-				 * Pamela Gatinho - 13/03/2012
-				 * Campo que identifica se a anormalidade será usada ou
-				 * não no sistema de leitura e impressão simultanea.
+				 * Pamela Gatinho - 13/03/2012 Campo que identifica se a
+				 * anormalidade será usada ou não no sistema de leitura e
+				 * impressão simultanea.
 				 */
-				form.setIndicadorImpressaoSimultanea(""
-						+ leituraAnormalidade.getIndicadorImpressaoSimultanea());
-				
-				sessao.setAttribute("leituraAnormalidadeAtualizar",
-						leituraAnormalidade);
+				form.setIndicadorImpressaoSimultanea("" + leituraAnormalidade.getIndicadorImpressaoSimultanea());
+
+				sessao.setAttribute("leituraAnormalidadeAtualizar", leituraAnormalidade);
 			}
 		}
 
 		// -------------- bt DESFAZER ---------------
 
-		if (httpServletRequest.getParameter("desfazer") != null
-				&& httpServletRequest.getParameter("desfazer")
-						.equalsIgnoreCase("S")) {
+		if (httpServletRequest.getParameter("desfazer") != null && httpServletRequest.getParameter("desfazer").equalsIgnoreCase("S")) {
 
 			sessao.removeAttribute("colecaoLeituraAnormalidadeTela");
 
 			String leituraAnormalidadeID = null;
 
-			if (sessao.getAttribute("idRegistroAtualizacao") != null
-					&& !sessao.getAttribute("idRegistroAtualizacao").equals("")) {
-				leituraAnormalidadeID = (String) sessao
-						.getAttribute("idRegistroAtualizacao");
+			if (sessao.getAttribute("idRegistroAtualizacao") != null && !sessao.getAttribute("idRegistroAtualizacao").equals("")) {
+				leituraAnormalidadeID = (String) sessao.getAttribute("idRegistroAtualizacao");
 			}
 
 			if (leituraAnormalidadeID.equalsIgnoreCase("")) {
@@ -335,56 +252,35 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 
 			if ((leituraAnormalidadeID == null) && (id == null)) {
 
-				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) sessao
-						.getAttribute("objetoLeituraAnormalidade");
+				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) sessao.getAttribute("objetoLeituraAnormalidade");
 
 				form.setDescricao(leituraAnormalidade.getDescricao());
 				form.setAbreviatura(leituraAnormalidade.getDescricaoAbreviada());
-				form.setIndicadorRelativoHidrometro(""
-						+ leituraAnormalidade.getIndicadorRelativoHidrometro());
-				form.setIndicadorImovelSemHidrometro(""
-						+ leituraAnormalidade.getIndicadorImovelSemHidrometro());
-				form.setUsoRestritoSistema(""
-						+ leituraAnormalidade.getIndicadorSistema());
-				form.setPerdaTarifaSocial(""
-						+ leituraAnormalidade.getIndicadorPerdaTarifaSocial());
-				form.setOsAutomatico(""
-						+ leituraAnormalidade.getIndicadorEmissaoOrdemServico());
-				form.setTipoServico(leituraAnormalidade.getServicoTipo()
-						.getId().toString());
-				form.setConsumoLeituraNaoInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoSemleitura().getId()
-						.toString());
-				form.setConsumoLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoComleitura().getId()
-						.toString());
-				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraSemleitura().getId()
-						.toString());
-				form.setLeituraLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraComleitura().getId()
-						.toString());
+				form.setIndicadorRelativoHidrometro("" + leituraAnormalidade.getIndicadorRelativoHidrometro());
+				form.setIndicadorImovelSemHidrometro("" + leituraAnormalidade.getIndicadorImovelSemHidrometro());
+				form.setUsoRestritoSistema("" + leituraAnormalidade.getIndicadorSistema());
+				form.setPerdaTarifaSocial("" + leituraAnormalidade.getIndicadorPerdaTarifaSocial());
+				form.setOsAutomatico("" + leituraAnormalidade.getIndicadorEmissaoOrdemServico());
+				form.setTipoServico(leituraAnormalidade.getServicoTipo().getId().toString());
+				form.setConsumoLeituraNaoInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoSemleitura().getId().toString());
+				form.setConsumoLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoComleitura().getId().toString());
+				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraSemleitura().getId().toString());
+				form.setLeituraLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraComleitura().getId().toString());
 
 				if (leituraAnormalidade.getNumeroFatorSemLeitura() != null) {
-					form.setNumeroFatorSemLeitura(""
-							+ leituraAnormalidade.getNumeroFatorSemLeitura());
+					form.setNumeroFatorSemLeitura("" + leituraAnormalidade.getNumeroFatorSemLeitura());
 				}
 				if (leituraAnormalidade.getNumeroFatorComLeitura() != null) {
-					form.setNumeroFatorComLeitura(""
-							+ leituraAnormalidade.getNumeroFatorComLeitura());
+					form.setNumeroFatorComLeitura("" + leituraAnormalidade.getNumeroFatorComLeitura());
 				}
 				if (leituraAnormalidade.getIndicadorLeitura() != null) {
-					form.setIndicadorLeitura(""
-							+ leituraAnormalidade.getIndicadorLeitura());
+					form.setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
 				}
 
-				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade
-						.getNumeroVezesSuspendeLeitura().toString());
-				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade
-						.getNumeroMesesLeituraSuspensa().toString());
+				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade.getNumeroVezesSuspendeLeitura().toString());
+				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade.getNumeroMesesLeituraSuspensa().toString());
 
-				sessao.setAttribute("leituraAnormalidadeAtualizar",
-						leituraAnormalidade);
+				sessao.setAttribute("leituraAnormalidadeAtualizar", leituraAnormalidade);
 				sessao.removeAttribute("leituraAnormalidade");
 			}
 
@@ -395,92 +291,60 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 			if (idLeituraAnormalidade != null) {
 
 				FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
-				filtroLeituraAnormalidade
-						.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoSemleitura");
-				filtroLeituraAnormalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroLeituraAnormalidade.ID,
-								idLeituraAnormalidade));
+				filtroLeituraAnormalidade.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeConsumoSemleitura");
+				filtroLeituraAnormalidade.adicionarParametro(new ParametroSimples(FiltroLeituraAnormalidade.ID, idLeituraAnormalidade));
 
-				Collection<LeituraAnormalidade> colecaoLeituraAnormalidade = fachada
-						.pesquisar(filtroLeituraAnormalidade,
-								LeituraAnormalidade.class.getName());
+				Collection<LeituraAnormalidade> colecaoLeituraAnormalidade = fachada.pesquisar(filtroLeituraAnormalidade, LeituraAnormalidade.class.getName());
 
 				if (Util.isVazioOrNulo(colecaoLeituraAnormalidade)) {
-					throw new ActionServletException(
-							"atencao.atualizacao.timestamp");
+					throw new ActionServletException("atencao.atualizacao.timestamp");
 				}
 
-				httpServletRequest.setAttribute("colecaoLeituraAnormalidade",
-						colecaoLeituraAnormalidade);
+				httpServletRequest.setAttribute("colecaoLeituraAnormalidade", colecaoLeituraAnormalidade);
 
-				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) colecaoLeituraAnormalidade
-						.iterator().next();
+				LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) colecaoLeituraAnormalidade.iterator().next();
 
 				form.setAbreviatura(leituraAnormalidade.getDescricaoAbreviada());
-				form.setIndicadorRelativoHidrometro(""
-						+ leituraAnormalidade.getIndicadorRelativoHidrometro());
-				form.setIndicadorImovelSemHidrometro(""
-						+ leituraAnormalidade.getIndicadorImovelSemHidrometro());
-				form.setUsoRestritoSistema(""
-						+ leituraAnormalidade.getIndicadorSistema());
-				form.setPerdaTarifaSocial(""
-						+ leituraAnormalidade.getIndicadorPerdaTarifaSocial());
-				form.setOsAutomatico(""
-						+ leituraAnormalidade.getIndicadorEmissaoOrdemServico());
-				form.setTipoServico(leituraAnormalidade.getServicoTipo()
-						.getId().toString());
-				form.setConsumoLeituraNaoInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoSemleitura().getId()
-						.toString());
-				form.setConsumoLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeConsumoComleitura().getId()
-						.toString());
-				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraSemleitura().getId()
-						.toString());
-				form.setLeituraLeituraInformado(leituraAnormalidade
-						.getLeituraAnormalidadeLeituraComleitura().getId()
-						.toString());
+				form.setIndicadorRelativoHidrometro("" + leituraAnormalidade.getIndicadorRelativoHidrometro());
+				form.setIndicadorImovelSemHidrometro("" + leituraAnormalidade.getIndicadorImovelSemHidrometro());
+				form.setUsoRestritoSistema("" + leituraAnormalidade.getIndicadorSistema());
+				form.setPerdaTarifaSocial("" + leituraAnormalidade.getIndicadorPerdaTarifaSocial());
+				form.setOsAutomatico("" + leituraAnormalidade.getIndicadorEmissaoOrdemServico());
+				form.setTipoServico(leituraAnormalidade.getServicoTipo().getId().toString());
+				form.setConsumoLeituraNaoInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoSemleitura().getId().toString());
+				form.setConsumoLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeConsumoComleitura().getId().toString());
+				form.setLeituraLeituraNaoturaInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraSemleitura().getId().toString());
+				form.setLeituraLeituraInformado(leituraAnormalidade.getLeituraAnormalidadeLeituraComleitura().getId().toString());
 
 				if (leituraAnormalidade.getNumeroFatorSemLeitura() != null) {
-					form.setNumeroFatorSemLeitura(""
-							+ leituraAnormalidade.getNumeroFatorSemLeitura());
+					form.setNumeroFatorSemLeitura("" + leituraAnormalidade.getNumeroFatorSemLeitura());
 				}
 				if (leituraAnormalidade.getNumeroFatorComLeitura() != null) {
-					form.setNumeroFatorComLeitura(""
-							+ leituraAnormalidade.getNumeroFatorComLeitura());
+					form.setNumeroFatorComLeitura("" + leituraAnormalidade.getNumeroFatorComLeitura());
 				}
 				if (leituraAnormalidade.getIndicadorLeitura() != null) {
-					form.setIndicadorLeitura(""
-							+ leituraAnormalidade.getIndicadorLeitura());
+					form.setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
 				}
 
-				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade
-						.getNumeroVezesSuspendeLeitura().toString());
-				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade
-						.getNumeroMesesLeituraSuspensa().toString());
+				form.setNumeroVezesSuspendeLeitura(leituraAnormalidade.getNumeroVezesSuspendeLeitura().toString());
+				form.setNumeroMesesLeituraSuspensa(leituraAnormalidade.getNumeroMesesLeituraSuspensa().toString());
 
-				httpServletRequest.setAttribute("idLeituraAnormalidade",
-						idLeituraAnormalidade);
-				
+				httpServletRequest.setAttribute("idLeituraAnormalidade", idLeituraAnormalidade);
+
 				/**
 				 * 
-				 * Pamela Gatinho - 13/03/2012
-				 * Campo que identifica se a anormalidade será usada ou
-				 * não no sistema de leitura e impressão simultanea.
+				 * Pamela Gatinho - 13/03/2012 Campo que identifica se a
+				 * anormalidade será usada ou não no sistema de leitura e
+				 * impressão simultanea.
 				 */
-				form.setIndicadorImpressaoSimultanea(""
-					+ leituraAnormalidade.getIndicadorImpressaoSimultanea());
-				
-				sessao.setAttribute("leituraAnormalidadeAtualizar",
-						leituraAnormalidade);
+				form.setIndicadorImpressaoSimultanea("" + leituraAnormalidade.getIndicadorImpressaoSimultanea());
+
+				sessao.setAttribute("leituraAnormalidadeAtualizar", leituraAnormalidade);
 			}
 		}
 		// -------------- bt DESFAZER ---------------
 
-		httpServletRequest.setAttribute("colecaoLeituraAnormalidadeTela",
-				sessao.getAttribute("colecaoLeituraAnormalidadeTipoValorTela"));
+		httpServletRequest.setAttribute("colecaoLeituraAnormalidadeTela", sessao.getAttribute("colecaoLeituraAnormalidadeTipoValorTela"));
 
 		return retorno;
 

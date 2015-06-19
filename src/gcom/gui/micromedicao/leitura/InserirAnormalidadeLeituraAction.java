@@ -69,6 +69,7 @@ public class InserirAnormalidadeLeituraAction extends GcomAction {
 		String fatorSemLeitura = form.getNumeroFatorSemLeitura();
 		String fatorComLeitura = form.getNumeroFatorComLeitura();
 		String indicadorLeitura = form.getIndicadorLeitura();
+		String indicadorImpressaoSimultanea = form.getIndicadorImpressaoSimultanea();
 
 		LeituraAnormalidade anormalidadeLeituraInserir = new LeituraAnormalidade();
 		Collection colecaoPesquisa = null;
@@ -196,6 +197,12 @@ public class InserirAnormalidadeLeituraAction extends GcomAction {
 												null,
 												"Anormalidade Emite OS Automática");
 		}
+		// Indicador Impressao Simultanea
+		if (indicadorImpressaoSimultanea == null || indicadorImpressaoSimultanea.equalsIgnoreCase("")) {
+			throw new ActionServletException(	"atencao.required",
+												null,
+												"Indicador Impressão Simultânea");
+		}
 
 		anormalidadeLeituraInserir.setDescricao(descricao);
 		anormalidadeLeituraInserir.setDescricaoAbreviada(abreviatura);
@@ -205,6 +212,7 @@ public class InserirAnormalidadeLeituraAction extends GcomAction {
 		anormalidadeLeituraInserir.setIndicadorPerdaTarifaSocial(new Short(perdaTarifaSocial));
 		anormalidadeLeituraInserir.setIndicadorSistema(new Short(usoRestritoSistema));
 		anormalidadeLeituraInserir.setIndicadorEmissaoOrdemServico(new Short(osAutomatico));
+		anormalidadeLeituraInserir.setIndicadorImpressaoSimultanea(new Short(indicadorImpressaoSimultanea));
 
 		if (tipoServico != null && !tipoServico.equals("")) {
 			ServicoTipo servicoTipo = new ServicoTipo();

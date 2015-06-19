@@ -198,6 +198,7 @@
 					N&atilde;o</strong> </strong></td>
 
 				</tr>
+
 				<tr>
 					<td><strong>Anormalidade Emite OS Automática:<font color="#FF0000">*</font></strong></td>
 					<td><strong> <html:radio property="osAutomatico" value="1"
@@ -216,6 +217,14 @@
 						<html:options collection="colecaoTipoServico"
 							labelProperty="descricao" property="id" />
 					</html:select></td>
+				</tr>
+				<tr>
+					<td><strong>Anormalidade referente ao IS:<font
+						color="#FF0000">*</font></strong></td>
+					<td><strong> <html:radio property="indicadorImpressaoSimultanea" value="1" />
+					<strong>Sim <html:radio property="indicadorImpressaoSimultanea" value="2" />
+					N&atilde;o</strong> </strong></td>
+
 				</tr>
 			</table>		
 			<table>
