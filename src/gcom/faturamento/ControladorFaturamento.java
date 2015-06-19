@@ -15886,7 +15886,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		ExtratoQuitacao extratoQuitacao = this.obterExtratoQuitacaoImovel(imovel.getId(), anoAnterior);
 		
-		if (extratoQuitacao != null && extratoQuitacao.getIndicadorImpressaoNaConta().equals(new Integer(ConstantesSistema.NAO))) {
+		if (extratoQuitacao != null && extratoQuitacao.getIndicadorImpressaoNaConta() != null && extratoQuitacao.getIndicadorImpressaoNaConta().equals(new Integer(ConstantesSistema.NAO))) {
 			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os débitos de consumo de água e/ou esgoto do ano de " + anoAnterior +  ".";
 		} 
 		return mensagem;
