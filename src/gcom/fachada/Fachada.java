@@ -493,6 +493,7 @@ import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioComparativoFatArrecExpurgoBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.relatorio.atendimentopublico.RelatorioAcompanhamentoBoletimMedicaoHelper;
 import gcom.relatorio.atendimentopublico.RelatorioAcompanhamentoRAHelper;
@@ -44132,6 +44133,22 @@ public class Fachada {
 	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) {
 		try {
 			return this.getControladorFaturamento().pesquisarQtdeContaImpressaoTermica(idGrupoFaturamento, referencia);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) {
+		try {
+			return this.getControladorArrecadacao().pesquisarResumoCreditosAvisosBancarios(data);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public String getSegurancaParametro(String parametro) {
+		try {
+			return this.getControladorAcesso().getSegurancaParametro(parametro);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}

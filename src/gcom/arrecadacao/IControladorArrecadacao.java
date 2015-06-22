@@ -61,6 +61,7 @@ import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioComparativoFatArrecExpurgoBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -4360,4 +4361,6 @@ public interface IControladorArrecadacao {
 		public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException;
 		
 		public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException;
+		
+		public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException;
 }

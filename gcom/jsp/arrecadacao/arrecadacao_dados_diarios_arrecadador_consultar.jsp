@@ -22,19 +22,18 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
-function avancar(){
-	document.forms[0].proximoPasso.value = 'avancar';
-	enviar();
-}
 
-function verificarExibicaoRelatorio() {
+	function avancar(){
+		document.forms[0].proximoPasso.value = 'avancar';
+		enviar();
+	}
 	
-	toggleBox('demodiv',1);
+	function verificarExibicaoRelatorio() {
+		
+		toggleBox('demodiv',1);
+		
+	}
 	
-}
-
--->
 </script>
 </head>
 <body leftmargin="5" topmargin="5">

@@ -7,6 +7,7 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.relatorio.seguranca.FiltrarRelatorioAcessosUsuariosHelper;
@@ -15,6 +16,8 @@ import gcom.relatorio.seguranca.FiltrarRelatorioSolicitacaoAcessoHelper;
 import gcom.relatorio.seguranca.RelatorioAcessosPorUsuariosHelper;
 import gcom.relatorio.seguranca.RelatorioFuncionalidadeOperacoesPorGrupoHelper;
 import gcom.relatorio.seguranca.RelatorioSolicitacaoAcessoHelper;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
 import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
 import gcom.seguranca.acesso.usuario.FiltroAbrangenciaUsuario;
@@ -5372,4 +5375,12 @@ public class ControladorAcessoSEJB implements SessionBean {
 		return colecaoRetorno;
 	}
 	
+	public String getSegurancaParametro(String parametro) throws ControladorException {
+		FiltroSegurancaParametro filtroSegurancaParametro = new FiltroSegurancaParametro();
+		filtroSegurancaParametro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, parametro));
+
+		Collection parametros = Fachada.getInstancia().pesquisar(filtroSegurancaParametro, SegurancaParametro.class.getName());
+
+		 return ((SegurancaParametro) parametros.iterator().next()).getValor();
+	}
 }
