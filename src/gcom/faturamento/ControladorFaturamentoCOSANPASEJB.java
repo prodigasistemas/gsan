@@ -1915,18 +1915,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				Imovel imovel = buildImovelAcrescimoImpontualidade(imovelPorRotaIterator);
 
 				Categoria principalCategoria = mapPrincipalCategoriaImoveis.get(imovel.getId());
-
+				
 				boolean cobrarAcrescimo = verificarCondicoesImovelCobrarAcrescimo(indicadorEncerrandoArrecadacao, mapIndicadorAcrescimoCliente, imovel, principalCategoria);
-
+				
 				if (cobrarAcrescimo) {
 					
 					debitosACobrarInserir = gerarAcrescimosConta(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel, indicadorEncerrandoArrecadacao);
 					debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosACobrarInserir));
-
+					
 					Collection<DebitoACobrar> debitosGuias = gerarAcrescimosGuiaPagamento(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel); 
 					debitosACobrarInserir.addAll(debitosGuias);
 					debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosGuias));
 				}
+					
 			}
 
 			if (debitosACobrarInserir != null && !debitosACobrarInserir.isEmpty()) {
@@ -3009,7 +3010,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Collection<DebitoACobrarCategoria> colecaoDebitosACobrarCategorias = new ArrayList();
 
 		for (DebitoACobrar debito : debitos) {
-			inserirDebitoACobrarCategoriaBatch(debito, debito.getImovel());
+			colecaoDebitosACobrarCategorias.addAll((Collection<DebitoACobrarCategoria>)inserirDebitoACobrarCategoriaBatch(debito, debito.getImovel()));
 		}
 		return colecaoDebitosACobrarCategorias;
 	}
