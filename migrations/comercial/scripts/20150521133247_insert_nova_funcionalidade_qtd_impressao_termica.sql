@@ -41,7 +41,7 @@ INSERT INTO seguranca.funcionalidade(
             fncd_id, modu_id, fncd_dsfuncionalidade, fncd_tmultimaalteracao, 
             fncd_dscaminhomenu, fncd_dscaminhourl, fncd_icpontoentrada, fncd_dsabreviado, 
             fncd_nnordemmenu, fncd_icnovajanela, fncd_icolap, fncg_id)
-    VALUES (16027, 7,'Consultar Quantidade de Contas Impressao Termica', now(), 
+    VALUES (nextval('seguranca.seq_funcionalidade'), 7,'Consultar Quantidade de Contas Impressao Termica', now(), 
     		'Gsan/Faturamento/Conta', 'exibirFiltrarQtdeContaImpressaoTermicaAction.do', 1, 'qtCntImTe',0, 2, 2, 33);
 
 
@@ -49,13 +49,13 @@ INSERT INTO seguranca.operacao(
             oper_id, fncd_id, oper_dsoperacao, oper_dsabreviado, oper_dscaminhourl, 
             oper_tmultimaalteracao, oper_idoperacaopesquisa, tbco_id, optp_id, 
             tbco_idargumento, oper_icregistratransacao)
-    VALUES (15049, 16027, 'Consultar Quantidade de Contas Impressao Termica', 'qtCntImTe', 'consultarQtdeContaImpressaoTermicaAction.do', now(), null, null, 6, null, 2);
+    VALUES (nextval('seguranca.seq_operacao'), currval('seguranca.seq_funcionalidade'), 'Consultar Quantidade de Contas Impressao Termica', 'qtCntImTe', 'consultarQtdeContaImpressaoTermicaAction.do', now(), null, null, 6, null, 2);
 
     
     
 INSERT INTO seguranca.grupo_func_operacao(
             grup_id, oper_id, fncd_id, gfop_tmultimaalteracao)
-    VALUES (1, 15049, 16027, now());
+    VALUES (1, currval('seguranca.seq_operacao'), currval('seguranca.seq_funcionalidade'), now());
 
 
 -- //@UNDO
@@ -63,7 +63,9 @@ INSERT INTO seguranca.grupo_func_operacao(
 
 DROP SEQUENCE faturamento.seq_conta_impressao_termica_qtde;
 DROP TABLE faturamento.conta_impressao_termica_qtde;
-DELETE FROM seguranca.grupo_func_operacao WHERE oper_id = 15049 AND fncd_id = 16027;
-DELETE FROM seguranca.operacao WHERE oper_id = 15049;
-DELETE FROM seguranca.funcionalidade WHERE fncd_id = 16027;
+DELETE FROM seguranca.grupo_func_operacao WHERE fncd_id in (
+  SELECT fncd_id FROM seguranca.funcionalidade WHERE fncd_dscaminhourl = 'exibirFiltrarQtdeContaImpressaoTermicaAction.do'
+);
+DELETE FROM seguranca.operacao WHERE oper_dscaminhourl = 'consultarQtdeContaImpressaoTermicaAction.do';
+DELETE FROM seguranca.funcionalidade WHERE fncd_dscaminhourl = 'exibirFiltrarQtdeContaImpressaoTermicaAction.do';
 
