@@ -51,14 +51,12 @@ public class DebitoACobrarCategoriaPK extends ObjetoGcom{
         this.categoria = categoria;
     }
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("debitoACobrar", getDebitoACobrar())
-            .append("categoria", getCategoria())
-            .toString();
-    }
 
-    public boolean equals(Object other) {
+	public String toString() {
+		return "DebitoACobrarCategoriaPK [debitoACobrar=" + debitoACobrar + ", categoria=" + categoria + "]";
+	}
+
+	public boolean equals(Object other) {
         if ( (this == other ) ) return true;
         if ( !(other instanceof DebitoACobrarCategoriaPK) ) return false;
         DebitoACobrarCategoriaPK castOther = (DebitoACobrarCategoriaPK) other;

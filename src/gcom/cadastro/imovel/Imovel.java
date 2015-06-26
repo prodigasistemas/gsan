@@ -1593,7 +1593,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
+		return "Imovel [id=" + id + "]";
 	}
 
 	public int hashCode() {

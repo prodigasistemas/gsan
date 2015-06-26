@@ -61324,7 +61324,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append("INNER JOIN faturaItem.fatura fatura ")
 					.append("WHERE faturaItem.contaGeral.id = :idConta ");
 
-			retorno = (Fatura) session.createQuery(consulta.toString()).setInteger("idConta",idConta.intValue()).uniqueResult();
+			retorno = (Fatura) session.createQuery(consulta.toString()).setInteger("idConta",idConta.intValue()).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

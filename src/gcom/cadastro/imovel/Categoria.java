@@ -233,7 +233,7 @@ public class Categoria extends ObjetoTransacao {
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
+		return "Categoria [id=" + id + "]";
 	}
 
 	public boolean equals(Object other) {

@@ -21,7 +21,7 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 	@ReportElementType(description="Arrecadador")
 	private String descricaoArrecadador;
 	
-	@ReportElementType(description="Valor do Pagamento (R$)")
+	@ReportElementType(description="Valor do Pagamento (R$)", align="right", totalizer=true)
 	private String valorPagamento;
 
 	public ResumoCreditosAvisosBancariosDTO() {}

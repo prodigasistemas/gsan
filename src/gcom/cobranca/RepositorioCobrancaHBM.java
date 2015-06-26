@@ -26970,7 +26970,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "select cli.indicadorAcrescimos from Cliente clie " + "where clie.id = :idCliente ";
+			consulta = "select clie.indicadorAcrescimos from Cliente clie " + "where clie.id = :idCliente ";
 
 			retorno = (Short) session.createQuery(consulta).setInteger("idCliente", idCliente).setMaxResults(1).uniqueResult();
 
