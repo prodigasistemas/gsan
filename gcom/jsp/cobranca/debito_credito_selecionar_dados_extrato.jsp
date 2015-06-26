@@ -29,7 +29,6 @@
 <html:javascript staticJavascript="false"  formName="DebitoCreditoDadosSelecaoExtratoActionForm"/>
 
 <SCRIPT LANGUAGE="JavaScript">
-<!--
 
 	function validarForm(form){
 		if (validateDebitoCreditoDadosSelecaoExtratoActionForm(form)){
@@ -300,7 +299,7 @@
 				
 				elemento.checked = true;
 				controleCampoAntecipacaoParcela(elemento);
-				//totalizarDebito(elemento);
+				totalizarDebito(elemento);
 			}
 		}
 		
@@ -461,7 +460,6 @@ function totalizarDebito(objeto){
 }
 
 
-//-->
 </SCRIPT>
 
 </head>
@@ -600,17 +598,13 @@ function totalizarDebito(objeto){
 		</tr>
 		
 		<tr>
-			<td><strong>Sit. da Lig. de Água:</strong></td>
-			<td>
-	   			<html:text property="descricaoLigacaoAguaSituacaoImovel" size="20" maxlength="20" readonly="true"
-				style="background-color:#EFEFEF; border:0; color: #000000"/>
-				
-				<strong>&nbsp;&nbsp;Sit. da Lig. de Esgoto:&nbsp;&nbsp;</strong>
-				
-				<html:text property="descricaoLigacaoEsgotoSituacaoImovel" size="20" maxlength="20" readonly="true"
-				style="background-color:#EFEFEF; border:0; color: #000000"/>
-				
-			</td>
+			<td><strong>Situação da Ligação de Água:</strong></td>
+			<td><html:text property="descricaoLigacaoAguaSituacaoImovel" size="20" maxlength="20" readonly="true" style="background-color:#EFEFEF; border:0; color: #000000"/></td>
+		</tr>
+		
+		<tr>
+			<td><strong>Situação da Ligação de Esgoto:</strong></td>
+			<td><html:text property="descricaoLigacaoEsgotoSituacaoImovel" size="20" maxlength="20" readonly="true" style="background-color:#EFEFEF; border:0; color: #000000"/></td>
 		</tr>
 		
 	</table>
@@ -879,8 +873,10 @@ function totalizarDebito(objeto){
 			</logic:notEmpty>
 			
 			</logic:present>
-			<INPUT TYPE="HIDDEN" NAME="valorTotalConta" ID="valorTotalConta" value="<%= "" + valorTotalConta %>"/>
+			
+			<input TYPE="hidden" NAME="valorTotalConta" ID="valorTotalConta" value="<%= "" + valorTotalConta %>"/>
 			<input type="hidden" name="valorTotalAcrescimo" ID="valorTotalAcrescimo" value="<%="" + valorTotalAcrescimo %>">
+			
 			</table>
 			
 			
