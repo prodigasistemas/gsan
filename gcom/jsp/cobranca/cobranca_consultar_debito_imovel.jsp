@@ -14,6 +14,7 @@
 <%@ page import="java.util.Collection" isELIgnored="false"%>
 <%@ page import="gcom.faturamento.conta.Conta"%>
 <%@ page import="gcom.cadastro.imovel.ImovelCobrancaSituacao"%>
+<%@ page import="java.math.BigDecimal"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <head>
@@ -111,20 +112,20 @@ function validaCheck(){
 	
 	
 function validaCheckConta(){
-	var form = document.forms[0];  	
-	
+	var form = document.forms[0];
 	var idContas = form.idsConta.value;
 	myString = new String(idContas);
 	splitString = myString.split(",");
-	
+
 	for (i=0; i< splitString.length; i++) {
 		chave  = splitString[i];
 		for(indice = 0; indice < form.elements.length; indice++){
 			if (form.elements[indice].type == "checkbox" && 
-				form.elements[indice].name == 'conta' && 
+				form.elements[indice].name == 'contasSelecionadas' && 
 				form.elements[indice].value.trim() == chave.trim()) {
-
 				form.elements[indice].checked = true;
+
+				alert("Conta:"+chave)
 			}
 		}
 	}
@@ -189,6 +190,7 @@ function validaCheckGuia(){
 		}
 	}
 }
+
 </script>
 </head>
 
@@ -204,11 +206,12 @@ function validaCheckGuia(){
 <html:form action="/exibirConsultarDebitoImovelAction"
 	name="ConsultarDebitoImovelActionForm" method="post"
 	type="gcom.gui.cobranca.ConsultarDebitoImovelActionForm">
-
+	
 	<input type="hidden" name="checkConta" value="0">
 	<input type="hidden" name="checkCredito" value="0">
 	<input type="hidden" name="checkDebito" value="0">
 	<input type="hidden" name="checkGuia" value="0">
+	<input type="hidden" name="valorAcrescimo">
 
 	<logic:notPresent name="ehPopup">
 
@@ -576,8 +579,8 @@ function validaCheckGuia(){
 																	<bean:define name="contaValoresHelper" property="conta" id="conta" />
 																	<bean:write name="conta" property="id" />
 																</html:multibox>
-																</td>
-																
+															    </td>
+
 																<td align="left"><logic:notEmpty
 																	name="contaValoresHelper" property="conta">
 																	<logic:notPresent name="ehPopup">
@@ -1897,6 +1900,41 @@ function validaCheckGuia(){
 										</tr>
 										<tr>
 											<td height="17" colspan="4">&nbsp;</td>
+										</tr>
+										     <%BigDecimal valorTotalDebito = new BigDecimal("0.00");%>
+										     <%BigDecimal valorTotalConta = new BigDecimal("0.00");%>
+					                         <%BigDecimal valorTotalAcrescimo = new BigDecimal("0.00");%>
+					                         <%BigDecimal valorTotalGuiaPagamento = new BigDecimal("0.00");%>
+					                         <%BigDecimal valorTotalParcelamento = new BigDecimal("0.00");%>
+                                             <%BigDecimal valorTotalDebitosFinal = valorTotalConta.add(valorTotalDebito); %>
+											 <%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalGuiaPagamento); %>
+											 <%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalParcelamento); %>
+											 <%BigDecimal valorTotalDebitosAtualizado = valorTotalDebitosFinal.add(valorTotalAcrescimo); %>
+											
+										<tr>
+										    <td>
+													<table width="100%" border="0">
+													<tr>
+														<td HEIGHT="20"><strong>Total dos Débitos:</strong></td>
+														<td><div align="right"><strong><%=request.getAttribute("valorTotalSemAcrescimo")%></strong></div></td>
+													</tr>
+													<tr>
+														<td HEIGHT="20"><strong>Total dos Débitos Atualizados:</strong></td>
+														<td><div align="right"><strong><%=request.getAttribute("valorTotalComAcrescimo")%></strong></div></td>
+													</tr>
+												
+													<tr>
+														<td HEIGHT="20"><strong>Total de Débitos Selecionados:</strong></td>
+														<td><div align="right" style="font-size: 12"><strong><span id="totalDebitoSelecionado">0,00</span></strong></div></td>
+														
+													</tr>
+													<tr>
+														<td HEIGHT="20"><strong>Total de Débitos Acumulados Selecionados:</strong></td>
+														<td><div align="right" style="font-size: 12"><strong><span id="totalDebitoAtualizadoSelecionado">0,00</span></strong></div></td>
+														
+													</tr>
+													</table>
+										   </td>
 										</tr>
 										
 											<tr>

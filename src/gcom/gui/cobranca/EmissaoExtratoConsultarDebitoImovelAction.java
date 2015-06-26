@@ -160,6 +160,8 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 
 			sessao.setAttribute("valorPagamentoAVista", valorTotalSemAcrescimo);
 			sessao.setAttribute("valorCreditoARealizar", valorCreditoARealizar);
+			sessao.setAttribute("valorAcrescimo", valorAcrescimo);
+			
 		}
 		
 		return retorno;		
