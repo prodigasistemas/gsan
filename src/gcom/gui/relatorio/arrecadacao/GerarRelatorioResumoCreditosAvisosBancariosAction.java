@@ -11,6 +11,7 @@ import gcom.util.Util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +36,11 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 		Fachada fachada = Fachada.getInstancia();
 
 		String data = form.getDataConsulta().replace("/", "-");
-		String nomeArquivo = "resumo_creditos_avisos_bancarios_" + data + ".pdf";
+		String nomeRelatorio = "resumo_creditos_avisos_bancarios_" + data + ".pdf";
 		
 		RelatorioUtil relatorioUtil = new RelatorioUtil(
 				"Resumo de Créditos dos Avisos Bancários",
-				nomeArquivo,
+				nomeRelatorio,
 				ResumoCreditosAvisosBancariosDTO.class, 
 				FormatoRelatorio.PDF);
 
@@ -52,21 +53,33 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 		List<ReportItemDTO> itens = new ArrayList<ReportItemDTO>();
 		itens.addAll(resumos);
 
-		relatorioUtil.gerarRelatorio(itens);
-
-		String url = fachada.getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_GSAN_RELATORIOS.toString());
-
-		downloadRelatorio(response, url, nomeArquivo);
+		File relatorio = gerar(relatorioUtil, itens);
+		
+		downloadRelatorio(response, relatorio);
 
 		return null;
 	}
 
-	private void downloadRelatorio(HttpServletResponse response, String url, String nomeArquivo) {
+	private File gerar(RelatorioUtil relatorioUtil, List<ReportItemDTO> itens) {
+		File relatorio = null;
+		
+		try {
+			relatorio = relatorioUtil.gerarRelatorio(itens);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_relatorio");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_relatorio");
+		}
+		
+		return relatorio;
+	}
+
+	private void downloadRelatorio(HttpServletResponse response, File relatorio) {
 		try {
 			response.setContentType(FormatoRelatorio.PDF.getContentType());
-			response.addHeader("Content-Disposition", "attachment; filename=" + nomeArquivo);
-
-			File relatorio = Util.salvarArquivoDeURL(url + nomeArquivo, nomeArquivo);
+			response.addHeader("Content-Disposition", "attachment; filename=" + relatorio.getName());
 
 			ServletOutputStream sos = response.getOutputStream();
 			sos.write(IoUtil.getBytesFromFile(relatorio));

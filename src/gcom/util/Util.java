@@ -6418,7 +6418,7 @@ public class Util {
 	}
 	
 	public static File salvarArquivoDeURL(final String url, final String nome) throws MalformedURLException, IOException {
-		BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+		BufferedInputStream in = new BufferedInputStream(new URL(url + nome).openStream());
 		FileOutputStream out = new FileOutputStream(nome);
 		
 		final byte data[] = new byte[1024];

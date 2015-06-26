@@ -1,6 +1,12 @@
 package gcom.relatorio;
 
+import gcom.fachada.Fachada;
+import gcom.seguranca.SegurancaParametro;
+import gcom.util.Util;
+
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import br.com.prodigasistemas.gsan.relatorio.FormatoRelatorio;
@@ -19,15 +25,17 @@ public class RelatorioUtil {
 		this.relatorio.setFormato(formato);
 	}
 
-	public void gerarRelatorio(List<ReportItemDTO> linhas) {
-		try {
-			relatorio.addLinhas(linhas);
+	public File gerarRelatorio(List<ReportItemDTO> linhas) throws MalformedURLException, IOException {
+		String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_GSAN_RELATORIOS.toString());
+		
+		relatorio.addLinhas(linhas);
 
-			util.invokeReport(relatorio);
-		} catch (IOException e) {
-			e.printStackTrace();
+		try {
+			util.invokeReport(relatorio, url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return Util.salvarArquivoDeURL(url, relatorio.getName());
 	}
 }

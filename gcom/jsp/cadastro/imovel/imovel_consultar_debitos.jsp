@@ -439,7 +439,7 @@ function pesquisarImovel() {
 						<%String cor = "#cbe5fe";%>
 						<%cor = "#cbe5fe";%>
 						<tr bordercolor="#79bbfd">
-							<td colspan="9" align="center" bgcolor="#79bbfd">
+							<td colspan="10" align="center" bgcolor="#79bbfd">
 							<strong>Contas</strong>
 							</td>
 						</tr>
@@ -842,10 +842,10 @@ function pesquisarImovel() {
 									<logic:present name="colecaoContaValoresPreteritos">
 										<logic:notEmpty name="colecaoContaValoresPreteritos" scope="session">
 											<tr>
-												<td colspan="8">
+												<td colspan="10">
 													<div align="center">
 														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
-															<strong>----------------- Contas de clientes anteriores -----------------</strong>
+															<strong>Contas de Clientes Anteriores</strong>
 														</font>
 													</div>
 												</td>
