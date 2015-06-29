@@ -89,6 +89,8 @@ import javax.ejb.SessionContext;
 
 import org.apache.log4j.Logger;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoCadastral, SessionBean {
 
 

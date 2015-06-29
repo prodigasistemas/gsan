@@ -10,7 +10,7 @@
 			<invoker-bindings>
 				<invoker>
 					<invoker-proxy-binding-name>
-						message-driven-bean-limite10
+						message-driven-bean
 					</invoker-proxy-binding-name>
 				</invoker>
 			</invoker-bindings>

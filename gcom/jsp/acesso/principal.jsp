@@ -20,7 +20,6 @@
           var empresa;
           interval *= 1000;
 
-
           var image_index = 0;
          
           image_list = new Array();
@@ -161,9 +160,6 @@
                           </td>
                     </tr>
                   </table>
-                 
-                 
-
                  
                  <logic:equal name="RAUrgencia" value="true" scope="session">
                  

@@ -456,7 +456,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION operacao.geraindicador(date)
-  OWNER TO pamela;
+  OWNER TO gsan_admin;
 
 
 -- //@UNDO
@@ -924,5 +924,5 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION operacao.geraindicador(date)
-  OWNER TO pamela;
+  OWNER TO gsan_admin;
 

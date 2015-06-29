@@ -5,7 +5,6 @@
 	version="2.4">
 
 	
-	
 	<filter>
 		<filter-name>filtroSessaoExpirada</filter-name>
 		<filter-class>gcom.gui.util.FiltroSessaoExpirada</filter-class>
@@ -25,7 +24,7 @@
 		<filter-name>filtroSessaoExpirada</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	
+
 	<filter>
 		<filter-name>filtroAtualizarQuadroAvisos</filter-name>
 		<filter-class>gcom.gui.util.FiltroAtualizarQuadroAvisos</filter-class>
@@ -50,7 +49,7 @@
 		<filter-name>filtroSessao</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-
+	
 	<filter>
 		<filter-name>filtroSegurancaAcesso</filter-name>
 		<filter-class>gcom.gui.util.FiltroSegurancaAcesso</filter-class>
@@ -60,15 +59,12 @@
 		<filter-name>filtroSegurancaAcesso</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	
-	
-
+	 
 	<filter-mapping>
 		<filter-name>requestControlFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
 	
-
 	<servlet>
 		<servlet-name>InicializadorSistema</servlet-name>
 		<servlet-class>gcom.gui.InicializadorSistema</servlet-class>
@@ -98,7 +94,6 @@
 	  <url-pattern>*.css</url-pattern>
 	</filter-mapping>
 
-   
     <filter-mapping>
 	  <filter-name>ResponseHeaderFilter</filter-name>
 	  <url-pattern>*.js</url-pattern>

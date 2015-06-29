@@ -16,6 +16,9 @@ scripts/build/build_gcom_desenv.sh
 scripts/build/build_gcom_homolog.sh
 scripts/build/build_gcom_prod_online.sh
 scripts/build/build_gcom_prod_batch.sh
+migrations/gsandbs.rar
+migrations/jboss-4.0.1sp1.rar
+migrations/mybatis-migrations-3.2.0.zip
 migrations/gerencial/environments/local.properties
 migrations/gerencial/environments/development.properties
 migrations/gerencial/environments/stage.properties

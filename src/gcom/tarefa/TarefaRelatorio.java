@@ -28,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -44,7 +43,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
@@ -78,6 +76,7 @@ public abstract class TarefaRelatorio extends Tarefa {
 
 	protected String nomeRelatorio = null;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public byte[] gerarRelatorio(String nomeRelatorio, Map parametrosRelatorio,
 			RelatorioDataSource relatorioDataSource, int tipoSaidaRelatorio)
 			throws RelatorioVazioException {
@@ -265,6 +264,7 @@ public abstract class TarefaRelatorio extends Tarefa {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public final void execute(JobExecutionContext arg0)
 			throws JobExecutionException {
 

@@ -134,7 +134,7 @@ import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 
 /**
- * < <DescriÁ„o da Classe>>
+ * < <Descri√ß√£o da Classe>>
  * 
  * @author Administrador 
  */
@@ -171,13 +171,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo respons·vel por verificar se existe no banco um determinado ID na
-	 * tabela de faturamento_grupo - caso exista o id passado como par‚metro na
-	 * tabela, retorna true, caso contr·rio retorna false
+	 * M√©todo respons√°vel por verificar se existe no banco um determinado ID na
+	 * tabela de faturamento_grupo - caso exista o id passado como par√¢metro na
+	 * tabela, retorna true, caso contr√°rio retorna false
 	 * 
 	 * @param Integer
 	 *            id - id de um FaturamentoGrupo
-	 * @return boolean - true para existir o id na tabela, false para n„o
+	 * @return boolean - true para existir o id na tabela, false para n√£o
 	 *         existir
 	 */
 	public boolean verificarExistenciaIdGrupoFaturamento(Integer id)
@@ -199,10 +199,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -211,15 +211,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * < <DescriÁ„o do mÈtodo>>
+	 * < <Descri√ß√£o do m√©todo>>
 	 * 
 	 * @param imovel
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param anoMesReferencia
-	 *            DescriÁ„o do par‚metro
-	 * @return DescriÁ„o do retorno
+	 *            Descri√ß√£o do par√¢metro
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public Integer pesquisarExistenciaConta(Imovel imovel, int anoMesReferencia)
 			throws ErroRepositorioException {
@@ -239,10 +239,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"imovel", anoMesReferencia).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -250,17 +250,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * < <DescriÁ„o do mÈtodo>>
+	 * < <Descri√ß√£o do m√©todo>>
 	 * 
 	 * @param faturamentoGrupo
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param anoMesReferencia
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param faturamentoAtividade
-	 *            DescriÁ„o do par‚metro
-	 * @return DescriÁ„o do retorno
+	 *            Descri√ß√£o do par√¢metro
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public Object[] obterDataPrevistaRealizadaFaturamentoAtividadeCronograma(
 			FaturamentoGrupo faturamentoGrupo, int anoMesReferencia,
@@ -285,10 +285,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					faturamentoAtividade.getId()).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -343,7 +343,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Roberta Costa
 	 * @date 18/07/2006
 	 * 
-	 * @return uma lista de atividades de faturamento comandadas e ainda n„o
+	 * @return uma lista de atividades de faturamento comandadas e ainda n√£o
 	 *         realizadas
 	 * @throws ErroRepositorioException
 	 */
@@ -357,7 +357,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		/**
 		 * 
-		 * MudanÁa na ordenaÁ„o das atividades de faturamento a serem exibidas na tela. 
+		 * Mudan√ßa na ordena√ß√£o das atividades de faturamento a serem exibidas na tela. 
 		 * Ordenando por dataDeComando em ordem decrescente
 		 * 
 		 * @author Wellington Rocha
@@ -378,10 +378,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					10 * numeroPagina).setMaxResults(10).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -395,7 +395,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
 	 * Retorna o count do resultado da pesquisa de Faturamento Atividade
-	 * Cronograma n„o realizadas
+	 * Cronograma n√£o realizadas
 	 * 
 	 * buscarAtividadeComandadaNaoRealizadaCount
 	 * 
@@ -426,10 +426,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) session.createQuery(consulta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -439,7 +439,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
-	 * @return uma coleÁ„o de FATURAMENTO_ATIVIDADE_CRONOGRAMA
+	 * @return uma cole√ß√£o de FATURAMENTO_ATIVIDADE_CRONOGRAMA
 	 * @throws ErroRepositorioException
 	 */
 	public Collection buscarFaturamentoAtividadeCronograma(String ids)
@@ -462,10 +462,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = session.createQuery(consulta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -476,7 +476,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 26/12/2005
 	 * 
 	 * @param conta
-	 * @return uma coleÁ„o com os dÈbitos cobrados de uma conta
+	 * @return uma cole√ß√£o com os d√©bitos cobrados de uma conta
 	 * @throws ErroRepositorioException
 	 */
 	public Collection buscarDebitosCobradosConta(Conta conta)
@@ -503,10 +503,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -538,10 +538,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -552,7 +552,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 28/12/2005
 	 * 
 	 * @param conta
-	 * @return uma coleÁ„o com os crÈditos realizados de uma conta
+	 * @return uma cole√ß√£o com os cr√©ditos realizados de uma conta
 	 * @throws ErroRepositorioException
 	 */
 	public Collection buscarCreditosRealizadosConta(Conta conta)
@@ -580,10 +580,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -611,10 +611,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setDate("dataLeituraAtual", dataLeituraAtual).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -622,7 +622,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/06/2007
@@ -651,10 +651,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -683,10 +683,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -715,10 +715,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							Subcategoria.SUBCATEGORIA_ZERO.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -744,10 +744,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					consumoTarifaCategoria.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -755,12 +755,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
 	 * Retorna a faixa de consumo de acordo com a tarifa da categoria e o
 	 * consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 13/07/2009
 	 * 
 	 * @param consumoTarifaCategoria
@@ -789,10 +789,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -800,7 +800,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vigÍncia em vigor
+	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vig√™ncia em vigor
 	 * de uma tarifa de consumo
 	 * 
 	 * @param consumoTarifa
@@ -827,10 +827,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -838,7 +838,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vigÍncia em vigor
+	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vig√™ncia em vigor
 	 * de uma tarifa de consumo Pesquisa a Data de Vigencia da Consumo Tarifa e
 	 * da Consumo Tarifa Vigencia
 	 * 
@@ -870,10 +870,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							idConsumoTarifaVigencia).setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -919,10 +919,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -930,9 +930,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vigÍncia em vigor
+	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vig√™ncia em vigor
 	 * de uma tarifa de consumo Pesuisar a Maior Menor data de todas as
-	 * vigÍncias do Consumo Tarifa
+	 * vig√™ncias do Consumo Tarifa
 	 * 
 	 * @author Rafael Santos
 	 * @since 12/07/2006
@@ -960,10 +960,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -971,7 +971,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vigÍncia em vigor
+	 * [UC0168] - Inserir Tarifa de Consumo Retorna a date de vig√™ncia em vigor
 	 * de uma tarifa de consumo Pesquisa a Maior Menor data das vigencia
 	 * 
 	 * @author Rafael Santos
@@ -1008,10 +1008,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1021,7 +1021,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Seleciona a partir da tabela CLIENTE_IMOVEL para IMOV_ID=Id do imÛvel e
+	 * Seleciona a partir da tabela CLIENTE_IMOVEL para IMOV_ID=Id do im√≥vel e
 	 * CLIM_DTRELACAOFIM com o valor correspondente a nulo
 	 * 
 	 * @param IMOVEL
@@ -1045,10 +1045,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					imovel.getId().intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1057,7 +1057,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S·vio Luiz Data:
+	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S√°vio Luiz Data:
 	 * 18/01/2006
 	 */
 
@@ -1080,17 +1080,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S·vio Luiz Data:
+	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S√°vio Luiz Data:
 	 * 18/01/2006
 	 */
 
@@ -1115,22 +1115,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S·vio Luiz Data:
+	 * [UC0082] - Registrar Leituras e Anormalidades Autor: S√°vio Luiz Data:
 	 * 18/01/2006
 	 */
 
-	// autor : S·vio Luiz atualiza a data de realizaÁ„o e a data de ultima
-	// alteraÁ„o
+	// autor : S√°vio Luiz atualiza a data de realiza√ß√£o e a data de ultima
+	// altera√ß√£o
 	// do faturamento atividade cronograma
 	public void atualizarFaturamentoAtividadeCronograma(
 			Integer idFaturamentoAtividadeCronograma, Date dataRealizada)
@@ -1154,7 +1154,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -1199,8 +1199,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Diogo Peixoto
 	 * @created 18/01/2006, 27/04/2011
@@ -1252,18 +1252,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa
 	 * @created 18/01/2006, 22/01/2007
@@ -1326,18 +1326,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa
 	 * @created 18/01/2006, 22/01/2007
@@ -1415,18 +1415,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @created 25/04/2011
@@ -1498,18 +1498,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = session.createQuery(sb.toString()).setInteger("anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa
 	 * @created 18/01/2006, 22/01/2007
@@ -1572,18 +1572,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"gerenciaRegional", gerenciaRegional).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa
 	 * @created 18/01/2006, 22/01/2007
@@ -1653,18 +1653,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"gerenciaRegional", gerenciaRegional).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa
 	 * @created 18/01/2006, 22/01/2007
@@ -1729,18 +1729,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"localidade", localidade).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @created 25/04/2011
@@ -1806,10 +1806,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = session.createQuery(sb.toString()).setInteger("anoMesReferencia", anoMesReferencia).setInteger("municipio", municipio).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -1818,7 +1818,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0146] - Manter Conta Author: Raphael Rossiter Data: 21/01/2006
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -1865,10 +1865,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"retificada", situacaoRetificada).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1889,8 +1889,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			// Atualiza apenas os dados (data do cancelamento, motivo, situaÁ„o
-			// anterior, situaÁ„o atual) da
+			// Atualiza apenas os dados (data do cancelamento, motivo, situa√ß√£o
+			// anterior, situa√ß√£o atual) da
 			// conta
 			update = "UPDATE gcom.faturamento.conta.Conta SET "
 					+ "cnta_dtcancelamento = :dataCancelamento, cmcn_id = :motivo, "
@@ -1915,10 +1915,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -1937,8 +1937,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			// Atualiza apenas os dados (data do cancelamento,
-			// motivoCancelamento, situaÁ„o atual,
-			// situaÁ„o atual, dataRetificacao, motivoRetificacao,
+			// motivoCancelamento, situa√ß√£o atual,
+			// situa√ß√£o atual, dataRetificacao, motivoRetificacao,
 			// referenciaContabil) da
 			// conta
 			update = "UPDATE gcom.faturamento.conta.Conta SET "
@@ -1962,16 +1962,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0147] - Colocar Revis„o Conta Author: Raphael Rossiter Data:
+	 * [UC0147] - Colocar Revis√£o Conta Author: Raphael Rossiter Data:
 	 * 23/01/2006
 	 * 
 	 * @param conta
@@ -2001,16 +2001,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0149] - Retirar Revis„o Conta Author: Raphael Rossiter Data:
+	 * [UC0149] - Retirar Revis√£o Conta Author: Raphael Rossiter Data:
 	 * 23/01/2006
 	 * 
 	 * @param conta
@@ -2036,10 +2036,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -2103,10 +2103,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 //		} catch (HibernateException e) {
-//			// levanta a exceÁ„o para a prÛxima camada
+//			// levanta a exce√ß√£o para a pr√≥xima camada
 //			throw new ErroRepositorioException(e, "Erro no Hibernate");
 //		} finally {
-//			// fecha a sess„o
+//			// fecha a sess√£o
 //			HibernateUtil.closeSession(session);
 //		}
 	}
@@ -2127,10 +2127,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					rotaId.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -2139,7 +2139,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * [UC0113 - Faturar Grupo Faturamento] Author: Leonardo Vieira, Rafael
-	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento SimulÁao
+	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento Simul√ßao
 	 * 
 	 * @param idFaturamentoGrupo
 	 *            Id do Faturamento Grupo
@@ -2163,15 +2163,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * anoMesReferencia.intValue()) .iterate();
 	 * 
 	 * while (iterator.hasNext()) { iterator.next(); iterator.remove(); }
-	 * session.flush(); } catch (HibernateException e) { // levanta a exceÁ„o
-	 * para a prÛxima camada throw new ErroRepositorioException(e, "Erro no
-	 * Hibernate"); } finally { // fecha a sess„o
+	 * session.flush(); } catch (HibernateException e) { // levanta a exce√ß√£o
+	 * para a pr√≥xima camada throw new ErroRepositorioException(e, "Erro no
+	 * Hibernate"); } finally { // fecha a sess√£o
 	 * HibernateUtil.closeSession(session); } }
 	 */
 
 	/**
 	 * [UC0113 - Faturar Grupo Faturamento] Author: Leonardo Vieira, Rafael
-	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento SimulÁao
+	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento Simul√ßao
 	 * 
 	 * @param idFaturamentoGrupo
 	 *            Id do Faturamento Grupo
@@ -2193,10 +2193,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -2204,7 +2204,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * [UC0113 - Faturar Grupo Faturamento] Author: Leonardo Vieira, Rafael
-	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento SimulÁao
+	 * Santos DAta: 17/02/2006 Remove o Resumo Faturamento Simul√ßao
 	 * 
 	 * @param idFaturamentoGrupo
 	 *            Id do Faturamento Grupo
@@ -2230,10 +2230,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idRota", idRota.intValue()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -2261,10 +2261,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							faturamentoAtividadeId).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -2278,8 +2278,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @param imovelId
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualId
-	 *            Id do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Debitos a Cobrar
+	 *            Id do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Debitos a Cobrar
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarDebitosACobrar(Integer imovelId,
@@ -2348,14 +2348,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "where imov.imov_id = :imovelId  "
 					+ " and dbac.dbac_nnprestacaocobradas < (dbac.dbac_nnprestacaodebito - coalesce(dbac_nnparcelabonus,0))  "
 					/*
-					 * INÕCIO_ALTERA«√O
+					 * IN√çCIO_ALTERA√á√ÉO
 					 * Adicionado por: Mariana Victor - 03/08/2011
-					 * RM 1887 - Retirar os dÈbitos a cobra quando estiverem em revis„o
+					 * RM 1887 - Retirar os d√©bitos a cobra quando estiverem em revis√£o
 					 * */
 					+ " and (dbac.dbac_dtrevisao is null "
 					+ "   and dbac.cmrv_id is null) "
 					/* 
-					 * FIM_ALTERA«√O
+					 * FIM_ALTERA√á√ÉO
 					 * */
 					+ " and dbac.dcst_idatual = :debitoCreditoSituacaoAtualId";
 
@@ -2382,10 +2382,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							debitoCreditoSituacaoAtualId).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -2397,7 +2397,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * @param debitoACobrarID
 	 *            Id do Debito a Cobrar
-	 * @return ColeÁ„o de Debitos a Cobrar Categoria
+	 * @return Cole√ß√£o de Debitos a Cobrar Categoria
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarDebitosACobrarCategoria(Integer debitoACobrarID)
@@ -2418,10 +2418,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"debitoACobrarID", debitoACobrarID).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -2429,13 +2429,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * [UC0113] - Faturar Grupo Faturamento Author: Leonardo Vieria, Rafael
-	 * Santos Data:17/01/2006 Consultar os Cre¥ditos a Realizar do Imovel
+	 * Santos Data:17/01/2006 Consultar os Cre¬¥ditos a Realizar do Imovel
 	 * 
 	 * @param imovelId
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualId
-	 *            Id do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Creditos a Realizar
+	 *            Id do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Creditos a Realizar
 	 * @exception ErroRepositorioException
 	 */
 	public Object[] pesquisarCreditoARealizar(
@@ -2473,10 +2473,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -2485,13 +2485,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * [UC0113] - Faturar Grupo Faturamento Author: Leonardo Vieria, Rafael
-	 * Santos Data:17/01/2006 Consultar os Cre¥ditos a Realizar do Imovel
+	 * Santos Data:17/01/2006 Consultar os Cre¬¥ditos a Realizar do Imovel
 	 * 
 	 * @param imovelId
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualId
-	 *            Id do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Creditos a Realizar
+	 *            Id do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Creditos a Realizar
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarCreditoARealizar(Integer imovelId,
@@ -2600,10 +2600,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"anoMesFaturamento", anoMesFaturamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -2616,7 +2616,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * @param creditoARealizarID
 	 *            Id do Creditoa A Realizar
-	 * @return ColeÁ„o de Creditoa a Realizar Categoria
+	 * @return Cole√ß√£o de Creditoa a Realizar Categoria
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarCreditoRealizarCategoria(
@@ -2638,17 +2638,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"creditoARealizarID", creditoARealizarID).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs MetÛdo respons·vel por inserir um
+	 * [UC0155] - Encerrar Faturamento do M√™s Met√≥do respons√°vel por inserir um
 	 * objeto de ResumoFaturamento no sistema
 	 * 
 	 * @param resumoFaturamento
@@ -2659,7 +2659,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public void inserirResumoFaturamentoAnoMesReferencia(
 			ResumoFaturamento resumoFaturamento)
 			throws ErroRepositorioException {
-		// obtÈm uma inst‚ncia com o hibernate
+		// obt√©m uma inst√¢ncia com o hibernate
 		Session session = HibernateUtil.getSession();
 		try {
 			// inseri o objeto na base de dados
@@ -2667,26 +2667,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o com o hibernate
+			// fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 01 Retorna o valor de ·gua
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a localiade, a
-	 * categoria e a situaÁ„o da conta igual a normal
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 01 Retorna o valor de √°gua
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a localiade, a
+	 * categoria e a situa√ß√£o da conta igual a normal
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no Hibernate
 	 */
@@ -2697,10 +2697,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -2726,10 +2726,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o com o hibernate
+			// fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -2739,17 +2739,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 02 Retorna o valor de esgoto
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a localiade, a
-	 * categoria e a situaÁ„o da conta igual a normal
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 02 Retorna o valor de esgoto
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a localiade, a
+	 * categoria e a situa√ß√£o da conta igual a normal
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no Hibernate
 	 */
@@ -2760,10 +2760,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -2789,10 +2789,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -2801,19 +2801,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 03 e 04 Retorna uma coleÁ„o
-	 * de dÈbitos a cobrar por ano e mÍs de referÍncia, por gerÍncia regional,
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 03 e 04 Retorna uma cole√ß√£o
+	 * de d√©bitos a cobrar por ano e m√™s de refer√™ncia, por ger√™ncia regional,
 	 * localidade e categoria
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @param idLancamentoItemContabil
-	 *            CÛdigo do itemde lanÁamento cont·bil
-	 * @return retorna a coleÁ„o pesquisada de acordo com os par‚metros
+	 *            C√≥digo do itemde lan√ßamento cont√°bil
+	 * @return retorna a cole√ß√£o pesquisada de acordo com os par√¢metros
 	 *         informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -2822,13 +2822,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pesquisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pesquisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -2858,29 +2858,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 07 Retorna o valor de guia
-	 * de pagamento acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
-	 * da conta igual a normal e o tipo de financiamento igual a serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 07 Retorna o valor de guia
+	 * de pagamento acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
+	 * da conta igual a normal e o tipo de financiamento igual a servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -2888,13 +2888,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar o resultado da pesquisa
+		// cria a cole√ß√£o que vai armazenar o resultado da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -2923,31 +2923,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento pesquisada
+		// retorna a cole√ß√£o de resumo de faturamento pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 17 e 18 Retorna uma coleÁ„o
-	 * de dÈbitos a cobrar por ano e mÍs de referÍncia, por gerÍncia regional,
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 17 e 18 Retorna uma cole√ß√£o
+	 * de d√©bitos a cobrar por ano e m√™s de refer√™ncia, por ger√™ncia regional,
 	 * localidade e categoria
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @param idLancamentoItemContabil
-	 *            CÛdigo de lanÁamento de item cont·bil
-	 * @return retorna a coleÁ„o pesquisada de acordo com os par‚metros
+	 *            C√≥digo de lan√ßamento de item cont√°bil
+	 * @return retorna a cole√ß√£o pesquisada de acordo com os par√¢metros
 	 *         informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -2956,13 +2956,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„oque vai armazenar os dÈbitos a cobrar pesquisados
+		// cria a cole√ß√£oque vai armazenar os d√©bitos a cobrar pesquisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -2989,29 +2989,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar
+		// retorna a cole√ß√£o de d√©bitos a cobrar
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 27 Retorna o valor de ·gua
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 27 Retorna o valor de √°gua
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
 	 * igual a cancelada
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3020,10 +3020,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3046,10 +3046,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3057,17 +3057,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 28 Retorna o valor de esgoto
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 28 Retorna o valor de esgoto
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
 	 * igual a cancelada
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3078,10 +3078,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3104,10 +3104,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3116,17 +3116,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 29 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a cancelada e o tipo de financiamento igual a serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 29 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a cancelada e o tipo de financiamento igual a servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3134,14 +3134,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3173,29 +3173,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 30 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a cancelada e o tipo de financiamento igual a parcelamento de ·gua
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 30 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a cancelada e o tipo de financiamento igual a parcelamento de √°gua
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3206,10 +3206,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3237,10 +3237,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3249,18 +3249,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 31 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 31 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
 	 * igual a cancelada e o tipo de financiamento igual a parcelamento de
 	 * esgoto
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3271,10 +3271,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3302,10 +3302,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3314,18 +3314,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 32 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 32 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
 	 * igual a cancelada e o tipo de financiamento igual a parcelamento de
-	 * serviÁo
+	 * servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3333,14 +3333,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar a coleÁ„o de resumo de faturamento
+		// cria a cole√ß√£o que vai armazenar a cole√ß√£o de resumo de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3372,29 +3372,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 33 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 33 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
 	 * igual a cancelada e o tipo de financiamento igual a juros de parcelamento
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3405,10 +3405,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objetode resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3437,10 +3437,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3449,17 +3449,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 08 Retorna o valor de ·gua
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a incluÌda
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 08 Retorna o valor de √°gua
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a inclu√≠da
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3469,10 +3469,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3499,10 +3499,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3511,17 +3511,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 09 Retorna o valor de esgoto
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a incluÌda
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 09 Retorna o valor de esgoto
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a inclu√≠da
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3531,10 +3531,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3561,10 +3561,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -3573,17 +3573,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 10 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a incluÌda e o tipo de financiamento igual a serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 10 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a inclu√≠da e o tipo de financiamento igual a servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3592,11 +3592,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * acumularValorDebitoTipoFinanciamentoServicoSituacaoIncluida( int
 	 * anoMesReferencia, int idLocalidade, int idCategoria, Integer
 	 * idLancamentoItemContabil) throws ErroRepositorioException {
-	 *  // cria a coleÁ„o que vai armazenar a coleÁ„o de resumo de faturamento
+	 *  // cria a cole√ß√£o que vai armazenar a cole√ß√£o de resumo de faturamento
 	 * BigDecimal retorno = null;
-	 *  // cria uma sess„o com o hibernate Session session =
+	 *  // cria uma sess√£o com o hibernate Session session =
 	 * HibernateUtil.getSession();
-	 *  // cria a vari·vel que vai conter o hql String consulta;
+	 *  // cria a vari√°vel que vai conter o hql String consulta;
 	 * 
 	 * try { // constroi o hql consulta = "select sum(dccg.valorCategoria) " +
 	 * "from DebitoCobradoCategoria dccg " + "inner join dccg.debitoCobrado dbcb " +
@@ -3618,25 +3618,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * .setInteger("idFinanciamentoTipo",FinanciamentoTipo.SERVICO_NORMAL)
 	 * .uniqueResult();
 	 *  // erro no hibernate } catch (HibernateException e) { // levanta a
-	 * exceÁ„o para a prÛxima camada throw new ErroRepositorioException(e, "Erro
-	 * no Hibernate"); } finally { // fecha a sess„o
+	 * exce√ß√£o para a pr√≥xima camada throw new ErroRepositorioException(e, "Erro
+	 * no Hibernate"); } finally { // fecha a sess√£o
 	 * HibernateUtil.closeSession(session); }
-	 *  // retorna a coleÁ„o de resumo de faturamento criada return retorno; }
+	 *  // retorna a cole√ß√£o de resumo de faturamento criada return retorno; }
 	 */
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 62 Retorna o valor de
-	 * categoria de dÈbito acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o da conta igual a normal e o tipo de financiamento igual a
-	 * serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 62 Retorna o valor de
+	 * categoria de d√©bito acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o da conta igual a normal e o tipo de financiamento igual a
+	 * servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3644,13 +3644,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3681,30 +3681,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o pesquisada
+		// retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 41 Retorna o valor de
-	 * categoria de dÈbito acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o da conta igual a normal e o tipo de financiamento igual a
-	 * serviÁo, quando o n˙mero de prestaÁıes cobradas for maior que 11(onze)
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 41 Retorna o valor de
+	 * categoria de d√©bito acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o da conta igual a normal e o tipo de financiamento igual a
+	 * servi√ßo, quando o n√∫mero de presta√ß√µes cobradas for maior que 11(onze)
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3712,13 +3712,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3749,29 +3749,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o pesquisada
+		// retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 43 e 44 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar , de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 43 e 44 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar , de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a documentos emitidos
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3779,13 +3779,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pesquisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pesquisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3813,30 +3813,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 45 e 46 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar , de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 45 e 46 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar , de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a financiamentos a cobrar
 	 * de curto prazo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -3844,13 +3844,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3881,29 +3881,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 47 e 48 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 47 e 48 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a financiamentos a cobrar
 	 * de longo prazo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -3912,13 +3912,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -3949,29 +3949,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 49 e 50 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 49 e 50 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a parcelamentos a cobrar
 	 * de curto prazo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -3980,13 +3980,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4017,30 +4017,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 51 e 52 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 51 e 52 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a parcelamentos a cobrar a
 	 * longo prazo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4048,13 +4048,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4085,28 +4085,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 05 e 06 Retorna uma coleÁ„o
-	 * de dÈbitos a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 05 e 06 Retorna uma cole√ß√£o
+	 * de d√©bitos a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a normal e o grupo de parcelamento igual a juros cobrados
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -4115,13 +4115,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4149,29 +4149,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 34 e 35 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 34 e 35 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a cancelado por parcelamento e o grupo de parcelamento igual a
 	 * juros cobrados
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -4180,13 +4180,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4214,26 +4214,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 53 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o igual a
-	 * normal e o tipo de financiamento igual a arrasto de ·gua ou arrasto de
-	 * esgoto ou arrasto de serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 53 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o igual a
+	 * normal e o tipo de financiamento igual a arrasto de √°gua ou arrasto de
+	 * esgoto ou arrasto de servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Ano e m√™s de refer√™ncia do faturamento
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4241,13 +4241,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferenciaContabil, Integer idLocalidade)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4283,29 +4283,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 19 e 20 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
-	 * igual a cancelado e o tipo de financiamento igual a parcelamento de ·gua
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 19 e 20 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
+	 * igual a cancelado e o tipo de financiamento igual a parcelamento de √°gua
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -4314,13 +4314,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4345,30 +4345,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 21 e 22 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 21 e 22 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a cancelado e o tipo de financiamento igual a parcelamento de
 	 * esgoto
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4376,13 +4376,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4407,29 +4407,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 23 e 24 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o igual a cancelado e o tipo de financiamento igual a parcelamento
-	 * de serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 23 e 24 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o igual a cancelado e o tipo de financiamento igual a parcelamento
+	 * de servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -4438,13 +4438,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4471,28 +4471,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 25 e 26 Retorna uma coleÁ„o
-	 * de dÈbito a cobrar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 25 e 26 Retorna uma cole√ß√£o
+	 * de d√©bito a cobrar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o
 	 * igual a cancelado e o tipo de financiamento igual a juros de parcelamento
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @return
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
@@ -4501,13 +4501,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os dÈbitos a cobrar pequisados
+		// cria a cole√ß√£o que vai armazenar os d√©bitos a cobrar pequisados
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4532,30 +4532,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 64 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * parcelamento de ·gua
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 64 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * parcelamento de √°gua
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4566,10 +4566,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4600,10 +4600,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -4612,18 +4612,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 65 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 65 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
 	 * parcelamento de esgoto
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4634,10 +4634,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4669,10 +4669,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -4682,18 +4682,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 66 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * parcelamento de serviÁos
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 66 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * parcelamento de servi√ßos
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4701,13 +4701,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4737,31 +4737,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 67 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 67 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
 	 * juros de parcelamento
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4772,10 +4772,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4807,10 +4807,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -4820,18 +4820,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 42 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * juros de parcelamento e a diferenÁa de prestaÁıes maior que 11(onze)
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 42 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * juros de parcelamento e a diferen√ßa de presta√ß√µes maior que 11(onze)
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4842,10 +4842,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4877,10 +4877,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -4890,18 +4890,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 68 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * arrasto de ·gua
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 68 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * arrasto de √°gua
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4912,10 +4912,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -4945,10 +4945,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -4958,18 +4958,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 69 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 69 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
 	 * arrasto de esgoto
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -4980,10 +4980,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5014,10 +5014,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5027,18 +5027,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 70 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * arrasto de serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 70 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * arrasto de servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5046,13 +5046,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5083,31 +5083,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 75 Retorna o valor de
-	 * categoria de credito realizado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e a origem do crÈdito igual a
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 75 Retorna o valor de
+	 * categoria de credito realizado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e a origem do cr√©dito igual a
 	 * contas pagas em duplicidade ou em excesso
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5118,10 +5118,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5152,10 +5152,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5164,18 +5164,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 80 Retorna o valor de
-	 * categoria de crÈdito realizado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o de conta igual a normal e a origem do crÈdito
-	 * igual a devoluÁ„o de tarifa de ·gua
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 80 Retorna o valor de
+	 * categoria de cr√©dito realizado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o de conta igual a normal e a origem do cr√©dito
+	 * igual a devolu√ß√£o de tarifa de √°gua
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5186,10 +5186,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5219,10 +5219,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5231,18 +5231,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 81 Retorna o valor de
-	 * categoria de crÈdito realizado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o de conta igual a normal e a origem do crÈdito
-	 * igual a devoluÁ„o de tarifa de esgoto
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 81 Retorna o valor de
+	 * categoria de cr√©dito realizado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o de conta igual a normal e a origem do cr√©dito
+	 * igual a devolu√ß√£o de tarifa de esgoto
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5253,10 +5253,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5287,10 +5287,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5299,18 +5299,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 82 Retorna o valor de
-	 * categoria de crÈdito realizado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o de conta igual a normal e a origem do crÈdito
-	 * igual a serviÁos indiretos pagos indevidamente
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 82 Retorna o valor de
+	 * categoria de cr√©dito realizado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o de conta igual a normal e a origem do cr√©dito
+	 * igual a servi√ßos indiretos pagos indevidamente
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5318,13 +5318,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5356,30 +5356,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 83 Retorna o valor de
-	 * categoria de crÈdito realizado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o de conta igual a normal e a origem do crÈdito
-	 * igual a devoluÁ„o de juros de parcelamento
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 83 Retorna o valor de
+	 * categoria de cr√©dito realizado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o de conta igual a normal e a origem do cr√©dito
+	 * igual a devolu√ß√£o de juros de parcelamento
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5390,10 +5390,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5425,10 +5425,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5438,13 +5438,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 71 Retorna o valor de
-	 * imposto de renda acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o de conta igual a normal e a categoria igual a p˙blica
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 71 Retorna o valor de
+	 * imposto de renda acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o de conta igual a normal e a categoria igual a p√∫blica
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Ano e m√™s de refer√™ncia do faturamento
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5452,13 +5452,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Integer idLocalidade, Integer idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5490,26 +5490,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 72 Retorna o valor de cofins
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o de conta
-	 * igual a normal e a categoria igual a p˙blica
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 72 Retorna o valor de cofins
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o de conta
+	 * igual a normal e a categoria igual a p√∫blica
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Ano e m√™s de refer√™ncia do faturamento
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5517,13 +5517,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Integer idLocalidade, Integer idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5555,26 +5555,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 73 Retorna o valor de csll
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o de conta
-	 * igual a normal e a categoria igual a p˙blica
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 73 Retorna o valor de csll
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o de conta
+	 * igual a normal e a categoria igual a p√∫blica
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Ano e m√™s de refer√™ncia do faturamento
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5582,13 +5582,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Integer idLocalidade, Integer idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5620,26 +5620,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 74 Retorna o valor de pis e
-	 * pasep acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o de
-	 * conta igual a normal e a categoria igual a p˙blica
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 74 Retorna o valor de pis e
+	 * pasep acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o de
+	 * conta igual a normal e a categoria igual a p√∫blica
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Ano e m√™s de refer√™ncia do faturamento
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5647,13 +5647,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Integer idLocalidade, Integer idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5685,14 +5685,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
@@ -5704,21 +5704,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - acumula o valor de guia
-	 * de pagamento para situaÁ„o de conta igual a cancelada de acordo com o
-	 * ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - acumula o valor de guia
+	 * de pagamento para situa√ß√£o de conta igual a cancelada de acordo com o
+	 * ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
+	 *            C√≥digo da categoria
 	 * @param tipoFinanciamento
 	 *            Tipo de Financiamento
 	 * @param itemContabil
-	 *            Item Cont·bil
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            Item Cont√°bil
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5729,10 +5729,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5761,10 +5761,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = BigDecimal.ZERO;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5772,17 +5772,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor de ·gua para situaÁ„o de conta igual a cancelada por retificaÁ„o de
-	 * acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor de √°gua para situa√ß√£o de conta igual a cancelada por retifica√ß√£o de
+	 * acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5792,10 +5792,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5817,10 +5817,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = BigDecimal.ZERO;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5828,17 +5828,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor de ·gua para situaÁ„o de conta igual a retificada de acordo com o
-	 * ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor de √°gua para situa√ß√£o de conta igual a retificada de acordo com o
+	 * ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5848,10 +5848,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5876,10 +5876,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5887,17 +5887,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor dÈbito cobrado para situaÁ„o de conta igual a cancelada por
-	 * retificaÁ„o e parcelamento de ·gua de acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor d√©bito cobrado para situa√ß√£o de conta igual a cancelada por
+	 * retifica√ß√£o e parcelamento de √°gua de acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5907,10 +5907,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5932,10 +5932,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5943,17 +5943,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor dÈbito cobrado para situaÁ„o de conta igual a retificada e
-	 * parcelamento de ·gua de acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor d√©bito cobrado para situa√ß√£o de conta igual a retificada e
+	 * parcelamento de √°gua de acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -5963,10 +5963,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -5990,10 +5990,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6001,17 +6001,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor de esgoto para situaÁ„o de conta igual a cancelada por retificaÁ„o
-	 * de acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor de esgoto para situa√ß√£o de conta igual a cancelada por retifica√ß√£o
+	 * de acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6021,10 +6021,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6047,10 +6047,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6058,17 +6058,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - pesquisar a soma do
-	 * valor de esgoto para situaÁ„o de conta igual a retificada de acordo com o
-	 * ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - pesquisar a soma do
+	 * valor de esgoto para situa√ß√£o de conta igual a retificada de acordo com o
+	 * ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6078,10 +6078,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6105,33 +6105,33 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = BigDecimal.ZERO;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	// fim dos metÛdos para os sub-fluxos 01 e 02 do [UC0155]
+	// fim dos met√≥dos para os sub-fluxos 01 e 02 do [UC0155]
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 08 - atualizar ano m s de
-	 * referÍncia do faturamento de acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 08 - atualizar ano m√äs de
+	 * refer√™ncia do faturamento de acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesFaturamentoAtual
-	 *            Ano e mÍs de referÍncia do faturamento atual
+	 *            Ano e m√™s de refer√™ncia do faturamento atual
 	 * @param anoMesFaturamentoNovo
-	 *            Ano e mÍs de referÍncia do faturamento anterior
+	 *            Ano e m√™s de refer√™ncia do faturamento anterior
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
 	public void atualizarAnoMesfaturamento(int anoMesFaturamentoAtual,
 			int anoMesFaturamentoNovo) throws ErroRepositorioException {
 
-		// obtÈm uma sess„o com o hibernate
+		// obt√©m uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		String atualizarAnoMesFaturamento;
@@ -6153,15 +6153,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs - Item 04
+	 * [UC0155] - Encerrar Faturamento do M√™s - Item 04
 	 * 
-	 * Atualiza a situaÁ„o de imÛvel com faturamento finalizado
+	 * Atualiza a situa√ß√£o de im√≥vel com faturamento finalizado
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/10/2006
@@ -6179,7 +6179,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String atualizarAnoMesFaturamentoRetirada;
 
 		try {
-			// Atualiza situaÁ„o do faturamento do imÛvel *******
+			// Atualiza situa√ß√£o do faturamento do im√≥vel *******
 			atualizarSituacaoFaturamentoImovel = "update Imovel "
 					+ "set faturamentoSituacaoTipo = null "
 					+ "where setorComercial = :idSetorComercial and faturamentoSituacaoTipo is not null "
@@ -6194,7 +6194,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesFaturamento", anoMesFaturamento).executeUpdate();
 			// ***************************************************
 
-			// Atualizar o ano/mÍs de faturamento retirada *******
+			// Atualizar o ano/m√™s de faturamento retirada *******
 			atualizarAnoMesFaturamentoRetirada = "update FaturamentoSituacaoHistorico "
 					+ "set anoMesFaturamentoRetirada = :anoMesFaturamento "
 					+ "where anoMesFaturamentoSituacaoFim <= :anoMesFaturamento "
@@ -6209,17 +6209,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 06 - pesquisar contas
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 06 - pesquisar contas
 	 * canceladas
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6228,10 +6228,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<Conta> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6253,10 +6253,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesReferenciaContabil).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6264,13 +6264,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 05 - pesquisar debitos
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 05 - pesquisar debitos
 	 * cobrados de contas canceladas
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @param idConta
-	 *            CÛdigo da conta
+	 *            C√≥digo da conta
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6279,10 +6279,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<DebitoCobrado> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6307,10 +6307,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6318,13 +6318,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 05 - pesquisar crÈditos
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 05 - pesquisar cr√©ditos
 	 * realizados de contas canceladas
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @param idConta
-	 *            CÛdigo da conta
+	 *            C√≥digo da conta
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6333,10 +6333,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<CreditoRealizado> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6361,10 +6361,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6372,11 +6372,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 06 - pesquisar dÈbitos a
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 06 - pesquisar d√©bitos a
 	 * cobrar cancelados
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6385,10 +6385,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<DebitoACobrar> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6419,10 +6419,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6430,11 +6430,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Item 07 - pesquisar crÈditos a
+	 * [UC0155] - Encerrar Faturamento do M√™s Item 07 - pesquisar cr√©ditos a
 	 * realizar cancelados
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6442,7 +6442,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferenciaContabil, Integer idSetorComercial) throws ErroRepositorioException {
 		Collection<CreditoARealizar> retorno = null;
 
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
+
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6466,19 +6469,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setInteger("idSituacaoParcelada",DebitoCreditoSituacao.PARCELADA).list();
 
 		} catch (HibernateException e) {
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Pesquisa uma coleÁ„o de resumos
-	 * defaturamento por ano e mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s Pesquisa uma cole√ß√£o de resumos
+	 * defaturamento por ano e m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferenciaContabil
-	 *            Ano e mÍs de referÍncia contabil
+	 *            Ano e m√™s de refer√™ncia contabil
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -6487,10 +6492,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<ResumoFaturamento> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -6505,10 +6510,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesFaturameto).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6545,10 +6550,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -6608,10 +6613,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -6735,8 +6740,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * public Collection<DebitoACobrar>
 	 * pesquisarDebitosACobrarCanceladosPorMesAnoReferenciaContabil( int
 	 * anoMesReferenciaContabil) throws ErroRepositorioException { Collection<DebitoACobrar>
-	 * retorno = null; // cria uma sess„o com o hibernate Session session =
-	 * HibernateUtil.getSession(); // cria a vari·vel que vai conter o hql
+	 * retorno = null; // cria uma sess√£o com o hibernate Session session =
+	 * HibernateUtil.getSession(); // cria a vari√°vel que vai conter o hql
 	 * String consulta;
 	 * 
 	 * try { // constroi o hql consulta = "select dbac " + "from DebitoACobrar
@@ -6747,9 +6752,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * or " + "(dbac.numeroPrestacaoDebito = dbac.numeroPrestacaoCobradas) "; //
 	 * executa o hql retorno = session.createQuery(consulta).setInteger(
 	 * "anoMesReferenciaContabil", anoMesReferenciaContabil) .list(); } catch
-	 * (HibernateException e) { // levanta a exceÁ„o para a prÛxima camada throw
+	 * (HibernateException e) { // levanta a exce√ß√£o para a pr√≥xima camada throw
 	 * new ErroRepositorioException(e, "Erro no Hibernate"); } finally { //
-	 * fecha a sess„o HibernateUtil.closeSession(session); }
+	 * fecha a sess√£o HibernateUtil.closeSession(session); }
 	 * 
 	 * return retorno; }
 	 */
@@ -6777,9 +6782,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * retorno = session.createQuery(consulta).setInteger("idImovel",
 	 * idImovel.intValue()).setMaxResults(1).uniqueResult(); } catch
-	 * (HibernateException e) { // levanta a exceÁ„o para a prÛxima camada throw
+	 * (HibernateException e) { // levanta a exce√ß√£o para a pr√≥xima camada throw
 	 * new ErroRepositorioException(e, "Erro no Hibernate"); } finally { //
-	 * fecha a sess„o HibernateUtil.closeSession(session); }
+	 * fecha a sess√£o HibernateUtil.closeSession(session); }
 	 * 
 	 * return retorno; }
 	 */
@@ -6787,7 +6792,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * Retorna o cÛdigo do dÈbito autom·tico.
+	 * Retorna o c√≥digo do d√©bito autom√°tico.
 	 * 
 	 * @author Rafael Santos, Pedro Alexandre
 	 * @date 16/02/2006,18/09/2006
@@ -6815,10 +6820,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6826,7 +6831,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados do imÛvel que ser· faturado
+	 * Pesquisa os dados do im√≥vel que ser√° faturado
 	 * 
 	 * [UC0113] - Faturar Grupo Faturamento
 	 * 
@@ -6883,8 +6888,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "hihPoco.id, "//30
 					/** 
 					 * 
-					 * Adicionando parametro para verificar se o imÛvel
-					 * faz parte de um condomÌnio
+					 * Adicionando parametro para verificar se o im√≥vel
+					 * faz parte de um condom√≠nio
 					 */
 					+ "imovel.imovelCondominio.id, " //31 
 					+ "imovel.quantidadeEconomias, " // 32
@@ -6919,20 +6924,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				/*
 				 * RM 1272 - A pedido de Eduardo Borges
 				 * 
-				 * Alterar para considerar as contas de imÛveis excluÌdos ou condomÌnio que foram faturados antes de serem 
-				 * colocados como excluÌdos/condomÌnio.
+				 * Alterar para considerar as contas de im√≥veis exclu√≠dos ou condom√≠nio que foram faturados antes de serem 
+				 * colocados como exclu√≠dos/condom√≠nio.
 				 */
 				if(!resumo){
 					
 					consulta += "AND imovel.indicadorImovelCondominio <> 1 ";
 					
-					//N„o faturar imÛveis com indicador de excluÌdo - CRC1577
+					//N√£o faturar im√≥veis com indicador de exclu√≠do - CRC1577
 					consulta += "AND imovel.indicadorExclusao <> 1 ";
 				}
 				
-				//Alterado por S·vio Luiz
+				//Alterado por S√°vio Luiz
 				//Data: 23/02/2010
-				//Qaundo for prÈ-faturamento n„o trazer os imÛveis tele medidos
+				//Qaundo for pr√©-faturamento n√£o trazer os im√≥veis tele medidos
 				if(preFaturar){
 					consulta += "AND imovelPerfil.indicadorGerarDadosLeitura = 1 ";
 				}
@@ -6942,10 +6947,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6988,10 +6993,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6999,7 +7004,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0242] - Registrar Movimento de Arrecadadores Author: S·vio Luiz Data:
+	 * [UC0242] - Registrar Movimento de Arrecadadores Author: S√°vio Luiz Data:
 	 * 01/02/2006
 	 * 
 	 * retorna o objeto debito automatico movimento
@@ -7040,10 +7045,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7051,16 +7056,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0242] - Registrar Movimento de Arrecadadores Author: S·vio Luiz Data:
+	 * [UC0242] - Registrar Movimento de Arrecadadores Author: S√°vio Luiz Data:
 	 * 01/02/2006
 	 * 
 	 * @param imovel
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param anoMesReferencia
-	 *            DescriÁ„o do par‚metro
-	 * @return DescriÁ„o do retorno
+	 *            Descri√ß√£o do par√¢metro
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public Integer pesquisarExistenciaContaComSituacaoAtual(Imovel imovel,
 			int anoMesReferencia) throws ErroRepositorioException {
@@ -7087,10 +7092,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7098,8 +7103,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras [SF0003] - Processar
-	 * Pagamento de Documento de CobranÁa Author: S·vio Luiz Data: 01/02/2006
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras [SF0003] - Processar
+	 * Pagamento de Documento de Cobran√ßa Author: S√°vio Luiz Data: 01/02/2006
 	 * 
 	 * retorna o objeto debito automatico movimento
 	 * 
@@ -7125,25 +7130,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					DebitoCreditoSituacao.PAGA).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
-	 * [SF0003] - Processar Pagamento de Documento de CobranÁa
+	 * [SF0003] - Processar Pagamento de Documento de Cobran√ßa
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @created 16/02/2006
 	 * 
 	 * @param matriculaImovel
-	 *            MatrÌcula do Imovel
+	 *            Matr√≠cula do Imovel
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
@@ -7157,7 +7162,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta = null;
 
 		try {
-			// Verifica se j· tem dÈbito autom·tico
+			// Verifica se j√° tem d√©bito autom√°tico
 			consulta = "SELECT fi.valorConta, conta.id, localidade.id, "
 					+ "imovel.id, localidadeHistorico.id, imovelHistorico.id, fatura.id "
 					+ "FROM FaturaItem fi "
@@ -7182,10 +7187,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ConstantesSistema.SIM.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7221,7 +7226,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta = null;
 
 		try {
-			// Verifica se j· tem dÈbito autom·tico
+			// Verifica se j√° tem d√©bito autom√°tico
 			consulta = "SELECT fi.valorConta, conta.id, localidade.id, "
 					+ "imovel.id, localidadeHistorico.id, imovelHistorico.id, fatura.id "
 					+ "FROM FaturaItem fi "
@@ -7250,10 +7255,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7261,11 +7266,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Atualiza o ano mes de faturamento de faturamento situaÁ„o historico
+	 * Atualiza o ano mes de faturamento de faturamento situa√ß√£o historico
 	 * 
 	 * [UC0156] Informar Situacao Especial Faturamento
 	 * 
-	 * @author S·vio Luiz, Raphael Rossiter
+	 * @author S√°vio Luiz, Raphael Rossiter
 	 * @date 17/03/2006, 11/08/2008
 	 * 
 	 * @param situacaoEspecialFaturamentoHelper
@@ -7301,20 +7306,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
 	 * O sistema seleciona as atividades que foram previamente comandadas e
-	 * ainda n„o realizadas (a partir da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA
+	 * ainda n√£o realizadas (a partir da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA
 	 * com FTCM_ID = FTCM_ID da tabela FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL e
-	 * FTAC_TMCOMANDO preenchido e FTAC_TMREALIZACAO n„o preenchido ou com um
-	 * valor anterior ‡ FTAC_TMCOMANDO)
+	 * FTAC_TMCOMANDO preenchido e FTAC_TMREALIZACAO n√£o preenchido ou com um
+	 * valor anterior √† FTAC_TMCOMANDO)
 	 * 
 	 * @author Roberta Costa
 	 * @date 29/03/2006
@@ -7356,9 +7361,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Iterator<FaturamentoAtividadeCronograma> iterator = null;
 
-			// Para paginaÁ„o deve-se pegar o resultado da consulta
-			// multiplicando o n˙mero de p·ginas por 10
-			// com um m·ximo de 10 registros por vez
+			// Para pagina√ß√£o deve-se pegar o resultado da consulta
+			// multiplicando o n√∫mero de p√°ginas por 10
+			// com um m√°ximo de 10 registros por vez
 			colecaoAtividadeCronograma = new ArrayList(new CopyOnWriteArraySet(
 					session.createQuery(consulta).setFirstResult(
 							10 * numeroPagina).setMaxResults(10).list()));
@@ -7379,10 +7384,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			 * retorno.add(faturamentoAtividadeCronograma); }
 			 */
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7427,10 +7432,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			retorno = (Integer) session.createQuery(consulta).uniqueResult();
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7439,11 +7444,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * 
-	 * MÈtodo que retorna todos os imÛveis que tenham cliente respons·vel e
-	 * indicacao de conta a ser entregue em outro endereÁo e que estejam nas
-	 * quadras pertencentes ‡s rotas passadas
+	 * M√©todo que retorna todos os im√≥veis que tenham cliente respons√°vel e
+	 * indicacao de conta a ser entregue em outro endere√ßo e que estejam nas
+	 * quadras pertencentes √†s rotas passadas
 	 * 
-	 * UC0209 Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * UC0209 Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
 	 * @author Thiago Toscano, Raphael Rossiter
 	 * @date 04/04/2006, 26/08/2009
@@ -7495,10 +7500,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -7507,7 +7512,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Metodo que retorno o debito Tipo do id passado
 	 * 
-	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
 	 * @author thiago
 	 * @date 05/04/2006
@@ -7542,10 +7547,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7555,9 +7560,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Metodo que retorno o debito Tipo do id passado
 	 * 
-	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
-	 * AlteraÁ„o feita por Tiago Moreno para retornar o valorSugerido do
+	 * Altera√ß√£o feita por Tiago Moreno para retornar o valorSugerido do
 	 * DebitoTipo
 	 * 
 	 * @author thiago toscano, Tiago Moreno
@@ -7584,10 +7589,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7595,12 +7600,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Metodo que retorna o id debito a cobrar, o id do imÛvel, o id do debito
-	 * tipo e o ano/mÍs de referÍncia do dÈbito
+	 * Metodo que retorna o id debito a cobrar, o id do im√≥vel, o id do debito
+	 * tipo e o ano/m√™s de refer√™ncia do d√©bito
 	 * 
-	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
-	 * @author Rafael CorrÍa e Leonardo Vieira
+	 * @author Rafael Corr√™a e Leonardo Vieira
 	 * @date 24/08/2006
 	 * 
 	 * @param idImovel,
@@ -7631,10 +7636,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7642,12 +7647,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Metodo que deleta os dÈbitos a cobrar categoria de um respectivo dÈbito a
+	 * Metodo que deleta os d√©bitos a cobrar categoria de um respectivo d√©bito a
 	 * cobrar
 	 * 
-	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
-	 * @author Rafael CorrÍa e Leonardo Vieira
+	 * @author Rafael Corr√™a e Leonardo Vieira
 	 * @date 24/08/2006
 	 * 
 	 * @param idDebitoACobrar
@@ -7667,20 +7672,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idDebitoACobrar).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Metodo que insere ou atualiza os dÈbitos a cobrar
+	 * Metodo que insere ou atualiza os d√©bitos a cobrar
 	 * 
-	 * [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
-	 * @author Rafael CorrÍa, Leonardo Vieira, Pedro Alexandre
+	 * @author Rafael Corr√™a, Leonardo Vieira, Pedro Alexandre
 	 * @date 24/08/2006
 	 * 
 	 * @param colecaoDebitosACobrar
@@ -7730,9 +7735,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro EndereÁo
+	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro Endere√ßo
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 29/08/2006
@@ -7778,7 +7783,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Metodo que retorno o valor da tarifa normal a ser cobrando no caso de uso
 	 * [UC029]
 	 * 
-	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * Utilizado pelo [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
 	 * @author thiago
 	 * @date 05/04/2006
@@ -7824,10 +7829,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	// }
 	//
 	// } catch (HibernateException e) {
-	// // levanta a exceÁ„o para a prÛxima camada
+	// // levanta a exce√ß√£o para a pr√≥xima camada
 	// throw new ErroRepositorioException(e, "Erro no Hibernate");
 	// } finally {
-	// // fecha a sess„o
+	// // fecha a sess√£o
 	// HibernateUtil.closeSession(session);
 	// }
 	//
@@ -7837,7 +7842,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * Metodo que retorno o valor da tarifa a ser cobrada
 	 * 
-	 * [UC029] Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * [UC029] Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
 	 * @author thiago, pedro alexandre
 	 * @date 05/04/2006, 30/08/2006
@@ -7883,10 +7888,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7895,9 +7900,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * 
-	 * Metodo que retorna os imÛveis das quadras pertencentes ‡s rotas
+	 * Metodo que retorna os im√≥veis das quadras pertencentes √†s rotas
 	 * 
-	 * Utilizado pelo [UC0302] Gerar DÈbitos a Cobrar de AcrÈscimos por
+	 * Utilizado pelo [UC0302] Gerar D√©bitos a Cobrar de Acr√©scimos por
 	 * Impontualidade
 	 * 
 	 * @author Fernanda Paiva, Raphael Rossiter
@@ -7946,10 +7951,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7957,11 +7962,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * ObtÈm as contas de um imÛvel com ano/mes da data de vencimento menor ou
+	 * Obt√©m as contas de um im√≥vel com ano/mes da data de vencimento menor ou
 	 * igual ao ano/mes de referencia da arrecadacao corrente e com situacao
 	 * atual correspondente a normal, retificada ou incluida.
 	 * 
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Fernanda Paiva, Pedro Alexandre
 	 * @date 24/04/2006,15/03/2007
@@ -8003,10 +8008,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8042,10 +8047,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("fim", anoMesFim).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8085,10 +8090,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8096,10 +8101,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 24/04/2006
 	 * 
-	 * ObtÈm as guias de pagamento de um imÛvel com ano/mes da data de
+	 * Obt√©m as guias de pagamento de um im√≥vel com ano/mes da data de
 	 * vencimento menor ou igual ao ano/mes de referencia da arrecadacao
 	 * corrente e com situacao atual correspondente a normal, retificada ou
 	 * incluida.
@@ -8138,10 +8143,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					DebitoTipo.ENTRADA_PARCELAMENTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8149,10 +8154,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 25/04/2006
 	 * 
-	 * ObtÈm os pagamentos da conta que contem a menor data de pagamento
+	 * Obt√©m os pagamentos da conta que contem a menor data de pagamento
 	 * 
 	 * @param conta
 	 * @return
@@ -8203,10 +8208,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8214,14 +8219,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0302] Gerar DÈbito a Cobrar de Acrescimos por Impontualidade [SB0001]
-	 * Gerar DÈbito a Cobrar
+	 * [UC0302] Gerar D√©bito a Cobrar de Acrescimos por Impontualidade [SB0001]
+	 * Gerar D√©bito a Cobrar
 	 * 
 	 * @author Fernanda Paiva
 	 * @created 25/04/2006
 	 * 
 	 * @param valor
-	 *            da multa/juros/atualizaÁ„o monetaria
+	 *            da multa/juros/atualiza√ß√£o monetaria
 	 * @param ano/mes
 	 *            referencia
 	 * @param tipo
@@ -8235,25 +8240,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		Object retorno;
 		try {
-			// Inclui o dÈbito a cobrar
+			// Inclui o d√©bito a cobrar
 			retorno = session.save(debitoACobrar);
 			session.flush();
 			session.clear();
 			return retorno;
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 26/04/2006
 	 * 
-	 * ObtÈm o tipo do debito
+	 * Obt√©m o tipo do debito
 	 * 
 	 * @param tipoDebito
 	 * @return
@@ -8277,10 +8282,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idDebitoTipo", debitoTipo).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8288,10 +8293,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Seleciona os relacionamentos entre o cliente e os imÛveis de acordo com o
-	 * cÛdigo do cliente respons·vel
+	 * Seleciona os relacionamentos entre o cliente e os im√≥veis de acordo com o
+	 * c√≥digo do cliente respons√°vel
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
 	 * @date 25/04/2006, 18/12/2007
@@ -8302,11 +8307,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Collection<Integer> pesquisarClienteImovelPorClienteResponsavel(
 			Integer idCliente) throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar a coleÁ„o de ClienteImovel
-		// respons·vel
+		// Cria a vari√°vel que vai armazenar a cole√ß√£o de ClienteImovel
+		// respons√°vel
 		Collection<Integer> retorno = null;
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8330,22 +8335,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na consulta
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// Retorna a coleÁ„o pesquisada
+		// Retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
 	/**
-	 * Pesquisa todos os clientes respons·veis na tabela de ClienteImovel para
-	 * tipo de relaÁ„o igual a respons·vel e data de fim de relaÁ„o iguala a
+	 * Pesquisa todos os clientes respons√°veis na tabela de ClienteImovel para
+	 * tipo de rela√ß√£o igual a respons√°vel e data de fim de rela√ß√£o iguala a
 	 * nula
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 25/04/2006
@@ -8357,10 +8362,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			SistemaParametro sistemaParametro, Integer numeroIndice,
 			Integer quantidadeRegistros) throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar a coleÁ„o de clientes respons·veis
+		// Cria a vari√°vel que vai armazenar a cole√ß√£o de clientes respons√°veis
 		Collection<Integer> retorno = null;
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8387,25 +8392,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na consulta
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna a coleÁ„o de clientes respons·veis pesquisados
+		// Retorna a cole√ß√£o de clientes respons√°veis pesquisados
 		return retorno;
 	}
 
 	/**
-	 * Pesquisa todos os clientes respons·veis na tabela de ClienteImovel para
-	 * tipo de relaÁ„o igual a respons·vel e data de fim de relaÁ„o igual a nula
+	 * Pesquisa todos os clientes respons√°veis na tabela de ClienteImovel para
+	 * tipo de rela√ß√£o igual a respons√°vel e data de fim de rela√ß√£o igual a nula
 	 * e com indicador faturas agrupadas igual a 1
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 04/02/2009
 	 * 
 	 * @return
@@ -8415,10 +8420,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			SistemaParametro sistemaParametro, Integer numeroIndice,
 			Integer quantidadeRegistros) throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar a coleÁ„o de clientes respons·veis
+		// Cria a vari√°vel que vai armazenar a cole√ß√£o de clientes respons√°veis
 		Collection<Integer> retorno = null;
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8448,23 +8453,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na consulta
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna a coleÁ„o de clientes respons·veis pesquisados
+		// Retorna a cole√ß√£o de clientes respons√°veis pesquisados
 		return retorno;
 	}
 
 	/**
-	 * Pesquisa a coleÁ„o de contas para os imÛveis do cliente respons·vel para
-	 * o ano/mÍs de refer ncia igual ao ano/mÍs de refer ncia corrente e a
-	 * situaÁ„o da conta igual a Normal ou Retificada ou IncluÌda
+	 * Pesquisa a cole√ß√£o de contas para os im√≥veis do cliente respons√°vel para
+	 * o ano/m√™s de refer√äncia igual ao ano/m√™s de refer√äncia corrente e a
+	 * situa√ß√£o da conta igual a Normal ou Retificada ou Inclu√≠da
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 25/04/2006
@@ -8478,11 +8483,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Collection idsConcatenadosImoveis, Integer anoMesReferenciaConta)
 			throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar a coleÁ„o de contas
+		// Cria a vari√°vel que vai armazenar a cole√ß√£o de contas
 		Collection<Conta> retorno = null;
 		Collection<Conta> retornoConsulta = null;
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8531,25 +8536,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na pesquisa
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna a coleÁ„o de contas dos imÛveis sobre responsabilidade do
+		// Retorna a cole√ß√£o de contas dos im√≥veis sobre responsabilidade do
 		// cliente informado
 		return retorno;
 	}
 
 	/**
-	 * Retorna um Object contendo um array de object com trÍs posiÁıes contendo
-	 * na primeira posiÁ„o a soma do valor total das contas na segunda posiÁ„o a
-	 * maior data de vencimento das contas e na terceira posiÁ„oa maior data de
-	 * validade das contas esses dados s„o necess·rios para gerar a fatura
+	 * Retorna um Object contendo um array de object com tr√™s posi√ß√µes contendo
+	 * na primeira posi√ß√£o a soma do valor total das contas na segunda posi√ß√£o a
+	 * maior data de vencimento das contas e na terceira posi√ß√£oa maior data de
+	 * validade das contas esses dados s√£o necess√°rios para gerar a fatura
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 25/04/2006
@@ -8563,11 +8568,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Collection idsConcatenadosImoveis, Integer anoMesReferenciaConta)
 			throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar o array retornado
+		// Cria a vari√°vel que vai armazenar o array retornado
 		Object retorno = null;
 		Collection<Object[]> retornoConsulta = new ArrayList();
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8655,20 +8660,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na consulta
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna o array contendo os dados do resumo das contas necess·rios
+		// Retorna o array contendo os dados do resumo das contas necess√°rios
 		// para gerar a fatura
 		return retorno;
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 27/04/2006
 	 * 
 	 * Atualiza o indicador de cobranca de multa na tabela de conta
@@ -8699,13 +8704,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 27/04/2006
 	 * 
 	 * Atualiza o indicador de cobranca de multa na tabela de Guia Pagamento
@@ -8741,10 +8746,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os items da fatura informada com o cÛdigo da fatura igua ao
-	 * cÛdigo da fatura dos items para emitir a fatura do cliente respons·vel
+	 * Pesquisa os items da fatura informada com o c√≥digo da fatura igua ao
+	 * c√≥digo da fatura dos items para emitir a fatura do cliente respons√°vel
 	 * 
-	 * [UC0321] Emitir Fatura de Cliente Respons·vel
+	 * [UC0321] Emitir Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 28/04/2006
@@ -8756,10 +8761,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Collection<FaturaItem> pesquisarItemsFatura(Integer idFatura)
 			throws ErroRepositorioException {
 
-		// Cria a vari·vel que vai armazenar a coleÁ„o de items de fatura
+		// Cria a vari√°vel que vai armazenar a cole√ß√£o de items de fatura
 		Collection<FaturaItem> retorno = null;
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
@@ -8776,19 +8781,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro na consulta
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o
+			// Fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna a coleÁ„o de itens da fatura da fatura informada
+		// Retorna a cole√ß√£o de itens da fatura da fatura informada
 		return retorno;
 	}
 
 	/**
-	 * [UC0329] - Restabelecer SituaÁ„o Anterior da Conta Atualiza para null a
+	 * [UC0329] - Restabelecer Situa√ß√£o Anterior da Conta Atualiza para null a
 	 * data de cancelamento e o motivo do cancelamento Author: Fernanda Paiva
 	 * Date: 05/05/2006
 	 * 
@@ -8820,13 +8825,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0329] - Alterar as SituaÁ„o Anterior e atual da Conta Author: Fernanda
+	 * [UC0329] - Alterar as Situa√ß√£o Anterior e atual da Conta Author: Fernanda
 	 * Paiva Date: 05/05/2006
 	 * 
 	 * Atualiza a situacao anterior da conta de situacao atual da conta
@@ -8880,13 +8885,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0329] - Restabelecer SituaÁ„o Anterior da Conta Author: Fernanda Paiva
+	 * [UC0329] - Restabelecer Situa√ß√£o Anterior da Conta Author: Fernanda Paiva
 	 * Date: 05/05/2006
 	 * 
 	 * Atualiza a situacao atual da conta
@@ -8917,7 +8922,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -8928,9 +8933,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0067] - Faturar Grupo de Faturaumetno
 	 * 
-	 * Determinar VAlores para Faturamento de ¡gua e/ou Esgoto
+	 * Determinar VAlores para Faturamento de √Ågua e/ou Esgoto
 	 * 
-	 * [SF0002] - Determinar VAlores para Faturamento de ¡gua e/ou Esgoto
+	 * [SF0002] - Determinar VAlores para Faturamento de √Ågua e/ou Esgoto
 	 * 
 	 * @author Rafael Santos
 	 * @date 26/04/2006
@@ -8967,10 +8972,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8979,7 +8984,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Atualizar Debito a Cobrar Campo numero de prestaÁıes cobradas
+	 * Atualizar Debito a Cobrar Campo numero de presta√ß√µes cobradas
 	 * 
 	 * [UC00113] - Faturar Grupo de Faturamento
 	 * 
@@ -9015,13 +9020,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Atualizar Debito a Cobrar Campo numero de prestaÁıes cobradas
+	 * Atualizar Debito a Cobrar Campo numero de presta√ß√µes cobradas
 	 * 
 	 * [UC00113] - Faturar Grupo de Faturamento
 	 * 
@@ -9061,13 +9066,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Atualizar Credito a Realizar Campo numero de prestaÁıes realizadas e
+	 * Atualizar Credito a Realizar Campo numero de presta√ß√µes realizadas e
 	 * valor mes anterior
 	 * 
 	 * [UC00113] - Faturar Grupo de Faturamento
@@ -9180,7 +9185,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -9217,10 +9222,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9230,7 +9235,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC00113] - Faturar Grupo de Faturamento
 	 * 
-	 * Recupera o percentual de esgoto para o imÛvel informado.
+	 * Recupera o percentual de esgoto para o im√≥vel informado.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/09/2006
@@ -9255,10 +9260,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9269,7 +9274,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Recupera as contas com estouro de consumo ou com baixo consumo [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -9418,10 +9423,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9432,7 +9437,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Recupera as contas com estouro de consumo ou com baixo consumo [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -9571,10 +9576,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9582,7 +9587,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna as contas para impressao
+	 * M√©todo que retorna as contas para impressao
 	 * 
 	 * Pesquisar Contas Emitir Caern
 	 * 
@@ -9752,10 +9757,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10063,10 +10068,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10074,10 +10079,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Atualiza os Clientes Respons·veis para de Conta Impressao Alteracao feita
+	 * Atualiza os Clientes Respons√°veis para de Conta Impressao Alteracao feita
 	 * para a ordenacao das contas de clientes orgaos publicos Por Tiago Moreno -
 	 * 25/08/2007 - Alterado: 17/10/2007 OBS: Nao estou usando o HQL e sim o
-	 * prÛprio UPDATE do SQL.
+	 * pr√≥prio UPDATE do SQL.
 	 * 
 	 */
 
@@ -10131,9 +10136,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas com debito autom·tico [UC0348] - Emitir Contas
+	 * Recupera as contas com debito autom√°tico [UC0348] - Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10209,10 +10214,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ClienteRelacaoTipo.USUARIO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10220,9 +10225,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera o id do cliente respons·vel pela conta [UC0348] - Emitir Contas
+	 * Recupera o id do cliente respons√°vel pela conta [UC0348] - Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10249,10 +10254,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10260,10 +10265,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas com entrega para o cliente respons·vel [UC0348] -
+	 * Recupera as contas com entrega para o cliente respons√°vel [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10412,10 +10417,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10423,10 +10428,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas com entrega para o cliente respons·vel [UC0348] -
+	 * Recupera as contas com entrega para o cliente respons√°vel [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10566,10 +10571,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10579,7 +10584,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Recupera as contas normais [UC0348] - Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10653,10 +10658,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ClienteRelacaoTipo.USUARIO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10664,9 +10669,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera o nome do cliente usu·rio pela conta [UC0348] - Emitir Contas
+	 * Recupera o nome do cliente usu√°rio pela conta [UC0348] - Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @return
@@ -10691,10 +10696,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ClienteRelacaoTipo.USUARIO).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10702,9 +10707,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera o id do cliente respons·vel pela conta [UC0348] - Emitir Contas
+	 * Recupera o id do cliente respons√°vel pela conta [UC0348] - Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 05/12/2006
 	 * 
 	 * @return
@@ -10731,10 +10736,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10742,13 +10747,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna a soma de quantidade economia
+	 * M√©todo que retorna a soma de quantidade economia
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0007] Obter Quantidade de Economias da Conta
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -10774,10 +10779,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -10785,13 +10790,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0011] Obter Quantidade de Economias da Conta
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -10829,13 +10834,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0011] Obter Quantidade de Economias da Conta
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -10865,10 +10870,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idCategoria.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10876,11 +10881,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna o tipo de c·lculo da conta
+	 * M√©todo que retorna o tipo de c√°lculo da conta
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 21/09/2009
 	 * 
 	 * 
@@ -10907,10 +10912,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10918,11 +10923,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna o tipo de c·lculo da conta no histÛrico
+	 * M√©todo que retorna o tipo de c√°lculo da conta no hist√≥rico
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 21/09/2009
 	 * 
 	 * 
@@ -10949,10 +10954,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -10960,15 +10965,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
 	 * cobrados de parcelamento,o numero da prestacao e o numero total de
-	 * prestaÁıes
+	 * presta√ß√µes
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -11004,10 +11009,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11015,15 +11020,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 19/05/2006, 16/01/2007
 	 * 
 	 * 
@@ -11073,10 +11078,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11084,12 +11089,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 06/09/2009
 	 * 
 	 * @param idConta
@@ -11132,10 +11137,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11143,15 +11148,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do crÈdito realizado ordenado pelo
-	 * tipo de crÈdito
+	 * M√©todo que retorna uma array de object do cr√©dito realizado ordenado pelo
+	 * tipo de cr√©dito
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0014] Gerar Linhas dos Creditos Realizados
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -11185,10 +11190,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11196,15 +11201,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do conta mensagem ordenado pelo
-	 * tipo de crÈdito
+	 * M√©todo que retorna uma array de object do conta mensagem ordenado pelo
+	 * tipo de cr√©dito
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0016] Obter Mensagem da Conta em 3 Partes
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -11258,10 +11263,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11269,12 +11274,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object de qualidade de agua
+	 * M√©todo que retorna uma array de object de qualidade de agua
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 25/05/2006
 	 * 
 	 * 
@@ -11297,7 +11302,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			consulta = "select qualidadeAgua.numeroIndiceTurbidez, "// 0
 					+ "qualidadeAgua.numeroCloroResidual, " // 1
-					// informaÁıes para 2 via de conta para caern
+					// informa√ß√µes para 2 via de conta para caern
 					+ " qualidadeAgua.numeroNitrato, " // 2
 					+ " qualidadeAgua.numeroIndiceColiformesTotais, " // 3
 					+ " qualidadeAgua.numeroIndicePh " // 4
@@ -11318,7 +11323,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 				consulta = "select qualidadeAgua.numeroIndiceTurbidez, "// 0
 					+ "qualidadeAgua.numeroCloroResidual, " // 1
-					// informaÁıes para 2 via de conta para caern
+					// informa√ß√µes para 2 via de conta para caern
 					+ " qualidadeAgua.numeroNitrato, " // 2
 					+ " qualidadeAgua.numeroIndiceColiformesTotais, " // 3
 					+ " qualidadeAgua.numeroIndicePh " // 4
@@ -11340,7 +11345,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 				consulta = "select qualidadeAgua.numeroIndiceTurbidez, "// 0
 					+ "qualidadeAgua.numeroCloroResidual, " // 1
-					// informaÁıes para 2 via de conta para caern
+					// informa√ß√µes para 2 via de conta para caern
 					+ " qualidadeAgua.numeroNitrato, " // 2
 					+ " qualidadeAgua.numeroIndiceColiformesTotais, " // 3
 					+ " qualidadeAgua.numeroIndicePh " // 4
@@ -11356,10 +11361,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			} 
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11367,13 +11372,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do conta impostos deduzidos
+	 * M√©todo que retorna uma array de object do conta impostos deduzidos
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0015] Gerar Linhas dos Impostos Deduzidos
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -11403,10 +11408,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11417,7 +11422,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Pesquisa todas as contas para testar o batch
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/06/2006
 	 * 
 	 * 
@@ -11437,10 +11442,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			retorno = session.createQuery(consulta).setMaxResults(115).list();
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11596,7 +11601,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							idAreaConstruidaFaixa);
 
 			/*
-			 * # COLOCANDO O VALOR NAS CONDI«’ES#
+			 * # COLOCANDO O VALOR NAS CONDI√á√ïES#
 			 */
 
 			/*
@@ -11638,10 +11643,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			// throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11679,7 +11684,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		String consulta = "";
 		/*
-		 * ## CONDI«’ES ##
+		 * ## CONDI√á√ïES ##
 		 */
 		consulta = consulta + " where ";
 
@@ -11851,7 +11856,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ "ligacaoEsgoto.percentual >= :intervaloValorPercentualEsgotoInicial and ligacaoEsgoto.percentual <= :intervaloValorPercentualEsgotoFinal  and  ";
 		}
-		// indicador mediÁ„o
+		// indicador medi√ß√£o
 		if (indicadorMedicao != null && indicadorMedicao.equals("comMedicao")) {
 			// tipo medicao
 			if (idTipoMedicao != null
@@ -11900,7 +11905,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// .toString())) {
 		// consulta = consulta + " nomeConta.id = :idNomeConta and ";
 		// }
-		// situaÁ„o da ligaÁ„o de agua
+		// situa√ß√£o da liga√ß√£o de agua
 		if (idSituacaoLigacaoAgua != null
 				&& !idSituacaoLigacaoAgua.equals("")
 				&& !idSituacaoLigacaoAgua.trim().equalsIgnoreCase(
@@ -11909,7 +11914,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ " ligacaoAguaSituacao.id = :idSituacaoLigacaoAgua  and  ";
 		}
-		// situaÁ„o ligaÁ„o de esgoto
+		// situa√ß√£o liga√ß√£o de esgoto
 		if (idSituacaoLigacaoEsgoto != null
 				&& !idSituacaoLigacaoEsgoto.equals("")
 				&& !idSituacaoLigacaoEsgoto.trim().equalsIgnoreCase(
@@ -11926,7 +11931,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 								.toString())) {
 			consulta = consulta + " imovelPerfil.id = :idImovelPerfil  and  ";
 		}
-		// poÁo tipo
+		// po√ßo tipo
 		if (idPocoTipo != null
 				&& !idPocoTipo.equals("")
 				&& !idPocoTipo.trim().equalsIgnoreCase(
@@ -12338,7 +12343,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idSituacaoLigacaoAgua).intValue());
 		}
 
-		// situaÁ„o ligaÁ„o de esgoto
+		// situa√ß√£o liga√ß√£o de esgoto
 		if (idSituacaoLigacaoEsgoto != null
 				&& !idSituacaoLigacaoEsgoto.equals("")
 				&& !idSituacaoLigacaoEsgoto.trim().equalsIgnoreCase(
@@ -12356,7 +12361,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			query.setInteger("idImovelPerfil", new Integer(idImovelPerfil)
 					.intValue());
 		}
-		// poÁo tipo
+		// po√ßo tipo
 		if (idPocoTipo != null
 				&& !idPocoTipo.equals("")
 				&& !idPocoTipo.trim().equalsIgnoreCase(
@@ -12597,10 +12602,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<Conta> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12621,10 +12626,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", new Integer(idImovel)).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12645,10 +12650,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<ConsumoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12667,10 +12672,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					LigacaoTipo.LIGACAO_AGUA).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12690,10 +12695,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<ConsumoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12712,10 +12717,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					LigacaoTipo.LIGACAO_ESGOTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12736,10 +12741,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<ConsumoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12764,10 +12769,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idLigacaoAguaCortado", LigacaoAguaSituacao.CORTADO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12788,10 +12793,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<ConsumoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12815,10 +12820,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12839,10 +12844,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<MedicaoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12865,10 +12870,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idLigacaoAguaCortado", LigacaoAguaSituacao.CORTADO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12889,10 +12894,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<MedicaoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12911,10 +12916,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					LigacaoEsgotoSituacao.LIGADO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12938,10 +12943,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12961,10 +12966,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<HidrometroInstalacaoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -12984,10 +12989,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idLigacaoAguaCortado", LigacaoAguaSituacao.CORTADO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13007,10 +13012,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<HidrometroInstalacaoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -13027,10 +13032,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					LigacaoEsgotoSituacao.LIGADO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13050,10 +13055,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<ConsumoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -13069,10 +13074,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13084,12 +13089,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<FaturamentoAtividadeCronograma> retorno = new ArrayList();
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		// Iterator iterator = null;
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -13128,10 +13133,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// }
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13139,11 +13144,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Este caso de uso calcula a tarifa minÌma de ·gua para um imÛvel
+	 * Este caso de uso calcula a tarifa min√≠ma de √°gua para um im√≥vel
 	 * 
-	 * [UC0451] Obter Tarifa MinÌma de ¡gua para um ImÛvel
+	 * [UC0451] Obter Tarifa Min√≠ma de √Ågua para um Im√≥vel
 	 * 
-	 * Para cada categoria e maior data de vigÍncia retorna o valor da tarifa
+	 * Para cada categoria e maior data de vig√™ncia retorna o valor da tarifa
 	 * minima
 	 * 
 	 * pesquisarTarifaMinimaCategoriaVigencia
@@ -13180,10 +13185,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"subcategoriaId", idSubCategoria).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13196,8 +13201,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste mÈtodo È feita uma busca para obter as atividades
-	 * comandadas e n„o realizadas
+	 * comandado, neste m√©todo √© feita uma busca para obter as atividades
+	 * comandadas e n√£o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -13210,14 +13215,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Collection<FaturamentoAtividadeCronograma> pesquisarFaturamentoAtividadeCronogramaComandadasNaoRealizadas(
 			int numeroPagina) throws ErroRepositorioException {
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		Collection<FaturamentoAtividadeCronograma> retorno = new ArrayList();
 
 		// Iterator iterator = null;
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -13266,10 +13271,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			 * retorno.add(faturamentoAtividadeCronograma); }
 			 */
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13283,8 +13288,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste mÈtodo È feita uma busca para obter as atividades
-	 * comandadas e n„o realizadas
+	 * comandado, neste m√©todo √© feita uma busca para obter as atividades
+	 * comandadas e n√£o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -13297,10 +13302,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public int pesquisarFaturamentoAtividadeCronogramaComandadasNaoRealizadasCount()
 			throws ErroRepositorioException {
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		int retorno = 0;
@@ -13321,10 +13326,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) session.createQuery(consulta).setTimestamp("novaData", new Date()).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13337,12 +13342,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * alteracao
 	 * 
 	 * @param id
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param ultimaAlteracao
-	 *            formato - 2006-08-25 DescriÁ„o do par‚metro
-	 * @return DescriÁ„o do retorno
+	 *            formato - 2006-08-25 Descri√ß√£o do par√¢metro
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public Integer pesquisarExistenciaContaParaConcorrencia(String idConta,
 			String ultimaAlteracao) throws ErroRepositorioException {
@@ -13380,10 +13385,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13392,11 +13397,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	public Integer verificarExistenciaDebitoTipo(Integer idDebitoTipo)
 			throws ErroRepositorioException {
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 
 		Integer retorno = null;
 
-		// cria a sess„o com o hibernate
+		// cria a sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -13411,13 +13416,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o pesquisada
+		// retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
@@ -13528,10 +13533,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13541,7 +13546,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0352] Emitir Contas
 	 * 
-	 * Este caso de uso permite a emiss„o de uma ou mais contas.
+	 * Este caso de uso permite a emiss√£o de uma ou mais contas.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 19/09/2006
@@ -13571,10 +13576,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					faturamentoGrupo.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13584,7 +13589,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0352] Emitir Contas
 	 * 
-	 * Este caso de uso permite a emiss„o de uma ou mais contas.
+	 * Este caso de uso permite a emiss√£o de uma ou mais contas.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 24/10/2006
@@ -13624,10 +13629,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13647,13 +13652,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public BigDecimal pesquisarValorMultasCobradas(int idConta)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -13671,10 +13676,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					DebitoTipo.MULTA_IMPONTUALIDADE).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13682,7 +13687,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera os dados da conta p emitir a 2™ via [UC0482]Emitir 2™ Via de
+	 * Recupera os dados da conta p emitir a 2¬™ via [UC0482]Emitir 2¬™ Via de
 	 * Conta
 	 * 
 	 * @author Vivianne Sousa
@@ -13765,7 +13770,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					/*
 					 * Felipe Santos
 					 * 
-					 * Imprimir segunda via de conta com o cliente respons·vel pela conta
+					 * Imprimir segunda via de conta com o cliente respons√°vel pela conta
 					 */
 					+ "and clct_icnomeconta = :indicadorNomeConta "
 			
@@ -13776,10 +13781,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("indicadorNomeConta", ConstantesSistema.SIM).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13787,10 +13792,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro EndereÁo
+	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro Endere√ßo
 	 * 
-	 * Atualiza os dados do dÈbito a cobrar e a data de ˙ltima atualizaÁ„o do
-	 * dÈbito a cobrar geral.
+	 * Atualiza os dados do d√©bito a cobrar e a data de √∫ltima atualiza√ß√£o do
+	 * d√©bito a cobrar geral.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 20/09/2006
@@ -13806,14 +13811,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		String sqlAtualizar = "";
 		try {
-			// LaÁo para atualizar todos os dÈbitos a cobrar informados
+			// La√ßo para atualizar todos os d√©bitos a cobrar informados
 			while (colecaoDebitosACobrarIterator.hasNext()) {
-				// Atualiza o dÈbito a cobrar
+				// Atualiza o d√©bito a cobrar
 				DebitoACobrar debitoACobrar = (DebitoACobrar) colecaoDebitosACobrarIterator
 						.next();
 				session.merge(debitoACobrar);
 
-				// Atualiza a data de ˙ltima alteraÁ„o do dÈbito a cobrar geral.
+				// Atualiza a data de √∫ltima altera√ß√£o do d√©bito a cobrar geral.
 				sqlAtualizar = "update DebitoACobrarGeral dage "
 						+ "set dage.ultimaAlteracao = :dataUltimaAlteracao "
 						+ "where dage.id = :idDebitoACobrarCategoria";
@@ -13837,7 +13842,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Data: 21/09/2006
 	 * 
 	 * @param idImovel
-	 *            Id do ImÛvel
+	 *            Id do Im√≥vel
 	 * @return cliente responsavel pelo imovel marcado como esferaPoder =
 	 *         federal
 	 */
@@ -13866,10 +13871,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					EsferaPoder.FEDERAL).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13883,7 +13888,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @param idImpostoTipo
 	 *            Id do ImpostoTipo
 	 * @param anoMesReferencia
-	 *            Ano MÍs de ReferÍncia
+	 *            Ano M√™s de Refer√™ncia
 	 * @return aliquotas do imposto
 	 */
 	public ImpostoTipoAliquota pesquisarAliquotaImposto(Integer idImpostoTipo,
@@ -13907,10 +13912,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13992,7 +13997,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * Atualiza a data e hora da realizaÁ„o da atividade.
+	 * Atualiza a data e hora da realiza√ß√£o da atividade.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 27/09/2006
@@ -14037,7 +14042,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * Atualiza o ano/mÍs de referÍncia do faturamento para o mÍs seguinte.
+	 * Atualiza o ano/m√™s de refer√™ncia do faturamento para o m√™s seguinte.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 27/09/2006
@@ -14078,9 +14083,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Verifica se todos os grupos j· foram faturados
+	 * Verifica se todos os grupos j√° foram faturados
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/10/2006
@@ -14108,10 +14113,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14119,13 +14124,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Permite inserir DebitoACobrarGeral contidos numa coleÁ„o [UC0394] Gerar
-	 * DÈbitos a Cobrar de DoaÁıes
+	 * Permite inserir DebitoACobrarGeral contidos numa cole√ß√£o [UC0394] Gerar
+	 * D√©bitos a Cobrar de Doa√ß√µes
 	 * 
-	 * @author CÈsar Ara˙jo
+	 * @author C√©sar Ara√∫jo
 	 * @date 05/08/2006
 	 * @param Collection
-	 *            <DebitoACobrarGeral> colecaoDebitosACobrarGeral - ColeÁ„o de
+	 *            <DebitoACobrarGeral> colecaoDebitosACobrarGeral - Cole√ß√£o de
 	 *            DebitoACobrarGeral
 	 * @throws ErroRepositorioException
 	 */
@@ -14150,13 +14155,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Permite inserir DebitoACobrar contidos numa coleÁ„o [UC0394] Gerar
-	 * DÈbitos a Cobrar de DoaÁıes
+	 * Permite inserir DebitoACobrar contidos numa cole√ß√£o [UC0394] Gerar
+	 * D√©bitos a Cobrar de Doa√ß√µes
 	 * 
-	 * @author CÈsar Ara˙jo
+	 * @author C√©sar Ara√∫jo
 	 * @date 05/08/2006
 	 * @param Collection
-	 *            <DebitoACobrarGeral> colecaoDebitosACobrarGeral - ColeÁ„o de
+	 *            <DebitoACobrarGeral> colecaoDebitosACobrarGeral - Cole√ß√£o de
 	 *            DebitoACobrarGeral
 	 * @throws ErroRepositorioException
 	 */
@@ -14177,9 +14182,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs - Item 05
+	 * [UC0155] - Encerrar Faturamento do M√™s - Item 05
 	 * 
-	 * Atualiza a situaÁ„o de imÛvel com cobranÁa finalizada
+	 * Atualiza a situa√ß√£o de im√≥vel com cobran√ßa finalizada
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/10/2006
@@ -14197,7 +14202,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String atualizarAnoMesCobrancaRetirada;
 
 		try {
-			// Atualiza situaÁ„o de cobranÁa do imÛvel *******
+			// Atualiza situa√ß√£o de cobran√ßa do im√≥vel *******
 			atualizarSituacaoCobrancaImovel = "update Imovel imov "
 					+ "set imov.cobrancaSituacaoTipo.id = null "
 					+ "where imov.setorComercial = :idSetorComercial and imov.cobrancaSituacaoTipo.id is not null "
@@ -14212,7 +14217,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesFaturamento", anoMesFaturamento).executeUpdate();
 			// ***************************************************
 
-			// Atualizar o ano/mÍs de cobranÁa retirada *******
+			// Atualizar o ano/m√™s de cobran√ßa retirada *******
 			atualizarAnoMesCobrancaRetirada = "update CobrancaSituacaoHistorico "
 					+ "set anoMesCobrancaRetirada = :anoMesFaturamento "
 					+ "where anoMesCobrancaSituacaoFim <= :anoMesFaturamento "
@@ -14226,7 +14231,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -14247,10 +14252,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idDebitoCobrado", idDebitoCobrado).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14279,9 +14284,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Pesquisa os dÈbitos a cobrar por categoria.
+	 * Pesquisa os d√©bitos a cobrar por categoria.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/10/2006
@@ -14305,19 +14310,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idDebitoACobrar", debitoACobrar.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Pesquisa os crÈditos a realizar por categoria.
+	 * Pesquisa os cr√©ditos a realizar por categoria.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/10/2006
@@ -14342,10 +14347,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idCreditoARealizar", creditoARealizar.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -14372,7 +14377,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * Pesquisa as conta categoria consumo de faixa.
 	 * 
@@ -14403,10 +14408,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14445,10 +14450,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada conta transferida para o histÛrico, atualiza o indicador de que
-	 * a conta est· no histÛrico na tabela ContaGeral.
+	 * Para cada conta transferida para o hist√≥rico, atualiza o indicador de que
+	 * a conta est√° no hist√≥rico na tabela ContaGeral.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/10/2006
@@ -14476,16 +14481,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada dÈbito a cobrar transferido para o histÛrico, atualiza o
-	 * indicador de que o dÈbito a cobrar est· no histÛrico na tabela
+	 * Para cada d√©bito a cobrar transferido para o hist√≥rico, atualiza o
+	 * indicador de que o d√©bito a cobrar est√° no hist√≥rico na tabela
 	 * DebitoACobrarGeral.
 	 * 
 	 * @author Pedro Alexandre
@@ -14514,16 +14519,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada crÈdito a realizar transferido para o histÛrico, atualiza o
-	 * indicador de que o crÈdito a realizar est· no histÛrico na tabela
+	 * Para cada cr√©dito a realizar transferido para o hist√≥rico, atualiza o
+	 * indicador de que o cr√©dito a realizar est√° no hist√≥rico na tabela
 	 * CreditoARealizarGeral.
 	 * 
 	 * @author Pedro Alexandre
@@ -14552,7 +14557,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -14572,10 +14577,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14593,10 +14598,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			session.clear();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14695,10 +14700,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14706,12 +14711,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de debito a cobrar a partir da tabela
+	 * M√©todo que retorna uma colecao de debito a cobrar a partir da tabela
 	 * DEBITO_A_COBRAR com tipo de financiamento (FNTP) com o valor
 	 * correspondente a parcelamento (PARCELAMENTO_AGUA ,PARCELAMENTO_ESGOTO
 	 * ,PARCELAMENTO_SERVICO)
 	 * 
-	 * Utilizado pelo [UC0214] Efetuar Parcelamento de DÈbitos
+	 * Utilizado pelo [UC0214] Efetuar Parcelamento de D√©bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/11/2006
@@ -14745,22 +14750,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de debitos cobrados referente a pareclas
+	 * M√©todo que retorna uma colecao de debitos cobrados referente a pareclas
 	 * do parcelamento a partir da tabela DEBITO_COBRADO com tipo de
 	 * financiamento (FNTP) com o valor correspondente a parcelamento
 	 * (PARCELAMENTO_AGUA ,PARCELAMENTO_ESGOTO ,PARCELAMENTO_SERVICO)
 	 * 
-	 * Utilizado pelo [UC0214] Efetuar Parcelamento de DÈbitos
+	 * Utilizado pelo [UC0214] Efetuar Parcelamento de D√©bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/11/2006
@@ -14794,17 +14799,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Seleciona as contas agrupando por imÛvel
+	 * Seleciona as contas agrupando por im√≥vel
 	 * 
 	 * [UC0485] - Gerar Resumo dos Devedores Duvidosos
 	 * 
@@ -15010,22 +15015,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 * 
-	 * [SB0004] - Calcular Valor de ¡gua e/ou Esgoto
+	 * [SB0004] - Calcular Valor de √Ågua e/ou Esgoto
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 04/12/2006
 	 * 
 	 * @param idOS
@@ -15048,22 +15053,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 * 
-	 * [SB0004] - Calcular Valor de ¡gua e/ou Esgoto
+	 * [SB0004] - Calcular Valor de √Ågua e/ou Esgoto
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 04/12/2006
 	 * 
 	 * @param idOS
@@ -15094,10 +15099,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -15108,7 +15113,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * Pesquisa a conta digitada
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 07/12/2006
 	 * 
 	 * @param idImovel
@@ -15140,10 +15145,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -15152,10 +15157,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0194] Inserir Credito a Realizar
 	 * 
-	 * Pesquisa a quantidade de contas e contas histÛrico para um imÛvel em uma
-	 * referÍncia
+	 * Pesquisa a quantidade de contas e contas hist√≥rico para um im√≥vel em uma
+	 * refer√™ncia
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 14/08/2008
 	 * 
 	 * @param idImovel
@@ -15195,10 +15200,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					referenciaConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -15208,7 +15213,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * UC0113 - Faturar Grupo Faturamento Author: Rafael Santos Data: 12/12/2006
 	 * 
 	 * @param idImovel
-	 *            Id do ImÛvel
+	 *            Id do Im√≥vel
 	 * @return cliente responsavel
 	 */
 	public Object pesquisarClienteResponsavel(Integer idImovel)
@@ -15234,10 +15239,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -15247,7 +15252,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * UC0113 - Faturar Grupo Faturamento Author: Rafael Santos Data: 27/12/2006
 	 * 
-	 * Pesquisar o Resumo Faturamento SimulaÁ„o
+	 * Pesquisar o Resumo Faturamento Simula√ß√£o
 	 * 
 	 */
 	public ResumoFaturamentoSimulacao pesquisarResumoFaturamentoSimulacao(
@@ -15334,10 +15339,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									: -1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -15368,8 +15373,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -15398,8 +15403,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -15431,7 +15436,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -15448,7 +15453,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -15529,8 +15534,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -15559,8 +15564,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -15592,7 +15597,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -15609,7 +15614,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -15690,8 +15695,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -15720,8 +15725,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -15753,7 +15758,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -15770,7 +15775,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -15850,8 +15855,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -15880,8 +15885,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -15913,7 +15918,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -15930,7 +15935,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16012,8 +16017,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16042,8 +16047,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16075,7 +16080,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16092,7 +16097,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16175,8 +16180,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16205,8 +16210,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16238,7 +16243,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16255,7 +16260,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16336,8 +16341,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16367,8 +16372,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16384,7 +16389,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							 * @autor Adriana Muniz
 							 * 19/07/2012
 							 * 
-							 * AcrÈscimo da parametro cnta.dcst_idatual na query.
+							 * Acr√©scimo da parametro cnta.dcst_idatual na query.
 							 * */
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
@@ -16407,7 +16412,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16424,7 +16429,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16506,8 +16511,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16536,8 +16541,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16569,7 +16574,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16586,7 +16591,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16669,8 +16674,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16700,8 +16705,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16734,7 +16739,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16751,7 +16756,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16833,8 +16838,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -16863,8 +16868,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -16896,7 +16901,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -16913,7 +16918,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS PARA PR… FATURAMENTO
+				//UTILIZADO APENAS PARA PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -16994,8 +16999,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -17024,8 +17029,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					atualizar = atualizar + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17057,7 +17062,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -17075,7 +17080,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(5, helper.getFaturamentoGrupo().getId());
 				}
@@ -17169,8 +17174,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -17199,8 +17204,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					atualizar = atualizar + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17232,7 +17237,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -17254,7 +17259,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					stUpdateParcelas.setDate(7, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					stUpdateParcelas.setInt(6, helper.getFaturamentoGrupo().getId());
 				}
@@ -17275,7 +17280,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					stUpdateResidual.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					stUpdateResidual.setInt(5, helper.getFaturamentoGrupo().getId());
 				}
@@ -17391,8 +17396,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -17421,8 +17426,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					atualizar = atualizar + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17454,7 +17459,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -17553,8 +17558,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -17583,8 +17588,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					atualizar = atualizar + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17616,7 +17621,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -17633,7 +17638,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -17683,8 +17688,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -17713,8 +17718,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					delete = delete + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17746,7 +17751,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -17763,7 +17768,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -17811,7 +17816,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -17821,7 +17826,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -17883,7 +17888,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -17893,7 +17898,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -17902,7 +17907,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC113] Faturar Grupo Faturamento
 	 * 
 	 * Retorna a quantidade de contas existentes para uma rota em um determinado
-	 * anoMÍs de referÍncia e de acordo com a situaÁ„o atual recebida.
+	 * anoM√™s de refer√™ncia e de acordo com a situa√ß√£o atual recebida.
 	 * 
 	 * @author Rafael Santos, Raphael Rossiter
 	 * @date 02/01/2007, 24/03/2008
@@ -17927,8 +17932,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = "SELECT count(conta.id) FROM Conta conta ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if(idImovel == null || idImovel.equals("")){
 				if (!rota.getIndicadorRotaAlternativa().equals(
@@ -17942,8 +17947,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ "AND situacaoAtual.id = :debitoCreditoSituacaoAtual ";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -17976,10 +17981,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -18018,7 +18023,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 * 
 	 * 
 	 * @author Rafael Pinto
@@ -18068,12 +18073,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
-	 * Deleta as faturas e os items da fatura por cliente respons·vel e ano/mÍs
-	 * de referÍncia.
+	 * Deleta as faturas e os items da fatura por cliente respons√°vel e ano/m√™s
+	 * de refer√™ncia.
 	 * 
-	 * @author Pedro Alexandre,S·vio Luiz
+	 * @author Pedro Alexandre,S√°vio Luiz
 	 * @date 04/01/2007,19/11/2007
 	 * 
 	 * @param idCliente
@@ -18173,7 +18178,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -18183,16 +18188,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Pesquisar os ids das localidades para encerrar o faturamento do ano/mÍs
-	 * de referÍncia corrente.
+	 * Pesquisar os ids das localidades para encerrar o faturamento do ano/m√™s
+	 * de refer√™ncia corrente.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 05/01/2007
@@ -18233,7 +18238,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Pesquisar os ids das localidades para gerar o resumo das
-	 * ligaÁıes/economias.
+	 * liga√ß√µes/economias.
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 17/01/2007
@@ -18265,7 +18270,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera os dados da conta p emitir a 2™ via [UC0482]Emitir 2™ Via de
+	 * Recupera os dados da conta p emitir a 2¬™ via [UC0482]Emitir 2¬™ Via de
 	 * Conta
 	 * 
 	 * @author Vivianne Sousa
@@ -18352,10 +18357,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -18363,7 +18368,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0532] Gerar RelatÛrio de Faturamento das LigaÁıes com MediÁ„o
+	 * [UC0532] Gerar Relat√≥rio de Faturamento das Liga√ß√µes com Medi√ß√£o
 	 * Individualizada
 	 * 
 	 * @author Vivianne Sousa
@@ -18600,17 +18605,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0532] Gerar RelatÛrio de Faturamento das LigaÁıes com MediÁ„o
+	 * [UC0532] Gerar Relat√≥rio de Faturamento das Liga√ß√µes com Medi√ß√£o
 	 * Individualizada
 	 * 
 	 * @author Vivianne Sousa
@@ -18718,10 +18723,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"nomeCliente", Hibernate.STRING).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -18730,9 +18735,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0493] Emitir de Extrato de Consumo de ImÛvel CondomÌnio
+	 * [UC0493] Emitir de Extrato de Consumo de Im√≥vel Condom√≠nio
 	 * 
-	 * Fl·vio Cordeiro 08/01/2007
+	 * Fl√°vio Cordeiro 08/01/2007
 	 * 
 	 * @throws ErroRepositorioException
 	 *             idsRotas string formatada com valores separados por virgula.
@@ -18842,9 +18847,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * soma dos consumos dos imoveis associados [UC0493] Emitir de Extrato de
-	 * Consumo de ImÛvel CondomÌnio
+	 * Consumo de Im√≥vel Condom√≠nio
 	 * 
-	 * Fl·vio Cordeiro 12/01/2007
+	 * Fl√°vio Cordeiro 12/01/2007
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18881,9 +18886,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * quantidade de imoveis associados [UC0493] Emitir de Extrato de Consumo de
-	 * ImÛvel CondomÌnio
+	 * Im√≥vel Condom√≠nio
 	 * 
-	 * Fl·vio Cordeiro 12/01/2007
+	 * Fl√°vio Cordeiro 12/01/2007
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18919,7 +18924,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0173] Gerar RelatÛrio de Resumo do Faturamento
+	 * [UC0173] Gerar Relat√≥rio de Resumo do Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 24/01/2007
@@ -18977,10 +18982,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -19015,17 +19020,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0335] Gerar Resumo de PendÍncia
+	 * [UC0335] Gerar Resumo de Pend√™ncia
 	 * 
 	 * Pesquisar os ids das localidade
 	 * 
@@ -19063,9 +19068,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Atualiza o sequencial de conta impress„o
+	 * Atualiza o sequencial de conta impress√£o
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 29/01/2007
 	 * 
 	 * @return
@@ -19112,7 +19117,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC] Gerar RelatÛrio de Contas Emitidas
+	 * [UC] Gerar Relat√≥rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 30/01/2007
@@ -19204,17 +19209,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC] Gerar RelatÛrio de Contas Emitidas
+	 * [UC] Gerar Relat√≥rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 02/02/2007
@@ -19248,16 +19253,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesReferencia).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
-	// retorna o anoMes do faturamento grupo do imÛvel passado
+	// retorna o anoMes do faturamento grupo do im√≥vel passado
 	public Integer retornaAnoMesFaturamentoGrupo(Integer idImovel)
 			throws ErroRepositorioException {
 
@@ -19296,7 +19301,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Monta a colecao de resultdos apartir da tbela conta impressao para
 	 * geracao do relatorio de MAPA DE CONTROLE DAS CONTAS EMITIDAS
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -19380,7 +19385,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Monta a colecao de resultdos apartir da tabela conta impressao para
 	 * geracao do relatorio de RESUMO CONTAS EMITIDAS POR LOCALIDADE NO GRUPO
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -19479,10 +19484,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idGuiaPagamento", idGuiaPagamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -19512,10 +19517,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idGuiaPagamento", idGuiaPagamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -19545,10 +19550,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idGuiaPagamento", idGuiaPagamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -19556,7 +19561,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -19613,7 +19618,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -19686,11 +19691,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * ObtÈm as contas de um imÛvel com ano/mes da data de vencimento menor ou
+	 * Obt√©m as contas de um im√≥vel com ano/mes da data de vencimento menor ou
 	 * igual ao ano/mes de referencia da arrecadacao corrente e com situacao
 	 * atual correspondente a normal, retificada ou incluida.
 	 * 
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Fernanda Paiva, Pedro Alexandre, Pedro Alexandre
 	 * @date 24/04/2006,15/03/2007,08/05/2008
@@ -19778,18 +19783,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 63 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * doaÁıes.
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 63 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * doa√ß√µes.
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -19797,13 +19802,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -19834,20 +19839,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * Recupera as contas do Conjunto de ImÛveis
+	 * Recupera as contas do Conjunto de Im√≥veis
 	 * 
 	 * @author Ana Maria, Mariana Victor
 	 * @date 19/03/2007, 14/07/2011
@@ -19872,7 +19877,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				repositorioUtilHBM.pesquisarParametrosDoSistema();
 
 			/**
-			 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta
+			 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta
 			 * 3. Caso o indicador de bloqueio de contas vinculadas a contrato de parcelamento no manter contas esteja ativo
 			 *   retirar da lista de contas selecionadas as contas vinculadas a algum contrato de parcelamento ativo
 			 *    
@@ -19998,10 +20003,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20009,7 +20014,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas em revis„o do Conjunto de ImÛveis
+	 * Recupera as contas em revis√£o do Conjunto de Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -20115,10 +20120,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20194,10 +20199,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20205,7 +20210,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas do Conjunto de ImÛveis
+	 * Recupera as contas do Conjunto de Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -20280,10 +20285,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20351,10 +20356,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20376,7 +20381,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -20436,10 +20441,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							ClienteRelacaoTipo.RESPONSAVEL).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20450,7 +20455,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -20504,10 +20509,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"imovelId", imovelId).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20518,7 +20523,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -20572,10 +20577,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"imovelId", imovelId).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20586,7 +20591,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -20634,10 +20639,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"imovelId", imovelId).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20645,7 +20650,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas do Conjunto de ImÛveis
+	 * Recupera as contas do Conjunto de Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -20724,10 +20729,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20735,10 +20740,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera o maior valor do sequÍncial de impress„o e soma 10 ao valor
+	 * Recupera o maior valor do sequ√™ncial de impress√£o e soma 10 ao valor
 	 * maximo retornado
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro
 	 * @date 27/03/2007
@@ -20751,10 +20756,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Short retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -20768,10 +20773,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20780,9 +20785,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Remove o id da conta dos pagamentos referentes a conta para poder mandar
-	 * a conta para o histÛrico.
+	 * a conta para o hist√≥rico.
 	 * 
-	 * [UC0000] Gerar HistÛrco para encerrar Faturamento
+	 * [UC0000] Gerar Hist√≥rco para encerrar Faturamento
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 01/04/2007
@@ -20814,10 +20819,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Remove o id do dÈbito a cobrar dos pagamentos referentes a conta para
-	 * poder mandar o dÈbito a cobrar para o histÛrico.
+	 * Remove o id do d√©bito a cobrar dos pagamentos referentes a conta para
+	 * poder mandar o d√©bito a cobrar para o hist√≥rico.
 	 * 
-	 * [UC0000] Gerar HistÛrco para encerrar Faturamento
+	 * [UC0000] Gerar Hist√≥rco para encerrar Faturamento
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 01/04/2007
@@ -20849,7 +20854,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas canceladas por localidade com paginaÁ„o
+	 * Pesquisa as contas canceladas por localidade com pagina√ß√£o
 	 * 
 	 * [UC0000] Gerar Historico para Encerrar Faturamento
 	 * 
@@ -20869,6 +20874,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<Conta> retorno = null;
 
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		String consulta;
@@ -20882,20 +20888,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "and ((cnta.debitoCreditoSituacaoAtual = :cancelada or cnta.debitoCreditoSituacaoAtual = :retificacao or cnta.debitoCreditoSituacaoAtual = :parcelada or cnta.debitoCreditoSituacaoAtual = :debitoPrescrito or cnta.debitoCreditoSituacaoAtual = :debitoPrescritoContasIncluidas) "
 					+ "or (cnta.valorAgua + cnta.valorEsgoto + cnta.debitos - cnta.valorCreditos - cnta.valorImposto = 0) )";
 
-			retorno = session.createQuery(consulta)
-					.setInteger("idSetorComercial", idSetorComercial)
-					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
-					.setInteger("cancelada",DebitoCreditoSituacao.CANCELADA)
-					.setInteger("retificacao",DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-					.setInteger("parcelada",DebitoCreditoSituacao.PARCELADA)
-					.setInteger("debitoPrescrito",DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					.setInteger("debitoPrescritoContasIncluidas",DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
-					.setMaxResults(quantidadeRegistros)
-					.setFirstResult(numeroIndice).list();
+			// executa o hql
+			retorno = session.createQuery(consulta).setInteger(
+					"idSetorComercial", idSetorComercial).setInteger(
+					"anoMesReferenciaContabil", anoMesReferenciaContabil)
+					.setInteger("situacaoCancelada",
+							DebitoCreditoSituacao.CANCELADA).setInteger(
+							"situacaoRetificacao",
+							DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+					.setInteger("situacaoParcelada",
+							DebitoCreditoSituacao.PARCELADA).setInteger(
+							"situacaoDebitoPrescrito",
+							DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					/**
+					 * Altera√ß√£o necess√°ria para as contas incluidas canceladas 
+					 * por d√©bito prescrito tamb√©m possm ir pra hist√≥rico*/
+					.setInteger("situacaoDebitoPrescritoContasIncluidas",
+							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setMaxResults(quantidadeRegistros).setFirstResult(
+							numeroIndice).list();
 
 		} catch (HibernateException e) {
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20903,10 +20920,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0XXX] Emitir Aviso de CobranÁa
+	 * [UC0XXX] Emitir Aviso de Cobran√ßa
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 09/04/2007
 	 * 
 	 */
@@ -20927,10 +20944,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -20940,7 +20957,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * retorna o nome do cliente usuario da conta
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 09/04/2007
 	 * 
 	 * @param idConta
@@ -20951,10 +20968,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		String retorno = "";
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -20972,10 +20989,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -20985,7 +21002,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 13/04/2007
 	 * 
 	 * @param idConta
@@ -20995,13 +21012,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public BigDecimal pesquisarValorMultasCobradasPorFinanciamnetoTipo(
 			int idConta) throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -21026,10 +21043,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21037,10 +21054,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Este caso de uso calcula a tarifa minÌma de ·gua para um imÛvel
+	 * Este caso de uso calcula a tarifa min√≠ma de √°gua para um im√≥vel
 	 * (SUBCATEGORIA)
 	 * 
-	 * [UC0451] Obter Tarifa MinÌma de ¡gua para um ImÛvel
+	 * [UC0451] Obter Tarifa Min√≠ma de √Ågua para um Im√≥vel
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2007
@@ -21154,10 +21171,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0251] Gerar Atividade de AÁ„o de CobranÁa [SB0004] Verificar CritÈrio
-	 * de CobranÁa para ImÛvel Pesquisa a soma dos imoveis com parcelamento.
+	 * [UC0251] Gerar Atividade de A√ß√£o de Cobran√ßa [SB0004] Verificar Crit√©rio
+	 * de Cobran√ßa para Im√≥vel Pesquisa a soma dos imoveis com parcelamento.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 13/04/2007
 	 * 
 	 * @param idConta
@@ -21168,7 +21185,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Collection<ContaValoresHelper> colecaoContasValores)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		int retorno = 0;
 
 		if (colecaoContasValores != null && !colecaoContasValores.isEmpty()) {
@@ -21182,10 +21199,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}
 			}
 
-			// cria uma sess„o com o hibernate
+			// cria uma sess√£o com o hibernate
 			Session session = HibernateUtil.getSession();
 
-			// cria a vari·vel que vai conter o hql
+			// cria a vari√°vel que vai conter o hql
 			String consulta;
 
 			try {
@@ -21213,10 +21230,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.uniqueResult();
 
 			} catch (HibernateException e) {
-				// levanta a exceÁ„o para a prÛxima camada
+				// levanta a exce√ß√£o para a pr√≥xima camada
 				throw new ErroRepositorioException(e, "Erro no Hibernate");
 			} finally {
-				// fecha a sess„o
+				// fecha a sess√£o
 				HibernateUtil.closeSession(session);
 			}
 		}
@@ -21225,7 +21242,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera os ids das contas do Conjunto de ImÛveis
+	 * Recupera os ids das contas do Conjunto de Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/04/2007
@@ -21297,10 +21314,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21333,10 +21350,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21373,10 +21390,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesReferencia).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21384,7 +21401,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
@@ -21424,10 +21441,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idSubCategoria).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21435,9 +21452,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/05/2007
@@ -21488,10 +21505,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			 * retorno.add(contaCategoria); }
 			 */
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21528,10 +21545,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					DebitoCreditoSituacao.RETIFICADA).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21539,11 +21556,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Gera credito a realizar para os imÛveis de determinados grupos
+	 * Gera credito a realizar para os im√≥veis de determinados grupos
 	 * 
-	 * BATCH PARA CORRE«√O DA BASE
+	 * BATCH PARA CORRE√á√ÉO DA BASE
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/05/2007
 	 * 
 	 */
@@ -21597,10 +21614,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21635,10 +21652,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", idImovel).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21646,11 +21663,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0394] - Gerar DÈbitos a Cobrar de DoaÁıes
+	 * [UC0394] - Gerar D√©bitos a Cobrar de Doa√ß√µes
 	 * 
 	 * Pesquisas os debitos para serem removidos
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 09/05/2007
 	 * 
 	 * @param colecaoRotas,
@@ -21675,8 +21692,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join dc.debitoTipo debTipoACob ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!rota.getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -21685,8 +21702,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "inner join qdr.rota rot ";
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -21705,10 +21722,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21716,11 +21733,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar RelatÛrio de Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relat√≥rio de Tarifa de Consumo
 	 * 
 	 * Pesquisas a data final de validade de uma tarifa de consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/05/2007
 	 * 
 	 * @param Integer
@@ -21748,10 +21765,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21759,11 +21776,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar RelatÛrio Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relat√≥rio Tarifa de Consumo
 	 * 
-	 * Pesquisas as tarifas de consumo para o relatÛrio
+	 * Pesquisas as tarifas de consumo para o relat√≥rio
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/05/2007
 	 * 
 	 * @param descricao,
@@ -21839,10 +21856,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -21850,11 +21867,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0394] - Gerar DÈbitos a Cobrar de DoaÁıes
+	 * [UC0394] - Gerar D√©bitos a Cobrar de Doa√ß√µes
 	 * 
-	 * Deleta as categorias do dÈbito a cobrar
+	 * Deleta as categorias do d√©bito a cobrar
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 09/05/2007
 	 * 
 	 * @param colecaoRotas,
@@ -21875,21 +21892,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idsDebitoACobrar).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0394] - Gerar DÈbitos a Cobrar de DoaÁıes
+	 * [UC0394] - Gerar D√©bitos a Cobrar de Doa√ß√µes
 	 * 
 	 * Deleta os debitos a cobrar e os debitos a cobrar geral para o ano e mes
-	 * de faturamento. Esse caso È quando um faturamento È rodado mais de 1 vez.
+	 * de faturamento. Esse caso √© quando um faturamento √© rodado mais de 1 vez.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 09/05/2007
 	 * 
 	 * @param colecaoRotas,
@@ -21916,16 +21933,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idsDebitoACobrar).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Recupera id de contas que est„o em revis„o por ac„o do usuario
+	 * Recupera id de contas que est√£o em revis√£o por ac√£o do usuario
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -21959,10 +21976,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22116,10 +22133,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22288,10 +22305,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22414,10 +22431,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22576,10 +22593,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22732,10 +22749,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22744,7 +22761,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera id de conta(s) sem revis„o ou em revis„o por aÁ„o do usu·rio
+	 * Recupera id de conta(s) sem revis√£o ou em revis√£o por a√ß√£o do usu√°rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -22779,10 +22796,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22790,7 +22807,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera os dados da conta historico p emitir a 2™ via [UC0482]Emitir 2™
+	 * Recupera os dados da conta historico p emitir a 2¬™ via [UC0482]Emitir 2¬™
 	 * Via de Conta
 	 * 
 	 * @author Vivianne Sousa
@@ -22875,10 +22892,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ClienteRelacaoTipo.USUARIO.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22886,8 +22903,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera o id do cliente respons·vel pela conta historico [UC0482]Emitir
-	 * 2™ Via de Conta
+	 * Recupera o id do cliente respons√°vel pela conta historico [UC0482]Emitir
+	 * 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/05/2007
@@ -22917,10 +22934,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22928,9 +22945,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna a soma de quantidade economia
+	 * M√©todo que retorna a soma de quantidade economia
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0007] Obter Quantidade de Economias da Conta Historico
 	 * 
@@ -22960,10 +22977,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -22971,7 +22988,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas do cliente respons·vel para todos os grupos de
+	 * Pesquisa as contas do cliente respons√°vel para todos os grupos de
 	 * faturamento.
 	 * 
 	 * [UC0348] Emitir Contas
@@ -23126,10 +23143,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23137,7 +23154,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas do cliente respons·vel para todos os grupos de
+	 * Pesquisa as contas do cliente respons√°vel para todos os grupos de
 	 * faturamento.
 	 * 
 	 * [UC0348] Emitir Contas
@@ -23282,10 +23299,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23293,9 +23310,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0011] Obter Quantidade de Economias da Conta
 	 * 
@@ -23327,10 +23344,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = new ArrayList(session.createQuery(consulta).setInteger("idConta", idConta).list());
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23338,9 +23355,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0011] Obter Quantidade de Economias da Conta
 	 * 
@@ -23374,10 +23391,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idCategoria.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23385,9 +23402,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do conta impostos deduzidos
+	 * M√©todo que retorna uma array de object do conta impostos deduzidos
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0015] Gerar Linhas dos Impostos Deduzidos
 	 * 
@@ -23420,10 +23437,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23431,13 +23448,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
 	 * cobrados de parcelamento,o numero da prestacao e o numero total de
-	 * prestaÁıes
+	 * presta√ß√µes
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/05/2007
@@ -23475,10 +23492,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23486,13 +23503,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/05/2007
@@ -23544,10 +23561,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23555,11 +23572,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do crÈdito realizado ordenado pelo
-	 * tipo de crÈdito
+	 * M√©todo que retorna uma array de object do cr√©dito realizado ordenado pelo
+	 * tipo de cr√©dito
 	 * 
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0014] Gerar Linhas dos Creditos Realizados
 	 * 
@@ -23597,10 +23614,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23611,9 +23628,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * Este caso de uso permite gerar um ralatorio analitico do faturamento
 	 * 
-	 * [UC0xxx]Gerar RelatÛrio AnalÌtico do Faturamento
+	 * [UC0xxx]Gerar Relat√≥rio Anal√≠tico do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 18/05/2007
 	 * 
 	 * @param anoMesFaturamento
@@ -23709,10 +23726,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"usuario", ClienteRelacaoTipo.USUARIO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23721,10 +23738,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * retorno o id do imvel com FNTP_ID da tabela DEBITO_A_COBRAR com o valor
-	 * correspondente a parcelamento de ·gua (2), parcelamento de esgoto (3), ou
-	 * parcelamento de serviÁo(4)
+	 * correspondente a parcelamento de √°gua (2), parcelamento de esgoto (3), ou
+	 * parcelamento de servi√ßo(4)
 	 * 
-	 * [UC0259] - Processar Pagamento com cÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com c√≥digo de Barras
 	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
 	 * 
@@ -23741,10 +23758,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Integer retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -23769,14 +23786,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar
+		// retorna a cole√ß√£o de d√©bitos a cobrar
 		return retorno;
 	}
 
@@ -23786,7 +23803,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * DCST_IDATUAL com o valor correspondente a normal (0) e FNTP_ID com o
 	 * valor correspondente a juros de parcelamento (8)
 	 * 
-	 * [UC0259] - Processar Pagamento com cÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com c√≥digo de Barras
 	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
 	 * 
@@ -23820,19 +23837,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0302] - Gerar Debitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar Debitos a Cobrar de Acr√©scimos por Impontualidade
 	 * Author: Raphael Rossiter Data: 31/05/2007
 	 * 
-	 * ObtÈm os pagamentos da conta que contem a menor data de pagamento
+	 * Obt√©m os pagamentos da conta que contem a menor data de pagamento
 	 * 
 	 * @param Integer
 	 *            conta, Integer idImovel, Integer anoMesReferenciaConta
@@ -23900,10 +23917,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23911,8 +23928,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 31/05/2007
@@ -23985,18 +24002,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 31/05/2007
@@ -24061,21 +24078,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"unidadeNegocio", unidadeNegocio).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * [SB0014] Selecionar por Indicador de Consumo [SB0015] Selecionar por
-	 * Indicador de Medido [SB0016] Selecionar por Indicador de PoÁo [SB0017]
-	 * Selecionar por Indicador de Volume Fixo de ¡gua
+	 * Indicador de Medido [SB0016] Selecionar por Indicador de Po√ßo [SB0017]
+	 * Selecionar por Indicador de Volume Fixo de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 01/06/2007
@@ -24192,7 +24209,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -24252,7 +24269,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeEelo ";
 
@@ -24370,7 +24387,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (situacaoLigacaoAgua != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoAguaSituacao ligacaoAguaSituacao ";
 
@@ -24400,13 +24417,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -24455,7 +24472,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua - Volume Faturado Ligacao Estimado ou
+	 * [UC0600] Emitir Histograma de √Ågua - Volume Faturado Ligacao Estimado ou
 	 * Real
 	 * 
 	 * 
@@ -24551,7 +24568,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -24611,7 +24628,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeEelo ";
 
@@ -24730,7 +24747,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (situacaoLigacaoAgua != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoAguaSituacao ligacaoAguaSituacao ";
 
@@ -24759,13 +24776,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -24799,7 +24816,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua - Volume Faturado Ligacao Estimado ou
+	 * [UC0600] Emitir Histograma de √Ågua - Volume Faturado Ligacao Estimado ou
 	 * Real
 	 * 
 	 * 
@@ -24894,7 +24911,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -24954,7 +24971,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeEelo ";
 
@@ -25069,7 +25086,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (situacaoLigacaoAgua != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoAguaSituacao ligacaoAguaSituacao ";
 
@@ -25098,13 +25115,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -25139,11 +25156,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua - Total Geral
+	 * [UC0600] Emitir Histograma de √Ågua - Total Geral
 	 * 
 	 * [SB0014] Selecionar por Indicador de Consumo [SB0015] Selecionar por
-	 * Indicador de Medido [SB0016] Selecionar por Indicador de PoÁo [SB0017]
-	 * Selecionar por Indicador de Volume Fixo de ¡gua
+	 * Indicador de Medido [SB0016] Selecionar por Indicador de Po√ßo [SB0017]
+	 * Selecionar por Indicador de Volume Fixo de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 18/06/2007
@@ -25229,7 +25246,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			parameters.put("mesAnoFaturamento", mesAnoFaturamento);
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -25289,7 +25306,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeEelo ";
 
@@ -25408,7 +25425,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (situacaoLigacaoAgua != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoAguaSituacao ligacaoAguaSituacao ";
 
@@ -25438,13 +25455,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -25479,7 +25496,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0605] Emitir Histograma de ¡gua por Economia
+	 * [UC0605] Emitir Histograma de √Ågua por Economia
 	 * 
 	 * @author Rafael Pinto
 	 * @date 14/06/2007
@@ -25586,7 +25603,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -25681,7 +25698,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (colecaoSituacaoLigacaoAgua != null
 					&& !colecaoSituacaoLigacaoAgua.isEmpty()) {
 
@@ -25704,13 +25721,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -25752,9 +25769,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0605] Emitir Histograma de ¡gua por Economia
+	 * [UC0605] Emitir Histograma de √Ågua por Economia
 	 * 
-	 * Monta as quebras que ser„o necessarias para o relatorio
+	 * Monta as quebras que ser√£o necessarias para o relatorio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 18/06/2007
@@ -25829,7 +25846,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -25907,7 +25924,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Agua SituaÁ„o
+			// Ligacao de Agua Situa√ß√£o
 			if (colecaoSituacaoLigacaoAgua != null
 					&& !colecaoSituacaoLigacaoAgua.isEmpty()) {
 
@@ -25930,13 +25947,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoAgua != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoAgua = (:volumoFixoAgua) ";
 				parameters.put("volumoFixoAgua", volumoFixoAgua);
@@ -25975,7 +25992,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// ///////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * Recupera os dados da conta p emitir a 2™ via [UC0482]Emitir 2™ Via de
+	 * Recupera os dados da conta p emitir a 2¬™ via [UC0482]Emitir 2¬™ Via de
 	 * Conta
 	 * 
 	 * @author Vivianne Sousa
@@ -26060,10 +26077,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26071,9 +26088,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * [SB0011] Obter Quantidade de Economias da Conta
 	 * 
@@ -26111,10 +26128,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idSubCategoria", idSubCategoria).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26147,10 +26164,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26158,9 +26175,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma colecao de conta categoria
+	 * M√©todo que retorna uma colecao de conta categoria
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/06/2007
@@ -26192,10 +26209,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list()));
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26230,10 +26247,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idContaRetificada).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26268,17 +26285,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
 	 * 
-	 * Metodo que retorna a data de revis„o da conta
+	 * Metodo que retorna a data de revis√£o da conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/07/2007
@@ -26310,11 +26327,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					indice ++;
 				}
 				
-				System.out.println("## QUANTIDADE PARTI«’ES = " + indice);
+				System.out.println("## QUANTIDADE PARTI√á√ïES = " + indice);
 				
 				for (int i = 0; i < indice; i++) {
 
-						System.out.println("## TAMANHO PARTI«√O DE INDICE  " + indice +" = " + particoes.get(i).size());
+						System.out.println("## TAMANHO PARTI√á√ÉO DE INDICE  " + indice +" = " + particoes.get(i).size());
 						
 						Collection retornoPart = null;
 						
@@ -26329,10 +26346,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26345,7 +26362,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * DCST_IDATUAL com o valor correspondente a normal (0) e CROG_ID com o
 	 * valor correspondente a descontos concedidos no parcelamento (6)
 	 * 
-	 * [UC0259] - Processar Pagamento com cÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com c√≥digo de Barras
 	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
 	 * 
@@ -26379,19 +26396,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -26424,10 +26441,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26435,10 +26452,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -26465,10 +26482,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idsContas", idsContas).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26478,7 +26495,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0485] Gerar Resumo dos Devedores Duvidosos
 	 * 
-	 * verifica se a conta informada possui cliente respons·vel com esfera de
+	 * verifica se a conta informada possui cliente respons√°vel com esfera de
 	 * poder de tipo de cliente igual a municipal, estadual ou federal.
 	 * 
 	 * @author Pedro Alexandre
@@ -26531,10 +26548,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -26569,10 +26586,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -26632,7 +26649,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				repositorioUtilHBM.pesquisarParametrosDoSistema();
 
 			/**
-			 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta
+			 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta
 			 * 3. Caso o indicador de bloqueio de contas vinculadas a contrato de parcelamento no manter contas esteja ativo
 			 *   retirar da lista de contas selecionadas as contas vinculadas a algum contrato de parcelamento ativo
 			 *    
@@ -26744,10 +26761,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26755,7 +26772,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas em revis„o de um grupo de faturamento
+	 * Recupera as contas em revis√£o de um grupo de faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 20/08/2007
@@ -26845,10 +26862,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26936,10 +26953,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27025,10 +27042,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27112,10 +27129,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27146,7 +27163,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			SistemaParametro sistemaParametro = repositorioUtilHBM.pesquisarParametrosDoSistema();
 
 			/**
-			 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta
+			 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta
 			 * 
 			 * 3. Caso o indicador de bloqueio de contas vinculadas a 
 			 * contrato de parcelamento no manter contas esteja ativo
@@ -27286,9 +27303,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Metodo temporario para correÁ„o da base de dados
+	 * Metodo temporario para corre√ß√£o da base de dados
 	 * 
-	 * Gerar CrÈdito a Realizar para os imÛveis com contas com vencimento em
+	 * Gerar Cr√©dito a Realizar para os im√≥veis com contas com vencimento em
 	 * 14/08/2007 com multa da conta 06/2007 cobrada na conta 07/2007 e que
 	 * pagaram em 17/07/2007
 	 * 
@@ -27345,10 +27362,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"anomesreferenciadebito", Hibernate.INTEGER).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27356,7 +27373,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/08/2007
@@ -27383,10 +27400,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27419,10 +27436,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27477,10 +27494,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27488,7 +27505,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 30/09/2007
@@ -27513,10 +27530,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27524,7 +27541,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 30/09/2007
@@ -27554,10 +27571,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"valorDebito", valorDebito).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27565,15 +27582,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
-	 * [SF0003] - Processar Pagamento de Documento de CobranÁa
+	 * [SF0003] - Processar Pagamento de Documento de Cobran√ßa
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @created 16/02/2006
 	 * 
 	 * @param matriculaImovel
-	 *            MatrÌcula do Imovel
+	 *            Matr√≠cula do Imovel
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
@@ -27604,10 +27621,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idFatura).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27615,11 +27632,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0637] - Gerar RelatÛrios Volumes Faturados
+	 * [UC0637] - Gerar Relat√≥rios Volumes Faturados
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 11/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -27728,10 +27745,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idLocalidade", idLocalidade).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27739,11 +27756,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio resumido
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio resumido
 	 * 
-	 * [UC0637] - Gerar RelatÛrios Volumes Faturados
+	 * [UC0637] - Gerar Relat√≥rios Volumes Faturados
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 13/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -27835,10 +27852,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idLocalidade", idLocalidade).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27846,11 +27863,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 20/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -27984,10 +28001,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"descricaoMotivoRevisao", Hibernate.STRING).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27995,11 +28012,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio resumido
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio resumido
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 20/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -28117,10 +28134,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"valorContas", Hibernate.BIG_DECIMAL).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28128,12 +28145,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Cria as condiÁoes da query que os dados necess·rio para a geraÁ„o do
-	 * relatÛrio
+	 * Cria as condi√ßoes da query que os dados necess√°rio para a gera√ß√£o do
+	 * relat√≥rio
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 20/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -28283,10 +28300,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"tarifaSocial", ConsumoTarifa.CONSUMO_SOCIAL)
 					.setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28294,9 +28311,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os Valores das Faixas de DÈbitos
+	 * Pesquisa os Valores das Faixas de D√©bitos
 	 * 
-	 * @author Ivan SÈrgio
+	 * @author Ivan S√©rgio
 	 * @created 14/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -28341,10 +28358,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = session.createQuery(consulta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28352,11 +28369,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0638] - Gerar RelatÛrios Anormalidade Consumo
+	 * [UC0638] - Gerar Relat√≥rios Anormalidade Consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 15/10/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -28831,10 +28848,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 //			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28842,12 +28859,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Cria as condiÁoes da query que os dados necess·rio para a geraÁ„o do
-	 * relatÛrio
+	 * Cria as condi√ßoes da query que os dados necess√°rio para a gera√ß√£o do
+	 * relat√≥rio
 	 * 
-	 * [UC0638] - Gerar RelatÛrios Anormalidade Consumo
+	 * [UC0638] - Gerar Relat√≥rios Anormalidade Consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 15/10/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -28956,9 +28973,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -28972,13 +28989,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idOrigemCredito, Integer idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29005,22 +29022,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, situaÁ„o anterior e a origem do crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, situa√ß√£o anterior e a origem do cr√©dito informados.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29039,10 +29056,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29074,10 +29091,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -29086,10 +29103,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta preenchido
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta preenchido
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29108,10 +29125,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<ResumoFaturamento> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29145,10 +29162,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -29158,10 +29175,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta n„o preenchido
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta n√£o preenchido
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29180,10 +29197,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29218,10 +29235,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -29231,9 +29248,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor do imposto
-	 * acumulado de acordo com o ano/mÍs de referÍncia cnt·bil da conta, as
-	 * situaÁıes atuais da conta e o tipo de imposto.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor do imposto
+	 * acumulado de acordo com o ano/m√™s de refer√™ncia cnt√°bil da conta, as
+	 * situa√ß√µes atuais da conta e o tipo de imposto.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29252,10 +29269,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29288,22 +29305,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor do imposto
-	 * acumulado de acordo com o ano/mÍs de referÍncia cont·bil da conta, a
-	 * situaÁ„o atual da conta e o tipo de imposto.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor do imposto
+	 * acumulado de acordo com o ano/m√™s de refer√™ncia cont√°bil da conta, a
+	 * situa√ß√£o atual da conta e o tipo de imposto.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29321,10 +29338,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29359,22 +29376,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor do imposto
-	 * acumulado de acordo com o ano/mÍs de referÍncia cont·bil da conta, a
-	 * situaÁ„o atual e anterior da conta e o tipo de imposto.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor do imposto
+	 * acumulado de acordo com o ano/m√™s de refer√™ncia cont√°bil da conta, a
+	 * situa√ß√£o atual e anterior da conta e o tipo de imposto.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29393,10 +29410,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29433,22 +29450,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -29463,13 +29480,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer[] idsOrigemCredito, Integer idSituacaoAtual,
 			Integer idSituacaoAnterior) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29500,22 +29517,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -29529,13 +29546,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer[] idsOrigemCredito, Integer idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29564,22 +29581,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna uma coleÁ„o de crÈdito a
-	 * realizar, de acordo com o ano/mÍs de referÍncia, a situaÁ„o atual, a
-	 * situaÁ„o anterior e origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna uma cole√ß√£o de cr√©dito a
+	 * realizar, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o atual, a
+	 * situa√ß√£o anterior e origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -29597,10 +29614,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -29629,14 +29646,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de dÈbitos a cobrar pesquisada
+		// retorna a cole√ß√£o de d√©bitos a cobrar pesquisada
 		return retorno;
 	}
 
@@ -29644,8 +29661,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0600] Emitir Histograma de Esgoto
 	 * 
 	 * [SB0014] Selecionar por Indicador de Consumo [SB0015] Selecionar por
-	 * Indicador de Medido [SB0016] Selecionar por Indicador de PoÁo [SB0017]
-	 * Selecionar por Indicador de Volume Fixo de ¡gua
+	 * Indicador de Medido [SB0016] Selecionar por Indicador de Po√ßo [SB0017]
+	 * Selecionar por Indicador de Volume Fixo de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 05/11/2007
@@ -29755,7 +29772,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -29815,7 +29832,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				if ( filtro.getIndicadorTarifaCategoria() != null && filtro.getIndicadorTarifaCategoria().intValue() == ConstantesSistema.NAO ) {
 					consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeElo ";
@@ -29933,7 +29950,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (situacaoLigacaoEsgoto != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ";
 
@@ -29978,13 +29995,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -30038,8 +30055,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC0600] Emitir Histograma de Esgoto - Total Geral
 	 * 
 	 * [SB0014] Selecionar por Indicador de Consumo [SB0015] Selecionar por
-	 * Indicador de Medido [SB0016] Selecionar por Indicador de PoÁo [SB0017]
-	 * Selecionar por Indicador de Volume Fixo de ¡gua
+	 * Indicador de Medido [SB0016] Selecionar por Indicador de Po√ßo [SB0017]
+	 * Selecionar por Indicador de Volume Fixo de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 05/11/2007
@@ -30115,7 +30132,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			parameters.put("mesAnoFaturamento", mesAnoFaturamento);
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -30175,7 +30192,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -30284,7 +30301,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (situacaoLigacaoEsgoto != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ";
 
@@ -30329,13 +30346,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -30458,7 +30475,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -30518,7 +30535,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -30627,7 +30644,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (situacaoLigacaoEsgoto != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ";
 
@@ -30671,13 +30688,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -30811,7 +30828,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -30890,7 +30907,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (colecaoSituacaoLigacaoEsgoto != null
 					&& !colecaoSituacaoLigacaoEsgoto.isEmpty()) {
 
@@ -30928,13 +30945,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -30973,7 +30990,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0606] Emitir Histograma de Esgoto por Economia
 	 * 
-	 * Monta as quebras que ser„o necessarias para o relatorio
+	 * Monta as quebras que ser√£o necessarias para o relatorio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 07/11/2007
@@ -31054,7 +31071,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				consultaFrom += "INNER JOIN histograma.localidadeElo localidadeElo ";
 
@@ -31132,7 +31149,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (colecaoSituacaoLigacaoEsgoto != null
 					&& !colecaoSituacaoLigacaoEsgoto.isEmpty()) {
 
@@ -31170,13 +31187,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -31219,7 +31236,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Recupera as contas com estouro de consumo ou com baixo consumo [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 15/05/2006, 20/11/2007
 	 * 
 	 * @return
@@ -31368,10 +31385,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -31382,7 +31399,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Recupera as contas com estouro de consumo ou com baixo consumo [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 15/05/2006, 20/11/2007
 	 * 
 	 * @return
@@ -31529,10 +31546,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -31540,10 +31557,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas com entrega para o cliente respons·vel [UC0348] -
+	 * Recupera as contas com entrega para o cliente respons√°vel [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 15/05/2006, 20/11/2007
 	 * 
 	 * @return
@@ -31694,10 +31711,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -31705,10 +31722,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Recupera as contas com entrega para o cliente respons·vel [UC0348] -
+	 * Recupera as contas com entrega para o cliente respons√°vel [UC0348] -
 	 * Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 15/05/2006, 20/11/2007
 	 * 
 	 * @return
@@ -31857,10 +31874,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -31868,7 +31885,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas do cliente respons·vel para todos os grupos de
+	 * Pesquisa as contas do cliente respons√°vel para todos os grupos de
 	 * faturamento.
 	 * 
 	 * [UC0348] Emitir Contas
@@ -32024,10 +32041,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32035,7 +32052,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas do cliente respons·vel para todos os grupos de
+	 * Pesquisa as contas do cliente respons√°vel para todos os grupos de
 	 * faturamento.
 	 * 
 	 * [UC0348] Emitir Contas
@@ -32190,10 +32207,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32201,9 +32218,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0626] Gerar Resumo de Metas Acumulado no MÍs (CAERN)
+	 * [UC0626] Gerar Resumo de Metas Acumulado no M√™s (CAERN)
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @data 28/11/2007
 	 * 
 	 * @param idConta
@@ -32214,10 +32231,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throws ErroRepositorioException {
 		Collection<Conta> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -32238,10 +32255,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", idImovel).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32249,8 +32266,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * atualiza o sequencial de conta impress„o e o indicador de
-	 * fichaCompensaÁ„o
+	 * atualiza o sequencial de conta impress√£o e o indicador de
+	 * fichaCompensa√ß√£o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/12/2007
@@ -32294,13 +32311,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o Author: Vivianne
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o Author: Vivianne
 	 * Sousa Data: 26/11/2007
 	 * 
 	 * @param idConta
-	 * @return DescriÁ„o do retorno
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public Conta pesquisarExistenciaContaComSituacaoAtual(Integer idConta)
 			throws ErroRepositorioException {
@@ -32327,10 +32344,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32370,17 +32387,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto CAER
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto CAER
 	 * 
 	 * @author Raphael Rossiter
 	 * 
@@ -32408,10 +32425,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32419,7 +32436,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC00730] Gerar RelatÛrio de ImÛveis com Faturas Recentes em Dia e
+	 * [UC00730] Gerar Relat√≥rio de Im√≥veis com Faturas Recentes em Dia e
 	 * Faturas Antigas em Atraso
 	 * 
 	 * @author Rafael Pinto
@@ -32454,10 +32471,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32465,7 +32482,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC00730] Gerar RelatÛrio de ImÛveis com Faturas Recentes em Dia e
+	 * [UC00730] Gerar Relat√≥rio de Im√≥veis com Faturas Recentes em Dia e
 	 * Faturas Antigas em Atraso
 	 * 
 	 * @author Rafael Pinto
@@ -32500,10 +32517,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32511,7 +32528,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC00730] Gerar RelatÛrio de ImÛveis com Faturas Recentes em Dia e
+	 * [UC00730] Gerar Relat√≥rio de Im√≥veis com Faturas Recentes em Dia e
 	 * Faturas Antigas em Atraso
 	 * 
 	 * @author Rafael Pinto
@@ -32546,10 +32563,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32557,11 +32574,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela BÙnus
+	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela B√¥nus
 	 * 
-	 * Retorna id e data vencimento da conta que tem serviÁo de parcelamento
+	 * Retorna id e data vencimento da conta que tem servi√ßo de parcelamento
 	 * cobrado DEBITO_COBRADO com CNTA_ID da tabela CONTA e FNTP_ID com valor
-	 * correspodente a parcelamento de agua, esgoto ou serviÁos da tabela
+	 * correspodente a parcelamento de agua, esgoto ou servi√ßos da tabela
 	 * FINANCIAMENTO_TIPO
 	 * 
 	 * @author Vivianne Sousa
@@ -32604,10 +32621,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -32618,7 +32635,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * [UC00113] - Faturar Grupo de Faturamento
 	 * 
 	 * Recupera o percentual alternativo e o numero de consumo do percentual
-	 * alternativo para o imÛvel informado.
+	 * alternativo para o im√≥vel informado.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/01/2008
@@ -32643,10 +32660,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32654,13 +32671,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o Author: Vivianne
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o Author: Vivianne
 	 * Sousa Data: 28/01/2008
 	 * 
 	 * @param idConta
-	 * @return DescriÁ„o do retorno
+	 * @return Descri√ß√£o do retorno
 	 * @exception ErroRepositorioException
-	 *                DescriÁ„o da exceÁ„o
+	 *                Descri√ß√£o da exce√ß√£o
 	 */
 	public ContaHistorico pesquisarExistenciaContaHistorico(Integer idConta)
 			throws ErroRepositorioException {
@@ -32682,10 +32699,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32693,7 +32710,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0254] - Efetuar An·lise do Movimento dos Arrecadadores
+	 * [UC0254] - Efetuar An√°lise do Movimento dos Arrecadadores
 	 * 
 	 * obtem imovel, localidade e conta atraves do id da conta
 	 * 
@@ -32723,17 +32740,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0254] - Efetuar An·lise do Movimento dos Arrecadadores
+	 * [UC0254] - Efetuar An√°lise do Movimento dos Arrecadadores
 	 * 
 	 * obtem imovel, localidade e contaHistorico atraves do id da conta
 	 * historico
@@ -32764,10 +32781,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -32775,7 +32792,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * [UC0737] - Atualiza Quantidade de Parcela Paga Consecutiva e Parcela
-	 * BÙnus
+	 * B√¥nus
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/02/2008
@@ -32810,14 +32827,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
 	 * [UC0737] - Atualiza Quantidade de Parcela Paga Consecutiva e Parcela
-	 * BÙnus
+	 * B√¥nus
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/02/2008
@@ -32852,13 +32869,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0216] - Calcular AcrÈscimos por Impontualidade
+	 * [UC0216] - Calcular Acr√©scimos por Impontualidade
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/02/2008
@@ -32888,10 +32905,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -32900,9 +32917,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	// linha 15
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de guia de
-	 * devoluÁ„o acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual e lanÁamento item cont·bil.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de guia de
+	 * devolu√ß√£o acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual e lan√ßamento item cont√°bil.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -32916,13 +32933,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual, Integer idLancamentoItemContabil)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -32950,10 +32967,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -32963,9 +32980,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// linha 38
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de guia de
-	 * devoluÁ„o acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual, a situaÁ„o anterior e lanÁamento item cont·bil.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de guia de
+	 * devolu√ß√£o acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual, a situa√ß√£o anterior e lan√ßamento item cont√°bil.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -32980,13 +32997,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual, Integer idSituacaoAnterior,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33017,10 +33034,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33030,17 +33047,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// linha 01 e 02
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 01 Retorna o valor de ·gua
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a localiade, a
-	 * categoria e a situaÁ„o da conta igual a normal
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 01 Retorna o valor de √°gua
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a localiade, a
+	 * categoria e a situa√ß√£o da conta igual a normal
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no Hibernate
 	 */
@@ -33052,10 +33069,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33084,10 +33101,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o com o hibernate
+			// fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33097,10 +33114,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
 	 * localidade informada por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 06/03/2008
@@ -33124,10 +33141,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33172,10 +33189,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33184,17 +33201,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 10 Retorna o valor de dÈbito
-	 * acumulado, de acordo com o ano/mÍs de referÍncia, a situaÁ„o da conta
-	 * igual a incluÌda e o tipo de financiamento igual a serviÁo
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 10 Retorna o valor de d√©bito
+	 * acumulado, de acordo com o ano/m√™s de refer√™ncia, a situa√ß√£o da conta
+	 * igual a inclu√≠da e o tipo de financiamento igual a servi√ßo
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -33202,13 +33219,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idLancamentoItemContabil) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar a coleÁ„o de resumo de faturamento
+		// cria a cole√ß√£o que vai armazenar a cole√ß√£o de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33255,14 +33272,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
@@ -33273,10 +33290,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33314,10 +33331,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33328,10 +33345,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	// linha 34
 	/**
 	 * Retorna o valor de categoria de credito realizado acumulado, de acordo
-	 * com o ano/mÍs de referÍncia, a situaÁ„o atual, o item de lanÁamento
-	 * cont·bil e a origem do crÈdito informados.
+	 * com o ano/m√™s de refer√™ncia, a situa√ß√£o atual, o item de lan√ßamento
+	 * cont√°bil e a origem do cr√©dito informados.
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/07/2011
@@ -33356,7 +33373,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		BigDecimal retorno = null;
 
 		String consulta;
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -33393,10 +33410,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33405,10 +33422,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
 	 * localidade informada por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 06/03/2008
@@ -33430,10 +33447,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33477,10 +33494,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33491,7 +33508,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Acumula o valor das guias de pagamento por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -33512,10 +33529,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33548,10 +33565,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = BigDecimal.ZERO;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33559,17 +33576,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - acumula o valor de
-	 * dÈbito cobrado para situaÁ„o de conta igual a cancelada por retificaÁ„o
-	 * de acordo com o ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - acumula o valor de
+	 * d√©bito cobrado para situa√ß√£o de conta igual a cancelada por retifica√ß√£o
+	 * de acordo com o ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -33578,13 +33595,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Collection<Integer> tipoFinanciamento, Integer itemContabil)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33617,10 +33634,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33629,17 +33646,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0001] - acumula o valor de
-	 * dÈbito cobrado para situaÁ„o de conta igual a retificada de acordo com o
-	 * ano/mÍs de referÍncia
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0001] - acumula o valor de
+	 * d√©bito cobrado para situa√ß√£o de conta igual a retificada de acordo com o
+	 * ano/m√™s de refer√™ncia
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -33650,10 +33667,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33686,10 +33703,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33697,10 +33714,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta preenchido
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta preenchido
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -33719,10 +33736,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33762,10 +33779,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33775,10 +33792,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, o item de financiamento cont·bil e a origem do crÈdito
-	 * informados e com o ano/mÍs da baixa cont·bil preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, o item de financiamento cont√°bil e a origem do cr√©dito
+	 * informados e com o ano/m√™s da baixa cont√°bil preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -33797,10 +33814,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33837,10 +33854,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33849,10 +33866,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta n„o preenchido
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta n√£o preenchido
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -33871,10 +33888,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33914,10 +33931,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -33927,10 +33944,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, o item de financiamento cont·bil e a origem do crÈdito
-	 * informados e com o ano/mÍs da baixa cont·bil n„o preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, o item de financiamento cont√°bil e a origem do cr√©dito
+	 * informados e com o ano/m√™s da baixa cont√°bil n√£o preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -33949,10 +33966,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -33983,7 +34000,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idLancamentoItemContabil",
 							idLancamentoItemContabil).uniqueResult();
 
-			// caso o valor n„o esteja nulo e seja maior que zero
+			// caso o valor n√£o esteja nulo e seja maior que zero
 			if (valor != null && valor.compareTo(BigDecimal.ZERO) == 1) {
 				retorno = new ResumoFaturamento();
 				retorno.setValorItemFaturamento(valor);
@@ -33991,10 +34008,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34004,9 +34021,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Acumula o valor das guias de pagamentos por tipo de financiamento
-	 * agrupando por lanÁamento item cont·bil.
+	 * agrupando por lan√ßamento item cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/03/2008
@@ -34025,13 +34042,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idFinanciamentoTipo)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar o resultado da pesquisa
+		// cria a cole√ß√£o que vai armazenar o resultado da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34068,22 +34085,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento pesquisada
+		// retorna a cole√ß√£o de resumo de faturamento pesquisada
 		return retorno;
 	}
 
 	// linha 27
 	/**
-	 * Acumula o valor de ·gua por situaÁ„o da conta
+	 * Acumula o valor de √°gua por situa√ß√£o da conta
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/03/2008
@@ -34101,10 +34118,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34132,10 +34149,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34143,9 +34160,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Acumula o valor de ·gua por situaÁ„o da conta
+	 * Acumula o valor de √°gua por situa√ß√£o da conta
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/03/2008
@@ -34164,10 +34181,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34198,10 +34215,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34210,9 +34227,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// linha 28
 	/**
-	 * Acumula o valor de esgoto por situaÁ„o da conta
+	 * Acumula o valor de esgoto por situa√ß√£o da conta
 	 * 
-	 * [UC0155 Encerrar Faturamentodo MÍs]
+	 * [UC0155 Encerrar Faturamentodo M√™s]
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/03/2008
@@ -34231,10 +34248,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34264,10 +34281,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34276,9 +34293,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Acumula o valor de esgoto por situaÁ„o da conta
+	 * Acumula o valor de esgoto por situa√ß√£o da conta
 	 * 
-	 * [UC0155 Encerrar Faturamentodo MÍs]
+	 * [UC0155 Encerrar Faturamentodo M√™s]
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/03/2008
@@ -34298,10 +34315,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34334,10 +34351,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34346,9 +34363,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, e a origem do crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, e a origem do cr√©dito informados.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -34365,10 +34382,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34405,10 +34422,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34417,9 +34434,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, a situaÁ„o anterior e a origem do crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, a situa√ß√£o anterior e a origem do cr√©dito informados.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -34436,10 +34453,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34477,10 +34494,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// erro no hibernate
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34489,9 +34506,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, e a origem do crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, e a origem do cr√©dito informados.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -34508,10 +34525,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34545,10 +34562,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34557,10 +34574,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
 	 * localidade informada por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 06/03/2008
@@ -34581,10 +34598,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34625,10 +34642,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34638,9 +34655,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// linha 30
 	/**
-	 * Acumula o valor de dÈbito cobrado por tipo de financiamento.
+	 * Acumula o valor de d√©bito cobrado por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -34657,14 +34674,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			int idFinanciamentoTipo)throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34701,21 +34718,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
-	 * Acumula o valor de dÈbito cobrado por tipo de financiamento.
+	 * Acumula o valor de d√©bito cobrado por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -34737,14 +34754,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual,
 			Collection<Integer> idFinanciamentoTipo) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34777,21 +34794,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 	
 	/**
-	 * Acumula o valor de dÈbito cobrado por tipo de financiamento.
+	 * Acumula o valor de d√©bito cobrado por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -34809,14 +34826,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual, int idFinanciamentoTipo)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -34850,23 +34867,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 	
 	/**
 	 * Retorna o valor de categoria de credito realizado acumulado, de acordo
-	 * com o ano/mÍs de referÍncia, a situaÁ„o atual, o item de lanÁamento
-	 * cont·bil e a origem do crÈdito informados.
+	 * com o ano/m√™s de refer√™ncia, a situa√ß√£o atual, o item de lan√ßamento
+	 * cont√°bil e a origem do cr√©dito informados.
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 06/03/2008
@@ -34888,7 +34905,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		BigDecimal retorno = null;
 
 		String consulta;
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -34923,10 +34940,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -34936,18 +34953,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 41 Retorna o valor de
-	 * categoria de dÈbito acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o da conta igual a normal e o tipo de financiamento igual a
-	 * serviÁo, quando o n˙mero de prestaÁıes cobradas for maior que 11(onze)
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 41 Retorna o valor de
+	 * categoria de d√©bito acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o da conta igual a normal e o tipo de financiamento igual a
+	 * servi√ßo, quando o n√∫mero de presta√ß√µes cobradas for maior que 11(onze)
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -34956,13 +34973,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idFinanciamentoTipo)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35000,30 +35017,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o pesquisada
+		// retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Linha 42 Retorna o valor de
-	 * categoria de dÈbito cobrado acumulado, de acordo com o ano/mÍs de
-	 * referÍncia, a situaÁ„o igual a normal e o tipo de financiamento igual a
-	 * juros de parcelamento e a diferenÁa de prestaÁıes maior que 11(onze)
+	 * [UC0155] - Encerrar Faturamento do M√™s Linha 42 Retorna o valor de
+	 * categoria de d√©bito cobrado acumulado, de acordo com o ano/m√™s de
+	 * refer√™ncia, a situa√ß√£o igual a normal e o tipo de financiamento igual a
+	 * juros de parcelamento e a diferen√ßa de presta√ß√µes maior que 11(onze)
 	 * 
 	 * @param anoMesReferencia
-	 *            Ano e mÍs de referÍncia do faturamento
+	 *            Ano e m√™s de refer√™ncia do faturamento
 	 * @param idLocalidade
-	 *            CÛdigo da localidade
+	 *            C√≥digo da localidade
 	 * @param idCategoria
-	 *            CÛdigo da categoria
-	 * @return retorna o valor acumulado de acordo com os par‚metros informados
+	 *            C√≥digo da categoria
+	 * @return retorna o valor acumulado de acordo com os par√¢metros informados
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -35035,10 +35052,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35086,10 +35103,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35099,10 +35116,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
 	 * localidade informada por grupo de parcelamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 06/03/2008
@@ -35125,10 +35142,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35195,10 +35212,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35208,9 +35225,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Acumula o valor de curto e longo prazo para creditos a realizar por
-	 * origem de crÈdito.
+	 * origem de cr√©dito.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 13/03/2008
@@ -35232,10 +35249,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35277,10 +35294,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35289,10 +35306,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Acumula o valor do dÈbito cobrado por tipo de financiamento agrupando por
-	 * lanÁamento item cont·bil.
+	 * Acumula o valor do d√©bito cobrado por tipo de financiamento agrupando por
+	 * lan√ßamento item cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 13/03/2008
@@ -35311,13 +35328,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35356,21 +35373,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o pesquisada
+		// retorna a cole√ß√£o pesquisada
 		return retorno;
 	}
 
 	/**
-	 * Acumula o valor de dÈbito cobrado por tipo de financiamento.
+	 * Acumula o valor de d√©bito cobrado por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -35389,14 +35406,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idFinanciamentoTipo)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35428,21 +35445,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
 	 * Acumula valor do imposto por tipo de imposto.
 	 * 
-	 * [UC155] Encerrar Faturamento do MÍs
+	 * [UC155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 14/03/2008
@@ -35461,13 +35478,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idTipoImposto, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35495,23 +35512,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * Acumula o valor de crÈdito realizado por origem de crÈdito e pela
-	 * referÍncia da conta.
+	 * Acumula o valor de cr√©dito realizado por origem de cr√©dito e pela
+	 * refer√™ncia da conta.
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 14/03/2008
@@ -35573,10 +35590,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35585,10 +35602,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Acumula o valor de crÈdito realizado po origem de crÈdito agrupando por
-	 * lanÁamento item cont·bil.
+	 * Acumula o valor de cr√©dito realizado po origem de cr√©dito agrupando por
+	 * lan√ßamento item cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 17/03/2008
@@ -35609,10 +35626,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35649,10 +35666,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35663,7 +35680,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Acumula o valor de imposto por tipo de imposto.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 17/03/2008
@@ -35681,13 +35698,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idTipoImposto, int idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35720,22 +35737,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * Acumula o valor do imposto por tipo de imposto por referÍncia cont·bil.
+	 * Acumula o valor do imposto por tipo de imposto por refer√™ncia cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 17/03/2008
@@ -35754,13 +35771,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int idTipoImposto, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35795,23 +35812,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de ·guae o de
-	 * esgoto acumulado, de acordo com o ano/mÍs de referÍncia, a localiade, a
-	 * categoria e a situaÁ„o da conta igual aos ids informados com ano/mÍs da
-	 * baixa cont·bil preenchida
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de √°guae o de
+	 * esgoto acumulado, de acordo com o ano/m√™s de refer√™ncia, a localiade, a
+	 * categoria e a situa√ß√£o da conta igual aos ids informados com ano/m√™s da
+	 * baixa cont√°bil preenchida
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -35827,10 +35844,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35859,10 +35876,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o com o hibernate
+			// fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35872,9 +35889,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a(s)
-	 * situaÁ„o(ıes) atual(ais) com o ano/mÍs de referÍncia da baixa cont·bil da
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a(s)
+	 * situa√ß√£o(√µes) atual(ais) com o ano/m√™s de refer√™ncia da baixa cont√°bil da
 	 * conta preenchido.
 	 * 
 	 * @param anoMesReferencia
@@ -35891,10 +35908,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35927,10 +35944,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -35940,10 +35957,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de ·guae o de
-	 * esgoto acumulado, de acordo com o ano/mÍs de referÍncia, a localiade, a
-	 * categoria e a situaÁ„o da conta igual aos ids informados com ano/mÍs da
-	 * baixa cont·bil n„o preenchida
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de √°guae o de
+	 * esgoto acumulado, de acordo com o ano/m√™s de refer√™ncia, a localiade, a
+	 * categoria e a situa√ß√£o da conta igual aos ids informados com ano/m√™s da
+	 * baixa cont√°bil n√£o preenchida
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -35959,10 +35976,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Object[] retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -35988,10 +36005,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o com o hibernate
+			// fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -36001,10 +36018,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual e o tipo de financiamento com o ano/mÍs de referÍncia da
-	 * baixa cont·bil da conta preenchido.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual e o tipo de financiamento com o ano/m√™s de refer√™ncia da
+	 * baixa cont√°bil da conta preenchido.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -36022,10 +36039,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36042,7 +36059,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36068,10 +36085,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -36081,10 +36098,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual e a origem do crÈdito informados e com o ano/mÍs da baixa
-	 * cont·bil preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual e a origem do cr√©dito informados e com o ano/m√™s da baixa
+	 * cont√°bil preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -36102,10 +36119,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36121,7 +36138,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and crrz.loca_id=:idLocalidade  "
 					+ "   and crcg.catg_id=:idCategoria  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36147,10 +36164,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -36159,9 +36176,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor do imposto
-	 * acumulado de acordo com o ano/mÍs de referÍncia da conta, a situaÁ„o
-	 * atual da conta e o tipo de imposto e com o ano/mÍs da baixa cont·bil da
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor do imposto
+	 * acumulado de acordo com o ano/m√™s de refer√™ncia da conta, a situa√ß√£o
+	 * atual da conta e o tipo de imposto e com o ano/m√™s da baixa cont√°bil da
 	 * conta preenchido.
 	 * 
 	 * @param anoMesReferencia
@@ -36178,13 +36195,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idImpostoTipo, Integer idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36203,7 +36220,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "   and cnid.imtp_id= :idTipoImposto ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36226,23 +36243,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual e o tipo de financiamento com o ano/mÍs de referÍncia da
-	 * baixa cont·bil da conta n„o preenchido.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual e o tipo de financiamento com o ano/m√™s de refer√™ncia da
+	 * baixa cont√°bil da conta n√£o preenchido.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -36260,10 +36277,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36281,7 +36298,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and dccg .catg_id= :idCategoria  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36306,10 +36323,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -36319,10 +36336,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual e a origem do crÈdito informados e com o ano/mÍs da baixa
-	 * cont·bil n„o preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual e a origem do cr√©dito informados e com o ano/m√™s da baixa
+	 * cont√°bil n√£o preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -36340,10 +36357,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		ResumoFaturamento retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36359,7 +36376,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and crrz.loca_id=:idLocalidade  "
 					+ "   and crcg.catg_id=:idCategoria  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36385,10 +36402,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -36397,10 +36414,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor do imposto
-	 * acumulado de acordo com o ano/mÍs de referÍncia da conta, a situaÁ„o
-	 * atual da conta e o tipo de imposto e com o ano/mÍs da baixa cont·bil da
-	 * conta n„o preenchido.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor do imposto
+	 * acumulado de acordo com o ano/m√™s de refer√™ncia da conta, a situa√ß√£o
+	 * atual da conta e o tipo de imposto e com o ano/m√™s da baixa cont√°bil da
+	 * conta n√£o preenchido.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -36416,13 +36433,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idImpostoTipo, Integer idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar a coleÁ„o pesquisada
+		// cria a vari√°vel que vai armazenar a cole√ß√£o pesquisada
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36441,7 +36458,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "   and cnid.imtp_id= :idTipoImposto ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -36465,24 +36482,24 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
-	 * Retorna o valor de crÈdito a realizar acumulado, de acordo com o ano/mÍs
-	 * de referÍncia cont·bil, a situaÁ„o atual ou anterior e a origem de
-	 * crÈdito informados.
+	 * Retorna o valor de cr√©dito a realizar acumulado, de acordo com o ano/m√™s
+	 * de refer√™ncia cont√°bil, a situa√ß√£o atual ou anterior e a origem de
+	 * cr√©dito informados.
 	 * 
 	 * @author Pedro Alexandre, Raphael Rossiter
 	 * @date 00/00/0000, 24/03/2009
@@ -36500,21 +36517,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer[] idsOrigemCredito, Integer idSituacaoAtual,
 			Categoria categoria) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
 
 			/*
 			 * Colocado por Raphael Rossiter em 24/03/2009 - Analista: Aryed
-			 * Lins OBJ - CorreÁ„o da contabilizaÁ„o dos crÈditos a realizar
-			 * cancelados para considerar as parcelas j· concedidas (Sequencial
+			 * Lins OBJ - Corre√ß√£o da contabiliza√ß√£o dos cr√©ditos a realizar
+			 * cancelados para considerar as parcelas j√° concedidas (Sequencial
 			 * 540). CRC1153.
 			 */
 			consulta = "select "
@@ -36554,23 +36571,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
-	 * Retorna o valor de crÈdito a realizar acumulado, de acordo com o ano/mÍs
-	 * de referÍncia cont·bil, a situaÁ„o atual e a origem de crÈdito
+	 * Retorna o valor de cr√©dito a realizar acumulado, de acordo com o ano/m√™s
+	 * de refer√™ncia cont√°bil, a situa√ß√£o atual e a origem de cr√©dito
 	 * informados.
 	 * 
 	 * @author Pedro Alexandre, Raphael Rossiter
@@ -36589,21 +36606,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idOrigemCredito, Integer idSituacaoAtual,
 			Categoria categoria) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
 
 			/*
 			 * Colocado por Raphael Rossiter em 24/03/2009 - Analista: Aryed
-			 * Lins OBJ - CorreÁ„o da contabilizaÁ„o dos crÈditos a realizar
-			 * cancelados para considerar as parcelas j· concedidas (Sequencial
+			 * Lins OBJ - Corre√ß√£o da contabiliza√ß√£o dos cr√©ditos a realizar
+			 * cancelados para considerar as parcelas j√° concedidas (Sequencial
 			 * 550). CRC1153.
 			 */
 			consulta = "select "
@@ -36638,22 +36655,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -36670,13 +36687,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAnterior, Categoria categoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		Collection retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36714,22 +36731,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -36746,13 +36763,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAnterior, Categoria categoria)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36786,22 +36803,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * Acumula o valor do dÈbito a cobrar por tipo de financiamento
+	 * Acumula o valor do d√©bito a cobrar por tipo de financiamento
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 24/03/2008
@@ -36820,13 +36837,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer[] idsTipoFinanciamento, int idSituacaoAtual,
 			int idSituacaoAnterior) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36861,22 +36878,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
 	 * @param anoMesReferenciaContabil
 	 * @param idLocalidade
@@ -36892,13 +36909,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual, Integer idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -36932,23 +36949,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
-	 * Retorna o valor de crÈdito a realizar acumulado, de acordo com o ano/mÍs
-	 * de referÍncia cont·bil, a situaÁ„o atual e a origem de crÈdito
+	 * Retorna o valor de cr√©dito a realizar acumulado, de acordo com o ano/m√™s
+	 * de refer√™ncia cont√°bil, a situa√ß√£o atual e a origem de cr√©dito
 	 * informados.
 	 * 
 	 * @author Pedro Alexandre, Raphael Rossiter
@@ -36967,21 +36984,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idCategoria, Integer idOrigemCredito,
 			Integer idSituacaoAtual) throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
 
 			/*
 			 * Colocado por Raphael Rossiter em 24/03/2009 - Analista: Aryed
-			 * Lins OBJ - CorreÁ„o da contabilizaÁ„o dos crÈditos a realizar
-			 * cancelados para considerar as parcelas j· concedidas (Sequencial
+			 * Lins OBJ - Corre√ß√£o da contabiliza√ß√£o dos cr√©ditos a realizar
+			 * cancelados para considerar as parcelas j√° concedidas (Sequencial
 			 * 1620). CRC1153.
 			 */
 			consulta = "select "
@@ -37016,22 +37033,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
 
 	/**
-	 * Acumula o valor de dÈbito cobrado por tipo de financiamento.
+	 * Acumula o valor de d√©bito cobrado por tipo de financiamento.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 07/03/2008
@@ -37049,14 +37066,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Localidade localidade, int idCategoria,
 			int idFinanciamentoTipo) throws ErroRepositorioException {
 
-		// cria a coleÁ„o que vai armazenar os resumos de faturamento
+		// cria a cole√ß√£o que vai armazenar os resumos de faturamento
 		// pesquisados
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37089,23 +37106,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
-	 * localidade informada por tipo de financiamento agrupando por lanÁamento
-	 * item cont·bil.
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
+	 * localidade informada por tipo de financiamento agrupando por lan√ßamento
+	 * item cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/04/2008
@@ -37126,10 +37143,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37175,10 +37192,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37187,11 +37204,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa os valores de curto e longo prazo dos dÈbitos a cobrar da
-	 * localidade informada por tipo de financiamento e agrupando por lanÁamento
-	 * item cont·bil.
+	 * Pesquisa os valores de curto e longo prazo dos d√©bitos a cobrar da
+	 * localidade informada por tipo de financiamento e agrupando por lan√ßamento
+	 * item cont√°bil.
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/04/2008
@@ -37213,10 +37230,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37263,10 +37280,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37275,11 +37292,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta n„o preenchido
-	 * agrupando por lanÁamento item cont·bil.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta n√£o preenchido
+	 * agrupando por lan√ßamento item cont√°bil.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -37297,10 +37314,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37321,7 +37338,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -37347,10 +37364,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37360,11 +37377,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * dÈbito cobrado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, tipo de financiamento e pelo lanÁamento item cont·bil com
-	 * o ano/mÍs de referÍncia da baixa cont·bil da conta preenchido agrupando
-	 * por lanÁamento item cont·bil.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * d√©bito cobrado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, tipo de financiamento e pelo lan√ßamento item cont√°bil com
+	 * o ano/m√™s de refer√™ncia da baixa cont√°bil da conta preenchido agrupando
+	 * por lan√ßamento item cont√°bil.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -37382,10 +37399,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria o objeto de resumo de faturamento
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37407,7 +37424,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and dccg .catg_id= :idCategoria  ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -37432,10 +37449,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37444,10 +37461,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, o item de financiamento cont·bil e a origem do crÈdito
-	 * informados e com o ano/mÍs da baixa cont·bil n„o preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, o item de financiamento cont√°bil e a origem do cr√©dito
+	 * informados e com o ano/m√™s da baixa cont√°bil n√£o preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -37464,15 +37481,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		/**
 		 * Troca da coluna cnta_amreferenciaconta por cnta_amreferenciacontabil no where
-		 * para corrigir contabilizaÁ„o.
+		 * para corrigir contabiliza√ß√£o.
 		 * @author: Wellington Rocha
 		 * @date: 10/01/12 */
 		try {
@@ -37491,7 +37508,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and crrz.loca_id=:idLocalidade "
 					+ "   and crcg.catg_id=:idCategoria ";
 			/**
-			 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+			 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 				consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -37517,10 +37534,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37529,10 +37546,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de categoria de
-	 * credito realizado acumulado, de acordo com o ano/mÍs de referÍncia, a
-	 * situaÁ„o atual, o item de financiamento cont·bil e a origem do crÈdito
-	 * informados e com o ano/mÍs da baixa cont·bil preenchida.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de categoria de
+	 * credito realizado acumulado, de acordo com o ano/m√™s de refer√™ncia, a
+	 * situa√ß√£o atual, o item de financiamento cont√°bil e a origem do cr√©dito
+	 * informados e com o ano/m√™s da baixa cont√°bil preenchida.
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -37549,17 +37566,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
 
 			/**
-			 * CorreÁ„o da consulta, troca da coluna cnta_amreferenciaconta por cnta_amreferenciacontabil
-			 * para correta contabilizaÁ„o.
+			 * Corre√ß√£o da consulta, troca da coluna cnta_amreferenciaconta por cnta_amreferenciacontabil
+			 * para correta contabiliza√ß√£o.
 			 * 
 			 * @author Wellington Rocha
 			 * @date 10/01/2012*/
@@ -37577,7 +37594,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and crrz.loca_id=:idLocalidade  ";
 			
 					/**
-					 * Inlcuindo contas incluidas canceladas por dÈbito prescrito na contabilizaÁ„o
+					 * Inlcuindo contas incluidas canceladas por d√©bito prescrito na contabiliza√ß√£o
 					 * @author Wellington Rocha*/
 					if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
 						consulta = consulta + " and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= "
@@ -37603,10 +37620,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37615,9 +37632,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa para cada imÛvel da rota informada a principal categoria.
+	 * Pesquisa para cada im√≥vel da rota informada a principal categoria.
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 05/05/2008
@@ -37633,10 +37650,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37685,10 +37702,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37697,10 +37714,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa as contas parao imÛvel com situaÁ„o igual a norma, retificada ou
+	 * Pesquisa as contas parao im√≥vel com situa√ß√£o igual a norma, retificada ou
 	 * incluida que tenha pagamento.
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/05/2008
@@ -37760,7 +37777,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Retorna as contas com o indicador de pagamento para a conta.
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/05/2008
@@ -37804,9 +37821,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * pesquisa o indicado de acrÈscimo para o cliente do imÛvel.
+	 * pesquisa o indicado de acr√©scimo para o cliente do im√≥vel.
 	 * 
-	 * [UC0302]-Gerar DÈbito a cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302]-Gerar D√©bito a cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/05/2008
@@ -37820,10 +37837,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -37857,10 +37874,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37870,7 +37887,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	// ******************************************************************************************
 	// [UC0764] Gerar Relatorio Contas Canceladas ou Retificadas
-	// Fl·vio Leonardo
+	// Fl√°vio Leonardo
 	// 09/05/2008
 	// metodo q contem a parte invariavel da query
 	public Collection pesquisarContasCanceladasRetificadas(Map parameters,
@@ -37948,10 +37965,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			retorno = query.list();
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -37961,7 +37978,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	// ******************************************************************************************
 	// ******************************************************************************************
 	// [UC0764] Gerar Relatorio Contas Canceladas ou Retificadas
-	// Fl·vio Leonardo
+	// Fl√°vio Leonardo
 	// 09/05/2008
 	// metodo q contem a parte invariavel da query
 	public Integer pesquisarQuantidadeContasCanceladasRetificadas(
@@ -38050,10 +38067,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) query.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -38190,7 +38207,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Incluir opÁ„o de contas prescritas no relatÛrio de contas canceladas/retificadas
+				 * Incluir op√ß√£o de contas prescritas no relat√≥rio de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38300,7 +38317,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Incluir opÁ„o de contas prescritas no relatÛrio de contas canceladas/retificadas
+				 * Incluir op√ß√£o de contas prescritas no relat√≥rio de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38403,7 +38420,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Incluir opÁ„o de contas prescritas no relatÛrio de contas canceladas/retificadas
+				 * Incluir op√ß√£o de contas prescritas no relat√≥rio de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38968,10 +38985,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39000,10 +39017,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39011,10 +39028,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0000] - PrÈ-Faturar Grupo de Faturamento
+	 * [UC0000] - Pr√©-Faturar Grupo de Faturamento
 	 * 
 	 * Obter o registro da tabela FaturamentoAtivCronRota referente a rota que
-	 * est· sendo prÈ-faturada
+	 * est√° sendo pr√©-faturada
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/04/2008
@@ -39054,10 +39071,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -39066,7 +39083,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [FS0002] - Verificar SituaÁ„o Especial de Faturamento
+	 * [FS0002] - Verificar Situa√ß√£o Especial de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/04/2008
@@ -39078,7 +39095,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	/**
 	 * 
-	 * Alteracao para enviar informacao se a rota È alternativa ou nao, para 
+	 * Alteracao para enviar informacao se a rota √© alternativa ou nao, para 
 	 * corrigir o problema da geracao da rota do IS para os grupos 101 e 401
 	 */
 	public Collection pesquisarImovelGerarArquivoTextoFaturamento(
@@ -39227,7 +39244,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						//+ " ORDER BY imovel.indicadorImovelCondominio,imovel.numeroSequencialRota,imovel.lote,imovel.subLote ";
 				/*
 				 * 
-				 * AlteraÁ„o feita para gerar a rota ordenada pela inscriÁ„o.
+				 * Altera√ß√£o feita para gerar a rota ordenada pela inscri√ß√£o.
 				 */
 						+ " ORDER BY imovel.indicadorImovelCondominio,localidade.id, setorComercial.codigo,quadra.numeroQuadra,imovel.lote,imovel.subLote ";
 			}
@@ -39244,10 +39261,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39287,10 +39304,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39371,10 +39388,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39384,7 +39401,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/04/2008
@@ -39425,10 +39442,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39439,7 +39456,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/04/2008
@@ -39475,10 +39492,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"servico", FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39488,7 +39505,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0003] - Obter dados dos crÈditos realizados
+	 * [SB0003] - Obter dados dos cr√©ditos realizados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/04/2008
@@ -39519,10 +39536,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					conta.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39532,7 +39549,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Emitir Contas CAERN
 	 * 
-	 * Obter dados dos crÈditos realizados Referente a AÁ„o Judicial da CAERN
+	 * Obter dados dos cr√©ditos realizados Referente a A√ß√£o Judicial da CAERN
 	 * (50% de Agua)
 	 * 
 	 * @author Tiago Moreno
@@ -39565,10 +39582,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39602,10 +39619,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idRota", idRota).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39613,7 +39630,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras - LEGADO
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras - LEGADO
 	 * 
 	 * [SB0014] - Processar Pagamento Legado CAEMA
 	 * 
@@ -39658,10 +39675,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setBigDecimal("valordebito", valorDebito).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39671,7 +39688,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0147] - Cancelar Conta
 	 * 
-	 * Atualizar a conta que est· sendo cancelada com o ra que est· autorizando
+	 * Atualizar a conta que est√° sendo cancelada com o ra que est√° autorizando
 	 * o cancelamento da mesma.
 	 * 
 	 * @author Raphael Rossiter
@@ -39701,10 +39718,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -39739,10 +39756,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39778,10 +39795,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39789,9 +39806,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -39838,7 +39855,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " contageral.cntg_ichistorico as indicadorContaHist, " // 19
 					+ " faturaItem.fitm_id as idFaturaItem, " // 20
 					/**
-					 * Nome do Imovel no lugar do nome do cliente usu·rio no relatÛrio de faturas agrupadas
+					 * Nome do Imovel no lugar do nome do cliente usu√°rio no relat√≥rio de faturas agrupadas
 					 * 
 					 * @author Wellington Rocha
 					 * @date 22/11/2012*/
@@ -39907,10 +39924,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39918,9 +39935,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -39976,10 +39993,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("referencia", anoMesReferencia).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -39987,11 +40004,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * Pesquisa a quantidade de itens de faturas para o cliente respons·vel
+	 * Pesquisa a quantidade de itens de faturas para o cliente respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 12/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -40041,10 +40058,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.setInteger("referencia",anoMesReferencia).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40053,12 +40070,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
 	 * Pesquisa os clientes associados as faturas de uma determinada esfera de
 	 * porder
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 21/01/2009
 	 * 
 	 * @throws ErroRepositorioException
@@ -40082,10 +40099,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idEsferaPoder", idEsferaPoder).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40093,11 +40110,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * Pesquisa o percentual de retenÁ„o
+	 * Pesquisa o percentual de reten√ß√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 12/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -40118,10 +40135,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40130,9 +40147,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UCXXXX] - RelatÛrio de Protocolo de Entrega de Faturas
+	 * [UCXXXX] - Relat√≥rio de Protocolo de Entrega de Faturas
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 12/11/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -40169,10 +40186,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40180,11 +40197,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0153] - Apresentar Dados Para An·lise da MediÁ„o e Consumo
+	 * [UC0153] - Apresentar Dados Para An√°lise da Medi√ß√£o e Consumo
 	 * 
-	 * Pesquisa a situaÁ„o especial de faturamento vigente do mÍs/ano informada
+	 * Pesquisa a situa√ß√£o especial de faturamento vigente do m√™s/ano informada
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/08/2008
 	 * 
 	 * @param idImovel
@@ -40215,10 +40232,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"anoMesReferencia", anoMesReferencia).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40233,7 +40250,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * Pesquisa as faixas da subcategoria
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 03/07/2008
 	 * 
 	 * @param idSubcategoria
@@ -40258,10 +40275,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idSubcategoria", idSubcategoria).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40270,11 +40287,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0857] - Gerar RelatÛrio de ArrecadaÁ„o das Multas de Autos de InfraÁ„o
+	 * [UC0857] - Gerar Relat√≥rio de Arrecada√ß√£o das Multas de Autos de Infra√ß√£o
 	 * 
-	 * Pesquisa os dados necess·rios para geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rios para gera√ß√£o do relat√≥rio
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/09/2008
 	 * 
 	 * @param idUnidadeNegocio,
@@ -40535,10 +40552,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40546,10 +40563,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Exclui resumo faturamento do ano/mÍs de faturamento corrente por
+	 * Exclui resumo faturamento do ano/m√™s de faturamento corrente por
 	 * localidade
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/08/2008
@@ -40562,16 +40579,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferenciaFaturamento, Integer idLocalidade)
 			throws ErroRepositorioException {
 
-		// Cria uma sess„o com o hibernate
+		// Cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// Cria a vari·vel que vai conter o hql
+		// Cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
 
 			// Constroi o hql para remover os resumos do faturamento
-			// referentes ao ano/mÍs de faturamento atual
+			// referentes ao ano/m√™s de faturamento atual
 			consulta = "delete ResumoFaturamento rf "
 					+ " where rf.anoMesReferencia = :anoMesReferenciaFaturamento "
 					+ " and rf.localidade.id = :idLocalidade";
@@ -40583,20 +40600,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// Erro no hibernate
 		} catch (HibernateException e) {
-			// Levanta a exceÁ„o para a prÛxima camada
+			// Levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sess„o com o hibernate
+			// Fecha a sess√£o com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0866] Gerar Comando Contas em CobranÁa por Empresa
+	 * [UC0866] Gerar Comando Contas em Cobran√ßa por Empresa
 	 * 
 	 * Pesquisa a quantidade de contas
 	 * 
-	 * @author: Rafael CorrÍa, Mariana Victor
+	 * @author: Rafael Corr√™a, Mariana Victor
 	 * @date: 27/10/2008, 07/04/2011
 	 */
 	public Collection pesquisarQuantidadeContas(
@@ -40719,10 +40736,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40731,11 +40748,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0870] Gerar Movimento de Contas em CobranÁa por Empresa
+	 * [UC0870] Gerar Movimento de Contas em Cobran√ßa por Empresa
 	 * 
-	 * Pesquisa os imÛveis das contas
+	 * Pesquisa os im√≥veis das contas
 	 * 
-	 * @author: Rafael CorrÍa, Mariana Victor
+	 * @author: Rafael Corr√™a, Mariana Victor
 	 * @date: 28/10/2008, 03/05/2011
 	 */
 	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(
@@ -40856,11 +40873,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40869,9 +40886,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [????] Informar Subdivisıes de Rota
+	 * [????] Informar Subdivis√µes de Rota
 	 * 
-	 * Verifica se esse grupo de Faturamento j· est· comandado para a atividade
+	 * Verifica se esse grupo de Faturamento j√° est√° comandado para a atividade
 	 * Gerar Arquivo de Leitura
 	 * 
 	 * @author: Victor Cisneiros
@@ -40919,7 +40936,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/10/2008
 	 * 
 	 * @param conta
@@ -40962,10 +40979,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -40977,7 +40994,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * 
 	 * 
-	 * @author: RÙmulo AurÈlio
+	 * @author: R√¥mulo Aur√©lio
 	 * @date: 29/10/2008
 	 */
 	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobranca(
@@ -40990,9 +41007,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta = null;
 
 		/**
-		 * * Script HQL que j· monta uma coleÁ„o de
-		 * GerarArquivoTextoContasCobrancaEmpresaHelper com tudo que È
-		 * necess·rio **
+		 * * Script HQL que j√° monta uma cole√ß√£o de
+		 * GerarArquivoTextoContasCobrancaEmpresaHelper com tudo que √©
+		 * necess√°rio **
 		 */
 		try {
 			consulta = "select new gcom.cabranca.GerarArquivoTextoContasCobrancaEmpresaHelper("
@@ -41034,10 +41051,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idEmpresa).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41050,7 +41067,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * 
 	 * 
-	 * @author: RÙmulo AurÈlio
+	 * @author: R√¥mulo Aur√©lio
 	 * @date: 29/10/2008
 	 */
 	public Collection<Object[]> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCriterio(
@@ -41084,10 +41101,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idEmpresa).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41098,7 +41115,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	// ///////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -41125,10 +41142,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41136,7 +41153,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -41163,10 +41180,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41174,7 +41191,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -41202,10 +41219,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41213,7 +41230,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -41240,10 +41257,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41251,7 +41268,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/11/2008
@@ -41279,10 +41296,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					imovelID).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41290,7 +41307,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/11/2008
@@ -41317,10 +41334,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					imovelID).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41558,10 +41575,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41599,10 +41616,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -41610,9 +41627,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * … necess·rio colocar a query abaixo no processo de faturar grupo como uma
+	 * √â necess√°rio colocar a query abaixo no processo de faturar grupo como uma
 	 * funcionalidade (Antes de rodar o faturar), para atender uma necessidade
-	 * de uma localidade (Petrolina), onde existe uma cobranÁa diferenciada de
+	 * de uma localidade (Petrolina), onde existe uma cobran√ßa diferenciada de
 	 * esgoto. CRC771 - Socorro Oliveira
 	 * 
 	 * @author Raphael Rossiter
@@ -41713,7 +41730,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0877] EmitirGuiaPagamentoEmAtraso
 	 * 
-	 * @author Fl·vio Leonardo
+	 * @author Fl√°vio Leonardo
 	 * @date 27/01/2009
 	 */
 	public Collection pesquisarDadosRelatorioGuiaPagamentoEmAtraso(
@@ -41800,7 +41817,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Pesquisar categoria por tarifa consumo
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 19/12/2008
 	 * 
 	 * @return Collection
@@ -41829,10 +41846,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConsumoTarifa).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41840,7 +41857,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public Integer maximoNumeroSequencia(Fatura fatura)
 			throws ErroRepositorioException {
@@ -41864,10 +41881,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41875,7 +41892,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public Integer maximoNumeroSequenciaFaturaItem(Fatura fatura)
 			throws ErroRepositorioException {
@@ -41899,10 +41916,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41910,7 +41927,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public BigDecimal somarValorFaturasItemFatura(Fatura fatura)
 			throws ErroRepositorioException {
@@ -41928,10 +41945,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idFatura", fatura.getId()).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41939,7 +41956,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public Date vencimentoFaturasItemFatura(Fatura fatura)
 			throws ErroRepositorioException {
@@ -41966,10 +41983,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -41977,7 +41994,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 * 
 	 * @param fatura
 	 * @throws ErroRepositorioException
@@ -42003,16 +42020,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/01/2009
@@ -42038,8 +42055,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "INNER JOIN crar.creditoTipo crti ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!rota.getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -42048,8 +42065,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "INNER JOIN qdra.rota rota ";
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -42067,10 +42084,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42079,7 +42096,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/01/2009
@@ -42101,8 +42118,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String delete = "delete from faturamento.cred_a_realiz_catg where crar_id in  ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -42115,8 +42132,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and qdra.rota_id = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -42163,7 +42180,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/01/2009
@@ -42186,8 +42203,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			atualizar = "update faturamento.credito_a_realizar_geral set cage_ichistorico=3 where crar_id in ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -42200,8 +42217,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and qdra.rota_id = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -42248,7 +42265,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/01/2009
@@ -42269,8 +42286,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String delete = "delete from faturamento.credito_a_realizar where crar_id in ";
 
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -42283,8 +42300,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and qdra.rota_id = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -42316,12 +42333,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			int qdt = st.executeUpdate();
 			System.out.println("quantidade"+ qdt);
-			System.out.println("descriÁao"+ delete);
+			System.out.println("descri√ßao"+ delete);
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -42331,14 +42348,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			// fecha a sess„o
+			// fecha a sess√£o
 			session.flush();
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/01/2009
@@ -42367,7 +42384,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -42377,7 +42394,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			//fecha a sess„o
+			//fecha a sess√£o
 			session.flush();
 			HibernateUtil.closeSession(session);
 		}
@@ -42386,7 +42403,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0819] Gerar Historico do Encerramento do Faturamento
 	 * 
-	 * Verifica se existe ocorrÍncia na tabela RESUMO_FATURAMENTO
+	 * Verifica se existe ocorr√™ncia na tabela RESUMO_FATURAMENTO
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/02/2009
@@ -42413,10 +42430,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42466,10 +42483,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"faturamentoGrupoId", faturamentoGrupo.getId()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42479,7 +42496,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 31/03/2009
 	 * 
 	 * @param idConta
@@ -42489,13 +42506,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public BigDecimal pesquisarValorCreditoPorOrigem(int idConta)
 			throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -42512,10 +42529,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42523,7 +42540,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * [SB0005] - Obter Valor do Parcelamento Concedido como Bonus
 	 * 
@@ -42555,8 +42572,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			/*
 			 * Colocado por Raphael Rossiter em 24/03/2009 - Analista: Aryed
-			 * Lins OBJ - CorreÁ„o da contabilizaÁ„o dos crÈditos a realizar
-			 * cancelados para considerar as parcelas j· concedidas (Sequencial
+			 * Lins OBJ - Corre√ß√£o da contabiliza√ß√£o dos cr√©ditos a realizar
+			 * cancelados para considerar as parcelas j√° concedidas (Sequencial
 			 * 3200). CRC1153.
 			 */
 			consulta = " SELECT SUM( ( dbcg.dbcg_vlcategoria / dbac.dbac_nnprestacaodebito ) "
@@ -42592,7 +42609,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * [SB0005] - Obter Valor do Parcelamento Concedido como Bonus
 	 * 
@@ -42624,8 +42641,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			/*
 			 * Colocado por Raphael Rossiter em 24/03/2009 - Analista: Aryed
-			 * Lins OBJ - CorreÁ„o da contabilizaÁ„o dos crÈditos a realizar
-			 * cancelados para considerar as parcelas j· concedidas (Sequencial
+			 * Lins OBJ - Corre√ß√£o da contabiliza√ß√£o dos cr√©ditos a realizar
+			 * cancelados para considerar as parcelas j√° concedidas (Sequencial
 			 * 3200). CRC1153.
 			 */
 			consulta = " SELECT SUM( ( cacg.cacg_vlcategoria / crar.crar_nnprestacaocredito ) "
@@ -42661,9 +42678,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Pesquisa o valor da ·gua da conta.
+	 * Pesquisa o valor da √°gua da conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/05/2009
 	 * 
 	 * @param idConta
@@ -42673,13 +42690,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public BigDecimal pesquisarValorAguaConta(Integer idImovel,
 			Integer referencia) throws ErroRepositorioException {
 
-		// cria a vari·vel que vai armazenar o valor pesquisado
+		// cria a vari√°vel que vai armazenar o valor pesquisado
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -42695,10 +42712,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42708,9 +42725,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * Calcula os dados do consumo tarifa de vigÍncia
+	 * Calcula os dados do consumo tarifa de vig√™ncia
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/07/2009
 	 * 
 	 * @param consumoTarifa
@@ -42761,10 +42778,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 //					idSubcategoria).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42774,9 +42791,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * Calcula os dados do consumo tarifa de vigÍncia
+	 * Calcula os dados do consumo tarifa de vig√™ncia
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/07/2009
 	 * 
 	 * @param consumoTarifa
@@ -42816,10 +42833,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idSubcategoria", idSubcategoria).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -42829,9 +42846,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * Calcula os dados do consumo tarifa de vigÍncia
+	 * Calcula os dados do consumo tarifa de vig√™ncia
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/07/2009
 	 * 
 	 * @param consumoTarifa
@@ -42861,10 +42878,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					dataFaturamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -42873,9 +42890,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * Calcula os dados do consumo tarifa de vigÍncia
+	 * Calcula os dados do consumo tarifa de vig√™ncia
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/07/2009
 	 * 
 	 * @param consumoTarifa
@@ -42913,10 +42930,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43111,10 +43128,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43124,7 +43141,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/07/2009
 	 * 
 	 * @param imovel
@@ -43149,10 +43166,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idsImoveis", idsImoveis).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43160,7 +43177,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0184] - Manter dÈbito a Cobrar
+	 * [UC0184] - Manter d√©bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -43191,10 +43208,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = true;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43202,7 +43219,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0184] - Manter dÈbito a Cobrar
+	 * [UC0184] - Manter d√©bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -43226,17 +43243,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					ids).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 	}
 
 	/**
-	 * [UC0896] - Manter Autos de InfraÁ„o
+	 * [UC0896] - Manter Autos de Infra√ß√£o
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -43265,10 +43282,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = true;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43276,7 +43293,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0896] - Manter Autos de InfraÁ„o
+	 * [UC0896] - Manter Autos de Infra√ß√£o
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -43304,10 +43321,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = true;
 			}
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43315,7 +43332,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0927] ñ Confirmar Cart„o de CrÈdito/DÈbito 
+	 * [UC0927] ‚Äì Confirmar Cart√£o de Cr√©dito/D√©bito 
 	 * 
 	 * @author Hugo Amorim, Raphael Rossiter
 	 * @date 30/07/2009, 14/01/2010
@@ -43351,10 +43368,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43364,7 +43381,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UCXXXX] - Gerar Conta
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 22/07/2009
 	 * 
 	 * @param anoMes
@@ -43568,8 +43585,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -43598,8 +43615,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					atualizar = atualizar + ")";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -43631,7 +43648,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -43648,7 +43665,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZANDO APENAS NO PR… FATURAMENTO
+				//UTILIZANDO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -43690,8 +43707,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 				/*
-				 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-				 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+				 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+				 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 				 */
 				if (!helper.getRota().getIndicadorRotaAlternativa().equals(
 						ConstantesSistema.SIM)) {
@@ -43708,8 +43725,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
 				}
 				/*
-				 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-				 * rota alternativa que estar· associada ao mesmo.
+				 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+				 * rota alternativa que estar√° associada ao mesmo.
 				 */
 				else {
 	
@@ -43729,7 +43746,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_dtemissao between ? and ?)";
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
 							+ " and cnta.ftgr_id = ?)";
@@ -43746,7 +43763,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
 				}
 				
-				//UTILIZADO APENAS NO PR… FATURAMENTO
+				//UTILIZADO APENAS NO PR√â FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -43784,7 +43801,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -43794,13 +43811,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					throw new ErroRepositorioException(e, "Erro no Hibernate");
 				}
 
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Pesquisa os dados do imÛvel que ser· faturado
+	 * Pesquisa os dados do im√≥vel que ser√° faturado
 	 * 
 	 * [UC0113] - Faturar Grupo Faturamento
 	 * 
@@ -43857,8 +43874,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "hihPoco.id, "//30
 					/** 
 					 * 
-					 * Adicionando parametro para verificar se o imÛvel
-					 * faz parte de um condomÌnio
+					 * Adicionando parametro para verificar se o im√≥vel
+					 * faz parte de um condom√≠nio
 					 */
 					+ "imovel.imovelCondominio.id, " //31 
 					+ "imovel.quantidadeEconomias, " // 32
@@ -43893,20 +43910,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			/*
 			 * RM 1272 - A pedido de Eduardo Borges
 			 * 
-			 * Alterar para considerar as contas de imÛveis excluÌdos ou condomÌnio que foram faturados antes de serem 
-			 * colocados como excluÌdos/condomÌnio.
+			 * Alterar para considerar as contas de im√≥veis exclu√≠dos ou condom√≠nio que foram faturados antes de serem 
+			 * colocados como exclu√≠dos/condom√≠nio.
 			 */
 			if(!resumo){
 				
 				consulta += "AND imovel.indicadorImovelCondominio <> 1 ";
 				
-				//N„o faturar imÛveis com indicador de excluÌdo - CRC1577
+				//N√£o faturar im√≥veis com indicador de exclu√≠do - CRC1577
 				consulta += "AND imovel.indicadorExclusao <> 1 ";
 			}
 			
-			// Alterado por S·vio Luiz
+			// Alterado por S√°vio Luiz
 			// Data: 23/02/2010
-			// Qaundo for prÈ-faturamento n„o trazer os imÛveis tele medidos
+			// Qaundo for pr√©-faturamento n√£o trazer os im√≥veis tele medidos
 			if (preFaturar) {
 				consulta += "AND imovelPerfil.indicadorGerarDadosLeitura = 1 ";
 			}
@@ -43917,10 +43934,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -43929,11 +43946,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * 
-	 * MÈtodo que retorna todos os imÛveis que tenham cliente respons·vel e
-	 * indicacao de conta a ser entregue em outro endereÁo e que estejam nas
-	 * quadras pertencentes ‡s rotas passadas
+	 * M√©todo que retorna todos os im√≥veis que tenham cliente respons√°vel e
+	 * indicacao de conta a ser entregue em outro endere√ßo e que estejam nas
+	 * quadras pertencentes √†s rotas passadas
 	 * 
-	 * UC0209 Gerar Taxa de Entrega de Conta em Outro EndereÁo.
+	 * UC0209 Gerar Taxa de Entrega de Conta em Outro Endere√ßo.
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/08/2009
@@ -43985,19 +44002,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Metodo que retorna os imÛveis das quadras pertencentes ‡s rotas
+	 * Metodo que retorna os im√≥veis das quadras pertencentes √†s rotas
 	 * 
-	 * Utilizado pelo [UC0302] Gerar DÈbitos a Cobrar de AcrÈscimos por
+	 * Utilizado pelo [UC0302] Gerar D√©bitos a Cobrar de Acr√©scimos por
 	 * Impontualidade
 	 * 
 	 * @author Raphael Rossiter
@@ -44039,10 +44056,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44050,30 +44067,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Permite pesquisar imÛvel doaÁ„o baseando-se em rotas [UC0394] Gerar
-	 * DÈbitos a Cobrar de DoaÁıes
+	 * Permite pesquisar im√≥vel doa√ß√£o baseando-se em rotas [UC0394] Gerar
+	 * D√©bitos a Cobrar de Doa√ß√µes
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/08/2008
 	 * 
 	 * @param idRota
-	 * @return Collection<ImovelCobrarDoacaoHelper> - ColeÁ„o de
-	 *         ImovelCobrarDoacaoHelper j· com as informaÁıes necess·rias para
-	 *         registro da cobranÁa
+	 * @return Collection<ImovelCobrarDoacaoHelper> - Cole√ß√£o de
+	 *         ImovelCobrarDoacaoHelper j√° com as informa√ß√µes necess√°rias para
+	 *         registro da cobran√ßa
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<ImovelCobrarDoacaoHelper> pesquisarImovelDoacaoPorRota(
 			Integer idRota) throws ErroRepositorioException {
 
-		/** * Declara vari·veis locais ** */
+		/** * Declara vari√°veis locais ** */
 		Session session = null;
 		Collection<ImovelCobrarDoacaoHelper> retorno = null;
 
 		session = HibernateUtil.getSession();
 
 		/**
-		 * * Script HQL que j· monta uma coleÁ„o de ImovelCobrarDoacaoHelper com
-		 * tudo que È necess·rio **
+		 * * Script HQL que j√° monta uma cole√ß√£o de ImovelCobrarDoacaoHelper com
+		 * tudo que √© necess√°rio **
 		 */
 		try {
 			String consulta = "select "
@@ -44104,10 +44121,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceÁ„o para a prÛxima camada ** */
+			/** * levanta a exce√ß√£o para a pr√≥xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sess„o ** */
+			/** * fecha a sess√£o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44115,30 +44132,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Permite pesquisar imÛvel doaÁ„o baseando-se em rotas [UC0394] Gerar
-	 * DÈbitos a Cobrar de DoaÁıes
+	 * Permite pesquisar im√≥vel doa√ß√£o baseando-se em rotas [UC0394] Gerar
+	 * D√©bitos a Cobrar de Doa√ß√µes
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/08/2008
 	 * 
 	 * @param idRota
-	 * @return Collection<ImovelCobrarDoacaoHelper> - ColeÁ„o de
-	 *         ImovelCobrarDoacaoHelper j· com as informaÁıes necess·rias para
-	 *         registro da cobranÁa
+	 * @return Collection<ImovelCobrarDoacaoHelper> - Cole√ß√£o de
+	 *         ImovelCobrarDoacaoHelper j√° com as informa√ß√µes necess√°rias para
+	 *         registro da cobran√ßa
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<ImovelCobrarDoacaoHelper> pesquisarImovelDoacaoPorRotaAlternativa(
 			Integer idRota) throws ErroRepositorioException {
 
-		/** * Declara vari·veis locais ** */
+		/** * Declara vari√°veis locais ** */
 		Session session = null;
 		Collection<ImovelCobrarDoacaoHelper> retorno = null;
 
 		session = HibernateUtil.getSession();
 
 		/**
-		 * * Script HQL que j· monta uma coleÁ„o de ImovelCobrarDoacaoHelper com
-		 * tudo que È necess·rio **
+		 * * Script HQL que j√° monta uma cole√ß√£o de ImovelCobrarDoacaoHelper com
+		 * tudo que √© necess√°rio **
 		 */
 		try {
 			String consulta = "select "
@@ -44170,10 +44187,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idRota", idRota).list();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceÁ„o para a prÛxima camada ** */
+			/** * levanta a exce√ß√£o para a pr√≥xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sess„o ** */
+			/** * fecha a sess√£o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44397,10 +44414,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = valor;
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44594,10 +44611,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44605,9 +44622,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
-	 * Verifica se todos os grupos j· foram faturados
+	 * Verifica se todos os grupos j√° foram faturados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 17/08/2009
@@ -44636,10 +44653,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							ConstantesSistema.INDICADOR_USO_ATIVO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44667,7 +44684,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			 * Autor: Adriana Muniz
 			 * data: 05/09/2011
 			 * 
-			 * Adic„o do filtro de situaÁ„o da conta igual a normal, retificada, parcelada ou incluida 
+			 * Adic√£o do filtro de situa√ß√£o da conta igual a normal, retificada, parcelada ou incluida 
 			 * */
 			consulta = "select c.cnta_id as id , c.cnta_dtvencimentoconta as vencimento "
 					+ " from faturamento.conta c "
@@ -44689,10 +44706,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idImovel", idImovel).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -44725,10 +44742,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					Hibernate.DATE).setInteger("idConta", idContal).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -44742,7 +44759,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	public void atualizarIndicadorHistoricoContaGeral(Integer idContaGeral,
 			Short indicadorHistorico) throws ErroRepositorioException {
-		// obtÈm uma sess„o com o hibernate
+		// obt√©m uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		String update;
@@ -44763,15 +44780,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * Pesquisa para cada imÛvel da rota informada a principal categoria.
+	 * Pesquisa para cada im√≥vel da rota informada a principal categoria.
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 01/09/2009
@@ -44787,10 +44804,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -44839,10 +44856,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44851,9 +44868,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * pesquisa o indicado de acrÈscimo para o cliente do imÛvel.
+	 * pesquisa o indicado de acr√©scimo para o cliente do im√≥vel.
 	 * 
-	 * [UC0302]-Gerar DÈbito a cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302]-Gerar D√©bito a cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 01/09/2009
@@ -44867,10 +44884,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<Object[]> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -44904,10 +44921,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -44916,12 +44933,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 * 
-	 * [SB0004] - Calcular Valor de ¡gua e/ou Esgoto
+	 * [SB0004] - Calcular Valor de √Ågua e/ou Esgoto
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 04/12/2006
 	 * 
 	 * @param idOS
@@ -44951,19 +44968,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * Pesquisa a quantidade de dados do relatÛrio
+	 * Pesquisa a quantidade de dados do relat√≥rio
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
 	 * @author Arthur Carvalho
 	 * @created 14/09/2009
@@ -45054,10 +45071,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("qtdeContas", Hibernate.INTEGER).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -45223,10 +45240,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) query.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			// throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -45263,7 +45280,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		sqlPrincipal
 				.append(" inner join cadastro.imovel on ( imovel.imov_id = conta.imov_id)  \n");
 
-		if (filtro.getUnidadeNegocio() != null) {// È isso mesmo
+		if (filtro.getUnidadeNegocio() != null) {// √© isso mesmo
 			sqlPrincipal
 					.append(" inner join cadastro.localidade loc on (imovel.loca_id = loc.loca_id )  \n");
 
@@ -45470,7 +45487,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Metodo seta os parametros numa determinada consulta e retorna um objeto
-	 * SQLQuery com o sql j· com parametros.
+	 * SQLQuery com o sql j√° com parametros.
 	 * 
 	 * @since 16/09/2009
 	 * @author Marlon Patrick
@@ -45497,14 +45514,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0113] - Faturar Grupo Faturamento Author:S·vio Luiz Data:27/10/2009
-	 * Consultar os Cre¥ditos a Realizar do Imovel
+	 * [UC0113] - Faturar Grupo Faturamento Author:S√°vio Luiz Data:27/10/2009
+	 * Consultar os Cre¬¥ditos a Realizar do Imovel
 	 * 
 	 * @param imovelId
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualId
-	 *            Id do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Creditos a Realizar
+	 *            Id do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Creditos a Realizar
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizado(
@@ -45519,7 +45536,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		 * Data: 30/01/2011
 		 * 
 		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
-		 * realizado fosse encontrado, com isso o crÈdito era liberado no IS, mas n„o era liberado no gsan
+		 * realizado fosse encontrado, com isso o cr√©dito era liberado no IS, mas n√£o era liberado no gsan
 		 * 
 		 * */
 		try {
@@ -45581,24 +45598,24 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * [UC0113] - Faturar Grupo Faturamento Author:S·vio Luiz Data:27/10/2009
-	 * Consultar os Creéditos a Realizar do Imovel
+	 * [UC0113] - Faturar Grupo Faturamento Author:S√°vio Luiz Data:27/10/2009
+	 * Consultar os Cre≈Ωditos a Realizar do Imovel
 	 * 
 	 * @param imovelId
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualId
-	 *            Id do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Creditos a Realizar
+	 *            Id do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Creditos a Realizar
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(
@@ -45614,7 +45631,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		 * Data: 30/01/2011
 		 * 
 		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
-		 * realizado fosse encontrado, com isso o crÈdito era liberado no IS, mas n„o era liberado no gsan
+		 * realizado fosse encontrado, com isso o cr√©dito era liberado no IS, mas n√£o era liberado no gsan
 		 * 
 		 * */
 		try {
@@ -45681,10 +45698,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idCreditoTipo", idCreditoTipo).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -45692,11 +45709,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	/**
 	 * Metodo que deleta os creditos realizados categoria de um respectivo
-	 * dÈbito a cobrar
+	 * d√©bito a cobrar
 	 * 
 	 * Utilizado pelo [UC0745] .
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/08/2006
 	 * 
 	 * @param idDebitoACobrar
@@ -45716,16 +45733,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idCreditoRealizado).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * MÈtodo que retorna as contas para impressao
+	 * M√©todo que retorna as contas para impressao
 	 * 
 	 * Pesquisar Contas Emitir CAEMA
 	 * 
@@ -45846,10 +45863,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -45928,10 +45945,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -45984,10 +46001,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46025,10 +46042,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					valordebito).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46038,8 +46055,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * Recupera as contas dos imÛveis selecionados que tenham o mÍs ano de
-	 * referÍncia e que estejam com a situaÁ„o atual igual a normal ou situaÁ„o
+	 * Recupera as contas dos im√≥veis selecionados que tenham o m√™s ano de
+	 * refer√™ncia e que estejam com a situa√ß√£o atual igual a normal ou situa√ß√£o
 	 * anterior igual a normal
 	 * 
 	 * @author Fernando Fontelles Filho
@@ -46112,10 +46129,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46126,7 +46143,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * Recupera as contas que foram impressas do grupo de faturamento e que sejam para envio de email.
-	 * [UC0394] - Gerar DÈbitos a Cobrar de DoaÁıes
+	 * [UC0394] - Gerar D√©bitos a Cobrar de Doa√ß√µes
 	 *
 	 * @author Raphael Rossiter
 	 * @date 23/02/2010
@@ -46161,10 +46178,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idDebitoTipo", idDebitoTipo).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46209,10 +46226,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46270,10 +46287,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									.list();
 						
 		}catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46375,10 +46392,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = query.setFirstResult(10 * qtd).setMaxResults(10).list();
 			//retorno = query.list();
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46456,10 +46473,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Integer) query.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46518,10 +46535,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (HibernateException e) {
 			e.printStackTrace();			
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46576,10 +46593,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46633,10 +46650,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (HibernateException e) {			
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46698,10 +46715,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46710,9 +46727,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * [UC1008] Gerar TXT declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * [UC1008] Gerar TXT declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
-	 * 	Este caso de uso permite a geraÁ„o do TXT da declaraÁ„o de quitaÁ„o de dÈbitos.
+	 * 	Este caso de uso permite a gera√ß√£o do TXT da declara√ß√£o de quita√ß√£o de d√©bitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -46734,17 +46751,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	/**
-	 * [UC1001] Emitir declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * [UC1001] Emitir declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
 	 * Pesquisa das contas.
 	 * 
@@ -46774,10 +46791,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46785,9 +46802,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}	
 	
 	/**
-	 * [UC1008] Gerar TXT declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * [UC1008] Gerar TXT declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
-	 * 	Este caso de uso permite a geraÁ„o do TXT da declaraÁ„o de quitaÁ„o de dÈbitos.
+	 * 	Este caso de uso permite a gera√ß√£o do TXT da declara√ß√£o de quita√ß√£o de d√©bitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -46802,7 +46819,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		/*
 		 * autor: Adriana Muniz
 		 * data: 21/03/2011
-		 * OrdenaÁ„o dos imoveis por Localidade, Setor, Quadra e Sequencial da Rota,
+		 * Ordena√ß√£o dos imoveis por Localidade, Setor, Quadra e Sequencial da Rota,
 		 * */
 
 		try {
@@ -46848,19 +46865,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	/**
-	 * [UC1008] Gerar TXT declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * [UC1008] Gerar TXT declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
-	 * 	Este caso de uso permite a geraÁ„o do TXT da declaraÁ„o de quitaÁ„o de dÈbitos.
+	 * 	Este caso de uso permite a gera√ß√£o do TXT da declara√ß√£o de quita√ß√£o de d√©bitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -46883,10 +46900,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46894,7 +46911,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0394] - Gerar DÈbitos a Cobrar de DoaÁıes
+	 * [UC0394] - Gerar D√©bitos a Cobrar de Doa√ß√µes
 	 *
 	 * @author Hugo Amorim
 	 * @date 07/04/2010
@@ -46936,10 +46953,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46947,8 +46964,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [SB0002] ñ Replicar os dÈbitos existentes para uma nova vigÍncia e valor.
-	 * Pesquisa a ˙ltima vigÍncia de cada dÈbito tipo, e retorna uma coleÁ„o com limite de 10 registros. 
+	 * [SB0002] ‚Äì Replicar os d√©bitos existentes para uma nova vig√™ncia e valor.
+	 * Pesquisa a √∫ltima vig√™ncia de cada d√©bito tipo, e retorna uma cole√ß√£o com limite de 10 registros. 
 	 * 
 	 * @author Josenildo Neves - Hugo Leonardo
 	 * @date 22/02/2010		   - 14/04/2010
@@ -46984,10 +47001,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -46995,8 +47012,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [SB0002] ñ Replicar os dÈbitos existentes para uma nova vigÍncia e valor.
-	 * Pesquisa a ˙ltima vigÍncia de cada tipo dÈbito, e retorna o total.   
+	 * [SB0002] ‚Äì Replicar os d√©bitos existentes para uma nova vig√™ncia e valor.
+	 * Pesquisa a √∫ltima vig√™ncia de cada tipo d√©bito, e retorna o total.   
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -47031,10 +47048,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.addScalar("dbtv_dtvigenciafinal",Hibernate.DATE).list().size();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47042,8 +47059,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [SB0002] ñ Replicar os dÈbitos existentes para uma nova vigÍncia e valor.
-	 * Pesquisa a ˙ltima vigÍncia de cada tipo dÈbito, e retorna uma coleÁ„o.   
+	 * [SB0002] ‚Äì Replicar os d√©bitos existentes para uma nova vig√™ncia e valor.
+	 * Pesquisa a √∫ltima vig√™ncia de cada tipo d√©bito, e retorna uma cole√ß√£o.   
 	 * 
 	 * @author Josenildo Neves - Hugo Leonardo	
 	 * @date 22/02/2010		   - 14/04/2010
@@ -47080,10 +47097,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setParameterList("selecionados",selecionados).list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47091,9 +47108,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1008] Gerar TXT declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * [UC1008] Gerar TXT declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
-	 * 	Este caso de uso permite a geraÁ„o do TXT da declaraÁ„o de quitaÁ„o de dÈbitos.
+	 * 	Este caso de uso permite a gera√ß√£o do TXT da declara√ß√£o de quita√ß√£o de d√©bitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -47113,10 +47130,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47126,7 +47143,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * MÈtodo criado para atualizar apenas os campos necess·rios para
+     * M√©todo criado para atualizar apenas os campos necess√°rios para
      * Conta.
      * 	 
      * @author Bruno Barros
@@ -47176,7 +47193,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			/**
 			 * 
 			 * Alteracao para atualizar a data de vencimento
-			 * das contas n„o impressas
+			 * das contas n√£o impressas
 			 * Data: 25/10/2011
 			 * Autor: Pamela Gatinho
 			 */
@@ -47208,7 +47225,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -47217,7 +47234,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * MÈtodo criado para atualizar apenas os campos necess·rios para
+     * M√©todo criado para atualizar apenas os campos necess√°rios para
      * Conta Categoria.
      * 	 
      * @author Bruno Barros
@@ -47296,7 +47313,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * MÈtodo criado para atualizar apenas os campos necess·rios para
+     * M√©todo criado para atualizar apenas os campos necess√°rios para
      * Conta Impostos Deduzidos.
      * 	 
      * @author Bruno Barros
@@ -47355,7 +47372,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * MÈtodo criado para atualizar apenas os campos necess·rios para
+     * M√©todo criado para atualizar apenas os campos necess√°rios para
      * Movimento Conta Prefaturada.
      * 	 
      * @author Bruno Barros
@@ -47422,7 +47439,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * MÈtodo criado para atualizar apenas os campos necess·rios para
+     * M√©todo criado para atualizar apenas os campos necess√°rios para
      * Conta.
      * 	 
      * @author Bruno Barros
@@ -47482,9 +47499,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0982] Inserir tipo de DÈbito com VigÍncia.
+	 * [UC0982] Inserir tipo de D√©bito com Vig√™ncia.
 	 * 
-	 * Verificar se existe vigÍncia j· cadastrada para o tipo de dÈbito.
+	 * Verificar se existe vig√™ncia j√° cadastrada para o tipo de d√©bito.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param dataVigenciaInicial
@@ -47518,10 +47535,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setMaxResults(1).uniqueResult();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -47529,11 +47546,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/** 
-	 *  4.1.1.	AtravÈs do DBTP_ID relacionar com o DBTP_ID da tabela DEBITO_TIPO_VIGENCIA.
-	 *   Selecionar a ˙ltima vigÍncia (maior data DBTV_DTVIGENCIAFINAL) para o tipo de dÈbito 
+	 *  4.1.1.	Atrav√©s do DBTP_ID relacionar com o DBTP_ID da tabela DEBITO_TIPO_VIGENCIA.
+	 *   Selecionar a √∫ltima vig√™ncia (maior data DBTV_DTVIGENCIAFINAL) para o tipo de d√©bito 
 	 *   o valor DBTV_VLDEBITO correspondente. 
-	 *	4.1.2.	Caso n„o seja encontrado para uma vigÍncia e tipo de dÈbito na tabela 
-	 *	DEBITO_TIPO_VIGENCIA, dever· selecionar o valor sugerido (DBTP_VLSUGERIDO<>0) 
+	 *	4.1.2.	Caso n√£o seja encontrado para uma vig√™ncia e tipo de d√©bito na tabela 
+	 *	DEBITO_TIPO_VIGENCIA, dever√° selecionar o valor sugerido (DBTP_VLSUGERIDO<>0) 
 	 *	correspondente a constante 22 na tabela DEBITO_TIPO e utilizar este valor. 
 	 *
 	 *  @author: Hugo Amorim
@@ -47544,15 +47561,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	public DebitoTipoVigencia pesquisarDebitoTipoVigenciaPorDebitoTipo(
 			Integer idDebitoTipo) throws ErroRepositorioException {
-		/** * Declara vari·veis locais ** */
+		/** * Declara vari√°veis locais ** */
 		Session session = null;
 		DebitoTipoVigencia retorno = null;
 
 		session = HibernateUtil.getSession();
 
 		/**
-		 * * Script HQL que j· monta uma coleÁ„o de ImovelCobrarDoacaoHelper com
-		 * tudo que È necess·rio **
+		 * * Script HQL que j√° monta uma cole√ß√£o de ImovelCobrarDoacaoHelper com
+		 * tudo que √© necess√°rio **
 		 */
 		try {
 			String consulta = "from DebitoTipoVigencia" +
@@ -47564,10 +47581,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceÁ„o para a prÛxima camada ** */
+			/** * levanta a exce√ß√£o para a pr√≥xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sess„o ** */
+			/** * fecha a sess√£o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47575,9 +47592,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 //	/**
-//	 * [UC1008] Gerar TXT declaraÁ„o de quitaÁ„o anual de dÈbitos
+//	 * [UC1008] Gerar TXT declara√ß√£o de quita√ß√£o anual de d√©bitos
 //	 * 
-//	 * 	Este caso de uso permite a geraÁ„o do TXT da declaraÁ„o de quitaÁ„o de dÈbitos.
+//	 * 	Este caso de uso permite a gera√ß√£o do TXT da declara√ß√£o de quita√ß√£o de d√©bitos.
 //	 * 
 //	 * @author Hugo Amorim
 //	 * @date 23/03/2010
@@ -47630,10 +47647,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 //					.list();
 //
 //		} catch (HibernateException e) {
-//			// levanta a exceÁ„o para a prÛxima camada
+//			// levanta a exce√ß√£o para a pr√≥xima camada
 //			throw new ErroRepositorioException(e, "Erro no Hibernate");
 //		} finally {
-//			// fecha a sess„o
+//			// fecha a sess√£o
 //			HibernateUtil.closeSession(session);
 //		}
 //
@@ -47701,10 +47718,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47757,10 +47774,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47770,9 +47787,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	 /**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento 
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento 
 	 *
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 10/06/2010
 	 *
 	 * @param colecaoFaturamentoAtividadeCronogramaRota
@@ -47813,19 +47830,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							"idCreditoTipo", idCreditoTipo).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
 	/**
-	 * [UC0391] Inserir valor de cobranÁa de serviÁo.
+	 * [UC0391] Inserir valor de cobran√ßa de servi√ßo.
 	 * 
-	 * Verificar se existe valor de cobranÁa de serviÁo j· cadastrada.
+	 * Verificar se existe valor de cobran√ßa de servi√ßo j√° cadastrada.
 	 * 
 	 * @author Hugo Amorim
 	 * @throws ControladorException
@@ -47834,7 +47851,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	public Boolean validarVigenciaValorCobrancaServico(
 			ServicoCobrancaValor servicoCobrancaValor)throws ErroRepositorioException{
-		/** * Declara vari·veis locais ** */
+		/** * Declara vari√°veis locais ** */
 		Session session = null;
 		Boolean retorno = false;
 		Collection retornoConsulta = null;
@@ -47842,8 +47859,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		session = HibernateUtil.getSession();
 
 		/**
-		 * * Script HQL que j· monta uma coleÁ„o de ImovelCobrarDoacaoHelper com
-		 * tudo que È necess·rio **
+		 * * Script HQL que j√° monta uma cole√ß√£o de ImovelCobrarDoacaoHelper com
+		 * tudo que √© necess√°rio **
 		 */
 		try {
 			String consulta = "FROM ServicoCobrancaValor"
@@ -47910,10 +47927,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					
 					
 		} catch (HibernateException e) {
-			/** * levanta a exceÁ„o para a prÛxima camada ** */
+			/** * levanta a exce√ß√£o para a pr√≥xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sess„o ** */
+			/** * fecha a sess√£o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -47921,7 +47938,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @throws ControladorException
 	 * @data 22/06/2010
 	 */
@@ -47957,12 +47974,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * Atualizar Credito a Realizar Campo numero de prestaÁıes realizadas e
-	 * valor do crÈdito
+	 * Atualizar Credito a Realizar Campo numero de presta√ß√µes realizadas e
+	 * valor do cr√©dito
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/06/2010
 	 * 
 	 * @param idDebitoAcobrar
@@ -47998,20 +48015,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
-	 * cobrados de parcelamento(parcelamento de ·gua,parcelamento de esgoto,
-	 * parcelamento de serviÁos e juros de parcelamento),o numero da prestacao 
-	 * e o numero total de prestaÁıes
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
+	 * cobrados de parcelamento(parcelamento de √°gua,parcelamento de esgoto,
+	 * parcelamento de servi√ßos e juros de parcelamento),o numero da prestacao 
+	 * e o numero total de presta√ß√µes
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/06/2010
@@ -48048,10 +48065,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48059,11 +48076,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Atualizar Credito a Realizar Categoria Campo valor do crÈdito por categoria
+	 * Atualizar Credito a Realizar Categoria Campo valor do cr√©dito por categoria
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/06/2010
 	 * 
 	 * @param idDebitoAcobrar
@@ -48108,19 +48125,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	
 	/**
-	 * Atualizar Credito a Realizar Campo numero de prestaÁıes realizadas e
-	 * valor do crÈdito
+	 * Atualizar Credito a Realizar Campo numero de presta√ß√µes realizadas e
+	 * valor do cr√©dito
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/06/2010
 	 * 
 	 * @param idDebitoAcobrar
@@ -48154,17 +48171,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	/**
-	 * Atualizar Credito a Realizar Categoria Campo valor do crÈdito por categoria
+	 * Atualizar Credito a Realizar Categoria Campo valor do cr√©dito por categoria
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/06/2010
 	 * 
 	 * @param idDebitoAcobrar
@@ -48188,11 +48205,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.hasNext()
 					&& colecaoCategoriasObterValorIterator
 							.hasNext()) {
-				// ObtÈm o valor por categoria
+				// Obt√©m o valor por categoria
 				BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator
 						.next();
 
-				// ObtÈm a categoria
+				// Obt√©m a categoria
 				Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator
 						.next();
 				
@@ -48215,7 +48232,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -48226,7 +48243,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/06/2010
 	 * 
 	 * @param idDebitoAcobrar
@@ -48253,10 +48270,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48266,14 +48283,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
-	 * cobrados de parcelamento(parcelamento de ·gua,parcelamento de esgoto,
-	 * parcelamento de serviÁos e juros de parcelamento),o numero da prestacao 
-	 * e o numero total de prestaÁıes
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
+	 * cobrados de parcelamento(parcelamento de √°gua,parcelamento de esgoto,
+	 * parcelamento de servi√ßos e juros de parcelamento),o numero da prestacao 
+	 * e o numero total de presta√ß√µes
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/06/2010
@@ -48309,10 +48326,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("jurosParcelamento",FinanciamentoTipo.JUROS_PARCELAMENTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48320,11 +48337,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * [UC0348] Emitir Contas
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/01/2007
@@ -48375,21 +48392,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setInteger("jurosParcelamento",FinanciamentoTipo.JUROS_PARCELAMENTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [UC0482]Emitir 2¬™ Via de Conta
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/06/2010
@@ -48440,10 +48457,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setInteger("jurosParcelamento",FinanciamentoTipo.JUROS_PARCELAMENTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48453,7 +48470,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter,Vivianne Sousa
 	 * @date 25/04/2008,14/06/2010
@@ -48491,10 +48508,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48504,7 +48521,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter,Vivianne Sousa
 	 * @date 25/04/2008,14/06/2010
@@ -48541,10 +48558,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("jurosParcelamento",FinanciamentoTipo.JUROS_PARCELAMENTO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -48575,10 +48592,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			session.createQuery(delete).setInteger("idArqTxtRotEmp", idArquivoTextoRoteiroEmpresa).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -48586,7 +48603,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * [UC] Gerar RelatÛrio de Contas Emitidas
+	 * [UC] Gerar Relat√≥rio de Contas Emitidas
 	 * 
 	 * @author Hugo Amorim
 	 * @created 16/06/2010
@@ -48679,10 +48696,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -48781,7 +48798,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC1001] 
 	 * 
-	 * [SB0047] Exibir mensagem quitaÁ„o de dÈbitos
+	 * [SB0047] Exibir mensagem quita√ß√£o de d√©bitos
 	 * 
 	 * @author Hugo Amorim
 	 * @created 21/06/2010
@@ -48809,10 +48826,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -48842,17 +48859,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idArquivoTextoRoteiroEmpresa).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	/**
-	 * [UC0014] Manter ImÛvel
+	 * [UC0014] Manter Im√≥vel
 	 * 
-	 * [FS0037] Verificar ImÛvel em Processo de Faturamento 
+	 * [FS0037] Verificar Im√≥vel em Processo de Faturamento 
 	 * 
 	 * @author Hugo Amorim
 	 * @created 02/07/2010
@@ -48885,10 +48902,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -48896,7 +48913,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	 /**
-	 * [UC1035] Efetivar Alterar InscriÁ„o de ImÛvel
+	 * [UC1035] Efetivar Alterar Inscri√ß√£o de Im√≥vel
 	 * 
 	 * @author Hugo Amorim
 	 * @throws ControladorException
@@ -48942,10 +48959,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -48955,7 +48972,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa MÌnima para Cortado 
+	 * [UC1041] Gerar Taxa Percentual da Tarifa M√≠nima para Cortado 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 09/07/2010
@@ -49009,10 +49026,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(quantidadeRegistros).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49020,7 +49037,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa MÌnima para Cortado 
+	 * [UC1041] Gerar Taxa Percentual da Tarifa M√≠nima para Cortado 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 09/07/2010
@@ -49074,10 +49091,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(quantidadeRegistros).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49087,9 +49104,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa MÌnima para Cortado
+	 * [UC1041] Gerar Taxa Percentual da Tarifa M√≠nima para Cortado
 	 * 
-	 * [FS0002] - Verificar existÍncia de dÈbito a cobrar de Tarifa de Cortado ativo para o imÛvel
+	 * [FS0002] - Verificar exist√™ncia de d√©bito a cobrar de Tarifa de Cortado ativo para o im√≥vel
 	 *
 	 * @author Raphael Rossiter
 	 * @date 12/07/2010
@@ -49120,10 +49137,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("anoMesFaturamento", anoMesFaturamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49131,7 +49148,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
     
     /**
-     * [UC1042] Verificar Farturamento dos ImÛveis Cortados
+     * [UC1042] Verificar Farturamento dos Im√≥veis Cortados
      * 
      * Apaga todos os debitos a cobrar, debitos a cobrar categoria
      * e debito a cobrar geral, para o imovel/anoMes informado, com
@@ -49168,7 +49185,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
                     setParameter( "idDCSA", DebitoCreditoSituacao.NORMAL ).                    
                     list();
             
-            // Diminuimos o valor do dÈbito da conta
+            // Diminuimos o valor do d√©bito da conta
             if(retorno != null && !retorno.isEmpty()){
 	            
             	colIdDebitoACobrar = new ArrayList(1);
@@ -49193,10 +49210,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	                            executeUpdate();
             }
         } catch (HibernateException e) {
-            // levanta a exceÁ„o para a prÛxima camada
+            // levanta a exce√ß√£o para a pr√≥xima camada
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
-            // fecha a sess„o
+            // fecha a sess√£o
             HibernateUtil.closeSession(session);
         }
         
@@ -49205,7 +49222,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
     }
     
     /**
-	 * [UC1042] Verificar Farturamento dos ImÛveis Cortados 
+	 * [UC1042] Verificar Farturamento dos Im√≥veis Cortados 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 13/07/2010
@@ -49245,10 +49262,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(quantidadeRegistros).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49256,7 +49273,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1042] Verificar Farturamento dos ImÛveis Cortados 
+	 * [UC1042] Verificar Farturamento dos Im√≥veis Cortados 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 13/07/2010
@@ -49293,10 +49310,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(quantidadeRegistros).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49305,7 +49322,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * [UC0214] Efetuar Parcelamento de DÈbitos
+	 * [UC0214] Efetuar Parcelamento de D√©bitos
 	 *
 	 * @author Vivianne Sousa
 	 * @date 21/07/2010
@@ -49343,10 +49360,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49355,14 +49372,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-     * [UC1042] Verificar Farturamento dos ImÛveis Cortados
+     * [UC1042] Verificar Farturamento dos Im√≥veis Cortados
      * 
      * Apaga todos os debitos a cobrar, debitos a cobrar categoria
      * e debito a cobrar geral, para o imovel/anoMes informado, com
      * debito tipo = DebitoTipo.TARIFA_CORTADO e debito tipo situacao
      * atual = DebitoCreditoSituacao.NORMAL 
      * 
-     * @autor S·vio Luiz
+     * @autor S√°vio Luiz
      * @date 13/07/2010
      *  
      * @param idImovel
@@ -49409,14 +49426,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	 /**
-     * [UC1042] Verificar Farturamento dos ImÛveis Cortados
+     * [UC1042] Verificar Farturamento dos Im√≥veis Cortados
      * 
      * Apaga todos os debitos a cobrar, debitos a cobrar categoria
      * e debito a cobrar geral, para o imovel/anoMes informado, com
      * debito tipo = DebitoTipo.TARIFA_CORTADO e debito tipo situacao
      * atual = DebitoCreditoSituacao.NORMAL 
      * 
-     * @autor S·vio Luiz
+     * @autor S√°vio Luiz
      * @date 13/07/2010
      *  
      * @param idImovel
@@ -49464,7 +49481,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
     /**
      * 
-     * [UC1042] Verificar Farturamento dos ImÛveis Cortados
+     * [UC1042] Verificar Farturamento dos Im√≥veis Cortados
      * 
      * Atualizar o indicador de faturamento do consumo historo
      * 
@@ -49474,7 +49491,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
      */	
 	public void atualizarIndicadorFaturamentoConsumoHistorico( 
 			Integer idConsumoHistorico, short indicadorFaturamento ) throws ErroRepositorioException {
-		// obtÈm uma sess„o com o hibernate
+		// obt√©m uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		String update;
@@ -49494,7 +49511,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -49502,8 +49519,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
     /**
      *  [UC0820] - Atualizar Faturamento do Movimento Celular
      *  
-     * Verifica se a quantidade de imÛveis que chegaram 
-     * È a esperada.
+     * Verifica se a quantidade de im√≥veis que chegaram 
+     * √© a esperada.
      * 
      * @author bruno
      * @date 16/08/2010
@@ -49546,10 +49563,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
                     setInteger( "anoMesFaturamento", anoMesFaturamento ).setMaxResults( 1 ).uniqueResult();
 
         } catch (HibernateException e) {
-            // levanta a exceÁ„o para a prÛxima camada
+            // levanta a exce√ß√£o para a pr√≥xima camada
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
-            // fecha a sess„o
+            // fecha a sess√£o
             HibernateUtil.closeSession(session);
         }
         
@@ -49593,17 +49610,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * Obter o n˙mero de retificaÁıes da Conta
+	 * Obter o n√∫mero de retifica√ß√µes da Conta
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/08/2010
@@ -49628,10 +49645,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49639,7 +49656,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1051] Gerar RelatÛrio de Amostragem das Anormalidades Informadas
+	 * [UC1051] Gerar Relat√≥rio de Amostragem das Anormalidades Informadas
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 09/08/2010
@@ -49891,10 +49908,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -49902,7 +49919,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1051] Gerar RelatÛrio de Amostragem das Anormalidades Informadas
+	 * [UC1051] Gerar Relat√≥rio de Amostragem das Anormalidades Informadas
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 09/08/2010
@@ -50041,10 +50058,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 								.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50053,7 +50070,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Metodo que retornar o grupo de faturamento a partir do id do Imovel
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 24/08/2010
 	 * @param idImovel
 	 * @return
@@ -50078,10 +50095,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50090,7 +50107,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 *
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -50116,10 +50133,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50127,7 +50144,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 *
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -50153,17 +50170,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	/**
-	 * [UC0488] Informar Retorno Ordem de FiscalizaÁ„o
+	 * [UC0488] Informar Retorno Ordem de Fiscaliza√ß√£o
 	 *
 	 * @author Vivianne Sousa
 	 * @date 24/08/2010
@@ -50188,10 +50205,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50200,15 +50217,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * Pesquisa os imÛveis que ja foram enviados para uma
-	 * determinada rota em impress„o simultanea
+	 * Pesquisa os im√≥veis que ja foram enviados para uma
+	 * determinada rota em impress√£o simultanea
 	 * 
 	 * @autor Bruno Barros.
 	 * @date 24/08/2010 
 	 * 
 	 * @param idRota - Id da rota a ser pesquisada
 	 * 
-	 * @return Collection<Integer> - Matriculas dos imÛveis que ja foram processados
+	 * @return Collection<Integer> - Matriculas dos im√≥veis que ja foram processados
 	 */
 	public Collection<Integer> pesquisarImoveisJaProcessadosBufferImpressaoSimultanea( Integer idRota )
 		throws ErroRepositorioException{
@@ -50237,10 +50254,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50248,9 +50265,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0014] Manter ImÛvel
+	 * [UC0014] Manter Im√≥vel
 	 * 
-	 * Verifica se o mesmo cliente est· associado ao ImÛvel em ClienteImovel.
+	 * Verifica se o mesmo cliente est√° associado ao Im√≥vel em ClienteImovel.
 	 * 
 	 * Autor: Hugo Leonardo
 	 * Data: 03/09/2010
@@ -50278,10 +50295,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50330,13 +50347,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			st.executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -50383,14 +50400,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -50425,10 +50442,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50466,10 +50483,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50478,7 +50495,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1010] Emitir 2™ via de declaraÁ„o anual de quitaÁ„o de dÈbitos
+	 * [UC1010] Emitir 2¬™ via de declara√ß√£o anual de quita√ß√£o de d√©bitos
 	 *
 	 * @Author Daniel Alves
 	 * @Date 14/09/2010
@@ -50505,10 +50522,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50517,7 +50534,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1073] ñ Religar ImÛveis Cortados com Consumo Real
+	 * [UC1073] ‚Äì Religar Im√≥veis Cortados com Consumo Real
 	 * 
 	 * Data: 13/09/2010
 	 * @author Vivianne Sousa
@@ -50549,10 +50566,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50560,7 +50577,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC1073] ñ Religar ImÛveis Cortados com Consumo Real
+	 * [UC1073] ‚Äì Religar Im√≥veis Cortados com Consumo Real
 	 * 
 	 * Data: 13/09/2010
 	 * @author Vivianne Sousa
@@ -50604,10 +50621,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50615,7 +50632,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1073] ñ Religar ImÛveis Cortados com Consumo Real
+	 * [UC1073] ‚Äì Religar Im√≥veis Cortados com Consumo Real
 	 * 
 	 * Data: 15/09/2010
 	 * @author Vivianne Sousa
@@ -50646,17 +50663,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.executeUpdate();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
 	 * [UC0352] Emitir Contas e Cartas
-	 * [SB0005] - Obter Dados da MediÁ„o da Conta 
+	 * [SB0005] - Obter Dados da Medi√ß√£o da Conta 
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/09/2010
@@ -50682,10 +50699,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50695,7 +50712,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * [UC0352] Emitir Contas e Cartas
-	 * [SB0005] - Obter Dados da MediÁ„o da Conta 
+	 * [SB0005] - Obter Dados da Medi√ß√£o da Conta 
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/09/2010
@@ -50721,10 +50738,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50778,10 +50795,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									.list();
 						
 		}catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50790,9 +50807,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * MÈtodo que retorna as contas para impressao
+	 * M√©todo que retorna as contas para impressao
 	 * 
-	 * Pesquisar Contas Emitir(Ficha de CompensaÁ„o)Caern
+	 * Pesquisar Contas Emitir(Ficha de Compensa√ß√£o)Caern
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/10/2010
@@ -50914,10 +50931,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50925,9 +50942,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * MÈtodo que retorna as contas para impressao
+	 * M√©todo que retorna as contas para impressao
 	 * 
-	 * Pesquisar Contas Emitir(Ficha de CompensaÁ„o)Caern
+	 * Pesquisar Contas Emitir(Ficha de Compensa√ß√£o)Caern
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/10/2010
@@ -51042,10 +51059,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 								.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51055,7 +51072,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * [UC1083] Prescrever DÈbitos de ImÛveis P˙blicos Manual
+	 * [UC1083] Prescrever D√©bitos de Im√≥veis P√∫blicos Manual
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/10/2010
@@ -51125,7 +51142,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 			// erro no hibernate
 		} catch (SQLException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -51140,7 +51157,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	/**
 	 * 
-	 * [UC1083] Prescrever DÈbitos de ImÛveis P˙blicos Autom·tico
+	 * [UC1083] Prescrever D√©bitos de Im√≥veis P√∫blicos Autom√°tico
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/10/2010
@@ -51163,19 +51180,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	/**
 	 * 
-	 * [UC1083] Prescrever DÈbitos de ImÛveis P˙blicos Autom·tico
+	 * [UC1083] Prescrever D√©bitos de Im√≥veis P√∫blicos Autom√°tico
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/10/2010
@@ -51233,7 +51250,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 			// erro no hibernate
 		} catch (SQLException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			if (null != st)
@@ -51248,10 +51265,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/*
 	 * 
-	 * MÈtodo criado para n„o salvar na tabela de geraÁ„o da rota
-	 * todos os imÛveis da rota, e sim, somente os que possuem conta pre-faturada
+	 * M√©todo criado para n√£o salvar na tabela de gera√ß√£o da rota
+	 * todos os im√≥veis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
-	 * Obter quantidade de imÛveis com conta PrÈ-faturada
+	 * Obter quantidade de im√≥veis com conta Pr√©-faturada
 	 */
 	
 	 /** @author Adriana Muniz e Pamela Gatinho  
@@ -51284,10 +51301,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -51323,10 +51340,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51334,8 +51351,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0651] Inserir Comando de NegativaÁ„o
-	 * [FS0031] ñ Verificar existÍncia de conta em nome do cliente
+	 * [UC0651] Inserir Comando de Negativa√ß√£o
+	 * [FS0031] ‚Äì Verificar exist√™ncia de conta em nome do cliente
 	 * 
 	 * Pesquisa os relacionamentos entre cliente e conta.
 	 * 
@@ -51367,10 +51384,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51381,7 +51398,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 03/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -51410,19 +51427,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return dataLeitura;
 	}
 	
 	/**
 	 * [RM-4643 (COMPESA)] 
-	 * Verificamos se o imÛvel sofreu alteraÁıes 
+	 * Verificamos se o im√≥vel sofreu altera√ß√µes 
 	 * depois de ter sido mandado para o GSAN a primeira vez
 	 * 
 	 * @author Bruno Barros
@@ -51491,21 +51508,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return ( retorno == null || retorno.intValue() == 0 );		
 	}
 	
 	/**
 	 * 
-	 * RetificaÁ„o de um conjunto de contas que foram pagas e que o pagamento n„o estava o dÈbito e/ou crÈdito (Conta paga via Impress„o Simult‚nea) 
+	 * Retifica√ß√£o de um conjunto de contas que foram pagas e que o pagamento n√£o estava o d√©bito e/ou cr√©dito (Conta paga via Impress√£o Simult√¢nea) 
 	 *
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 27/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -51540,21 +51557,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	/**
 	 * 
-	 * RetificaÁ„o de um conjunto de contas que foram pagas e que o pagamento n„o estava o dÈbito e/ou crÈdito (Conta paga via Impress„o Simult‚nea) 
+	 * Retifica√ß√£o de um conjunto de contas que foram pagas e que o pagamento n√£o estava o d√©bito e/ou cr√©dito (Conta paga via Impress√£o Simult√¢nea) 
 	 *
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 28/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -51579,10 +51596,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta.intValue()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51590,10 +51607,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * Inserir DÈbitos para as contas impressas via Impress„o Simult‚nea de Contas que sairam com o valor da conta errada (Alguns grupos com tarifa proporcional
-	 *  que n„o estava levando em consideraÁ„o a quantidade de economias)
+	 * Inserir D√©bitos para as contas impressas via Impress√£o Simult√¢nea de Contas que sairam com o valor da conta errada (Alguns grupos com tarifa proporcional
+	 *  que n√£o estava levando em considera√ß√£o a quantidade de economias)
 	 *
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 12/01/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -51628,20 +51645,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	/**
 	 * [UC0204] Consultar Conta
 	 * 
-	 * Pesquisa o consumo faturado do imÛvel
+	 * Pesquisa o consumo faturado do im√≥vel
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -51673,10 +51690,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51685,9 +51702,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * [UC0473] Consultar Dados Complementares do ImÛvel
+	 * [UC0473] Consultar Dados Complementares do Im√≥vel
 	 * 
-	 * Pesquisa as matrÌculas associadas ‡ mesma tarifa de consumo do imÛvel.
+	 * Pesquisa as matr√≠culas associadas √† mesma tarifa de consumo do im√≥vel.
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -51719,10 +51736,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 								idImovel).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -51789,10 +51806,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 		
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -51838,10 +51855,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.uniqueResult();
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -51851,7 +51868,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [FS0002] - Verificar SituaÁ„o Especial de Faturamento
+	 * [FS0002] - Verificar Situa√ß√£o Especial de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/04/2008
@@ -52014,10 +52031,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -52124,7 +52141,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 			// Faixa Consumo Ligacao Intervalo Medido
-			// Faixa Consumo Ligacao Intervalo N„o Medido
+			// Faixa Consumo Ligacao Intervalo N√£o Medido
 			if (consumoFaixaLigacaoIntervaloMedido != null
 					&& consumoFaixaLigacaoIntervaloNaoMedido != null) {
 
@@ -52184,7 +52201,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("unidade", unidadeNegocio.getId());
 			}
 
-			// Elo PÛlo
+			// Elo P√≥lo
 			if (eloPolo != null) {
 				if ( filtro.getIndicadorTarifaCategoria() != null && filtro.getIndicadorTarifaCategoria().intValue() == ConstantesSistema.NAO ) {
 					consultaFrom += "INNER JOIN histograma.localidadeEelo localidadeElo ";
@@ -52304,7 +52321,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("esfera", colecaoEsferaPoder);
 			}
 
-			// Ligacao de Esgoto SituaÁ„o
+			// Ligacao de Esgoto Situa√ß√£o
 			if (situacaoLigacaoEsgoto != null) {
 				consultaFrom += "INNER JOIN histograma.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ";
 
@@ -52348,13 +52365,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				parameters.put("medicao", medicao);
 			}
 
-			// [SB0016] Selecionar por Indicador de PoÁo
+			// [SB0016] Selecionar por Indicador de Po√ßo
 			if (poco != null) {
 				consultaWhere += "AND histograma.indicadorPoco = (:poco) ";
 				parameters.put("poco", poco);
 			}
 
-			// [SB0017] Selecionar por Indicador de Volume Fixo de ¡gua
+			// [SB0017] Selecionar por Indicador de Volume Fixo de √Ågua
 			if (volumoFixoEsgoto != null) {
 				consultaWhere += "AND histograma.indicadorVolumeFixadoEsgoto = (:volumoFixoEsgoto) ";
 				parameters.put("volumoFixoEsgoto", volumoFixoEsgoto);
@@ -52389,7 +52406,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
     /**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [FS0048] ñ Verificar existÍncia da conta.
+	 * [FS0048] ‚Äì Verificar exist√™ncia da conta.
 	 * 
 	 * @author Mariana Victor
 	 * @date 27/01/2011
@@ -52438,10 +52455,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -52572,7 +52589,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC1122] Automatizar Perfis de Grandes Consumidores
 	 * 
-	 * Pesquisa o consumo faturado do imÛvel
+	 * Pesquisa o consumo faturado do im√≥vel
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -52601,10 +52618,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -52631,10 +52648,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (BigDecimal) session.createQuery(consulta).setInteger("idConta", id).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -52669,16 +52686,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
-	// retorna o anoMes do faturamento grupo do imÛvel passado inclusive se ele tiver rota alternativa
+	// retorna o anoMes do faturamento grupo do im√≥vel passado inclusive se ele tiver rota alternativa
 	public Integer retornaAnoMesGrupoFaturamento(Integer idImovel)
 			throws ErroRepositorioException {
 
@@ -52737,7 +52754,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * Retorna o cliente usu·rio 
+	 * Retorna o cliente usu√°rio 
 	 * 
 	 * @author Mariana Victor
 	 * @date 11/03/2011
@@ -52777,17 +52794,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	/**
-	 * [UC1129] Gerar RelatÛrio DevoluÁ„o dos Pagamentos em Duplicidade
+	 * [UC1129] Gerar Relat√≥rio Devolu√ß√£o dos Pagamentos em Duplicidade
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/03/2011
@@ -52846,25 +52863,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta.append(" AND loca.loca_id = " + helper.getIdLocalidade() ); 
 			}
 			
-			// GerÍncia
+			// Ger√™ncia
 			if(helper.getIdGerencia() != null ){
 					
 				consulta.append(" AND loca.greg_id = " + helper.getIdGerencia()); 
 			}
 			
-			// Unidade NegÛcio
+			// Unidade Neg√≥cio
 			if(helper.getIdUnidadeNegocio() != null ){
 					
 				consulta.append(" AND loca.uneg_id = " + helper.getIdUnidadeNegocio()); 
 			}
 			
-			// Perfil ImÛvel
+			// Perfil Im√≥vel
 			if(helper.getIdPerfilImovel() != null ){
 					
 				consulta.append(" AND imo.iper_id = " + helper.getIdPerfilImovel()); 
 			}
 			
-			// ImÛvel Categoria
+			// Im√≥vel Categoria
 			if(helper.getIdCategoriaImovel() != null){
 				
 				consulta.append(" AND cat.catg_id = " + helper.getIdCategoriaImovel());
@@ -52926,25 +52943,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta.append(" AND loca.loca_id = " + helper.getIdLocalidade() ); 
 			}
 			
-			// GerÍncia
+			// Ger√™ncia
 			if(helper.getIdGerencia() != null ){
 					
 				consulta.append(" AND loca.greg_id = " + helper.getIdGerencia()); 
 			}
 			
-			// Unidade NegÛcio
+			// Unidade Neg√≥cio
 			if(helper.getIdUnidadeNegocio() != null ){
 					
 				consulta.append(" AND loca.uneg_id = " + helper.getIdUnidadeNegocio()); 
 			}
 			
-			// Perfil ImÛvel
+			// Perfil Im√≥vel
 			if(helper.getIdPerfilImovel() != null ){
 					
 				consulta.append(" AND imo.iper_id = " + helper.getIdPerfilImovel()); 
 			}
 			
-			// ImÛvel Categoria
+			// Im√≥vel Categoria
 			if(helper.getIdCategoriaImovel() != null){
 				
 				consulta.append(" AND cat.catg_id = " + helper.getIdCategoriaImovel());
@@ -53005,25 +53022,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta.append(" AND loca.loca_id = " + helper.getIdLocalidade() ); 
 			}
 			
-			// GerÍncia
+			// Ger√™ncia
 			if(helper.getIdGerencia() != null ){
 					
 				consulta.append(" AND loca.greg_id = " + helper.getIdGerencia()); 
 			}
 			
-			// Unidade NegÛcio
+			// Unidade Neg√≥cio
 			if(helper.getIdUnidadeNegocio() != null ){
 					
 				consulta.append(" AND loca.uneg_id = " + helper.getIdUnidadeNegocio()); 
 			}
 			
-			// Perfil ImÛvel
+			// Perfil Im√≥vel
 			if(helper.getIdPerfilImovel() != null ){
 					
 				consulta.append(" AND imo.iper_id = " + helper.getIdPerfilImovel()); 
 			}
 			
-			// ImÛvel Categoria
+			// Im√≥vel Categoria
 			if(helper.getIdCategoriaImovel() != null){
 				
 				consulta.append(" AND cat.catg_id = " + helper.getIdCategoriaImovel());
@@ -53083,10 +53100,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = BigDecimal.ZERO;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -53108,10 +53125,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53131,10 +53148,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = BigDecimal.ZERO;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -53155,10 +53172,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53179,10 +53196,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<CreditoRealizado> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -53205,10 +53222,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53228,10 +53245,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		Collection<CreditoRealizadoHistorico> retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -53254,10 +53271,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53265,7 +53282,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar ImÛvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Im√≥vel da Tarifa Social
 	 * [SB0003] Excluir Comando Selecionado 
 	 * 
 	 * @author Vivianne Sousa
@@ -53297,10 +53314,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53329,10 +53346,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
     		retorno = (Integer) session.createSQLQuery(consulta).addScalar("sequencial", Hibernate.INTEGER).uniqueResult();
 
         } catch (HibernateException e) {
-            // levanta a exceÁ„o para a prÛxima camada
+            // levanta a exce√ß√£o para a pr√≥xima camada
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
-            // fecha a sess„o
+            // fecha a sess√£o
             HibernateUtil.closeSession(session);
         }
 
@@ -53343,7 +53360,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
     /**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * [SB0031] Obter RepresentaÁ„o numÈrica do Nosso N˙mero da Ficha de CompensaÁ„o
+	 * [SB0031] Obter Representa√ß√£o num√©rica do Nosso N√∫mero da Ficha de Compensa√ß√£o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/03/2011
@@ -53366,17 +53383,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
     
     /**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53403,10 +53420,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Conta) session.createQuery(consulta).setInteger("nnBoleto", nnBoleto).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53414,7 +53431,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53443,10 +53460,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.setBigDecimal("valorPagamento", valorPagamento).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53454,7 +53471,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53492,10 +53509,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (Conta) session.createQuery(consulta).setBigDecimal("valorPagamento", valorPagamento).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53503,7 +53520,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53531,10 +53548,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("nnBoleto", nnBoleto).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53542,7 +53559,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53571,10 +53588,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			.setInteger("idConta", idConta).setBigDecimal("valorPagamento", valorPagamento).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -53582,7 +53599,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de CompensaÁ„o 
+	 * [UC0724] - Processar Pagamento com Ficha de Compensa√ß√£o 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -53620,10 +53637,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (ContaHistorico) session.createQuery(consulta).setBigDecimal("valorPagamento", valorPagamento).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54024,9 +54041,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC0866] Gerar Comando Contas em CobranÁa por Empresa
+	 * [UC0866] Gerar Comando Contas em Cobran√ßa por Empresa
 	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imÛvel
+	 * Pesquisa a quantidade de contas, agrupando por im√≥vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 07/04/2011
@@ -54348,10 +54365,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54386,7 +54403,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}		
 	}
@@ -54420,13 +54437,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
 	 */
@@ -54487,10 +54504,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54499,7 +54516,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
@@ -54529,10 +54546,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -54541,7 +54558,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
@@ -54570,10 +54587,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54582,7 +54599,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/** 
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -54725,10 +54742,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54736,7 +54753,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/** 
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -54880,10 +54897,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -54891,7 +54908,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -55037,10 +55054,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55048,7 +55065,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	* [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	* [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -55194,10 +55211,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idImovelContaEnvio",ImovelContaEnvio.ENVIAR_CONTA_BRAILLE_RESPONSAVEL).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55205,7 +55222,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -55343,10 +55360,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55354,7 +55371,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 25/04/2011
 	 * 
@@ -55495,10 +55512,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55507,7 +55524,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * [UC1166]  Gerar  txt para impress„o de contas no formato braille
+	 * [UC1166]  Gerar  txt para impress√£o de contas no formato braille
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
 	 */
@@ -55531,10 +55548,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55543,9 +55560,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * [UC0866] Gerar Comando Contas em CobranÁa por Empresa
+	 * [UC0866] Gerar Comando Contas em Cobran√ßa por Empresa
 	 * 
-	 * Pesquisa a quantidade de contas por imÛvel
+	 * Pesquisa a quantidade de contas por im√≥vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 03/05/2011
@@ -55571,10 +55588,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55584,9 +55601,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imÛvel
+	 * Pesquisa a quantidade de contas, agrupando por im√≥vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 12/05/2011
@@ -55629,10 +55646,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					Hibernate.BIG_DECIMAL).setInteger("pendente", OrdemServico.SITUACAO_PENDENTE).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55641,7 +55658,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
 	 * Pesquisa a quantidade de contas
 	 * 
@@ -55686,10 +55703,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55698,9 +55715,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
-	 * Cria as condicionais para a pesquisa de quantidade de contas, agrupanda por imÛvel
+	 * Cria as condicionais para a pesquisa de quantidade de contas, agrupanda por im√≥vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 12/05/2011
@@ -55937,9 +55954,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
-	 * Pesquisa as ordens de serviÁo selecionadas
+	 * Pesquisa as ordens de servi√ßo selecionadas
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 19/05/2011
@@ -55982,10 +55999,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -55994,9 +56011,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC1173] Informar Consumo por Par‚metros
+	 * [UC1173] Informar Consumo por Par√¢metros
 	 * 
-	 * [FS0005] ñ Validar mÍs ano maior ou igual 
+	 * [FS0005] ‚Äì Validar m√™s ano maior ou igual 
 	 * 
 	 * @author Mariana Victor
 	 * @date 20/05/2011
@@ -56024,10 +56041,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56066,10 +56083,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -56113,10 +56130,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56124,7 +56141,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * UC1198 - RelatÛrio das Multas de Autos de InfraÁ„o Pendentes
+	 * UC1198 - Relat√≥rio das Multas de Autos de Infra√ß√£o Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -56158,7 +56175,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	
 	/**
-	 * UC1198 - RelatÛrio das Multas de Autos de InfraÁ„o Pendentes
+	 * UC1198 - Relat√≥rio das Multas de Autos de Infra√ß√£o Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -56173,8 +56190,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta = "";
 		
 		/*
-		 * 3.1.1. Caso o dÈbito a cobrar esteja associado a um auto de infraÁ„o
-		 *        e seja correspondente a uma multa de auto de infraÁ„o 
+		 * 3.1.1. Caso o d√©bito a cobrar esteja associado a um auto de infra√ß√£o
+		 *        e seja correspondente a uma multa de auto de infra√ß√£o 
 		 */
 		consulta =  " Select fg.ftgr_id," +
 					"fg.FTGR_DSFATURAMENTOGRUPO,"+
@@ -56221,9 +56238,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = Util.removerUltimosCaracteres(consulta, 4);
 			
 		/*
-		 * 3.1.2. Caso n„o tenha pagamento associado a uma conta
-		 *        e esta conta esteja associada a um auto de infraÁ„o
-		 *        e seja correspondente a uma multa de auto de infraÁ„o	
+		 * 3.1.2. Caso n√£o tenha pagamento associado a uma conta
+		 *        e esta conta esteja associada a um auto de infra√ß√£o
+		 *        e seja correspondente a uma multa de auto de infra√ß√£o	
 		 */
 			
 		 consulta +="union "+
@@ -56273,9 +56290,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = Util.removerUltimosCaracteres(consulta, 4);
 			
 			/*
-			 * 3.2 Caso n„o exista  pagamento histÛrico associado ao dÈbito a cobrar
-			 *     e este dÈbito a cobrar esteja associado a um auto de infraÁ„o
-			 *     e seja correspondente a uma multa de auto de infraÁ„o
+			 * 3.2 Caso n√£o exista  pagamento hist√≥rico associado ao d√©bito a cobrar
+			 *     e este d√©bito a cobrar esteja associado a um auto de infra√ß√£o
+			 *     e seja correspondente a uma multa de auto de infra√ß√£o
 			 */
 			
 			consulta += "union "+
@@ -56338,10 +56355,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta = Util.removerUltimosCaracteres(consulta, 4);
 				
 				/*
-				 * 3.2.2 Caso o auto de infraÁ„o esteja associado a uma conta
-				 *       e n„o exista pagamento histÛrico 
-				 *       e esta conta esteja associada a um auto de infraÁ„o 
-				 *       e seja correspondente a uma multa de auto de infraÁ„o
+				 * 3.2.2 Caso o auto de infra√ß√£o esteja associado a uma conta
+				 *       e n√£o exista pagamento hist√≥rico 
+				 *       e esta conta esteja associada a um auto de infra√ß√£o 
+				 *       e seja correspondente a uma multa de auto de infra√ß√£o
 				 */
 				
 				consulta +="union "+
@@ -56433,9 +56450,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * UC1198 - RelatÛrio das Multas de Autos de InfraÁ„o Pendentes
-	 * [SB0001] - Verificar itens de parcelamento a partir de dÈbito cobrado
-	 * [SB0002] - Verificar itens de parcelamento a partir do dÈbito a cobrar
+	 * UC1198 - Relat√≥rio das Multas de Autos de Infra√ß√£o Pendentes
+	 * [SB0001] - Verificar itens de parcelamento a partir de d√©bito cobrado
+	 * [SB0002] - Verificar itens de parcelamento a partir do d√©bito a cobrar
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -56484,10 +56501,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idDebACobrar",idDebACobrar).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56497,9 +56514,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * UC1198 - RelatÛrio das Multas de Autos de InfraÁ„o Pendentes
-	 * [SB0003]-Verificar itens de parcelamento a partir de dÈbito a cobrar de nÌvel 2
-	 * [SB0004]-Verificar itens de parcelamento a partir de dÈbito cobrado de nÌvel 2
+	 * UC1198 - Relat√≥rio das Multas de Autos de Infra√ß√£o Pendentes
+	 * [SB0003]-Verificar itens de parcelamento a partir de d√©bito a cobrar de n√≠vel 2
+	 * [SB0004]-Verificar itens de parcelamento a partir de d√©bito cobrado de n√≠vel 2
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -56550,10 +56567,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56561,7 +56578,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}	
 	
 	/**
-	 * [UC0713] Emitir Ordem de ServiÁo Seletiva
+	 * [UC0713] Emitir Ordem de Servi√ßo Seletiva
 	 * [SB0002] Gerar TXT 
 	 * 
 	 * @author Vivianne Sousa
@@ -56585,10 +56602,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -56627,10 +56644,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("idMedicaoTipo", idMedicaoTipo.intValue()).setMaxResults(1).uniqueResult();
 		
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -56639,9 +56656,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 
 	/**
-	 * Acumula o valor de agua cancelado por retificaÁ„o
+	 * Acumula o valor de agua cancelado por retifica√ß√£o
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2011
@@ -56656,10 +56673,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia,int idLocalidade,int idCategoria) throws ErroRepositorioException {
 			BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -56691,10 +56708,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56702,9 +56719,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * Acumula o valor de esgoto cancelado por retificaÁ„o
+	 * Acumula o valor de esgoto cancelado por retifica√ß√£o
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2011
@@ -56720,10 +56737,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -56755,10 +56772,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56768,7 +56785,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Acumula o valor de agua incluido por retificacao
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2011
@@ -56784,10 +56801,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -56819,10 +56836,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56832,7 +56849,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Acumula o valor de esgoto incluido por retificacao
 	 * 
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2011
@@ -56848,10 +56865,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -56883,10 +56900,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -56940,10 +56957,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -57006,10 +57023,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -57066,10 +57083,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57102,10 +57119,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57139,10 +57156,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57167,10 +57184,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -57195,10 +57212,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -57226,10 +57243,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57257,10 +57274,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57288,10 +57305,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57316,10 +57333,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 	
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -57327,11 +57344,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 /**
-	 * [UC1194] Consultar Estrutura Tarif·ria Loja Virtual
-	 * [SB0001]  Pesquisar Tarifa Social ou Tarifa MÌnima
+	 * [UC1194] Consultar Estrutura Tarif√°ria Loja Virtual
+	 * [SB0001]  Pesquisar Tarifa Social ou Tarifa M√≠nima
 	 * 
-	 * MÈtodo que vai retornar um Helper que possui o consumo
-	 * da tarifa mÌnima e da tarifa social e seus respectivos
+	 * M√©todo que vai retornar um Helper que possui o consumo
+	 * da tarifa m√≠nima e da tarifa social e seus respectivos
 	 * valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -57386,10 +57403,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1194] Consultar Estrutura Tarif·ria Loja Virtual
+	 * [UC1194] Consultar Estrutura Tarif√°ria Loja Virtual
 	 * [SB0001]  Pesquisar Tarifa Normal
 	 * 
-	 * MÈtodo que vai retornar um Helper que possui o consumo
+	 * M√©todo que vai retornar um Helper que possui o consumo
 	 * da tarifa normal e seus respectivos valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -57449,10 +57466,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif·ria Loja Virtual 
+	 * [UC1194] Consultar Estrutura Tarif√°ria Loja Virtual 
 	 * 
-	 * MÈtodo que vai retornar um Helper que possui o consumo n„o medido
-	 * de chafariz p˙blico.
+	 * M√©todo que vai retornar um Helper que possui o consumo n√£o medido
+	 * de chafariz p√∫blico.
 	 * 
 	 * @author Diogo Peixoto
 	 * @since 06/09/2011
@@ -57469,7 +57486,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			sb.append("SELECT ");
 			sb.append("'por 1.000L' AS consumo, ");
 			sb.append("ctfx_vlconsumotarifa AS valor, ");
-			sb.append("'Chafariz P˙blico' AS categoriaImovel ");
+			sb.append("'Chafariz P√∫blico' AS categoriaImovel ");
 			sb.append("FROM faturamento.consumo_tarifa_vigencia consumoTarifaVigencia, ");
 			sb.append("faturamento.consumo_tarifa consumoTarifa, ");
 			sb.append("faturamento.consumo_tarifa_categoria consumoTarifaCategoria, ");
@@ -57501,7 +57518,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1187] Colocar DÈbito a Cobrar em Revis„o
+	 * [UC1187] Colocar D√©bito a Cobrar em Revis√£o
 	 * 
 	 * @author Mariana Victor
 	 * @date 21/07/2011
@@ -57531,16 +57548,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC1188] Retirar DÈbito A Cobrar de Revis„o
+	 * [UC1188] Retirar D√©bito A Cobrar de Revis√£o
 	 * 
 	 * @author Mariana Victor
 	 * @date 21/07/2011
@@ -57567,10 +57584,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -57602,19 +57619,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * [UC1216] Suspender Leitura para ImÛvel com HidrÙmetro Retirado
+	 * [UC1216] Suspender Leitura para Im√≥vel com Hidr√¥metro Retirado
 	 * 
-	 * [SB0001] ñ Selecionar ImÛveis com HidrÙmetro Retirado
+	 * [SB0001] ‚Äì Selecionar Im√≥veis com Hidr√¥metro Retirado
 	 *
 	 * @author Vivianne Sousa
 	 * @date 23/08/2011
@@ -57671,8 +57688,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * [UC1216] Suspender Leitura para ImÛvel com HidrÙmetro Retirado
-	 * [SB0003] ñ Incluir ImÛvel na SituaÁ„o Especial de Faturamento
+	 * [UC1216] Suspender Leitura para Im√≥vel com Hidr√¥metro Retirado
+	 * [SB0003] ‚Äì Incluir Im√≥vel na Situa√ß√£o Especial de Faturamento
 	 *
 	 * @author Vivianne Sousa
 	 * @date 23/08/2011
@@ -57696,17 +57713,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * [UC1218] Suspender Leitura para ImÛvel com Consumo Real n„o Superior a 10m3
+	 * [UC1218] Suspender Leitura para Im√≥vel com Consumo Real n√£o Superior a 10m3
 	 *
 	 * @author Vivianne Sousa
 	 * @date 26/08/2011
@@ -57788,9 +57805,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/**
-	 * [UC1214] Informar Acerto Documentos N„o Aceitos
+	 * [UC1214] Informar Acerto Documentos N√£o Aceitos
 	 * 
-	 * [SB0002] ? Selecionar DÈbitos Pagos
+	 * [SB0002] ? Selecionar D√©bitos Pagos
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -57833,18 +57850,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/**
-	 * [UC0457] - Encerrar Ordem de ServiÁo
-	 * [SB0009 - Verificar SituaÁ„o Especial de Faturamento]
+	 * [UC0457] - Encerrar Ordem de Servi√ßo
+	 * [SB0009 - Verificar Situa√ß√£o Especial de Faturamento]
 	 * 
 	 * @param idImovel
 	 * @return FaturamentoSituacaoHistorico
@@ -57864,18 +57881,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idImovel", new Integer(idImovel)).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return historico;
 	}
 	
 	/**
-	 * [UC0457] - Encerrar Ordem de ServiÁo
-	 * [SB0009 - Verificar SituaÁ„o Especial de Faturamento]
+	 * [UC0457] - Encerrar Ordem de Servi√ßo
+	 * [SB0009 - Verificar Situa√ß√£o Especial de Faturamento]
 	 * 
 	 * @param faturamentoSituacaoHistorico
 	 * @throws ErroRepositorioException
@@ -57923,10 +57940,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -57959,10 +57976,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -58000,10 +58017,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -58043,10 +58060,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -58057,12 +58074,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * autor: Adriana Muniz
 	 * Data: 16/05/2011
-	 * MÈtodo para retornar uma coleÁ„o de debitos cobrados do parcelamento
+	 * M√©todo para retornar uma cole√ß√£o de debitos cobrados do parcelamento
 	 * */
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Adriana Muniz
 	 * @date 13/05/2011
@@ -58102,10 +58119,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"servico", FinanciamentoTipo.PARCELAMENTO_SERVICO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -58114,16 +58131,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		/*
 	 * 
-	 * MÈtodo criado para n„o salvar na tabela de geraÁ„o da rota
-	 * todos os imÛveis da rota, e sim, somente os que possuem conta pre-faturada
+	 * M√©todo criado para n√£o salvar na tabela de gera√ß√£o da rota
+	 * todos os im√≥veis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
-	 * Obter quantidade de imÛveis com conta PrÈ-faturada
+	 * Obter quantidade de im√≥veis com conta Pr√©-faturada
 	 */
 	
 	 /** @author Adriana Muniz e Pamela Gatinho  
 	 * @date 13/12/2010
 	 * 
-	 * @return Collection Dados dos imÛveis com conta pre-faturada
+	 * @return Collection Dados dos im√≥veis com conta pre-faturada
 	 * @param anoMesReferencia
 	 * @param rota
 	 * @throws ErroRepositorioException
@@ -58245,28 +58262,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	/*
 	 * 
-	 * MÈtodo criado para n„o salvar na tabela de geraÁ„o da rota dividida
-	 * todos os imÛveis da rota, e sim, somente os que possuem conta pre-faturada
+	 * M√©todo criado para n√£o salvar na tabela de gera√ß√£o da rota dividida
+	 * todos os im√≥veis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
-	 * Obter quantidade de imÛveis da rota dividida com conta PrÈ-faturada
+	 * Obter quantidade de im√≥veis da rota dividida com conta Pr√©-faturada
 	 */
 	
 	 /** @author Pamela Gatinho  
 	 * @date 01/02/2011
 	 * 
-	 * @return Integer quantidade de imÛveis da rota dividida com conta pre-faturada
+	 * @return Integer quantidade de im√≥veis da rota dividida com conta pre-faturada
 	 * @param anoMesReferencia
 	 * @param imoveis  A lista de imoveis pra verificar quem possui conta pre-faturada
 	 * @throws ErroRepositorioException
@@ -58295,13 +58312,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
@@ -58309,21 +58326,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * Data: 22/02/2011
 	 * 
-	 * Dois mÈtodos foram acrescentados:
+	 * Dois m√©todos foram acrescentados:
 	 * 
-	 * MÈtodo usado na geraÁ„o do bonus social, que retorna o consumo de agua para determinado imÛvel
-	 * Que ser· utilizado para verificar uma das condiÁıes para o crÈdito ser concedido
-	 * que È o consumo menor ou igual a 10 
+	 * M√©todo usado na gera√ß√£o do bonus social, que retorna o consumo de agua para determinado im√≥vel
+	 * Que ser√° utilizado para verificar uma das condi√ß√µes para o cr√©dito ser concedido
+	 * que √© o consumo menor ou igual a 10 
 	 * 
-	 * MÈtodo para verificar a subcategoria do imÛvel(bÙnus social)
+	 * M√©todo para verificar a subcategoria do im√≥vel(b√¥nus social)
 	 */
 	/**
 	 * @author Adriana Muniz e Welligton Rocha
 	 * @date: 01/03/2011
 	 * 
-	 * Pesquisa o consumo de agua faturado para um determinado imÛvel 
+	 * Pesquisa o consumo de agua faturado para um determinado im√≥vel 
 	 * 
-	 * @return Integer consumo de agua do imÛvel
+	 * @return Integer consumo de agua do im√≥vel
 	 * @param anoMesReferencia
 	 * @param idImovel
 	 * @throws ErroRepositorioException
@@ -58361,10 +58378,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -58374,7 +58391,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Adriana Muniz e Welligton Rocha
 	 * @date: 01/03/2011
 	 * 
-	 * Pesquisa a subcategoria do imÛvel(Bonus social)
+	 * Pesquisa a subcategoria do im√≥vel(Bonus social)
 	 * 
 	 * @return Integer com o id da subcategoria
 	 * @param idImovel
@@ -58395,25 +58412,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idImovel", idImovel).uniqueResult();
 			
 		}catch(HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 	
 	/*
-	 * Ultizado no retorno das informaÁıes enviadas pelo IS, 
-	 * para deletar os creditos realizados e a realizar, caso n„o tenha sido concedido, por consumo acima de 10 metros c˙bicos
+	 * Ultizado no retorno das informa√ß√µes enviadas pelo IS, 
+	 * para deletar os creditos realizados e a realizar, caso n√£o tenha sido concedido, por consumo acima de 10 metros c√∫bicos
 	 * */
 	/**
 	 * @author Adriana Muniz
 	 * @date: 31/03/2011
 	 * Verifica se tem credito realizado para determinada conta
 	 * 
-	 * @param idConta CÛdigo da conta
+	 * @param idConta C√≥digo da conta
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
@@ -58422,10 +58439,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		CreditoRealizado retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -58442,10 +58459,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					idConta).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -58455,7 +58472,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * @author Adriana Muniz
 	 * @date: 01/04/2011
-	 * Verifica se tem credito a realizar do tipo bonus social para determinado imÛvel
+	 * Verifica se tem credito a realizar do tipo bonus social para determinado im√≥vel
 	 * 
 	 * @param idImovel 
 	 * @throws ErroRepositorioException
@@ -58466,10 +58483,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		CreditoARealizar retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -58488,10 +58505,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idImovel", idImovel).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -58501,7 +58518,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * @author Adriana Muniz
 	 * @date: 01/04/2011
-	 * Exclui credito realizado do tipo bonus social para determinado imÛvel
+	 * Exclui credito realizado do tipo bonus social para determinado im√≥vel
 	 * 
 	 * @param idImovel 
 	 * @throws ErroRepositorioException
@@ -58520,10 +58537,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			session.createQuery(delete).setInteger("idCreditoRealizado", idCreditoRealizado).executeUpdate();
 		} catch(HibernateException e) {
-			//levanta a exceÁ„o para prÛxima camada
+			//levanta a exce√ß√£o para pr√≥xima camada
 			throw new ErroRepositorioException(e,"Erro no Hibernate");
 		} finally {
-			//fecha a sess„o
+			//fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -58531,7 +58548,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * @author Adriana Muniz
 	 * @date: 01/04/2011
-	 * Exclui credito a realizar do tipo bonus social para determinado imÛvel
+	 * Exclui credito a realizar do tipo bonus social para determinado im√≥vel
 	 * 
 	 * @param idImovel 
 	 * @throws ErroRepositorioException
@@ -58556,10 +58573,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			session.createQuery(delete).setInteger("idCreditoARealizar", idCreditoARealizar).executeUpdate();
 			
 		} catch(HibernateException e) {
-			//levanta a exceÁ„o para prÛxima camada
+			//levanta a exce√ß√£o para pr√≥xima camada
 			throw new ErroRepositorioException(e,"Erro no Hibernate");
 		} finally {
-			//fecha a sess„o
+			//fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -58567,15 +58584,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/*
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
-	 * Utilizado na geraÁ„o do arquivo da declaraÁ„o de quitaÁ„o anual dÈbitos 
+	 * Utilizado na gera√ß√£o do arquivo da declara√ß√£o de quita√ß√£o anual d√©bitos 
 	 */
 	/**
 	 * 
-	 * MÈtodo que verifica se o imovel possui cliente respons·vel e
-	 * indicacao de conta a ser entregue em outro endereÁo e que estejam nas
-	 * quadras pertencentes ‡s rota passada
+	 * M√©todo que verifica se o imovel possui cliente respons√°vel e
+	 * indicacao de conta a ser entregue em outro endere√ßo e que estejam nas
+	 * quadras pertencentes √†s rota passada
 	 * 
-	 * Gerar arquivo da declaraÁ„o de quitaÁ„o anual de dÈbitos
+	 * Gerar arquivo da declara√ß√£o de quita√ß√£o anual de d√©bitos
 	 * 
 	 * @author Adriana Muniz
 	 * @date 12/05/2011
@@ -58668,10 +58685,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		return verifica;
@@ -58679,13 +58696,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/*
 	 * 
-	 * MÈtodo criado para obter os imÛveis de uma rota que possuem conta
+	 * M√©todo criado para obter os im√≥veis de uma rota que possuem conta
 	 */
 	
 	 /** @author Pamela Gatinho  
 	 * @date 21/06/2011
 	 * 
-	 * @return Collection Dados dos imÛveis com conta
+	 * @return Collection Dados dos im√≥veis com conta
 	 * @param anoMesReferencia
 	 * @param rota
 	 * @throws ErroRepositorioException
@@ -58767,13 +58784,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleÁ„o de atividades pesquisada(s)
+		// retorna a cole√ß√£o de atividades pesquisada(s)
 		return retorno;
 	}
 	
@@ -58782,7 +58799,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Pamela Gatinho  
 	 * @date 04/08/2011
 	 * 
-	 * Metodo que obtem a conta do imÛvel, so n„o retorna
+	 * Metodo que obtem a conta do im√≥vel, so n√£o retorna
 	 * a conta que estiver com a situacao
 	 * CANCELADA POR RETIFICACAO
 	 *  
@@ -58824,10 +58841,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		// retorna a conta
@@ -58836,12 +58853,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 
 	/*
-	 * MÈtodo chamado para buscar creditos do imovel que tenha valor residual diferente de zero, 
+	 * M√©todo chamado para buscar creditos do imovel que tenha valor residual diferente de zero, 
 	 * caso esse valor seja menor que o valor da conta no processamento de retorno do IS */
 	/**
 	 * Autor: Adriana Muniz
 	 * Data: 09/08/2011
-	 * MÈtodo retono todos os crÈditos a realizar do imovel que tenha valor residual diferente de zero
+	 * M√©todo retono todos os cr√©ditos a realizar do imovel que tenha valor residual diferente de zero
 	 * 
 	 * @param idImovel
 	 * @return Collection
@@ -58874,15 +58891,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/*
-	 * AlteraÁ„o para calcular corretamente o valor do imposto no resumo do faturamento
+	 * Altera√ß√£o para calcular corretamente o valor do imposto no resumo do faturamento
 	 * */
 	/**
 	 * Autor: Wellington Rocha
 	 * Data: 02/08/2011
 	 * 
-	 * MÈtodo para obter o valor dos imposto por categoria
+	 * M√©todo para obter o valor dos imposto por categoria
 	 * 
-	 * Encerrar faturamento do MÍs
+	 * Encerrar faturamento do M√™s
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -58942,7 +58959,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no hibernate");
 		}finally { 
-			//fecha a sess„o
+			//fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -58952,8 +58969,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 *
 	 * 
-	 * MÈtodo para obter todos os imÛveis que j· foram processados
-	 * na transmiss„o do arquivo de retorno do IS
+	 * M√©todo para obter todos os im√≥veis que j√° foram processados
+	 * na transmiss√£o do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 22/08/2011
@@ -58984,10 +59001,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("anoMesFaturamento", anoMesFaturamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -58997,8 +59014,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 *
 	 * 
-	 * MÈtodo para obter todos os imÛveis que faltam ser transmitidos
-	 * na transmiss„o do arquivo de retorno do IS
+	 * M√©todo para obter todos os im√≥veis que faltam ser transmitidos
+	 * na transmiss√£o do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 24/08/2011
@@ -59032,10 +59049,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("anoMesFaturamento", anoMesFaturamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -59045,12 +59062,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/*
 	 * autor: Adriana Muniz
 	 * Data: 17/06/2011
-	 * Utilizado na geraÁ„o do bonus social
+	 * Utilizado na gera√ß√£o do bonus social
 	 * */
 	/**
-	 * MÈtodo verifica se a conta est· cancelada
+	 * M√©todo verifica se a conta est√° cancelada
 	 * 
-	 * Gerar BÙnus Social
+	 * Gerar B√¥nus Social
 	 * 
 	 * @author Adriana Muniz
 	 * @date: 17/06/2011
@@ -59276,10 +59293,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -59290,9 +59307,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Data: 11/10/2011
 	 * Autor: Adriana Muniz
 	 * 
-	 * Pesquisa se j· registro na tabela mov_conta_prefaturada por imÛvel e referÍncia
+	 * Pesquisa se j√° registro na tabela mov_conta_prefaturada por im√≥vel e refer√™ncia
 	 * 
-	 * Utilizado no processamento das informaÁıes enviadas pelo IS.
+	 * Utilizado no processamento das informa√ß√µes enviadas pelo IS.
 	 * 
 	 * @param idImovel
  	 * @param anoMes
@@ -59330,9 +59347,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * Data: 11/10/2011
 	 * Autor: Adriana Muniz
 	 * 
-	 * Pesquisa o indicador de retransmiss„o pelo imÛvel e referÍncia
+	 * Pesquisa o indicador de retransmiss√£o pelo im√≥vel e refer√™ncia
 	 * 
-	 * Utilizado no processamento das informaÁıes enviadas pelo IS.
+	 * Utilizado no processamento das informa√ß√µes enviadas pelo IS.
 	 * 
  	 * @param idImovel
  	 * @param anoMes
@@ -59369,7 +59386,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	/**
 	 *
 	 * 
-	 * MÈtodo para pesquisar imÛveis macro de condominios por rota
+	 * M√©todo para pesquisar im√≥veis macro de condominios por rota
 	 * 
 	 * @author Felipe Santos
 	 * @date 26/01/2012
@@ -59411,7 +59428,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	/**
 	 *
 	 * 
-	 * MÈtodo para pesquisar os imÛveis micro pelo imÛvel condominio
+	 * M√©todo para pesquisar os im√≥veis micro pelo im√≥vel condominio
 	 * 
 	 * @author Felipe Santos
 	 * @date 26/01/2012
@@ -59445,7 +59462,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	
  	/**
 	 *
-	 * Confirmar PrescriÁ„o de Conta
+	 * Confirmar Prescri√ß√£o de Conta
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
@@ -59469,10 +59486,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -59526,7 +59543,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Pamela Gatinho  
 	 * @date 24/02/2012
 	 * 
-	 * Metodo que obtem o movimento do imÛvel
+	 * Metodo que obtem o movimento do im√≥vel
 	 * lido pelo IS
 	 * 
 	 * @return MovimentoContaPreFaturada
@@ -59556,10 +59573,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		// retorna a conta
@@ -59571,8 +59588,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Pamela Gatinho  
 	 * @date 06/03/2013
 	 * 
-	 * Metodo que obtem o extrato de quitaÁ„o
-	 * de dÈbitos de um imÛvel para um determinado
+	 * Metodo que obtem o extrato de quita√ß√£o
+	 * de d√©bitos de um im√≥vel para um determinado
 	 * ano.
 	 * 
 	 * @return ExtratoQuitacao
@@ -59602,10 +59619,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		// retorna a conta
@@ -59617,7 +59634,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * [UC0155] - 
 	 * 
-	 * Alterar ContabilizaÁ„o de valores arrecadados antes de 31/12/2012
+	 * Alterar Contabiliza√ß√£o de valores arrecadados antes de 31/12/2012
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -59635,13 +59652,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual, Integer idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -59678,10 +59695,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -59692,11 +59709,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * 
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs Retorna o valor de crÈdito a
-	 * realizar acumulado, de acordo com o ano/mÍs de referÍncia cont·bil, a
-	 * situaÁ„o atual ou anterior e a origem de crÈdito informados.
+	 * [UC0155] - Encerrar Faturamento do M√™s Retorna o valor de cr√©dito a
+	 * realizar acumulado, de acordo com o ano/m√™s de refer√™ncia cont√°bil, a
+	 * situa√ß√£o atual ou anterior e a origem de cr√©dito informados.
 	 * 
-	 * AlteraÁıes para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√µes para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -59714,13 +59731,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual, Integer idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria a coleÁ„o de retorno da pesquisa
+		// cria a cole√ß√£o de retorno da pesquisa
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -59757,14 +59774,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleÁ„o de resumo de faturamento criada
+		// retorna a cole√ß√£o de resumo de faturamento criada
 		return retorno;
 
 	}
@@ -59772,9 +59789,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -59794,13 +59811,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
-		/* - AlteraÁ„o para corrigir o valor dos crÈditos
+		/* - Altera√ß√£o para corrigir o valor dos cr√©ditos
 		 *  no resumo do gerencial em 22/08/2011*/
 		try {
 			
@@ -59845,10 +59862,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -59859,9 +59876,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -59881,13 +59898,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
-		/* - AlteraÁ„o para corrigir o valor dos crÈditos
+		/* - Altera√ß√£o para corrigir o valor dos cr√©ditos
 		 *  no resumo do gerencial em 22/08/2011*/
 		try {
 			
@@ -59933,10 +59950,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -59947,9 +59964,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -59969,10 +59986,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60009,10 +60026,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60022,9 +60039,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -60044,10 +60061,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60084,10 +60101,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60098,9 +60115,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -60119,10 +60136,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60162,10 +60179,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// erro no hibernate
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60176,9 +60193,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -60197,10 +60214,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60240,10 +60257,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// erro no hibernate
 
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60254,9 +60271,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -60276,10 +60293,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60318,10 +60335,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60331,9 +60348,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	/**
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ 31/12/2012
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√© 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -60353,10 +60370,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		BigDecimal retorno = null;
 
-		// cria uma sess„o com o hibernate
+		// cria uma sess√£o com o hibernate
 		Session session = HibernateUtil.getSession();
 
-		// cria a vari·vel que vai conter o hql
+		// cria a vari√°vel que vai conter o hql
 		String consulta;
 
 		try {
@@ -60395,10 +60412,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceÁ„o para a prÛxima camada
+			// levanta a exce√ß√£o para a pr√≥xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sess„o
+			// fecha a sess√£o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -60410,7 +60427,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * Felipe Santos - 22/10/2013
 	 * 
-	 * Retorna quantidadeContas e valorFaturamento por referÍncia e localidade
+	 * Retorna quantidadeContas e valorFaturamento por refer√™ncia e localidade
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -60901,10 +60918,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	          .setParameterList("contasIds", idsContas).list();
 	      
 	    } catch (HibernateException e) {
-	      // levanta a exceÁ„o para a prÛxima camada
+	      // levanta a exce√ß√£o para a pr√≥xima camada
 	      throw new ErroRepositorioException(e, "Erro no Hibernate");
 	    } finally {
-	      // fecha a sess„o
+	      // fecha a sess√£o
 	      HibernateUtil.closeSession(session);
 	    }
 	    

@@ -44,6 +44,16 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		return instancia;
 	}
 
+	/**
+	 * Retorna a contagem máxima de registros de uma determinada classe no
+	 * sistema
+	 * 
+	 * @param classe
+	 *            Classe (.class) que será feita a contagem
+	 * @return Número de registros
+	 * @exception ErroRepositorioException
+	 *                Erro no mecanismo hibernate
+	 */
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
@@ -204,7 +214,18 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	/**
+	 * < <Descrição do método>>
+	 * 
+	 * @param filtro
+	 *            Descrição do parâmetro
+	 * @param pacoteNomeObjeto
+	 *            Descrição do parâmetro
+	 * @return Descrição do retorno
+	 * @exception ErroRepositorioException
+	 *                Descrição da exceção
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection pesquisar(Filtro filtro, String pacoteNomeObjeto) throws ErroRepositorioException {
 		Collection retorno = null;
 

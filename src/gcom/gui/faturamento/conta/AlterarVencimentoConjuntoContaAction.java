@@ -131,7 +131,7 @@ public class AlterarVencimentoConjuntoContaAction extends GcomAction {
         	}
     		
     		Date dataCorrenteComDias = Util.adicionarNumeroDiasDeUmaData(dataCorrente, diasAdicionais.intValue());
-    		// E o usuário não tenha permissão especial.	
+    		// E o usuario nao tenha permissao especial.	
 			boolean temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao = fachada.verificarPermissaoEspecial(PermissaoEspecial.RETIFICAR_DATA_VENCIMENTO_ALEM_PRAZO_PADRAO,
 					usuarioLogado);		
 				

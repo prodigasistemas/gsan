@@ -490,7 +490,7 @@ CREATE FUNCTION dias_nummes(double precision, double precision) RETURNS integer
  $_$;
 
 
-ALTER FUNCTION operacao.dias_nummes(double precision, double precision) OWNER TO pamela;
+ALTER FUNCTION operacao.dias_nummes(double precision, double precision) OWNER TO gsan_admin;
 
 --
 -- TOC entry 1752 (class 1255 OID 3672382)
@@ -954,7 +954,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION operacao.geraindicador(mesreferencia date) OWNER TO pamela;
+ALTER FUNCTION operacao.geraindicador(mesreferencia date) OWNER TO gsan_admin;
 
 --
 -- TOC entry 1753 (class 1255 OID 3672385)
@@ -967,7 +967,7 @@ CREATE FUNCTION "isnull"(numeric, numeric) RETURNS numeric
 is null) WHEN true THEN $2 ELSE $1 END) AS RESULT$_$;
 
 
-ALTER FUNCTION operacao."isnull"(numeric, numeric) OWNER TO pamela;
+ALTER FUNCTION operacao."isnull"(numeric, numeric) OWNER TO gsan_admin;
 
 --
 -- TOC entry 1754 (class 1255 OID 3672386)
@@ -980,7 +980,7 @@ CREATE FUNCTION last_day(date) RETURNS date
 cast(date_trunc('month', $1) + '1 month'::interval as date) - 1$_$;
 
 
-ALTER FUNCTION operacao.last_day(date) OWNER TO pamela;
+ALTER FUNCTION operacao.last_day(date) OWNER TO gsan_admin;
 
 SET search_path = public, pg_catalog;
 
@@ -1976,7 +1976,7 @@ END;
 $_$;
 
 
-ALTER FUNCTION public.geraindicador(mesreferencia date) OWNER TO pamela;
+ALTER FUNCTION public.geraindicador(mesreferencia date) OWNER TO gsan_admin;
 
 --
 -- TOC entry 1795 (class 1255 OID 3672429)
@@ -64034,7 +64034,7 @@ CREATE TABLE crar_crrz (
 );
 
 
-ALTER TABLE faturamento.crar_crrz OWNER TO adriana;
+ALTER TABLE faturamento.crar_crrz OWNER TO gsan_admin;
 
 --
 -- TOC entry 1111 (class 1259 OID 3677044)
@@ -81027,7 +81027,7 @@ CREATE TABLE analise_clinica (
 );
 
 
-ALTER TABLE operacao.analise_clinica OWNER TO w3;
+ALTER TABLE operacao.analise_clinica OWNER TO gsan_admin;
 
 --
 -- TOC entry 1448 (class 1259 OID 3678149)
@@ -81304,7 +81304,7 @@ CREATE TABLE eeab_horas_cmb (
 );
 
 
-ALTER TABLE operacao.eeab_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.eeab_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1462 (class 1259 OID 3678200)
@@ -81335,7 +81335,7 @@ CREATE TABLE eeab_medidor (
 );
 
 
-ALTER TABLE operacao.eeab_medidor OWNER TO w3;
+ALTER TABLE operacao.eeab_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1464 (class 1259 OID 3678206)
@@ -81376,7 +81376,7 @@ CREATE TABLE eeab_volume_entrada (
 );
 
 
-ALTER TABLE operacao.eeab_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.eeab_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1466 (class 1259 OID 3678213)
@@ -81392,7 +81392,7 @@ CREATE TABLE eeab_volume_saida (
 );
 
 
-ALTER TABLE operacao.eeab_volume_saida OWNER TO w3;
+ALTER TABLE operacao.eeab_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1467 (class 1259 OID 3678216)
@@ -81474,7 +81474,7 @@ CREATE TABLE eeat_horas_cmb (
 );
 
 
-ALTER TABLE operacao.eeat_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.eeat_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1471 (class 1259 OID 3678230)
@@ -81505,7 +81505,7 @@ CREATE TABLE eeat_medidor (
 );
 
 
-ALTER TABLE operacao.eeat_medidor OWNER TO w3;
+ALTER TABLE operacao.eeat_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1473 (class 1259 OID 3678236)
@@ -81546,7 +81546,7 @@ CREATE TABLE eeat_volume_entrada (
 );
 
 
-ALTER TABLE operacao.eeat_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.eeat_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1475 (class 1259 OID 3678243)
@@ -81562,7 +81562,7 @@ CREATE TABLE eeat_volume_saida (
 );
 
 
-ALTER TABLE operacao.eeat_volume_saida OWNER TO w3;
+ALTER TABLE operacao.eeat_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1476 (class 1259 OID 3678246)
@@ -81663,7 +81663,7 @@ CREATE TABLE escritorio (
 );
 
 
-ALTER TABLE operacao.escritorio OWNER TO w3;
+ALTER TABLE operacao.escritorio OWNER TO gsan_admin;
 
 --
 -- TOC entry 1479 (class 1259 OID 3678256)
@@ -81739,7 +81739,7 @@ CREATE TABLE eta_horas_cmb (
 );
 
 
-ALTER TABLE operacao.eta_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.eta_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1483 (class 1259 OID 3678270)
@@ -81770,7 +81770,7 @@ CREATE TABLE eta_medidor (
 );
 
 
-ALTER TABLE operacao.eta_medidor OWNER TO w3;
+ALTER TABLE operacao.eta_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1485 (class 1259 OID 3678276)
@@ -81811,7 +81811,7 @@ CREATE TABLE eta_volume_entrada (
 );
 
 
-ALTER TABLE operacao.eta_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.eta_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1487 (class 1259 OID 3678283)
@@ -81827,7 +81827,7 @@ CREATE TABLE eta_volume_saida (
 );
 
 
-ALTER TABLE operacao.eta_volume_saida OWNER TO w3;
+ALTER TABLE operacao.eta_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1488 (class 1259 OID 3678286)
@@ -81846,7 +81846,7 @@ CREATE TABLE ete (
 );
 
 
-ALTER TABLE operacao.ete OWNER TO w3;
+ALTER TABLE operacao.ete OWNER TO gsan_admin;
 
 --
 -- TOC entry 1489 (class 1259 OID 3678290)
@@ -81868,7 +81868,7 @@ CREATE TABLE ete_volume (
 );
 
 
-ALTER TABLE operacao.ete_volume OWNER TO w3;
+ALTER TABLE operacao.ete_volume OWNER TO gsan_admin;
 
 --
 -- TOC entry 1490 (class 1259 OID 3678294)
@@ -81908,7 +81908,7 @@ CREATE TABLE indicador_mensal (
 );
 
 
-ALTER TABLE operacao.indicador_mensal OWNER TO pamela;
+ALTER TABLE operacao.indicador_mensal OWNER TO gsan_admin;
 
 --
 -- TOC entry 1492 (class 1259 OID 3678300)
@@ -82003,7 +82003,7 @@ CREATE TABLE rede_instalada (
 );
 
 
-ALTER TABLE operacao.rede_instalada OWNER TO w3;
+ALTER TABLE operacao.rede_instalada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1497 (class 1259 OID 3678319)
@@ -82142,7 +82142,7 @@ CREATE TABLE residencia (
 );
 
 
-ALTER TABLE operacao.residencia OWNER TO w3;
+ALTER TABLE operacao.residencia OWNER TO gsan_admin;
 
 --
 -- TOC entry 1506 (class 1259 OID 3678350)
@@ -82205,7 +82205,7 @@ CREATE TABLE rso_horas_cmb (
 );
 
 
-ALTER TABLE operacao.rso_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.rso_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1509 (class 1259 OID 3678361)
@@ -82260,7 +82260,7 @@ CREATE SEQUENCE sequence_analise_clinica
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_analise_clinica OWNER TO w3;
+ALTER TABLE operacao.sequence_analise_clinica OWNER TO gsan_admin;
 
 --
 -- TOC entry 1512 (class 1259 OID 3678370)
@@ -82395,7 +82395,7 @@ CREATE SEQUENCE sequence_eeab_horas_cmb
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeab_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.sequence_eeab_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1521 (class 1259 OID 3678388)
@@ -82425,7 +82425,7 @@ CREATE SEQUENCE sequence_eeab_medidor
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeab_medidor OWNER TO w3;
+ALTER TABLE operacao.sequence_eeab_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1523 (class 1259 OID 3678392)
@@ -82455,7 +82455,7 @@ CREATE SEQUENCE sequence_eeab_volume_entrada
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeab_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.sequence_eeab_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1525 (class 1259 OID 3678396)
@@ -82470,7 +82470,7 @@ CREATE SEQUENCE sequence_eeab_volume_saida
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeab_volume_saida OWNER TO w3;
+ALTER TABLE operacao.sequence_eeab_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1526 (class 1259 OID 3678398)
@@ -82530,7 +82530,7 @@ CREATE SEQUENCE sequence_eeat_horas_cmb
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeat_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.sequence_eeat_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1530 (class 1259 OID 3678406)
@@ -82560,7 +82560,7 @@ CREATE SEQUENCE sequence_eeat_medidor
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeat_medidor OWNER TO w3;
+ALTER TABLE operacao.sequence_eeat_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1532 (class 1259 OID 3678410)
@@ -82590,7 +82590,7 @@ CREATE SEQUENCE sequence_eeat_volume_entrada
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeat_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.sequence_eeat_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1534 (class 1259 OID 3678414)
@@ -82605,7 +82605,7 @@ CREATE SEQUENCE sequence_eeat_volume_saida
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eeat_volume_saida OWNER TO w3;
+ALTER TABLE operacao.sequence_eeat_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1535 (class 1259 OID 3678416)
@@ -82650,7 +82650,7 @@ CREATE SEQUENCE sequence_escritorio
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_escritorio OWNER TO w3;
+ALTER TABLE operacao.sequence_escritorio OWNER TO gsan_admin;
 
 --
 -- TOC entry 1538 (class 1259 OID 3678422)
@@ -82680,7 +82680,7 @@ CREATE SEQUENCE sequence_eta_fontecaptacao
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eta_fontecaptacao OWNER TO w3;
+ALTER TABLE operacao.sequence_eta_fontecaptacao OWNER TO gsan_admin;
 
 --
 -- TOC entry 1540 (class 1259 OID 3678426)
@@ -82710,7 +82710,7 @@ CREATE SEQUENCE sequence_eta_horas_cmb
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eta_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.sequence_eta_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1542 (class 1259 OID 3678430)
@@ -82740,7 +82740,7 @@ CREATE SEQUENCE sequence_eta_medidor
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eta_medidor OWNER TO w3;
+ALTER TABLE operacao.sequence_eta_medidor OWNER TO gsan_admin;
 
 --
 -- TOC entry 1544 (class 1259 OID 3678434)
@@ -82770,7 +82770,7 @@ CREATE SEQUENCE sequence_eta_volume_entrada
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eta_volume_entrada OWNER TO w3;
+ALTER TABLE operacao.sequence_eta_volume_entrada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1546 (class 1259 OID 3678438)
@@ -82785,7 +82785,7 @@ CREATE SEQUENCE sequence_eta_volume_saida
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_eta_volume_saida OWNER TO w3;
+ALTER TABLE operacao.sequence_eta_volume_saida OWNER TO gsan_admin;
 
 --
 -- TOC entry 1547 (class 1259 OID 3678440)
@@ -82800,7 +82800,7 @@ CREATE SEQUENCE sequence_ete
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_ete OWNER TO w3;
+ALTER TABLE operacao.sequence_ete OWNER TO gsan_admin;
 
 --
 -- TOC entry 1548 (class 1259 OID 3678442)
@@ -82815,7 +82815,7 @@ CREATE SEQUENCE sequence_ete_volume
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_ete_volume OWNER TO w3;
+ALTER TABLE operacao.sequence_ete_volume OWNER TO gsan_admin;
 
 --
 -- TOC entry 1549 (class 1259 OID 3678444)
@@ -82875,7 +82875,7 @@ CREATE SEQUENCE sequence_rede_instalada
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_rede_instalada OWNER TO w3;
+ALTER TABLE operacao.sequence_rede_instalada OWNER TO gsan_admin;
 
 --
 -- TOC entry 1553 (class 1259 OID 3678452)
@@ -82890,7 +82890,7 @@ CREATE SEQUENCE sequence_registroconsumo
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_registroconsumo OWNER TO w3;
+ALTER TABLE operacao.sequence_registroconsumo OWNER TO gsan_admin;
 
 --
 -- TOC entry 1554 (class 1259 OID 3678454)
@@ -82905,7 +82905,7 @@ CREATE SEQUENCE sequence_registroconsumoeat
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_registroconsumoeat OWNER TO w3;
+ALTER TABLE operacao.sequence_registroconsumoeat OWNER TO gsan_admin;
 
 --
 -- TOC entry 1555 (class 1259 OID 3678456)
@@ -82935,7 +82935,7 @@ CREATE SEQUENCE sequence_residencia
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_residencia OWNER TO w3;
+ALTER TABLE operacao.sequence_residencia OWNER TO gsan_admin;
 
 --
 -- TOC entry 1557 (class 1259 OID 3678460)
@@ -82980,7 +82980,7 @@ CREATE SEQUENCE sequence_rso_horas_cmb
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_rso_horas_cmb OWNER TO w3;
+ALTER TABLE operacao.sequence_rso_horas_cmb OWNER TO gsan_admin;
 
 --
 -- TOC entry 1560 (class 1259 OID 3678466)
@@ -83040,7 +83040,7 @@ CREATE SEQUENCE sequence_unidade_consumidora
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_unidade_consumidora OWNER TO pamela;
+ALTER TABLE operacao.sequence_unidade_consumidora OWNER TO gsan_admin;
 
 --
 -- TOC entry 1564 (class 1259 OID 3678474)
@@ -83055,7 +83055,7 @@ CREATE SEQUENCE sequence_unidade_consumidora_operacional
     CACHE 1;
 
 
-ALTER TABLE operacao.sequence_unidade_consumidora_operacional OWNER TO w3;
+ALTER TABLE operacao.sequence_unidade_consumidora_operacional OWNER TO gsan_admin;
 
 --
 -- TOC entry 1565 (class 1259 OID 3678476)
@@ -83097,7 +83097,7 @@ CREATE TABLE tipo_unidade_operacional (
 );
 
 
-ALTER TABLE operacao.tipo_unidade_operacional OWNER TO pamela;
+ALTER TABLE operacao.tipo_unidade_operacional OWNER TO gsan_admin;
 
 --
 -- TOC entry 1568 (class 1259 OID 3678486)
@@ -83147,7 +83147,7 @@ CREATE TABLE unidade_consumidora_operacional (
 );
 
 
-ALTER TABLE operacao.unidade_consumidora_operacional OWNER TO w3;
+ALTER TABLE operacao.unidade_consumidora_operacional OWNER TO gsan_admin;
 
 --
 -- TOC entry 1570 (class 1259 OID 3678493)
@@ -84613,7 +84613,7 @@ CREATE TABLE bi_logradouro (
 );
 
 
-ALTER TABLE public.bi_logradouro OWNER TO jeluan;
+ALTER TABLE public.bi_logradouro OWNER TO gsan_admin;
 
 --
 -- TOC entry 1602 (class 1259 OID 3678596)
@@ -84649,7 +84649,7 @@ CREATE TABLE cliente_endereco_max_cled_id (
 );
 
 
-ALTER TABLE public.cliente_endereco_max_cled_id OWNER TO jomaia;
+ALTER TABLE public.cliente_endereco_max_cled_id OWNER TO gsan_admin;
 
 --
 -- TOC entry 1604 (class 1259 OID 3678602)
@@ -84664,7 +84664,7 @@ CREATE TABLE cliente_endereco_max_nnimovel (
 );
 
 
-ALTER TABLE public.cliente_endereco_max_nnimovel OWNER TO jomaia;
+ALTER TABLE public.cliente_endereco_max_nnimovel OWNER TO gsan_admin;
 
 --
 -- TOC entry 1605 (class 1259 OID 3678608)
@@ -84690,7 +84690,7 @@ CREATE TABLE cliente_endereco_tmp (
 );
 
 
-ALTER TABLE public.cliente_endereco_tmp OWNER TO jomaia;
+ALTER TABLE public.cliente_endereco_tmp OWNER TO gsan_admin;
 
 --
 -- TOC entry 1606 (class 1259 OID 3678611)
@@ -84729,7 +84729,7 @@ CREATE TABLE dadosrelatorioenergiaeletrica (
 );
 
 
-ALTER TABLE public.dadosrelatorioenergiaeletrica OWNER TO w3;
+ALTER TABLE public.dadosrelatorioenergiaeletrica OWNER TO gsan_admin;
 
 --
 -- TOC entry 1608 (class 1259 OID 3678620)
@@ -84790,7 +84790,7 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 
-ALTER TABLE public.hibernate_sequence OWNER TO w3;
+ALTER TABLE public.hibernate_sequence OWNER TO gsan_admin;
 
 --
 -- TOC entry 1611 (class 1259 OID 3678628)
@@ -84805,7 +84805,7 @@ CREATE TABLE ligacaounidadeoperacional (
 );
 
 
-ALTER TABLE public.ligacaounidadeoperacional OWNER TO w3;
+ALTER TABLE public.ligacaounidadeoperacional OWNER TO gsan_admin;
 
 --
 -- TOC entry 1612 (class 1259 OID 3678631)
@@ -84832,7 +84832,7 @@ CREATE TABLE nodesigma (
 );
 
 
-ALTER TABLE public.nodesigma OWNER TO w3;
+ALTER TABLE public.nodesigma OWNER TO gsan_admin;
 
 --
 -- TOC entry 1614 (class 1259 OID 3678637)
@@ -84978,7 +84978,7 @@ CREATE TABLE parecer (
 );
 
 
-ALTER TABLE public.parecer OWNER TO moreno;
+ALTER TABLE public.parecer OWNER TO gsan_admin;
 
 --
 -- TOC entry 1620 (class 1259 OID 3678663)
@@ -85003,7 +85003,7 @@ CREATE TABLE resumo_arrecadacao (
 );
 
 
-ALTER TABLE public.resumo_arrecadacao OWNER TO aryed;
+ALTER TABLE public.resumo_arrecadacao OWNER TO gsan_admin;
 
 --
 -- TOC entry 1621 (class 1259 OID 3678667)
@@ -85037,7 +85037,7 @@ CREATE TABLE seguranca_bkp_20091113 (
 );
 
 
-ALTER TABLE public.seguranca_bkp_20091113 OWNER TO jomaia;
+ALTER TABLE public.seguranca_bkp_20091113 OWNER TO gsan_admin;
 
 --
 -- TOC entry 1623 (class 1259 OID 3678673)
@@ -85064,7 +85064,7 @@ CREATE TABLE todas_as_foreign_keys_20081028 (
 );
 
 
-ALTER TABLE public.todas_as_foreign_keys_20081028 OWNER TO jaugustomd;
+ALTER TABLE public.todas_as_foreign_keys_20081028 OWNER TO gsan_admin;
 
 --
 -- TOC entry 1625 (class 1259 OID 3678682)
@@ -85080,7 +85080,7 @@ CREATE TABLE todas_as_foreign_keys_basica (
 );
 
 
-ALTER TABLE public.todas_as_foreign_keys_basica OWNER TO jomaia;
+ALTER TABLE public.todas_as_foreign_keys_basica OWNER TO gsan_admin;
 
 --
 -- TOC entry 1626 (class 1259 OID 3678688)
@@ -85095,7 +85095,7 @@ CREATE TABLE todas_as_primary_keys_20081028 (
 );
 
 
-ALTER TABLE public.todas_as_primary_keys_20081028 OWNER TO jaugustomd;
+ALTER TABLE public.todas_as_primary_keys_20081028 OWNER TO gsan_admin;
 
 --
 -- TOC entry 1627 (class 1259 OID 3678694)
@@ -85109,7 +85109,7 @@ CREATE TABLE todas_as_tabelas_20091229 (
 );
 
 
-ALTER TABLE public.todas_as_tabelas_20091229 OWNER TO jomaia;
+ALTER TABLE public.todas_as_tabelas_20091229 OWNER TO gsan_admin;
 
 --
 -- TOC entry 1628 (class 1259 OID 3678700)
@@ -85126,7 +85126,7 @@ CREATE TABLE todos_os_indices_20091218 (
 );
 
 
-ALTER TABLE public.todos_os_indices_20091218 OWNER TO jomaia;
+ALTER TABLE public.todos_os_indices_20091218 OWNER TO gsan_admin;
 
 --
 -- TOC entry 1629 (class 1259 OID 3678706)
@@ -85143,7 +85143,7 @@ CREATE TABLE todos_os_indices_basica (
 );
 
 
-ALTER TABLE public.todos_os_indices_basica OWNER TO jomaia;
+ALTER TABLE public.todos_os_indices_basica OWNER TO gsan_admin;
 
 --
 -- TOC entry 1630 (class 1259 OID 3678712)
@@ -85160,7 +85160,7 @@ CREATE TABLE todos_os_indices_cosanpa (
 );
 
 
-ALTER TABLE public.todos_os_indices_cosanpa OWNER TO jomaia;
+ALTER TABLE public.todos_os_indices_cosanpa OWNER TO gsan_admin;
 
 SET search_path = quartz, pg_catalog;
 

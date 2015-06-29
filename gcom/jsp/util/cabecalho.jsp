@@ -42,7 +42,7 @@
 						</td>
 						
 						<td align="right" valign="bottom">
-							<img src="<bean:message key="caminho.imagens"/>logo_menu_superior.gif" border="0">
+							<img src="<bean:message key="caminho.imagens"/>back-sgqa.gif" border="0">
 						</td>
 						
 					</tr>

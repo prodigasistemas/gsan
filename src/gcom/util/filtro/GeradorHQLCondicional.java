@@ -309,11 +309,18 @@ public class GeradorHQLCondicional {
 			}
 
 			if (parametro instanceof String) {
+				
 				String parametroString = (String) parametro;
-
+				
 				if (!parametroString.startsWith("0")) {
-					query.setParameter("a" + i, parametro);
-					i++;
+					try {
+						Integer parametroInteger = Integer.parseInt(parametroString);
+						query.setInteger("a" + i, parametroInteger);
+					} catch (NumberFormatException e) {
+						query.setParameter("a" + i, parametro);
+					} finally {
+						i++;
+					}
 				} else {
 					query.setString("a" + i, parametroString);
 					i++;
@@ -622,6 +629,7 @@ public class GeradorHQLCondicional {
 	/**
 	 * Este método gera uma query usando o padrão Criteria Queries do hibernate
 	 */
+	@SuppressWarnings("rawtypes")
 	public static Collection gerarQueryCriteriaExpression(Session session,
 			Filtro filtro, Class classe) throws HibernateException {
 

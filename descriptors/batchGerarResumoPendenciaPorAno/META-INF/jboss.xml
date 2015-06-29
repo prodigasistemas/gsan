@@ -11,15 +11,13 @@
 					BatchGerarResumoPendenciaPorAnoMDB
 	
 				</destination-jndi-name>
-			 	
 			 	<invoker-bindings>
 					<invoker>
 						<invoker-proxy-binding-name>
-							message-driven-bean-limite15
+							message-driven-bean
 						</invoker-proxy-binding-name>
 					</invoker>
 				</invoker-bindings>
-			 	
 		</message-driven>
 	</enterprise-beans>
 </jboss>	

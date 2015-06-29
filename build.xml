@@ -7,7 +7,7 @@
 	</tstamp>
 
 	<property file="build.properties" />
-
+	
 	<property name="servidor.tipo" value="${gsan.tipo}" />
 	<property name="servidor.versao" value="5.1.1.57" />
 
@@ -20,11 +20,14 @@
 	<property name="Struts.home" value="lib/Struts1.1" />
 	<property name="deploy.lib.dir" value="lib/deploy" />
 	<property name="Servlet.home" value="lib/Servlet" />
+	<property name="Hibernate3.home" value="lib/hibernate-3.1" />
 	<property name="MenuTagLib.home" value="lib/MenuTagLib" />
+	<property name="Axis2.home" value="lib/Axis2" />
+	<property name="Apache-Ant-1.6.2.home" value="lib/apache-ant-1.6.2" />
 	<property name="JasperReports.home" value="lib/JasperReports 1.2.2" />
 	<property name="JAF.home" value="lib/JAF" />
 	<property name="JavaMail.home" value="lib/Javamail" />
-	<property name="PostGreSQL7.4.home" value="lib/DriverPostGres/7.4" />
+	<property name="PostGreSQL9.3.home" value="lib/DriverPostGres/9.3" />
 	<property name="Properties.home" value="src/gcom" />
 	<property name="PagerTagLib.home" value="lib/PagerTagLib" />
 	<property name="JSTL.home" value="lib/JSTL 1.1" />
@@ -86,9 +89,9 @@
 		<pathelement location="${PagerTagLib.home}/pager-taglib.jar" />
 		<pathelement location="${JAF.home}/activation.jar" />
 		<pathelement location="${JavaMail.home}/mail.jar" />
-		<pathelement location="${Axis.home}/commons-httpclient-3.1.jar" />
+		<pathelement location="${Axis2.home}/commons-httpclient-3.1.jar" />
+		<pathelement location="${Apache-Ant-1.6.2.home}/bcel-5.1.jar" />
 		<pathelement location="/reports" />
-
 	</path>
 
 	<target name="alterarDataVersao" depends="init">
@@ -173,6 +176,9 @@
 			<fileset dir="${JSTL.home}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${Quartz.home}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${JavaHelp.home}">
 				<include name="*.jar" />
 			</fileset>
@@ -195,7 +201,7 @@
 			</classpath>
 		</taskdef>
 
-		<jrc srcdir="${CaminhoReports}" destdir="${CaminhoReports}" tempdir="${CaminhoReports}" keepjava="false" xmlvalidation="false">
+		<jrc srcdir="${CaminhoReports}" destdir="${CaminhoReports}" tempdir="${CaminhoReports}" keepjava="false" xmlvalidation="true">
 			<classpath>
 				<fileset dir="${JasperReports.home}">
 					<include name="*.jar" />
