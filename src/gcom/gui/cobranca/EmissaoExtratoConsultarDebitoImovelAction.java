@@ -160,6 +160,8 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 
 			sessao.setAttribute("valorPagamentoAVista", valorTotalSemAcrescimo);
 			sessao.setAttribute("valorCreditoARealizar", valorCreditoARealizar);
+			sessao.setAttribute("valorAcrescimo", valorAcrescimo);
+			
 		}
 		
 		return retorno;		
@@ -176,7 +178,7 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 			retorno = new Object[3];
 			colecaoContas = new ArrayList();
 
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContaValores");
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContas");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 

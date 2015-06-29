@@ -536,8 +536,6 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 				sessao.setAttribute("colecaoCreditoARealizar",colecaoCreditoARealizar);
 				sessao.setAttribute("colecaoGuiaPagamentoValores", colecaoGuiaPagamentoValores);
 
-//				sessao.setAttribute("valorAcrescimo", valorAcrescimo);
-//				sessao.setAttribute("valorTotalDescontoPagamentoAVista",valorTotalDescontoPagamentoAVista);
 				sessao.setAttribute("valorPagamentoAVistaConsultarDebitos", valorTotalSemAcrescimo);
 				sessao.setAttribute("valorCreditoARealizar", valorCreditoARealizar);
 				sessao.setAttribute("idImovel", codigoImovel);
