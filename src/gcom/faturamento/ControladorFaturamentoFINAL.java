@@ -42009,14 +42009,20 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * atual menos 3 dias e a data atual Desenvolvedor: Raphael
 				 * Rossiter em 19/02/2008 Analista: Aryed Lins
 				 */
-				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-
-					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
-					helper.setDataEmissaoFinal(new Date());
-				} else {
+//				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+//
+//					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
+//					helper.setDataEmissaoFinal(new Date());
+//				} else {
+//					helper.setDataEmissaoInicial(null);
+//					helper.setDataEmissaoFinal(null);
+//				}
+				
+				if (helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					helper.setDataEmissaoInicial(null);
 					helper.setDataEmissaoFinal(null);
 				}
+
 
 				try {
 
@@ -42026,13 +42032,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					repositorioFaturamento.apagarClienteConta(helper);
 					repositorioFaturamento.apagarContaImpostosDeduzidos(helper);
 					repositorioFaturamento.apagarDebitoAutomaticoMovimento(helper);
+					
 					repositorioFaturamento.apagarDebitoCobradoCategoria(helper);
 					repositorioFaturamento.apagarDebitoCobrado(helper);
 					repositorioFaturamento.apagarCreditoRealizadoCategoria(helper);
 					repositorioFaturamento.apagarCreditoRealizado(helper);
+					
 					repositorioFaturamento.atualizarDebitoACobrar(helper);
 					repositorioFaturamento.atualizarCreditoARealizar(helper);
 					repositorioFaturamento.atualizarContaGeral(helper);
+					
 					repositorioFaturamento.apagarDadosCobranca(helper);
 					repositorioFaturamento.apagarConta(helper);
 
@@ -76039,14 +76048,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		this.atualizarLigacaoEsgotoPorRota(rota, atividade);
 
-		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-
-		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
-		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
-		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+//		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+//
+//		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
+//		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+//		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
 
 		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
 		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
 
 		// Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
