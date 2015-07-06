@@ -66,6 +66,7 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 		if (httpServletRequest.getParameter("reloadPage") == null) {
 
 			sessao.removeAttribute("colecaoConta");
+			sessao.removeAttribute("colecaoContaClienteAtual");
 			sessao.removeAttribute("colecaoContaPreteritos");
 			sessao.removeAttribute("colecaoDebitoACobrar");
 			sessao.removeAttribute("colecaoCreditoARealizar");
@@ -118,14 +119,18 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 					
 					Collection<ContaValoresHelper> colecaoConta = new ArrayList<ContaValoresHelper>();
 					Collection<ContaValoresHelper> colecaoContaPreteritos = new ArrayList<ContaValoresHelper>();
+					Collection<ContaValoresHelper> colecaoContaClienteAtual = new ArrayList<ContaValoresHelper>();
 					colecaoConta.addAll(helper.getColecaoContasValoresImovel());
-					colecaoContaPreteritos.addAll(helper.getColecaoContasValoresPreteritos());
+					colecaoConta.addAll(helper.getColecaoContasValoresPreteritos());
 
 					// CONTA
 					sessao.setAttribute("colecaoConta", colecaoConta);
 					
+					// CONTA
+					sessao.setAttribute("colecaoContaClienteAtual", helper.getColecaoContasValoresImovel());
+					
 					// debitos pretéritos
-					sessao.setAttribute("colecaoContaPreteritos", colecaoContaPreteritos);
+					sessao.setAttribute("colecaoContaPreteritos", helper.getColecaoContasValoresPreteritos());
 
 					// DEBITO_A_COBRAR
 					sessao.setAttribute("colecaoDebitoACobrar", helper.getColecaoDebitoACobrar());

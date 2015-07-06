@@ -29,7 +29,7 @@
 <html:javascript staticJavascript="false"  formName="DebitoCreditoDadosSelecaoExtratoActionForm"/>
 
 <SCRIPT LANGUAGE="JavaScript">
-<!--
+//<!--
 
 	function validarForm(form){
 		if (validateDebitoCreditoDadosSelecaoExtratoActionForm(form)){
@@ -67,6 +67,7 @@
 		else if (validarCamposDinamicos(form)){
 		
 			var idsConta = obterValorCheckboxMarcadoPorNome("conta");
+			var idsContaPreteritas = obterValorCheckboxMarcadoPorNome("debitosPreteritos");
 			var idsDebito = obterValorCheckboxMarcadoPorNome("debito");
 			var idsCredito = obterValorCheckboxMarcadoPorNome("credito");
 			var idsGuiaPagamento = obterValorCheckboxMarcadoPorNome("guiaPagamento");
@@ -75,6 +76,11 @@
 			
 			if (idsConta != null && idsConta.length > 0){
 				urlTransferencia = urlTransferencia + "conta=" + idsConta;
+				concatenador = true;
+				
+			}
+			if (idsContaPreteritas != null && idsContaPreteritas.length > 0){
+				urlTransferencia = urlTransferencia + "debitosPreteritos=" + idsContaPreteritas;
 				concatenador = true;
 				
 			}
@@ -419,6 +425,7 @@ function calcularDesconto(){
 <html:hidden property="idsGuia"/>
 <html:hidden property="idsParcelamento"/>
 
+<input type="hidden" name="checkDebitosPreteritos" value="0">
 <input type="hidden" name="checkConta" value="0">
 <input type="hidden" name="checkCredito" value="0">
 <input type="hidden" name="checkDebito" value="0">
@@ -604,9 +611,9 @@ function calcularDesconto(){
 			<%BigDecimal valorTotalConta = new BigDecimal("0.00");%>
 			<%BigDecimal valorTotalAcrescimo = new BigDecimal("0.00");%>
 
-			<logic:present name="colecaoConta">
+			<logic:present name="colecaoContaClienteAtual">
 			
-			<logic:notEmpty name="colecaoConta">
+			<logic:notEmpty name="colecaoContaClienteAtual">
 
 			<tr>
 				<td>
@@ -617,7 +624,7 @@ function calcularDesconto(){
 										
 					<table width="100%" align="center" bgcolor="#90c7fc">
 										
-					<logic:iterate name="colecaoConta" id="conta" type="ContaValoresHelper">
+					<logic:iterate name="colecaoContaClienteAtual" id="conta" type="ContaValoresHelper">
 
 						<%valorTotalConta = valorTotalConta.add(conta.getValorTotalConta()); %>
 						<%valorTotalAcrescimo = valorTotalAcrescimo.add(conta.getValorTotalContaValoresParcelamento()); %>
@@ -632,7 +639,9 @@ function calcularDesconto(){
 												
 												
 						<td align="center" width="5%">
-							<INPUT TYPE="checkbox" NAME="conta" value="<%="" + conta.getConta().getId().intValue() %>">
+							<INPUT TYPE="checkbox" NAME="conta" value="<%="" + conta.getConta().getId().intValue() %>" 
+							alt="<%="" + Util.formatarMoedaReal(conta.getValorTotalConta()).trim()%>
+							<%=";" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>">
 						</td>
 						
 						
@@ -835,7 +844,7 @@ function calcularDesconto(){
 					<tr bgcolor="#90c7fc">
 
 						<td width="5%" height="20">
-							<strong><a href="javascript:facilitador(document.forms[0].checkConta,'conta');" id="0">Todos</a></strong>
+							<strong><a href="javascript:facilitador(document.forms[0].checkDebitosPreteritos,'debitosPreteritos');" id="0">Todos</a></strong>
 						</td>
 						<td width="15%">
 							<div align="center"><strong>Mês/Ano</strong></div>
@@ -891,7 +900,9 @@ function calcularDesconto(){
 												
 												
 						<td align="center" width="5%">
-							<INPUT TYPE="checkbox" NAME="conta" value="<%="" + conta.getConta().getId().intValue() %>">
+							<INPUT TYPE="checkbox" NAME="debitosPreteritos" value="<%="" + conta.getConta().getId().intValue() %>" 
+							alt="<%="" + Util.formatarMoedaReal(conta.getValorTotalConta()).trim()%>
+							<%=";" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>">
 						</td>
 						
 						
