@@ -76048,11 +76048,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		this.atualizarLigacaoEsgotoPorRota(rota, atividade);
 
-//		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-//
-//		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
-//		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
-//		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+
+		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
+		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
 
 		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
 		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);

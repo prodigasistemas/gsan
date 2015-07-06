@@ -2503,40 +2503,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta = null;
 
 		try {
-			// consulta = "select
-			// cr.id,cr.numeroPrestacaoRealizada,cr.numeroPrestacaoRealizada,cr.valorCredito,cr.valorResidualMesAnterior,"
-			// +
-			// "creditoTipo.id,lancamentoItemContabil.id,localidade.id,quadra.id,cr.codigoSetorComercial,cr.numeroQuadra,cr.numeroLote,
-			// "
-			// +
-			// "cr.numeroSubLote,cr.anoMesReferenciaCredito,cr.anoMesCobrancaCredito,cr.numeroPrestacaoRealizada,cr.numeroPrestacaoCredito,
-			// "
-			// + "creditoOrigem.id "
-			// + "from CreditoARealizar cr "
-			// + "inner join cr.debitoCreditoSituacaoAtual dcs "
-			// + "inner join cr.imovel im "
-			// + "inner join cr.creditoTipo creditoTipo "
-			// + "inner join cr.lancamentoItemContabil lancamentoItemContabil "
-			// + "inner join cr.localidade localidade "
-			// + "inner join cr.quadra quadra "
-			// + "inner join cr.creditoOrigem creditoOrigem "
-			// + "left join cr.parcelamento parcelamento "
-			// + "where im.id = :imovelId and cr.debitoCreditoSituacaoAtual.id =
-			// :debitoCreditoSituacaoAtualId "
-			// + "and (cr.numeroPrestacaoRealizada < cr.numeroPrestacaoCredito
-			// or cr.valorResidualMesAnterior > 0) and "
-			// + " ((parcelamento.id is null) "
-			// + "or (cr.numeroPrestacaoRealizada > 0) "
-			// + "or (parcelamento.id is not null and
-			// cr.numeroPrestacaoRealizada = 0 and
-			// parcelamento.anoMesReferenciaFaturamento < :anoMesFaturamento))
-			// ";
-			//
-			// retorno = session.createQuery(consulta).setInteger("imovelId",
-			// imovelId.intValue()).setInteger(
-			// "debitoCreditoSituacaoAtualId",
-			// debitoCreditoSituacaoAtualId).setInteger(
-			// "anoMesFaturamento", anoMesFaturamento).list();
 
 			consulta = "select "
 					+ "  crar.crar_id as idCreditoARealizar, " //0
@@ -60708,35 +60674,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	private String getSqlApagarContasFaturamento2(ApagarDadosFaturamentoHelper helper, String nomeTabela) {
 
 		StringBuilder strDelete = new StringBuilder();
-		strDelete.append("delete from ")
-				.append(nomeTabela)
-				.append(" where cnta_id in ")
-				.append(" (select cnta.cnta_id from faturamento.conta cnta ");
+		strDelete.append(" (select cnta.cnta_id from faturamento.conta cnta ");
 		
 		if(helper.getIdImovel() == null || helper.getIdImovel().equals("")){
 			
 			strDelete.append(" inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) ");
-			
-			if (!helper.getRota().getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
-
 				strDelete.append(" inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) ")
 						.append(" inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) ")
 						.append(" left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) ")
 						.append(" where rota.rota_id = " + helper.getRota().getId().intValue())
 						.append(" and imov.rota_idalternativa is null ");
-				
-			} else {
-				strDelete.append(" inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) ")
-						.append(" where rota.rota_id =  " + helper.getRota().getId().intValue());
-			}
-
 			strDelete.append(" and cnta.cnta_amreferenciaconta = " + helper.getAnoMesFaturamento())
 					.append(" and cnta.dcst_idatual = " + helper.getIdDebitoCreditoSituacaoAtual());
-          
-			// Alteracao para regerar todas as contas PF ao faturar o grupo
-			if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 				strDelete.append(" and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ");	
-			}
 			
 			strDelete.append(")");
 
@@ -60749,37 +60699,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						.append(Util.getSQLDate(helper.getDataEmissaoFinal()))
 						.append(" )");
 			}
-			
-			//UTILIZADO APENAS NO PRÉ FATURAMENTO
-			if (helper.getFaturamentoGrupo() != null) {
-				strDelete.append(strDelete.toString().substring(0, strDelete.toString().length() - 1))
-						.append(" and cnta.ftgr_id = )" + helper.getFaturamentoGrupo().getId());
-			}
-
-		} else{
-			
-			strDelete.append(" left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) ")
-					.append(" where cnta.imov_id = " + helper.getIdImovel().intValue())
-					.append(" and cnta.cnta_amreferenciaconta = " + helper.getAnoMesFaturamento())
-					.append(" and cnta.dcst_idatual = " + helper.getIdDebitoCreditoSituacaoAtual());
-					
-			// Alteracao para regerar todas as contas PF ao faturar o grupo
-			if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-				strDelete.append(" and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ");	
-			}
-				
-			strDelete.append(")");
-				
-			//UTILIZADO APENAS NO FATURAMENTO
-			if (helper.getDataEmissaoInicial() != null) {
-				strDelete.append(strDelete.toString().substring(0, strDelete.toString().length() - 1))
-				.append(" and cnta.cnta_dtemissao between ")
-				.append(Util.getSQLDate(helper.getDataEmissaoInicial()))
-				.append(" and ")
-				.append(Util.getSQLDate(helper.getDataEmissaoFinal()))
-				.append(" )");
-			}
-			
 		}
 			
 		return strDelete.toString();	
