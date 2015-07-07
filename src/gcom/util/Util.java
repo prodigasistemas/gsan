@@ -356,9 +356,7 @@ public class Util {
 		}
 	}
 
-	public static void main (String [] args) {
-		System.out.println(Util.subtrairMesDoAnoMes(201406, 24));
-	}
+	
 	public static String formatarMesAnoParaAnoMes(String data) {
 
 		String mes = data.substring(0, 2);
@@ -796,7 +794,12 @@ public class Util {
 		}
 		return retorno;
 	}
-
+	
+    public static String formatarData(Date data, FormatoData formato){
+        SimpleDateFormat format = new SimpleDateFormat(formato.getFormato());
+        return data != null ? format.format(data) : "";
+    }
+	
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
 	 * 
@@ -1634,6 +1637,16 @@ public class Util {
 		Date retorno = null;
 		try {
 			retorno = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "BR")).parse(data);
+		} catch (Exception e) {
+			new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
+		}
+		return retorno;
+	}
+	
+	public static Date converteStringParaDateAmericana(String data) {
+		Date retorno = null;
+		try {
+			retorno = new SimpleDateFormat("yyyy-MM-dd").parse(data);
 		} catch (Exception e) {
 			new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
 		}

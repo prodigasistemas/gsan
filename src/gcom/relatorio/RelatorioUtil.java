@@ -18,7 +18,7 @@ public class RelatorioUtil {
 
 	private ReportUtil util = new ReportUtil();
 	private ReportDTO relatorio;
-
+ 
 	@SuppressWarnings("rawtypes")
 	public RelatorioUtil(String titulo, String nome, Class classe, FormatoRelatorio formato) {
 		this.relatorio = new ReportDTO(titulo, nome, classe);
