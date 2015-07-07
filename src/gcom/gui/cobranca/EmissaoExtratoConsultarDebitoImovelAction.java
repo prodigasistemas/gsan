@@ -37,11 +37,14 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 		
 		ConsultarDebitoImovelActionForm consultarDebitoImovelActionForm = (ConsultarDebitoImovelActionForm) actionForm;
 		
+		
+		
 		Collection<ContaValoresHelper> colecaoContaValores =  null;
 		Collection<DebitoACobrar> colecaoDebitoACobrar = null;
 		Collection<CreditoARealizar> colecaoCreditoARealizar = null;
 		Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores = null;
-		
+
+       		
 		String[] idsContas = consultarDebitoImovelActionForm.getContasSelecionadas();
 		String[] idsDebitos = consultarDebitoImovelActionForm.getDebitosSelecionados();
 		String[] idsCreditos = consultarDebitoImovelActionForm.getCreditosSelecionados();
@@ -49,29 +52,30 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 		
 		Object[] contas = this.obterContasSelecionadas(idsContas, sessao);
 		Object[] debitos = this.obterDebitosSelecionados(idsDebitos, sessao);
-        Object[] creditos = this.obterCreditosSelecionadas(idsCreditos, sessao);
-        Object[] guiasPagamento = this.obterGuiasSelecionadas(idsGuias, sessao);
+		Object[] creditos = this.obterCreditosSelecionadas(idsCreditos, sessao);
+		Object[] guiasPagamento = this.obterGuiasSelecionadas(idsGuias, sessao);
 		
 		//CONTAS
 		if(contas != null){
-        	colecaoContaValores = (Collection) contas[0];
-        }
-		
+		   colecaoContaValores = (Collection) contas[0];
+		}
+				
 		//DÉBITOS A COBRAR
-        if(debitos != null){
-        	colecaoDebitoACobrar = (Collection) debitos[0];
-        }
-        
-        
+		if(debitos != null){
+		   colecaoDebitoACobrar = (Collection) debitos[0];
+		}
+		        
         //CRÉDITOS A REALIZAR
         if(creditos != null){
-        	colecaoCreditoARealizar = (Collection) creditos[0];
-        }
-        
-        //GUIAS DE PAGAMENTO
-        if(guiasPagamento != null){
-        	colecaoGuiaPagamentoValores = (Collection) guiasPagamento[0];
-        }
+           colecaoCreditoARealizar = (Collection) creditos[0];
+		}
+		        
+		//GUIAS DE PAGAMENTO
+		if(guiasPagamento != null){
+		   colecaoGuiaPagamentoValores = (Collection) guiasPagamento[0];
+		}
+		
+		
 		
 		ContaValoresHelper dadosConta = null;
 		
@@ -167,7 +171,7 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 		return retorno;		
 	}
 	
-	private Object[] obterContasSelecionadas(String[] idsContas, HttpSession sessao) {
+	private Object[] obterContasSelecionadas(String[] idsContas,HttpSession sessao) {
 
 		Object[] retorno = null;
 		Collection<ContaValoresHelper> colecaoContas = null;
@@ -177,8 +181,9 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 		if (idsContas != null && !idsContas.equals("")) {
 			retorno = new Object[3];
 			colecaoContas = new ArrayList();
+            
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContasImovel");
 
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContas");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 
@@ -214,7 +219,7 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 			retorno = new Object[2];
 			colecaoDebitos = new ArrayList();
 			
-			Collection colecaoDebitosSessao = (Collection) sessao.getAttribute("colecaoDebitoACobrar");
+			Collection colecaoDebitosSessao = (Collection) sessao.getAttribute("colecaoDebitoACobrarConsultar");
 			Iterator itColecaoDebitosSessao = colecaoDebitosSessao.iterator();
 			DebitoACobrar debitoACobrar = null;
 			
@@ -248,7 +253,7 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 			retorno = new Object[2];
 			colecaoCreditos = new ArrayList();
 			
-			Collection colecaoCreditosSessao = (Collection) sessao.getAttribute("colecaoCreditoARealizar");
+			Collection colecaoCreditosSessao = (Collection) sessao.getAttribute("colecaoCreditoARealizarConsultar");
 			Iterator itColecaoCreditosSessao = colecaoCreditosSessao.iterator();
 			CreditoARealizar creditoARealizar = null;
 			
@@ -282,7 +287,7 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 			retorno = new Object[2];
 			colecaoGuias = new ArrayList();
 			
-			Collection colecaoGuiasSessao = (Collection) sessao.getAttribute("colecaoGuiaPagamentoValores");
+			Collection colecaoGuiasSessao = (Collection) sessao.getAttribute("colecaoGuiaPagamentoValoresConsultar");
 			Iterator itColecaoGuiasSessao = colecaoGuiasSessao.iterator();
 			GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = null;
 			
