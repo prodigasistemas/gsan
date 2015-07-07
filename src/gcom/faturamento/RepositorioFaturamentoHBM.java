@@ -9064,18 +9064,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "crar_tmultimaalteracao = :dataAtual"
 						+ " where crar_id = :idCreditoARelizar";
 
-				session.createQuery(atualizarImovel).setShort(
-						"numeroPrestacao",
-						creditoARealizar.getNumeroPrestacaoRealizada())
-						.setBigDecimal("valorMesAnterior",
-								creditoARealizar.getValorResidualMesAnterior())
-						.setInteger("idCreditoARelizar",
-								creditoARealizar.getId().intValue())
-						.setInteger(
-								"anoMesPrestacao",
-								creditoARealizar.getAnoMesReferenciaPrestacao()
-										.intValue()).setTimestamp("dataAtual",
-								new Date()).executeUpdate();
+				session.createQuery(atualizarImovel)
+						.setShort("numeroPrestacao",creditoARealizar.getNumeroPrestacaoRealizada())
+						.setBigDecimal("valorMesAnterior",creditoARealizar.getValorResidualMesAnterior())
+						.setInteger("idCreditoARelizar",creditoARealizar.getId().intValue())
+						.setInteger("anoMesPrestacao", creditoARealizar.getAnoMesReferenciaPrestacao() .intValue()).setTimestamp("dataAtual",new Date())
+						.executeUpdate();
 				}
 				else{
 					
@@ -9086,19 +9080,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "crar_tmultimaalteracao = :dataAtual"
 						+ " where crar_id = :idCreditoARelizar";
 
-					session.createQuery(atualizarImovel).setShort(
-						"numeroPrestacao",
-						creditoARealizar.getNumeroPrestacaoRealizada())
-						.setBigDecimal("valorMesAnterior",
-								creditoARealizar.getValorResidualMesAnterior())
-						.setInteger("idCreditoARelizar",
-								creditoARealizar.getId().intValue())
-						.setInteger(
-								"anoMesPrestacao",
-								creditoARealizar.getAnoMesReferenciaPrestacao()
-										.intValue()).setTimestamp("dataAtual",
-								new Date()).setBigDecimal("valorConcedidoMes", creditoARealizar.getValorResidualConcedidoMes())
-								.executeUpdate();
+					session.createQuery(atualizarImovel)
+							.setShort("numeroPrestacao",creditoARealizar.getNumeroPrestacaoRealizada())
+							.setBigDecimal("valorMesAnterior",creditoARealizar.getValorResidualMesAnterior())
+							.setInteger("idCreditoARelizar", creditoARealizar.getId().intValue())
+							.setInteger( "anoMesPrestacao", creditoARealizar.getAnoMesReferenciaPrestacao() .intValue()).setTimestamp("dataAtual", new Date())
+							.setBigDecimal("valorConcedidoMes", creditoARealizar.getValorResidualConcedidoMes())
+							.executeUpdate();
 				}
 				
 			} 
@@ -9111,14 +9099,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "crar_vlresidualmesanterior = :valorMesAnterior, crar_tmultimaalteracao = :dataAtual "
 						+ "where crar_id = :idCreditoARelizar";
 
-					session.createQuery(atualizarImovel).setShort(
-						"numeroPrestacao",
-						creditoARealizar.getNumeroPrestacaoRealizada())
-						.setBigDecimal("valorMesAnterior",
-								creditoARealizar.getValorResidualMesAnterior())
-						.setInteger("idCreditoARelizar",
-								creditoARealizar.getId().intValue())
-						.setTimestamp("dataAtual", new Date()).executeUpdate();
+					session.createQuery(atualizarImovel)
+							.setShort("numeroPrestacao", creditoARealizar.getNumeroPrestacaoRealizada())
+							.setBigDecimal("valorMesAnterior", creditoARealizar.getValorResidualMesAnterior())
+							.setInteger("idCreditoARelizar", creditoARealizar.getId().intValue())
+							.setTimestamp("dataAtual", new Date())
+							.executeUpdate();
 				}
 				else{
 					
@@ -9128,25 +9114,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ "crar_tmultimaalteracao = :dataAtual "
 						+ "where crar_id = :idCreditoARelizar";
 
-					session.createQuery(atualizarImovel).setShort(
-						"numeroPrestacao",
-						creditoARealizar.getNumeroPrestacaoRealizada())
-						.setBigDecimal("valorMesAnterior",
-								creditoARealizar.getValorResidualMesAnterior())
-						.setInteger("idCreditoARelizar",
-								creditoARealizar.getId().intValue())
-						.setTimestamp("dataAtual", new Date()).setBigDecimal("valorConcedidoMes", creditoARealizar.getValorResidualConcedidoMes())
-						.executeUpdate();
+					session.createQuery(atualizarImovel)
+							.setShort("numeroPrestacao", creditoARealizar.getNumeroPrestacaoRealizada())
+							.setBigDecimal("valorMesAnterior", creditoARealizar.getValorResidualMesAnterior())
+							.setInteger("idCreditoARelizar", creditoARealizar.getId().intValue())
+							.setTimestamp("dataAtual", new Date()).setBigDecimal("valorConcedidoMes", creditoARealizar.getValorResidualConcedidoMes())
+							.executeUpdate();
 				}
-				
 			}
-
 		} catch (HibernateException e) {
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 	}
