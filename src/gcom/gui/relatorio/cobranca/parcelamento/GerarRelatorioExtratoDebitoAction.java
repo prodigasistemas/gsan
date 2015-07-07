@@ -379,7 +379,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	}
 
 	private void setDadosConsultarDebitoPorImovel(Fachada fachada, HttpSession sessao) throws ControladorException {
-		Integer idImovel = new Integer((String) sessao.getAttribute("idImovel"));
+		Integer idImovel = new Integer((String) sessao.getAttribute("idImovelConsultar"));
 
 		imovel = fachada.pesquisarImovel(idImovel);
 		inscricao = imovel.getInscricaoFormatada();

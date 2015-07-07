@@ -514,6 +514,13 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 				
 				//seta na sessão para emitir o extrato de débito
 				sessao.setAttribute("colecaoContaValores",colecaoContaValores);
+				//seta sessão para consulta de imovel copia pois os mesmos estavam sendo removidos da sessão mas prudente duplicar
+				sessao.setAttribute("colecaoContasImovel",colecaoContaValores);
+				sessao.setAttribute("colecaoDebitoACobrarConsultar",	colecaoDebitoACobrar);
+				sessao.setAttribute("colecaoCreditoARealizarConsultar",colecaoCreditoARealizar);
+				sessao.setAttribute("colecaoGuiaPagamentoValoresConsultar", colecaoGuiaPagamentoValores);
+				sessao.setAttribute("idImovelConsultar", codigoImovel);
+				
 				sessao.setAttribute("colecaoContaValoresPreteritos",colecaoContaValoresPreteritos);
 				sessao.setAttribute("colecaoContas",colecaoContas);
 				
@@ -529,6 +536,14 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 			}else{
 				//seta na sessão para emitir o extrato de débito
 				sessao.setAttribute("colecaoContaValores",colecaoContaValores);
+				
+				//seta sessão para consulta de imovel copia pois os mesmos estavam sendo removidos da sessão mas prudente duplicar
+				sessao.setAttribute("colecaoContasImovel",colecaoContaValores);
+				sessao.setAttribute("colecaoDebitoACobrarConsultar",	colecaoDebitoACobrar);
+				sessao.setAttribute("colecaoCreditoARealizarConsultar",colecaoCreditoARealizar);
+				sessao.setAttribute("colecaoGuiaPagamentoValoresConsultar", colecaoGuiaPagamentoValores);
+				sessao.setAttribute("idImovelConsultar", codigoImovel);
+				
 				sessao.setAttribute("colecaoContaValoresPreteritos",colecaoContaValoresPreteritos);
 				sessao.setAttribute("colecaoContas",colecaoContas);
 				
@@ -546,6 +561,8 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 		
 		Short indicadorEmissaoExtratoNaConsulta = fachada.pesquisarParametrosDoSistema().getIndicadorEmissaoExtratoNaConsulta();
 		consultarDebitoImovelActionForm.setIndicadorEmissaoExtratoNaConsulta(indicadorEmissaoExtratoNaConsulta.toString());
+		String[] contasSelecionadas = {};
+		consultarDebitoImovelActionForm.setContasSelecionadas(contasSelecionadas);
 		
 		if (httpServletRequest.getAttribute("caminhoRetornoTelaConsultaDebito") != null) {
 

@@ -332,4 +332,8 @@ public class ConsultarDebitoClienteActionForm extends ActionForm {
 		this.nomeClienteSuperior = nomeClienteSuperior;
 	}
 	
+	public boolean possuiCliente() {
+		return this.getCodigoCliente() != null && !this.getCodigoCliente().equals("");
+	}
+	
 }

@@ -43,6 +43,32 @@ import org.apache.struts.action.ActionMapping;
 public class GerarRelatorioExtratoDebitoClienteAction extends
 		ExibidorProcessamentoTarefaRelatorio {
 
+	private String nomeCliente;    	
+	private String cpfCnpj;
+	private String tipoResponsavel;
+	private String dataEmissao;
+	private String debitosACobrar;
+	
+	private Collection<ContaValoresHelper> colecaoContas;
+	private BigDecimal valorTotalContas;
+	private BigDecimal acrescimoImpontualidade;
+	private BigDecimal valorDocumento;
+	private String valorContas;
+
+	private void init() {
+		nomeCliente = "";    	
+		cpfCnpj = "";
+		tipoResponsavel = "";
+		dataEmissao = "";
+		debitosACobrar = "";
+		valorContas = "";
+		
+		colecaoContas =  null;
+		valorTotalContas = new BigDecimal("0.00");
+		acrescimoImpontualidade = new BigDecimal("0.00");
+		valorDocumento = new BigDecimal("0.00");
+
+	}
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -50,32 +76,16 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 		ActionForward retorno = null;
 		Fachada fachada = Fachada.getInstancia();
 
+		init();
+		
 		HttpSession sessao = httpServletRequest.getSession(false);
         Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		ConsultarDebitoClienteActionForm consultarDebitoClienteActionForm = (ConsultarDebitoClienteActionForm) actionForm;
-					
-		//Linha 2
-		String nomeCliente = "";    	
-		String cpfCnpj = "";
 		
-		//Linha 3
-		String enderecoCliente = "";
-		
-		//Linha 4 
-		String tipoResponsavel = "";
-		
-		//Linha 11
-		String dataEmissao = "";
-			
-		Collection<ContaValoresHelper> colecaoContas =  null;
-		BigDecimal valorTotalContas = new BigDecimal("0.00");
-		BigDecimal acrescimoImpontualidade = new BigDecimal("0.00");
-
-		//Consultar Débito 			
 		colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValores");
-		String debitosACobrar = (String)sessao.getAttribute("valorDebitoACobrar");
 		acrescimoImpontualidade = Util.formatarMoedaRealparaBigDecimal(sessao.getAttribute("valorAcrescimo").toString());
-		String valorContas = (String)sessao.getAttribute("valorConta");
+		debitosACobrar = (String)sessao.getAttribute("valorDebitoACobrar");
+		valorContas = (String)sessao.getAttribute("valorConta");
 		
 		Map mapContas =  retirarContasEmRevisaoDeColecaoContas(colecaoContas);
 		colecaoContas =  (Collection)mapContas.get("colecaoContasSemContasEmRevisao");
@@ -83,43 +93,35 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 		Date maiorDataVencimentoContas = (Date)mapContas.get("maiorDataVencimentoContas");
 		
 		BigDecimal valorContasBigDecimal = Util.formatarMoedaRealparaBigDecimal(valorContas);
-	    valorContasBigDecimal = valorContasBigDecimal.subtract(valorTotalContasRevisao);
-	    valorContas = Util.formatarMoedaReal(valorContasBigDecimal);
+	    valorContas = Util.formatarMoedaReal(valorContasBigDecimal.subtract(valorTotalContasRevisao));
 	    
-		Integer idCliente = null;
-		if (consultarDebitoClienteActionForm.getCodigoCliente() != null &&
-			!consultarDebitoClienteActionForm.getCodigoCliente().equals("")){		
+	    Integer idCliente = null;
+		if (consultarDebitoClienteActionForm.possuiCliente()){		
 			idCliente = new Integer(consultarDebitoClienteActionForm.getCodigoCliente());
 			nomeCliente = consultarDebitoClienteActionForm.getNomeCliente();
 			cpfCnpj = consultarDebitoClienteActionForm.getCpfCnpj();
-		}
-		else {
-			
+		} else {
 			idCliente = new Integer(consultarDebitoClienteActionForm.getCodigoClienteSuperior());
 			nomeCliente = consultarDebitoClienteActionForm.getNomeClienteSuperior();
 			cpfCnpj = consultarDebitoClienteActionForm.getCpfCnpj();
-			}
+		}
 		
 		Cliente cliente = fachada.pesquisarClienteDigitado(idCliente);
 		
 		if(consultarDebitoClienteActionForm.getTipoRelacao() != null){
-			  tipoResponsavel = consultarDebitoClienteActionForm.getTipoRelacao();
+		  tipoResponsavel = consultarDebitoClienteActionForm.getTipoRelacao();
 		}
-		
-		enderecoCliente = consultarDebitoClienteActionForm.getEnderecoCliente();
 		
 		RelatorioExtratoDebitoCliente relatorioExtratoDebitoCliente = new RelatorioExtratoDebitoCliente((Usuario)(httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 		 
 		String tipo = (String)httpServletRequest.getParameter("tipo");
 		ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = fachada.gerarEmitirExtratoDebito(
                  null, new Short("0"), colecaoContas, null, null,
-                 new BigDecimal("0.00"), new BigDecimal("0.00"), Util.formatarMoedaRealparaBigDecimal( valorContas ), null, cliente,null, null, null);
+                 getValorAcrescimos(tipo), new BigDecimal("0.00"), getValorDocumento(tipo), null, cliente,null, null, null);
        
         CobrancaDocumento documentoCobranca = extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemContas().iterator().next().getCobrancaDocumento();
         
-        if(cliente.getClienteTipo() != null
-        		&& cliente.getClienteTipo().getEsferaPoder()!=null
-					&& cliente.getClienteTipo().getEsferaPoder().getId().compareTo(EsferaPoder.FEDERAL.intValue())==0){
+        if(cliente.isClienteFederal()){
 					
         	if(documentoCobranca.getValorImpostos()!=null){
         		relatorioExtratoDebitoCliente.addParametro("valorTotalImpostos",Util.formatarMoedaReal(documentoCobranca.getValorImpostos()));
@@ -330,22 +332,14 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 			
 		}
 		
-		//Linha 2
 		 relatorioExtratoDebitoCliente.addParametro("nomeCliente",nomeCliente);
 		 relatorioExtratoDebitoCliente.addParametro("codigoClienteResponsavel", idCliente.toString());
 		 relatorioExtratoDebitoCliente.addParametro("cpfCnpj", cpfCnpj);
-		 
-		//Linha 3
-		 relatorioExtratoDebitoCliente.addParametro("enderecoCliente", enderecoCliente);
-
-		
-		//Linha 4
+		 relatorioExtratoDebitoCliente.addParametro("enderecoCliente", consultarDebitoClienteActionForm.getEnderecoCliente());
 		 relatorioExtratoDebitoCliente.addParametro("tipoResponsavel", tipoResponsavel);
-		 
-		//Linhas 11
 		 relatorioExtratoDebitoCliente.addParametro("dataEmissao",dataEmissao);
-		 
 		 relatorioExtratoDebitoCliente.addParametro("valorContas",valorContas);		 
+
 		 BigDecimal valorGuiasPagamento = Util.formatarMoedaRealparaBigDecimal( sessao.getAttribute("valorGuiaPagamento").toString() );		 
 		 relatorioExtratoDebitoCliente.addParametro("valorGuiasPagamento", Util.formatarMoedaReal( valorGuiasPagamento ) );
 		 
@@ -353,13 +347,11 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 		 relatorioExtratoDebitoCliente.addParametro("valorDescontosCreditos", Util.formatarMoedaReal( valorDescontosCreditos ) );
 		 
 		 relatorioExtratoDebitoCliente.addParametro("valorTotalContas", Util.formatarMoedaReal(valorTotalContas));
-		
 		relatorioExtratoDebitoCliente.addParametro("colecaoContas",colecaoContas);
 		
 		String tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
 
-		relatorioExtratoDebitoCliente.addParametro("tipoFormatoRelatorio", Integer
-				.parseInt(tipoRelatorio));
+		relatorioExtratoDebitoCliente.addParametro("tipoFormatoRelatorio", Integer.parseInt(tipoRelatorio));
 		try {
 			retorno = processarExibicaoRelatorio(relatorioExtratoDebitoCliente,
 					tipoRelatorio, httpServletRequest, httpServletResponse,
@@ -411,5 +403,27 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 		retorno.put("maiorDataVencimentoContas",maiorDataVencimentoContas);
 		
 		return retorno;
+	}
+	
+	private BigDecimal getValorAcrescimos(String tipo) {
+		BigDecimal acrescimo = new BigDecimal(0.00);
+		
+		if (tipo != null && tipo.equals("total")) {
+			acrescimo =  acrescimoImpontualidade;
+		}
+		return acrescimo;
+	}
+	
+	private BigDecimal getValorDocumento(String tipo) {
+		BigDecimal valorDocumento = new BigDecimal(0.00);
+		
+		if (tipo != null) {
+			if (tipo.equals("total")) {
+				valorDocumento = Util.formatarMoedaRealparaBigDecimal(valorContas).add(acrescimoImpontualidade);
+			} else if (tipo.equals("conta")) {
+				valorDocumento = Util.formatarMoedaRealparaBigDecimal(valorContas);
+			} 
+		}
+		return valorDocumento;
 	}
 }
