@@ -182,9 +182,13 @@ public class EmissaoExtratoConsultarDebitoImovelAction extends GcomAction {
 			retorno = new Object[3];
 			colecaoContas = new ArrayList();
             
+			Collection contas = new ArrayList();
 			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContasImovel");
+			Collection colecaoContasPreteritasSessao = (Collection) sessao.getAttribute("colecaoContaValoresPreteritos");
+			contas.addAll(colecaoContasSessao);
+			contas.addAll(colecaoContasPreteritasSessao);
 
-			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
+			Iterator itColecaoContasSessao = contas.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 
 			while (itColecaoContasSessao.hasNext()) {
