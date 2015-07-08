@@ -42009,21 +42009,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * atual menos 3 dias e a data atual Desenvolvedor: Raphael
 				 * Rossiter em 19/02/2008 Analista: Aryed Lins
 				 */
-//				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-//
-//					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
-//					helper.setDataEmissaoFinal(new Date());
-//				} else {
-//					helper.setDataEmissaoInicial(null);
-//					helper.setDataEmissaoFinal(null);
-//				}
-				
-				if (helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+
+					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
+					helper.setDataEmissaoFinal(new Date());
+				} else {
 					helper.setDataEmissaoInicial(null);
 					helper.setDataEmissaoFinal(null);
 				}
-
-
+				
 				try {
 
 					repositorioFaturamento.apagarContaImpressao(helper);
