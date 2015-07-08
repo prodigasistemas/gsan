@@ -675,4 +675,8 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	public void setIndicadorNegativacaoPeriodo(Short indicadorNegativacaoPeriodo) {
 		this.indicadorNegativacaoPeriodo = indicadorNegativacaoPeriodo;
 	}
+	
+	public boolean isClienteFederal() {
+		return this.getClienteTipo() != null && this.getClienteTipo().getEsferaPoder()!=null && this.getClienteTipo().getEsferaPoder().getId().compareTo(EsferaPoder.FEDERAL.intValue())==0;
+	}
 }

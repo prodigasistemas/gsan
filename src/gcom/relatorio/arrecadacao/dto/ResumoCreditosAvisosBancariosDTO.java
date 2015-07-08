@@ -1,5 +1,6 @@
 package gcom.relatorio.arrecadacao.dto;
 
+import gcom.util.FormatoData;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
@@ -12,10 +13,10 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 
 	private static final long serialVersionUID = 7599238519918851586L;
 	
-	@ReportElementType(description="Data do Crédito Previsto", group=true)
+	@ReportElementType(description="Data do Crédito Previsto", group=true, type=ReportElementType.TYPE_DATE)
 	private String dataPagamentoPrevisto;
 	
-	@ReportElementType(description="Data do Aviso")
+	@ReportElementType(description="Data do Aviso", type=ReportElementType.TYPE_DATE)
 	private String dataRealizada;
 	
 	@ReportElementType(description="Arrecadador")
@@ -28,8 +29,8 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 	
 	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento) {
 		super();
-		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto);
-		this.dataRealizada = Util.formatarData(dataRealizada);
+		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO);
+		this.dataRealizada = Util.formatarData(dataRealizada, FormatoData.AMERICANO_COM_TRACO);
 		this.descricaoArrecadador = descricaoArrecadador;
 		this.valorPagamento = Util.formatarMoedaReal(valorPagamento);
 	}

@@ -16224,6 +16224,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		conta.setValorCreditos(conta.getValorCreditos().add(creditoRealizado.getValorCredito()));
 		getControladorUtil().atualizar(conta);
+		
+		creditoARealizar.setNumeroPrestacaoRealizada(new Short("1"));
+		getControladorUtil().atualizar(creditoARealizar);
 	}
 	
 	private void incluirDebitoCobradoContaRetificadaDiferenca2Reais(Conta conta, DebitoACobrar debitoACobrar) throws Exception {
@@ -16303,6 +16306,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA) && !situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
 			try {
 				novaConta = this.copiarContaCompleta(contaOriginal, motivoInclusao, referenciaContabil, novaSituacao);
+				novaConta.setDataRetificacao((new GregorianCalendar()).getTime());
+				getControladorUtil().atualizar(novaConta);
 				return novaConta;
 			} catch (Exception e) {
 				logger.error("Erro ao retificar conta para pagamentos om diferença de R$2,00", e);

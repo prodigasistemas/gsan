@@ -31696,32 +31696,24 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			.append("INNER JOIN arrecadacao.arrecadador_contrato contrato on ar.arrc_id = contrato.arrc_id ")
 			.append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ");
 		
-		StringBuilder where = new StringBuilder();
-		where.append("WHERE a.avbc_dtrealizada >= :data ")
-	      	 .append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
-	      	 .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento ");
+		StringBuilder groupBy = new StringBuilder();
+		groupBy.append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
+	      	   .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento, tarifa.actf_vltarifa ");
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT data_pagamento_previsto, data_realizada, descricao_arrecadador, sum(valor_pagamento) as total ")
-		   .append("FROM (")
+	   	sql.append("SELECT data_pagamento_previsto, data_realizada, descricao_arrecadador, sum((valor_pagamento - (qtdDocumentos * valor_tarifa))) as valorLiquido ")
+			.append("FROM (")
 		   
 		   .append(select)
-		   .append("p.pgmt_dtpagamento as data_pagamento, ")
-		   .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
-		   .append("sum(p.pgmt_vlpagamento) as valor_pagamento ")
-		   .append(from)
-		   .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
-		   .append(where)
-		   
-		   .append("UNION ")
-		   
-		   .append(select)
-		   .append("p.pghi_dtpagamento as data_pagamento, ")
-		   .append("p.pghi_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
-		   .append("sum(p.pghi_vlpagamento) as valor_pagamento ")
-		   .append(from)
-		   .append("INNER JOIN arrecadacao.pagamento_historico p ON (a.avbc_id = p.avbc_id) ")
-		   .append(where)
+           .append("p.pgmt_dtpagamento as data_pagamento, ")
+           .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
+           .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
+           .append("count(distinct p.amit_id) as qtdDocumentos, ")
+           .append("tarifa.actf_vltarifa as valor_tarifa ")
+           .append(from)
+           .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
+           .append("WHERE (p.pgmt_dtpagamento + tarifa.actf_nndiafloat) >= :data ")
+           .append(groupBy)
 		   
 		   .append(") as resumo ")
 		   .append("GROUP BY data_pagamento_previsto, data_realizada, id_arrecadador, descricao_arrecadador ")
@@ -31732,7 +31724,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("data_pagamento_previsto", Hibernate.DATE)
 					.addScalar("data_realizada", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
-					.addScalar("total", Hibernate.BIG_DECIMAL)
+					.addScalar("valorLiquido", Hibernate.BIG_DECIMAL)
 					.setDate("data", data)
 					.list();
 			

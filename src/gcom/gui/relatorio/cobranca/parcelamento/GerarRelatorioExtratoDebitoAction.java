@@ -379,7 +379,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	}
 
 	private void setDadosConsultarDebitoPorImovel(Fachada fachada, HttpSession sessao) throws ControladorException {
-		Integer idImovel = new Integer((String) sessao.getAttribute("idImovel"));
+		Integer idImovel = new Integer((String) sessao.getAttribute("idImovelConsultar"));
 
 		imovel = fachada.pesquisarImovel(idImovel);
 		inscricao = imovel.getInscricaoFormatada();
@@ -388,15 +388,16 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
 		
-		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContas");
+		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValores");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
 		colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizar");
 
 		valorDescontoCredito = (BigDecimal) sessao.getAttribute("valorCreditoARealizar");
 		valorDesconto = (BigDecimal) sessao.getAttribute("valorTotalDescontoPagamentoAVista");
-		valorDocumento = (BigDecimal) sessao.getAttribute("valorPagamentoAVistaConsultarDebitos");
+		valorDocumento = (BigDecimal) sessao.getAttribute("valorPagamentoAVista");
 		valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimo");
+		valorDocumento = valorDocumento.add(valorAcrescimosImpontualidade);
 
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarSemJurosParcelamento(colecaoDebitosACobrar);
 	}

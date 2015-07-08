@@ -257,6 +257,7 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.FormatoData;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
 import gcom.util.ParametroNaoInformadoException;
@@ -52251,12 +52252,12 @@ public class ControladorArrecadacao implements SessionBean {
 			List<ResumoCreditosAvisosBancariosDTO> resumos = repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(data);
 
 			for (ResumoCreditosAvisosBancariosDTO resumo : resumos) {
-				Date dataPagamentoPrevisto = Util.converteStringParaDate(resumo.getDataPagamentoPrevisto());
+				Date dataPagamentoPrevisto = Util.converteStringParaDateAmericana(resumo.getDataPagamentoPrevisto());
 
 				while (!Util.ehDiaUtil(dataPagamentoPrevisto, feriadosNacionais, null)) {
 					dataPagamentoPrevisto = Util.adicionarNumeroDiasDeUmaData(dataPagamentoPrevisto, 1);
 
-					resumo.setDataPagamentoPrevisto(Util.formatarData(dataPagamentoPrevisto));
+					resumo.setDataPagamentoPrevisto(Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO));
 				}
 			}
 

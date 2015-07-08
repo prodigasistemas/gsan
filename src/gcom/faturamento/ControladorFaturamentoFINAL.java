@@ -42004,7 +42004,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					helper.setDataEmissaoInicial(null);
 					helper.setDataEmissaoFinal(null);
 				}
-
+				
 				try {
 
 					repositorioFaturamento.apagarContaImpressao(helper);
@@ -42013,13 +42013,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					repositorioFaturamento.apagarClienteConta(helper);
 					repositorioFaturamento.apagarContaImpostosDeduzidos(helper);
 					repositorioFaturamento.apagarDebitoAutomaticoMovimento(helper);
+					
 					repositorioFaturamento.apagarDebitoCobradoCategoria(helper);
 					repositorioFaturamento.apagarDebitoCobrado(helper);
 					repositorioFaturamento.apagarCreditoRealizadoCategoria(helper);
 					repositorioFaturamento.apagarCreditoRealizado(helper);
+					
 					repositorioFaturamento.atualizarDebitoACobrar(helper);
 					repositorioFaturamento.atualizarCreditoARealizar(helper);
 					repositorioFaturamento.atualizarContaGeral(helper);
+					
 					repositorioFaturamento.apagarDadosCobranca(helper);
 					repositorioFaturamento.apagarConta(helper);
 
@@ -75981,7 +75984,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
 
 		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
 		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
 
 		// Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
