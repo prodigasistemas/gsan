@@ -522,7 +522,7 @@ function totalizarDebito(objeto){
 														<td width="3%" bgcolor="#90c7fc" align="center">
 												<% } else { %>
 													<tr bordercolor="#000000">
-														<td width="10%" bgcolor="#90c7fc">
+														<td width="3%" bgcolor="#90c7fc">
 												<% } %>
 														<div class="style9">
 															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
@@ -531,7 +531,7 @@ function totalizarDebito(objeto){
 														</div>
 													</td>
 															
-														<td>
+														<td width="3%">
 															<div align="center" class="style9">
 																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
 																	<strong>M&ecirc;s/Ano</strong>

@@ -1165,7 +1165,7 @@ function totalizarDebito(objeto){
 				
 					<table width="100%" cellpadding="0" cellspacing="0">
 					<tr bgcolor="#79bbfd">
-						<td colspan="7" height="20"><strong>Débitos</strong></td>
+						<td colspan="7" height="20"><strong>Débitos A Cobrar</strong></td>
 					</tr>
 					<tr bgcolor="#90c7fc">
 
