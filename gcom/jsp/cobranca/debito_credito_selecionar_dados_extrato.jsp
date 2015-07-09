@@ -1674,7 +1674,7 @@ function totalizarDebito(objeto){
 	
 	
 	<%BigDecimal valorTotalDebitosAtualizado = valorTotalDebitosFinal.add(valorTotalAcrescimo); %>
-	<%valorTotalDebitosAtualizado = valorTotalDebitosAtualizado.add(valorTotalAcrescimoPreterito); %> %>
+	<%valorTotalDebitosAtualizado = valorTotalDebitosAtualizado.add(valorTotalAcrescimoPreterito); %>
 	
 	<table width="100%" border="0">
 	<tr>
