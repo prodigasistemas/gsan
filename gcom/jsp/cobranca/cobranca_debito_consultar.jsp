@@ -27,6 +27,9 @@
  Begin
 
 var bCancel = false; 
+var radioIndConta = true;
+var radioAtualImv = true;
+var radioTodos = true;
 
 function validateConsultarDebitoActionForm(form) {                                                                   
 	if (bCancel) 
@@ -291,7 +294,6 @@ function controleClienteSuperior(){
 		form.codigoCliente.readOnly = true;
 		form.tipoRelacao.disabled = true;
 		
-		//form.responsavel[1].checked = true;
 		form.responsavel[1].disabled = false;
 		form.responsavel[2].disabled = false;
 		
@@ -377,7 +379,7 @@ function habilitarResponsavel() {
 	if(form.codigoClienteSuperior.value.length > 0){
 		form.responsavel[0].disabled = true;
 		form.responsavel[2].disabled = true;
-		form.responsavel[1].checked = true;
+		form.responsavel[0].checked = true;
 	}
 }
 

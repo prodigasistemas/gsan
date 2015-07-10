@@ -470,6 +470,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
+		boolean isClienteSuperior = relacaoTipo == 99 ? true : false;
 
 		try {
 
@@ -489,13 +490,19 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "and conta.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida, :situacaoParcelada) "
 					+ "and conta.cnta_amreferenciaconta between :inicialReferencia and :finalReferencia "
 					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
-					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 "
+					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 ";
 					/*
 					 * Felipe Santos
 					 * 
 					 * Consultar Débitos por Cliente indicado na conta
 					 */
-					+ "and clieConta.clct_icnomeconta = :indicadorNomeConta ";
+					/*
+					 * Matheus Cruz
+					 * O indicador nome conta nao e considerado quando o cliente for superior
+					 */
+					if (!isClienteSuperior) {
+						consulta += "and clieConta.clct_icnomeconta = :indicadorNomeConta ";
+					}
 
 			if (indicadorConta == 2) {
 				consulta += "and conta.cnta_dtrevisao is null ";
@@ -507,7 +514,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				consulta += "and conta.cnta_amreferenciabaixacontabil is null ";
 			}
 
-			if (relacaoTipo != null) {
+			if (isClienteSuperior) {
+				consulta += "and clieConta.crtp_id = " + ClienteRelacaoTipo.RESPONSAVEL;
+			} else if (relacaoTipo != null) {
 				consulta += "and clieConta.crtp_id = " + relacaoTipo.toString();
 			}
 
@@ -521,25 +530,49 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 			consulta += " ORDER BY idImovel, referencia ";
 
-			retorno = session.createSQLQuery(consulta).addScalar("idConta", Hibernate.INTEGER)
-					.addScalar("valorAgua", Hibernate.BIG_DECIMAL).addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
-					.addScalar("valorDebitos", Hibernate.BIG_DECIMAL).addScalar("valorCreditos", Hibernate.BIG_DECIMAL)
-					.addScalar("dataRevisao", Hibernate.DATE).addScalar("referencia", Hibernate.INTEGER)
-					.addScalar("dataVencimento", Hibernate.DATE).addScalar("indicadorCobrancaMulta", Hibernate.SHORT)
-					.addScalar("idSituacaoAtual", Hibernate.INTEGER).addScalar("digitoVerificador", Hibernate.SHORT)
-					.addScalar("idMotivoRevisao", Hibernate.INTEGER).addScalar("ultimaAlteracao", Hibernate.DATE)
-					.addScalar("idImovel", Hibernate.INTEGER).addScalar("consumoAgua", Hibernate.INTEGER)
-					.addScalar("valorImpostos", Hibernate.BIG_DECIMAL).addScalar("consumoEsgoto", Hibernate.INTEGER)
-					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL).addScalar("dataPagamento", Hibernate.DATE)
-					.addScalar("idParcelamento", Hibernate.INTEGER).setInteger("idCliente", idCliente)
-					.setInteger("situacaoNormal", new Integer(contaSituacaoNormal))
-					.setInteger("situacaoRetificada", new Integer(contaSituacaoRetificada))
-					.setInteger("situacaoIncluida", new Integer(contaSituacaoIncluida))
-					.setInteger("situacaoParcelada", new Integer(contaSituacaoParcelada))
-					.setInteger("inicialReferencia", new Integer(anoMesInicialReferenciaDebito))
-					.setInteger("finalReferencia", new Integer(anoMesFinalReferenciaDebito))
-					.setDate("inicialVencimento", anoMesInicialVecimentoDebito).setDate("finalVencimento", anoMesFinalVencimentoDebito)
-					.setInteger("indicadorNomeConta", ConstantesSistema.SIM).list();
+			if (!isClienteSuperior) {
+				retorno = session.createSQLQuery(consulta).addScalar("idConta", Hibernate.INTEGER)
+						.addScalar("valorAgua", Hibernate.BIG_DECIMAL).addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+						.addScalar("valorDebitos", Hibernate.BIG_DECIMAL).addScalar("valorCreditos", Hibernate.BIG_DECIMAL)
+						.addScalar("dataRevisao", Hibernate.DATE).addScalar("referencia", Hibernate.INTEGER)
+						.addScalar("dataVencimento", Hibernate.DATE).addScalar("indicadorCobrancaMulta", Hibernate.SHORT)
+						.addScalar("idSituacaoAtual", Hibernate.INTEGER).addScalar("digitoVerificador", Hibernate.SHORT)
+						.addScalar("idMotivoRevisao", Hibernate.INTEGER).addScalar("ultimaAlteracao", Hibernate.DATE)
+						.addScalar("idImovel", Hibernate.INTEGER).addScalar("consumoAgua", Hibernate.INTEGER)
+						.addScalar("valorImpostos", Hibernate.BIG_DECIMAL).addScalar("consumoEsgoto", Hibernate.INTEGER)
+						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL).addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idParcelamento", Hibernate.INTEGER).setInteger("idCliente", idCliente)
+						.setInteger("situacaoNormal", new Integer(contaSituacaoNormal))
+						.setInteger("situacaoRetificada", new Integer(contaSituacaoRetificada))
+						.setInteger("situacaoIncluida", new Integer(contaSituacaoIncluida))
+						.setInteger("situacaoParcelada", new Integer(contaSituacaoParcelada))
+						.setInteger("inicialReferencia", new Integer(anoMesInicialReferenciaDebito))
+						.setInteger("finalReferencia", new Integer(anoMesFinalReferenciaDebito))
+						.setDate("inicialVencimento", anoMesInicialVecimentoDebito).setDate("finalVencimento", anoMesFinalVencimentoDebito)
+						.setInteger("indicadorNomeConta", ConstantesSistema.SIM).list();
+			} else {
+
+				retorno = session.createSQLQuery(consulta).addScalar("idConta", Hibernate.INTEGER)
+						.addScalar("valorAgua", Hibernate.BIG_DECIMAL).addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+						.addScalar("valorDebitos", Hibernate.BIG_DECIMAL).addScalar("valorCreditos", Hibernate.BIG_DECIMAL)
+						.addScalar("dataRevisao", Hibernate.DATE).addScalar("referencia", Hibernate.INTEGER)
+						.addScalar("dataVencimento", Hibernate.DATE).addScalar("indicadorCobrancaMulta", Hibernate.SHORT)
+						.addScalar("idSituacaoAtual", Hibernate.INTEGER).addScalar("digitoVerificador", Hibernate.SHORT)
+						.addScalar("idMotivoRevisao", Hibernate.INTEGER).addScalar("ultimaAlteracao", Hibernate.DATE)
+						.addScalar("idImovel", Hibernate.INTEGER).addScalar("consumoAgua", Hibernate.INTEGER)
+						.addScalar("valorImpostos", Hibernate.BIG_DECIMAL).addScalar("consumoEsgoto", Hibernate.INTEGER)
+						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL).addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idParcelamento", Hibernate.INTEGER).setInteger("idCliente", idCliente)
+						.setInteger("situacaoNormal", new Integer(contaSituacaoNormal))
+						.setInteger("situacaoRetificada", new Integer(contaSituacaoRetificada))
+						.setInteger("situacaoIncluida", new Integer(contaSituacaoIncluida))
+						.setInteger("situacaoParcelada", new Integer(contaSituacaoParcelada))
+						.setInteger("inicialReferencia", new Integer(anoMesInicialReferenciaDebito))
+						.setInteger("finalReferencia", new Integer(anoMesFinalReferenciaDebito))
+						.setDate("inicialVencimento", anoMesInicialVecimentoDebito).setDate("finalVencimento", anoMesFinalVencimentoDebito)
+						.list();
+			
+			}
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -676,6 +709,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
+		
+		if (relacaoTipo != null && relacaoTipo == 99) {
+			relacaoTipo = new Short("3");
+		}
 
 		try {
 
