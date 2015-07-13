@@ -506,13 +506,11 @@ public class DebitoACobrar extends ObjetoTransacao {
         this.debitoACobrarCategorias = debitoACobrarCategorias;
     }
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+	public String toString() {
+		return "DebitoACobrar [id=" + id + "]";
+	}
 
-    /**
+	/**
      * @author Vivianne Sousa
     */
     public BigDecimal getValorTotal(){

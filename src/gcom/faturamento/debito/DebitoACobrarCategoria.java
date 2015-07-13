@@ -123,13 +123,11 @@ public class DebitoACobrarCategoria extends ObjetoTransacao {
         this.categoria = categoria;
     }
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("comp_id", getComp_id())
-            .toString();
-    }
+	public String toString() {
+		return "DebitoACobrarCategoria [comp_id=" + comp_id + "]";
+	}
 
-    public boolean equals(Object other) {
+	public boolean equals(Object other) {
         if ( (this == other ) ) return true;
         if ( !(other instanceof DebitoACobrarCategoria) ) return false;
         DebitoACobrarCategoria castOther = (DebitoACobrarCategoria) other;

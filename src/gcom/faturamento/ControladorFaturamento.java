@@ -75,6 +75,7 @@ import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoInclusao;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaTipo;
+import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaCategoria;
 import gcom.faturamento.conta.FiltroContaCategoriaConsumoFaixa;
@@ -3732,27 +3733,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					imovel.setSubLote((Short) arrayImoveisPorRota[5]);
 				}
 
-				Localidade localidade = new Localidade();
 				if (arrayImoveisPorRota[1] != null) {
-					// instancia uma localidade para ser setado no imóvel
-					localidade.setId((Integer) arrayImoveisPorRota[1]);
-					imovel.setLocalidade(localidade);
+					imovel.setLocalidade(new Localidade((Integer) arrayImoveisPorRota[1]));
 				}
 
-				Quadra quadra = new Quadra();
 				if (arrayImoveisPorRota[3] != null) {
-					// instancia uma quadra para ser setado no imóvel
-					Integer numeroQuadra = (Integer) arrayImoveisPorRota[3];
-					Integer idQuadra = (Integer) arrayImoveisPorRota[7];
-					quadra.setId(idQuadra);
-					quadra.setNumeroQuadra(numeroQuadra);
+					Quadra quadra = new Quadra((Integer) arrayImoveisPorRota[7]);
+					quadra.setNumeroQuadra((Integer) arrayImoveisPorRota[3]);
 					imovel.setQuadra(quadra);
 				}
 
-				Integer setorComercial = null;
 				if (arrayImoveisPorRota[2] != null) {
-					// instancia um setor comercial para ser setado no imóvel
-					setorComercial = (Integer) arrayImoveisPorRota[2];
+					imovel.setCodigoSetorComercial((Integer) arrayImoveisPorRota[2]);
 				}
 
 				/*
@@ -3931,10 +3923,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								// recupera todos os pagamentos da conta
 								// com menor data de pagamento
-								Object[] arrayPagamentoContasMenorData = repositorioFaturamento
-										.obterArrecadacaoFormaPagamentoContasMenorData(
-												idConta, imovel.getId(),
-												conta.getReferencia());
+								Object[] arrayPagamentoContasMenorData = repositorioFaturamento.obterArrecadacaoFormaPagamentoContasMenorData(conta);
 
 								if (arrayPagamentoContasMenorData != null) {
 									idArrecadacaoForma = (Integer) arrayPagamentoContasMenorData[0];
@@ -4014,9 +4003,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
 														imovel,
-														localidade,
-														quadra,
-														setorComercial,
 														numeroPrestacaoDebito,
 														numeroPrestacaoCobradas,
 														conta,
@@ -4064,9 +4050,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
 														imovel,
-														localidade,
-														quadra,
-														setorComercial,
 														numeroPrestacaoDebito,
 														numeroPrestacaoCobradas,
 														conta,
@@ -4112,9 +4095,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												.gerarDebitoACobrarParaConta(
 														anoMesReferenciaArrecadacao,
 														imovel,
-														localidade,
-														quadra,
-														setorComercial,
 														numeroPrestacaoDebito,
 														numeroPrestacaoCobradas,
 														conta,
@@ -4275,8 +4255,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
 											anoMesReferenciaArrecadacao,
 											anoMesReferenciaFaturamento,
-											imovel, localidade, quadra,
-											setorComercial,
+											imovel, 
 											numeroPrestacaoDebito,
 											numeroPrestacaoCobradas,
 											guiaPagamento,
@@ -4319,8 +4298,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
 											anoMesReferenciaArrecadacao,
 											anoMesReferenciaFaturamento,
-											imovel, localidade, quadra,
-											setorComercial,
+											imovel, 
 											numeroPrestacaoDebito,
 											numeroPrestacaoCobradas,
 											guiaPagamento,
@@ -4366,9 +4344,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											anoMesReferenciaArrecadacao,
 											anoMesReferenciaFaturamento,
 											imovel,
-											localidade,
-											quadra,
-											setorComercial,
 											numeroPrestacaoDebito,
 											numeroPrestacaoCobradas,
 											guiaPagamento,
@@ -4452,43 +4427,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @param idRota
 	 * @return Collection
 	 */
-	public Collection pesquisarImovelGerarAcrescimosImpontualidade(Rota rota)
-			throws ControladorException {
+	public Collection pesquisarImovelGerarAcrescimosImpontualidade(Rota rota) throws ControladorException {
 
 		Collection colecaoImoveis = null;
 
-		/*
-		 * Caso a rota não esteja com o indicador de rota alternativa ativo; a
-		 * pesquisa dos imóveis será feita a partir de sua quadra.
-		 */
-		if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
-
-			try {
-
-				colecaoImoveis = repositorioFaturamento
-						.pesquisarImoveisDasQuadrasPorRota(rota.getId());
-
-			} catch (ErroRepositorioException ex) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("erro.sistema", ex);
+		try {
+			if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
+				colecaoImoveis = repositorioFaturamento.pesquisarImoveisDasQuadrasPorRota(rota.getId());
+			} else {
+				colecaoImoveis = repositorioFaturamento.pesquisarImoveisDasQuadrasPorRotaAlternativa(rota.getId());
 			}
-		}
-		/*
-		 * Caso contrário; a pesquisa dos imóveis será feita a partir da rota
-		 * alternativa que estará associada ao mesmo.
-		 */
-		else {
-
-			try {
-
-				colecaoImoveis = repositorioFaturamento
-						.pesquisarImoveisDasQuadrasPorRotaAlternativa(rota
-								.getId());
-
-			} catch (ErroRepositorioException ex) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("erro.sistema", ex);
-			}
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
 		}
 
 		return colecaoImoveis;
@@ -16587,5 +16538,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		
 		return colecaoQtdeContas;
+	}
+	
+	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarFaturaDeConta(idConta);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 }

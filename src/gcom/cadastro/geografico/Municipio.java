@@ -100,6 +100,10 @@ public class Municipio extends ObjetoTransacao {
     public Municipio() {
     }
 
+    public Municipio(Integer id) {
+    	this.id = id;
+    }
+    
     /** minimal constructor */
     public Municipio(
             gcom.cadastro.geografico.Microrregiao microrregiao,

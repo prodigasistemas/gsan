@@ -6242,10 +6242,12 @@ public class ControladorCadastro implements SessionBean {
 								.getCpfFormatado());
 					}
 
-					Object[] pagamentoContasMenorData = repositorioFaturamento
-							.obterArrecadacaoFormaPagamentoContasMenorData(
-									helper.getIdConta(), helper.getIdImovel(),
-									helper.getReferenciaFaturasAtrasoInicial());
+					Conta conta = new Conta();
+					conta.setId(helper.getIdConta());
+					conta.setImovel(new Imovel(helper.getIdImovel()));
+					conta.setReferencia(helper.getReferenciaFaturasAtrasoInicial());
+					
+					Object[] pagamentoContasMenorData = repositorioFaturamento.obterArrecadacaoFormaPagamentoContasMenorData(conta);
 
 					Date dataPagamento = null;
 					if (pagamentoContasMenorData != null) {

@@ -24,3 +24,4 @@ DELETE FROM seguranca.operacao WHERE oper_dsoperacao LIKE 'Gerar Resumo Creditos
 DELETE FROM seguranca.funcionalidade WHERE fncd_dsfuncionalidade LIKE 'Gerar Resumo Creditos Avisos Bancarios';
 
 DELETE FROM seguranca.parametro WHERE nome = 'URL_GSAN_RELATORIOS';
+

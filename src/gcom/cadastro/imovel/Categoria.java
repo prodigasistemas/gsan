@@ -1,6 +1,7 @@
 package gcom.cadastro.imovel;
 
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -232,7 +233,7 @@ public class Categoria extends ObjetoTransacao {
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
+		return "Categoria [id=" + id + "]";
 	}
 
 	public boolean equals(Object other) {
@@ -343,4 +344,11 @@ public class Categoria extends ObjetoTransacao {
 		this.indicadorPermissaoEspecial = indicadorPermissaoEspecial;
 	}
 
+	public boolean categoriaCobraAcrescimo() {
+		return this != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.SIM);
+	}
+	
+	public boolean categoriaCobraAcrescimoEncerramento() {
+		return this != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.ENCERRAMENTO_ARRECADACAO);
+	}
 }
