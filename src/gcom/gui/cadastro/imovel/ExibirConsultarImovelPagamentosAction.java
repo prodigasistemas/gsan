@@ -185,15 +185,6 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
 					Collection colecaoImoveisPagamentosHistorico = fachada.pesquisarPagamentoHistoricoImovel(idImovelPagamentos.trim(), null, null, null,
 							null, null, null,null, null,null, null,null, null,null, null,null, null);
 					
-					FiltroPagamentoSituacao filtroPagamentoSituacao = new FiltroPagamentoSituacao();
-					filtroPagamentoSituacao.adicionarParametro(new ParametroSimples(FiltroPagamentoSituacao.DESCRICAO_ABREVIADA, "NCONF"));
-					
-					
-					PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
-					
-					Collection colecaoImoveisPagamentosInconformes = fachada.pesquisarPagamentoImovel(idImovelPagamentos.trim(), null, null, null, null, 
-							null, null, null, null, null, null, null, null, new String[]{pagamentoSituacao.getId().toString()}, null, null, null, null, null);
-
 					
 					//Não há Pagamentos para o imóvel de matrícula {0}.
 					/*if (colecaoImoveisPagamentos == null || colecaoImoveisPagamentos.isEmpty()) {
