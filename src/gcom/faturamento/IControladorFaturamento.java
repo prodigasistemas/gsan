@@ -5701,4 +5701,6 @@ public interface IControladorFaturamento {
 	public Collection<RelatorioReceitasAFaturarHelper> gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) throws ControladorException, ErroRepositorioException;
 
 	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) throws ControladorException;
+	
+	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ControladorException;
 }

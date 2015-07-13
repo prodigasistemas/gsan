@@ -62,8 +62,8 @@ import gcom.relatorio.arrecadacao.RelatorioAnaliseAvisosBancariosBean;
 import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -31705,15 +31705,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			.append("FROM (")
 		   
 		   .append(select)
-		   .append("p.pgmt_dtpagamento as data_pagamento, ")
-		   .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
-		   .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
-		   .append("count(distinct p.amit_id) as qtdDocumentos, ")
-		   .append("tarifa.actf_vltarifa as valor_tarifa ")
-		   .append(from)
-		   .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
-		   .append("WHERE (p.pgmt_dtpagamento + tarifa.actf_nndiafloat) >= :data ")
-		   .append(groupBy)
+           .append("p.pgmt_dtpagamento as data_pagamento, ")
+           .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
+           .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
+           .append("count(distinct p.amit_id) as qtdDocumentos, ")
+           .append("tarifa.actf_vltarifa as valor_tarifa ")
+           .append(from)
+           .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
+           .append("WHERE (p.pgmt_dtpagamento + tarifa.actf_nndiafloat) >= :data ")
+           .append(groupBy)
 		   
 		   .append(") as resumo ")
 		   .append("GROUP BY data_pagamento_previsto, data_realizada, id_arrecadador, descricao_arrecadador ")

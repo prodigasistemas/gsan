@@ -1129,8 +1129,7 @@ public interface IRepositorioFaturamento {
 
 	public void atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(Integer idImovel) throws ErroRepositorioException;
 
-	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(Integer conta, Integer idImovel, Integer anoMesReferenciaConta)
-			throws ErroRepositorioException;
+	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(Conta conta) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection consultarResumoFaturamentoRelatorioEstadoPorUnidadeNegocio(int anoMesReferencia, String opcaoRelatorio) throws ErroRepositorioException;
@@ -3019,4 +3018,6 @@ public interface IRepositorioFaturamento {
 	public Collection pesquisarGerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 	
 	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
+	
+	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException;
 }

@@ -534,4 +534,8 @@ public class Pagamento extends ObjetoTransacao {
 		this.indicadorClassificadoRecuperacaoCredito = indicadorClassificadoRecuperacaoCredito;
 	}
 	
+	public boolean isPagamentoClassificado() {
+		return this.pagamentoSituacaoAtual.getId().intValue() == PagamentoSituacao.PAGAMENTO_CLASSIFICADO.intValue();
+	}
+	
 }
