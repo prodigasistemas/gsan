@@ -1255,94 +1255,45 @@ function pesquisarImovel() {
 							</td>
 						</tr>
 						<logic:notEmpty name="colecaoPagamentosImovelContaInconformes" scope="session">
-							<%if ( ((Integer)session.getAttribute("totalContasInconformes"))  <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONTAS_DEBITO) {%>
 							<tr bordercolor="#000000">
-								<td width="9%" bgcolor="#90c7fc" align="center">
-						<% } else { %>
-							<tr bordercolor="#000000">
-								<td width="10%" bgcolor="#90c7fc">
-						<% } %>
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>M&ecirc;s/Ano</strong>
-										</font>
-									</div>
+								<td bgcolor="#90c7fc" width="14%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Mês/Ano Conta</strong>
+									</font>
 								</td>
-								
-								<td width="12%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Vencimento</strong>
-										</font>
-									</div>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Valor da Conta</strong>
+									</font>
 								</td>
-								
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Valor de &Aacute;gua </strong> 
-										</font>
-									</div>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Valor do Pag.</strong>
+									</font>
 								</td>
-								
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Valor de Esgoto</strong> 
-										</font>
-									</div>
+								<td bgcolor="#90c7fc" width="16%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Data do Pag.</strong>
+									</font>
 								</td>
-								
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Valor dos <br> D&eacute;bitos</strong> 
-										</font>
-									</div>
-								</td>
-								
-								<td width="10%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Valor dos Creditos</strong> 
-										</font>
-									</div>
-								</td>
-								
-								<td width="10%" bgcolor="#90c7fc">
-								  <div align="center" class="style9">
-								    <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-								      <strong>Valor dos	Impostos</strong> 
-								    </font>
-								  </div>
-								</td>
-								
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Valor da Conta</strong> 
-										</font>
-									</div>
-								</td>
-								
-								<td width="7%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Acr&eacute;sc. Impont.</strong>
-											<strong></strong> 
-										</font>
-									</div>
-								</td>
-								
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center" class="style9">
-										<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-											<strong>Sit.</strong>
-										</font>
-									</div>
+								<td bgcolor="#90c7fc" width="32%" align="center" colspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Situação</strong>
+									</font>
 								</td>
 							</tr>
-							
+							<tr>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Anterior</strong>
+									</font>
+								</td>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Atual</strong>
+									</font>
+								</td>
+							</tr>							
 							<tr>
 								<td height="auto" colspan="10">
 									<div style="width: 100%; max-height: 100px; overflow: auto;">
@@ -1362,60 +1313,75 @@ function pesquisarImovel() {
 														<td width="14%" align="center"><logic:notEmpty
 															name="pagamento" property="contaGeral">
 															<logic:notEmpty name="pagamento" property="contaGeral.conta">
-																<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
-																	<logic:notEmpty name="pagamento"
-																		property="contaGeral.conta.referencia">
-																		<a
-																			href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.conta.referencia">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
 																	</logic:notEmpty>
-																</logic:notEmpty>
+																</font>
 															</logic:notEmpty>
 															
 															<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
-																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
-																	<logic:notEmpty name="pagamento"
-																		property="contaGeral.contaHistorico.anoMesReferenciaConta">
-																		<a
-																			href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.contaHistorico.anoMesReferenciaConta">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
 																	</logic:notEmpty>
-																</logic:notEmpty>
+																</font>
 															</logic:notEmpty>
 															
 														</logic:notEmpty> 
 														<logic:empty name="pagamento" property="contaGeral">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
 																${pagamento.formatarAnoMesPagamentoParaMesAno}
+															</font>
 														</logic:empty></td>
 														<td width="19%" align="right">
 															<logic:notEmpty	name="pagamento" property="contaGeral">
-																<logic:notEmpty name="pagamento" property="contaGeral.conta">
-																	<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
-																		<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
-																			formatKey="money.format" />&nbsp;
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																		<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
 																	</logic:notEmpty>
-																</logic:notEmpty>
+																</font>
 																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
-																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
-																		<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
-																			formatKey="money.format" />&nbsp;
-																	</logic:notEmpty>
+																	<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																		<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																	</font>
 																</logic:notEmpty>
 															</logic:notEmpty>
 														</td>
-														<td width="19%" align="right"><bean:write name="pagamento"
-															property="valorPagamento" formatKey="money.format" />&nbsp;
+														<td width="19%" align="right">
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
+															</font>
 														</td>
 														
 														<td width="16%" align="center">
-															<a
-																href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
-															<bean:write name="pagamento"
-																property="dataPagamento" formatKey="date.format" /></a>&nbsp;</td>
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																<a href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
+																<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" /></a>&nbsp;
+															</font>
+														</td>
+													
 														<td width="16%">
-														
-														${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">	
+																${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+															</font>
 														</td>
 														<td width="16%">
-														${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+																${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+															</font>
 														</td>
 													</tr>
 												</logic:iterate>
