@@ -262,6 +262,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				while (contaValores.hasNext()) {
 					ContaValoresHelper contaValoresHelper = (ContaValoresHelper)contaValores.next();
 					
+					if(verificaReferenciaIgualReferencialFaturamento(contaValoresHelper.getConta().getAnoMesReferenciaConta())) {
+						colecaoContaValores.remove(contaValoresHelper);
+						continue;
+					}
+					
 					//Colocado por Raphael Rossiter em 04/12/2008
 					//=============================================================================================
 					Collection<ParcelamentoDescontoAntiguidade> colecaoParcelamentoDescontoAntiguidade = 
@@ -373,6 +378,12 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					Iterator guiaPagamentoValores = colecaoGuiaPagamentoValores.iterator();
 					while (guiaPagamentoValores.hasNext()) {
 						GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(guiaPagamentoValoresHelper.getGuiaPagamento().getDataEmissao()))) {
+							colecaoGuiaPagamentoValores.remove(guiaPagamentoValoresHelper);
+							continue;
+						}
+						
 						valorTotalGuiasPagamento.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalGuiasPagamento = valorTotalGuiasPagamento.add(guiaPagamentoValoresHelper.getGuiaPagamento().getValorDebito());
 						
@@ -443,6 +454,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 	
 					while (debitoACobrarValores.hasNext()) {
 						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(debitoACobrar.getGeracaoDebito()))) {
+							colecaoDebitoACobrar.remove(debitoACobrar);
+							continue;
+						}
 						
 						//[FS0022]-Verificar existência de juros sobre imóvel
 						if(debitoACobrar.getDebitoTipo().getId() != null && 
@@ -525,6 +541,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
 					while (creditoARealizarValores.hasNext()) {
 						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
+							colecaoCreditoARealizar.remove(creditoARealizar);
+							continue;
+						}
 						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
 					}

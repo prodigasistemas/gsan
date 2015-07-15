@@ -9,6 +9,8 @@ import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
@@ -77,7 +79,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		// -----------------------------------------------------------
 		
 		DynaActionForm efetuarParcelamentoDebitosActionForm = (DynaActionForm) actionForm;
-
+		
 		// Pega o codigo que o usuario digitou para a pesquisa direta de imovel
 		String codigoImovel = (String) httpServletRequest.getParameter("matriculaImovel");
 		String codigoImovelAntes = (String) efetuarParcelamentoDebitosActionForm.get("codigoImovelAntes");
@@ -244,7 +246,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				// Dados do Débito do Imóvel - Contas
 				Collection<ContaValoresHelper> colecaoContasImovel = colecaoDebitoImovel.getColecaoContasValoresImovel();
 				colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
-
+				
 				if (colecaoContasImovel != null	&& !colecaoContasImovel.isEmpty()) {
 					
 					Iterator contaValores = colecaoContasImovel.iterator();
@@ -252,6 +254,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					while (contaValores.hasNext()) {
 						
 						ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(contaValoresHelper.getConta().getAnoMesReferenciaConta())) {
+							colecaoContasImovel.remove(contaValoresHelper);
+							continue;
+						}
 						
 						valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalContas = valorTotalContas.add(contaValoresHelper.getValorTotalConta());
@@ -289,7 +296,14 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				if (colecaoGuiaPagamentoValoresImovel != null && !colecaoGuiaPagamentoValoresImovel.isEmpty()) {
 					Iterator guiaPagamentoValores = colecaoGuiaPagamentoValoresImovel.iterator();
 					while (guiaPagamentoValores.hasNext()) {
+						
 						GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(guiaPagamentoValoresHelper.getGuiaPagamento().getDataEmissao()))) {
+							colecaoGuiaPagamentoValoresImovel.remove(guiaPagamentoValoresHelper);
+							continue;
+						}
+							
 						if (guiaPagamentoValoresHelper.getGuiaPagamento() != null && !guiaPagamentoValoresHelper.getGuiaPagamento().equals("")) {
 							valorTotalGuiasPagamento.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
 							valorTotalGuiasPagamento = valorTotalGuiasPagamento.add(guiaPagamentoValoresHelper.getGuiaPagamento().getValorDebito().setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO));
@@ -344,6 +358,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 					while (debitoACobrarValores.hasNext()) {
 						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
+						
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(debitoACobrar.getGeracaoDebito()))) {
+							colecaoDebitoACobrar.remove(debitoACobrar);
+							continue;
+						}
 						
 						//[FS0022]-Verificar existência de juros sobre imóvel
 						if(debitoACobrar.getDebitoTipo().getId() != null && 
@@ -415,9 +434,12 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
 					while (creditoARealizarValores.hasNext()) {
 						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
+							colecaoCreditoARealizar.remove(creditoARealizar);
+							continue;
+						}
 						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS,	Parcelamento.TIPO_ARREDONDAMENTO);
-						valorCreditoARealizar = valorCreditoARealizar
-								.add(creditoARealizar.getValorTotalComBonus());
+						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
 					}
 
 					sessao.setAttribute("colecaoCreditoARealizarImovel",colecaoCreditoARealizar);
