@@ -1,11 +1,14 @@
 package gcom.gui.cobranca;
 
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
@@ -171,6 +174,18 @@ public class ConsultarDebitoAction extends GcomAction {
 							.getParameter("caminhoRetornoTelaConsultaDebito"));
 
 		}
+		
+		FiltroPagamentoSituacao filtroPagamentoSituacao = new FiltroPagamentoSituacao();
+		filtroPagamentoSituacao.adicionarParametro(new ParametroSimples(FiltroPagamentoSituacao.DESCRICAO_ABREVIADA, "NCONF"));
+		
+		
+		PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
+		
+		Collection colecaoContasInconformes = fachada.pesquisarPagamentoImovel(codigoImovel.trim(), null, null, null, null, 
+				null, null, null, null, null, null, null, null, new String[]{pagamentoSituacao.getId().toString()}, null, null, null, null, null);
+		
+		sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoContasInconformes);
+		sessao.setAttribute("totalContasInconformes", colecaoContasInconformes.size());
 
 		return retorno;
 	}
