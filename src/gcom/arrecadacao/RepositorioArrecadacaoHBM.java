@@ -25,6 +25,7 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
+import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
@@ -31741,6 +31742,81 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException {
+
+		Object[] retorno = new Object[2];
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			
+			String hql = " select distinct pagamento "
+					+ " from gcom.arrecadacao.pagamento.Pagamento pagamento "
+					+ " INNER JOIN FETCH pagamento.avisoBancario avbc "
+					+ " INNER JOIN FETCH avbc.arrecadador arrec "
+					+ " INNER JOIN FETCH arrec.cliente clie "
+					+ " INNER JOIN FETCH pagamento.documentoTipo doctoTp "
+					+ " LEFT JOIN FETCH pagamento.contaGeral contaGeral "
+					+ " LEFT JOIN FETCH contaGeral.conta conta "
+					+ " LEFT JOIN FETCH contaGeral.contaHistorico contaHistorico "
+					+ " LEFT JOIN FETCH pagamento.guiaPagamento gpag "
+					+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
+					+ " LEFT JOIN FETCH pagamento.debitoACobrarGeral dbcbGeral "
+					+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
+					+ " LEFT JOIN FETCH dbcb.debitoTipo dbtpDbcb "
+					+ " LEFT JOIN FETCH pagamento.debitoTipo dbtp "
+					+ " LEFT JOIN FETCH pagamento.pagamentoSituacaoAtual pagtoSitAtual "
+					+ " LEFT JOIN FETCH pagamento.pagamentoSituacaoAnterior pagtoSitAnterior "
+					+ " LEFT JOIN conta.clienteContas as clienteContas "
+					+ " WHERE conta.imovel.id = :idImovel "
+					+ " AND clienteContas.cliente = (select ci.cliente from gcom.cadastro.cliente.ClienteImovel ci where conta.imovel.id = ci.imovel.id and ci.clienteRelacaoTipo = :idTipoCliente and ci.dataFimRelacao is null) "
+					+ " AND pagamento.pagamentoSituacaoAtual = :pagamentoSituacao";
+			
+//					
+			retorno[0] = session.createQuery(hql)
+					.setParameter("idImovel", Integer.parseInt(idImovel))
+					.setParameter("idTipoCliente", ClienteRelacaoTipo.USUARIO)
+					.setParameter("pagamentoSituacao", PagamentoSituacao.VALOR_NAO_CONFERE)
+					.list();
+			
+			hql = " select distinct pagamento "
+				+ " from gcom.arrecadacao.pagamento.Pagamento pagamento "
+				+ " INNER JOIN FETCH pagamento.avisoBancario avbc "
+				+ " INNER JOIN FETCH avbc.arrecadador arrec "
+				+ " INNER JOIN FETCH arrec.cliente clie "
+				+ " INNER JOIN FETCH pagamento.documentoTipo doctoTp "
+				+ " LEFT JOIN FETCH pagamento.contaGeral contaGeral "
+				+ " LEFT JOIN FETCH contaGeral.conta conta "
+				+ " LEFT JOIN FETCH contaGeral.contaHistorico contaHistorico "
+				+ " LEFT JOIN FETCH pagamento.guiaPagamento gpag "
+				+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
+				+ " LEFT JOIN FETCH pagamento.debitoACobrarGeral dbcbGeral "
+				+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
+				+ " LEFT JOIN FETCH dbcb.debitoTipo dbtpDbcb "
+				+ " LEFT JOIN FETCH pagamento.debitoTipo dbtp "
+				+ " LEFT JOIN FETCH pagamento.pagamentoSituacaoAtual pagtoSitAtual "
+				+ " LEFT JOIN FETCH pagamento.pagamentoSituacaoAnterior pagtoSitAnterior "
+				+ " LEFT JOIN conta.clienteContas as clienteContas "
+				+ " WHERE conta.imovel.id = :idImovel "
+				+ " AND clienteContas.cliente <> (select ci.cliente from gcom.cadastro.cliente.ClienteImovel ci where conta.imovel.id = ci.imovel.id and ci.clienteRelacaoTipo = :idTipoCliente and ci.dataFimRelacao is null) "
+				+ " AND pagamento.pagamentoSituacaoAtual = :pagamentoSituacao";
+					
+			retorno[1] = session.createQuery(hql)
+					.setParameter("idImovel", Integer.parseInt(idImovel))
+					.setParameter("idTipoCliente", ClienteRelacaoTipo.USUARIO)
+					.setParameter("pagamentoSituacao", PagamentoSituacao.VALOR_NAO_CONFERE)
+					.list();
+			
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
