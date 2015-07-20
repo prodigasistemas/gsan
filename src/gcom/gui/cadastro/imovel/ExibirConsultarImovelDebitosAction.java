@@ -550,9 +550,6 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					
 					PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
 					
-//					Collection<Pagamento> colecaoContasInconformes = fachada.pesquisarPagamentoImovel(idImovelDebitos.trim(), null, null, null, null, 
-//							null, null, null, null, null, null, null, null, new String[]{pagamentoSituacao.getId().toString()}, null, null, null, null, null);
-
 					Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(idImovelDebitos.trim());
 					Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
 					Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];

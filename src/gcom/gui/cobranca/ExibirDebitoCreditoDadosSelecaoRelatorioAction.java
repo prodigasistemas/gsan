@@ -1,6 +1,7 @@
 package gcom.gui.cobranca;
 
 import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -75,7 +76,8 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 			sessao.removeAttribute("colecaoDebitoCreditoParcelamento");
 			sessao.removeAttribute("idImovel");
 			sessao.removeAttribute("colecaoPagamentosImovelContaInconformes");
-			sessao.removeAttribute("totalContasInconformes");
+			sessao.removeAttribute("colecaoPagamentosInconformesAtuais");
+			sessao.removeAttribute("colecaoPagamentosInconformesPreteritos");
 
 			form.setIndicadorIncluirAcrescimosImpontualidade(CobrancaDocumento.INCLUIR_ACRESCIMOS);
 
@@ -124,11 +126,16 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 					
 					PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
 					
-					Collection colecaoContasInconformes = fachada.pesquisarPagamentoImovel(idImovel.trim(), null, null, null, null, 
-							null, null, null, null, null, null, null, null, new String[]{pagamentoSituacao.getId().toString()}, null, null, null, null, null);
+					Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(idImovel.trim());
+					Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
+					Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];
+					Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
 					
-					sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoContasInconformes);
-					sessao.setAttribute("totalContasInconformes", colecaoContasInconformes.size());
+					sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoPagamentosImovelContaInconformes);
+					sessao.setAttribute("colecaoPagamentosInconformesAtuais", colecaoPagamentosInconformesAtuais);
+					sessao.setAttribute("colecaoPagamentosInconformesPreteritos", colecaoPagamentosInconformesPreteritas);
 
 					// [SB0001] - Apresentar Débitos/Créditos do Imóvel de Origem
 					ObterDebitoImovelOuClienteHelper helper = fachada.apresentarDebitoCreditoImovelExtratoDebito(new Integer(idImovel), false);

@@ -1,6 +1,7 @@
 package gcom.gui.cobranca;
 
 import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
@@ -11,6 +12,7 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -181,11 +183,16 @@ public class ConsultarDebitoAction extends GcomAction {
 		
 		PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
 		
-		Collection colecaoContasInconformes = fachada.pesquisarPagamentoImovel(codigoImovel.trim(), null, null, null, null, 
-				null, null, null, null, null, null, null, null, new String[]{pagamentoSituacao.getId().toString()}, null, null, null, null, null);
+		Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(codigoImovel.trim());
+		Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
+		Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];
+		Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
+		colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
+		colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
 		
-		sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoContasInconformes);
-		sessao.setAttribute("totalContasInconformes", colecaoContasInconformes.size());
+		sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoPagamentosImovelContaInconformes);
+		sessao.setAttribute("colecaoPagamentosInconformesAtuais", colecaoPagamentosInconformesAtuais);
+		sessao.setAttribute("colecaoPagamentosInconformesPreteritos", colecaoPagamentosInconformesPreteritas);
 
 		return retorno;
 	}
