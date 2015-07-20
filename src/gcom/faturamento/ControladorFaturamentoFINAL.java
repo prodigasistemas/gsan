@@ -2229,6 +2229,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
 						this.gerarMovimentoDebitoAutomatico(imovel, conta, faturamentoGrupo);
 					}
+					
+					try {
+						repositorioFaturamento.concluirFaturamentoConta(conta.getId());
+					} catch (ErroRepositorioException e) {
+						throw new ControladorException("Erro ao concluir etapa de faturamento", e);
+					}
 				}
 
 				if (!gerarAtividadeGrupoFaturamento) {
@@ -25211,6 +25217,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					creditoARealizar
 							.setGeracaoCredito((Date) arrayCreditosACobrar[17]);
 				}
+				
+				if (arrayCreditosACobrar[18] != null) {
+					creditoARealizar.setAnoMesReferenciaPrestacao((Integer) arrayCreditosACobrar[18]);
+				}
 
 				creditosARealizar.add(creditoARealizar);
 			}
@@ -41989,24 +41999,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				System.out.println("**============ 1 - apagarDadosGeradosFaturarGrupoFaturamento ===============**"
 									+ "\n Imovel: " + helper.getIdImovel());
 
-				/*
-				 * Caso a situação atual NÃO seja PRÉ-FATURAMENTO:
-				 * 
-				 * DELETAR apenas as contas com data de emissão entre a data
-				 * atual menos 3 dias e a data atual Desenvolvedor: Raphael
-				 * Rossiter em 19/02/2008 Analista: Aryed Lins
-				 */
-				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-
-					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
-					helper.setDataEmissaoFinal(new Date());
-				} else {
-					helper.setDataEmissaoInicial(null);
-					helper.setDataEmissaoFinal(null);
-				}
-				
 				try {
-
 					repositorioFaturamento.apagarContaImpressao(helper);
 					repositorioFaturamento.apagarContaCategoriaConsumoFaixa(helper);
 					repositorioFaturamento.apagarContaCategoria(helper);
@@ -66833,30 +66826,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						valorCorrespondenteParcelaMes = parte22;
 					}
 
-					// Atualiza o nº de prestações realizadas
-					creditoARealizar.setNumeroPrestacaoRealizada(new Short((creditoARealizar.getNumeroPrestacaoRealizada().intValue() + 1) + ""));
-
-					// anoMes da prestação será o anaMes de referência da conta
-					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+					
+//					if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
+//							&& creditoARealizar.getAnoMesReferenciaPrestacao().intValue() != anoMesFaturamento.intValue()) {
+//						creditoARealizar.setNumeroPrestacaoRealizada(new Short((creditoARealizar.getNumeroPrestacaoRealizada().intValue() + 1) + ""));
+//						creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+//					} 
 
 				}
 
-				/**
-				 * Autor: Adriana Muniz Data: 29/06/2011
-				 * 
-				 * Alteração para que a referência da prestação do crédito seja
-				 * sempre atualizada, se um crédito realizado tenha sido gerado
-				 * a partir desse crédito a realizar
-				 * */
-				// anoMes da prestação será o anaMes de referência da conta
-				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+				if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
+						&& creditoARealizar.getAnoMesReferenciaPrestacao().intValue() != anoMesFaturamento.intValue()) {
+					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+					creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
+				}
 
-				// Valor de credito
 				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
 
-				// Armazena o valor residual concedido no mês
-				// (CRAR_VLRESIDUALCONCEDIDOMES = CRAR_VLRESIDUALMESANTERIOR).
-				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
 
 				/*
 				 * Para o pré-faturamento todos os créditos a realizar serão
@@ -75979,20 +75965,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
 
-		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
+		//this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
 		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
 		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
 
 		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
 		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
 
-		// Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
 		if (Util.obterMes(rota.getFaturamentoGrupo().getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
 
 			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
 			helper.setAnoMesFaturamento(Util.somaUmMesAnoMesReferencia(rota.getFaturamentoGrupo().getAnoMesReferencia()));
 
-			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+			//this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
 			this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
 			this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
 

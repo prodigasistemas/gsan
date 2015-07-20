@@ -55,6 +55,8 @@
 		<property name="dataEnvioEmailConta" type="java.sql.Date" column="cnta_dtenvioemailconta" length="4"/>
 		<property name="valorRateioAgua" type="java.math.BigDecimal" column="cnta_vlrateioagua" not-null="false" length="13"/>
     	<property name="valorRateioEsgoto" type="java.math.BigDecimal" column="cnta_vlrateioesgoto" not-null="false" length="13"/>
+    	<property name="indicadorFaturamentoConcluido" type="short" column="cnta_icfaturamentoconcluido" not-null="true" length="2"/>
+    	
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ContaMotivoCancelamento -->
 		<many-to-one name="contaMotivoCancelamento" class="gcom.faturamento.conta.ContaMotivoCancelamento" not-null="false">

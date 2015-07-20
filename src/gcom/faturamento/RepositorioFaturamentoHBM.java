@@ -2461,7 +2461,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  crar.crar_amcobrancacredito as amCobrancaCredito, "//14
 					+ "  crog.crog_id as idCreditoOrigem, "//15
 					+ "  crar.crar_nnparcelabonus as numeroParcelaBonus, "//16
-					+ "  crar.crar_tmatucredito as tmCredito "//17
+					+ "  crar.crar_tmatucredito as tmCredito, "//17
+					+ "  crar.crar_amreferenciaprestacao as refPrestacao "//18
 					+ " from "
 					+ "  faturamento.credito_a_realizar crar "
 					+ " inner join faturamento.debito_credito_situacao dcst on crar.dcst_idatual=dcst.dcst_id "
@@ -15252,56 +15253,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					delete = delete
 							+ " (select cnta.cnta_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-				
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -15312,12 +15285,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(1, helper.getRota().getId().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -15330,7 +15297,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
@@ -15340,27 +15306,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * ao faturar o grupo
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -15412,18 +15367,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15440,28 +15389,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -15473,12 +15410,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -15491,35 +15422,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -15572,21 +15485,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -15600,27 +15500,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				/**
+			     * 
+			     * Pamela Gatinho - 29/08/2011
+			     * Alteracao para regerar todas as contas PF
+			     * ao faturar o grupo
+			     */
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -15632,12 +15526,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(1, helper.getRota().getId().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -15659,27 +15547,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * ao faturar o grupo
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
 					
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
-				
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -15732,21 +15609,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -15760,28 +15624,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				delete = delete + ")";
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -15793,17 +15645,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
-				
 			}
 			else{
 				
@@ -15811,37 +15656,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -15894,7 +15721,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
@@ -15905,7 +15731,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * ao faturar o grupo
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15922,28 +15749,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete 
+								+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -15955,24 +15771,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
 			}
 			else{
-				
 				delete = delete
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
@@ -15982,27 +15790,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * ao faturar o grupo
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete = delete 
+								+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16094,21 +15892,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -16131,25 +15916,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							 * Acréscimo da parametro cnta.dcst_idatual na query.
 							 * */
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 				
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -16162,12 +15936,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -16180,7 +15948,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " from faturamento.debito_cobrado dbcb "
 						+ " inner join faturamento.conta cnta on ( cnta.cnta_id = dbcb.cnta_id ) "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
@@ -16189,28 +15956,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
 				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
+
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16263,56 +16020,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					delete = delete
 							+ " (select cnta.cnta_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				delete = delete + ")";
+
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -16324,12 +16055,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -16341,7 +16066,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
@@ -16350,28 +16074,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
 				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-
+				
+				delete = delete + ")";
+					
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16427,21 +16140,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -16456,28 +16156,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( imov.imov_id = cnta.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete 
+							+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				delete = delete + ")";
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -16489,55 +16178,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
 			}
 			else{
-				
 				delete = delete
 						+ " (select crrz.crrz_id "
 						+ " from faturamento.credito_realizado crrz "
 						+ " inner join faturamento.conta cnta on ( cnta.cnta_id = crrz.cnta_id ) "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-
+				
+				delete = delete + ")";
+				
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16590,21 +16254,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -16620,25 +16271,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
 							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 				
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -16651,12 +16291,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS PARA FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS PARA PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -16670,34 +16304,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				delete = delete + ")";
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16751,21 +16368,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -16779,28 +16383,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				atualizar += ")";
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
@@ -16813,12 +16405,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(3, helper.getAnoMesFaturamento());
 				st.setInt(4, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(5, helper.getFaturamentoGrupo().getId());
@@ -16830,38 +16416,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.imov_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-				
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				atualizar += ")";
 
 				st = jdbcCon.prepareStatement(atualizar);
 				st.setInt(1, helper.getAnoMesFaturamento());
 				st.setInt(2, helper.getIdImovel().intValue());
 				st.setInt(3, helper.getAnoMesFaturamento());
 				st.setInt(4, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -16926,56 +16494,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					atualizar = atualizar
 							+ " (select imov.imov_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				atualizar += ")";
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
@@ -16992,17 +16534,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stUpdateParcelas.setInt(4, helper.getAnoMesFaturamento());
 				stUpdateParcelas.setInt(5, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					stUpdateParcelas.setDate(6, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					stUpdateParcelas.setDate(7, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					stUpdateParcelas.setInt(6, helper.getFaturamentoGrupo().getId());
 				}
-				
 				
 				//UPDATE VALOR RESIDUAL
 				updateResidual = updateResidual + atualizar;
@@ -17013,12 +16548,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stUpdateResidual.setInt(3, helper.getAnoMesFaturamento());
 				stUpdateResidual.setInt(4, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					stUpdateResidual.setDate(5, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					stUpdateResidual.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					stUpdateResidual.setInt(5, helper.getFaturamentoGrupo().getId());
@@ -17031,28 +16560,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.imov_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-				
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-
 				
+				atualizar += ")";
+
 				//UPDATE DAS PARCELAS
 				updateParcelas = updateParcelas + atualizar;
 				
@@ -17063,12 +16579,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stUpdateParcelas.setInt(4, helper.getAnoMesFaturamento());
 				stUpdateParcelas.setInt(5, helper.getIdDebitoCreditoSituacaoAtual());
 
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					stUpdateParcelas.setDate(6, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					stUpdateParcelas.setDate(7, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UPDATE VALOR RESIDUAL
 				updateResidual = updateResidual + atualizar;
 				
@@ -17077,12 +16587,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stUpdateResidual.setInt(2, helper.getIdImovel().intValue());
 				stUpdateResidual.setInt(3, helper.getAnoMesFaturamento());
 				stUpdateResidual.setInt(4, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					stUpdateResidual.setDate(5, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					stUpdateResidual.setDate(6, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			stUpdateParcelas.executeUpdate();
@@ -17148,55 +16652,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					atualizar = atualizar
 							+ " (select cnta.cnta_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				atualizar += ")";
 				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -17210,12 +16688,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
 				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
-				//UTILIZADO APENAS NO FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
@@ -17226,37 +16698,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-
+				
+				atualizar += ")";
 				st = jdbcCon.prepareStatement(atualizar);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -17310,55 +16763,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					atualizar = atualizar
 							+ " (select cnta.cnta_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+				
+				atualizar += ")";
 				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
@@ -17371,53 +16798,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
 			}
 			else{
-				
 				atualizar = atualizar
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
-				
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
-
+				
+				atualizar += ")";
+				
 				st = jdbcCon.prepareStatement(atualizar);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 			st.executeUpdate();
 
@@ -17440,21 +16843,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ?  ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
+						delete += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
-					delete = delete + ")";
+					delete += ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -17468,28 +16865,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -17501,12 +16879,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -17520,34 +16892,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					delete = delete + ")";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+						+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
+					
+				delete = delete + ")";
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -41870,23 +41225,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and imov.rota_idalternativa = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 
-			if (helper.getDataEmissaoInicial() != null) {
-				delete = delete.substring(0, delete.length() - 1)
-						+ " and crar.crar_tmatucredito between ? and ? and crar_nnprestacaorealizadas = 0)";
-			}
-
 			st = jdbcCon.prepareStatement(delete);
 			st.setInt(1, helper.getAnoMesFaturamento());
 			st.setInt(2, helper.getIdCreditoTipo());
 			st.setInt(3, helper.getRota().getId().intValue());
 			st.setInt(4, helper.getIdDebitoCreditoSituacaoAtual().intValue());
-
-			if (helper.getDataEmissaoInicial() != null) {
-				st.setTimestamp(5, Util.getSQLTimesTemp(helper
-						.getDataEmissaoInicial()));
-				st.setTimestamp(6, Util.getSQLTimesTemp(helper
-						.getDataEmissaoFinal()));
-			}
 
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -41955,23 +41298,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and imov.rota_idalternativa = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 
-			if (helper.getDataEmissaoInicial() != null) {
-				atualizar = atualizar.substring(0, atualizar.length() - 1)
-						+ " and crar.crar_tmatucredito between ? and ? and crar_nnprestacaorealizadas = 0)";
-			}
-
 			st = jdbcCon.prepareStatement(atualizar);
 			st.setInt(1, helper.getAnoMesFaturamento());
 			st.setInt(2, helper.getIdCreditoTipo());
 			st.setInt(3, helper.getRota().getId().intValue());
 			st.setInt(4, helper.getIdDebitoCreditoSituacaoAtual().intValue());
-
-			if (helper.getDataEmissaoInicial() != null) {
-				st.setTimestamp(5, Util.getSQLTimesTemp(helper
-						.getDataEmissaoInicial()));
-				st.setTimestamp(6, Util.getSQLTimesTemp(helper
-						.getDataEmissaoFinal()));
-			}
 
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -42038,23 +41369,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " and imov.rota_idalternativa = rota.rota_id and rota.rota_id = ? and crar.dcst_idatual = ?)";
 			}
 
-			if (helper.getDataEmissaoInicial() != null) {
-				delete = delete.substring(0, delete.length() - 1)
-						+ " and crar.crar_tmatucredito between ? and ? and crar_nnprestacaorealizadas = 0)";
-			}
-
 			st = jdbcCon.prepareStatement(delete);
 			st.setInt(1, helper.getAnoMesFaturamento().intValue());
 			st.setInt(2, helper.getIdCreditoTipo().intValue());
 			st.setInt(3, helper.getRota().getId().intValue());
 			st.setInt(4, helper.getIdDebitoCreditoSituacaoAtual().intValue());
-
-			if (helper.getDataEmissaoInicial() != null) {
-				st.setTimestamp(5, Util.getSQLTimesTemp(helper
-						.getDataEmissaoInicial()));
-				st.setTimestamp(6, Util.getSQLTimesTemp(helper
-						.getDataEmissaoFinal()));
-			}
 
 			int qdt = st.executeUpdate();
 			System.out.println("quantidade"+ qdt);
@@ -43323,56 +42642,30 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
 				 * rota alternativa que estará associada ao mesmo.
 				 */
 				else {
-	
 					atualizar = atualizar
 							+ " (select cnta.cnta_id "
 							+ " from faturamento.conta cnta "
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-				    /**
-				     * 
-				     * Pamela Gatinho - 29/08/2011
-				     * Alteracao para regerar todas as contas PF
-				     * ao faturar o grupo
-				     */
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						atualizar = atualizar + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ";	
-					}
-					
-					atualizar = atualizar + ")";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
+				atualizar += ")";
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					atualizar = atualizar.substring(0, atualizar.length() - 1)
@@ -43384,44 +42677,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZANDO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZANDO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
 				}
 			}
 			else{
-				
-				atualizar = atualizar
+  	 			atualizar = atualizar
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-						
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					atualizar = atualizar.substring(0, atualizar.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
 
 				st = jdbcCon.prepareStatement(atualizar);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
-
 
 			st.executeUpdate();
 
@@ -43445,7 +42717,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.quadra qdra on ( qdra.qdra_id = imov.qdra_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = qdra.rota_id ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
 				}
@@ -43461,16 +42732,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
 				}
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -43482,12 +42746,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
 	
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
-				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					st.setInt(4, helper.getFaturamentoGrupo().getId());
@@ -43499,25 +42757,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " (select cnta.cnta_id "
 						+ " from faturamento.conta cnta "
 						+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-				
-							+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					delete = delete.substring(0, delete.length() - 1)
-							+ " and cnta.cnta_dtemissao between ? and ?)";
-				}
+						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2))";
 
 				st = jdbcCon.prepareStatement(delete);
 				st.setInt(1, helper.getIdImovel().intValue());
 				st.setInt(2, helper.getAnoMesFaturamento());
 				st.setInt(3, helper.getIdDebitoCreditoSituacaoAtual());
-
-				//UTILIZADO APENAS NO FATURAMENTO
-				if (helper.getDataEmissaoInicial() != null) {
-					st.setDate(4, Util.getSQLDate(helper.getDataEmissaoInicial()));
-					st.setDate(5, Util.getSQLDate(helper.getDataEmissaoFinal()));
-				}
 			}
 
 			st.executeUpdate();
@@ -61182,15 +60427,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				strDelete.append(" and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ");	
 			}
 			
-
-			//UTILIZADO APENAS NO FATURAMENTO
-			if (helper.getDataEmissaoInicial() != null) {
-				strDelete.append(" and cnta.cnta_dtemissao between ")
-						.append(Util.getSQLDate(helper.getDataEmissaoInicial()))
-						.append(" and ")
-						.append(Util.getSQLDate(helper.getDataEmissaoFinal()));
-			}
-			
 			//UTILIZADO APENAS NO PRÉ FATURAMENTO
 			if (helper.getFaturamentoGrupo() != null) {
 				strDelete.append(" and cnta.ftgr_id = " + helper.getFaturamentoGrupo().getId());
@@ -61207,20 +60443,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// Alteracao para regerar todas as contas PF ao faturar o grupo
 			if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 				strDelete.append(" and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ");	
+				strDelete.append(" and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO);	
 			}
 				
-				
-			//UTILIZADO APENAS NO FATURAMENTO
-			if (helper.getDataEmissaoInicial() != null) {
-				strDelete.append(" and cnta.cnta_dtemissao between ")
-				.append(Util.getSQLDate(helper.getDataEmissaoInicial()))
-				.append(" and ")
-				.append(Util.getSQLDate(helper.getDataEmissaoFinal()));
-			}
 			strDelete.append(")");
 			
 		}
 
 		return strDelete.toString();	
+	}
+	
+	public void concluirFaturamentoConta(Integer id) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("update Conta ")
+					.append("set indicadorFaturamentoCompleto = " + ConstantesSistema.SIM)
+					.append("WHERE id = :idConta ");
+
+			session.createQuery(consulta.toString()).setInteger("idConta", id).executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }
