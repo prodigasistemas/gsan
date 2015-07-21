@@ -294,7 +294,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 		BigDecimal valorJurosMora = new BigDecimal("0.00");
 		BigDecimal valorMulta = new BigDecimal("0.00");
 
-		if (colecaoContas != null && !colecaoContas.isEmpty()) {
+		if (colecaoContas != null && !colecaoContas.isEmpty() || (colecaoContaValoresPreteritos != null && !colecaoContaValoresPreteritos.isEmpty())) {
 			java.util.Iterator<ContaValoresHelper> colecaoContaValoresIterator = colecaoContas.iterator();
 			
 			// percorre a colecao de conta somando o valor para obter um valor total
@@ -423,6 +423,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 			httpServletRequest.setAttribute("colecaoContaValores", colecaoContaValores);
 			httpServletRequest.setAttribute("colecaoContaValoresPreteritos", colecaoContaValoresPreteritos);
 			httpServletRequest.setAttribute("colecaoContas", colecaoContas);
+			httpServletRequest.setAttribute("totalContas", colecaoContaValores.size() + colecaoContaValoresPreteritos.size());
 
 			// Manda a colecao e os valores total de conta pelo request
 			httpServletRequest.setAttribute("colecaoDebitoACobrar",	colecaoDebitoACobrar);

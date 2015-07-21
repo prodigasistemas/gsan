@@ -86,6 +86,8 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		if (request.getParameter("reloadPage") == null) {
 
 			sessao.removeAttribute("colecaoConta");
+			sessao.removeAttribute("colecaoContaNormais");
+			sessao.removeAttribute("colecaoContaPreteritos");
 			sessao.removeAttribute("colecaoDebitoACobrar");
 			sessao.removeAttribute("colecaoCreditoARealizar");
 			sessao.removeAttribute("colecaoGuiaPagamento");
@@ -166,6 +168,8 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 					colecaoConta.addAll(helper.getColecaoContasValoresPreteritos());
 
 					sessao.setAttribute("colecaoConta", colecaoConta);
+					sessao.setAttribute("colecaoContaNormais", helper.getColecaoContasValoresImovel());
+					sessao.setAttribute("colecaoContaPreteritos", helper.getColecaoContasValoresPreteritos());
 					sessao.setAttribute("colecaoDebitoACobrar", helper.getColecaoDebitoACobrar());
 					sessao.setAttribute("colecaoGuiaPagamento", helper.getColecaoGuiasPagamentoValoresSemFichaCompensacao());
 					sessao.setAttribute("colecaoDebitoCreditoParcelamento", helper.getColecaoDebitoCreditoParcelamentoHelper());
