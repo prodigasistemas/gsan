@@ -827,7 +827,7 @@ function calcularDesconto(){
 			<table width="100%" align="center" bgcolor="#90c7fc" border="0">
 						<% String cor = "#cbe5fe";%>
 						<tr bordercolor="#79bbfd">
-							<td colspan="10" align="center" bgcolor="#79bbfd">
+							<td colspan="10" bgcolor="#79bbfd">
 							<strong>Contas Inconformes</strong>
 							</td>
 						</tr>
