@@ -90,6 +90,13 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 		BigDecimal valorMulta = new BigDecimal("0.00");
 		
 		String idsContas = httpServletRequest.getParameter("conta");
+		String idsDebitosPreteritos = httpServletRequest.getParameter("contaPreterita");
+		if (idsDebitosPreteritos != null) {
+			if (idsContas == null)
+				idsContas = idsDebitosPreteritos;
+			else
+				idsContas += "," + idsDebitosPreteritos;
+		}
 		String idsDebitos = httpServletRequest.getParameter("debito");
 		String idsCreditos = httpServletRequest.getParameter("credito");
 		String idsGuias = httpServletRequest.getParameter("guiaPagamento");
