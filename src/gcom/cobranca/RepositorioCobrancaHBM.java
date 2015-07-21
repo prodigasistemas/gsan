@@ -470,7 +470,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		boolean isClienteSuperior = relacaoTipo == 99 ? true : false;
+		boolean isClienteSuperior = relacaoTipo == null ? false : (relacaoTipo == 99 ? true : false) ;
 
 		try {
 
