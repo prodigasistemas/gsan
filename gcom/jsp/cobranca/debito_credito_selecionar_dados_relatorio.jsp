@@ -821,50 +821,44 @@ function calcularDesconto(){
 					  <td colspan="1">&nbsp;</td>
 				    </tr>
 			
-					<tr>
-					<td colspan="4">
-					<table width="100%" align="left" bgcolor="#90c7fc" border="0">
-						<%String cor = "#cbe5fe";%>
+			
+			</table>
+			
+			<table width="100%" align="center" bgcolor="#90c7fc" border="0">
+						<% String cor = "#cbe5fe";%>
 						<tr bordercolor="#79bbfd">
-							<td colspan="10" align="left" bgcolor="#79bbfd">
+							<td colspan="10" align="center" bgcolor="#79bbfd">
 							<strong>Contas Inconformes</strong>
 							</td>
 						</tr>
-						<tr bordercolor="#000000">
-							<td width="17%">
-								<div align="left"><strong>Mês/Ano Conta</strong></div>
-							</td>
-							<td width="18%">
-								<div align="center"><strong>Valor da Conta</strong></div>
-							</td>
-							<td width="19%">
-								<div align="center"><strong>Valor do Pag.</strong></div>
-							</td>
-							<td width="16%">
-								<div align="center"><strong>Data do Pag.</strong></div>
-							</td>
-							<td width="32%">
-								<div align="center"><strong>Situação</strong></div>
-							</td>
-						</tr>
-						
-						<logic:notEmpty name="colecaoPagamentosImovelContaInconformes" scope="session">
-						    <tr>
-						        <td width="14%"/>
-							    <td width="19%"/>
-							    <td width="19%"/>
-							    <td width="16%"/>
-							    <td width="16%" bgcolor="#cbe5fe" align="center">
-								   <font color="#000000">
-									   <strong>Anterior</strong>
-								   </font>
-							    </td>
-							    <td width="16%" bgcolor="#cbe5fe" align="center">
-								   <font color="#000000">
-									   <strong>Atual</strong>
-								   </font>
-							    </td>
-						    </tr>	
+							<tr bordercolor="#000000">
+								<td bgcolor="#90c7fc" width="14%" align="center" rowspan="2">
+										<strong>Mês/Ano Conta</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+										<strong>Valor da Conta</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+										<strong>Valor do Pag.</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="16%" align="center" rowspan="2">
+										<strong>Data do Pag.</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="32%" align="center" colspan="2">
+										<strong>Situação</strong>
+								</td>
+							</tr>
+							<tr>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+										<strong>Anterior</strong>
+								</td>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+										<strong>Atual</strong>
+								</td>
+							</tr>
+							
+							<logic:notEmpty name="colecaoPagamentosImovelContaInconformes" scope="session">
+														
 							<tr>
 								<td height="auto" colspan="10">
 									<div style="width: 100%; max-height: 100px; overflow: auto;">
@@ -1026,10 +1020,6 @@ function calcularDesconto(){
 							</tr>
 						</logic:notEmpty>
 					</table>
-					</td>
-				</tr>
-			
-			</table>
 			
 			<table width="100%" cellpadding="0" cellspacing="0">
 			<tr>
