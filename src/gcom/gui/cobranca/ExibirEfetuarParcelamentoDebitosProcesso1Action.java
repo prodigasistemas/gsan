@@ -295,7 +295,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 				// Guias de Pagamento
 				Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValoresImovel = colecaoDebitoImovel.getColecaoGuiasPagamentoValores();
-				GuiaPagamentoValoresHelper guiaRemovida = null;
+				Collection<GuiaPagamentoValoresHelper> guiasRemovidas = new ArrayList<GuiaPagamentoValoresHelper>();
 				
 				if (colecaoGuiaPagamentoValoresImovel != null && !colecaoGuiaPagamentoValoresImovel.isEmpty()) {
 					Iterator guiaPagamentoValores = colecaoGuiaPagamentoValoresImovel.iterator();
@@ -304,7 +304,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
 						
 						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(guiaPagamentoValoresHelper.getGuiaPagamento().getDataEmissao()))) {
-							guiaRemovida = guiaPagamentoValoresHelper;
+							guiasRemovidas.add(guiaPagamentoValoresHelper);
 							continue;
 						}
 							
@@ -332,7 +332,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						}
 					}
 
-					sessao.setAttribute("colecaoGuiaPagamentoValoresImovel", guiaRemovida != null ? colecaoGuiaPagamentoValoresImovel.remove(guiaRemovida) : colecaoGuiaPagamentoValoresImovel);
+					if(!guiasRemovidas.isEmpty())
+						colecaoGuiaPagamentoValoresImovel.removeAll(guiasRemovidas);
+					
+					sessao.setAttribute("colecaoGuiaPagamentoValoresImovel", colecaoGuiaPagamentoValoresImovel);
 
 					efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamentoImovel",Util.formatarMoedaReal(valorTotalGuiasPagamento));
 				} else {
@@ -353,7 +356,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 				// Debitos A Cobrar
 				Collection colecaoDebitoACobrar = colecaoDebitoImovel.getColecaoDebitoACobrar();
-				DebitoACobrar debitoRemovido = null;
+				Collection<DebitoACobrar> debitosRemovidos = new ArrayList<DebitoACobrar>();
 				
 				if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 					Iterator debitoACobrarValores = colecaoDebitoACobrar.iterator();
@@ -365,7 +368,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
 						
 						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(debitoACobrar.getGeracaoDebito()))) {
-							debitoRemovido = debitoACobrar;
+							debitosRemovidos.add(debitoACobrar);
 							continue;
 						}
 						
@@ -407,7 +410,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						
 					}
 
-					sessao.setAttribute("colecaoDebitoACobrarImovel",debitoRemovido != null ? colecaoDebitoACobrar.remove(debitoRemovido) : colecaoDebitoACobrar);
+					if(!debitosRemovidos.isEmpty())
+						colecaoDebitoACobrar.removeAll(debitosRemovidos);
+					
+					sessao.setAttribute("colecaoDebitoACobrarImovel", colecaoDebitoACobrar);
 
 					// Serviços
 					valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
@@ -435,20 +441,22 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 				// Crédito A Realizar
 				Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoImovel.getColecaoCreditoARealizar();
-				CreditoARealizar creditoRemovido = null;
+				Collection<CreditoARealizar> creditosRemovidos = new ArrayList<CreditoARealizar>();
 				if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
 					Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
 					while (creditoARealizarValores.hasNext()) {
 						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
 						if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
-							creditoRemovido = creditoARealizar;
+							creditosRemovidos.add(creditoARealizar);
 							continue;
 						}
 						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS,	Parcelamento.TIPO_ARREDONDAMENTO);
 						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
 					}
 
-					sessao.setAttribute("colecaoCreditoARealizarImovel", creditoRemovido != null ? colecaoCreditoARealizar.remove(creditoRemovido) : colecaoCreditoARealizar);
+					if(!creditosRemovidos.isEmpty())
+						colecaoCreditoARealizar.removeAll(creditosRemovidos);
+					sessao.setAttribute("colecaoCreditoARealizarImovel", colecaoCreditoARealizar);
 
 					efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizarImovel", 
                             Util.formatarMoedaReal(valorCreditoARealizar));
