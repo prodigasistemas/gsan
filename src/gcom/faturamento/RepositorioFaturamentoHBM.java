@@ -2481,29 +2481,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>0 or (parc.parc_id is not null "
 					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ) ";
 
-			retorno = session.createSQLQuery(consulta).addScalar(
-					"idCreditoARealizar", Hibernate.INTEGER).addScalar(
-					"numeroPrestacaoRealizada", Hibernate.SHORT).addScalar(
-					"numeroPrestacaoCredito", Hibernate.SHORT).addScalar(
-					"valorCredito", Hibernate.BIG_DECIMAL).addScalar(
-					"valorResidualMesAnterior", Hibernate.BIG_DECIMAL)
-					.addScalar("idCreditoTipo", Hibernate.INTEGER).addScalar(
-							"idLancamentoItemContabil", Hibernate.INTEGER)
-					.addScalar("idLocalidade", Hibernate.INTEGER).addScalar(
-							"idQuadra", Hibernate.INTEGER).addScalar(
-							"codigoSetorComercial", Hibernate.INTEGER)
-					.addScalar("numeroQuadra", Hibernate.INTEGER).addScalar(
-							"lote", Hibernate.SHORT).addScalar("sublote",
-							Hibernate.SHORT).addScalar("amReferenciaCredito",
-							Hibernate.INTEGER).addScalar("amCobrancaCredito",
-							Hibernate.INTEGER).addScalar("idCreditoOrigem",
-							Hibernate.INTEGER).addScalar("numeroParcelaBonus",
-							Hibernate.SHORT).addScalar("tmCredito",
-							Hibernate.TIMESTAMP).setInteger("imovelId",
-							imovelId.intValue()).setInteger(
-							"debitoCreditoSituacaoAtualId",
-							debitoCreditoSituacaoAtualId).setInteger(
-							"anoMesFaturamento", anoMesFaturamento).list();
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idCreditoARealizar", Hibernate.INTEGER)
+					.addScalar("numeroPrestacaoRealizada", Hibernate.SHORT)
+					.addScalar("numeroPrestacaoCredito", Hibernate.SHORT)
+					.addScalar("valorCredito", Hibernate.BIG_DECIMAL)
+					.addScalar("valorResidualMesAnterior", Hibernate.BIG_DECIMAL)
+					.addScalar("idCreditoTipo", Hibernate.INTEGER)
+					.addScalar("idLancamentoItemContabil", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("idQuadra", Hibernate.INTEGER)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("lote", Hibernate.SHORT)
+					.addScalar("sublote",Hibernate.SHORT)
+					.addScalar("amReferenciaCredito",Hibernate.INTEGER)
+					.addScalar("amCobrancaCredito", Hibernate.INTEGER)
+					.addScalar("idCreditoOrigem", Hibernate.INTEGER)
+					.addScalar("numeroParcelaBonus", Hibernate.SHORT)
+					.addScalar("tmCredito", Hibernate.TIMESTAMP)
+					.addScalar("refPrestacao", Hibernate.INTEGER)
+					.setInteger("imovelId", imovelId.intValue())
+					.setInteger( "debitoCreditoSituacaoAtualId", debitoCreditoSituacaoAtualId)
+					.setInteger( "anoMesFaturamento", anoMesFaturamento).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -15275,6 +15275,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 
+				delete = delete + ")";				
+
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -15369,13 +15371,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 							+ " where rota.rota_id = ? and imov.rota_idalternativa is null "
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
-					}
-					
-					delete = delete + ")";
 				}
 				/*
 				 * Caso contrário; a pesquisa dos imóveis será feita a partir da
@@ -15389,16 +15384,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join cadastro.imovel imov on ( cnta.imov_id = imov.imov_id ) "
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
-							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
-						
-					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
-						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
-					}
-					
-					delete = delete + ")";
+							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";						
 				}
-	
+
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
+							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+				}
+				
+				delete = delete + ")";
+				
 				//UTILIZADO APENAS NO PRÉ FATURAMENTO
 				if (helper.getFaturamentoGrupo() != null) {
 					delete = delete.substring(0, delete.length() - 1)
@@ -60460,7 +60455,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			consulta.append("update Conta ")
-					.append("set indicadorFaturamentoCompleto = " + ConstantesSistema.SIM)
+					.append("set indicadorFaturamentoConcluido = " + ConstantesSistema.SIM)
 					.append("WHERE id = :idConta ");
 
 			session.createQuery(consulta.toString()).setInteger("idConta", id).executeUpdate();

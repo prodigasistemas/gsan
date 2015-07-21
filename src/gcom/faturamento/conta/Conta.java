@@ -94,7 +94,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 	private Date dataEnvioEmailConta;
 	private BigDecimal valorRateioAgua;
 	private BigDecimal valorRateioEsgoto;
-	private Short indicadorFaturamentoConcluido;
+	private Short indicadorFaturamentoConcluido = new Short("0");
 	
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
 	private Integer consumoAgua;
