@@ -377,7 +377,7 @@ function validarForm(form)
 function habilitarResponsavel() {
 	var form = document.ConsultarDebitoActionForm;
 	if(form.codigoClienteSuperior.value.length > 0){
-		form.responsavel[0].disabled = true;
+		form.responsavel[1].disabled = true;
 		form.responsavel[2].disabled = true;
 		form.responsavel[0].checked = true;
 	}

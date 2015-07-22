@@ -44154,4 +44154,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
+	
+	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) {
+		try {
+			return this.getControladorArrecadacao().pesquisarPagamentoInconformeImovel(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 }

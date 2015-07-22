@@ -4363,4 +4363,19 @@ public interface IControladorArrecadacao {
 		public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException;
 		
 		public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException;
+		
+		/**
+		 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+		 * 
+		 * 
+		 * Pesquisa os pagamentos do Imóvel pesquisarPagamentoImovel
+		 * 
+		 * @author Matheus Cruz
+		 * @date 14/07/2015
+		 * 
+		 * @param FiltroPagamento
+		 * @return Collection<Pagamento>
+		 * @throws ControladorException
+		 */
+		public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException;
 }

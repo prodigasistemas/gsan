@@ -11,6 +11,7 @@
 <%@ page import="gcom.faturamento.credito.CreditoARealizar"%>
 <%@ page import="gcom.cobranca.bean.GuiaPagamentoValoresHelper"%>
 <%@ page import="gcom.cobranca.bean.DebitoCreditoParcelamentoHelper"%>
+<%@ page import="gcom.arrecadacao.pagamento.Pagamento"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
@@ -819,13 +820,215 @@ function calcularDesconto(){
 					
 				</td>
 			</tr>
-
+			
 			</logic:notEmpty>
 			
 			</logic:present>
 			
+
+				    <tr>
+					  <td colspan="1">&nbsp;</td>
+				    </tr>
+			
+			
 			</table>
 			
+			<table width="100%" align="center" bgcolor="#90c7fc" border="0">
+						<% String cor = "#cbe5fe";%>
+						<tr bordercolor="#79bbfd">
+							<td colspan="10" bgcolor="#79bbfd">
+							<strong>Contas Inconformes</strong>
+							</td>
+						</tr>
+							<tr bordercolor="#000000">
+								<td bgcolor="#90c7fc" width="14%" align="center" rowspan="2">
+										<strong>Mês/Ano Conta</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+										<strong>Valor da Conta</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+										<strong>Valor do Pag.</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="16%" align="center" rowspan="2">
+										<strong>Data do Pag.</strong>
+								</td>
+								<td bgcolor="#90c7fc" width="32%" align="center" colspan="2">
+										<strong>Situação</strong>
+								</td>
+							</tr>
+							<tr>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+										<strong>Anterior</strong>
+								</td>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+										<strong>Atual</strong>
+								</td>
+							</tr>
+							
+							<logic:notEmpty name="colecaoPagamentosImovelContaInconformes" scope="session">
+														
+							<tr>
+								<td height="auto" colspan="10">
+									<div style="width: 100%; max-height: 100px; overflow: auto;">
+										<table width="100%">
+											<%int cont1 = 1;%>
+												<logic:iterate name="colecaoPagamentosInconformesAtuais"
+													id="pagamento" type="Pagamento">
+													<%cont1 = cont1 + 1;
+														if (cont1 % 2 == 0) {%>
+													<tr bgcolor="#FFFFFF">
+														<%} else {
+								
+								    				%>
+													<tr bgcolor="#cbe5fe">
+														<%}%>
+								
+														<td width="14%" align="center"><logic:notEmpty
+															name="pagamento" property="contaGeral">
+															<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.conta.referencia">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+															<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.contaHistorico.anoMesReferenciaConta">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+														</logic:notEmpty> 
+														<logic:empty name="pagamento" property="contaGeral">
+																${pagamento.formatarAnoMesPagamentoParaMesAno}
+														</logic:empty></td>
+														<td width="19%" align="right">
+															<logic:notEmpty	name="pagamento" property="contaGeral">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																		<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																		<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																</logic:notEmpty>
+															</logic:notEmpty>
+														</td>
+														<td width="19%" align="right">
+																<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
+														</td>
+														
+														<td width="16%" align="center">
+																<a href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
+																<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" /></a>&nbsp;
+														</td>
+													
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+														</td>
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+														</td>
+													</tr>
+												</logic:iterate>
+												
+												<logic:present name="colecaoPagamentosInconformesPreteritos">
+													<logic:notEmpty name="colecaoPagamentosInconformesPreteritos" scope="session">
+														<tr>
+															<td colspan="10">
+																<div align="center">
+																		<strong>Pagamentos Inconformes de Clientes Anteriores</strong>
+																</div>
+															</td>
+														</tr>
+													</logic:notEmpty>
+													
+													<logic:iterate name="colecaoPagamentosInconformesPreteritos"
+														id="pagamento" type="Pagamento">
+														<%cont1 = cont1 + 1;
+															if (cont1 % 2 == 0) {%>
+														<tr bgcolor="#FFFFFF">
+															<%} else {
+									
+									    				%>
+														<tr bgcolor="#cbe5fe">
+															<%}%>
+								
+														<td width="14%" align="center"><logic:notEmpty
+															name="pagamento" property="contaGeral">
+															<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.conta.referencia">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+															<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.contaHistorico.anoMesReferenciaConta">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+														</logic:notEmpty> 
+														<logic:empty name="pagamento" property="contaGeral">
+																${pagamento.formatarAnoMesPagamentoParaMesAno}
+														</logic:empty></td>
+														<td width="19%" align="right">
+															<logic:notEmpty	name="pagamento" property="contaGeral">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																		<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																		<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																</logic:notEmpty>
+															</logic:notEmpty>
+														</td>
+														<td width="19%" align="right">
+																<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
+														</td>
+														
+														<td width="16%" align="center">
+																<a href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
+																<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" /></a>&nbsp;
+														</td>
+													
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+														</td>
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+														</td>
+													</tr>
+												</logic:iterate>
+													
+												</logic:present>
+										</table>
+									</div>
+								</td>
+							</tr>
+						</logic:notEmpty>
+					</table>
 			
 			<table width="100%" cellpadding="0" cellspacing="0">
 			<tr>
@@ -879,7 +1082,7 @@ function calcularDesconto(){
 			<tr>
 				<td>
 										
-					<% String cor = "#cbe5fe";%>
+					<% cor = "#cbe5fe";%>
 
 					<div style="width: 100%; height: 100; overflow: auto;">
 										

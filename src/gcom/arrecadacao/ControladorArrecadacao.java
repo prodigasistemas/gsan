@@ -52265,5 +52265,19 @@ public class ControladorArrecadacao implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}}
+	}
+	
+	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException {
+		
+
+		try {
+			return repositorioArrecadacao.pesquisarPagamentoInconformeImovel(idImovel);
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	
+		
+	}
+}
 
