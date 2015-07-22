@@ -42013,7 +42013,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					repositorioFaturamento.apagarCreditoRealizado(helper);
 					
 					repositorioFaturamento.atualizarDebitoACobrar(helper);
-					repositorioFaturamento.atualizarCreditoARealizar(helper);
+					//repositorioFaturamento.atualizarCreditoARealizar(helper);
 					repositorioFaturamento.atualizarContaGeral(helper);
 					
 					repositorioFaturamento.apagarDadosCobranca(helper);
@@ -66725,7 +66725,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		// Pesquisa os créditos a realizar do imóvel
 		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
-
+		
 		// caso seja por pré-faturar, Impressão Simultânea, pesquisar os
 		// créditos de Nitrato
 		// também que foram gerados com a situação Pré-Faturada
@@ -66772,6 +66772,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
+			logger.info("********* Imovel:" + imovel.getId() + " - Quantidade de creditos a realizar: " + colecaoCreditosARealizar.size());
+			
 			mapCreditoRealizado = new HashMap();
 			mapValoresPorTipoCredito = new HashMap<CreditoTipo, BigDecimal>();
 
@@ -66782,6 +66784,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
 				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+				
+				logger.info("*********************** Credito a realizar");
+				logger.info("ID               : " + creditoARealizar.getId());
+				logger.info("realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
+				logger.info("residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
+				logger.info("concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
+				
 
 				BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
 				BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
@@ -66791,8 +66800,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
 				}
 
-				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
-						.intValue())) {
+				if (creditoARealizar.getAnoMesReferenciaPrestacao().intValue() == anoMesFaturamento.intValue() || 
+					creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
 
 					/*
 					 * Valor correspondente da parcela do mês = valor do crédito
@@ -66825,14 +66834,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 						valorCorrespondenteParcelaMes = parte22;
 					}
-
-					
-//					if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
-//							&& creditoARealizar.getAnoMesReferenciaPrestacao().intValue() != anoMesFaturamento.intValue()) {
-//						creditoARealizar.setNumeroPrestacaoRealizada(new Short((creditoARealizar.getNumeroPrestacaoRealizada().intValue() + 1) + ""));
-//						creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
-//					} 
-
 				}
 
 				if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
@@ -66891,6 +66892,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// Acumula o valor do crédito
 				valorTotalCreditos = valorTotalCreditos.add(valorCredito);
 
+				logger.info(". realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
+				logger.info(". residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
+				logger.info(". concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
+				
 				// Se a atividade é faturar grupo de faturamento
 				if (gerarAtividadeGrupoFaturamento) {
 

@@ -2477,7 +2477,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and crar.dcst_idatual= :debitoCreditoSituacaoAtualId "
 					+ "  and (crar.crar_nnprestacaorealizadas<"
 					+ "      (crar.crar_nnprestacaocredito - coalesce(crar.crar_nnparcelabonus, 0)) "
-					+ "      or crar.crar_vlresidualmesanterior>0) "
+					+ "      or crar.crar_vlresidualmesanterior>0 "
+					+ "      or crar.crar_amreferenciaprestacao = :anoMesFaturamento) "
 					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>0 or (parc.parc_id is not null "
 					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ) ";
 
