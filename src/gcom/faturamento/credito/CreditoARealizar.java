@@ -620,4 +620,66 @@ public class CreditoARealizar extends ObjetoTransacao {
 	public void setValorResidualConcedidoMes(BigDecimal valorResidualConcedidoMes) {
 		this.valorResidualConcedidoMes = valorResidualConcedidoMes;
 	}
+
+	public void reduzPrestacoesRealizadas() {
+		numeroPrestacaoRealizada--;
+	}
+
+	public boolean possuiResiduo() {
+		return valorResidualMesAnterior != null && valorResidualMesAnterior.compareTo(BigDecimal.ZERO) > 0;
+	}
+
+	public boolean isUltimaPrestacao() {
+		return numeroPrestacaoRealizada() == numeroPrestacaoCredito() - numeroParcelaBonus();
+	}
+
+	public short numeroParcelaBonus() {
+		return numeroParcelaBonus != null ? numeroParcelaBonus : 0;
+	}
+	
+	private int numeroPrestacaoCredito() {
+		return numeroPrestacaoCredito != null ? numeroPrestacaoCredito : 0;
+	}
+	
+	private int numeroPrestacaoRealizada() {
+		return numeroPrestacaoRealizada != null ? numeroPrestacaoRealizada : 0;
+	}
+
+	public BigDecimal calculaValorParcela() {
+		BigDecimal valorParcela = BigDecimal.ZERO;
+		
+		if (!isUltimaPrestacao()) {
+			valorParcela = getValorCredito().divide(new BigDecimal(numeroPrestacaoCredito()), 2, BigDecimal.ROUND_DOWN);
+
+			if (numeroPrestacaoRealizada() == numeroPrestacaoCredito() - numeroParcelaBonus() - 1) {
+				BigDecimal valorMesVezesPrestacaoCredito = valorParcela.multiply(new BigDecimal(numeroPrestacaoCredito())).setScale(2);
+
+				BigDecimal parte11 = valorParcela.add(getValorCredito());
+				BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
+
+				valorParcela = parte22;
+			}
+		}
+		
+		return valorParcela;
+	}
+
+	public void incrementaPrestacoesRealizadas(){
+		if (!isUltimaPrestacao()){
+			this.setNumeroPrestacaoRealizada((short) (numeroPrestacaoRealizada() + 1));			
+		}
+	}
+
+	public void atualizaResiduo(BigDecimal valorCredito, BigDecimal valorTotalACobrar) {
+		valorResidualMesAnterior = valorCredito.subtract(valorTotalACobrar);
+		valorResidualMesAnterior = valorResidualMesAnterior.compareTo(BigDecimal.ZERO) >= 0 ? valorResidualMesAnterior : BigDecimal.ZERO;
+	}
+
+	public boolean concedidoNaReferenciaAtual(int referencia) {
+		return anoMesReferenciaPrestacao.intValue() == referencia;
+	}
+
+	public BigDecimal calculaCreditoOuResiduo() {
+		return possuiResiduo() ? valorResidualMesAnterior : valorCredito;
+	}
 }

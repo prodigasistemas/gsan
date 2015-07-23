@@ -66800,49 +66800,51 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
 				}
 
-				if (creditoARealizar.getAnoMesReferenciaPrestacao().intValue() == anoMesFaturamento.intValue() || 
-					creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
+//				if (creditoARealizar.getAnoMesReferenciaPrestacao().intValue() == anoMesFaturamento.intValue() || 
+//					creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
+//
+//					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,BigDecimal.ROUND_DOWN);
+//
+//					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() 
+//							== ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue()) - 1)) {
+//
+//						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
+//
+//						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
+//						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
+//
+//						valorCorrespondenteParcelaMes = parte22;
+//					}
+//				}
+				
+				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
 
-					/*
-					 * Valor correspondente da parcela do mês = valor do crédito
-					 * / nº de pestações do crédito.
-					 */
-					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,
-							BigDecimal.ROUND_DOWN);
+					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,BigDecimal.ROUND_DOWN);
 
-					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() == ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
-							.intValue()) - 1)) {
+					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() 
+							== ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue()) - 1)) {
 
-						/*
-						 * PARTE 01 valor do crédito correspondente a parcela do
-						 * mês * (o nº de prestação dos créditos menos o numero
-						 * de parcela bonus)
-						 */
+						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
 
-						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(
-								new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
-
-						/*
-						 * PARTE 02 valor do crédito correspondente a parcela do
-						 * mês + valor do crédito
-						 */
 						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
-
-						// valor do crédito correspondente a parcela do mês
-						// = PARTE 02 - PARTE 01
 						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
 
 						valorCorrespondenteParcelaMes = parte22;
 					}
 				}
+				
+				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
+				
+				if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
+					valorCredito = creditoARealizar.calculaCreditoOuResiduo();
+				}
+
 
 				if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
 						&& creditoARealizar.getAnoMesReferenciaPrestacao().intValue() != anoMesFaturamento.intValue()) {
 					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 					creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
 				}
-
-				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
 
 
 				/*
