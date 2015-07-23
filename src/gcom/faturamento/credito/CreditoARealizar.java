@@ -676,7 +676,7 @@ public class CreditoARealizar extends ObjetoTransacao {
 	}
 
 	public boolean concedidoNaReferenciaAtual(int referencia) {
-		return anoMesReferenciaPrestacao.intValue() == referencia;
+		return anoMesReferenciaPrestacao != null && anoMesReferenciaPrestacao.intValue() == referencia;
 	}
 
 	public BigDecimal calculaCreditoOuResiduo() {
