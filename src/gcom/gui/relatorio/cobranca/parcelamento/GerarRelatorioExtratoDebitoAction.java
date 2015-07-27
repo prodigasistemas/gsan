@@ -93,6 +93,11 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 			
 		try {
+			
+			if (usuarioLogado != null) {
+				logger.info("[Usuario logado: " + usuarioLogado.getLogin() + "]");
+			}
+			
 			if (request.getParameter("extratoDebito") != null) {
 					setDadosExtratoDebito(fachada, sessao);
 			} else if (request.getParameter("parcelamento") != null) {
@@ -355,6 +360,17 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		}
 		
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarSemJurosParcelamento(colecaoDebitosACobrar);
+		
+		logger.info("[ " + idImovel + "	- GERANDO EXTRATO DE DEBITO ]");
+		String valoresTotaisContas = "";
+		if (colecaoContas != null && !colecaoContas.isEmpty()) {
+			for (ContaValoresHelper conta : colecaoContas) {
+				valoresTotaisContas += conta.getValorTotalConta() + ",";
+			}
+			
+			
+			logger.info("[ " + idImovel + "	- valoresTotaisContas: " + valoresTotaisContas.substring(0, valoresTotaisContas.length()-1) + "]");
+		}
 	}
 
 	private void setNomeUsuarioECpfCnpj(Fachada fachada, Integer idImovel) {
@@ -487,6 +503,15 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		logger.info("[ " + idImovel + "	- valorDocumento: " + valorDocumento + "]");
 		logger.info("[ " + idImovel + "	- valorDesconto: " + valorDesconto + "]");
 		logger.info("[ " + idImovel + "	- valorDescontoCredito: " + valorDescontoCredito + "]");
+		String valoresTotaisContas = "";
+		if (colecaoContas != null && !colecaoContas.isEmpty()) {
+			for (ContaValoresHelper conta : colecaoContas) {
+				valoresTotaisContas += conta.getValorTotalConta() + ",";
+			}
+			
+			
+			logger.info("[ " + idImovel + "	- valoresTotaisContas: " + valoresTotaisContas.substring(0, valoresTotaisContas.length()-1) + "]");
+		}
 	}
 
 	private Collection obterColecaoDebitosACobrarDoParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
