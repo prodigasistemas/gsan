@@ -22090,7 +22090,7 @@ public class ControladorArrecadacao implements SessionBean {
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.BONUS_SOCIAL);
 
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoBonusSocial, lancamentoItemTemp, lancamentoItemContabil,
+										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoBonusSocial, lancamentoItemTemp, null,
 										new Short("900"), sequencialImpressao);
 								
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
