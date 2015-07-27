@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
-import static org.junit.Assert.assertEquals;
 
 public class TestaUtil extends TestCase {
 
