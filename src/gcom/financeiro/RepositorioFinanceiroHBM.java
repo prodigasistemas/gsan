@@ -4894,7 +4894,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ "				ELSE 0 " 
 					+ "			END ) ) ) < 13 ) "
 					+ "		 THEN "
-					+ " 		crarCat.cacg_vlcategoria - (trunc( (crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * (crar.crar_nnprestacaorealizadas - ( "
+					+ " 		crarCat.cacg_vlcategoria - (round( (crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * (crar.crar_nnprestacaorealizadas - ( "
 					+ " 		CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
 					+ "				THEN 1 "
 					+ "		 		ELSE 0 "
@@ -5095,7 +5095,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
             // constroi o sql
             consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
                     + " crarCat.catg_id as idCategoria, "
-                    + " sum( crarCat.cacg_vlcategoria - (trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
                     + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
                     + " THEN 1 "
                     + " ELSE 0 "
@@ -5294,7 +5294,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
             // constroi o sql
             consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
             		+ " crarCat.catg_id as idCategoria, "
-            		+ " sum( crarCat.cacg_vlcategoria - (trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+            		+ " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
                     + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
                     + " THEN 1 "
                     + " ELSE 0 "
@@ -5474,7 +5474,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
             // constroi o sql
             consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
                     + " crarCat.catg_id as idCategoria, "
-                    + " sum( crarCat.cacg_vlcategoria - (trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
                     + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
                     + " THEN 1 "
                     + " ELSE 0 "
@@ -5648,7 +5648,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
             // constroi o sql
             consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
                     + " crarCat.catg_id as idCategoria, "
-                    + " sum( crarCat.cacg_vlcategoria - (trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
                     + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
                     + " THEN 1 "
                     + " ELSE 0 "
@@ -5827,7 +5827,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
             // constroi o sql
             consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
                     + " crarCat.catg_id as idCategoria, "
-                    + " sum( crarCat.cacg_vlcategoria - (trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
                     + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
                     + " THEN 1 "
                     + " ELSE 0 "
