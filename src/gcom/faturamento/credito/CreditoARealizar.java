@@ -645,7 +645,7 @@ public class CreditoARealizar extends ObjetoTransacao {
 		return numeroPrestacaoRealizada != null ? numeroPrestacaoRealizada : 0;
 	}
 
-	public BigDecimal calculaValorParcela() {
+	public BigDecimal calculaValorParcelaIntermediaria() {
 		BigDecimal valorParcela = BigDecimal.ZERO;
 		
 		if (!isUltimaPrestacao()) {
@@ -664,6 +664,19 @@ public class CreditoARealizar extends ObjetoTransacao {
 		return valorParcela;
 	}
 
+	private BigDecimal calculaValorUltimaParcela() {
+		BigDecimal valorParcela = getValorCredito().divide(new BigDecimal(numeroPrestacaoCredito()), 2, BigDecimal.ROUND_DOWN);
+		
+		BigDecimal valorMesVezesPrestacaoCredito = valorParcela.multiply(new BigDecimal(numeroPrestacaoCredito())).setScale(2);
+		
+		BigDecimal parte11 = valorParcela.add(getValorCredito());
+		BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
+		
+		valorParcela = parte22;
+		
+		return valorParcela;
+	}
+	
 	public void incrementaPrestacoesRealizadas(){
 		if (!isUltimaPrestacao()){
 			this.setNumeroPrestacaoRealizada((short) (numeroPrestacaoRealizada() + 1));			
@@ -678,8 +691,12 @@ public class CreditoARealizar extends ObjetoTransacao {
 	public boolean concedidoNaReferenciaAtual(int referencia) {
 		return anoMesReferenciaPrestacao != null && anoMesReferenciaPrestacao.intValue() == referencia;
 	}
+	
+	public boolean nuncaFoiConcedido(){
+		return anoMesReferenciaPrestacao == null;
+	}
 
 	public BigDecimal calculaCreditoOuResiduo() {
-		return possuiResiduo() ? valorResidualMesAnterior : valorCredito;
+		return possuiResiduo() ? valorResidualMesAnterior : calculaValorUltimaParcela();
 	}
 }

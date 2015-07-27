@@ -66791,61 +66791,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				logger.info("residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
 				logger.info("concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
 				
-
-				BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
-				BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
-
-				Short numeroParcelaBonus = 0;
-				if (creditoARealizar.getNumeroParcelaBonus() != null) {
-					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
-				}
-
-//				if (creditoARealizar.getAnoMesReferenciaPrestacao().intValue() == anoMesFaturamento.intValue() || 
-//					creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
-//
-//					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,BigDecimal.ROUND_DOWN);
-//
-//					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() 
-//							== ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue()) - 1)) {
-//
-//						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
-//
-//						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
-//						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
-//
-//						valorCorrespondenteParcelaMes = parte22;
-//					}
-//				}
-				
-				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue())) {
-
-					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,BigDecimal.ROUND_DOWN);
-
-					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() 
-							== ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus.intValue()) - 1)) {
-
-						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
-
-						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
-						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
-
-						valorCorrespondenteParcelaMes = parte22;
-					}
-				}
-				
-				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
+				BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria().add(creditoARealizar.getValorResidualMesAnterior());
 				
 				if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
 					valorCredito = creditoARealizar.calculaCreditoOuResiduo();
 				}
 
-
-				if (creditoARealizar.getAnoMesReferenciaPrestacao() != null
-						&& creditoARealizar.getAnoMesReferenciaPrestacao().intValue() != anoMesFaturamento.intValue()) {
-					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+				if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
+					creditoARealizar.incrementaPrestacoesRealizadas();
 					creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
+					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 				}
-
+				
 
 				/*
 				 * Para o pré-faturamento todos os créditos a realizar serão
@@ -66917,11 +66874,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					creditoRealizado.setValorCredito(valorCredito);
 					creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
 					creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
-
-					creditoRealizado.setNumeroParcelaBonus(numeroParcelaBonus);
-
+					creditoRealizado.setNumeroParcelaBonus(creditoARealizar.numeroParcelaBonus());
 					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
-
 					creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
 
 					// Adiciona o crédito realizado na sessão
