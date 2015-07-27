@@ -66715,6 +66715,104 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return GerarCreditoRealizadoHelper
 	 * @throws ControladorException
 	 */
+	
+	public Collection<CreditoARealizar> atualizarCreditosARealizar(Integer anoMesFaturamento, Collection<CreditoARealizar> creditos, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal valorDebitos, boolean preFaturamento){
+		
+		BigDecimal valorTotalCreditos = ConstantesSistema.VALOR_ZERO;
+		BigDecimal valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+
+		BigDecimal parte1 = valorTotalACobrar.add(valorAgua);
+		BigDecimal parte2 = parte1.add(valorEsgoto);
+		valorTotalACobrar = parte2.add(valorDebitos);
+
+		/*
+		 * Para o pré-faturamento todos os créditos a realizar serão
+		 * transformados em crédito realizado, independente do valor total a
+		 * cobrar.
+		 */
+		if (preFaturamento) {
+			valorTotalACobrar = BigDecimal.ONE;
+		}
+		
+		Iterator iteratorColecaoCreditosARealizar = creditos.iterator();
+
+		CreditoARealizar creditoARealizar = null;
+
+		while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
+
+			creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+			
+			logger.info("*********************** Credito a realizar");
+			logger.info("ID               : " + creditoARealizar.getId());
+			logger.info("realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
+			logger.info("residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
+			logger.info("concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
+			
+			BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria().add(creditoARealizar.getValorResidualMesAnterior());
+			
+			if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
+				valorCredito = creditoARealizar.calculaCreditoOuResiduo();
+			}
+
+			if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
+				creditoARealizar.incrementaPrestacoesRealizadas();
+				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
+				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+			}
+			
+
+			/*
+			 * Para o pré-faturamento todos os créditos a realizar serão
+			 * transformados em crédito realizado, independente do valor
+			 * total a cobrar.
+			 */
+			if (!preFaturamento) {
+
+				// Retira o valor de credito do valor total a cobrar
+				valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
+			}
+
+			/*
+			 * Caso o valor total a cobrar seja menor que zero o valor
+			 * residual do mês anterior vai ser igual a valor total a cobrar
+			 * vezes -1(menos um) e o valor do crédito vai ser igual ao
+			 * valor do crédito menos valor residual do mês anterior.
+			 * 
+			 * Valor Total A Cobrar = 0.00
+			 * 
+			 * Caso contrário o valor residual do mês anterior vai ser
+			 * iguala zero.
+			 */
+			if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+
+				creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
+
+				valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
+
+				valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+
+			} else {
+
+				/**
+				 * autor: Adriana Muniz data:29/06/2011
+				 * 
+				 * alteração para não lançar para zero o valor residual dos
+				 * creditos s a realizar, caso o imóvel pertença ao
+				 * impressão simultanea
+				 * */
+				if (!preFaturamento) {
+					creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+				}
+			}
+
+			// Acumula o valor do crédito
+			valorTotalCreditos = valorTotalCreditos.add(valorCredito);
+
+			logger.info(". realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
+			logger.info(". residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
+			logger.info(". concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
+		}
+	}
 	public GerarCreditoRealizadoHelper gerarCreditoRealizado(Imovel imovel,
 			Integer anoMesFaturamento,
 			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto,
