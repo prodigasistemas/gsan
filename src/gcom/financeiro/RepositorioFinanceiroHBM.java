@@ -4900,7 +4900,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ "		 		ELSE 0 "
 					+ " 		END ) ) ) "  
 					+ " 	ELSE " 
-					+ " 		trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * 12 " 
+					+ " 		round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * 12 " 
 					+ " 	END " 
 					+ " ) as valorCurtoPrazo, " 
 					+ " sum( " 
@@ -4913,7 +4913,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " 	THEN " 
 					+ "			0.00 " 
 					+ " 	ELSE " 
-					+ " 		crarCat.cacg_vlcategoria - ( trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito ), 2 ) * ( 12 + crar.crar_nnprestacaorealizadas - ( " 
+					+ " 		crarCat.cacg_vlcategoria - ( round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito ), 2 ) * ( 12 + crar.crar_nnprestacaorealizadas - ( " 
 					+ " 		CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) " 
 					+ " 			THEN 1 "
 					+ " 			ELSE 0 "
@@ -5017,7 +5017,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and ( crar.crog_id = :descontoParcelamento ) "
@@ -5208,7 +5208,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and crar.crog_id in ( :devolucaoAgua, "
@@ -5396,7 +5396,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and ( crar.crog_id = :descontoIncondicional ) "
@@ -5577,7 +5577,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and ( crar.crog_id in ( :pagamentoExcesso, :pagamentoDuplicidade ) )"
@@ -5749,7 +5749,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and ( crar.crog_id = :descontoCondicional ) "
@@ -5928,7 +5928,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoNormal, "
 					+ " :situacaoIncluida, :situacaoRetificada ) ) "
-					+ " or ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
 					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
 					+ " and ( crar.crog_id = :ajusteZerarConta ) "
@@ -9005,13 +9005,13 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					
 					+ " count(dbac.dbac_id) as quantidadeDocumentos, "//7
 					+ " sum(( coalesce(dbac.dbac_vldebito,0) - "
-					+ " (trunc(( coalesce(dbac.dbac_vldebito,0) / dbac.dbac_nnprestacaodebito ),2) "
+					+ " (round(( coalesce(dbac.dbac_vldebito,0) / dbac.dbac_nnprestacaodebito ),2) "
 					+ " * dbac.dbac_nnprestacaocobradas))) as valorCategoria, "//8
 					
 					+ " fdrc.fdrc_id AS idFaixa, " //9
 					
 					+ " sum( ( coalesce(dbac.dbac_vldebito,0) - "
-					+ " (trunc( ( coalesce(dbac.dbac_vldebito,0) / dbac.dbac_nnprestacaodebito ),2) " 
+					+ " (round( ( coalesce(dbac.dbac_vldebito,0) / dbac.dbac_nnprestacaodebito ),2) " 
 					+ " * (dbac.dbac_nnprestacaocobradas - (CASE WHEN(dbac.dbac_amreferenciaprestacao is not null " 
 					+ " and dbac.dbac_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END) ) ) ) ) " 
 					+ " as valorCategoriaSemParcelaAtual "//10
@@ -9023,9 +9023,9 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ ClienteRelacaoTipo.RESPONSAVEL.toString() + " and clim.clim_dtrelacaofim is null "
 					+ " LEFT JOIN cadastro.cliente resp on clim.clie_id = resp.clie_id "
 					+ " LEFT JOIN cadastro.cliente_tipo cltp on resp.cltp_id = cltp.cltp_id "
-					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= (coalesce(dbac.dbac_vldebito,0) - (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= (coalesce(dbac.dbac_vldebito,0) - (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas)) "
-					+ "   AND fdrc.fdrc_vlfaixafinal >= (coalesce(dbac.dbac_vldebito,0) - (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					+ "   AND fdrc.fdrc_vlfaixafinal >= (coalesce(dbac.dbac_vldebito,0) - (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas))) "	
 					
 					+ " WHERE loca.loca_id = :idLocalidade "
@@ -9123,12 +9123,12 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ DocumentoTipo.CREDITO_A_REALIZAR.toString() + " as idDocumentoTipo, "//6
 					
 					+ " count(crar.crar_id) as quantidadeDocumentos, "//7 
-					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) ) ) as valorCategoria, "//8
 					
 					+ " fdrc.fdrc_id AS idFaixa, " //9
 					
-					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
 					+ " * (crar.crar_nnprestacaorealizadas - (CASE WHEN(crar.crar_amreferenciaprestacao is not null " 
 					+ " and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END ) ) ) "
 					+ " + coalesce(crar.crar_vlresidualmesanterior,0 ) ) ) as valorCategoriaSemParcelaAtual "//10
@@ -9140,9 +9140,9 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ ClienteRelacaoTipo.RESPONSAVEL.toString() + " and clim.clim_dtrelacaofim is null "
 					+ " LEFT JOIN cadastro.cliente resp on clim.clie_id = resp.clie_id "
 					+ " LEFT JOIN cadastro.cliente_tipo cltp on resp.cltp_id = cltp.cltp_id "
-					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
+					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) ) "
-					+ "   AND fdrc.fdrc_vlfaixafinal >= ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
+					+ "   AND fdrc.fdrc_vlfaixafinal >= ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) )) "
 					
 					+ " WHERE loca.loca_id = :idLocalidade "
