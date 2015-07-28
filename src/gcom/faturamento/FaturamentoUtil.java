@@ -7,12 +7,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.jboss.logging.Logger;
-
 public class FaturamentoUtil {
-
-    private static Logger logger = Logger.getLogger(FaturamentoUtil.class);
-
     public AtualizacaoCreditoARealizarHelper atualizarCreditosARealizar(Integer anoMesFaturamento
             , Collection<CreditoARealizar> creditos
             , BigDecimal valorAgua
@@ -33,19 +28,13 @@ public class FaturamentoUtil {
             valorTotalACobrar = BigDecimal.ONE;
         }
         
-        Iterator iteratorColecaoCreditosARealizar = creditos.iterator();
+        Iterator<CreditoARealizar> iteratorColecaoCreditosARealizar = creditos.iterator();
 
         CreditoARealizar creditoARealizar = null;
         
         while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
             creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
-            
-            logger.info("*********************** Credito a realizar");
-            logger.info("ID               : " + creditoARealizar.getId());
-            logger.info("realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
-            logger.info("residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
-            logger.info("concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
             
             BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria(preFaturamento).add(creditoARealizar.getValorResidualMesAnterior());
             
@@ -78,13 +67,8 @@ public class FaturamentoUtil {
                 }
             }
 
-            // Acumula o valor do crédito
             valorTotalCreditos = valorTotalCreditos.add(valorCredito);
 
-            logger.info(". realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
-            logger.info(". residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
-            logger.info(". concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
-            
             helper.addCreditoARealizar(valorCredito, creditoARealizar);
         }
         
