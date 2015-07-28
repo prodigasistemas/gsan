@@ -969,5 +969,11 @@ public class GcomAction extends DispatchAction {
 
 	}
 	
+	protected boolean verificaReferenciaIgualReferencialFaturamento(Integer referencia) {
+		if(referencia.equals(getSistemaParametro().getAnoMesFaturamento()))
+			return true;
+		return false;
+	}
+	
 	
 }
