@@ -645,13 +645,13 @@ public class CreditoARealizar extends ObjetoTransacao {
 		return numeroPrestacaoRealizada != null ? numeroPrestacaoRealizada : 0;
 	}
 
-	public BigDecimal calculaValorParcelaIntermediaria() {
+	public BigDecimal calculaValorParcelaIntermediaria(boolean prefaturamento) {
 		BigDecimal valorParcela = BigDecimal.ZERO;
 		
 		if (!isUltimaPrestacao()) {
 			valorParcela = getValorCredito().divide(new BigDecimal(numeroPrestacaoCredito()), 2, BigDecimal.ROUND_DOWN);
 
-			if (numeroPrestacaoRealizada() == numeroPrestacaoCredito() - numeroParcelaBonus() - 1) {
+			if (numeroPrestacaoRealizada() == numeroPrestacaoCredito() - numeroParcelaBonus() - 1 && prefaturamento) {
 				BigDecimal valorMesVezesPrestacaoCredito = valorParcela.multiply(new BigDecimal(numeroPrestacaoCredito())).setScale(2);
 
 				BigDecimal parte11 = valorParcela.add(getValorCredito());

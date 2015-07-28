@@ -66715,83 +66715,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return GerarCreditoRealizadoHelper
 	 * @throws ControladorException
 	 */
-	
-	public AtualizacaoCreditoARealizarHelper atualizarCreditosARealizar(Integer anoMesFaturamento, Collection<CreditoARealizar> creditos, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal valorDebitos, boolean preFaturamento){
-	    
-	    AtualizacaoCreditoARealizarHelper helper = new AtualizacaoCreditoARealizarHelper();
 		
-		BigDecimal valorTotalCreditos = ConstantesSistema.VALOR_ZERO;
-		BigDecimal valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-
-		BigDecimal parte1 = valorTotalACobrar.add(valorAgua);
-		BigDecimal parte2 = parte1.add(valorEsgoto);
-		valorTotalACobrar = parte2.add(valorDebitos);
-
-		if (preFaturamento) {
-			valorTotalACobrar = BigDecimal.ONE;
-		}
-		
-		Iterator iteratorColecaoCreditosARealizar = creditos.iterator();
-
-		CreditoARealizar creditoARealizar = null;
-		
-		while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
-
-			creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
-			
-			logger.info("*********************** Credito a realizar");
-			logger.info("ID               : " + creditoARealizar.getId());
-			logger.info("realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
-			logger.info("residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
-			logger.info("concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
-			
-			BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria().add(creditoARealizar.getValorResidualMesAnterior());
-			
-			if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
-				valorCredito = creditoARealizar.calculaCreditoOuResiduo();
-			}
-
-			if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
-				creditoARealizar.incrementaPrestacoesRealizadas();
-				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
-				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
-			}
-			
-			if (!preFaturamento) {
-				valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
-			}
-
-			if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
-
-				creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
-
-				valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
-
-				valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-
-			} else {
-
-				if (!preFaturamento) {
-					creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-				}
-			}
-
-			// Acumula o valor do crédito
-			valorTotalCreditos = valorTotalCreditos.add(valorCredito);
-
-			logger.info(". realizadas       : " + creditoARealizar.getNumeroPrestacaoRealizada());
-			logger.info(". residual anterior: " + creditoARealizar.getValorResidualMesAnterior());
-			logger.info(". concedido mes    : " + creditoARealizar.getValorResidualConcedidoMes());
-			
-			helper.addCreditoARealizar(valorCredito, creditoARealizar);
-		}
-		
-		helper.setValorTotalCreditos(valorTotalCreditos);
-		helper.setValorTotalDebitos(valorTotalACobrar);
-		
-		return helper;
-	}
-	
 	public GerarCreditoRealizadoHelper gerarCreditoRealizado(Imovel imovel,
 			Integer anoMesFaturamento,
 			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto,
@@ -66839,7 +66763,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
 			
-			AtualizacaoCreditoARealizarHelper atualizacaoHelper = atualizarCreditosARealizar(anoMesFaturamento
+			AtualizacaoCreditoARealizarHelper atualizacaoHelper = new FaturamentoUtil().atualizarCreditosARealizar(anoMesFaturamento
 			        , colecaoCreditosARealizar
 			        , helperValoresAguaEsgoto.getValorTotalAgua()
 			        , helperValoresAguaEsgoto.getValorTotalEsgoto()
