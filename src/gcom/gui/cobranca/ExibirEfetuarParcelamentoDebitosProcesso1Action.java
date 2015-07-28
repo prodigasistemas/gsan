@@ -216,8 +216,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				// Caso não existam contas para o imóvel deixar indisponível
 				// o campo mês/ano
 				// de referência inicial e mês/ano de referência final
-				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel
-						.getColecaoContasValoresImovel().size() == 0)) {
+				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
+						&&
+					(colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)) {
 					sessao.setAttribute("bloqueiaIntervaloParcelamento","sim");
 					efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", "");
 					efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", "");
@@ -244,12 +245,18 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				BigDecimal valorMulta = new BigDecimal("0.00");
 
 				// Dados do Débito do Imóvel - Contas
-				Collection<ContaValoresHelper> colecaoContasImovel = colecaoDebitoImovel.getColecaoContasValoresImovel();
+				Collection<ContaValoresHelper> colecaoContasImovel = new ArrayList<ContaValoresHelper>();
 				colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
 				
 				ContaValoresHelper contaRemovida = null;
 				
-				if (colecaoContasImovel != null	&& !colecaoContasImovel.isEmpty()) {
+				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() != null	&& !colecaoDebitoImovel.getColecaoContasValoresImovel().isEmpty())
+						||
+					(colecaoDebitoImovel.getColecaoContasValoresPreteritos() != null	&& !colecaoDebitoImovel.getColecaoContasValoresPreteritos().isEmpty())
+				 ) {
+					
+					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresImovel());
+					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
 					
 					Iterator contaValores = colecaoContasImovel.iterator();
 					

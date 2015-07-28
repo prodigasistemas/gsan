@@ -537,18 +537,6 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					//pesquisa todas as situações de cobrança ativa do imovel
 					Collection colecaoCobrancaSituacao = fachada.pesquisarImovelCobrancaSituacaoPorImovel(new Integer(idImovelDebitos.trim()));
 					
-					Object[] arrayQtdeEValorDebitosPreteritos = fachada.pesquisarQtdeDebitosPreteritos(imovel.getId());
-					Integer qtde = ((Integer)arrayQtdeEValorDebitosPreteritos[0]) == 0 ? null : (Integer)arrayQtdeEValorDebitosPreteritos[0];
-					BigDecimal valor =	(BigDecimal)arrayQtdeEValorDebitosPreteritos[1];
-					
-					sessao.setAttribute("quantidadeDebitosPreteritos", qtde);
-					sessao.setAttribute("valorDebitosPreteritos", Util.formatarMoedaReal(valor));
-					
-					FiltroPagamentoSituacao filtroPagamentoSituacao = new FiltroPagamentoSituacao();
-					filtroPagamentoSituacao.adicionarParametro(new ParametroSimples(FiltroPagamentoSituacao.DESCRICAO_ABREVIADA, "NCONF"));
-					
-					
-					PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
 					
 					Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(idImovelDebitos.trim());
 					Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
@@ -556,6 +544,28 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
 					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
 					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
+					
+//					Object[] arrayQtdeEValorDebitosPreteritos = fachada.pesquisarQtdeDebitosPreteritos(imovel.getId());
+//					Integer qtde = ((Integer)arrayQtdeEValorDebitosPreteritos[0]) == 0 ? null : (Integer)arrayQtdeEValorDebitosPreteritos[0];
+//					BigDecimal valor =	(BigDecimal)arrayQtdeEValorDebitosPreteritos[1];
+					
+					Integer qtde = colecaoContaValoresPreteritos.size() + colecaoPagamentosInconformesPreteritas.size();
+					BigDecimal valor = new BigDecimal("0.00");
+					
+					for (Pagamento pagamento : colecaoPagamentosInconformesPreteritas) {
+						if (pagamento.getContaGeral().getConta() != null)
+							valor = valor.add(pagamento.getContaGeral().getConta().getValorTotal());
+						else
+							valor = valor.add(pagamento.getContaGeral().getContaHistorico().getValorTotal());
+					}
+					
+					for (ContaValoresHelper contaValoresHelper : colecaoContaValoresPreteritos) {
+						valor = valor.add(contaValoresHelper.getConta().getValorTotal());
+					}
+					
+					
+					sessao.setAttribute("quantidadeDebitosPreteritos", (qtde == 0) ? null : qtde);
+					sessao.setAttribute("valorDebitosPreteritos", (valor.doubleValue() == 0.00) ? null : Util.formatarMoedaReal(valor));
 					
 					if ((colecaoContaValores == null)&& (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 							&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty()) && (colecaoGuiaPagamentoValores == null)) {

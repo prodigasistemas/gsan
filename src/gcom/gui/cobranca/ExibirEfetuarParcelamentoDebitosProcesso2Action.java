@@ -246,14 +246,17 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				BigDecimal valorMulta = new BigDecimal("0.00");
 				
 				// Dados do Débito do Imóvel - Contas
-				Collection<ContaValoresHelper> colecaoContaValores = colecaoDebitoCliente.getColecaoContasValores();
+				Collection<ContaValoresHelper> colecaoContaValores = new ArrayList<ContaValoresHelper>();
 				
 				ParcelamentoPerfil parcelamentoPerfil = (ParcelamentoPerfil)sessao.getAttribute("parcelamentoPerfil");
 				//[SB0011] Verificar Única Fatura
 				fachada.verificarUnicaFatura(colecaoContaValores,parcelamentoPerfil);
 				
-				if (colecaoContaValores != null && !colecaoContaValores.isEmpty()) {
+				if ((colecaoDebitoCliente.getColecaoContasValores() != null && !colecaoDebitoCliente.getColecaoContasValores().isEmpty())
+						||
+					(colecaoDebitoCliente.getColecaoContasValoresPreteritos() != null && !colecaoDebitoCliente.getColecaoContasValoresPreteritos().isEmpty())) {
 					
+					colecaoContaValores.addAll(colecaoDebitoCliente.getColecaoContasValores());
 					colecaoContaValores.addAll(colecaoDebitoCliente.getColecaoContasValoresPreteritos());
 					
 					int quantidadeMinimaMesesAntiguidade = 0;
