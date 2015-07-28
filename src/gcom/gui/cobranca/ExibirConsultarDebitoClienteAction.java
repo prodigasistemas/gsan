@@ -177,6 +177,8 @@ public class ExibirConsultarDebitoClienteAction extends GcomAction {
 		// Se a pesquisa foi pelo cliente superior seta o valor 99 no tipo da
 		// relação para identificar posteriormente este tipo de pesquisa (o
 		// código 99 é apenas um identificador)
+		
+		//Comentado por Reinaldo
 		if ((codigoClienteSuperior != null
 				&& !codigoClienteSuperior.trim().equals("") && Integer
 				.parseInt(codigoClienteSuperior) > 0)) {

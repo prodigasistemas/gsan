@@ -2,8 +2,10 @@ package gcom.gui.cadastro.imovel;
 
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.aviso.AvisoBancario;
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.DocumentoTipo;
@@ -11,6 +13,8 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -180,7 +184,7 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
 
 					Collection colecaoImoveisPagamentosHistorico = fachada.pesquisarPagamentoHistoricoImovel(idImovelPagamentos.trim(), null, null, null,
 							null, null, null,null, null,null, null,null, null,null, null,null, null);
-
+					
 					
 					//Não há Pagamentos para o imóvel de matrícula {0}.
 					/*if (colecaoImoveisPagamentos == null || colecaoImoveisPagamentos.isEmpty()) {

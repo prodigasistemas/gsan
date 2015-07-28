@@ -13,6 +13,7 @@
 <%@ page import="gcom.util.ConstantesSistema" isELIgnored="false"%>
 <%@ page import="java.util.Collection" isELIgnored="false"%>
 <%@ page import="gcom.faturamento.conta.Conta"%>
+<%@ page import="gcom.arrecadacao.pagamento.Pagamento"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <head>
@@ -1335,6 +1336,11 @@ function validaCheckGuia(){
 					</table>
 					</td>
 				</tr>
+				
+				
+				
+				
+				
 				<tr>
 					<logic:empty name="colecaoContaValores">
 						<td colspan="4" align="right"><input type="button" name=""

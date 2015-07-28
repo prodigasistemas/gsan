@@ -11,6 +11,7 @@
 <%@ page import="gcom.faturamento.credito.CreditoARealizar"%>
 <%@ page import="gcom.cobranca.bean.GuiaPagamentoValoresHelper"%>
 <%@ page import="gcom.cobranca.bean.DebitoCreditoParcelamentoHelper"%>
+<%@ page import="gcom.arrecadacao.pagamento.Pagamento"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
@@ -66,6 +67,7 @@
 		else if (validarCamposDinamicos(form)){
 		
 			var idsConta = obterValorCheckboxMarcadoPorNome("conta");
+			var idsContaPreterita = obterValorCheckboxMarcadoPorNome("contaPreterita");
 			var idsDebito = obterValorCheckboxMarcadoPorNome("debito");
 			var idsCredito = obterValorCheckboxMarcadoPorNome("credito");
 			var idsGuiaPagamento = obterValorCheckboxMarcadoPorNome("guiaPagamento");
@@ -77,6 +79,13 @@
 				concatenador = true;
 				
 			}
+
+			if (idsContaPreterita != null && idsContaPreterita.length > 0){
+				urlTransferencia = urlTransferencia + "contaPreterita=" + idsContaPreterita;
+				concatenador = true;
+				
+			}
+			
 			if (idsDebito != null && idsDebito.length > 0){
 				if (concatenador){
 					urlTransferencia = urlTransferencia + "&debito=" + idsDebito;
@@ -428,7 +437,7 @@ function totalizarDebito(objeto){
 	var valorSelecionado = 0;
 	var valorAcrescimosSelecionado = 0;
 	
-	if(objeto.name == 'conta'){
+	if(objeto.name == 'conta' || objeto.name == 'contaPreterita'){
 		myString = new String(objeto.alt);
 		splitString = myString.split(";");
 		valorSelecionado  = splitString[0];
@@ -475,6 +484,7 @@ function totalizarDebito(objeto){
 <html:hidden property="idsParcelamento"/>
 
 <input type="hidden" name="checkConta" value="0">
+<input type="hidden" name="checkContaPreterita" value="0">
 <input type="hidden" name="checkCredito" value="0">
 <input type="hidden" name="checkDebito" value="0">
 <input type="hidden" name="checkGuia" value="0">
@@ -660,9 +670,9 @@ function totalizarDebito(objeto){
 			
 
 
-			<logic:present name="colecaoConta">
+			<logic:present name="colecaoContaNormais">
 			
-			<logic:notEmpty name="colecaoConta">
+			<logic:notEmpty name="colecaoContaNormais">
 
 			<tr>
 				<td>
@@ -673,7 +683,7 @@ function totalizarDebito(objeto){
 										
 					<table width="100%" align="center" bgcolor="#90c7fc">
 										
-					<logic:iterate name="colecaoConta" id="conta" type="ContaValoresHelper">
+					<logic:iterate name="colecaoContaNormais" id="conta" type="ContaValoresHelper">
 
 						<%valorTotalConta = valorTotalConta.add(conta.getValorTotalConta()); %>
 						<%valorTotalAcrescimo = valorTotalAcrescimo.add(conta.getValorTotalContaValoresParcelamento()); %>
@@ -874,8 +884,487 @@ function totalizarDebito(objeto){
 			
 			</logic:present>
 			
+					
 			<input TYPE="hidden" NAME="valorTotalConta" ID="valorTotalConta" value="<%= "" + valorTotalConta %>"/>
 			<input type="hidden" name="valorTotalAcrescimo" ID="valorTotalAcrescimo" value="<%="" + valorTotalAcrescimo %>">
+			
+			        <tr>
+					  <td colspan="1">&nbsp;</td>
+				    </tr>
+			
+			</table>
+			
+			<table width="100%" align="center" bgcolor="#90c7fc" border="0">
+						<% String cor = "#cbe5fe";%>
+						<tr bordercolor="#79bbfd">
+							<td colspan="10" bgcolor="#79bbfd">
+							<strong>Contas Inconformes</strong>
+							</td>
+						</tr>
+						
+							<tr bordercolor="#000000">
+								<td bgcolor="#90c7fc" width="14%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Mês/Ano Conta</strong>
+									</font>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Valor da Conta</strong>
+									</font>
+								</td>
+								<td bgcolor="#90c7fc" width="19%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Valor do Pag.</strong>
+									</font>
+								</td>
+								<td bgcolor="#90c7fc" width="16%" align="center" rowspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Data do Pag.</strong>
+									</font>
+								</td>
+								<td bgcolor="#90c7fc" width="32%" align="center" colspan="2">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Situação</strong>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Anterior</strong>
+									</font>
+								</td>
+								<td width="16%" bgcolor="#cbe5fe" align="center">
+									<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+										<strong>Atual</strong>
+									</font>
+								</td>
+							</tr>
+						
+						<logic:notEmpty name="colecaoPagamentosImovelContaInconformes" scope="session">							
+							<tr>
+								<td height="auto" colspan="10">
+									<div style="width: 100%; max-height: 100px; overflow: auto;">
+										<table width="100%">
+											<%int cont1 = 1;%>
+												<logic:iterate name="colecaoPagamentosInconformesAtuais"
+													id="pagamento" type="Pagamento">
+													<%cont1 = cont1 + 1;
+														if (cont1 % 2 == 0) {%>
+													<tr bgcolor="#FFFFFF">
+														<%} else {
+								
+								    				%>
+													<tr bgcolor="#cbe5fe">
+														<%}%>
+								
+														<td width="14%" align="center"><logic:notEmpty
+															name="pagamento" property="contaGeral">
+															<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.conta.referencia">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+															<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.contaHistorico.anoMesReferenciaConta">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+														</logic:notEmpty> 
+														<logic:empty name="pagamento" property="contaGeral">
+																${pagamento.formatarAnoMesPagamentoParaMesAno}
+														</logic:empty></td>
+														<td width="19%" align="right">
+															<logic:notEmpty	name="pagamento" property="contaGeral">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																		<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																		<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																</logic:notEmpty>
+															</logic:notEmpty>
+														</td>
+														<td width="19%" align="right">
+																<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
+														</td>
+														
+														<td width="16%" align="center">
+																<a href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
+																<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" /></a>&nbsp;
+														</td>
+													
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+														</td>
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+														</td>
+													</tr>
+												</logic:iterate>
+												
+												<logic:present name="colecaoPagamentosInconformesPreteritos">
+													<logic:notEmpty name="colecaoPagamentosInconformesPreteritos" scope="session">
+														<tr>
+															<td colspan="10">
+																<div align="center">
+																		<strong>Pagamentos Inconformes de Clientes Anteriores</strong>
+																</div>
+															</td>
+														</tr>
+													</logic:notEmpty>
+													
+													<logic:iterate name="colecaoPagamentosInconformesPreteritos"
+														id="pagamento" type="Pagamento">
+														<%cont1 = cont1 + 1;
+															if (cont1 % 2 == 0) {%>
+														<tr bgcolor="#FFFFFF">
+															<%} else {
+									
+									    				%>
+														<tr bgcolor="#cbe5fe">
+															<%}%>
+								
+														<td width="14%" align="center"><logic:notEmpty
+															name="pagamento" property="contaGeral">
+															<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.conta.referencia">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.conta.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+															<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																	<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.id">
+																		<logic:notEmpty name="pagamento"
+																			property="contaGeral.contaHistorico.anoMesReferenciaConta">
+																			<a href="javascript:abrirPopup('exibirConsultarContaAction.do?tipoConsulta=conta&contaID=<%="" + pagamento.getContaGeral().getId() %>' , 600, 800);">${pagamento.contaGeral.contaHistorico.formatarAnoMesParaMesAno}</a>
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+															</logic:notEmpty>
+															
+														</logic:notEmpty> 
+														<logic:empty name="pagamento" property="contaGeral">
+																${pagamento.formatarAnoMesPagamentoParaMesAno}
+														</logic:empty></td>
+														<td width="19%" align="right">
+															<logic:notEmpty	name="pagamento" property="contaGeral">
+																	<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																		<logic:notEmpty name="pagamento" property="contaGeral.conta.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.conta.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																	</logic:notEmpty>
+																<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																		<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico.valorTotal">
+																			<bean:write name="pagamento" property="contaGeral.contaHistorico.valorTotal"
+																				formatKey="money.format" />&nbsp;
+																		</logic:notEmpty>
+																</logic:notEmpty>
+															</logic:notEmpty>
+														</td>
+														<td width="19%" align="right">
+																<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
+														</td>
+														
+														<td width="16%" align="center">
+																<a href="javascript:abrirPopup('exibirConsultarPagamentoPopupAction.do?idPagamento=${pagamento.id}' , 210, 510);">
+																<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" /></a>&nbsp;
+														</td>
+													
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
+														</td>
+														<td width="16%">
+																${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
+														</td>
+													</tr>
+												</logic:iterate>
+													
+												</logic:present>
+										</table>
+									</div>
+								</td>
+							</tr>
+						</logic:notEmpty>
+					</table>
+			<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td HEIGHT="5"></td>
+			</tr>
+			</table>
+			
+			<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>
+					<%BigDecimal valorTotalContaPreteritos = new BigDecimal("0.00");%>
+					<%BigDecimal valorTotalAcrescimoPreterito = new BigDecimal("0.00");%>
+					<table width="100%" cellpadding="0" cellspacing="0">
+					<tr bgcolor="#79bbfd">
+						<td colspan="6" height="20"><strong>D&eacute;bitos Pret&eacute;ritos</strong></td>
+					</tr>
+					<tr bgcolor="#90c7fc">
+
+						<td width="5%" height="20">
+							<strong><a href="javascript:facilitador(document.forms[0].checkContaPreterita,'contaPreterita');" id="0">Todos</a></strong>
+						</td>
+						<td width="15%">
+							<div align="center"><strong>Mês/Ano</strong></div>
+						</td>
+						<td width="20%">
+							<div align="center"><strong>Vencimento</strong></div>
+						</td>
+						<td width="20%">
+							<div align="center"><strong>Valor</strong></div>
+						</td>
+						<td width="20%">
+							<div align="center"><strong>Acrés. Impont.</strong></div>
+						</td>
+						<td width="20%">
+							<div align="center"><strong>Situação</strong></div>
+						</td>
+
+					</tr>
+					</table>
+
+				</td>
+			</tr>
+			
+			
+
+
+			<logic:present name="colecaoContaPreteritos">
+			
+			<logic:notEmpty name="colecaoContaPreteritos">
+
+			<tr>
+				<td>
+										
+					<% cor = "#cbe5fe";%>
+
+					<div style="width: 100%; height: 100; overflow: auto;">
+										
+					<table width="100%" align="center" bgcolor="#90c7fc">
+										
+					<logic:iterate name="colecaoContaPreteritos" id="conta" type="ContaValoresHelper">
+
+						<%valorTotalContaPreteritos = valorTotalContaPreteritos.add(conta.getValorTotalConta()); %>
+						<%valorTotalAcrescimoPreterito = valorTotalAcrescimoPreterito.add(conta.getValorTotalContaValoresParcelamento()); %>
+						
+						<%	if (cor.equalsIgnoreCase("#cbe5fe")){
+							cor = "#FFFFFF";%>
+							<tr bgcolor="#FFFFFF">
+						<%} else{
+							cor = "#cbe5fe";%>
+							<tr bgcolor="#cbe5fe">
+						<%}%>
+											
+												
+						<td align="center" width="5%">
+							<INPUT TYPE="checkbox" NAME="contaPreterita" value="<%="" + conta.getConta().getId().intValue() %>" 
+							alt="<%="" + Util.formatarMoedaReal(conta.getValorTotalConta()).trim()%>
+							<%=";" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>"
+							onclick="totalizarDebito(this);"> 
+						</td>
+						
+						<logic:empty name="conta" property="conta.contaMotivoRevisao">
+						
+							<td width="15%" align="center">
+							<font color="#000000"> 
+								<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<%="" + conta.getConta().getId() %>&tipoConsulta=conta', 600, 800);">
+								<%=""+ Util.formatarMesAnoReferencia(conta.getConta().getReferencia())%> </a>
+							</font>	
+							</td>
+							<td width="20%">
+								<div align="center">
+									<logic:present name="conta" property="conta.dataVencimentoConta">
+										<span style="color: #000000;">
+											<%="" + Util.formatarData(conta.getConta().getDataVencimentoConta())%>
+										</span>
+									</logic:present> 
+									<logic:notPresent name="conta" property="conta.dataVencimentoConta">
+										&nbsp;
+									</logic:notPresent>	
+								</div>
+							</td>
+							<td width="20%">
+								<div align="right">
+									<span style="color: #000000;">
+										<%="" + Util.formatarMoedaReal(new BigDecimal(conta.getConta().getValorTotalConta())).trim()%>
+									</span>
+								</div>
+								
+							</td>
+							<td width="20%">
+								<div align="right">
+									
+									<logic:equal name="conta" property="valorTotalContaValoresParcelamento" value="0.00">
+									<span style="color: #000000;">
+										<%="" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>
+									</span>
+									</logic:equal>
+									
+									<logic:notEqual name="conta" property="valorTotalContaValoresParcelamento" value="0.00">
+									<a title="<%="Multa: " + Util.formatarMoedaReal(conta.getValorMulta()).trim() + 
+									" Juros de Mora: " + Util.formatarMoedaReal(conta.getValorJurosMora()).trim() +
+									" Atualização Monetária: " + Util.formatarMoedaReal(conta.getValorAtualizacaoMonetaria()).trim()%>">
+										
+										<%="" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>
+									</a>
+									</logic:notEqual>
+									
+								</div>
+							</td>
+							<td width="20%">
+								<div align="center">
+														
+									<logic:present name="conta" property="conta.debitoCreditoSituacaoAtual">
+										<font color="#000000"> 
+											<bean:write name="conta" property="conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao" />
+										</font>
+									</logic:present> 
+														
+									<logic:notPresent name="conta" property="conta.debitoCreditoSituacaoAtual">
+										&nbsp;
+									</logic:notPresent>
+														
+								</div>
+							</td>
+							
+						</logic:empty>
+						
+						
+						
+						
+						
+						
+						<logic:notEmpty name="conta" property="conta.contaMotivoRevisao">
+							<td width="15%" align="center">
+								<font color="#ff0000"> 
+									<a href="javascript:abrirPopup('exibirConsultarContaAction.do?contaID=<%="" + conta.getConta().getId() %>&tipoConsulta=conta', 600, 800);">
+									<font color="#ff0000"><%=""+ Util.formatarMesAnoReferencia(conta.getConta().getReferencia())%> </font></a>
+								</font>
+							</td>
+							<td width="20%">
+								<div align="center">
+									<logic:present name="conta" property="conta.dataVencimentoConta">
+										<span style="color: #ff0000;">
+											<%="" + Util.formatarData(conta.getConta().getDataVencimentoConta())%>
+										</span>
+									</logic:present> 
+									<logic:notPresent name="conta" property="conta.dataVencimentoConta">
+										&nbsp;
+									</logic:notPresent>	
+								</div>
+							</td>
+							<td width="20%">
+								<div align="right">
+									<span style="color: #ff0000;">
+										<%="" + Util.formatarMoedaReal(new BigDecimal(conta.getConta().getValorTotalConta())).trim()%>
+									</span>
+								</div>
+							</td>
+							<td width="20%">
+								<div align="right">
+									
+									<logic:equal name="conta" property="valorTotalContaValoresParcelamento" value="0.00">
+									<span style="color: #ff0000;">
+										<%="" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>
+									</span>
+									</logic:equal>
+									
+									<logic:notEqual name="conta" property="valorTotalContaValoresParcelamento" value="0.00">
+									<a title="<%="Multa: " + Util.formatarMoedaReal(conta.getValorMulta()).trim() + 
+									" Juros de Mora: " + Util.formatarMoedaReal(conta.getValorJurosMora()).trim() +
+									" Atualização Monetária: " + Util.formatarMoedaReal(conta.getValorAtualizacaoMonetaria()).trim()%>">
+										<span style="color: #ff0000;">
+											<%="" + Util.formatarMoedaReal(conta.getValorTotalContaValoresParcelamento()).trim()%>
+										</span>
+									</a>
+									</logic:notEqual>
+									
+								</div>
+							</td>
+							<td width="20%">
+								<div align="center">
+														
+									<logic:present name="conta" property="conta.debitoCreditoSituacaoAtual">
+										<font color="#ff0000"> 
+											<bean:write name="conta" property="conta.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao" />
+										</font>
+									</logic:present> 
+														
+									<logic:notPresent name="conta" property="conta.debitoCreditoSituacaoAtual">
+										&nbsp;
+									</logic:notPresent>
+														
+								</div>
+							</td>
+							
+						</logic:notEmpty>
+						
+						
+						
+					</tr>
+			
+					</logic:iterate>
+					
+						<%if (cor.equalsIgnoreCase("#cbe5fe")){
+							cor = "#FFFFFF";%>
+							<tr bgcolor="#FFFFFF">
+						<%} else{
+							cor = "#cbe5fe";%>
+							<tr bgcolor="#cbe5fe">
+						<%}%>
+
+						<td width="5%" height="20"></td>
+						<td width="15%">
+							<div align="center"><strong>Total:</strong></div>
+						</td>
+						<td width="20%"></td>
+						<td width="20%">
+							<div align="right"><strong>
+								<%="" + Util.formatarMoedaReal(valorTotalContaPreteritos).trim()%>
+							</strong></div>
+						</td>
+						<td width="20%">
+							<div align="right"><strong>
+								<%="" + Util.formatarMoedaReal(valorTotalAcrescimoPreterito).trim()%>
+							</strong></div>
+						</td>
+						<td width="20%"></td>
+
+					</tr>
+										
+					</table>
+										
+					</div>
+					
+				</td>
+			</tr>
+
+			</logic:notEmpty>
+			
+			</logic:present>
+			
+			<input TYPE="hidden" NAME="valorTotalContaPreterita" ID="valorTotalContaPreterita" value="<%= "" + valorTotalContaPreteritos %>"/>
+			<input type="hidden" name="valorTotalAcrescimoPreterito" ID="valorTotalContaPreterita" value="<%="" + valorTotalAcrescimoPreterito %>">
 			
 			</table>
 			
@@ -892,7 +1381,7 @@ function totalizarDebito(objeto){
 				
 					<table width="100%" cellpadding="0" cellspacing="0">
 					<tr bgcolor="#79bbfd">
-						<td colspan="7" height="20"><strong>Débitos</strong></td>
+						<td colspan="7" height="20"><strong>Débitos A Cobrar</strong></td>
 					</tr>
 					<tr bgcolor="#90c7fc">
 
@@ -1385,7 +1874,9 @@ function totalizarDebito(objeto){
 			</table>
 			
 		</td>
+		
 	</tr>
+	
 	</table>
 	
 	<table width="100%" border="0">
@@ -1395,11 +1886,13 @@ function totalizarDebito(objeto){
 	</table>
 	
 	<%BigDecimal valorTotalDebitosFinal = valorTotalConta.add(valorTotalDebito); %>
+	<%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalContaPreteritos); %>
 	<%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalGuiaPagamento); %>
 	<%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalParcelamento); %>
 	
 	
 	<%BigDecimal valorTotalDebitosAtualizado = valorTotalDebitosFinal.add(valorTotalAcrescimo); %>
+	<%valorTotalDebitosAtualizado = valorTotalDebitosAtualizado.add(valorTotalAcrescimoPreterito); %>
 	
 	<table width="100%" border="0">
 	<tr>
