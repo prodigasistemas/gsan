@@ -6360,8 +6360,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "crar.debitoCreditoSituacaoAtual =:idSituacaoParcelada "
 					+ ") ) "
 					+ " or "
-					+ "((crar.numeroPrestacaoCredito = (crar.numeroPrestacaoRealizada + coalesce(crar.numeroParcelaBonus,0))) "
-					+ "and crar.valorResidualMesAnterior = 0 and (crar.valorResidualConcedidoMes = 0 or crar.valorResidualConcedidoMes is null) "
+					+ " ((crar.numeroPrestacaoCredito = (crar.numeroPrestacaoRealizada + coalesce(crar.numeroParcelaBonus,0))) "
+					+ " and crar.valorResidualMesAnterior = 0 "
 					+ " and crar.anoMesReferenciaPrestacao <= :anoMesReferenciaContabil)";
 
 			retorno = session.createQuery(consulta)
