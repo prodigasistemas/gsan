@@ -3020,4 +3020,6 @@ public interface IRepositorioFaturamento {
 	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 	
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException;
+
+	public void concluirFaturamentoConta(Integer id) throws ErroRepositorioException;
 }

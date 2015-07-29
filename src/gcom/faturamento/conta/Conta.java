@@ -94,6 +94,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 	private Date dataEnvioEmailConta;
 	private BigDecimal valorRateioAgua;
 	private BigDecimal valorRateioEsgoto;
+	private Short indicadorFaturamentoConcluido = new Short("0");
 	
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
 	private Integer consumoAgua;
@@ -1214,6 +1215,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return debitos;
 	}
 	
+	public Short getIndicadorFaturamentoConcluido() {
+		return indicadorFaturamentoConcluido;
+	}
+
+	public void setIndicadorFaturamentoConcluido(Short indicadorFaturamentoCompleto) {
+		this.indicadorFaturamentoConcluido = indicadorFaturamentoCompleto;
+	}
+
 	public Conta buildConta(Conta conta){
 		conta.setCodigoSetorComercial(this.getCodigoSetorComercial());
 		conta.setQuadra(this.getQuadra());
