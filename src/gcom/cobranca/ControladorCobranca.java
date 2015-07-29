@@ -40174,7 +40174,9 @@ public class ControladorCobranca implements SessionBean {
 		boolean existeDebitoCredito = false;
 
 		// CONTA
-		if (imovelDebitoCredito.getColecaoContasValoresImovel() != null && !imovelDebitoCredito.getColecaoContasValoresImovel().isEmpty()) {
+		if ((imovelDebitoCredito.getColecaoContasValoresImovel() != null && !imovelDebitoCredito.getColecaoContasValoresImovel().isEmpty())
+			||
+			(imovelDebitoCredito.getColecaoContasValoresPreteritos() != null && !imovelDebitoCredito.getColecaoContasValoresPreteritos().isEmpty())) {
 			existeDebitoCredito = true;
 
 			if (!indicadorParcelamento) {

@@ -1,5 +1,7 @@
 package gcom.gui.cobranca;
 
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.FiltroImovel;
@@ -410,7 +412,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 				
 			}
 		}
-
+		
 		if ((colecaoContaValores == null || colecaoContaValoresPreteritos == null) && (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 			&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty())
 			&& (colecaoGuiaPagamentoValores == null)) {

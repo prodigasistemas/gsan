@@ -1,5 +1,10 @@
 package gcom.gui.cadastro.imovel;
 
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -93,6 +98,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 			sessao.removeAttribute("totalContas");
 			sessao.removeAttribute("idImovelPrincipalAba");
 			sessao.removeAttribute("imovelClientes");
+			sessao.removeAttribute("colecaoPagamentosImovelContaInconformes");
+			sessao.removeAttribute("colecaoPagamentosInconformesAtuais");
+			sessao.removeAttribute("colecaoPagamentosInconformesPreteritos");
 
 			// Manda a colecao e os valores total de conta pelo request
 			sessao.removeAttribute("colecaoDebitoACobrar");
@@ -174,6 +182,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		}
 		
 		Imovel imovel = null;
+		Collection clientesImovel = null;
 		
 		String idImovel = (String) httpServletRequest.getParameter("idImovel");
 		String enviarAoCarregar = (String) httpServletRequest.getParameter("enviarAoCarregar");
@@ -207,7 +216,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 			
 			if(idImovelDebitos!=null && !idImovelDebitos.equalsIgnoreCase("")){
 				//	pesquisar cliente do imovel
-				Collection clientesImovel = fachada.pesquisarClientesImovelExcluidoOuNao(new Integer(idImovelDebitos.trim()));
+				clientesImovel = fachada.pesquisarClientesImovelExcluidoOuNao(new Integer(idImovelDebitos.trim()));
 				sessao.setAttribute("imovelClientes",clientesImovel);
 			}
 			
@@ -528,12 +537,35 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					//pesquisa todas as situações de cobrança ativa do imovel
 					Collection colecaoCobrancaSituacao = fachada.pesquisarImovelCobrancaSituacaoPorImovel(new Integer(idImovelDebitos.trim()));
 					
-					Object[] arrayQtdeEValorDebitosPreteritos = fachada.pesquisarQtdeDebitosPreteritos(imovel.getId());
-					Integer qtde = ((Integer)arrayQtdeEValorDebitosPreteritos[0]) == 0 ? null : (Integer)arrayQtdeEValorDebitosPreteritos[0];
-					BigDecimal valor =	(BigDecimal)arrayQtdeEValorDebitosPreteritos[1];
 					
-					sessao.setAttribute("quantidadeDebitosPreteritos", qtde);
-					sessao.setAttribute("valorDebitosPreteritos", Util.formatarMoedaReal(valor));
+					Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(idImovelDebitos.trim());
+					Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
+					Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];
+					Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
+					
+//					Object[] arrayQtdeEValorDebitosPreteritos = fachada.pesquisarQtdeDebitosPreteritos(imovel.getId());
+//					Integer qtde = ((Integer)arrayQtdeEValorDebitosPreteritos[0]) == 0 ? null : (Integer)arrayQtdeEValorDebitosPreteritos[0];
+//					BigDecimal valor =	(BigDecimal)arrayQtdeEValorDebitosPreteritos[1];
+					
+					Integer qtde = colecaoContaValoresPreteritos.size() + colecaoPagamentosInconformesPreteritas.size();
+					BigDecimal valor = new BigDecimal("0.00");
+					
+					for (Pagamento pagamento : colecaoPagamentosInconformesPreteritas) {
+						if (pagamento.getContaGeral().getConta() != null)
+							valor = valor.add(pagamento.getContaGeral().getConta().getValorTotal());
+						else
+							valor = valor.add(pagamento.getContaGeral().getContaHistorico().getValorTotal());
+					}
+					
+					for (ContaValoresHelper contaValoresHelper : colecaoContaValoresPreteritos) {
+						valor = valor.add(contaValoresHelper.getConta().getValorTotal());
+					}
+					
+					
+					sessao.setAttribute("quantidadeDebitosPreteritos", (qtde == 0) ? null : qtde);
+					sessao.setAttribute("valorDebitosPreteritos", (valor.doubleValue() == 0.00) ? null : Util.formatarMoedaReal(valor));
 					
 					if ((colecaoContaValores == null)&& (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 							&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty()) && (colecaoGuiaPagamentoValores == null)) {
@@ -579,6 +611,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 						sessao.setAttribute("colecaoContaValoresPreteritos", colecaoContaValoresPreteritos);
 						sessao.setAttribute("totalContas", colecaoContaValores.size() + colecaoContaValoresPreteritos.size());
 						sessao.setAttribute("colecaoContas", colecaoContas);
+						sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoPagamentosImovelContaInconformes);
+						sessao.setAttribute("colecaoPagamentosInconformesAtuais", colecaoPagamentosInconformesAtuais);
+						sessao.setAttribute("colecaoPagamentosInconformesPreteritos", colecaoPagamentosInconformesPreteritas);
 								
 						// Manda a colecao e os valores total de conta pelo request
 						sessao.setAttribute("colecaoDebitoACobrar",colecaoDebitoACobrar);
