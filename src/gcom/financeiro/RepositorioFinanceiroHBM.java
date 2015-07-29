@@ -3614,7 +3614,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).setInteger(
                             "descontoCondicional",
-                            CreditoOrigem.DESCONTOS_CONDICIONAIS).list();
+                            CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE).list();
 
         } catch (HibernateException e) {
             // levanta a exceção para a próxima camada
@@ -5697,7 +5697,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
 							.setInteger("descontoCondicional",
-                            CreditoOrigem.DESCONTOS_CONDICIONAIS).list();
+                            CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE).list();
 
         } catch (HibernateException e) {
             // levanta a exceção para a próxima camada
@@ -5784,7 +5784,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
 					.setInteger(
                             "descontoCondicional",
-                            CreditoOrigem.DESCONTOS_CONDICIONAIS).list();
+                            CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
