@@ -1,5 +1,10 @@
 package gcom.gui.cadastro.imovel;
 
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -93,6 +98,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 			sessao.removeAttribute("totalContas");
 			sessao.removeAttribute("idImovelPrincipalAba");
 			sessao.removeAttribute("imovelClientes");
+			sessao.removeAttribute("colecaoPagamentosImovelContaInconformes");
+			sessao.removeAttribute("colecaoPagamentosInconformesAtuais");
+			sessao.removeAttribute("colecaoPagamentosInconformesPreteritos");
 
 			// Manda a colecao e os valores total de conta pelo request
 			sessao.removeAttribute("colecaoDebitoACobrar");
@@ -174,6 +182,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		}
 		
 		Imovel imovel = null;
+		Collection clientesImovel = null;
 		
 		String idImovel = (String) httpServletRequest.getParameter("idImovel");
 		String enviarAoCarregar = (String) httpServletRequest.getParameter("enviarAoCarregar");
@@ -207,7 +216,7 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 			
 			if(idImovelDebitos!=null && !idImovelDebitos.equalsIgnoreCase("")){
 				//	pesquisar cliente do imovel
-				Collection clientesImovel = fachada.pesquisarClientesImovelExcluidoOuNao(new Integer(idImovelDebitos.trim()));
+				clientesImovel = fachada.pesquisarClientesImovelExcluidoOuNao(new Integer(idImovelDebitos.trim()));
 				sessao.setAttribute("imovelClientes",clientesImovel);
 			}
 			
@@ -535,6 +544,19 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 					sessao.setAttribute("quantidadeDebitosPreteritos", qtde);
 					sessao.setAttribute("valorDebitosPreteritos", Util.formatarMoedaReal(valor));
 					
+					FiltroPagamentoSituacao filtroPagamentoSituacao = new FiltroPagamentoSituacao();
+					filtroPagamentoSituacao.adicionarParametro(new ParametroSimples(FiltroPagamentoSituacao.DESCRICAO_ABREVIADA, "NCONF"));
+					
+					
+					PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
+					
+					Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(idImovelDebitos.trim());
+					Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
+					Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];
+					Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
+					colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
+					
 					if ((colecaoContaValores == null)&& (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty())
 							&& (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty()) && (colecaoGuiaPagamentoValores == null)) {
 						if (colecaoContaValores == null){
@@ -579,6 +601,9 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 						sessao.setAttribute("colecaoContaValoresPreteritos", colecaoContaValoresPreteritos);
 						sessao.setAttribute("totalContas", colecaoContaValores.size() + colecaoContaValoresPreteritos.size());
 						sessao.setAttribute("colecaoContas", colecaoContas);
+						sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoPagamentosImovelContaInconformes);
+						sessao.setAttribute("colecaoPagamentosInconformesAtuais", colecaoPagamentosInconformesAtuais);
+						sessao.setAttribute("colecaoPagamentosInconformesPreteritos", colecaoPagamentosInconformesPreteritas);
 								
 						// Manda a colecao e os valores total de conta pelo request
 						sessao.setAttribute("colecaoDebitoACobrar",colecaoDebitoACobrar);

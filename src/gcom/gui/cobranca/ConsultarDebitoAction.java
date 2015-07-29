@@ -1,13 +1,18 @@
 package gcom.gui.cobranca;
 
+import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,6 +106,23 @@ public class ConsultarDebitoAction extends GcomAction {
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
 
 			codigoImovel = codigoImovel.trim();
+			
+			FiltroPagamentoSituacao filtroPagamentoSituacao = new FiltroPagamentoSituacao();
+			filtroPagamentoSituacao.adicionarParametro(new ParametroSimples(FiltroPagamentoSituacao.DESCRICAO_ABREVIADA, "NCONF"));
+			
+			
+			PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroPagamentoSituacao, PagamentoSituacao.class.getName()));
+			
+			Object[] colecaoContasInconformes = fachada.pesquisarPagamentoInconformeImovel(codigoImovel.trim());
+			Collection<Pagamento> colecaoPagamentosInconformesAtuais = (Collection<Pagamento>) colecaoContasInconformes[0];
+			Collection<Pagamento> colecaoPagamentosInconformesPreteritas = (Collection<Pagamento>) colecaoContasInconformes[1];
+			Collection<Pagamento> colecaoPagamentosImovelContaInconformes = new ArrayList<Pagamento>();
+			colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesAtuais);
+			colecaoPagamentosImovelContaInconformes.addAll(colecaoPagamentosInconformesPreteritas);
+			
+			sessao.setAttribute("colecaoPagamentosImovelContaInconformes", colecaoPagamentosImovelContaInconformes);
+			sessao.setAttribute("colecaoPagamentosInconformesAtuais", colecaoPagamentosInconformesAtuais);
+			sessao.setAttribute("colecaoPagamentosInconformesPreteritos", colecaoPagamentosInconformesPreteritas);
 
 			// Seta o retorno para a página que vai detalhar o imovel
 			retorno = actionMapping.findForward("exibirDebitoImovel");
@@ -171,7 +193,7 @@ public class ConsultarDebitoAction extends GcomAction {
 							.getParameter("caminhoRetornoTelaConsultaDebito"));
 
 		}
-
+		
 		return retorno;
 	}
 }

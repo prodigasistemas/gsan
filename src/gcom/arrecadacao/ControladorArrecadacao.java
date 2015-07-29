@@ -22090,7 +22090,7 @@ public class ControladorArrecadacao implements SessionBean {
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.BONUS_SOCIAL);
 
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoBonusSocial, lancamentoItemTemp, lancamentoItemContabil,
+										anoMesReferenciaArrecadacao, somaValorCreditoRealizadoBonusSocial, lancamentoItemTemp, null,
 										new Short("900"), sequencialImpressao);
 								
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
@@ -52265,5 +52265,19 @@ public class ControladorArrecadacao implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}}
+	}
+	
+	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException {
+		
+
+		try {
+			return repositorioArrecadacao.pesquisarPagamentoInconformeImovel(idImovel);
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	
+		
+	}
+}
 
