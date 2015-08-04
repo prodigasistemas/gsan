@@ -2415,4 +2415,9 @@ public interface IRepositorioFinanceiro {
 	public Collection<Object[]> pesquisarValorBaixadoAgrupadoPorLocalidadeResumoDevedoresDuvidosos( int anoMesReferenciaContabil )  throws ErroRepositorioException ;
 	
 	
+	public Collection<Object[]> pesquisarDadosCreditosARealizar(int anoMesReferenciaContabil, Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException ;
+	
+	public Collection<Object[]> pesquisarDadosCreditosARealizarValorResidual(int anoMesReferenciaContabil, Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException;
+	 
+	 
 }

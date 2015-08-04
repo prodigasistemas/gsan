@@ -23,7 +23,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
-import gcom.cobranca.DocumentoTipo;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -5797,98 +5796,6 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 		return retorno;
 	}
 
-    /**
-     * [UC0714] - Gerar Contas a Receber Contábil
-     *
-     * Acumula os valores dos créditos a realizar para ajustes para zerar contas
-     * pela gerência, localidade e categoria
-     *
-     * @author Rafael Corrêa
-     * @date 08/11/2007
-     *
-     * @param idLocalidade
-     * @param anoMesReferenciaContabil
-     *            Ano e mês de referência contabil
-     * @throws ErroRepositorioException
-     *             Erro no hibernate
-     */
-    public Collection<Object[]> pesquisarDadosCreditosARealizarCategoriaAjusteZerarConta(
-            int anoMesReferenciaContabil, Integer idLocalidade)
-            throws ErroRepositorioException {
-        Collection<Object[]> retorno = null;
-
-        // cria uma sessão com o hibernate
-        Session session = HibernateUtil.getSession();
-
-        // cria a variável que vai conter o hql
-        String consulta;
-
-        try {
-            // constroi o sql
-            consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
-                    + " crarCat.catg_id as idCategoria, "
-                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
-                    + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
-                    + " THEN 1 "
-                    + " ELSE 0 "
-                    + " END ) "
-                    + " ) ) ) as valorCategoria "
-                    + " FROM cadastro.localidade loca "
-                    + " INNER JOIN faturamento.credito_a_realizar crar "
-                    + " on loca.loca_id = crar.loca_id "
-                    + " INNER JOIN faturamento.cred_a_realiz_catg crarCat "
-                    + " on crarCat.crar_id = crar.crar_id "
-                    + " WHERE loca.loca_id = :idLocalidade "
-                    + " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
-                    + " and crar.dcst_idatual in ( :situacaoNormal, "
-                    + " :situacaoIncluida, :situacaoRetificada ) ) "
-                    + " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
-                    + " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
-                    + " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
-                    + " and ( crar.crog_id = :ajusteZerarConta ) "
-                    + " GROUP BY loca.greg_id, loca.uneg_id, loca.loca_id, crarcat.catg_id "
-                    + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria ";
-
-            // executa o sql
-            retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
-                    Hibernate.INTEGER).addScalar("idUnidadeNegocio",
-                    Hibernate.INTEGER).addScalar("idLocalidade",
-                    Hibernate.INTEGER).addScalar("idCategoria",
-                    Hibernate.INTEGER).addScalar("valorCategoria",
-                    Hibernate.BIG_DECIMAL).setInteger("idLocalidade",
-                    idLocalidade).setInteger("anoMesReferenciaContabil",
-                    anoMesReferenciaContabil).setInteger("situacaoNormal",
-                    DebitoCreditoSituacao.NORMAL).setInteger(
-                    "situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
-                    .setInteger("situacaoRetificada",
-                            DebitoCreditoSituacao.RETIFICADA).setInteger(
-                            "situacaoCancelada",
-                            DebitoCreditoSituacao.CANCELADA).setInteger(
-                            "situacaoCanceladaPorRetificacao",
-                            DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-                    .setInteger("situacaoParcelada",
-                            DebitoCreditoSituacao.PARCELADA).setInteger(
-                            "situacaoDebitoPrescrito",
-                            DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**
-							 * Inclusao das contas incluidas canceladas por prescrição
-							 *  de débito na geração do resumo*/
-							.setInteger("situacaoDebitoPrescritoContasIncluidas",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
-							.setInteger("ajusteZerarConta",
-                            CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA).list();
-
-        } catch (HibernateException e) {
-            // levanta a exceção para a próxima camada
-            throw new ErroRepositorioException(e, "Erro no Hibernate");
-        } finally {
-            // fecha a sessão
-            HibernateUtil.closeSession(session);
-        }
-
-        return retorno;
-    }
-    
 	/**
 	 * [UC0714] - Gerar Contas a Receber Contábil
 	 * 
@@ -12181,6 +12088,221 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 			HibernateUtil.closeSession(session);
 		}
 		
+		return retorno;
+	}
+	
+	
+	 /**
+     * [UC0714] - Gerar Contas a Receber Contábil
+     *
+     * Acumula os valores dos créditos a realizar para ajustes para zerar contas
+     * pela gerência, localidade e categoria
+     *
+     * @author Rafael Corrêa
+     * @date 08/11/2007
+     *
+     * @param idLocalidade
+     * @param anoMesReferenciaContabil
+     *            Ano e mês de referência contabil
+     * @throws ErroRepositorioException
+     *             Erro no hibernate
+     */
+    public Collection<Object[]> pesquisarDadosCreditosARealizarCategoriaAjusteZerarConta(
+            int anoMesReferenciaContabil, Integer idLocalidade)
+            throws ErroRepositorioException {
+        Collection<Object[]> retorno = null;
+
+        // cria uma sessão com o hibernate
+        Session session = HibernateUtil.getSession();
+
+        // cria a variável que vai conter o hql
+        String consulta;
+
+        try {
+            // constroi o sql
+            consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
+                    + " crarCat.catg_id as idCategoria, "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
+                    + " THEN 1 "
+                    + " ELSE 0 "
+                    + " END ) "
+                    + " ) ) ) as valorCategoria "
+                    + " FROM cadastro.localidade loca "
+                    + " INNER JOIN faturamento.credito_a_realizar crar "
+                    + " on loca.loca_id = crar.loca_id "
+                    + " INNER JOIN faturamento.cred_a_realiz_catg crarCat "
+                    + " on crarCat.crar_id = crar.crar_id "
+                    + " WHERE loca.loca_id = :idLocalidade "
+                    + " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+                    + " and crar.dcst_idatual in ( :situacaoNormal, "
+                    + " :situacaoIncluida, :situacaoRetificada ) ) "
+                    + " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
+                    + " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
+                    + " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
+                    + " and ( crar.crog_id = :ajusteZerarConta ) "
+                    + " GROUP BY loca.greg_id, loca.uneg_id, loca.loca_id, crarcat.catg_id "
+                    + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria ";
+
+            // executa o sql
+            retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
+                    Hibernate.INTEGER).addScalar("idUnidadeNegocio",
+                    Hibernate.INTEGER).addScalar("idLocalidade",
+                    Hibernate.INTEGER).addScalar("idCategoria",
+                    Hibernate.INTEGER).addScalar("valorCategoria",
+                    Hibernate.BIG_DECIMAL).setInteger("idLocalidade",
+                    idLocalidade).setInteger("anoMesReferenciaContabil",
+                    anoMesReferenciaContabil).setInteger("situacaoNormal",
+                    DebitoCreditoSituacao.NORMAL).setInteger(
+                    "situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+                    .setInteger("situacaoRetificada",
+                            DebitoCreditoSituacao.RETIFICADA).setInteger(
+                            "situacaoCancelada",
+                            DebitoCreditoSituacao.CANCELADA).setInteger(
+                            "situacaoCanceladaPorRetificacao",
+                            DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+                    .setInteger("situacaoParcelada",
+                            DebitoCreditoSituacao.PARCELADA).setInteger(
+                            "situacaoDebitoPrescrito",
+                            DebitoCreditoSituacao.DEBITO_PRESCRITO)
+                            /**
+							 * Inclusao das contas incluidas canceladas por prescrição
+							 *  de débito na geração do resumo*/
+							.setInteger("situacaoDebitoPrescritoContasIncluidas",
+							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+							.setInteger("ajusteZerarConta",
+                            CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA).list();
+
+        } catch (HibernateException e) {
+            // levanta a exceção para a próxima camada
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            // fecha a sessão
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+    }	
+    
+    
+    /**
+     * [UC0714] - Gerar Contas a Receber Contábil
+     */
+    public Collection<Object[]> pesquisarDadosCreditosARealizar(int anoMesReferenciaContabil,
+    		Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException {
+    	
+        Collection<Object[]> retorno = null;
+
+        Session session = HibernateUtil.getSession();
+
+        try {
+        	String consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
+                    + " crarCat.catg_id as idCategoria, "
+                    + " sum( crarCat.cacg_vlcategoria - (round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * ( crar.crar_nnprestacaorealizadas - "
+                    + " ( CASE WHEN ( crar.crar_amreferenciaprestacao is not null and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil ) "
+                    + " THEN 1 "
+                    + " ELSE 0 "
+                    + " END ) "
+                    + " ) ) ) as valorCategoria "
+                    + " FROM cadastro.localidade loca "
+                    + " INNER JOIN faturamento.credito_a_realizar crar "
+                    + " on loca.loca_id = crar.loca_id "
+                    + " INNER JOIN faturamento.cred_a_realiz_catg crarCat "
+                    + " on crarCat.crar_id = crar.crar_id "
+                    + " WHERE loca.loca_id = :idLocalidade "
+                    + " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+                    + " and crar.dcst_idatual in ( :situacaoNormal, "
+                    + " :situacaoIncluida, :situacaoRetificada ) ) "
+                    + " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
+                    + " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
+                    + " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
+                    + " and ( crar.crog_id = :creditoOrigem ) "
+                    + " GROUP BY loca.greg_id, loca.uneg_id, loca.loca_id, crarcat.catg_id "
+                    + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria ";
+
+            retorno = session.createSQLQuery(consulta)
+            		.addScalar("idGerencia", Hibernate.INTEGER)
+            		.addScalar("idUnidadeNegocio", Hibernate.INTEGER)
+            		.addScalar("idLocalidade", Hibernate.INTEGER)
+                    .addScalar("idCategoria", Hibernate.INTEGER)
+                    .addScalar("valorCategoria", Hibernate.BIG_DECIMAL)
+                    .setInteger("idLocalidade", idLocalidade)
+                    .setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+                    .setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+                    .setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+                    .setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+                    .setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
+                    .setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+                    .setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
+                    .setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					.setInteger("situacaoDebitoPrescritoContasIncluidas", DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setInteger("creditoOrigem", creditoOrigem)
+					.list();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+    }
+
+    /**
+	 * [UC0714] - Gerar Contas a Receber Contábil
+	 */
+	public Collection<Object[]> pesquisarDadosCreditosARealizarValorResidual(int anoMesReferenciaContabil,
+			Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException {
+		
+		Collection<Object[]> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, " 
+					+ " crarCat.catg_id as idCategoria, "
+					+ " sum( round ( ( (crar_vlresidualmesanterior / (select sum(cacg_qteconomia) from faturamento.cred_a_realiz_catg where crar_id = crar.crar_id)) * crarCat.cacg_qteconomia ), 2 )) as valorResidual "
+					+ " FROM cadastro.localidade loca "
+					+ " INNER JOIN faturamento.credito_a_realizar crar "
+					+ " on loca.loca_id = crar.loca_id "
+					+ " INNER JOIN faturamento.cred_a_realiz_catg crarCat " 
+					+ " on crar.crar_id = crarCat.crar_id "
+					+ " WHERE loca.loca_id = :idLocalidade and crar.crar_vlresidualmesanterior is not null and crar.crar_vlresidualmesanterior > 0 "
+					+ " and ( ( crar.crar_amreferenciacontabil <= :anoMesReferenciaContabil "
+					+ " and crar.dcst_idatual in ( :situacaoNormal, "
+					+ " :situacaoIncluida, :situacaoRetificada ) ) "
+					+ " or ( crar.crar_amreferenciacontabil > :anoMesReferenciaContabil "
+					+ " and crar.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
+					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and crar.dcst_idanterior is null ) ) "
+					+ " and ( crar.crog_id = :creditoOrigem ) "
+					+ " GROUP BY loca.greg_id, loca.uneg_id, loca.loca_id, crarcat.catg_id "
+					+ " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria ";
+
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idGerencia", Hibernate.INTEGER)
+					.addScalar("idUnidadeNegocio", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("idCategoria", Hibernate.INTEGER)
+					.addScalar("valorResidual", Hibernate.BIG_DECIMAL)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
+					.setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+					.setInteger("situacaoParcelada",DebitoCreditoSituacao.PARCELADA)
+					.setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					.setInteger("situacaoDebitoPrescritoContasIncluidas",DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setInteger("creditoOrigem", creditoOrigem)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
 		return retorno;
 	}
 	

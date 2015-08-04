@@ -48,6 +48,7 @@ import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.credito.CreditoOrigem;
 import gcom.financeiro.bean.AcumularValoresHelper;
 import gcom.financeiro.bean.GerarIntegracaoContabilidadeHelper;
 import gcom.financeiro.bean.GerarResumoDevedoresDuvidososHelper;
@@ -9160,6 +9161,217 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         	colecaoDadosCreditosARealizarValorResidualAjusteZerarConta = null;
         }
 
+        // Recuperacao de Credito Contas Canceladas
+		Collection colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladas = repositorioFinanceiro.pesquisarDadosCreditosARealizar(
+				anoMesAnteriorFaturamento, idLocalidade,CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+
+		// Valor Residual Recuperacao de Credito Contas Canceladas
+		Collection<Object[]> colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas = repositorioFinanceiro
+				.pesquisarDadosCreditosARealizarValorResidual(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+
+		if (colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladas != null && !colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladas.isEmpty()) {
+
+			Iterator colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladasIterator = colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladas.iterator();
+
+			while (colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladasIterator.hasNext()) {
+
+				Object[] dadosCreditosARealizar = (Object[]) colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladasIterator.next();
+
+				Integer idGerenciaRegionalCredito = (Integer) dadosCreditosARealizar[0];
+				Integer idUnidadeNegocioCredito = (Integer) dadosCreditosARealizar[1];
+				Integer idLocalidadeCredito = (Integer) dadosCreditosARealizar[2];
+				Integer idCategoriaCredito = (Integer) dadosCreditosARealizar[3];
+
+				BigDecimal valorCategoria = (BigDecimal) dadosCreditosARealizar[4];
+
+				// Verifica se existe valor residual para a mesma categoria, caso exista acumula o valor
+				if (colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas != null && !colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas.isEmpty()) {
+
+					Collection colecaoRemovidos = new ArrayList<Object[]>();
+
+					for (Object[] dadosCreditosARealizarValorResidual : colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas) {
+						Integer idCategoriaCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[3];
+
+						BigDecimal valorResidual = (BigDecimal) dadosCreditosARealizarValorResidual[4];
+
+						if (idCategoriaCreditoValorResidual.equals(idCategoriaCredito)) {
+
+							if (valorResidual != null) {
+								valorCategoria = valorCategoria.add(valorResidual);
+							}
+
+							colecaoRemovidos.add(dadosCreditosARealizarValorResidual);
+							break;
+
+						}
+
+					}
+
+					colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas.removeAll(colecaoRemovidos);
+
+				}
+
+				if (valorCategoria != null && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
+					
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento,
+							idGerenciaRegionalCredito,
+							idUnidadeNegocioCredito,
+							idLocalidadeCredito,
+							idCategoriaCredito,
+							valorCategoria.multiply(new BigDecimal("-1")),
+							LancamentoTipo.CREDITOS_A_REALIZAR,
+							400,
+							LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA,
+							60, 
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+
+			colecaoDadosCreditosARealizarRecuperacaoCreditoContasCanceladas = null;
+
+		}
+
+		// Verifica se restou algum dado que não estava presente na colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas
+		if (colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas != null && !colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas.isEmpty()) {
+			for (Object[] dadosCreditosARealizarValorResidual : colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas) {
+
+				Integer idGerenciaRegionalCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[0];
+				Integer idUnidadeNegocioCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[1];
+				Integer idLocalidadeCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[2];
+				Integer idCategoriaCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[3];
+				BigDecimal valorResidual = (BigDecimal) dadosCreditosARealizarValorResidual[4];
+
+				if (valorResidual != null && valorResidual.compareTo(new BigDecimal("0.00")) > 0) {
+					// Cria o objeto com os valores passados
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento,
+							idGerenciaRegionalCreditoValorResidual,
+							idUnidadeNegocioCreditoValorResidual,
+							idLocalidadeCreditoValorResidual,
+							idCategoriaCreditoValorResidual,
+							valorResidual.multiply(new BigDecimal("-1")),
+							LancamentoTipo.CREDITOS_A_REALIZAR,
+							400,
+							LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA,
+							60,
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+
+			colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasCanceladas = null;
+		}
+		
+		
+		
+		// Recuperacao de Credito Contas Parceladas
+		Collection colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladas = repositorioFinanceiro.pesquisarDadosCreditosARealizar(
+				anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+
+		// Valor Residual Recuperacao de Credito Contas Parceladas
+		Collection<Object[]> colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas = repositorioFinanceiro
+				.pesquisarDadosCreditosARealizarValorResidual(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+
+		if (colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladas != null && !colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladas.isEmpty()) {
+
+			Iterator colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladasIterator = colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladas.iterator();
+
+			while (colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladasIterator.hasNext()) {
+
+				Object[] dadosCreditosARealizar = (Object[]) colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladasIterator.next();
+
+				Integer idGerenciaRegionalCredito = (Integer) dadosCreditosARealizar[0];
+				Integer idUnidadeNegocioCredito = (Integer) dadosCreditosARealizar[1];
+				Integer idLocalidadeCredito = (Integer) dadosCreditosARealizar[2];
+				Integer idCategoriaCredito = (Integer) dadosCreditosARealizar[3];
+
+				BigDecimal valorCategoria = (BigDecimal) dadosCreditosARealizar[4];
+
+				// Verifica se existe valor residual para a mesma categoria, caso exista acumula o valor
+				if (colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas != null && !colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas.isEmpty()) {
+
+					Collection colecaoRemovidos = new ArrayList<Object[]>();
+
+					for (Object[] dadosCreditosARealizarValorResidual : colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas) {
+						Integer idCategoriaCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidual[3];
+
+						BigDecimal valorResidual = (BigDecimal) dadosCreditosARealizarValorResidual[4];
+
+						if (idCategoriaCreditoValorResidual.equals(idCategoriaCredito)) {
+
+							if (valorResidual != null) {
+								valorCategoria = valorCategoria.add(valorResidual);
+							}
+
+							colecaoRemovidos.add(dadosCreditosARealizarValorResidual);
+							break;
+
+						}
+
+					}
+
+					colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas.removeAll(colecaoRemovidos);
+
+				}
+
+				if (valorCategoria != null && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
+					
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento,
+							idGerenciaRegionalCredito,
+							idUnidadeNegocioCredito,
+							idLocalidadeCredito,
+							idCategoriaCredito,
+							valorCategoria.multiply(new BigDecimal("-1")),
+							LancamentoTipo.CREDITOS_A_REALIZAR,
+							400,
+							LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA,
+							70, 
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+
+			colecaoDadosCreditosARealizarRecuperacaoCreditoContasParceladas = null;
+
+		}
+
+		// Verifica se restou algum dado que não estava presente na colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas
+		if (colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas != null && !colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas.isEmpty()) {
+			for (Object[] dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas : colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas) {
+
+				Integer idGerenciaRegionalCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas[0];
+				Integer idUnidadeNegocioCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas[1];
+				Integer idLocalidadeCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas[2];
+				Integer idCategoriaCreditoValorResidual = (Integer) dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas[3];
+				BigDecimal valorResidual = (BigDecimal) dadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas[4];
+
+				if (valorResidual != null && valorResidual.compareTo(new BigDecimal("0.00")) > 0) {
+					// Cria o objeto com os valores passados
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento,
+							idGerenciaRegionalCreditoValorResidual,
+							idUnidadeNegocioCreditoValorResidual,
+							idLocalidadeCreditoValorResidual,
+							idCategoriaCreditoValorResidual,
+							valorResidual.multiply(new BigDecimal("-1")),
+							LancamentoTipo.CREDITOS_A_REALIZAR,
+							400,
+							LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA,
+							70,
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+
+			colecaoDadosCreditosARealizarValorResidualRecuperacaoCreditoContasParceladas = null;
+		}
 	}
 	
 	/**
