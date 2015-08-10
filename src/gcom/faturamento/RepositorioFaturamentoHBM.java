@@ -15273,7 +15273,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 
 				delete = delete + ")";				
@@ -15310,7 +15310,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15390,7 +15390,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15420,7 +15420,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15507,7 +15507,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			     */
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15544,7 +15544,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15625,7 +15625,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15656,7 +15656,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15728,7 +15728,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     */
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15750,7 +15750,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete = delete 
 								+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15788,7 +15788,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete = delete 
 								+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete = delete + ")";
@@ -15916,7 +15916,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -15954,7 +15954,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     */
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16035,7 +16035,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16072,7 +16072,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     */
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16158,7 +16158,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete 
 							+ " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16189,7 +16189,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16271,7 +16271,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16302,7 +16302,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete = delete + " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				delete = delete + ")";
@@ -16384,7 +16384,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16416,7 +16416,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16509,7 +16509,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16560,7 +16560,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16667,7 +16667,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16698,7 +16698,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16778,7 +16778,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16808,7 +16808,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -16844,7 +16844,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 					if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 						delete += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-								+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+								+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 					}
 					
 					delete += ")";
@@ -16890,7 +16890,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					delete += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-						+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+						+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 					
 				delete = delete + ")";
@@ -42657,7 +42657,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 					atualizar += " and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) "
-							+ " and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO;	
+							+ " and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO;	
 				}
 				
 				atualizar += ")";
@@ -60439,7 +60439,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			// Alteracao para regerar todas as contas PF ao faturar o grupo
 			if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 				strDelete.append(" and (mcpf.cnta_id is null or mcpf.mcpf_icatualizarfaturamento = 2) ");	
-				strDelete.append(" and cnta.cnta_idfaturamentoconcluido = " + ConstantesSistema.NAO);	
+				strDelete.append(" and cnta.cnta_icfaturamentoconcluido = " + ConstantesSistema.NAO);	
 			}
 				
 			strDelete.append(")");
