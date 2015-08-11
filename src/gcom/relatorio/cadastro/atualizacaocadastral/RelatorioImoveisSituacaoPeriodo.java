@@ -39,7 +39,7 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 			throw new RelatorioVazioException("atencao.pesquisa.nenhumresultado");
 		} else {
 		Integer qtdeImoveis = colecaoImoveis.size();
-		Collection<RelatorioImoveisSituacaoPeriodoBean> colecaoBean = this.inicializarBeanRelatório(colecaoImoveis);
+		Collection<RelatorioImoveisSituacaoPeriodoBean> colecaoBean = this.inicializarBeanRelatorio(colecaoImoveis);
 		
 
 		Map<String, String> parametros = getParametros(dataInicial, dataFinal, descricaoSituacaoCadastral, qtdeImoveis, sistemaParametro);
@@ -54,7 +54,7 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 			Integer idFuncionalidadeIniciada = this.getIdFuncionalidadeIniciada();
 			persistirRelatorioConcluido(retorno, Relatorio.RELATORIO_IMOVEIS_SITUACAO_PERIODO, idFuncionalidadeIniciada);
 		} catch (ControladorException e) {
-			throw new TarefaException("Erro ao gravar relatório no sistema", e);
+			throw new TarefaException("Erro ao gravar relatï¿½rio no sistema", e);
 		}
 
 		return retorno;
@@ -81,7 +81,7 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 		AgendadorTarefas.agendarTarefa("RelatorioImoveisSituacaoPeriodo", this);
 	}
 	
-	private Collection<RelatorioImoveisSituacaoPeriodoBean> inicializarBeanRelatório(Collection<Integer> colecaoImoveis) {
+	private Collection<RelatorioImoveisSituacaoPeriodoBean> inicializarBeanRelatorio(Collection<Integer> colecaoImoveis) {
 		Collection<RelatorioImoveisSituacaoPeriodoBean> retorno = new ArrayList<RelatorioImoveisSituacaoPeriodoBean>();
 		Iterator iter = colecaoImoveis.iterator();
 		
