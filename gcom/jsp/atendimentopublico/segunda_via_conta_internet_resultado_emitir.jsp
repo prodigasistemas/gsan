@@ -288,6 +288,61 @@ function validarForm(form){
 										</tr>
 										</logic:iterate>
 										
+										<logic:present name="colecaoContaValoresPreteritos">
+										
+										<tr>
+										 	 <td colspan="10">
+												<div align="center">
+											 	 <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">
+												  <strong>Contas de Clientes Anteriores</strong>
+												 </font>
+												</div>
+											 </td>
+										</tr>
+										
+									<logic:iterate name="colecaoContaValoresPreteritos"
+											id="contaValoresPreteritosHelper" type="ContaValoresHelper">
+		
+											
+									<%	if (cor.equalsIgnoreCase("#cbe5fe")) {
+											cor = "#FFFFFF";	%>
+										<tr bgcolor="#FFFFFF">
+									<%	} else {
+											cor = "#cbe5fe";%>
+										<tr bgcolor="#cbe5fe">
+									<%	}	%>
+											
+											<td width="12%">
+												<div align="center">
+													<bean:write name="contaValoresPreteritosHelper"
+														property="formatarAnoMesParaMesAno" />
+												</div>
+											</td>
+											
+											<td width="15%">
+												<div align="center">
+												<bean:write name="contaValoresPreteritosHelper"
+													property="valorTotalConta" 
+													formatKey="money.format" />
+												</div>
+											</td>
+											
+											<td width="15%" align="center">
+												<a href="javascript:abrirPopup('gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta='+<%="" + contaValoresPreteritosHelper.getConta().getId()%>, 400, 800);">
+												<img align="center" border="0"
+													src="<bean:message key="caminho.imagens"/>print.gif"
+													title="Imprimir Fatura" /></a>
+											</td>
+											
+											<td width="15%" align="center">
+											<a href="javascript:abrirPopup('exibirSelecionarBancoAction.do?idConta='+<%="" + contaValoresPreteritosHelper.getConta().getId()%>, 400, 800);" 
+												title="Selecionar Banco"> Selecionar Banco </a>
+											</td>
+										</tr>
+										</logic:iterate>
+
+										</logic:present>
+										
 										<logic:present name="totalContas">
 									<%	if (cor.equalsIgnoreCase("#cbe5fe")) {
 											cor = "#FFFFFF";	%>

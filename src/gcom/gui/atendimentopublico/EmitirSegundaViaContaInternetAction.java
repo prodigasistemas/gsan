@@ -113,6 +113,7 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 			 */
 				
 			BigDecimal totalContas = new BigDecimal("0.00");
+			BigDecimal totalContasPreterito = new BigDecimal("0.00");
 			BigDecimal valorTotalAcrescimoImpontualidadeContas = new BigDecimal("0.00");
 			
 			Short nDiasVencimentoCobranca = sistemaParametro.getNumeroDiasVencimentoCobranca();
@@ -164,34 +165,58 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 						1, 
 						null);
 			
-			Collection colecaoContasValores = 
-				obterDebitoImovelOuClienteHelper.getColecaoContasValores();
+			Collection colecaoContasValores = obterDebitoImovelOuClienteHelper.getColecaoContasValores();
 			
-			if (colecaoContasValores == null || colecaoContasValores.isEmpty()) {
+			Collection<ContaValoresHelper> colecaoContaValoresPreteritos = obterDebitoImovelOuClienteHelper.getColecaoContasValoresPreteritos();
+			
+			
+			
+			if ((colecaoContasValores == null || colecaoContasValores.isEmpty()) || (colecaoContaValoresPreteritos == null || colecaoContaValoresPreteritos.isEmpty())) {
 				throw new ActionServletException("atencao.imovel_sem_debitos");
 			} else {
 			
-				Iterator colecaoContasValoresIterator = colecaoContasValores.iterator();
-				
-				while (colecaoContasValoresIterator.hasNext()) {
-					ContaValoresHelper contaValoresHelper = 
-						(ContaValoresHelper) colecaoContasValoresIterator.next();
+				if (colecaoContasValores != null){
 					
-					totalContas = totalContas.add(contaValoresHelper.getValorTotalConta());
+					Iterator colecaoContasValoresIterator = colecaoContasValores.iterator();
 					
-					valorTotalAcrescimoImpontualidadeContas = 
-						valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValores());
+					while (colecaoContasValoresIterator.hasNext()) {
+						ContaValoresHelper contaValoresHelper = 
+							(ContaValoresHelper) colecaoContasValoresIterator.next();
+						
+						totalContas = totalContas.add(contaValoresHelper.getValorTotalConta());
+						
+						valorTotalAcrescimoImpontualidadeContas = 
+							valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValores());
+					}
+					
 				}
-
-				httpServletRequest.setAttribute("totalContas", totalContas);
+				
+				if (colecaoContaValoresPreteritos != null){
+					
+					Iterator colecaoContaValoresPreteritoIterator = colecaoContaValoresPreteritos.iterator();
+					
+					while (colecaoContaValoresPreteritoIterator.hasNext()) {
+						ContaValoresHelper contaValoresPreteritoHelper = 
+							(ContaValoresHelper) colecaoContaValoresPreteritoIterator.next();
+						
+						totalContasPreterito = totalContasPreterito.add(contaValoresPreteritoHelper.getValorTotalConta());
+					}
+					
+					
+				}
+				
+				
+				httpServletRequest.setAttribute("totalContas", totalContas.add(totalContasPreterito));
 				form.setValorDebito(Util.formatarMoedaReal(totalContas));
 				//valor dos encargos so aparece para CAEMA
 				//RM986 - Vivianne Sousa - 15/06/2011
 				form.setValorEncargosACobrar(Util.formatarMoedaReal(valorTotalAcrescimoImpontualidadeContas));
 			}
+
+			httpServletRequest.setAttribute("colecaoContaValoresPreteritos",colecaoContaValoresPreteritos);
 			
 			httpServletRequest.setAttribute("colecaoContasValores",colecaoContasValores);
-
+			
 			form.setNomeCliente(this.getFachada().obterNomeCliente(matricula));
 			
 			ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = 
