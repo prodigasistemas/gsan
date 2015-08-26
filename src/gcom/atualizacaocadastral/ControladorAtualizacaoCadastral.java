@@ -41,6 +41,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelImagem;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
@@ -276,7 +277,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-			throw new ControladorException("Erro ao atualizar imóveis aprovados.", e);
+			throw new ControladorException("Erro ao atualizar imoveis aprovados.", e);
 		}
 	}
 
@@ -318,8 +319,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		try {
 			this.aprovarImoveis(converterListaEmImovelRetorno(listaImoveis), usuarioLogado);
 		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao pesquisar atualizar imóveis em lote.", e);
-			throw new ControladorException("Erro ao atualizar imóveis em lote.", e);
+			logger.error("Erro ao pesquisar atualizar imoveis em lote.", e);
+			throw new ControladorException("Erro ao atualizar imoveis em lote.", e);
 		}
 		
 	}
@@ -505,6 +506,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 		}
 		
+		atualizarImovelPerfil(imovelRetorno.getId(), subcategoriasRetorno);
+	
 		this.removerSubcategoriasDoImovel(imovelRetorno.getIdImovel(), idsSubcategorias);
 	}
 	
@@ -530,8 +533,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 			this.removerRamosAtividadeDoImovel(imovelRetorno.getIdImovel(), idsRamosAtividadesImovel);
 		} catch (ControladorException e) {
-			logger.error("Erro ao atualizar ramo de atividade retorno do imóvel " + imovelRetorno.getId(), e);
-			throw new ControladorException("Erro ao atualizar ramo de atividade retorno do imóvel " + imovelRetorno.getId(), e);
+			logger.error("Erro ao atualizar ramo de atividade retorno do imovel " + imovelRetorno.getId(), e);
+			throw new ControladorException("Erro ao atualizar ramo de atividade retorno do imovel " + imovelRetorno.getId(), e);
 		}
 	}
 	
@@ -790,14 +793,13 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar imóvel retorno " + idImovelRetorno, e);
-			throw new ControladorException("Erro ao atualizar imóvel retorno  " + idImovelRetorno, e);
+			logger.error("Erro ao atualizar imovel retorno " + idImovelRetorno, e);
+			throw new ControladorException("Erro ao atualizar imovel retorno  " + idImovelRetorno, e);
 		}
 	}
 	
 	private void incluirImoveis() throws ControladorException {
 		Integer idImovel = null;
-		Integer idUsuario = null;
 
 		try {
 			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
@@ -821,15 +823,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				atualizarImovelProcessado(imovelRetorno.getId());
 			}
-
 		} catch (Exception e) {
-			logger.error("Erro ao inserir imóvel retorno " + idImovel);
-			throw new ControladorException("Erro ao inserir imóvel retorno  " + idImovel, e);
+			logger.error("Erro ao inserir imovel retorno " + idImovel);
+			throw new ControladorException("Erro ao inserir imovel retorno  " + idImovel, e);
 
 		}
 	}
-	
-	
 	
 	private HashMap<ClienteRelacaoTipo, ICliente> obterClientesImovel(Integer idImovelRetorno) throws ControladorException {
 		HashMap<ClienteRelacaoTipo, ICliente> mapClientes = new HashMap<ClienteRelacaoTipo, ICliente>();
@@ -844,8 +843,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 		
 		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao obter clientes do imóvel imóvel retorno" + idImovelRetorno);
-			throw new ControladorException("Erro ao obter clientes do imóvel retorno  "+ idImovelRetorno, e);
+			logger.error("Erro ao obter clientes do imovel retorno" + idImovelRetorno);
+			throw new ControladorException("Erro ao obter clientes do imovel retorno  "+ idImovelRetorno, e);
 		}
 		return mapClientes;
 	}
@@ -878,8 +877,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 
 		} catch (Exception e) {
-			logger.error("Erro ao excluir imóvel retorno" + idImovel);
-			throw new ControladorException("Erro ao excluir imóvel retorno  "+ idImovel, e);
+			logger.error("Erro ao excluir imovel retorno" + idImovel);
+			throw new ControladorException("Erro ao excluir imovel retorno  "+ idImovel, e);
 		}
 	}
 	
@@ -935,8 +934,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar clientes do imóvel " + idImovel, e);
-			throw new ControladorException("Erro ao atualizar clientes do imóvel.", e);
+			logger.error("Erro ao atualizar clientes do imovel " + idImovel, e);
+			throw new ControladorException("Erro ao atualizar clientes do imovel.", e);
 		}
 	}
 
@@ -1133,8 +1132,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		try {
 			FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
 			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.ID, idRA));
-//			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.CODIGO_SITUACAO, String.valueOf(RegistroAtendimento.SITUACAO_PENDENTE)));
-//			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.SOLICITACAO_TIPO_ESPECIFICACAO, 1227)); // "ATUALIZACAO CADASTRAL GSAN"
 			
 			Collection<RegistroAtendimento> colecaoRegistroAtendimento = getControladorUtil().pesquisar(filtroRegistroAtendimento, RegistroAtendimento.class.getName());
 			
@@ -1234,14 +1231,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					}
 				}
 			}
-			/*Iterator imoveisIterator = (IImovel) imoveisParaAprovar.iterator();
-			while(imoveisIterator.hasNext()) {
-				
-			}
-			*/
 		} catch (Exception e) {
-			logger.error("Erro ao aprovar imóveis em lote. " + e);
-			throw new ControladorException("Erro ao aprovar imóveis em lote.", e);
+			logger.error("Erro ao aprovar imoveis em lote. " + e);
+			throw new ControladorException("Erro ao aprovar imoveis em lote.", e);
 		}
 	}
 	
@@ -1277,8 +1269,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			mapDadosAnalise.put(ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm.ALTERACAO_LIGACAO_ESGOTO, repositorioAtualizacaoCadastral.obterquantidadeImoveisComAlteracaoFaturamentoArquivo(idArquivo, TabelaColuna.NOME_COLUNA_ESGOTO));
 			mapDadosAnalise.put(ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm.ALTERACAO_CATEGORIA_SUB_ECONOMIAS, repositorioAtualizacaoCadastral.obterquantidadeImoveisComAlteracaoFaturamentoArquivo(idArquivo, TabelaColuna.NOME_COLUNA_ECONOMIAS));
 		} catch (Exception e) {
-			logger.error("Erro ao obter dados para análise do aquivo." + e);
-			throw new ControladorException("Erro ao obter dados para análise do aquivo.", e);
+			logger.error("Erro ao obter dados para analise do aquivo." + e);
+			throw new ControladorException("Erro ao obter dados para analise do aquivo.", e);
 		}
 		return mapDadosAnalise;
 	}
@@ -1411,7 +1403,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 						bean.setDescCategorias(this.getCategoriasImovelRetornoRelatorioPorRota(idImovelRetorno));
 						
 					} else if (tipoOperacao.equals(AlteracaoTipo.EXCLUSAO)) {
-						bean.setIdImovel(idImovel + " - EXCLUÍDO");
+						bean.setIdImovel(idImovel + " - EXCLUï¿½DO");
 						bean.setDescCategorias(this.getCategoriasImovelRetornoRelatorioPorRota(idImovelRetorno));
 						
 					} else if (tipoOperacao.equals(new Integer(0))) {
@@ -1485,5 +1477,17 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 		
 		return categorias;
+	}
+	
+	private void atualizarImovelPerfil(Integer idImovel, Collection<IImovelSubcategoria> subcategoriasRetorno) throws ControladorException {
+		ImovelPerfil perfil = getControladorImovel().obterImovelPerfil(idImovel);
+		
+		if (perfil.getId().equals(ImovelPerfil.TARIFA_SOCIAL)
+				&& subcategoriasRetorno != null && !subcategoriasRetorno.isEmpty()) {
+			
+			Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+			imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.NORMAL));
+			getControladorUtil().atualizar(imovel);
+		}
 	}
 }
