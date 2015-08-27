@@ -171,7 +171,7 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 			
 			
 			
-			if ((colecaoContasValores == null || colecaoContasValores.isEmpty()) || (colecaoContaValoresPreteritos == null || colecaoContaValoresPreteritos.isEmpty())) {
+			if ((colecaoContasValores == null || colecaoContasValores.isEmpty()) && (colecaoContaValoresPreteritos == null || colecaoContaValoresPreteritos.isEmpty())) {
 				throw new ActionServletException("atencao.imovel_sem_debitos");
 			} else {
 			
@@ -208,8 +208,6 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 				
 				httpServletRequest.setAttribute("totalContas", totalContas.add(totalContasPreterito));
 				form.setValorDebito(Util.formatarMoedaReal(totalContas));
-				//valor dos encargos so aparece para CAEMA
-				//RM986 - Vivianne Sousa - 15/06/2011
 				form.setValorEncargosACobrar(Util.formatarMoedaReal(valorTotalAcrescimoImpontualidadeContas));
 			}
 
