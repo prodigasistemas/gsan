@@ -23875,9 +23875,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					anoMesFaturamento,
 					categoria,
 					localidade,
-					new LancamentoTipo(
-							LancamentoTipo.DEVOLUCAO_VALORES_RECUPERACAO_CREDITO),
-					new LancamentoItem(idLancamentoItem), null, null, null);
+					new LancamentoTipo(LancamentoTipo.DEVOLUCAO_VALORES_RECUPERACAO_CREDITO),
+					new LancamentoItem(idLancamentoItem),
+					new LancamentoItemContabil(LancamentoItemContabil.ACRESCIMOS_POR_IMPONTUALIDADE),
+					null,
+					null);
 		}
 
 		return resumoFaturamento;
