@@ -17,6 +17,7 @@ import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.micromedicao.medicao.MedicaoTipo;
+import gcom.relatorio.contasareceber.RelatorioParametrosContabeisContasAReceberBean;
 import gcom.relatorio.financeiro.RelatorioVolumesConsumidosNaoFaturadosBean;
 import gcom.relatorio.financeiro.ResumoReceitaHelper;
 import gcom.util.ConstantesSistema;
@@ -7791,7 +7792,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                     "  juncao.rfat_nnsequenciatipolancamento, " +
                     "  juncao.rfat_nnseqitemtplanc, " +
                     "  juncao.catg_id ";
-				
+
 				// executa o sql
 				retorno = session.createSQLQuery(consulta)
 							.addScalar("descricaoTipoLancamento", Hibernate.STRING)
@@ -12297,6 +12298,71 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("creditoOrigem", creditoOrigem)
 					.list();
 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection<Object[]> pesquisarDadosRelatorioParametrosContabeisContasAReceber( Integer referenciaContabil ) throws ErroRepositorioException{
+		
+		Collection<Object[]> retorno = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		StringBuilder select = new StringBuilder();
+		select.append("select lanTip.lctp_dstipolancamento as descricaoTipoLancamento, ")
+		      .append("lanIte.lcit_dsitemlancamento as descricaoItemLancamento, ") 
+		      .append("cat.catg_dsabreviado as descricaoCategoria, ")  
+              .append(" case when catTip.cgtp_id = 1 then coalesce( conConPar.cnct_nnconta, '0' ) ")
+		      .append(" else coalesce( conConPub.cnct_nnconta, '0' ) ")
+			  .append(" end as numeroConta, ")
+              .append("sum(coalesce( conRec.crct_vlitemlancamento, 0 ) ) as valorItemLancamento, ")
+              .append("conRec.crct_nnsequenciatipolancamento, ") 
+              .append("conRec.crct_nnseqitemtplanc, ") 
+              .append("conRec.catg_id  ");
+		
+		StringBuilder from = new StringBuilder();
+		from.append("FROM financeiro.contas_a_receber_contb conRec ") 
+              .append("inner join financeiro.lancamento_tipo lanTip on ( lanTip.lctp_id = conRec.lctp_id ) ") 
+              .append("inner join financeiro.lancamento_item lanIte on ( lanIte.lcit_id = conRec.lcit_id ) ")  
+              .append("inner join financeiro.contas_a_rec_contb_param conRecConParPar on ( ( conRecConParPar.lict_id = conRec.lict_id or conRecConParPar.lict_id is null ) and conRecConParPar.lctp_id = conRec.lctp_id and conRecConParPar.lcit_id = conRec.lcit_id and conRecConParPar.cgtp_id = 1 ) ")
+              .append("inner join financeiro.conta_contabil conConPar on ( conRecConParPar.cnct_id = conConPar.cnct_id ) ")
+              .append("inner join financeiro.contas_a_rec_contb_param conRecConParPub on ( ( conRecConParPub.lict_id = conRec.lict_id or conRecConParPub.lict_id is null ) and conRecConParPub.lctp_id = conRec.lctp_id and conRecConParPub.lcit_id = conRec.lcit_id and conRecConParPub.cgtp_id = 2 ) ")
+              .append("inner join financeiro.conta_contabil conConPub on ( conRecConParPub.cnct_id = conConPub.cnct_id ) ")
+              .append("inner join cadastro.categoria cat on ( cat.catg_id = conRec.catg_id )  ")
+              .append("inner join cadastro.categoria_tipo catTip on ( cat.cgtp_id = catTip.cgtp_id ) ");
+		
+		StringBuilder where = new StringBuilder();
+	   	where.append("where conRec.crct_amreferencia =:data ");
+		
+		StringBuilder groupBy = new StringBuilder();
+		groupBy.append("group by lanTip.lctp_dstipolancamento,lanIte.lcit_dsitemlancamento,cat.catg_dsabreviado,4, ")  
+               .append("conRec.crct_nnsequenciatipolancamento,conRec.crct_nnseqitemtplanc,conRec.catg_id ");
+		
+		StringBuilder orderBy = new StringBuilder();
+		orderBy.append("order by conRec.crct_nnsequenciatipolancamento,conRec.crct_nnseqitemtplanc,conRec.catg_id;");
+	
+		StringBuilder sql = new StringBuilder();
+	   	sql.append(select)
+           .append(from)
+           .append(where)
+           .append(groupBy)
+		   .append(orderBy);
+		   
+		try {
+			retorno = session.createSQLQuery(sql.toString())
+					.addScalar("descricaoTipoLancamento", Hibernate.STRING)
+					.addScalar("descricaoItemLancamento", Hibernate.STRING)
+					.addScalar("descricaoCategoria", Hibernate.STRING)
+					.addScalar("numeroConta", Hibernate.STRING)
+					.addScalar("valorItemLancamento", Hibernate.BIG_DECIMAL)
+					.setInteger("data", referenciaContabil)
+					.list();
+			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

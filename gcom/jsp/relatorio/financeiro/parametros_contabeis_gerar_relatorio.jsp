@@ -38,7 +38,7 @@
 	function validarForm() {
 		var form = document.forms[0];
 		if(form.selecaoRelatorio[0].checked == false 
-				&&   form.selecaoRelatorio[1].checked == false){
+				&&   form.selecaoRelatorio[1].checked == false &&  form.selecaoRelatorio[2].checked == false){
 			alert('Informe Tipo do Relatório');
 		}else{
 				toggleBox('demodiv',1);
@@ -132,7 +132,8 @@
 				<tr>
 					<td><strong>Tipo do Relat&oacute;rio:<font color="#FF0000">*</font></strong></td>
 					<td><html:radio property="selecaoRelatorio" value="F" />Faturamento
-					<html:radio property="selecaoRelatorio" value="A" /> Arrecada&ccedil;&atilde;o</td>
+					<html:radio property="selecaoRelatorio" value="A" /> Arrecada&ccedil;&atilde;o
+					<html:radio property="selecaoRelatorio" value="C" /> Contas a Receber</td>
 				</tr>
 				
 				<tr>

@@ -13,6 +13,7 @@ public class GerarRelatorioParametrosContabeisActionForm extends ActionForm {
 	
 	public static final String SELECAO_RELATORIO_FATURAMENTO = "F";
 	public static final String SELECAO_RELATORIO_ARRECADACAO = "A";
+	public static final String SELECAO_RELATORIO_CONTAS_A_RECEBER = "C";
     
     private String selecaoRelatorio;
     private String referenciaContabil;

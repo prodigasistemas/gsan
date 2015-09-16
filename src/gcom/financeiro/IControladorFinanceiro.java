@@ -2,6 +2,7 @@ package gcom.financeiro;
 
 import gcom.batch.ProcessoIniciado;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
+import gcom.relatorio.contasareceber.RelatorioParametrosContabeisContasAReceberBean;
 import gcom.relatorio.financeiro.RelatorioEvolucaoContasAReceberContabilBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisArrecadacaoBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisFaturamentoBean;
@@ -426,5 +427,18 @@ public interface IControladorFinanceiro {
     public Map consultarSomatorioValorContasBaixadasContabilmenteFaixa(
     		Integer referenciaInicio, Integer referenciaFinal,Integer faixa, Short periodicidade)
     		throws ControladorException;
+    
+    
+	
+	/**
+     * Pesquisa contas a Receber 
+     * 
+     * @author: Reinaldo Viana
+     * @date: 04/09/2015
+     * 
+     * @return
+     * @throws ErroRepositorioException
+     */
+    public Collection<RelatorioParametrosContabeisContasAReceberBean>  pesquisarDadosRelatorioParametrosContabeisContasAReceber(String referenciaContabil) throws ControladorException;
 
 }

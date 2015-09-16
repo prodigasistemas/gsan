@@ -495,7 +495,6 @@ import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
 import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.atendimentopublico.RelatorioAcompanhamentoBoletimMedicaoHelper;
 import gcom.relatorio.atendimentopublico.RelatorioAcompanhamentoRAHelper;
 import gcom.relatorio.atendimentopublico.RelatorioCertidaoNegativaClienteBean;
@@ -555,6 +554,7 @@ import gcom.relatorio.cobranca.parcelamento.ExtratoDebitoRelatorioHelper;
 import gcom.relatorio.cobranca.parcelamento.RelacaoParcelamentoRelatorioHelper;
 import gcom.relatorio.cobranca.parcelamento.RelatorioRelacaoParcelamentoAnaliticoBean;
 import gcom.relatorio.cobranca.parcelamento.RelatorioRelacaoParcelamentoCartaoCreditoBean;
+import gcom.relatorio.contasareceber.RelatorioParametrosContabeisContasAReceberBean;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocal;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocalHome;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
@@ -44160,6 +44160,25 @@ public class Fachada {
 			return this.getControladorArrecadacao().pesquisarPagamentoInconformeImovel(idImovel);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+
+	/**
+	 * Gerar Relatório dos Parâmetros Contábeis
+	 * 
+	 * @author Reinaldo Viana
+	 * @date 02/09/2015
+	 * 
+	 * @return Collection<RelatorioParametrosContabeisContasAReceberBean>
+	 * @throws ErroRepositorioException
+	 */
+	public Collection<RelatorioParametrosContabeisContasAReceberBean> pesquisarDadosRelatorioParametrosContabeisContasAReceber(String referenciaContabil) {
+
+		try {
+			return this.getControladorFinanceiro().pesquisarDadosRelatorioParametrosContabeisContasAReceber(referenciaContabil);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 }

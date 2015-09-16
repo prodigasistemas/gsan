@@ -432,6 +432,8 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_PARAMETROS_CONTABEIS_FATURAMENTO = "/relatorioParametrosContabeisFaturamento.jasper";
 
 	public static final String RELATORIO_PARAMETROS_CONTABEIS_ARRECADACAO = "/relatorioParametrosContabeisArrecadacao.jasper";
+	
+	public static final String RELATORIO_PARAMETROS_CONTABEIS_CONTAS_A_RECEBER = "/relatorioParametrosContabeisContasAReceber.jasper";
 
 	public static final String RELATORIO_ANALISE_AVISOS_BANCARIOS = "/relatorioAnaliseAvisosBancarios.jasper";
 

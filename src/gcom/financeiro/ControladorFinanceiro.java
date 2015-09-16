@@ -61,6 +61,7 @@ import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoOrigem;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.financeiro.lancamento.RepositorioLancamentoItemContabilHBM;
+import gcom.relatorio.contasareceber.RelatorioParametrosContabeisContasAReceberBean;
 import gcom.relatorio.financeiro.RelatorioEvolucaoContasAReceberContabilBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisArrecadacaoBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisFaturamentoBean;
@@ -12667,7 +12668,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return Collection<RelatorioParametrosContabeisFaturamentoBean>
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<RelatorioParametrosContabeisFaturamentoBean> 
+    public Collection<RelatorioParametrosContabeisFaturamentoBean> 
 		pesquisarDadosRelatorioParametrosContabeisFaturamento( String referenciaContabil ) throws ControladorException {
 		
 		Collection pesquisaDados = new ArrayList();
@@ -18142,4 +18143,45 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public Collection<RelatorioParametrosContabeisContasAReceberBean>  pesquisarDadosRelatorioParametrosContabeisContasAReceber(String referenciaContabil) throws ControladorException{
+	
+		Collection pesquisaDados = new ArrayList();
+		Integer anoMes = null;
+		
+		// Verificamos se o ano mes de referencia foi informado
+		if ( referenciaContabil != null && !referenciaContabil.equals( "" )){
+			anoMes = Integer.parseInt( Util.formatarMesAnoParaAnoMesSemBarra( referenciaContabil ) );
+		}
+		
+		Collection<RelatorioParametrosContabeisContasAReceberBean> colRetorno = new ArrayList();		
+		
+		try {
+			pesquisaDados = repositorioFinanceiro.pesquisarDadosRelatorioParametrosContabeisContasAReceber( anoMes );			
+			
+			// Montamos os dados
+			Iterator iter = pesquisaDados.iterator();
+			
+			while(iter.hasNext()){
+				Object[] objetos = (Object[]) iter.next();
+				
+				RelatorioParametrosContabeisContasAReceberBean bean = new RelatorioParametrosContabeisContasAReceberBean(
+						(String) objetos[0], // Descricao do tipo de lancamento
+						(String) objetos[1], // Descricao do Item de lancamento
+						(String) objetos[2], // Descricao da categoria
+						(String) objetos[3], // Numero da conta 
+						(BigDecimal) objetos[4]  // valor da conta				
+				);
+                
+				colRetorno.add( bean );
+			}
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+		
+		return colRetorno;		
+		
+	}
+	
 }

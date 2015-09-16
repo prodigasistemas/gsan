@@ -2418,6 +2418,19 @@ public interface IRepositorioFinanceiro {
 	public Collection<Object[]> pesquisarDadosCreditosARealizar(int anoMesReferenciaContabil, Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException ;
 	
 	public Collection<Object[]> pesquisarDadosCreditosARealizarValorResidual(int anoMesReferenciaContabil, Integer idLocalidade, Integer creditoOrigem) throws ErroRepositorioException;
+	
+    /**
+     * Gerar Relatório dos Parâmetros Contábeis
+     * 
+     * @author Reinaldo Viana
+     * @date 02/09/2015
+     * 
+     * @return Collection<RelatorioParametrosContabeisContasAReceberBean>
+     * @throws ErroRepositorioException
+     */
+    public Collection<Object[]> 
+        pesquisarDadosRelatorioParametrosContabeisContasAReceber( Integer referenciaContabil ) 
+        throws ErroRepositorioException;  
 	 
 	 
 }
