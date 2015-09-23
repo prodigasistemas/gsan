@@ -77,6 +77,18 @@ function pesquisarImovel() {
 
 
 -->
+
+function carregaMaps() {
+
+	var form = document.forms[0];
+			  
+	var url = "http://vazamento.cosanpa.pa.gov.br/gsan/imovel_mapa.asp?coord="+form.coordenadaXDadosCadastrais.value +","+form.coordenadaYDadosCadastrais.value ;
+	
+	window.open(url, '_blank' );
+	
+}
+
+
 </script>
 </head>
 
@@ -632,7 +644,7 @@ function pesquisarImovel() {
 						</tr>
 						<tr>
 							<td height="10" align="left">
-							<div class="style9"><strong>Coordenada UTM X:</strong></div>
+							<div class="style9"><strong>Latitude:</strong></div>
 							</td>
 							<td align="left">
 							<div class="style9"><html:text
@@ -640,7 +652,7 @@ function pesquisarImovel() {
 								style="background-color:#EFEFEF; border:0; color: #000000"
 								size="20" maxlength="20" /></div>
 							</td>
-							<td align="left"><strong>Coordenada UTM Y:</strong></td>
+							<td align="left"><strong>Longitude:</strong></td>
 							<td align="left"><html:text property="coordenadaYDadosCadastrais"
 								readonly="true"
 								style="background-color:#EFEFEF; border:0; color: #000000"
@@ -650,11 +662,16 @@ function pesquisarImovel() {
 							<td height="10" align="left">
 							<div class="style9"><strong>Ocorr&ecirc;ncia de Cadastro:</strong></div>
 							</td>
-							<td colspan="3" align="left">
+							<td colspan="2" align="left">
 							<div class="style9"><html:text
 								property="cadastroOcorrenciaDadosCadastrais" readonly="true"
 								style="background-color:#EFEFEF; border:0; color: #000000"
 								size="20" maxlength="20" /></div>
+							</td>
+							<td align="left">
+							<a href="javascript:carregaMaps();">
+							<img border="0" src="<bean:message key="caminho.imagens"/>googlemaps.gif"
+												title="Buscar coordenadas" /></a>
 							</td>
 						</tr>
 						<tr>
