@@ -100,24 +100,33 @@ public abstract class ClienteBuilder {
 			if (indicadorFisicoJuridico.equals(tipoPessoa)) {
 				retorno = cliente.getClienteTipo().getId();
 			} else {
-				FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-				filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, tipoPessoa));
-
-				if (tipoPessoa.shortValue() == ClienteTipo.INDICADOR_PESSOA_FISICA.shortValue()) {
-					filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
-				} else {
-					filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "NAO INFORMADO"));
-				}
-
-				Collection pesquisaClienteTipo = Fachada.getInstancia().pesquisar(filtroClienteTipo, ClienteTipo.class.getName());
-				if (pesquisaClienteTipo != null && !pesquisaClienteTipo.isEmpty()) {
-					ClienteTipo clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisaClienteTipo);
-					retorno = clienteTipo.getId();
-				}
+				retorno = pesquisarClienteTipo(tipoPessoa);
 			}
+		} else {
+			retorno = pesquisarClienteTipo(tipoPessoa);
 		}
 
 		return retorno;
+	}
+
+	private Integer pesquisarClienteTipo(Short tipoPessoa) {
+		FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
+		filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, tipoPessoa));
+
+		if (tipoPessoa.shortValue() == ClienteTipo.INDICADOR_PESSOA_FISICA.shortValue()) {
+			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
+		} else {
+			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "NAO INFORMADO"));
+		}
+
+		ClienteTipo clienteTipo = null;
+		
+		Collection pesquisaClienteTipo = Fachada.getInstancia().pesquisar(filtroClienteTipo, ClienteTipo.class.getName());
+		if (pesquisaClienteTipo != null && !pesquisaClienteTipo.isEmpty()) {
+			clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisaClienteTipo);
+		}
+		
+		return clienteTipo.getId();
 	}
 
 	public abstract IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo);
