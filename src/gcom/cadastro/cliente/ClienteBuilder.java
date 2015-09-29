@@ -111,12 +111,13 @@ public abstract class ClienteBuilder {
 
 	private Integer pesquisarClienteTipo(Short tipoPessoa) {
 		FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-		filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, tipoPessoa));
 
-		if (tipoPessoa.shortValue() == ClienteTipo.INDICADOR_PESSOA_FISICA.shortValue()) {
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
-		} else {
+		if (tipoPessoa.shortValue() == ClienteTipo.INDICADOR_PESSOA_JURIDICA.shortValue()) {
+			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_JURIDICA));
 			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "NAO INFORMADO"));
+		} else {
+			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_FISICA));
+			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
 		}
 
 		ClienteTipo clienteTipo = null;
