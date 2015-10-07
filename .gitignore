@@ -7,7 +7,6 @@
 **/.svn
 bin
 .sonar
-sonar-project.properties
 reports/*.jasper
 build.properties
 gcom/jsp/util/rodape.jsp
