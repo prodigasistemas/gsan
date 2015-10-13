@@ -26,8 +26,10 @@
 	<property name="JasperReports.home" value="lib/jasper-report" />
 	<property name="PagerTagLib.home" value="lib/pager-taglib" />
 	<property name="Quartz.home" value="lib/quartz" />
+	<property name="Servlet.home" value="lib/servlet" />
 	<property name="Struts.home" value="lib/struts1.1" />	
 	<property name="Properties.home" value="src/gcom" />
+	
 	<property name="src" value="src" />
 
 	<path id="project.class.path">
@@ -64,6 +66,10 @@
 		<pathelement location="${JasperReports.home}/itext-1.3.1.jar" />
 		<pathelement location="${JasperReports.home}/jasperreports-1.2.2.jar" />
 		<pathelement location="${Quartz.home}/quartz-all-1.5.2.jar" />
+		<pathelement location="${Servlet.home}/commons-el.jar" />
+		<pathelement location="${Servlet.home}/jsp-api.jar" />
+		<pathelement location="${Servlet.home}/servlet-api.jar" />
+		<pathelement location="${Servlet.home}/servlets-common.jar" />
 		<pathelement location="${Struts.home}/commons-beanutils.jar" />
 		<pathelement location="${Struts.home}/commons-collections.jar" />
 		<pathelement location="${Struts.home}/commons-digester.jar" />
