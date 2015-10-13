@@ -408,6 +408,11 @@ public class RetificarContaAction extends GcomAction {
         	} 
         }
         
+        // Inclui valor do Rateio na conta de agua
+        if(contaAtual.getValorRateioAgua()!=null){
+           valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
+        }
+        
         BigDecimal valorTotalConta = new BigDecimal("0");
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
@@ -599,6 +604,10 @@ public class RetificarContaAction extends GcomAction {
 				atualizarMediaConsumoHistorico = true;
 		
 		String retornoUrlBotaoVoltar = "retificarConta";
+		
+		for (CalcularValoresAguaEsgotoHelper conta : valoresConta) {
+		     conta.setValorFaturadoAguaCategoria(valorTotalConta);  	 
+		}
 		
         idConta =  
         	this.getFachada().retificarConta(new Integer(mesAnoContaJSP), 
