@@ -3546,8 +3546,8 @@ public class ControladorArrecadacao implements SessionBean {
             try {
             	
             	String nomeZip = "registrar_movimento_arrecadador_banco_"+nomeArrecadador+ "-"+idTipoMovimento;
-                
             	nomeZip = nomeZip.replace("/","");
+            	nomeZip = nomeZip.replace(" ","_");
             	
             	File leitura = new File(nomeZip +".PDF");
                 File compactado = new File(nomeZip + ".zip"); // nomeZip
