@@ -67,6 +67,7 @@
 		<pathelement location="${ApacheCommons.home}/commons-httpclient.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-javaflow.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-lang.jar" />
+		<pathelement location="${ApacheCommons.home}/commons-logging.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-validator.jar" />
 		<pathelement location="${Axis2.home}/axiom-api-1.2.8.jar" />
 		<pathelement location="${Axis2.home}/axiom-impl-1.2.8.jar" />
@@ -76,7 +77,7 @@
 		<pathelement location="${GsanRelatorios.home}/gsan-relatorios-cliente.jar" />
 		<pathelement location="${Hibernate.home}/hibernate3.jar" />
 		<pathelement location="${JasperReports.home}/barbecue-1.1.jar" />
-		<pathelement location="${JasperReports.home}/iReport.jar" />
+		<pathelement location="${JasperReports.home}/ireport.jar" />
 		<pathelement location="${JasperReports.home}/itext-1.3.1.jar" />
 		<pathelement location="${JasperReports.home}/jasperreports-1.2.2.jar" />
 		<pathelement location="${JasperReports.home}/jcommon-1.0.0.jar" />
@@ -183,6 +184,9 @@
 		<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
 			<classpath>
 				<fileset dir="${JasperReports.home}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ApacheCommons.home}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>

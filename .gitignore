@@ -11,6 +11,7 @@ reports/*.jasper
 build.properties
 gcom/jsp/util/rodape.jsp
 documents/recadastramento/layouts/~$Layout_Retorno_Cadastro.xlsx
+scripts/build/build_gcom_local.sh
 scripts/build/build_gcom_desenv.sh
 scripts/build/build_gcom_homolog.sh
 scripts/build/build_gcom_prod_online.sh
@@ -24,3 +25,4 @@ migrations/comercial/environments/stage.properties
 migrations/comercial/environments/production.properties
 migrations/comercial/environments/local.properties
 src/gcom/properties/version.properties
+
