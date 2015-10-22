@@ -58,6 +58,7 @@
 		<pathelement location="${jboss.client.home}/jboss-jsr77-client.jar" />
 		<pathelement location="${jboss.client.home}/jbossall-client.jar" />
 		<pathelement location="${jboss.client.home}/mail.jar" />
+		<pathelement location="${jboss.client.home}/wsdl4j.jar" />
 		<pathelement location="${jboss.server.home}/default/lib/bcel.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-beanutils.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-codec.jar" />
