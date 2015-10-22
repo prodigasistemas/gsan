@@ -25,7 +25,6 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
-import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
@@ -63,8 +62,8 @@ import gcom.relatorio.arrecadacao.RelatorioAnaliseAvisosBancariosBean;
 import gcom.relatorio.arrecadacao.RelatorioAvisoBancarioPorContaCorrenteBean;
 import gcom.relatorio.arrecadacao.RelatorioDocumentoNaoAceitosBean;
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
-import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
+import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -31673,13 +31672,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT a.avbc_id as id_aviso, ")
-			  .append("a.avbc_dtrealizada as data_realizada, ")    
+			  .append("a.avbc_dtrealizada as data_aviso, ")    
 			  .append("a.arrc_id as id_arrecadador, ")    
 			  .append("c.clie_nmcliente as descricao_arrecadador, ")   
 			  .append("a.arfm_id as id_arrecadacao_forma, ")    
 			  .append("af.arfm_dsarrecadacaoforma as descricao_arrecadacao_forma, ")   
-			  .append("b.bnco_id as id_banco, ")   
-			  .append("cb.ctbc_id as id_conta, ")
 			  .append("a.avbc_dtlancamento as data_lancamento, ")
 			  .append("(CASE WHEN a.avbc_iccreditodebito = 1 THEN a.avbc_vlrealizado ELSE 0 END) as credito, ")   
 			  .append("(CASE WHEN a.avbc_iccreditodebito = 2 THEN a.avbc_vlrealizado ELSE 0 END) as debito, ")   
@@ -31688,44 +31685,42 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		
 		StringBuilder from = new StringBuilder();
 		from.append("FROM arrecadacao.aviso_bancario a ")   
-			.append("LEFT JOIN arrecadacao.arrecadador ar ON (a.arrc_id = ar.arrc_id) ")
-			.append("LEFT JOIN cadastro.cliente c ON (ar.clie_id = c.clie_id) ")
-			.append("LEFT JOIN arrecadacao.arrecadacao_forma af ON (a.arfm_id = af.arfm_id) ")
-			.append("INNER JOIN arrecadacao.conta_bancaria cb ON (a.ctbc_id = cb.ctbc_id) ")
-			.append("INNER JOIN arrecadacao.agencia ag ON (cb.agen_id = ag.agen_id) ")
-			.append("INNER JOIN arrecadacao.banco b ON (ag.bnco_id = b.bnco_id) ")
-			.append("INNER JOIN arrecadacao.arrecadador_contrato contrato on ar.arrc_id = contrato.arrc_id ")
-			.append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa on (tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id) ");
+			.append("LEFT JOIN arrecadacao.arrecadador ar ON a.arrc_id = ar.arrc_id ")
+			.append("LEFT JOIN cadastro.cliente c ON ar.clie_id = c.clie_id ")
+			.append("LEFT JOIN arrecadacao.arrecadacao_forma af ON a.arfm_id = af.arfm_id ")
+			.append("INNER JOIN arrecadacao.arrecadador_contrato contrato ON ar.arrc_id = contrato.arrc_id ")
+			.append("INNER JOIN arrecadacao.arrecadador_contrato_tar tarifa ON tarifa.arct_id = contrato.arct_id and tarifa.arfm_id = af.arfm_id ");
 		
 		StringBuilder groupBy = new StringBuilder();
-		groupBy.append("GROUP BY id_aviso, data_realizada, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
-	      	   .append("         id_banco, id_conta, data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento, tarifa.actf_vltarifa ");
+		groupBy.append("GROUP BY id_aviso, data_aviso, id_arrecadador, descricao_arrecadador, id_arrecadacao_forma, descricao_arrecadacao_forma, ")
+	      	   .append("         data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento, tarifa.actf_vltarifa ");
 		
 		StringBuilder sql = new StringBuilder();
-	   	sql.append("SELECT data_pagamento_previsto, data_realizada, descricao_arrecadador, sum((valor_pagamento - (qtdDocumentos * valor_tarifa))) as valorLiquido ")
-			.append("FROM (")
+	   	sql.append("SELECT data_pagamento_previsto, data_aviso, descricao_arrecadador, sum((valor_pagamento - (qtd_documentos * valor_tarifa))) as valor_pagamento ")
+		   .append("FROM (")
 		   
 		   .append(select)
            .append("p.pgmt_dtpagamento as data_pagamento, ")
-           .append("p.pgmt_dtpagamento + tarifa.actf_nndiafloat as data_pagamento_previsto, ")
+           .append("adiciona_dias_uteis(p.pgmt_dtpagamento, tarifa.actf_nndiafloat,1) as data_pagamento_previsto, ")
            .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
-           .append("count(distinct p.amit_id) as qtdDocumentos, ")
+           .append("count(distinct p.amit_id) as qtd_documentos, ")
            .append("tarifa.actf_vltarifa as valor_tarifa ")
            .append(from)
-           .append("INNER JOIN arrecadacao.pagamento p ON (a.avbc_id = p.avbc_id) ")
-           .append("WHERE (p.pgmt_dtpagamento + tarifa.actf_nndiafloat) >= :data ")
+           .append("INNER JOIN arrecadacao.pagamento p ON a.avbc_id = p.avbc_id ")
+           .append("WHERE p.pgmt_dtpagamento >= current_date - 10 ")
            .append(groupBy)
 		   
 		   .append(") as resumo ")
-		   .append("GROUP BY data_pagamento_previsto, data_realizada, id_arrecadador, descricao_arrecadador ")
-		   .append("ORDER BY data_pagamento_previsto, data_realizada, id_arrecadador;");
+		   .append("WHERE data_pagamento_previsto >= :data ")
+		   .append("GROUP BY data_pagamento_previsto, data_aviso, id_arrecadador, descricao_arrecadador ")
+		   .append("ORDER BY data_pagamento_previsto, data_aviso, id_arrecadador;");
 		
 		try {
 			Collection colecao = session.createSQLQuery(sql.toString())
 					.addScalar("data_pagamento_previsto", Hibernate.DATE)
-					.addScalar("data_realizada", Hibernate.DATE)
+					.addScalar("data_aviso", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
-					.addScalar("valorLiquido", Hibernate.BIG_DECIMAL)
+					.addScalar("valor_pagamento", Hibernate.BIG_DECIMAL)
 					.setDate("data", data)
 					.list();
 			
@@ -31769,7 +31764,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " AND clienteContas.cliente = (select ci.cliente from gcom.cadastro.cliente.ClienteImovel ci where conta.imovel.id = ci.imovel.id and ci.clienteRelacaoTipo = :idTipoCliente and ci.dataFimRelacao is null) "
 					+ " AND pagamento.pagamentoSituacaoAtual = :pagamentoSituacao";
 			
-//					
 			retorno[0] = session.createQuery(hql)
 					.setParameter("idImovel", Integer.parseInt(idImovel))
 					.setParameter("idTipoCliente", ClienteRelacaoTipo.USUARIO)

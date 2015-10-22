@@ -141,7 +141,6 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.RepositorioLocalidadeHBM;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
@@ -231,7 +230,6 @@ import gcom.relatorio.arrecadacao.RelatorioPagamentoEntidadesBeneficentesSinteti
 import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
 import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.big.RelatorioBIGHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
@@ -257,7 +255,6 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
-import gcom.util.FormatoData;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
 import gcom.util.ParametroNaoInformadoException;
@@ -52247,37 +52244,19 @@ public class ControladorArrecadacao implements SessionBean {
 	
 	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ControladorException {
 		try {
-			Collection<NacionalFeriado> feriadosNacionais = repositorioUtil.pesquisarFeriadosNacionais();
-
-			List<ResumoCreditosAvisosBancariosDTO> resumos = repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(data);
-
-			for (ResumoCreditosAvisosBancariosDTO resumo : resumos) {
-				Date dataPagamentoPrevisto = Util.converteStringParaDateAmericana(resumo.getDataPagamentoPrevisto());
-
-				while (!Util.ehDiaUtil(dataPagamentoPrevisto, feriadosNacionais, null)) {
-					dataPagamentoPrevisto = Util.adicionarNumeroDiasDeUmaData(dataPagamentoPrevisto, 1);
-
-					resumo.setDataPagamentoPrevisto(Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO));
-				}
-			}
-
-			return resumos;
+			return repositorioArrecadacao.pesquisarResumoCreditosAvisosBancarios(data);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 	
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException {
-		
-
 		try {
 			return repositorioArrecadacao.pesquisarPagamentoInconformeImovel(idImovel);
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-	
-		
 	}
 }
 
