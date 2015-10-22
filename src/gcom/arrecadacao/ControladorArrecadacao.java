@@ -25613,7 +25613,7 @@ public class ControladorArrecadacao implements SessionBean {
 		credito.setLancamentoItemContabil(lancamentoItemContabil);
 		
 		CreditoOrigem creditoOrigem = new CreditoOrigem();
-		creditoOrigem.setId(CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+		creditoOrigem.setId(CreditoOrigem.DEVOLUCAO_TARIFA_AGUA);
 		credito.setCreditoOrigem(creditoOrigem);
 		
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();

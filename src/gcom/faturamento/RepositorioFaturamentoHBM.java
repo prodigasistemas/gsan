@@ -14549,7 +14549,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "ligacaoAguaSituacaoConta.indicadorFaturamentoSituacao, "//49
 					+ "ligacaoEsgotoSituacaoConta.indicadorFaturamentoSituacao, "//50
 					+ "cnt.valorRateioAgua, "//51
-					+ "cnt.consumoRateioAgua "//52
+  					+ "cnt.consumoRateioAgua, "//52
+  					+ "cnt.valorRateioEsgoto, "//53
+  					+ "cnt.consumoRateioEsgoto "//54
 					+ "FROM Conta cnt "
 					+ "INNER JOIN cnt.debitoCreditoSituacaoAtual debitoCreditoSituacaoAtual "
 					+ "INNER JOIN cnt.localidade localidadeConta "

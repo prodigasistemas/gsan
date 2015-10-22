@@ -10181,6 +10181,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					contaInserir.setConsumoRateioAgua(new Integer("0"));
 				}
 				
+				if (contaAtual.getConsumoRateioEsgoto() != null) {
+					contaInserir.setConsumoRateioEsgoto(contaAtual.getConsumoRateioEsgoto());
+				}else {
+				    contaInserir.setConsumoRateioEsgoto(new Integer("0"));
+				}
+
 				// CRC4202 - adicionado por Vivianne Sousa - 21/09/2010 -
 				if (atualizarLeituraAnteriorEAtualConta) {
 					this.verificarValoresLeituraAnteriorEAtual(leituraAnterior, leituraAtual, contaInserir.getConsumoAgua(), retornoBotaoVoltar, 
@@ -10214,13 +10220,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				contaInserir.setValorEsgoto(valorTotalEsgoto);
 				
-				
 				if (contaAtual.getValorRateioAgua() != null) {
-					contaInserir.setValorRateioAgua(contaAtual.getValorRateioAgua());
+				    contaInserir.setValorRateioAgua(contaAtual.getValorRateioAgua());
 				} else {
 					contaInserir.setValorRateioAgua(new BigDecimal("0.00"));
 				}
-				
+
+				if (contaAtual.getValorRateioEsgoto() != null){
+					contaInserir.setValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
+				}else{
+					contaInserir.setValorRateioEsgoto(new BigDecimal("0.00"));
+				}
 
 				BigDecimal valorTotalDebito = null;
 				BigDecimal valorTotalCredito = null;
@@ -39772,6 +39782,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 			if (arrayConta[52] != null) {
 				retorno.setConsumoRateioAgua((Integer) (arrayConta[52]));
+			}
+			if (arrayConta[53] != null) {
+				retorno.setValorRateioEsgoto((BigDecimal) (arrayConta[53]));
+			}
+			if (arrayConta[54] != null) {
+			    retorno.setConsumoRateioEsgoto((Integer) (arrayConta[54]));
 			}
 		}
 
