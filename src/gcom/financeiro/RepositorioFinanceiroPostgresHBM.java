@@ -257,13 +257,13 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					
 					+ " count(dbac.dbac_id) as quantidadeDocumentos, "//7
 					+ " sum(( coalesce(dbac.dbac_vldebito,0) - " +
-					" (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					" (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas))) as valorCategoria, "//8
 					
 					+ " fdrc.fdrc_id AS idFaixa, " //9
 					
 					+ " sum(( coalesce(dbac.dbac_vldebito,0) - " +
-					" (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					" (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * (dbac.dbac_nnprestacaocobradas-(CASE WHEN(dbac.dbac_amreferenciaprestacao is not null " +
 					" and dbac.dbac_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END))))) " +
 					" as valorCategoriaSemParcelaAtual "//10
@@ -275,9 +275,9 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					+ ClienteRelacaoTipo.RESPONSAVEL.toString() + " and clim.clim_dtrelacaofim is null "
 					+ " LEFT JOIN cadastro.cliente resp on clim.clie_id = resp.clie_id "
 					+ " LEFT JOIN cadastro.cliente_tipo cltp on resp.cltp_id = cltp.cltp_id "
-					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= (coalesce(dbac.dbac_vldebito,0) - (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= (coalesce(dbac.dbac_vldebito,0) - (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas)) "
-					+ "   AND fdrc.fdrc_vlfaixafinal >= (coalesce(dbac.dbac_vldebito,0) - (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					+ "   AND fdrc.fdrc_vlfaixafinal >= (coalesce(dbac.dbac_vldebito,0) - (round(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas))) "	
 					
 					+ " WHERE loca.loca_id = :idLocalidade "
@@ -359,12 +359,12 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					+ DocumentoTipo.CREDITO_A_REALIZAR.toString() + " as idDocumentoTipo, "//6
 					
 					+ " count(crar.crar_id) as quantidadeDocumentos, "//7 
-					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) )) as valorCategoria, "//8
 					
 					+ " fdrc.fdrc_id AS idFaixa, " //9
 					
-					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
 					+ " * (crar.crar_nnprestacaorealizadas - (CASE WHEN(crar.crar_amreferenciaprestacao is not null " 
 					+ " and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END ) ) ) "
 					+ " + coalesce(crar.crar_vlresidualmesanterior,0 ) ) ) as valorCategoriaSemParcelaAtual "//10
@@ -376,9 +376,9 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					+ ClienteRelacaoTipo.RESPONSAVEL.toString() + " and clim.clim_dtrelacaofim is null "
 					+ " LEFT JOIN cadastro.cliente resp on clim.clie_id = resp.clie_id "
 					+ " LEFT JOIN cadastro.cliente_tipo cltp on resp.cltp_id = cltp.cltp_id "
-					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
+					+ " LEFT JOIN financeiro.faixa_docs_a_receber fdrc ON (fdrc.fdrc_vlfaixainicial <= ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) ) "
-					+ "   AND fdrc.fdrc_vlfaixafinal >= ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
+					+ "   AND fdrc.fdrc_vlfaixafinal >= ( ( coalesce(crar.crar_vlcredito,0) - round((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) )) "
 					
 					+ " WHERE loca.loca_id = :idLocalidade "
