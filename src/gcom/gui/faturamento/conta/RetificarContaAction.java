@@ -416,9 +416,7 @@ public class RetificarContaAction extends GcomAction {
         }
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
-       // valorTotalConta = valorTotalConta.add(valorTotalEsgoto);
         valorTotalConta = valorTotalConta.add(valorTotalDebitosConta);
-
         valorTotalConta = valorTotalConta.subtract(valorTotalCreditosConta);
         
         
@@ -605,9 +603,9 @@ public class RetificarContaAction extends GcomAction {
 		
 		String retornoUrlBotaoVoltar = "retificarConta";
 		
-		for (CalcularValoresAguaEsgotoHelper conta : valoresConta) {
+		/*(for (CalcularValoresAguaEsgotoHelper conta : valoresConta) {
 		     conta.setValorFaturadoAguaCategoria(valorTotalConta);  	 
-		}
+		}*/
 		
         idConta =  
         	this.getFachada().retificarConta(new Integer(mesAnoContaJSP), 

@@ -10221,13 +10221,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				contaInserir.setValorEsgoto(valorTotalEsgoto);
 				
 				if (contaAtual.getValorRateioAgua() != null) {
-				    contaInserir.setValorRateioAgua(contaAtual.getValorRateioAgua());
+					contaInserir.setValorRateioAgua(contaAtual.getValorRateioAgua());
+					contaInserir.setValorAgua(valorTotalAgua.add(contaAtual.getValorRateioAgua()));
 				} else {
 					contaInserir.setValorRateioAgua(new BigDecimal("0.00"));
 				}
 
 				if (contaAtual.getValorRateioEsgoto() != null){
 					contaInserir.setValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
+					contaInserir.setValorEsgoto(valorTotalEsgoto.add(contaAtual.getValorRateioEsgoto()));
 				}else{
 					contaInserir.setValorRateioEsgoto(new BigDecimal("0.00"));
 				}
