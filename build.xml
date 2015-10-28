@@ -27,6 +27,7 @@
 	<property name="JavaHelp.home" value="lib/help" />
 	<property name="Hibernate.home" value="lib/hibernate" />
 	<property name="JasperReports.home" value="lib/jasper-report" />
+	<property name="JSTL.home" value="lib/jstl" />
 	<property name="PagerTagLib.home" value="lib/pager-taglib" />
 	<property name="Quartz.home" value="lib/quartz" />
 	<property name="Servlet.home" value="lib/servlet" />
@@ -163,6 +164,9 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${JasperReports.home}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${JSTL.home}">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${PagerTagLib.home}">
