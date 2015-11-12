@@ -12184,12 +12184,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				creditoRealizado.setUltimaAlteracao(dataUltimaAlteracao);
 
-				if (creditoRealizadoArray[10] != null) {
-					CreditoOrigem creditoOrigem = new CreditoOrigem();
-					creditoOrigem.setId((Integer) creditoRealizadoArray[10]);
-					creditoRealizado.setCreditoOrigem(creditoOrigem);
-				}
-
 				// numero de parcela bonus
 				if (creditoRealizadoArray[12] != null) {
 					creditoRealizado
