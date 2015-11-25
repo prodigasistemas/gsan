@@ -13,7 +13,7 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 
 	private static final long serialVersionUID = 7599238519918851586L;
 	
-	@ReportElementType(description="Data do Crédito Previsto", group=true, type=ReportElementType.TYPE_DATE)
+	@ReportElementType(description="Data do Credito Previsto", group=true, type=ReportElementType.TYPE_DATE)
 	private String dataPagamentoPrevisto;
 	
 	@ReportElementType(description="Data do Aviso", type=ReportElementType.TYPE_DATE)

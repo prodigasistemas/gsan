@@ -39,7 +39,7 @@ public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomActio
 		String nomeRelatorio = "resumo_creditos_avisos_bancarios_" + data + ".pdf";
 		
 		RelatorioUtil relatorioUtil = new RelatorioUtil(
-				"Resumo de Créditos dos Avisos Bancários",
+				"Resumo de Creditos dos Avisos Bancarios",
 				nomeRelatorio,
 				ResumoCreditosAvisosBancariosDTO.class, 
 				FormatoRelatorio.PDF);
