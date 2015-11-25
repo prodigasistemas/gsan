@@ -110,7 +110,7 @@
 	</target>
 
 	<target depends="init, alterarDataVersao" name="javacompile">
-		<javac classpathref="project.class.path" includeantruntime="true" debug="true" deprecation="true" destdir="${dest}" nowarn="true">
+		<javac classpathref="project.class.path" includeantruntime="true" debug="true" deprecation="true" destdir="${dest}" nowarn="true" encoding="ISO-8859-1">
 			<src path="${src}" />
 		</javac>
 	</target>
