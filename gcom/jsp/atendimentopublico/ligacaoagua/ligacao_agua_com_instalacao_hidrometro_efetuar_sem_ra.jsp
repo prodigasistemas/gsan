@@ -88,6 +88,7 @@
 		form.situacaoCavalete[0].checked = false;
 		form.situacaoCavalete[1].checked = false;	
 		form.numeroLacre.value = "";
+		form.numeroLacreHidrometro.value = "";
 		form.aceitaLacre[0].checked = false;
 		form.aceitaLacre[1].checked = false;	
 
@@ -513,6 +514,11 @@
 											<td><strong> <html:radio property="situacaoCavalete"
 												value="1" /> <strong>COM <html:radio
 												property="situacaoCavalete" value="2" /> SEM</strong> </strong></td>
+										</tr>
+										<tr>
+											<td><strong> Número do Lacre:</strong></td>
+											<td><html:text property="numeroLacreHidrometro" size="9"
+												maxlength="9" onkeypress="return isCampoNumerico(event);"/></td>
 										</tr>
 									</table>
 									</td>

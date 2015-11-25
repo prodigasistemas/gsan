@@ -273,6 +273,18 @@ public class EfetuarLigacaoAguaComInstalacaoHidrometroSemRAAction extends
 
 		String numeroHidrometro = efetuarLigacaoAguaComInstalacaoHidrometroActionForm
 				.getNumeroHidrometro();
+		
+		String numeroLacreHidrometro = efetuarLigacaoAguaComInstalacaoHidrometroActionForm
+				.getNumeroLacreHidrometro();
+		
+		// Número do Lacre
+		if (numeroLacreHidrometro != null
+				   	   && !numeroLacreHidrometro.trim().equals("")) {
+					hidrometroInstalacaoHistorico.setNumeroLacre(numeroLacreHidrometro);
+				} else {
+						hidrometroInstalacaoHistorico.setNumeroLacre(null);
+				}
+
 
 		if (numeroHidrometro != null) {
 			// Pesquisa o Hidrômetro

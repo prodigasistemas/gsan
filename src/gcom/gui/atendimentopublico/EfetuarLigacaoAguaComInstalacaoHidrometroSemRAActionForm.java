@@ -48,7 +48,7 @@ public class EfetuarLigacaoAguaComInstalacaoHidrometroSemRAActionForm extends Ac
     private String percentualCobranca;
     private String quantidadeParcelas;
     private String valorParcelas;
-    
+    private String numeroLacreHidrometro;
     
     /*
 	 * Colocado por Raphael Rossiter em 20/04/2007
@@ -411,7 +411,10 @@ public class EfetuarLigacaoAguaComInstalacaoHidrometroSemRAActionForm extends Ac
 	public void setIdLigacaoOrigem(String idLigacaoOrigem) {
 		this.idLigacaoOrigem = idLigacaoOrigem;
 	}
-	
-	
-
+	public String getNumeroLacreHidrometro() {
+		return numeroLacreHidrometro;
+	}
+	public void setNumeroLacreHidrometro(String numeroLacreHidrometro) {
+		this.numeroLacreHidrometro = numeroLacreHidrometro;
+	}
 }
