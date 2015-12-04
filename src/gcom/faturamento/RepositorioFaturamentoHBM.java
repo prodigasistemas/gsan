@@ -58645,7 +58645,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  crar.loca_id=:idLocalidade "
 					+ "  and catg.catg_id = :idCategoria "
 					+ "  and crar.crar_amreferenciacontabil=:anoMesReferenciaContabil "
-					+ "  and pgmt.pgmt_amreferenciapagamento < 201301 "
+					+ "  and pgmt.pgmt_amreferenciaarrecadacao < 201301 "
 					+ "  and (crar.dcst_idatual=:idSituacaoAtual or crar.dcst_idanterior=:idSituacaoAnterior) "
 					+ "  and crar.crog_id=:idOrigemCredito ";
 
@@ -58724,7 +58724,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				+ "  crar.loca_id=:idLocalidade "
 				+ "  and catg.catg_id = :idCategoria "
 				+ "  and crar.crar_amreferenciacontabil=:anoMesReferenciaContabil "
-				+ "  and (pgmt.pgmt_amreferenciapagamento is null or pgmt.pgmt_amreferenciapagamento > 201212) "
+				+ "  and (pgmt.pgmt_amreferenciaarrecadacao is null or pgmt.pgmt_amreferenciaarrecadacao > 201212) "
 				+ "  and (crar.dcst_idatual=:idSituacaoAtual or crar.dcst_idanterior=:idSituacaoAnterior) "
 				+ "  and crar.crog_id=:idOrigemCredito ";
 
