@@ -39,6 +39,18 @@ public class RelatorioReceitasAFaturarHelper {
 		this.valorEsgotoAFaturar = receitasAFaturarResumo.getValorEsgotoAFaturar();
 	}
 
+	public boolean gerar() {
+		if (dataLeituraAnterior != null
+				&& dataLeituraPrevista != null
+				&& valorAgua != null
+				&& valorEsgoto != null) {
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public Integer getIdGrupo() {
 		return idGrupo;
 	}
