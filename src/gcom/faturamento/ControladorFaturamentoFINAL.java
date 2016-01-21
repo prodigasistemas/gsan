@@ -6279,11 +6279,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * 09/01/2006
 	 */
 	protected Collection<CalcularValoresAguaEsgotoHelper> calculoProporcionalMaisDeUmaTarifa(
-			Date dataLeituraAtual, Date dataLeituraAnterior,
+			Date dataLeituraAtual,
+			Date dataLeituraAnterior,
 			Collection<ConsumoTarifaVigencia> colecaoConsumoTarifaVigencia,
 			Integer consumoFaturado,
 			Collection categoriasOuSubcategoriasImovel,
-			BigDecimal percentualEsgoto, String tipoCalculo,
+			BigDecimal percentualEsgoto,
+			String tipoCalculo,
 			Integer idTarifaTipoCalculo) throws ControladorException {
 
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoRetorno = new ArrayList();
@@ -6291,10 +6293,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		dataLeituraAnterior = Util.formatarDataSemHora(dataLeituraAnterior);
 		dataLeituraAtual = Util.formatarDataSemHora(dataLeituraAtual);
 
-		// 1 - Calcula a quantidade de dias entre as leituras = data de leitura
-		// atual - data de leitura anterior
-		long qtdDiasLeitura = IoUtil.diferencaEntreDatas(dataLeituraAnterior,
-				dataLeituraAtual);
+		// 1 - Calcula a quantidade de dias entre as leituras = data de leitura atual - data de leitura anterior
+		long qtdDiasLeitura = IoUtil.diferencaEntreDatas(dataLeituraAnterior, dataLeituraAtual);
+		
+		// soma 1 dia para contar o dia inicial da leitura
+		qtdDiasLeitura += 1;
 
 		// 2 - Data da vigência inicial
 		Date dataVigenciaInicial = dataLeituraAnterior;
@@ -6303,8 +6306,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		List colecaoConsumoTarifaVigenciaList = new ArrayList();
 		colecaoConsumoTarifaVigenciaList.addAll(colecaoConsumoTarifaVigencia);
 
-		ListIterator colecaoConsumoTarifaVigenciaListIt = colecaoConsumoTarifaVigenciaList
-				.listIterator();
+		ListIterator colecaoConsumoTarifaVigenciaListIt = colecaoConsumoTarifaVigenciaList.listIterator();
 
 		ConsumoTarifaVigencia consumoTarifaVigenciaColecao;
 		Collection<CalcularValoresAguaEsgotoHelper> calculoSimplesUmaTarifaColecao;
@@ -6312,64 +6314,41 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Date dataVigenciaFinal = null;
 		// ConsumoTarifaVigencia consumoTarifaVigenciaColecaoPrevious = null;
 
-		boolean acrescentarDia = false;
-
 		while (colecaoConsumoTarifaVigenciaListIt.hasNext()) {
 
-			consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt
-					.next();
+			consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt.next();
 
 			// Cálculo Simples Para Uma Única Tarifa
 
 			if (tipoCalculo.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
 
 				if (idTarifaTipoCalculo.intValue() == 4) {
-					calculoSimplesUmaTarifaColecao = calculoConsumoDiretoNaFaixa(
-							consumoFaturado, categoriasOuSubcategoriasImovel,
-							percentualEsgoto, consumoTarifaVigenciaColecao,
-							ConstantesSistema.CALCULAR_AGUA,
-							idTarifaTipoCalculo);
+					calculoSimplesUmaTarifaColecao = calculoConsumoDiretoNaFaixa(consumoFaturado, categoriasOuSubcategoriasImovel, percentualEsgoto,
+							consumoTarifaVigenciaColecao, ConstantesSistema.CALCULAR_AGUA, idTarifaTipoCalculo);
 				} else {
-					calculoSimplesUmaTarifaColecao = calculoSimplesUmaTarifa(
-							consumoFaturado, categoriasOuSubcategoriasImovel,
-							percentualEsgoto, consumoTarifaVigenciaColecao,
-							ConstantesSistema.CALCULAR_AGUA,
-							idTarifaTipoCalculo);
+					calculoSimplesUmaTarifaColecao = calculoSimplesUmaTarifa(consumoFaturado, categoriasOuSubcategoriasImovel, percentualEsgoto,
+							consumoTarifaVigenciaColecao, ConstantesSistema.CALCULAR_AGUA, idTarifaTipoCalculo);
 				}
 
 			} else {
 
 				if (idTarifaTipoCalculo.intValue() == 4) {
-					calculoSimplesUmaTarifaColecao = calculoConsumoDiretoNaFaixa(
-							consumoFaturado, categoriasOuSubcategoriasImovel,
-							percentualEsgoto, consumoTarifaVigenciaColecao,
-							ConstantesSistema.CALCULAR_ESGOTO,
-							idTarifaTipoCalculo);
+					calculoSimplesUmaTarifaColecao = calculoConsumoDiretoNaFaixa(consumoFaturado, categoriasOuSubcategoriasImovel, percentualEsgoto,
+							consumoTarifaVigenciaColecao, ConstantesSistema.CALCULAR_ESGOTO, idTarifaTipoCalculo);
 				} else {
-					calculoSimplesUmaTarifaColecao = calculoSimplesUmaTarifa(
-							consumoFaturado, categoriasOuSubcategoriasImovel,
-							percentualEsgoto, consumoTarifaVigenciaColecao,
-							ConstantesSistema.CALCULAR_ESGOTO,
-							idTarifaTipoCalculo);
+					calculoSimplesUmaTarifaColecao = calculoSimplesUmaTarifa(consumoFaturado, categoriasOuSubcategoriasImovel, percentualEsgoto,
+							consumoTarifaVigenciaColecao, ConstantesSistema.CALCULAR_ESGOTO, idTarifaTipoCalculo);
 				}
 			}
-
-			// Caso exista próxima tarifa vigente então data da vigência final =
-			// CSTV_DTVIGENCIA da próxima
-			// tarifa vigente menos um dia, caso contrário, data da vigência
-			// final = data de leitura atual
-
+			
+			// Caso exista próxima tarifa vigente então data da vigência final = CSTV_DTVIGENCIA da próxima tarifa vigente menos um dia,
+			// caso contrário, data da vigência final = data de leitura atual
 			if (colecaoConsumoTarifaVigenciaListIt.hasNext()) {
 
-				consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt
-						.next();
-				/*
-				 * consumoTarifaVigenciaColecaoPrevious =
-				 * (ConsumoTarifaVigencia)
-				 */colecaoConsumoTarifaVigenciaListIt.previous();
+				consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt.next();
+				colecaoConsumoTarifaVigenciaListIt.previous();
 
-				dataVigenciaFinal = consumoTarifaVigenciaColecao
-						.getDataVigencia();
+				dataVigenciaFinal = consumoTarifaVigenciaColecao.getDataVigencia();
 
 				// Subtraindo um dia
 				Calendar dataVigenciaFinalMenosUmDia = new GregorianCalendar();
@@ -6378,10 +6357,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				dataVigenciaFinal = dataVigenciaFinalMenosUmDia.getTime();
 
+				if (consumoTarifaVigenciaColecao.getDataVigencia().before(dataLeituraAtual)
+						|| consumoTarifaVigenciaColecao.getDataVigencia().equals(dataLeituraAtual)) {
+                    dataVigenciaFinal = Util.adicionarNumeroDiasDeUmaData(consumoTarifaVigenciaColecao.getDataVigencia(), -1);
+                } else {
+                    dataVigenciaFinal = dataLeituraAtual;
+                }
 			} else {
-
-				dataVigenciaFinal = dataLeituraAtual;
-
+				if (consumoTarifaVigenciaColecao.getDataVigencia().before(dataLeituraAtual)
+						|| consumoTarifaVigenciaColecao.getDataVigencia().equals(dataLeituraAtual)) {
+                    dataVigenciaFinal = dataLeituraAtual;
+                } else {
+                    dataVigenciaFinal = consumoTarifaVigenciaColecao.getDataVigencia();
+                }
 			}
 
 			// Calcula a quantidade de dias de vigência da tarifa dentro do
@@ -6390,115 +6378,96 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			dataVigenciaInicial = Util.formatarDataSemHora(dataVigenciaInicial);
 			dataVigenciaFinal = Util.formatarDataSemHora(dataVigenciaFinal);
 
-			long qtdDiasVigenciaDentroPeriodo = IoUtil.diferencaEntreDatas(
-					dataVigenciaInicial, dataVigenciaFinal);
+			long qtdDiasVigenciaDentroPeriodo = IoUtil.diferencaEntreDatas(dataVigenciaInicial, dataVigenciaFinal);
 
-			// Adiciona 1 dia
-			if (acrescentarDia) {
-				qtdDiasVigenciaDentroPeriodo += 1;
+			if (colecaoConsumoTarifaVigenciaListIt.hasNext()) {
+				if (dataVigenciaFinal.after(dataVigenciaInicial) || dataVigenciaFinal.equals(dataVigenciaInicial)) {
+					qtdDiasVigenciaDentroPeriodo += 1;
+				} else {
+					qtdDiasVigenciaDentroPeriodo = 0;
+				}
+			} else {
+				if (dataVigenciaFinal.before(dataLeituraAtual) || dataVigenciaFinal.equals(dataLeituraAtual)) {
+					qtdDiasVigenciaDentroPeriodo += 1;
+				} else {
+					qtdDiasVigenciaDentroPeriodo = 0;
+				}
 			}
-
-			acrescentarDia = true;
-
+			
 			// Calcula o fator de vigência da tarifa =
 			// qtdDiasVigenciaDentroPeriodo / qtdDiasLeitura
 			// O BigDecimal será arredondado para 4 casas decimais
-			BigDecimal qtdDiasVigenciaDentroPeriodoBigDecimal = new BigDecimal(
-					qtdDiasVigenciaDentroPeriodo);
+			BigDecimal qtdDiasVigenciaDentroPeriodoBigDecimal = new BigDecimal(qtdDiasVigenciaDentroPeriodo);
 			BigDecimal qtdDiasLeituraBigDecimal = new BigDecimal(qtdDiasLeitura);
 
-			BigDecimal fatorVigenciaTarifa = qtdDiasVigenciaDentroPeriodoBigDecimal
-					.divide(qtdDiasLeituraBigDecimal, 4,
-							BigDecimal.ROUND_HALF_UP);
+			BigDecimal fatorVigenciaTarifa = qtdDiasVigenciaDentroPeriodoBigDecimal.divide(qtdDiasLeituraBigDecimal, 4, BigDecimal.ROUND_HALF_UP);
 
 			// Para cada Categoria, aplica o fator de vigência da tarifa.
 
-			Iterator calculoSimplesUmaTarifaColecaoIt = calculoSimplesUmaTarifaColecao
-					.iterator();
+			Iterator calculoSimplesUmaTarifaColecaoIt = calculoSimplesUmaTarifaColecao.iterator();
 			CalcularValoresAguaEsgotoHelper calculoSimplesUmaTarifaColecaoObjeto;
 			BigDecimal valorFaturadoNew, valorTarifaMinimaNew;
 
 			while (calculoSimplesUmaTarifaColecaoIt.hasNext()) {
 
-				calculoSimplesUmaTarifaColecaoObjeto = (CalcularValoresAguaEsgotoHelper) calculoSimplesUmaTarifaColecaoIt
-						.next();
+				calculoSimplesUmaTarifaColecaoObjeto = (CalcularValoresAguaEsgotoHelper) calculoSimplesUmaTarifaColecaoIt.next();
 
-				if (tipoCalculo
-						.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
+				if (tipoCalculo.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
 
 					// Aplicando o fator de vigência da tarifa no valor faturado
 					// de água da categoria
 					// -----------------------------------------------------------------------------------
-					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto
-							.getValorFaturadoAguaCategoria().multiply(
-									fatorVigenciaTarifa);
+					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto.getValorFaturadoAguaCategoria().multiply(fatorVigenciaTarifa);
 
 					// Arredondando para duas casas decimais
-					valorFaturadoNew = valorFaturadoNew.setScale(2,
-							BigDecimal.ROUND_HALF_UP);
+					valorFaturadoNew = valorFaturadoNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-					calculoSimplesUmaTarifaColecaoObjeto
-							.setValorFaturadoAguaCategoria(valorFaturadoNew);
+					calculoSimplesUmaTarifaColecaoObjeto.setValorFaturadoAguaCategoria(valorFaturadoNew);
 					// ------------------------------------------------------------------------------------
 
 					// Aplicando o fator de vigência da tarifa no valor da
 					// tarifa mínima de água da categoria
 					// ------------------------------------------------------------------------------------
-					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto
-							.getValorTarifaMinimaAguaCategoria().multiply(
-									fatorVigenciaTarifa);
+					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto.getValorTarifaMinimaAguaCategoria().multiply(fatorVigenciaTarifa);
 
 					// Arredondando para duas casas decimais
-					valorTarifaMinimaNew = valorTarifaMinimaNew.setScale(2,
-							BigDecimal.ROUND_HALF_UP);
+					valorTarifaMinimaNew = valorTarifaMinimaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-					calculoSimplesUmaTarifaColecaoObjeto
-							.setValorTarifaMinimaAguaCategoria(valorTarifaMinimaNew);
+					calculoSimplesUmaTarifaColecaoObjeto.setValorTarifaMinimaAguaCategoria(valorTarifaMinimaNew);
 					// ------------------------------------------------------------------------------------
 
 					// Para cada faixa da tarifa de consumo
 					BigDecimal valorFaturadoFaixaNew, valorTarifaFaixaNew;
 
-					Collection calculoSimplesUmaTarifaFaixaColecao = calculoSimplesUmaTarifaColecaoObjeto
-							.getFaixaTarifaConsumo();
-					Iterator calculoSimplesUmaTarifaFaixaIt = calculoSimplesUmaTarifaFaixaColecao
-							.iterator();
+					Collection calculoSimplesUmaTarifaFaixaColecao = calculoSimplesUmaTarifaColecaoObjeto.getFaixaTarifaConsumo();
+					Iterator calculoSimplesUmaTarifaFaixaIt = calculoSimplesUmaTarifaFaixaColecao.iterator();
 					CalcularValoresAguaEsgotoFaixaHelper calculoSimplesUmaTarifaFaixaColecaoObjeto;
 
 					while (calculoSimplesUmaTarifaFaixaIt.hasNext()) {
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt
-								.next();
+						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt.next();
 
 						// Aplicando o fator de vigência da tarifa no valor
 						// faturado de água na faixa
 						// -----------------------------------------------------------------------------------
-						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.getValorFaturadoAguaFaixa().multiply(
-										fatorVigenciaTarifa);
+						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorFaturadoAguaFaixa().multiply(fatorVigenciaTarifa);
 
 						// Arredondando para duas casas decimais
-						valorFaturadoFaixaNew = valorFaturadoFaixaNew.setScale(
-								2, BigDecimal.ROUND_HALF_UP);
+						valorFaturadoFaixaNew = valorFaturadoFaixaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.setValorFaturadoAguaFaixa(valorFaturadoFaixaNew);
+						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorFaturadoAguaFaixa(valorFaturadoFaixaNew);
 						// ------------------------------------------------------------------------------------
 
 						// Aplicando o fator de vigência da tarifa no valor da
 						// tarifa na faixa
 						// ------------------------------------------------------------------------------------
 
-						valorTarifaFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.getValorTarifaFaixa().multiply(
-										fatorVigenciaTarifa);
+						valorTarifaFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorTarifaFaixa().multiply(fatorVigenciaTarifa);
 
 						// Arredondando para duas casas decimais
-						valorTarifaFaixaNew = valorTarifaFaixaNew.setScale(2,
-								BigDecimal.ROUND_HALF_UP);
+						valorTarifaFaixaNew = valorTarifaFaixaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.setValorTarifaFaixa(valorTarifaFaixaNew);
+						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorTarifaFaixa(valorTarifaFaixaNew);
 						// ------------------------------------------------------------------------------------
 
 					}
@@ -6507,75 +6476,56 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Aplicando o fator de vigência da tarifa no valor faturado
 					// de esgoto da categoria
 					// -----------------------------------------------------------------------------------
-					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto
-							.getValorFaturadoEsgotoCategoria().multiply(
-									fatorVigenciaTarifa);
+					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto.getValorFaturadoEsgotoCategoria().multiply(fatorVigenciaTarifa);
 
 					// Arredondando para duas casas decimais
-					valorFaturadoNew = valorFaturadoNew.setScale(2,
-							BigDecimal.ROUND_HALF_UP);
+					valorFaturadoNew = valorFaturadoNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-					calculoSimplesUmaTarifaColecaoObjeto
-							.setValorFaturadoEsgotoCategoria(valorFaturadoNew);
+					calculoSimplesUmaTarifaColecaoObjeto.setValorFaturadoEsgotoCategoria(valorFaturadoNew);
 					// ------------------------------------------------------------------------------------
 
 					// Aplicando o fator de vigência da tarifa no valor da
 					// tarifa mínima de esgoto da categoria
 					// ------------------------------------------------------------------------------------
-					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto
-							.getValorTarifaMinimaEsgotoCategoria().multiply(
-									fatorVigenciaTarifa);
+					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto.getValorTarifaMinimaEsgotoCategoria().multiply(fatorVigenciaTarifa);
 
 					// Arredondando para duas casas decimais
-					valorTarifaMinimaNew = valorTarifaMinimaNew.setScale(2,
-							BigDecimal.ROUND_HALF_UP);
+					valorTarifaMinimaNew = valorTarifaMinimaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-					calculoSimplesUmaTarifaColecaoObjeto
-							.setValorTarifaMinimaEsgotoCategoria(valorTarifaMinimaNew);
+					calculoSimplesUmaTarifaColecaoObjeto.setValorTarifaMinimaEsgotoCategoria(valorTarifaMinimaNew);
 					// ------------------------------------------------------------------------------------
 
 					// Para cada faixa da tarifa de consumo
 					BigDecimal valorFaturadoFaixaNew, valorTarifaFaixaNew;
 
-					Collection calculoSimplesUmaTarifaFaixaColecao = calculoSimplesUmaTarifaColecaoObjeto
-							.getFaixaTarifaConsumo();
-					Iterator calculoSimplesUmaTarifaFaixaIt = calculoSimplesUmaTarifaFaixaColecao
-							.iterator();
+					Collection calculoSimplesUmaTarifaFaixaColecao = calculoSimplesUmaTarifaColecaoObjeto.getFaixaTarifaConsumo();
+					Iterator calculoSimplesUmaTarifaFaixaIt = calculoSimplesUmaTarifaFaixaColecao.iterator();
 					CalcularValoresAguaEsgotoFaixaHelper calculoSimplesUmaTarifaFaixaColecaoObjeto;
 
 					while (calculoSimplesUmaTarifaFaixaIt.hasNext()) {
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt
-								.next();
+						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt.next();
 
 						// Aplicando o fator de vigência da tarifa no valor
 						// faturado de esgoto na faixa
 						// -----------------------------------------------------------------------------------
-						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.getValorFaturadoEsgotoFaixa().multiply(
-										fatorVigenciaTarifa);
+						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorFaturadoEsgotoFaixa().multiply(fatorVigenciaTarifa);
 
 						// Arredondando para duas casas decimais
-						valorFaturadoFaixaNew = valorFaturadoFaixaNew.setScale(
-								2, BigDecimal.ROUND_HALF_UP);
+						valorFaturadoFaixaNew = valorFaturadoFaixaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.setValorFaturadoEsgotoFaixa(valorFaturadoFaixaNew);
+						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorFaturadoEsgotoFaixa(valorFaturadoFaixaNew);
 						// ------------------------------------------------------------------------------------
 
 						// Aplicando o fator de vigência da tarifa no valor da
 						// tarifa na faixa
 						// ------------------------------------------------------------------------------------
-						valorTarifaFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.getValorTarifaFaixa().multiply(
-										fatorVigenciaTarifa);
+						valorTarifaFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorTarifaFaixa().multiply(fatorVigenciaTarifa);
 
 						// Arredondando para duas casas decimais
-						valorTarifaFaixaNew = valorTarifaFaixaNew.setScale(2,
-								BigDecimal.ROUND_HALF_UP);
+						valorTarifaFaixaNew = valorTarifaFaixaNew.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-						calculoSimplesUmaTarifaFaixaColecaoObjeto
-								.setValorTarifaFaixa(valorTarifaFaixaNew);
+						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorTarifaFaixa(valorTarifaFaixaNew);
 						// ------------------------------------------------------------------------------------
 
 					}
