@@ -3,8 +3,8 @@
 CURRENT_PATH=$(pwd)
 
 # Limpa o JBoss e apaga a versão atual
-rm -rf $JBOSS_GSAN/server/default/work
-rm -rf $JBOSS_GSAN/server/default/tmp
+rm -rf $JBOSS_GSAN/server/default/work/*
+rm -rf $JBOSS_GSAN/server/default/tmp/*
 rm -rf $JBOSS_GSAN/server/default/deploy/gcom*.ear
 rm -rf $JBOSS_GSAN/server/default/deploy/gsan*.ear
 
