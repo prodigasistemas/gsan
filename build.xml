@@ -27,6 +27,7 @@
 	<property name="JavaHelp.home" value="lib/help" />
 	<property name="Hibernate.home" value="lib/hibernate" />
 	<property name="JasperReports.home" value="lib/jasper-report" />
+	<property name="JbossLibs.home" value="lib/jboss-libs" />
 	<property name="JSTL.home" value="lib/jstl" />
 	<property name="PagerTagLib.home" value="lib/pager-taglib" />
 	<property name="Quartz.home" value="lib/quartz" />
@@ -39,11 +40,8 @@
 	<path id="project.class.path">
 		<pathelement location="${dest}" />
 		
-		<pathelement location="${jboss.client.home}/jboss-common-client.jar" />
 		<pathelement location="${jboss.client.home}/jboss-system-client.jar" />
 		<pathelement location="${jboss.client.home}/getopt.jar" />
-		<pathelement location="${jboss.client.home}/log4j.jar" />
-		<pathelement location="${jboss.client.home}/jboss-j2ee.jar" />
 		<pathelement location="${jboss.client.home}/jnp-client.jar" />
 		<pathelement location="${jboss.client.home}/jboss-transaction-client.jar" />
 		<pathelement location="${jboss.client.home}/jboss-client.jar" />
@@ -58,8 +56,6 @@
 		<pathelement location="${jboss.client.home}/jacorb.jar" />
 		<pathelement location="${jboss.client.home}/jboss-jsr77-client.jar" />
 		<pathelement location="${jboss.client.home}/jbossall-client.jar" />
-		<pathelement location="${jboss.client.home}/mail.jar" />
-		<pathelement location="${jboss.client.home}/wsdl4j.jar" />
 		<pathelement location="${jboss.server.home}/default/lib/bcel.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-beanutils.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-codec.jar" />
@@ -84,6 +80,11 @@
 		<pathelement location="${JasperReports.home}/jasperreports-1.2.2.jar" />
 		<pathelement location="${JasperReports.home}/jcommon-1.0.0.jar" />
 		<pathelement location="${JasperReports.home}/jfreechart-1.0.0.jar" />
+		<pathelement location="${JbossLibs.home}/jboss-j2ee.jar" />
+		<pathelement location="${JbossLibs.home}/mail.jar" />
+		<pathelement location="${JbossLibs.home}/log4j.jar" />
+		<pathelement location="${JbossLibs.home}/jboss-common-client.jar" />
+		<pathelement location="${JbossLibs.home}/wsdl4j.jar" />
 		<pathelement location="${Quartz.home}/quartz-all-1.5.2.jar" />
 		<pathelement location="${Servlet.home}/commons-el.jar" />
 		<pathelement location="${Servlet.home}/jsp-api.jar" />
