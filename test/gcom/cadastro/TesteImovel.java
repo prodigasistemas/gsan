@@ -25,6 +25,9 @@ import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.Quadra;
+import gcom.cadastro.localidade.SetorComercial;
 
 public class TesteImovel {
 	
@@ -111,17 +114,78 @@ public class TesteImovel {
 	
 	@Test
 	public void testEnderecoTipoTituloLogradouro() {
+		Imovel imovel = buildImovelComEnderecoCompleto();
 		
+		assertEquals("Avenida Almirante Barroso", imovel.getEnderecoTipoTituloLogradouro());
 	}
 	
 	@Test
 	public void testInscricaoFormatada() {
+		Localidade localidade = mock(Localidade.class);
+		when(localidade.getId()).thenReturn(1);
 		
+		SetorComercial setorComercial = mock(SetorComercial.class);
+		when(setorComercial.getCodigo()).thenReturn(1);
+		
+		Quadra quadra = mock(Quadra.class);
+		when(quadra.getNumeroQuadra()).thenReturn(1);
+		
+		Imovel imovel = new Imovel();
+		imovel.setLocalidade(localidade);
+		imovel.setSetorComercia(setorComercial);
+		imovel.setQuadra(quadra);
+		imovel.setLote((short)1);
+		imovel.setSubLote((short)2);
+		
+		assertEquals("001.001.001.0001.002", imovel.getInscricaoFormatada());
+	}
+	
+	@Test
+	public void testInscricaoFormatadaComSetorEQuadraComMais2Algarismos() {
+		Localidade localidade = mock(Localidade.class);
+		when(localidade.getId()).thenReturn(1);
+		
+		SetorComercial setorComercial = mock(SetorComercial.class);
+		when(setorComercial.getCodigo()).thenReturn(12);
+		
+		Quadra quadra = mock(Quadra.class);
+		when(quadra.getNumeroQuadra()).thenReturn(12);
+		
+		Imovel imovel = new Imovel();
+		imovel.setLocalidade(localidade);
+		imovel.setSetorComercia(setorComercial);
+		imovel.setQuadra(quadra);
+		imovel.setLote((short)1);
+		imovel.setSubLote((short)2);
+		
+		assertEquals("001.012.012.0001.002", imovel.getInscricaoFormatada());
 	}
 	
 	@Test
 	public void testInscricaoFormatadaSemPonto() {
+		Imovel imovel = buildImovelComInscricao();
 		
+		assertEquals("0010120120001002", imovel.getInscricaoFormatadaSemPonto());
+	}
+
+	private Imovel buildImovelComInscricao() {
+		Localidade localidade = mock(Localidade.class);
+		when(localidade.getId()).thenReturn(1);
+		
+		SetorComercial setorComercial = mock(SetorComercial.class);
+		when(setorComercial.getCodigo()).thenReturn(12);
+		
+		Quadra quadra = mock(Quadra.class);
+		when(quadra.getNumeroQuadra()).thenReturn(12);
+		
+		Imovel imovel = new Imovel();
+		imovel.setLocalidade(localidade);
+		imovel.setSetorComercia(setorComercial);
+		imovel.setQuadra(quadra);
+		imovel.setLote((short)1);
+		imovel.setSubLote((short)2);
+		
+		return imovel;
 	}
 
 	private Imovel buildImovelComEnderecoCompleto() {
