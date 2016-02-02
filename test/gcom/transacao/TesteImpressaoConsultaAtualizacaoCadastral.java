@@ -9,7 +9,6 @@ import gcom.seguranca.transacao.RepositorioTransacaoUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
@@ -44,7 +43,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 
 	public void testImovelComFiltroAlteracaoHidrometroDoisImoveis(){
@@ -74,7 +73,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testDoisImoveisComFiltroAlteracaoAguaEsgoto(){
@@ -112,7 +111,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 			soma += item.getIdImovel();
 		}
 		
-		Assert.assertEquals(1984420 + 445566, soma);
+		assertEquals(1984420 + 445566, soma);
 	}
 	
 	public void testUmImovelComFiltroAlteracaoAguaEsgotoEUmImovelComAlteracaoAgua(){
@@ -149,7 +148,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 			soma += item.getIdImovel();
 		}
 		
-		Assert.assertEquals(445566, soma);
+		assertEquals(445566, soma);
 	}	
 	
 	public void testImovelComFiltroAlteracaoAguaDoisImoveis(){
@@ -184,35 +183,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 			soma += item.getIdImovel();
 		}
 		
-		Assert.assertEquals(445566, soma);
-	}
-	
-	public void testImovelSemAlteracaoHidrometroSemResultados(){
-		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
-		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> lista = new ArrayList<ConsultarMovimentoAtualizacaoCadastralHelper>();
-		
-		ConsultarMovimentoAtualizacaoCadastralHelper imovel = new ConsultarMovimentoAtualizacaoCadastralHelper();
-		imovel.setNumeroHidrometro("1212121");
-		imovel.setIdTipoAlteracao(1);
-		imovel.setIdImovel(1984420);
-		imovel.setIdLigacaoAgua(3);
-		imovel.setIdLigacaoEsgoto(1);
-		
-		lista.add(imovel);
-		
-		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());		
-		filtro.setAlteracaoHidrometro(false);
-		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
-		
-		int soma = 0;
-		for (ConsultarMovimentoAtualizacaoCadastralHelper item : array) {
-			soma += item.getIdImovel();
-		}
-		
-		Assert.assertEquals(0, soma);
+		assertEquals(445566, soma);
 	}
 	
 	public void testImovelSemAlteracaoHidrometro(){
@@ -243,6 +214,6 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 			soma += item.getIdImovel();
 		}
 		
-		Assert.assertEquals(1984420, soma);
+		assertEquals(1984420, soma);
 	}
 }

@@ -3,13 +3,13 @@ package gcom.transacao;
 import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ColunaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.seguranca.transacao.RepositorioTransacaoUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class TesteDadosAtualizacaoCadastral extends TestCase {
@@ -29,32 +29,10 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 				
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
-	}
-	
-	public void testImovelSemAlteracaoHidrometroSemResultados(){
-		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
-		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> lista = new ArrayList<ConsultarMovimentoAtualizacaoCadastralHelper>();
-		
-		ConsultarMovimentoAtualizacaoCadastralHelper imovel = new ConsultarMovimentoAtualizacaoCadastralHelper();
-		imovel.setNumeroHidrometro("1212121");
-		imovel.setIdTipoAlteracao(1);
-		imovel.setIdImovel(1984420);
-		imovel.setIdLigacaoAgua(3);
-		imovel.setIdLigacaoEsgoto(1);
-		
-		lista.add(imovel);
-		
-		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setAlteracaoHidrometro(false);
-		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
-		
-		Assert.assertEquals(0, array.size());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemAlteracaoHidrometro(){
@@ -75,11 +53,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		imovel.addColunaAtualizacao(coluna);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoHidrometro(false);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelComAlteracaoHidrometro(){
@@ -100,11 +79,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoHidrometro(true);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemFiltroAlteracaoSituacaoAgua(){
@@ -121,10 +101,10 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemAlteracaoSituacaoAgua(){
@@ -141,12 +121,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoSituacaoAgua(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelComAlteracaoSituacaoAgua(){
@@ -167,12 +147,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoSituacaoAgua(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}	
 
 	public void testImovelComAlteracaoSituacaoAguaSemResultados(){
@@ -189,12 +169,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoSituacaoAgua(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(0, array.size());
+		assertEquals(0, array.size());
 	}	
 	
 	public void testImovelSemFiltroAlteracaoSituacaoEsgoto(){
@@ -211,10 +191,10 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemAlteracaoSituacaoEsgoto(){
@@ -231,12 +211,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoSituacaoEsgoto(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelComAlteracaoSituacaoEsgoto(){
@@ -257,12 +237,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoSituacaoEsgoto(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemFiltroAlteracaoCategoria(){
@@ -280,11 +260,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoCategoria(null);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemAlteracaoCategoria(){
@@ -299,11 +280,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoCategoria(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelComAlteracaoCategoria(){
@@ -322,12 +304,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoCategoria(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
+		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
 	public void testImovelSemAlteracaoCategoriaSemResultados(){
@@ -346,12 +328,12 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoCategoria(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(0, array.size());
+		assertEquals(0, array.size());
 	}
 	
 	public void testImovelComAlteracaoCategoriaSemResultados(){
@@ -366,11 +348,11 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		
+		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
 		filtroHelper.setAlteracaoCategoria(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
-		Assert.assertEquals(0, array.size());
+		assertEquals(0, array.size());
 	}	
 }
