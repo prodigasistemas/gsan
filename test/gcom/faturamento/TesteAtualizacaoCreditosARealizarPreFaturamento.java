@@ -9,7 +9,7 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
+public class TesteAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
     
     FaturamentoUtil controlador = new FaturamentoUtil();
     

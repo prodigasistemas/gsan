@@ -10,7 +10,7 @@ import java.util.Set;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class TestaConsultaImoveisAtulizacao extends TestCase {
+public class TesteConsultaImoveisAtulizacao extends TestCase {
 	public void testInclusaoDoisImoveis(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();

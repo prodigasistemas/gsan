@@ -15,7 +15,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-public class TestaCargaAlteracoesArquivo extends TestCase {
+public class TesteCargaAlteracoesArquivo extends TestCase {
 	
 	private Collection<DadosTabelaAtualizacaoCadastralHelper> montaObjetos(Collection<DadosTabelaAtualizacaoCadastralHelper> existentes, List<DadosTabelaAtualizacaoCadastralHelper> lista){
 		Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = new HashMap<String, List<DadosTabelaAtualizacaoCadastralHelper>>();

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-public class TestaCategoriaAtualizacaoCadastral extends TestCase {
+public class TesteCategoriaAtualizacaoCadastral extends TestCase {
 	public void testCategoriaSemDuplicidade(){
 		Set<CategoriaAtualizacaoCadastral> set = new HashSet<CategoriaAtualizacaoCadastral>();
 		
