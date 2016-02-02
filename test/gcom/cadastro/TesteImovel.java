@@ -4,13 +4,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.Imovel;
-import junit.framework.TestCase;
 
-public class TesteImovel extends TestCase {
+public class TesteImovel {
 	
 	private Imovel imovel;
 	
@@ -22,6 +25,7 @@ public class TesteImovel extends TestCase {
 	private ClienteRelacaoTipo responsavel;
 	private ClienteRelacaoTipo usuario;
 	
+	@Before
 	public void setUp() {
 		imovel = new Imovel();
 		
@@ -44,6 +48,7 @@ public class TesteImovel extends TestCase {
 		usuario.setId(ClienteRelacaoTipo.USUARIO.intValue());
 	}
 
+	@Test
 	public void testGetClienteUsuario() {
 		Set<ClienteImovel> clienteImoveis = new HashSet<ClienteImovel>();
 		ClienteImovel clienteImovel1 = new ClienteImovel(new Date(), imovel, null, clienteProprietario, proprietario);
@@ -59,6 +64,7 @@ public class TesteImovel extends TestCase {
 		assertEquals(clienteImovel3.getCliente().getNome(), imovel.getClienteUsuario().getNome());
 	}
 	
+	@Test
 	public void testGetClienteUsuarioSemUsuario() {
 		Set<ClienteImovel> clienteImoveis = new HashSet<ClienteImovel>();
 		ClienteImovel clienteImovel1 = new ClienteImovel(new Date(), imovel, null, clienteProprietario, proprietario);

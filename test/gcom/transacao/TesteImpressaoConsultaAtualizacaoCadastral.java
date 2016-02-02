@@ -1,28 +1,33 @@
 package gcom.transacao;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import gcom.cadastro.atualizacaocadastral.bean.ColunaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.seguranca.transacao.RepositorioTransacaoUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import junit.framework.TestCase;
-
-public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
+public class TesteImpressaoConsultaAtualizacaoCadastral {
 
 	private ColunaAtualizacaoCadastral colunaHidrometro = new ColunaAtualizacaoCadastral();
 	private ColunaAtualizacaoCadastral colunaAgua = new ColunaAtualizacaoCadastral();
 	private ColunaAtualizacaoCadastral colunaEsgoto = new ColunaAtualizacaoCadastral();
 	
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		colunaHidrometro.setNomeColuna("imac_nnhidrometro");
 		colunaAgua.setNomeColuna("last_id");
 		colunaEsgoto.setNomeColuna("lest_id");
 	}
 
+	@Test
 	public void testImovelComFiltroAlteracaoHidrometro(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -46,6 +51,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 
+	@Test
 	public void testImovelComFiltroAlteracaoHidrometroDoisImoveis(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -76,6 +82,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testDoisImoveisComFiltroAlteracaoAguaEsgoto(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -114,6 +121,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420 + 445566, soma);
 	}
 	
+	@Test
 	public void testUmImovelComFiltroAlteracaoAguaEsgotoEUmImovelComAlteracaoAgua(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -151,6 +159,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		assertEquals(445566, soma);
 	}	
 	
+	@Test
 	public void testImovelComFiltroAlteracaoAguaDoisImoveis(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -186,6 +195,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral extends TestCase {
 		assertEquals(445566, soma);
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoHidrometro(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 

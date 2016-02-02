@@ -1,16 +1,16 @@
 package gcom.util;
 
+import java.util.Map;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import gcom.cadastro.atualizacaocadastral.LinkedHashSetAlteracaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class TesteConsultaImoveisAtulizacao extends TestCase {
+public class TesteConsultaImoveisAtulizacao {
+	
+	@Test
 	public void testInclusaoDoisImoveis(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -23,9 +23,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(1);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(2, set.size());
+		assertEquals(2, set.size());
 	}
 	
+	@Test
 	public void testInclusaoImovelDuplicado(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -38,9 +39,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(1);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(1, set.size());
+		assertEquals(1, set.size());
 	}
 	
+	@Test
 	public void testInclusaoImovelDuplicadoComApenasInclusao(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -53,9 +55,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(2);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(2, set.get(10).getIdTipoAlteracao().intValue());
+		assertEquals(2, set.get(10).getIdTipoAlteracao().intValue());
 	}
 
+	@Test
 	public void testInclusaoImovelDuplicadoComAlteracaoEInclusaoSimples(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -68,9 +71,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(1);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
+		assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
 	}
 	
+	@Test
 	public void testInclusaoImovelDuplicadoComAlteracaoEInclusaoSimplesInvertido(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -83,9 +87,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(2);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
+		assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
 	}
 
+	@Test
 	public void testInclusaoImovelDuplicadoComAlteracaoEInclusaoMaisRegistros(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -103,9 +108,10 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(1);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
+		assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
 	}
 	
+	@Test
 	public void testInclusaoImovelDuplicadoComAlteracaoEInclusaoMaisRegistrosTrocado(){
 		Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSetAlteracaoCadastral();
 		ConsultarMovimentoAtualizacaoCadastralHelper item = new ConsultarMovimentoAtualizacaoCadastralHelper();
@@ -123,6 +129,6 @@ public class TesteConsultaImoveisAtulizacao extends TestCase {
 		item.setIdTipoAlteracao(2);
 		set.put(item.getIdImovel(), item);
 		
-		Assert.assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
+		assertEquals(1, set.get(10).getIdTipoAlteracao().intValue());
 	}
 }

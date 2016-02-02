@@ -1,13 +1,16 @@
 package gcom.model;
 
-import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TesteCategoriaAtualizacaoCadastral extends TestCase {
+import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
+
+public class TesteCategoriaAtualizacaoCadastral {
+	
+	@Test
 	public void testCategoriaSemDuplicidade(){
 		Set<CategoriaAtualizacaoCadastral> set = new HashSet<CategoriaAtualizacaoCadastral>();
 		

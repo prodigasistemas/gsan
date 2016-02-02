@@ -1,5 +1,12 @@
 package gcom.transacao;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.junit.Test;
+
 import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ColunaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
@@ -7,14 +14,9 @@ import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastr
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.seguranca.transacao.RepositorioTransacaoUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public class TesteDadosAtualizacaoCadastral {
 
-import junit.framework.TestCase;
-
-public class TesteDadosAtualizacaoCadastral extends TestCase {
-
-	
+	@Test
 	public void testImovelSemFiltroAlteracaoHidrometro(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -35,6 +37,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoHidrometro(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 
@@ -61,6 +64,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelComAlteracaoHidrometro(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 
@@ -87,6 +91,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemFiltroAlteracaoSituacaoAgua(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -107,6 +112,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoSituacaoAgua(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 
@@ -129,6 +135,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelComAlteracaoSituacaoAgua(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -155,6 +162,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}	
 
+	@Test
 	public void testImovelComAlteracaoSituacaoAguaSemResultados(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -177,6 +185,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(0, array.size());
 	}	
 	
+	@Test
 	public void testImovelSemFiltroAlteracaoSituacaoEsgoto(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -197,6 +206,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoSituacaoEsgoto(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -219,6 +229,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelComAlteracaoSituacaoEsgoto(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -245,6 +256,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemFiltroAlteracaoCategoria(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -268,6 +280,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoCategoria(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -288,6 +301,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelComAlteracaoCategoria(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -312,6 +326,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
 	}
 	
+	@Test
 	public void testImovelSemAlteracaoCategoriaSemResultados(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
@@ -336,6 +351,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		assertEquals(0, array.size());
 	}
 	
+	@Test
 	public void testImovelComAlteracaoCategoriaSemResultados(){
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
 		
