@@ -55,18 +55,7 @@ public class ExibirConsultarDebitoACobrarAction extends GcomAction {
 		String idParcelamento = httpServletRequest
 				.getParameter("parcelamentoID");
 
-		// se o código não for nulo
-//		if (idImovel != null && !idImovel.equalsIgnoreCase("")) {
-//			// remove a coleção de débitos a cobrar
-//			sessao.removeAttribute("colecaoDebitoACobrar");
-//			sessao.removeAttribute("colecaoDebitoACobrarHistorico");
-//		}
-
-		/*
-		 * Pesquisando o debito a partir do id imovel
-		 * =====================================================================
-		 */
-
+		// Pesquisando o debito a partir do id imovel
 		if (idImovel != null && !idImovel.equalsIgnoreCase("")) {
 
 			// cria o filtro do imovel
@@ -115,17 +104,7 @@ public class ExibirConsultarDebitoACobrarAction extends GcomAction {
 			// carrega o debitoACobrar
 			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
 			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoCreditoSituacaoAtual");
-//			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar");
-			/*
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.geracaoDebito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.anoMesReferenciaDebito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.anoMesCobrancaDebito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.numeroPrestacaoCobradas");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.numeroPrestacaoDebito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.valorDebito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.valorTotal");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.percentualTaxaJurosFinanciamento");
-			 */
+
 			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.registroAtendimento");
 			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.ordemServico");
 			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.financiamentoTipo");

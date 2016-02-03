@@ -14665,6 +14665,24 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	/**
+	 * Consulta os dados da conta historico
+	 * 
+	 * @param idConta
+	 * 
+	 * @return uma colecao de conta
+	 */
+
+	public Collection consultarContaHistorico(Integer idConta) {
+
+		try {
+			return this.getControladorFaturamento().consultarContaHistorico(idConta);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 
 	/**
 	 * Consulta os Dados Complementares do Imovel

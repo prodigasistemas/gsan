@@ -180,26 +180,10 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 			if (idContaHistorico != null && !idContaHistorico.equalsIgnoreCase("")) {
 	
-				FiltroContaHistorico filtroContaHistorico = new FiltroContaHistorico();
-	
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("contaMotivoInclusao");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("contaMotivoRetificacao");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("contaMotivoCancelamento");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("contaMotivoRevisao");
-				filtroContaHistorico.adicionarCaminhoParaCarregamentoEntidade("usuario");
-	
-				filtroContaHistorico.adicionarParametro(
-					new ParametroSimples(
-						FiltroContaHistorico.ID, idContaHistorico));
-	
+				// faz a consulta da conta por hql.
 				Collection colecaoContaHistorico = 
-					this.getFachada().pesquisar(
-						filtroContaHistorico, ContaHistorico.class.getName());
+					this.getFachada().consultarContaHistorico(new Integer(idContaHistorico));
+				
 	
 				if (colecaoContaHistorico == null || colecaoContaHistorico.isEmpty()) {
 					throw new ActionServletException("atencao.pesquisa.conta.inexistente");
@@ -211,6 +195,10 @@ public class ExibirConsultarContaAction extends GcomAction {
 				idImovel = contaHistorico.getImovel().getId();
 				referenciaConta = contaHistorico.getFormatarAnoMesParaMesAno();
 				situacaoAtualConta = contaHistorico.getDebitoCreditoSituacaoAtual().getId();
+				
+				if (contaHistorico.getValorRateioAgua() == null){
+					contaHistorico.setValorRateioAgua(new BigDecimal("0.00"));
+				}
 				
 				// Colocando o objeto conta selecionado na sessão
 				sessao.setAttribute("contaHistorico", contaHistorico);

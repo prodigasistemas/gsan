@@ -1380,6 +1380,16 @@ public interface IControladorFaturamento {
 	 */
 	public Collection consultarConta(Integer idConta)
 			throws ControladorException;
+	
+	/**
+	 * Obtem dados da conta
+	 * 
+	 * @param idConta Id da Conta
+	 * 
+	 * @return uma colecao de conta
+	 */
+	public Collection consultarContaHistorico(Integer idConta)
+			throws ControladorException;	
 
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
