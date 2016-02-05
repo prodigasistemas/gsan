@@ -67,10 +67,7 @@ public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastral
 				}
 			}
 			
-			if (filtro && existeAlteracao){
-				passou = true;
-			}
-			if (!filtro && !existeAlteracao){
+			if ((filtro && existeAlteracao) || (!filtro && !existeAlteracao)){
 				passou = true;
 			}
 		}

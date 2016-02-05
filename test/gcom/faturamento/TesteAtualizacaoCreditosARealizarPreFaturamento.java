@@ -1,15 +1,17 @@
 package gcom.faturamento;
 
-import gcom.faturamento.AtualizacaoCreditoARealizarHelper.ItemCreditoARealizar;
-import gcom.faturamento.credito.CreditoARealizar;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
+import gcom.faturamento.AtualizacaoCreditoARealizarHelper.ItemCreditoARealizar;
+import gcom.faturamento.credito.CreditoARealizar;
+
+public class TesteAtualizacaoCreditosARealizarPreFaturamento{
     
     FaturamentoUtil controlador = new FaturamentoUtil();
     
@@ -26,6 +28,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
     
     CreditoARealizar credito01 = new CreditoARealizar();
     
+    @Before
     public void setUp(){
     	credito01.setValorCredito(new BigDecimal(35));
     	credito01.setNumeroPrestacaoCredito((short) 6);
@@ -34,6 +37,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
     	creditos.add(credito01);
     }
     
+    @Test
     public void testaParcela4de6PreFaturamento(){
     	credito01.setNumeroPrestacaoRealizada((short) 4);
         
@@ -49,6 +53,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertEquals(5.83, item.getCreditoCalculado().doubleValue(), 0);
     }
     
+    @Test
     public void testaTotalContaCreditoPreFaturamento(){
         credito01.setNumeroPrestacaoRealizada((short) 5);
         
@@ -64,6 +69,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertEquals(5.85, item.getCreditoCalculado().doubleValue(), 0);
     }
     
+    @Test
     public void testaPreFaturamentoComParcela0de1(){
     	credito01.setNumeroPrestacaoCredito((short) 1);
         credito01.setNumeroPrestacaoRealizada((short) 0);
@@ -81,6 +87,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertFalse(credito.possuiResiduo());
     }
 
+    @Test
     public void testaPreFaturamentoComParcela0de1EResiduo(){
     	credito01.setNumeroPrestacaoCredito((short) 1);
     	credito01.setNumeroPrestacaoRealizada((short) 1);
@@ -100,6 +107,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
     	assertEquals(8.40, credito.getValorResidualMesAnterior().doubleValue(), 0);
     }
     
+    @Test
     public void testaTotalContaCreditoFaturamento(){
         credito01.setNumeroPrestacaoRealizada((short) 6);
         credito01.setAnoMesReferenciaPrestacao(jul2015);
@@ -118,6 +126,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertEquals(5.85, item.getCreditoCalculado().doubleValue(), 0);
     }
     
+    @Test
     public void testaParcela5de6Faturamento(){
     	credito01.setNumeroPrestacaoRealizada((short) 5);
     	credito01.setAnoMesReferenciaPrestacao(jul2015);
@@ -136,6 +145,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertEquals(5.83, item.getCreditoCalculado().doubleValue(), 0);
     }    
     
+    @Test
     public void testaParcela4de6Faturamento(){
     	credito01.setNumeroPrestacaoRealizada((short) 4);
     	credito01.setAnoMesReferenciaPrestacao(jul2015);
@@ -154,6 +164,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertEquals(5.83, item.getCreditoCalculado().doubleValue(), 0);
     }
     
+    @Test
     public void testaParcela1de1NuncaConcedido(){
     	credito01.setNumeroPrestacaoCredito((short) 1);
     	credito01.setNumeroPrestacaoRealizada((short) 1);
@@ -174,6 +185,7 @@ public class TestaAtualizacaoCreditosARealizarPreFaturamento extends TestCase{
         assertFalse(credito.possuiResiduo());
     }
     
+    @Test
     public void testaParcela1de1ConcedidoComResiduo(){
     	credito01.setNumeroPrestacaoCredito((short) 1);
     	credito01.setNumeroPrestacaoRealizada((short) 1);

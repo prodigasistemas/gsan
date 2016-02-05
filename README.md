@@ -20,55 +20,23 @@ Módulos do GSAN
 Requisitos de Infra-Estrutura
 ===
 
-* PostgreSQL 9.3.4
-* JBoss 4.0.1sp1
 * Java 1.5 / 1.6
+* [JBoss 4.0.1sp1](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-JBoss)
+* [PostgreSQL 9.3.4](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-PostgreSQL)
 
 Configurações do Banco de Dados
 ===
 
-Para a configuração do banco de dados utilizamos o MyBatis Migration, onde as configurações da biblioteca se encontram na Wiki - https://github.com/prodigasistemas/gsan/wiki/Criando-Migra%C3%A7%C3%B5es-na-Base-de-Dados - após configurar a biblioteca basta seguir as instruções abaixo:
+Para a configuração do banco de dados utilizamos o MyBatis Migration, onde as configurações da biblioteca se encontram na [Wiki de migração de banco de dados](https://github.com/prodigasistemas/gsan/wiki/Criando-Migra%C3%A7%C3%B5es-na-Base-de-Dados).
 
-A partir da pasta gsan/migrations-start/ executar os comandos:
-
-``> migrate bootstrap``
-
-``> migrate up``
-
-Esses comandos irão executar os scripts SQL para iniciar a base de dados do “comercial”.
+Depois de configurar o MyBatis Migration, você deve realizar o download do projeto gsan-migracoes e executá-las para os bancos comercial e gerencial. [Os detalhes estão na página do projeto](https://github.com/prodigasistemas/gsan-migracoes)
 
 Configurações no JBoss
 ===
 
 O primeiro passo é adicionar as configurações do datasource para a conexão com o banco de dados.
 
-Para configurar o datasource, crie o arquivo postgres-ds.xml:
-
-	<?xml version="1.0" encoding="UTF-8"?>
-
-	<datasources>
-		<local-tx-datasource>
-			<jndi-name>PostgresDS</jndi-name>
-			<connection-url>jdbc:postgresql://0.0.0.0/gsan_comercial</connection-url>
-		    	<driver-class>org.postgresql.Driver</driver-class>
-			<user-name>login</user-name>
-			<password>senha</password>
-			<min-pool-size>5</min-pool-size>
-			<max-pool-size>200</max-pool-size>
-			<idle-timeout-minutes>2</idle-timeout-minutes>
-			<prepared-statement-cache-size>40</prepared-statement-cache-size>
-		</local-tx-datasource>
-
- 		<local-tx-datasource>
-			<jndi-name>PostgresGerencialDS</jndi-name>
-			<connection-url>jdbc:postgresql://0.0.0.0/gsan_gerencial</connection-url>
-		    	<driver-class>org.postgresql.Driver</driver-class>
-			<user-name>login</user-name>
-			<password>senha</password>
-		</local-tx-datasource>
-	</datasources>
-
-Substitua os dados de conexão do banco de dados, como *ip*, *porta*, *login* e *senha*.
+[Veja as instruções na Wiki](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-JBoss#configura%C3%A7%C3%B5es-do-jboss)
 
 Scripts de Build
 ===

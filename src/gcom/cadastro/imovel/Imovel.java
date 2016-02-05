@@ -1485,16 +1485,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 				.length() < 3) {
 			setorComercial = zeroDois + this.getSetorComercial().getCodigo();
 		}
-
-		/*if (String.valueOf(this.getQuadra().getNumeroQuadra()).length() < 4
-			&& String.valueOf(this.getQuadra().getNumeroQuadra()).length() > 2) {
-			quadra = zeroUm + this.getQuadra().getNumeroQuadra();
-		} else if (String.valueOf(this.getQuadra().getNumeroQuadra()).length() < 3
-				&& String.valueOf(this.getQuadra().getNumeroQuadra()).length() > 1) {
-			quadra = zeroDois + this.getQuadra().getNumeroQuadra();
-		} else if (String.valueOf(this.getQuadra().getNumeroQuadra()).length() < 2) {
-			quadra = zeroTres + this.getQuadra().getNumeroQuadra();
-		}*/
 		
 		if (String.valueOf(this.getQuadra().getNumeroQuadra()).length() < 3
 				&& String.valueOf(this.getQuadra().getNumeroQuadra())

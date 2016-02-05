@@ -1,11 +1,5 @@
 package gcom.transacao;
 
-import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
-import gcom.cadastro.atualizacaocadastral.SituacaoEsgotoHelper;
-import gcom.cadastro.atualizacaocadastral.SituacaoSubcategoriaHelper;
-import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
-import gcom.util.AtualizacaoCadastralUtil;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,9 +7,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TestaCargaAlteracoesArquivo extends TestCase {
+import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
+import gcom.cadastro.atualizacaocadastral.SituacaoEsgotoHelper;
+import gcom.cadastro.atualizacaocadastral.SituacaoSubcategoriaHelper;
+import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
+import gcom.util.AtualizacaoCadastralUtil;
+
+public class TesteCargaAlteracoesArquivo {
 	
 	private Collection<DadosTabelaAtualizacaoCadastralHelper> montaObjetos(Collection<DadosTabelaAtualizacaoCadastralHelper> existentes, List<DadosTabelaAtualizacaoCadastralHelper> lista){
 		Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = new HashMap<String, List<DadosTabelaAtualizacaoCadastralHelper>>();
@@ -33,6 +34,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		return nova;
 	}
 	
+	@Test
 	public void testaCargaSemAlteracaoAgua(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -54,6 +56,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("last_id;LIGADO;LIGADO", campo.toString());
 	}
 	
+	@Test
 	public void testaCargaComAlteracaoAgua(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -80,6 +83,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("last_id;LIGADO;DESLIGADO", campo.toString());
 	}
 	
+	@Test
 	public void testaCargaSemAlteracaoAguaComAlteracaoEsgoto(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -111,6 +115,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[last_id;LIGADO;LIGADO][lest_id;LIGADO;DESLIGADO]", retorno.toString());
 	}	
 
+	@Test
 	public void testaCargaSemAlteracaoSemAlteracaoEsgoto(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -136,6 +141,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[last_id;LIGADO;LIGADO][lest_id;DESLIGADO;DESLIGADO]", retorno.toString());
 	}	
 
+	@Test
 	public void testaCargaSemAlteracaoCategoria(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -160,6 +166,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;4;4]", retorno.toString());
 	}	
 
+	@Test
 	public void testaCargaComAlteracaoCategoria(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -190,6 +197,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;4;2]", retorno.toString());
 	}
 
+	@Test
 	public void testaCargaSemAlteracaoCategoriaComAddCategoria(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -222,6 +230,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;4;4;RESIDENCIAL - R2][isac_qteconomia;4;2;RESIDENCIAL - R1]", retorno.toString());
 	}
 	
+	@Test
 	public void testaCargaSemAlteracaoCategoriaComDuasCategoriasExistentes(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -253,6 +262,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;4;4;RESIDENCIAL - R2][isac_qteconomia;1;1;COMERCIAL - C2][isac_qteconomia;4;2;RESIDENCIAL - R1]", retorno.toString());
 	}
 	
+	@Test
 	public void testaCargaComESemAlteracaoCategoriaComDuasCategoriasExistentes(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -290,7 +300,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;1;1;COMERCIAL - C2][isac_qteconomia;4;2;RESIDENCIAL - R2][isac_qteconomia;4;2;RESIDENCIAL - R1]", retorno.toString());
 	}
 	
-
+	@Test
 	public void testaCargaComAlteracaoAguaEOutraColuna(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
