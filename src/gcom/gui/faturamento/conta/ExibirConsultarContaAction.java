@@ -196,10 +196,6 @@ public class ExibirConsultarContaAction extends GcomAction {
 				referenciaConta = contaHistorico.getFormatarAnoMesParaMesAno();
 				situacaoAtualConta = contaHistorico.getDebitoCreditoSituacaoAtual().getId();
 				
-				if (contaHistorico.getValorRateioAgua() == null){
-					contaHistorico.setValorRateioAgua(new BigDecimal("0.00"));
-				}
-				
 				// Colocando o objeto conta selecionado na sessão
 				sessao.setAttribute("contaHistorico", contaHistorico);
 	

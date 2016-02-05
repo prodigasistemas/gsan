@@ -37716,7 +37716,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					contaHistorico.setUltimaAlteracao((Date) arrayConta[51]);
 				}
 
-				// Valor Rateio
+				// Valor Rateio Agua
 				if (arrayConta[52] != null) {
 					contaHistorico.setValorRateioAgua((BigDecimal) arrayConta[52]);
 				}else{
