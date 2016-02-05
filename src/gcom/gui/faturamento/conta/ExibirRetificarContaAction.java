@@ -496,8 +496,18 @@ public class ExibirRetificarContaAction extends GcomAction {
 	            
 	        } */
 	        
+	        BigDecimal valorRateioAgua = new BigDecimal("0.00");
+	        BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
 	        BigDecimal valorTotalAgua = new BigDecimal("0.00");
 	        BigDecimal valorTotalEsgoto = new BigDecimal("0.00");
+	        
+	        if (contaSelecao.getValorRateioAgua() != null){
+	        	valorRateioAgua = contaSelecao.getValorRateioAgua();
+	        }
+	        
+	        if (contaSelecao.getValorRateioEsgoto() != null){
+	        	valorRateioEsgoto = contaSelecao.getValorRateioEsgoto();
+	        }
 	        
 	        if (contaSelecao.getValorAgua() != null){
 	        	valorTotalAgua = contaSelecao.getValorAgua();
@@ -704,6 +714,8 @@ public class ExibirRetificarContaAction extends GcomAction {
 	        
 	        
 	        //Exibindo os valores calculados
+	        retificarContaActionForm.setValorRateioAgua(Util.formatarMoedaReal(valorRateioAgua));
+	        retificarContaActionForm.setValorRateioEsgoto(Util.formatarMoedaReal(valorRateioEsgoto));
 			retificarContaActionForm.setValorAgua(Util.formatarMoedaReal(valorTotalAgua));
 			retificarContaActionForm.setValorEsgoto(Util.formatarMoedaReal(valorTotalEsgoto));
 			retificarContaActionForm.setValorDebito(Util.formatarMoedaReal(valorTotalDebito));
