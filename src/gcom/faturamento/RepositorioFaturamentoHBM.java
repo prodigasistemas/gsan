@@ -13346,41 +13346,33 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "mned.abreviado, "// 24
 					+ "mned.indicadorUso, "// 25
 					+ "mned.ultimaAlteracao, "// 26
-
 					+ "cnmi.id, "// 27
 					+ "cnmi.descricaoMotivoInclusaoConta, "// 28
 					+ "cnmi.indicadorUso, "// 29
 					+ "cnmi.ultimaAlteracao, "// 30
-
 					+ "cnmr.id, "// 31
 					+ "cnmr.descricao, "// 32
 					+ "cnmr.indicadorUso, "// 33
 					+ "cnmr.ultimaAlteracao, "// 34
-
 					+ "cnmc.id, "// 35
 					+ "cnmc.descricaoMotivoCancelamentoConta, "// 36
 					+ "cnmc.indicadorUso, "// 37
 					+ "cnmc.ultimaAlteracao, "// 38
-
 					+ "cnmrv.id, "// 39
 					+ "cnmrv.descricaoMotivoRevisaoConta, "// 40
 					+ "cnmrv.indicadorUso, "// 41
 					+ "cnmrv.ultimaAlteracao, "// 42
-
 					+ "contaOrigem.id, "// 43
 					+ "imovelOrigem.id, "// 44
-
 					+ "cnta.referenciaContabil, "// 45
 					+ "cnta.referenciaBaixaContabil, "// 46
 					+ "contaOrigemHistorico.id, "// 47
 					+ "imovelOrigemHistorico.id, "// 48
 					+ "usuario.nomeUsuario, "// 49
 					+ "cnta.valorImposto, " // 50
-					/**
-					 * 
-					 * Adicionando campo na consulta
-					 */
-					+ "cnta.ultimaAlteracao " // 51
+					+ "cnta.ultimaAlteracao, " // 51
+					+ "cnta.valorRateioAgua, " // 52
+					+ "cnta.valorRateioEsgoto " // 53
 					+ "FROM Conta cnta "
 					+ "INNER JOIN cnta.imovel imov "
 					+ "INNER JOIN cnta.debitoCreditoSituacaoAtual dcst "
@@ -13414,6 +13406,115 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	
+	/**
+	 * Este caso de uso consultar os dados da conta
+	 * 
+	 * @param idConta
+	 *            Id da Conta
+	 * 
+	 * 
+	 * @return uma colecao de conta
+	 * @throws ErroRepositorioException
+	 */
+	public Collection consultarContaHistorico(Integer idConta)
+			throws ErroRepositorioException {
+
+		Collection retorno = null;
+		
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "SELECT imov.id, " // 0
+					+ "cnta.anoMesReferenciaConta, " // 1
+					+ "cnta.debitoCreditoSituacaoAtual, "// 2
+					+ "cnta.ligacaoAguaSituacao, "// 3
+					+ "cnta.ligacaoEsgotoSituacao, " // 4
+					+ "cnta.indicadorCobrancaMulta, "// 5
+					+ "cnta.indicadorAlteracaoVencimento, "// 6
+					+ "cnta.consumoAgua, "// 7
+					+ "cnta.consumoEsgoto, " // 8
+					+ "cnta.percentualEsgoto, "// 9
+					+ "cnta.valorAgua, " // 10
+					+ "cnta.valorEsgoto, " // 11
+					+ "cnta.valorDebitos, " // 12
+					+ "cnta.valorCreditos, "// 13
+					+ "cnta.indicadorDebitoConta, "// 14
+					+ "cnta.id, " // 15
+					+ "cnta.dataVencimentoConta, "// 16
+					+ "cnta.dataValidadeConta, " // 17
+					+ "cnta.dataInclusao, " // 18
+					+ "cnta.dataRetificacao, "// 19
+					+ "cnta.dataCancelamento, " // 20
+					+ "cnta.dataRevisao, "// 21
+					+ "mned.id, "// 22
+					+ "mned.motivoNaoeEntregaDocumento, "// 23
+					+ "mned.abreviado, "// 24
+					+ "mned.indicadorUso, "// 25
+					+ "mned.ultimaAlteracao, "// 26
+					+ "cnmi.id, "// 27
+					+ "cnmi.descricaoMotivoInclusaoConta, "// 28
+					+ "cnmi.indicadorUso, "// 29
+					+ "cnmi.ultimaAlteracao, "// 30
+					+ "cnmr.id, "// 31
+					+ "cnmr.descricao, "// 32
+					+ "cnmr.indicadorUso, "// 33
+					+ "cnmr.ultimaAlteracao, "// 34
+					+ "cnmc.id, "// 35
+					+ "cnmc.descricaoMotivoCancelamentoConta, "// 36
+					+ "cnmc.indicadorUso, "// 37
+					+ "cnmc.ultimaAlteracao, "// 38
+					+ "cnmrv.id, "// 39
+					+ "cnmrv.descricaoMotivoRevisaoConta, "// 40
+					+ "cnmrv.indicadorUso, "// 41
+					+ "cnmrv.ultimaAlteracao, "// 42
+					+ "contaOrigem.id, "// 43
+					+ "imovelOrigem.id, "// 44
+					+ "cnta.anoMesReferenciaContabil, "// 45
+					+ "cnta.anoMesReferenciaBaixaContabil, "// 46
+					+ "contaOrigemHistorico.id, "// 47
+					+ "imovelOrigemHistorico.id, "// 48
+					+ "usuario.nomeUsuario, "// 49
+					+ "cnta.valorImposto, " // 50
+					+ "cnta.ultimaAlteracao, " // 51
+					+ "cnta.valorRateioAgua, " // 52
+					+ "cnta.valorRateioEsgoto " // 52
+					+ "FROM ContaHistorico cnta "
+					+ "INNER JOIN cnta.imovel imov "
+					+ "INNER JOIN cnta.debitoCreditoSituacaoAtual dcst "
+					+ "INNER JOIN cnta.ligacaoAguaSituacao last "
+					+ "INNER JOIN cnta.ligacaoEsgotoSituacao lest "
+					+ "LEFT JOIN cnta.motivoNaoEntregaDocumento mned "
+					+ "LEFT JOIN cnta.contaMotivoInclusao cnmi "
+					+ "LEFT JOIN cnta.contaMotivoRetificacao cnmr "
+					+ "LEFT JOIN cnta.contaMotivoCancelamento cnmc "
+					+ "LEFT JOIN cnta.contaMotivoRevisao cnmrv "
+					+ "LEFT JOIN cnta.usuario usuario "
+
+					+ "LEFT JOIN cnta.origem contaGeralOrigem "
+					+ "LEFT JOIN contaGeralOrigem.conta contaOrigem "
+					+ "LEFT JOIN contaOrigem.imovel imovelOrigem "
+					+ "LEFT JOIN contaGeralOrigem.contaHistorico contaOrigemHistorico "
+					+ "LEFT JOIN contaOrigemHistorico.imovel imovelOrigemHistorico "
+
+					+ "WHERE  cnta.id = :idConta ";
+
+			retorno = session.createQuery(consulta).setInteger("idConta",
+					idConta.intValue()).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}	
+
+	
 
 	/**
 	 * [UC0352] Emitir Contas
