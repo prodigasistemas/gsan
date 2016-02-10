@@ -51226,6 +51226,9 @@ public class ControladorArrecadacao implements SessionBean {
 				big.setIndicadorQuantidadeInadimplenciaMaior90(inadimplenciaMaior90[0]); // [O]
 				big.setIndicadorValorInadimplenciaMaior90(inadimplenciaMaior90[1]); // [P]
 				
+				System.out.println("inadimplenciaAte30: " + inadimplenciaAte30 + "; inadimplenciaAte90: "
+						+ inadimplenciaAte90 + "; inadimplenciaMaior90: " + inadimplenciaMaior90);
+				
 				big = this.setQuantidadeFaturamentosComprometidosRelatorioBIG(big, inadimplenciaAte30,
 						inadimplenciaAte90, inadimplenciaMaior90); // [Q]
 				
@@ -51603,6 +51606,9 @@ public class ControladorArrecadacao implements SessionBean {
 			indicadorValor = valorVencidas.divide(valorEmitidas, 10, BigDecimal.ROUND_HALF_UP);
 		}
 		
+		if (valorVencidas == null) {
+			valorVencidas = BigDecimal.ZERO;
+		}
 		BigDecimal[] inadimplencia = { 
 				indicadorQuantidade, 
 				indicadorValor,
