@@ -32,7 +32,8 @@
 	<property name="PagerTagLib.home" value="lib/pager-taglib" />
 	<property name="Quartz.home" value="lib/quartz" />
 	<property name="Servlet.home" value="lib/servlet" />
-	<property name="Struts.home" value="lib/struts1.1" />	
+	<property name="Struts.home" value="lib/struts1.1" />
+	<property name="Junit4.home" value="lib/junit4" />
 	<property name="Properties.home" value="src/gcom" />
 	
 	<property name="src" value="src" />
@@ -92,6 +93,7 @@
 		<pathelement location="${Servlet.home}/servlets-common.jar" />
 		<pathelement location="${Struts.home}/struts.jar" />
 		<pathelement location="${Struts.home}/struts-legacy.jar" />
+		<pathelement location="${Junit4.home}/junit-4.6.jar" />
 		<pathelement location="${Properties.home}/properties" />
 		<pathelement location="/reports" />
 	</path>
