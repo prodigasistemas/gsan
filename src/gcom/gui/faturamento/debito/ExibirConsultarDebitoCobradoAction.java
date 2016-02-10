@@ -84,31 +84,6 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 
 			// se o código da conta não for nulo
 			if (idConta != null && !idConta.equalsIgnoreCase("")) {
-
-				// cria o filtro da conta
-				/*
-				 * FiltroConta filtroConta = new FiltroConta();
-				 * 
-				 * //carrega o imóvel
-				 * filtroConta.adicionarCaminhoParaCarregamentoEntidade("imovel");
-				 * 
-				 * //carrega a situação da conta
-				 * filtroConta.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-				 * 
-				 * //carrega a situação da ligação de água
-				 * filtroConta.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-				 * 
-				 * //carrega a a situação de esgoto
-				 * filtroConta.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-				 * 
-				 * //seta o código da conta no filtro
-				 * filtroConta.adicionarParametro(new
-				 * ParametroSimples(FiltroConta.ID, idConta));
-				 * 
-				 * //pesquisa a conta na base de dados Collection colecaoConta =
-				 * fachada.pesquisar(filtroConta, Conta.class.getName());
-				 */
-
 				Collection colecaoConta = fachada.consultarConta(new Integer(
 						idConta));
 				// se não encontrou nenhuma conta com o código informado
@@ -145,10 +120,7 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 			// cria a coleção de débitos cobrados
 			Collection colecaoContaDebitosCobrados;
 
-			/*
-			 * Débitos Cobrados (Carregar coleção)
-			 * ======================================================================
-			 */
+			/* Débitos Cobrados (Carregar coleção)*/
 
 			// cria o filtro de débito cobrado
 			FiltroDebitoCobrado filtroDebitoCobrado = new FiltroDebitoCobrado();
@@ -164,8 +136,6 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 			// pesquisa a coleção de débitos cobrados
 			colecaoContaDebitosCobrados = fachada.pesquisar(
 					filtroDebitoCobrado, DebitoCobrado.class.getName());
-			
-			
 
 			// seta a coleção de débitos cobrados na sessão
 			sessao.setAttribute("colecaoContaDebitosCobrados",
@@ -199,10 +169,7 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 				sessao.removeAttribute("colecaoContaDebitosCobrados");
 			}
 
-			/*
-			 * Pesquisando a conta histórico a partir do id recebido
-			 * =====================================================================
-			 */
+			/*Pesquisando a conta histórico a partir do id recebido*/
 
 			// cria o objeto conta histórico
 			ContaHistorico contaHistorico = null;
@@ -211,32 +178,9 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 			if (idContaHistorico != null
 					&& !idContaHistorico.equalsIgnoreCase("")) {
 
-				// cria o filtro da conta histórico
-				FiltroContaHistorico filtroContaHistorico = new FiltroContaHistorico();
-
-				// carrega o imóvel
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("imovel");
-
-				// carrega a situação da conta
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-
-				// carrega a situação da ligação de água
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-
-				// carrega a situação de esgoto
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-
-				// seta o código da conta histórico no filtro
-				filtroContaHistorico.adicionarParametro(new ParametroSimples(
-						FiltroContaHistorico.ID, idContaHistorico));
-
 				// pesquisa a conta histórico na base de dados
-				Collection colecaoContaHistorico = fachada.pesquisar(
-						filtroContaHistorico, ContaHistorico.class.getName());
+				Collection colecaoContaHistorico = 
+						this.getFachada().consultarContaHistorico(new Integer(idContaHistorico));
 
 				// se não encontrou nenhuma conta histórico com o código
 				// informado
@@ -276,10 +220,7 @@ public class ExibirConsultarDebitoCobradoAction extends GcomAction {
 			// cria a coleção de débitos cobrados histórico
 			Collection colecaoContaDebitosCobradosHistorico;
 
-			/*
-			 * Débitos Cobrados (Carregar coleção)
-			 * ======================================================================
-			 */
+			/*Débitos Cobrados (Carregar coleção)*/
 
 			// cria o filtro de débito cobrado
 			FiltroDebitoCobradoHistorico filtroDebitoCobradoHistorico = new FiltroDebitoCobradoHistorico();

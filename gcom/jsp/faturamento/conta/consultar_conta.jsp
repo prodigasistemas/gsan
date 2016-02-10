@@ -349,7 +349,7 @@
 
 				<tr>
 					<td><strong>Consumo de &Aacute;gua:</strong></td>
-					<td colspan="2">
+					<td>
 						<logic:present name="conta" property="consumoAgua">
 							<html:text name="conta" 
 								property="consumoAgua" 
@@ -366,6 +366,36 @@
 								style="background-color:#EFEFEF; border:0" />
 						</logic:notPresent>
 					</td>
+					<td><strong>D&eacute;bito Autom&aacute;tico:</strong></td>
+					<td>
+						<logic:present name="conta" property="indicadorDebitoConta">
+							<logic:equal name="conta" property="indicadorDebitoConta" value="1">
+								<input type="text" 
+									value="SIM" 
+									name="indicadorDebitoConta"
+									size="4" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0" />
+							</logic:equal>
+							
+							<logic:equal name="conta" property="indicadorDebitoConta" value="2">
+								<input type="text" 
+									value="NÃO" 
+									name="indicadorDebitoConta"
+									size="4" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0" />
+							</logic:equal>
+						</logic:present> 
+						
+						<logic:notPresent name="conta" property="indicadorDebitoConta">
+							<input type="text" 
+								name="indicadorDebitoConta" 
+								size="4"
+								readonly="true" 
+								style="background-color:#EFEFEF; border:0" />
+						</logic:notPresent>
+					</td>					
 				</tr>
 
 				<tr>
@@ -451,45 +481,36 @@
 				</tr>
 
 				<tr>
+				    <td><strong>Valor Rateio da Agua:</strong></td>
+					<td>
+						<input type="text" 
+							name="valorRateioAgua"
+							value=<%="" + Util.formatarMoedaReal(((Conta)session.getAttribute("conta")).getValorRateioAgua())%>
+							readonly="true"
+							style="background-color:#EFEFEF; border:0; text-align: right;" />
+					</td>
+					<td><strong>Valor Rateio Esgoto:</strong></td>
+					<td>
+						<input type="text" 
+							name="valorRateioEsgoto"
+							value=<%="" + Util.formatarMoedaReal(((Conta)session.getAttribute("conta")).getValorRateioEsgoto())%>
+							readonly="true"
+							style="background-color:#EFEFEF; border:0; text-align: right;" />
+					</td>
+					
+				</tr>
+				
+				<tr>
 					<td><strong>Valor Total da Conta:</strong></td>
 					<td>
 						<input type="text" 
 							name="valorTotalConta"
 							value=<%="" + Util.formatarMoedaReal(((Conta)session.getAttribute("conta")).getValorTotal())%>
 							readonly="true"
-							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
-
-					<td><strong>D&eacute;bito Autom&aacute;tico:</strong></td>
-					<td>
-						<logic:present name="conta" property="indicadorDebitoConta">
-							<logic:equal name="conta" property="indicadorDebitoConta" value="1">
-								<input type="text" 
-									value="SIM" 
-									name="indicadorDebitoConta"
-									size="4" 
-									readonly="true"
-									style="background-color:#EFEFEF; border:0" />
-							</logic:equal>
-							
-							<logic:equal name="conta" property="indicadorDebitoConta" value="2">
-								<input type="text" 
-									value="NÃO" 
-									name="indicadorDebitoConta"
-									size="4" 
-									readonly="true"
-									style="background-color:#EFEFEF; border:0" />
-							</logic:equal>
-						</logic:present> 
-						
-						<logic:notPresent name="conta" property="indicadorDebitoConta">
-							<input type="text" 
-								name="indicadorDebitoConta" 
-								size="4"
-								readonly="true" 
-								style="background-color:#EFEFEF; border:0" />
-						</logic:notPresent>
+							style="background-color:#EFEFEF; border:0; text-align: right;" />
 					</td>
-				</tr>
+					
+				</tr>				
 
 				<tr>
 					<td><strong>Motivo da Inclus&atilde;o:</strong></td>
@@ -1007,7 +1028,7 @@
 
 				<tr>
 					<td><strong>Consumo de &Aacute;gua:</strong></td>
-					<td colspan="2">
+					<td>
 						<logic:present name="contaHistorico" property="consumoAgua">
 							<html:text name="contaHistorico" 
 								property="consumoAgua" 
@@ -1023,6 +1044,33 @@
 								style="background-color:#EFEFEF; border:0" />
 						</logic:notPresent>
 					</td>
+					<td><strong>D&eacute;bito Autom&aacute;tico:</strong></td>
+					<td>
+						<logic:present name="contaHistorico" property="indicadorDebitoConta">
+							<logic:equal name="contaHistorico" property="indicadorDebitoConta" value="1">
+								<input type="text" value="SIM" 
+									name="indicadorDebitoConta"
+									size="4" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0" />
+							</logic:equal>
+							<logic:equal name="contaHistorico" property="indicadorDebitoConta" value="2">
+								<input type="text" 
+									value="NÃO" 
+									name="indicadorDebitoConta"
+									size="4" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0" />
+							</logic:equal>
+						</logic:present> 
+						
+						<logic:notPresent name="contaHistorico" property="indicadorDebitoConta">
+							<input type="text" 
+								name="indicadorDebitoConta" 
+								size="4"
+								readonly="true" 
+								style="background-color:#EFEFEF; border:0" />
+					</logic:notPresent></td>					
 				</tr>
 
 				<tr>
@@ -1064,7 +1112,7 @@
 							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorAgua())%>
 							size="20" 
 							readonly="true"
-							style="background-color:#EFEFEF; border:0" /></td>
+							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
 
 					<td><strong>Valor de Esgoto:</strong></td>
 					<td>
@@ -1073,7 +1121,7 @@
 							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorEsgoto())%>
 							size="20" 
 							readonly="true"
-							style="background-color:#EFEFEF; border:0" /></td>
+							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
 				</tr>
 
 				<tr>
@@ -1084,7 +1132,7 @@
 							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorDebitos())%>
 							size="20" 
 							readonly="true"
-							style="background-color:#EFEFEF; border:0" /></td>
+							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
 
 					<td><strong>Valor dos Cr&eacute;ditos:</strong></td>
 					<td>
@@ -1094,18 +1142,36 @@
 								value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorCreditos())%>
 								size="20" 
 								readonly="true"
-								style="background-color:#EFEFEF; border:0" />
+								style="background-color:#EFEFEF; border:0; text-align: right;" />
 						</logic:present> 
 						<logic:notPresent name="contaHistorico" property="valorCreditos">
 							<input type="text" 
 								name="valorCreditos" 
 								size="20" 
 								readonly="true"
-								style="background-color:#EFEFEF; border:0" />
+								style="background-color:#EFEFEF; border:0; text-align: right;" />
 						</logic:notPresent>
 					</td>
 				</tr>
 
+				<tr>
+				    <td><strong>Valor Rateio da Agua:</strong></td>
+					<td>
+						<input type="text" 
+							name="valorRateioAgua"
+							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorRateioAgua())%>
+							readonly="true"
+							style="background-color:#EFEFEF; border:0; text-align: right;" />
+					</td>				
+					<td><strong>Valor Rateio do Esgoto:</strong></td>
+					<td>
+						<input type="text" 
+							name="valorRateioEsgoto"
+							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorRateioEsgoto())%>
+							readonly="true" 
+							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
+				</tr>
+				
 				<tr>
 					<td><strong>Valor Total da Conta:</strong></td>
 					<td>
@@ -1113,37 +1179,8 @@
 							name="valorTotalConta"
 							value=<%="" + Util.formatarMoedaReal(((ContaHistorico)session.getAttribute("contaHistorico")).getValorTotal())%>
 							readonly="true" 
-							style="background-color:#EFEFEF; border:0" /></td>
-
-					<td><strong>D&eacute;bito Autom&aacute;tico:</strong></td>
-					<td>
-						<logic:present name="contaHistorico" property="indicadorDebitoConta">
-							<logic:equal name="contaHistorico" property="indicadorDebitoConta" value="1">
-								<input type="text" value="SIM" 
-									name="indicadorDebitoConta"
-									size="4" 
-									readonly="true"
-									style="background-color:#EFEFEF; border:0" />
-							</logic:equal>
-							<logic:equal name="contaHistorico" property="indicadorDebitoConta" value="2">
-								<input type="text" 
-									value="NÃO" 
-									name="indicadorDebitoConta"
-									size="4" 
-									readonly="true"
-									style="background-color:#EFEFEF; border:0" />
-							</logic:equal>
-						</logic:present> 
-						
-						<logic:notPresent name="contaHistorico" property="indicadorDebitoConta">
-							<input type="text" 
-								name="indicadorDebitoConta" 
-								size="4"
-								readonly="true" 
-								style="background-color:#EFEFEF; border:0" />
-					</logic:notPresent></td>
-				</tr>
-
+							style="background-color:#EFEFEF; border:0; text-align: right;" /></td>
+				</tr>				
 				<tr>
 					<td><strong>Motivo da Inclus&atilde;o:</strong></td>
 					<td colspan="1">

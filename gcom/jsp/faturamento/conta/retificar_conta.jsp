@@ -1812,6 +1812,20 @@ function desabilita2(){
 		        </td>
 			</tr>
 			<tr>
+				<td height="10"><strong>Valor Rateio Agua:</strong></td>
+		        <td>
+					<html:text property="valorRateioAgua" size="21" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"/>
+		        </td>
+		        <td colspan="2" align="right"></td>
+			</tr>
+			<tr>
+				<td height="10"><strong>Valor Rateio Esgoto:</strong></td>
+		        <td>
+					<html:text property="valorRateioEsgoto" size="21" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"/>
+		        </td>
+		        <td colspan="2" align="right"></td>
+			</tr>
+			<tr>
 				<td height="10"><strong>Valor Total da Conta:</strong></td>
 		        <td>
 					<html:text property="valorTotal" size="21" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"/>

@@ -37403,7 +37403,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (arrayConta[49] != null) {
 					Usuario usuario = new Usuario();
 					usuario.setNomeUsuario((String) arrayConta[49]);
-
 					conta.setUsuario(usuario);
 				}
 
@@ -37419,13 +37418,327 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					conta.setUltimaAlteracao((Date) arrayConta[51]);
 				}
 
+				// Valor Rateio agua
+				if (arrayConta[52] != null) {
+					conta.setValorRateioAgua((BigDecimal) arrayConta[52]);
+				}else{
+					conta.setValorRateioAgua(new BigDecimal("0.00"));
+				}
+
+				// Valor Rateio Esgoto
+				if (arrayConta[53] != null) {
+					conta.setValorRateioEsgoto((BigDecimal) arrayConta[53]);
+				}else{
+					conta.setValorRateioEsgoto(new BigDecimal("0.00"));
+				}
+
 				contas.add(conta);
 			}
 		}
 
 		return contas;
 	}
+	
+	/**
+	 * Consulta os dados da conta
+	 * 
+	 * @param idConta
+	 *            Id da Conta
+	 * 
+	 * @return uma colecao de conta
+	 */
+	public Collection consultarContaHistorico(Integer idConta)
+			throws ControladorException {
 
+		Collection colecaoConta = null;
+		Collection contas = null;
+		// Pesquisa conta
+		try {
+			colecaoConta = repositorioFaturamento.consultarContaHistorico(idConta);
+
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+		// Verifica se existe conta
+		if (colecaoConta != null && !colecaoConta.isEmpty()) {
+
+			Iterator iteratorColecaoConta = colecaoConta.iterator();
+			ContaHistorico contaHistorico = null;
+			contas = new ArrayList();
+			while (iteratorColecaoConta.hasNext()) {
+
+				Object[] arrayConta = (Object[]) iteratorColecaoConta.next();
+
+				contaHistorico = new ContaHistorico();
+				// id do imovel - Item [0]
+				if (arrayConta[0] != null) {
+					Imovel imovel = new Imovel();
+					imovel.setId((Integer) arrayConta[0]);
+					contaHistorico.setImovel(imovel);
+				}
+
+				// referencia da conta - Item [1]
+				if (arrayConta[1] != null) {
+					contaHistorico.setReferencia((Integer) arrayConta[1]);
+				}
+
+				// debito credito situa��o atual - Item [2]
+				if (arrayConta[2] != null) {
+					contaHistorico.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) arrayConta[2]);
+				}
+
+				// liga��o de �gua - Item 3
+				if (arrayConta[3] != null) {
+					contaHistorico.setLigacaoAguaSituacao((LigacaoAguaSituacao) arrayConta[3]);
+				}
+				// ligacao de esgoto - Item [4]
+				if (arrayConta[4] != null) {
+
+					contaHistorico.setLigacaoEsgotoSituacao((LigacaoEsgotoSituacao) arrayConta[4]);
+				}
+				// indicador de cobranca de multa - item [5]
+				if (arrayConta[5] != null) {
+					contaHistorico.setIndicadorCobrancaMulta(((Short) arrayConta[5])
+							.shortValue());
+				}
+				// indicador de alteracao de vencimento - item [6]
+				if (arrayConta[6] != null) {
+					contaHistorico.setIndicadorAlteracaoVencimento((Short) arrayConta[6]);
+				}
+				// consumo de agua - item [7]
+				if (arrayConta[7] != null) {
+					contaHistorico.setConsumoAgua((Integer) arrayConta[7]);
+				}
+				// consumo de esgoto - item [8]
+				if (arrayConta[8] != null) {
+					contaHistorico.setConsumoEsgoto((Integer) arrayConta[8]);
+				}
+				// percentual esgoto - item [9]
+				if (arrayConta[9] != null) {
+					contaHistorico.setPercentualEsgoto((BigDecimal) arrayConta[9]);
+				}
+				// Valor Agua - item [10]
+				if (arrayConta[10] != null) {
+					contaHistorico.setValorAgua((BigDecimal) arrayConta[10]);
+				}
+				// Valor Esgoto - item [11]
+				if (arrayConta[11] != null) {
+					contaHistorico.setValorEsgoto((BigDecimal) arrayConta[11]);
+				}
+				// Debitos - item [12]
+				if (arrayConta[12] != null) {
+					contaHistorico.setDebitos((BigDecimal) arrayConta[12]);
+				}
+				// valorCreditos - item [13]
+				if (arrayConta[13] != null) {
+					contaHistorico.setValorCreditos((BigDecimal) arrayConta[13]);
+				}
+				// indicador debito conta - item [14]
+				if (arrayConta[14] != null) {
+					contaHistorico.setIndicadorDebitoConta(((Short) arrayConta[14])
+							.shortValue());
+				}
+
+				// id conta - item [15]
+				if (arrayConta[15] != null) {
+					contaHistorico.setId((Integer) arrayConta[15]);
+				}
+				// data vencimento conta - item [16]
+				if (arrayConta[16] != null) {
+					contaHistorico.setDataVencimentoConta((Date) arrayConta[16]);
+				}
+				// data validade conta - item [17]
+				if (arrayConta[17] != null) {
+					contaHistorico.setDataValidadeConta((Date) arrayConta[17]);
+				}
+				// data inclusao conta - item [18]
+				if (arrayConta[18] != null) {
+					contaHistorico.setDataInclusao((Date) arrayConta[18]);
+				}
+				// data retificacao conta - item [19]
+				if (arrayConta[19] != null) {
+					contaHistorico.setDataRetificacao((Date) arrayConta[19]);
+				}
+				// data cancelamento conta - item [20]
+				if (arrayConta[20] != null) {
+					contaHistorico.setDataCancelamento((Date) arrayConta[20]);
+				}
+				// data revisao conta - item [21]
+				if (arrayConta[21] != null) {
+					contaHistorico.setDataRevisao((Date) arrayConta[21]);
+				}
+
+				// motivo nao entrega documento - item [22]
+				if (arrayConta[22] != null) {
+
+					MotivoNaoEntregaDocumento motivoNaoEntregaDocumento = new MotivoNaoEntregaDocumento();
+
+					motivoNaoEntregaDocumento.setId((Integer) arrayConta[22]);
+					motivoNaoEntregaDocumento
+							.setMotivoNaoeEntregaDocumento((String) arrayConta[23]);
+					motivoNaoEntregaDocumento
+							.setAbreviado((String) arrayConta[24]);
+					motivoNaoEntregaDocumento
+							.setIndicadorUso((Short) arrayConta[25]);
+					motivoNaoEntregaDocumento
+							.setUltimaAlteracao((Date) arrayConta[26]);
+
+					contaHistorico.setMotivoNaoEntregaDocumento(motivoNaoEntregaDocumento);
+				}
+
+				// contaMotivoInclusao - item [27]
+				if (arrayConta[27] != null) {
+
+					ContaMotivoInclusao contaMotivoInclusao = new ContaMotivoInclusao();
+
+					contaMotivoInclusao.setId((Integer) arrayConta[27]);
+					contaMotivoInclusao
+							.setDescricaoMotivoInclusaoConta((String) arrayConta[28]);
+					contaMotivoInclusao.setIndicadorUso((Short) arrayConta[29]);
+					contaMotivoInclusao
+							.setUltimaAlteracao((Date) arrayConta[30]);
+
+					contaHistorico.setContaMotivoInclusao(contaMotivoInclusao);
+				}
+
+				// contaMotivoRetificacao - item [31]
+				if (arrayConta[31] != null) {
+
+					ContaMotivoRetificacao contaMotivoRetificacao = new ContaMotivoRetificacao();
+
+					contaMotivoRetificacao.setId((Integer) arrayConta[31]);
+					contaMotivoRetificacao
+							.setDescricao((String) arrayConta[32]);
+					contaMotivoRetificacao
+							.setIndicadorUso((Short) arrayConta[33]);
+					contaMotivoRetificacao
+							.setUltimaAlteracao((Date) arrayConta[34]);
+
+					contaHistorico.setContaMotivoRetificacao(contaMotivoRetificacao);
+				}
+
+				// contaMotivoCancelamento - item [35]
+				if (arrayConta[35] != null) {
+
+					ContaMotivoCancelamento contaMotivoCancelamento = new ContaMotivoCancelamento();
+
+					contaMotivoCancelamento.setId((Integer) arrayConta[35]);
+					contaMotivoCancelamento
+							.setDescricaoMotivoCancelamentoConta((String) arrayConta[36]);
+					contaMotivoCancelamento
+							.setIndicadorUso((Short) arrayConta[37]);
+					contaMotivoCancelamento
+							.setUltimaAlteracao((Date) arrayConta[38]);
+
+					contaHistorico.setContaMotivoCancelamento(contaMotivoCancelamento);
+				}
+
+				// contaMotivoRevisao - item [39]
+				if (arrayConta[39] != null) {
+
+					ContaMotivoRevisao contaMotivoRevisao = new ContaMotivoRevisao();
+
+					contaMotivoRevisao.setId((Integer) arrayConta[39]);
+					contaMotivoRevisao
+							.setDescricaoMotivoRevisaoConta((String) arrayConta[40]);
+					contaMotivoRevisao.setIndicadorUso((Short) arrayConta[41]);
+					contaMotivoRevisao
+							.setUltimaAlteracao((Date) arrayConta[42]);
+
+					contaHistorico.setContaMotivoRevisao(contaMotivoRevisao);
+				}
+
+				// CONTA_ORIGEM
+				if (arrayConta[43] != null) {
+
+					ContaGeral contaGeralOrigem = new ContaGeral();
+					contaGeralOrigem.setId((Integer) arrayConta[43]);
+
+					Conta contaOrigem = new Conta();
+					contaOrigem.setId((Integer) arrayConta[43]);
+
+					Imovel imovelOrigem = new Imovel();
+					imovelOrigem.setId((Integer) arrayConta[44]);
+
+					contaOrigem.setImovel(imovelOrigem);
+					contaGeralOrigem.setConta(contaOrigem);
+
+					contaHistorico.setOrigem(contaGeralOrigem);
+
+				} else {
+					if (arrayConta[47] != null) {
+
+						ContaGeral contaGeralOrigem = new ContaGeral();
+						contaGeralOrigem.setId((Integer) arrayConta[47]);
+
+						Conta contaOrigem = new Conta();
+						contaOrigem.setId((Integer) arrayConta[47]);
+
+						Imovel imovelOrigem = new Imovel();
+						imovelOrigem.setId((Integer) arrayConta[48]);
+
+						contaOrigem.setImovel(imovelOrigem);
+						contaGeralOrigem.setConta(contaOrigem);
+
+						contaHistorico.setOrigem(contaGeralOrigem);
+
+					}
+				}
+
+				// Referencia Contabil
+				if (arrayConta[45] != null) {
+					contaHistorico.setAnoMesReferenciaContabil((Integer) arrayConta[45]);
+				}
+				// Referencia Baixa Contabil
+				if (arrayConta[46] != null) {
+					contaHistorico.setAnoMesReferenciaBaixaContabil((Integer) arrayConta[46]);
+				}
+
+				// Usuario
+				if (arrayConta[49] != null) {
+					Usuario usuario = new Usuario();
+					usuario.setNomeUsuario((String) arrayConta[49]);
+
+					contaHistorico.setUsuario(usuario);
+				}
+
+				// Valor dos impostos
+				if (arrayConta[50] != null) {
+
+					contaHistorico.setValorImposto((BigDecimal) arrayConta[50]);
+				}
+
+				// Ultima alteracao
+				if (arrayConta[51] != null) {
+
+					contaHistorico.setUltimaAlteracao((Date) arrayConta[51]);
+				}
+
+				// Valor Rateio Agua
+				if (arrayConta[52] != null) {
+					contaHistorico.setValorRateioAgua((BigDecimal) arrayConta[52]);
+				}else{
+					contaHistorico.setValorRateioAgua(new BigDecimal("0.00"));
+				}
+				
+				// Valor Rateio Esgoto
+				if (arrayConta[53] != null) {
+					contaHistorico.setValorRateioEsgoto((BigDecimal) arrayConta[53]);
+				}else{
+					contaHistorico.setValorRateioEsgoto(new BigDecimal("0.00"));
+				}
+
+				contas.add(contaHistorico);
+			}
+		}
+
+		return contas;
+	}	
+
+	
+	
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
 	 * 

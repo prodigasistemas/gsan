@@ -701,6 +701,9 @@ public interface IRepositorioFaturamento {
 
 	@SuppressWarnings("rawtypes")
 	public Collection consultarConta(Integer idConta) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection consultarContaHistorico(Integer idConta) throws ErroRepositorioException;
 
 	public BigDecimal obterPercentualLigacaoEsgotoImovel(Integer idImovel) throws ErroRepositorioException;
 

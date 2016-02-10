@@ -141,7 +141,12 @@ public abstract class TarefaRelatorio extends Tarefa {
 				break;
 			case TIPO_XLS:
 
+				
 				JRXlsExporter exporterXLS = new JRXlsExporter();
+				
+				// Incluido para correcao do Tab do Excel (Suporta 30 caracteres)
+				jasperPrint.setName(nomeRelatorio.substring(1,30));
+				
 				exporterXLS.setParameter(JRExporterParameter.JASPER_PRINT,
 						jasperPrint);
 				exporterXLS.setParameter(JRExporterParameter.OUTPUT_STREAM,

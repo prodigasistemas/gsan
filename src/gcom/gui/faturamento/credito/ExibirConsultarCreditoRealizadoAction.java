@@ -75,10 +75,7 @@ public class ExibirConsultarCreditoRealizadoAction extends GcomAction {
 						.removeAttribute("colecaoContaCreditosRealizadosHistorico");
 			}
 
-			/*
-			 * Pesquisando a conta a partir do id recebido
-			 * =====================================================================
-			 */
+			/*Pesquisando a conta a partir do id recebido*/
 
 			// cria o objeto conta
 			Conta conta = null;
@@ -206,32 +203,9 @@ public class ExibirConsultarCreditoRealizadoAction extends GcomAction {
 			if (idContaHistorico != null
 					&& !idContaHistorico.equalsIgnoreCase("")) {
 
-				// cria o filtro da conta histórico
-				FiltroContaHistorico filtroContaHistorico = new FiltroContaHistorico();
-
-				// carrega o imóvel
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("imovel");
-
-				// carrega a situação da conta
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-
-				// carrega a situação da ligação de água
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-
-				// carrega a situação de esgoto
-				filtroContaHistorico
-						.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-
-				// seta o código da conta histórico no filtro
-				filtroContaHistorico.adicionarParametro(new ParametroSimples(
-						FiltroContaHistorico.ID, idContaHistorico));
-
 				// pesquisa a conta histórico na base de dados
-				Collection colecaoContaHistorico = fachada.pesquisar(
-						filtroContaHistorico, ContaHistorico.class.getName());
+				Collection colecaoContaHistorico = 
+						this.getFachada().consultarContaHistorico(new Integer(idContaHistorico));
 
 				// se não encontrou nenhuma conta histórico com o código
 				// informado

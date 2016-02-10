@@ -26,6 +26,8 @@ public class RetificarContaActionForm extends ActionForm {
 	private String vencimentoConta;
 	private String valorDebito;
 	private String valorCredito;
+	private String valorRateioAgua;
+	private String valorRateioEsgoto;
 	private String valorTotal;
 	private String idConsumoTarifa;
 	private String percentualColeta;
@@ -280,6 +282,20 @@ public class RetificarContaActionForm extends ActionForm {
 		this.leituraAtualPoco = leituraAtualPoco;
 	}
 
+	public String getValorRateioAgua() {
+		return valorRateioAgua;
+	}
 
+	public void setValorRateioAgua(String valorRateioAgua) {
+		this.valorRateioAgua = valorRateioAgua;
+	}
+
+	public String getValorRateioEsgoto() {
+		return valorRateioEsgoto;
+	}
+
+	public void setValorRateioEsgoto(String valorRateioEsgoto) {
+		this.valorRateioEsgoto = valorRateioEsgoto;
+	}
 
 }
