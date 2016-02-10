@@ -51587,13 +51587,21 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		BigDecimal quantidadeVencidas = BigDecimal.valueOf((Integer) vencidas[0]);
 		BigDecimal quantidadeEmitidas = BigDecimal.valueOf((Integer) emitidas[0]);
-		BigDecimal indicadorQuantidade = quantidadeVencidas.divide(
-				quantidadeEmitidas, 10, BigDecimal.ROUND_HALF_UP);
+		BigDecimal indicadorQuantidade = BigDecimal.ZERO;
 		
+		if ( (quantidadeVencidas.compareTo(BigDecimal.ZERO) != 0)
+			      || (quantidadeEmitidas.compareTo(BigDecimal.ZERO) != 0)) {
+			
+			indicadorQuantidade = quantidadeVencidas.divide(quantidadeEmitidas, 10, BigDecimal.ROUND_HALF_UP);
+		}
 		BigDecimal valorVencidas = (BigDecimal) vencidas[1];
 		BigDecimal valorEmitidas = (BigDecimal) emitidas[1];
-		BigDecimal indicadorValor = valorVencidas.divide(
-				valorEmitidas, 10, BigDecimal.ROUND_HALF_UP);
+		BigDecimal indicadorValor = BigDecimal.ZERO;
+		
+		if ( (valorVencidas.compareTo(BigDecimal.ZERO) != 0)
+			      || (valorEmitidas.compareTo(BigDecimal.ZERO) != 0)) {
+			indicadorValor = valorVencidas.divide(valorEmitidas, 10, BigDecimal.ROUND_HALF_UP);
+		}
 		
 		BigDecimal[] inadimplencia = { 
 				indicadorQuantidade, 
