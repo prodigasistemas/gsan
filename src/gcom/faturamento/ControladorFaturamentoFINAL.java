@@ -27709,6 +27709,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			SistemaParametro sistemaParametro = getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
+			sistemaParametro.setAnoMesFaturamento(201601);
+		    sistemaParametro.setAnoMesArrecadacao(201601);
+		      
 			// Recupera o ano/mês de faturamento corrente
 			Integer anoMesFaturamentoCorrente = sistemaParametro
 					.getAnoMesFaturamento();
