@@ -794,6 +794,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao atualizar imovel retorno " + idImovelRetorno, e);
+			logger.error("Erro ao atualizar imovel retorno. " + e.getMessage() , e);
 			throw new ControladorException("Erro ao atualizar imovel retorno  " + idImovelRetorno, e);
 		}
 	}
