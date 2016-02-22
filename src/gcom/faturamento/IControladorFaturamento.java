@@ -851,8 +851,8 @@ public interface IControladorFaturamento {
 	 *            ID do Debito Credito Situação
 	 * @return Coleção de Creditos a Realizar
 	 */
-	public Collection obterCreditoARealizarImovel(Integer imovelID,
-			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento)
+	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID,
+			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento, boolean prefaturamento)
 			throws ControladorException;
 
 	/**

@@ -25018,17 +25018,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 *            ID do Debito Credito Situação
 	 * @return Coleção de Creditos a Realizar
 	 */
-	public Collection obterCreditoARealizarImovel(Integer imovelID,
-			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento)
+	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID,
+			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento, boolean preFaturamento)
 			throws ControladorException {
 
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		// lista de credito a realizar
 		Collection creditosARealizar = null;
 		Collection colecaoCreditosARealizar = null;
-
+		
+		Integer referencia = (preFaturamento ? anoMesFaturamento : sistemaParametro.getAnoMesFaturamento());
+		
+		logger.info("Pre faturamento? " + preFaturamento + " - referencia " + referencia);
 		/**
 		 * @autor Adriana Muniz
 		 * @date 25/09/2013
@@ -25036,170 +25037,115 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 * Troca da referência de faturamento do grupo para a referencia
 		 * de faturamento do sistema de parametro.
 		 */
-		// Pesquisa créditos a cobrar
+		
 		try {
-			colecaoCreditosARealizar = repositorioFaturamento
-					.pesquisarCreditoARealizar(imovelID,
-							debitoCreditoSituacaoAtualID,
-							sistemaParametro.getAnoMesFaturamento());
+			colecaoCreditosARealizar = repositorioFaturamento.pesquisarCreditoARealizar(imovelID, debitoCreditoSituacaoAtualID, referencia);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Verifica se existe débitos a realizar
-		if (colecaoCreditosARealizar != null
-				&& !colecaoCreditosARealizar.isEmpty()) {
+		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
 			creditosARealizar = new ArrayList();
 
-			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
-					.iterator();
+			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
+			
 			CreditoARealizar creditoARealizar = null;
 			while (iteratorColecaoCreditosARealizar.hasNext()) {
 
-				Object[] arrayCreditosACobrar = (Object[]) iteratorColecaoCreditosARealizar
-						.next();
+				Object[] arrayCreditosACobrar = (Object[]) iteratorColecaoCreditosARealizar.next();
 
 				creditoARealizar = new CreditoARealizar();
-				// id do Credito a Realizar - Item 0
+
 				if (arrayCreditosACobrar[0] != null) {
 					creditoARealizar.setId((Integer) arrayCreditosACobrar[0]);
 					CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
-					creditoARealizarGeral
-							.setId((Integer) arrayCreditosACobrar[0]);
-					creditoARealizar
-							.setCreditoARealizarGeral(creditoARealizarGeral);
+					creditoARealizarGeral.setId((Integer) arrayCreditosACobrar[0]);
+					creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
 				}
 
-				// numero de prestacoes realizadas - item 1
 				if (arrayCreditosACobrar[1] != null) {
-					creditoARealizar
-							.setNumeroPrestacaoRealizada((Short) arrayCreditosACobrar[1]);
+					creditoARealizar.setNumeroPrestacaoRealizada((Short) arrayCreditosACobrar[1]);
 				}
 
-				// numero de prestacoes credito - item 2
 				if (arrayCreditosACobrar[2] != null) {
-					creditoARealizar
-							.setNumeroPrestacaoCredito((Short) arrayCreditosACobrar[2]);
-
+					creditoARealizar.setNumeroPrestacaoCredito((Short) arrayCreditosACobrar[2]);
 				}
 
-				// valor de credito - item 3
 				if (arrayCreditosACobrar[3] != null) {
-					creditoARealizar
-							.setValorCredito((BigDecimal) arrayCreditosACobrar[3]);
-
+					creditoARealizar.setValorCredito((BigDecimal) arrayCreditosACobrar[3]);
 				}
 
-				// valor residual mes anterior - item 4
 				if (arrayCreditosACobrar[4] != null) {
-					creditoARealizar
-							.setValorResidualMesAnterior((BigDecimal) arrayCreditosACobrar[4]);
+					creditoARealizar.setValorResidualMesAnterior((BigDecimal) arrayCreditosACobrar[4]);
 				}
 
-				// credito tipo - item 5
 				if (arrayCreditosACobrar[5] != null) {
-					CreditoTipo creditoTipo = new CreditoTipo();
-					creditoTipo.setId((Integer) arrayCreditosACobrar[5]);
+					CreditoTipo creditoTipo = new CreditoTipo((Integer) arrayCreditosACobrar[5]);
 					creditoARealizar.setCreditoTipo(creditoTipo);
-
 				}
 
-				// lancamento item contabil - item 6
 				if (arrayCreditosACobrar[6] != null) {
-					LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
-					lancamentoItemContabil
-							.setId((Integer) arrayCreditosACobrar[6]);
-					creditoARealizar
-							.setLancamentoItemContabil(lancamentoItemContabil);
+					LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil((Integer) arrayCreditosACobrar[6]);
+					creditoARealizar.setLancamentoItemContabil(lancamentoItemContabil);
 				}
 
-				// lancamento - item 7
 				if (arrayCreditosACobrar[7] != null) {
-					Localidade localidade = new Localidade();
-					localidade.setId((Integer) arrayCreditosACobrar[7]);
+					Localidade localidade = new Localidade((Integer) arrayCreditosACobrar[7]);
 					creditoARealizar.setLocalidade(localidade);
 				}
 
-				// quadra - item 8
 				if (arrayCreditosACobrar[8] != null) {
-					Quadra quadra = new Quadra();
-					quadra.setId((Integer) arrayCreditosACobrar[8]);
+					Quadra quadra = new Quadra((Integer) arrayCreditosACobrar[8]);
 					creditoARealizar.setQuadra(quadra);
 				}
 
-				// codigo setor comercial - item 9
 				if (arrayCreditosACobrar[9] != null) {
-					creditoARealizar
-							.setCodigoSetorComercial((Integer) arrayCreditosACobrar[9]);
+					creditoARealizar.setCodigoSetorComercial((Integer) arrayCreditosACobrar[9]);
 				}
 
-				// numero quadra - item 10
 				if (arrayCreditosACobrar[10] != null) {
-					creditoARealizar
-							.setNumeroQuadra((Integer) arrayCreditosACobrar[10]);
+					creditoARealizar.setNumeroQuadra((Integer) arrayCreditosACobrar[10]);
 				}
 
-				// numero lote - item 11
 				if (arrayCreditosACobrar[11] != null) {
-					creditoARealizar
-							.setNumeroLote((Short) arrayCreditosACobrar[11]);
+					creditoARealizar.setNumeroLote((Short) arrayCreditosACobrar[11]);
 				}
 
-				// numero sublote - item 12
 				if (arrayCreditosACobrar[12] != null) {
-					creditoARealizar
-							.setNumeroSubLote((Short) arrayCreditosACobrar[12]);
+					creditoARealizar.setNumeroSubLote((Short) arrayCreditosACobrar[12]);
 				}
 
-				// ano mes referencia credito - item 13
 				if (arrayCreditosACobrar[13] != null) {
-					creditoARealizar
-							.setAnoMesReferenciaCredito((Integer) arrayCreditosACobrar[13]);
+					creditoARealizar.setAnoMesReferenciaCredito((Integer) arrayCreditosACobrar[13]);
 				}
 
-				// ano mes cobranca credito - item 14
 				if (arrayCreditosACobrar[14] != null) {
-					creditoARealizar
-							.setAnoMesCobrancaCredito((Integer) arrayCreditosACobrar[14]);
+					creditoARealizar.setAnoMesCobrancaCredito((Integer) arrayCreditosACobrar[14]);
 				}
 
-				// CreditoOrigem - item 15
 				if (arrayCreditosACobrar[15] != null) {
-
-					CreditoOrigem creditoOrigem = new CreditoOrigem();
-					creditoOrigem.setId((Integer) arrayCreditosACobrar[15]);
-
+					CreditoOrigem creditoOrigem = new CreditoOrigem((Integer) arrayCreditosACobrar[15]);
 					creditoARealizar.setCreditoOrigem(creditoOrigem);
 				}
 
-				/*
-				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criação do bonus para parcelamento com RD especial
-				 */
-				// numero de parcelas bonus - item 16
 				if (arrayCreditosACobrar[16] != null) {
-					creditoARealizar
-							.setNumeroParcelaBonus((Short) arrayCreditosACobrar[16]);
+					creditoARealizar.setNumeroParcelaBonus((Short) arrayCreditosACobrar[16]);
 				}
 
 				if (arrayCreditosACobrar[17] != null) {
-					creditoARealizar
-							.setGeracaoCredito((Date) arrayCreditosACobrar[17]);
+					creditoARealizar.setGeracaoCredito((Date) arrayCreditosACobrar[17]);
 				}
 				
 				if (arrayCreditosACobrar[18] != null) {
 					creditoARealizar.setAnoMesReferenciaPrestacao((Integer) arrayCreditosACobrar[18]);
 				}
-
 				creditosARealizar.add(creditoARealizar);
 			}
 		}
-
 		return creditosARealizar;
-
 	}
 
 	/**
@@ -67021,47 +66967,20 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		GerarCreditoRealizadoHelper helper = new GerarCreditoRealizadoHelper();
 
-		// Pesquisa os créditos a realizar do imóvel
-		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
-		
-		// caso seja por pré-faturar, Impressão Simultânea, pesquisar os
-		// créditos de Nitrato
-		// também que foram gerados com a situação Pré-Faturada
-		if (preFaturamento) {
-			// Pesquisa os créditos a realizar do imóvel
-			Collection colecaoCreditosARealizarNitrato = this
-					.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.PRE_FATURADA, anoMesFaturamento);
-
-			if (colecaoCreditosARealizarNitrato != null && !colecaoCreditosARealizarNitrato.isEmpty()) {
-
-				if (colecaoCreditosARealizar == null) {
-					colecaoCreditosARealizar = new ArrayList();
-				}
-
-				colecaoCreditosARealizar.addAll(colecaoCreditosARealizarNitrato);
-			}
-		}
+		Collection colecaoCreditosARealizar = obterTodosCreditosARealizarImovel(imovel, anoMesFaturamento, preFaturamento);
 
 		Collection colecaoCreditosARealizarUpdate = new ArrayList();
 
-		// Cria o map para armazenar os créditos realizados junto com os
-		// créditos ralizados por categoria
 		Map<CreditoRealizado, Collection<CreditoRealizadoCategoria>> mapCreditoRealizado = null;
-		// Cria o map para armazenar os créditos a realizar com seus valores por
-		// tipo
 		Map<CreditoTipo, BigDecimal> mapValoresPorTipoCredito = null;
 		
 		BigDecimal valorTotalCreditos = BigDecimal.ZERO;
 
 		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
-			logger.info("********* Imovel:" + imovel.getId() + " - Quantidade de creditos a realizar: " + colecaoCreditosARealizar.size());
-			
 			mapCreditoRealizado = new HashMap();
 			mapValoresPorTipoCredito = new HashMap<CreditoTipo, BigDecimal>();
 
-			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
-			
 			AtualizacaoCreditoARealizarHelper atualizacaoHelper = new FaturamentoUtil().atualizarCreditosARealizar(anoMesFaturamento
 			        , colecaoCreditosARealizar
 			        , helperValoresAguaEsgoto.getValorTotalAgua()
@@ -67071,119 +66990,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			for(ItemCreditoARealizar itemCredito : atualizacaoHelper.getCreditos()){
 			    CreditoARealizar creditoARealizar = itemCredito.getCreditoARelizar();
 			    
-				// Se a atividade é faturar grupo de faturamento
 				if (gerarAtividadeGrupoFaturamento) {
 
-					// Cria o crédito realizado
-					CreditoRealizado creditoRealizado = new CreditoRealizado();
-					creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
-					creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
-					creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
-					creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
-					creditoRealizado.setQuadra(creditoARealizar.getQuadra());
-					creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
-					creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
-					creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
-					creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
-					creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
-					creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
-					creditoRealizado.setValorCredito(itemCredito.getCreditoCalculado());
-					creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
-					creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
-					creditoRealizado.setNumeroParcelaBonus(creditoARealizar.numeroParcelaBonus());
-					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
-					creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
+					CreditoRealizado creditoRealizado = criarCreditoRealizado(itemCredito);
+					Collection colecaoCreditosRealizadoCategoria = criarCreditoRealizadoCategoria(creditoRealizado, itemCredito);
 
-					// Pesquisa os créditos a realizar categoria
-					Collection colecaoCreditoARealizarCategoria = this.obterCreditoRealizarCategoria(creditoARealizar.getId());
-
-					Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria.iterator();
-
-					// Crédito a realizar categoria
-					CreditoARealizarCategoria creditoARealizarCategoria = null;
-
-					Collection colecaoCategoriasObterValor = new ArrayList();
-
-					// Laço para recuperar as categorias do crédito a
-					// realizar
-					while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
-						creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator.next();
-						Categoria categoria = new Categoria();
-						categoria.setId(creditoARealizarCategoria.getCategoria().getId());
-						categoria.setQuantidadeEconomiasCategoria(creditoARealizarCategoria.getQuantidadeEconomia());
-						colecaoCategoriasObterValor.add(categoria);
-					}
-
-					// Obter os valores das categorias por categoria do
-					// credito a realizar categoria
-					Collection colecaoCategoriasCalculadasValor = getControladorImovel().obterValorPorCategoria(colecaoCategoriasObterValor, itemCredito.getCreditoCalculado());
-
-					Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor.iterator();
-					Iterator colecaoCategoriasObterValorIterator = colecaoCategoriasObterValor.iterator();
-
-					// Cria os créditos a realizar por categoria
-					CreditoRealizadoCategoria creditoRealizadoCategoria = null;
-					Collection colecaoCreditosRealizadoCategoria = new ArrayList();
-
-					while (colecaoCategoriasCalculadasValorIterator.hasNext() && colecaoCategoriasObterValorIterator.hasNext()) {
-						// Obtém o valor por categoria
-						BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
-
-						// Obtém a categoria
-						Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
-
-						// Cria o crédito a ralizar por categoria
-						creditoRealizadoCategoria = new CreditoRealizadoCategoria();
-						CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
-						creditoRealizadoCategoriaPk.setCategoria(categoria);
-						creditoRealizadoCategoriaPk.setCreditoRealizado(creditoRealizado);
-						creditoRealizadoCategoria.setComp_id(creditoRealizadoCategoriaPk);
-						creditoRealizadoCategoria.setValorCategoria(valorPorCategoria);
-						creditoRealizadoCategoria.setCreditoRealizado(creditoRealizado);
-						creditoRealizadoCategoria.setCategoria(categoria);
-						creditoRealizadoCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
-						colecaoCreditosRealizadoCategoria.add(creditoRealizadoCategoria);
-					}
-
-					if (colecaoCategoriasCalculadasValor != null) {
-						colecaoCategoriasCalculadasValor.clear();
-						colecaoCategoriasCalculadasValor = null;
-
-					}
-
-					// Armazena o credito realizado junto com os créditos
-					// realizados por categoria
 					mapCreditoRealizado.put(creditoRealizado, colecaoCreditosRealizadoCategoria);
 
-					// Adiciona o crédito a realizar para ser atualizado
 					colecaoCreditosARealizarUpdate.add(creditoARealizar);
+				}
 
-				}// fim atividade se grupo faturamento
-
-				/*
-				 * Desenvolvedor: Hugo Amorim Analista:Jeferson Pedrosa Data:
-				 * 29/07/2010
-				 * 
-				 * [CRC4457] Colecionar os valores que compõem os totais de
-				 * débito e créditos nas tabelas
-				 * resumo_faturamento_simulado_detalhe_debito e
-				 * resumo_faturamento_simulado_detalhe_credito respectivamente.
-				 */
-				// Verifica se debito a cobrar já foi inserido, caso sim
-				// acumala os valores.
 				if (mapValoresPorTipoCredito.containsKey(creditoARealizar.getCreditoTipo())) {
 					BigDecimal valor = mapValoresPorTipoCredito.get(creditoARealizar.getCreditoTipo());
 					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), Util.somaBigDecimal(valor, itemCredito.getCreditoCalculado()));
-				}
-				// Caso contrario inseri na coleção
-				// primeiro registro do tipo.
-				else {
+				} else {
 					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), itemCredito.getCreditoCalculado());
 				}
-			}// fim laço de credito a realizar
-			
+			}
 			valorTotalCreditos = atualizacaoHelper.getValorTotalCreditos();
-		}// fim do creditos a realizar
+		}
 
 		helper.setValorTotalCredito(valorTotalCreditos);
 		helper.setColecaoCreditoARealizar(colecaoCreditosARealizarUpdate);
@@ -67191,6 +67016,112 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		helper.setMapValoresPorTipoCredito(mapValoresPorTipoCredito);
 
 		return helper;
+	}
+
+	private Collection obterTodosCreditosARealizarImovel(Imovel imovel, Integer anoMesFaturamento, boolean preFaturamento) throws ControladorException {
+		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovelPorSituacao(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamento, preFaturamento);
+		
+		if (preFaturamento) {
+			colecaoCreditosARealizar = obterCreditosARealizarPFdoImovel(imovel, anoMesFaturamento, colecaoCreditosARealizar);
+		}
+		return colecaoCreditosARealizar;
+	}
+
+	private Collection obterCreditosARealizarPFdoImovel(Imovel imovel, Integer anoMesFaturamento, Collection colecaoCreditosARealizar)
+			throws ControladorException {
+		Collection colecaoCreditosARealizarPF = this.obterCreditoARealizarImovelPorSituacao(imovel.getId(), DebitoCreditoSituacao.PRE_FATURADA, anoMesFaturamento, true);
+		
+		if (colecaoCreditosARealizarPF != null && !colecaoCreditosARealizarPF.isEmpty()) {
+			if (colecaoCreditosARealizar == null) {
+				colecaoCreditosARealizar = new ArrayList();
+			}
+			colecaoCreditosARealizar.addAll(colecaoCreditosARealizarPF);
+		}
+		return colecaoCreditosARealizar;
+	}
+
+	private Collection criarCreditoRealizadoCategoria(CreditoRealizado creditoRealizado, ItemCreditoARealizar itemCredito) 
+			throws ControladorException {
+		CreditoRealizadoCategoria creditoRealizadoCategoria = null;
+		
+		Collection colecaoCategorias = obterCreditoARealizarCategoria(itemCredito.getCreditoARelizar());
+
+		Collection colecaoCreditosRealizadoCategoria = new ArrayList();
+		Collection colecaoCategoriasCalculadasValor = getControladorImovel().obterValorPorCategoria(colecaoCategorias, itemCredito.getCreditoCalculado());
+		Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor.iterator();
+		
+		
+		Iterator colecaoCategoriasObterValorIterator = colecaoCategorias.iterator();
+		
+		while (colecaoCategoriasCalculadasValorIterator.hasNext() && colecaoCategoriasObterValorIterator.hasNext()) {
+			BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
+			Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
+
+			// Cria o crédito a ralizar por categoria
+			creditoRealizadoCategoria = new CreditoRealizadoCategoria();
+			CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
+			creditoRealizadoCategoriaPk.setCategoria(categoria);
+			creditoRealizadoCategoriaPk.setCreditoRealizado(creditoRealizado);
+			creditoRealizadoCategoria.setComp_id(creditoRealizadoCategoriaPk);
+			creditoRealizadoCategoria.setValorCategoria(valorPorCategoria);
+			creditoRealizadoCategoria.setCreditoRealizado(creditoRealizado);
+			creditoRealizadoCategoria.setCategoria(categoria);
+			creditoRealizadoCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+			colecaoCreditosRealizadoCategoria.add(creditoRealizadoCategoria);
+		}
+		
+		if (colecaoCategoriasCalculadasValor != null) {
+			colecaoCategoriasCalculadasValor.clear();
+			colecaoCategoriasCalculadasValor = null;
+
+		}
+		
+		return colecaoCreditosRealizadoCategoria;
+	}
+
+	private Collection obterCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
+		Collection colecaoCategorias = new ArrayList();
+		
+		CreditoARealizarCategoria creditoARealizarCategoria = null;
+		
+		Collection colecaoCreditoARealizarCategoria = this.obterCreditoRealizarCategoria(creditoARealizar.getId());
+		Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria.iterator();
+
+		while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
+			creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator.next();
+			Categoria categoria = new Categoria();
+			categoria.setId(creditoARealizarCategoria.getCategoria().getId());
+			categoria.setQuantidadeEconomiasCategoria(creditoARealizarCategoria.getQuantidadeEconomia());
+			colecaoCategorias.add(categoria);
+		}
+		return colecaoCategorias;
+	}
+
+	private CreditoRealizado criarCreditoRealizado(ItemCreditoARealizar itemCreditoARealizar) {
+		
+		CreditoARealizar creditoARealizar = itemCreditoARealizar.getCreditoARelizar();
+		
+		CreditoRealizado creditoRealizado = new CreditoRealizado();
+		
+		creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+		creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+		creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+		creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
+		creditoRealizado.setQuadra(creditoARealizar.getQuadra());
+		creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+		creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+		creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+		creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+		creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+		creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
+		creditoRealizado.setValorCredito(itemCreditoARealizar.getCreditoCalculado());
+		creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+		creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
+		creditoRealizado.setNumeroParcelaBonus(creditoARealizar.numeroParcelaBonus());
+		creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
+		creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
+		
+		return creditoRealizado;
 	}
 
 	public Conta gerarConta(

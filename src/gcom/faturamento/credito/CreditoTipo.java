@@ -10,66 +10,34 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class CreditoTipo extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 
-	public final static Integer DESCONTO_ACRESCIMOS_IMPONTUALIDADE = new Integer(1);
-
-	public final static Integer DESCONTO_ANTIGUIDADE_DEBITO = new Integer(2);
-
-	public final static Integer DESCONTO_INATIVIDADE_LIGACAO_AGUA = new Integer(3);
-
-	public final static Integer CREDITOS_ANTERIORES = new Integer(4);
-
-	public final static Integer DEVOLUCAO_PAGAMENTOS_DUPLICIDADE = new Integer(5);
-
-	public final static Integer DEVOLUCAO_OUTROS_VALORES = new Integer(7);
-
-	public final static Integer DESCONTOS_CONCEDIDOS = new Integer(8);
-
-	public final static Integer DEVOLUCAO_ACRESCIMOS_IMPONTUALIDADE = new Integer(9);
-	
-	public final static Integer DESCONTO_SANCOES = new Integer(10);
-	
-	public final static Integer DESCONTO_TARIFA_SOCIAL = new Integer(11);
-	
 	public final static Integer CREDITO_NITRATO = new Integer(0);
-	
+	public final static Integer DESCONTO_ACRESCIMOS_IMPONTUALIDADE = new Integer(1);
+	public final static Integer DESCONTO_ANTIGUIDADE_DEBITO = new Integer(2);
+	public final static Integer DESCONTO_INATIVIDADE_LIGACAO_AGUA = new Integer(3);
+	public final static Integer CREDITOS_ANTERIORES = new Integer(4);
+	public final static Integer DEVOLUCAO_PAGAMENTOS_DUPLICIDADE = new Integer(5);
+	public final static Integer DEVOLUCAO_OUTROS_VALORES = new Integer(7);
+	public final static Integer DESCONTOS_CONCEDIDOS = new Integer(8);
+	public final static Integer DEVOLUCAO_ACRESCIMOS_IMPONTUALIDADE = new Integer(9);
+	public final static Integer DESCONTO_SANCOES = new Integer(10);
+	public final static Integer DESCONTO_TARIFA_SOCIAL = new Integer(11);
 	public final static Integer PAGAMENTO_PARCIAL = new Integer(856);
-
 	public final static Integer PAGAMENTO_NAO_CONFERE = new Integer(860);
 	
-
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricao;
-
-	/** nullable persistent field */
 	private String descricaoAbreviada;
-
-	/** nullable persistent field */
 	private Integer indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** nullable persistent field */
 	private BigDecimal valorLimite;
-
-	/** nullable persistent field */
 	private Short indicadorGeracaoAutomatica;
-
-	/** nullable persistent field */
 	private LancamentoItemContabil lancamentoItemContabil;
-    
-    /** nullable persistent field */
     private Integer codigoConstante;
 
-	/** full constructor */
-	public CreditoTipo(String descricao, String descricaoAbreviada,
+    public CreditoTipo(String descricao, String descricaoAbreviada,
 			Integer indicadorUso, Date ultimaAlteracao, BigDecimal valorLimite,
 			Short indicadorGeracaoAutomatica,
 			LancamentoItemContabil lancamentoItemContabil) {
@@ -82,24 +50,14 @@ public class CreditoTipo extends ObjetoTransacao {
 		this.lancamentoItemContabil = lancamentoItemContabil;
 	}
 
-	/** default constructor */
 	public CreditoTipo() {
 	}
 	
-	/**
-	 * [UC0745] - Gerar Arquivo Texto para Faturamento
-	 * 
-	 * Construtor de CreditoTipo 
-	 * 
-	 * @param id
-	 * @param descricao
-	 */
 	public CreditoTipo(Integer id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	// Construido por Sávio Luiz para setar o id no objeto
 	public CreditoTipo(Integer id) {
 		this.id = id;
 	}
@@ -168,8 +126,7 @@ public class CreditoTipo extends ObjetoTransacao {
 		return lancamentoItemContabil;
 	}
 
-	public void setLancamentoItemContabil(
-			LancamentoItemContabil lancamentoItemContabil) {
+	public void setLancamentoItemContabil(LancamentoItemContabil lancamentoItemContabil) {
 		this.lancamentoItemContabil = lancamentoItemContabil;
 	}
 
@@ -182,10 +139,8 @@ public class CreditoTipo extends ObjetoTransacao {
 	public Filtro retornaFiltro() {
 		FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
 
-		filtroCreditoTipo.adicionarParametro(new ParametroSimples(
-				FiltroCreditoTipo.ID, this.getId()));
-		filtroCreditoTipo
-				.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
+		filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, this.getId()));
+		filtroCreditoTipo.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
 
 		return filtroCreditoTipo;
 	}
@@ -208,12 +163,9 @@ public class CreditoTipo extends ObjetoTransacao {
 		boolean retorno = false;
 		
 		if (obj instanceof CreditoTipo) {
-			
 			CreditoTipo castOther = (CreditoTipo) obj;
-			
 			retorno = this.getId().compareTo(castOther.getId())==0;
 		}
-		
 		return retorno;
 	}
 
@@ -221,6 +173,4 @@ public class CreditoTipo extends ObjetoTransacao {
 	public int hashCode() {
 		return this.getId();
 	}
-    
-    
 }

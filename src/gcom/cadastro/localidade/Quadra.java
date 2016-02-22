@@ -111,23 +111,19 @@ public class Quadra extends ObjetoTransacao {
 		this.quadraPerfil = quadraPerfil;
 	}
 
-	/** default constructor */
 	public Quadra() {
 	}
 
-	/** minimal constructor */
 	public Quadra(Integer id, int numeroQuadra, Rota rota) {
 		this.id = id;
 		this.numeroQuadra = numeroQuadra;
 		this.rota = rota;
 	}
 
-	// Construido por Sávio Luiz para setar o id no objeto
 	public Quadra(Integer id) {
 		this.id = id;
 	}
 
-	/** constructor */
 	public Quadra(int descricao, Rota rota,
 			IbgeSetorCensitario ibgeSetorCensitario,
 			gcom.cadastro.localidade.SetorComercial setorComercial,

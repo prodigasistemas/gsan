@@ -7,7 +7,12 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.jboss.logging.Logger;
+
 public class FaturamentoUtil {
+	
+	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
+	
     public AtualizacaoCreditoARealizarHelper atualizarCreditosARealizar(Integer anoMesFaturamento
             , Collection<CreditoARealizar> creditos
             , BigDecimal valorAgua
@@ -35,6 +40,11 @@ public class FaturamentoUtil {
         while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
             creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+            
+            logger.info("      ANTES -----> " + creditoARealizar.getId() + " : " + creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
+                    + creditoARealizar.getValorTotal() + " credito : "
+                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
+                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
             
             BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria(preFaturamento).add(creditoARealizar.getValorResidualMesAnterior());
             
@@ -69,6 +79,11 @@ public class FaturamentoUtil {
 
             valorTotalCreditos = valorTotalCreditos.add(valorCredito);
 
+            logger.info("      DEPOIS -----> " + creditoARealizar.getId() + " : " + creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
+                    + creditoARealizar.getValorTotal() + " credito : "
+                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
+                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+            
             helper.addCreditoARealizar(valorCredito, creditoARealizar);
         }
         

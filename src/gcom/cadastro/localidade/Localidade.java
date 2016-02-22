@@ -84,7 +84,6 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 		this.codigoICMS = codigoICMS;
 	}
 
-	/** full constructor */
 	public Localidade(Integer id, String descricao, String numeroImovel,
 			String complementoEndereco, String fone, String ramalfone,
 			String fax, String email, int consumoGrandeUsuario,
@@ -115,16 +114,13 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 		this.logradouroBairro = logradouroBairro;
 	}
 
-	/** default constructor */
 	public Localidade() {
 	}
 
-	// Construido por Sávio Luiz para setar o id no objeto
 	public Localidade(Integer id) {
 		this.id = id;
 	}
 
-	/** minimal constructor */
 	public Localidade(Integer id, String descricao, String fone,
 			String ramalfone, int consumoGrandeUsuario,
 			gcom.cadastro.localidade.LocalidadePorte localidadePorte,
