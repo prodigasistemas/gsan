@@ -644,7 +644,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "from gcom.faturamento.consumotarifa.ConsumoTarifaVigencia ctv "
 					+ "inner join ctv.consumoTarifa ct "
 					+ "where ctv.dataVigencia < :dataLeituraAnterior and ct.id = :idConsumoTarifa "
-					+ "order by ctv.dataVigencia ";
+					+ "order by ctv.dataVigencia desc";
 
 			retorno = session.createQuery(consulta).setInteger(
 					"idConsumoTarifa", consumoTarifa.getId().intValue())
