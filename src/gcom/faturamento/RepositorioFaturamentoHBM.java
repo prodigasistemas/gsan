@@ -2434,7 +2434,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @exception ErroRepositorioException
 	 */
 	public Collection pesquisarCreditoARealizar(Integer imovelId,
-			Integer debitoCreditoSituacaoAtualId, int anoMesFaturamento)
+			Integer debitoCreditoSituacaoAtualId, int anoMesFaturamentoGrupo, SistemaParametro sistemaParametro)
 			throws ErroRepositorioException {
 		Collection retorno = null;
 
@@ -2478,9 +2478,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and (crar.crar_nnprestacaorealizadas<"
 					+ "      (crar.crar_nnprestacaocredito - coalesce(crar.crar_nnparcelabonus, 0)) "
 					+ "      or crar.crar_vlresidualmesanterior>0 "
-					+ "      or crar.crar_amreferenciaprestacao = :anoMesFaturamento) "
+					+ "      or crar.crar_amreferenciaprestacao = :anoMesFaturamentoGrupo) "
 					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>0 or (parc.parc_id is not null "
-					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ) ";
+					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamentoSistemaParametro) ) ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idCreditoARealizar", Hibernate.INTEGER)
@@ -2504,7 +2504,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("refPrestacao", Hibernate.INTEGER)
 					.setInteger("imovelId", imovelId.intValue())
 					.setInteger( "debitoCreditoSituacaoAtualId", debitoCreditoSituacaoAtualId)
-					.setInteger( "anoMesFaturamento", anoMesFaturamento).list();
+					.setInteger( "anoMesFaturamentoSistemaParametro", sistemaParametro.getAnoMesFaturamento())
+					.setInteger( "anoMesFaturamentoGrupo", anoMesFaturamentoGrupo).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -60571,4 +60572,37 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
+			Integer anoMesReferencia) throws ErroRepositorioException {
+
+		FaturamentoAtividadeCronograma retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = "select fac from FaturamentoAtividadeCronograma fac "
+					+ "inner join fac.faturamentoAtividade fa "
+					+ "inner join fac.faturamentoGrupoCronogramaMensal fcm "
+					+ "inner join fcm.faturamentoGrupo fg "
+					+ "where fg.id = :faturamentoGrupoId and fa.id = :faturamentoAtividadeId "
+					+ "and fcm.anoMesReferencia = :anoMesReferencia";
+
+			retorno = (FaturamentoAtividadeCronograma) session.createQuery(consulta)
+					.setInteger("faturamentoGrupoId", faturamentoGrupoId.intValue())
+					.setInteger("faturamentoAtividadeId",faturamentoAtividadeId)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
 }

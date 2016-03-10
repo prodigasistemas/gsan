@@ -195,7 +195,7 @@ public interface IRepositorioFaturamento {
 	public Collection pesquisarDebitosACobrar(Integer imovelId, Integer debitoCreditoSituacaoAtualId) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarCreditoARealizar(Integer imovelId, Integer debitoCreditoSituacaoAtualId, int anoMesFaturamento) throws ErroRepositorioException;
+	public Collection pesquisarCreditoARealizar(Integer imovelId, Integer debitoCreditoSituacaoAtualId, int anoMesFaturamentoGrupo, SistemaParametro sistemaParametro) throws ErroRepositorioException;
 
 	public void inserirResumoFaturamentoAnoMesReferencia(ResumoFaturamento resumoFaturamento) throws ErroRepositorioException;
 
@@ -3025,4 +3025,7 @@ public interface IRepositorioFaturamento {
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException;
 
 	public void concluirFaturamentoConta(Integer id) throws ErroRepositorioException;
+	
+	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
+			Integer anoMesReferencia) throws ErroRepositorioException;
 }

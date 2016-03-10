@@ -6404,7 +6404,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 	 */
 	public boolean verificarNaoGeracaoConta(Imovel imovel,
 			BigDecimal valorTotalAgua, BigDecimal valorTotalEsgoto,
-			int anoMesFaturamento) throws ControladorException {
+			int anoMesFaturamentoGrupo) throws ControladorException {
 
 		boolean retorno = true;
 		boolean primeiraCondicao = false;
@@ -6430,7 +6430,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 		 * Colocado por Raphael Rossiter em 20/03/2007
 		 */
 		colecaoDebitosACobrar = this.obterDebitoACobrarImovel(imovel.getId(),
-				DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
+				DebitoCreditoSituacao.NORMAL, anoMesFaturamentoGrupo);
 
 		/*
 		 * Não existam débitos a cobrar (não existem débitos na tabela
@@ -6449,9 +6449,9 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 		} else {
 
 			try {
+				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 				colecaoCreditosARealizar = repositorioFaturamento
-						.pesquisarCreditoARealizar(imovel.getId(),
-								DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
+						.pesquisarCreditoARealizar(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamentoGrupo, sistemaParametro);
 
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
@@ -6607,8 +6607,8 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 				if (ligacaoAgua.getDataCorte() != null) {
 
 					Date dataAnoMesFaturamento = Util.criarData(1, Util
-							.obterMes(anoMesFaturamento), Util
-							.obterAno(anoMesFaturamento));
+							.obterMes(anoMesFaturamentoGrupo), Util
+							.obterAno(anoMesFaturamentoGrupo));
 
 					Date dataAnoMesFaturamentoMenos2Anos = Util
 							.subtrairNumeroAnosDeUmaData(dataAnoMesFaturamento,
