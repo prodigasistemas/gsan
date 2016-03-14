@@ -6540,8 +6540,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			dataVigenciaFinalMaisUmDia.setTime(dataVigenciaFinal);
 			dataVigenciaFinalMaisUmDia.add(Calendar.DATE, 1);
 
-			// Data de vigência inicial = data da vigência final + 1 dia
-			dataVigenciaInicial = dataVigenciaFinalMaisUmDia.getTime();
+			if (dataVigenciaFinal.before(dataLeituraAnterior)) {
+				dataVigenciaInicial = dataLeituraAnterior;
+			} else {
+				dataVigenciaInicial = dataVigenciaFinalMaisUmDia.getTime();;
+			}
 
 			// Acumulando os valores calculados
 			colecaoRetorno.addAll(calculoSimplesUmaTarifaColecao);
