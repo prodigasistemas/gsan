@@ -10190,7 +10190,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				idContaGerada = idContaGerado;
 
-				this.inserirClienteConta(contaInserir, imovel);
+				this.inserirClienteContaRetificacao(contaInserir, contaAtual.getId());
 				
                 if (calcularValoresConta != null && !calcularValoresConta.isEmpty()){
                     CalcularValoresAguaEsgotoHelper valorConta = calcularValoresConta.iterator().next();
@@ -75938,6 +75938,26 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	private void inserirClienteContaRetificacao(Conta contaRetificada, Integer idContaCanceladaPorRetificacao) throws ControladorException {
+		Collection<IClienteConta> listaClienteConta = null;
+		try {
+			listaClienteConta = repositorioFaturamento.pesquisarClienteConta(idContaCanceladaPorRetificacao);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		
+		for (IClienteConta clienteConta : listaClienteConta) {
+			ClienteConta clienteContaRetificada = new ClienteConta();
+			clienteContaRetificada.setCliente(clienteConta.getCliente());
+			clienteContaRetificada.setClienteRelacaoTipo(clienteConta.getClienteRelacaoTipo());
+			clienteContaRetificada.setConta(contaRetificada);
+			clienteContaRetificada.setIndicadorNomeConta(clienteConta.getIndicadorNomeConta());
+			clienteContaRetificada.setUltimaAlteracao(new Date());
+			
+			getControladorUtil().inserir(clienteContaRetificada);
 		}
 	}
 }
