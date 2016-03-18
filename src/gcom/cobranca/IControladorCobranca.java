@@ -58,6 +58,7 @@ import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHe
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
 import gcom.gui.relatorio.cobranca.FiltroRelatorioDocumentosAReceberHelper;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
@@ -284,18 +285,7 @@ public interface IControladorCobranca {
 			Imovel imovelCondominio, String anoMesFaturamento)
 			throws ControladorException;
 
-	/**
-	 * Consultar Matriculas dos Imoveis Vinculados do Imovel condominio Auhtor:
-	 * Rafael Santos Data: 23/01/2006 [UC0179] Consultar Historico Medição
-	 * Indiviualizada
-	 * 
-	 * @param consumoHistorico
-	 *            Consumo Historico
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection consultarConsumoHistoricoImoveisVinculados(
-			ConsumoHistorico consumoHistorico) throws ControladorException;
+	public Collection consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ControladorException;
 
 	/**
 	 * Consultar Dados Consumo Tipo Imovel Auhtor: Rafael Santos Data:

@@ -1,5 +1,34 @@
 package gcom.micromedicao;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.CallbackException;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -20,12 +49,12 @@ import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
-import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTextoHelper;
 import gcom.gui.relatorio.micromedicao.RelatorioNotificacaoDebitosImpressaoSimultaneaHelper;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
 import gcom.micromedicao.bean.ImovelPorRotaHelper;
 import gcom.micromedicao.bean.LigacaoMedicaoIndividualizadaHelper;
@@ -72,35 +101,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.CallbackException;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 
 /**
@@ -2290,23 +2290,27 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Collection consultarConsumoHistoricoImoveisVinculados(
-			ConsumoHistorico consumoHistorico) throws ErroRepositorioException {
+	public Collection<Integer> consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumo) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		Collection<Integer> retorno;
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
 		try {
-			consulta = "SELECT imovel.id " 
-					 + "FROM ConsumoHistorico consumo "
-					 + 		"INNER JOIN consumo.imovel imovel "
-					 + "WHERE consumo.consumoImovelCondominio = :id " 
-					 + "ORDER BY imovel.indicadorImovelAreaComum";
+		    StringBuilder sql = new StringBuilder();
+		    sql.append("SELECT imovel.id ")
+		    .append(" FROM ConsumoHistorico consumo ")
+		    .append(" INNER JOIN consumo.imovel imovel")
+		    .append(" WHERE consumo.imovel.imovelCondominio.id = :idImovelCondominio ")
+		    .append(" and consumo.referenciaFaturamento = :referencia")
+		    .append(" and consumo.ligacaoTipo.id = :tipoLigacao")
+		    .append(" ORDER BY imovel.indicadorImovelAreaComum");
 
-			retorno = session.createQuery(consulta)
-							 .setInteger("id", consumoHistorico.getId())
+			retorno = session.createQuery(sql.toString())
+							 .setInteger("idImovelCondominio", consumo.getIdImovelCondominio())
+							 .setInteger("referencia", consumo.getReferencia())
+							 .setInteger("tipoLigacao", consumo.getTipoLigacao().getId())
 							 .list();
 
 		} catch (HibernateException e) {
