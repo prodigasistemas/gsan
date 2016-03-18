@@ -8764,46 +8764,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 */
 	public BigDecimal calcularValorTotalAguaOuEsgotoPorCategoria(
 			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoHelper,
-			String tipoRetorno) {
+            String tipoRetorno) {
 
-		BigDecimal retorno = new BigDecimal("0.00");
+        BigDecimal retorno = new BigDecimal("0.00");
 
-		if (calcularValoresAguaEsgotoHelper != null
-				&& !calcularValoresAguaEsgotoHelper.isEmpty()) {
+        if (calcularValoresAguaEsgotoHelper != null && !calcularValoresAguaEsgotoHelper.isEmpty()) {
+            
+            for (CalcularValoresAguaEsgotoHelper item : calcularValoresAguaEsgotoHelper) {
+            	if (tipoRetorno.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
+            		if (item.getValorFaturadoAguaCategoria() != null) {
+            			retorno = retorno.add(item.getValorFaturadoAguaCategoria());
+            		}
+            	}
+            	// Valor Faturado de Esgoto
+            	else {
+            		if (item.getValorFaturadoEsgotoCategoria() != null) {
+            			retorno = retorno.add(item.getValorFaturadoEsgotoCategoria());
+            		}
+            	}
+            }
+        }
 
-			Iterator calcularValoresAguaEsgotoHelperIt = calcularValoresAguaEsgotoHelper
-					.iterator();
-			CalcularValoresAguaEsgotoHelper calcularValoresAguaEsgotoHelperObjeto = null;
-
-			while (calcularValoresAguaEsgotoHelperIt.hasNext()) {
-
-				calcularValoresAguaEsgotoHelperObjeto = (CalcularValoresAguaEsgotoHelper) calcularValoresAguaEsgotoHelperIt
-						.next();
-
-				// Valor Faturado de Água
-				if (tipoRetorno
-						.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
-					if (calcularValoresAguaEsgotoHelperObjeto
-							.getValorFaturadoAguaCategoria() != null) {
-						retorno = retorno
-								.add(calcularValoresAguaEsgotoHelperObjeto
-										.getValorFaturadoAguaCategoria());
-					}
-				}
-				// Valor Faturado de Esgoto
-				else {
-					if (calcularValoresAguaEsgotoHelperObjeto
-							.getValorFaturadoEsgotoCategoria() != null) {
-						retorno = retorno
-								.add(calcularValoresAguaEsgotoHelperObjeto
-										.getValorFaturadoEsgotoCategoria());
-					}
-				}
-			}
-		}
-
-		return retorno;
-	}
+        return retorno;
+    }
 
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 12/01/2006
@@ -8815,46 +8798,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 */
 	public Integer calcularConsumoTotalAguaOuEsgotoPorCategoria(
 			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoHelper,
-			String tipoRetorno) {
+ String tipoRetorno) {
 
-		Integer retorno = new Integer("0");
+        Integer retorno = new Integer("0");
 
-		if (calcularValoresAguaEsgotoHelper != null
-				&& !calcularValoresAguaEsgotoHelper.isEmpty()) {
+        if (calcularValoresAguaEsgotoHelper != null && !calcularValoresAguaEsgotoHelper.isEmpty()) {
+            
+            for (CalcularValoresAguaEsgotoHelper item : calcularValoresAguaEsgotoHelper) {
+                if (tipoRetorno.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
+                    if (item.getConsumoFaturadoAguaCategoria() != null) {
+                        retorno = retorno + item.getConsumoFaturadoAguaCategoria();
+                    }
+                }
+                // Consumo Faturado de Esgoto
+                else {
+                    if (item.getConsumoFaturadoEsgotoCategoria() != null) {
+                        retorno = retorno + item.getConsumoFaturadoEsgotoCategoria();
+                    }
+                }
+            }
+        }
 
-			Iterator calcularValoresAguaEsgotoHelperIt = calcularValoresAguaEsgotoHelper
-					.iterator();
-			CalcularValoresAguaEsgotoHelper calcularValoresAguaEsgotoHelperObjeto = null;
-
-			while (calcularValoresAguaEsgotoHelperIt.hasNext()) {
-
-				calcularValoresAguaEsgotoHelperObjeto = (CalcularValoresAguaEsgotoHelper) calcularValoresAguaEsgotoHelperIt
-						.next();
-
-				// Consumo Faturado de Água
-				if (tipoRetorno
-						.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
-					if (calcularValoresAguaEsgotoHelperObjeto
-							.getConsumoFaturadoAguaCategoria() != null) {
-						retorno = retorno
-								+ calcularValoresAguaEsgotoHelperObjeto
-										.getConsumoFaturadoAguaCategoria();
-					}
-				}
-				// Consumo Faturado de Esgoto
-				else {
-					if (calcularValoresAguaEsgotoHelperObjeto
-							.getConsumoFaturadoEsgotoCategoria() != null) {
-						retorno = retorno
-								+ calcularValoresAguaEsgotoHelperObjeto
-										.getConsumoFaturadoEsgotoCategoria();
-					}
-				}
-			}
-		}
-
-		return retorno;
-	}
+        return retorno;
+    }
 
 	/**
 	 * [UC0145] - Inserir Conta [SF002] - Gerar dados da conta [SF003] - Gerar
@@ -10119,26 +10085,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer consumoTotalAgua = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_AGUA);
 
 				if (consumoTotalAgua.equals(new Integer("0"))) {
-					if (consumoAgua != null && !consumoAgua.trim().equalsIgnoreCase("")) {
-						contaInserir.setConsumoAgua(new Integer(consumoAgua));
-					} else {
-						contaInserir.setConsumoAgua(new Integer("0"));
-					}
+					contaInserir.atribuirConsumoAgua(consumoAgua);
 				} else {
 					contaInserir.setConsumoAgua(consumoTotalAgua);
 				}
+								
+				contaInserir.atribuirConsumoRateioAgua(contaAtual.getConsumoRateioAgua());
 				
-				if (contaAtual.getConsumoRateioAgua() != null) {
-				    contaInserir.setConsumoRateioAgua(contaAtual.getConsumoRateioAgua());
-				}else {
-					contaInserir.setConsumoRateioAgua(new Integer("0"));
-				}
-				
-				if (contaAtual.getConsumoRateioEsgoto() != null) {
-					contaInserir.setConsumoRateioEsgoto(contaAtual.getConsumoRateioEsgoto());
-				}else {
-				    contaInserir.setConsumoRateioEsgoto(new Integer("0"));
-				}
+				contaInserir.atribuirConsumoRateioEsgoto(contaAtual.getConsumoRateioEsgoto());
 
 				// CRC4202 - adicionado por Vivianne Sousa - 21/09/2010 -
 				if (atualizarLeituraAnteriorEAtualConta) {
@@ -10156,36 +10110,20 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer consumoTotalEsgoto = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
 
 				if (consumoTotalEsgoto.equals(new Integer("0"))) {
-					if (consumoEsgoto != null && !consumoEsgoto.trim().equalsIgnoreCase("")) {
-						contaInserir.setConsumoEsgoto(new Integer(consumoEsgoto));
-					} else {
-						contaInserir.setConsumoEsgoto(new Integer("0"));
-					}
+				    contaInserir.atribuirConsumoEsgoto(consumoEsgoto);
 				} else {
 					contaInserir.setConsumoEsgoto(consumoTotalEsgoto);
 				}
 
 				BigDecimal valorTotalAgua = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
-
 				contaInserir.setValorAgua(valorTotalAgua);
 
 				BigDecimal valorTotalEsgoto = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
-
 				contaInserir.setValorEsgoto(valorTotalEsgoto);
 				
-				if (contaAtual.getValorRateioAgua() != null) {
-					contaInserir.setValorRateioAgua(contaAtual.getValorRateioAgua());
-					contaInserir.setValorAgua(valorTotalAgua.add(contaAtual.getValorRateioAgua()));
-				} else {
-					contaInserir.setValorRateioAgua(new BigDecimal("0.00"));
-				}
-
-				if (contaAtual.getValorRateioEsgoto() != null){
-					contaInserir.setValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
-					contaInserir.setValorEsgoto(valorTotalEsgoto.add(contaAtual.getValorRateioEsgoto()));
-				}else{
-					contaInserir.setValorRateioEsgoto(new BigDecimal("0.00"));
-				}
+				contaInserir.atribuiValorRateioAgua(contaAtual.getValorRateioAgua());
+				
+				contaInserir.atribuiValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
 
 				BigDecimal valorTotalDebito = null;
 				BigDecimal valorTotalCredito = null;
@@ -10200,18 +10138,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				contaInserir.setDebitos(valorTotalDebito);
 				contaInserir.setValorCreditos(valorTotalCredito);
-
-				if (percentualEsgoto != null && !percentualEsgoto.trim().equalsIgnoreCase("")) {
-					contaInserir.setPercentualEsgoto(Util.formatarMoedaRealparaBigDecimal(percentualEsgoto));
-				} else {
-					contaInserir.setPercentualEsgoto(new BigDecimal("0.00"));
-				}
-
+				contaInserir.atribuiPercentualEsgoto(percentualEsgoto);
 				GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = gerarImpostosDeduzidosConta(contaAtual.getImovel().getId(), mesAnoConta,
 						valorTotalAgua, valorTotalEsgoto, valorTotalDebito, valorTotalCredito, false);
 
 				contaInserir.setValorImposto(impostosDeduzidosConta.getValorTotalImposto());
-
 				contaInserir.setDataValidadeConta(this.retornaDataValidadeConta(dataVencimentoConta));
 				contaInserir.setDataRetificacao((new GregorianCalendar()).getTime());
 				contaInserir.setDataEmissao((new GregorianCalendar()).getTime());
@@ -10235,34 +10166,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				contaInserir.setUsuario(usuarioLogado);
 
-				int numeroRetificacoes = 0;
 
-				if (contaAtual.getNumeroRetificacoes() != null) {
-					numeroRetificacoes = contaAtual.getNumeroRetificacoes();
-				}
-
-				numeroRetificacoes = numeroRetificacoes + 1;
-
-				contaInserir.setNumeroRetificacoes(numeroRetificacoes);
+				contaInserir.incrementaNumeroRetificacoes();
 				contaInserir.setFaturamentoGrupo(contaAtual.getFaturamentoGrupo());
 				contaInserir.setRota(contaAtual.getRota());
 				contaInserir.setNumeroFatura(null);
 				contaInserir.setAnoMesReferenciaBaixaSocial(null);
 				contaInserir.setNumeroAlteracoesVencimento(new Integer(0));
 				contaInserir.setUltimaAlteracao(new Date());
-
-				if (leituraAnteriorPoco != null) {
-					contaInserir.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
-				}
-				if (leituraAtualPoco != null) {
-					contaInserir.setNumeroLeituraAtualPoco(leituraAtualPoco);
-				}
-				if (volumePoco != null) {
-					contaInserir.setNumeroVolumePoco(volumePoco);
-				}
-				if (percentualColeta != null) {
-					contaInserir.setPercentualColeta(percentualColeta);
-				}
+				contaInserir.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
+				contaInserir.setNumeroLeituraAtualPoco(leituraAtualPoco);
+				contaInserir.setNumeroVolumePoco(volumePoco);
+				contaInserir.setPercentualColeta(percentualColeta);
 
 				Collection colecaoContaCategoria = montarColecaoContaCategoria(colecaoCategoria, contaInserir);
 
@@ -10276,6 +10191,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				idContaGerada = idContaGerado;
 
 				this.inserirClienteContaRetificacao(contaInserir, contaAtual.getId());
+				
+                if (calcularValoresConta != null && !calcularValoresConta.isEmpty()){
+                    CalcularValoresAguaEsgotoHelper valorConta = calcularValoresConta.iterator().next();
+                    valorConta.adicionaRateioAgua(contaAtual.getValorRateioAgua());
+                    valorConta.adicionaRateioEsgoto(contaAtual.getValorRateioEsgoto());
+                }
+				
 				this.inserirContaCategoria(calcularValoresConta,colecaoCategoria, contaInserir);
 				this.inserirDebitoCobrado(contaInserir, colecaoDebitoCobrado, imovel, colecaoCategoria);
 				this.inserirCreditoRealizado(contaInserir,colecaoCreditoRealizado, imovel, colecaoCategoria);
@@ -10313,11 +10235,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer consumoTotalAgua = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_AGUA);
 
 				if (consumoTotalAgua.equals(new Integer("0"))) {
-					if (consumoAgua != null && !consumoAgua.trim().equalsIgnoreCase("")) {
-						contaAtual.setConsumoAgua(new Integer(consumoAgua));
-					} else {
-						contaAtual.setConsumoAgua(new Integer("0"));
-					}
+				    contaAtual.atribuirConsumoAgua(consumoAgua);
 				} else {
 					contaAtual.setConsumoAgua(consumoTotalAgua);
 				}
@@ -10334,11 +10252,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer consumoTotalEsgoto = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
 
 				if (consumoTotalEsgoto.equals(new Integer("0"))) {
-					if (consumoEsgoto != null && !consumoEsgoto.trim().equalsIgnoreCase("")) {
-						contaAtual.setConsumoEsgoto(new Integer(consumoEsgoto));
-					} else {
-						contaAtual.setConsumoEsgoto(new Integer("0"));
-					}
+				    contaAtual.atribuirConsumoEsgoto(consumoEsgoto);
 				} else {
 					contaAtual.setConsumoEsgoto(consumoTotalEsgoto);
 				}
@@ -10362,12 +10276,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				contaAtual.setDebitos(valorTotalDebito);
 				contaAtual.setValorCreditos(valorTotalCredito);
-
-				if (percentualEsgoto != null && !percentualEsgoto.trim().equalsIgnoreCase("")) {
-					contaAtual.setPercentualEsgoto(Util.formatarMoedaRealparaBigDecimal(percentualEsgoto));
-				} else {
-					contaAtual.setPercentualEsgoto(new BigDecimal("0.00"));
-				}
+				contaAtual.atribuiPercentualEsgoto(percentualEsgoto);
 
 				GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = this.gerarImpostosDeduzidosConta(contaAtual.getImovel().getId(), mesAnoConta, 
 						valorTotalAgua, valorTotalEsgoto, valorTotalDebito, valorTotalCredito, false);
@@ -10382,29 +10291,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				contaAtual.setContaMotivoRetificacao(contaMotivoRetificacao);
 				contaAtual.setUsuario(usuarioLogado);
 				contaAtual.setUltimaAlteracao(new Date());
-
-				if (leituraAnteriorPoco != null) {
-					contaAtual.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
-				}
-				if (leituraAtualPoco != null) {
-					contaAtual.setNumeroLeituraAtualPoco(leituraAtualPoco);
-				}
-				if (volumePoco != null) {
-					contaAtual.setNumeroVolumePoco(volumePoco);
-				}
-				if (percentualColeta != null) {
-					contaAtual.setPercentualColeta(percentualColeta);
-				}
-
-				int numeroRetificacoes = 0;
-
-				if (contaAtual.getNumeroRetificacoes() != null) {
-					numeroRetificacoes = contaAtual.getNumeroRetificacoes();
-				}
-
-				numeroRetificacoes = numeroRetificacoes + 1;
-
-				contaAtual.setNumeroRetificacoes(numeroRetificacoes);
+				contaAtual.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
+				contaAtual.setNumeroLeituraAtualPoco(leituraAtualPoco);
+				contaAtual.setNumeroVolumePoco(volumePoco);
+				contaAtual.setPercentualColeta(percentualColeta);
+				contaAtual.incrementaNumeroRetificacoes();
 
 				try {
 					Collection colecaoContaCategoria = montarColecaoContaCategoria(colecaoCategoria, contaAtual);
@@ -10441,6 +10332,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					contaAtual.setUsuario(usuarioNaoAlterado);
 
 					throw new ControladorException("erro.sistema", ex);
+				}
+
+				if (calcularValoresConta != null && !calcularValoresConta.isEmpty()){
+				    CalcularValoresAguaEsgotoHelper valorConta = calcularValoresConta.iterator().next();
+				    valorConta.adicionaRateioAgua(contaAtual.getValorRateioAgua());
+				    valorConta.adicionaRateioEsgoto(contaAtual.getValorRateioEsgoto());
 				}
 
 				this.inserirContaCategoria(calcularValoresConta, colecaoCategoria, contaAtual);
@@ -10616,72 +10513,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 		}
 	}
-
-	/**
-	 * [UC0185] - Obter Valor Por Categoria
-	 * 
-	 * @author Raphael Rossiter, Ana Maria
-	 * @date 05/12/2005, 17/11/2008
-	 * @param colecaoCategorias
-	 * @param valorDebitoCobrado
-	 * @return um Array de objetos Object [Categoria] [valorPorCategoria]
-	 */
-	/*
-	 * public Object[][] obterValorPorCategoria(Collection colecaoCategorias,
-	 * BigDecimal valorDebitoCobrado) {
-	 * 
-	 * Object[][] retorno = new Object[colecaoCategorias.size()][2];
-	 * 
-	 * // O sistema acumula a quantidade total de economias das categorias int
-	 * qtdTotalEconomias = 0; Iterator colecaoCategoriasIt =
-	 * colecaoCategorias.iterator(); Categoria categoria;
-	 * 
-	 * while (colecaoCategoriasIt.hasNext()) { categoria = (Categoria)
-	 * colecaoCategoriasIt.next(); qtdTotalEconomias = qtdTotalEconomias +
-	 * categoria.getQuantidadeEconomiasCategoria().intValue(); }
-	 * 
-	 * // Fator de multiplicação para rateio do valor BigDecimal
-	 * fatorMultiplicacao = Util.dividirArredondando(valorDebitoCobrado, new
-	 * BigDecimal(qtdTotalEconomias));
-	 * 
-	 * // Para cada categoria, o sistema calcula o valor por categoria
-	 * BigDecimal valorPorCategoria = new BigDecimal(0); // Acumula o valor de
-	 * todas as categorias BigDecimal valorPorCategoriaAcumulado = new
-	 * BigDecimal(0);
-	 * 
-	 * colecaoCategoriasIt = colecaoCategorias.iterator(); int indexArray = 0;
-	 * 
-	 * while (colecaoCategoriasIt.hasNext()) { categoria = (Categoria)
-	 * colecaoCategoriasIt.next();
-	 * 
-	 * valorPorCategoria = fatorMultiplicacao.multiply(new BigDecimal(
-	 * categoria.getQuantidadeEconomiasCategoria())); BigDecimal valorTruncado =
-	 * valorPorCategoria.setScale(2, BigDecimal.ROUND_DOWN);
-	 * valorPorCategoriaAcumulado = valorPorCategoriaAcumulado
-	 * .add(valorTruncado);
-	 * 
-	 * retorno[indexArray][0] = categoria; retorno[indexArray][1] =
-	 * valorTruncado;
-	 * 
-	 * indexArray++; }
-	 */
-
-	/*
-	 * Caso o Valor Por Categoria Acumulado seja menor que o ValorDebitoCobrado,
-	 * o sistema acumula a diferença no Valor Por Categoria da primeira
-	 * categoria
-	 */
-	/*
-	 * int comparacao =
-	 * valorPorCategoriaAcumulado.compareTo(valorDebitoCobrado);
-	 * 
-	 * if (comparacao == -1) { BigDecimal diferenca = valorDebitoCobrado
-	 * .subtract(valorPorCategoriaAcumulado); diferenca = diferenca.setScale(2,
-	 * BigDecimal.ROUND_DOWN); BigDecimal valorPrimeiraCategoria = (BigDecimal)
-	 * retorno[0][1]; retorno[0][1] = valorPrimeiraCategoria.add(diferenca); }
-	 * 
-	 * return retorno; }
-	 */
 
 	/**
 	 * <Breve descrição sobre o caso de uso>

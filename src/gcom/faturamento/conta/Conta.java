@@ -1235,4 +1235,67 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public boolean isContaRetificada() {
 		return this.debitoCreditoSituacaoAtual.getId().intValue() == DebitoCreditoSituacao.RETIFICADA.intValue();
 	}
+	
+    public void atribuiValorRateioAgua(BigDecimal valorRateioAgua) {
+        if (valorRateioAgua != null) {
+            this.valorRateioAgua = valorRateioAgua;
+            this.valorAgua       = this.valorAgua.add(valorRateioAgua);
+        } else {
+            this.valorRateioAgua = BigDecimal.ZERO;
+        }        
+    }
+
+    public void atribuiValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
+        if (valorRateioEsgoto != null){
+            this.valorRateioEsgoto = valorRateioEsgoto;
+            this.valorEsgoto       = this.valorEsgoto.add(valorRateioEsgoto);
+        }else{
+            this.valorRateioEsgoto = BigDecimal.ZERO;
+        }        
+    }
+
+    public void atribuirConsumoRateioEsgoto(Integer consumoRateioEsgoto) {
+        if (consumoRateioEsgoto != null) {
+            this.consumoRateioEsgoto = consumoRateioEsgoto;
+        }else {
+            this.consumoRateioEsgoto = new Integer("0");
+        }
+        
+    }
+
+    public void atribuirConsumoRateioAgua(Integer consumoRateioAgua) {
+        if (consumoRateioAgua != null) {
+            this.consumoRateioAgua = consumoRateioAgua;
+        }else {
+            this.consumoRateioAgua = new Integer("0");
+        }        
+    }
+
+    public void atribuirConsumoAgua(String consumoAgua) {
+        try {
+            this.setConsumoAgua(Integer.parseInt(consumoAgua));
+        } catch (Exception e) {
+            this.setConsumoAgua(0);
+        }
+    }
+
+    public void atribuirConsumoEsgoto(String consumoEsgoto) {
+        try {
+            this.setConsumoEsgoto(Integer.parseInt(consumoEsgoto));
+        } catch (Exception e) {
+            this.setConsumoEsgoto(0);
+        }
+    }
+
+    public void incrementaNumeroRetificacoes() {
+        this.numeroRetificacoes = this.numeroRetificacoes != null ? this.numeroRetificacoes + 1 : 1;
+    }
+
+    public void atribuiPercentualEsgoto(String percentualEsgoto) {
+        try{
+            this.percentualEsgoto = Util.formatarMoedaRealparaBigDecimal(percentualEsgoto);
+        }catch(Exception e){
+            this.percentualEsgoto = BigDecimal.ZERO;
+        }
+    }	
 }

@@ -176,4 +176,21 @@ public class CalcularValoresAguaEsgotoHelper implements Serializable {
 		this.quantidadeEconomiasCategoria = quantidadeEconomiasCategoria;
 	}
 
+    public void adicionaRateioAgua(BigDecimal valorRateioAgua) {
+        if (valorFaturadoAguaCategoria == null){
+            valorFaturadoAguaCategoria = BigDecimal.ZERO;
+        }
+        if (valorRateioAgua != null){
+            this.valorFaturadoAguaCategoria = this.valorFaturadoAguaCategoria.add(valorRateioAgua);
+        }
+    }
+
+    public void adicionaRateioEsgoto(BigDecimal valorRateioEsgoto) {
+        if (valorFaturadoEsgotoCategoria == null){
+            valorFaturadoEsgotoCategoria = BigDecimal.ZERO;
+        }
+        if (valorRateioEsgoto != null){
+            this.valorFaturadoEsgotoCategoria = this.valorFaturadoEsgotoCategoria.add(valorRateioEsgoto);
+        }
+    }
 }

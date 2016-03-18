@@ -387,26 +387,19 @@ public class RetificarContaAction extends GcomAction {
         BigDecimal valorTotalAgua = new BigDecimal("0");
         BigDecimal valorTotalEsgoto = new BigDecimal("0");
         
-        if (valoresConta != null && !valoresConta.isEmpty()){
-        	
-        	Iterator valoresContaIt = valoresConta.iterator();
-        	CalcularValoresAguaEsgotoHelper valoresContaObjeto = null;
-        	
-        	while (valoresContaIt.hasNext()){
-        		
-        		valoresContaObjeto = (CalcularValoresAguaEsgotoHelper) valoresContaIt.next();
-        		
-        		//Valor Faturado de Água
-        		if (valoresContaObjeto.getValorFaturadoAguaCategoria() != null){
-        			valorTotalAgua = valorTotalAgua.add(valoresContaObjeto.getValorFaturadoAguaCategoria());
-        		}
-        		
-        		//Valor Faturado de Esgoto
-        		if (valoresContaObjeto.getValorFaturadoEsgotoCategoria() != null){
-        			valorTotalEsgoto = valorTotalEsgoto.add(valoresContaObjeto.getValorFaturadoEsgotoCategoria());
-        		}
-        	} 
-        }
+        if (valoresConta != null){
+            for(CalcularValoresAguaEsgotoHelper valor : valoresConta){
+                //Valor Faturado de Água
+                if (valor.getValorFaturadoAguaCategoria() != null){
+                    valorTotalAgua = valorTotalAgua.add(valor.getValorFaturadoAguaCategoria());
+                }
+                
+                //Valor Faturado de Esgoto
+                if (valor.getValorFaturadoEsgotoCategoria() != null){
+                    valorTotalEsgoto = valorTotalEsgoto.add(valor.getValorFaturadoEsgotoCategoria());
+                }                
+            }
+         }
         
         BigDecimal valorTotalConta = new BigDecimal("0");
         
