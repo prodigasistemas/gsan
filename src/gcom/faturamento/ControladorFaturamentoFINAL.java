@@ -66120,46 +66120,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throws ControladorException {
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = new DeterminarValoresFaturamentoAguaEsgotoHelper();
-
-		if (consumoHistoricoAgua != null) {
-			helper.setConsumoHistoricoAgua(consumoHistoricoAgua);
-
-			if (consumoHistoricoAgua.getIndicadorFaturamento() != null) {
-				helper.setIndicadorFaturamentoAgua(consumoHistoricoAgua.getIndicadorFaturamento());
-			}
-
-			if (consumoHistoricoAgua.getNumeroConsumoFaturadoMes() != null) {
-				helper.setConsumoFaturadoAgua(consumoHistoricoAgua.getNumeroConsumoFaturadoMes());
-			}
-
-			if (consumoHistoricoAgua.getConsumoRateio() != null) {
-				helper.setConsumoRateioAgua(consumoHistoricoAgua.getConsumoRateio());
-			}
-
-			if (consumoHistoricoAgua.getConsumoTipo() != null) {
-				helper.setConsumoTipoAgua(consumoHistoricoAgua.getConsumoTipo());
-			}
-		}
-
-		if (consumoHistoricoEsgoto != null) {
-			helper.setConsumoHistoricoEsgoto(consumoHistoricoEsgoto);
-
-			if (consumoHistoricoEsgoto.getIndicadorFaturamento() != null) {
-				helper.setIndicadorFaturamentoEsgoto(consumoHistoricoEsgoto.getIndicadorFaturamento());
-			}
-
-			if (consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes() != null) {
-				helper.setConsumoFaturadoEsgoto(consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes());
-			}
-
-			if (consumoHistoricoEsgoto.getConsumoRateio() != null) {
-				helper.setConsumoRateioEsgoto(consumoHistoricoEsgoto.getConsumoRateio());
-			}
-
-			if (consumoHistoricoEsgoto.getConsumoTipo() != null) {
-				helper.setConsumoTipoEsgoto(consumoHistoricoEsgoto.getConsumoTipo());
-			}
-		}
+		
+		helper.atribuirConsumoHistoricoAgua(consumoHistoricoAgua);
+		
+		helper.atribuirConsumoHistoricoEsgoto(consumoHistoricoEsgoto);
 
 		int consumoMinimoLigacao = getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, null);
 		helper.setConsumoMinimoLigacao(consumoMinimoLigacao);
@@ -66183,20 +66147,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							anoMesFaturamento);
 
 			if (medicaoHistoricoAgua != null) {
-
-				// DATA_LEITURA_ANTERIOR
-				if (medicaoHistoricoAgua.getDataLeituraAnteriorFaturamento() != null) {
-
-					helper.setDataLeituraAnterior(medicaoHistoricoAgua
-							.getDataLeituraAnteriorFaturamento());
-				}
-
-				// DATA_LEITURA_ATUAL
-				if (medicaoHistoricoAgua.getDataLeituraAtualFaturamento() != null) {
-
-					helper.setDataLeituraAtual(medicaoHistoricoAgua
-							.getDataLeituraAtualFaturamento());
-				}
+				helper.setDataLeituraAnterior(medicaoHistoricoAgua.getDataLeituraAnteriorFaturamento());
+				helper.setDataLeituraAtual(medicaoHistoricoAgua.getDataLeituraAtualFaturamento());
 			}
 		}
 

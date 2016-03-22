@@ -40419,41 +40419,32 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public int obterConsumoASerRateado(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) {
+    public int obterConsumoASerRateado(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) {
 
-		Integer consumoImovelCondomino =  new Integer(0);
-		
-		int consumoASerRateado = 0;
-		try {
-			Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
-					.obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-			
-			Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
-			Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
-	
-			int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-	
-			if (consumoLigacaoImovelCondominio != null) {
-				consumoImovelCondomino = consumoLigacaoImovelCondominio;
-			}
-		
-		/*
-		 * O consumo de água a ser rateado vai ser igual ao consumo da ligação
-		 * de água/esgoto do imóvel condomínio para o mês de faturamento corrente.
-		 */
-		consumoASerRateado = -consumoAguaImoveisVinculados;
-		
-		if (consumoImovelCondomino != null) {
-			consumoASerRateado = consumoASerRateado + consumoImovelCondomino;
-		}
-		
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("Consumo a ser rateado: " + consumoASerRateado);
-		return consumoASerRateado;
-	}
+        Integer consumoImovelCondomino = new Integer(0);
+
+        int consumoASerRateado = 0;
+        try {
+            Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
+                    .obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
+
+            Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
+            Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
+
+            int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
+
+            if (consumoLigacaoImovelCondominio != null) {
+                consumoImovelCondomino = consumoLigacaoImovelCondominio;
+            }
+
+            consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
+        } catch (ErroRepositorioException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Consumo a ser rateado: " + consumoASerRateado);
+        return consumoASerRateado;
+    }
 	
 	/**
 	 * 
