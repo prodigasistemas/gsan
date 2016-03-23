@@ -286,7 +286,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 	SessionContext sessionContext;
 
-	private static Logger logger = Logger.getLogger(ControladorFaturamentoCOSANPASEJB.class);
+	private static Logger logger = Logger.getLogger(ControladorMicromedicao.class);
 
 	public void ejbCreate() throws CreateException {
 		repositorioUtil = RepositorioUtilHBM.getInstancia();
