@@ -56,6 +56,7 @@ import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.micromedicao.bean.ConsultarArquivoTextoRoteiroEmpresaHelper;
+import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.relatorio.arrecadacao.GuiaDevolucaoRelatorioHelper;
 import gcom.relatorio.arrecadacao.RelatorioAnaliseArrecadacaoBean;
 import gcom.relatorio.arrecadacao.RelatorioAnaliseAvisosBancariosBean;
@@ -31795,6 +31796,85 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+	
+	public void criarPagamentoHistoricoDeGuia(Integer idPagamento, Integer idGuia) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		StringBuilder update = new StringBuilder();
+
+		try {
+			update.append("update arrecadacao.pagamento  ") 
+					.append("set = :idGuia")
+					.append("where = :idPagamento ");
+			
+			session.createSQLQuery(update.toString())
+				.setInteger("idGuia",idGuia)
+				.setInteger("idPagamento", idPagamento).executeUpdate();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public void inserirColecaoObjetoParaBatch(Map<PagamentoHistorico, Integer> pagamentos) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		Iterator iteratorPagamentos = pagamentos.entrySet().iterator();
+
+		Object pagamentoHistorico = null;
+		
+		try {
+			
+			while (iteratorPagamentos.hasNext()) {
+				
+				pagamentoHistorico = iteratorPagamentos.next();
+			
+				
+				session.save(pagamentoHistorico);
+				
+				session.flush();
+				session.clear();
+			}
+			
+		} 
+		catch (HibernateException e) {
+			
+			if (pagamentoHistorico != null && (pagamentoHistorico instanceof ConsumoHistorico)) {
+				
+				System.out.println("CONSISTIR ID MATRICULA ERRO = " + ((ConsumoHistorico) pagamentoHistorico).getImovel().getId());
+			}
+			
+			// levanta a exceção para a próxima camada
+			e.printStackTrace();
+			
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			session.flush();
+			session.clear();
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public PagamentoHistorico pesquisarPagamentoHistorico(Integer idPagamento) throws ErroRepositorioException {
+
+		PagamentoHistorico retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = "select pgmt from PagamentoHistorico pgmt where pgmt.id = :idPagamento ";
+			retorno = (PagamentoHistorico) session.createQuery(consulta).setInteger("idPagamento", idPagamento).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
 }

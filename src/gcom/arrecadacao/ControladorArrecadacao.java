@@ -25458,9 +25458,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * [UC0276] Encerrar Arrecadação do Mês
 	 * Metodo responsável pela transferência das contas, guias de pagamento, pagamentos e devoluções para o histórico.
 	 */
-	public void gerarHistoricoParaEncerrarArrecadacaoMes(
-			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
- int idFuncionalidadeIniciada)
+	public void gerarHistoricoParaEncerrarArrecadacaoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade,int idFuncionalidadeIniciada)
 			throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -30638,11 +30636,11 @@ public class ControladorArrecadacao implements SessionBean {
 						pagamentoHistorico.setId((Integer) dadosPagamento[0]);
 					}
 
-					GuiaPagamento guiaPagamento = null;
+					GuiaPagamentoHistorico guiaPagamento = null;
 
 					// Id da Guia de Pagamento
 					if (dadosPagamento[1] != null) {
-						guiaPagamento = new GuiaPagamento();
+						guiaPagamento = new GuiaPagamentoHistorico();
 						guiaPagamento.setId((Integer) dadosPagamento[1]);
 					}
 
@@ -30688,7 +30686,7 @@ public class ControladorArrecadacao implements SessionBean {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
 					}
 
-					pagamentoHistorico.setGuiaPagamento(guiaPagamento);
+					pagamentoHistorico.setGuiaPagamentoHistorico(guiaPagamento);
 
 					DebitoTipo debitoTipoPagamento = null;
 
@@ -34819,15 +34817,16 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @param anoMesFaturamentoSistemaParametro
 	 * @throws ControladorException
 	 */
-	public void transferirPagamentoParaHistorico(
-			Collection<Pagamento> colecaoPagamentos)
+	public void transferirPagamentoParaHistorico(Collection<Pagamento> colecaoPagamentos)
 			throws ControladorException {
 
 		PagamentoHistorico pagamentoHistoricoTemp = null;
 
 		Collection colecaoPagamentoHistoricoInserir = new ArrayList();
 		Collection colecaoPagamentoHistoricoRemover = new ArrayList();
-
+		
+		Map<PagamentoHistorico, Integer> pagamentosComGuias = new HashMap<PagamentoHistorico, Integer>();
+		
 		try {
 			if (colecaoPagamentos != null && !colecaoPagamentos.isEmpty()) {
 
@@ -34844,15 +34843,10 @@ public class ControladorArrecadacao implements SessionBean {
 					pagamentoHistoricoTemp.setArrecadadorMovimentoItem(pagamento.getArrecadadorMovimentoItem());
 					pagamentoHistoricoTemp.setAvisoBancario(pagamento.getAvisoBancario());
 					pagamentoHistoricoTemp.setCliente(pagamento.getCliente());
-					if (pagamento.getContaGeral() != null && pagamento.getContaGeral().getId() != null) {
-						pagamentoHistoricoTemp.setContaGeral(pagamento.getContaGeral());
-					}
-
 					pagamentoHistoricoTemp.setDataPagamento(pagamento.getDataPagamento());
 					pagamentoHistoricoTemp.setDebitoACobrarGeral(pagamento.getDebitoACobrarGeral());
 					pagamentoHistoricoTemp.setDebitoTipo(pagamento.getDebitoTipo());
 					pagamentoHistoricoTemp.setDocumentoTipo(pagamento.getDocumentoTipo());
-					pagamentoHistoricoTemp.setGuiaPagamento(pagamento.getGuiaPagamento());
 					pagamentoHistoricoTemp.setImovel(pagamento.getImovel());
 					pagamentoHistoricoTemp.setLocalidade(pagamento.getLocalidade());
 					pagamentoHistoricoTemp.setPagamentoSituacaoAnterior(pagamento.getPagamentoSituacaoAnterior());
@@ -34860,13 +34854,13 @@ public class ControladorArrecadacao implements SessionBean {
 					pagamentoHistoricoTemp.setUltimaAlteracao(new Date());
 					pagamentoHistoricoTemp.setValorPagamento(pagamento.getValorPagamento());
 					pagamentoHistoricoTemp.setValorExcedente(pagamento.getValorExcedente());
-					
-					// Alterado por Sávio Luiz
-					// Data:27/05/2008
 					pagamentoHistoricoTemp.setIndicadorExpurgado(pagamento.getIndicadorExpurgado());
+
 					
-					//Alterado por Anderson Italo
-					// Data:21/07/2009
+					if (pagamento.getContaGeral() != null && pagamento.getContaGeral().getId() != null) {
+						pagamentoHistoricoTemp.setContaGeral(pagamento.getContaGeral());
+					}
+					
 					if (pagamento.getCobrancaDocumento() != null){
 						pagamentoHistoricoTemp.setCobrancaDocumentoAgregador(pagamento.getCobrancaDocumento());
 					}
@@ -34882,19 +34876,21 @@ public class ControladorArrecadacao implements SessionBean {
 					if (pagamento.getDataProcessamento() != null){
 						pagamentoHistoricoTemp.setDataHoraProcessamento(pagamento.getDataProcessamento());
 					}
-					//fim alteracao
 
-					colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
+					if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getId() != null) {
+						pagamentosComGuias.put(pagamentoHistoricoTemp, pagamento.getGuiaPagamento().getId());
+					} else {
+						colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
+					}
 
 				}
 			}
 
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					colecaoPagamentoHistoricoInserir);
+			getControladorBatch().inserirColecaoObjetoParaBatch(colecaoPagamentoHistoricoInserir);
+			getControladorBatch().removerColecaoPagamentoParaBatch(colecaoPagamentoHistoricoRemover);
 
-			getControladorBatch().removerColecaoPagamentoParaBatch(
-					colecaoPagamentoHistoricoRemover);
-
+			this.inserirPagamentohistoricoComGuias(pagamentosComGuias);
+			
 			colecaoPagamentoHistoricoInserir = null;
 			colecaoPagamentoHistoricoRemover = null;
 
@@ -34903,6 +34899,26 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
+	private void inserirPagamentohistoricoComGuias(Map<PagamentoHistorico, Integer> pagamentosComGuias) {
+		
+		Iterator iteratorPagamentos = pagamentosComGuias.entrySet().iterator();
+		
+		try {
+			while (iteratorPagamentos.hasNext()) {
+				
+				PagamentoHistorico pagamentoHistorico = (PagamentoHistorico) iteratorPagamentos.next();
+				
+				Integer idGuia = pagamentosComGuias.get(pagamentoHistorico);
+				
+				Integer idPagamento = (Integer) this.repositorioUtil.inserir(pagamentoHistorico);
+				
+				this.repositorioArrecadacao.pesquisarPagamentoHistorico(idPagamento);			
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
 	 * 
