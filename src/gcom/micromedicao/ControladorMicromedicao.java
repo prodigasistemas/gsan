@@ -13974,7 +13974,6 @@ public class ControladorMicromedicao implements SessionBean {
             sessionContext.setRollbackOnly();
             throw new ControladorException("erro.sistema", ex);
         }
-
         return consumoHistorico;
     }
 
