@@ -378,41 +378,11 @@ public interface IRepositorioMicromedicao {
 	 */
 	public Collection<Integer> consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ErroRepositorioException;
 
-	/**
-	 * Consultar Consumo Tipo do Consumo Historico Auhtor: Rafael Santos Data:
-	 * 23/01/2006
-	 * 
-	 * @param consumoHistorico
-	 *            Consumo Historico
-	 * @return Dados do Consumo Tipo
-	 * @throws ControladorException
-	 */
-	public Object[] consultarDadosConsumoTipoConsumoHistorico(
-			ConsumoHistorico consumoHistorico) throws ErroRepositorioException;
+	public Object[] consultarDadosConsumoTipoConsumoHistorico(ConsumoHistorico consumoHistorico) throws ErroRepositorioException;
 
-	/**
-	 * Consultar Consumo Historico da Medicao Individualizada Auhtor: Rafael
-	 * Santos Data: 23/01/2006 [UC0179] Consultar Historico Medição
-	 * Indiviualizada
-	 * 
-	 * @param imovel
-	 *            Imovel
-	 * @param ligcaoTipo
-	 *            Tipo de Ligacação
-	 * @param anoMesFaturamento
-	 *            Ano Mes Faturamento
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Object[] obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
+	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
 			LigacaoTipo ligacaoTipo, int anoMesReferencia)
 			throws ErroRepositorioException;
-
-	/**
-	 * Método utilizado para pesquisar dados do maior histórico de medição
-	 * existente para um imóvel [UC0101] Consistir Leituras e Calcular Consumos
-	 * Autor: Leonardo Vieira Data: 20/02/2006
-	 */
 
 	public Object pesquisarObterDadosMaiorHistoricoMedicao(Imovel imovel,
 			MedicaoTipo medicaoTipo, SistemaParametro sistemaParametro)

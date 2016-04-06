@@ -2371,43 +2371,31 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Object[] obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
+	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
 			LigacaoTipo ligacaoTipo, int anoMesFaturamento)
 			throws ErroRepositorioException {
 
-		Object[] retornoDados = null;
-		Object retorno = null;
+	    ConsumoHistorico retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 
 		try {
-			consulta = "SELECT ch.id," 
-					 + 		  "ch.consumoRateio, "
-					 + 		  "ch.numeroConsumoFaturadoMes, " 
-					 + 		  "consumoTipo.id, "
-					 + 		  "ch.indicadorFaturamento, "
-					 + 		  "consumoAnormalidade.id, "
-					 + 		  "ch.consumoImovelVinculadosCondominio, "
-					 + 		  "imovel.indicadorImovelAreaComum "
+			consulta = "SELECT ch " 
 					 + "FROM ConsumoHistorico ch "
-					 + 		"LEFT JOIN ch.consumoAnormalidade consumoAnormalidade "
-					 + 		"LEFT JOIN ch.consumoTipo consumoTipo "
-					 + 		"LEFT JOIN ch.imovel imovel "
+					 + 		"LEFT JOIN FETCH ch.consumoAnormalidade consumoAnormalidade "
+					 + 		"LEFT JOIN FETCH ch.consumoTipo consumoTipo "
+					 + 		"LEFT JOIN FETCH ch.imovel imovel "
 					 + "WHERE ch.imovel.id = :id "
 					 + 		"AND ch.referenciaFaturamento = :anoMes "
 					 + 		"AND ch.ligacaoTipo.id = :ligacao ";
 
-			retorno = session.createQuery(consulta)
+			retorno = (ConsumoHistorico) session.createQuery(consulta)
 							 .setInteger("id", imovel.getId())
 							 .setInteger("anoMes", anoMesFaturamento)
 							 .setInteger("ligacao", ligacaoTipo.getId())
 							 .setMaxResults(1)
 							 .uniqueResult();
-
-			if (retorno != null) {
-				retornoDados = (Object[]) retorno;
-			}
-
+			
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -2415,7 +2403,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		return retornoDados;
+		return retorno;
 
 	}
 

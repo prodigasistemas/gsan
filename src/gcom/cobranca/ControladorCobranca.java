@@ -6343,43 +6343,16 @@ public class ControladorCobranca implements SessionBean {
 	 * @exception ControladorException
 	 * @return Consumo Historico do Imovel
 	 */
-	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia)
+	private ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia)
 			throws ControladorException {
 
 		ConsumoHistorico consumoHistorico = null;
 
-		Object[] colecaoConsumoHistoricoArray = null;
-
 		try {
-			colecaoConsumoHistoricoArray = repositorioMicromedicao.obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipo,
-					anoMesReferencia);
+		    consumoHistorico = repositorioMicromedicao.obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipo, anoMesReferencia);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (colecaoConsumoHistoricoArray != null && !(colecaoConsumoHistoricoArray.length < 0)) {
-
-			consumoHistorico = new ConsumoHistorico();
-
-			// Seta o id do histórico
-			if (colecaoConsumoHistoricoArray[0] != null) {
-				consumoHistorico.setId((Integer) colecaoConsumoHistoricoArray[0]);
-			}
-			// Seta Consumo Rateio
-			if (colecaoConsumoHistoricoArray[1] != null) {
-				consumoHistorico.setConsumoRateio((Integer) colecaoConsumoHistoricoArray[1]);
-			}
-			// Seta o tipo de ligação
-			if (colecaoConsumoHistoricoArray[2] != null) {
-				consumoHistorico.setNumeroConsumoFaturadoMes((Integer) colecaoConsumoHistoricoArray[2]);
-			}
-
-			// Seta o tipo de ligação
-			if (colecaoConsumoHistoricoArray[3] != null) {
-				consumoHistorico.setConsumoTipo((ConsumoTipo) colecaoConsumoHistoricoArray[3]);
-			}
-
 		}
 
 		return consumoHistorico;

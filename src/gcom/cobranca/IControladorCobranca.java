@@ -287,61 +287,10 @@ public interface IControladorCobranca {
 
 	public Collection consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ControladorException;
 
-	/**
-	 * Consultar Dados Consumo Tipo Imovel Auhtor: Rafael Santos Data:
-	 * 23/01/2006 [UC0179] Consultar Historico Medição Indiviualizada
-	 * 
-	 * @param consumoHistorico
-	 *            Consumo Historico
-	 * @return
-	 * @throws ControladorException
-	 */
-	public ConsumoTipo consultarDadosConsumoTipoConsumoHistorico(
-			ConsumoHistorico consumoHistorico) throws ControladorException;
+	public ConsumoTipo consultarDadosConsumoTipoConsumoHistorico(ConsumoHistorico consumoHistorico) throws ControladorException;
 
-	/**
-	 * Consultar Consumo Historico da Medicao Individualizada Auhtor: Rafael
-	 * Santos Data: 23/01/2006 [UC0179] Consultar Historico Medição
-	 * Indiviualizada
-	 * 
-	 * @param imovel
-	 *            Imovel
-	 * @param ligcaoTipo
-	 *            Tipo de Ligacação
-	 * @param anoMesFaturamento
-	 *            Ano Mes Faturamento
-	 * @return
-	 * @throws ControladorException
-	 */
-	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(
-			Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia)
-			throws ControladorException;
+	public void atualizarSituacaoConta(String codigoConta, int situacaoAtual, int anoMesReferenciaContabil) throws ControladorException;
 
-	/**
-	 * [UC0213] Desfazer Parcelamento Debito
-	 * 
-	 * @author Fernanda Paiva
-	 * @created 14/02/2006
-	 * 
-	 * @param DebitoCreditoSituacaoAnterior
-	 *            DebitoCreditoSituacaoAtual idConta
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
-	public void atualizarSituacaoConta(String codigoConta, int situacaoAtual,
-			int anoMesReferenciaContabil) throws ControladorException;
-
-	/**
-	 * [UC0213] Desfazer Parcelamento Debito
-	 * 
-	 * @author Fernanda Paiva
-	 * @created 15/02/2006
-	 * 
-	 * @param DebitoCreditoSituacaoAtual
-	 *            idGuiaPagamento
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
 	public void atualizarSituacaoGuiaPagamento(String codigoGuiaPagamento,
 			int situacaoAtualGuia, int anoMesReferenciaContabil)
 			throws ControladorException;

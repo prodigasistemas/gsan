@@ -13964,69 +13964,15 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(
-			Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia)
-            throws ControladorException {
+	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ControladorException {
 
         ConsumoHistorico consumoHistorico = null;
 
-        Object[] colecaoConsumoHistoricoArray = null;
-
         try {
-            colecaoConsumoHistoricoArray = repositorioMicromedicao.obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipo, anoMesReferencia);
+            consumoHistorico = repositorioMicromedicao.obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipo, anoMesReferencia);
         } catch (ErroRepositorioException ex) {
             sessionContext.setRollbackOnly();
             throw new ControladorException("erro.sistema", ex);
-        }
-
-        if (colecaoConsumoHistoricoArray != null && !(colecaoConsumoHistoricoArray.length < 0)) {
-
-            consumoHistorico = new ConsumoHistorico();
-
-            // Seta o id do histórico
-            if (colecaoConsumoHistoricoArray[0] != null) {
-                consumoHistorico.setId((Integer) colecaoConsumoHistoricoArray[0]);
-            }
-
-            // Seta Consumo Rateio
-            if (colecaoConsumoHistoricoArray[1] != null) {
-                consumoHistorico.setConsumoRateio((Integer) colecaoConsumoHistoricoArray[1]);
-            }
-
-            // Seta o Numero Consumo Faturado Mes
-            if (colecaoConsumoHistoricoArray[2] != null) {
-                consumoHistorico.setNumeroConsumoFaturadoMes((Integer) colecaoConsumoHistoricoArray[2]);
-            }
-
-            // Seta o Consumo Tipo
-            if (colecaoConsumoHistoricoArray[3] != null) {
-                ConsumoTipo consumoTipo = new ConsumoTipo();
-                consumoTipo.setId((Integer) colecaoConsumoHistoricoArray[3]);
-                consumoHistorico.setConsumoTipo(consumoTipo);
-            }
-
-            // Seta o Indicador Faturamento
-            if (colecaoConsumoHistoricoArray[4] != null) {
-                consumoHistorico.setIndicadorFaturamento((Short) colecaoConsumoHistoricoArray[4]);
-            }
-
-            // Seta o id co Consumo Anormalidade
-            if (colecaoConsumoHistoricoArray[5] != null) {
-                ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-                consumoAnormalidade.setId((Integer) colecaoConsumoHistoricoArray[5]);
-                consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
-            }
-
-            // Seta o Consumo do imóvel vinculado
-            if (colecaoConsumoHistoricoArray[6] != null) {
-                consumoHistorico.setConsumoImovelVinculadosCondominio((Integer) colecaoConsumoHistoricoArray[6]);
-            }
-
-            if (colecaoConsumoHistoricoArray[7] != null) {
-                Imovel imov = new Imovel();
-                imov.setIndicadorImovelAreaComum((Short) colecaoConsumoHistoricoArray[7]);
-                consumoHistorico.setImovel(imov);
-            }
         }
 
         return consumoHistorico;
