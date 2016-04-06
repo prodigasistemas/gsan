@@ -45702,14 +45702,12 @@ public class ControladorCobranca implements SessionBean {
 
 					}
 
-					// verifica se o pagamento tem guia de pagamento
 					if (pagamento.getGuiaPagamento() != null) {
-						// verifica se a guia de pagamento tem parcelamento
-						if (pagamento.getGuiaPagamento().getParcelamento() != null) {
-							// [SB0006] - Verificar itens do parcelamento a
-							// partir de guia de pagamento
-							verificarItensParcelamentos(pagamento.getGuiaPagamento().getParcelamento(), pagamento.getGuiaPagamento(), null,
-									pagamento, null, anoMesArrecadacao, colecaoEmpresaContaCobrancaPagamentos);
+						
+						GuiaPagamento guia = getControladorArrecadacao().pesquisarGuiaPagemento(pagamento.getGuiaPagamento().getId());
+						
+						if (guia != null && guia.getParcelamento() != null) {
+							verificarItensParcelamentos(guia.getParcelamento(), guia, null,pagamento, null, anoMesArrecadacao, colecaoEmpresaContaCobrancaPagamentos);
 						}
 					}
 

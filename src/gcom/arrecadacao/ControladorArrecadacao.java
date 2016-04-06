@@ -25465,20 +25465,22 @@ public class ControladorArrecadacao implements SessionBean {
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
-		try {
-			gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(anoMesReferenciaArrecadacao, idLocalidade);
-			gerarHistoricoParaEncerrarArrecadacaoDebitoACobrar(anoMesReferenciaArrecadacao, idLocalidade);
-			gerarHistoricoParaEncerrarArrecadacaoCreditoARealizar(anoMesReferenciaArrecadacao, idLocalidade);
-			gerarHistoricoParaEncerrarArrecadacaoPagamento(anoMesReferenciaArrecadacao, idLocalidade);
-			gerarHistoricoEncerrarArrecadacaoDevolucao(anoMesReferenciaArrecadacao, idLocalidade);
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-		} catch (Exception e) {
-			sessionContext.setRollbackOnly();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-			throw new EJBException(e);
+			try {
+				//if (idLocalidade.equals(new Integer(1)) || idLocalidade.equals(new Integer(2))) {
+					gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(anoMesReferenciaArrecadacao, idLocalidade);
+					gerarHistoricoParaEncerrarArrecadacaoDebitoACobrar(anoMesReferenciaArrecadacao, idLocalidade);
+					gerarHistoricoParaEncerrarArrecadacaoCreditoARealizar(anoMesReferenciaArrecadacao, idLocalidade);
+					gerarHistoricoParaEncerrarArrecadacaoPagamento(anoMesReferenciaArrecadacao, idLocalidade);
+					gerarHistoricoEncerrarArrecadacaoDevolucao(anoMesReferenciaArrecadacao, idLocalidade);
+				
+				//}
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+				throw new EJBException(e);
+			}
 		}
-	}
 
 	public void processarPagamentosDiferencaDoisReais(Integer referenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
 		
@@ -25763,6 +25765,10 @@ public class ControladorArrecadacao implements SessionBean {
 		final int quantidadeRegistros = 500;
 		int numeroIndice = 0; 
 
+		if (idLocalidade.equals(new Integer(1))) {
+			System.out.println("chegou na localidade 1...");
+		}
+		
 		while (!flagTerminou) {
 			Collection<Integer> colecaoPagamentosClassificados = repositorioArrecadacao.pesquisarPagamentosClassificadosOuValorExcedenteBaixado(
 					anoMesReferenciaArrecadacao, idLocalidade, numeroIndice, quantidadeRegistros);
@@ -25773,12 +25779,14 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 
 			Iterator<Integer> iteratorPagamentos = colecaoPagamentosClassificados.iterator();
+			
+			System.out.println("Pagamentos classificados: " + colecaoPagamentosClassificados.size());
 			while (iteratorPagamentos.hasNext()) {
 
 				Integer idPagamento = iteratorPagamentos.next();
 
-				Pagamento pagamento = this.repositorioArrecadacao.pesquisarPagamentoParaEncerrarArrecadacao(idPagamento);
-
+				Pagamento pagamento = obterPagamentoComIGuiaPagamentoDoPagamento(idPagamento);
+				
 				if (pagamento != null) {
 					transferirPagamentoParaHistorico(Collections.singletonList(pagamento));
 					iteratorPagamentos.remove();
@@ -25787,24 +25795,18 @@ public class ControladorArrecadacao implements SessionBean {
 
 			}
 		}
-
-		/** Fim Pagamentos Classificados */
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/02/2008
-	 *
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idLocalidade
-	 * @param idSetorComercial
-	 * @throws ErroRepositorioException
-	 * @throws ControladorException
-	 */
+	private Pagamento obterPagamentoComIGuiaPagamentoDoPagamento(Integer idPagamento) throws ErroRepositorioException {
+		Pagamento pagamento = this.repositorioArrecadacao.pesquisarPagamentoParaEncerrarArrecadacao(idPagamento);
+		Integer idGuia = this.repositorioArrecadacao.pesquisarIdGuiaPagamento(idPagamento);
+		
+		if (idGuia != null) {
+			pagamento.setGuiaPagamento(new GuiaPagamento(idGuia));
+		}
+		return pagamento;
+	}
+	
 	protected void gerarHistoricoEncerrarArrecadacaoConta(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
 			Integer idSetorComercial) throws ErroRepositorioException,
@@ -32953,7 +32955,7 @@ public class ControladorArrecadacao implements SessionBean {
 						colecaoConjuntoPagamentos.add(pagamento);
 					}
 
-					guiaPagamentoAnterior = pagamento.getGuiaPagamento();
+					guiaPagamentoAnterior = (GuiaPagamento) pagamento.getGuiaPagamento();
 
 					localidadeAnterior = pagamento.getLocalidade();
 					imovelAnterior = pagamento.getImovel();
@@ -34878,6 +34880,7 @@ public class ControladorArrecadacao implements SessionBean {
 					}
 
 					if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getId() != null) {
+						System.out.println("Pagamento " + pagamento.getId() + " com guia " + pagamento.getGuiaPagamento().getId());
 						pagamentosComGuias.put(pagamentoHistoricoTemp, pagamento.getGuiaPagamento().getId());
 					} else {
 						colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
@@ -34901,18 +34904,23 @@ public class ControladorArrecadacao implements SessionBean {
 
 	private void inserirPagamentohistoricoComGuias(Map<PagamentoHistorico, Integer> pagamentosComGuias) {
 		
-		Iterator iteratorPagamentos = pagamentosComGuias.entrySet().iterator();
+		Iterator<PagamentoHistorico> iteratorPagamentos = pagamentosComGuias.keySet().iterator();
 		
+		System.out.println("Inserindo histórico de pagamentos com guias...");
 		try {
 			while (iteratorPagamentos.hasNext()) {
 				
 				PagamentoHistorico pagamentoHistorico = (PagamentoHistorico) iteratorPagamentos.next();
-				
+				System.out.println(" ---------------------------------- ");
 				Integer idGuia = pagamentosComGuias.get(pagamentoHistorico);
-				
+				System.out.println("	idGuia: " + idGuia);
 				Integer idPagamento = (Integer) this.repositorioUtil.inserir(pagamentoHistorico);
-				
-				this.repositorioArrecadacao.pesquisarPagamentoHistorico(idPagamento);			
+				System.out.println("	idPagamentoHistorico: " + idPagamento);
+				pagamentoHistorico = this.repositorioArrecadacao.pesquisarPagamentoHistorico(idPagamento);
+				pagamentoHistorico.setGuiaPagamentoHistorico(new GuiaPagamentoHistorico(idGuia));
+				System.out.println("	Pagamento Historico: " + pagamentoHistorico.getId() + " - " + pagamentoHistorico.getGuiaPagamentoHistorico().getId());
+				this.repositorioUtil.atualizar(pagamentoHistorico);
+				System.out.println("	pagamento atualizado ");
 			}
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
@@ -35371,11 +35379,10 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 
-	public Collection pesquisarGuiaPagemento(Integer idGuiaPagamento)
+	public GuiaPagamento pesquisarGuiaPagemento(Integer idGuiaPagamento)
 			throws ControladorException {
 		try {
-			return repositorioArrecadacao
-					.pesquisarGuiaPagamento(idGuiaPagamento);
+			return repositorioArrecadacao.pesquisarGuiaPagamento(idGuiaPagamento);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);

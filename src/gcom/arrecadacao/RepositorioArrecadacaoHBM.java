@@ -13478,7 +13478,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " LEFT JOIN FETCH pagamentoHistorico.documentoTipo doctoTp "
 					+ " LEFT JOIN FETCH pagamentoHistorico.contaGeral contaGeral "
 					+ " LEFT JOIN FETCH contaGeral.contaHistorico contaHistorico "
-					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamento gpag "
+					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamentoHistorico gpag "
 					+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
 					+ " LEFT JOIN FETCH pagamentoHistorico.debitoACobrarGeral dbcbGeral "
 					+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
@@ -18729,10 +18729,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * @throws ErroRepositorioException
 	 */
 
-	public Collection pesquisarGuiaPagamento(Integer idGuiaPagamento)
+	public GuiaPagamento pesquisarGuiaPagamento(Integer idGuiaPagamento)
 			throws ErroRepositorioException {
 
-		Collection retorno = null;
+		GuiaPagamento retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 		try {
@@ -18740,8 +18740,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "FROM GuiaPagamento guiaPagamento "
 					+ "WHERE guiaPagamento.id = :idGuiaPagamento ";
 
-			retorno = session.createQuery(consulta).setInteger(
-					"idGuiaPagamento", idGuiaPagamento.intValue()).list();
+			retorno = (GuiaPagamento) session.createQuery(consulta).setInteger("idGuiaPagamento", idGuiaPagamento.intValue()).uniqueResult();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -31876,5 +31875,26 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException {
+
+		Integer idGuia = null;
+		String sql = "";
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			sql = "SELECT gpag_id as idGuia from arrecadacao.pagamento where pgmt_id = :idPagamento ";
+
+			idGuia = (Integer) session.createSQLQuery(sql).addScalar("idGuia", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return idGuia;
 	}
 }

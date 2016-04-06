@@ -4296,32 +4296,11 @@ public interface IRepositorioArrecadacao {
        * @return Collection
        * @throws ErroRepositorioException
        */
-      public Collection pesquisarPagamentoPorAvisoBancario(Integer idAvisoBancario) 
-      	throws ErroRepositorioException;
+    @SuppressWarnings("rawtypes")
+	public Collection pesquisarPagamentoPorAvisoBancario(Integer idAvisoBancario) throws ErroRepositorioException;
       
-  	/**
-  	 * @author Ana Maria
-  	 * @date 29/01/2007
-  	 * 
-  	 * @param idGuiaPagamento
-  	 * 
-  	 * @return Collection
-  	 * @throws ErroRepositorioException
-  	 */
-  	public Collection pesquisarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;      
+  	public GuiaPagamento pesquisarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;      
   	
-  	
-  	/**
-	 * Atualiza logradouroBairro de um ou mais imóveis  
-	 * 
-	 * [UC0] Atualizar Logradouro
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 22/02/2007
-	 * 
-	 * @param 
-	 * @return void
-	 */
 	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, 
 			LogradouroBairro logradouroBairroNovo) throws ErroRepositorioException ;
 	
@@ -6956,4 +6935,6 @@ public interface IRepositorioArrecadacao {
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
 	
 	public PagamentoHistorico pesquisarPagamentoHistorico(Integer idPagamento) throws ErroRepositorioException;
+	
+	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException;
 }

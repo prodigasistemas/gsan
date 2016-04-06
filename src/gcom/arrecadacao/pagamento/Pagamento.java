@@ -59,7 +59,7 @@ public class Pagamento extends ObjetoTransacao {
 
 	@ControleAlteracao(value=FiltroPagamento.GUIA_PAGAMENTO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
-	private gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento;
+	private IGuiaPagamento guiaPagamento;
 
 	@ControleAlteracao(value=FiltroPagamento.DOCUMENTO_TIPO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
@@ -265,26 +265,23 @@ public class Pagamento extends ObjetoTransacao {
 		return this.pagamentoSituacaoAtual;
 	}
 
-	public void setPagamentoSituacaoAtual(
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual) {
+	public void setPagamentoSituacaoAtual(PagamentoSituacao pagamentoSituacaoAtual) {
 		this.pagamentoSituacaoAtual = pagamentoSituacaoAtual;
 	}
 
-	public gcom.arrecadacao.pagamento.PagamentoSituacao getPagamentoSituacaoAnterior() {
+	public PagamentoSituacao getPagamentoSituacaoAnterior() {
 		return this.pagamentoSituacaoAnterior;
 	}
 
-	public void setPagamentoSituacaoAnterior(
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior) {
+	public void setPagamentoSituacaoAnterior(PagamentoSituacao pagamentoSituacaoAnterior) {
 		this.pagamentoSituacaoAnterior = pagamentoSituacaoAnterior;
 	}
 
-	public gcom.arrecadacao.pagamento.GuiaPagamento getGuiaPagamento() {
+	public IGuiaPagamento getGuiaPagamento() {
 		return this.guiaPagamento;
 	}
 
-	public void setGuiaPagamento(
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento) {
+	public void setGuiaPagamento(IGuiaPagamento guiaPagamento) {
 		this.guiaPagamento = guiaPagamento;
 	}
 
@@ -316,8 +313,7 @@ public class Pagamento extends ObjetoTransacao {
 		return this.arrecadadorMovimentoItem;
 	}
 
-	public void setArrecadadorMovimentoItem(
-			ArrecadadorMovimentoItem arrecadadorMovimentoItem) {
+	public void setArrecadadorMovimentoItem(ArrecadadorMovimentoItem arrecadadorMovimentoItem) {
 		this.arrecadadorMovimentoItem = arrecadadorMovimentoItem;
 	}
 

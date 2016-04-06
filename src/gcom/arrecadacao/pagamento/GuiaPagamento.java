@@ -26,154 +26,100 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class GuiaPagamento extends ObjetoTransacao {
+public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 	
 	private static final long serialVersionUID = 1L;
-
+	
+	public static final int ATRIBUTOS_GUIA_PAGAMENTO_INSERIR = 115; //Operacao.OPERACAO_GUIA_PAGAMENTO_INSERIR
+	public static final int ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR = 116; //Operacao.OPERACAO_GUIA_PAGAMENTO_CANCELAR
+	
+	private Integer id;
+	private Integer anoMesReferenciaContabil;
+	private Date ultimaAlteracao;
+	private Cliente cliente;
+	private Parcelamento parcelamento;
+	private DocumentoTipo documentoTipo;
+	private Imovel imovel;
+	private Localidade localidade;
+	private FinanciamentoTipo financiamentoTipo;
+	private LancamentoItemContabil lancamentoItemContabil;
+	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
+	private Short indicadoCobrancaMulta;
+	private Short numeroPrestacaoDebito;
+	private Set clientesGuiaPagamento;
+	private GuiaPagamentoGeral guiaPagamentoGeral;
+	private Integer numeroGuia;
+	private Integer anoGuia;
+	private Integer lotePagamento;
+	private Usuario usuario;
+	private GuiaPagamentoGeral origem;
+	private String observacao;
+	private Short indicadorEmitirObservacao;
+	private String numeroGuiaFatura;
+	
+	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_TIPO,funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR})
+	private Date dataEmissao;
+	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private Date dataVencimento;
+	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private BigDecimal valorDebito;
+	
+	
+	@ControleAlteracao(value=FiltroGuiaPagamento.REGISTRO_ATENDIMENTO, funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private RegistroAtendimento registroAtendimento;
+	
+	
+	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_TIPO, funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private DebitoTipo debitoTipo;
+	
+	@ControleAlteracao(value=FiltroGuiaPagamento.ORDEM_SERVICO, funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private OrdemServico ordemServico;
+	
+	
+	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_CREDITO_SITUACAO_ATUAL, funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private DebitoCreditoSituacao debitoCreditoSituacaoAtual;
+	
+	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
+	private Short numeroPrestacaoTotal;
+	
 	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = { "id" };
 		return retorno;
 	}
-	
-	public static final int ATRIBUTOS_GUIA_PAGAMENTO_INSERIR = 115; //Operacao.OPERACAO_GUIA_PAGAMENTO_INSERIR
-	public static final int ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR = 116; //Operacao.OPERACAO_GUIA_PAGAMENTO_CANCELAR
 
 	public Filtro retornaFiltro() {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(
-				FiltroGuiaPagamento.ID, this.getId()));
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, this.getId()));
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("localidade");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("usuario");
 
 		return filtroGuiaPagamento;
 	}
 
-	/** identifier field */
-	private Integer id;
 
-	/** nullable persistent field */
-	private Integer anoMesReferenciaContabil;
+	public GuiaPagamento() {
+	}
 
-	/** nullable persistent field */
-	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_TIPO,
-			funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR})
-	private Date dataEmissao;
+	public GuiaPagamento(Integer id) {
+		this.id = id;
+	}
 
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private Date dataVencimento;
-
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private BigDecimal valorDebito;
-
-	/** nullable persistent field */
-	private Date ultimaAlteracao;
-
-	/** persistent field */
-	private Cliente cliente;
-
-	/** persistent field */
-	private Parcelamento parcelamento;
-
-	/** persistent field */
-	private DocumentoTipo documentoTipo;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroGuiaPagamento.REGISTRO_ATENDIMENTO,
-			funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private RegistroAtendimento registroAtendimento;
-
-	/** persistent field */	
-	private Imovel imovel;
-
-	/** persistent field */
-	private Localidade localidade;
-
-	/** persistent field */
-	private FinanciamentoTipo financiamentoTipo;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_TIPO,
-			funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private DebitoTipo debitoTipo;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroGuiaPagamento.ORDEM_SERVICO,
-			funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private OrdemServico ordemServico;
-
-	/** persistent field */
-	private LancamentoItemContabil lancamentoItemContabil;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroGuiaPagamento.DEBITO_CREDITO_SITUACAO_ATUAL,
-			funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private DebitoCreditoSituacao debitoCreditoSituacaoAtual;
-
-	/** persistent field */
-	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
-
-	/** persistent field */
-	private Short indicadoCobrancaMulta;
-	
-	/** persistent field */
-	private Short numeroPrestacaoDebito;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_GUIA_PAGAMENTO_INSERIR,ATRIBUTOS_GUIA_PAGAMENTO_CANCELAR})
-	private Short numeroPrestacaoTotal;
-	
-	/** persistent field */
-	private Set clientesGuiaPagamento;
-	
-	/** persistent field */
-	private GuiaPagamentoGeral guiaPagamentoGeral;
-	
-	private Integer numeroGuia;
-	
-	private Integer anoGuia;
-	
-	private Integer lotePagamento;
-	
-    /** persistent field */
-    private Usuario usuario;
-	
-	private GuiaPagamentoGeral origem;
-	
-	private String observacao;
-	
-	private Short indicadorEmitirObservacao;
-	
-	/** nullable persistent field */
-	private String numeroGuiaFatura;
-
-	/** full constructor */
 	public GuiaPagamento(Integer anoMesReferenciaContabil, Date dataEmissao,
 			Date dataVencimento, BigDecimal valorDebito, Date ultimaAlteracao,
 			Cliente cliente, Parcelamento parcelamento,
@@ -235,11 +181,6 @@ public class GuiaPagamento extends ObjetoTransacao {
 		this.debitoCreditoSituacaoAnterior = debitoCreditoSituacaoAnterior;
 	}
 
-	/** default constructor */
-	public GuiaPagamento() {
-	}
-
-	/** minimal constructor */
 	public GuiaPagamento(Cliente cliente, Parcelamento parcelamento,
 			DocumentoTipo documentoTipo,
 			RegistroAtendimento registroAtendimento, Imovel imovel,
@@ -421,31 +362,18 @@ public class GuiaPagamento extends ObjetoTransacao {
 		this.clientesGuiaPagamento = clientesGuiaPagamento;
 	}
 
-	/**
-	 * @return Retorna o campo indicadoCobrancaMulta.
-	 */
 	public Short getIndicadoCobrancaMulta() {
 		return indicadoCobrancaMulta;
 	}
 
-	/**
-	 * @param indicadoCobrancaMulta
-	 *            O indicadoCobrancaMulta a ser setado.
-	 */
 	public void setIndicadoCobrancaMulta(Short indicadoCobrancaMulta) {
 		this.indicadoCobrancaMulta = indicadoCobrancaMulta;
 	}
 
-	/**
-	 * @return Retorna o campo debitoACobrarGeral.
-	 */
 	public GuiaPagamentoGeral getGuiaPagamentoGeral() {
 		return guiaPagamentoGeral;
 	}
 
-	/**
-	 * @param debitoACobrarGeral O debitoACobrarGeral a ser setado.
-	 */
 	public void setGuiaPagamentoGeral(GuiaPagamentoGeral guiaPagamentoGeral) {
 		this.guiaPagamentoGeral = guiaPagamentoGeral;
 	}
@@ -528,56 +456,30 @@ public class GuiaPagamento extends ObjetoTransacao {
 		this.numeroGuia = numeroGuia;
 	}
 
-
-	/**
-	 * @return Retorna o campo usuario.
-	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	/**
-	 * @param usuario O usuario a ser setado.
-	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
 	
-	/**
-	 * @return Retorna o campo indicadorEmitirObservacao.
-	 */
 	public Short getIndicadorEmitirObservacao() {
 		return indicadorEmitirObservacao;
 	}
 
-	/**
-	 * @param indicadorEmitirObservacao O indicadorEmitirObservacao a ser setado.
-	 */
 	public void setIndicadorEmitirObservacao(Short indicadorEmitirObservacao) {
 		this.indicadorEmitirObservacao = indicadorEmitirObservacao;
 	}
 
-	/**
-	 * @return Retorna o campo observacao.
-	 */
 	public String getObservacao() {
 		return observacao;
 	}
 
-	/**
-	 * @param observacao O observacao a ser setado.
-	 */
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param other
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;

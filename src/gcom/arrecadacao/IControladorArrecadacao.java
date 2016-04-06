@@ -2510,31 +2510,8 @@ public interface IControladorArrecadacao {
 			String inscricaoEstadual, String idImovel, Usuario usuarioLogado)
 			throws ControladorException;
 
-	/**
-	 * @author Ana Maria
-	 * @date 29/01/2007
-	 * 
-	 * @param idGuiaPagamento
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public Collection pesquisarGuiaPagemento(Integer idGuiaPagamento)
-			throws ControladorException;
+	public GuiaPagamento pesquisarGuiaPagemento(Integer idGuiaPagamento) throws ControladorException;
 
-	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * Metodo responsável pela transferência das contas, guias de pagamento,
-	 * pagamentos e devoluções para o histórico.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 06/02/2007
-	 * 
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idLocalidade
-	 * @throws ControladorException
-	 */
 	public void gerarHistoricoParaEncerrarArrecadacaoMes(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
 			int idFuncionalidadeIniciada) throws ControladorException;
