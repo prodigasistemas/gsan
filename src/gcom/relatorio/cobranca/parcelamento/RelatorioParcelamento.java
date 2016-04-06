@@ -1279,7 +1279,7 @@ public class RelatorioParcelamento extends TarefaRelatorio {
 	     		if (parcelamentoRelatorioHelper.getTelefoneDevedor() != null &&
 	     				!parcelamentoRelatorioHelper.getTelefoneDevedor().equals("") ) {
 	     			ddd = parcelamentoRelatorioHelper.getTelefoneDevedor().substring(1,3);
-	     			telefone = parcelamentoRelatorioHelper.getTelefoneDevedor().substring(4, 12 );
+	     			telefone = parcelamentoRelatorioHelper.getTelefoneDevedor().substring(4, parcelamentoRelatorioHelper.getTelefoneDevedor().length());
 	     		}
 	     		//Verificar se o Usuario é funcionario para informar seu cargo ou não
 	     		String nomeFuncinario = "";
