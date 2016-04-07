@@ -1,4 +1,4 @@
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+i<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-template.tld" prefix="template"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
@@ -165,7 +165,7 @@ function consultar(){
 							<html:text property="mesAno" size="10" maxlength="7" onkeyup="javascript:mascaraAnoMes(this, event);" /> mm/aaaa
 						</td>
 	
-						<td width="65" align="left" class="style1">
+						<td width="65" align="left" class="style1"colecaoConsultarHistoricoMedicaoIndividualizada>
 							<gsan:controleAcessoBotao name="Button" value="Consultar" onclick="javascript:consultar();"	url="exibirConsultarHistoricoMedicaoIndividualizadaAction.do" />
 						</td>
 					</tr>
@@ -185,14 +185,72 @@ function consultar(){
 					
 					
 				</table>
-
+				
 				<table width="590" border="0" bgcolor="#79bbfd" align="center" cellpadding="0" cellspacing="0">
 					<tr bgcolor="#79bbfd" height="18">
 						<td align="center" class="style11"><strong>Dados do Im&oacute;vel Condom&iacute;nio</strong></td>
 					</tr>
 				</table>
-				
-				
+
+				<table width="590" border="0" bgcolor="#90c7fc" align="center" cellpadding="1" cellspacing="1">
+					<tr bgcolor="#90c7fc">
+						<td width="48%">
+							<div align="center"><strong>Nome do Cliente Usu&aacute;rio</strong></div>
+						</td>
+						<td width="9%">
+							<div align="center"><strong>Tipo de Consumo</strong></div>
+						</td>
+						<td width="15%">
+							<div align="center"><strong>Consumo Cobrado(Macro)</strong></div>
+						</td>
+						<td width="13%">
+							<div align="center"><strong>Consumo Imóveis(Micros)</strong></div>
+						</td>
+						
+						<td width="15%">
+							<div align="center"><strong>Consumo Rateado </strong></div>
+						</td>
+
+					</tr>
+					<logic:present	name="colecaoConsultarHistoricoMedicaoIndivCondominio" scope="session">
+						<logic:iterate name="colecaoConsultarHistoricoMedicaoIndivCondominio" id="consultarHistoricoMedicaoIndividualizadaHelper">
+							<tr bgcolor="#FFFFFF">
+								<td width="37%">
+								    <div align="left">
+										<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="nomeClienteUsuario" /></b>
+									</div>
+								</td>
+							    <td width="9%">
+									<div align="center">
+										<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="tipoConsumo" /></b>
+									</div>
+								</td>
+								<td width="10%">
+									<div align="center">
+										<b> <logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%="" + LigacaoTipo.LIGACAO_AGUA%>">
+												<bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoAguaFaturado" />
+											</logic:equal> 
+											<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%="" + LigacaoTipo.LIGACAO_ESGOTO%>">
+												<bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoEsgoto" />
+											</logic:equal>
+										</b>
+									</div>
+								</td>
+
+								<td width="11%">
+									<div align="center">
+										<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoImovel" /></b>
+									</div>
+								</td>
+                                <td width="11%">
+									<div align="center">
+										<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoRateio" /></b>
+									</div>
+								</td>
+							</tr>
+					   </logic:iterate>
+					</logic:present>
+				</table>
 				<table width="590" border="0" align="center" cellpadding="0" cellspacing="0">
 					<tr>
 						<td height="22" class="style1">
@@ -313,198 +371,63 @@ function consultar(){
 						<td align="center" class="style11"><strong>Hist&oacute;rico de Medi&ccedil;&atilde;o Individualizada</strong></td>
 					</tr>
 				</table>
+				
+                <table width="590" border="0" bgcolor="#90c7fc" align="center" cellpadding="1" cellspacing="1">
+					<tr bgcolor="#90c7fc">
+							<td width="20%">
+								<div align="center">
+									<strong>Matr&iacute;cula do Im&oacute;vel</strong>
+								</div>
+							</td>
+							<td>
+								<div align="center">
+									<strong>Nome do Cliente Usu&aacute;rio</strong>
+								</div>
+							</td>
+							<td width="15%">
+								<div align="center">
+									<strong>Tipo de Consumo</strong>
+								</div>
+							</td>
+					</tr>
+					<tr bgcolor="#90c7fc">
+					<logic:present	name="colecaoConsultarHistoricoMedicaoIndividualizada" scope="session">
+						<logic:iterate name="colecaoConsultarHistoricoMedicaoIndividualizada" id="consultarHistoricoMedicaoIndividualizadaHelper">
 
+							<tr bgcolor="#FFFFFF">
+								<td width="20%">
+									<div align="center">
+										<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="matriculaImovel" />
+									</div>
+								</td>
+								
+								<td>
+									<div align="left">
+										<bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="nomeClienteUsuario" />
+									</div>
+								</td>
+								
+								<td width="15%">
+									<div align="center">
+										<bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="tipoConsumo" />
+									</div>
+								</td>
+						</logic:iterate>
+					</logic:present>
+					</tr>
+					
+				</table>		
 
+                <p>&nbsp;</p>
 				<table width="590" border="0" align="center" cellpadding="0" cellspacing="0">
 					<tr>
-						<td height="22" class="style1">
-							<table width="590" border="0" align="center" cellpadding="0" cellspacing="0">
-								<tr>
-									<td height="0">
-		
-										<table width="590" bgcolor="#90c7fc">
-											<tr bgcolor="#90c7fc">
-												<td width="11%">
-													<div align="center"><strong>Matr&iacute;cula do Im&oacute;vel</strong></div>
-												</td>
-												<td width="37%">
-													<div align="center"><strong>Nome do Cliente Usu&aacute;rio</strong></div>
-												</td>
-												<td width="9%">
-													<div align="center"><strong>Tipo de Consumo</strong></div>
-												</td>
-												<td width="11%">
-													<div align="center"><strong>Consumo Imóvel </strong></div>
-												</td>
-												<td width="11%">
-													<div align="center"><strong>Consumo Rateado </strong></div>
-												</td>
-												
-												<td width="11%">
-													<div align="center"><strong>Consumo Cobrado </strong></div>
-												</td>
-													
-												<%--<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_AGUA%>">
-													<td width="11%">
-														<div align="center"><strong>Cons.&Aacute;gua Cobrado </strong></div>
-													</td>
-												</logic:equal>
-												
-												<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_ESGOTO%>">
-													<td width="10%">
-														<div align="center"><strong>Consumo Esgoto</strong></div>
-													</td>
-												</logic:equal>
-											</tr> --%>
-			
-											<%String cor = "#cbe5fe";%>
-											<%String styleColor = "";%>
-											<%int contador = 0;	%>
-											
-											<logic:present	name="colecaoConsultarHistoricoMedicaoIndividualizada" scope="session">
-												<logic:iterate name="colecaoConsultarHistoricoMedicaoIndividualizada" id="consultarHistoricoMedicaoIndividualizadaHelper">
-			
-													<%if (contador == 0) {
-													  if (cor.equalsIgnoreCase("#cbe5fe")) {
-														cor = "#FFFFFF";%>
-													<tr bgcolor="#FFFFFF">
-														<%} else { 
-															cor = "#cbe5fe";%>
-													<tr bgcolor="#cbe5fe">
-														<%}%>
-														
-														<td width="11%">
-															<div align="center">
-																<b><bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="matriculaImovel" /></b>
-															</div>
-														</td>
-														
-														<td width="37%">
-															<div align="left">
-																<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="nomeClienteUsuario" /></b>
-															</div>
-														</td>
-														
-														<td width="9%">
-															<div align="center">
-																<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="tipoConsumo" /></b>
-															</div>
-														</td>
-														
-														<td width="11%">
-															<div align="center">
-																<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoImovel" /></b>
-															</div>
-														</td>
-
-														<td width="11%">
-															<div align="center">
-																<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoRateio" /></b>
-															</div>
-														</td>
-
-														<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_AGUA%>">
-															<td width="11%">
-																<div align="center">
-																	<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoAguaFaturado" /></b>
-																</div>
-															</td>
-														</logic:equal>
-														
-														<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_ESGOTO%>">
-															<td width="10%">
-																<div align="center">
-																	<b><bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoEsgoto" /></b>
-																</div>
-															</td>
-														</logic:equal>
-													</tr>
-													<%} else {
-														styleColor = "";
-													if (cor.equalsIgnoreCase("#FFFFFF")) {
-														
-													cor = "#cbe5fe";%>
-													<tr bgcolor="#cbe5fe">
-														
-														<%} else {
-														cor = "#FFFFFF";%>
-													<tr bgcolor="#FFFFFF">
-														<%}%>
-														
-														<logic:equal name="consultarHistoricoMedicaoIndividualizadaHelper" property="indicadorImovelAreaComum" value="<%=""+ConstantesSistema.INDICADOR_USO_ATIVO%>">
-															<% styleColor = "color:#F00;"; %>
-														</logic:equal>
-
-														<td width="11%">
-															<div align="center" style="<%=styleColor %>">
-																<bean:write name="consultarHistoricoMedicaoIndividualizadaHelper" property="matriculaImovel" />
-															</div>
-														</td>
-														
-														<td width="37%">
-															<div align="left" style="<%=styleColor %>">
-																<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="nomeClienteUsuario" />
-															</div>
-														</td>
-														
-														<td width="9%">
-															<div align="center" style="<%=styleColor %>">
-																<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="tipoConsumo" />
-															</div>
-														</td>
-														
-														<td width="11%">
-															<div align="center" style="<%=styleColor %>">
-																<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoImovel" />
-															</div>
-														</td>
-														
-														<td width="11%">
-															<div align="center" style="<%=styleColor %>">
-																<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoRateio" />
-															</div>
-														</td>
-														
-														<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_AGUA%>">
-															<td width="11%">
-																<div align="center" style="<%=styleColor %>">
-																	<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoAguaFaturado" />
-																</div>
-															</td>
-														</logic:equal>
-														
-														<logic:equal name="ConsultarHistoricoMedicaoIndividualizadaActionForm" property="idTipoLigacao" value="<%=""+LigacaoTipo.LIGACAO_ESGOTO%>">
-															<td width="10%">
-																<div align="center" style="<%=styleColor %>">
-																	<bean:write	name="consultarHistoricoMedicaoIndividualizadaHelper" property="consumoEsgoto" />
-																</div>
-															</td>
-														</logic:equal>
-														
-													</tr>
-			
-													<%}
-													contador = contador + 1;
-													%>
-													
-												</logic:iterate>
-											</logic:present>
-										</table>
-									</td>
-								</tr>
-							</table>
-
-							<table border="0">
-								<tr>
-									<td align="left">
-										<input type="button" name="limpar" value="Limpar" class="bottonRightCol" onclick="limparForm();"> 
-										<input type="button" name="Button" class="bottonRightCol" value="Cancelar" onclick="window.location.href='/gsan/telaPrincipal.do'" />
-									</td>
-								</tr>
-							</table>
+						<td align="left">
+							<input type="button" name="limpar" value="Limpar" class="bottonRightCol" onclick="limparForm();"> 
+							<input type="button" name="Button" class="bottonRightCol" value="Cancelar" onclick="window.location.href='/gsan/telaPrincipal.do'" />
 						</td>
 					</tr>
 				</table>
+				<p>&nbsp;</p>
 			</td>
 		</tr>
 	</table>

@@ -1,5 +1,47 @@
 package gcom.micromedicao;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
 import gcom.atendimentopublico.IRepositorioAtendimentoPublico;
 import gcom.atendimentopublico.RepositorioAtendimentoPublicoHBM;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -102,7 +144,6 @@ import gcom.faturamento.conta.FiltroContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.FiltroContaImpressao;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
-import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.faturamento.bean.AnalisarImoveisReleituraHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
@@ -115,6 +156,7 @@ import gcom.micromedicao.bean.AnormalidadeLeituraHelper;
 import gcom.micromedicao.bean.AssociarConjuntoRotasCriterioCobrancaHelper;
 import gcom.micromedicao.bean.ComparativoLeiturasEAnormalidadesRelatorioHelper;
 import gcom.micromedicao.bean.ConsultarHistoricoMedicaoIndividualizadaHelper;
+import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.bean.FaixasFalsasLeituraRelatorioHelper;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
 import gcom.micromedicao.bean.GerarRAOSAnormalidadeConsumoHelper;
@@ -229,48 +271,6 @@ import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
 public class ControladorMicromedicao implements SessionBean {
 	
 	private static final long serialVersionUID = 1L;
@@ -286,7 +286,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 	SessionContext sessionContext;
 
-	private static Logger logger = Logger.getLogger(ControladorFaturamentoCOSANPASEJB.class);
+	private static Logger logger = Logger.getLogger(ControladorMicromedicao.class);
 
 	public void ejbCreate() throws CreateException {
 		repositorioUtil = RepositorioUtilHBM.getInstancia();
@@ -13700,303 +13700,232 @@ public class ControladorMicromedicao implements SessionBean {
 	 */
 	public Collection consultarHistoricoMedicaoIndividualizada(
 			Imovel imovelCondominio, String anoMesFaturamento,
-			LigacaoTipo ligacaoTipoInformado) throws ControladorException {
+ LigacaoTipo ligacaoTipoInformado)
+            throws ControladorException {
 
-		Collection colecaoHistoricosMedicaoIndividualizada = null;
-		MedicaoHistorico medicaoHistorico = null;
-		ConsumoHistorico consumoHistorico = null;
-		ConsumoHistorico consumoHistoricoAguaEsgoto = null;
-		Cliente cliente = null;
-		ConsumoTipo consumoTipo = null;
+        Collection colecaoHistoricosMedicaoIndividualizada = null;
+        MedicaoHistorico medicaoHistorico = null;
+        ConsumoHistorico consumoHistorico = null;
+        ConsumoHistorico consumoHistoricoAguaEsgoto = null;
+        Cliente cliente = null;
+        ConsumoTipo consumoTipo = null;
 
-		try {
+        try {
 
-			/*
-			 * Matricula Nome do Cliente Tipo de Consumo Consumo de Água Medido
-			 * Consumo de Água Faturado Consumo Esgoto Faturado Consumo do
-			 * Rateio
-			 */
-			ConsultarHistoricoMedicaoIndividualizadaHelper consultarHistoricoMedicaoIndividualizadaHelper = null;
+            /*
+             * Matricula Nome do Cliente Tipo de Consumo Consumo de Água Medido
+             * Consumo de Água Faturado Consumo Esgoto Faturado Consumo do
+             * Rateio
+             */
+            ConsultarHistoricoMedicaoIndividualizadaHelper consultarHistoricoMedicaoIndividualizadaHelper = null;
 
-			if (imovelCondominio != null) {
+            if (imovelCondominio != null) {
 
-				// INICIO IMOVEL
-				// CONDOMINIO********************************************
-				colecaoHistoricosMedicaoIndividualizada = new ArrayList();
+                // INICIO IMOVEL
+                // CONDOMINIO********************************************
+                colecaoHistoricosMedicaoIndividualizada = new ArrayList();
 
-				// imovel condominio
-				consultarHistoricoMedicaoIndividualizadaHelper = new ConsultarHistoricoMedicaoIndividualizadaHelper();
+                // imovel condominio
+                consultarHistoricoMedicaoIndividualizadaHelper = new ConsultarHistoricoMedicaoIndividualizadaHelper();
 
-				// inscrição do imovel condominio
-				consultarHistoricoMedicaoIndividualizadaHelper
-						.setMatriculaImovel(imovelCondominio.getId().toString());
+                // inscrição do imovel condominio
+                consultarHistoricoMedicaoIndividualizadaHelper.setMatriculaImovel(imovelCondominio.getId().toString());
 
-				cliente = this
-						.consultarDadosClienteImovelUsuario(imovelCondominio);
+                cliente = this.consultarDadosClienteImovelUsuario(imovelCondominio);
 
-				// nome do cliente do imovel condominio
-				if (cliente != null) {
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setNomeClienteUsuario(cliente.getNome());
-				} else {
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setNomeClienteUsuario("");
-				}
+                // nome do cliente do imovel condominio
+                if (cliente != null) {
+                    consultarHistoricoMedicaoIndividualizadaHelper.setNomeClienteUsuario(cliente.getNome());
+                } else {
+                    consultarHistoricoMedicaoIndividualizadaHelper.setNomeClienteUsuario("");
+                }
 
-				// consultar consumo Historico imovel condominio
-				consumoHistoricoAguaEsgoto = this
-						.obterConsumoHistoricoMedicaoIndividualizada(
-								imovelCondominio, ligacaoTipoInformado,
-								new Integer(anoMesFaturamento).intValue());
+                // consultar consumo Historico imovel condominio
+                consumoHistoricoAguaEsgoto = this.obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipoInformado,
+                        new Integer(anoMesFaturamento).intValue());
 
-				if (consumoHistoricoAguaEsgoto == null) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.consumo.historico.inexistente.imovel.condominio");
-				}
+                if (consumoHistoricoAguaEsgoto == null) {
+                    sessionContext.setRollbackOnly();
+                    throw new ControladorException("atencao.consumo.historico.inexistente.imovel.condominio");
+                }
 
-				consumoTipo = consultarDadosConsumoTipoConsumoHistorico(consumoHistoricoAguaEsgoto);
-				if (consumoTipo != null) {
-					// tipo de consumo do imovel condominio
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setTipoConsumo(consumoTipo.getDescricaoAbreviada());
+                consumoTipo = consultarDadosConsumoTipoConsumoHistorico(consumoHistoricoAguaEsgoto);
+                if (consumoTipo != null) {
+                    // tipo de consumo do imovel condominio
+                    consultarHistoricoMedicaoIndividualizadaHelper.setTipoConsumo(consumoTipo.getDescricaoAbreviada());
 
-				} else {
-					// tipo de consumo do imovel condominio
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setTipoConsumo("");
-				}
+                } else {
+                    // tipo de consumo do imovel condominio
+                    consultarHistoricoMedicaoIndividualizadaHelper.setTipoConsumo("");
+                }
 
-				// PESQUISA MEDICAO HISTORICO
-				medicaoHistorico = repositorioMicromedicao
-						.pesquisarMedicaoHistoricoTipoAgua(imovelCondominio
-								.getId(), new Integer(anoMesFaturamento));
+                // PESQUISA MEDICAO HISTORICO
+                medicaoHistorico = repositorioMicromedicao.pesquisarMedicaoHistoricoTipoAgua(imovelCondominio.getId(), new Integer(anoMesFaturamento));
 
-				if (medicaoHistorico != null
-						&& medicaoHistorico.getNumeroConsumoMes() != null) {
-					// consumo agua medido do imovel condominio
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setConsumoAguaMedido(medicaoHistorico
-									.getNumeroConsumoMes().toString());
-				} else {
-					consultarHistoricoMedicaoIndividualizadaHelper
-							.setConsumoAguaMedido("");
-				}
+                if (medicaoHistorico != null && medicaoHistorico.getNumeroConsumoMes() != null) {
+                    // consumo agua medido do imovel condominio
+                    consultarHistoricoMedicaoIndividualizadaHelper.setConsumoAguaMedido(medicaoHistorico.getNumeroConsumoMes().toString());
+                } else {
+                    consultarHistoricoMedicaoIndividualizadaHelper.setConsumoAguaMedido("");
+                }
 
-				if (consumoHistoricoAguaEsgoto != null) {
-					if (ligacaoTipoInformado.getId().equals(
-							LigacaoTipo.LIGACAO_AGUA)) {
+                if (consumoHistoricoAguaEsgoto != null) {
+                    if (ligacaoTipoInformado.getId().equals(LigacaoTipo.LIGACAO_AGUA)) {
 
-						if (consumoHistoricoAguaEsgoto
-								.getNumeroConsumoFaturadoMes() != null) {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoAguaFaturado(consumoHistoricoAguaEsgoto
-											.getNumeroConsumoFaturadoMes()
-											.toString());
-						} else {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoAguaFaturado("");
-						}
-					} else if (ligacaoTipoInformado.getId().equals(
-							LigacaoTipo.LIGACAO_ESGOTO)) {
-						if (consumoHistoricoAguaEsgoto
-								.getNumeroConsumoFaturadoMes() != null) {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoEsgoto(consumoHistoricoAguaEsgoto
-											.getNumeroConsumoFaturadoMes()
-											.toString());
-						} else {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoEsgoto("");
-						}
-					}
+                        if (consumoHistoricoAguaEsgoto.getNumeroConsumoFaturadoMes() != null) {
+                            consultarHistoricoMedicaoIndividualizadaHelper
+                                    .setConsumoAguaFaturado(consumoHistoricoAguaEsgoto.getNumeroConsumoFaturadoMes().toString());
+                        } else {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoAguaFaturado("");
+                        }
+                    } else if (ligacaoTipoInformado.getId().equals(LigacaoTipo.LIGACAO_ESGOTO)) {
+                        if (consumoHistoricoAguaEsgoto.getNumeroConsumoFaturadoMes() != null) {
+                            consultarHistoricoMedicaoIndividualizadaHelper
+                                    .setConsumoEsgoto(consumoHistoricoAguaEsgoto.getNumeroConsumoFaturadoMes().toString());
+                        } else {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoEsgoto("");
+                        }
+                    }
 
-					// consumo rateio do imovel condominio
-					if (consumoHistoricoAguaEsgoto.getConsumoRateio() != null) {
-						consultarHistoricoMedicaoIndividualizadaHelper
-								.setConsumoRateio(consumoHistoricoAguaEsgoto
-										.getConsumoRateio().toString());
-					} else {
-						consultarHistoricoMedicaoIndividualizadaHelper
-								.setConsumoRateio("");
-					}
+                    // consumo rateio do imovel condominio
+                    if (consumoHistoricoAguaEsgoto.getConsumoRateio() != null) {
+                        consultarHistoricoMedicaoIndividualizadaHelper.setConsumoRateio(consumoHistoricoAguaEsgoto.getConsumoRateio().toString());
+                    } else {
+                        consultarHistoricoMedicaoIndividualizadaHelper.setConsumoRateio("");
+                    }
 
-					// Seta o consumo do imóvel vínculado
-					if (consumoHistoricoAguaEsgoto
-							.getConsumoImovelVinculadosCondominio() != null) {
-						// consumo agua medido do imovel vinculado
-						consultarHistoricoMedicaoIndividualizadaHelper
-								.setConsumoImovel(consumoHistoricoAguaEsgoto
-										.getConsumoImovelVinculadosCondominio()
-										.toString());
-					} else {
-						consultarHistoricoMedicaoIndividualizadaHelper
-								.setConsumoImovel("");
-					}
+                    // Seta o consumo do imóvel vínculado
+                    if (consumoHistoricoAguaEsgoto.getConsumoImovelVinculadosCondominio() != null) {
+                        // consumo agua medido do imovel vinculado
+                        consultarHistoricoMedicaoIndividualizadaHelper
+                                .setConsumoImovel(consumoHistoricoAguaEsgoto.getConsumoImovelVinculadosCondominio().toString());
+                    } else {
+                        consultarHistoricoMedicaoIndividualizadaHelper.setConsumoImovel("");
+                    }
 
-				}
+                }
 
-				// adicionando dados do imovel condominio
-				colecaoHistoricosMedicaoIndividualizada
-						.add(consultarHistoricoMedicaoIndividualizadaHelper);
+                // adicionando dados do imovel condominio
+                colecaoHistoricosMedicaoIndividualizada.add(consultarHistoricoMedicaoIndividualizadaHelper);
 
-				// FIM IMOVEL CONDOMINIO
-				// *******************************************************************
+                // FIM IMOVEL CONDOMINIO
+                // *******************************************************************
 
-				// TODOS OS IMOVEIS VINCULADOS AO IMOVEL CONDOMINIO
-				Collection colecaoConsumoHistoricoImoveisVinculados = this
-						.consultarConsumoHistoricoImoveisVinculados(consumoHistoricoAguaEsgoto);
+                // TODOS OS IMOVEIS VINCULADOS AO IMOVEL CONDOMINIO
+                
+                ConsumoHistoricoCondominio pesquisa = new ConsumoHistoricoCondominio(imovelCondominio.getId(), new Integer(anoMesFaturamento), ligacaoTipoInformado);
+                
+                Collection colecaoConsumoHistoricoImoveisVinculados = this.consultarConsumoHistoricoImoveisVinculados(pesquisa);
 
-				// obter os dados para os imoveis vinculados
-				// coleção de ids dos imoveis vinculados ao condominio
-				if (colecaoConsumoHistoricoImoveisVinculados != null
-						&& !colecaoConsumoHistoricoImoveisVinculados.isEmpty()) {
+                // obter os dados para os imoveis vinculados
+                // coleção de ids dos imoveis vinculados ao condominio
+                if (colecaoConsumoHistoricoImoveisVinculados != null && !colecaoConsumoHistoricoImoveisVinculados.isEmpty()) {
 
-					Iterator iColecaoConsumoHistoricoImoveisVinculados = colecaoConsumoHistoricoImoveisVinculados
-							.iterator();
+                    Iterator iColecaoConsumoHistoricoImoveisVinculados = colecaoConsumoHistoricoImoveisVinculados.iterator();
 
-					while (iColecaoConsumoHistoricoImoveisVinculados.hasNext()) {
-						String idImovelVinculados = ((Integer) iColecaoConsumoHistoricoImoveisVinculados
-								.next()).toString();
+                    while (iColecaoConsumoHistoricoImoveisVinculados.hasNext()) {
+                        String idImovelVinculados = ((Integer) iColecaoConsumoHistoricoImoveisVinculados.next()).toString();
 
-						// imovel vinculado
-						consultarHistoricoMedicaoIndividualizadaHelper = new ConsultarHistoricoMedicaoIndividualizadaHelper();
+                        // imovel vinculado
+                        consultarHistoricoMedicaoIndividualizadaHelper = new ConsultarHistoricoMedicaoIndividualizadaHelper();
 
-						Imovel imovelVinculado = new Imovel();
-						imovelVinculado.setId(new Integer(idImovelVinculados));
+                        Imovel imovelVinculado = new Imovel();
+                        imovelVinculado.setId(new Integer(idImovelVinculados));
 
-						// consultar consumo Historico imovel vinculado Ligacao
-						// Agua
-						// consumoHistorico =
-						// this.obterConsumoHistoricoMedicaoIndividualizada(imovelVinculado,
-						// ligacaoTipo, new
-						// Integer(anoMesFaturamento).intValue());
-						consumoHistorico = this
-								.obterConsumoHistoricoMedicaoIndividualizada(
-										imovelVinculado, ligacaoTipoInformado,
-										new Integer(anoMesFaturamento));
+                        // consultar consumo Historico imovel vinculado Ligacao
+                        // Agua
+                        // consumoHistorico =
+                        // this.obterConsumoHistoricoMedicaoIndividualizada(imovelVinculado,
+                        // ligacaoTipo, new
+                        // Integer(anoMesFaturamento).intValue());
+                        consumoHistorico = this.obterConsumoHistoricoMedicaoIndividualizada(imovelVinculado, ligacaoTipoInformado,
+                                new Integer(anoMesFaturamento));
 
-						// inscrição do imovel vinculado
-						consultarHistoricoMedicaoIndividualizadaHelper
-								.setMatriculaImovel(imovelVinculado.getId()
-										.toString());
+                        // inscrição do imovel vinculado
+                        consultarHistoricoMedicaoIndividualizadaHelper.setMatriculaImovel(imovelVinculado.getId().toString());
 
-						cliente = this
-								.consultarDadosClienteImovelUsuario(imovelVinculado);
+                        cliente = this.consultarDadosClienteImovelUsuario(imovelVinculado);
 
-						// nome do cliente do imovel vinculado
-						if (cliente != null) {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setNomeClienteUsuario(cliente.getNome());
-						} else {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setNomeClienteUsuario("");
-						}
+                        // nome do cliente do imovel vinculado
+                        if (cliente != null) {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setNomeClienteUsuario(cliente.getNome());
+                        } else {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setNomeClienteUsuario("");
+                        }
 
-						if (consumoHistorico != null) {
-							consumoTipo = consultarDadosConsumoTipoConsumoHistorico(consumoHistorico);
-						} else {
-							consumoTipo = null;
-						}
+                        if (consumoHistorico != null) {
+                            consumoTipo = consultarDadosConsumoTipoConsumoHistorico(consumoHistorico);
+                        } else {
+                            consumoTipo = null;
+                        }
 
-						if (consumoTipo != null) {
-							// tipo de consumo do imovel vinculado
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setTipoConsumo(consumoTipo
-											.getDescricaoAbreviada());
+                        if (consumoTipo != null) {
+                            // tipo de consumo do imovel vinculado
+                            consultarHistoricoMedicaoIndividualizadaHelper.setTipoConsumo(consumoTipo.getDescricaoAbreviada());
 
-						} else {
-							// tipo de consumo do imovel vinculado
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setTipoConsumo("");
-						}
+                        } else {
+                            // tipo de consumo do imovel vinculado
+                            consultarHistoricoMedicaoIndividualizadaHelper.setTipoConsumo("");
+                        }
 
-						// Seta o consumo do imóvel vínculado
-						if (consumoHistorico != null
-								&& consumoHistorico
-										.getConsumoImovelVinculadosCondominio() != null) {
-							// consumo agua medido do imovel vinculado
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoImovel(consumoHistorico
-											.getConsumoImovelVinculadosCondominio()
-											.toString());
-						} else {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoImovel("");
-						}
+                        // Seta o consumo do imóvel vínculado
+                        if (consumoHistorico != null && consumoHistorico.getConsumoImovelVinculadosCondominio() != null) {
+                            // consumo agua medido do imovel vinculado
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoImovel(consumoHistorico.getConsumoImovelVinculadosCondominio().toString());
+                        } else {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoImovel("");
+                        }
 
-						// consumo agua faturado do imovel vinculado
-						if (consumoHistorico != null) {
+                        // consumo agua faturado do imovel vinculado
+                        if (consumoHistorico != null) {
 
-							if (ligacaoTipoInformado.getId().equals(
-									LigacaoTipo.LIGACAO_AGUA)) {
+                            if (ligacaoTipoInformado.getId().equals(LigacaoTipo.LIGACAO_AGUA)) {
 
-								if (consumoHistorico
-										.getNumeroConsumoFaturadoMes() != null) {
-									consultarHistoricoMedicaoIndividualizadaHelper
-											.setConsumoAguaFaturado(consumoHistorico
-													.getNumeroConsumoFaturadoMes()
-													.toString());
-								} else {
-									consultarHistoricoMedicaoIndividualizadaHelper
-											.setConsumoAguaFaturado("");
-								}
-							} else if (ligacaoTipoInformado.getId().equals(
-									LigacaoTipo.LIGACAO_ESGOTO)) {
-								if (consumoHistorico
-										.getNumeroConsumoFaturadoMes() != null) {
-									consultarHistoricoMedicaoIndividualizadaHelper
-											.setConsumoEsgoto(consumoHistorico
-													.getNumeroConsumoFaturadoMes()
-													.toString());
-								} else {
-									consultarHistoricoMedicaoIndividualizadaHelper
-											.setConsumoEsgoto("");
-								}
-							}
+                                if (consumoHistorico.getNumeroConsumoFaturadoMes() != null) {
+                                    consultarHistoricoMedicaoIndividualizadaHelper
+                                            .setConsumoAguaFaturado(consumoHistorico.getNumeroConsumoFaturadoMes().toString());
+                                } else {
+                                    consultarHistoricoMedicaoIndividualizadaHelper.setConsumoAguaFaturado("");
+                                }
+                            } else if (ligacaoTipoInformado.getId().equals(LigacaoTipo.LIGACAO_ESGOTO)) {
+                                if (consumoHistorico.getNumeroConsumoFaturadoMes() != null) {
+                                    consultarHistoricoMedicaoIndividualizadaHelper.setConsumoEsgoto(consumoHistorico.getNumeroConsumoFaturadoMes().toString());
+                                } else {
+                                    consultarHistoricoMedicaoIndividualizadaHelper.setConsumoEsgoto("");
+                                }
+                            }
 
-							// consumo rateio do imovel vinculado
-							if (consumoHistorico.getConsumoRateio() != null) {
-								consultarHistoricoMedicaoIndividualizadaHelper
-										.setConsumoRateio(consumoHistorico
-												.getConsumoRateio().toString());
-							} else {
-								consultarHistoricoMedicaoIndividualizadaHelper
-										.setConsumoRateio("");
-							}
-						} else {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoAguaFaturado("");
-							// consumo rateio do imovel vinculado
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setConsumoRateio("");
-						}
+                            // consumo rateio do imovel vinculado
+                            if (consumoHistorico.getConsumoRateio() != null) {
+                                consultarHistoricoMedicaoIndividualizadaHelper.setConsumoRateio(consumoHistorico.getConsumoRateio().toString());
+                            } else {
+                                consultarHistoricoMedicaoIndividualizadaHelper.setConsumoRateio("");
+                            }
+                        } else {
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoAguaFaturado("");
+                            // consumo rateio do imovel vinculado
+                            consultarHistoricoMedicaoIndividualizadaHelper.setConsumoRateio("");
+                        }
 
-						if (consumoHistorico.getImovel() != null
-								&& consumoHistorico.getImovel()
-										.getIndicadorImovelAreaComum() != null) {
-							consultarHistoricoMedicaoIndividualizadaHelper
-									.setIndicadorImovelAreaComum(consumoHistorico
-											.getImovel()
-											.getIndicadorImovelAreaComum()
-											.toString());
-						}
+                        if (consumoHistorico.getImovel() != null && consumoHistorico.getImovel().getIndicadorImovelAreaComum() != null) {
+                            consultarHistoricoMedicaoIndividualizadaHelper
+                                    .setIndicadorImovelAreaComum(consumoHistorico.getImovel().getIndicadorImovelAreaComum().toString());
+                        }
 
-						// adicionando dados do imovel vinculado
-						colecaoHistoricosMedicaoIndividualizada
-								.add(consultarHistoricoMedicaoIndividualizadaHelper);
-					}
-				}
-			}
+                        // adicionando dados do imovel vinculado
+                        colecaoHistoricosMedicaoIndividualizada.add(consultarHistoricoMedicaoIndividualizadaHelper);
+                    }
+                }
+            }
 
-			return colecaoHistoricosMedicaoIndividualizada;
+            return colecaoHistoricosMedicaoIndividualizada;
 
-		} catch (ErroRepositorioException e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
+        } catch (ErroRepositorioException e) {
+            sessionContext.setRollbackOnly();
+            throw new ControladorException("erro.sistema", e);
+        }
 
-	}
+    }
 
 	/**
 	 * Consultar Matriculas dos Imoveis Vinculados do Imovel condominio
@@ -14010,12 +13939,10 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Collection consultarConsumoHistoricoImoveisVinculados(
-			ConsumoHistorico consumoHistorico) throws ControladorException {
+	public Collection consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ControladorException {
 
 		try {
-			return repositorioMicromedicao
-					.consultarConsumoHistoricoImoveisVinculados(consumoHistorico);
+			return repositorioMicromedicao.consultarConsumoHistoricoImoveisVinculados(consumoHistorico);
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
@@ -14037,82 +13964,19 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(
-			Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia)
-			throws ControladorException {
+	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ControladorException {
 
-		ConsumoHistorico consumoHistorico = null;
+        ConsumoHistorico consumoHistorico = null;
 
-		Object[] colecaoConsumoHistoricoArray = null;
+        try {
+            consumoHistorico = repositorioMicromedicao.obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipo, anoMesReferencia);
+        } catch (ErroRepositorioException ex) {
+            sessionContext.setRollbackOnly();
+            throw new ControladorException("erro.sistema", ex);
+        }
 
-		try {
-			colecaoConsumoHistoricoArray = repositorioMicromedicao
-					.obterConsumoHistoricoMedicaoIndividualizada(imovel,
-							ligacaoTipo, anoMesReferencia);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (colecaoConsumoHistoricoArray != null
-				&& !(colecaoConsumoHistoricoArray.length < 0)) {
-
-			consumoHistorico = new ConsumoHistorico();
-
-			// Seta o id do histórico
-			if (colecaoConsumoHistoricoArray[0] != null) {
-				consumoHistorico
-						.setId((Integer) colecaoConsumoHistoricoArray[0]);
-			}
-
-			// Seta Consumo Rateio
-			if (colecaoConsumoHistoricoArray[1] != null) {
-				consumoHistorico
-						.setConsumoRateio((Integer) colecaoConsumoHistoricoArray[1]);
-			}
-
-			// Seta o Numero Consumo Faturado Mes
-			if (colecaoConsumoHistoricoArray[2] != null) {
-				consumoHistorico
-						.setNumeroConsumoFaturadoMes((Integer) colecaoConsumoHistoricoArray[2]);
-			}
-
-			// Seta o Consumo Tipo
-			if (colecaoConsumoHistoricoArray[3] != null) {
-				ConsumoTipo consumoTipo = new ConsumoTipo();
-				consumoTipo.setId((Integer) colecaoConsumoHistoricoArray[3]);
-				consumoHistorico.setConsumoTipo(consumoTipo);
-			}
-
-			// Seta o Indicador Faturamento
-			if (colecaoConsumoHistoricoArray[4] != null) {
-				consumoHistorico
-						.setIndicadorFaturamento((Short) colecaoConsumoHistoricoArray[4]);
-			}
-
-			// Seta o id co Consumo Anormalidade
-			if (colecaoConsumoHistoricoArray[5] != null) {
-				ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-				consumoAnormalidade
-						.setId((Integer) colecaoConsumoHistoricoArray[5]);
-				consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
-			}
-
-			// Seta o Consumo do imóvel vinculado
-			if (colecaoConsumoHistoricoArray[6] != null) {
-				consumoHistorico
-						.setConsumoImovelVinculadosCondominio((Integer) colecaoConsumoHistoricoArray[6]);
-			}
-
-			if (colecaoConsumoHistoricoArray[7] != null) {
-				Imovel imov = new Imovel();
-				imov.setIndicadorImovelAreaComum((Short) colecaoConsumoHistoricoArray[7]);
-				consumoHistorico.setImovel(imov);
-			}
-		}
-
-		return consumoHistorico;
-	}
+        return consumoHistorico;
+    }
 
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento Author: Rafael Santos
@@ -40501,41 +40365,32 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public int obterConsumoASerRateado(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) {
+    public int obterConsumoASerRateado(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) {
 
-		Integer consumoImovelCondomino =  new Integer(0);
-		
-		int consumoASerRateado = 0;
-		try {
-			Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
-					.obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-			
-			Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
-			Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
-	
-			int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-	
-			if (consumoLigacaoImovelCondominio != null) {
-				consumoImovelCondomino = consumoLigacaoImovelCondominio;
-			}
-		
-		/*
-		 * O consumo de água a ser rateado vai ser igual ao consumo da ligação
-		 * de água/esgoto do imóvel condomínio para o mês de faturamento corrente.
-		 */
-		consumoASerRateado = -consumoAguaImoveisVinculados;
-		
-		if (consumoImovelCondomino != null) {
-			consumoASerRateado = consumoASerRateado + consumoImovelCondomino;
-		}
-		
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("Consumo a ser rateado: " + consumoASerRateado);
-		return consumoASerRateado;
-	}
+        Integer consumoImovelCondomino = new Integer(0);
+
+        int consumoASerRateado = 0;
+        try {
+            Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
+                    .obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
+
+            Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
+            Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
+
+            int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
+
+            if (consumoLigacaoImovelCondominio != null) {
+                consumoImovelCondomino = consumoLigacaoImovelCondominio;
+            }
+
+            consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
+        } catch (ErroRepositorioException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Consumo a ser rateado: " + consumoASerRateado);
+        return consumoASerRateado;
+    }
 	
 	/**
 	 * 

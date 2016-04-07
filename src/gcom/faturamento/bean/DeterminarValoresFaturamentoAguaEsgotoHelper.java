@@ -212,4 +212,26 @@ public class DeterminarValoresFaturamentoAguaEsgotoHelper {
 	public void setPercentualColetaEsgoto(BigDecimal percentualColetaEsgoto) {
 		this.percentualColetaEsgoto = percentualColetaEsgoto;
 	}
+
+    public void atribuirConsumoHistoricoAgua(ConsumoHistorico consumoHistoricoAgua2) {
+        if (consumoHistoricoAgua != null) {
+            this.setConsumoHistoricoAgua(consumoHistoricoAgua);
+            this.setIndicadorFaturamentoAgua(consumoHistoricoAgua.getIndicadorFaturamento());
+            this.setConsumoFaturadoAgua(consumoHistoricoAgua.getNumeroConsumoFaturadoMes());
+            this.setConsumoRateioAgua(consumoHistoricoAgua.getConsumoRateio());
+            this.setConsumoTipoAgua(consumoHistoricoAgua.getConsumoTipo());
+        }        
+    }
+    
+
+    public void atribuirConsumoHistoricoEsgoto(ConsumoHistorico consumoHistoricoEsgoto) {
+        if (consumoHistoricoEsgoto != null) {
+            this.setConsumoHistoricoEsgoto(consumoHistoricoEsgoto);
+            this.setIndicadorFaturamentoEsgoto(consumoHistoricoEsgoto.getIndicadorFaturamento());
+            this.setConsumoFaturadoEsgoto(consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes());
+            this.setConsumoRateioEsgoto(consumoHistoricoEsgoto.getConsumoRateio());
+            this.setConsumoTipoEsgoto(consumoHistoricoEsgoto.getConsumoTipo());
+            
+        }        
+    }
 }
