@@ -296,6 +296,7 @@ import gcom.relatorio.faturamento.conta.ContaLinhasDescricaoServicosTarifasTotal
 import gcom.relatorio.faturamento.conta.ContasEmitidasRelatorioHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioMapaControleConta;
+import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Abrangencia;
@@ -75958,6 +75959,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			clienteContaRetificada.setUltimaAlteracao(new Date());
 			
 			getControladorUtil().inserir(clienteContaRetificada);
+		}
+	}
+	
+	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idMunicipio) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarContasFaturadasDesde122015(anoMes, idMunicipio);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 }

@@ -20,6 +20,13 @@
 	   var form = document.forms[0];
 	   form.submit();
 	}
+	function limparMunicipio() {
+        var form = document.forms[0];
+
+        form.codigoMunicipio.value = "";
+    	form.descricaoMunicipio.value = "";
+    	form.submit();
+    }
 </script>
 
 </head>

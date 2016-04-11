@@ -52,13 +52,9 @@ public class FiltrarRelatorioAMAEAction extends GcomAction {
 				// O municipio foi encontrado
 				form.setCodigoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getId());
 				form.setDescricaoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getNome());
-//				form.set("codigoMunicipio", ""+ ((Municipio) ((List) municipioEncontrado).get(0)).getId());
-//				form.set("descricaoMunicipioCliente",((Municipio) ((List) municipioEncontrado).get(0)).getNome());
 			} else {
 				form.setCodigoMunicipio(null);
 				form.setDescricaoMunicipio("Município inexistente");
-//				form.set("codigoMunicipio", "");
-//				form.set("descricaoMunicipio","Município inexistente");
 				httpServletRequest.setAttribute("municipioNaoEncontrado","exception");
 			}
 		}
