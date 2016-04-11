@@ -522,6 +522,22 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["MATRICULA: "+$F{getMatriculaImovel}]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="154"
+						width="534"
+						height="318"
+						key="textField-372">
+							<printWhenExpression><![CDATA[new Boolean($F{getDescontoNegociado}.equals("relatorioDeveApresentarParagrafo2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["           "+"Pela presente instrumento particular e na melhor forma de direito, o (a) Sr.(a) " + $F{getNomeCliente}+" Portador(a) do RG Nº " + $F{getRgCliente} + " CPF Nº " +$F{getCpfCnpj} +", residente  e  domiciliado  à "+ $F{getEndereco} +" doravante denominado (a) DEVEDOR (A) e a COMPANHIA DE SANEAMENTO DO PARÁ, doravante denominada CREDORA, representada pelo (a) Sr.(a), " + $F{getNomeFuncionario} + ", ocupante do cargo de " + $F{getCargoFuncionario} + " têm  justo  e  acertado  a assinatura do presente  Termo de Confissão e Assunção de Dívida e de Acordo para Pagamento Parcelado, mediante as clausulas e condições seguintes:" 
++ "\n" + "CLÁUSULA PRIMEIRA: O(A) DEVEDOR(A) confessa e assume a dívida de R$ " + $F{getValorASerNegociado} +" ("+ $F{getValorAserNegociadoPorExtenso} +"), perante a CREDORA, referente às faturas vencidas e não pagas" + $V{mensagemReferenciaDocumentos} + ".\n CLÁUSULA SEGUNDA: O débito que alude a Cláusula Primeira será reembolsado pelo (a) DEVEDOR, a favor da CREDORA da seguinte forma: \nPARÁGRAFO 1º - PARCELADO: Em 01 (uma) parcela, a titulo de entrada, no valor de R$ " + $F{getValorEntrada}  + " (" + $F{getValorDeEntradaProExtenso} + "),  vencível  em " + $F{getDataVencimentoGuiaPagamento} + "; e as demais em   " + $F{getNumeroParcelas} +" ("   + $F{getNumeroDeParcelasPorExtenso} +") parcelas iguais, fixas e exigíveis mensalmente, no valor de R$ " + $F{getValorParcela} + " (" + $F{getValorDaParcelaPorExtenso} + ") cada, totalizando a importância de R$ " +  $F{getValorASerParcelado} +" (" + $F{getValorTOTALDasParcelasPorExtenso} + "), sendo estas parcelas vencíveis nas datas das faturas de consumo mensal."+ "\n" +"PARAGRAFO 2º: O restante do débito, no valor de R$ "+$F{getTotalDescontos} +" (" +$F{getValorDescontoPorExtenso} +"), será quitado a título de desconto, de forma proporcional ao prazo de parcelamento e condicionada ao efetivo pagamento de cada uma das faturas de cobrança das parcelas antes referidas e conta-consumo mensal, que trata o parágrafo anterior."+"\n" + "CLÁUSULA TERCEIRA: Em garantia do pagamento do débito acima acordado, o (a) devedor (a) emite e entrega em caução, nesta data, uma Nota Promissória em favor da CREDORA, no valor de R$ "+ $F{getValorASerNegociado}  + " (" + $F{getValorAserNegociadoPorExtenso} + "), exclusivamente vinculada ao presente Termo."+ "\n" + "CLÁUSULA QUARTA: Em caso de inadimplemento, implicará no vencimento antecipado da dívida, abatendo-se apenas a (s) parcela (s) paga (s), pelo que este instrumento se constitui em titulo executivo extrajudicial, hábil para a cobrança da dívida. Sobre o valor vencido incidirão juros de mora de 1% a.m. (um porcento ao mês) e multa de 2% (dois porcento), na forma legal." + "\n" + "CLÁUSULA QUINTA: Para dirimir quaisquer questões que direta ou indiretamente decorram do presente contrato, o foro competente é o do DEVEDOR." + "\n" + "                         "+"E por estarem assim justas e acordadas, as partes assinam o presente Termo de Confissão e Assunção de Dívida e de Acordo para Pagamento Parcelado, em 02 (duas) vias de igual teor e forma, na presença das testemunhas abaixo, e que produza seus legais e jurídicos efeitos."]]></textFieldExpression>
+				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="6"
