@@ -60617,22 +60617,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			consulta = 
-					"select muni_id, loca_id, sum(agua) as agua, sum(esgoto) as esgoto from ( select muni_id, sc.loca_id, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto "
-					+"from faturamento.conta c, cadastro.setor_comercial sc "
+					"select muni_nmmunicipio, loca_nmlocalidade, sum(agua) as agua, sum(esgoto) as esgoto from ( select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto "
+					+"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
 					+"where 1=1 "
 					+"and cnta_amreferenciaconta = :referencia "
 					+"and dcst_idatual in (0,2,3,5,4) "
-					+"and c.loca_id = sc.loca_id ";
+					+"and c.loca_id = sc.loca_id "
+					+"and sc.muni_id = m.muni_id "
+					+"and loc.loca_id = sc.loca_id ";
 			if (idMunicipio != null) {
 				consulta += " and muni_id = :idMunicipio ";
 			}
 			consulta+="group by 1,2 "
 					+"union all "
-					+"select muni_id, sc.loca_id, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto from faturamento.conta c, cadastro.setor_comercial sc "
+					+"select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
 					+"where 1=1 "
 					+"and cnta_amreferenciacontabil = :referencia "
 					+"and cnta_amreferenciaconta >= 201511 "
 					+"and c.loca_id = sc.loca_id "
+					+"and sc.muni_id = m.muni_id "
+					+"and loc.loca_id = sc.loca_id "
 					+"and dcst_idatual = 1 ";
 			if (idMunicipio != null) {
 				consulta += " and muni_id = :idMunicipio ";
@@ -60643,8 +60647,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+"order by 1,2 ";
 			
 			query = session.createSQLQuery(consulta)
-			.addScalar("muni_id", Hibernate.STRING)
-			.addScalar("loca_id", Hibernate.STRING)
+			.addScalar("muni_nmmunicipio", Hibernate.STRING)
+			.addScalar("loca_nmlocalidade", Hibernate.STRING)
 			.addScalar("agua", Hibernate.BIG_DECIMAL)
 			.addScalar("esgoto", Hibernate.BIG_DECIMAL)
 			.setInteger("referencia", anoMes);
@@ -60655,12 +60659,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			helper = query.list();
 			
 			consulta = 
-					"select muni_id, sc.loca_id, sum(cnta_vlagua) as agua , sum(cnta_vlesgoto) as esgoto " 
-					+"from faturamento.conta c, cadastro.setor_comercial sc "
+					"select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua , sum(cnta_vlesgoto) as esgoto " 
+					+"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
 					+"where 1=1 "
 					+"and cnta_amreferenciacontabil = :referencia "
 					+"and cnta_amreferenciaconta >= 201511 "
 					+"and c.loca_id = sc.loca_id " 
+					+"and sc.muni_id = m.muni_id "
+					+"and loc.loca_id = sc.loca_id "
 					+"and dcst_idatual in (4,3) ";
 			if (idMunicipio != null) {
 				consulta += " and muni_id = :idMunicipio ";
@@ -60669,8 +60675,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+"order by 1,2 ";
 			
 			query = session.createSQLQuery(consulta)
-					.addScalar("muni_id", Hibernate.STRING)
-					.addScalar("loca_id", Hibernate.STRING)
+					.addScalar("muni_nmmunicipio", Hibernate.STRING)
+					.addScalar("loca_nmlocalidade", Hibernate.STRING)
 					.addScalar("agua", Hibernate.BIG_DECIMAL)
 					.addScalar("esgoto", Hibernate.BIG_DECIMAL)
 					.setInteger("referencia", anoMes);
