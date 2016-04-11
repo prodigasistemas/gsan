@@ -52,7 +52,7 @@ public class RetificarContaAction extends GcomAction {
     	//Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
         
-        // Mudar isso quando tiver esquema de segurança
+        // Mudar isso quando tiver esquema de seguranï¿½a
         HttpSession sessao = this.getSessao(httpServletRequest);        
         
         //Carregando a conta com os dados atuais
@@ -60,10 +60,10 @@ public class RetificarContaAction extends GcomAction {
         
         String valorConfirmacao = httpServletRequest.getParameter("confirmado");
         
-        // Instância do formulário que está sendo utilizado
+        // Instï¿½ncia do formulï¿½rio que estï¿½ sendo utilizado
 		RetificarContaActionForm retificarContaActionForm = (RetificarContaActionForm) actionForm;
 
-		// Recebendo os dados enviados pelo formulário
+		// Recebendo os dados enviados pelo formulï¿½rio
 		String imovelIdJSP = retificarContaActionForm.getIdImovel();
 		String mesAnoContaJSP = retificarContaActionForm.getMesAnoConta();
 		String vencimentoContaJSP = retificarContaActionForm.getVencimentoConta();
@@ -77,8 +77,8 @@ public class RetificarContaAction extends GcomAction {
 		
 		
 		/*
-		 * Adicionar a lista de clientes vinculados à conta, e indicar qual deles
-		 * será impresso na 2ª via da conta 
+		 * Adicionar a lista de clientes vinculados ï¿½ conta, e indicar qual deles
+		 * serï¿½ impresso na 2ï¿½ via da conta 
 		 */
 		
 		String agua = null;
@@ -129,7 +129,7 @@ public class RetificarContaAction extends GcomAction {
 			flag = false;
 		}
 		
-		// Carrega as coleções de acordo com os objetos da sessão
+		// Carrega as coleï¿½ï¿½es de acordo com os objetos da sessï¿½o
 		Collection colecaoDebitoCobrado = new Vector();
 		if (sessao.getAttribute("colecaoDebitoCobrado") != null) {
 			colecaoDebitoCobrado = 
@@ -166,7 +166,7 @@ public class RetificarContaAction extends GcomAction {
     				flag = true;
     			}
     			
-    			//Atualizando a quantidade de economias por subcategoria de acordo com o informado pelo usuário
+    			//Atualizando a quantidade de economias por subcategoria de acordo com o informado pelo usuï¿½rio
     	        //-------------------------------------------------------------------------------------------
     	        Iterator colecaoCategoriaOUSubcategoriaInicialIt = colecaoCategoriaOUSubcategoriaInicial.iterator();
     	        Subcategoria subcategoria;
@@ -211,7 +211,7 @@ public class RetificarContaAction extends GcomAction {
     				flag = true;
     			}
     			
-    			//Atualizando a quantidade de economias por categoria de acordo com o informado pelo usuário
+    			//Atualizando a quantidade de economias por categoria de acordo com o informado pelo usuï¿½rio
     	        //-------------------------------------------------------------------------------------------
     	        Iterator colecaoCategoriaOUSubcategoriaInicialIt = colecaoCategoriaOUSubcategoriaInicial.iterator();
     	        Categoria categoria;
@@ -254,7 +254,7 @@ public class RetificarContaAction extends GcomAction {
 				flag = true;
 			}
 
-			//Atualizando o valor do debito de acordo com o informado pelo usuário
+			//Atualizando o valor do debito de acordo com o informado pelo usuï¿½rio
 	        //-------------------------------------------------------------------------------------------
 	        Iterator colecaoDebitoIt = colecaoDebito.iterator();
 	        DebitoCobrado debitoCobrado;
@@ -276,7 +276,7 @@ public class RetificarContaAction extends GcomAction {
 							|| valor.equalsIgnoreCase("")) {
 						throw new ActionServletException(
 								"atencao.campo_texto.obrigatorio", null,
-								"Débito Cobrado");
+								"Dï¿½bito Cobrado");
 					}
 					else{
     					valor2 = Util.formatarMoedaRealparaBigDecimal(valor);
@@ -298,7 +298,7 @@ public class RetificarContaAction extends GcomAction {
 				flag = true;
 			}
 			
-			//Atualizando o valor do credito de acordo com o informado pelo usuário
+			//Atualizando o valor do credito de acordo com o informado pelo usuï¿½rio
 	        //-------------------------------------------------------------------------------------------
 	        Iterator colecaoCreditoIt = colecaoCredito.iterator();
 	        CreditoRealizado creditoRealizado;
@@ -320,7 +320,7 @@ public class RetificarContaAction extends GcomAction {
 							|| valor.equalsIgnoreCase("")) {
 						throw new ActionServletException(
 								"atencao.campo_texto.obrigatorio", null,
-								"Crédito Realizado");
+								"Crï¿½dito Realizado");
 					}
 					else{
     					valor2 = Util.formatarMoedaRealparaBigDecimal(valor);
@@ -331,14 +331,14 @@ public class RetificarContaAction extends GcomAction {
 	        }
 
 		}
-		// [FS0015] - Verificar se foi efetuado o cálculo da conta
+		// [FS0015] - Verificar se foi efetuado o cï¿½lculo da conta
 
-		// [SF0001] - Determinar Valores para Faturamento de Água e/ou Esgoto
+		// [SF0001] - Determinar Valores para Faturamento de ï¿½gua e/ou Esgoto
 		Usuario usuarioLogado = (Usuario)sessao.getAttribute(Usuario.USUARIO_LOGADO);
         
         // Adicionado por Bruno Barros, 25/07/2008
         // Verificar se foi informado a tarifa de consumo da conta no retificar
-        // Caso sim, calcular com o novo ConsumoTarifa informado, senão, 
+        // Caso sim, calcular com o novo ConsumoTarifa informado, senï¿½o, 
         // utilizar o da conta
         
         Integer idConsumoTarifa = contaAtual.getConsumoTarifa().getId();
@@ -373,23 +373,23 @@ public class RetificarContaAction extends GcomAction {
         
         // Fim alterador por Bruno Barros, 25/07/2008
         
-        //Cálcula o valor total dos débitos de uma conta de acordo com o informado pelo usuário
+        //Cï¿½lcula o valor total dos dï¿½bitos de uma conta de acordo com o informado pelo usuï¿½rio
         BigDecimal valorTotalDebitosConta = 
         	this.getFachada().calcularValorTotalDebitoConta(colecaoDebitoCobrado,
         httpServletRequest.getParameterMap());
         
-        //Cálcula o valor total dos créditos de uma conta de acordo com o informado pelo usuário
+        //Cï¿½lcula o valor total dos crï¿½ditos de uma conta de acordo com o informado pelo usuï¿½rio
         BigDecimal valorTotalCreditosConta = 
         	this.getFachada().calcularValorTotalCreditoConta(colecaoCreditoRealizado,
         httpServletRequest.getParameterMap());
 		
-		//Totalizando os valores de água e esgoto
+		//Totalizando os valores de ï¿½gua e esgoto
         BigDecimal valorTotalAgua = new BigDecimal("0");
         BigDecimal valorTotalEsgoto = new BigDecimal("0");
         
         if (valoresConta != null){
             for(CalcularValoresAguaEsgotoHelper valor : valoresConta){
-                //Valor Faturado de Água
+                //Valor Faturado de ï¿½gua
                 if (valor.getValorFaturadoAguaCategoria() != null){
                     valorTotalAgua = valorTotalAgua.add(valor.getValorFaturadoAguaCategoria());
                 }
@@ -410,27 +410,24 @@ public class RetificarContaAction extends GcomAction {
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
         valorTotalConta = valorTotalConta.add(valorTotalDebitosConta);
+        valorTotalConta = valorTotalConta.add(valorTotalEsgoto);
         valorTotalConta = valorTotalConta.subtract(valorTotalCreditosConta);
         
         
-        if (valorTotalConta.equals(new BigDecimal("0.00")) && 
-        	(valorTotalCreditosConta == null || valorTotalCreditosConta.equals(new BigDecimal("0.00")))) {
-			throw new ActionServletException("atencao.valor_conta_igual_zero");
-		}
-		else if (valorTotalConta.compareTo(new BigDecimal("0.00")) == -1){	
+        if (valorTotalConta.compareTo(BigDecimal.ZERO) < 0 ){	
 			throw new ActionServletException("atencao.valor_conta_negativo");
 		}
 		
-        // [FS0022] - Retificação de Conta Retifivada.
+        // [FS0022] - Retificaï¿½ï¿½o de Conta Retifivada.
         //-------------------------------------------------------------------------------------------
 		// Alterado por :  Yara Taciane  - data : 19/06/2008 
-		// Analista :  Denys Guimarães
+		// Analista :  Denys Guimarï¿½es
         //-------------------------------------------------------------------------------------------
         //Caso a conta de origem seja RETIFICADA.
 		if( contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA) ){
 			// E o valor total da nova conta esteja menor que o valor total da conta retificada original.
 			if(valorTotalConta.doubleValue() < contaAtual.getValorTotalContaBigDecimal().doubleValue() ){
-				// E o usuário não tenha permissão especial. 
+				// E o usuï¿½rio nï¿½o tenha permissï¿½o especial. 
 				boolean temPermissaoParaRetificarParaMenorContaRetificadora = 
 					this.getFachada().verificarPermissaoEspecial(
 						PermissaoEspecial.RETIFICAR_PARA_MENOR_CONTA_RETIFICADA,
@@ -476,7 +473,7 @@ public class RetificarContaAction extends GcomAction {
 				Date dataCorrenteComDias = Util.adicionarNumeroDiasDeUmaData(dataCorrente, diasAdicionais.intValue());
 				//Date dataUltimoDiaMes = Util.obterUltimaDataMes(Util.getMes(dataCorrente), Util.getAno(dataCorrente));
 				
-				//E o usuário não tenha permissão especial.	
+				//E o usuï¿½rio nï¿½o tenha permissï¿½o especial.	
 				boolean temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao = 
 					this.getFachada().verificarPermissaoEspecial(
 						PermissaoEspecial.RETIFICAR_DATA_VENCIMENTO_ALEM_PRAZO_PADRAO,
@@ -517,13 +514,13 @@ public class RetificarContaAction extends GcomAction {
                 ligacaoAguaSituacao.getIndicadorFaturamentoSituacao().equals(ConstantesSistema.SIM ) && 
                 valorConfirmacao == null ;                
             
-            // se for para ir para a tela de confirmação
+            // se for para ir para a tela de confirmaï¿½ï¿½o
             if (telaConfirmacao) {
                 httpServletRequest.setAttribute("caminhoActionConclusao",
                         "/gsan/retificarContaAction.do");
                 httpServletRequest.setAttribute("cancelamento", "TRUE");
                 httpServletRequest.setAttribute("nomeBotao1", "Sim");
-                httpServletRequest.setAttribute("nomeBotao2", "Não");
+                httpServletRequest.setAttribute("nomeBotao2", "Nï¿½o");
 
                 return montarPaginaConfirmacao("atencao.consumo_novo_substituir_consumo_calculo_media_ano_mes",
                         httpServletRequest, actionMapping);
@@ -543,7 +540,7 @@ public class RetificarContaAction extends GcomAction {
 		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
 
 		
-		// Motivo da Retificação da conta
+		// Motivo da Retificaï¿½ï¿½o da conta
 		ContaMotivoRetificacao contaMotivoRetificacao = new ContaMotivoRetificacao();
 		contaMotivoRetificacao.setId(motivoRetificacaoContaJSP);
 		if(!flag)
@@ -625,25 +622,25 @@ public class RetificarContaAction extends GcomAction {
 				
 		montarPaginaSucesso(httpServletRequest, 
 				"Conta " + Util.formatarAnoMesParaMesAno(new Integer(mesAnoContaJSP).intValue()) + 
-				" do imóvel " + contaAtual.getImovel().getId().intValue() + " retificada com sucesso.",
-				"Realizar outra Manutençao de Conta",
+				" do imï¿½vel " + contaAtual.getImovel().getId().intValue() + " retificada com sucesso.",
+				"Realizar outra Manutenï¿½ao de Conta",
 				"exibirManterContaAction.do?menu=sim","gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta="+ idConta.toString(), 
-				"Emitir 2ª Via de Conta");
+				"Emitir 2ï¿½ Via de Conta");
 
 		return retorno;
     }
     
 	
-	/*[SB0012] – Determinar competência de retificação de consumo
+	/*[SB0012] ï¿½ Determinar competï¿½ncia de retificaï¿½ï¿½o de consumo
 	 * Vivianne Sousa - 16/02/2011
-	 * RM4132 - analista responsável:Jeferson Pedrosa
+	 * RM4132 - analista responsï¿½vel:Jeferson Pedrosa
 	 */
 	public BigDecimal determinarCompatenciaRetificacaoConsumo(String idMotivoSelecionado,
 			SistemaParametro sistemaParametro,Usuario usuarioLogado,boolean temPermissaoParaRetificarContaNorma){
 		
 		BigDecimal competenciaRetificacao = null;
 		if(sistemaParametro.getIndicadorNormaRetificacao().equals(ConstantesSistema.SIM)){
-			//Caso a Empresa esteja na Norma de Retificação de Conta 
+			//Caso a Empresa esteja na Norma de Retificaï¿½ï¿½o de Conta 
 			
 			if(idMotivoSelecionado != null && !idMotivoSelecionado.equalsIgnoreCase("")
 				&& !idMotivoSelecionado.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)){
@@ -683,9 +680,9 @@ public class RetificarContaAction extends GcomAction {
 	}
 
 	
-	/* [FS0041] – Validar competência Consumo Água
+	/* [FS0041] ï¿½ Validar competï¿½ncia Consumo ï¿½gua
 	 * Vivianne Sousa - 17/02/2011
-	 * RM4132 - analista responsável:Jeferson Pedrosa
+	 * RM4132 - analista responsï¿½vel:Jeferson Pedrosa
 	 */
 	public void validarCompetenciaConsumoAgua(BigDecimal competenciaRetificacao,Conta contaSelecao,
 			String consumoAgua,boolean temPermissaoParaRetificarContaNorma){
@@ -725,9 +722,9 @@ public class RetificarContaAction extends GcomAction {
 	}
 
 	
-	/* [FS0042] – Validar competência Volume Poço
+	/* [FS0042] ï¿½ Validar competï¿½ncia Volume Poï¿½o
 	 * Vivianne Sousa - 17/02/2011
-	 * RM4132 - analista responsável:Jeferson Pedrosa
+	 * RM4132 - analista responsï¿½vel:Jeferson Pedrosa
 	 */
 	public void validarCompetenciaVolumePoco(BigDecimal competenciaRetificacao,
 			Conta contaSelecao,String volumePoco,boolean temPermissaoParaRetificarContaNorma){
@@ -769,7 +766,7 @@ public class RetificarContaAction extends GcomAction {
 	}
 
 	/* Vivianne Sousa - 17/02/2011
-	 * RM4132 - analista responsável:Jeferson Pedrosa
+	 * RM4132 - analista responsï¿½vel:Jeferson Pedrosa
 	 */
 	public void validarCompetencia(String idMotivoSelecionado,SistemaParametro sistemaParametro,
 			Usuario usuarioLogado,Conta contaSelecao,String volumePoco,String consumoAgua,boolean temPermissaoParaRetificarContaNorma){
@@ -785,9 +782,9 @@ public class RetificarContaAction extends GcomAction {
 		}
 	}
 	
-	 /* [FS0039] – Verificar valores de Leitura Anterior e Atual do Poço
+	 /* [FS0039] ï¿½ Verificar valores de Leitura Anterior e Atual do Poï¿½o
 	  * Vivianne Sousa - 17/02/2011
-	  * RM4132 - analista responsável:Jeferson Pedrosa
+	  * RM4132 - analista responsï¿½vel:Jeferson Pedrosa
 	 */
 	public void verificarValoresLeituraAnteriorEAtualPoco(String leituraAnteriorPocoString,
 			String leituraAtualPocoString, String consumoFaturadoPocoString,SistemaParametro sistemaParametro) {
@@ -797,7 +794,7 @@ public class RetificarContaAction extends GcomAction {
 			if(leituraAnteriorPocoString != null && leituraAtualPocoString != null && consumoFaturadoPocoString != null &&
 					!leituraAnteriorPocoString.equalsIgnoreCase("") && !leituraAtualPocoString.equalsIgnoreCase("") 
 					&& !consumoFaturadoPocoString.equalsIgnoreCase("")){
-				//Caso exista informação do Volume de Poço, da Leitura Anterior Poço e da Leitura Atual Poço:
+				//Caso exista informaï¿½ï¿½o do Volume de Poï¿½o, da Leitura Anterior Poï¿½o e da Leitura Atual Poï¿½o:
 				
 				Integer leituraAnteriorPoco = new Integer(leituraAnteriorPocoString);
 				Integer leituraAtualPoco =  new Integer(leituraAtualPocoString);
@@ -819,14 +816,14 @@ public class RetificarContaAction extends GcomAction {
 	
 	}
 	
-	/*[FS0037]-Verificar ocorrências mesmo motivo no ano
+	/*[FS0037]-Verificar ocorrï¿½ncias mesmo motivo no ano
 	 * Vivianne Sousa - 11/02/2011
 	 */
 	public void verificarOcorrenciasMesmoMotivoAno(Integer idMotivoSelecionado,Integer idImovel, 
 			HttpSession sessao,SistemaParametro sistemaParametro,boolean temPermissaoParaRetificarContaNorma){
 
 		if(sistemaParametro.getIndicadorNormaRetificacao().equals(ConstantesSistema.SIM)){
-			//Caso a Empresa esteja na Norma de Retificação de Conta 
+			//Caso a Empresa esteja na Norma de Retificaï¿½ï¿½o de Conta 
 			
 			ContaMotivoRetificacao contaMotivoRetificacao = getFachada().pesquisaContaMotivoRetificacao(idMotivoSelecionado);
 			if (contaMotivoRetificacao != null && contaMotivoRetificacao.getNumeroOcorrenciasNoAno() != null &&
@@ -839,7 +836,7 @@ public class RetificarContaAction extends GcomAction {
 				
 				if(!temPermissaoParaRetificarContaNorma && 
 						qtdeContaEContaHistoricoRetificadaMotivo.compareTo(numeroOcorrenciasNoAno) > -1){
-					//Limite de Retificações para o mesmo Motivo excedido!
+					//Limite de Retificaï¿½ï¿½es para o mesmo Motivo excedido!
 					throw new ActionServletException("atencao.limite_retificacoes_excedido");
 					
 				}
