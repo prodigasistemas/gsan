@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+	<display-name>Controladores de Faturamento</display-name>
+	<ejb-client-jar>ControladoresFaturamento.jar</ejb-client-jar>
+    <enterprise-beans>
+        <session>
+            <display-name>ControladorAnaliseGeracaoContaGCOM</display-name>
+            <ejb-name>ControladorAnaliseGeracaoContaGCOM</ejb-name>
+            <local-home>gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocalHome</local-home>
+            <local>gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocal</local>
+            <ejb-class>gcom.faturamento.controladores.ControladorAnaliseGeracaoConta</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+
+        <session>
+            <display-name>ControladorDebitoACobrarGCOM</display-name>
+            <ejb-name>ControladorDebitoACobrarGCOM</ejb-name>
+            <local-home>gcom.faturamento.controladores.ControladorDebitoACobrarLocalHome</local-home>
+            <local>gcom.faturamento.controladores.ControladorDebitoACobrarLocal</local>
+            <ejb-class>gcom.faturamento.controladores.ControladorDebitoACobrar</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorAnaliseGeracaoContaGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+    
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorDebitoACobrarGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>        
+    </assembly-descriptor>
+</ejb-jar>

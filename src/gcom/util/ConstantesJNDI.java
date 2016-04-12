@@ -7,6 +7,9 @@ public class ConstantesJNDI {
 
 	public final static String NOME_ARQUIVO_PROPRIEDADES = "constantes_jndi.properties";
 
+	public static String CONTROLADOR_DEBITO_A_COBRAR = "";
+	public static String CONTROLADOR_ANALISE_GERACAO_CONTA = "";
+	
 	public static String FUNCOES_EJB = "";
 	public static String CONTROLADOR_TABELA_AUXILIAR_SEJB = "";
 	public static String CONTROLADOR_UTIL_SEJB = "";
@@ -288,6 +291,9 @@ public class ConstantesJNDI {
 			}
 
 			propriedades.load(stream);
+			
+            CONTROLADOR_DEBITO_A_COBRAR = propriedades.getProperty("ControladorDebitoACobrar");
+            CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
 
 			CONTROLADOR_USUARIO_SEJB = propriedades.getProperty("ControladorUsuario");
 			CONTROLADOR_GERENCIAL_CADASTRO_SEJB = propriedades.getProperty("ControladorGerencialCadastro");
