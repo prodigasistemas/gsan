@@ -28,6 +28,8 @@
 		<property name="anoMesReferenciaPrestacao" type="java.lang.Integer" column="dbac_amreferenciaprestacao" length="4"/>
 		<property name="numeroParcelasAntecipadas" type="java.lang.Integer" column="dbac_nnparcelasantecipadas" length="4"/>
 		<property name="dataRevisao" type="java.sql.Date" column="dbac_dtrevisao" length="4"/>
+		<property name="situacaoAtual" type="java.lang.Integer" column="dcst_idatual" length="2" insert="false" update="false"/>
+		
 		<!-- associations -->
 		<!-- bi-directional one-to-many association to DebitoACobrarCategoria -->
 		<set name="debitoACobrarCategorias" lazy="true" inverse="true" cascade="delete">

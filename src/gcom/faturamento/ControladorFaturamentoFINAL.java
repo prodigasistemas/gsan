@@ -1,8 +1,44 @@
 package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ContratoDemanda;
-import gcom.arrecadacao.ControladorArrecadacaoLocal;
-import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
 import gcom.arrecadacao.IRepositorioArrecadacao;
@@ -20,35 +56,23 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItemPK;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocalHome;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacaoConsumoTipo;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacaoConsumoTipo;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoTipoValidacao;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
@@ -59,8 +83,6 @@ import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteGuiaPagamento;
@@ -70,13 +92,9 @@ import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.RepositorioClienteImovelHBM;
 import gcom.cadastro.empresa.Empresa;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.geografico.Bairro;
-import gcom.cadastro.geografico.ControladorGeograficoLocal;
-import gcom.cadastro.geografico.ControladorGeograficoLocalHome;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
@@ -93,8 +111,6 @@ import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.EmitirConsumoImovelCondominimoHelper;
 import gcom.cadastro.imovel.bean.ImovelMicromedicao;
-import gcom.cadastro.localidade.ControladorLocalidadeLocal;
-import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
@@ -116,8 +132,6 @@ import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
 import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.cobranca.FiltroCobrancaDocumentoItem;
@@ -129,8 +143,6 @@ import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem;
-import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
-import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
 import gcom.cobranca.contratoparcelamento.FiltroContratoParcelamentoItem;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
@@ -243,8 +255,8 @@ import gcom.faturamento.debito.FiltroDebitoACobrarGeral;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipoVigencia;
 import gcom.faturamento.debito.IDebitoCobrado;
-import gcom.financeiro.ControladorFinanceiroLocal;
-import gcom.financeiro.ControladorFinanceiroLocalHome;
+import gcom.faturamento.repositorio.FaturamentoSituacaoRepositorio;
+import gcom.faturamento.repositorio.FaturamentoSituacaoTipoRepositorio;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.ResumoFaturamento;
 import gcom.financeiro.lancamento.LancamentoItem;
@@ -283,8 +295,6 @@ import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.relatorio.faturamento.ConsumoTarifaRelatorioHelper;
-import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocal;
-import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocalHome;
 import gcom.relatorio.faturamento.FaturamentoLigacoesMedicaoIndividualizadaRelatorioHelper;
 import gcom.relatorio.faturamento.RelatorioAnaliticoFaturamentoHelper;
 import gcom.relatorio.faturamento.RelatorioFaturaClienteResponsavel;
@@ -296,11 +306,7 @@ import gcom.relatorio.faturamento.conta.ContaLinhasDescricaoServicosTarifasTotal
 import gcom.relatorio.faturamento.conta.ContasEmitidasRelatorioHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioMapaControleConta;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Abrangencia;
-import gcom.seguranca.acesso.ControladorAcessoLocal;
-import gcom.seguranca.acesso.ControladorAcessoLocalHome;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
@@ -310,12 +316,11 @@ import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.spcserasa.ControladorSpcSerasaLocal;
-import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.Calculos;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -337,47 +342,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
-
-public class ControladorFaturamentoFINAL implements SessionBean {
+public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -392,6 +357,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioClienteImovel repositorioClienteImovel;
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
+	protected FaturamentoSituacaoRepositorio faturamentoSituacaoRepositorio;
+	protected FaturamentoSituacaoTipoRepositorio faturamentoSituacaoTipoRepositorio;
 
 	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
@@ -405,6 +372,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		repositorioClienteImovel = RepositorioClienteImovelHBM.getInstancia();
 		repositorioCadastro = RepositorioCadastroHBM.getInstancia();
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
+		faturamentoSituacaoRepositorio = FaturamentoSituacaoRepositorio.getInstance();
+		faturamentoSituacaoTipoRepositorio = FaturamentoSituacaoTipoRepositorio.getInstance();
 	}
 
 	public Integer informarConsumoMinimoParametro(
@@ -485,506 +454,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		this.sessionContext = sessionContext;
 	}
 
-	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
-		ControladorRegistroAtendimentoLocalHome localHome = null;
-		ControladorRegistroAtendimentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
 
-		ServiceLocator locator = null;
 
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
-	private ControladorLocalidadeLocal getControladorLocalidade() {
-		ControladorLocalidadeLocalHome localHome = null;
-		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLocalidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorSpcSerasa
-	 * 
-	 * @return O valor de controladorSpcSerasa
-	 */
-	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
-		ControladorSpcSerasaLocalHome localHome = null;
-		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorLigacaoAguaLocal getControladorLigacaoAgua() {
-		ControladorLigacaoAguaLocalHome localHome = null;
-		ControladorLigacaoAguaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLigacaoAguaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_AGUA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorLigacaoEsgotoLocal getControladorLigacaoEsgoto() {
-		ControladorLigacaoEsgotoLocalHome localHome = null;
-		ControladorLigacaoEsgotoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLigacaoEsgotoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_ESGOTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de ControladorAtendimentoPublico
-	 * 
-	 * @return O valor de ControladorAtendimentoPublico
-	 */
-	protected ControladorAtendimentoPublicoLocal getControladorAtendimentoPublico() {
-		ControladorAtendimentoPublicoLocalHome localHome = null;
-		ControladorAtendimentoPublicoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorAtendimentoPublicoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ATENDIMENTO_PUBLICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
-	protected ControladorAcessoLocal getControladorAcesso() {
-		ControladorAcessoLocalHome localHome = null;
-		ControladorAcessoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAcessoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorFinanceiroLocal getControladorFinanceiro() {
-		ControladorFinanceiroLocalHome localHome = null;
-		ControladorFinanceiroLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFinanceiroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FINANCEIRO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorArrecadacaoLocal getControladorArrecadacao() {
-		ControladorArrecadacaoLocalHome localHome = null;
-		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorArrecadacaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
-	protected ControladorEnderecoLocal getControladorEndereco() {
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de controladorCliente
-	 * 
-	 * @return O valor de controladorCliente
-	 */
-	protected ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorClienteLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de ControladorGeograficoLocal
-	 * 
-	 * @return O valor de ControladorGeograficoLocal
-	 */
-	protected ControladorGeograficoLocal getControladorGeografico() {
-
-		ControladorGeograficoLocalHome localHome = null;
-		ControladorGeograficoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorGeograficoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_GEOGRAFICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
-	protected ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
-	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de ControladorRelaotorioFaturamentoLocal
-	 * 
-	 * @return O valor de ControladorRelaotorioFaturamentoLocal
-	 */
-	protected ControladorRelatorioFaturamentoLocal getControladorRelatorioFaturamento() {
-		ControladorRelatorioFaturamentoLocalHome localHome = null;
-		ControladorRelatorioFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorRelatorioFaturamentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_RELATORIO_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de ControladorContratoParcelamentoLocal
-	 * 
-	 * @return O valor de ControladorContratoParcelamentoLocal
-	 */
-	protected ControladorContratoParcelamentoLocal getControladorContratoParcelamento() {
-		ControladorContratoParcelamentoLocalHome localHome = null;
-		ControladorContratoParcelamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorContratoParcelamentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
 
 	/**
 	 * Remove todas as rotas da tabela faturamentoAtivCronRota
@@ -2117,6 +1589,33 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return contaTipo;
 	}
 
+    private boolean deveFaturar(Imovel imovel, Integer anoMesFaturamento) throws ControladorException {
+        boolean faturar = true;
+        
+        try {
+            if (imovel.getFaturamentoSituacaoTipo() != null) {
+                
+                Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = faturamentoSituacaoRepositorio.faturamentosHistoricoVigentesPorImovel(imovel.getId());
+                FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
+                
+                FaturamentoSituacaoTipo tipo = faturamentoSituacaoTipoRepositorio.situacaoTipoDoImovel(imovel.getId());
+                
+                if ((faturamentoSituacaoHistorico != null 
+                        && anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() 
+                        && anoMesFaturamento <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())
+                        && tipo.paralisacaoFaturamentoAtivo()  
+                        && imovel.faturamentoAguaValido()) {
+                    faturar = false;
+                }
+            }
+        } catch (Exception e) {
+            throw new ControladorException("Erro ao verificar se imovel deve faturar", e);
+        }
+
+
+        return faturar;
+    }
+	
 	/**
 	 * Determina os dados do faturamento do imóvel.
 	 * [UC0113] - Faturar Grupo de Faturamento
@@ -2167,9 +1666,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovel, anoMesFaturamentoGrupo, colecaoCategoriaOUSubcategoria,
 								faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 			}
+			
+	        boolean valoresAguaEsgotoZerados = false;
+	        if (imovel.faturamentoAguaAtivo() || imovel.faturamentoEsgotoAtivo() || imovel.existeHidrometro()) {
+	            valoresAguaEsgotoZerados = !deveFaturar(imovel, anoMesFaturamentoGrupo);
+	        }
+			
+			boolean gerarConta = false;
+			
+			if (imovel.useNovaChecagemGerarConta()){
+			    gerarConta = getControladorAnaliseGeracaoConta().verificarGeracaoConta(valoresAguaEsgotoZerados, anoMesFaturamentoGrupo, imovel);
+			}else{
+			    gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), 
+			            helperValoresAguaEsgoto.getValorTotalEsgoto(), anoMesFaturamentoGrupo, false);
+			}
 
-			boolean gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), 
-					helperValoresAguaEsgoto.getValorTotalEsgoto(), anoMesFaturamentoGrupo, false);
 
 			if (gerarConta) {
 
@@ -75533,20 +75044,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return false;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 06/03/2013
-	 * 
-	 *       Metodo que obtem o extrato de quitação de débitos de um imóvel para
-	 *       um determinado ano.
-	 * 
-	 * @return ExtratoQuitacao
-	 * @param anoReferencia
-	 * @param idImovel
-	 * @throws ControladorException
-	 */
 	public ExtratoQuitacao obterExtratoQuitacaoImovel(Integer idImovel,
 			Integer anoReferencia) throws ControladorException {
 		try {
@@ -75559,23 +75056,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * Alteração para contabilizar em contas diferentes valores arrecadados até
-	 * 31/12/2012
-	 * 
-	 * [UC0155] - Encerrar Faturamento do Mês
-	 * 
-	 * @author Wellington Rocha
-	 * 
-	 * @param anoMesReferencia
-	 * @param idLocalidade
-	 * @param idCategoria
-	 * @param idsOrigemCredito
-	 * 
-	 * @throws ControladorException
-	 */
 	private BigDecimal[] obterDiferencaValoresCreditosRealizadosContaRetificadaDuplicidadeAte201212(
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsOrigemCredito) throws ControladorException {
