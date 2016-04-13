@@ -274,8 +274,8 @@ public class ExibirConsultarDadosPagamentoAction extends GcomAction {
 				form.setMesAno(Util.formatarAnoMesParaMesAno(pagamento.getAnoMesReferenciaPagamento()));
 			}else {
 				
-				if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento() .getAnoMesReferenciaContabil() != null){
-					form.setMesAno(Util.formatarAnoMesParaMesAno(pagamento.getGuiaPagamento().getAnoMesReferenciaContabil()));
+				if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getGuiaPagamento().getAnoMesReferenciaContabil() != null){
+					form.setMesAno(Util.formatarAnoMesParaMesAno(pagamento.getGuiaPagamento().getGuiaPagamento().getAnoMesReferenciaContabil()));
 				} else {
 					form.setMesAno("");
 				}

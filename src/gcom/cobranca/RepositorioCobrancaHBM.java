@@ -20656,8 +20656,11 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		String consulta;
 
 		try {
-			consulta = "SELECT gpag " + "FROM GuiaPagamento gpag " + "INNER JOIN FETCH gpag.cliente clie "
-					+ "INNER JOIN FETCH gpag.debitoTipo dbtp " + "INNER JOIN FETCH gpag.localidade loca "
+			consulta = "SELECT gpag FROM GuiaPagamento gpag " 
+					+ "INNER JOIN FETCH gpag.cliente clie "
+					+ "INNER JOIN FETCH gpag.debitoTipo dbtp " 
+					+ "INNER JOIN FETCH gpag.localidade loca "
+					+ "INNER JOIN FETCH gpag.guiaPagamentoGeral ggeral "
 					+ "WHERE clie.id = :idCliente AND gpag.dataVencimento = :dataVencimento";
 
 			retorno = (GuiaPagamento) session.createQuery(consulta).setInteger("idCliente", idCliente)

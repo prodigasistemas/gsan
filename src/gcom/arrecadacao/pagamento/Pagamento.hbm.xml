@@ -64,7 +64,7 @@
 			<column name="amit_id"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to GuiaPagamento -->
-		<many-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento">
+		<many-to-one name="guiaPagamento" class="gcom.faturamento.GuiaPagamentoGeral">
 			<column name="gpag_id"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to AvisoBancario -->

@@ -36,6 +36,7 @@ import gcom.cobranca.DocumentoTipo;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.fachada.Fachada;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.ImpostoTipo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
@@ -24010,6 +24011,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						if(dadosPagamento[3] != null){
 							GuiaPagamento guia = new GuiaPagamento();
 							guia.setId((Integer)dadosPagamento[3]);
+							guia.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer)dadosPagamento[3]));
+							
 							if(dadosPagamento[4] != null){
 								Parcelamento parcelamento = new Parcelamento();
 								parcelamento.setId((Integer)dadosPagamento[4]);
@@ -24030,7 +24033,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								guia.setDebitoTipo(debitoTipo);
 							}
 							
-							pagamento.setGuiaPagamento(guia);
+							pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
+							
 						}
 						if(dadosPagamento[8] != null){
 							DebitoACobrar debitoACobrar = new DebitoACobrar();
@@ -31887,7 +31891,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 			sql = "SELECT gpag_id as idGuia from arrecadacao.pagamento where pgmt_id = :idPagamento ";
 
-			idGuia = (Integer) session.createSQLQuery(sql).addScalar("idGuia", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+			idGuia = (Integer) session.createSQLQuery(sql)
+						.addScalar("idGuia", Hibernate.INTEGER)
+						.setInteger("idPagamento", idPagamento)
+						.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");

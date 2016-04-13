@@ -23901,7 +23901,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ " LEFT JOIN FETCH arrecMovItem.arrecadadorMovimento arrecMov "
 					
-					+ " LEFT JOIN FETCH pagamento.guiaPagamento guiaPgmt "
+					+ " LEFT JOIN FETCH pagamento.guiaPagamento guiaPgmtGeral "
+					+ " LEFT JOIN FETCH guiaPgmtGeral.guiaPagamento guiaPgmt "
 
 					+ " WHERE pagamento.id = :idPagamento ";
 

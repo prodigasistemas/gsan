@@ -61,7 +61,8 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-
+			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+			
 			// Para a exibição do endereço do imóvel
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
@@ -120,7 +121,8 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-
+			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+			
 			// Para a exibição do endereço do imóvel
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");

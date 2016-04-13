@@ -4568,7 +4568,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.DEBITO_TIPO_ID, idDebitoTipo));
 					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.EMISSAO_GUIA_PAGAMENTO, osNaBase.getDataGeracao()));
 					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.IMOVEL_ID, idImovel));
-
+					
 					Collection<GuiaPagamento> colecaoGuiasPagamento = getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 
 					if (colecaoGuiasPagamento == null || colecaoGuiasPagamento.isEmpty()) {

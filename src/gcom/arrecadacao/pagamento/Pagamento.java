@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.DocumentoTipo;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.debito.DebitoACobrarGeral;
@@ -59,7 +60,7 @@ public class Pagamento extends ObjetoTransacao {
 
 	@ControleAlteracao(value=FiltroPagamento.GUIA_PAGAMENTO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
-	private IGuiaPagamento guiaPagamento;
+	private GuiaPagamentoGeral guiaPagamento;
 
 	@ControleAlteracao(value=FiltroPagamento.DOCUMENTO_TIPO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
@@ -115,9 +116,9 @@ public class Pagamento extends ObjetoTransacao {
 			ContaGeral contaGeral,
 			Localidade localidade,
 			DebitoTipo debitoTipo,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior,
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento,
+			PagamentoSituacao pagamentoSituacaoAtual,
+			PagamentoSituacao pagamentoSituacaoAnterior,
+			GuiaPagamentoGeral guiaPagamento,
 			DocumentoTipo documentoTipo, AvisoBancario avisoBancario,
 			Imovel imovel, ArrecadadorMovimentoItem arrecadadorMovimentoItem,
 			ArrecadacaoForma arrecadacaoForma, BigDecimal valorPagamento,
@@ -154,9 +155,9 @@ public class Pagamento extends ObjetoTransacao {
 			ContaGeral contaGeral,
 			Localidade localidade,
 			DebitoTipo debitoTipo,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior,
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento,
+			PagamentoSituacao pagamentoSituacaoAtual,
+			PagamentoSituacao pagamentoSituacaoAnterior,
+			GuiaPagamentoGeral guiaPagamento,
 			DocumentoTipo documentoTipo, AvisoBancario avisoBancario,
 			Imovel imovel, ArrecadadorMovimentoItem arrecadadorMovimentoItem,
 			ArrecadacaoForma arrecadacaoForma, BigDecimal valorPagamento,
@@ -277,11 +278,11 @@ public class Pagamento extends ObjetoTransacao {
 		this.pagamentoSituacaoAnterior = pagamentoSituacaoAnterior;
 	}
 
-	public IGuiaPagamento getGuiaPagamento() {
+	public GuiaPagamentoGeral getGuiaPagamento() {
 		return this.guiaPagamento;
 	}
 
-	public void setGuiaPagamento(IGuiaPagamento guiaPagamento) {
+	public void setGuiaPagamento(GuiaPagamentoGeral guiaPagamento) {
 		this.guiaPagamento = guiaPagamento;
 	}
 

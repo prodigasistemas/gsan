@@ -801,9 +801,9 @@ public class ControladorArrecadacaoCAERSEJB extends ControladorArrecadacao
 									
 									if (idGuiaPagamento != null) {
 										
-										GuiaPagamento guiaPagamento = new GuiaPagamento();
-										guiaPagamento.setId(idGuiaPagamento);
-										pagamento.setGuiaPagamento(guiaPagamento);
+										GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+										guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+										pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 										
 										/*
 										 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
@@ -3192,9 +3192,9 @@ public class ControladorArrecadacaoCAERSEJB extends ControladorArrecadacao
 			// Verifica se o id da conta é diferente de nulo
 			if (idGuiaPagamento != null) {
 
-				GuiaPagamento guiaPagamento = new GuiaPagamento();
-				guiaPagamento.setId(idGuiaPagamento);
-				pagamento.setGuiaPagamento(guiaPagamento);
+				GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+				guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 
 			} else {
 				pagamento.setGuiaPagamento(null);
@@ -3407,9 +3407,9 @@ public class ControladorArrecadacaoCAERSEJB extends ControladorArrecadacao
 			// Verifica se o id da conta é diferente de nulo
 			if (idGuiaPagamento != null) {
 
-				GuiaPagamento guiaPagamento = new GuiaPagamento();
-				guiaPagamento.setId(idGuiaPagamento);
-				pagamento.setGuiaPagamento(guiaPagamento);
+				GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+				guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+ 				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 
 			} else {
 				pagamento.setGuiaPagamento(null);
@@ -3733,9 +3733,9 @@ public class ControladorArrecadacaoCAERSEJB extends ControladorArrecadacao
 					// diferente de nulo
 					if (idGuiaPagamentoGeralPesquisa != null) {
 						if (idGuiaPagamento != null) {
-							GuiaPagamento guiaPagamento = new GuiaPagamento();
-							guiaPagamento.setId(idGuiaPagamento);
-							pagamento.setGuiaPagamento(guiaPagamento);
+							GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+							guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+							pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 
 						} else {
 							pagamento.setGuiaPagamento(null);
@@ -5214,7 +5214,7 @@ public class ControladorArrecadacaoCAERSEJB extends ControladorArrecadacao
 					            }
 					            
 					            if (idLocalidadeGuiaPagamento != null){
-					            	pagamento.setGuiaPagamento(cobrancaDocumentoItem.getGuiaPagamentoGeral().getGuiaPagamento());
+					            	pagamento.setGuiaPagamento(cobrancaDocumentoItem.getGuiaPagamentoGeral());
 					            }
 					            else{
 					            	try {

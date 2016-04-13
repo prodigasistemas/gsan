@@ -36018,7 +36018,8 @@ public class ControladorCobranca implements SessionBean {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoOrigem.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -36140,7 +36141,8 @@ public class ControladorCobranca implements SessionBean {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoOrigem.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -43851,7 +43853,8 @@ public class ControladorCobranca implements SessionBean {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo.financiamentoTipo");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -56900,21 +56903,22 @@ public class ControladorCobranca implements SessionBean {
 	public Pagamento gerarPagamentoGuiaPagamentoCartaoDebito(GuiaPagamentoGeral guiaPagamentoGeral, AvisoBancario avisoBancario,
 			PagamentoCartaoDebito pagamentoCartaoDebito) throws ControladorException {
 
+		DocumentoTipo documentoTipo = new DocumentoTipo(new Integer(DocumentoTipo.GUIA_PAGAMENTO));
+
 		Pagamento pagamento = new Pagamento();
 
-		// RECUPERANDO OS DADOS DA GUIA DE PAGAMENTO
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoGeral.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(colecaoGuiaPagamento);
 
-		// Cria o pagamento para a guia de pagamento
 		pagamento.setAnoMesReferenciaPagamento(null);
 		pagamento.setAnoMesReferenciaArrecadacao(avisoBancario.getAnoMesReferenciaArrecadacao());
 		pagamento.setValorPagamento(guiaPagamento.getValorDebito());
@@ -56923,23 +56927,15 @@ public class ControladorCobranca implements SessionBean {
 		pagamento.setPagamentoSituacaoAnterior(null);
 		pagamento.setDebitoTipo(guiaPagamento.getDebitoTipo());
 		pagamento.setContaGeral(null);
-		pagamento.setGuiaPagamento(guiaPagamento);
+		pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 		pagamento.setDebitoACobrarGeral(null);
 		pagamento.setLocalidade(guiaPagamento.getLocalidade());
-
-		DocumentoTipo documentoTipo = new DocumentoTipo();
-		documentoTipo.setId(new Integer(DocumentoTipo.GUIA_PAGAMENTO));
 		pagamento.setDocumentoTipo(documentoTipo);
 		pagamento.setDocumentoTipoAgregador(documentoTipo);
-
 		pagamento.setAvisoBancario(avisoBancario);
 		pagamento.setImovel(guiaPagamento.getImovel());
 		pagamento.setArrecadadorMovimentoItem(null);
-
-		ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-		arrecadacaoForma.setId(ArrecadacaoForma.CARTAO_DEBITO);
-		pagamento.setArrecadacaoForma(arrecadacaoForma);
-
+		pagamento.setArrecadacaoForma(new ArrecadacaoForma(ArrecadacaoForma.CARTAO_DEBITO));
 		pagamento.setUltimaAlteracao(new Date());
 		pagamento.setCliente(null);
 		pagamento.setDataProcessamento(new Date());
