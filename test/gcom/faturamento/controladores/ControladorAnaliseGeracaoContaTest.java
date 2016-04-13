@@ -33,16 +33,16 @@ import gcom.faturamento.repositorio.CreditoARealizarRepositorio;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
-public class AnalisadorGeracaoContaTest {
+public class ControladorAnaliseGeracaoContaTest {
 
     @InjectMocks
 	private ControladorAnaliseGeracaoConta analisadorGeracaoConta;
 	
 	private Imovel imovel;
 	private LigacaoAguaSituacao aguaLigada;
-	private LigacaoAguaSituacao aguaNaoLigada;
+	private LigacaoAguaSituacao aguaDesligada;
 	private LigacaoEsgotoSituacao esgotoLigado;
-	private LigacaoEsgotoSituacao esgotoNaoLigado;
+	private LigacaoEsgotoSituacao esgotoDesligado;
 	private int anoMesFaturamento;
 	
 	@Mock
@@ -99,71 +99,79 @@ public class AnalisadorGeracaoContaTest {
 		aguaLigada = new LigacaoAguaSituacao();
 		aguaLigada.setId(LigacaoAguaSituacao.LIGADO);
 		imovel.setLigacaoAguaSituacao(aguaLigada);
-		aguaNaoLigada = new LigacaoAguaSituacao();
-		aguaNaoLigada.setId(LigacaoAguaSituacao.POTENCIAL);
+		aguaDesligada = new LigacaoAguaSituacao();
+		aguaDesligada.setId(LigacaoAguaSituacao.POTENCIAL);
 		
 		esgotoLigado = new LigacaoEsgotoSituacao();
 		esgotoLigado.setId(LigacaoEsgotoSituacao.LIGADO);
 		imovel.setLigacaoEsgotoSituacao(esgotoLigado);
-		esgotoNaoLigado = new LigacaoEsgotoSituacao();
-		esgotoNaoLigado.setId(LigacaoEsgotoSituacao.POTENCIAL);
+		esgotoDesligado = new LigacaoEsgotoSituacao();
+		esgotoDesligado.setId(LigacaoEsgotoSituacao.POTENCIAL);
 		
 		MockitoAnnotations.initMocks(this);
 	}
 	
-
 	@Test
-	public void naoGeraContaComAguaEsgotoZeradosAguaLigadaEsgotoLigadoNaoCondominio() throws Exception {
+	public void naoGeraContaSemConsumo_AguaLigada_EsgotoLigado_NaoPertenceACondominio() throws Exception {
 		aguaEsgotoZerados = true;
 		
 		assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
 	}
 	
 	@Test
-	public void geraContaSemAguaEsgotoZeradosAguaLigadaEsgotoDesligadoNaoCondominio() throws Exception {
+	public void naoGeraContaSemConsumo_AguaDesligada_EsgotoDesligado_NaoPertenceACondominio() throws Exception {
+	    aguaEsgotoZerados = true;
+	    imovel.setLigacaoAguaSituacao(aguaLigada);
+	    imovel.setLigacaoEsgotoSituacao(esgotoDesligado);
+	    
+	    assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
+	}
+	
+	@Test
+	public void geraContaComConsumoDeAguaEEsgoto_AguaLigada_sgotoDesligado_NaoPertenceACondominio() throws Exception {
 		aguaEsgotoZerados = false;
-		imovel.setLigacaoEsgotoSituacao(esgotoNaoLigado);
+		imovel.setLigacaoEsgotoSituacao(esgotoDesligado);
 		
 		assertTrue(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
 	}
 	
 	@Test
-	public void geraContaSemAguaEsgotoZeradosELigado() throws Exception {
+	public void geraContaComConsumoDeAguaEEsgoto_AguaLigada() throws Exception {
 		aguaEsgotoZerados = false;
 		
 		assertTrue(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
 	}
 
 	@Test
-	public void naoGeraContaSemAguaEsgotoZeradoEDesligado() throws Exception {
+	public void naoGeraContaComConsumoDeAguaEsgoto_AguaDesligada_EsgotoDesligado() throws Exception {
 		aguaEsgotoZerados = false;
 		
-		aguaLigada.setId(0);
-		esgotoLigado.setId(0);
+		imovel.setLigacaoAguaSituacao(aguaDesligada);
+		imovel.setLigacaoEsgotoSituacao(esgotoDesligado);
 		
 		assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
 	}
 	
 	@Test
-	public void naoGeraContaSemAguaEsgotoZeradosDesligadoESemCondominio() throws Exception {
+	public void naoGeraContaComConsumoDeAguaEsgoto_AguaEsgotoDesligados_ESemCondominio() throws Exception {
 		aguaEsgotoZerados = false;
 		
-		aguaLigada.setId(0);
-		esgotoLigado.setId(0);
+        imovel.setLigacaoAguaSituacao(aguaDesligada);
+        imovel.setLigacaoEsgotoSituacao(esgotoDesligado);
 		
 		assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
 	}
 	
 	@Test
-	public void naoGeraContaSemAguaEsgotoZeradosDesligadoEComCondominio() throws Exception {
-		aguaEsgotoZerados = false;
+	public void geraContaSemConsumo_AguaDesligada_EsgotoDesligado_EPerterceACondominio() throws Exception {
+		aguaEsgotoZerados = true;
 		
-		aguaLigada.setId(0);
-		esgotoLigado.setId(0);
+        imovel.setLigacaoAguaSituacao(aguaDesligada);
+        imovel.setLigacaoEsgotoSituacao(esgotoDesligado);
 		
 		imovel.setImovelCondominio(new Imovel());
 		
-		assertTrue(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
+		assertTrue(analisadorGeracaoConta.verificarSituacaoDeCondominio(aguaEsgotoZerados, imovel));
 	}
 
 	@Test
@@ -240,10 +248,6 @@ public class AnalisadorGeracaoContaTest {
 		assertTrue(analisadorGeracaoConta.verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel));
 	}
 	
-	public Collection<DebitoACobrar> getDebitos(){
-	    return debitos;
-	} 
-	
 	@Test
 	public void geraContaQuandoHaCreditosRealizarENaoHaCreditosComDevolucao() throws Exception {
 		this.debitos = buildCollectionDebitosCobrarVazio(false);
@@ -257,6 +261,13 @@ public class AnalisadorGeracaoContaTest {
 		
 		assertTrue(analisadorGeracaoConta.verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel));
 	}
+		
+    @Test
+    public void gerarContaParaImoveisCortadosPertencentesACondominio() throws Exception {
+        aguaEsgotoZerados = true;
+        
+        assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
+    }
 	
 	private Collection<CreditoARealizar> buildCollectionCreditosRealizar() {
 		Collection<CreditoARealizar> creditosRealizar = new ArrayList<CreditoARealizar>();
@@ -306,5 +317,9 @@ public class AnalisadorGeracaoContaTest {
 		debitosCobrar.add(debitoCobrar);
 		
 		return debitosCobrar;
-	}
+	}	
+
+	private Collection<DebitoACobrar> getDebitos(){
+        return debitos;
+    } 	
 }

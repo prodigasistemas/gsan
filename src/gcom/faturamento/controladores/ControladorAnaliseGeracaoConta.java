@@ -29,10 +29,14 @@ public class ControladorAnaliseGeracaoConta extends ControladorComum {
 	}
 		
 	public boolean verificarGeracaoConta(boolean aguaEsgotoZerados, int anoMesFaturamento, Imovel imovel) throws ControladorException {
-		return verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel) || verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel);
+		return verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel) || verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel) || verificarSituacaoDeCondominio(aguaEsgotoZerados, imovel);
 	}
 
-	public boolean verificarDebitosECreditosParaGerarConta(int anoMesFaturamento, Imovel imovel) throws ControladorException{
+	public boolean verificarSituacaoDeCondominio(boolean aguaEsgotoZerados, Imovel imovel) {
+        return aguaEsgotoZerados && !imovel.aguaLigada() && !imovel.esgotoLigado() && imovel.pertenceACondominio();
+    }
+
+    public boolean verificarDebitosECreditosParaGerarConta(int anoMesFaturamento, Imovel imovel) throws ControladorException{
 	    boolean segundaCondicaoGerarConta = true;
 	    
 	    try {
