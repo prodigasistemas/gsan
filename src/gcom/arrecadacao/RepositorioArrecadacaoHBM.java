@@ -25484,7 +25484,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				"left join fetch pgmt.contaGeral as cntg " +
 				"left join fetch pgmt.debitoACobrarGeral as dbag " +
 				"left join fetch pgmt.debitoTipo as dbtp " +
-				"left join fetch pgmt.guiaPagamento as gupg " +
+				"left join fetch pgmt.guiaPagamento as guiaGeral " +
+				"left join fetch guiaGeral.guiaPagamento as gupg " +
 				"left join fetch pgmt.imovel as imov " +
 				"left join fetch pgmt.pagamentoSituacaoAnterior as pgan " +
 				"left join fetch pgmt.pagamentoSituacaoAtual as pgat " +

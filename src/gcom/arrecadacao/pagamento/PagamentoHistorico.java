@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.DocumentoTipo;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.debito.DebitoACobrarGeral;
@@ -38,7 +39,7 @@ public class PagamentoHistorico implements Serializable {
     private PagamentoSituacao pagamentoSituacaoAtual;
     private PagamentoSituacao pagamentoSituacaoAnterior;
     private ArrecadadorMovimentoItem arrecadadorMovimentoItem;
-    private GuiaPagamentoHistorico guiaPagamentoHistorico;
+    private GuiaPagamentoGeral guiaPagamentoGeral;
 	private DebitoACobrarGeral debitoACobrarGeral;
     private AvisoBancario avisoBancario;
     private DebitoTipo debitoTipo;
@@ -57,7 +58,7 @@ public class PagamentoHistorico implements Serializable {
     		ArrecadacaoForma arrecadacaoForma, Imovel imovel, DocumentoTipo documentoTipo, 
     		ContaGeral contaGeral, Localidade localidade, PagamentoSituacao pagamentoSituacaoAtual, 
     		PagamentoSituacao pagamentoSituacaoAnterior, ArrecadadorMovimentoItem arrecadadorMovimentoItem, 
-    		GuiaPagamentoHistorico guiaPagamento, AvisoBancario avisoBancario, DebitoTipo debitoTipo, Cliente cliente) {
+    		GuiaPagamentoGeral guiaPagamento, AvisoBancario avisoBancario, DebitoTipo debitoTipo, Cliente cliente) {
         this.valorPagamento = valorPagamento;
         this.anoMesReferenciaPagamento = anoMesReferenciaPagamento;
         this.dataPagamento = dataPagamento;
@@ -72,7 +73,7 @@ public class PagamentoHistorico implements Serializable {
         this.pagamentoSituacaoAtual = pagamentoSituacaoAtual;
         this.pagamentoSituacaoAnterior = pagamentoSituacaoAnterior;
         this.arrecadadorMovimentoItem = arrecadadorMovimentoItem;
-        this.guiaPagamentoHistorico = guiaPagamento;
+        this.guiaPagamentoGeral = guiaPagamento;
         this.avisoBancario = avisoBancario;
         this.debitoTipo = debitoTipo;
         this.cliente = cliente;
@@ -84,7 +85,7 @@ public class PagamentoHistorico implements Serializable {
     public PagamentoHistorico(BigDecimal valorPagamento, Integer anoMesReferenciaPagamento, Date dataPagamento, 
     		Integer anoMesReferenciaArrecadacao, ArrecadacaoForma arrecadacaoForma, Imovel imovel, DocumentoTipo documentoTipo, 
     		ContaGeral contaGeral, Localidade localidade, gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual, 
-    		PagamentoSituacao pagamentoSituacaoAnterior, ArrecadadorMovimentoItem arrecadadorMovimentoItem, GuiaPagamentoHistorico guiaPagamento, 
+    		PagamentoSituacao pagamentoSituacaoAnterior, ArrecadadorMovimentoItem arrecadadorMovimentoItem, GuiaPagamentoGeral guiaPagamento, 
     		AvisoBancario avisoBancario, DebitoTipo debitoTipo, Cliente cliente) {
         this.valorPagamento = valorPagamento;
         this.anoMesReferenciaPagamento = anoMesReferenciaPagamento;
@@ -98,7 +99,7 @@ public class PagamentoHistorico implements Serializable {
         this.pagamentoSituacaoAtual = pagamentoSituacaoAtual;
         this.pagamentoSituacaoAnterior = pagamentoSituacaoAnterior;
         this.arrecadadorMovimentoItem = arrecadadorMovimentoItem;
-        this.guiaPagamentoHistorico = guiaPagamento;
+        this.guiaPagamentoGeral = guiaPagamento;
         this.avisoBancario = avisoBancario;
         this.debitoTipo = debitoTipo;
         this.cliente = cliente;
@@ -223,12 +224,12 @@ public class PagamentoHistorico implements Serializable {
 		this.documentoTipo = documentoTipo;
 	}
 
-	public GuiaPagamentoHistorico getGuiaPagamentoHistorico() {
-		return guiaPagamentoHistorico;
+	public GuiaPagamentoGeral getGuiaPagamentoGeral() {
+		return guiaPagamentoGeral;
 	}
 
-	public void setGuiaPagamentoHistorico(GuiaPagamentoHistorico guiaPagamento) {
-		this.guiaPagamentoHistorico = guiaPagamento;
+	public void setGuiaPagamentoGeral(GuiaPagamentoGeral guiaPagamentoGeral) {
+		this.guiaPagamentoGeral = guiaPagamentoGeral;
 	}
 
 	public Integer getId() {

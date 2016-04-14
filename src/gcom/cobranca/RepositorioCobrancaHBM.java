@@ -621,8 +621,11 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "select sum(p.valorPagamento), min(p.dataPagamento) " + "from Pagamento p "
-					+ "inner join p.guiaPagamento guiaPagamento " + "where guiaPagamento.id = :id " + "group by guiaPagamento.id";
+			consulta = "select sum(p.valorPagamento), min(p.dataPagamento) from Pagamento p "
+					+ "inner join p.guiaPagamento guiaPagamentoGeral "
+					+ "inner join guiaPagamentoGeral.guiaPagamento guiaPagamento "
+					+ "where guiaPagamento.id = :id " 
+					+ "group by guiaPagamento.id";
 
 			retorno = session.createQuery(consulta).setInteger("id", new Integer(idGuiaPagamento)).list();
 
@@ -7923,12 +7926,16 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "SELECT MIN(pgmt.dataPagamento) " + "FROM Pagamento pgmt " + "INNER JOIN pgmt.guiaPagamento gpag "
+			consulta = "SELECT MIN(pgmt.dataPagamento) FROM Pagamento pgmt " 
+					+ "INNER JOIN pgmt.guiaPagamento gpagGeral "
+					+ "INNER JOIN gpagGeral.guiaPagamento gpag "
 					+ "INNER JOIN gpag.imovel imov " + "WHERE gpag.id = :idGuiaPagamento ";
 
 			data1 = (Date) session.createQuery(consulta).setInteger("idGuiaPagamento", idGuiaPagamento).uniqueResult();
 
-			consulta = "SELECT MIN(pgmt.dataPagamento) " + "FROM Pagamento pgmt " + "INNER JOIN pgmt.guiaPagamento gpag "
+			consulta = "SELECT MIN(pgmt.dataPagamento) FROM Pagamento pgmt " 
+					+ "INNER JOIN pgmt.guiaPagamento gpagGeral "
+					+ "INNER JOIN gpagGeral.guiaPagamento gpag "
 					+ "INNER JOIN gpag.imovel imov " + "WHERE pgmt.imovel.id= :idImovel and pgmt.debitoTipo.id = :idDebitoTipo";
 
 			data2 = (Date) session.createQuery(consulta).setInteger("idImovel", idImovel).setInteger("idDebitoTipo", idDebitoTipo)

@@ -25665,12 +25665,11 @@ public class ControladorArrecadacao implements SessionBean {
 
 			Iterator<Integer> iteratorPagamentos = colecaoPagamentosClassificados.iterator();
 			
-			System.out.println("Pagamentos classificados: " + colecaoPagamentosClassificados.size());
 			while (iteratorPagamentos.hasNext()) {
 
 				Integer idPagamento = iteratorPagamentos.next();
 
-				Pagamento pagamento = obterPagamentoComIGuiaPagamentoDoPagamento(idPagamento);
+				Pagamento pagamento = this.repositorioArrecadacao.pesquisarPagamentoParaEncerrarArrecadacao(idPagamento);
 				
 				if (pagamento != null) {
 					transferirPagamentoParaHistorico(Collections.singletonList(pagamento));
@@ -25682,16 +25681,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	private Pagamento obterPagamentoComIGuiaPagamentoDoPagamento(Integer idPagamento) throws ErroRepositorioException {
-		Pagamento pagamento = this.repositorioArrecadacao.pesquisarPagamentoParaEncerrarArrecadacao(idPagamento);
-		
-		if (pagamento != null && pagamento.getDocumentoTipo().getId().intValue() == DocumentoTipo.GUIA_PAGAMENTO.intValue()) {
-			Integer idGuia = this.repositorioArrecadacao.pesquisarIdGuiaPagamento(idPagamento);
-			pagamento.setGuiaPagamento(new GuiaPagamentoGeral(idGuia));
-		}
-		return pagamento;
-	}
-	
 	protected void gerarHistoricoEncerrarArrecadacaoConta(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
 			Integer idSetorComercial) throws ErroRepositorioException,
@@ -30520,6 +30509,7 @@ public class ControladorArrecadacao implements SessionBean {
 					if (dadosPagamento[1] != null) {
 						guiaPagamento = new GuiaPagamentoHistorico();
 						guiaPagamento.setId((Integer) dadosPagamento[1]);
+						guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer) dadosPagamento[1]));
 					}
 
 					// Id do Cliente
@@ -30564,7 +30554,7 @@ public class ControladorArrecadacao implements SessionBean {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
 					}
 
-					pagamentoHistorico.setGuiaPagamentoHistorico(guiaPagamento);
+					pagamentoHistorico.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
 
 					DebitoTipo debitoTipoPagamento = null;
 
@@ -34501,7 +34491,7 @@ public class ControladorArrecadacao implements SessionBean {
 					Integer idGuiaPagamento = guiaPagamento.getId();
 
 					/** remove a referência da guia de pagamento dos pagamentos */
-					this.repositorioArrecadacao.apagarIdGuiaPagamentoPagamentos(idGuiaPagamento);
+					//this.repositorioArrecadacao.apagarIdGuiaPagamentoPagamentos(idGuiaPagamento);
 
 					guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
 					guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
@@ -34618,8 +34608,6 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection colecaoPagamentoHistoricoInserir = new ArrayList();
 		Collection colecaoPagamentoHistoricoRemover = new ArrayList();
 		
-		Map<PagamentoHistorico, Integer> pagamentosComGuias = new HashMap<PagamentoHistorico, Integer>();
-		
 		try {
 			if (colecaoPagamentos != null && !colecaoPagamentos.isEmpty()) {
 
@@ -34672,10 +34660,10 @@ public class ControladorArrecadacao implements SessionBean {
 
 					if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getId() != null) {
 						System.out.println("Pagamento " + pagamento.getId() + " com guia " + pagamento.getGuiaPagamento().getId());
-						pagamentosComGuias.put(pagamentoHistoricoTemp, pagamento.getGuiaPagamento().getId());
-					} else {
-						colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
-					}
+						pagamentoHistoricoTemp.setGuiaPagamentoGeral(pagamento.getGuiaPagamento());
+					} 
+
+					colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
 
 				}
 			}
@@ -34683,8 +34671,6 @@ public class ControladorArrecadacao implements SessionBean {
 			//getControladorBatch().inserirColecaoObjetoParaBatch(colecaoPagamentoHistoricoInserir);
 			//getControladorBatch().removerColecaoPagamentoParaBatch(colecaoPagamentoHistoricoRemover);
 
-			this.inserirPagamentohistoricoComGuias(pagamentosComGuias);
-			
 			colecaoPagamentoHistoricoInserir = null;
 			colecaoPagamentoHistoricoRemover = null;
 
@@ -34708,8 +34694,8 @@ public class ControladorArrecadacao implements SessionBean {
 				Integer idPagamento = (Integer) this.repositorioUtil.inserir(pagamentoHistorico);
 				System.out.println("	idPagamentoHistorico: " + idPagamento);
 				pagamentoHistorico = this.repositorioArrecadacao.pesquisarPagamentoHistorico(idPagamento);
-				pagamentoHistorico.setGuiaPagamentoHistorico(new GuiaPagamentoHistorico(idGuia));
-				System.out.println("	Pagamento Historico: " + pagamentoHistorico.getId() + " - " + pagamentoHistorico.getGuiaPagamentoHistorico().getId());
+				pagamentoHistorico.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuia));
+				System.out.println("	Pagamento Historico: " + pagamentoHistorico.getId() + " - " + pagamentoHistorico.getGuiaPagamentoGeral().getId());
 				//this.repositorioUtil.atualizar(pagamentoHistorico);
 				System.out.println("	pagamento atualizado ");
 			}
