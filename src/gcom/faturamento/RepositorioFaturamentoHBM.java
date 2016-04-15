@@ -60608,103 +60608,106 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException {
-		Collection helper = new ArrayList();
-		List<RelatorioAMAEDTO> retorno = new ArrayList<RelatorioAMAEDTO>();
+	    Collection helper = new ArrayList();
+	    List<RelatorioAMAEDTO> retorno = new ArrayList<RelatorioAMAEDTO>();
 
-		Session session = HibernateUtil.getSession();
-		String consulta;
-		Query query = null;
+	    Session session = HibernateUtil.getSession();
+	    String consulta;
+	    Query query = null;
 
-		try {
-			consulta = 
-					"select muni_nmmunicipio, loca_nmlocalidade, sum(agua) as agua, sum(esgoto) as esgoto from ( select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto "
-					+"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
-					+"where 1=1 "
-					+"and cnta_amreferenciaconta = :referencia "
-					+"and dcst_idatual in (0,2,3,5,4) "
-					+"and c.loca_id = sc.loca_id "
-					+"and sc.muni_id = m.muni_id "
-					+"and loc.loca_id = sc.loca_id ";
-			if (idMunicipio != null) {
-				consulta += " and muni_id = :idMunicipio ";
-			}
-			consulta+="group by 1,2 "
-					+"union all "
-					+"select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
-					+"where 1=1 "
-					+"and cnta_amreferenciacontabil = :referencia "
-					+"and cnta_amreferenciaconta >= 201511 "
-					+"and c.loca_id = sc.loca_id "
-					+"and sc.muni_id = m.muni_id "
-					+"and loc.loca_id = sc.loca_id "
-					+"and dcst_idatual = 1 ";
-			if (idMunicipio != null) {
-				consulta += " and muni_id = :idMunicipio ";
-			}
-			consulta+="group by 1,2 "
-					+"order by 1,2) as fat "
-					+"group by 1, 2 "
-					+"order by 1,2 ";
-			
-			query = session.createSQLQuery(consulta)
-			.addScalar("muni_nmmunicipio", Hibernate.STRING)
-			.addScalar("loca_nmlocalidade", Hibernate.STRING)
-			.addScalar("agua", Hibernate.BIG_DECIMAL)
-			.addScalar("esgoto", Hibernate.BIG_DECIMAL)
-			.setInteger("referencia", anoMes);
-			if (idMunicipio != null) {
-				query.setInteger("idMunicipio", idMunicipio);
-			}
-			
-			helper = query.list();
-			
-			consulta = 
-					"select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua , sum(cnta_vlesgoto) as esgoto " 
-					+"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
-					+"where 1=1 "
-					+"and cnta_amreferenciacontabil = :referencia "
-					+"and cnta_amreferenciaconta >= 201511 "
-					+"and c.loca_id = sc.loca_id " 
-					+"and sc.muni_id = m.muni_id "
-					+"and loc.loca_id = sc.loca_id "
-					+"and dcst_idatual in (4,3) ";
-			if (idMunicipio != null) {
-				consulta += " and muni_id = :idMunicipio ";
-			}
-			consulta+="group by 1,2 " 
-					+"order by 1,2 ";
-			
-			query = session.createSQLQuery(consulta)
-					.addScalar("muni_nmmunicipio", Hibernate.STRING)
-					.addScalar("loca_nmlocalidade", Hibernate.STRING)
-					.addScalar("agua", Hibernate.BIG_DECIMAL)
-					.addScalar("esgoto", Hibernate.BIG_DECIMAL)
-					.setInteger("referencia", anoMes);
-			if (idMunicipio != null) {
-				query.setInteger("idMunicipio", idMunicipio);
-			}
-			
-			helper.addAll(query.list());
-			
-			for (Object obj : helper) {
-				Object[] arrayObj = (Object[]) obj;
-				
-				RelatorioAMAEDTO dto = new RelatorioAMAEDTO(
-						(String) arrayObj[0],
-						(String) arrayObj[1],
-						(BigDecimal) arrayObj[2],
-						(BigDecimal) arrayObj[3]);
-				
-				retorno.add(dto);
-			}
-			
-			return retorno;
+	    try {
+	      consulta = 
+	          "select muni_nmmunicipio, loca_nmlocalidade, sum(agua) as agua, sum(esgoto) as esgoto, 'Normal' as situacao from ( select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto "
+	          +"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
+	          +"where 1=1 "
+	          +"and cnta_amreferenciaconta = :referencia "
+	          +"and dcst_idatual in (0,2,3,5,4) "
+	          +"and c.loca_id = sc.loca_id "
+	          +"and sc.muni_id = m.muni_id "
+	          +"and loc.loca_id = sc.loca_id ";
+	      if (idMunicipio != null) {
+	        consulta += " and muni_id = :idMunicipio ";
+	      }
+	      consulta+="group by 1,2 "
+	          +"union all "
+	          +"select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua, sum(cnta_vlesgoto) as esgoto from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
+	          +"where 1=1 "
+	          +"and cnta_amreferenciacontabil = :referencia "
+	          +"and cnta_amreferenciaconta >= 201511 "
+	          +"and c.loca_id = sc.loca_id "
+	          +"and sc.muni_id = m.muni_id "
+	          +"and loc.loca_id = sc.loca_id "
+	          +"and dcst_idatual = 1 ";
+	      if (idMunicipio != null) {
+	        consulta += " and muni_id = :idMunicipio ";
+	      }
+	      consulta+="group by 1,2 "
+	          +"order by 1,2) as fat "
+	          +"group by 1, 2 "
+	          +"order by 1,2 ";
+	      
+	      query = session.createSQLQuery(consulta)
+	      .addScalar("muni_nmmunicipio", Hibernate.STRING)
+	      .addScalar("loca_nmlocalidade", Hibernate.STRING)
+	      .addScalar("agua", Hibernate.BIG_DECIMAL)
+	      .addScalar("esgoto", Hibernate.BIG_DECIMAL)
+	      .addScalar("situacao", Hibernate.STRING)
+	      .setInteger("referencia", anoMes);
+	      if (idMunicipio != null) {
+	        query.setInteger("idMunicipio", idMunicipio);
+	      }
+	      
+	      helper = query.list();
+	      
+	      consulta = 
+	          "select muni_nmmunicipio, loc.loca_nmlocalidade, sum(cnta_vlagua) as agua , sum(cnta_vlesgoto) as esgoto, 'Cancelada' as situacao " 
+	          +"from faturamento.conta c, cadastro.setor_comercial sc, cadastro.municipio m, cadastro.localidade loc "
+	          +"where 1=1 "
+	          +"and cnta_amreferenciacontabil = :referencia "
+	          +"and cnta_amreferenciaconta >= 201511 "
+	          +"and c.loca_id = sc.loca_id " 
+	          +"and sc.muni_id = m.muni_id "
+	          +"and loc.loca_id = sc.loca_id "
+	          +"and dcst_idatual in (4,3) ";
+	      if (idMunicipio != null) {
+	        consulta += " and muni_id = :idMunicipio ";
+	      }
+	      consulta+="group by 1,2 " 
+	          +"order by 1,2 ";
+	      
+	      query = session.createSQLQuery(consulta)
+	          .addScalar("muni_nmmunicipio", Hibernate.STRING)
+	          .addScalar("loca_nmlocalidade", Hibernate.STRING)
+	          .addScalar("agua", Hibernate.BIG_DECIMAL)
+	          .addScalar("esgoto", Hibernate.BIG_DECIMAL)
+	          .addScalar("situacao", Hibernate.STRING)
+	          .setInteger("referencia", anoMes);
+	      if (idMunicipio != null) {
+	        query.setInteger("idMunicipio", idMunicipio);
+	      }
+	      
+	      helper.addAll(query.list());
+	      
+	      for (Object obj : helper) {
+	        Object[] arrayObj = (Object[]) obj;
+	        
+	        RelatorioAMAEDTO dto = new RelatorioAMAEDTO(
+	            (String) arrayObj[0],
+	            (String) arrayObj[1],
+	            (BigDecimal) arrayObj[2],
+	            (BigDecimal) arrayObj[3],
+	            (String) arrayObj[4]);
+	        
+	        retorno.add(dto);
+	      }
+	      
+	      return retorno;
 
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
+	    } catch (HibernateException e) {
+	      throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	      HibernateUtil.closeSession(session);
+	    }
+	  }
 	
 }
