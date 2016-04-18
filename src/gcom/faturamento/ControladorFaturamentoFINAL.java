@@ -26422,6 +26422,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.setVolumeMinimoFaturamento((Integer) dados[13]);
 					imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 				}
+				
+				//Situacao Especial de Faturamento
+				if (dados[14] != null) { // 14
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+					faturamentoSituacaoTipo.setId(((Integer) dados[14]));
+					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+				}
 
 				imoveis.add(imovel);
 
@@ -26628,6 +26635,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.getNumeroConsumoFaturadoMes();
 							consumoTipoEsgoto = consumoHistoricoEsgoto
 									.getConsumoTipo();
+						}
+						
+						if(imovel.getFaturamentoSituacaoTipo()!=null && 
+						   imovel.getFaturamentoSituacaoTipo().getId().equals(FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA)){
+						   continue;
 						}
 
 						if (!this.permiteFaturamentoParaAgua(
