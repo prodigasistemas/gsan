@@ -297,30 +297,6 @@ function pesquisaImovelNaColecao(imovel, tipoMedicao){
 			return false;
 		}
 	}
-
-	function verificarValorConfirmado() {
-		
-		var form = document.forms[0];
-	
-		if (form.confirmacao.checked == true) {
-			form.confirmacao.value = '1';
-		} else {
-			form.confirmacao.value = '';
-		}
-		
-	}
-	
-	function checkConfirmado(valor) {
-		var form = document.forms[0];
-		
-		if (valor == '1') {
-			form.confirmacao.checked = true;
-			form.confirmacao.disabled = true;
-		} else {
-			form.confirmacao.checked = false;
-			form.confirmacao.disabled = false;
-		}
-	}
 	
 	function verificarValorAnalisado() {
 	
