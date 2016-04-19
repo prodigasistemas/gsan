@@ -3031,4 +3031,10 @@ public interface IRepositorioFaturamento {
 			Integer anoMesReferencia) throws ErroRepositorioException;
 	
 	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorEsgotoPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
+	
+	public Object[] acumularValorAguaEsgotoPorSituacaoConta(int anoMesReferencia, int idLocalidade,int idSituacaoAtual, int idSituacaoAnterior) throws ErroRepositorioException;
 }

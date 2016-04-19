@@ -23,16 +23,14 @@ public class RelatorioAMAEDTO implements ReportItemDTO {
   @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY, totalizer=true)
   private String valorEsgoto;
   
-  @ReportElementType(description="Situacao", group=true, type=ReportElementType.TYPE_STRING)
   private String situacao;
   
-  public RelatorioAMAEDTO(String municipio, String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao) {
+  public RelatorioAMAEDTO(String municipio, String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto) {
     super();
     this.municipio = municipio;
     this.localidade = localidade;
     this.valorAgua = Util.formatarMoedaReal(valorAgua);
     this.valorEsgoto = Util.formatarMoedaReal(valorEsgoto);
-    this.situacao = situacao;
   }
 
   public RelatorioAMAEDTO(){}
