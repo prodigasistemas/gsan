@@ -146,7 +146,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			adicionarObjetosSelecionadosColecoes(httpServletRequest, sessao, imovelAtual, observacao);
 			
 			sessao.setAttribute("analisado", "");
-			sessao.setAttribute("confirmacao", "");
 			sessao.setAttribute("gerarAviso", "");
 			sessao.setAttribute("gerarOS", "");
 			sessao.setAttribute("gerarRelatorio", "");
@@ -543,13 +542,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 										String valorPercentual = "" + percentual;
 										leituraConsumoActionForm.setVarConsumo(valorPercentual.replace(".", ",") + "%");
 									}
-									
-									LeituraSituacao leituraSituacaoAtual = medicaoHistoricoAnoMesAtual.getLeituraSituacaoAtual();  
-									if (leituraSituacaoAtual != null) {
-										String confirmacao = leituraSituacaoAtual.getId().equals(LeituraSituacao.CONFIRMADA) ? ConstantesSistema.CONFIRMADA : ConstantesSistema.NAO_CONFIRMADA;
-										leituraConsumoActionForm.setConfirmacao(confirmacao);
-										sessao.setAttribute("confirmacao", confirmacao);
-									}
 								}
 								
 								if(imovelMicromedicaoConsumo.getConsumoHistorico() != null
@@ -747,7 +739,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 	private void limparFormPaginacao(
 			LeituraConsumoActionForm leituraConsumoActionForm) {
 		leituraConsumoActionForm.setAnalisado("");
-		leituraConsumoActionForm.setConfirmacao("");
 		leituraConsumoActionForm.setGerarAviso("");
 		leituraConsumoActionForm.setGerarOS("");
 		leituraConsumoActionForm.setGerarRelatorio("");
