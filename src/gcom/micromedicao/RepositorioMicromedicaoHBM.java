@@ -1,5 +1,34 @@
 package gcom.micromedicao;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.CallbackException;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -72,35 +101,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.CallbackException;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 
 /**
@@ -4028,12 +4028,15 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * 
 	 * [UC0153] Apresentar dados para Analise da medição e Consumo
 	 */
-	public Collection carregarDadosMedicaoResumo(Integer idImovel, boolean ligacaoAgua) throws ErroRepositorioException {
+	public Collection carregarDadosMedicaoResumo(Integer idImovel,
+			boolean ligacaoAgua) throws ErroRepositorioException {
+
 		Collection retorno = null;
+
 		Session session = HibernateUtil.getSession();
-		
+		String consulta;
 		try {
-			String consulta = "select medicaoHistorico.mdhi_amleitura as mesAno,"
+			consulta = "select medicaoHistorico.mdhi_amleitura as mesAno,"
 					+ " medicaoHistorico.mdhi_dtleituraatualinformada as dataLeituraInformada,"
 					+ " medicaoHistorico.mdhi_nnleituraatualinformada as numeroLeituraInformada,"
 					+ " medicaoHistorico.mdhi_dtleituraatualfaturamento as dataLeituraFaturada,"
@@ -4041,34 +4044,39 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " leituraAnormalidadeInformada.ltan_id as idAnormalidadeLeituraInformada,"
 					+ " leituraAnormalidadeFaturamento.ltan_id as idAnormalidadeLeituraFaturada,"
 					+ " leituraAnormalidadeFaturamento.ltan_dsleituraanormalidade as descricaoanormalidadeleiturafa,"
-					+ " leituraSituacao.ltst_id as idLeituraSituacao,"
-					+ " leituraSituacao.ltst_dsleiturasituacao as descricaoLeituraSituacao"
+					+ " leituraSituacao.ltst_dsleiturasituacao as leituraSituacao"
 					+ " from micromedicao.medicao_historico medicaoHistorico "
 					+ " left outer join micromedicao.leitura_situacao leituraSituacao on medicaoHistorico.ltst_idleiturasituacaoatual = leituraSituacao.ltst_id "
 					+ "	left outer join micromedicao.leitura_anormalidade leituraAnormalidadeInformada on medicaohistorico.ltan_idleitanorminformada=leituraAnormalidadeInformada.ltan_id "
 					+ "	left outer join micromedicao.leitura_anormalidade leituraAnormalidadeFaturamento on medicaohistorico.ltan_idleitanormfatmt=leituraAnormalidadeFaturamento.ltan_id ";
-			
 			if (ligacaoAgua) {
-				consulta += " where medicaoHistorico.lagu_id = " + idImovel + " order by medicaoHistorico.mdhi_amleitura";
+				consulta = consulta + " where medicaoHistorico.lagu_id = "
+						+ idImovel
+						+ " order by medicaoHistorico.mdhi_amleitura";
 			} else {
-				consulta += " where medicaoHistorico.imov_id = " + idImovel + " order by medicaoHistorico.mdhi_amleitura";
+				consulta = consulta + " where medicaoHistorico.imov_id = "
+						+ idImovel
+						+ " order by medicaoHistorico.mdhi_amleitura";
 			}
 
-			retorno = session.createSQLQuery(consulta)
-					.addScalar("mesAno", Hibernate.INTEGER)
-					.addScalar("dataLeituraInformada", Hibernate.DATE)
-					.addScalar("numeroLeituraInformada", Hibernate.INTEGER)
-					.addScalar("dataLeituraFaturada", Hibernate.DATE)
-					.addScalar("numeroLeituraFaturada", Hibernate.INTEGER)
-					.addScalar("idAnormalidadeLeituraInformada", Hibernate.INTEGER)
-					.addScalar("idAnormalidadeLeituraFaturada", Hibernate.INTEGER)
-					.addScalar("descricaoanormalidadeleiturafa", Hibernate.STRING)
-					.addScalar("idLeituraSituacao", Hibernate.INTEGER)
-					.addScalar("descricaoLeituraSituacao", Hibernate.STRING).list();
+			retorno = session.createSQLQuery(consulta).addScalar("mesAno",
+					Hibernate.INTEGER).addScalar("dataLeituraInformada",
+					Hibernate.DATE).addScalar("numeroLeituraInformada",
+					Hibernate.INTEGER).addScalar("dataLeituraFaturada",
+					Hibernate.DATE).addScalar("numeroLeituraFaturada",
+					Hibernate.INTEGER).addScalar(
+					"idAnormalidadeLeituraInformada", Hibernate.INTEGER)
+					.addScalar("idAnormalidadeLeituraFaturada",
+							Hibernate.INTEGER).addScalar(
+							"descricaoanormalidadeleiturafa",
+							Hibernate.STRING).addScalar("leituraSituacao",
+							Hibernate.STRING).list();
 
 		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
+			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
