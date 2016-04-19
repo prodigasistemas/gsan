@@ -23,7 +23,6 @@ import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.micromedicao.bean.CalculoConsumoHelper;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
-import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -557,8 +556,9 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 						}
 					}
 					
-//					Organizar a coleção de Conta
+//					 Organizar a coleção de Conta
 					if (colecaoImovelMicromedicao != null && !colecaoImovelMicromedicao.isEmpty()) {
+						
 						Collections.sort((List) colecaoImovelMicromedicao, new Comparator() {
 									public int compare(Object a, Object b) {
 										
