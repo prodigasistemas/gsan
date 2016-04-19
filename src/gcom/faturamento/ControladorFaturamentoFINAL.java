@@ -26638,8 +26638,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						}
 						
 						if(imovel.getFaturamentoSituacaoTipo()!=null && 
-						   imovel.getFaturamentoSituacaoTipo().getId().equals(FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA)){
-						   continue;
+								   imovel.getFaturamentoSituacaoTipo().getId().intValue()==FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA.intValue()){
+								   continue;
 						}
 
 						if (!this.permiteFaturamentoParaAgua(
