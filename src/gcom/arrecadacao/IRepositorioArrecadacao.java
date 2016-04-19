@@ -5873,7 +5873,7 @@ public interface IRepositorioArrecadacao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Pagamento pesquisarPagamentoParaEncerrarArrecadacao(Integer idPagamento)
+	public PagamentoHistorico obterPagamentoHistoricoDePagamentoParaEncerrarArrecadacao(Integer idPagamento)
 			throws ErroRepositorioException;
 	
 	

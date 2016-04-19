@@ -1176,51 +1176,21 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	public void removerColecaoPagamentoParaBatch(Collection<Pagamento> colecaoPagamento) throws ErroRepositorioException {
-		
-		String delete;
+	public void removerColecaoPagamentoParaBatch(Collection<Integer> pagamentos) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		
-		PreparedStatement st = null;
-
 		try {
-			if(colecaoPagamento != null && !colecaoPagamento.isEmpty()){
+			if(pagamentos != null && !pagamentos.isEmpty()){
 				
-				//declara o tipo de conexao
-				Connection jdbcCon = session.connection();
-				
-				//update
-				delete = "delete from arrecadacao.pagamento pgmt " +
-						 "where pgmt.pgmt_id = ? " ;
+				String delete = "delete from Pagamento pgmt where pgmt.id in (:ids) " ;
 	
-				Iterator<Pagamento> iteratorObjetos = colecaoPagamento.iterator();
-				Pagamento pagamento = null;
-				
-				//abre a conexao
-				st = jdbcCon.prepareStatement(delete);	
-				
-				while (iteratorObjetos.hasNext()) {
-
-					pagamento = iteratorObjetos.next();
-					
-					//seta os parametros
-					st.setInt(1, pagamento.getId());
-					
-					//executa o update
-					st.executeUpdate();
-				}
+				session.createQuery(delete)
+					.setParameterList("ids", pagamentos)
+					.executeUpdate();
 			}
-		} catch (SQLException e) {
-			// e.printStackTrace();
+		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			if (null != st)
-				try {
-					st.close();
-				} catch (SQLException e) {
-					throw new ErroRepositorioException(e, "Erro no Hibernate");
-				}
-			HibernateUtil.closeSession(session);
+			session.close();
 		}
 		
 	}

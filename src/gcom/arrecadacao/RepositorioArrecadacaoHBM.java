@@ -18538,14 +18538,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 
 			consulta.append("select pgmt.id from Pagamento pgmt ")
-					.append("inner join pgmt.localidade loca ")
-					.append("where ((loca.id= :idLocalidade) and ")
+					.append("where ((pgmt.localidade.id= :idLocalidade) and ")
 					.append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
-					.append("and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))")
+					.append("and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao))")
 					.append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
-					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
+					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao)) ")
 					.append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
-					.append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
+					.append(" and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao) ) ")
 					.append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
 					.append(" order by pgmt.id");
 
@@ -19837,7 +19836,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select devl from Devolucao devl "
 					+ "inner join devl.localidade loca "
 					+ "where loca.id= :idLocalidade and "
-					+ "devl.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "devl.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and ( devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_CLASSIFICADA 
 					+ " or devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES
 					+ ")"
@@ -20081,7 +20080,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select dbac from DebitoACobrar dbac "
 					+ "inner join dbac.localidade loca "
 					+ "where dbac.id in "
-					+ "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and (pgmt.pagamentoSituacaoAtual.id = "
 					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO
 					+ " or pgmt.pagamentoSituacaoAtual.id = "
@@ -23906,7 +23905,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "inner join crar.localidade loca "
 					+ "where crar.id in "
 					+ "(select distinct devl.creditoARealizarGeral.id from Devolucao devl " 
-					+ "where devl.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "where devl.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES 
 					+ " and devl.creditoARealizarGeral.id is not null and devl.localidade.id = :idLocalidade) "
 					+ " and loca.id = :idLocalidade ";
@@ -25464,38 +25463,21 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Pagamento pesquisarPagamentoParaEncerrarArrecadacao(Integer idPagamento)
+	public PagamentoHistorico obterPagamentoHistoricoDePagamentoParaEncerrarArrecadacao(Integer idPagamento)
 			throws ErroRepositorioException {
 
 
-		Pagamento retorno = null;
+		PagamentoHistorico retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 
 		try {
-			consulta = "select pgmt " +
+			consulta = "select new PagamentoHistorico(pgmt) " +
 				"from Pagamento pgmt " +
-				"inner join fetch pgmt.avisoBancario avbc " +
-				"inner join fetch pgmt.documentoTipo as dctp " +
-				"inner join fetch pgmt.localidade as loca " +
-				"left join fetch pgmt.arrecadacaoForma as arfr " +
-				"left join fetch pgmt.arrecadadorMovimentoItem as amvi " +
-				"left join fetch pgmt.cliente as clie " +
-				"left join fetch pgmt.contaGeral as cntg " +
-				"left join fetch pgmt.debitoACobrarGeral as dbag " +
-				"left join fetch pgmt.debitoTipo as dbtp " +
-				"left join fetch pgmt.guiaPagamento as guiaGeral " +
-				"left join fetch guiaGeral.guiaPagamento as gupg " +
-				"left join fetch pgmt.imovel as imov " +
-				"left join fetch pgmt.pagamentoSituacaoAnterior as pgan " +
-				"left join fetch pgmt.pagamentoSituacaoAtual as pgat " +
-				"left join fetch pgmt.cobrancaDocumento as cbdo " +
-				"left join fetch pgmt.documentoTipoAgregador as dcta " +
-				"left join fetch pgmt.fatura as fatu " +
 				"where pgmt.id = :idPagamento ";
 
-			retorno = (Pagamento) session.createQuery(consulta).setInteger(
-					"idPagamento", idPagamento).uniqueResult();
+			retorno = (PagamentoHistorico) session.createQuery(consulta)
+					.setInteger("idPagamento", idPagamento).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

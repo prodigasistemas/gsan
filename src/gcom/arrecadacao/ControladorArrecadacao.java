@@ -278,6 +278,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25600,49 +25601,45 @@ public class ControladorArrecadacao implements SessionBean {
 	protected void gerarHistoricoEncerrarArrecadacaoDevolucao(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException, ControladorException {
-		/** Devoluções Classificadas */
-		List colecaoDevolucoesClassificadas = (List) repositorioArrecadacao
-				.pesquisarDevolucoesClassificadasPorLocalidade(
-						anoMesReferenciaArrecadacao, idLocalidade);
 
-		if (colecaoDevolucoesClassificadas != null
-				&& !colecaoDevolucoesClassificadas.isEmpty()) {
-			int limiteSuperiorDevolucao;
-			int limiteInferiorDevolucao;
-			int limiteMaximoDevolucao = colecaoDevolucoesClassificadas.size();
+		List devolucoesClassificadas = (List) repositorioArrecadacao
+				.pesquisarDevolucoesClassificadasPorLocalidade(anoMesReferenciaArrecadacao, idLocalidade);
+
+		if (devolucoesClassificadas != null && !devolucoesClassificadas.isEmpty()) {
+			int limiteSuperior;
+			int limiteInferior;
+			int limiteMaximo = devolucoesClassificadas.size();
 			int quantidadeMaximaPorColecaoDevolucao = 50;
 
-			for (int i = 0; i < limiteMaximoDevolucao; i = i
+			for (int i = 0; i < limiteMaximo; i = i
 					+ quantidadeMaximaPorColecaoDevolucao) {
 
-				if (limiteMaximoDevolucao < quantidadeMaximaPorColecaoDevolucao) {
-					limiteInferiorDevolucao = 0;
-					limiteSuperiorDevolucao = limiteMaximoDevolucao;
+				if (limiteMaximo < quantidadeMaximaPorColecaoDevolucao) {
+					limiteInferior = 0;
+					limiteSuperior = limiteMaximo;
 				} else {
-					limiteInferiorDevolucao = i;
-					limiteSuperiorDevolucao = i
-							+ quantidadeMaximaPorColecaoDevolucao;
+					limiteInferior = i;
+					limiteSuperior = i + quantidadeMaximaPorColecaoDevolucao;
 
-					if (limiteSuperiorDevolucao > limiteMaximoDevolucao) {
-						limiteSuperiorDevolucao = limiteMaximoDevolucao;
+					if (limiteSuperior > limiteMaximo) {
+						limiteSuperior = limiteMaximo;
 					}
 				}
 
 				List colecaoDevolucoesTemporaria = new ArrayList();
 				colecaoDevolucoesTemporaria
-						.addAll(colecaoDevolucoesClassificadas.subList(
-								limiteInferiorDevolucao,
-								limiteSuperiorDevolucao));
+						.addAll(devolucoesClassificadas.subList(
+								limiteInferior,
+								limiteSuperior));
 
-				if (colecaoDevolucoesTemporaria != null
-						&& !colecaoDevolucoesTemporaria.isEmpty()) {
+				if (colecaoDevolucoesTemporaria != null && !colecaoDevolucoesTemporaria.isEmpty()) {
 					transferirDevolucaoParaHistorico(colecaoDevolucoesTemporaria);
 				}
 
 				colecaoDevolucoesTemporaria = null;
 			}
 
-			colecaoDevolucoesClassificadas = null;
+			devolucoesClassificadas = null;
 		}
 		/** Fim Devoluções Classificadas */
 	}
@@ -25655,29 +25652,22 @@ public class ControladorArrecadacao implements SessionBean {
 		int numeroIndice = 0; 
 
 		while (!flagTerminou) {
-			Collection<Integer> colecaoPagamentosClassificados = repositorioArrecadacao.pesquisarPagamentosClassificadosOuValorExcedenteBaixado(
+			Collection<Integer> pagamentosClassificados = repositorioArrecadacao.pesquisarPagamentosClassificadosOuValorExcedenteBaixado(
 					anoMesReferenciaArrecadacao, idLocalidade, numeroIndice, quantidadeRegistros);
 
-			if (colecaoPagamentosClassificados == null || colecaoPagamentosClassificados.size() < quantidadeRegistros) {
-
+			if (pagamentosClassificados == null || pagamentosClassificados.size() < quantidadeRegistros || pagamentosClassificados.isEmpty()) {
 				flagTerminou = true;
 			}
-
-			Iterator<Integer> iteratorPagamentos = colecaoPagamentosClassificados.iterator();
 			
-			while (iteratorPagamentos.hasNext()) {
+			Collection<PagamentoHistorico> historicos = new ArrayList<PagamentoHistorico>();
 
-				Integer idPagamento = iteratorPagamentos.next();
-
-				Pagamento pagamento = this.repositorioArrecadacao.pesquisarPagamentoParaEncerrarArrecadacao(idPagamento);
-				
-				if (pagamento != null) {
-					transferirPagamentoParaHistorico(Collections.singletonList(pagamento));
-					iteratorPagamentos.remove();
-					pagamento = null;
-				}
-
+			for (Integer idPagamento : pagamentosClassificados) {
+				PagamentoHistorico pagamentoHistorico = this.repositorioArrecadacao.obterPagamentoHistoricoDePagamentoParaEncerrarArrecadacao(idPagamento);
+				historicos.add(pagamentoHistorico);
 			}
+			
+			getControladorBatch().inserirColecaoObjetoParaBatch(historicos);
+			getControladorBatch().removerColecaoPagamentoParaBatch(pagamentosClassificados);			
 		}
 	}
 
@@ -25743,7 +25733,6 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @throws ControladorException
 	 */
 	protected void gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException, ControladorException {
-		/** Guias de Pagamento */
 		List colecaoGuiasPagamento = (List) repositorioArrecadacao.pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(anoMesReferenciaArrecadacao, idLocalidade);
 
 		if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
@@ -25773,9 +25762,7 @@ public class ControladorArrecadacao implements SessionBean {
 					transferirGuiaPagamentoParaHistorico(colecaoGuiasTemporaria);
 					atualizarIndicadorGuiaPagamentoNoHistorico(colecaoGuiasTemporaria);
 					
-					//CRC2725 - alterado por Vivianne Sousa - 25/09/2009 analista:Fátima
-					getControladorSpcSerasa().verificarRelacaoDaTransfereciaPHistoricoComItensNegativacao(
-							colecaoGuiasTemporaria);
+					getControladorSpcSerasa().verificarRelacaoDaTransfereciaPHistoricoComItensNegativacao(colecaoGuiasTemporaria);
 				}
 
 				colecaoGuiasTemporaria = null;
@@ -25803,44 +25790,38 @@ public class ControladorArrecadacao implements SessionBean {
 	protected void gerarHistoricoParaEncerrarArrecadacaoDebitoACobrar(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException, ControladorException {
-		// criar os histórico dos débitos a cobrar cancelados
+
 		List debitosACobrar = (List) repositorioArrecadacao
 				.pesquisarDebitosACobrarDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(
 						anoMesReferenciaArrecadacao, idLocalidade);
 
 		if (debitosACobrar != null && !debitosACobrar.isEmpty()) {
-			int limiteSuperiorDebito;
-			int limiteInferiorDebito;
-			int limiteMaximoDebito = debitosACobrar.size();
+			int limiteSuperior;
+			int limiteInferior;
+			int limiteMaximo = debitosACobrar.size();
 			int quantidadeMaximaPorColecaoDebito = 50;
 
-			for (int i = 0; i < limiteMaximoDebito; i = i
-					+ quantidadeMaximaPorColecaoDebito) {
+			for (int i = 0; i < limiteMaximo; i = i + quantidadeMaximaPorColecaoDebito) {
 
-				if (limiteMaximoDebito < quantidadeMaximaPorColecaoDebito) {
-					limiteInferiorDebito = 0;
-					limiteSuperiorDebito = limiteMaximoDebito;
+				if (limiteMaximo < quantidadeMaximaPorColecaoDebito) {
+					limiteInferior = 0;
+					limiteSuperior = limiteMaximo;
 				} else {
-					limiteInferiorDebito = i;
-					limiteSuperiorDebito = i + quantidadeMaximaPorColecaoDebito;
+					limiteInferior = i;
+					limiteSuperior = i + quantidadeMaximaPorColecaoDebito;
 
-					if (limiteSuperiorDebito > limiteMaximoDebito) {
-						limiteSuperiorDebito = limiteMaximoDebito;
+					if (limiteSuperior > limiteMaximo) {
+						limiteSuperior = limiteMaximo;
 					}
 				}
 
 				List colecaoDebitosTemporaria = new ArrayList();
-				colecaoDebitosTemporaria.addAll(debitosACobrar.subList(
-						limiteInferiorDebito, limiteSuperiorDebito));
+				
+				colecaoDebitosTemporaria.addAll(debitosACobrar.subList(limiteInferior, limiteSuperior));
 
-				if (colecaoDebitosTemporaria != null
-						&& !colecaoDebitosTemporaria.isEmpty()) {
-					getControladorFaturamento()
-							.transferirDebitosACobrarParaHistorico(
-									colecaoDebitosTemporaria);
-					getControladorFaturamento()
-							.atualizarIndicadorDebitoACobrarNoHistorico(
-									colecaoDebitosTemporaria);
+				if (colecaoDebitosTemporaria != null && !colecaoDebitosTemporaria.isEmpty()) {
+					getControladorFaturamento().transferirDebitosACobrarParaHistorico(colecaoDebitosTemporaria);
+					getControladorFaturamento().atualizarIndicadorDebitoACobrarNoHistorico(colecaoDebitosTemporaria);
 				}
 
 				colecaoDebitosTemporaria = null;
@@ -34490,9 +34471,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 					Integer idGuiaPagamento = guiaPagamento.getId();
 
-					/** remove a referência da guia de pagamento dos pagamentos */
-					//this.repositorioArrecadacao.apagarIdGuiaPagamentoPagamentos(idGuiaPagamento);
-
 					guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
 					guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
 					guiaPagamentoHistoricoTemp.setAnoMesReferenciaContabil(guiaPagamento.getAnoMesReferenciaContabil());
@@ -34518,11 +34496,8 @@ public class ControladorArrecadacao implements SessionBean {
 					guiaPagamentoHistoricoTemp.setIndicadorEmitirObservacao(guiaPagamento.getIndicadorEmitirObservacao());
 					guiaPagamentoHistoricoTemp.setNumeroGuiaFatura(guiaPagamento.getNumeroGuiaFatura());
 
-					/** Inserindo a guia no historico */
 					getControladorUtil().inserir(guiaPagamentoHistoricoTemp);
-
 					enviarGuiaPagamentoCategoriaParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
-
 					enviarClienteGuiaPagamentoParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
 				}
 			}
@@ -34582,97 +34557,6 @@ public class ControladorArrecadacao implements SessionBean {
 						.atualizarIndicadorGuiaPagamentoNoHistorico(colecaoGuiasPagamentoTemporaria);
 
 			}
-
-		} catch (Exception ex) {
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-
-	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * Transfere para o histórico os pagamentos informados.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 09/01/2007
-	 * 
-	 * @param colecaoGuiasPagamento
-	 * @param anoMesFaturamentoSistemaParametro
-	 * @throws ControladorException
-	 */
-	public void transferirPagamentoParaHistorico(Collection<Pagamento> colecaoPagamentos)
-			throws ControladorException {
-
-		PagamentoHistorico pagamentoHistoricoTemp = null;
-
-		Collection colecaoPagamentoHistoricoInserir = new ArrayList();
-		Collection colecaoPagamentoHistoricoRemover = new ArrayList();
-		
-		try {
-			if (colecaoPagamentos != null && !colecaoPagamentos.isEmpty()) {
-
-				colecaoPagamentoHistoricoRemover.addAll(colecaoPagamentos);
-				int cont = 0;
-				for (Pagamento pagamento : colecaoPagamentos) {
-					cont++;
-
-					pagamentoHistoricoTemp = new PagamentoHistorico();
-					pagamentoHistoricoTemp.setId(pagamento.getId());
-					pagamentoHistoricoTemp.setAnoMesReferenciaArrecadacao(pagamento.getAnoMesReferenciaArrecadacao());
-					pagamentoHistoricoTemp.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());
-					pagamentoHistoricoTemp.setArrecadacaoForma(pagamento.getArrecadacaoForma());
-					pagamentoHistoricoTemp.setArrecadadorMovimentoItem(pagamento.getArrecadadorMovimentoItem());
-					pagamentoHistoricoTemp.setAvisoBancario(pagamento.getAvisoBancario());
-					pagamentoHistoricoTemp.setCliente(pagamento.getCliente());
-					pagamentoHistoricoTemp.setDataPagamento(pagamento.getDataPagamento());
-					pagamentoHistoricoTemp.setDebitoACobrarGeral(pagamento.getDebitoACobrarGeral());
-					pagamentoHistoricoTemp.setDebitoTipo(pagamento.getDebitoTipo());
-					pagamentoHistoricoTemp.setDocumentoTipo(pagamento.getDocumentoTipo());
-					pagamentoHistoricoTemp.setImovel(pagamento.getImovel());
-					pagamentoHistoricoTemp.setLocalidade(pagamento.getLocalidade());
-					pagamentoHistoricoTemp.setPagamentoSituacaoAnterior(pagamento.getPagamentoSituacaoAnterior());
-					pagamentoHistoricoTemp.setPagamentoSituacaoAtual(pagamento.getPagamentoSituacaoAtual());
-					pagamentoHistoricoTemp.setUltimaAlteracao(new Date());
-					pagamentoHistoricoTemp.setValorPagamento(pagamento.getValorPagamento());
-					pagamentoHistoricoTemp.setValorExcedente(pagamento.getValorExcedente());
-					pagamentoHistoricoTemp.setIndicadorExpurgado(pagamento.getIndicadorExpurgado());
-
-					
-					if (pagamento.getContaGeral() != null && pagamento.getContaGeral().getId() != null) {
-						pagamentoHistoricoTemp.setContaGeral(pagamento.getContaGeral());
-					}
-					
-					if (pagamento.getCobrancaDocumento() != null){
-						pagamentoHistoricoTemp.setCobrancaDocumentoAgregador(pagamento.getCobrancaDocumento());
-					}
-					
-					if (pagamento.getDocumentoTipoAgregador() != null){
-						pagamentoHistoricoTemp.setDocumentoTipoAgregador(pagamento.getDocumentoTipoAgregador());
-					}
-					
-					if (pagamento.getFatura() != null){
-						pagamentoHistoricoTemp.setFatura(pagamento.getFatura());
-					}
-					
-					if (pagamento.getDataProcessamento() != null){
-						pagamentoHistoricoTemp.setDataHoraProcessamento(pagamento.getDataProcessamento());
-					}
-
-					if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getId() != null) {
-						System.out.println("Pagamento " + pagamento.getId() + " com guia " + pagamento.getGuiaPagamento().getId());
-						pagamentoHistoricoTemp.setGuiaPagamentoGeral(pagamento.getGuiaPagamento());
-					} 
-
-					colecaoPagamentoHistoricoInserir.add(pagamentoHistoricoTemp);
-
-				}
-			}
-
-			//getControladorBatch().inserirColecaoObjetoParaBatch(colecaoPagamentoHistoricoInserir);
-			//getControladorBatch().removerColecaoPagamentoParaBatch(colecaoPagamentoHistoricoRemover);
-
-			colecaoPagamentoHistoricoInserir = null;
-			colecaoPagamentoHistoricoRemover = null;
 
 		} catch (Exception ex) {
 			throw new ControladorException("erro.sistema", ex);
@@ -42732,35 +42616,33 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException, ControladorException {
 		
-		// criar os histórico dos creditos a realizar 
 		List creditosARealizar = (List) repositorioArrecadacao
-				.pesquisarCreditoaRealizarDeDevolucoesClassificadas(
-						anoMesReferenciaArrecadacao, idLocalidade);
+				.pesquisarCreditoaRealizarDeDevolucoesClassificadas(anoMesReferenciaArrecadacao, idLocalidade);
 
 		if (creditosARealizar != null && !creditosARealizar.isEmpty()) {
-			int limiteSuperiorDebito;
-			int limiteInferiorDebito;
-			int limiteMaximoDebito = creditosARealizar.size();
+			int limiteSuperior;
+			int limiteInferior;
+			int limiteMaximo = creditosARealizar.size();
 			int quantidadeMaximaPorColecaoCredito = 50;
 
-			for (int i = 0; i < limiteMaximoDebito; i = i
+			for (int i = 0; i < limiteMaximo; i = i
 					+ quantidadeMaximaPorColecaoCredito) {
 
-				if (limiteMaximoDebito < quantidadeMaximaPorColecaoCredito) {
-					limiteInferiorDebito = 0;
-					limiteSuperiorDebito = limiteMaximoDebito;
+				if (limiteMaximo < quantidadeMaximaPorColecaoCredito) {
+					limiteInferior = 0;
+					limiteSuperior = limiteMaximo;
 				} else {
-					limiteInferiorDebito = i;
-					limiteSuperiorDebito = i + quantidadeMaximaPorColecaoCredito;
+					limiteInferior = i;
+					limiteSuperior = i + quantidadeMaximaPorColecaoCredito;
 
-					if (limiteSuperiorDebito > limiteMaximoDebito) {
-						limiteSuperiorDebito = limiteMaximoDebito;
+					if (limiteSuperior > limiteMaximo) {
+						limiteSuperior = limiteMaximo;
 					}
 				}
 
 				List colecaoCreditosTemporaria = new ArrayList();
 				colecaoCreditosTemporaria.addAll(creditosARealizar.subList(
-						limiteInferiorDebito, limiteSuperiorDebito));
+						limiteInferior, limiteSuperior));
 
 				if (colecaoCreditosTemporaria != null && !colecaoCreditosTemporaria.isEmpty()) {
 					getControladorFaturamento().transferirCreditoARealizarParaHistorico(colecaoCreditosTemporaria);
@@ -51945,3 +51827,36 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 }
 
+
+
+
+/*
+2016-04-15 16:04:00,562 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes guias: 16:04:00 - 562
+2016-04-15 16:04:03,950 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes debitos: 16:04:03 - 950
+2016-04-15 16:04:04,216 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes creditos: 16:04:04 - 216
+2016-04-15 16:04:04,255 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes pagamentos: 16:04:04 - 255
+2016-04-15 16:04:00,552 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes guias: 16:04:00 - 551
+2016-04-15 16:04:04,981 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes debitos: 16:04:04 - 981
+2016-04-15 16:04:05,091 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes creditos: 16:04:05 - 91
+2016-04-15 16:04:05,095 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes pagamentos: 16:04:05 - 95
+2016-04-15 16:04:00,561 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes guias: 16:04:00 - 561
+2016-04-15 16:04:02,038 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes debitos: 16:04:02 - 38
+2016-04-15 16:04:02,264 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes creditos: 16:04:02 - 264
+2016-04-15 16:04:02,368 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes pagamentos: 16:04:02 - 367
+2016-04-15 16:04:00,562 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes guias: 16:04:00 - 561
+2016-04-15 16:04:00,574 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes debitos: 16:04:00 - 574
+2016-04-15 16:04:00,584 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes creditos: 16:04:00 - 584
+2016-04-15 16:04:00,592 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes pagamentos: 16:04:00 - 592
+2016-04-15 16:04:04,576 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes devolucoes: 16:04:04 - 576
+2016-04-15 16:04:04,581 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - depois devolucoes: 16:04:04 - 581
+2016-04-15 16:04:00,561 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes guias: 16:04:00 - 561
+2016-04-15 16:04:01,006 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes debitos: 16:04:01 - 6
+2016-04-15 16:04:01,124 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes creditos: 16:04:01 - 124
+2016-04-15 16:04:01,135 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes pagamentos: 16:04:01 - 135
+2016-04-15 16:04:04,663 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes guias: 16:04:04 - 663
+2016-04-15 16:04:05,999 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes debitos: 16:04:05 - 999
+2016-04-15 16:04:06,060 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes creditos: 16:04:06 - 60
+2016-04-15 16:04:06,090 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes pagamentos: 16:04:06 - 90
+
+
+*/

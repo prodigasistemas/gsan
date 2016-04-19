@@ -39409,11 +39409,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 							colecaoCreditoARealizarCategoriaHistoricoInserir
 									.add(creditoARealizarCategoriaHistorico);
-
-							System.out.println("credito a realizar:"
-									+ creditoARealizarCategoriaHistorico
-											.getComp_id()
-											.getCreditoARealizarHistoricoId());
 						}
 					}
 				}

@@ -2417,23 +2417,6 @@ public interface IControladorArrecadacao {
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
 	 * 
-	 * Transfere para o histórico as guias de pagamentos e os relacionamentos
-	 * ligados a ela.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 09/01/2007
-	 * 
-	 * @param colecaoGuiasPagamento
-	 * @param anoMesFaturamentoSistemaParametro
-	 * @throws ControladorException
-	 */
-	public void transferirPagamentoParaHistorico(
-			Collection<Pagamento> colecaoPagamentos)
-			throws ControladorException;
-
-	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
 	 * Transfere para o histórico as devoluções informadas.
 	 * 
 	 * @author Administrador

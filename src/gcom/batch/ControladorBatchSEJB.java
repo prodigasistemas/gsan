@@ -5,7 +5,6 @@ import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
-import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
 import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRaEncerramentoComando;
@@ -218,7 +217,6 @@ import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gerencial.micromedicao.TarefaBatchGerarResumoHidrometro;
 import gcom.integracao.ControladorIntegracaoLocal;
 import gcom.integracao.ControladorIntegracaoLocalHome;
-import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
@@ -272,8 +270,6 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-
-import org.apache.commons.beanutils.BeanComparator;
 
 /**
  * Controlador que possui os metodos de negocio de toda a parte que da suporte
@@ -342,8 +338,8 @@ public class ControladorBatchSEJB implements SessionBean {
 		SistemaParametro sistemaParametros = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
-		Integer anoMesFaturamentoSistemaParametro = sistemaParametros
-				.getAnoMesFaturamento();
+		Integer anoMesFaturamentoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
+		Integer anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesArrecadacao();
 
 		/** Colecao de ids de localidades para encerrar a arrecadacacao do mes */
 		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao()
@@ -733,49 +729,26 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 
-					/** Pedro Alexandre */
 					case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
 
-						// Verificamos se o resumo da arrecadação foi gerado
-						// para esse o ano mes de referencia
-						if (!getControladorArrecadacao()
-								.verificarExistenciaResumoArrecadacaoParaAnoMes(
-										getControladorUtil()
-												.pesquisarParametrosDoSistema()
-												.getAnoMesArrecadacao())) {
-							throw new ControladorException(
-									"Não existem dados do resumo da arrecadação para o ano/mês de referencia");
+						if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
+										getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
+							throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
 						}
 
 						TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						/**
-						 * Coleaao de ids de localidades para encerrar a
-						 * ARRECADACAO do mes
-						 */
-						/*
-						 * Collection<Integer>
-						 * colecaoIdsSetoresEncerrarArrecadacaoMes =
-						 * getControladorArrecadacao().pesquisarIdsSetoresComPagamentosOuDevolucoes();
-						 */
-
-						// Seta os parametros para rodar a funcionalidade
-						dadosGerarHistoricoEncerrarArrecadacaoMes
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(
+								ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesEncerrarArrecadacaoMes);
 
 						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(
 								"anoMesReferenciaArrecadacao",
-								anoMesFaturamentoSistemaParametro);
+								anoMesArrecadacaoSistemaParametro);
 
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
@@ -7591,14 +7564,9 @@ public class ControladorBatchSEJB implements SessionBean {
 	 * @param colecaoPagamento
 	 * @throws ControladorException
 	 */
-	public void removerColecaoPagamentoParaBatch(
-			Collection<Pagamento> colecaoPagamento) throws ControladorException {
-
+	public void removerColecaoPagamentoParaBatch(Collection<Integer> pagamentos) throws ControladorException {
 		try {
-			if (colecaoPagamento != null && !colecaoPagamento.isEmpty()) {
-				repositorioBatch
-						.removerColecaoPagamentoParaBatch(colecaoPagamento);
-			}
+			repositorioBatch.removerColecaoPagamentoParaBatch(pagamentos);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

@@ -81,6 +81,54 @@ public class PagamentoHistorico implements Serializable {
 
     public PagamentoHistorico() {
     }
+    
+    public PagamentoHistorico(Pagamento pagamento) {
+    	this.setId(pagamento.getId());
+		this.setAnoMesReferenciaArrecadacao(pagamento.getAnoMesReferenciaArrecadacao());
+		this.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());
+		this.setArrecadacaoForma(pagamento.getArrecadacaoForma());
+		this.setArrecadadorMovimentoItem(pagamento.getArrecadadorMovimentoItem());
+		this.setAvisoBancario(pagamento.getAvisoBancario());
+		this.setCliente(pagamento.getCliente());
+		this.setDataPagamento(pagamento.getDataPagamento());
+		this.setDebitoACobrarGeral(pagamento.getDebitoACobrarGeral());
+		this.setDebitoTipo(pagamento.getDebitoTipo());
+		this.setDocumentoTipo(pagamento.getDocumentoTipo());
+		this.setImovel(pagamento.getImovel());
+		this.setLocalidade(pagamento.getLocalidade());
+		this.setPagamentoSituacaoAnterior(pagamento.getPagamentoSituacaoAnterior());
+		this.setPagamentoSituacaoAtual(pagamento.getPagamentoSituacaoAtual());
+		this.setUltimaAlteracao(new Date());
+		this.setValorPagamento(pagamento.getValorPagamento());
+		this.setValorExcedente(pagamento.getValorExcedente());
+		this.setIndicadorExpurgado(pagamento.getIndicadorExpurgado());
+
+		
+		if (pagamento.getContaGeral() != null && pagamento.getContaGeral().getId() != null) {
+			this.setContaGeral(pagamento.getContaGeral());
+		}
+		
+		if (pagamento.getCobrancaDocumento() != null){
+			this.setCobrancaDocumentoAgregador(pagamento.getCobrancaDocumento());
+		}
+		
+		if (pagamento.getDocumentoTipoAgregador() != null){
+			this.setDocumentoTipoAgregador(pagamento.getDocumentoTipoAgregador());
+		}
+		
+		if (pagamento.getFatura() != null){
+			this.setFatura(pagamento.getFatura());
+		}
+		
+		if (pagamento.getDataProcessamento() != null){
+			this.setDataHoraProcessamento(pagamento.getDataProcessamento());
+		}
+
+		if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getId() != null) {
+			this.setGuiaPagamentoGeral(pagamento.getGuiaPagamento());
+		} 
+
+    }
 
     public PagamentoHistorico(BigDecimal valorPagamento, Integer anoMesReferenciaPagamento, Date dataPagamento, 
     		Integer anoMesReferenciaArrecadacao, ArrecadacaoForma arrecadacaoForma, Imovel imovel, DocumentoTipo documentoTipo, 
