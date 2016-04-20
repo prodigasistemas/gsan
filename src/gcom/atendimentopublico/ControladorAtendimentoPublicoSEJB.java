@@ -4768,9 +4768,10 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 			FiltroServicoTipoOperacao filtroServicoTipoOperacao = new FiltroServicoTipoOperacao();
 			filtroServicoTipoOperacao.adicionarParametro(new ParametroSimples(FiltroServicoTipoOperacao.ID_SERVICO_TIPO, servicoTipo.getId()));
 			
-			ServicoTipoOperacao sto = (ServicoTipoOperacao) getControladorUtil().pesquisar(filtroServicoTipoOperacao, ServicoTipoOperacao.class.getName()).iterator().next();
+			Collection colecao = getControladorUtil().pesquisar(filtroServicoTipoOperacao, ServicoTipoOperacao.class.getName());
 			
-			if (sto != null) {
+			if (colecao != null && !colecao.isEmpty()) {
+				ServicoTipoOperacao sto = (ServicoTipoOperacao) colecao.iterator().next();
 				getControladorUtil().remover(sto);
 			}
 		}
