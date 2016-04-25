@@ -19,48 +19,50 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarRelatorioAMAEAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		// Seta o retorno
 		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAMAE");
-		
+
 		GerarRelatorioAMAEActionForm form = (GerarRelatorioAMAEActionForm) actionForm;
-		
+		// recupera a flag de limpar o form
+		String limparForm = httpServletRequest.getParameter("limparForm");
 		Fachada fachada = Fachada.getInstancia();
-		
 		String codigoDigitadoMunicipioEnter = null;
-		// Código do Município
-		if (form.getCodigoMunicipio() != null) 
-			codigoDigitadoMunicipioEnter = form.getCodigoMunicipio().toString();
-		
 
-		// Verifica se o código foi digitado
-		if (codigoDigitadoMunicipioEnter != null
-				&& !codigoDigitadoMunicipioEnter.trim().equals("")
-				&& Integer.parseInt(codigoDigitadoMunicipioEnter) > 0) {
-			FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
+		if (limparForm != null && !limparForm.equals("")) {
+			form.setCodigoMunicipio(null);
+			form.setDescricaoMunicipio(null);
+			form.setMesAno(null);
+		} else {
 
-			filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, codigoDigitadoMunicipioEnter));
-			filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.INDICADOR_USO,ConstantesSistema.INDICADOR_USO_ATIVO));
+			// Código do Município
+			if (form.getCodigoMunicipio() != null)
+				codigoDigitadoMunicipioEnter = form.getCodigoMunicipio().toString();
 
-			Collection municipioEncontrado = fachada.pesquisar(filtroMunicipio,
-					Municipio.class.getName());
+			// Verifica se o código foi digitado
+			if (codigoDigitadoMunicipioEnter != null && !codigoDigitadoMunicipioEnter.trim().equals("") && Integer.parseInt(codigoDigitadoMunicipioEnter) > 0) {
+				FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
 
-			if (municipioEncontrado != null && !municipioEncontrado.isEmpty()) {
-				// O municipio foi encontrado
-				form.setCodigoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getId());
-				form.setDescricaoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getNome());
-			} else {
-				form.setCodigoMunicipio(null);
-				form.setDescricaoMunicipio("Município inexistente");
-				httpServletRequest.setAttribute("municipioNaoEncontrado","exception");
+				filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, codigoDigitadoMunicipioEnter));
+				filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+				Collection municipioEncontrado = fachada.pesquisar(filtroMunicipio, Municipio.class.getName());
+
+				if (municipioEncontrado != null && !municipioEncontrado.isEmpty()) {
+					// O municipio foi encontrado
+					form.setCodigoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getId());
+					form.setDescricaoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getNome());
+				} else {
+					form.setCodigoMunicipio(null);
+					form.setDescricaoMunicipio("Município inexistente");
+					httpServletRequest.setAttribute("municipioNaoEncontrado", "exception");
+				}
 			}
 		}
-		
+
 		return retorno;
 	}
-
 
 }

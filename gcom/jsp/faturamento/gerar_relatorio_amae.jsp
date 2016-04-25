@@ -21,11 +21,9 @@
 	   form.submit();
 	}
 	function limparMunicipio() {
-        var form = document.forms[0];
-
-        form.codigoMunicipio.value = "";
-    	form.descricaoMunicipio.value = "";
-    	form.submit();
+		var form = document.forms[0];
+		form.action = 'filtrarRelatorioAMAEAction.do?limparForm=OK'
+		form.submit();
     }
 </script>
 
