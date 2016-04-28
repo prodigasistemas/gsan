@@ -9,15 +9,15 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class FaturamentoSituacaoRepositorio {
+public class RepositorioFaturamentoSituacao {
     
-    private static FaturamentoSituacaoRepositorio instance;
+    private static RepositorioFaturamentoSituacao instance;
     
-    private FaturamentoSituacaoRepositorio(){}
+    private RepositorioFaturamentoSituacao(){}
     
-    public static FaturamentoSituacaoRepositorio getInstance(){
+    public static RepositorioFaturamentoSituacao getInstance(){
         if (instance == null){
-            instance = new FaturamentoSituacaoRepositorio();
+            instance = new RepositorioFaturamentoSituacao();
         }
         
         return instance;

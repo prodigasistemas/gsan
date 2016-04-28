@@ -12,15 +12,15 @@ import gcom.faturamento.credito.CreditoARealizar;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class CreditoARealizarRepositorio {
+public class RepositorioCreditoARealizar {
     
-    private static CreditoARealizarRepositorio instance = null;
+    private static RepositorioCreditoARealizar instance = null;
     
-    private CreditoARealizarRepositorio() {}
+    private RepositorioCreditoARealizar() {}
     
-    public static CreditoARealizarRepositorio getInstance(){
+    public static RepositorioCreditoARealizar getInstance(){
         if (instance == null){
-            instance = new CreditoARealizarRepositorio();
+            instance = new RepositorioCreditoARealizar();
         }
         
         return instance;
