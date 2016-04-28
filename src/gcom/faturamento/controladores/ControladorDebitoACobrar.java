@@ -6,10 +6,10 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 
-import gcom.arrecadacao.repositorio.PagamentoRepositorio;
+import gcom.arrecadacao.repositorio.RepositorioPagamento;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.faturamento.debito.DebitoACobrar;
-import gcom.faturamento.repositorio.DebitoACobrarRepositorio;
+import gcom.faturamento.repositorio.RepositorioDebitoACobrar;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -17,13 +17,13 @@ import gcom.util.ErroRepositorioException;
 public class ControladorDebitoACobrar extends ControladorComum{
     private static final long serialVersionUID = -6230958913028633457L;
 
-    private DebitoACobrarRepositorio debitoCobrarRepositorio;
+    private RepositorioDebitoACobrar debitoCobrarRepositorio;
 	
-	private PagamentoRepositorio pagamentoRepositorio;
+	private RepositorioPagamento repositorioPagamento;
 	
     public void ejbCreate() throws CreateException {
-        pagamentoRepositorio    = PagamentoRepositorio.getInstancia();
-        debitoCobrarRepositorio = DebitoACobrarRepositorio.getInstancia();
+        repositorioPagamento    = RepositorioPagamento.getInstancia();
+        debitoCobrarRepositorio = RepositorioDebitoACobrar.getInstancia();
     }
 	
 	public Collection<DebitoACobrar> debitosCobrarVigentes(Integer idImovel) throws ControladorException{
@@ -61,7 +61,7 @@ public class ControladorDebitoACobrar extends ControladorComum{
     		Collection<DebitoACobrar> lista = debitoCobrarRepositorio.debitosCobrarPorImovelComPendenciaESemRevisao(idImovel);
             
             for (DebitoACobrar debito : lista) {
-                if (!debito.pertenceParcelamento(anoMesFaturamento) && pagamentoRepositorio.debitoSemPagamento(debito.getId())){
+                if (!debito.pertenceParcelamento(anoMesFaturamento) && repositorioPagamento.debitoSemPagamento(debito.getId())){
                     debitos.add(debito);
                 }
             }

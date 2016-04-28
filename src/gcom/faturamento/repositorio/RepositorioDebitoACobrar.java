@@ -12,15 +12,15 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class DebitoACobrarRepositorio{
+public class RepositorioDebitoACobrar{
     
-    private static DebitoACobrarRepositorio instancia;
+    private static RepositorioDebitoACobrar instancia;
     
-    private DebitoACobrarRepositorio() {}
+    private RepositorioDebitoACobrar() {}
 
-    public static DebitoACobrarRepositorio getInstancia() {
+    public static RepositorioDebitoACobrar getInstancia() {
         if (instancia == null){
-            instancia = new DebitoACobrarRepositorio();
+            instancia = new RepositorioDebitoACobrar();
         }
         
         return instancia;

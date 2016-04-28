@@ -11,15 +11,15 @@ import gcom.faturamento.credito.CreditoARealizar;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class DevolucaoRepositorio {
+public class RepositorioDevolucao {
     
-    private static DevolucaoRepositorio instance;
+    private static RepositorioDevolucao instance;
     
-    private DevolucaoRepositorio(){}
+    private RepositorioDevolucao(){}
     
-    public static DevolucaoRepositorio getInstance(){
+    public static RepositorioDevolucao getInstance(){
         if (instance == null){
-            instance = new DevolucaoRepositorio();
+            instance = new RepositorioDevolucao();
         }
         
         return instance;

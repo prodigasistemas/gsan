@@ -19,7 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import gcom.arrecadacao.repositorio.DevolucaoRepositorio;
+import gcom.arrecadacao.repositorio.RepositorioDevolucao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.imovel.Imovel;
@@ -49,7 +49,7 @@ public class ControladorAnaliseGeracaoContaTest {
 	private CreditoARealizarRepositorio creditoRealizarRepositorio;
 	
 	@Mock
-	private DevolucaoRepositorio devolucaoRepositorio;
+	private RepositorioDevolucao repositorioDevolucao;
 		
 	private boolean aguaEsgotoZerados;
 	
@@ -282,7 +282,7 @@ public class ControladorAnaliseGeracaoContaTest {
 	}
 	
 	private void mockExisteCreditoComDevolucao(Collection<CreditoARealizar> creditosRealizar, boolean retorno) throws ErroRepositorioException {
-		when(devolucaoRepositorio.existeCreditoComDevolucao(creditosRealizar))
+		when(repositorioDevolucao.existeCreditoComDevolucao(creditosRealizar))
 			.thenReturn(retorno);
 	}
 		
