@@ -7007,7 +7007,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			registroDetalheConsumidor.append("  ");
 
 			// D.22 - Nome cliente devedor
-			registroDetalheConsumidor.append(Util.completaString(cliente.getNome(), 70));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(cliente.getNome()), 70));
 
 			// D.23 - Data de nascimento do cliente
 			if (cliente.getCpf() != null && cliente.getCpf().length() > 0) {
@@ -7024,7 +7024,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			// D.25 - Nome da Mãe
 			if (cliente.getNomeMae() != null) {
-				registroDetalheConsumidor.append(Util.completaString(cliente.getNomeMae(), 70));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(cliente.getNomeMae()), 70));
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			}
@@ -7032,9 +7032,9 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			String endereco = this.getControladorEndereco().pesquisarEnderecoClienteAbreviado(cliente.getId());
 
 			if (endereco != null && endereco.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(endereco.substring(0, 45), 45));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco.substring(0, 45)), 45));
 			} else {
-				registroDetalheConsumidor.append(Util.completaString(endereco, 45));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco), 45));
 			}
 
 			ClienteEndereco clienteEndereco = null;
@@ -7047,16 +7047,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			if (clienteEndereco.getLogradouroBairro() != null) {
 				// D.27 - Bairro
-				registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroBairro().getBairro().getNome(), 20));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroBairro().getBairro().getNome()), 20));
 			} else {
 				// D.27 - Bairro
-				registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getBairro(), 20));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getBairro()), 20));
 			}
 
 			// D.28 - Município
-			registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getMunicipio(), 25));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getMunicipio()), 25));
 			// D.29 - Unidade da Federação
-			registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getSigla(), 2));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getSigla()), 2));
 			// D.30 - Cep
 			registroDetalheConsumidor.append(Util.completaString("" + clienteEndereco.getLogradouroCep().getCep().getCodigo(), 8));
 
@@ -7077,7 +7077,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			// D.34
 			if (endereco != null && endereco.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(endereco.substring(45), 25));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco.substring(45)), 25));
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 25));
 			}
@@ -10294,23 +10294,22 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 	private void enviarEmailArquivoNegativacao(Integer idNegativador, StringBuffer registroLinha) throws ControladorException {
 		Date data = new Date();
-		String AAAAMMDD = Util.formatarDataAAAAMMDD(data);
-		String HHMM = Util.formatarDataHHMM(data);
-		String formatodatahora = AAAAMMDD + "_" + HHMM;
+		String formatodatahora = Util.formatarDataAAAAMMDD(data) + "_" + Util.formatarDataHHMM(data);
 		BufferedWriter out = null;
 		ZipOutputStream zos = null;
-		
-		String nomeZip = "";
-		File leituraTipo = null;
 
-		if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
-			nomeZip = "REG_SPC_" + formatodatahora;
-			leituraTipo = new File(nomeZip + ".env");
-		} else {
-			nomeZip = "REG_SERASA_" + formatodatahora;
-			leituraTipo = new File(nomeZip + ".txt");
-		}
+		Negativador negativador = this.pesquisarNegativadorPorId(idNegativador);
+				
+		String nomeArquivo = "REG_" + negativador.getCliente().getNome() + "_" + formatodatahora;
+		nomeArquivo = nomeArquivo.trim().replace(' ', '_');
 		
+		File arquivo = null;
+		if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
+			arquivo = new File(nomeArquivo + ".env");
+		} else {
+			arquivo = new File(nomeArquivo + ".txt");
+		}
+
 		EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.SPC_SERASA);
 		String emailRemetente = envioEmail.getEmailRemetente();
 		String tituloMensagem = envioEmail.getTituloMensagem();
@@ -10318,19 +10317,19 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		String emailReceptor = envioEmail.getEmailReceptor();
 
 		try {
-			File compactado = new File(nomeZip + ".zip");
+			File compactado = new File(nomeArquivo + ".zip");
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
-			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivo.getAbsolutePath())));
 			out.write(registroLinha.toString());
 			out.flush();
 			out.close();
 
-			ZipUtil.adicionarArquivo(zos, leituraTipo);
+			ZipUtil.adicionarArquivo(zos, arquivo);
 			zos.close();
 
 			ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente, tituloMensagem, corpoMensagem, compactado);
 
-			leituraTipo.delete();
+			arquivo.delete();
 		} catch (IOException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		} catch (Exception e) {
@@ -10339,6 +10338,15 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			IoUtil.fecharStream(out);
 			IoUtil.fecharStream(zos);
 		}
+	}
+
+	private Negativador pesquisarNegativadorPorId(Integer idNegativador) throws ControladorException {
+		FiltroNegativador filtro = new FiltroNegativador();
+		filtro.adicionarParametro(new ParametroSimples(FiltroNegativador.ID, idNegativador));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		
+		Collection colecao = getControladorUtil().pesquisar(filtro, Negativador.class.getName());
+		return (Negativador) Util.retonarObjetoDeColecao(colecao);
 	}
 
 	/**
