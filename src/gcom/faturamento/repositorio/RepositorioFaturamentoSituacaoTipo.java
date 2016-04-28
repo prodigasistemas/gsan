@@ -7,15 +7,15 @@ import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class FaturamentoSituacaoTipoRepositorio {
+public class RepositorioFaturamentoSituacaoTipo {
     
-    private static FaturamentoSituacaoTipoRepositorio instance;
+    private static RepositorioFaturamentoSituacaoTipo instance;
     
-    private FaturamentoSituacaoTipoRepositorio(){}
+    private RepositorioFaturamentoSituacaoTipo(){}
     
-    public static FaturamentoSituacaoTipoRepositorio getInstance(){
+    public static RepositorioFaturamentoSituacaoTipo getInstance(){
         if (instance == null){
-            instance = new FaturamentoSituacaoTipoRepositorio();
+            instance = new RepositorioFaturamentoSituacaoTipo();
         }
         
         return instance;

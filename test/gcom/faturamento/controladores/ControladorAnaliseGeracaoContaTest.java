@@ -29,7 +29,7 @@ import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
-import gcom.faturamento.repositorio.CreditoARealizarRepositorio;
+import gcom.faturamento.repositorio.RepositorioCreditoARealizar;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -46,7 +46,7 @@ public class ControladorAnaliseGeracaoContaTest {
 	private int anoMesFaturamento;
 	
 	@Mock
-	private CreditoARealizarRepositorio creditoRealizarRepositorio;
+	private RepositorioCreditoARealizar creditoRealizarRepositorio;
 	
 	@Mock
 	private RepositorioDevolucao repositorioDevolucao;

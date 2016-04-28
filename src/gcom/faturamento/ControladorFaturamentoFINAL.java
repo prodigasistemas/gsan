@@ -255,8 +255,8 @@ import gcom.faturamento.debito.FiltroDebitoACobrarGeral;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipoVigencia;
 import gcom.faturamento.debito.IDebitoCobrado;
-import gcom.faturamento.repositorio.FaturamentoSituacaoRepositorio;
-import gcom.faturamento.repositorio.FaturamentoSituacaoTipoRepositorio;
+import gcom.faturamento.repositorio.RepositorioFaturamentoSituacao;
+import gcom.faturamento.repositorio.RepositorioFaturamentoSituacaoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.ResumoFaturamento;
 import gcom.financeiro.lancamento.LancamentoItem;
@@ -357,8 +357,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	protected IRepositorioClienteImovel repositorioClienteImovel;
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
-	protected FaturamentoSituacaoRepositorio faturamentoSituacaoRepositorio;
-	protected FaturamentoSituacaoTipoRepositorio faturamentoSituacaoTipoRepositorio;
+	protected RepositorioFaturamentoSituacao repositorioFaturamentoSituacao;
+	protected RepositorioFaturamentoSituacaoTipo repositorioFaturamentoSituacaoTipo;
 
 	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
@@ -372,8 +372,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		repositorioClienteImovel = RepositorioClienteImovelHBM.getInstancia();
 		repositorioCadastro = RepositorioCadastroHBM.getInstancia();
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
-		faturamentoSituacaoRepositorio = FaturamentoSituacaoRepositorio.getInstance();
-		faturamentoSituacaoTipoRepositorio = FaturamentoSituacaoTipoRepositorio.getInstance();
+		repositorioFaturamentoSituacao = RepositorioFaturamentoSituacao.getInstance();
+		repositorioFaturamentoSituacaoTipo = RepositorioFaturamentoSituacaoTipo.getInstance();
 	}
 
 	public Integer informarConsumoMinimoParametro(
@@ -1595,10 +1595,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         try {
             if (imovel.getFaturamentoSituacaoTipo() != null) {
                 
-                Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = faturamentoSituacaoRepositorio.faturamentosHistoricoVigentesPorImovel(imovel.getId());
+                Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = repositorioFaturamentoSituacao.faturamentosHistoricoVigentesPorImovel(imovel.getId());
                 FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
                 
-                FaturamentoSituacaoTipo tipo = faturamentoSituacaoTipoRepositorio.situacaoTipoDoImovel(imovel.getId());
+                FaturamentoSituacaoTipo tipo = repositorioFaturamentoSituacaoTipo.situacaoTipoDoImovel(imovel.getId());
                 
                 if ((faturamentoSituacaoHistorico != null 
                         && anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() 

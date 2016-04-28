@@ -10,21 +10,21 @@ import gcom.enums.Status;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
-import gcom.faturamento.repositorio.CreditoARealizarRepositorio;
+import gcom.faturamento.repositorio.RepositorioCreditoARealizar;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 
 public class ControladorAnaliseGeracaoConta extends ControladorComum {
     private static final long serialVersionUID = 5517389533745886938L;
 
-	private CreditoARealizarRepositorio creditoRealizarRepositorio;
+	private RepositorioCreditoARealizar creditoRealizarRepositorio;
 	
 	private RepositorioDevolucao repositorioDevolucao;
 	
 	public ControladorAnaliseGeracaoConta(){}
 	
 	public void ejbCreate() throws CreateException {
-	    creditoRealizarRepositorio = CreditoARealizarRepositorio.getInstance();
+	    creditoRealizarRepositorio = RepositorioCreditoARealizar.getInstance();
 	    repositorioDevolucao       = RepositorioDevolucao.getInstance();
 	}
 		
