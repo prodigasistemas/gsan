@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import javax.ejb.CreateException;
 
-import gcom.arrecadacao.repositorio.DevolucaoRepositorio;
+import gcom.arrecadacao.repositorio.RepositorioDevolucao;
 import gcom.cadastro.imovel.Imovel;
 import gcom.enums.Status;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -19,13 +19,13 @@ public class ControladorAnaliseGeracaoConta extends ControladorComum {
 
 	private CreditoARealizarRepositorio creditoRealizarRepositorio;
 	
-	private DevolucaoRepositorio devolucaoRepositorio;
+	private RepositorioDevolucao repositorioDevolucao;
 	
 	public ControladorAnaliseGeracaoConta(){}
 	
 	public void ejbCreate() throws CreateException {
 	    creditoRealizarRepositorio = CreditoARealizarRepositorio.getInstance();
-	    devolucaoRepositorio       = DevolucaoRepositorio.getInstance();
+	    repositorioDevolucao       = RepositorioDevolucao.getInstance();
 	}
 		
 	public boolean verificarGeracaoConta(boolean aguaEsgotoZerados, int anoMesFaturamento, Imovel imovel) throws ControladorException {
@@ -49,7 +49,7 @@ public class ControladorAnaliseGeracaoConta extends ControladorComum {
 	                DebitoCreditoSituacao.NORMAL, 
 	                anoMesFaturamento);
 	        
-	        if (naoHaCreditoARealizar(creditosARealizar) || devolucaoRepositorio.existeCreditoComDevolucao(creditosARealizar)) {
+	        if (naoHaCreditoARealizar(creditosARealizar) || repositorioDevolucao.existeCreditoComDevolucao(creditosARealizar)) {
 	            segundaCondicaoGerarConta = haDebitosCobrarAtivos(debitosACobrar);
 	        }
         } catch (Exception e) {

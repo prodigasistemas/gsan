@@ -9,15 +9,15 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
-public class PagamentoRepositorio{
+public class RepositorioPagamento{
     
-    private static PagamentoRepositorio instance;
+    private static RepositorioPagamento instance;
     
-    private PagamentoRepositorio() {}
+    private RepositorioPagamento() {}
 
-    public static PagamentoRepositorio getInstancia() {
+    public static RepositorioPagamento getInstancia() {
         if (instance == null){
-            instance = new PagamentoRepositorio();
+            instance = new RepositorioPagamento();
         }
         
         return instance;
