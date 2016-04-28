@@ -1,5 +1,12 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
@@ -20,6 +27,7 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.CobrancaSituacaoTipo;
+import gcom.enums.Status;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.FaturamentoTipo;
@@ -37,14 +45,6 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
 public class Imovel extends ObjetoTransacao implements IImovel {
@@ -2299,4 +2299,89 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
 	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
+	
+    public boolean existeHidrometro() {
+        return existeHidrometroAgua() || existeHidrometroPoco();
+    }
+
+    public boolean existeHidrometroAgua() {
+        return ligacaoAgua != null && ligacaoAgua.getHidrometroInstalacaoHistorico() != null && ligacaoAgua.existeHidrometroInstalado();
+    }
+    
+    public boolean existeHidrometroPoco() {
+        return hidrometroInstalacaoHistorico != null;
+    }
+	
+    public boolean possuiEsgoto() {
+        return ligacaoEsgoto != null;
+    }
+
+    public boolean esgotoLigado() {
+        return ligacaoEsgotoSituacao.getId().equals(LigacaoEsgotoSituacao.LIGADO);
+    }
+
+    public boolean pertenceACondominio() {
+        return imovelCondominio != null;
+    }
+
+    public boolean isCondominio() {
+        return indicadorImovelCondominio != null && indicadorImovelCondominio == Status.ATIVO.getId();
+    }
+
+    public boolean faturamentoEsgotoAtivo() {
+        return ligacaoEsgotoSituacao != null && ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao() != null
+                && ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao().shortValue() == Status.ATIVO.getId();
+    }
+
+    public boolean faturamentoAguaAtivo() {
+        return ligacaoAguaSituacao != null && ligacaoAguaSituacao.getIndicadorFaturamentoSituacao() != null
+                && ligacaoAguaSituacao.getIndicadorFaturamentoSituacao().shortValue() == Status.ATIVO.getId();
+    }
+
+    public boolean paralisacaoFaturamento() {
+        return faturamentoSituacaoTipo != null && faturamentoSituacaoTipo.getIndicadorParalisacaoFaturamento() == Status.ATIVO.getId();
+    }
+
+    public boolean faturamentoAguaValido() {
+        return faturamentoSituacaoTipo != null && faturamentoSituacaoTipo.getIndicadorValidoAgua() == Status.ATIVO.getId();
+    }
+	
+    public boolean aguaLigada() {
+        return ligacaoAguaSituacao.getId().equals(LigacaoAguaSituacao.LIGADO);
+    }
+    
+    public boolean useNovaChecagemGerarConta(){
+        int [] ids = new int[]{7814933,7814950
+         ,7815085,7815093,7816723,7814852,7814836,7815735,7815530,7815549
+         ,7815557,7814259,7815611,7815654,7814291,7814321,7815026,7814410
+         ,7815034,7814488,7814798,7814283,7814305,7814313,7814364,7814330
+         ,7814380,7814356,7814402,7814461,7814470,7814542,7814550,7814810
+         ,7814860,7814879,7814887,7814925,7815042,7814968,7814976,7815000
+         ,7815050,7815522,7815620,7815670,7815689,7815743,7814275,7814607
+         ,7814429,7814496,7814526,7814569,7814941,7814984,7815069,7815484
+         ,7815492,7815506,7816634,7815565,7815697,7815719,7816626,7814437
+         ,7815514,7814828,7814844,7816618,7815573,7816642,7816650,7814909
+         ,7814453,7814917,7814267,7814240,7815727,7814348,7814399,7814534
+         ,7814895,7814500,
+         7627750 ,7629028,7629737,7628200,7629400,7629672,7629150,7629699
+         ,7628137,7628129,7630034,7630000,7629974,7629958,7628960,7627718
+         ,7627530,7627521,7627742,7628773,7628714,7628676,7628668,7628978
+         ,7629524,7627513,7629427,7629451,7629494,7629540,7629575,7629591
+         ,7629605,7629613,7629320,7629346,7629362,7628234,7629753,7629761
+         ,7629770,7629796,7629818,7629842,7629877,7629745,7629907,7629923
+         ,7628927,7628900,7628889,7629559,7629621,7629630,7629648,7629664
+         ,7627483,7629702,7629710,7629729,7629087,7629109,7629168,7629370
+         ,7630050,7629460,7629486,7627475,7629516,7629044,7628994,7628838
+         ,7628862,7628811,7628803,7629303,7628242,7628226,7628218,7628188
+         ,7628170,7628161,7628153,7628145,7628943,7627700,7628609,7629443
+         ,7627491,7629311};
+        
+        for (int i =0; i< ids.length; i++){
+            if (ids[i] == id.intValue()){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
