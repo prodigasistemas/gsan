@@ -120,7 +120,7 @@ public class RelatorioManterConsumoTarifa extends TarefaRelatorio {
 				// Categoria
 				String categoria = "";
 				
-				if (consumoTarifaRelatorioHelper.getCategoria() != null && !categoriaAnterior.equals(consumoTarifaRelatorioHelper.getCategoria())) {
+				if (consumoTarifaRelatorioHelper.getCategoria() != null) {
 					categoria = consumoTarifaRelatorioHelper.getCategoria();
 					categoriaAnterior = consumoTarifaRelatorioHelper.getCategoria();
 				}

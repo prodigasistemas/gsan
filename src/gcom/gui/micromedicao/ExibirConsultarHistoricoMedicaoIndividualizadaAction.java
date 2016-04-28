@@ -6,6 +6,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.micromedicao.FiltroLigacaoTipo;
+import gcom.micromedicao.bean.ConsultarHistoricoMedicaoIndividualizadaHelper;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,21 +103,21 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 
 				Collection<Imovel> imovelPesquisado = fachada.pesquisar(filtroImovel, Imovel.class.getName());
 
-				// [FS0002 - Verificar existência da matrícula do imóvel
+				// [FS0002 - Verificar existï¿½ncia da matrï¿½cula do imï¿½vel
 				if (imovelPesquisado != null && imovelPesquisado.isEmpty()) {
 					consultarHistoricoMedicaoIndividualizadaActionForm.setCodigoImovel("");
-					consultarHistoricoMedicaoIndividualizadaActionForm.setDescricaoImovel("MATRÍCULA INEXISTENTE");
+					consultarHistoricoMedicaoIndividualizadaActionForm.setDescricaoImovel("MATRï¿½CULA INEXISTENTE");
 					httpServletRequest.setAttribute("matriculaInexistente",true);
 				} else {
 					Imovel imovelCondominio = imovelPesquisado.iterator().next();
 					consultarHistoricoMedicaoIndividualizadaActionForm.setDescricaoImovel(imovelCondominio.getInscricaoFormatada());
 					
-					// [FS0001] - Verificar se o imóvel é um condomínio
+					// [FS0001] - Verificar se o imï¿½vel ï¿½ um condomï¿½nio
 					if (imovelCondominio.getIndicadorImovelCondominio() != null	&& (imovelCondominio.getIndicadorImovelCondominio().shortValue() == Imovel.IMOVEL_NAO_CONDOMINIO.shortValue())) {
 						throw new ActionServletException("atencao.imovel.nao_condominio");
 					}
 					
-					// [FS0001] - Verificar se o imóvel é um condomínio
+					// [FS0001] - Verificar se o imï¿½vel ï¿½ um condomï¿½nio
 					if (imovelCondominio.getIndicadorImovelCondominio() == null) {
 						throw new ActionServletException("atencao.imovel.nao_condominio");
 					}
@@ -131,10 +133,10 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 						
 						boolean valida = Util.validarAnoMes(anoMes);
 						if (valida) {
-							throw new ActionServletException("atencao.invalid",	null, "Mês/Ano do Faturamento");
+							throw new ActionServletException("atencao.invalid",	null, "Mï¿½s/Ano do Faturamento");
 						}
 
-						// [FS0007] Compara Ano Mês Referência com Ano Mes Atual
+						// [FS0007] Compara Ano Mï¿½s Referï¿½ncia com Ano Mes Atual
 						if (anoMes != null && !anoMes.equalsIgnoreCase("")) {
 							String mesReferencia = anoMes.substring(0, 2);
 							String anoReferencia = anoMes.substring(3, 7);
@@ -153,7 +155,7 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 							}
 						}
 
-						// [FS0003] Validar mês e ano referência
+						// [FS0003] Validar mï¿½s e ano referï¿½ncia
 						if (anoMes != null && !anoMes.equalsIgnoreCase("")) {
 							String mes = anoMes.substring(0, 2);
 							if (new Integer(mes).intValue() > 12) {
@@ -162,7 +164,7 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 						}
 						
 						String anoMesFaturamentoInformado = null;
-						// [FS0004] - Verifica ano e mês do faturamento
+						// [FS0004] - Verifica ano e mï¿½s do faturamento
 						if (anoMes != null && !anoMes.equalsIgnoreCase("")) {
 							String mes = anoMes.substring(0, 2);
 							String ano = anoMes.substring(3, 7);
@@ -187,10 +189,17 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 						}
 
 						Collection colecaoConsultarHistoricoMedicaoIndividualizada = fachada.consultarHistoricoMedicaoIndividualizada(imovelCondominio, anoMesFaturamentoInformado, tipoLigacao);
-
+						Collection colecaoConsultarHistoricoMedicaoIndivCondominio = new ArrayList();
+						
+ 					    for (Iterator iterator = colecaoConsultarHistoricoMedicaoIndividualizada.iterator(); iterator.hasNext();) {
+ 						    ConsultarHistoricoMedicaoIndividualizadaHelper consultarHistoricoMedCond = (ConsultarHistoricoMedicaoIndividualizadaHelper) iterator.next();
+ 						    colecaoConsultarHistoricoMedicaoIndivCondominio.add(consultarHistoricoMedCond);
+ 						    colecaoConsultarHistoricoMedicaoIndividualizada.remove(consultarHistoricoMedCond);
+ 						    break;
+						}
+ 					   
 						if (colecaoConsultarHistoricoMedicaoIndividualizada != null	&& !colecaoConsultarHistoricoMedicaoIndividualizada.isEmpty()) {
-							int quantidade = (colecaoConsultarHistoricoMedicaoIndividualizada.size() - 1);
-							consultarHistoricoMedicaoIndividualizadaActionForm.setQuantidadeImoveisVinculados(quantidade + "");
+							consultarHistoricoMedicaoIndividualizadaActionForm.setQuantidadeImoveisVinculados(colecaoConsultarHistoricoMedicaoIndividualizada.size() + "");
 						} else {
 							consultarHistoricoMedicaoIndividualizadaActionForm.setQuantidadeImoveisVinculados("0");
 						}
@@ -199,6 +208,7 @@ public class ExibirConsultarHistoricoMedicaoIndividualizadaAction extends GcomAc
 						dadosImovel.add(imovelCondominio);
 
 						sessao.setAttribute("colecaoConsultarHistoricoMedicaoIndividualizada", colecaoConsultarHistoricoMedicaoIndividualizada);
+						sessao.setAttribute("colecaoConsultarHistoricoMedicaoIndivCondominio", colecaoConsultarHistoricoMedicaoIndivCondominio);
 						sessao.setAttribute("dadosImovel", dadosImovel);
 					}
 				}
