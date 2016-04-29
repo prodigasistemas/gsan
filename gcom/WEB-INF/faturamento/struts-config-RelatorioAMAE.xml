@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAMAEActionForm" type="gcom.gui.faturamento.GerarRelatorioAMAEActionForm" />
+	</form-beans>
+
+
+	<!--******************* PAGINAS GLOBAIS ******************* -->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="GerarRelatorioAMAEActionForm"
+			type="gcom.gui.faturamento.FiltrarRelatorioAMAEAction"
+			scope="session" validate="true" path="/filtrarRelatorioAMAEAction">
+
+			<forward name="exibirGerarRelatorioAMAE" path="/jsp/faturamento/gerar_relatorio_amae.jsp" />
+
+		</action>
+
+		<action name="GerarRelatorioAMAEActionForm" 
+			type="gcom.gui.faturamento.GerarRelatorioAMAEAction"
+			validate="true" path="/gerarRelatorioAMAEAction" scope="session"/>
+
+
+	</action-mappings>
+
+</struts-config>
