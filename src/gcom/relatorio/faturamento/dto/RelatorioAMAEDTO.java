@@ -11,26 +11,32 @@ public class RelatorioAMAEDTO implements ReportItemDTO {
 
   private static final long serialVersionUID = 4309079765574906490L;
   
-  @ReportElementType(description="Municipio", group=true, type=ReportElementType.TYPE_STRING)
+//  @ReportElementType(description="Municipio", group=true, type=ReportElementType.TYPE_STRING)
   private String municipio;
   
-  @ReportElementType(description="Localidade", type=ReportElementType.TYPE_STRING)
-  private String localidade;
-  
-  @ReportElementType(description="Valor agua", type=ReportElementType.TYPE_MONEY, totalizer=true)
-  private String valorAgua;
-  
-  @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY, totalizer=true)
-  private String valorEsgoto;
-  
+  @ReportElementType(description="Situacao", group=true, type=ReportElementType.TYPE_STRING)
   private String situacao;
   
-  public RelatorioAMAEDTO(String municipio, String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto) {
+//  @ReportElementType(description="Localidade", type=ReportElementType.TYPE_STRING)
+  private String localidade;
+  
+  @ReportElementType(description="Valor agua", type=ReportElementType.TYPE_MONEY)
+  private String valorAgua;
+  
+  @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY)
+  private String valorEsgoto;
+  
+  @ReportElementType(description="Total", type=ReportElementType.TYPE_MONEY)
+  private String valorTotal;
+  
+  public RelatorioAMAEDTO(String municipio, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
     super();
     this.municipio = municipio;
     this.localidade = localidade;
     this.valorAgua = Util.formatarMoedaReal(valorAgua);
     this.valorEsgoto = Util.formatarMoedaReal(valorEsgoto);
+    this.situacao = situacao;
+    this.valorTotal = Util.formatarMoedaReal(valorTotal);
   }
 
   public RelatorioAMAEDTO(){}

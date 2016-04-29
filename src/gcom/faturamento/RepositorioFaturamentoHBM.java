@@ -60719,7 +60719,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	    Query query = null;
 	    
 		try {
-			consulta = "SELECT m.muni_nmmunicipio as municipio, l.loca_nmlocalidade as localidade, laar_vlagua as agua, laar_vlesgoto as esgoto "
+			consulta = "SELECT m.muni_nmmunicipio as municipio, l.loca_nmlocalidade as localidade, laar_vlagua as agua, laar_vlesgoto as esgoto, laar_tipolancamento as tipoLancamento "
 					+ "FROM faturamento.lanc_agencia_reguladora lar "
 					+ "inner join cadastro.setor_comercial sc on sc.stcm_id = lar.stcm_id "
 					+ "inner join cadastro.municipio m on m.muni_id = sc.muni_id "
@@ -60728,7 +60728,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "and laar_amreferencia = :anoMesReferencia";
 			
 			if (idMunicipio != null) {
-		        consulta += " and muni_id = :idMunicipio ";
+		        consulta += " and m.muni_id = :idMunicipio ";
 		    }
 			
 			query = session.createSQLQuery(consulta)
@@ -60736,6 +60736,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			        .addScalar("localidade", Hibernate.STRING)
 			        .addScalar("agua", Hibernate.BIG_DECIMAL)
 			        .addScalar("esgoto", Hibernate.BIG_DECIMAL)
+			        .addScalar("tipoLancamento", Hibernate.INTEGER)
 			         .setInteger("anoMesReferencia", anoMes);
 			if (idMunicipio != null) {
 				query.setInteger("idMunicipio", idMunicipio);
@@ -60743,17 +60744,50 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			helper = query.list();
 			
+			BigDecimal valorAguaNormal = new BigDecimal(0);
+	        BigDecimal valorEsgotoNormal = new BigDecimal(0);
+
+	        BigDecimal valorAguaCancelada = new BigDecimal(0);
+	        BigDecimal valorEsgotoCancelada = new BigDecimal(0);
+			
 			for (Object obj : helper) {
 		        Object[] arrayObj = (Object[]) obj;
 		        
-		        RelatorioAMAEDTO dto = new RelatorioAMAEDTO(
-		            (String) arrayObj[0],
-		            (String) arrayObj[1],
-		            (BigDecimal) arrayObj[2],
-		            (BigDecimal) arrayObj[3]);
+//		        RelatorioAMAEDTO dto = new RelatorioAMAEDTO(
+//		            (String) arrayObj[0],
+////		            (String) arrayObj[1],
+//		            (BigDecimal) arrayObj[2],
+//		            (BigDecimal) arrayObj[3],
+//		            ((Integer)arrayObj[4] == 1 || (Integer)arrayObj[4] == 2) ? "Faturado" : "Cancelado");
 		        
-		        retorno.add(dto);
+//		        retorno.add(dto);
+		        
+		        if (((Integer)arrayObj[4] == 1 || (Integer)arrayObj[4] == 2)) {
+		            valorAguaNormal = valorAguaNormal.add((BigDecimal) arrayObj[2]);
+		            valorEsgotoNormal = valorEsgotoNormal.add((BigDecimal) arrayObj[3]);
+		          } else {
+		            valorAguaCancelada = valorAguaCancelada.add((BigDecimal) arrayObj[2]);
+		            valorEsgotoCancelada = valorEsgotoCancelada.add((BigDecimal) arrayObj[3]);
+		          }
 		      }
+			
+			BigDecimal valorFaturadoAgua = valorAguaNormal.subtract(valorAguaCancelada);
+			BigDecimal valorFaturadoEsgoto = valorEsgotoNormal.subtract(valorEsgotoCancelada);
+			BigDecimal valorPercentualAgua = valorFaturadoAgua.multiply(new BigDecimal(0.02));
+			BigDecimal valorPercentualEsgoto = valorFaturadoEsgoto.multiply(new BigDecimal(0.02));
+			BigDecimal valorRepasseAgua = valorFaturadoAgua.subtract(valorAguaCancelada);
+			BigDecimal valorRepasseEsgoto = valorFaturadoEsgoto.subtract(valorEsgotoCancelada);
+			
+			RelatorioAMAEDTO faturadoDto = new RelatorioAMAEDTO("", valorFaturadoAgua, valorFaturadoEsgoto, "1. Faturado", valorFaturadoAgua.add(valorFaturadoEsgoto));
+			RelatorioAMAEDTO canceladoDto = new RelatorioAMAEDTO("", valorAguaCancelada, valorEsgotoCancelada, "2. Cancelado", valorAguaCancelada.add(valorEsgotoCancelada));
+			RelatorioAMAEDTO repasseDto = new RelatorioAMAEDTO("", valorRepasseAgua, valorRepasseEsgoto, "3. Valor base repasse", valorRepasseAgua.add(valorRepasseEsgoto));
+			RelatorioAMAEDTO percentualDto = new RelatorioAMAEDTO("", valorPercentualAgua, valorPercentualEsgoto, "4. Repasse (2,00%)", valorPercentualAgua.add(valorPercentualEsgoto));
+	        
+	        
+			retorno.add(canceladoDto);
+	        retorno.add(percentualDto);
+	        retorno.add(faturadoDto);
+	        retorno.add(repasseDto);
 			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

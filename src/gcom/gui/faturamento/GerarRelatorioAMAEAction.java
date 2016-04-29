@@ -49,7 +49,7 @@ public class GerarRelatorioAMAEAction extends ExibidorProcessamentoTarefaRelator
 		
 		String nomeRelatorio = "relatorio_faturamento_amae" + mesAno + ".pdf";
 		RelatorioUtil relatorioUtil = new RelatorioUtil(
-				"Resumo de Faturamento",
+				"Relatório faturamento para agência reguladora",
 				nomeRelatorio,
 				RelatorioAMAEDTO.class, 
 				FormatoRelatorio.PDF);
