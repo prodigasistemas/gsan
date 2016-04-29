@@ -51,6 +51,7 @@ import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
+import gcom.atendimentopublico.AgenciaReguladora;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocalHome;
 import gcom.atendimentopublico.bean.EfetuarLigacaoAguaComInstalacaoHidrometroSemRAHelper;
@@ -44195,6 +44196,14 @@ public class Fachada {
 
 		try {
 			return this.getControladorFinanceiro().pesquisarDadosRelatorioParametrosContabeisContasAReceber(referenciaContabil);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<AgenciaReguladora> obterAgenciasReguladorasAtivas() {
+		try {
+			return this.getControladorAtendimentoPublico().obterAgenciasReguladorasAtivas();
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

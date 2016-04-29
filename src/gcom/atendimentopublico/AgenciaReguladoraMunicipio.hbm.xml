@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.atendimentopublico.AgenciaReguladoraMunicipio" table="atendimentopublico.agencia_regul_municipio">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.AgenciaReguladoraMunicipioPK">
+			<key-property name="agenciaReguladoraId" column="areg_id" type="java.lang.Integer" length="4"/>
+			<key-property name="municipioId" column="muni_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" not-null="true" column="armu_tmultimaalteracao" length="8"/>
+		
+		<many-to-one name="agenciaReguladora" class="gcom.atendimentopublico.AgenciaReguladora" not-null="true">
+			<column name="areg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true"
+			 insert="false" update="false">
+			<column name="muni_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

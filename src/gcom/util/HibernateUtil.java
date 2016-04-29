@@ -45,6 +45,8 @@ import gcom.arrecadacao.pagamento.PagamentoCartaoDebitoItem;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.arrecadacao.pagamento.SequenciaCartao;
+import gcom.atendimentopublico.AgenciaReguladora;
+import gcom.atendimentopublico.AgenciaReguladoraMunicipio;
 import gcom.atendimentopublico.EspecificacaoPavimentacaoServicoTipo;
 import gcom.atendimentopublico.EspecificacaoUnidadeCobranca;
 import gcom.atendimentopublico.LigacaoOrigem;
@@ -937,6 +939,8 @@ public class HibernateUtil {
 					.addClass(OrdemServicoFoto.class)
 					.addClass(FotoSituacaoOrdemServico.class)
 					.addClass(MensagemAcompanhamentoServico.class)
+					.addClass(AgenciaReguladora.class)
+					.addClass(AgenciaReguladoraMunicipio.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cadastro //

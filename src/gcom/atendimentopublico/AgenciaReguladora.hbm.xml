@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.atendimentopublico.AgenciaReguladora" table="atendimentopublico.agencia_reguladora">
+		<id name="id" type="java.lang.Integer" column="areg_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_agencia_reguladora</param>
+			</generator>
+		</id>
+
+		<property name="nome" type="java.lang.String" column="areg_nmagencia" length="5"/>
+		<property name="referenciaInicialRepasse" type="java.lang.Integer" column="agen_refinicialrepasse" length="4"/>
+		<property name="percentualRepasse" type="java.lang.Integer" column="agen_percrepasse" length="4"/>
+		<property name="dataInicioVigencia" type="java.sql.Date" column="agen_dtiniciovigencia" length="4"/>
+		<property name="dataFimVigencia" type="java.sql.Date" column="agen_dtfimvigencia" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="agen_tmultimaalteracao" length="8"/>
+    
+	</class>
+</hibernate-mapping>
