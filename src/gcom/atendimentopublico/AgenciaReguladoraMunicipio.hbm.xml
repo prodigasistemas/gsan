@@ -9,7 +9,7 @@
 		
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" not-null="true" column="armu_tmultimaalteracao" length="8"/>
 		
-		<many-to-one name="agenciaReguladora" class="gcom.atendimentopublico.AgenciaReguladora" not-null="true">
+		<many-to-one name="agenciaReguladora" class="gcom.atendimentopublico.AgenciaReguladora" not-null="true" insert="false" update="false">
 			<column name="areg_id"/>
 		</many-to-one>
 		

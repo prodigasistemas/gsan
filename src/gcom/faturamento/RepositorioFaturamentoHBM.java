@@ -60719,14 +60719,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	    Query query = null;
 	    
 		try {
-			consulta = "SELECT m.muni_nmmunicipio as municipio, l.loca_nmlocalidade as localidade, laar_vlagua as agua, laar_vlesgoto as esgoto, laar_tipolancamento as tipoLancamento "
+			consulta = "SELECT m.muni_nmmunicipio as municipio, l.loca_nmlocalidade as localidade, laar_vlagua as agua, laar_vlesgoto as esgoto, laar_tipolancamento as tipoLancamento, ar.areg_percrepasse as percentualRepasse "
 					+ "FROM faturamento.lanc_agencia_reguladora lar "
 					+ "inner join cadastro.setor_comercial sc on sc.stcm_id = lar.stcm_id "
 					+ "inner join cadastro.municipio m on m.muni_id = sc.muni_id "
 					+ "inner join cadastro.localidade l on l.loca_id = lar.loca_id "
 					+ "inner join atendimentopublico.agencia_regul_municipio agmun on agmun.muni_id = m.muni_id "
+					+ "inner join atendimentopublico.agencia_reguladora ar on ar.areg_id = agmun.areg_id "
 					+ "where 1=1 "
 					+ "and laar_amreferencia = :anoMesReferencia "
+					+ "and :data >= ar.areg_dtiniciovigencia "
+					+ "and (:data >= ar.areg_dtfimvigencia or ar.areg_dtfimvigencia is null) "
 					+ "and agmun.areg_id = :idAgencia";
 			
 			query = session.createSQLQuery(consulta)
@@ -60735,8 +60738,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			        .addScalar("agua", Hibernate.BIG_DECIMAL)
 			        .addScalar("esgoto", Hibernate.BIG_DECIMAL)
 			        .addScalar("tipoLancamento", Hibernate.INTEGER)
+			        .addScalar("percentualRepasse", Hibernate.INTEGER)
 			        .setInteger("anoMesReferencia", anoMes)
-					.setInteger("idAgencia", idAgencia);
+					.setInteger("idAgencia", idAgencia)
+					.setDate("data", new Date());
+			
 			
 			helper = query.list();
 			
@@ -60745,6 +60751,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	        BigDecimal valorAguaCancelada = new BigDecimal(0);
 	        BigDecimal valorEsgotoCancelada = new BigDecimal(0);
+	        Integer percentualRepasse = null;
 			
 			for (Object obj : helper) {
 		        Object[] arrayObj = (Object[]) obj;
@@ -60756,19 +60763,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		            valorAguaCancelada = valorAguaCancelada.add((BigDecimal) arrayObj[2]);
 		            valorEsgotoCancelada = valorEsgotoCancelada.add((BigDecimal) arrayObj[3]);
 		          }
+		        
+		        percentualRepasse = (Integer)arrayObj[5]; 
 		      }
 			
+			double percentual = ((double)percentualRepasse)/100;
 			BigDecimal valorFaturadoAgua = valorAguaNormal.subtract(valorAguaCancelada);
 			BigDecimal valorFaturadoEsgoto = valorEsgotoNormal.subtract(valorEsgotoCancelada);
-			BigDecimal valorPercentualAgua = valorFaturadoAgua.multiply(new BigDecimal(0.02));
-			BigDecimal valorPercentualEsgoto = valorFaturadoEsgoto.multiply(new BigDecimal(0.02));
+			BigDecimal valorPercentualAgua = valorFaturadoAgua.multiply(new BigDecimal(percentual));
+			BigDecimal valorPercentualEsgoto = valorFaturadoEsgoto.multiply(new BigDecimal(percentual));
 			BigDecimal valorRepasseAgua = valorFaturadoAgua.subtract(valorAguaCancelada);
 			BigDecimal valorRepasseEsgoto = valorFaturadoEsgoto.subtract(valorEsgotoCancelada);
 			
 			RelatorioAMAEDTO faturadoDto = new RelatorioAMAEDTO("", valorFaturadoAgua, valorFaturadoEsgoto, "1. Faturado", valorFaturadoAgua.add(valorFaturadoEsgoto));
 			RelatorioAMAEDTO canceladoDto = new RelatorioAMAEDTO("", valorAguaCancelada, valorEsgotoCancelada, "2. Cancelado", valorAguaCancelada.add(valorEsgotoCancelada));
 			RelatorioAMAEDTO repasseDto = new RelatorioAMAEDTO("", valorRepasseAgua, valorRepasseEsgoto, "3. Valor base repasse", valorRepasseAgua.add(valorRepasseEsgoto));
-			RelatorioAMAEDTO percentualDto = new RelatorioAMAEDTO("", valorPercentualAgua, valorPercentualEsgoto, "4. Repasse (2,00%)", valorPercentualAgua.add(valorPercentualEsgoto));
+			RelatorioAMAEDTO percentualDto = new RelatorioAMAEDTO("", valorPercentualAgua, valorPercentualEsgoto, "4. Repasse (" + percentualRepasse + "%)", valorPercentualAgua.add(valorPercentualEsgoto));
 	        
 	        
 			retorno.add(canceladoDto);

@@ -9,11 +9,11 @@
 		</id>
 
 		<property name="nome" type="java.lang.String" column="areg_nmagencia" length="5"/>
-		<property name="referenciaInicialRepasse" type="java.lang.Integer" column="agen_refinicialrepasse" length="4"/>
-		<property name="percentualRepasse" type="java.lang.Integer" column="agen_percrepasse" length="4"/>
-		<property name="dataInicioVigencia" type="java.sql.Date" column="agen_dtiniciovigencia" length="4"/>
-		<property name="dataFimVigencia" type="java.sql.Date" column="agen_dtfimvigencia" length="4"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="agen_tmultimaalteracao" length="8"/>
+		<property name="referenciaInicialRepasse" type="java.lang.Integer" column="areg_refinicialrepasse" length="4"/>
+		<property name="percentualRepasse" type="java.lang.Integer" column="areg_percrepasse" length="4"/>
+		<property name="dataInicioVigencia" type="java.sql.Date" column="areg_dtiniciovigencia" length="4"/>
+		<property name="dataFimVigencia" type="java.sql.Date" column="areg_dtfimvigencia" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="areg_tmultimaalteracao" length="8"/>
     
 	</class>
 </hibernate-mapping>

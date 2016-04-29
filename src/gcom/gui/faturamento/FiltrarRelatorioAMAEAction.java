@@ -13,6 +13,7 @@ import gcom.util.filtro.ParametroSimples;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,6 +25,7 @@ public class FiltrarRelatorioAMAEAction extends GcomAction {
 			HttpServletResponse httpServletResponse) {
 
 		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAMAE");
+		HttpSession sessao = httpServletRequest.getSession(false);
 
 		GerarRelatorioAMAEActionForm form = (GerarRelatorioAMAEActionForm) actionForm;
 		// recupera a flag de limpar o form
@@ -38,6 +40,8 @@ public class FiltrarRelatorioAMAEAction extends GcomAction {
 			form.setDescricaoAgenciaReguladora(null);
 			form.setMesAno(null);
 		} else {
+			
+			sessao.setAttribute("colecaoAgencias", agencias);
 
 			// Código do Município
 			if (form.getIdAgenciaReguladora() != null)
@@ -52,15 +56,15 @@ public class FiltrarRelatorioAMAEAction extends GcomAction {
 
 				Collection municipioEncontrado = fachada.pesquisar(filtroMunicipio, Municipio.class.getName());
 
-				if (municipioEncontrado != null && !municipioEncontrado.isEmpty()) {
-					// O municipio foi encontrado
-					form.setCodigoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getId());
-					form.setDescricaoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getNome());
-				} else {
-					form.setCodigoMunicipio(null);
-					form.setDescricaoMunicipio("Município inexistente");
-					httpServletRequest.setAttribute("municipioNaoEncontrado", "exception");
-				}
+//				if (municipioEncontrado != null && !municipioEncontrado.isEmpty()) {
+//					// O municipio foi encontrado
+//					form.setCodigoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getId());
+//					form.setDescricaoMunicipio(((Municipio) ((List) municipioEncontrado).get(0)).getNome());
+//				} else {
+//					form.setCodigoMunicipio(null);
+//					form.setDescricaoMunicipio("Município inexistente");
+//					httpServletRequest.setAttribute("municipioNaoEncontrado", "exception");
+//				}
 			}
 		}
 
