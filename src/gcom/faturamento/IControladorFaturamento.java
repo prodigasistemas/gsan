@@ -78,7 +78,7 @@ import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
 import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -5715,5 +5715,5 @@ public interface IControladorFaturamento {
 	
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ControladorException;
 	
-	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idAgencia);
+	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia);
 }

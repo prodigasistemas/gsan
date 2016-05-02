@@ -7,17 +7,15 @@ import java.math.BigDecimal;
 import br.com.prodigasistemas.gsan.relatorio.ReportElementType;
 import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
 
-public class RelatorioAMAEDTO implements ReportItemDTO {
+public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
 
   private static final long serialVersionUID = 4309079765574906490L;
   
-//  @ReportElementType(description="Municipio", group=true, type=ReportElementType.TYPE_STRING)
   private String municipio;
   
   @ReportElementType(description="Situacao", group=true, type=ReportElementType.TYPE_STRING)
   private String situacao;
   
-//  @ReportElementType(description="Localidade", type=ReportElementType.TYPE_STRING)
   private String localidade;
   
   @ReportElementType(description="Valor agua", type=ReportElementType.TYPE_MONEY)
@@ -29,7 +27,7 @@ public class RelatorioAMAEDTO implements ReportItemDTO {
   @ReportElementType(description="Total", type=ReportElementType.TYPE_MONEY)
   private String valorTotal;
   
-  public RelatorioAMAEDTO(String municipio, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
+  public RelatorioAgenciaReguladoraDTO(String municipio, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
     super();
     this.municipio = municipio;
     this.localidade = localidade;
@@ -39,7 +37,7 @@ public class RelatorioAMAEDTO implements ReportItemDTO {
     this.valorTotal = Util.formatarMoedaReal(valorTotal);
   }
 
-  public RelatorioAMAEDTO(){}
+  public RelatorioAgenciaReguladoraDTO(){}
   
   public String getSituacao() {
     return situacao;
@@ -80,8 +78,4 @@ public class RelatorioAMAEDTO implements ReportItemDTO {
   public void setValorEsgoto(String valorEsgoto) {
     this.valorEsgoto = valorEsgoto;
   }
-  
-  
-
-
 }

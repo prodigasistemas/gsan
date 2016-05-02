@@ -2,7 +2,7 @@ package gcom.gui.faturamento;
 
 import org.apache.struts.action.ActionForm;
 
-public class GerarRelatorioAMAEActionForm extends ActionForm {
+public class GerarRelatorioAgenciaReguladoraActionForm extends ActionForm {
 	
 	private static final long serialVersionUID = 2862244916755659541L;
 	

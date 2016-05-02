@@ -568,7 +568,7 @@ import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.relatorio.financeiro.RelatorioEvolucaoContasAReceberContabilBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisArrecadacaoBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisFaturamentoBean;
@@ -44210,9 +44210,9 @@ public class Fachada {
 		}
 	}
 
-	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idAgencia) {
+	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) {
 		try {
-			return this.getControladorFaturamento().pesquisarContasFaturadasDesde122015(anoMes, idAgencia);
+			return this.getControladorFaturamento().pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}

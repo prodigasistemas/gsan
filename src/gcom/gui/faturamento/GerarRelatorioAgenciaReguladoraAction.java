@@ -5,7 +5,7 @@ import gcom.gui.ActionServletException;
 import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
 import gcom.relatorio.RelatorioUtil;
 import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
-import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.util.IoUtil;
 import gcom.util.Util;
 
@@ -27,24 +27,23 @@ import org.apache.struts.action.ActionMapping;
 import br.com.prodigasistemas.gsan.relatorio.FormatoRelatorio;
 import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
 
-public class GerarRelatorioAMAEAction extends ExibidorProcessamentoTarefaRelatorio {
+public class GerarRelatorioAgenciaReguladoraAction extends ExibidorProcessamentoTarefaRelatorio {
 
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAMAE");
+		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAgenciaReguladora");
 		
-		GerarRelatorioAMAEActionForm form = (GerarRelatorioAMAEActionForm) actionForm;
+		GerarRelatorioAgenciaReguladoraActionForm form = (GerarRelatorioAgenciaReguladoraActionForm) actionForm;
 		Integer idAgencia = form.getIdAgenciaReguladora() == 0 ? null : form.getIdAgenciaReguladora();
 		String mesAno = form.getMesAno().replace("/", "");
 		String anoMes = mesAno.substring(2) + mesAno.substring(0,2);
 
 		Fachada fachada = Fachada.getInstancia();
-		List<RelatorioAMAEDTO> colecaoDadosAMAE = fachada.pesquisarContasFaturadasDesde122015(Integer.parseInt(anoMes), idAgencia);
+		List<RelatorioAgenciaReguladoraDTO> dtos = fachada.pesquisarContasParaRelatorioAgenciaReguladora(Integer.parseInt(anoMes), idAgencia);
 
-		if (colecaoDadosAMAE == null || colecaoDadosAMAE.isEmpty()) {
+		if (dtos == null || dtos.isEmpty()) {
 			throw new ActionServletException("atencao.relatorio.vazio");
 		}
 		
@@ -52,11 +51,11 @@ public class GerarRelatorioAMAEAction extends ExibidorProcessamentoTarefaRelator
 		RelatorioUtil relatorioUtil = new RelatorioUtil(
 				"Relatório faturamento para agência reguladora",
 				getNomeRelatorio(anoMes),
-				RelatorioAMAEDTO.class, 
+				RelatorioAgenciaReguladoraDTO.class, 
 				FormatoRelatorio.PDF);
 
 		List<ReportItemDTO> itens = new ArrayList<ReportItemDTO>();
-		itens.addAll(colecaoDadosAMAE);
+		itens.addAll(dtos);
 
 		File relatorio = gerar(relatorioUtil, itens);
 		

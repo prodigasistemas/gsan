@@ -268,7 +268,7 @@ import gcom.relatorio.faturamento.conta.ContaLinhasDescricaoServicosTarifasTotal
 import gcom.relatorio.faturamento.conta.ContasEmitidasRelatorioHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioMapaControleConta;
-import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
@@ -75406,9 +75406,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idAgencia) throws ControladorException {
+	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ControladorException {
 		try {
-			return repositorioFaturamento.pesquisarContasFaturadasDesde122015(anoMes, idAgencia);
+			return repositorioFaturamento.pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

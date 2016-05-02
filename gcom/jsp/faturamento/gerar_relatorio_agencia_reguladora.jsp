@@ -22,7 +22,7 @@
 	}
 	function limparMunicipio() {
 		var form = document.forms[0];
-		form.action = 'filtrarRelatorioAMAEAction.do?limparForm=OK'
+		form.action = 'filtrarRelatorioAgenciaReguladoraAction.do?limparForm=OK'
 		form.submit();
     }
 </script>
@@ -30,9 +30,9 @@
 </head>
 <body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');">
 
-<html:form action="/gerarRelatorioAMAEAction.do"
-	name="GerarRelatorioAMAEActionForm"
-	type="gcom.gui.faturamento.GerarRelatorioAMAEActionForm"
+<html:form action="/gerarRelatorioAgenciaReguladoraAction.do"
+	name="GerarRelatorioAgenciaReguladoraActionForm"
+	type="gcom.gui.faturamento.GerarRelatorioAgenciaReguladoraActionForm"
 	method="post">
 
 <%@ include file="/jsp/util/cabecalho.jsp"%> 
@@ -84,7 +84,7 @@
 			<tr>
 				<td width="11"><img border="0"
 					src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-				<td class="parabg">Gerar Relatório AMAE</td>
+				<td class="parabg">Gerar Relatório Agência Reguladora</td>
 				<td width="11" valign="top"><img border="0"
 					src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 			</tr>
@@ -94,7 +94,7 @@
 		<table width="100%" border="0">
 
 			<tr>
-				<td colspan="2">Para gerar relatório para AMAE, informe os dados abaixo:</td>
+				<td colspan="2">Para gerar relatório para agência reguladora, informe os dados abaixo:</td>
 			</tr>
 
 			<tr>
@@ -138,7 +138,7 @@
 					<gsan:controleAcessoBotao name="Button" 
 				  		value="Gerar" 
 				  		onclick="javascript:validarForm();" 
-				  		url="gerarRelatorioAMAEAction.do"/>
+				  		url="gerarRelatorioAgenciaReguladoraAction.do"/>
 				  	
 				</td>
 			</tr>

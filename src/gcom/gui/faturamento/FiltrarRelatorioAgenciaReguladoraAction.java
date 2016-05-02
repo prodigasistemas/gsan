@@ -1,15 +1,10 @@
 package gcom.gui.faturamento;
 
-import java.util.Collection;
-import java.util.List;
-
 import gcom.atendimentopublico.AgenciaReguladora;
-import gcom.cadastro.geografico.FiltroMunicipio;
-import gcom.cadastro.geografico.Municipio;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
-import gcom.util.ConstantesSistema;
-import gcom.util.filtro.ParametroSimples;
+
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,20 +14,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public class FiltrarRelatorioAMAEAction extends GcomAction {
+public class FiltrarRelatorioAgenciaReguladoraAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAMAE");
+		ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAgenciaReguladora");
 		HttpSession sessao = httpServletRequest.getSession(false);
 
-		GerarRelatorioAMAEActionForm form = (GerarRelatorioAMAEActionForm) actionForm;
-		// recupera a flag de limpar o form
+		GerarRelatorioAgenciaReguladoraActionForm form = (GerarRelatorioAgenciaReguladoraActionForm) actionForm;
+
 		String limparForm = httpServletRequest.getParameter("limparForm");
 		Fachada fachada = Fachada.getInstancia();
-		String codigoDigitadoMunicipioEnter = null;
-
 		
 		if (limparForm != null && !limparForm.equals("")) {
 			form.setIdAgenciaReguladora(null);

@@ -63,7 +63,7 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.relatorio.faturamento.dto.RelatorioAMAEDTO;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
@@ -3030,7 +3030,7 @@ public interface IRepositorioFaturamento {
 	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
 			Integer anoMesReferencia) throws ErroRepositorioException;
 	
-	public List<RelatorioAMAEDTO> pesquisarContasFaturadasDesde122015(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
+	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
 	
 	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
 	
