@@ -28,10 +28,6 @@ public class Agencia implements Serializable {
     private Date ultimaAlteracao;
     private String numeroFax;
     private String email;
-    private Integer percentualRepasse;
-    private Date dataInicioVigencia;
-    private Date dataFimVigencia;
-    private Integer referenciaInicialRepasse;
     
     private Bairro bairro;
     private LogradouroCep logradouroCep;

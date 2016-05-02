@@ -106,29 +106,15 @@
 			</tr>
 			
 			<tr>
-					<td><strong>Munic&iacute;pio:</strong></td>
-					<td colspan="3"><strong> <html:text maxlength="4"
-						property="codigoMunicipio" size="4"
-						onkeypress="javascript:form.target = ''; return validaEnter(event, 'filtrarRelatorioAMAEAction.do', 'codigoMunicipio');"
-						onkeyup="limparBairro(); limparLogradouro();" /> <img width="23"
-						height="21"
-						src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-						style="cursor:hand;"
-						onclick="abrirPopup('exibirPesquisarMunicipioAction.do', 400, 800); limparBairro(); limparLogradouro();"
-						alt="Pesquisar" /> <logic:present name="municipioNaoEncontrado"
-						scope="request">
-						<html:text property="descricaoMunicipio" size="40"
-							maxlength="30" readonly="true"
-							style="background-color:#EFEFEF; border:0; color: #ff0000" />
-					</logic:present> <logic:notPresent name="municipioNaoEncontrado"
-						scope="request">
-						<html:text property="descricaoMunicipio" size="40"
-							maxlength="30" readonly="true"
-							style="background-color:#EFEFEF; border:0; color: #000000" />
-					</logic:notPresent> <a href="javascript:limparMunicipio();"> <img
-						src="<bean:message key="caminho.imagens"/>limparcampo.gif"
-						border="0" title="Apagar" /></a> </strong></td>
-				</tr>
+				<td><strong>Agência reguladora:<font color="#FF0000">*</font></strong></td>
+				<td colspan="2" align="left">
+					<html:select property="idAgenciaReguladora" tabindex="3" >
+						<html:option value="-1">&nbsp;</html:option>
+						<html:options collection="colecaoAgencias"
+							labelProperty="nome" property="id" />
+					</html:select>
+				</td>
+			</tr>
 			
 			<tr>
 				<td>&nbsp;</td>
