@@ -1309,9 +1309,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException {
+	public Collection<RelatorioFichaFiscalizacaoCadastralHelper> pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException {
 		
-		Collection retorno = new ArrayList();
+		Collection<RelatorioFichaFiscalizacaoCadastralHelper> retorno = new ArrayList<RelatorioFichaFiscalizacaoCadastralHelper>();
 		
 		try {
 			Collection colecaoDadosFicha = repositorioAtualizacaoCadastral.pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
@@ -1375,10 +1375,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
+	public Collection<RelatorioRelacaoImoveisRotaBean> pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
 			throws ControladorException {
 		
-		Collection retorno = new ArrayList();
+		Collection<RelatorioRelacaoImoveisRotaBean> retorno = new ArrayList<RelatorioRelacaoImoveisRotaBean>();
 		
 		try {
 			Collection colecaoImoveisRetorno = repositorioAtualizacaoCadastral.pesquisarDadosImoveisPorRotaAtualizacaoCadastral(
@@ -1490,5 +1490,21 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.NORMAL));
 			getControladorUtil().atualizar(imovel);
 		}
+	}
+	
+	public boolean verificarPermissaoAprovarImovel(Integer idUsuarioLogado, Integer idImovel) {
+		boolean temPermissao = true;
+		try {
+			System.out.println("temPermissaoAprovarImovel - controlador");
+			Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(idImovel);
+			System.out.println(idUsuarioAprovacao);
+			if (idUsuarioAprovacao != null && idUsuarioAprovacao.intValue() != idUsuarioLogado.intValue())
+				temPermissao = false;
+		
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		System.out.println(temPermissao);
+		return temPermissao;
 	}
 }
