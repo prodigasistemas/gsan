@@ -7,7 +7,7 @@
 		 printOrder="Vertical"
 		 orientation="Portrait"
 		 pageWidth="595"
-		 pageHeight="1684"
+		 pageHeight="842"
 		 columnWidth="283"
 		 columnSpacing="0"
 		 leftMargin="14"
@@ -71,12 +71,12 @@
 			</band>
 		</title>
 		<pageHeader>
-			<band height="311"  isSplitAllowed="true" >
+			<band height="278"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						mode="Opaque"
 						x="2"
-						y="299"
+						y="263"
 						width="563"
 						height="12"
 						backcolor="#CCCCCC"
@@ -86,7 +86,7 @@
 				<staticText>
 					<reportElement
 						x="0"
-						y="300"
+						y="264"
 						width="83"
 						height="11"
 						key="staticText-29"/>
@@ -99,7 +99,7 @@
 				<staticText>
 					<reportElement
 						x="87"
-						y="300"
+						y="264"
 						width="74"
 						height="11"
 						key="staticText-31"/>
@@ -112,7 +112,7 @@
 				<staticText>
 					<reportElement
 						x="165"
-						y="300"
+						y="264"
 						width="115"
 						height="11"
 						key="staticText-33"/>
@@ -125,7 +125,7 @@
 				<staticText>
 					<reportElement
 						x="142"
-						y="179"
+						y="169"
 						width="283"
 						height="17"
 						key="staticText-78"/>
@@ -138,20 +138,20 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="200"
+						y="186"
 						width="563"
-						height="98"
+						height="76"
 						key="staticText-79"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="9" isBold="false"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
 					</textElement>
 				<text><![CDATA[Notificamos V.S.ª que consta em nossos registros pendência de pagamento das faturas abaixo relacionadas, pertencentes ao imóvel que está sob sua responsabilidade. De acordo com a Lei 11.445/07, a inadimplência nos autoriza a interromper o fornecimento de água e/ou coleta de esgoto sanitário. A regularização do débito poderá ser feita com o pagamento do valor constante nesse documento, onde não estão inclusos os acréscimos por impontualidade, valores estes que serão cobrados na próxima fatura. Para esclarecer qualquer dúvida procure uma das nossas lojas de atendimento/escritório regional, ou ligue para 0800 70 71 195, a ligação é gratuita. Lembre-se da importância que a água tratada tem na sua vida. Caso o débito já esteja pago, este aviso deve ser desconsiderado.]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="285"
-						y="300"
+						y="264"
 						width="83"
 						height="11"
 						key="staticText-113"/>
@@ -164,7 +164,7 @@
 				<staticText>
 					<reportElement
 						x="372"
-						y="300"
+						y="264"
 						width="74"
 						height="11"
 						key="staticText-114"/>
@@ -177,7 +177,7 @@
 				<staticText>
 					<reportElement
 						x="450"
-						y="300"
+						y="264"
 						width="115"
 						height="11"
 						key="staticText-115"/>
@@ -192,12 +192,12 @@
 						x="73"
 						y="92"
 						width="352"
-						height="25"
+						height="19"
 						forecolor="#003399"
 						key="staticText-70"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Arial" pdfFontName="Courier-BoldOblique" size="16" isBold="true" isItalic="true"/>
+						<font fontName="Arial" pdfFontName="Courier-BoldOblique" size="14" isBold="true" isItalic="true"/>
 					</textElement>
 				<text><![CDATA[Companhia de Saneamento do Pará]]></text>
 				</staticText>
@@ -205,8 +205,8 @@
 					<reportElement
 						x="3"
 						y="94"
-						width="67"
-						height="55"
+						width="46"
+						height="36"
 						key="image-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -345,7 +345,7 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="168"
+						y="158"
 						width="44"
 						height="11"
 						key="staticText-105"/>
@@ -358,7 +358,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="46"
-						y="168"
+						y="158"
 						width="323"
 						height="11"
 						key="textField-86"/>
@@ -504,7 +504,7 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="156"
+						y="146"
 						width="44"
 						height="11"
 						key="staticText-110"/>
@@ -517,7 +517,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="46"
-						y="156"
+						y="146"
 						width="519"
 						height="11"
 						key="textField-88"/>
@@ -530,7 +530,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="155"
+						y="145"
 						width="566"
 						height="0"
 						key="line-67"/>
@@ -539,7 +539,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="167"
+						y="157"
 						width="566"
 						height="0"
 						key="line-68"/>
@@ -592,7 +592,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="184"
-						y="138"
+						y="130"
 						width="140"
 						height="11"
 						key="textField-90"/>
@@ -605,7 +605,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="73"
-						y="118"
+						y="114"
 						width="473"
 						height="13"
 						key="textField-91"/>
@@ -618,7 +618,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="332"
-						y="138"
+						y="131"
 						width="224"
 						height="11"
 						key="textField-92"/>
@@ -631,7 +631,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="178"
+						y="168"
 						width="566"
 						height="0"
 						key="line-84"/>
@@ -640,7 +640,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="283"
-						y="299"
+						y="263"
 						width="1"
 						height="12"
 						key="line-86"/>
@@ -649,7 +649,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="299"
+						y="263"
 						width="566"
 						height="0"
 						key="line-87"/>
@@ -658,7 +658,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="310"
+						y="276"
 						width="566"
 						height="0"
 						key="line-88"/>
@@ -733,7 +733,7 @@
 			</band>
 		</columnFooter>
 		<pageFooter>
-			<band height="1150"  isSplitAllowed="true" >
+			<band height="283"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						mode="Opaque"
@@ -762,13 +762,13 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="18"
-						width="556"
-						height="150"
+						y="15"
+						width="564"
+						height="86"
 						key="staticText-80"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="1_1_2">
-						<font fontName="Courier New" pdfFontName="Courier" size="9" isBold="false"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
 					</textElement>
 				<text><![CDATA[A violação do lacre, a danificação do hidrômetro e/ou cavalete é considerada infração, passível de cobrança de multa e outras cominações legais, podendo ocorrer à interrupção imediata do serviço de abastecimento de água e/ou coleta de esgoto sanitário. 
 A religação abusiva do ramal predial de água e/ou de coleta de esgoto, após a interrupção, feita clandestinamente pelo consumidor ou por sua ordem, é considerada manipulação indevida na tubulação, caracterizando infração grave, passível das penalidades acima informadas. 
@@ -777,7 +777,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="2"
-						y="180"
+						y="178"
 						width="562"
 						height="0"
 						key="line-71"/>
@@ -786,7 +786,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="2"
-						y="173"
+						y="171"
 						width="60"
 						height="6"
 						key="staticText-112"/>
@@ -799,7 +799,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="265"
-						y="191"
+						y="189"
 						width="54"
 						height="11"
 						key="staticText-90"/>
@@ -812,7 +812,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="265"
-						y="202"
+						y="200"
 						width="54"
 						height="11"
 						key="textField-71"/>
@@ -826,7 +826,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					<reportElement
 						mode="Opaque"
 						x="61"
-						y="249"
+						y="238"
 						width="314"
 						height="38"
 						forecolor="#000000"
@@ -839,7 +839,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="46"
-						y="229"
+						y="214"
 						width="345"
 						height="16"
 						key="textField-62"/>
@@ -852,7 +852,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="51"
-						y="246"
+						y="235"
 						width="334"
 						height="0"
 						key="line-33"/>
@@ -861,7 +861,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="136"
-						y="191"
+						y="189"
 						width="127"
 						height="11"
 						key="staticText-93"/>
@@ -874,7 +874,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="2"
-						y="191"
+						y="189"
 						width="62"
 						height="11"
 						key="staticText-94"/>
@@ -887,7 +887,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="2"
-						y="202"
+						y="200"
 						width="62"
 						height="11"
 						key="textField-75"/>
@@ -900,7 +900,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="136"
-						y="202"
+						y="200"
 						width="127"
 						height="11"
 						key="textField-76"/>
@@ -913,7 +913,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="321"
-						y="191"
+						y="189"
 						width="62"
 						height="11"
 						key="staticText-96"/>
@@ -926,7 +926,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="321"
-						y="202"
+						y="200"
 						width="62"
 						height="11"
 						key="textField-78"/>
@@ -939,7 +939,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="67"
-						y="202"
+						y="200"
 						width="67"
 						height="11"
 						key="textField-79"/>
@@ -952,7 +952,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="67"
-						y="191"
+						y="189"
 						width="67"
 						height="11"
 						key="staticText-97"/>
@@ -965,7 +965,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="65"
-						y="192"
+						y="190"
 						width="0"
 						height="20"
 						key="line-76"/>
@@ -974,7 +974,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="imovel"  hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="384"
-						y="202"
+						y="200"
 						width="181"
 						height="11"
 						key="textField-89"/>
@@ -987,7 +987,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<staticText>
 					<reportElement
 						x="384"
-						y="191"
+						y="189"
 						width="182"
 						height="11"
 						key="staticText-116"/>
@@ -1000,7 +1000,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="135"
-						y="192"
+						y="190"
 						width="0"
 						height="20"
 						key="line-77"/>
@@ -1009,7 +1009,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="264"
-						y="192"
+						y="190"
 						width="0"
 						height="20"
 						key="line-78"/>
@@ -1018,7 +1018,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="201"
+						y="199"
 						width="566"
 						height="0"
 						key="line-79"/>
@@ -1027,7 +1027,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="212"
+						y="210"
 						width="566"
 						height="0"
 						key="line-80"/>
@@ -1036,7 +1036,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="320"
-						y="192"
+						y="190"
 						width="0"
 						height="20"
 						key="line-81"/>
@@ -1045,7 +1045,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="384"
-						y="192"
+						y="190"
 						width="0"
 						height="21"
 						key="line-82"/>
@@ -1054,7 +1054,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="1"
-						y="191"
+						y="189"
 						width="566"
 						height="0"
 						key="line-85"/>
@@ -1081,7 +1081,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				<line direction="TopDown">
 					<reportElement
 						x="51"
-						y="287"
+						y="276"
 						width="334"
 						height="0"
 						key="line-91"/>
@@ -1089,8 +1089,8 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				</line>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="34"
-						y="799"
+						x="36"
+						y="121"
 						width="520"
 						height="11"
 						key="textField-96">
@@ -1102,99 +1102,10 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getRuaComplementoCorrespondencia}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="73"
-						y="687"
-						width="352"
-						height="25"
-						forecolor="#003399"
-						key="staticText-119">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Arial" pdfFontName="Courier-BoldOblique" size="16" isBold="true" isItalic="true"/>
-					</textElement>
-				<text><![CDATA[Companhia de Saneamento do Pará]]></text>
-				</staticText>
-				<image  vAlign="Middle" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="3"
-						y="689"
-						width="67"
-						height="55"
-						key="image-2">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[$P{imagem}]]></imageExpression>
-				</image>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="34"
-						y="787"
-						width="519"
-						height="11"
-						key="textField-97">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNomeCliente}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="184"
-						y="733"
-						width="140"
-						height="11"
-						key="textField-98">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Helvetica" size="8" isBold="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{cnpjEmpresa}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="73"
-						y="713"
-						width="473"
-						height="13"
-						key="textField-99">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Helvetica" size="8" isBold="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{enderecoEmpresa}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="332"
-						y="733"
-						width="224"
-						height="11"
-						key="textField-100">
-							<printWhenExpression><![CDATA[new Boolean ($F{getIcEnderecoAlternativo}.equals("1"))]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Helvetica" size="8" isBold="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{foneFaxEmpresa}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="34"
-						y="813"
+						x="36"
+						y="132"
 						width="520"
 						height="11"
 						key="textField-101">
@@ -1208,8 +1119,8 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="34"
-						y="827"
+						x="36"
+						y="143"
 						width="520"
 						height="11"
 						key="textField-102">
@@ -1223,8 +1134,8 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="34"
-						y="839"
+						x="36"
+						y="154"
 						width="520"
 						height="11"
 						key="textField-103">
@@ -1236,6 +1147,49 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getCepCorrespondencia}]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="103"
+						width="563"
+						height="12"
+						backcolor="#CCCCCC"
+						key="rectangle-21"/>
+					<graphicElement stretchType="NoStretch" pen="None"/>
+				</rectangle>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="101"
+						width="566"
+						height="0"
+						key="line-92"/>
+					<graphicElement stretchType="NoStretch" pen="Thin"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="115"
+						width="566"
+						height="0"
+						key="line-93"/>
+					<graphicElement stretchType="NoStretch" pen="Thin"/>
+				</line>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="84"
+						y="102"
+						width="382"
+						height="13"
+						key="staticText-119"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[ENDEREÇO ALTERNATIVO]]></text>
+				</staticText>
 			</band>
 		</pageFooter>
 		<summary>
