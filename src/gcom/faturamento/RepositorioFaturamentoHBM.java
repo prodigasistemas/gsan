@@ -21001,7 +21001,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			if (dataVigenciaInicial != null) {
 				consulta = consulta
-						+ " ctf.ctfx_nncosumofaixainicio between :dataVigenciaInicial and :dataVigenciaFinal and ";
+						+ " ctv.cstv_dtvigencia between :dataVigenciaInicial and :dataVigenciaFinal and ";
 			}
 
 			consulta = Util.removerUltimosCaracteres(consulta, 4);

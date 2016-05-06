@@ -297,30 +297,6 @@ function pesquisaImovelNaColecao(imovel, tipoMedicao){
 			return false;
 		}
 	}
-
-	function verificarValorConfirmado() {
-		
-		var form = document.forms[0];
-	
-		if (form.confirmacao.checked == true) {
-			form.confirmacao.value = '1';
-		} else {
-			form.confirmacao.value = '';
-		}
-		
-	}
-	
-	function checkConfirmado(valor) {
-		var form = document.forms[0];
-		
-		if (valor == '1') {
-			form.confirmacao.checked = true;
-			form.confirmacao.disabled = true;
-		} else {
-			form.confirmacao.checked = false;
-			form.confirmacao.disabled = false;
-		}
-	}
 	
 	function verificarValorAnalisado() {
 	
@@ -333,7 +309,7 @@ function pesquisaImovelNaColecao(imovel, tipoMedicao){
 		}
 		
 	}
-
+	
 	function checkAnalisado(valor) {
 	
 		var form = document.forms[0];
@@ -536,7 +512,7 @@ function pesquisaImovelNaColecao(imovel, tipoMedicao){
 </head>
 
 <body leftmargin="5" topmargin="5"
-	onload="javascript:setarFoco('${requestScope.nomeCampo}');checkConfirmado('${sessionScope.confirmacao}');verificarValorConfirmado();checkAnalisado('${sessionScope.analisado}');verificarValorAnalisado();checkGerarAviso('${sessionScope.gerarAviso}');verificarValorGerarAviso();;checkGerarOS('${sessionScope.gerarOS}');verificarValorGerarOS();;checkGerarRelatorio('${sessionScope.gerarRelatorio}');verificarValorGerarRelatorio();desabilitaCampos('${requestScope.habilitaCampos}','${requestScope.desabilitaAtualizarImovel}');verificaLeituraAnteriorPositiva();exibirMensagemReleituraRealizada();">
+	onload="javascript:setarFoco('${requestScope.nomeCampo}');checkAnalisado('${sessionScope.analisado}');verificarValorAnalisado();checkGerarAviso('${sessionScope.gerarAviso}');verificarValorGerarAviso();;checkGerarOS('${sessionScope.gerarOS}');verificarValorGerarOS();;checkGerarRelatorio('${sessionScope.gerarRelatorio}');verificarValorGerarRelatorio();desabilitaCampos('${requestScope.habilitaCampos}','${requestScope.desabilitaAtualizarImovel}');verificaLeituraAnteriorPositiva();exibirMensagemReleituraRealizada();">
 <html:form action="/atualizarConsumoResumoAction.do"
 	name="LeituraConsumoActionForm"
 	type="gcom.gui.micromedicao.LeituraConsumoActionForm" method="post">
@@ -798,7 +774,7 @@ function pesquisaImovelNaColecao(imovel, tipoMedicao){
 														property="medido" readonly="true"
 														style="background-color:#EFEFEF; border:0;font-size:xx-small"
 														size="4" /> <html:checkbox property="confirmacao"
-														value="1" onclick="verificarValorConfirmado();" /><strong> Conf.</strong></td>
+														value="1" /><strong> Conf.</strong></td>
 												</tr>
 												<tr bgcolor="#cbe5fe">
 													<td width="67" height="22" class="styleFontePeqNegrito"><strong>Anterior

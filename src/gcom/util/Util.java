@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6444,5 +6445,10 @@ public class Util {
 		out.close();
 		
 		return new File(nome);
+	}
+	
+	public static String removerCaractereEspecial(String valor) {
+		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
+		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
 }

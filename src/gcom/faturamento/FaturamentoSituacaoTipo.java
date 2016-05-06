@@ -1,16 +1,17 @@
 package gcom.faturamento;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import gcom.enums.Status;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.leitura.LeituraAnormalidadeConsumo;
 import gcom.micromedicao.leitura.LeituraAnormalidadeLeitura;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.Serializable;
-import java.util.Date;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
 /** @author Hibernate CodeGenerator */
@@ -256,14 +257,8 @@ public class FaturamentoSituacaoTipo extends ObjetoTransacao implements Serializ
 		Filtro filtro = retornaFiltro();
 		return filtro;
 	}
-	/*public Short getIndicadorFaturamentoParalisacaoEsgoto() {
-		return indicadorFaturamentoParalisacaoEsgoto;
-	}
 
-	public void setIndicadorFaturamentoParalisacaoEsgoto(
-			Short indicadorFaturamentoParalisacaoEsgoto) {
-		this.indicadorFaturamentoParalisacaoEsgoto = indicadorFaturamentoParalisacaoEsgoto;
-	}*/
-	
-	
+    public boolean paralisacaoFaturamentoAtivo() {
+        return indicadorParalisacaoFaturamento != null  && indicadorParalisacaoFaturamento.shortValue() == Status.ATIVO.getId();
+    }    
 }
