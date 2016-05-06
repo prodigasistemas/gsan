@@ -17,18 +17,14 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-public class BatchGerarResumoDiarioNegativacaoMDB
-		implements
-			MessageDrivenBean,
-			MessageListener {
+public class BatchGerarResumoDiarioNegativacaoMDB implements MessageDrivenBean, MessageListener {
 	private static final long serialVersionUID = 1L;
 
 	public BatchGerarResumoDiarioNegativacaoMDB() {
 		super();
 	}
 
-	public void setMessageDrivenContext(MessageDrivenContext ctx)
-			throws EJBException {
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 
 	}
 
@@ -41,8 +37,7 @@ public class BatchGerarResumoDiarioNegativacaoMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				this.getControladorSpcSerasa().gerarResumoDiarioNegativacao(
-						(Integer) ((Object[]) objectMessage.getObject())[0],(Integer) ((Object[]) objectMessage.getObject())[1]);
+				this.getControladorSpcSerasa().gerarResumoDiarioNegativacao((Integer) ((Object[]) objectMessage.getObject())[0], (Integer) ((Object[]) objectMessage.getObject())[1]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
@@ -55,26 +50,16 @@ public class BatchGerarResumoDiarioNegativacaoMDB
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorSpcSerasa
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -85,12 +70,6 @@ public class BatchGerarResumoDiarioNegativacaoMDB
 		}
 	}
 
-
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
 	public void ejbCreate() {
 
 	}
