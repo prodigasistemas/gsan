@@ -343,6 +343,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
+import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -75408,7 +75409,73 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ControladorException {
 		try {
-			return repositorioFaturamento.pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+			List<RelatorioAgenciaReguladoraDTO> retorno = new ArrayList<RelatorioAgenciaReguladoraDTO>();
+			Collection lancamentosAgenciaReguladora = repositorioFaturamento.pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+			int percentualRepasse = 0;
+			
+			for (Object obj : lancamentosAgenciaReguladora) {
+	            Object[] arrayObj = (Object[]) obj;
+	            
+	            percentualRepasse = (Integer)arrayObj[4]; 
+	            
+	            BigDecimal valorAgua = (BigDecimal)arrayObj[1];
+	            BigDecimal valorEsgoto = (BigDecimal)arrayObj[2];
+	            
+	            RelatorioAgenciaReguladoraDTO dto = 
+	                new RelatorioAgenciaReguladoraDTO(
+	                    (String)arrayObj[0], 
+	                    valorAgua,
+	                    valorEsgoto, 
+	                    (String)arrayObj[3],  
+	                    valorAgua.add(valorEsgoto));
+	            
+	            retorno.add(dto);
+	          }
+			
+			Map<String, BigDecimal[]> baseRepasse = new HashMap<String, BigDecimal[]>();
+			Map<String, BigDecimal[]> baseRepasseFaturado = new HashMap<String, BigDecimal[]>();
+			Map<String, BigDecimal[]> baseRepasseCancelado = new HashMap<String, BigDecimal[]>();
+			double percentual = (double) percentualRepasse;
+			
+			// Preenche os valores de repasse faturados e cancelados
+			for (ReportItemDTO reportItemDTO : retorno) {
+				RelatorioAgenciaReguladoraDTO dto = (RelatorioAgenciaReguladoraDTO) reportItemDTO;
+				
+				if (dto.getSituacao().equals("Faturado")) {
+					baseRepasseFaturado.put(dto.getLocalidade(), new BigDecimal[] { Util.formatarMoedaRealparaBigDecimal(dto.getValorAgua()), Util.formatarMoedaRealparaBigDecimal(dto.getValorEsgoto())});
+				} else {
+					baseRepasseCancelado.put(dto.getLocalidade(), new BigDecimal[] { Util.formatarMoedaRealparaBigDecimal(dto.getValorAgua()), Util.formatarMoedaRealparaBigDecimal(dto.getValorEsgoto())});
+				}
+				
+			}
+			
+			// Preenche os valores base de repasse
+			for (String localidade : baseRepasseFaturado.keySet()) {
+				BigDecimal[] valoresFaturados = baseRepasseFaturado.get(localidade);
+				BigDecimal[] valoresCancelados = baseRepasseCancelado.get(localidade);
+				
+				if (valoresCancelados != null) {
+					baseRepasse.put(localidade, new BigDecimal[] { valoresFaturados[0].subtract(valoresCancelados[0]), valoresFaturados[1].subtract(valoresCancelados[1]) });
+				} else {
+					baseRepasse.put(localidade, new BigDecimal[] { valoresFaturados[0], valoresFaturados[1] });
+				}
+			}
+			
+			// Insere os valores base de repasse no relatorio
+			for (String localidade : baseRepasse.keySet()) {
+				BigDecimal[] valores = baseRepasse.get(localidade);
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0], valores[1],"Base para repasse",valores[0].add(valores[1]));
+				retorno.add(r1);
+			}
+			
+			// Calcula o percentual do valor base de repasse e insere no relatorio
+			for (String localidade : baseRepasse.keySet()) {
+				BigDecimal[] valores = baseRepasse.get(localidade);
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0].multiply(new BigDecimal((percentual/100))), valores[1].multiply(new BigDecimal((percentual/100))),"Valor a ser repassado",valores[0].add(valores[1]));
+				retorno.add(r1);
+			}
+			
+			return retorno;
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

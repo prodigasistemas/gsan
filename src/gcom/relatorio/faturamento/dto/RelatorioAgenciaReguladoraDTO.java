@@ -11,25 +11,23 @@ public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
 
   private static final long serialVersionUID = 4309079765574906490L;
   
-  private String municipio;
-  
   @ReportElementType(description="Situacao", group=true, type=ReportElementType.TYPE_STRING)
   private String situacao;
   
+  @ReportElementType(description="Localidade", type=ReportElementType.TYPE_STRING)
   private String localidade;
   
-  @ReportElementType(description="Valor agua", type=ReportElementType.TYPE_MONEY)
+  @ReportElementType(description="Valor agua", type=ReportElementType.TYPE_MONEY, totalizer=true)
   private String valorAgua;
   
-  @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY)
+  @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY, totalizer=true)
   private String valorEsgoto;
   
   @ReportElementType(description="Total", type=ReportElementType.TYPE_MONEY)
   private String valorTotal;
   
-  public RelatorioAgenciaReguladoraDTO(String municipio, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
+  public RelatorioAgenciaReguladoraDTO(String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
     super();
-    this.municipio = municipio;
     this.localidade = localidade;
     this.valorAgua = Util.formatarMoedaReal(valorAgua);
     this.valorEsgoto = Util.formatarMoedaReal(valorEsgoto);
@@ -45,14 +43,6 @@ public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
 
   public void setSituacao(String situacao) {
     this.situacao = situacao;
-  }
-
-  public String getMunicipio() {
-    return municipio;
-  }
-
-  public void setMunicipio(String municipio) {
-    this.municipio = municipio;
   }
 
   public String getLocalidade() {

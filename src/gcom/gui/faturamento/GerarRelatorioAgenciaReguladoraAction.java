@@ -53,6 +53,8 @@ public class GerarRelatorioAgenciaReguladoraAction extends ExibidorProcessamento
 				getNomeRelatorio(anoMes),
 				RelatorioAgenciaReguladoraDTO.class, 
 				FormatoRelatorio.PDF);
+		relatorioUtil.setOmitirTotalGeral(true);
+		
 
 		List<ReportItemDTO> itens = new ArrayList<ReportItemDTO>();
 		itens.addAll(dtos);
