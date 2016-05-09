@@ -5,6 +5,7 @@ import gcom.cadastro.localidade.SetorComercial;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class LancamentoAgenciaReguladora implements Serializable {
 
@@ -21,6 +22,7 @@ public class LancamentoAgenciaReguladora implements Serializable {
 	private BigDecimal valorAgua;
 	private BigDecimal valorEsgoto;
 	private Integer tipoLancamento;
+	private Date ultimaAlteracao;
 	
 	public LancamentoAgenciaReguladora() { }
 	
@@ -78,6 +80,14 @@ public class LancamentoAgenciaReguladora implements Serializable {
 
 	public void setTipoLancamento(Integer tipoLancamento) {
 		this.tipoLancamento = tipoLancamento;
+	}
+
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 	
 	
