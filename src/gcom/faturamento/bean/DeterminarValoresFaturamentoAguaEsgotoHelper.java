@@ -213,7 +213,7 @@ public class DeterminarValoresFaturamentoAguaEsgotoHelper {
 		this.percentualColetaEsgoto = percentualColetaEsgoto;
 	}
 
-    public void atribuirConsumoHistoricoAgua(ConsumoHistorico consumoHistoricoAgua2) {
+    public void atribuirConsumoHistoricoAgua(ConsumoHistorico consumoHistoricoAgua) {
         if (consumoHistoricoAgua != null) {
             this.setConsumoHistoricoAgua(consumoHistoricoAgua);
             this.setIndicadorFaturamentoAgua(consumoHistoricoAgua.getIndicadorFaturamento());
