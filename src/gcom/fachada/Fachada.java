@@ -44183,16 +44183,6 @@ public class Fachada {
 		}
 	}
 	
-
-	/**
-	 * Gerar Relatório dos Parâmetros Contábeis
-	 * 
-	 * @author Reinaldo Viana
-	 * @date 02/09/2015
-	 * 
-	 * @return Collection<RelatorioParametrosContabeisContasAReceberBean>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioParametrosContabeisContasAReceberBean> pesquisarDadosRelatorioParametrosContabeisContasAReceber(String referenciaContabil) {
 
 		try {
@@ -44213,6 +44203,13 @@ public class Fachada {
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) {
 		try {
 			return this.getControladorFaturamento().pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+	}
+	public boolean verificarPermissaoAprovarImovel(Integer idUsuario, Integer idImovel) {
+		try {
+			return this.getControladorAtualizacaoCadastral().verificarPermissaoAprovarImovel(idUsuario, idImovel);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}

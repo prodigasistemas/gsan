@@ -1597,17 +1597,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         
         try {
             if (imovel.getFaturamentoSituacaoTipo() != null) {
-                
                 Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = repositorioFaturamentoSituacao.faturamentosHistoricoVigentesPorImovel(imovel.getId());
                 FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
                 
                 FaturamentoSituacaoTipo tipo = repositorioFaturamentoSituacaoTipo.situacaoTipoDoImovel(imovel.getId());
                 
-                if ((faturamentoSituacaoHistorico != null 
-                        && anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() 
-                        && anoMesFaturamento <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())
-                        && tipo.paralisacaoFaturamentoAtivo()  
-                        && imovel.faturamentoAguaValido()) {
+                if ((faturamentoSituacaoHistorico != null && faturamentoSituacaoHistorico.dentroIntervaloFaturamento(anoMesFaturamento))
+                     && tipo.paralisacaoFaturamentoAtivo()  
+                     && imovel.faturamentoAguaValido()) {
                     faturar = false;
                 }
             }
@@ -1615,15 +1612,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
             throw new ControladorException("Erro ao verificar se imovel deve faturar", e);
         }
 
-
         return faturar;
     }
 	
-	/**
-	 * Determina os dados do faturamento do imóvel.
-	 * [UC0113] - Faturar Grupo de Faturamento
-	 * [SB0001 - Determinar Faturamento para o Imóvel]
-	 */
 	@SuppressWarnings("unchecked")
 	public void determinarFaturamentoImovel(Imovel imovel,
 			boolean gerarAtividadeGrupoFaturamento,
@@ -25970,6 +25961,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setVolumeMinimoFaturamento((Integer) dados[13]);
 					imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 				}
+				
+				//Situacao Especial de Faturamento
+				if (dados[14] != null) { // 14
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+					faturamentoSituacaoTipo.setId(((Integer) dados[14]));
+					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+				}
 
 				imoveis.add(imovel);
 
@@ -26176,6 +26174,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getNumeroConsumoFaturadoMes();
 							consumoTipoEsgoto = consumoHistoricoEsgoto
 									.getConsumoTipo();
+						}
+						
+						if(imovel.getFaturamentoSituacaoTipo()!=null && 
+								   imovel.getFaturamentoSituacaoTipo().getId().intValue()==FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA.intValue()){
+								   continue;
 						}
 
 						if (!this.permiteFaturamentoParaAgua(
@@ -45604,7 +45607,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// Quebra de Linha
 				documentoTxt.append(System.getProperty("line.separator"));
-				// -- Fim HEADER
+				// -- Fim ER
 				// -------------------------------------------------
 				while (iteratorObjetos.hasNext()) {
 					sequencialImpressao++;
@@ -65669,9 +65672,45 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 		
-		helper.atribuirConsumoHistoricoAgua(consumoHistoricoAgua);
-		
-		helper.atribuirConsumoHistoricoEsgoto(consumoHistoricoEsgoto);
+		if (consumoHistoricoAgua != null) {
+			helper.setConsumoHistoricoAgua(consumoHistoricoAgua);
+
+			if (consumoHistoricoAgua.getIndicadorFaturamento() != null) {
+				helper.setIndicadorFaturamentoAgua(consumoHistoricoAgua.getIndicadorFaturamento());
+			}
+
+			if (consumoHistoricoAgua.getNumeroConsumoFaturadoMes() != null) {
+				helper.setConsumoFaturadoAgua(consumoHistoricoAgua.getNumeroConsumoFaturadoMes());
+			}
+
+			if (consumoHistoricoAgua.getConsumoRateio() != null) {
+				helper.setConsumoRateioAgua(consumoHistoricoAgua.getConsumoRateio());
+			}
+
+			if (consumoHistoricoAgua.getConsumoTipo() != null) {
+				helper.setConsumoTipoAgua(consumoHistoricoAgua.getConsumoTipo());
+			}
+		}
+
+		if (consumoHistoricoEsgoto != null) {
+			helper.setConsumoHistoricoEsgoto(consumoHistoricoEsgoto);
+
+			if (consumoHistoricoEsgoto.getIndicadorFaturamento() != null) {
+				helper.setIndicadorFaturamentoEsgoto(consumoHistoricoEsgoto.getIndicadorFaturamento());
+			}
+
+			if (consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes() != null) {
+				helper.setConsumoFaturadoEsgoto(consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes());
+			}
+
+			if (consumoHistoricoEsgoto.getConsumoRateio() != null) {
+				helper.setConsumoRateioEsgoto(consumoHistoricoEsgoto.getConsumoRateio());
+			}
+
+			if (consumoHistoricoEsgoto.getConsumoTipo() != null) {
+				helper.setConsumoTipoEsgoto(consumoHistoricoEsgoto.getConsumoTipo());
+			}
+		}
 
 		int consumoMinimoLigacao = getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, null);
 		helper.setConsumoMinimoLigacao(consumoMinimoLigacao);

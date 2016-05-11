@@ -16,6 +16,7 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.AtualizacaoCadastralUtil;
 import gcom.util.Util;
@@ -49,6 +50,9 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		String idImovel = (String) request.getParameter("idImovel");
 		String idTipoAlteracao = (String) request.getParameter("idTipoAlteracao");
 
+		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
+		
+		form.setTemPermissaoAprovarImovel(temPermissaoAprovarImovel(usuario.getId(), idImovel));
 		try {
 			Collection<DadosTabelaAtualizacaoCadastralHelper> resumoImovel = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 
@@ -140,4 +144,10 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
 		return imovel;
 	}
+	
+	public boolean temPermissaoAprovarImovel(Integer idUsuario, String idImovel) {
+		System.out.println("temPermissaoAprovarImovel - action");
+		return fachada.verificarPermissaoAprovarImovel(idUsuario, new Integer(idImovel));
+	}
+	
 }

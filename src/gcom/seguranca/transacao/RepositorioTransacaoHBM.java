@@ -637,6 +637,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			SQLQuery query = session.createSQLQuery(sql.toString())
 					.addScalar("idImovel", Hibernate.INTEGER)
+					
 					.addScalar("tipoAlteracao", Hibernate.INTEGER)
 					.addScalar("nomeFuncionario", Hibernate.STRING)
 					.addScalar("icAutorizado", Hibernate.INTEGER)
