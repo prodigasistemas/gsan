@@ -1495,16 +1495,13 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	public boolean verificarPermissaoAprovarImovel(Integer idUsuarioLogado, Integer idImovel) {
 		boolean temPermissao = true;
 		try {
-			System.out.println("temPermissaoAprovarImovel - controlador");
 			Integer idUsuarioAprovacao = repositorioSeguranca.pesquisarIdUsuarioAutorizadorImoveis(idImovel);
-			System.out.println(idUsuarioAprovacao);
 			if (idUsuarioAprovacao != null && idUsuarioAprovacao.intValue() != idUsuarioLogado.intValue())
 				temPermissao = false;
 		
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
-		System.out.println(temPermissao);
 		return temPermissao;
 	}
 }
