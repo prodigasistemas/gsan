@@ -417,8 +417,6 @@ public class ControladorBatchSEJB implements SessionBean {
 						
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						
-						System.out.println("INICIANDO FUNCIONALIDADE GERAR_RESUMO_DIARIO_NEGATIVACAO");
-
 						break;
 					case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
 

@@ -7,6 +7,7 @@ import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.ordemservico.bean.ObterValorDebitoHelper;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelSuprimido;
 import gcom.cobranca.CobrancaAcaoAtividadeComandoFiscalizacaoSituacao;
@@ -23,6 +24,7 @@ import gcom.util.ErroRepositorioException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Interfe, que disponibiliza os serviços do Repositório Atendimento Público 
@@ -1174,5 +1176,9 @@ public interface IRepositorioAtendimentoPublico {
 	 *  
 	 */
  	public Collection pesquisarRamalLocalInstalacao() throws ErroRepositorioException;
+ 	
+ 	public List<Municipio> obterMunicipiosAgenciaReguladora(Integer idAgencia) throws ErroRepositorioException;
+ 	
+ 	public List<AgenciaReguladora> obterAgenciasReguladorasAtivas() throws ErroRepositorioException;
 	
 }

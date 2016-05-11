@@ -85,6 +85,7 @@ import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.AreaConstruidaFaixa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
@@ -12923,6 +12924,24 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public List<Municipio> obterMunicipiosAgenciaReguladora(Integer idAgencia) throws ControladorException {
+		try {
+			return repositorioAtendimentoPublico.obterMunicipiosAgenciaReguladora(idAgencia);
+		} catch (ErroRepositorioException erx) {
+			erx.printStackTrace();
+			throw new ControladorException("erro.sistema", erx);
+		}
+	}
+	
+	public List<AgenciaReguladora> obterAgenciasReguladorasAtivas() throws ControladorException {
+		try {
+			return repositorioAtendimentoPublico.obterAgenciasReguladorasAtivas();
+		} catch (ErroRepositorioException erx) {
+			erx.printStackTrace();
+			throw new ControladorException("erro.sistema", erx);
 		}
 	}
 }

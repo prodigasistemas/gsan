@@ -63,6 +63,7 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
@@ -3028,4 +3029,18 @@ public interface IRepositorioFaturamento {
 	
 	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
 			Integer anoMesReferencia) throws ErroRepositorioException;
+	
+	public Collection pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorEsgotoPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
+	
+	public Object[] acumularValorAguaEsgotoPorSituacaoConta(int anoMesReferencia, int idLocalidade,int idSituacaoAtual, int idSituacaoAnterior) throws ErroRepositorioException;
+	
+	public BigDecimal calcularDiferencaValorAguaCanceladaRetificacao(int anoMesReferencia,int idLocalidade) throws ErroRepositorioException;
+	
+	public BigDecimal calcularDiferencaValorEsgotoCanceladaRetificacao(int anoMesReferencia,int idLocalidade) throws ErroRepositorioException;
+	
+	public void excluirLancamentoAgenciaReguladoraPorAnoMesArrecadacaoPorLocalidade(int anoMesReferenciaFaturamento, Integer idLocalidade) throws ErroRepositorioException;
 }
