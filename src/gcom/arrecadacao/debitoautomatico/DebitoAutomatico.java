@@ -6,37 +6,20 @@ import java.io.Serializable;
 import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class DebitoAutomatico implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String identificacaoClienteBanco;
-
-    /** nullable persistent field */
     private Date dataOpcaoDebitoContaCorrente;
-
-    /** nullable persistent field */
     private Date dataInclusaoNovoDebitoAutomatico;
-
-    /** nullable persistent field */
     private Date dataExclusao;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
-    /** persistent field */
     private Agencia agencia;
-
-    /** persistent field */
     private Imovel imovel;
 
-    /** full constructor */
     public DebitoAutomatico(String identificacaoClienteBanco, Date dataOpcaoDebitoContaCorrente, Date dataInclusaoNovoDebitoAutomatico, Date dataExclusao, Date ultimaAlteracao, Agencia agencia, Imovel imovel) {
         this.identificacaoClienteBanco = identificacaoClienteBanco;
         this.dataOpcaoDebitoContaCorrente = dataOpcaoDebitoContaCorrente;
@@ -47,11 +30,9 @@ public class DebitoAutomatico implements Serializable {
         this.imovel = imovel;
     }
 
-    /** default constructor */
     public DebitoAutomatico() {
     }
 
-    /** minimal constructor */
     public DebitoAutomatico(Agencia agencia, Imovel imovel) {
         this.agencia = agencia;
         this.imovel = imovel;
@@ -122,9 +103,7 @@ public class DebitoAutomatico implements Serializable {
     }
 
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
+        return new ToStringBuilder(this).append("id", getId()).toString();
     }
 
 }

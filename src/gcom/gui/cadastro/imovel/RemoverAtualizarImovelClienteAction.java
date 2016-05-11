@@ -49,22 +49,15 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        // obtendo uma instancia da sessao
         HttpSession sessao = httpServletRequest.getSession(false);
         
         Fachada fachada = Fachada.getInstancia();
         
         Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 
-        //DynaValidatorActionForm inserirImovelClienteActionForm = (DynaValidatorActionForm) actionForm;
+        Collection imovelClientesNovos = (Collection) sessao.getAttribute("imovelClientesNovos");
 
-        // Cria variaveis
-        Collection imovelClientesNovos = (Collection) sessao
-                .getAttribute("imovelClientesNovos");
-
-        // atribui os valores q vem pelo request as variaveis
-        String[] clientesImoveis = httpServletRequest
-                .getParameterValues("idRemocaoClienteImovel");
+        String[] clientesImoveis = httpServletRequest.getParameterValues("idRemocaoClienteImovel");
         if (clientesImoveis != null) {
         	sessao.setAttribute("arrayClientesImoveis", clientesImoveis);
         } else {
@@ -159,9 +152,7 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
                         	 	
                         			}
                         			fachada.verificaRestricaoDaTabelaClienteImovel(clienteImovel);
-	                                colecaoClientesImoveisFimRelacao
-	                                        .add(clienteImovel);
-	                                
+	                                colecaoClientesImoveisFimRelacao.add(clienteImovel);
 	                    			// [FS0019] - Verificar existência de negativação para o cliente-imóvel
 	                    			// Exibir mensagem de advertência caso o cliente esteja em processo de negativação
 	                    			// Adicionado por Victor Cisneiros (12/01/2009)
@@ -183,12 +174,8 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
 	                						}
 	                					}
 	                				}
-
-	                                sessao.setAttribute(
-	                                        "colecaoClientesImoveisFimRelacao",
-	                                        colecaoClientesImoveisFimRelacao);
-		                            
-		                            
+	                				colecaoClientesImoveisRemovidos.addAll(colecaoClientesImoveisFimRelacao);
+	                                sessao.setAttribute("colecaoClientesImoveisFimRelacao", colecaoClientesImoveisFimRelacao);
                             	 }else{
  	                            	// verifica se o tipo do cliente é usuário
  		                            if (clienteImovel
@@ -225,6 +212,8 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
             }       
         	
         	sessao.setAttribute("colecaoClientesImoveisRemovidos", colecaoClientesImoveisRemovidos);	
+        	imovelClientesNovos.removeAll(colecaoClientesImoveisFimRelacao);
+        	sessao.setAttribute("imovelClientesNovos", imovelClientesNovos);
         	            
         return retorno;
     }

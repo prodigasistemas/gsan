@@ -560,13 +560,6 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * [UC0011] Inserir Imóvel
-	 *
-	 * @param inserirImovelHelper
-	 * @return Integer
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Integer inserirImovelRetorno(InserirImovelHelper inserirImovelHelper)
 			throws ControladorException {
@@ -584,13 +577,6 @@ public class ControladorImovelSEJB implements SessionBean {
 		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = imovel.getLigacaoEsgotoSituacao();
 		Usuario usuario = inserirImovelHelper.getUsuario();
 		
-		/*
-		 * Integração com o conceito de face da quadra
-		 * 
-		 * Caso a empresa utilize o conceito de face da quadra (PARM_ICQUADRAFACE = 1 da 
-		 * tabela SISTEMA_PARAMETROS); os campos de INDICADOR_REDE_AGUA, INDICADOR_REDE_ESGOTO
-		 * DISTRITO_OPERACIONAL e BACIA serão obtidos a partir da face.
-		 */
 		IntegracaoQuadraFaceHelper integracaoQuadraFace = null;
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 		
@@ -631,14 +617,8 @@ public class ControladorImovelSEJB implements SessionBean {
     		}
     	}
 		
-    	
-		/*
-		 * VERIFICANDO A SITUAÇÃO DA LIGAÇÃO DA ÁGUA DE ACORDO COM A QUADRA OU FACE DA QUADRA
-		 * QUE ESTÁ SENDO CADASTRADA PARA O IMÓVEL.
-		 */
 		if (integracaoQuadraFace != null) {
 
-			// SITUAÇÃO DE LIGAÇÃO DE AGUA
 			if (integracaoQuadraFace.getIndicadorRedeAgua() != null && 
 				integracaoQuadraFace.getIndicadorRedeAgua().equals(Quadra.SEM_REDE)) {
 				
@@ -711,10 +691,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		}
 
-		/**
-		 * alterado por pedro alexandre dia 17/11/2006 alteração feita para
-		 * acoplar o controle de abrangência de usuário
-		 */
 		// ------------ CONTROLE DE ABRANGENCIA ----------------
 		Abrangencia abrangencia = new Abrangencia(inserirImovelHelper.getUsuario(), 
 		inserirImovelHelper.getImovel().getLocalidade());
@@ -732,25 +708,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-/*		
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_IMOVEL_INSERIR, new UsuarioAcaoUsuarioHelper(
-						usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		Operacao operacao = new Operacao();
-		operacao.setId(Operacao.OPERACAO_IMOVEL_INSERIR);
-
-		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		operacaoEfetuada.setOperacao(operacao);
-		
-		imovel.setOperacaoEfetuada(operacaoEfetuada);
-		imovel.adicionarUsuario(usuario,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		registradorOperacao.registrarOperacao(imovel);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-*/		
-		// [FS0022] Auto-incremento do Numero do Lote
 		if (quadra.getIndicadorIncrementoLote() != null && 
 			quadra.getIndicadorIncrementoLote().equals(new Short("1"))) {
 			
@@ -777,9 +734,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		while (iteratorCliente.hasNext()) {
 			clienteImovel = null;
 			clienteImovel = (ClienteImovel) iteratorCliente.next();
-			//Alterado por Sávio Luiz data: 27/03/2009 sobre a CRC 1185
-			//Colocado só para descobrir como os usuários estão cadastrando um único cliente imóvel 
-			// com o indicador do nome da conta igual a 2 - Temporário.
+
 			if(clientesImoveis.size() == 1){
 				if(clienteImovel.getIndicadorNomeConta().equals(new Short("2"))){
 					sessionContext.setRollbackOnly();
@@ -787,7 +742,6 @@ public class ControladorImovelSEJB implements SessionBean {
 				}
 			}
 			
-			//registrar transação clienteImovel
 			registradorOperacao.registrarOperacao(clienteImovel);
 			
 			clienteImovel.setImovel(imovelNovo);
@@ -795,8 +749,6 @@ public class ControladorImovelSEJB implements SessionBean {
 			this.getControladorCliente().inserirClienteImovel(clienteImovel);
 		}
 
-		// Obtem os valores que vem na coleção de
-		// subCategorias(economia)para cadastrar em Imovel_Subcategoria
 		Collection subcategorias = inserirImovelHelper.getSubcategorias();
 		Iterator iteratorSubCategoria = subcategorias.iterator();
 		ImovelSubcategoria imovelSubcategoria = null;
@@ -806,7 +758,6 @@ public class ControladorImovelSEJB implements SessionBean {
 			imovelSubcategoria = (ImovelSubcategoria) iteratorSubCategoria
 					.next();
 			
-			//registrar transação imovelSubcategoria
 			registradorOperacao.registrarOperacao(imovelSubcategoria);
 			
 			imovelSubcategoria.getComp_id().setImovel(imovelNovo);
@@ -827,15 +778,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			 this.inserirImovelRamoAtividade(imovelRamoAtividade);			
 		}
 		
-		FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
-		filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, 
-		inserirImovelHelper.getImovel().getLigacaoEsgotoSituacao().getId()));
-
-		Collection colecaoLigacaoEsgotoSituacao = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, 
-		LigacaoEsgotoSituacao.class.getName());
-		
-		LigacaoEsgotoSituacao ligacaoEsgoto = (LigacaoEsgotoSituacao) 
-		Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
+		LigacaoEsgotoSituacao ligacaoEsgoto = filtrarLigacaoEsgotoSituacao(inserirImovelHelper.getImovel().getLigacaoEsgotoSituacao().getId());
 		
 		if (ligacaoEsgoto.getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
 			inserirLigacaoEsgotoImovel(inserirImovelHelper);
@@ -1094,327 +1037,46 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @param inserirImovelHelper
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("unchecked")
 	public void atualizarImovel(InserirImovelHelper inserirImovelHelper) throws ControladorException {
 		
 		this.verificarAlteracaoImovelEmCampo(inserirImovelHelper);
-		//------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		Operacao.OPERACAO_IMOVEL_ATUALIZAR, inserirImovelHelper.getImovel().getId(), 
-		inserirImovelHelper.getImovel().getId(), new UsuarioAcaoUsuarioHelper(
-		inserirImovelHelper.getUsuario(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = registrarTransacaoAtualizarImovel(inserirImovelHelper);
+		
+		Imovel imovelNaBase = filtrarImovelPorId(inserirImovelHelper.getImovel().getId());
 
-		registradorOperacao.registrarOperacao(inserirImovelHelper.getImovel());
-		
-		getControladorTransacao().registrarTransacao(inserirImovelHelper.getImovel());
-		
-		// ------------ </REGISTRAR TRANSAÇÃO>----------------------------		
-		
-		// filtro imovel
-		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(new ParametroSimples(
-		FiltroImovel.ID, inserirImovelHelper.getImovel().getId()));
-
-		// coleção com resultado da pesquisa de imovel
-		Collection imoveis = getControladorUtil().pesquisar(filtroImovel,
-		Imovel.class.getName());
-		
-		// imovel encontrado
-		Imovel imovelNaBase = (Imovel) imoveis.iterator().next();
-
-		// Verificar se o imovel já foi atualizada por outro usuário durante
-		// esta atualização
-		if (imovelNaBase.getUltimaAlteracao().after(
-			inserirImovelHelper.getImovel().getUltimaAlteracao())) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.atualizacao.timestamp");
-		}
+		validarAlteracaoImovel(inserirImovelHelper, imovelNaBase);
 		
 		try {
-			
-			// Atualiza a data de última alteração
 			inserirImovelHelper.getImovel().setUltimaAlteracao(new Date());
-			// cliente imoveis removidos do banco
-			Collection colecaoClientesImoveisRemovidos = inserirImovelHelper.getColecaoClientesImoveisRemovidos();
+
+			removerClienteImovelManterImovel(inserirImovelHelper, registradorOperacao);
+			atualizarClienteImovelManterImovel(inserirImovelHelper, registradorOperacao);
+
+			removerSubcategoriasManterImovel(registradorOperacao, inserirImovelHelper.getColecaoImovelSubcategoriasRemovidas());
+			atualizarSubcategoriasManterImovel(inserirImovelHelper, registradorOperacao);
+				
+			removerRamoAvididadeManterImovel(registradorOperacao, inserirImovelHelper.getColecaoRamoAtividadesRemovidas());
+			atualizarRamoAtividadeManterImovel(inserirImovelHelper, registradorOperacao);
 			
-			if (colecaoClientesImoveisRemovidos != null
-					&& !colecaoClientesImoveisRemovidos.isEmpty()) {
-				Iterator iteratorClientesImoveisRemovidos = colecaoClientesImoveisRemovidos
-						.iterator();
-				ClienteImovel clienteImovelRemovido = null;
-				while (iteratorClientesImoveisRemovidos.hasNext()) {
-					clienteImovelRemovido = (ClienteImovel) iteratorClientesImoveisRemovidos
-							.next();
-
-					FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-					filtroClienteImovel
-							.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
-					filtroClienteImovel
-							.adicionarParametro(new ParametroSimples(
-									FiltroClienteImovel.IMOVEL_ID, inserirImovelHelper.getImovel().getId()));
-					filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
-					Collection colecaoClienteImovel = (Collection) getControladorUtil()
-							.pesquisar(filtroClienteImovel,
-									ClienteImovel.class.getName());
-
-					boolean existe = this.verificarExistenciaClienteImovel(
-							colecaoClienteImovel, clienteImovelRemovido);
-					if (existe) {// se ja existe na base apenas atualiza para
-						
-						registradorOperacao.registrarOperacao(clienteImovelRemovido);
-						
-						getControladorUtil().atualizar(clienteImovelRemovido);
-					}
-					
-				}
-			}
-
-			// clientes imoves na lista do imovel adicionar ao imovel
-			Collection clientes = inserirImovelHelper.getClientes();
-			
-			if (clientes != null && !clientes.isEmpty()) {
-				
-				Iterator iteratorCliente = clientes.iterator();
-				ClienteImovel clienteImovel = null;
-
-				FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-				filtroClienteImovel
-						.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
-				filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_IMOVEL_FIM_RELACAO_MOTIVO);
-				filtroClienteImovel.adicionarParametro(new ParametroSimples(
-						FiltroClienteImovel.IMOVEL_ID, inserirImovelHelper.getImovel().getId()));
-				filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
-				Collection colecaoClienteImovel = (Collection) getControladorUtil()
-						.pesquisar(filtroClienteImovel,
-								ClienteImovel.class.getName());
-
-				boolean clienteResponsavel = false;
-				
-				// atualiza ou insere o cliente imovel
-				while (iteratorCliente.hasNext()) {
-					
-					clienteImovel = (ClienteImovel) iteratorCliente.next();
-					
-					if (clienteImovel.getClienteRelacaoTipo().getId().equals(
-							ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL)){
-						clienteResponsavel = true;
-					}
-					
-					boolean existe = this.verificarExistenciaClienteImovel(
-							colecaoClienteImovel, clienteImovel);
-					
-					registradorOperacao.registrarOperacao(clienteImovel);
-					
-					if (existe) {// se ja existe na base apenas atualiza para
-						// o cliente imovel
-						clienteImovel.setImovel(inserirImovelHelper.getImovel());
-						clienteImovel.setUltimaAlteracao(new Date());
-						if (clienteImovel.getDataFimRelacao() == null || 
-								clienteImovel.getDataFimRelacao().equals("") ) {
-							getControladorUtil().atualizar(clienteImovel);
-						}
-					} else {// insere o cliente imovel par ao imovel caso não
-						// exista na base
-						clienteImovel.setImovel(inserirImovelHelper.getImovel());
-						clienteImovel.setUltimaAlteracao(new Date());
-						getControladorUtil().inserirOuAtualizar(clienteImovel);
-					}
-				}
-				
-				/*
-				 * Alteração solicitada por Rosana Carvalho e implementada por Tiago Moreno
-				 * Data: 10/03/2008
-				 * 
-				 * [SB0001] 5.4. Caso não seja informado um novo cliente responsável, os indicadores 
-				 * de envio da conta (IMOV_ICCONTA) e extrato para responsável (IMOV_ICEMISSAOEXTRATOFATURAMENTO)
-				 * devem ser atualizados com o valor 2(dois) e o Conta Envio (ICTE_ID = 2)
-				 * 
-				 */
-				if (!clienteResponsavel){
-
-					if(inserirImovelHelper.getImovel().getImovelContaEnvio() == null ||
-						(inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_EMAIL.intValue() &&
-						inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_IMOVEL_E_PARA_EMAIL.intValue()) ){
-
-						ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
-						imovelContaEnvio.setId(2);
-						
-						//setando falor para imovel conta envio
-						inserirImovelHelper.getImovel().setImovelContaEnvio(imovelContaEnvio);
-					}
-					
-					//setando indicador de conta
-					inserirImovelHelper.getImovel().setIndicadorConta(new Short("2"));
-					
-					//setando indicador de emissao de extrato
-					inserirImovelHelper.getImovel().setIndicadorEmissaoExtratoFaturamento(new Short("2"));
-					
-					//atualizando o imovel
-					getControladorUtil().atualizar(inserirImovelHelper.getImovel());
-				}
-				
-			}
-			
-			/**
-			 * Alterado por Arthur Carvalho 11/11/2009
-			 * Urgencia para liberação da versão, contudo necessita de correção
-			 * So atualiza os dados da aba subcategoria caso tenha sido alterada
-			 */
-				
-				Collection colecaoImovelSubcategoriasRemovidas = 
-				inserirImovelHelper.getColecaoImovelSubcategoriasRemovidas();
-				
-				if (colecaoImovelSubcategoriasRemovidas != null
-						&& !colecaoImovelSubcategoriasRemovidas.isEmpty()) {
-					Iterator iColecaoImovelSubcategoriasRemovidas = colecaoImovelSubcategoriasRemovidas
-							.iterator();
-					ImovelSubcategoria imovelSubcategoria = null;
-					while (iColecaoImovelSubcategoriasRemovidas.hasNext()) {
-						imovelSubcategoria = (ImovelSubcategoria) iColecaoImovelSubcategoriasRemovidas
-								.next();
-						if (imovelSubcategoria.getComp_id().getImovel() != null
-								&& imovelSubcategoria.getComp_id().getSubcategoria() != null) {
-							registradorOperacao.registrarOperacao(imovelSubcategoria);						
-							getControladorUtil().remover(imovelSubcategoria);
-	
-						}
-					}
-				}
-				
-				// imovel sub categoria
-				Collection subcategorias = inserirImovelHelper.getSubcategorias();
-				
-				if (subcategorias != null && !subcategorias.isEmpty()) {
-					Iterator iteratorImovelSubCategorias = subcategorias.iterator();
-					ImovelSubcategoria imovelSubcategoria = null;
-	
-	
-					// atualiza ou insere o imovel sub categoria
-					while (iteratorImovelSubCategorias.hasNext()) {
-	
-						imovelSubcategoria = null;
-						imovelSubcategoria = (ImovelSubcategoria) iteratorImovelSubCategorias
-								.next();
-	
-						// [FS0018]- Validar a(s) categoria(s) do imovel com a(s)
-						// respectiva(s) tarifa(s)
-						if (imovelSubcategoria.getComp_id().getSubcategoria()
-								.getCategoria() != null) {
-	
-							Boolean existeCategoria = repositorioImovel
-									.verificarExistenciaTarifaConsumoCategoriaParaCategoriaImovel(
-											inserirImovelHelper.getImovel().getId(),
-											imovelSubcategoria.getComp_id()
-													.getSubcategoria()
-													.getCategoria().getId());
-	
-							if (!existeCategoria) {
-								//sessionContext.setRollbackOnly();
-								throw new ControladorException(
-										"atencao.categoria_imovel_sem_tarifa",
-										null, inserirImovelHelper.getImovel()
-												.getId().toString());
-							}
-	
-						}
-						
-							
-						// não exista na base
-						if ( imovelSubcategoria.getComp_id().getImovel() == null || 
-								imovelSubcategoria.getComp_id().getImovel().equals("") ) {
-
-							imovelSubcategoria.getComp_id().setImovel(inserirImovelHelper.getImovel());
-							imovelSubcategoria.setUltimaAlteracao(new Date());
-							
-							registradorOperacao.registrarOperacao(imovelSubcategoria);
-							getControladorUtil().inserir(imovelSubcategoria);
-						} else {
-							registradorOperacao.registrarOperacao(imovelSubcategoria);
-							getControladorUtil().atualizar(imovelSubcategoria);
-						}
-					}
-				}else {
-					
-					sessionContext.setRollbackOnly();
-					throw new ControladorException("atencao.required", null," Subcategoria do Imóvel");
-				}
-				
-			Collection colecaoImovelRamoAtivadadeRemovidas = inserirImovelHelper.getColecaoRamoAtividadesRemovidas();
-					
-			if (colecaoImovelRamoAtivadadeRemovidas != null
-					&& !colecaoImovelRamoAtivadadeRemovidas.isEmpty()) {
-				Iterator iColecaoImovelRamoAtivadadeRemovidas = colecaoImovelRamoAtivadadeRemovidas
-						.iterator();
-				ImovelRamoAtividade imovelRamoAtividade = null;
-				while (iColecaoImovelRamoAtivadadeRemovidas.hasNext()) {
-					imovelRamoAtividade = (ImovelRamoAtividade) iColecaoImovelRamoAtivadadeRemovidas.next();
-					if (imovelRamoAtividade.getComp_id().getImovel() != null) {
-						registradorOperacao.registrarOperacao(imovelRamoAtividade);						
-						getControladorUtil().remover(imovelRamoAtividade);
-
-					}
-				}
-			}
-				
-			//Ramos atividades
-			Collection ramosAtividades = inserirImovelHelper.getRamosAtividades();
-			Iterator iteratorRamosAtividades = ramosAtividades.iterator();
-			ImovelRamoAtividade imovelRamoAtividade = null;
-			
-			
-			if(ramosAtividades != null && !ramosAtividades.isEmpty()){
-				while (iteratorRamosAtividades.hasNext()) {
-					
-					 imovelRamoAtividade = (ImovelRamoAtividade) iteratorRamosAtividades.next();
-					 
-					 registradorOperacao.registrarOperacao(imovelRamoAtividade);
-					 if (imovelRamoAtividade.getComp_id().getImovel() == null || 
-							 imovelRamoAtividade.getComp_id().getImovel().equals("") ) {
-					 imovelRamoAtividade.getComp_id().setImovel(inserirImovelHelper.getImovel());
-					 imovelRamoAtividade.setUltimaAlteracao(new Date());
-					 getControladorUtil().inserir(imovelRamoAtividade);			
-					 } else {
-						 getControladorUtil().atualizar(imovelRamoAtividade);
-					 }
-				}	
-			}
-			
-
-
-			/**
-			 * alterado por pedro alexandre dia 17/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
 			Abrangencia abrangencia = new Abrangencia(inserirImovelHelper.getUsuario(), 
 			inserirImovelHelper.getImovel());
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
 
 			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
+				throw new ControladorException("atencao.acesso.negado.abrangencia");
 			} else {
-				// atualiza o imovel na base
 				this.getControladorUtil().atualizar(inserirImovelHelper.getImovel());
 			}
 			
-			FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
-			filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, 
-			inserirImovelHelper.getImovel().getLigacaoEsgotoSituacao().getId()));
-
-			Collection colecaoLigacaoEsgotoSituacao = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
+			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = filtrarLigacaoEsgotoSituacao(inserirImovelHelper.getImovel().getLigacaoEsgotoSituacao().getId());
 			
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
-			
-			if (ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
+			if (ligacaoEsgotoSituacao != null && ligacaoEsgotoSituacao.possuiFaturamentoAtivo()) {
 				FiltroLigacaoEsgoto filtroLigacaoEsgoto = new FiltroLigacaoEsgoto();
-				filtroLigacaoEsgoto.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgoto.ID, 
-				inserirImovelHelper.getImovel().getId()));
+				filtroLigacaoEsgoto.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgoto.ID, inserirImovelHelper.getImovel().getId()));
 				
-				Collection colecaoLigacaoEsgoto = getControladorUtil()
-				.pesquisar(filtroLigacaoEsgoto, LigacaoEsgoto.class.getName());
+				Collection colecaoLigacaoEsgoto = getControladorUtil().pesquisar(filtroLigacaoEsgoto, LigacaoEsgoto.class.getName());
 				
 				if (colecaoLigacaoEsgoto != null && !colecaoLigacaoEsgoto.isEmpty()) {
 					LigacaoEsgoto ligacaoEsgoto = (LigacaoEsgoto) Util.retonarObjetoDeColecao(colecaoLigacaoEsgoto);
@@ -1427,11 +1089,6 @@ public class ControladorImovelSEJB implements SessionBean {
 				}
 			}
 			
-			/**
-			 * fim alteração de controle de abrangência
-			 * *************************
-			 */
-
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -1451,6 +1108,222 @@ public class ControladorImovelSEJB implements SessionBean {
 				throw new ControladorException("erro.sistema", e);
 			}
 		}	
+	}
+
+	private LigacaoEsgotoSituacao filtrarLigacaoEsgotoSituacao(Integer id) throws ControladorException {
+		FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
+		filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, id));
+
+		Collection colecaoLigacaoEsgotoSituacao = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
+		
+		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
+		return ligacaoEsgotoSituacao;
+	}
+
+	private void atualizarRamoAtividadeManterImovel(InserirImovelHelper inserirImovelHelper, RegistradorOperacao registradorOperacao) throws ControladorException {
+		
+		Collection<ImovelRamoAtividade> ramosAtividades = inserirImovelHelper.getRamosAtividades();
+		
+		if(ramosAtividades != null && !ramosAtividades.isEmpty()){
+			
+			for (ImovelRamoAtividade imovelRamoAtividade : ramosAtividades) {
+				
+				 registradorOperacao.registrarOperacao(imovelRamoAtividade);
+				 
+				 if (imovelRamoAtividade.getComp_id().getImovel() == null || imovelRamoAtividade.getComp_id().getImovel().equals("") ) {
+					 imovelRamoAtividade.getComp_id().setImovel(inserirImovelHelper.getImovel());
+					 imovelRamoAtividade.setUltimaAlteracao(new Date());
+					 getControladorUtil().inserir(imovelRamoAtividade);			
+				 } else {
+					 getControladorUtil().atualizar(imovelRamoAtividade);
+				 }
+			}	
+		}
+	}
+
+	private void removerRamoAvididadeManterImovel(RegistradorOperacao registradorOperacao, Collection<ImovelRamoAtividade> colecaoImovelRamoAtivadadeRemovidas)
+			throws ControladorException {
+		
+		if (colecaoImovelRamoAtivadadeRemovidas != null && !colecaoImovelRamoAtivadadeRemovidas.isEmpty()) {
+			for (ImovelRamoAtividade imovelRamoAtividade : colecaoImovelRamoAtivadadeRemovidas) {
+				if (imovelRamoAtividade.getComp_id().getImovel() != null) {
+					registradorOperacao.registrarOperacao(imovelRamoAtividade);						
+					getControladorUtil().remover(imovelRamoAtividade);
+
+				}
+			}
+		}
+	}
+
+	private void atualizarSubcategoriasManterImovel(InserirImovelHelper inserirImovelHelper, RegistradorOperacao registradorOperacao) throws ErroRepositorioException, ControladorException {
+		
+		Collection<ImovelSubcategoria> subcategorias = inserirImovelHelper.getSubcategorias();
+		
+		if (subcategorias != null && !subcategorias.isEmpty()) {
+
+			for (ImovelSubcategoria imovelSubcategoria : subcategorias ) {
+
+				if (imovelSubcategoria.getComp_id().getSubcategoria().getCategoria() != null) {
+
+					Boolean existeCategoria = repositorioImovel
+							.verificarExistenciaTarifaConsumoCategoriaParaCategoriaImovel(
+									inserirImovelHelper.getImovel().getId(),
+									imovelSubcategoria.getComp_id().getSubcategoria().getCategoria().getId());
+
+					if (!existeCategoria) {
+						throw new ControladorException(
+								"atencao.categoria_imovel_sem_tarifa",
+								null, inserirImovelHelper.getImovel()
+										.getId().toString());
+					}
+				}
+				
+				if ( imovelSubcategoria.getComp_id().getImovel() == null || imovelSubcategoria.getComp_id().getImovel().equals("") ) {
+
+					imovelSubcategoria.getComp_id().setImovel(inserirImovelHelper.getImovel());
+					imovelSubcategoria.setUltimaAlteracao(new Date());
+					
+					registradorOperacao.registrarOperacao(imovelSubcategoria);
+					getControladorUtil().inserir(imovelSubcategoria);
+				} else {
+					registradorOperacao.registrarOperacao(imovelSubcategoria);
+					getControladorUtil().atualizar(imovelSubcategoria);
+				}
+			}
+		}else {
+			
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("atencao.required", null," Subcategoria do Imóvel");
+		}
+	}
+
+	private void removerSubcategoriasManterImovel(RegistradorOperacao registradorOperacao, Collection<ImovelSubcategoria> subcategoriasRemovidas) throws ControladorException {
+		if (subcategoriasRemovidas != null && !subcategoriasRemovidas.isEmpty()) {
+			
+			for (ImovelSubcategoria imovelSubcategoria : subcategoriasRemovidas) {
+				if (imovelSubcategoria.getComp_id().getImovel() != null && imovelSubcategoria.getComp_id().getSubcategoria() != null) {
+
+					registradorOperacao.registrarOperacao(imovelSubcategoria);						
+					getControladorUtil().remover(imovelSubcategoria);
+
+				}
+			}
+		}
+	}
+
+	private void atualizarClienteImovelManterImovel(InserirImovelHelper inserirImovelHelper, RegistradorOperacao registradorOperacao) throws ControladorException {
+		
+		Collection<ClienteImovel> clientes = inserirImovelHelper.getClientes();
+		
+		if (clientes != null && !clientes.isEmpty()) {
+			FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+			filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
+			filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_IMOVEL_FIM_RELACAO_MOTIVO);
+			filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, inserirImovelHelper.getImovel().getId()));
+			filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+			
+			Collection<ClienteImovel> colecaoClienteImovel = (Collection<ClienteImovel>) getControladorUtil().pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
+			
+			boolean clienteResponsavel = false;
+			
+			for (ClienteImovel clienteImovel : clientes) {
+				
+				if (clienteImovel.getClienteRelacaoTipo().getId().equals(ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL)){
+					clienteResponsavel = true;
+				}
+				
+				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
+				
+				registradorOperacao.registrarOperacao(clienteImovel);
+				
+				if (existe) {
+					clienteImovel.setImovel(inserirImovelHelper.getImovel());
+					clienteImovel.setUltimaAlteracao(new Date());
+					if (clienteImovel.getDataFimRelacao() == null || clienteImovel.getDataFimRelacao().equals("") ) {
+						getControladorUtil().atualizar(clienteImovel);
+					}
+				} else {
+					clienteImovel.setImovel(inserirImovelHelper.getImovel());
+					clienteImovel.setUltimaAlteracao(new Date());
+					getControladorUtil().inserirOuAtualizar(clienteImovel);
+				}
+			}
+			
+			if (!clienteResponsavel){
+				
+				if(inserirImovelHelper.getImovel().getImovelContaEnvio() == null ||
+						(inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_EMAIL.intValue() &&
+						inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_IMOVEL_E_PARA_EMAIL.intValue()) ){
+					
+					ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
+					imovelContaEnvio.setId(2);
+					
+					inserirImovelHelper.getImovel().setImovelContaEnvio(imovelContaEnvio);
+				}
+				
+				inserirImovelHelper.getImovel().setIndicadorConta(new Short("2"));
+				inserirImovelHelper.getImovel().setIndicadorEmissaoExtratoFaturamento(new Short("2"));
+				
+				getControladorUtil().atualizar(inserirImovelHelper.getImovel());
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void removerClienteImovelManterImovel(InserirImovelHelper inserirImovelHelper, RegistradorOperacao registradorOperacao) throws ControladorException {
+		
+		Collection<ClienteImovel> colecaoClientesImoveis = inserirImovelHelper.getColecaoClientesImoveisRemovidos();
+		if (colecaoClientesImoveis != null && !colecaoClientesImoveis.isEmpty()) {
+			
+			for (ClienteImovel clienteImovel : colecaoClientesImoveis) {
+				FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+				filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
+				filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, inserirImovelHelper.getImovel().getId()));
+				filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+				
+				Collection<ClienteImovel> colecaoClienteImovel = (Collection<ClienteImovel>) getControladorUtil().pesquisar(filtroClienteImovel,ClienteImovel.class.getName());
+				
+				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
+					if (existe) {
+						registradorOperacao.registrarOperacao(clienteImovel);
+						clienteImovel.setDataFimRelacao(new Date());
+						getControladorUtil().atualizar(clienteImovel);
+						
+						if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.RESPONSAVEL.intValue()
+							|| clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.USUARIO.intValue())
+						excluirDebitoAutomaticoClienteImovel(clienteImovel);
+					}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Imovel filtrarImovelPorId(Integer idImovel) throws ControladorException {
+		FiltroImovel filtroImovel = new FiltroImovel();
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
+
+		Collection<Imovel> imoveis = (Collection<Imovel>) getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
+		Imovel imovelNaBase = (Imovel) imoveis.iterator().next();
+		return imovelNaBase;
+	}
+
+	private RegistradorOperacao registrarTransacaoAtualizarImovel(InserirImovelHelper inserirImovelHelper) throws ControladorException {
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+		Operacao.OPERACAO_IMOVEL_ATUALIZAR, inserirImovelHelper.getImovel().getId(), 
+		inserirImovelHelper.getImovel().getId(), new UsuarioAcaoUsuarioHelper(
+		inserirImovelHelper.getUsuario(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
+		registradorOperacao.registrarOperacao(inserirImovelHelper.getImovel());
+		
+		getControladorTransacao().registrarTransacao(inserirImovelHelper.getImovel());
+		return registradorOperacao;
+	}
+
+	private void validarAlteracaoImovel(InserirImovelHelper inserirImovelHelper, Imovel imovelNaBase) throws ControladorException {
+		if (imovelNaBase.getUltimaAlteracao().after(inserirImovelHelper.getImovel().getUltimaAlteracao())) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("atencao.atualizacao.timestamp");
+		}
 	}
 
 	private void verificarAlteracaoImovelEmCampo(InserirImovelHelper imovelHelper) throws ControladorException {
@@ -1555,8 +1428,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 *            Cliente Imovel
 	 * @return true se o cliente imovel existe, false caso contrário
 	 */
-	public boolean verificarExistenciaClienteImovel(
-			Collection colecaoClienteImovel, ClienteImovel clienteImovel) {
+	public boolean verificarExistenciaClienteImovel(Collection colecaoClienteImovel, ClienteImovel clienteImovel) {
 
 		boolean retorno = false;
 		boolean achou = false;
@@ -1565,12 +1437,9 @@ public class ControladorImovelSEJB implements SessionBean {
 			Iterator iColecaoClienteImovel = colecaoClienteImovel.iterator();
 
 			while (iColecaoClienteImovel.hasNext() && !achou) {
-				ClienteImovel clienteImovelNaBase = (ClienteImovel) iColecaoClienteImovel
-						.next();
+				ClienteImovel clienteImovelNaBase = (ClienteImovel) iColecaoClienteImovel.next();
 
-				if (clienteImovel.getId() != null
-						&& clienteImovelNaBase.getId().intValue() == clienteImovel
-								.getId().intValue()) {
+				if (clienteImovel.getId() != null && clienteImovelNaBase.getId().intValue() == clienteImovel.getId().intValue()) {
 					retorno = true;
 					achou = true;
 				}
@@ -16682,6 +16551,31 @@ public class ControladorImovelSEJB implements SessionBean {
 			return repositorioImovel.obterImovelCobrancaSituacao(idImovelSituacaoCobranca);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public DebitoAutomatico pesquisarDebitoAutomaticoAtivoImovel(Integer idImovel) throws ControladorException {
+
+		DebitoAutomatico debitoAutomatico = null;
+
+		try {
+			debitoAutomatico = this.repositorioImovel.pesquisarDebitoAutomaticoAtivoImovel(idImovel);
+
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+		return debitoAutomatico;
+	}
+	
+	public void excluirDebitoAutomaticoClienteImovel(ClienteImovel clienteImovel) throws ControladorException {
+		
+		DebitoAutomatico debitoAutomatico = this.pesquisarDebitoAutomaticoAtivoImovel(clienteImovel.getImovel().getId());
+		
+		if (debitoAutomatico != null ) {
+			debitoAutomatico.setDataExclusao(new Date());
+			getControladorUtil().atualizar(debitoAutomatico);
 		}
 	}
 }
