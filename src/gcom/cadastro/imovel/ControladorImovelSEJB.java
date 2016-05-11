@@ -16572,9 +16572,10 @@ public class ControladorImovelSEJB implements SessionBean {
 	public void excluirDebitoAutomaticoClienteImovel(ClienteImovel clienteImovel) throws ControladorException {
 		
 		DebitoAutomatico debitoAutomatico = this.pesquisarDebitoAutomaticoAtivoImovel(clienteImovel.getImovel().getId());
-		debitoAutomatico.setDataExclusao(new Date());
 		
-		getControladorUtil().atualizar(debitoAutomatico);
-		
+		if (debitoAutomatico != null ) {
+			debitoAutomatico.setDataExclusao(new Date());
+			getControladorUtil().atualizar(debitoAutomatico);
+		}
 	}
 }
