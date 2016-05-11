@@ -1,7 +1,10 @@
 package gcom.cadastro.imovel.bean;
 
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoEsgotamento;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelRamoAtividade;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.io.Serializable;
@@ -19,19 +22,19 @@ public class InserirImovelHelper implements Serializable {
 
 	private Imovel imovel;
 	
-	private Collection subcategorias;
+	private Collection<ImovelSubcategoria> subcategorias;
 	
-	private Collection ramosAtividades;
+	private Collection<ImovelRamoAtividade> ramosAtividades;
 	
 	private Collection endereco;
 	
-	private Collection clientes;
+	private Collection<ClienteImovel> clientes;
 	
 	private Usuario usuario;
 	
 	private LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento;
 	
-	private Collection colecaoClientesImoveisRemovidos;
+	private Collection<ClienteImovel> colecaoClientesImoveisRemovidos;
 	
 	private Collection colecaoImovelSubcategoriasRemovidas;
 	
@@ -54,11 +57,11 @@ public class InserirImovelHelper implements Serializable {
 	}
 	
 
-	public Collection getClientes() {
+	public Collection<ClienteImovel> getClientes() {
 		return clientes;
 	}
 
-	public void setClientes(Collection clientes) {
+	public void setClientes(Collection<ClienteImovel> clientes) {
 		this.clientes = clientes;
 	}
 
@@ -87,11 +90,11 @@ public class InserirImovelHelper implements Serializable {
 		this.ligacaoEsgotoEsgotamento = ligacaoEsgotoEsgotamento;
 	}
 
-	public Collection getSubcategorias() {
+	public Collection<ImovelSubcategoria> getSubcategorias() {
 		return subcategorias;
 	}
 
-	public void setSubcategorias(Collection subcategorias) {
+	public void setSubcategorias(Collection<ImovelSubcategoria> subcategorias) {
 		this.subcategorias = subcategorias;
 	}
 
@@ -103,12 +106,11 @@ public class InserirImovelHelper implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public Collection getColecaoClientesImoveisRemovidos() {
+	public Collection<ClienteImovel> getColecaoClientesImoveisRemovidos() {
 		return colecaoClientesImoveisRemovidos;
 	}
 
-	public void setColecaoClientesImoveisRemovidos(
-			Collection colecaoClientesImoveisRemovidos) {
+	public void setColecaoClientesImoveisRemovidos(Collection<ClienteImovel> colecaoClientesImoveisRemovidos) {
 		this.colecaoClientesImoveisRemovidos = colecaoClientesImoveisRemovidos;
 	}
 
@@ -121,11 +123,11 @@ public class InserirImovelHelper implements Serializable {
 		this.colecaoImovelSubcategoriasRemovidas = colecaoImovelSubcategoriasRemovidas;
 	}
 
-	public Collection getRamosAtividades() {
+	public Collection<ImovelRamoAtividade> getRamosAtividades() {
 		return ramosAtividades;
 	}
 
-	public void setRamosAtividades(Collection ramosAtividades) {
+	public void setRamosAtividades(Collection<ImovelRamoAtividade> ramosAtividades) {
 		this.ramosAtividades = ramosAtividades;
 	}
 

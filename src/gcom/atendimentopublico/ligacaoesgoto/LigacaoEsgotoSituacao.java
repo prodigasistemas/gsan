@@ -183,4 +183,8 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 	public void setIndicadorExistenciaRede(Short indicadorExistenciaRede) {
 		this.indicadorExistenciaRede = indicadorExistenciaRede;
 	}
+	
+	public boolean possuiFaturamentoAtivo() {
+		return this.indicadorFaturamentoSituacao.intValue() == LigacaoEsgotoSituacao.FATURAMENTO_ATIVO.intValue();
+	}
 }
