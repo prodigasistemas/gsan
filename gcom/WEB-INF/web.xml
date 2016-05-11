@@ -466,6 +466,7 @@
 				/WEB-INF/cobranca/struts-config-GerarAvisoDeDebito.xml,
 				/WEB-INF/faturamento/struts-config-GerarFaturaClienteResponsavel.xml,
 				/WEB-INF/faturamento/struts-config-GerarFaturaClienteResponsavel.xml,
+				/WEB-INF/faturamento/struts-config-RelatorioAgenciaReguladora.xml,
 				/WEB-INF/cobranca/struts-config-DebitoCreditoDadosSelecaoExtrato.xml,
 				/WEB-INF/micromedicao/struts-config-GerarDadosParaLeitura.xml,
 				/WEB-INF/micromedicao/struts-config-ManterRoteiroEmpresa.xml,

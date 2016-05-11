@@ -14,62 +14,29 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class Agencia implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String codigoAgencia;
-
-    /** persistent field */
     private String nomeAgencia;
-
-    /** persistent field */
     private String numeroTelefone;
-
-    /** persistent field */
     private String numeroRamal;
-
-    /** nullable persistent field */
     private String numeroImovel;
-
-    /** nullable persistent field */
     private String complementoEndereco;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private String numeroFax;
-
-    /** nullable persistent field */
     private String email;
-
-    /** persistent field */
-    private Bairro bairro;
     
+    private Bairro bairro;
     private LogradouroCep logradouroCep;
- 	
  	private LogradouroBairro logradouroBairro;
-
-    /** persistent field */
-    private gcom.arrecadacao.banco.Banco banco;
-
-    /** persistent field */
+    private Banco banco;
     private Logradouro logradouro;
-
-    /** persistent field */
     private EnderecoReferencia enderecoReferencia;
-
-    /** persistent field */
     private Cep cep;
 
-    /** full constructor */
     public Agencia(String codigoAgencia, String nomeAgencia, String numeroTelefone, String numeroRamal, String numeroImovel, String complementoEndereco, Date ultimaAlteracao, String numeroFax, String email, Bairro bairro, LogradouroCep logradouroCep, LogradouroBairro logradouroBairro, gcom.arrecadacao.banco.Banco banco, Logradouro logradouro, EnderecoReferencia enderecoReferencia, Cep cep) {
         this.codigoAgencia = codigoAgencia;
         this.nomeAgencia = nomeAgencia;
@@ -89,12 +56,9 @@ public class Agencia implements Serializable {
         this.cep = cep;
     }
 
-  
-	/** default constructor */
     public Agencia() {
     }
 
-    /** minimal constructor */
     public Agencia(String nomeAgencia, String numeroTelefone, String numeroRamal, Bairro bairro, gcom.arrecadacao.banco.Banco banco, Logradouro logradouro, EnderecoReferencia enderecoReferencia, Cep cep) {
         this.nomeAgencia = nomeAgencia;
         this.numeroTelefone = numeroTelefone;
@@ -232,43 +196,22 @@ public class Agencia implements Serializable {
             .toString();
     }
 
-
-	/**
-	 * @return Retorna o campo logradouroBairro.
-	 */
 	public LogradouroBairro getLogradouroBairro() {
 		return logradouroBairro;
 	}
 
-
-	/**
-	 * @param logradouroBairro O logradouroBairro a ser setado.
-	 */
 	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
 		this.logradouroBairro = logradouroBairro;
 	}
 
-
-	/**
-	 * @return Retorna o campo logradouroCep.
-	 */
 	public LogradouroCep getLogradouroCep() {
 		return logradouroCep;
 	}
 
-
-	/**
-	 * @param logradouroCep O logradouroCep a ser setado.
-	 */
 	public void setLogradouroCep(LogradouroCep logradouroCep) {
 		this.logradouroCep = logradouroCep;
 	}
 	
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatado() {
 		String endereco = null;
 
@@ -367,11 +310,4 @@ public class Agencia implements Serializable {
 				new ParametroSimples(FiltroAgencia .ID, this.getId()));
 		return filtroAgencia; 
 	}
-	
-	
-	
-
 }    
-
-
-   

@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class Municipio extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
@@ -18,44 +17,21 @@ public class Municipio extends ObjetoTransacao {
 		return retorno;
 	}
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String nome;
-
-    /** nullable persistent field */
     private Integer cepInicio;
-
-    /** nullable persistent field */
     private Integer cepFim;
-
-    /** nullable persistent field */
     private Short ddd;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
-    private gcom.cadastro.geografico.Microrregiao microrregiao;
-
-    /** persistent field */
-    private gcom.cadastro.geografico.RegiaoDesenvolvimento regiaoDesenvolvimento;
-
-    /** persistent field */
-    private gcom.cadastro.geografico.UnidadeFederacao unidadeFederacao;
-
     private Date dataConcessaoInicio;
-    
     private Date dataConcessaoFim;
-    
     private String codigoIbge;
-    
-    /** nullable persistent field */
     private Short indicadorRelacaoQuadraBairro;
+
+    private Microrregiao microrregiao;
+    private RegiaoDesenvolvimento regiaoDesenvolvimento;
+    private UnidadeFederacao unidadeFederacao;
     
     public Date getDataConcessaoFim() {
         return dataConcessaoFim;
@@ -73,7 +49,6 @@ public class Municipio extends ObjetoTransacao {
         this.dataConcessaoInicio = dataConcessaoInicio;
     }
 
-    /** full constructor */
     public Municipio(
             String nome,
             Integer cepInicio,
@@ -96,7 +71,6 @@ public class Municipio extends ObjetoTransacao {
         this.codigoIbge = codigoIbge;
     }
 
-    /** default constructor */
     public Municipio() {
     }
 
@@ -104,7 +78,6 @@ public class Municipio extends ObjetoTransacao {
     	this.id = id;
     }
     
-    /** minimal constructor */
     public Municipio(
             gcom.cadastro.geografico.Microrregiao microrregiao,
             gcom.cadastro.geografico.RegiaoDesenvolvimento regiaoDesenvolvimento,

@@ -38,4 +38,8 @@ public class RelatorioUtil {
 		
 		return Util.salvarArquivoDeURL(url, relatorio.getName());
 	}
+	
+	public void setOmitirTotalGeral(boolean omitir) {
+		relatorio.setOmitirTotalGeral(omitir);
+	}
 }
