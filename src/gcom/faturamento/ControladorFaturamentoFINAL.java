@@ -1594,17 +1594,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         
         try {
             if (imovel.getFaturamentoSituacaoTipo() != null) {
-                
                 Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = repositorioFaturamentoSituacao.faturamentosHistoricoVigentesPorImovel(imovel.getId());
                 FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
                 
                 FaturamentoSituacaoTipo tipo = repositorioFaturamentoSituacaoTipo.situacaoTipoDoImovel(imovel.getId());
                 
-                if ((faturamentoSituacaoHistorico != null 
-                        && anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() 
-                        && anoMesFaturamento <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())
-                        && tipo.paralisacaoFaturamentoAtivo()  
-                        && imovel.faturamentoAguaValido()) {
+                if ((faturamentoSituacaoHistorico != null && faturamentoSituacaoHistorico.dentroIntervaloFaturamento(anoMesFaturamento))
+                     && tipo.paralisacaoFaturamentoAtivo()  
+                     && imovel.faturamentoAguaValido()) {
                     faturar = false;
                 }
             }
@@ -1612,15 +1609,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
             throw new ControladorException("Erro ao verificar se imovel deve faturar", e);
         }
 
-
         return faturar;
     }
 	
-	/**
-	 * Determina os dados do faturamento do imóvel.
-	 * [UC0113] - Faturar Grupo de Faturamento
-	 * [SB0001 - Determinar Faturamento para o Imóvel]
-	 */
 	@SuppressWarnings("unchecked")
 	public void determinarFaturamentoImovel(Imovel imovel,
 			boolean gerarAtividadeGrupoFaturamento,
@@ -25933,6 +25924,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setVolumeMinimoFaturamento((Integer) dados[13]);
 					imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 				}
+				
+				//Situacao Especial de Faturamento
+				if (dados[14] != null) { // 14
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+					faturamentoSituacaoTipo.setId(((Integer) dados[14]));
+					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+				}
 
 				imoveis.add(imovel);
 
@@ -26139,6 +26137,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getNumeroConsumoFaturadoMes();
 							consumoTipoEsgoto = consumoHistoricoEsgoto
 									.getConsumoTipo();
+						}
+						
+						if(imovel.getFaturamentoSituacaoTipo()!=null && 
+								   imovel.getFaturamentoSituacaoTipo().getId().intValue()==FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA.intValue()){
+								   continue;
 						}
 
 						if (!this.permiteFaturamentoParaAgua(

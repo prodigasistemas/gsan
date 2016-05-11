@@ -358,5 +358,10 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
 	public Filtro retornaFiltroRegistroOperacao() {
 		Filtro filtro = retornaFiltro();
 		return filtro;
-	}	
+	}
+	
+	public boolean dentroIntervaloFaturamento(Integer anoMesFaturamento){
+	    return anoMesFaturamento >= this.getAnoMesFaturamentoSituacaoInicio() 
+        && anoMesFaturamento <= this.getAnoMesFaturamentoSituacaoFim();
+	}
 }
