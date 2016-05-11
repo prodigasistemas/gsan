@@ -218,7 +218,6 @@ import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gerencial.micromedicao.TarefaBatchGerarResumoHidrometro;
 import gcom.integracao.ControladorIntegracaoLocal;
 import gcom.integracao.ControladorIntegracaoLocalHome;
-import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
@@ -272,8 +271,6 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-
-import org.apache.commons.beanutils.BeanComparator;
 
 /**
  * Controlador que possui os metodos de negocio de toda a parte que da suporte
@@ -401,53 +398,26 @@ public class ControladorBatchSEJB implements SessionBean {
 						.inserir(funcionalidadeIniciada));
 
 				// Seta os parametros da funcionalidadeIniciada
-
 				// ----------------------------------------------------------
 				// Lista dos possiveis processos eventuais ou mensais
 				// ----------------------------------------------------------
 				try {
-
-					switch (funcionalidadeIniciada.getProcessoFuncionalidade()
-							.getFuncionalidade().getId()) {
+					switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
 
 					case Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO:
 						TarefaBatchGerarResumoDiarioNegativacao gerarResumoDiarioNegativacao = new TarefaBatchGerarResumoDiarioNegativacao(
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						Collection colSetores = getControladorSpcSerasa()
-								.consultarSetorParaGerarResumoDiarioNegativacao();
+						Collection rotasResumoDiarioNegativacao = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
 
-						// [UC0688] Gerar Resumo Diário da Negativação.
-						// -------------------------------------------------------------------------------------------
-						// Alterado por : Yara Taciane - data : 08/07/2008
-						// Analista : Fátima Sampaio
-						// -------------------------------------------------------------------------------------------
+						gerarResumoDiarioNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotasResumoDiarioNegativacao);
 
-						// 2.0 O sistema exclui o resumo diário das negativações
-						// da penúltima execução
-						// (exclui as linhas da tabela RESUMO_NEGATIVACAO com
-						// RNEG_NNEXECUCAORESUMONEGATIVACAO=PARM_NNEXECUCAORESUMONEGATIVACAO
-						// da tabela SISTEMA_PARAMETROS menos um.
-						// comantado por Vivianne Sousa 03/11/2009 - adicionado
-						// no Gerar Resumo Negativação
-						// Integer penultimaExecucaoResumo =
-						// sistemaParametros.getNumeroExecucaoResumoNegativacao()
-						// - 1;
-						// getControladorSpcSerasa().apagarResumoNegativacao(penultimaExecucaoResumo);
-
-						gerarResumoDiarioNegativacao
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colSetores);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(gerarResumoDiarioNegativacao));
-
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoDiarioNegativacao));
+						
 						getControladorUtil().atualizar(funcionalidadeIniciada);
+						
+						System.out.println("INICIANDO FUNCIONALIDADE GERAR_RESUMO_DIARIO_NEGATIVACAO");
 
 						break;
 					case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
@@ -573,7 +543,6 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 
-					/** Yara T. Souza */
 					case Funcionalidade.ATUALIZAR_NUMERO_EXECUCAO_RESUMO_NEGATIVACAO:
 
 						TarefaBatchAtualizarNumeroExecucaoResumoNegativacao atualizarNumeroExecucaoResumoNegativacao = new TarefaBatchAtualizarNumeroExecucaoResumoNegativacao(
@@ -590,24 +559,18 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 
-					/** Yara T. Souza */
 					case Funcionalidade.GERAR_MOVIMENTO_EXCLUSAO_NEGATIVACAO:
 
 						TarefaBatchGerarMovimentoExclusaoNegativacao gerarMovimentoExclusaoNegativacao = new TarefaBatchGerarMovimentoExclusaoNegativacao(
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						// Seta o objeto para ser serializado no banco,
-						// onde depois seria executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(gerarMovimentoExclusaoNegativacao));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoExclusaoNegativacao));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
 
-					/** Yara T. Souza */
 					case Funcionalidade.GERAR_MOVIMENTO_RETORNO_NEGATIVACAO:
 
 						TarefaBatchGerarMovimentoRetornoNegativacao gerarMovimentoRetornoNegativacao = new TarefaBatchGerarMovimentoRetornoNegativacao(
@@ -3126,19 +3089,11 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						Collection colLocalidades = getControladorSpcSerasa()
-								.consultarLocalidadeParaDeterminarConfirmacaoDaNegativacao();
+						Collection colLocalidades = getControladorSpcSerasa().consultarLocalidadeParaDeterminarConfirmacaoDaNegativacao();
 
-						determinarConfirmacaoDaNegativacao
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colLocalidades);
+						determinarConfirmacaoDaNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidades);
 
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(determinarConfirmacaoDaNegativacao));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(determinarConfirmacaoDaNegativacao));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
