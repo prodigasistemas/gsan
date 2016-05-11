@@ -45,6 +45,7 @@ import gcom.util.ErroRepositorioException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Declaração pública de serviços do Session Bean de ControladorCliente
@@ -1891,5 +1892,7 @@ public interface ControladorAtendimentoPublicoLocal extends
 	 */
 	public Collection<RamalLocalInstalacao> pesquisarRamalLocalInstalacao()
 			throws ControladorException;
+	
+	public List<AgenciaReguladora> obterAgenciasReguladorasAtivas() throws ControladorException;
 	
 }
