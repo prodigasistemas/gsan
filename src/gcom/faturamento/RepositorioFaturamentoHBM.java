@@ -60607,17 +60607,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ErroRepositorioException {
+	public Collection pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ErroRepositorioException {
 	    List<RelatorioAgenciaReguladoraDTO> retorno = new ArrayList<RelatorioAgenciaReguladoraDTO>();
 	    Collection helper = new ArrayList();
 
 	    Session session = HibernateUtil.getSession();
-	    String consulta;
+	    String consultaBase;
+	    String consulta1;
+	    String consulta2;
 	    Query query = null;
 	    
 		try {
-			consulta = "SELECT m.muni_nmmunicipio as municipio, l.loca_nmlocalidade as localidade, laar_vlagua as agua, laar_vlesgoto as esgoto, laar_tipolancamento as tipoLancamento, ar.areg_percrepasse as percentualRepasse "
-					+ "FROM faturamento.lanc_agencia_reguladora lar "
+			consulta1 = "SELECT l.loca_nmlocalidade as localidade, sum(laar_vlagua) as agua, sum(laar_vlesgoto) as esgoto, 'Faturado' as tipoLancamento, max(ar.areg_percrepasse) as percentualRepasse ";
+			consulta2 = "SELECT l.loca_nmlocalidade as localidade, sum(laar_vlagua) as agua, sum(laar_vlesgoto) as esgoto, 'Cancelado' as tipoLancamento, max(ar.areg_percrepasse) as percentualRepasse ";
+			consultaBase = " FROM faturamento.lanc_agencia_reguladora lar "
 					+ "inner join cadastro.setor_comercial sc on sc.stcm_id = lar.stcm_id "
 					+ "inner join cadastro.municipio m on m.muni_id = sc.muni_id "
 					+ "inner join cadastro.localidade l on l.loca_id = lar.loca_id "
@@ -60627,61 +60630,44 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "and laar_amreferencia = :anoMesReferencia "
 					+ "and :data >= ar.areg_dtiniciovigencia "
 					+ "and (:data >= ar.areg_dtfimvigencia or ar.areg_dtfimvigencia is null) "
-					+ "and agmun.areg_id = :idAgencia";
+					+ "and agmun.areg_id = :idAgencia ";
 			
-			query = session.createSQLQuery(consulta)
-					.addScalar("municipio", Hibernate.STRING)
+			consulta1 += consultaBase +
+					" and laar_tipolancamento in (:aguaEsgoto, :inclusoesRefaturamento) "
+					+ "group by l.loca_nmlocalidade "
+					+ "order by 2";
+			
+			query = session.createSQLQuery(consulta1)
 			        .addScalar("localidade", Hibernate.STRING)
 			        .addScalar("agua", Hibernate.BIG_DECIMAL)
 			        .addScalar("esgoto", Hibernate.BIG_DECIMAL)
-			        .addScalar("tipoLancamento", Hibernate.INTEGER)
+			        .addScalar("tipoLancamento", Hibernate.STRING)
 			        .addScalar("percentualRepasse", Hibernate.INTEGER)
 			        .setInteger("anoMesReferencia", anoMes)
 					.setInteger("idAgencia", idAgencia)
-					.setDate("data", new Date());
-			
+					.setDate("data", new Date())
+					.setInteger("aguaEsgoto", LancamentoAgenciaReguladora.AGUA_ESGOTO)
+					.setInteger("inclusoesRefaturamento", LancamentoAgenciaReguladora.INCLUSOES_POR_REFATURAMENTO);
 			
 			helper = query.list();
 			
-			BigDecimal valorAguaNormal = new BigDecimal(0);
-	        BigDecimal valorEsgotoNormal = new BigDecimal(0);
-
-	        BigDecimal valorAguaCancelada = new BigDecimal(0);
-	        BigDecimal valorEsgotoCancelada = new BigDecimal(0);
-	        Integer percentualRepasse = null;
+			consulta2 += consultaBase +
+					" and laar_tipolancamento in (:cancelamentoRefaturamento) "
+					+ "group by l.loca_nmlocalidade "
+					+ "order by 2";
 			
-			for (Object obj : helper) {
-		        Object[] arrayObj = (Object[]) obj;
-		        
-		        if (((Integer)arrayObj[4] == 1 || (Integer)arrayObj[4] == 2)) {
-		            valorAguaNormal = valorAguaNormal.add((BigDecimal) arrayObj[2]);
-		            valorEsgotoNormal = valorEsgotoNormal.add((BigDecimal) arrayObj[3]);
-		          } else {
-		            valorAguaCancelada = valorAguaCancelada.add((BigDecimal) arrayObj[2]);
-		            valorEsgotoCancelada = valorEsgotoCancelada.add((BigDecimal) arrayObj[3]);
-		          }
-		        
-		        percentualRepasse = (Integer)arrayObj[5]; 
-		      }
+			query = session.createSQLQuery(consulta2)
+			        .addScalar("localidade", Hibernate.STRING)
+			        .addScalar("agua", Hibernate.BIG_DECIMAL)
+			        .addScalar("esgoto", Hibernate.BIG_DECIMAL)
+			        .addScalar("tipoLancamento", Hibernate.STRING)
+			        .addScalar("percentualRepasse", Hibernate.INTEGER)
+			        .setInteger("anoMesReferencia", anoMes)
+					.setInteger("idAgencia", idAgencia)
+					.setDate("data", new Date())
+					.setInteger("cancelamentoRefaturamento", LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
 			
-			double percentual = ((double)percentualRepasse)/100;
-			BigDecimal valorFaturadoAgua = valorAguaNormal.subtract(valorAguaCancelada);
-			BigDecimal valorFaturadoEsgoto = valorEsgotoNormal.subtract(valorEsgotoCancelada);
-			BigDecimal valorPercentualAgua = valorFaturadoAgua.multiply(new BigDecimal(percentual));
-			BigDecimal valorPercentualEsgoto = valorFaturadoEsgoto.multiply(new BigDecimal(percentual));
-			BigDecimal valorRepasseAgua = valorFaturadoAgua.subtract(valorAguaCancelada);
-			BigDecimal valorRepasseEsgoto = valorFaturadoEsgoto.subtract(valorEsgotoCancelada);
-			
-			RelatorioAgenciaReguladoraDTO faturadoDto = new RelatorioAgenciaReguladoraDTO("", valorFaturadoAgua, valorFaturadoEsgoto, "1. Faturado", valorFaturadoAgua.add(valorFaturadoEsgoto));
-			RelatorioAgenciaReguladoraDTO canceladoDto = new RelatorioAgenciaReguladoraDTO("", valorAguaCancelada, valorEsgotoCancelada, "2. Cancelado", valorAguaCancelada.add(valorEsgotoCancelada));
-			RelatorioAgenciaReguladoraDTO repasseDto = new RelatorioAgenciaReguladoraDTO("", valorRepasseAgua, valorRepasseEsgoto, "3. Valor base repasse", valorRepasseAgua.add(valorRepasseEsgoto));
-			RelatorioAgenciaReguladoraDTO percentualDto = new RelatorioAgenciaReguladoraDTO("", valorPercentualAgua, valorPercentualEsgoto, "4. Repasse (" + percentualRepasse + "%)", valorPercentualAgua.add(valorPercentualEsgoto));
-	        
-	        
-			retorno.add(canceladoDto);
-	        retorno.add(percentualDto);
-	        retorno.add(faturadoDto);
-	        retorno.add(repasseDto);
+			helper.addAll(query.list());
 			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -60689,7 +60675,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	      HibernateUtil.closeSession(session);
 	    }
 		
-		return retorno;
+		return helper;
 	}
 	
 	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,
@@ -60845,6 +60831,163 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// retorna o resumo de faturamento criado
 		return retorno;
 
+	}
+	
+	public BigDecimal calcularDiferencaValorAguaCanceladaRetificacao(int anoMesReferencia,int idLocalidade) throws ErroRepositorioException {
+			BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta;
+
+		try {
+			
+			consulta = 
+					"select sum (col_0) valorCanceladoAgua from ( "
+					+"select loca_id, sum(ctcg.ctcg_vlagua) as col_0 "
+					+"from faturamento.conta_categoria ctcg "
+					+"inner join faturamento.conta cnta on ctcg.cnta_id=cnta.cnta_id "
+					+"where cnta.cnta_amreferenciacontabil = :anoMesFaturamento "
+					+"and cnta.cnta_amreferenciaconta >= 201511 " 
+					+"and (cnta.dcst_idatual = :debitoCreditoSituacaoCancelada or cnta.dcst_idanterior = :debitoCreditoSituacaoCancelada) "
+					+"and cnta.loca_id = :idLocalidade "
+					+"group by 1 "
+					+"union all "
+					+"select c4.loca_id, sum( coalesce(cg4.ctcg_vlagua,0) - coalesce(cg1.ctcg_vlagua,0)) as valorCanceladoAgua "
+					+"from faturamento.conta c4 "
+					+"inner join faturamento.conta_categoria cg4 on c4.cnta_id = cg4.cnta_id  "
+					+"inner join faturamento.conta c1 on (c1.imov_id = c4.imov_id "
+					+"and c1.cnta_amreferenciaconta = c4.cnta_amreferenciaconta "
+					+"and c4.dcst_idatual = :debitoCreditoSituacaoCanceladaPorRetificacao "
+					+"and (c1.dcst_idatual = :debitoCreditoSituacaoRetificada or c1.dcst_idanterior = :debitoCreditoSituacaoRetificada) "
+					+"and c4.cnta_amreferenciacontabil = :anoMesFaturamento "
+					+"and c4.cnta_amreferenciaconta >= 201511 "
+					+"and c4.loca_id = :idLocalidade) "
+					+"left join faturamento.conta_categoria cg1 on (c1.cnta_id = cg1.cnta_id and cg1.catg_id = cg4.catg_id and cg1.scat_id = cg4.scat_id) "
+					+"where coalesce(cg4.ctcg_vlagua,0) > coalesce(cg1.ctcg_vlagua,0) "
+					+"group by 1 ) as canc_agua ";
+
+
+			// executa o hql
+			retorno = (BigDecimal) session.createSQLQuery(consulta).
+				addScalar("valorCanceladoAgua", Hibernate.BIG_DECIMAL).
+				setInteger("anoMesFaturamento", anoMesReferencia).
+				setInteger("idLocalidade", idLocalidade).
+				setInteger("debitoCreditoSituacaoCancelada", DebitoCreditoSituacao.CANCELADA).
+				setInteger("debitoCreditoSituacaoRetificada", DebitoCreditoSituacao.RETIFICADA).
+				setInteger("debitoCreditoSituacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO).
+				uniqueResult();
+			
+			if(retorno == null){
+				retorno = BigDecimal.ZERO;
+			}
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public BigDecimal calcularDiferencaValorEsgotoCanceladaRetificacao(int anoMesReferencia,int idLocalidade) throws ErroRepositorioException {
+		BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+	
+		// cria a variável que vai conter o hql
+		String consulta;
+	
+		try {
+			
+			consulta = 
+					"select sum (col_0) valorCanceladoEsgoto from ( "
+					+"select loca_id, sum(ctcg.ctcg_vlesgoto) as col_0 "
+					+"from faturamento.conta_categoria ctcg "
+					+"inner join faturamento.conta cnta on ctcg.cnta_id=cnta.cnta_id "
+					+"where cnta.cnta_amreferenciacontabil = :anoMesFaturamento "
+					+"and cnta.cnta_amreferenciaconta >= 201511 " 
+					+"and (cnta.dcst_idatual = :debitoCreditoSituacaoCancelada or cnta.dcst_idanterior = :debitoCreditoSituacaoCancelada) "
+					+"and cnta.loca_id = :idLocalidade "
+					+"group by 1 "
+					+"union all "
+					+"select c4.loca_id, sum( coalesce(cg4.ctcg_vlesgoto,0) - coalesce(cg1.ctcg_vlesgoto,0)) as valorCanceladoAgua "
+					+"from faturamento.conta c4 "
+					+"inner join faturamento.conta_categoria cg4 on c4.cnta_id = cg4.cnta_id  "
+					+"inner join faturamento.conta c1 on (c1.imov_id = c4.imov_id "
+					+"and c1.cnta_amreferenciaconta = c4.cnta_amreferenciaconta "
+					+"and c4.dcst_idatual = :debitoCreditoSituacaoCanceladaPorRetificacao "
+					+"and (c1.dcst_idatual = :debitoCreditoSituacaoRetificada or c1.dcst_idanterior = :debitoCreditoSituacaoRetificada) "
+					+"and c4.cnta_amreferenciacontabil = :anoMesFaturamento "
+					+"and c4.cnta_amreferenciaconta >= 201511 "
+					+"and c4.loca_id = :idLocalidade) "
+					+"left join faturamento.conta_categoria cg1 on (c1.cnta_id = cg1.cnta_id and cg1.catg_id = cg4.catg_id and cg1.scat_id = cg4.scat_id) "
+					+"where coalesce(cg4.ctcg_vlesgoto,0) > coalesce(cg1.ctcg_vlesgoto,0) "
+					+"group by 1 ) as canc_esgoto ";
+	
+	
+			// executa o hql
+			retorno = (BigDecimal) session.createSQLQuery(consulta).
+				addScalar("valorCanceladoEsgoto", Hibernate.BIG_DECIMAL).
+				setInteger("anoMesFaturamento", anoMesReferencia).
+				setInteger("idLocalidade", idLocalidade).
+				setInteger("debitoCreditoSituacaoCancelada", DebitoCreditoSituacao.CANCELADA).
+				setInteger("debitoCreditoSituacaoRetificada", DebitoCreditoSituacao.RETIFICADA).
+				setInteger("debitoCreditoSituacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO).
+				uniqueResult();
+			
+			if(retorno == null){
+				retorno = BigDecimal.ZERO;
+			}
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+	
+		return retorno;
+	}
+	
+	public void excluirLancamentoAgenciaReguladoraPorAnoMesArrecadacaoPorLocalidade(
+			int anoMesReferenciaFaturamento, Integer idLocalidade)
+			throws ErroRepositorioException {
+
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// Cria a variável que vai conter o hql
+		String consulta;
+
+		try {
+
+			// Constroi o hql para remover os lancamentos de agencia reguladora
+			// referentes ao ano/mês de faturamento atual
+			consulta = "delete LancamentoAgenciaReguladora lar "
+					+ " where lar.anoMesReferencia = :anoMesReferenciaFaturamento "
+					+ " and lar.localidade.id = :idLocalidade";
+
+			// Executa o hql
+			session.createQuery(consulta).setInteger(
+					"anoMesReferenciaFaturamento", anoMesReferenciaFaturamento)
+					.setInteger("idLocalidade", idLocalidade).executeUpdate();
+
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
 	}
 
 	

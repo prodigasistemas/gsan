@@ -17,6 +17,7 @@
 		<property name="tipoLancamento" type="java.lang.Integer" column="laar_tipolancamento" length="1"/>
 		<property name="valorAgua" type="java.math.BigDecimal" column="laar_vlagua" length="13"/>
 		<property name="valorEsgoto" type="java.math.BigDecimal" column="laar_vlesgoto" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="laar_tmultimaalteracao" length="8"/>
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to Localidade -->
 		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">

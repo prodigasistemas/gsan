@@ -343,6 +343,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
+import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -15127,6 +15128,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				repositorioFaturamento
 						.excluirResumoFaturamentoPorAnoMesArrecadacaoPorLocalidade(
 								anoMesFaturamento, idLocalidade);
+				
+				repositorioFaturamento
+						.excluirLancamentoAgenciaReguladoraPorAnoMesArrecadacaoPorLocalidade(
+								anoMesFaturamento, idLocalidade);
 
 				Integer idGerenciaRegional = this.getControladorLocalidade()
 						.pesquisarIdGerenciaParaLocalidade(idLocalidade);
@@ -15270,7 +15275,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraNormais(idLocalidade, anoMesFaturamento, (BigDecimal) arrayValoresAguaEsgoto[0], (BigDecimal) arrayValoresAguaEsgoto[1], LancamentoAgenciaReguladora.AGUA_ESGOTO);
 					lancamentosAgenciaReguladora.add(lar);
 				}
-
+				
+				/**
+				 * Adiciona na tabela faturamento.lanc_agencia_reguladora
+				 * registros do tipo 900.
+				 * A logica foi colocada fora do laco de categoria, pois eh considerada apenas a localidade
+				 * e, se fosse colocada dentro do laco, geraria registros duplicados.
+				 */
+				LancamentoAgenciaReguladora lancAgReg = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
+				if (lancAgReg.getValorAgua() != BigDecimal.ZERO || lancAgReg.getValorEsgoto() != BigDecimal.ZERO) {
+					lancamentosAgenciaReguladora.add(lancAgReg);
+				}
+				
+				/**
+				 * Adiciona na tabela faturamento.lanc_agencia_reguladora
+				 * registros do tipo 510.
+				 * A logica foi colocada fora do laco de categoria, pois eh considerada apenas a localidade
+				 * e, se fosse colocada dentro do laco, geraria registros duplicados.
+				 */
+				LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.INCLUSOES_POR_REFATURAMENTO);
+				if (lar.getValorAgua() != BigDecimal.ZERO || lar.getValorEsgoto() != BigDecimal.ZERO) {
+					lancamentosAgenciaReguladora.add(lar);
+				}
+				
 				for (Categoria categoria : colecaoCategorias) {
 
 					// receita bruta
@@ -16557,13 +16584,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									resumoFaturamentoTemporario
 											.getValorItemFaturamento());
 
-					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-						// Monta LancamentoAgenciaReguladora
-						LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
-						lancamentosAgenciaReguladora.add(lar);
-					}
-
+//					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
+//						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+//						// Monta LancamentoAgenciaReguladora
+//						LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
+//						lancamentosAgenciaReguladora.add(lar);
+//					}
+					
 					// acumular o valor de água para situação atual ou anterior
 					// igual a incluída
 					valorItemFaturamento = repositorioFaturamento
@@ -16601,9 +16628,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-						// Monta LancamentoAgenciaReguladora
-						LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.INCLUSOES_POR_REFATURAMENTO);
-						lancamentosAgenciaReguladora.add(lar);
 					}
 					
 
@@ -75408,7 +75432,73 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ControladorException {
 		try {
-			return repositorioFaturamento.pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+			List<RelatorioAgenciaReguladoraDTO> retorno = new ArrayList<RelatorioAgenciaReguladoraDTO>();
+			Collection lancamentosAgenciaReguladora = repositorioFaturamento.pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+			int percentualRepasse = 0;
+			
+			for (Object obj : lancamentosAgenciaReguladora) {
+	            Object[] arrayObj = (Object[]) obj;
+	            
+	            percentualRepasse = (Integer)arrayObj[4]; 
+	            
+	            BigDecimal valorAgua = (BigDecimal)arrayObj[1];
+	            BigDecimal valorEsgoto = (BigDecimal)arrayObj[2];
+	            
+	            RelatorioAgenciaReguladoraDTO dto = 
+	                new RelatorioAgenciaReguladoraDTO(
+	                    (String)arrayObj[0], 
+	                    valorAgua,
+	                    valorEsgoto, 
+	                    (String)arrayObj[3],  
+	                    valorAgua.add(valorEsgoto));
+	            
+	            retorno.add(dto);
+	          }
+			
+			Map<String, BigDecimal[]> baseRepasse = new HashMap<String, BigDecimal[]>();
+			Map<String, BigDecimal[]> baseRepasseFaturado = new HashMap<String, BigDecimal[]>();
+			Map<String, BigDecimal[]> baseRepasseCancelado = new HashMap<String, BigDecimal[]>();
+			double percentual = (double) percentualRepasse;
+			
+			// Preenche os valores de repasse faturados e cancelados
+			for (ReportItemDTO reportItemDTO : retorno) {
+				RelatorioAgenciaReguladoraDTO dto = (RelatorioAgenciaReguladoraDTO) reportItemDTO;
+				
+				if (dto.getSituacao().equals("Faturado")) {
+					baseRepasseFaturado.put(dto.getLocalidade(), new BigDecimal[] { Util.formatarMoedaRealparaBigDecimal(dto.getValorAgua()), Util.formatarMoedaRealparaBigDecimal(dto.getValorEsgoto())});
+				} else {
+					baseRepasseCancelado.put(dto.getLocalidade(), new BigDecimal[] { Util.formatarMoedaRealparaBigDecimal(dto.getValorAgua()), Util.formatarMoedaRealparaBigDecimal(dto.getValorEsgoto())});
+				}
+				
+			}
+			
+			// Preenche os valores base de repasse
+			for (String localidade : baseRepasseFaturado.keySet()) {
+				BigDecimal[] valoresFaturados = baseRepasseFaturado.get(localidade);
+				BigDecimal[] valoresCancelados = baseRepasseCancelado.get(localidade);
+				
+				if (valoresCancelados != null) {
+					baseRepasse.put(localidade, new BigDecimal[] { valoresFaturados[0].subtract(valoresCancelados[0]), valoresFaturados[1].subtract(valoresCancelados[1]) });
+				} else {
+					baseRepasse.put(localidade, new BigDecimal[] { valoresFaturados[0], valoresFaturados[1] });
+				}
+			}
+			
+			// Insere os valores base de repasse no relatorio
+			for (String localidade : baseRepasse.keySet()) {
+				BigDecimal[] valores = baseRepasse.get(localidade);
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0], valores[1],"Base para repasse",valores[0].add(valores[1]));
+				retorno.add(r1);
+			}
+			
+			// Calcula o percentual do valor base de repasse e insere no relatorio
+			for (String localidade : baseRepasse.keySet()) {
+				BigDecimal[] valores = baseRepasse.get(localidade);
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0].multiply(new BigDecimal((percentual/100))), valores[1].multiply(new BigDecimal((percentual/100))),"Valor a ser repassado",valores[0].add(valores[1]));
+				retorno.add(r1);
+			}
+			
+			return retorno;
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
@@ -75445,6 +75535,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Localidade loca = (Localidade) getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName()).iterator().next();
 
 		LancamentoAgenciaReguladora lar = new LancamentoAgenciaReguladora(loca, setorComercial, anoMesFaturamento, valorAgua, valorEsgoto, tipoLancamento);
+
+		return lar;
+	}
+	
+	public LancamentoAgenciaReguladora buildLancamentoAgenciaReguladoraCancelados(Integer idLocalidade, Integer anoMesFaturamento, int tipoLancamento) throws Exception{
+		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.LOCALIDADE_ID, idLocalidade));
+		SetorComercial setorComercial = (SetorComercial) getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName()).iterator().next();
+
+		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
+		Localidade loca = (Localidade) getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName()).iterator().next();
+
+		BigDecimal valorAguaLancamentoAgenciaReguladora = repositorioFaturamento.calcularDiferencaValorAguaCanceladaRetificacao(anoMesFaturamento,idLocalidade);
+
+		BigDecimal valorEsgotoLancamentoAgenciaReguladora = repositorioFaturamento.calcularDiferencaValorEsgotoCanceladaRetificacao(anoMesFaturamento,idLocalidade);
+
+		LancamentoAgenciaReguladora lar = new LancamentoAgenciaReguladora(loca, setorComercial, anoMesFaturamento, valorAguaLancamentoAgenciaReguladora,
+				valorEsgotoLancamentoAgenciaReguladora, tipoLancamento);
 
 		return lar;
 	}
