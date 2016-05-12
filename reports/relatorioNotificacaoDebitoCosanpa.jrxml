@@ -1188,7 +1188,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
 					</textElement>
-				<text><![CDATA[ENDEREÇO DE COBRANÇA]]></text>
+				<text><![CDATA[ENDEREÇO DE ENTREGA]]></text>
 				</staticText>
 			</band>
 		</pageFooter>
