@@ -1,16 +1,23 @@
 package gcom.gerencial.faturamento;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSubcategoria;
@@ -24,8 +31,6 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.ParcelamentoGrupo;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.IRepositorioFaturamento;
@@ -94,14 +99,11 @@ import gcom.gerencial.faturamento.debito.GDebitoTipo;
 import gcom.gerencial.financeiro.GFinanciamentoTipo;
 import gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil;
 import gcom.gerencial.micromedicao.GRota;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.Rota;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -109,209 +111,22 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
+    private static final long serialVersionUID = -5996920706815852008L;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-/**
- * 
- * 
- * @author Thiago Toscano
- * @created 19/04/2006
- */
-public class ControladorGerencialFaturamentoSEJB implements SessionBean {
-	private static final long serialVersionUID = 1L;
-	private IRepositorioGerencialCobranca repositorioGerencialCobranca = null;
+    private IRepositorioGerencialCobranca repositorioGerencialCobranca = null;
 	private IRepositorioGerencialCadastro repositorioGerencialCadastro = null;
 	private IRepositorioGerencialFaturamento repositorioGerencial = null;
 	private IRepositorioFaturamento repositorioFaturamento = null;
-
-	// private IRepositorioUtil repositorioUtil = null;
-
 	private IRepositorioGerencialFaturamento repositorioGerencialFaturamento = null;
 
-	SessionContext sessionContext;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-		// repositorioUtil = RepositorioUtilHBM.getInstancia();
-		repositorioGerencial = RepositorioGerencialFaturamentoHBM
-				.getInstancia();
-		repositorioGerencialFaturamento = RepositorioGerencialFaturamentoHBM
-				.getInstancia();
-		repositorioGerencialCobranca = RepositorioGerencialCobrancaHBM
-				.getInstancia();
-		
-		repositorioGerencialCadastro = RepositorioGerencialCadastroHBM
-				.getInstancia();
-		
+		repositorioGerencial = RepositorioGerencialFaturamentoHBM.getInstancia();
+		repositorioGerencialFaturamento = RepositorioGerencialFaturamentoHBM.getInstancia();
+		repositorioGerencialCobranca = RepositorioGerencialCobrancaHBM.getInstancia();
+		repositorioGerencialCadastro = RepositorioGerencialCadastroHBM.getInstancia();
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
 	}
-
-	/**
-	 * Retorna o valor do ControladorMicromedicao
-	 * 
-	 * @author Leonardo Regis
-	 * @date 20/07/2006
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
-	private ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	 
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	/**
-	 * CASO DE USO: CONSULTAR RESUMO DE SITUACAO ESPECIAL DE FATURAMENTO AUTOR:
-	 * TIAGO MORENO RODRIGUES
-	 * 
-	 * DATA: 26/05/2006
-	 */
 
 	public Collection<ResumoFaturamentoSituacaoEspecialConsultaGerenciaRegHelper> recuperaResumoSituacaoEspecialFaturamento(
 			ConsultarResumoSituacaoEspecialHelper helper)
@@ -940,8 +755,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 					// pesquisando a categoria
 					// [UC0306] - Obtter principal categoria do imóvel
 					Categoria categoria = null;
-					categoria = this.getControladorImovel()
-							.obterPrincipalCategoriaImovel(idImovel);
+					categoria = getControladorImovel().obterPrincipalCategoriaImovel(idImovel);
 
 					if (categoria != null) {
 						helper.setIdCategoria(categoria.getId());
@@ -1132,46 +946,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 		}
 	}
 
-	private ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Este caso de uso permite consultar o resumo da análise de faturamento,
-	 * com a opção de impressão da consulta. Dependendo da opção de totalização
-	 * sempre é gerado o relatório, sem a feração da consulta.
-	 * 
-	 * [UC0339] Consultar Resumo da Análise Faturamento
-	 * 
-	 * consultarResumoAnaliseFaturamento
-	 * 
-	 * @author Fernanda Paiva
-	 * @date 31/05/2006
-	 * 
-	 * @param informarDadosGeracaoRelatorioConsultaHelper
-	 * @return
-	 * @throws ControladorException
-	 */
 	public List consultarResumoAnaliseFaturamento(
 			InformarDadosGeracaoRelatorioConsultaHelper informarDadosGeracaoRelatorioConsultaHelper)
 			throws ControladorException {
@@ -11112,9 +10886,5 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 		}
 		
 		return colContaCategoria;
-	}
-	
-	
-
-    
+	}    
 }

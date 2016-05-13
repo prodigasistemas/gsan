@@ -27,6 +27,8 @@ import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.ControladorGeograficoLocal;
 import gcom.cadastro.geografico.ControladorGeograficoLocalHome;
+import gcom.cadastro.imovel.ControladorImovelLocal;
+import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.localidade.ControladorLocalidadeLocal;
 import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
 import gcom.cobranca.ControladorCobrancaLocal;
@@ -39,6 +41,8 @@ import gcom.faturamento.controladores.ControladorDebitoACobrarLocal;
 import gcom.faturamento.controladores.ControladorDebitoACobrarLocalHome;
 import gcom.financeiro.ControladorFinanceiroLocal;
 import gcom.financeiro.ControladorFinanceiroLocalHome;
+import gcom.micromedicao.ControladorMicromedicaoLocal;
+import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocal;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocalHome;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
@@ -65,8 +69,32 @@ public abstract class ControladorComum implements SessionBean{
 
     public void setSessionContext(SessionContext sessionContext) throws EJBException, RemoteException {
         this.sessionContext = sessionContext;
-    }   
+    }
     
+    protected ControladorImovelLocal getControladorImovel() {
+        ControladorImovelLocalHome localHome = null;
+        ControladorImovelLocal local = null;
+
+        // pega a instância do ServiceLocator.
+
+        ServiceLocator locator = null;
+
+        try {
+            locator = ServiceLocator.getInstancia();
+
+            localHome = (ControladorImovelLocalHome) locator
+                    .getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
+            // guarda a referencia de um objeto capaz de fazer chamadas
+            // objetos remotamente
+            local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
     
     protected ControladorLocalidadeLocal getControladorLocalidade() {
         try {
@@ -76,6 +104,29 @@ public abstract class ControladorComum implements SessionBean{
             
             ControladorLocalidadeLocal local = localHome.create();
             
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+    
+    protected ControladorMicromedicaoLocal getControladorMicromedicao() {
+        ControladorMicromedicaoLocalHome localHome = null;
+        ControladorMicromedicaoLocal local = null;
+
+        // pega a instância do ServiceLocator.
+        ServiceLocator locator = null;
+        try {
+            locator = ServiceLocator.getInstancia();
+
+            localHome = (ControladorMicromedicaoLocalHome) locator
+                    .getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
+            // guarda a referencia de um objeto capaz de fazer chamadas à
+            // objetos remotamente
+            local = localHome.create();
+
             return local;
         } catch (CreateException e) {
             throw new SistemaException(e);
