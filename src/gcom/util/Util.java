@@ -3372,6 +3372,12 @@ public class Util {
 		}
 		return resultado;
 	}
+	
+	public static BigDecimal calcularPercentual(BigDecimal valor, double percentual){
+	    valor = (valor == null) ? BigDecimal.ZERO : valor;
+	    
+	    return valor.multiply(new BigDecimal((percentual/100)));
+	}
 
 	/**
 	 * Método que valida se uma String é composta apenas de dígitos.

@@ -75533,7 +75533,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Calcula o percentual do valor base de repasse e insere no relatorio
 			for (String localidade : baseRepasse.keySet()) {
 				BigDecimal[] valores = baseRepasse.get(localidade);
-				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0].multiply(new BigDecimal((percentual/100))), valores[1].multiply(new BigDecimal((percentual/100))),"Valor a ser repassado",valores[0].add(valores[1]));
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, Util.calcularPercentual(valores[0], percentual), Util.calcularPercentual(valores[1], percentual),"Valor a ser repassado", Util.calcularPercentual(valores[0].add(valores[1]), percentual));
 				retorno.add(r1);
 			}
 			
@@ -75542,7 +75542,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+		
 	public LancamentoAgenciaReguladora buildLancamentoAgenciaReguladoraCancelados(Integer idLocalidade, Integer anoMesFaturamento, boolean aPartirNovembro, int tipoLancamento) throws Exception{
 		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
 		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.LOCALIDADE_ID, idLocalidade));
