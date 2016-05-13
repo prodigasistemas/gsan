@@ -1,5 +1,6 @@
 package gcom.util;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -67,5 +68,14 @@ public class TestaUtil {
 		calendar.set(2015, 4, 19);
 		
 		assertEquals("2015-05-19", Util.formatarData(calendar.getTime(), FormatoData.AMERICANO_COM_TRACO));
+	}
+	
+	@Test
+	public void testaCalculaPercentual(){
+	    BigDecimal valorBase  = new BigDecimal(100);
+	    assertEquals(5, Util.calcularPercentual(valorBase, 5D).doubleValue(), 0.01);
+
+	    valorBase  = new BigDecimal(80);
+	    assertEquals(5.60, Util.calcularPercentual(valorBase, 7D).doubleValue(), 0.01);
 	}
 }
