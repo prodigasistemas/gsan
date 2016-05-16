@@ -544,8 +544,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								}
 
 								contaTxt = null;
-
-								logger.info("ID_CONTA:" + emitirContaHelper.getIdConta() + " SEQUENCIAL:" + sequencialImpressao + " CONT:" + cont);
 								
 								if (flagTerminou && ehFaturamentoAntecipado) {
 									if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
