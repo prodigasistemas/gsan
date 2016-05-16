@@ -290,8 +290,10 @@
     										<td width="50">
     										<div align="center">
                                                   <logic:equal name="item" property="habilitaAlteracao" value="true">
-    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
-    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+                                                  	<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
+		    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
+		    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+                                                  	</logic:equal>
     										  </logic:equal>
     										</div>
     										</td>
@@ -309,11 +311,12 @@
 				<tr>
 					<td height="24">
 					<div align="right"><input type="hidden" name="testeInserir"> 
-					<input
-						name="Button" type="button" class="bottonRightCol" value="Confirmar"
-						onClick="confirma();">
+					<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
+						<input name="Button" type="button" class="bottonRightCol" value="Aprovar" onClick="confirma();"  >
+					</logic:equal>
+					
 					<input name="Button2" type="button" class="bottonRightCol"
-						value="Fechar" onClick="window.location.href='/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do'"></div>
+						value="Voltar" onClick="window.location.href='/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do'"></div>
 					</td>
 				</tr>
 			</table>

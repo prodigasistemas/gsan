@@ -20,7 +20,7 @@ Módulos do GSAN
 Requisitos de Infra-Estrutura
 ===
 
-* Java 1.5 / 1.6
+* [Java 1.5 / 1.6](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-Java)
 * [JBoss 4.0.1sp1](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-JBoss)
 * [PostgreSQL 9.3.4](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-PostgreSQL)
 

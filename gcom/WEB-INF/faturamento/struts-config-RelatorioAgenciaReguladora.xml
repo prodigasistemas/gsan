@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAgenciaReguladoraActionForm" type="gcom.gui.faturamento.GerarRelatorioAgenciaReguladoraActionForm" />
+	</form-beans>
+
+
+	<!--******************* PAGINAS GLOBAIS ******************* -->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="GerarRelatorioAgenciaReguladoraActionForm"
+			type="gcom.gui.faturamento.FiltrarRelatorioAgenciaReguladoraAction"
+			scope="session" validate="true" path="/filtrarRelatorioAgenciaReguladoraAction">
+
+			<forward name="exibirGerarRelatorioAgenciaReguladora" path="/jsp/faturamento/gerar_relatorio_agencia_reguladora.jsp" />
+
+		</action>
+
+		<action name="GerarRelatorioAgenciaReguladoraActionForm" 
+			type="gcom.gui.faturamento.GerarRelatorioAgenciaReguladoraAction"
+			validate="true" path="/gerarRelatorioAgenciaReguladoraAction" scope="session"/>
+
+
+	</action-mappings>
+
+</struts-config>

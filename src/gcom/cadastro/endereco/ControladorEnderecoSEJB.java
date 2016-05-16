@@ -983,6 +983,19 @@ public class ControladorEnderecoSEJB implements SessionBean {
 					// =============================================================================================
 				}
 			}
+		} else if (colecaoCepsAtualizacao != null){
+			Iterator cepsAtualizacaoIterator = colecaoCepsAtualizacao.iterator();
+			while (cepsAtualizacaoIterator.hasNext()) {
+				LogradouroCep logCep = ((AtualizarLogradouroCepHelper) cepsAtualizacaoIterator.next()).getLogradouroCep();
+				if (logCep.getIndicadorUso().shortValue() == ConstantesSistema.INDICADOR_USO_DESATIVO.shortValue()) {
+					try {
+						this.repositorioEndereco.atualizarIndicadorUsoLogradouroCep(logCep.getCep().getCepId(), logradouro.getId(), ConstantesSistema.INDICADOR_USO_ATIVO);
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new ControladorException("erro.sistema", e);
+					}
+				}
+			}
 		}
 
 		while (iteratorColecaoCeps.hasNext()) {

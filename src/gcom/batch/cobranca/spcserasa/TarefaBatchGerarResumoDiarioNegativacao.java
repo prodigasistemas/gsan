@@ -12,16 +12,12 @@ import java.util.Iterator;
 
 /**
  * Tarefa que manda para Gerar Resumo diario Negativacao
- * 
- * @author Thiago Toscano
- * @created 21/01/2007
  */
 public class TarefaBatchGerarResumoDiarioNegativacao extends TarefaBatch {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	public TarefaBatchGerarResumoDiarioNegativacao(Usuario usuario,
-			int idFuncionalidadeIniciada) {
+	public TarefaBatchGerarResumoDiarioNegativacao(Usuario usuario, int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
 	}
@@ -33,20 +29,17 @@ public class TarefaBatchGerarResumoDiarioNegativacao extends TarefaBatch {
 
 	public Object executar() throws TarefaException {
 
-		Collection colecaoSetores = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Collection rotas = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 
-		  Iterator iterator = colecaoSetores.iterator();
-	        
-	        while (iterator.hasNext()) {
-	        	Integer idSetores = (Integer) iterator.next();
-	            enviarMensagemControladorBatch(
-	                    ConstantesJNDI.BATCH_GERAR_RESUMO_DIARIO_NEGATIVACAO_MDB,
-	                    new Object[] { this.getIdFuncionalidadeIniciada(),idSetores });
-	            	
-	        }
+		Iterator iterator = rotas.iterator();
 
-	
-        return null;
+		while (iterator.hasNext()) {
+			Integer idRota = (Integer) iterator.next();
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_GERAR_RESUMO_DIARIO_NEGATIVACAO_MDB, new Object[] { this.getIdFuncionalidadeIniciada(), idRota });
+
+		}
+
+		return null;
 	}
 
 	@Override
@@ -62,8 +55,7 @@ public class TarefaBatchGerarResumoDiarioNegativacao extends TarefaBatch {
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("BatchGerarResumoDiarioNegativacao",
-				this);
+		AgendadorTarefas.agendarTarefa("BatchGerarResumoDiarioNegativacao", this);
 	}
 
 }

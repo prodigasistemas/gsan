@@ -17,6 +17,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 	private String idRegistrosNaoAutorizados;
 	private String idRegistrosAutorizados;
 	private String situacao;
+	private boolean temPermissaoAprovarImovel;
 
 	public String getIdImovel() {
 		return idImovel;
@@ -120,4 +121,14 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 		this.setNumeroQuadra("");
 		this.setSituacao("");
 	}
+
+	public boolean getTemPermissaoAprovarImovel() {
+		return temPermissaoAprovarImovel;
+	}
+
+	public void setTemPermissaoAprovarImovel(boolean temPermissaoAprovarImovel) {
+		this.temPermissaoAprovarImovel = temPermissaoAprovarImovel;
+	}
+	
+	
 }

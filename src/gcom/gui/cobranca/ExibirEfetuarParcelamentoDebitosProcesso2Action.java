@@ -371,7 +371,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 								colecaoContaValores);
 					}*/
 					
-					sessao.setAttribute("colecaoContaValores", contaRemovida != null ? colecaoContaValores.remove(contaRemovida) : colecaoContaValores);
+					if (contaRemovida != null) {
+			            colecaoContaValores.remove(contaRemovida);
+			        } 
+			        
+					sessao.setAttribute("colecaoContaValores", colecaoContaValores);
 				} 
 				else {
 					

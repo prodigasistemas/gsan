@@ -2203,7 +2203,7 @@ public interface IRepositorioSpcSerasa {
 	 * @author Vivianne Sousa
 	 * @date 30/10/2009
 	 */
-	public List consultarNegativadorMovimentoReg(Integer idSetor, int quantidadeInicio, int quantidadeMaxima) throws ErroRepositorioException;
+	public List<NegativadorMovimentoReg> consultarNegativadorMovimentoReg(Integer idRota) throws ErroRepositorioException;
 
 	/**
 	 * [UC0688] - Gerar Resumo Diario da Negativação retorna o id do negativador
@@ -2326,7 +2326,7 @@ public interface IRepositorioSpcSerasa {
 	 * @author Vivianne Sousa
 	 * @date 11/03/2010
 	 */
-	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade, int quantidadeInicio, int quantidadeMaxima) throws ErroRepositorioException;
+	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade) throws ErroRepositorioException;
 
 	/**
 	 * [UC1005] Determinar Confirmação da Negativação

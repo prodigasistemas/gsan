@@ -1,5 +1,16 @@
 package gcom.micromedicao;
 
+import java.io.BufferedReader;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.empresa.Empresa;
@@ -22,6 +33,7 @@ import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTe
 import gcom.gui.relatorio.micromedicao.RelatorioNotificacaoDebitosImpressaoSimultaneaHelper;
 import gcom.micromedicao.bean.AnaliseConsumoRelatorioOSHelper;
 import gcom.micromedicao.bean.AssociarConjuntoRotasCriterioCobrancaHelper;
+import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
 import gcom.micromedicao.bean.HidrometroRelatorioOSHelper;
 import gcom.micromedicao.bean.ImovelFaltandoSituacaoLeituraHelper;
@@ -63,18 +75,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.filtro.Filtro;
-
-import java.io.BufferedReader;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
 
 public interface IControladorMicromedicao {
 
@@ -205,7 +205,7 @@ public interface IControladorMicromedicao {
 	 * [UC0179] Consultar Historico Medição Indiviualizada
 	 */
 	@SuppressWarnings("rawtypes")
-	public Collection consultarConsumoHistoricoImoveisVinculados(ConsumoHistorico consumoHistorico) throws ControladorException;
+	public Collection consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ControladorException;
 
 	/**
 	 * [UC0179] Consultar Historico Medição Indiviualizada

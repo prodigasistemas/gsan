@@ -1,5 +1,6 @@
 package gcom.cadastro.imovel;
 
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
@@ -3202,4 +3203,6 @@ public interface IRepositorioImovel {
 	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException;
 	
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ErroRepositorioException;
+	
+	public DebitoAutomatico pesquisarDebitoAutomaticoAtivoImovel(Integer idImovel) throws ErroRepositorioException;
 }

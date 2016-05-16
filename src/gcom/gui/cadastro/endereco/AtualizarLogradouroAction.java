@@ -1,9 +1,14 @@
 package gcom.gui.cadastro.endereco;
 
+import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.FiltroCep;
 import gcom.cadastro.endereco.FiltroLogradouro;
+import gcom.cadastro.endereco.FiltroLogradouroCep;
 import gcom.cadastro.endereco.Logradouro;
+import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTitulo;
+import gcom.cadastro.endereco.bean.AtualizarLogradouroCepHelper;
 import gcom.cadastro.geografico.FiltroMunicipio;
 import gcom.cadastro.geografico.Municipio;
 import gcom.fachada.Fachada;
@@ -19,7 +24,9 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -242,6 +249,54 @@ public class AtualizarLogradouroAction extends GcomAction {
 		if (sessao.getAttribute("colecaoAtualizarLogradouroCepHelper") != null){
 			colecaoAtualizarLogradouroCepHelper = (Collection)
 			sessao.getAttribute("colecaoAtualizarLogradouroCepHelper");
+		}
+		
+		for (Object object : colecaoCeps) {
+			Cep cep = (Cep) object;
+			
+			FiltroCep filtroCep = new FiltroCep();
+			filtroCep.adicionarParametro(new ParametroSimples(FiltroCep.CODIGO, cep.getCodigo()));
+			Iterator cepIterator =  fachada.pesquisar(filtroCep, Cep.class.getName()).iterator();
+			Cep cepExistente = null;
+			if (cepIterator.hasNext()) {
+				cepExistente = (Cep) cepIterator.next(); 
+			}
+			
+			if (cepExistente == null) {
+				continue;
+			}
+			
+			FiltroLogradouroCep filtroLogradouroCep = new FiltroLogradouroCep();
+			filtroLogradouroCep.adicionarParametro(new ParametroSimples(FiltroLogradouroCep.ID_LOGRADOURO,logradouro.getId()));
+			filtroLogradouroCep.adicionarParametro(new ParametroSimples(FiltroLogradouroCep.ID_CEP, cepExistente.getCepId()));
+			filtroLogradouroCep.adicionarParametro(new ParametroSimples(FiltroLogradouroCep.INDICADOR_USO,ConstantesSistema.INDICADOR_USO_DESATIVO));
+			filtroLogradouroCep.adicionarCaminhoParaCarregamentoEntidade("cep");
+			Iterator logradouroCepIterator = fachada.pesquisar(filtroLogradouroCep, LogradouroCep.class.getName()).iterator();
+			LogradouroCep logradouroCep = null;
+			if (logradouroCepIterator.hasNext()) {
+				logradouroCep = (LogradouroCep) logradouroCepIterator.next();
+			}
+			
+			if (logradouroCep != null && sessao.getAttribute("ativarCepLogradouro") == null) {
+				httpServletRequest.setAttribute("caminhoActionConclusao", "/gsan/atualizarLogradouroAction.do");
+				httpServletRequest.setAttribute("cancelamento", "TRUE");
+				httpServletRequest.setAttribute("nomeBotao1", "Sim");
+				httpServletRequest.setAttribute("nomeBotao2", "Não");
+				sessao.setAttribute("ativarCepLogradouro", "true");
+
+				return montarPaginaConfirmacao("atencao.ativar_cep_logradouro", httpServletRequest, actionMapping, cepExistente.getCepFormatado());
+			} else if (logradouroCep != null && sessao.getAttribute("ativarCepLogradouro").equals("true") && (confirmado != null && confirmado.equals("ok"))) {
+				if (colecaoAtualizarLogradouroCepHelper == null) {
+					colecaoAtualizarLogradouroCepHelper = new ArrayList();
+				}
+				AtualizarLogradouroCepHelper atualizarLogradouroCepHelper = new AtualizarLogradouroCepHelper();
+				atualizarLogradouroCepHelper.setCep(cepExistente);
+				atualizarLogradouroCepHelper.setLogradouroCep(logradouroCep);
+				colecaoAtualizarLogradouroCepHelper.add(atualizarLogradouroCepHelper);
+				sessao.setAttribute("ativarCepLogradouro", null);
+			} else if (logradouroCep != null && sessao.getAttribute("ativarCepLogradouro").equals("true") && (confirmado != null && confirmado.equals("cancelar"))) {
+				sessao.setAttribute("ativarCepLogradouro", null);
+			}
 		}
 		
 		fachada.atualizarLogradouro(logradouro, colecaoBairros, colecaoCeps, 

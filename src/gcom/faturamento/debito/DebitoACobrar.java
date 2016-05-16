@@ -1,5 +1,9 @@
 package gcom.faturamento.debito;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
@@ -18,12 +22,6 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 /** @author Hibernate CodeGenerator */
@@ -166,6 +164,8 @@ public class DebitoACobrar extends ObjetoTransacao {
     private Date dataRevisao;
     
     private ContaMotivoRevisao contaMotivoRevisao;
+    
+    private Integer situacaoAtual;
 
     public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];
@@ -702,22 +702,12 @@ public class DebitoACobrar extends ObjetoTransacao {
 		this.anoMesReferenciaPrestacao = anoMesReferenciaPrestacao;
 	}
 
-	/**
-     * Realiza o calculo de quantas parcelas falta para cobrar  
-     * numero total de prestações menos
-     * numero de parcelas cobradas menos
-     * numero de parcelas bonus
-     * 
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public short getParcelasRestanteComBonus(){
         
-       short retorno = Short.parseShort(""+
-               (getNumeroPrestacaoDebito() -  getNumeroPrestacaoCobradas()));
+       short retorno = (short) (getNumeroPrestacaoDebito()  -  getNumeroPrestacaoCobradas());
        
        if (getNumeroParcelaBonus() != null){
-           retorno = Short.parseShort(""+ (retorno - getNumeroParcelaBonus().shortValue()));
+           retorno = (short) (retorno - getNumeroParcelaBonus().shortValue());
        }
             
         return retorno;
@@ -727,10 +717,6 @@ public class DebitoACobrar extends ObjetoTransacao {
 		this.valorTotalDebito = valorTotalDebito;
 	}
 
-	/**
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public BigDecimal getValorTotalComBonus(){
         
     	//caso o número de parcelas já cobradas  seja igual 
@@ -768,10 +754,6 @@ public class DebitoACobrar extends ObjetoTransacao {
 		}	        
     }
 
-    /**
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public short getNumeroPrestacaoDebitoMenosBonus() {
         short retorno =getNumeroPrestacaoDebito();
         
@@ -782,23 +764,12 @@ public class DebitoACobrar extends ObjetoTransacao {
         return retorno;
     }
     
-    /**
-     * @author Vivianne Sousa
-     * @created 15/04/2008
-    */
     public BigDecimal getValorPrestacao(){
-        
-        //truncando o resultado com 2 casas decimais
-        BigDecimal retornoDivisao = 
-            this.valorDebito.divide(new BigDecimal(numeroPrestacaoDebito),2,BigDecimal.ROUND_DOWN);
+        BigDecimal retornoDivisao =  this.valorDebito.divide(new BigDecimal(numeroPrestacaoDebito),2,BigDecimal.ROUND_DOWN);
        
         return retornoDivisao;
     }
     
-    /**
-     * @author Vivianne Sousa
-     * @created 17/04/2008
-    */
     public short getNumeroPrestacaoCobradasMaisBonus() {
         short retorno =getNumeroPrestacaoCobradas();
         
@@ -809,16 +780,10 @@ public class DebitoACobrar extends ObjetoTransacao {
         return retorno;
     }
 
-	/**
-	 * @return Retorna o campo usuario.
-	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	/**
-	 * @param usuario O usuario a ser setado.
-	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
@@ -831,7 +796,15 @@ public class DebitoACobrar extends ObjetoTransacao {
 		this.dataRevisao = dataRevisao;
 	}
 	
-	public ContaMotivoRevisao getContaMotivoRevisao() {
+	public Integer getSituacaoAtual() {
+        return situacaoAtual;
+    }
+
+    public void setSituacaoAtual(Integer situacaoAtual) {
+        this.situacaoAtual = situacaoAtual;
+    }
+
+    public ContaMotivoRevisao getContaMotivoRevisao() {
 		return contaMotivoRevisao;
 	}
 
@@ -839,24 +812,8 @@ public class DebitoACobrar extends ObjetoTransacao {
 		this.contaMotivoRevisao = contaMotivoRevisao;
 	}
 
-	/**
-     * @author Rômulo Aurélio
-     * @created 28/08/2008
-    */
     public BigDecimal getValorParcela(){
-    	
     	return getValorPrestacao();
-    	
-//    	short retorno =getNumeroPrestacaoDebito();
-//    	
-//    	if (getNumeroParcelaBonus() != null){
-//            retorno = Short.parseShort(""+ (retorno - getNumeroParcelaBonus().shortValue()));
-//        }
-//        //truncando o resultado com 2 casas decimais
-//        BigDecimal retornoDivisao = 
-//            this.valorDebito.divide(new BigDecimal(retorno),2,BigDecimal.ROUND_DOWN);
-//       
-//        return retornoDivisao;
     }
     
     public short getNumeroPrestacaoRestante() {
@@ -906,4 +863,15 @@ public class DebitoACobrar extends ObjetoTransacao {
 
 		return retorno;
 	}
+	
+    public boolean pertenceParcelamento(int anoMesReferencia) {
+        return parcelamento != null 
+                && parcelamento.getAnoMesReferenciaFaturamento() != null 
+                && parcelamento.getAnoMesReferenciaFaturamento() >= anoMesReferencia
+                && this.naPrimeiraParcela();
+    }
+
+    private boolean naPrimeiraParcela() {
+        return numeroPrestacaoCobradas == 0;
+    }
 }

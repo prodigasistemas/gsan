@@ -1,5 +1,10 @@
 package gcom.atendimentopublico.ligacaoagua;
 
+import java.util.Date;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
 import gcom.cadastro.imovel.Imovel;
@@ -8,11 +13,6 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao
 public class LigacaoAgua extends ObjetoTransacao {
@@ -417,4 +417,12 @@ public class LigacaoAgua extends ObjetoTransacao {
 	public void setMedicaoHistoricos(Set medicaoHistoricos) {
 		this.medicaoHistoricos = medicaoHistoricos;
 	}
+	
+    public boolean existeHidrometroInstalado() {
+        boolean existe = false;
+        if (hidrometroInstalacaoHistorico != null) {
+            existe = hidrometroInstalacaoHistorico.getDataRetirada() == null;
+        }
+        return existe;
+    }	
 }

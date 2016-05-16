@@ -1,5 +1,10 @@
 package gcom.micromedicao;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.cadastro.imovel.Categoria;
@@ -12,11 +17,11 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
-import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTextoHelper;
 import gcom.gui.relatorio.micromedicao.RelatorioNotificacaoDebitosImpressaoSimultaneaHelper;
+import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
 import gcom.micromedicao.bean.ImovelPorRotaHelper;
 import gcom.micromedicao.bean.LigacaoMedicaoIndividualizadaHelper;
@@ -45,11 +50,6 @@ import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 
 
 /**
@@ -58,86 +58,14 @@ import java.util.List;
  * @author Administrador
  */
 public interface IRepositorioMicromedicao {
+	public Collection pesquisarNumeroHidrometroFaixa(String faixaInicial, String faixaFinal) throws ErroRepositorioException;
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faixaInicial
-	 *            Descrição do parâmetro
-	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
+	public Collection pesquisarNumeroHidrometroFaixaRelatorio(String faixaInicial, String faixaFinal) throws ErroRepositorioException;
 
-	public Collection pesquisarNumeroHidrometroFaixa(String faixaInicial,
-			String faixaFinal) throws ErroRepositorioException;
+	public Collection pesquisarNumeroHidrometroFaixaPaginacao(String faixaInicial, String faixaFinal, Integer numeroPagina)	throws ErroRepositorioException;
 
-	/**
-	 * Pesquisa uma coleção de hidrômetros de acordo com fixo, faixa inicial e
-	 * faixa final
-	 * 
-	 * @param faixaInicial
-	 *            Descrição do parâmetro
-	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
+	public Collection pesquisarNumeroHidrometroFaixaComLimite(String faixaInicial, String faixaFinal) throws ErroRepositorioException;
 
-	public Collection pesquisarNumeroHidrometroFaixaRelatorio(
-			String faixaInicial, String faixaFinal)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faixaInicial
-	 *            Descrição do parâmetro
-	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-
-	public Collection pesquisarNumeroHidrometroFaixaPaginacao(
-			String faixaInicial, String faixaFinal, Integer numeroPagina)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faixaInicial
-	 *            Descrição do parâmetro
-	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-
-	public Collection pesquisarNumeroHidrometroFaixaComLimite(
-			String faixaInicial, String faixaFinal)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @param anoMesReferencia
-	 *            Descrição do parâmetro
-	 * @param periodoInformado
-	 *            Descrição do parâmetro
-	 * @param ligacaoTipo
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public Collection pesquisarConsumoMedidoHidrometroPeriodoInformadoLigacaoAgua(
 			Imovel imovel, int anoMesReferencia,
 			LigacaoTipo ligacaoTipo) throws ErroRepositorioException;
@@ -448,44 +376,13 @@ public interface IRepositorioMicromedicao {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Collection consultarConsumoHistoricoImoveisVinculados(
-			ConsumoHistorico consumoHistorico) throws ErroRepositorioException;
+	public Collection<Integer> consultarConsumoHistoricoImoveisVinculados(ConsumoHistoricoCondominio consumoHistorico) throws ErroRepositorioException;
 
-	/**
-	 * Consultar Consumo Tipo do Consumo Historico Auhtor: Rafael Santos Data:
-	 * 23/01/2006
-	 * 
-	 * @param consumoHistorico
-	 *            Consumo Historico
-	 * @return Dados do Consumo Tipo
-	 * @throws ControladorException
-	 */
-	public Object[] consultarDadosConsumoTipoConsumoHistorico(
-			ConsumoHistorico consumoHistorico) throws ErroRepositorioException;
+	public Object[] consultarDadosConsumoTipoConsumoHistorico(ConsumoHistorico consumoHistorico) throws ErroRepositorioException;
 
-	/**
-	 * Consultar Consumo Historico da Medicao Individualizada Auhtor: Rafael
-	 * Santos Data: 23/01/2006 [UC0179] Consultar Historico Medição
-	 * Indiviualizada
-	 * 
-	 * @param imovel
-	 *            Imovel
-	 * @param ligcaoTipo
-	 *            Tipo de Ligacação
-	 * @param anoMesFaturamento
-	 *            Ano Mes Faturamento
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Object[] obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
+	public ConsumoHistorico obterConsumoHistoricoMedicaoIndividualizada(Imovel imovel,
 			LigacaoTipo ligacaoTipo, int anoMesReferencia)
 			throws ErroRepositorioException;
-
-	/**
-	 * Método utilizado para pesquisar dados do maior histórico de medição
-	 * existente para um imóvel [UC0101] Consistir Leituras e Calcular Consumos
-	 * Autor: Leonardo Vieira Data: 20/02/2006
-	 */
 
 	public Object pesquisarObterDadosMaiorHistoricoMedicao(Imovel imovel,
 			MedicaoTipo medicaoTipo, SistemaParametro sistemaParametro)

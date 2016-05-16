@@ -22,6 +22,7 @@
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="agen_tmultimaalteracao" length="8"/>
 		<property name="numeroFax" type="java.lang.String" column="agen_nnfax" length="9"/>
 		<property name="email" type="java.lang.String" column="agen_dsemail" length="40"/>
+    
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Bairro -->
 		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="true">

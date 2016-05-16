@@ -1,5 +1,6 @@
 package gcom.cadastro.imovel;
 
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
@@ -76,6 +77,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -31232,4 +31234,31 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return retorno;
 	}
+	
+	public DebitoAutomatico pesquisarDebitoAutomaticoAtivoImovel(Integer idImovel) throws ErroRepositorioException {
+		
+		DebitoAutomatico retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT debitoAutomatico ")
+					.append("from DebitoAutomatico debitoAutomatico ")
+					.append("where debitoAutomatico.imovel.id = :idImovel ")
+					.append("and debitoAutomatico.dataExclusao is null ");
+
+			retorno = (DebitoAutomatico) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel.intValue()).uniqueResult();
+
+		} catch (NonUniqueResultException e) {
+			return null;
+		}catch (Exception e){
+		    throw new ErroRepositorioException(e);
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+
 }

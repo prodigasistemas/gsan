@@ -410,16 +410,13 @@ public class RetificarContaAction extends GcomAction {
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
         valorTotalConta = valorTotalConta.add(valorTotalDebitosConta);
+        valorTotalConta = valorTotalConta.add(valorTotalEsgoto);
         valorTotalConta = valorTotalConta.subtract(valorTotalCreditosConta);
         
-        
-        if (valorTotalConta.equals(new BigDecimal("0.00")) && 
-        	(valorTotalCreditosConta == null || valorTotalCreditosConta.equals(new BigDecimal("0.00")))) {
-			throw new ActionServletException("atencao.valor_conta_igual_zero");
-		}
-		else if (valorTotalConta.compareTo(new BigDecimal("0.00")) == -1){	
-			throw new ActionServletException("atencao.valor_conta_negativo");
-		}
+        if (valorTotalConta.compareTo(BigDecimal.ZERO) < 0 ){	
+        	throw new ActionServletException("atencao.valor_conta_negativo");
+        }
+
 		
         // [FS0022] - Retificação de Conta Retifivada.
         //-------------------------------------------------------------------------------------------

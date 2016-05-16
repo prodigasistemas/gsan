@@ -750,7 +750,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["R$ " + $F{getTotalDebitos}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["R$ " + $F{getValorASerNegociado}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
