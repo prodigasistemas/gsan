@@ -19,6 +19,7 @@ import gcom.util.IoUtil;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
+import gcom.util.Util;
 import gcom.util.ZipUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -141,21 +142,21 @@ public abstract class TarefaRelatorio extends Tarefa {
 				break;
 			case TIPO_XLS:
 
-				
 				JRXlsExporter exporterXLS = new JRXlsExporter();
+
+				nomeRelatorio = nomeRelatorio.replaceAll("/", "");
 				
-				// Incluido para correcao do Tab do Excel (Suporta 30 caracteres)
-				jasperPrint.setName(nomeRelatorio.substring(1,30));
+				if (nomeRelatorio.length() > 31) {
+					nomeRelatorio = nomeRelatorio.substring(0, 31);
+				}
 				
-				exporterXLS.setParameter(JRExporterParameter.JASPER_PRINT,
-						jasperPrint);
-				exporterXLS.setParameter(JRExporterParameter.OUTPUT_STREAM,
-						retorno);
-				
+				jasperPrint.setName(nomeRelatorio);
+
+				exporterXLS.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporterXLS.setParameter(JRExporterParameter.OUTPUT_STREAM, retorno);
 				exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
 				exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
 				exporterXLS.setParameter(JRXlsExporterParameter.IS_AUTO_DETECT_CELL_TYPE, true);
-
 				exporterXLS.exportReport();
 
 				break;
