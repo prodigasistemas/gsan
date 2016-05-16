@@ -1598,6 +1598,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         try {
             if (imovel.getFaturamentoSituacaoTipo() != null) {
                 Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = repositorioFaturamentoSituacao.faturamentosHistoricoVigentesPorImovel(imovel.getId());
+                
+                if (faturamentosSituacaoHistorico.isEmpty()){
+                    return true;
+                }
+                
                 FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
                 
                 FaturamentoSituacaoTipo tipo = repositorioFaturamentoSituacaoTipo.situacaoTipoDoImovel(imovel.getId());
@@ -1661,14 +1666,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 			}
 			
-	        boolean valoresAguaEsgotoZerados = false;
-	        if (imovel.faturamentoAguaAtivo() || imovel.faturamentoEsgotoAtivo() || imovel.existeHidrometro()) {
-	            valoresAguaEsgotoZerados = !deveFaturar(imovel, anoMesFaturamentoGrupo);
-	        }
 			
 			boolean gerarConta = false;
 			
 			if (imovel.useNovaChecagemGerarConta()){
+			    boolean valoresAguaEsgotoZerados = false;
+			    
+			    if (imovel.faturamentoAguaAtivo() || imovel.faturamentoEsgotoAtivo() || imovel.existeHidrometro()) {
+			        valoresAguaEsgotoZerados = !deveFaturar(imovel, anoMesFaturamentoGrupo);
+			    }
+			    
 			    gerarConta = getControladorAnaliseGeracaoConta().verificarGeracaoConta(valoresAguaEsgotoZerados, anoMesFaturamentoGrupo, imovel);
 			}else{
 			    gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), 
