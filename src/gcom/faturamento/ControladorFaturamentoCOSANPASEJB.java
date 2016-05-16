@@ -1482,8 +1482,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				
 				int comparacaoData = Util.compararData(emitirConta.getDataVencimentoConta(), novaDataVencimento);
 
-				System.out.println("Imóvel " + emitirConta.getIdImovel() + ": [" + emitirConta.getDataVencimentoConta() + " < " + novaDataVencimento + "? " + comparacaoData);
-				
 				if (comparacaoData == -1) {
 					Conta conta = (Conta) repositorioFaturamento.obterConta(emitirConta.getIdConta()).iterator().next();
 					conta.setDataVencimentoConta(novaDataVencimento);

@@ -114,47 +114,6 @@ public class ExibirAtualizarImovelEnderecoAction extends GcomAction {
 		// Alteracao Solicitada por Ana Breda, Data:23/02/2006
 		// Alterado por Rômulo Aurélio
 
-		/*
-		 * if(colecaoEndereco != null && !colecaoEndereco.isEmpty()){
-		 * 
-		 * Imovel imovel = (Imovel)colecaoEndereco.iterator().next();
-		 * 
-		 * System.out.println("imovel.getLogradouroBairro().getLogradouro().getMunicipio().getId().toString()="+imovel.getLogradouroBairro().getLogradouro().getMunicipio().getId().intValue());
-		 * System.out.println("( ((SetorComercial) ((List)
-		 * setorComerciais).get(0)).getMunicipio().getId()=" +(
-		 * ((SetorComercial) ((List)
-		 * setorComerciais).get(0)).getMunicipio().getId().intValue()));
-		 * System.out.println("boolean="+(!(imovel.getLogradouroBairro().getLogradouro().getMunicipio().getId().intValue() == (
-		 * ((SetorComercial) ((List) setorComerciais)
-		 * .get(0)).getMunicipio().getId().intValue()))) );
-		 * 
-		 * 
-		 * if(imovel.getLogradouroBairro() != null &&
-		 * imovel.getLogradouroBairro().getLogradouro() != null &&
-		 * imovel.getLogradouroBairro().getLogradouro().getMunicipio() != null &&
-		 * (!(imovel.getLogradouroBairro().getLogradouro().getMunicipio().getId().intValue() == (
-		 * ((SetorComercial) ((List) setorComerciais)
-		 * .get(0)).getMunicipio().getId().intValue()))) ){
-		 * 
-		 * 
-		 * Usuario usuario = (Usuario) sessao .getAttribute("usuarioLogado");
-		 * 
-		 * if (!fachada
-		 * .verificarPermissaoInserirImovelMunicipioLogradouroDiferenteSetor(usuario)) {
-		 * throw new ActionServletException(
-		 * "atencao.usuario.sem.permissao.inserir_logradouro_municipio_diferente_setor_comercial"); } //
-		 * httpServletRequest.setAttribute("atencao","O município do logradouro
-		 * não é o mesmo do setor comercial"); // // // URL da próxima ABA //
-		 * httpServletRequest.setAttribute("proximaAba", //
-		 * "/gsan/atualizarImovelWizardAction.do?destino=3&action=atualizarImovelEnderecoAction"); // // //
-		 * URL da ABA anterior // httpServletRequest.setAttribute("voltarAba", //
-		 * "/gsan/atualizarImovelWizardAction.do?removeEndereco=true&destino=2&action=atualizarImovelLocalidadeAction"); //
-		 * retorno = actionMapping.findForward("telaOpcaoConsultar");
-		 * 
-		 * //sessao.removeAttribute("colecaoEnderecos"); //throw new
-		 * ActionServletException("atencao.municipio.diferente.setor_comercial.logradouro"); } }
-		 */
-
 		return retorno;
 	}
 

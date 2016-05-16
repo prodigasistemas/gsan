@@ -14805,8 +14805,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					resumoReceitaInserir.setUltimaAlteracao(new Date());
 					resumoReceitaInserir.setCategoria(categoria);
 					resumoReceitaInserir.setUnidadeNegocio(unidadeNegocio);
-					System.out.println("imovel:" + helper.getImovelId());
-					System.out.println("categoria:" + helper.getCategoriaId());
 					
 					if(helper.getSomaOutrasReceitas() != null && !helper.getSomaOutrasReceitas().equals(BigDecimal.ZERO)){
 						contabil = new ContaContabil();
@@ -14855,13 +14853,10 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					resumoReceitaInserir.setUltimaAlteracao(new Date());
 					resumoReceitaInserir.setCategoria(categoria);
 					resumoReceitaInserir.setUnidadeNegocio(unidadeNegocio);
-					System.out.println("imovel:" + helper.getImovelId());
-					System.out.println("categoria:" + helper.getCategoriaId());
 					
 					if(helper.getSomaOutrasReceitas() != null && !helper.getSomaOutrasReceitas().equals(BigDecimal.ZERO)){
 						contabil = new ContaContabil();
 						contabil.setId(helper.getContaContabil());
-						System.out.println("CONTABIL OUTROS HISTORICO: "+contabil.getId());
 						resumoReceitaInserir.setContaContabil(contabil);
 						resumoReceitaInserir.setValorReceita(helper.getValorTotal());
 						
@@ -16753,7 +16748,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					if(objeto[5] != null){
 						Collection<ImovelSubcategoria> colecaoImovelSubCategoria = new ArrayList();
 						if(helper.getImovelId() != null && !helper.getImovelId().equals("")){
-							//System.out.println("Imovel:"+ helper.getImovelId());
 							colecaoImovelSubCategoria = 
 								getControladorImovel().pesquisarCategoriasImovel(helper.getImovelId());
 						}else{
@@ -17784,7 +17778,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					if(objeto[5] != null){
 						Collection<ImovelSubcategoria> colecaoImovelSubCategoria = new ArrayList();
 						if(helper.getImovelId() != null && !helper.getImovelId().equals("")){
-							//System.out.println("Imovel:"+ helper.getImovelId());
 							colecaoImovelSubCategoria = 
 								getControladorImovel().pesquisarCategoriasImovel(helper.getImovelId());
 						}else{
@@ -17955,7 +17948,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					if(objeto[5] != null){
 						Collection<ImovelSubcategoria> colecaoImovelSubCategoria = new ArrayList();
 						if(helper.getImovelId() != null && !helper.getImovelId().equals("")){
-							//System.out.println("Imovel:"+ helper.getImovelId());
 							colecaoImovelSubCategoria = 
 								getControladorImovel().pesquisarCategoriasImovel(helper.getImovelId());
 						}else{

@@ -9530,13 +9530,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 					}
 
-					System.out.println("==============================================");
-					System.out.println("Antes da Atualização no banco ");
-					System.out.println("Imóvel: " + imovel.getId());
-					System.out.println("Referência da conta: " + contaAtual.getReferencia());
-					System.out.println("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
-					System.out.println("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
-					System.out.println("==============================================");
 					logger.info("Antes da Atualização no banco ");
 					logger.info("Imóvel: " + imovel.getId());
 					logger.info("Referência da conta: " + contaAtual.getReferencia());
