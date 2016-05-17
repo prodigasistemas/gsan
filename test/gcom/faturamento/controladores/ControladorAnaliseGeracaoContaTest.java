@@ -261,14 +261,7 @@ public class ControladorAnaliseGeracaoContaTest {
 		
 		assertTrue(analisadorGeracaoConta.verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel));
 	}
-		
-    @Test
-    public void gerarContaParaImoveisCortadosPertencentesACondominio() throws Exception {
-        aguaEsgotoZerados = true;
-        
-        assertFalse(analisadorGeracaoConta.verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel));
-    }
-	
+
 	private Collection<CreditoARealizar> buildCollectionCreditosRealizar() {
 		Collection<CreditoARealizar> creditosRealizar = new ArrayList<CreditoARealizar>();
 		CreditoARealizar creditoRealizar = new CreditoARealizar();
