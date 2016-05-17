@@ -75421,10 +75421,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							grupo.getId(),
 							FaturamentoAtividade.EFETUAR_LEITURA,
 							grupo.getAnoMesReferencia());
-			System.out.println("Cronograma nulo? " + cronograma != null );
 
 			if (cronograma != null) {
-				System.out.println("Data realização nula? " + cronograma.getDataRealizacao() );
 				if (cronograma.getDataRealizacao() == null) {
 					cronograma.setDataRealizacao(cronograma.getDataPrevista());
 					cronograma.setUltimaAlteracao(new Date());
