@@ -35,6 +35,7 @@ public class LancamentoAgenciaReguladora implements Serializable {
 		this.valorAgua = valorAgua;
 		this.valorEsgoto = valorEsgoto;
 		this.tipoLancamento = tipoLancamento;
+		this.ultimaAlteracao = new Date();
 	}
 	
 	public Integer getId() {

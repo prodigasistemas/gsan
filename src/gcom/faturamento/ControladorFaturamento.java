@@ -631,7 +631,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        								 DebitoCreditoSituacao.PRE_FATURADA);
 	        					 
 	        					 if (contaAtualizacao == null || contaAtualizacao.getId() == null){
-	        						 System.out.println("Imovel sem conta: " + helper.getImovel().getId());
 	        						 continue;
 	        					 }
 	        				 } catch (ErroRepositorioException ex) {

@@ -8965,8 +8965,6 @@ public class ControladorMicromedicao implements SessionBean {
 			Collection colecaoAtualizarMedicaoHistoricoEsgoto,
 			EsferaPoder esferaPoder) throws ControladorException {
 
-		System.out.println("Imovel Esgoto-----> " + imovel.getId());
-		
 		ConsumoTipo consumoTipo = new ConsumoTipo();
 		ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
 		MedicaoHistorico medicaoHistoricoPoco = null;
@@ -9459,12 +9457,6 @@ public class ControladorMicromedicao implements SessionBean {
 			}
 
 		}
-
-		System.out.println("*****************************");
-		System.out.println("Imovel: " + imovel.getId());
-		System.out.println("Consumo Esgoto  "
-				+ consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes());
-		System.out.println("*****************************");
 	}
 
 	/**

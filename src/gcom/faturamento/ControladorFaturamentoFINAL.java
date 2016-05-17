@@ -1598,6 +1598,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         try {
             if (imovel.getFaturamentoSituacaoTipo() != null) {
                 Collection<FaturamentoSituacaoHistorico> faturamentosSituacaoHistorico = repositorioFaturamentoSituacao.faturamentosHistoricoVigentesPorImovel(imovel.getId());
+                
+                if (faturamentosSituacaoHistorico.isEmpty()){
+                    return true;
+                }
+                
                 FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = faturamentosSituacaoHistorico.iterator().next();
                 
                 FaturamentoSituacaoTipo tipo = repositorioFaturamentoSituacaoTipo.situacaoTipoDoImovel(imovel.getId());
@@ -1661,14 +1666,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 			}
 			
-	        boolean valoresAguaEsgotoZerados = false;
-	        if (imovel.faturamentoAguaAtivo() || imovel.faturamentoEsgotoAtivo() || imovel.existeHidrometro()) {
-	            valoresAguaEsgotoZerados = !deveFaturar(imovel, anoMesFaturamentoGrupo);
-	        }
 			
 			boolean gerarConta = false;
 			
 			if (imovel.useNovaChecagemGerarConta()){
+			    boolean valoresAguaEsgotoZerados = false;
+			    
+			    if (imovel.faturamentoAguaAtivo() || imovel.faturamentoEsgotoAtivo() || imovel.existeHidrometro()) {
+			        valoresAguaEsgotoZerados = !deveFaturar(imovel, anoMesFaturamentoGrupo);
+			    }
+			    
 			    gerarConta = getControladorAnaliseGeracaoConta().verificarGeracaoConta(valoresAguaEsgotoZerados, anoMesFaturamentoGrupo, imovel);
 			}else{
 			    gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), 
@@ -9523,13 +9530,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 					}
 
-					System.out.println("==============================================");
-					System.out.println("Antes da Atualização no banco ");
-					System.out.println("Imóvel: " + imovel.getId());
-					System.out.println("Referência da conta: " + contaAtual.getReferencia());
-					System.out.println("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
-					System.out.println("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
-					System.out.println("==============================================");
 					logger.info("Antes da Atualização no banco ");
 					logger.info("Imóvel: " + imovel.getId());
 					logger.info("Referência da conta: " + contaAtual.getReferencia());
@@ -75421,10 +75421,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							grupo.getId(),
 							FaturamentoAtividade.EFETUAR_LEITURA,
 							grupo.getAnoMesReferencia());
-			System.out.println("Cronograma nulo? " + cronograma != null );
 
 			if (cronograma != null) {
-				System.out.println("Data realização nula? " + cronograma.getDataRealizacao() );
 				if (cronograma.getDataRealizacao() == null) {
 					cronograma.setDataRealizacao(cronograma.getDataPrevista());
 					cronograma.setUltimaAlteracao(new Date());
@@ -75533,7 +75531,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Calcula o percentual do valor base de repasse e insere no relatorio
 			for (String localidade : baseRepasse.keySet()) {
 				BigDecimal[] valores = baseRepasse.get(localidade);
-				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, valores[0].multiply(new BigDecimal((percentual/100))), valores[1].multiply(new BigDecimal((percentual/100))),"Valor a ser repassado",valores[0].add(valores[1]));
+				RelatorioAgenciaReguladoraDTO r1 = new RelatorioAgenciaReguladoraDTO(localidade, Util.calcularPercentual(valores[0], percentual), Util.calcularPercentual(valores[1], percentual),"Valor a ser repassado", Util.calcularPercentual(valores[0].add(valores[1]), percentual));
 				retorno.add(r1);
 			}
 			
@@ -75542,7 +75540,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+		
 	public LancamentoAgenciaReguladora buildLancamentoAgenciaReguladoraCancelados(Integer idLocalidade, Integer anoMesFaturamento, boolean aPartirNovembro, int tipoLancamento) throws Exception{
 		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
 		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.LOCALIDADE_ID, idLocalidade));

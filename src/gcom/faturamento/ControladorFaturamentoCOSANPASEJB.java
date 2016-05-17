@@ -544,8 +544,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								}
 
 								contaTxt = null;
-
-								logger.info("ID_CONTA:" + emitirContaHelper.getIdConta() + " SEQUENCIAL:" + sequencialImpressao + " CONT:" + cont);
 								
 								if (flagTerminou && ehFaturamentoAntecipado) {
 									if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
@@ -1484,8 +1482,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				
 				int comparacaoData = Util.compararData(emitirConta.getDataVencimentoConta(), novaDataVencimento);
 
-				System.out.println("Imóvel " + emitirConta.getIdImovel() + ": [" + emitirConta.getDataVencimentoConta() + " < " + novaDataVencimento + "? " + comparacaoData);
-				
 				if (comparacaoData == -1) {
 					Conta conta = (Conta) repositorioFaturamento.obterConta(emitirConta.getIdConta()).iterator().next();
 					conta.setDataVencimentoConta(novaDataVencimento);
