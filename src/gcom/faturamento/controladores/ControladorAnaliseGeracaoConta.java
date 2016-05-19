@@ -28,12 +28,12 @@ public class ControladorAnaliseGeracaoConta extends ControladorComum {
 	    repositorioDevolucao       = RepositorioDevolucao.getInstance();
 	}
 		
-	public boolean verificarGeracaoConta(boolean aguaEsgotoZerados, int anoMesFaturamento, Imovel imovel) throws ControladorException {
-		return verificarSituacaoImovelParaGerarConta(aguaEsgotoZerados, imovel) || verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel) || verificarSituacaoDeCondominio(aguaEsgotoZerados, imovel);
+	public boolean verificarGeracaoConta(boolean imovelSemConsumo, int anoMesFaturamento, Imovel imovel) throws ControladorException {
+		return verificarSituacaoImovelParaGerarConta(imovelSemConsumo, imovel) || verificarDebitosECreditosParaGerarConta(anoMesFaturamento, imovel) || verificarSituacaoDeCondominio(imovelSemConsumo, imovel);
 	}
 
-	public boolean verificarSituacaoDeCondominio(boolean aguaEsgotoZerados, Imovel imovel) {
-        return aguaEsgotoZerados && !imovel.aguaLigada() && !imovel.esgotoLigado() && imovel.pertenceACondominio();
+	public boolean verificarSituacaoDeCondominio(boolean imovelSemConsumo, Imovel imovel) {
+        return imovelSemConsumo && !imovel.aguaLigada() && !imovel.esgotoLigado() && imovel.pertenceACondominio();
     }
 
     public boolean verificarDebitosECreditosParaGerarConta(int anoMesFaturamento, Imovel imovel) throws ControladorException{
@@ -60,8 +60,8 @@ public class ControladorAnaliseGeracaoConta extends ControladorComum {
 		return segundaCondicaoGerarConta;
 	}
 
-	public boolean verificarSituacaoImovelParaGerarConta(boolean valoresAguaEsgotoZerados, Imovel imovel) {
-		return !(valoresAguaEsgotoZerados || (!valoresAguaEsgotoZerados && !imovel.aguaLigada() && !imovel.esgotoLigado() && !imovel.pertenceACondominio()));
+	public boolean verificarSituacaoImovelParaGerarConta(boolean imovelSemConsumo, Imovel imovel) {
+		return !(imovelSemConsumo || (!imovelSemConsumo && !imovel.aguaLigada() && !imovel.esgotoLigado() && !imovel.pertenceACondominio()));
 	}
 
 	private boolean haDebitosCobrarAtivos(Collection<DebitoACobrar> debitosACobrar) {
