@@ -1664,11 +1664,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 									mapAtualizaSequencial.put(emitirContaHelper
 											.getIdConta(), sequencialImpressao);
 									cont++;
-									
-									System.out.println("ID_CONTA:"+emitirContaHelper.getIdConta()+" SEQUENCIAL:"+sequencialImpressao+" CONT:"+cont);
-									
-									
-									
+																		
 									if(flagTerminou && ehFaturamentoAntecipado){
 										if(anoMesReferenciaFaturamentoAntecipado != null && 
 											anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()){

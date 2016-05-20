@@ -51,6 +51,7 @@ import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
+import gcom.atendimentopublico.AgenciaReguladora;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocalHome;
 import gcom.atendimentopublico.bean.EfetuarLigacaoAguaComInstalacaoHidrometroSemRAHelper;
@@ -567,6 +568,7 @@ import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.relatorio.financeiro.RelatorioEvolucaoContasAReceberContabilBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisArrecadacaoBean;
 import gcom.relatorio.financeiro.RelatorioParametrosContabeisFaturamentoBean;
@@ -44181,22 +44183,35 @@ public class Fachada {
 		}
 	}
 	
-
-	/**
-	 * Gerar Relatório dos Parâmetros Contábeis
-	 * 
-	 * @author Reinaldo Viana
-	 * @date 02/09/2015
-	 * 
-	 * @return Collection<RelatorioParametrosContabeisContasAReceberBean>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioParametrosContabeisContasAReceberBean> pesquisarDadosRelatorioParametrosContabeisContasAReceber(String referenciaContabil) {
 
 		try {
 			return this.getControladorFinanceiro().pesquisarDadosRelatorioParametrosContabeisContasAReceber(referenciaContabil);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<AgenciaReguladora> obterAgenciasReguladorasAtivas() {
+		try {
+			return this.getControladorAtendimentoPublico().obterAgenciasReguladorasAtivas();
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
+	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) {
+		try {
+			return this.getControladorFaturamento().pesquisarContasParaRelatorioAgenciaReguladora(anoMes, idAgencia);
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+	}
+	public boolean verificarPermissaoAprovarImovel(Integer idUsuario, Integer idImovel) {
+		try {
+			return this.getControladorAtualizacaoCadastral().verificarPermissaoAprovarImovel(idUsuario, idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
 }

@@ -23,7 +23,6 @@ import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.micromedicao.bean.CalculoConsumoHelper;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
-import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -146,7 +145,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			adicionarObjetosSelecionadosColecoes(httpServletRequest, sessao, imovelAtual, observacao);
 			
 			sessao.setAttribute("analisado", "");
-			sessao.setAttribute("confirmacao", "");
 			sessao.setAttribute("gerarAviso", "");
 			sessao.setAttribute("gerarOS", "");
 			sessao.setAttribute("gerarRelatorio", "");
@@ -543,13 +541,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 										String valorPercentual = "" + percentual;
 										leituraConsumoActionForm.setVarConsumo(valorPercentual.replace(".", ",") + "%");
 									}
-									
-									LeituraSituacao leituraSituacaoAtual = medicaoHistoricoAnoMesAtual.getLeituraSituacaoAtual();  
-									if (leituraSituacaoAtual != null) {
-										String confirmacao = leituraSituacaoAtual.getId().equals(LeituraSituacao.CONFIRMADA) ? ConstantesSistema.CONFIRMADA : ConstantesSistema.NAO_CONFIRMADA;
-										leituraConsumoActionForm.setConfirmacao(confirmacao);
-										sessao.setAttribute("confirmacao", confirmacao);
-									}
 								}
 								
 								if(imovelMicromedicaoConsumo.getConsumoHistorico() != null
@@ -565,8 +556,9 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 						}
 					}
 					
-//					Organizar a coleção de Conta
+//					 Organizar a coleção de Conta
 					if (colecaoImovelMicromedicao != null && !colecaoImovelMicromedicao.isEmpty()) {
+						
 						Collections.sort((List) colecaoImovelMicromedicao, new Comparator() {
 									public int compare(Object a, Object b) {
 										
@@ -747,7 +739,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 	private void limparFormPaginacao(
 			LeituraConsumoActionForm leituraConsumoActionForm) {
 		leituraConsumoActionForm.setAnalisado("");
-		leituraConsumoActionForm.setConfirmacao("");
 		leituraConsumoActionForm.setGerarAviso("");
 		leituraConsumoActionForm.setGerarOS("");
 		leituraConsumoActionForm.setGerarRelatorio("");

@@ -107,7 +107,6 @@ import gcom.cobranca.bean.ParametrosComandoNegativacaoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoFINAL;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.GuiaPagamentoGeral;
@@ -181,7 +180,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
+	private Logger logger = Logger.getLogger(ControladorSpcSerasaSEJB.class);
 	
 	SessionContext sessionContext;
 	
@@ -4049,14 +4048,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * [UC0673] - Gerar Movimento da Exclusão de Negativação
 	 * [SB0001] - Gerar Movimento da Exclusão de Negativação
 	 */
-	public Collection gerarMovimentoExclusaoNegativacao(Integer idFuncionalidadeIniciada,
-			Integer[] idNegativador) throws ControladorException {
-		
-		logger.info("Movimento de Exclusão de Negativação EM PROCESSAMENTO...");
-		
-		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-				idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
+	public Collection gerarMovimentoExclusaoNegativacao(Integer idFuncionalidadeIniciada, Integer[] idNegativador) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
 		Collection colecaoMovimento = new ArrayList();
 
@@ -4075,16 +4068,15 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				Collection colecaoNegativadores = (ArrayList) mapNegativadorMovimentoRegistro.get(negativador);
 				
 				this.gerarRegistroTipoHeaderExclusao(negativador, negativadorMovimento, negativadorContrato);
-				Object[] registro = this.gerarRegistroTipoDetalheExclusao(negativador,
+				Object[] registro = this.gerarRegistroTipoDetalheExclusao(negativador, negativadorMovimento, negativadorContrato, colecaoNegativadores);
+				registro = this.gerarRegistroTipoTraillerExclusao((Integer) registro[0], (BigDecimal) registro[1], (Integer) registro[2], negativador, 
 						negativadorMovimento, negativadorContrato, colecaoNegativadores);
-				registro = this.gerarRegistroTipoTraillerExclusao((Integer) registro[0], (BigDecimal) registro[1],
-						(Integer) registro[2], negativador, negativadorMovimento, negativadorContrato, colecaoNegativadores);
 
 				this.gerarArquivoNegativacao(negativadorMovimento, false);
 
-				Integer numeroRegistrosEnvio = null;
 				colecaoMovimento = repositorioSpcSerasa.consultarNegativadorMovimentoRegistroParaGerarArquivo(negativadorMovimento.getId(), "T");
 
+				Integer numeroRegistrosEnvio = null;
 				if (colecaoMovimento != null && !colecaoMovimento.isEmpty()) {
 					if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
 						NegativadorMovimentoReg movimentoRegistro = (NegativadorMovimentoReg) colecaoMovimento.iterator().next();
@@ -5712,92 +5704,32 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @author Thiago Toscano,Vivianne Sousa
 	 * @date 07/01/2008,10/03/2010
 	 */
-	public void gerarResumoDiarioNegativacao(Integer idFuncionalidadeIniciada, Integer idSetor)
-			throws ControladorException {
-
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento do Batch
-		//
-		// -------------------------
-		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.ROTA, idSetor);
+	public void gerarResumoDiarioNegativacao(Integer idFuncionalidadeIniciada, Integer idRota) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
 
 		try {
+			List<NegativadorMovimentoReg> registros = repositorioSpcSerasa.consultarNegativadorMovimentoReg(idRota);
 
-			int quantidadeInicio = 0;
-			int quantidadeMaxima = 50;
+			for (NegativadorMovimentoReg registro : registros) {
+				List<NegativadorMovimentoRegItem> itens = retornarNegativadorMovimentoRegistroItens(registro);
+				
+				Object[] itensProcessados = processarItemNegativacao(itens);
+				Object[] situacaoDebito = determinarSituacaoPredominanteDebitoNegativacao(registro, itens, itensProcessados);
 
-			boolean flagFimPesquisa = false;
+				Short indicadorSituacaoDefinitiva = (Short) itensProcessados[9];
+				CobrancaDebitoSituacao novaCobrancaDebitoSituacao = (CobrancaDebitoSituacao) situacaoDebito[0];
 
-			while (!flagFimPesquisa) {
-
-				Collection coll = repositorioSpcSerasa.consultarNegativadorMovimentoReg(idSetor, quantidadeInicio,
-						quantidadeMaxima);
-
-				if (coll != null) {
-
-					if (coll.size() < quantidadeMaxima) {
-						flagFimPesquisa = true;
-					}
-
-					Iterator it = coll.iterator();
-					while (it.hasNext()) {
-
-						Object[] dadosNmr = (Object[]) it.next();
-						NegativadorMovimentoReg nmr = new NegativadorMovimentoReg();
-
-						nmr.setId((Integer) dadosNmr[0]);
-						if (dadosNmr[1] != null) {
-							nmr.setCodigoExclusaoTipo((Integer) dadosNmr[1]);
-						}
-						if (dadosNmr[2] != null) {
-							nmr.setValorDebito((BigDecimal) dadosNmr[2]);
-						}
-
-						System.out.println("-------------- NMR : " + nmr.getId());
-
-						Object[] obj = new Object[10];
-
-						// 2.2 Processa os itens da negativação
-						// [SB0001 Processar Itens da Negativação].
-						Collection collNegativadorMovimentoRegItem = processarItemNegativacao(nmr, obj);
-						Short indicadorSituacaoDefinitiva = (Short) obj[9];
-
-						// 2.4
-						// [SB0002 Determinar Situação Predominante do Débito da
-						// Negativação].
-						// retornoSituacaoPredominanteDebitoNegativacao
-						Object[] rspdn = determinarSituacaoPredominanteDebitoNegativacao(nmr,
-								collNegativadorMovimentoRegItem, obj);
-
-						CobrancaDebitoSituacao novoCDS = (CobrancaDebitoSituacao) rspdn[0];
-
-						// 2.5
-						if (novoCDS.getId() != null) {
-							repositorioSpcSerasa.atualizarNegativadorMovimentoReg(novoCDS.getId(), (Date) rspdn[1],
-									indicadorSituacaoDefinitiva, ConstantesSistema.NAO, nmr.getId());
-
-						} else {
-
-							System.out.println("************************* ENTROU ALGUMA VEZ!!!");
-							repositorioSpcSerasa.atualizarNegativadorMovimentoReg(indicadorSituacaoDefinitiva,
-									ConstantesSistema.NAO, nmr.getId());
-
-						}
-
-					}
-
+				if (novaCobrancaDebitoSituacao.getId() != null) {
+					logger.info("GERAR_RESUMO_DIARIO_NEGATIVACAO - Atualizando NOVA CobrancaDebitoSituacao do Registro [nmrg_id = " + registro.getId() + "]");
+					repositorioSpcSerasa.atualizarNegativadorMovimentoReg(novaCobrancaDebitoSituacao.getId(), (Date) situacaoDebito[1],
+							indicadorSituacaoDefinitiva, ConstantesSistema.NAO, registro.getId());
 				} else {
-					flagFimPesquisa = true;
+					logger.info("GERAR_RESUMO_DIARIO_NEGATIVACAO - Atualizando apenas o Registro [nmrg_id = " + registro.getId() + "]");
+					repositorioSpcSerasa.atualizarNegativadorMovimentoReg(indicadorSituacaoDefinitiva, ConstantesSistema.NAO, registro.getId());
 				}
-
 			}
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-
 		} catch (Throwable ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new ControladorException("erro.sistema", ex);
@@ -5812,7 +5744,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @author Thiago Toscano
 	 * @date 07/01/2008
 	 *
-	 * @param nmr
+	 * @param registro
 	 * @param Object
 	 *            []
 	 * 
@@ -5832,134 +5764,128 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ErroRepositorioException
 	 */
-	private Collection processarItemNegativacao(NegativadorMovimentoReg nmr, Object[] obj) throws ControladorException {
+	private Object[] processarItemNegativacao(List<NegativadorMovimentoRegItem> itens) throws ControladorException {
+		Integer quantidadeNegativacao = 0;
+		Integer quantidadeNegativacaoPendente = 0;
+		Integer quantidadeNegativacaoPago = 0;
+		Integer quantidadeNegativacaoParcelado = 0;
+		Integer quantidadeNegativacaoCancelado = 0;
+		BigDecimal valorNegativacaoPendente = new BigDecimal(0);
+		BigDecimal valorNegativacaoPago = new BigDecimal(0);
+		BigDecimal valorNegativacaoParcelado = new BigDecimal(0);
+		BigDecimal valorNegativacaoCancelado = new BigDecimal(0);
+		Short indicadorSituacaoDefinitiva = ConstantesSistema.SIM;
 
-		try {
+		for (NegativadorMovimentoRegItem item : itens) {
+			quantidadeNegativacao += 1;
 
-			Integer quantidadeNegativacao = 0;
-			Integer quantidadeNegativacaoPendente = 0;
-			Integer quantidadeNegativacaoPago = 0;
-			Integer quantidadeNegativacaoParcelado = 0;
-			Integer quantidadeNegativacaoCancelado = 0;
+			Integer cobrancaDebitoSituacao = item.getCobrancaDebitoSituacao().getId();
 
-			BigDecimal valorNegativacaoPendente = new BigDecimal(0);
-			BigDecimal valorNegativacaoPago = new BigDecimal(0);
-			BigDecimal valorNegativacaoParcelado = new BigDecimal(0);
-			BigDecimal valorNegativacaoCancelado = new BigDecimal(0);
-			Short indicadorSituacaoDefinitiva = ConstantesSistema.SIM;
+			if (cobrancaDebitoSituacao.equals(CobrancaDebitoSituacao.PENDENTE)) {
+				valorNegativacaoPendente = valorNegativacaoPendente.add(item.getValorDebito());
+				quantidadeNegativacaoPendente += 1;
 
-			Collection coll = this.repositorioSpcSerasa.consultarNegativadorMovimentoRegItem(nmr.getId());
-			Collection collectionNegMovRegItem = new ArrayList<NegativadorMovimentoRegItem>();
+			} else if (cobrancaDebitoSituacao.equals(CobrancaDebitoSituacao.PAGO)) {
+				valorNegativacaoPago = valorNegativacaoPago.add(item.getValorDebito());
+				quantidadeNegativacaoPago += 1;
 
-			if (coll != null && !coll.isEmpty()) {
-				Iterator it = coll.iterator();
-				// 2.0
-				while (it.hasNext()) {
+			} else if (cobrancaDebitoSituacao.equals(CobrancaDebitoSituacao.PARCELADO)) {
+				valorNegativacaoParcelado = valorNegativacaoParcelado.add(item.getValorDebito());
+				quantidadeNegativacaoParcelado += 1;
 
-					Object[] dadosNegMovRegItem = (Object[]) it.next();
-
-					NegativadorMovimentoRegItem nmri = new NegativadorMovimentoRegItem();
-					nmri.setNegativadorMovimentoReg(nmr);
-					if (dadosNegMovRegItem[0] != null) {
-						nmri.setId((Integer) dadosNegMovRegItem[0]);
-					}
-					if (dadosNegMovRegItem[1] != null) {
-						CobrancaDebitoSituacao cds = new CobrancaDebitoSituacao();
-						cds.setId((Integer) dadosNegMovRegItem[1]);
-						nmri.setCobrancaDebitoSituacao(cds);
-					}
-					if (dadosNegMovRegItem[2] != null) {
-						CobrancaDebitoSituacao cds = new CobrancaDebitoSituacao();
-						cds.setId((Integer) dadosNegMovRegItem[2]);
-						nmri.setCobrancaDebitoSituacaoAposExclusao(cds);
-					}
-					if (dadosNegMovRegItem[3] != null) {
-						nmri.setIndicadorSituacaoDefinitiva((Short) dadosNegMovRegItem[3]);
-					}
-					if (dadosNegMovRegItem[4] != null) {
-						nmri.setValorDebito((BigDecimal) dadosNegMovRegItem[4]);
-					}
-					if (dadosNegMovRegItem[5] != null) {
-						ContaGeral conta = new ContaGeral();
-						conta.setId((Integer) dadosNegMovRegItem[5]);
-						conta.setIndicadorHistorico((Short) dadosNegMovRegItem[6]);
-						nmri.setContaGeral((ContaGeral) conta);
-					}
-					if (dadosNegMovRegItem[7] != null) {
-						GuiaPagamentoGeral guiaPag = new GuiaPagamentoGeral();
-						guiaPag.setId((Integer) dadosNegMovRegItem[7]);
-						guiaPag.setIndicadorHistorico((Short) dadosNegMovRegItem[8]);
-						nmri.setGuiaPagamentoGeral((GuiaPagamentoGeral) guiaPag);
-					}
-					if (dadosNegMovRegItem[9] != null) {
-						nmri.setDataSituacaoDebito((Date) dadosNegMovRegItem[9]);
-					}
-					if (dadosNegMovRegItem[10] != null) {
-						nmri.setDataSituacaoDebitoAposExclusao((Date) dadosNegMovRegItem[10]);
-					}
-					if (dadosNegMovRegItem[11] != null) {
-						DocumentoTipo documentoTipo = new DocumentoTipo();
-						documentoTipo.setId((Integer) dadosNegMovRegItem[11]);
-						nmri.setDocumentoTipo(documentoTipo);
-					}
-
-					collectionNegMovRegItem.add(nmri);
-
-					CobrancaDebitoSituacao cds = null;
-					quantidadeNegativacao = quantidadeNegativacao + 1;
-
-					if (nmri != null) {
-						// 2.1
-						cds = nmri.getCobrancaDebitoSituacao();
-
-						if (cds.getId().equals(CobrancaDebitoSituacao.PENDENTE)) {
-
-							valorNegativacaoPendente = valorNegativacaoPendente.add(nmri.getValorDebito());
-							quantidadeNegativacaoPendente = quantidadeNegativacaoPendente + 1;
-
-						} else if (cds.getId().equals(CobrancaDebitoSituacao.PAGO)) {
-
-							valorNegativacaoPago = valorNegativacaoPago.add(nmri.getValorDebito());
-							quantidadeNegativacaoPago = quantidadeNegativacaoPago + 1;
-
-						} else if (cds.getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
-
-							valorNegativacaoParcelado = valorNegativacaoParcelado.add(nmri.getValorDebito());
-							quantidadeNegativacaoParcelado = quantidadeNegativacaoParcelado + 1;
-
-						} else if (cds.getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
-
-							valorNegativacaoCancelado = valorNegativacaoCancelado.add(nmri.getValorDebito());
-							quantidadeNegativacaoCancelado = quantidadeNegativacaoCancelado + 1;
-
-						}
-
-						if (nmri.getIndicadorSituacaoDefinitiva() != 1) {
-							indicadorSituacaoDefinitiva = ConstantesSistema.NAO;
-						}
-
-					}
-
-				}
+			} else if (cobrancaDebitoSituacao.equals(CobrancaDebitoSituacao.CANCELADO)) {
+				valorNegativacaoCancelado = valorNegativacaoCancelado.add(item.getValorDebito());
+				quantidadeNegativacaoCancelado += 1;
 			}
-			obj[0] = quantidadeNegativacao;
-			obj[1] = quantidadeNegativacaoPendente;
-			obj[2] = quantidadeNegativacaoPago;
-			obj[3] = quantidadeNegativacaoParcelado;
-			obj[4] = quantidadeNegativacaoCancelado;
-			obj[5] = valorNegativacaoPendente;
-			obj[6] = valorNegativacaoPago;
-			obj[7] = valorNegativacaoParcelado;
-			obj[8] = valorNegativacaoCancelado;
-			obj[9] = indicadorSituacaoDefinitiva;
 
-			return collectionNegMovRegItem;
-
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
+			if (item.getIndicadorSituacaoDefinitiva() != ConstantesSistema.SIM.shortValue()) {
+				indicadorSituacaoDefinitiva = ConstantesSistema.NAO;
+			}
 		}
+
+		Object[] retorno = {
+				quantidadeNegativacao,
+				quantidadeNegativacaoPendente,
+				quantidadeNegativacaoPago,
+				quantidadeNegativacaoParcelado,
+				quantidadeNegativacaoCancelado,
+				valorNegativacaoPendente,
+				valorNegativacaoPago,
+				valorNegativacaoParcelado,
+				valorNegativacaoCancelado,
+				indicadorSituacaoDefinitiva
+		};
+
+		return retorno;
 	}
 
+	private List<NegativadorMovimentoRegItem> retornarNegativadorMovimentoRegistroItens(NegativadorMovimentoReg registro) {
+		List<NegativadorMovimentoRegItem> itens = new ArrayList<NegativadorMovimentoRegItem>();
+		
+		try {
+			Collection objetos = this.repositorioSpcSerasa.consultarNegativadorMovimentoRegItem(registro.getId());
+			
+			for (Iterator iterator = objetos.iterator(); iterator.hasNext();) {
+				Object[] objeto = (Object[]) iterator.next();
+				
+				NegativadorMovimentoRegItem item = new NegativadorMovimentoRegItem();
+				item.setNegativadorMovimentoReg(registro);
+				
+				if (objeto[0] != null) {
+					item.setId((Integer) objeto[0]);
+				}
+				
+				if (objeto[1] != null) {
+					item.setCobrancaDebitoSituacao(new CobrancaDebitoSituacao((Integer) objeto[1]));
+				}
+				
+				if (objeto[2] != null) {
+					item.setCobrancaDebitoSituacaoAposExclusao(new CobrancaDebitoSituacao((Integer) objeto[2]));
+				}
+				
+				if (objeto[3] != null) {
+					item.setIndicadorSituacaoDefinitiva((Short) objeto[3]);
+				}
+				
+				if (objeto[4] != null) {
+					item.setValorDebito((BigDecimal) objeto[4]);
+				}
+				
+				if (objeto[5] != null) {
+					ContaGeral conta = new ContaGeral();
+					conta.setId((Integer) objeto[5]);
+					conta.setIndicadorHistorico((Short) objeto[6]);
+					item.setContaGeral((ContaGeral) conta);
+				}
+				
+				if (objeto[7] != null) {
+					GuiaPagamentoGeral guia = new GuiaPagamentoGeral();
+					guia.setId((Integer) objeto[7]);
+					guia.setIndicadorHistorico((Short) objeto[8]);
+					item.setGuiaPagamentoGeral((GuiaPagamentoGeral) guia);
+				}
+				
+				if (objeto[9] != null) {
+					item.setDataSituacaoDebito((Date) objeto[9]);
+				}
+				
+				if (objeto[10] != null) {
+					item.setDataSituacaoDebitoAposExclusao((Date) objeto[10]);
+				}
+				
+				if (objeto[11] != null) {
+					item.setDocumentoTipo(new DocumentoTipo((Integer) objeto[11]));
+				}
+				
+				itens.add(item);
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
+		return itens;
+	}
+	
 	/**
 	 * Método que determina a cobrancaDebitoSituacao do
 	 * NegativadorMovimentoRegItem [UC0688] Gerar Resumo Diário da Negativação
@@ -6495,7 +6421,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @date 07/01/2008
 	 *
 	 *
-	 * @param nmr
+	 * @param registro
 	 *            obj[0] = quantidadeNegativacao; obj[1] =
 	 *            quantidadeNegativacaoPendente; obj[2] =
 	 *            quantidadeNegativacaoPago; obj[3] =
@@ -6513,136 +6439,80 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ErroRepositorioException
 	 */
-	private Object[] determinarSituacaoPredominanteDebitoNegativacao(NegativadorMovimentoReg nmr,
-			Collection collNegativadorMovimentoRegItem, Object[] obj) throws ControladorException,
-			ErroRepositorioException {
-		CobrancaDebitoSituacao cbs = null;
-		Date data = null;
-
+	private Object[] determinarSituacaoPredominanteDebitoNegativacao(NegativadorMovimentoReg registro, 
+			Collection colecaoRegistroItens, Object[] itensProcessados) throws ControladorException, ErroRepositorioException {
+		
 		boolean temItemDependente = false;
 
-		NegativadorMovimentoRegItem nmri = new NegativadorMovimentoRegItem();
-		// 1.0
-		if (collNegativadorMovimentoRegItem != null) {
-			Iterator it = collNegativadorMovimentoRegItem.iterator();
-			while (it.hasNext()) {
+		NegativadorMovimentoRegItem item = new NegativadorMovimentoRegItem();
+		for (Iterator iterator = colecaoRegistroItens.iterator(); iterator.hasNext();) {
+			item = (NegativadorMovimentoRegItem) iterator.next();
 
-				nmri = (NegativadorMovimentoRegItem) it.next();
-
-				// Se foi excluido, tem que pegar o após a exclusão .
-				if (nmr.getCodigoExclusaoTipo() != null) {
-					if (nmri != null
-							&& nmri.getCobrancaDebitoSituacaoAposExclusao().getId()
-									.equals(CobrancaDebitoSituacao.PENDENTE)) {
-						temItemDependente = true;
-						break;
-					}
-				} else {
-					if (nmri != null
-							&& nmri.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PENDENTE)) {
-						temItemDependente = true;
-						break;
-					}
+			if (registro.getCodigoExclusaoTipo() != null) {
+				if (item != null && item.getCobrancaDebitoSituacaoAposExclusao().getId().equals(CobrancaDebitoSituacao.PENDENTE)) {
+					temItemDependente = true;
+					break;
 				}
-
+			} else {
+				if (item != null && item.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PENDENTE)) {
+					temItemDependente = true;
+					break;
+				}
 			}
 		}
 
-		// 1.1
+		CobrancaDebitoSituacao cobrancaDebitoSituacao = new CobrancaDebitoSituacao();
+		Date data = null;
 		if (temItemDependente) {
-			// 1.1
-			cbs = new CobrancaDebitoSituacao();
-			cbs.setId(CobrancaDebitoSituacao.PENDENTE);
-
-			// 1.2
+			cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.PENDENTE);
 			data = new Date();
-
 		} else {
+			Integer quantidadeNegativacao = (Integer) itensProcessados[0];
 
-			Integer quantidadeNegativacao = (Integer) obj[0];
+			Integer quantidadeNegativacaoPago = (Integer) itensProcessados[2];
+			Integer quantidadeNegativacaoParcelado = (Integer) itensProcessados[3];
+			Integer quantidadeNegativacaoCancelado = (Integer) itensProcessados[4];
 
-			Integer quantidadeNegativacaoPago = (Integer) obj[2];
-			Integer quantidadeNegativacaoParcelado = (Integer) obj[3];
-			Integer quantidadeNegativacaoCancelado = (Integer) obj[4];
-			// BigDecimal valorNegativacaoPendente = (BigDecimal)obj[5];
+			BigDecimal valorNegativacaoPago = (BigDecimal) itensProcessados[6];
+			BigDecimal valorNegativacaoParcelado = (BigDecimal) itensProcessados[7];
+			BigDecimal valorNegativacaoCancelado = (BigDecimal) itensProcessados[8];
 
-			BigDecimal valorNegativacaoPago = (BigDecimal) obj[6];
-			BigDecimal valorNegativacaoParcelado = (BigDecimal) obj[7];
-			BigDecimal valorNegativacaoCancelado = (BigDecimal) obj[8];
-
-			// 2.0
-
-			BigDecimal valorDebito = nmr.getValorDebito();
+			BigDecimal valorDebito = registro.getValorDebito();
 			BigDecimal porcentagem = new BigDecimal(0.7);
 			BigDecimal valorMinimo = valorDebito.multiply(porcentagem);
-			// 3.0
 
 			double quantidadeMinima = quantidadeNegativacao * porcentagem.doubleValue();
 
-			if (valorNegativacaoCancelado.doubleValue() >= valorMinimo.doubleValue()
-					|| quantidadeNegativacaoCancelado.doubleValue() >= quantidadeMinima) {
-				// 6.1
-				cbs = new CobrancaDebitoSituacao();
-				cbs.setId(CobrancaDebitoSituacao.CANCELADO);
-				// 6.2
-				data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
-			} else if (valorNegativacaoParcelado.doubleValue() >= valorMinimo.doubleValue()
-					|| quantidadeNegativacaoParcelado.doubleValue() >= quantidadeMinima) {
-				// 5.1
-				cbs = new CobrancaDebitoSituacao();
-				cbs.setId(CobrancaDebitoSituacao.PARCELADO);
-				// 5.2
-				data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
-			} else if (valorNegativacaoPago.doubleValue() >= valorMinimo.doubleValue()
-					|| quantidadeNegativacaoPago.doubleValue() >= quantidadeMinima) {
-				// 4.1
-				cbs = new CobrancaDebitoSituacao();
-				cbs.setId(CobrancaDebitoSituacao.PAGO);
-				// 4.2
-				data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
+			cobrancaDebitoSituacao = new CobrancaDebitoSituacao();
+			
+			if (valorNegativacaoCancelado.doubleValue() >= valorMinimo.doubleValue() || quantidadeNegativacaoCancelado.doubleValue() >= quantidadeMinima) {
+				cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.CANCELADO);
+			} else if (valorNegativacaoParcelado.doubleValue() >= valorMinimo.doubleValue() || quantidadeNegativacaoParcelado.doubleValue() >= quantidadeMinima) {
+				cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.PARCELADO);
+			} else if (valorNegativacaoPago.doubleValue() >= valorMinimo.doubleValue() || quantidadeNegativacaoPago.doubleValue() >= quantidadeMinima) {
+				cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.PAGO);
 			} else {
-				// 7.0
-				cbs = new CobrancaDebitoSituacao();
-
-				if (valorNegativacaoCancelado.doubleValue() >= valorNegativacaoPago.doubleValue()
-						&& valorNegativacaoCancelado.doubleValue() >= valorNegativacaoParcelado.doubleValue()) {
-
-					cbs = new CobrancaDebitoSituacao();
-					cbs.setId(CobrancaDebitoSituacao.CANCELADO);
-
-					data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
+				if (valorNegativacaoCancelado.doubleValue() >= valorNegativacaoPago.doubleValue() && valorNegativacaoCancelado.doubleValue() >= valorNegativacaoParcelado.doubleValue()) {
+					cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.CANCELADO);
 				}
-				if (valorNegativacaoParcelado.doubleValue() >= valorNegativacaoPago.doubleValue()
-						&& valorNegativacaoParcelado.doubleValue() >= valorNegativacaoCancelado.doubleValue()) {
-
-					cbs = new CobrancaDebitoSituacao();
-					cbs.setId(CobrancaDebitoSituacao.PARCELADO);
-
-					data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
+				
+				if (valorNegativacaoParcelado.doubleValue() >= valorNegativacaoPago.doubleValue() && valorNegativacaoParcelado.doubleValue() >= valorNegativacaoCancelado.doubleValue()) {
+					cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.PARCELADO);
 				}
-				if (valorNegativacaoPago.doubleValue() >= valorNegativacaoParcelado.doubleValue()
-						&& valorNegativacaoPago.doubleValue() >= valorNegativacaoCancelado.doubleValue()) {
-
-					cbs = new CobrancaDebitoSituacao();
-					cbs.setId(CobrancaDebitoSituacao.PAGO);
-
-					data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cbs, nmr);
-
+				
+				if (valorNegativacaoPago.doubleValue() >= valorNegativacaoParcelado.doubleValue() && valorNegativacaoPago.doubleValue() >= valorNegativacaoCancelado.doubleValue()) {
+					cobrancaDebitoSituacao.setId(CobrancaDebitoSituacao.PAGO);
 				}
 			}
 
+			data = repositorioSpcSerasa.getMaiorDataNegativadorMovimentoRegItem(cobrancaDebitoSituacao, registro);
 		}
 
-		Object[] objResposta = new Object[2];
-		objResposta[0] = cbs;
-		objResposta[1] = data;
+		Object[] situacaoDebito = new Object[2];
+		situacaoDebito[0] = cobrancaDebitoSituacao;
+		situacaoDebito[1] = data;
 
-		return objResposta;
+		return situacaoDebito;
 	}
 
 	/**
@@ -6655,178 +6525,101 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @author Vivianne Sousa
 	 * @date 10/03/2010
 	 */
-	public void determinarConfirmacaoDaNegativacao(Integer idFuncionalidadeIniciada, Integer idLocalidade)
-			throws ControladorException {
-
-		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.LOCALIDADE, idLocalidade);
+	public void determinarConfirmacaoDaNegativacao(Integer idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
+			Collection registros = repositorioSpcSerasa.pesquisarNegativadorMovimentoReg(idLocalidade);
+			
+			if (registros != null && !registros.isEmpty()) {
+				Iterator iterator = registros.iterator();
+				while (iterator.hasNext()) {
+					Object[] dados = (Object[]) iterator.next();
 
-			int quantidadeInicio = 0;
-			int quantidadeMaxima = 100;
+					Integer idNegativadorMovimentoReg = (Integer) dados[0];
+					Integer idImovel = (Integer) dados[1];
+					Integer idNegativacaoImoveis = (Integer) dados[2];
+					Integer idNegativador = (Integer) dados[3];
+					Integer idClienteNegativadorMovimentoReg = dados[4] != null ? (Integer) dados[4] : null;
+					short numeroPrazoInclusao = (Short) dados[5];
+					Date dataProcessamentoEnvio = (Date) dados[6];
+					Integer codigoExclusaoTipo = dados[7] != null ? (Integer) dados[7] : null;
+					Date dataExclusao = dados[8] != null ? (Date) dados[8] : null;
 
-			boolean flagFimPesquisa = false;
+					// Data de confirmação recebe NGMV_DTPROCESSAMENTOENVIO da tabela NEGATIVADOR_MOVIMENTO
+					// mais NGCN_NNPRAZOINCLUSAO da tabela NEGATIVADOR_CONTRATO mais 1 dia
+					Date dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm = Util.adicionarNumeroDiasDeUmaData(dataProcessamentoEnvio, numeroPrazoInclusao);
+					dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm = Util.adicionarNumeroDiasDeUmaData(dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm, 1);
 
-			while (!flagFimPesquisa) {
+					// Atualizar a situação de cobrança do imóvel na tabela IMOVEL
+					Integer idCobrancaSituacaoImovel = null;
+					if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
+						idCobrancaSituacaoImovel = CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC;
+					} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
+						idCobrancaSituacaoImovel = CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA;
+					}
+					// CRC3323 - comentado por Vivianne Sousa -
+					// analista:Fatima Sampaio - 10/05/2010
+					// getControladorImovel().atualizarSituacaoCobrancaImovel(idCobrancaSituacaoImovel,idImovel);
 
-				Collection coll = repositorioSpcSerasa.pesquisarNegativadorMovimentoReg(idLocalidade, quantidadeInicio,
-						quantidadeMaxima);
-
-				if (coll != null) {
-
-					if (coll.size() < quantidadeMaxima) {
-						flagFimPesquisa = true;
+					// Atualizar a situação de cobrança do imóvel na tabela IMOVEL_COBRANCA_SITUACAO
+					Integer idCobrancaSituacaoImovelCobrancaSituacao = null;
+					if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
+						idCobrancaSituacaoImovelCobrancaSituacao = CobrancaSituacao.CARTA_ENVIADA_AO_SPC;
+					} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
+						idCobrancaSituacaoImovelCobrancaSituacao = CobrancaSituacao.CARTA_ENVIADA_A_SERASA;
+					}
+					
+					List colecaoImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(idImovel, idCobrancaSituacaoImovelCobrancaSituacao);
+					for (Iterator iterator2 = colecaoImovelCobrancaSituacao.iterator(); iterator2.hasNext();) {
+						Integer idImovelCobrancaSituacao = (Integer) iterator2.next();
+						getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(idImovelCobrancaSituacao, dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
 					}
 
-					// if (coll.size() < quantidadeInicio) {
-					// flagFimPesquisa = true;
-					// } else {
-					// quantidadeInicio = quantidadeInicio + quantidadeMaxima;
-					// }
+					// Incluir a nova situação de cobrança do imóvel na tabela IMOVEL_COBRANCA_SITUACAO
+					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(idImovel, idCobrancaSituacaoImovel);
 
-					Iterator it = coll.iterator();
-					while (it.hasNext()) {
+					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null || idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
+						ImovelCobrancaSituacao imovelCobrancaSituacao = new ImovelCobrancaSituacao();
+						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
+						Cliente cliente = new Cliente();
+						Imovel imovel = new Imovel();
+						cobrancaSituacao.setId(idCobrancaSituacaoImovel);
+						imovel.setId(idImovel);
+						imovelCobrancaSituacao.setImovel(imovel);
+						imovelCobrancaSituacao.setDataImplantacaoCobranca(dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
 
-						Object[] dados = (Object[]) it.next();
+						if (codigoExclusaoTipo != null) {
+							imovelCobrancaSituacao.setDataRetiradaCobranca(dataExclusao);
 
-						Integer idNegativadorMovimentoReg = null;
-						Integer idImovel = null;
-						Integer idNegativacaoImoveis = null;
-						Integer idNegativador = null;
-						Integer idClienteNegativadorMovimentoReg = null;
-						short numeroPrazoInclusao = 0;
-						Date dataProcessamentoEnvio = null;
-						Integer codigoExclusaoTipo = null;
-						Date dataExclusao = null;
-
-						idNegativadorMovimentoReg = (Integer) dados[0];
-						idImovel = (Integer) dados[1];
-						idNegativacaoImoveis = (Integer) dados[2];
-						idNegativador = (Integer) dados[3];
-						if (dados[4] != null) {
-							idClienteNegativadorMovimentoReg = (Integer) dados[4];
+							// Atualizar Data da Retirada da Situação Carta Enviada
+							this.repositorioSpcSerasa.atualizarDataRetiradaSituacaoCartaEnviada(dataExclusao, idImovel);
+						} else {
+							imovelCobrancaSituacao.setDataRetiradaCobranca(null);
 						}
-						numeroPrazoInclusao = (Short) dados[5];
-						dataProcessamentoEnvio = (Date) dados[6];
-
-						if (dados[7] != null) {
-							codigoExclusaoTipo = (Integer) dados[7];
-						}
-
-						if (dados[8] != null) {
-							dataExclusao = (Date) dados[8];
-						}
-						// -------------------------------------------
-
-						System.out.println("-------------- NMR : " + idNegativadorMovimentoReg);
-
-						// Data de confirmação recebe NGMV_DTPROCESSAMENTOENVIO
-						// da tabela NEGATIVADOR_MOVIMENTO
-						// mais NGCN_NNPRAZOINCLUSAO da tabela
-						// NEGATIVADOR_CONTRATO mais 1 dia
-						Date dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm = Util.adicionarNumeroDiasDeUmaData(
-								dataProcessamentoEnvio, numeroPrazoInclusao);
-						dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm = Util.adicionarNumeroDiasDeUmaData(
-								dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm, 1);
-
-						// 1.2. Atualizar a situação de cobrança do imóvel na
-						// tabela IMOVEL
-						Integer idCobrancaSituacaoImovel = null;
-						if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
-							idCobrancaSituacaoImovel = CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC;
-						} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
-							idCobrancaSituacaoImovel = CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA;
-						}
-						// CRC3323 - comentado por Vivianne Sousa -
-						// analista:Fatima Sampaio - 10/05/2010
-						// getControladorImovel().atualizarSituacaoCobrancaImovel(idCobrancaSituacaoImovel,idImovel);
-
-						// 1.3. Atualizar a situação de cobrança do imóvel na
-						// tabela IMOVEL_COBRANCA_SITUACAO
-						Integer idCobrancaSituacaoImovelCobrancaSituacao = null;
-						if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
-							idCobrancaSituacaoImovelCobrancaSituacao = CobrancaSituacao.CARTA_ENVIADA_AO_SPC;
-						} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
-							idCobrancaSituacaoImovelCobrancaSituacao = CobrancaSituacao.CARTA_ENVIADA_A_SERASA;
-						}
-						List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(
-								idImovel, idCobrancaSituacaoImovelCobrancaSituacao);
-						if (collImovelCobrancaSituacao != null && !collImovelCobrancaSituacao.isEmpty()) {
-							Iterator iter = collImovelCobrancaSituacao.iterator();
-							while (iter.hasNext()) {
-								Integer idImovelCobrancaSituacao = (Integer) iter.next();
-								getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(
-										idImovelCobrancaSituacao, dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
-							}
-						}
-
-						// 1.4. Incluir a nova situação de cobrança do imóvel na
-						// tabela IMOVEL_COBRANCA_SITUACAO
-						List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa
-								.consultarImovelCobrancaSituacao(idImovel, idCobrancaSituacaoImovel);
-
-						// verificação adicionada para permitir reiniciar o
-						// batch
-						if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null
-								|| idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
-
-							ImovelCobrancaSituacao ics = new ImovelCobrancaSituacao();
-							CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
-							Cliente cliente = new Cliente();
-							Imovel imovel = new Imovel();
-							cobrancaSituacao.setId(idCobrancaSituacaoImovel);
-							imovel.setId(idImovel);
-							ics.setImovel(imovel);
-							ics.setDataImplantacaoCobranca(dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
-
-							if (codigoExclusaoTipo != null) {
-
-								ics.setDataRetiradaCobranca(dataExclusao);
-
-								// [SB0002] – Atualizar Data da Retirada da
-								// Situação Carta Enviada
-								this.repositorioSpcSerasa.atualizarDataRetiradaSituacaoCartaEnviada(dataExclusao,
-										idImovel);
-
-							} else {
-								ics.setDataRetiradaCobranca(null);
-							}
-							ics.setCobrancaSituacao(cobrancaSituacao);
-							cliente.setId(idClienteNegativadorMovimentoReg);
-							ics.setCliente(cliente);
-							ics.setUltimaAlteracao(new Date());
-							RepositorioUtilHBM.getInstancia().inserir(ics);
-						}
-
-						// 1.5. Atualizar a situação de cobrança do imóvel na
-						// tabela NEGATIVADOR_MOVIMENTO_REG
-						repositorioSpcSerasa.atualizarSituacaoCobrancaNegativadorMovimentoReg(idCobrancaSituacaoImovel,
-								idNegativadorMovimentoReg);
-
-						// atualização ficou para o final para permitir
-						// reiniciar o batch
-						// 1.1. Atualizar a tabela NEGATIVACAO_IMOVEIS
-						if (idNegativacaoImoveis != null) {
-							repositorioSpcSerasa.atualizarDataConfirmacaoNegativacaoImoveis(idNegativacaoImoveis,
-									dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
-						}
+						
+						imovelCobrancaSituacao.setCobrancaSituacao(cobrancaSituacao);
+						cliente.setId(idClienteNegativadorMovimentoReg);
+						imovelCobrancaSituacao.setCliente(cliente);
+						imovelCobrancaSituacao.setUltimaAlteracao(new Date());
+						RepositorioUtilHBM.getInstancia().inserir(imovelCobrancaSituacao);
 					}
 
-				} else {
-					flagFimPesquisa = true;
+					// Atualizar a situação de cobrança do imóvel na tabela NEGATIVADOR_MOVIMENTO_REG
+					repositorioSpcSerasa.atualizarSituacaoCobrancaNegativadorMovimentoReg(idCobrancaSituacaoImovel, idNegativadorMovimentoReg);
+
+					// Atualizar a tabela NEGATIVACAO_IMOVEIS
+					if (idNegativacaoImoveis != null) {
+						repositorioSpcSerasa.atualizarDataConfirmacaoNegativacaoImoveis(idNegativacaoImoveis, dataProcessamentoEnvioMaisNumeroPrazoInclusaoMaisUm);
+					}
 				}
-
 			}
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-
 		} catch (Throwable ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new ControladorException("erro.sistema", ex);
 		}
-
 	}
 
 	// GERA REGISTRO HEADER SERASA **************
@@ -7007,7 +6800,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			registroDetalheConsumidor.append("  ");
 
 			// D.22 - Nome cliente devedor
-			registroDetalheConsumidor.append(Util.completaString(cliente.getNome(), 70));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(cliente.getNome()), 70));
 
 			// D.23 - Data de nascimento do cliente
 			if (cliente.getCpf() != null && cliente.getCpf().length() > 0) {
@@ -7024,7 +6817,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			// D.25 - Nome da Mãe
 			if (cliente.getNomeMae() != null) {
-				registroDetalheConsumidor.append(Util.completaString(cliente.getNomeMae(), 70));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(cliente.getNomeMae()), 70));
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			}
@@ -7032,9 +6825,9 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			String endereco = this.getControladorEndereco().pesquisarEnderecoClienteAbreviado(cliente.getId());
 
 			if (endereco != null && endereco.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(endereco.substring(0, 45), 45));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco.substring(0, 45)), 45));
 			} else {
-				registroDetalheConsumidor.append(Util.completaString(endereco, 45));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco), 45));
 			}
 
 			ClienteEndereco clienteEndereco = null;
@@ -7047,16 +6840,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			if (clienteEndereco.getLogradouroBairro() != null) {
 				// D.27 - Bairro
-				registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroBairro().getBairro().getNome(), 20));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroBairro().getBairro().getNome()), 20));
 			} else {
 				// D.27 - Bairro
-				registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getBairro(), 20));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getBairro()), 20));
 			}
 
 			// D.28 - Município
-			registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getMunicipio(), 25));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getMunicipio()), 25));
 			// D.29 - Unidade da Federação
-			registroDetalheConsumidor.append(Util.completaString(clienteEndereco.getLogradouroCep().getCep().getSigla(), 2));
+			registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(clienteEndereco.getLogradouroCep().getCep().getSigla()), 2));
 			// D.30 - Cep
 			registroDetalheConsumidor.append(Util.completaString("" + clienteEndereco.getLogradouroCep().getCep().getCodigo(), 8));
 
@@ -7077,7 +6870,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			// D.34
 			if (endereco != null && endereco.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(endereco.substring(45), 25));
+				registroDetalheConsumidor.append(Util.completaString(Util.removerCaractereEspecial(endereco.substring(45)), 25));
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 25));
 			}
@@ -7373,7 +7166,6 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
-			envioEmailErroMovimentoRetorno(ex, nomeArquivo);
 			throw new ControladorException("erro.sistema", ex);
 		}
 
@@ -10172,7 +9964,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				registroLinha = this.atualizarRegistroTraillerArquivoNegativacaoSERASA(negativadorMovimento.getId(), registroLinha, numeroRegistro);
 			}
 			
-			enviarEmailArquivoNegativacao(negativadorMovimento.getNegativador().getId(), registroLinha);
+			enviarEmailArquivoNegativacao(negativadorMovimento, registroLinha);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -10292,45 +10084,58 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return registroLinha;
 	}
 
-	private void enviarEmailArquivoNegativacao(Integer idNegativador, StringBuffer registroLinha) throws ControladorException {
+	private void enviarEmailArquivoNegativacao(NegativadorMovimento movimento, StringBuffer registroLinha) throws ControladorException {
 		Date data = new Date();
-		String AAAAMMDD = Util.formatarDataAAAAMMDD(data);
-		String HHMM = Util.formatarDataHHMM(data);
-		String formatodatahora = AAAAMMDD + "_" + HHMM;
+		String formatodatahora = Util.formatarDataAAAAMMDD(data) + "_" + Util.formatarDataHHMM(data);
 		BufferedWriter out = null;
 		ZipOutputStream zos = null;
-		
-		String nomeZip = "";
-		File leituraTipo = null;
 
-		if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
-			nomeZip = "REG_SPC_" + formatodatahora;
-			leituraTipo = new File(nomeZip + ".env");
-		} else {
-			nomeZip = "REG_SERASA_" + formatodatahora;
-			leituraTipo = new File(nomeZip + ".txt");
-		}
+		Negativador negativador = this.pesquisarNegativadorPorId(movimento.getNegativador().getId());
+				
+		String nomeArquivo = "REG_" + negativador.getCliente().getNome() + "_" + formatodatahora;
+		nomeArquivo = nomeArquivo.trim().replace(' ', '_');
 		
+		File arquivo = null;
+		if (movimento.getNegativador().getId().equals(Negativador.NEGATIVADOR_SPC)) {
+			arquivo = new File(nomeArquivo + ".env");
+		} else {
+			arquivo = new File(nomeArquivo + ".txt");
+		}
+
 		EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.SPC_SERASA);
 		String emailRemetente = envioEmail.getEmailRemetente();
-		String tituloMensagem = envioEmail.getTituloMensagem();
-		String corpoMensagem = envioEmail.getCorpoMensagem();
+		String tituloMensagem = negativador.getCliente().getNome() + " - " + envioEmail.getTituloMensagem();
+		String tipo = "";
+		if (movimento.getCodigoMovimento() == NegativadorMovimento.CODIGO_MOVIMENTO_INCLUSAO) {
+			tipo = " (INCLUSÃO)"; 
+		} else if (movimento.getCodigoMovimento() == NegativadorMovimento.CODIGO_MOVIMENTO_EXCLUSAO) {
+			tipo = " (EXCLUSÃO)"; 
+		}
+		tituloMensagem += tipo;
+		
+		StringBuilder corpoMensagem = new StringBuilder();
+		corpoMensagem.append("Negativador: " + negativador.getCliente().getNome())
+				     .append("\n")
+				     .append("Código do Movimento: " + movimento.getId() + tipo)
+				     .append("\n")
+				     .append("Sequencial: " + Util.completaStringComZeroAEsquerda(movimento.getNumeroSequencialEnvio().toString(), 6));
+		
 		String emailReceptor = envioEmail.getEmailReceptor();
 
 		try {
-			File compactado = new File(nomeZip + ".zip");
+			File compactado = new File(nomeArquivo + ".zip");
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
-			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivo.getAbsolutePath())));
 			out.write(registroLinha.toString());
 			out.flush();
 			out.close();
 
-			ZipUtil.adicionarArquivo(zos, leituraTipo);
+			ZipUtil.adicionarArquivo(zos, arquivo);
 			zos.close();
 
-			ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente, tituloMensagem, corpoMensagem, compactado);
+			ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente, tituloMensagem, corpoMensagem.toString(), compactado);
 
-			leituraTipo.delete();
+			arquivo.delete();
 		} catch (IOException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		} catch (Exception e) {
@@ -10339,6 +10144,15 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			IoUtil.fecharStream(out);
 			IoUtil.fecharStream(zos);
 		}
+	}
+
+	private Negativador pesquisarNegativadorPorId(Integer idNegativador) throws ControladorException {
+		FiltroNegativador filtro = new FiltroNegativador();
+		filtro.adicionarParametro(new ParametroSimples(FiltroNegativador.ID, idNegativador));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		
+		Collection colecao = getControladorUtil().pesquisar(filtro, Negativador.class.getName());
+		return (Negativador) Util.retonarObjetoDeColecao(colecao);
 	}
 
 	/**

@@ -186,6 +186,9 @@
 			<fileset dir="${ApacheCommons.home}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${BarCode.home}">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 	</target>
 

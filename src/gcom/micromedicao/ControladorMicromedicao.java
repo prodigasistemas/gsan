@@ -1,5 +1,47 @@
 package gcom.micromedicao;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
 import gcom.atendimentopublico.IRepositorioAtendimentoPublico;
 import gcom.atendimentopublico.RepositorioAtendimentoPublicoHBM;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -73,6 +115,7 @@ import gcom.cobranca.RotaAcaoCriterio;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.RotaAcaoCriterioPK;
 import gcom.fachada.Fachada;
+import gcom.faturamento.ControladorFaturamentoCOSANPASEJB;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
@@ -227,48 +270,6 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
 
 public class ControladorMicromedicao implements SessionBean {
 	
@@ -8964,8 +8965,6 @@ public class ControladorMicromedicao implements SessionBean {
 			Collection colecaoAtualizarMedicaoHistoricoEsgoto,
 			EsferaPoder esferaPoder) throws ControladorException {
 
-		System.out.println("Imovel Esgoto-----> " + imovel.getId());
-		
 		ConsumoTipo consumoTipo = new ConsumoTipo();
 		ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
 		MedicaoHistorico medicaoHistoricoPoco = null;
@@ -9458,12 +9457,6 @@ public class ControladorMicromedicao implements SessionBean {
 			}
 
 		}
-
-		System.out.println("*****************************");
-		System.out.println("Imovel: " + imovel.getId());
-		System.out.println("Consumo Esgoto  "
-				+ consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes());
-		System.out.println("*****************************");
 	}
 
 	/**
@@ -13973,7 +13966,6 @@ public class ControladorMicromedicao implements SessionBean {
             sessionContext.setRollbackOnly();
             throw new ControladorException("erro.sistema", ex);
         }
-
         return consumoHistorico;
     }
 
@@ -15889,12 +15881,15 @@ public class ControladorMicromedicao implements SessionBean {
 	 * 
 	 * [UC0153] Apresentar dados para Analise da medição e Consumo
 	 */
-	public Collection carregarDadosMedicaoResumo(Integer idImovel, boolean ligacaoAgua) throws ControladorException {
+	public Collection carregarDadosMedicaoResumo(Integer idImovel,
+			boolean ligacaoAgua) throws ControladorException {
+
 		Collection resultadoPesquisa = null;
 		Collection retorno = null;
 
 		try {
-			resultadoPesquisa = repositorioMicromedicao.carregarDadosMedicaoResumo(idImovel, ligacaoAgua);
+			resultadoPesquisa = repositorioMicromedicao
+					.carregarDadosMedicaoResumo(idImovel, ligacaoAgua);
 
 			if (!resultadoPesquisa.isEmpty()) {
 				Iterator iterator = resultadoPesquisa.iterator();
@@ -15910,24 +15905,37 @@ public class ControladorMicromedicao implements SessionBean {
 					objetoMedicao = (Object[]) iterator.next();
 					medicaoHistorico = new MedicaoHistorico();
 
-					medicaoHistorico.setAnoMesReferencia(((Integer) objetoMedicao[0]).intValue());
-					medicaoHistorico.setDataLeituraAtualInformada((Date) objetoMedicao[1]);
-					medicaoHistorico.setLeituraAtualInformada((Integer) objetoMedicao[2]);
-					medicaoHistorico.setDataLeituraAtualFaturamento((Date) objetoMedicao[3]);
-					medicaoHistorico.setLeituraAtualFaturamento((Integer) objetoMedicao[4]);
-
+					medicaoHistorico
+							.setAnoMesReferencia(((Integer) objetoMedicao[0])
+									.intValue());
+					medicaoHistorico
+							.setDataLeituraAtualInformada((Date) objetoMedicao[1]);
+					medicaoHistorico
+							.setLeituraAtualInformada((Integer) objetoMedicao[2]);
+					medicaoHistorico
+							.setDataLeituraAtualFaturamento((Date) objetoMedicao[3]);
+					medicaoHistorico
+							.setLeituraAtualFaturamento((Integer) objetoMedicao[4]);
+					// =============================== Leitura Anormalidade
+					// Informada
 					leituraAnormalidadeInformada = new LeituraAnormalidade();
-					leituraAnormalidadeInformada.setId((Integer) objetoMedicao[5]);
-					medicaoHistorico.setLeituraAnormalidadeInformada(leituraAnormalidadeInformada);
-
+					leituraAnormalidadeInformada
+							.setId((Integer) objetoMedicao[5]);
+					medicaoHistorico
+							.setLeituraAnormalidadeInformada(leituraAnormalidadeInformada);
+					// =============================== Leitura Anormalidade
+					// Informada
 					leituraAnormalidadeFaturada = new LeituraAnormalidade();
-					leituraAnormalidadeFaturada.setId((Integer) objetoMedicao[6]);
-					leituraAnormalidadeFaturada.setDescricao((String) objetoMedicao[7]);
-					medicaoHistorico.setLeituraAnormalidadeFaturamento(leituraAnormalidadeFaturada);
-
+					leituraAnormalidadeFaturada
+							.setId((Integer) objetoMedicao[6]);
+					leituraAnormalidadeFaturada
+							.setDescricao((String) objetoMedicao[7]);
+					medicaoHistorico
+							.setLeituraAnormalidadeFaturamento(leituraAnormalidadeFaturada);
+					// =============================== Leitura Anormalidade
+					// Informada
 					leituraSituacao = new LeituraSituacao();
-					leituraSituacao.setId((Integer) objetoMedicao[8]);
-					leituraSituacao.setDescricao((String) objetoMedicao[9]);
+					leituraSituacao.setDescricao((String) objetoMedicao[8]);
 					medicaoHistorico.setLeituraSituacaoAtual(leituraSituacao);
 
 					retorno.add(medicaoHistorico);
@@ -15939,6 +15947,7 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 
 		return retorno;
+
 	}
 
 	/**

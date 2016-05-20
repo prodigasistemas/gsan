@@ -2820,8 +2820,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			   			+ " nmrg.cobrancaDebitoSituacao.id is not null and "
 			   			+ " nmrg.cobrancaDebitoSituacao.id <> 1 and"
 			   			+ " ngmv.codigoMovimento=1 and "
-//			   			+ " nmrg.negativadorMovimento.id in (select ngmv.id from NegativadorMovimento ngmv "
-//			   			+ "                  where ngmv.negativador.id in(:idNegativador) and ngmv.codigoMovimento=1) and   "   
 			   			+ " nmrg.negativadorRegistroTipo.id in (select nrtp.id from NegativadorRegistroTipo nrtp "
 			   			+ "                  where  nrtp.codigoRegistro = 'D' and nrtp.negativador.id in(:idNegativador)) "
 			   			+ " and nmrg.numeroRegistro <> 0  "
@@ -3551,19 +3549,14 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		Session session = HibernateUtil.getSession();
 
 		try {
-//			String hql = " select nmri"
-//				 + " from gcom.cobranca.NegativadorMovimentoRegItem as nmri "
-//				 + " left join fetch nmri.negativadorMovimentoReg as nmr " 
-//				 + " left join fetch nmri.cobrancaDebitoSituacao as cds " 
-//				 + " left join fetch nmri.contaGeral as cg " 
-//				 + " left join fetch nmri.guiaPagamentoGeral as cpg "				 
-//				 + " where nmri.negativadorMovimentoReg.id = " + codigoNegativadorMovimentoReg
-//				 + " ";
-			String sql = " SELECT ni.nmri_id as id,  ni.cdst_id as idDebitoSituacao, " +
+			String sql = " SELECT ni.nmri_id as id, " +
+					"ni.cdst_id as idDebitoSituacao, " +
 					"ni.cdst_idaposexclusao as idDebitoSituacaoAposExclusao, " +
 					"ni.nmri_icsitdefinitiva as icSituacaoDefinitiva, " +
-					"ni.nmri_vldebito as valorDebito, ni.cnta_id as idConta, " +
-					"cg.cntg_ichistorico as icContaHistorico, ni.gpag_id as idGuiaPagamento, " +
+					"ni.nmri_vldebito as valorDebito, " +
+					"ni.cnta_id as idConta, " +
+					"cg.cntg_ichistorico as icContaHistorico, " +
+					"ni.gpag_id as idGuiaPagamento, " +
 					"gpg.gpge_ichistorico as icGuiaPagamentoHistorico, " +
 					"ni.nmri_dtsituacaodebito as dataSituacaoDebito, " +
 					"ni.nmri_dtsitdebaposexclusao as dataSituacaoDebitoApos, " +
@@ -3574,25 +3567,23 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 					"where ni.nmrg_id = " + codigoNegativadorMovimentoReg;
 
 			retorno = (List) session.createSQLQuery(sql)
-			.addScalar("id", Hibernate.INTEGER)
-			.addScalar("idDebitoSituacao", Hibernate.INTEGER)
-			.addScalar("idDebitoSituacaoAposExclusao", Hibernate.INTEGER)
-			.addScalar("icSituacaoDefinitiva", Hibernate.SHORT)
-			.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
-			.addScalar("idConta", Hibernate.INTEGER)
-			.addScalar("icContaHistorico", Hibernate.SHORT)
-			.addScalar("idGuiaPagamento", Hibernate.INTEGER)
-			.addScalar("icGuiaPagamentoHistorico", Hibernate.SHORT)
-			.addScalar("dataSituacaoDebito", Hibernate.DATE)
-			.addScalar("dataSituacaoDebitoApos", Hibernate.DATE)
-			.addScalar("idDocumentoTipo", Hibernate.INTEGER)
-			.list();
+				.addScalar("id", Hibernate.INTEGER)
+				.addScalar("idDebitoSituacao", Hibernate.INTEGER)
+				.addScalar("idDebitoSituacaoAposExclusao", Hibernate.INTEGER)
+				.addScalar("icSituacaoDefinitiva", Hibernate.SHORT)
+				.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
+				.addScalar("idConta", Hibernate.INTEGER)
+				.addScalar("icContaHistorico", Hibernate.SHORT)
+				.addScalar("idGuiaPagamento", Hibernate.INTEGER)
+				.addScalar("icGuiaPagamentoHistorico", Hibernate.SHORT)
+				.addScalar("dataSituacaoDebito", Hibernate.DATE)
+				.addScalar("dataSituacaoDebitoApos", Hibernate.DATE)
+				.addScalar("idDocumentoTipo", Hibernate.INTEGER)
+				.list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -3691,22 +3682,17 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			
 			DebitoCreditoSituacao dcst = new DebitoCreditoSituacao();
 			dcst.setId((Integer)retorno[0]);
-		//	System.out.println("DebitoCreditoSituacao = " + (Integer)retorno[0]);
-			
 			
 			Imovel imovel= new Imovel();
 			imovel.setId((Integer)retorno[2]);	
-		//	System.out.println("Imovel = " + (Integer)retorno[2]);
 		
 			c.setReferencia((Integer)retorno[1]);
 			c.setDebitoCreditoSituacaoAtual(dcst);			
 			c.setImovel(imovel);
-		//	System.out.println("Referencia = " + (Integer)retorno[1]);
 			
 			if(retorno[3] != null){
 				c.setDataCancelamento((Date)retorno[3]);
 			}
-		//	System.out.println("DataCancelamento = " + (Date)retorno[3]);
 			
 			c.setId((Integer)retorno[4]);
 			
@@ -13150,46 +13136,31 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 * @author Vivianne Sousa
 	 * @date 30/10/2009
 	 */
-	public List consultarNegativadorMovimentoReg(Integer idSetor, int quantidadeInicio, int quantidadeMaxima)
-	throws ErroRepositorioException {
-	
+	public List<NegativadorMovimentoReg> consultarNegativadorMovimentoReg(Integer idRota) throws ErroRepositorioException {
 		List retorno = new ArrayList();
 		Session session = HibernateUtil.getSession();
 		
 		try {
-			
-			String hql = " select nmr.id, nmr.codigoExclusaoTipo, nmr.valorDebito "
-				 + " from gcom.cobranca.NegativadorMovimentoReg nmr"
-				 + " left join nmr.quadra quad "		
-			 	 + " left join quad.setorComercial as setor "
-				 + " left join nmr.negativadorMovimento as nm " 
-				 + " where "
-				 + " nm.codigoMovimento = :codigoMovimento "
+			String consulta = "SELECT nmr "
+				 + " FROM gcom.cobranca.NegativadorMovimentoReg nmr"
+				 + " LEFT JOIN nmr.quadra quad "		
+				 + " LEFT JOIN nmr.negativadorMovimento as nm " 
+				 + " WHERE nm.codigoMovimento = :codigoMovimento "
 				 + " and nmr.imovel is not null "  
 				 + " and nmr.indicadorAceito = :indicadorAceito "
 				 + " and nmr.codigoExclusaoTipo is null "
 				 + " and nmr.indicadorItemAtualizado = :indicadorItemAtualizado "
-				 + " and setor.id = :idSetor";
+				 + " and quad.rota.id = :idRota";
 			
-			long t1 = System.currentTimeMillis();
-			
-			retorno = (List) session.createQuery(hql)
-			.setShort("codigoMovimento", ConstantesSistema.SIM)
-			.setShort("indicadorAceito", ConstantesSistema.SIM)
-			.setShort("indicadorItemAtualizado", ConstantesSistema.SIM)
-			.setInteger("idSetor",idSetor)
-			//.setFirstResult(quantidadeInicio)
-			.setMaxResults(quantidadeMaxima)
-			.list();
-			
-			long t2 = System.currentTimeMillis();
-			System.out.println("[UC0688]consultarNegativadorMovimentoReg " + ( t2 - t1));
-			
+			retorno = (List) session.createQuery(consulta)
+					.setShort("codigoMovimento", ConstantesSistema.SIM)
+					.setShort("indicadorAceito", ConstantesSistema.SIM)
+					.setShort("indicadorItemAtualizado", ConstantesSistema.SIM)
+					.setInteger("idRota", idRota)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -13679,10 +13650,7 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 * @author Vivianne Sousa
 	 * @date 11/03/2010
 	 */
-	//OVERRIDE - Metodo sobrescrito na classe RepositoripSpcSeresaPostgresHBM
-	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade, 
-			int quantidadeInicio, int quantidadeMaxima)throws ErroRepositorioException {
-	
+	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade) throws ErroRepositorioException {
 		Collection retorno = new ArrayList();
 		Session session = HibernateUtil.getSession();
 		
@@ -13698,38 +13666,30 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 				+ " ngmv.ngmv_dtprocessamentoenvio as dataProcessamentoEnvio," //6
 				+ " nmrg.nmrg_cdexclusaotipo as codigoExclusaoTipo," //7
 				+ " ngim.ngim_dtexclusao as dataExclusao" //8
-				+ " from          cobranca.negatd_movimento_reg   nmrg"
-				+ " inner join    cobranca.negativador_movimento       ngmv on ngmv.ngmv_id=nmrg.ngmv_id and ngmv_cdmovimento=1"
-				+ " inner join    cobranca.negativacao_imoveis         ngim on ngim.ngcm_id=ngmv.ngcm_id and ngim.imov_id=nmrg.imov_id and ngim_dtconfirmacao is null"
-				+ " inner join    cobranca.negativador_contrato        ngcn on ngcn.negt_id=ngmv.negt_id and (ngcn_dtcontratoencerramento is null or ngcn_dtcontratofim >= to_date(sysdate))"
-				+ " where"
-				+ "      	nmrg.imov_id is not null"
-				+ " and 	nmrg.nmrg_icaceito=1"
-				+ " and 	(  (nmrg.nmrg_cdexclusaotipo is null and  to_date(sysdate) - ngmv.ngmv_dtprocessamentoenvio > ngcn.ngcn_nnprazoinclusao)"
-				+ " 	or (nmrg.nmrg_cdexclusaotipo is not null and  ngim.ngim_dtexclusao - ngmv.ngmv_dtprocessamentoenvio>ngcn.ngcn_nnprazoinclusao))"
+				+ " from cobranca.negatd_movimento_reg nmrg"
+				+ " inner join cobranca.negativador_movimento ngmv on ngmv.ngmv_id=nmrg.ngmv_id and ngmv_cdmovimento=1"
+				+ " inner join cobranca.negativacao_imoveis ngim on ngim.ngcm_id=ngmv.ngcm_id and ngim.imov_id=nmrg.imov_id and ngim_dtconfirmacao is null"
+				+ " inner join cobranca.negativador_contrato ngcn on ngcn.negt_id=ngmv.negt_id and (ngcn_dtcontratoencerramento is null or ngcn_dtcontratofim >= to_date(sysdate))"
+				+ " where nmrg.imov_id is not null"
+				+ " and nmrg.nmrg_icaceito=1"
+				+ " and ((nmrg.nmrg_cdexclusaotipo is null and  to_date(sysdate) - ngmv.ngmv_dtprocessamentoenvio > ngcn.ngcn_nnprazoinclusao)"
+				+ " 	 or (nmrg.nmrg_cdexclusaotipo is not null and  ngim.ngim_dtexclusao - ngmv.ngmv_dtprocessamentoenvio>ngcn.ngcn_nnprazoinclusao))"
 				+ " and loca_id = " + idLocalidade;
 			
-			long t1 = System.currentTimeMillis();
 			retorno = (Collection)session.createSQLQuery(consulta)
-			.addScalar("idNegativadorMovimentoReg", Hibernate.INTEGER)
-			.addScalar("idImovel", Hibernate.INTEGER)
-			.addScalar("idNegativacaoImoveis", Hibernate.INTEGER)
-			.addScalar("idNegativador", Hibernate.INTEGER)
-			.addScalar("idclientenegativadormovimentor", Hibernate.INTEGER)
-			.addScalar("numeroPrazoInclusao", Hibernate.SHORT)
-			.addScalar("dataProcessamentoEnvio", Hibernate.DATE)
-			.addScalar("codigoExclusaoTipo" , Hibernate.INTEGER)
-			.addScalar("dataExclusao", Hibernate.DATE)
-//			.setFirstResult(quantidadeInicio)
-			.setMaxResults(quantidadeMaxima).list();
-			long t2 = System.currentTimeMillis();
-			System.out.println("[UC1005]pesquisarNegativadorMovimentoReg " + ( t2 - t1));
-			
+					.addScalar("idNegativadorMovimentoReg", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("idNegativacaoImoveis", Hibernate.INTEGER)
+					.addScalar("idNegativador", Hibernate.INTEGER)
+					.addScalar("idclientenegativadormovimentor", Hibernate.INTEGER)
+					.addScalar("numeroPrazoInclusao", Hibernate.SHORT)
+					.addScalar("dataProcessamentoEnvio", Hibernate.DATE)
+					.addScalar("codigoExclusaoTipo" , Hibernate.INTEGER)
+					.addScalar("dataExclusao", Hibernate.DATE)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		

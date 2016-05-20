@@ -85,6 +85,7 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 			sql.append(" FROM seguranca.tab_col_atlz_cadastral tcac");
 			sql.append(" inner join seguranca.tab_atlz_cadastral tac on (tac.tatc_id = tcac.tatc_id)");
 			sql.append(" where tac.tatc_cdimovel = :idImovel");
+			sql.append(" and tcac.usur_id is not null ");
 
 			return (Integer) (session.createSQLQuery(sql.toString())
 									.addScalar("usuarioLogado", Hibernate.INTEGER)

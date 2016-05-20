@@ -45,6 +45,8 @@ import gcom.arrecadacao.pagamento.PagamentoCartaoDebitoItem;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.arrecadacao.pagamento.SequenciaCartao;
+import gcom.atendimentopublico.AgenciaReguladora;
+import gcom.atendimentopublico.AgenciaReguladoraMunicipio;
 import gcom.atendimentopublico.EspecificacaoPavimentacaoServicoTipo;
 import gcom.atendimentopublico.EspecificacaoUnidadeCobranca;
 import gcom.atendimentopublico.LigacaoOrigem;
@@ -460,6 +462,7 @@ import gcom.faturamento.HistogramaEsgotoLigacao;
 import gcom.faturamento.HistogramaEsgotoLigacaoSemQuadra;
 import gcom.faturamento.ImpostoTipo;
 import gcom.faturamento.ImpostoTipoAliquota;
+import gcom.faturamento.LancamentoAgenciaReguladora;
 import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.MovimentoContaCategoriaConsumoFaixa;
 import gcom.faturamento.MovimentoContaImpostoDeduzido;
@@ -937,6 +940,8 @@ public class HibernateUtil {
 					.addClass(OrdemServicoFoto.class)
 					.addClass(FotoSituacaoOrdemServico.class)
 					.addClass(MensagemAcompanhamentoServico.class)
+					.addClass(AgenciaReguladora.class)
+					.addClass(AgenciaReguladoraMunicipio.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cadastro //
@@ -1246,6 +1251,7 @@ public class HibernateUtil {
 					.addClass(HistogramaEsgotoLigacaoSemQuadra.class)
 					.addClass(ReceitasAFaturarResumo.class)
 					.addClass(ContaImpressaoTermicaQtde.class)
+					.addClass(LancamentoAgenciaReguladora.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

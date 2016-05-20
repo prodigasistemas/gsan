@@ -254,8 +254,7 @@ public class RepositorioSpcSerasaPostgresHBM extends RepositorioSpcSerasaHBM {
 	 * @date 08/12/2010
 	 */
 	@Override
-	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade, int quantidadeInicio, int quantidadeMaxima) throws ErroRepositorioException {
-
+	public Collection pesquisarNegativadorMovimentoReg(Integer idLocalidade) throws ErroRepositorioException {
 		Collection retorno = new ArrayList();
 		Session session = HibernateUtil.getSession();
 
@@ -269,31 +268,32 @@ public class RepositorioSpcSerasaPostgresHBM extends RepositorioSpcSerasaHBM {
 					+ " nmrg.clie_id as idClienteNegativadorMovimentoReg,"
 					+ " ngcn.ngcn_nnprazoinclusao as numeroPrazoInclusao,"
 					+ " ngmv.ngmv_dtprocessamentoenvio as dataProcessamentoEnvio,"
-					+ " nmrg.nmrg_cdexclusaotipo as codigoExclusaoTipo," // 7
-					+ " ngim.ngim_dtexclusao as dataExclusao" // 8
-					+ " from          cobranca.negatd_movimento_reg   nmrg"
-					+ " inner join    cobranca.negativador_movimento       ngmv on ngmv.ngmv_id=nmrg.ngmv_id and ngmv_cdmovimento=1"
-					+ " inner join    cobranca.negativacao_imoveis         ngim on ngim.ngcm_id=ngmv.ngcm_id and ngim.imov_id=nmrg.imov_id and ngim_dtconfirmacao is null"
-					+ " inner join    cobranca.negativador_contrato        ngcn on ngcn.negt_id=ngmv.negt_id and (ngcn_dtcontratoencerramento is null or ngcn_dtcontratofim >= current_date)"
-					+ " where" + "      	nmrg.imov_id is not null" + " and 	nmrg.nmrg_icaceito=1"
-					+ " and 	(  (nmrg.nmrg_cdexclusaotipo is null and  current_date - ngmv.ngmv_dtprocessamentoenvio > ngcn.ngcn_nnprazoinclusao)"
-					+ " 	or (nmrg.nmrg_cdexclusaotipo is not null and  ngim.ngim_dtexclusao - ngmv.ngmv_dtprocessamentoenvio>ngcn.ngcn_nnprazoinclusao))"
+					+ " nmrg.nmrg_cdexclusaotipo as codigoExclusaoTipo,"
+					+ " ngim.ngim_dtexclusao as dataExclusao"
+					+ " from cobranca.negatd_movimento_reg   nmrg"
+					+ " inner join cobranca.negativador_movimento ngmv on ngmv.ngmv_id=nmrg.ngmv_id and ngmv_cdmovimento=1"
+					+ " inner join cobranca.negativacao_imoveis ngim on ngim.ngcm_id=ngmv.ngcm_id and ngim.imov_id=nmrg.imov_id and ngim_dtconfirmacao is null"
+					+ " inner join cobranca.negativador_contrato ngcn on ngcn.negt_id=ngmv.negt_id and (ngcn_dtcontratoencerramento is null or ngcn_dtcontratofim >= current_date)"
+					+ " where nmrg.imov_id is not null"
+					+ " and nmrg.nmrg_icaceito=1"
+					+ " and ((nmrg.nmrg_cdexclusaotipo is null and current_date - ngmv.ngmv_dtprocessamentoenvio > ngcn.ngcn_nnprazoinclusao)"
+					+ " 	 or (nmrg.nmrg_cdexclusaotipo is not null and  ngim.ngim_dtexclusao - ngmv.ngmv_dtprocessamentoenvio>ngcn.ngcn_nnprazoinclusao))"
 					+ " and loca_id = " + idLocalidade;
 
-			long t1 = System.currentTimeMillis();
-			retorno = (Collection) session.createSQLQuery(consulta).addScalar("idNegativadorMovimentoReg", Hibernate.INTEGER)
-					.addScalar("idImovel", Hibernate.INTEGER).addScalar("idNegativacaoImoveis", Hibernate.INTEGER)
-					.addScalar("idNegativador", Hibernate.INTEGER).addScalar("idClienteNegativadorMovimentoReg", Hibernate.INTEGER)
-					.addScalar("numeroPrazoInclusao", Hibernate.SHORT).addScalar("dataProcessamentoEnvio", Hibernate.DATE)
-					.addScalar("codigoExclusaoTipo", Hibernate.INTEGER).addScalar("dataExclusao", Hibernate.DATE).setMaxResults(quantidadeMaxima).list();
-			long t2 = System.currentTimeMillis();
-			System.out.println("[UC1005]pesquisarNegativadorMovimentoReg " + (t2 - t1));
-
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("idNegativadorMovimentoReg", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("idNegativacaoImoveis", Hibernate.INTEGER)
+					.addScalar("idNegativador", Hibernate.INTEGER)
+					.addScalar("idClienteNegativadorMovimentoReg", Hibernate.INTEGER)
+					.addScalar("numeroPrazoInclusao", Hibernate.SHORT)
+					.addScalar("dataProcessamentoEnvio", Hibernate.DATE)
+					.addScalar("codigoExclusaoTipo", Hibernate.INTEGER)
+					.addScalar("dataExclusao", Hibernate.DATE)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 

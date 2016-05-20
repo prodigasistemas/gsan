@@ -101,7 +101,7 @@ public interface ControladorSpcSerasaLocal extends javax.ejb.EJBLocalObject {
 	 * Ponto inicial do caso de uso de Gerar Resumo Diário da Negativação
 	 * [UC0688] Gerar Resumo Diário da Negativação fluxo principal
 	 */
-	public void gerarResumoDiarioNegativacao(Integer idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException;
+	public void gerarResumoDiarioNegativacao(Integer idFuncionalidadeIniciada, Integer idRota) throws ControladorException;
 
 	/**
 	 * Ponto inicial do caso de uso de Gerar Resumo Diário da Negativação
