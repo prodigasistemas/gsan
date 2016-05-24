@@ -7374,7 +7374,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
 					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
 					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id  "
+					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento    "
 					+ "from ClienteImovel ci "
 					+ "inner join ci.imovel i "
 					+ "inner join i.ligacaoAguaSituacao last "
@@ -7387,18 +7387,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join q.rota r "
 					+ "inner join i.setorComercial sc "
 					+ "inner join i.imovelPerfil ip "
+					+ "inner join i.faturamentoSituacaoTipo fst "
 					+ "WHERE q.rota.id = :idRota AND i.rotaAlternativa IS NULL "
 					+ "AND i.indicadorImovelCondominio <> 1 "
 					+ "AND i.imovelContaEnvio.id <> 4 "
 					+ "AND i.indicadorExclusao <> 1 "
-
 					+ "AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder "
-					+ "AND crt.id = "
-					+ ClienteRelacaoTipo.RESPONSAVEL
-					+ " AND (i.imovelContaEnvio.id = "
-					+ ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
-					+ " OR i.imovelContaEnvio = "
-					+ ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
+					+ "AND crt.id = " + ClienteRelacaoTipo.RESPONSAVEL
+					+ " AND (i.imovelContaEnvio.id = " + ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
+					+ " OR i.imovelContaEnvio = " + ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
 					+ " )";
 
 			retorno = session.createQuery(consulta).setInteger("idEsferaPoder",
@@ -43045,7 +43042,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
 					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
 					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id  "
+					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento  "
 					+ "from ClienteImovel ci "
 					+ "inner join ci.imovel i "
 					+ "inner join i.rotaAlternativa rotaAlternativa "
@@ -43059,6 +43056,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join q.rota r "
 					+ "inner join i.setorComercial sc "
 					+ "inner join i.imovelPerfil ip "
+					+ "inner join i.faturamentoSituacaoTipo fst "
 					+ "WHERE rotaAlternativa.id = :idRota "
 					+ "AND i.indicadorImovelCondominio <> 1 "
 					+ "AND i.imovelContaEnvio.id <> 4 "
