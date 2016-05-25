@@ -25961,6 +25961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (dados[14] != null) { // 14
 					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
 					faturamentoSituacaoTipo.setId(((Integer) dados[14]));
+					faturamentoSituacaoTipo.setIndicadorParalisacaoFaturamento(((Short) dados[15]));
 					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 				}
 
