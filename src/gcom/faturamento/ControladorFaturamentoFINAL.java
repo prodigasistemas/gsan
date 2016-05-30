@@ -16504,36 +16504,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					valorItemFaturamento = repositorioFaturamento
-							.acumularValorAguaPorSituacaoConta(
-									anoMesFaturamento, idLocalidade,
-									idCategoria,
-									DebitoCreditoSituacao.CANCELADA);
+					valorItemFaturamento = repositorioFaturamento.acumularValorAguaPorSituacaoConta(
+									anoMesFaturamento, idLocalidade,idCategoria,DebitoCreditoSituacao.CANCELADA);
 
-					lancamentoTipo = new LancamentoTipo(
-							LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario
-							.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade
-							.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
-							.getUnidadeNegocio());
+					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario
-							.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario
-							.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario
-							.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario
-							.setSequenciaTipoLancamento(new Short("900"));
-					resumoFaturamentoTemporario
-							.setSequenciaItemTipoLancamento(new Short("10"));
+					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("900"));
+					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
 					BigDecimal somaValorAguaSituacaoCanceladaPorRetificacao = null;
@@ -16544,38 +16532,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// retificacao(DebitoCreditoSituacao = 4) - valor de conta
 					// retificada (DebitoCreditoSituacao = 1) por conta
 					// categoria
-					somaValorAguaSituacaoCanceladaPorRetificacao = repositorioFaturamento
-							.diferencaValorAguaCanceladaRetificacao(
-									anoMesFaturamento, idLocalidade,
-									idCategoria);
+					somaValorAguaSituacaoCanceladaPorRetificacao = repositorioFaturamento.diferencaValorAguaCanceladaRetificacao(
+									anoMesFaturamento, idLocalidade,idCategoria);
 
 					// Acumula todas todas os valores retificados que tem contas
 					// canceladas por retificacao, eh do valor de conta
 					// retificado(DebitoCreditoSituacao = 1) - valor de conta
 					// cancelada por retificacao (DebitoCreditoSituacao = 4) por
 					// conta categoria
-					somaValorAguaSituacaoRetificada = repositorioFaturamento
-							.diferencaValorAguaRetificada(anoMesFaturamento,
-									idLocalidade, idCategoria);
+					somaValorAguaSituacaoRetificada = repositorioFaturamento.diferencaValorAguaRetificada(anoMesFaturamento,idLocalidade, idCategoria);
 
 					// Guarda todos os valores cancelados por retificacao que tb
 					// tiveram cancelamentos por retificacao
-					resumoFaturamentoTemporario = this
-							.acumularValorResumoFaturamento(
-									resumoFaturamentoTemporario,
-									somaValorAguaSituacaoCanceladaPorRetificacao);
-					resumoFaturamentoReceitaCancelada = this
-							.acumularValorResumoFaturamento(
-									resumoFaturamentoReceitaCancelada,
-									resumoFaturamentoTemporario
-											.getValorItemFaturamento());
+					resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, somaValorAguaSituacaoCanceladaPorRetificacao);
+					resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada,resumoFaturamentoTemporario.getValorItemFaturamento());
 
-//					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-//						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-//						// Monta LancamentoAgenciaReguladora
-//						LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
-//						lancamentosAgenciaReguladora.add(lar);
-//					}
+					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					}
+					
 					
 					// acumular o valor de água para situação atual ou anterior
 					// igual a incluída
