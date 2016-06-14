@@ -1123,11 +1123,10 @@ private static final long serialVersionUID = 1L;
 					&& cobrancaDocumentoTxt.length() != 0) {
 	
 				// criar o arquivo zip
-				File compactado = new File(nomeZip + ".zip"); // nomeZip
-				ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(
-						compactado));
+				File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".zip"); // nomeZip
+				ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
 	
-				File leitura = new File(nomeZip + ".txt");
+				File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".txt");
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(leitura.getAbsolutePath())));
 				out.write(cobrancaDocumentoTxt.toString());

@@ -175,6 +175,8 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -7367,13 +7369,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeArquivo = "contas_projetos_especiais_" + anoMes;
 
 			// criar o arquivo zip
-			File compactado = new File(nomeArquivo + ".zip"); // nomeZip
+			File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".zip"); // nomeZip
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
 
-			File leitura = new File(nomeArquivo + ".txt");
+			File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".txt");
 
-			out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(leitura.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 
 			while (!flagTerminou) {
 
@@ -9219,13 +9220,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							+ Util.formatarData(dataAtual) + "_"
 							+ Util.formatarHoraSemDataSemDoisPontos(dataAtual);
 					nomeZip = nomeZip.replace("/", "_");
-					File compactado = new File(nomeZip + ".zip");
-					File leitura = new File(nomeZip + ".txt");
-					ZipOutputStream zos = new ZipOutputStream(
-							new FileOutputStream(compactado));
-					BufferedWriter out = new BufferedWriter(
-							new OutputStreamWriter(new FileOutputStream(
-									leitura.getAbsolutePath())));
+					File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
+					
+					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
+					BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 					// ========================================================================
 
 					flagTerminouParte = false;
@@ -14005,12 +14004,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				// Definindo arquivo para escrita
 				nomeZip = nomeZip.replace("/", "_");
-				File compactado = new File(nomeZip + ".zip");
-				leitura = new File(nomeZip + ".txt");
+				File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+				leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
-				out = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(leitura.getAbsolutePath())));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 
 				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
 				System.out.println("***************************************");
@@ -15603,14 +15601,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private byte[] compactarArquivoRetorno(String nomeArquivo, StringBuilder arquivoTexto) throws IOException {
 		byte[] retorno;
 		
-		File compactado = new File(nomeArquivo + ".tar.gz");
+		File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".tar.gz");
 		ByteArrayOutputStream baosArquivoZip = new ByteArrayOutputStream();
 		
 		GZIPOutputStream zos = new GZIPOutputStream(new FileOutputStream(compactado));
-		File leitura = new File(nomeArquivo + ".txt");
+		File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".txt");
 
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(leitura.getAbsolutePath())));
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
+		
 		out.write(arquivoTexto.toString());
 		out.flush();
 		ZipUtil.adicionarArquivo(zos, leitura);

@@ -23,6 +23,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
+import gcom.fachada.Fachada;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
@@ -42,6 +43,8 @@ import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -691,8 +694,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private void formatarArquivoContas(StringBuilder contasTxtLista, String nomeZip)
 			throws FileNotFoundException, IOException {
 		
-		File compactadoTipo = new File(nomeZip + ".zip");
-		File leituraTipo = new File(nomeZip + ".txt");
+		File compactadoTipo = new File(getNomeArquivoCompactadoRota(nomeZip));
+		File leituraTipo = new File(getNomeArquivoCompactadoRota(nomeZip));
 		BufferedWriter out = null;
 		ZipOutputStream zos = null;
 
@@ -715,7 +718,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		leituraTipo = null;
 		contasTxtLista = null;
 	}
-
+	
+	private String getNomeArquivoCompactadoRota(String nomeArquivo) {
+		return getControladorUtil().getCaminhoDownloadArquivos("faturamento") + "/"+ nomeArquivo + ".zip";
+	}
+	
 	private void formatarArquivoImpressoraTermica(
 			Collection<Object[]> stringFormatadaImpressaoTermica,
 			Collection<String> localidadesArquivo,

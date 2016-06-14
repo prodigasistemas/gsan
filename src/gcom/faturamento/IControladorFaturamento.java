@@ -5716,4 +5716,5 @@ public interface IControladorFaturamento {
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ControladorException;
 	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia);
+	
 }

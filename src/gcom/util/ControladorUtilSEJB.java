@@ -8,6 +8,9 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.email.ServicosEmail;
@@ -539,12 +542,12 @@ public class ControladorUtilSEJB implements SessionBean {
 	public void mandaArquivoLeituraEmail(String nomeArquivo, StringBuilder arquivo, String emailReceptor, String emailRemetente, String tituloMensagem,
 			String corpoMensagem) throws ControladorException {
 		try {
-			File leitura = File.createTempFile(nomeArquivo, ".txt");
+			File leitura = File.createTempFile(getCaminhoDownloadArquivos("") + nomeArquivo, ".txt");
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 			out.write(arquivo.toString());
 			out.close();
 
-			File compactado = new File(nomeArquivo + ".zip"); // nomeZip
+			File compactado = new File(getCaminhoDownloadArquivos("") + nomeArquivo + ".zip"); // nomeZip
 			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
 			ZipUtil.adicionarArquivo(zos, leitura);
 
@@ -613,6 +616,19 @@ public class ControladorUtilSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
+
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public String getCaminhoDownloadArquivos(String modulo) {
+		FiltroSegurancaParametro filtroSegurancaParametro = new FiltroSegurancaParametro();
+		filtroSegurancaParametro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.CAMINHO_ARQUIVOS.toString()));
+
+		Collection parametros = Fachada.getInstancia().pesquisar(filtroSegurancaParametro, SegurancaParametro.class.getName());
+
+		SegurancaParametro caminho = (SegurancaParametro) parametros.iterator().next();
+		
+		return caminho.getValor() + modulo + "/";
 
 	}
 }
