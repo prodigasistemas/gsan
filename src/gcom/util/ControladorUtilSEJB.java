@@ -628,7 +628,7 @@ public class ControladorUtilSEJB implements SessionBean {
 
 		SegurancaParametro caminho = (SegurancaParametro) parametros.iterator().next();
 		
-		return caminho.getValor() + modulo + "/";
+		return caminho.getValor() + "/" + modulo + "/";
 
 	}
 }

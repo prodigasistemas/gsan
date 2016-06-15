@@ -16350,10 +16350,8 @@ public class ControladorArrecadacao implements SessionBean {
 				try {
 
 
-					File leitura = new File(nomeZip + ".rem");
-					out = new BufferedWriter(
-							new OutputStreamWriter(new FileOutputStream(leitura
-									.getAbsolutePath())));
+					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
+					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 					out.write(arquivoTXTEnvio.toString());
 					out.flush();
 
