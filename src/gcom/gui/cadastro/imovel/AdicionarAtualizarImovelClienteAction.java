@@ -39,221 +39,183 @@ import org.apache.struts.validator.DynaValidatorForm;
  */
 public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 
-    /**
-     * < <Descrição do método>>
-     * 
-     * @param actionMapping
-     *            Descrição do parâmetro
-     * @param actionForm
-     *            Descrição do parâmetro
-     * @param httpServletRequest
-     *            Descrição do parâmetro
-     * @param httpServletResponse
-     *            Descrição do parâmetro
-     * @return Descrição do retorno
-     */@SuppressWarnings("rawtypes")
-    public ActionForward execute(ActionMapping actionMapping,
-            ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+	/**
+	 * < <Descrição do método>>
+	 * 
+	 * @param actionMapping
+	 *            Descrição do parâmetro
+	 * @param actionForm
+	 *            Descrição do parâmetro
+	 * @param httpServletRequest
+	 *            Descrição do parâmetro
+	 * @param httpServletResponse
+	 *            Descrição do parâmetro
+	 * @return Descrição do retorno
+	 */
+	@SuppressWarnings("rawtypes")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 
-        ActionForward retorno = actionMapping
-                .findForward("adicionarAtualizarImovelCliente");
+		ActionForward retorno = actionMapping.findForward("adicionarAtualizarImovelCliente");
 
-        //obtendo uma instancia da sessao
-        HttpSession sessao = httpServletRequest.getSession(false);
-        
-        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
+		// obtendo uma instancia da sessao
+		HttpSession sessao = httpServletRequest.getSession(false);
 
-        DynaValidatorForm inserirImovelActionForm = (DynaValidatorForm) actionForm;
+		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 
-        Fachada fachada = Fachada.getInstancia();
+		DynaValidatorForm inserirImovelActionForm = (DynaValidatorForm) actionForm;
 
-        Collection imovelClientesNovos = null;
+		Fachada fachada = Fachada.getInstancia();
 
-        Imovel imovel = (Imovel) sessao.getAttribute("imovelAtualizacao");
+		Collection imovelClientesNovos = null;
 
-        if (sessao.getAttribute("imovelClientesNovos") != null) {
-            imovelClientesNovos = (Collection) sessao
-                    .getAttribute("imovelClientesNovos");
-        } else {
-            imovelClientesNovos = new ArrayList();
-        }
+		Imovel imovel = (Imovel) sessao.getAttribute("imovelAtualizacao");
 
-        //instância um cliente
+		if (sessao.getAttribute("imovelClientesNovos") != null) {
+			imovelClientesNovos = (Collection) sessao.getAttribute("imovelClientesNovos");
+		} else {
+			imovelClientesNovos = new ArrayList();
+		}
 
-        Cliente cliente = new Cliente();
+		// instância um cliente
 
-        //teste se o cliente ja foi pesquisado com enter
+		Cliente cliente = new Cliente();
 
-        if (inserirImovelActionForm.get("idCliente") != null) {
+		// teste se o cliente ja foi pesquisado com enter
 
-            //recupera o id do cliente
-            String idCliente = (String) inserirImovelActionForm
-                    .get("idCliente");
-            //instância o filtro do cliente
-            FiltroCliente filtroCliente = new FiltroCliente();
+		if (inserirImovelActionForm.get("idCliente") != null) {
 
-            //adiciona o parametro no filtro
-            filtroCliente.adicionarParametro(new ParametroSimples(
-                    FiltroCliente.ID, idCliente));
+			// recupera o id do cliente
+			String idCliente = (String) inserirImovelActionForm.get("idCliente");
+			// instância o filtro do cliente
+			FiltroCliente filtroCliente = new FiltroCliente();
 
-            //faz a pesquisa do cliente
-            Collection clientesObjs = fachada.pesquisar(filtroCliente,
-                    Cliente.class.getName());
+			// adiciona o parametro no filtro
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
 
-            //recupera o cliente da coleção pesquisada
-            if (!clientesObjs.isEmpty()) {
-                cliente = (Cliente) clientesObjs.iterator().next();
-            } else {
-                throw new ActionServletException("atencao.naocadastrado", null,
-                        "Cliente");
-            }
+			// faz a pesquisa do cliente
+			Collection clientesObjs = fachada.pesquisar(filtroCliente, Cliente.class.getName());
 
-        }
+			// recupera o cliente da coleção pesquisada
+			if (!clientesObjs.isEmpty()) {
+				cliente = (Cliente) clientesObjs.iterator().next();
+			} else {
+				throw new ActionServletException("atencao.naocadastrado", null, "Cliente");
+			}
 
-        //inicializa o tipo do cliente imovel
-        ClienteRelacaoTipo clienteRelacaoTipo = new ClienteRelacaoTipo();
+		}
 
-        //recupera id do tipo do cliente imovel
-        clienteRelacaoTipo.setId((Integer) inserirImovelActionForm
-                .get("tipoClienteImovel"));
-        //recupera a descricao do tipo do cliente imovel
-        clienteRelacaoTipo.setDescricao((String) inserirImovelActionForm
-                .get("textoSelecionado"));
+		// inicializa o tipo do cliente imovel
+		ClienteRelacaoTipo clienteRelacaoTipo = new ClienteRelacaoTipo();
 
-        
-        
-        
-        SimpleDateFormat dataFormato = new SimpleDateFormat("dd/MM/yyyy");
+		// recupera id do tipo do cliente imovel
+		clienteRelacaoTipo.setId((Integer) inserirImovelActionForm.get("tipoClienteImovel"));
+		// recupera a descricao do tipo do cliente imovel
+		clienteRelacaoTipo.setDescricao((String) inserirImovelActionForm.get("textoSelecionado"));
 
-        Date dataInicioRelacao = null;
-        if(inserirImovelActionForm.get("dataInicioClienteImovelRelacao") != null && !((String)inserirImovelActionForm.get("dataInicioClienteImovelRelacao")).equals("")){
-	        try {
-	            dataInicioRelacao = dataFormato.parse((String)inserirImovelActionForm.get("dataInicioClienteImovelRelacao"));
-	
-	        } catch (ParseException ex) {
-	            dataInicioRelacao = null;
-	        }
-        }
+		SimpleDateFormat dataFormato = new SimpleDateFormat("dd/MM/yyyy");
 
-        Date dataCorrente = null;
-        Calendar data = Calendar.getInstance();
+		Date dataInicioRelacao = null;
+		if (inserirImovelActionForm.get("dataInicioClienteImovelRelacao") != null
+				&& !((String) inserirImovelActionForm.get("dataInicioClienteImovelRelacao")).equals("")) {
+			try {
+				dataInicioRelacao = dataFormato.parse((String) inserirImovelActionForm.get("dataInicioClienteImovelRelacao"));
 
-        data.set(Calendar.SECOND, 0);
-        data.set(Calendar.MILLISECOND, 0);
-        data.set(Calendar.HOUR, 0);
-        data.set(Calendar.MINUTE, 0);
-        dataCorrente = data.getTime();
+			} catch (ParseException ex) {
+				dataInicioRelacao = null;
+			}
+		}
 
-        //caso a data de inicio da relação seja anterior que a data atual
-        if (dataInicioRelacao.after(dataCorrente)) {
-            throw new ActionServletException(
-                    "atencao.data_inicio_relacao_cliente_imovel");
-        }
-        
-        if(dataInicioRelacao == null){
-        	dataInicioRelacao = new Date();
-        }
-        
-        //inicializa o cliente imovel
-        ClienteImovel clienteImovel = new ClienteImovel(dataInicioRelacao, null, null,
-                cliente, clienteRelacaoTipo);
-        
-        // Verifica permissão especial para manter cliente 
-        // responsavel do imovel.
-        Categoria categoria =
-    		fachada.obterPrincipalCategoriaImovel(imovel.getId());
-    	
-    	if(categoria.getId().compareTo(Categoria.PUBLICO)==0
-    			&& clienteImovel.getClienteRelacaoTipo().getId()
-    				.compareTo(ClienteRelacaoTipo.RESPONSAVEL.intValue())==0){
-    		
-    		boolean possuiPermissaoManterClienteResponsavelImoveisPublicos = 
-    			fachada.verificarPermissaoEspecialAtiva(
-    					PermissaoEspecial.ALTERAR_CLIENTE_RESPONSAVEL_PARA_IMOVEIS_PUBLICOS,usuarioLogado);
-    		
-    		if(!possuiPermissaoManterClienteResponsavelImoveisPublicos){
-    			throw new ActionServletException(
-    					"atencao.nao_usuario_nao_possui_permissao_alterar_cliente_reponsavel");
-    		}
-    	 	
-    	}
-    	
-    	//Adiciona o imovel ao cliente imovel
-        clienteImovel.setImovel(imovel);
-        //Coloca a data de ultima alteração para identificar o objeto
-        clienteImovel.setUltimaAlteracao(new Date());
+		Date dataCorrente = null;
+		Calendar data = Calendar.getInstance();
 
-        if (!imovelClientesNovos.contains(clienteImovel)) {
-            //verifica se o tipo do cliente é usuário ou é responsável
-            if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ConstantesSistema.CLIENTE_IMOVEL_TIPO_USUARIO.intValue() ) {
-                
-            	if (sessao.getAttribute("idClienteImovelUsuario") == null
-                   || sessao.getAttribute("idClienteImovelUsuario").equals("")) {
-                	if (imovel != null && imovel.getImovelPerfil() != null
-                    && imovel.getImovelPerfil().getId() != null && imovel.getImovelPerfil().getId().equals(ConstantesSistema.INDICADOR_TARIFA_SOCIAL)) {
-                        throw new ActionServletException( //cliente na tarifa social
-                                "atencao.cliente_na_tarifa_social", null,
-                                "usuário");
-                    }
-                    //inserirImovelActionForm.set("idClienteImovelUsuario",
-                            //cliente.getId().toString());
-                    sessao.setAttribute("idClienteImovelUsuario",
-                            cliente.getId().toString());
-                    httpServletRequest.setAttribute("idClienteImovelUsuario",cliente.getId().toString());
-                    //httpServletRequest.setAttribute("idClienteImovelUsuario",
-                    //        cliente.getId().toString());
-                    //adiciona o cliente imovel na coleção de
-                    // imovelClientesNovos
-                    clienteImovel.setIndicadorNomeConta(new Short((short)2));
-                    
-                    imovelClientesNovos.add(clienteImovel);
-                    
-                } else {
-                    throw new ActionServletException(
-                            "atencao.ja_cadastradado.cliente_imovel_usuario");
-                }
-            } else if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL.intValue()) {
-                    
-            		if (sessao.getAttribute("idClienteImovelResponsavel") == null
-                            || sessao.getAttribute(
-                                    "idClienteImovelResponsavel").equals("")) {
+		data.set(Calendar.SECOND, 0);
+		data.set(Calendar.MILLISECOND, 0);
+		data.set(Calendar.HOUR, 0);
+		data.set(Calendar.MINUTE, 0);
+		dataCorrente = data.getTime();
 
-//                    	inserirImovelActionForm.set("idClienteImovelResponsavel",
-  //                              cliente.getId().toString());
-                        //httpServletRequest.setAttribute("idClienteImovelResponsavel",
-                          //      cliente.getId().toString());
-            			sessao.setAttribute("idClienteImovelResponsavel",
-                                cliente.getId().toString());
-                    	
-                        //adiciona o cliente imovel na coleção de
-                        // imovelClientesNovos
-            			clienteImovel.setIndicadorNomeConta(new Short((short)2));            			
-                        imovelClientesNovos.add(clienteImovel);
-                    }else{
-                		throw new ActionServletException(
-                                "atencao.ja_cadastradado.cliente_imovel_responsavel");
-                    }
-            } else {
-                //sever para cliente do tipo proprietario
-                //adiciona o cliente imovel na coleção de
-                // imovelClientesNovos
-            	clienteImovel.setIndicadorNomeConta(new Short((short)2));
-                imovelClientesNovos.add(clienteImovel);
-            }
+		// caso a data de inicio da relação seja anterior que a data atual
+		if (dataInicioRelacao.after(dataCorrente)) {
+			throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
+		}
 
-            inserirImovelActionForm.set("idCliente", null);
-            inserirImovelActionForm.set("nomeCliente", null);
+		if (dataInicioRelacao == null) {
+			dataInicioRelacao = new Date();
+		}
 
-            //manda para a sessão a coleção de imovelClienteNovos
-            sessao.setAttribute("imovelClientesNovos", imovelClientesNovos);
+		// inicializa o cliente imovel
+		ClienteImovel clienteImovel = new ClienteImovel(dataInicioRelacao, null, null, cliente, clienteRelacaoTipo);
 
-        } else {
-            throw new ActionServletException(
-                    "atencao.ja_cadastradado.cliente_imovel");
-        }
+		// Verifica permissão especial para manter cliente
+		// responsavel do imovel.
+		Categoria categoria = fachada.obterPrincipalCategoriaImovel(imovel.getId());
 
-        return retorno;
-    }
+		if (categoria.getId().compareTo(Categoria.PUBLICO) == 0
+				&& clienteImovel.getClienteRelacaoTipo().getId().compareTo(ClienteRelacaoTipo.RESPONSAVEL.intValue()) == 0) {
+
+			boolean possuiPermissaoManterClienteResponsavelImoveisPublicos = fachada.verificarPermissaoEspecialAtiva(
+					PermissaoEspecial.ALTERAR_CLIENTE_RESPONSAVEL_PARA_IMOVEIS_PUBLICOS, usuarioLogado);
+
+			if (!possuiPermissaoManterClienteResponsavelImoveisPublicos) {
+				throw new ActionServletException("atencao.nao_usuario_nao_possui_permissao_alterar_cliente_reponsavel");
+			}
+
+		}
+
+		// Adiciona o imovel ao cliente imovel
+		clienteImovel.setImovel(imovel);
+		// Coloca a data de ultima alteração para identificar o objeto
+		clienteImovel.setUltimaAlteracao(new Date());
+
+		if (!imovelClientesNovos.contains(clienteImovel)) {
+			// verifica se o tipo do cliente é usuário ou é responsável
+			if (clienteImovel.isClienteUsuario()) {
+
+				if (sessao.getAttribute("idClienteImovelUsuario") == null || sessao.getAttribute("idClienteImovelUsuario").equals("")) {
+					if (imovel != null && imovel.getImovelPerfil() != null && imovel.getImovelPerfil().getId() != null
+							&& imovel.getImovelPerfil().getId().equals(ConstantesSistema.INDICADOR_TARIFA_SOCIAL)) {
+						
+						throw new ActionServletException("atencao.cliente_na_tarifa_social", null, "usuário");
+					}
+					sessao.setAttribute("idClienteImovelUsuario", cliente.getId().toString());
+					httpServletRequest.setAttribute("idClienteImovelUsuario", cliente.getId().toString());
+
+					clienteImovel.setIndicadorNomeConta(new Short((short) 2));
+
+					imovelClientesNovos.add(clienteImovel);
+
+				} else {
+					throw new ActionServletException("atencao.ja_cadastradado.cliente_imovel_usuario");
+				}
+			} else if (clienteImovel.isClienteResponsavel()) {
+
+				if (sessao.getAttribute("idClienteImovelResponsavel") == null || sessao.getAttribute("idClienteImovelResponsavel").equals("")) {
+
+					sessao.setAttribute("idClienteImovelResponsavel", cliente.getId().toString());
+
+					clienteImovel.setIndicadorNomeConta(new Short((short) 2));
+					imovelClientesNovos.add(clienteImovel);
+				} else {
+					throw new ActionServletException("atencao.ja_cadastradado.cliente_imovel_responsavel");
+				}
+			} else {
+				// sever para cliente do tipo proprietario adiciona o cliente imovel na coleção de imovelClientesNovos
+				clienteImovel.setIndicadorNomeConta(new Short((short) 2));
+				imovelClientesNovos.add(clienteImovel);
+			}
+
+			inserirImovelActionForm.set("idCliente", null);
+			inserirImovelActionForm.set("nomeCliente", null);
+
+			// manda para a sessão a coleção de imovelClienteNovos
+			sessao.setAttribute("imovelClientesNovos", imovelClientesNovos);
+
+		} else {
+			throw new ActionServletException("atencao.ja_cadastradado.cliente_imovel");
+		}
+
+		return retorno;
+	}
 
 }

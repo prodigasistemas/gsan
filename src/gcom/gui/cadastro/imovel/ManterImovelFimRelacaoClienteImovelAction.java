@@ -128,11 +128,7 @@ public class ManterImovelFimRelacaoClienteImovelAction extends GcomAction {
 						.setClienteImovelFimRelacaoMotivo(clienteImovelFimRelacao);
 				clienteImovel.setDataFimRelacao(dataFimRelacao);
 
-             	// verifica se o tipo do cliente é usuário
-                 if (clienteImovel
-                         .getClienteRelacaoTipo()
-                         .getId().shortValue() == 
-                         ConstantesSistema.CLIENTE_IMOVEL_TIPO_USUARIO.shortValue()) {
+                 if (clienteImovel.isClienteUsuario()) {
                      if(sessao.getAttribute(
                              "idClienteImovelUsuario") != null){
                     	 sessao.removeAttribute("idClienteImovelUsuario");	 
@@ -140,11 +136,8 @@ public class ManterImovelFimRelacaoClienteImovelAction extends GcomAction {
                 	 
                  }
                  
-                 // verifica se o tipo do cliente é responsavel
-                 if ((clienteImovel.getClienteRelacaoTipo().getId().shortValue()
-                          == ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL.shortValue())) {
-                     if(sessao.getAttribute(
-                     	"idClienteImovelResponsavel") != null){
+                 if (clienteImovel.isClienteResponsavel()) {
+                     if(sessao.getAttribute("idClienteImovelResponsavel") != null){ 
                     	 sessao.removeAttribute("idClienteImovelResponsavel");	 
                      }
                  }
@@ -156,10 +149,7 @@ public class ManterImovelFimRelacaoClienteImovelAction extends GcomAction {
              	}
                  
              	imovelClientesNovos.remove(clienteImovel);
-             	
-                 //clienteImovelIterator.remove();
 			}
-
 		}
 		
 		sessao.setAttribute("imovelClientesNovos", imovelClientesNovos);

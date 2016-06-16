@@ -3529,7 +3529,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				+ "	left outer join micromedicao.hidrometro_relojoaria hidrometroRelojoaria on hidrometro.hire_id = hidrometroRelojoaria.hire_id "
 				+ "	left outer join seguranca.usuario usuarioResponsavelInstalacao on hidrometroIstalacaoHistorico.usur_idinstalacao = usuarioResponsavelInstalacao.usur_id "
 				+ "	where clienteImovel.cifr_id is null AND clienteImovel.crtp_id = "
-				+ ConstantesSistema.CLIENTE_IMOVEL_TIPO_USUARIO;
+				+ ClienteRelacaoTipo.USUARIO.intValue();
 
 		try {
 			retorno = session
@@ -3671,7 +3671,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				+ "	left outer join atendimentopublico.ligacao_esgoto ligacaoEsgoto on imovel.imov_id=ligacaoEsgoto.lesg_id "
 				+ "	left outer join cadastro.poco_tipo pocoTipo on imovel.poco_id=pocoTipo.poco_id  "
 				+ "	where clienteImovel.cifr_id is null AND clienteImovel.crtp_id = "
-				+ ConstantesSistema.CLIENTE_IMOVEL_TIPO_USUARIO;
+				+ ClienteRelacaoTipo.USUARIO.intValue();
 
 		try {
 			retorno = session.createSQLQuery(sql).addScalar(
