@@ -351,4 +351,20 @@ public class Categoria extends ObjetoTransacao {
 	public boolean categoriaCobraAcrescimoEncerramento() {
 		return this != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.ENCERRAMENTO_ARRECADACAO);
 	}
+	
+	public boolean isResidencial() {
+		return id.intValue() ==	RESIDENCIAL.intValue();
+	}
+	
+	public boolean isComercial() {
+		return id.intValue() ==	COMERCIAL.intValue();
+	}
+	
+	public boolean isIndustrial() {
+		return id.intValue() ==	INDUSTRIAL.intValue();
+	}
+	
+	public boolean isPublico() {
+		return id.intValue() ==	PUBLICO.intValue();
+	}
 }

@@ -116,6 +116,7 @@ function limparPesquisaImovel() {
   
 function verificarAberturaPopup(abertura){
 
+	alert("vai abrir o popup??" + (abertura == 1));
 	if(abertura == 1){
 		abrirPopup('exibirManterImovelFimRelacaoClienteImovelAction.do', 475, 765);	
 	}
