@@ -23014,10 +23014,10 @@ public class ControladorCobranca implements SessionBean {
 			System.out.println("***************************************");
 
 			// criar o arquivo zip
-			File compactado = new File(nomeZip + ".zip"); // nomeZip
+			File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".zip"); // nomeZip
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
 
-			leitura = new File(nomeZip + ".txt");
+			leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".txt");
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 
 		} catch (IOException e) {
@@ -24040,101 +24040,6 @@ public class ControladorCobranca implements SessionBean {
 		System.out.println("***************************************");
 		System.out.println("FIM DA CRIACAO DO ARQUIVO");
 		System.out.println("***************************************");
-
-		// Date dataAtual = new Date();
-		// String nomeZip = null;
-		// if (idAcaoCobranca.equals(CobrancaAcao.AVISO_CORTE)) {
-		// if (idCronogramaAtividadeAcaoCobranca != null) {
-		// nomeZip = "AVISO_CORTE_GRUPO_" + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// nomeZip = nomeZip.replace("/", "_");
-		//
-		// } else {
-		// String descricaoAbrevDocumentoTipo = "";
-		// if (acaoCobranca != null && acaoCobranca.getDocumentoTipo() != null)
-		// {
-		// descricaoAbrevDocumentoTipo = acaoCobranca.getDocumentoTipo()
-		// .getDescricaoAbreviado();
-		// }
-		// String tituloComandoEventual = cobrancaAcaoAtividadeComando
-		// .getDescricaoTitulo();
-		//
-		// nomeZip = descricaoAbrevDocumentoTipo + " " + tituloComandoEventual
-		// + " " + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// nomeZip = nomeZip.replace("/", "_");
-		// nomeZip = nomeZip.replace(" ", "_");
-		//
-		// }
-		// } else if
-		// (idAcaoCobranca.equals(CobrancaAcao.AVISO_CORTE_A_REVELIA)){
-		// if (idCronogramaAtividadeAcaoCobranca != null) {
-		// nomeZip = "AVISO_CORTE_A_REVELIA_GRUPO_" + grupoCobranca.getId() +
-		// "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// nomeZip = nomeZip.replace("/", "_");
-		//
-		// } else {
-		// String descricaoAbrevDocumentoTipo = "";
-		// if (acaoCobranca != null && acaoCobranca.getDocumentoTipo() != null)
-		// {
-		// descricaoAbrevDocumentoTipo = acaoCobranca.getDocumentoTipo()
-		// .getDescricaoAbreviado();
-		// }
-		// String tituloComandoEventual = cobrancaAcaoAtividadeComando
-		// .getDescricaoTitulo();
-		//
-		// nomeZip = descricaoAbrevDocumentoTipo + " " + tituloComandoEventual
-		// + " " + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// nomeZip = nomeZip.replace("/", "_");
-		// nomeZip = nomeZip.replace(" ", "_");
-		//
-		// }
-		// }
-
-		// // pegar o arquivo, zipar pasta e arquivo e escrever no stream
-		// try {
-		//
-		// System.out.println("***************************************");
-		// System.out.println("INICO DA CRIACAO DO ARQUIVO");
-		// System.out.println("***************************************");
-		//
-		// if (cobrancaDocumentoTxt != null
-		// && cobrancaDocumentoTxt.length() != 0) {
-		//
-		// cobrancaDocumentoTxt.append("\u0004");
-		//
-		// // criar o arquivo zip
-		// File compactado = new File(nomeZip + ".zip"); // nomeZip
-		// ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(
-		// compactado));
-		//
-		// File leitura = new File(nomeZip + ".txt");
-		// BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-		// new FileOutputStream(leitura.getAbsolutePath())));
-		// out.write(cobrancaDocumentoTxt.toString());
-		// out.close();
-		// ZipUtil.adicionarArquivo(zos, leitura);
-		//
-		// // close the stream
-		// zos.close();
-		// leitura.delete();
-		// }
-		// System.out.println("***************************************");
-		// System.out.println("FIM DA CRIACAO DO ARQUIVO");
-		// System.out.println("***************************************");
-		//
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// throw new ControladorException("erro.sistema", e);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// throw new ControladorException("erro.sistema", e);
-		// }
-
 	}
 
 	/**
@@ -26665,103 +26570,6 @@ public class ControladorCobranca implements SessionBean {
 		System.out.println("***************************************");
 		System.out.println("FIM DO CORTE ADMINISTRATIVO OU FISICO OU ORDEM DE SUPRESSÃO");
 		System.out.println("***************************************");
-
-		// Date dataAtual = new Date();
-		// String nomeZip = "";
-		// // caso seja cronograma
-		// if (idCronogramaAtividadeAcaoCobranca != null) {
-		// if (idAcaoCobranca.equals(CobrancaAcao.CORTE_ADMINISTRATIVO)) {
-		// nomeZip = "ORDEM_CORTE_ADMINISTRATIVO_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// } else if (idAcaoCobranca.equals(CobrancaAcao.CORTE_FISICO)) {
-		// nomeZip = "ORDEM_CORTE_FISICO_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// } else if
-		// (idAcaoCobranca.equals(CobrancaAcao.CORTE_FISICO_LIGADO_A_REVELIA)) {
-		// nomeZip = "ORDEM_CORTE_FISICO_LIGADO_A_REVELIA_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// } else if
-		// (idAcaoCobranca.equals(CobrancaAcao.CORTE_ADMINISTRATIVO_LIGADO_A_REVELIA))
-		// {
-		// nomeZip = "ORDEM_CORTE_ADMINISTRATIVO_LIGADO_A_REVELIA_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// } else if (idAcaoCobranca.equals(CobrancaAcao.CORTE_FISICO_PUBLICO))
-		// {
-		// nomeZip = "ORDEM_CORTE_FISICO_PUBLICO_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// } else if (idAcaoCobranca.equals(CobrancaAcao.RECORTE)) {
-		// nomeZip = "ORDEM_RECORTE_GRUPO_"
-		// + grupoCobranca.getId() + "_"
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// }
-		// // para o caso de eventual
-		// } else {
-		// String descricaoAbrevDocumentoTipo = "";
-		// if (acaoCobranca != null
-		// && acaoCobranca.getDocumentoTipo() != null) {
-		// descricaoAbrevDocumentoTipo = acaoCobranca
-		// .getDocumentoTipo().getDescricaoAbreviado();
-		// }
-		// String tituloComandoEventual = cobrancaAcaoAtividadeComando
-		// .getDescricaoTitulo();
-		//
-		// nomeZip = descricaoAbrevDocumentoTipo + " "
-		// + tituloComandoEventual + " "
-		// + Util.formatarData(dataAtual) +
-		// Util.formatarHoraSemDataSemDoisPontos(dataAtual);
-		// }
-		// nomeZip = nomeZip.replace("/", "_");
-		// nomeZip = nomeZip.replace(" ", "_");
-
-		// try {
-		// System.out.println("***************************************");
-		// System.out.println("INICIO CRIAR ARQUIVO");
-		// System.out.println("***************************************");
-		//
-		// if (cobrancaDocumentoTxt != null
-		// && cobrancaDocumentoTxt.length() != 0) {
-		//
-		// cobrancaDocumentoTxt.append("\u0004");
-		//
-		// File leitura = new File(nomeZip + ".txt");
-		// // criar o arquivo zip
-		// File compactado = new File(nomeZip + ".zip"); // nomeZip
-		// ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(
-		// compactado));
-		//
-		// BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-		// new FileOutputStream(leitura.getAbsolutePath())));
-		// out.write(cobrancaDocumentoTxt.toString());
-		// out.close();
-		// ZipUtil.adicionarArquivo(zos, leitura);
-		//
-		// // close the stream
-		// zos.close();
-		// leitura.delete();
-		// }
-		// System.out.println("***************************************");
-		// System.out.println("FIM CRIAR ARQUIVO");
-		// System.out.println("***************************************");
-		//
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// throw new ControladorException("erro.sistema", e);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// throw new ControladorException("erro.sistema", e);
-		// }
-
 	}
 
 	/**
@@ -27940,10 +27748,10 @@ public class ControladorCobranca implements SessionBean {
 
 				cobrancaDocumentoTxt.append("\u0004");
 				// criar o arquivo zip
-				File compactado = new File(nomeZip + ".zip"); // nomeZip
+				File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".zip"); // nomeZip
 				ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
 
-				File leitura = new File(nomeZip + ".txt");
+				File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("cobranca") + nomeZip + ".txt");
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 				out.write(cobrancaDocumentoTxt.toString());
 				out.close();
@@ -33746,42 +33554,10 @@ public class ControladorCobranca implements SessionBean {
 					quantidadeCobrancaDocumentoInicio = quantidadeCobrancaDocumentoInicio + 1000;
 
 				}
-				// ***********************************************************************
-				// ****PARTE COMENTADA DA DIVISÃO PARA IMPRESSÃO DE DOCUMENTO
-				// COBRANÇA****
-				// ***********************************************************************
-
-				// int metadeColecao = 0;
-				// if (colecaoCobrancaDocumento.size() % 2 == 0) {
-				// metadeColecao = colecaoCobrancaDocumento.size() / 2;
-				// } else {
-				// metadeColecao = (colecaoCobrancaDocumento.size() / 2) + 1;
-				// }
-
-				// Map<Integer, Map<Object, Object>>
-				// mapCobrancaDocumentoOrdenada =
-				// dividirColecao(colecaoCobrancaDocumento);
-
-				/*
-				 * if (mapCobrancaDocumentoOrdenada != null) { int countOrdem =
-				 * 0;
-				 * 
-				 * while (countOrdem < mapCobrancaDocumentoOrdenada.size()) {
-				 * Map<Object, Object> mapCobrancaoDocumentoDivididas =
-				 * mapCobrancaDocumentoOrdenada .get(countOrdem);
-				 */
-
-				/*
-				 * Iterator iteratorCobrancaDocumento =
-				 * mapCobrancaoDocumentoDivididas .keySet().iterator();
-				 */
 				Iterator iteratorCobrancaDocumento = colecaoCobrancaDocumento.iterator();
 				while (iteratorCobrancaDocumento.hasNext()) {
 
 					CobrancaDocumento cobrancaDocumento = null;
-					/*
-					 * if(quantidadeContas == 48){ System.out.println(""); }
-					 */
 
 					// int situacao = 0;
 					cobrancaDocumento = (CobrancaDocumento) iteratorCobrancaDocumento.next();
@@ -37181,459 +36957,6 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [UCXXXX] Gerar Resumo das Ações de Cobrança Eventuais
 	 * 
-	 * [SB0001] - Processar Documento de Cobrança
-	 * 
-	 * @author Sávio Luiz
-	 * @date 18/06/2007
-	 * 
-	 */
-	// public void processarDocumentoCobrancaEventual(
-	// int idCobrancaAtividadeAcaoComando, Usuario usuarioLogado,
-	// int idCobrancaAcao, Integer idServicoTipoAcaoCobranca,
-	// Date dataRealizacaoEncerrar) throws ControladorException {
-	//
-	// // colecao com os documentos de cobrança gerados na atividade EMITIR da
-	// // ação de cobrança
-	// Collection<DadosPesquisaCobrancaDocumentoHelper>
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = null;
-	//
-	// // posições do array com os dados que serão atualizados
-	// final int POSICAO_ID_COBRANCA_DOCUMENTO = 0;
-	// final int POSICAO_ID_SITUACAO_ACAO = 1;
-	// final int POSICAO_DATA_SITUACAO_ACAO = 2;
-	// final int POSICAO_ID_SITUACAO_PREDOMINANTE_DEBITO_COBRANCA = 3;
-	// final int POSICAO_ID_CATEGORIA = 5;
-	// final int POSICAO_ID_ESFERA_PODER = 6;
-	// final int POSICAO_INDICADOR_ACIMA_LIMITE = 9;
-	// final int POSICAO_PERCENTUAL_VALOR_MINIMO_PAGO_CRITERIO_COBRANCA = 10;
-	// final int POSICAO_PERCENTUAL_QUANTIDADE_MINIMO_PAGO_CRITERIO_COBRANCA =
-	// 11;
-	//
-	// try {
-	//
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = this.repositorioCobranca
-	// .pesquisarCobrancaDocumentoEventual(idCobrancaAtividadeAcaoComando);
-	//
-	// // para cada documento de cobrança
-	// if (colecaoDadosPesquisaCobrancaDocumentoHelper != null
-	// && !colecaoDadosPesquisaCobrancaDocumentoHelper.isEmpty()) {
-	//
-	// Iterator iteratorCobrancaDocumantoParaAtualizarOUHelper = null;
-	// Collection colecaoCobrancaDocumantoParaAtualizar = null;
-	//
-	// // caso o id do serviço tipo seja diferente de nulo então
-	// // pode ter OS e é verificado as os dos documentos de
-	// // cobrança
-	// if (idServicoTipoAcaoCobranca != null) {
-	// colecaoCobrancaDocumantoParaAtualizar = this
-	// .gerarColecaoDocumentoCobrancaOrdemServicoEventual(
-	// idServicoTipoAcaoCobranca, usuarioLogado,
-	// idCobrancaAtividadeAcaoComando,
-	// dataRealizacaoEncerrar);
-	//
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper =
-	// colecaoCobrancaDocumantoParaAtualizar
-	// .iterator();
-	// } else {
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper =
-	// colecaoDadosPesquisaCobrancaDocumentoHelper
-	// .iterator();
-	// colecaoCobrancaDocumantoParaAtualizar = new ArrayList();
-	// }
-	// while (iteratorCobrancaDocumantoParaAtualizarOUHelper.hasNext()) {
-	//
-	// Object[] cobrancaDocumentoParaAtualizar = null;
-	// Integer idCobrancaDocumento = null;
-	// BigDecimal valorMinimoPagoParceladoCancelado = null;
-	// BigDecimal quantidadeMinimoaPagoParceladoCancelado = null;
-	// if (idServicoTipoAcaoCobranca != null) {
-	// cobrancaDocumentoParaAtualizar = (Object[])
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper
-	// .next();
-	// idCobrancaDocumento = (Integer)
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_COBRANCA_DOCUMENTO];
-	// valorMinimoPagoParceladoCancelado = (BigDecimal)
-	// cobrancaDocumentoParaAtualizar[POSICAO_PERCENTUAL_VALOR_MINIMO_PAGO_CRITERIO_COBRANCA];
-	// quantidadeMinimoaPagoParceladoCancelado = (BigDecimal)
-	// cobrancaDocumentoParaAtualizar[POSICAO_PERCENTUAL_QUANTIDADE_MINIMO_PAGO_CRITERIO_COBRANCA];
-	// } else {
-	// // dados para atualizar o cobranca documento
-	// cobrancaDocumentoParaAtualizar = new Object[13];
-	//
-	// DadosPesquisaCobrancaDocumentoHelper dadosPesquisaCobrancaDocumentoHelper
-	// = (DadosPesquisaCobrancaDocumentoHelper)
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper
-	// .next();
-	//
-	// // indicador acima do limite
-	// Short indicadorAcimaLimite = null;
-	// if (dadosPesquisaCobrancaDocumentoHelper
-	// .getValorDocumento() != null
-	// && dadosPesquisaCobrancaDocumentoHelper
-	// .getValorDocumento()
-	// .compareTo(
-	// dadosPesquisaCobrancaDocumentoHelper
-	// .getValorLimitePrioridadeCobrancaCriterio()) > 0) {
-	// indicadorAcimaLimite = new Short("1");
-	// } else {
-	// indicadorAcimaLimite = new Short("2");
-	// }
-	//
-	// cobrancaDocumentoParaAtualizar[POSICAO_INDICADOR_ACIMA_LIMITE] =
-	// indicadorAcimaLimite;
-	//
-	// // [UC0306] - Obter Principal CAtegoria do Imovel
-	// Categoria categoria = getControladorImovel()
-	// .obterPrincipalCategoriaImovel(
-	// dadosPesquisaCobrancaDocumentoHelper
-	// .getIdImovel());
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_CATEGORIA] = categoria
-	// .getId();
-	//
-	// // pesquisa os imovel para ser usado para gravar o
-	// // Resumo
-	// // Cobrança Ação
-	// Imovel imovel = this
-	// .pesquisarDadosImovel(dadosPesquisaCobrancaDocumentoHelper
-	// .getIdImovel());
-	//
-	// // pega a esfera do poder do imovel
-	// EsferaPoder esferaPoder = null;
-	// if (imovel.getClienteImoveis() != null
-	// && !imovel.getClienteImoveis().isEmpty()) {
-	// Cliente cliente = (Cliente) imovel
-	// .getClienteImoveis().iterator().next();
-	// esferaPoder = cliente.getClienteTipo()
-	// .getEsferaPoder();
-	// }
-	// if (esferaPoder != null && !esferaPoder.equals("")) {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_ESFERA_PODER] = esferaPoder
-	// .getId();
-	// } else {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_ESFERA_PODER] = null;
-	// }
-	//
-	// // atualiza os campos para serem utilizados para
-	// // atualização
-	// // e consulta de dados da cobrança documento
-	// // Atribuir o valor AÇÃO ENVIADOS à situação de
-	// // Cobrança
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_SITUACAO_ACAO] =
-	// CobrancaAcaoSituacao.ENVIADOS;
-	// cobrancaDocumentoParaAtualizar[POSICAO_DATA_SITUACAO_ACAO] =
-	// dadosPesquisaCobrancaDocumentoHelper
-	// .getDataEmissao();
-	// idCobrancaDocumento = dadosPesquisaCobrancaDocumentoHelper
-	// .getIdDocumento();
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_COBRANCA_DOCUMENTO] =
-	// idCobrancaDocumento;
-	// valorMinimoPagoParceladoCancelado = dadosPesquisaCobrancaDocumentoHelper
-	// .getPercentualValorMinimoCobrancaCriterio();
-	// quantidadeMinimoaPagoParceladoCancelado =
-	// dadosPesquisaCobrancaDocumentoHelper
-	// .getPercentualQuantidadeMinimaCobrancaCriterio();
-	//
-	// }
-	//
-	// // 2.2 Seleciona os itens do documento de cobrança
-	// Collection colecaoCobrancaDocumentoItem = null;
-	// // COBRANCA_DOCUMENTO_ITEM por CBDO_ID igual a
-	// // idCobrancaDocmento
-	//
-	// colecaoCobrancaDocumentoItem = this.repositorioCobranca
-	// .pesquisarDadosCobrancaDocumentoItem(idCobrancaDocumento);
-	//
-	// // colecaoCobrancaDocumentoItem =
-	// // this.repositorioCobranca
-	// // .pesquisarCobrancaDocumentoItem(idCobrancaDocumento);
-	//
-	// // [SB0003] - Determinar Situação de Débtio do Item de
-	// // Cobrança
-	// if (colecaoCobrancaDocumentoItem != null
-	// && !colecaoCobrancaDocumentoItem.isEmpty()) {
-	//
-	// // cobrancaDocumentoParaAtualizar =
-	// processarCobrancaDocumentoItem(
-	// colecaoCobrancaDocumentoItem,
-	// cobrancaDocumentoParaAtualizar,
-	// valorMinimoPagoParceladoCancelado,
-	// quantidadeMinimoaPagoParceladoCancelado);
-	//
-	// } else {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_SITUACAO_PREDOMINANTE_DEBITO_COBRANCA]
-	// = CobrancaDebitoSituacao.SEM_DEBITOS;
-	// }
-	//
-	// if (idServicoTipoAcaoCobranca == null) {
-	// colecaoCobrancaDocumantoParaAtualizar
-	// .add(cobrancaDocumentoParaAtualizar);
-	// }
-	//
-	// }// fim do while da Colecao Cobranca Documentos
-	//
-	// if (!colecaoCobrancaDocumantoParaAtualizar.isEmpty()) {
-	// // grava no banco as COBRANCA_DOCUMENTO
-	// repositorioCobranca
-	// .atualizarCobrancaDocumento(colecaoCobrancaDocumantoParaAtualizar);
-	// }
-	//
-	// // seta null para o GC liberar
-	// colecaoCobrancaDocumantoParaAtualizar.clear();
-	// colecaoCobrancaDocumantoParaAtualizar = null;
-	// }
-	//
-	// colecaoDadosPesquisaCobrancaDocumentoHelper.clear();
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = null;
-	//
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// throw new ControladorException("erro.sistema", ex);
-	// }
-	// }
-
-	// /**
-	// *
-	// * [UCXXXX] Gerar Resumo das Ações de Cobrança Eventuais
-	// *
-	// * [SB0001] - Processar Documento de Cobrança
-	// *
-	// * @author Sávio Luiz
-	// * @date 18/06/2007
-	// *
-	// */
-	// public void processarDocumentoCobrancaEventualVersaoReduzida(
-	// int idCobrancaAtividadeAcaoComando, Usuario usuarioLogado,
-	// int idCobrancaAcao, Integer idServicoTipoAcaoCobranca,
-	// Date dataRealizacaoEncerrar) throws ControladorException {
-	//
-	// // colecao com os documentos de cobrança gerados na atividade EMITIR da
-	// // ação de cobrança
-	// Collection<DadosPesquisaCobrancaDocumentoHelper>
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = null;
-	//
-	// // posições do array com os dados que serão atualizados
-	// final int POSICAO_ID_COBRANCA_DOCUMENTO = 0;
-	// final int POSICAO_ID_SITUACAO_ACAO = 1;
-	// final int POSICAO_DATA_SITUACAO_ACAO = 2;
-	// final int POSICAO_ID_SITUACAO_PREDOMINANTE_DEBITO_COBRANCA = 3;
-	// final int POSICAO_ID_CATEGORIA = 5;
-	// final int POSICAO_ID_ESFERA_PODER = 6;
-	// final int POSICAO_ID_CRITERIO_COBRANCA = 8;
-	// final int POSICAO_INDICADOR_ACIMA_LIMITE = 9;
-	//
-	// try {
-	//
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = this.repositorioCobranca
-	// .pesquisarCobrancaDocumentoEventualSemCriterio(idCobrancaAtividadeAcaoComando);
-	//
-	// HashtableCache cacheCriterios = new HashtableCache("criterioCobranca");
-	//
-	// // para cada documento de cobrança
-	// if (colecaoDadosPesquisaCobrancaDocumentoHelper != null
-	// && !colecaoDadosPesquisaCobrancaDocumentoHelper.isEmpty()) {
-	//
-	// Iterator iteratorCobrancaDocumantoParaAtualizarOUHelper = null;
-	// Collection colecaoCobrancaDocumantoParaAtualizar = null;
-	//
-	// // caso o id do serviço tipo seja diferente de nulo então
-	// // pode ter OS e é verificado as os dos documentos de
-	// // cobrança
-	// if (idServicoTipoAcaoCobranca != null) {
-	// colecaoCobrancaDocumantoParaAtualizar = this
-	// .gerarColecaoDocumentoCobrancaOrdemServico(
-	// idServicoTipoAcaoCobranca, dataRealizacaoEncerrar, usuarioLogado,
-	// ConstantesSistema.NUMERO_NAO_INFORMADO, idCobrancaAtividadeAcaoComando);
-	//
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper =
-	// colecaoCobrancaDocumantoParaAtualizar
-	// .iterator();
-	// } else {
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper =
-	// colecaoDadosPesquisaCobrancaDocumentoHelper
-	// .iterator();
-	// colecaoCobrancaDocumantoParaAtualizar = new ArrayList();
-	// }
-	// while (iteratorCobrancaDocumantoParaAtualizarOUHelper.hasNext()) {
-	//
-	// Object[] cobrancaDocumentoParaAtualizar = null;
-	// Integer idCobrancaDocumento = null;
-	// Integer idImovel = null;
-	// Date dataEmissao = null;
-	// Integer idCobrancaCriterio = null;
-	// BigDecimal valorMinimoPagoParceladoCancelado = null;
-	// BigDecimal quantidadeMinimaPagoParceladoCancelado = null;
-	// BigDecimal valorLimitePrioridade = null;
-	// BigDecimal valorDocumento = null;
-	// Integer idSituacaoAcao = null;
-	//
-	// if (idServicoTipoAcaoCobranca != null) {
-	// cobrancaDocumentoParaAtualizar = (Object[])
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper
-	// .next();
-	// idCobrancaDocumento = (Integer)
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_COBRANCA_DOCUMENTO];
-	// // Consultando criterio de cobranca... usando cache, pois ha muita
-	// repeticao de criterios
-	// if (cobrancaDocumentoParaAtualizar[POSICAO_ID_CRITERIO_COBRANCA] !=
-	// null){
-	// idCobrancaCriterio = (Integer)
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_CRITERIO_COBRANCA];
-	// }
-	//
-	// } else {
-	//
-	// // dados para atualizar o cobranca documento
-	// cobrancaDocumentoParaAtualizar = new Object[13];
-	//
-	// // cbdo_id as idCobrancaDocumento // 0
-	// // cbdo_tmemissao as emissao // 1
-	// // imov_id as idImovel, " + // 2
-	// // cbdo_vldocumento as valorDocumento // 3
-	// // cbct_id as idCriterio " // 4
-	// // cast_id as idSituacaoAcao " // 5
-	// Object[] dadosPesquisaCobrancaDocumento = (Object[])
-	// iteratorCobrancaDocumantoParaAtualizarOUHelper.next();
-	//
-	// if (dadosPesquisaCobrancaDocumento != null){
-	// idCobrancaDocumento = (Integer) dadosPesquisaCobrancaDocumento[0];
-	// dataEmissao = (Date) dadosPesquisaCobrancaDocumento[1];
-	// idImovel = (Integer) dadosPesquisaCobrancaDocumento[2];
-	// valorDocumento = (BigDecimal) dadosPesquisaCobrancaDocumento[3];
-	// idCobrancaCriterio = (Integer) dadosPesquisaCobrancaDocumento[4];
-	// idSituacaoAcao = (Integer) dadosPesquisaCobrancaDocumento[5];
-	// }
-	//
-	// // [UC0306] - Obter Principal CAtegoria do Imovel
-	// // De acordo com o metodo ControladorImovel.obterPrincipalCategoriaImovel
-	// // caso seja a empresa FEBRABAN, a categoria principal sera a que tiver o
-	// maior codigo,
-	// // caso contrario, a principal será a que tiver menor codigo
-	// SistemaParametro sistemaParametro =
-	// getControladorUtil().pesquisarParametrosDoSistema();
-	// boolean ehFEBRABAN = sistemaParametro.getCodigoEmpresaFebraban().equals(
-	// SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN);
-	// Integer idCategoria = repositorioImovel.obterIdCategoriaPrincipal(
-	// idImovel, ehFEBRABAN);
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_CATEGORIA] = idCategoria;
-	//
-	// Integer idEsferaPoder = repositorioImovel.obterIdEsferaPoder(idImovel);
-	//
-	// if (idEsferaPoder != null) {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_ESFERA_PODER] = idEsferaPoder;
-	// } else {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_ESFERA_PODER] = null;
-	// }
-	//
-	// // atualiza os campos para serem utilizados para
-	// // atualização
-	// // e consulta de dados da cobrança documento
-	// // Atribuir o valor AÇÃO ENVIADOS à situação de
-	// // Cobrança
-	// if (idSituacaoAcao == null){
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_SITUACAO_ACAO] =
-	// CobrancaAcaoSituacao.ENVIADOS;
-	// cobrancaDocumentoParaAtualizar[POSICAO_DATA_SITUACAO_ACAO] = dataEmissao;
-	// }
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_COBRANCA_DOCUMENTO] =
-	// idCobrancaDocumento;
-	//
-	// }
-	//
-	// // Consultando criterio de cobranca... usando cache, pois ha muita
-	// repeticao de criterios
-	// if (idCobrancaCriterio != null){
-	// CobrancaCriterio cobrancaCriterio = null;
-	// Object objCache = cacheCriterios.get(idCobrancaCriterio);
-	// if (objCache == null){
-	// FiltroCobrancaCriterio filtroCriterio = new FiltroCobrancaCriterio();
-	// filtroCriterio.adicionarParametro(new ParametroSimples(
-	// FiltroCobrancaCriterio.ID,
-	// idCobrancaCriterio));
-	// Collection retorno = repositorioUtil.pesquisar(filtroCriterio,
-	// CobrancaCriterio.class.getName());
-	// cobrancaCriterio = (CobrancaCriterio)
-	// Util.retonarObjetoDeColecao(retorno);
-	// cacheCriterios.put(idCobrancaCriterio, cobrancaCriterio);
-	// } else {
-	// cobrancaCriterio = (CobrancaCriterio) objCache;
-	// }
-	// valorMinimoPagoParceladoCancelado = cobrancaCriterio
-	// .getPercentualValorMinimoPagoParceladoCancelado();
-	// quantidadeMinimaPagoParceladoCancelado =
-	// cobrancaCriterio.getPercentualQuantidadeMinimoPagoParceladoCancelado();
-	// valorLimitePrioridade = cobrancaCriterio.getValorLimitePrioridade();
-	// }
-	//
-	// // indicador acima do limite
-	// Short indicadorAcimaLimite = null;
-	// if (valorDocumento != null && valorLimitePrioridade != null
-	// && valorDocumento.compareTo(valorLimitePrioridade) > 0) {
-	// indicadorAcimaLimite = new Short("1");
-	// } else {
-	// indicadorAcimaLimite = new Short("2");
-	// }
-	//
-	// cobrancaDocumentoParaAtualizar[POSICAO_INDICADOR_ACIMA_LIMITE] =
-	// indicadorAcimaLimite;
-	//
-	// // 2.2 Seleciona os itens do documento de cobrança
-	// Collection colecaoCobrancaDocumentoItem = null;
-	// // COBRANCA_DOCUMENTO_ITEM por CBDO_ID igual a
-	// // idCobrancaDocmento
-	// colecaoCobrancaDocumentoItem = this.repositorioCobranca
-	// .pesquisarDadosCobrancaDocumentoItemSituacaoJaAtualizada(idCobrancaDocumento);
-	//
-	// // colecaoCobrancaDocumentoItem =
-	// // this.repositorioCobranca
-	// // .pesquisarCobrancaDocumentoItem(idCobrancaDocumento);
-	//
-	// // [SB0003] - Determinar Situação de Débtio do Item de
-	// // Cobrança
-	// if (colecaoCobrancaDocumentoItem != null
-	// && !colecaoCobrancaDocumentoItem.isEmpty()) {
-	// cobrancaDocumentoParaAtualizar =
-	// processarCobrancaDocumentoItemComItensJaAtualizados(
-	// colecaoCobrancaDocumentoItem,
-	// cobrancaDocumentoParaAtualizar,
-	// valorMinimoPagoParceladoCancelado,
-	// quantidadeMinimaPagoParceladoCancelado,
-	// idImovel);
-	// } else {
-	// cobrancaDocumentoParaAtualizar[POSICAO_ID_SITUACAO_PREDOMINANTE_DEBITO_COBRANCA]
-	// = CobrancaDebitoSituacao.SEM_DEBITOS;
-	// }
-	//
-	// if (idServicoTipoAcaoCobranca == null) {
-	// colecaoCobrancaDocumantoParaAtualizar
-	// .add(cobrancaDocumentoParaAtualizar);
-	// }
-	//
-	// }// fim do while da Colecao Cobranca Documentos
-	//
-	// if (!colecaoCobrancaDocumantoParaAtualizar.isEmpty()) {
-	// // grava no banco as COBRANCA_DOCUMENTO
-	// repositorioCobranca
-	// .atualizarCobrancaDocumento(colecaoCobrancaDocumantoParaAtualizar);
-	// }
-	//
-	// // seta null para o GC liberar
-	// colecaoCobrancaDocumantoParaAtualizar.clear();
-	// colecaoCobrancaDocumantoParaAtualizar = null;
-	// }
-	//
-	// colecaoDadosPesquisaCobrancaDocumentoHelper.clear();
-	// colecaoDadosPesquisaCobrancaDocumentoHelper = null;
-	//
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// throw new ControladorException("erro.sistema", ex);
-	// }
-	// }
-
-	/**
-	 * 
-	 * [UCXXXX] Gerar Resumo das Ações de Cobrança Eventuais
-	 * 
 	 * [SB0006] - Determinar Situação da Ordem de Serviço
 	 * 
 	 * @author Sávio Luiz
@@ -39269,26 +38592,6 @@ public class ControladorCobranca implements SessionBean {
 							// ITEM 21
 							cobrancaDocumentoTxt.append(Util.formatarData(cobrancaDocumento.getEmissao()));
 
-							// data de vencimento AAAAMMDD
-							// Object[] dadosFaturamentoGrupo =
-							// getControladorFaturamento()
-							// .pesquisarAnoMesEDiaVencimentoFaturamentoGrupo(
-							// cobrancaDocumento.getImovel()
-							// .getId());
-							// Integer anoMesFaturamento = null;
-							// Integer diaVencimento = null;
-							// if (dadosFaturamentoGrupo != null) {
-							// if (dadosFaturamentoGrupo[0] != null) {
-							// anoMesFaturamento = (Integer)
-							// dadosFaturamentoGrupo[0];
-							// }
-							// if (dadosFaturamentoGrupo[1] != null) {
-							// diaVencimento = ((Short)
-							// dadosFaturamentoGrupo[1])
-							// .intValue();
-							// }
-							// }
-
 							// ITEM 22
 							String dataVencimento = "";
 							if (cobrancaDocumento.getEmissao() != null && acaoCobranca.getNumeroDiasValidade() != null) {
@@ -39396,14 +38699,6 @@ public class ControladorCobranca implements SessionBean {
 							} else {
 								cobrancaDocumentoTxt.append(Util.completaString("", 15));
 							}
-
-							/*
-							 * COLOCADO POR RAPHAEL ROSSITER EM 03/01/2007
-							 * =============================================
-							 * ----
-							 * ----------------------------------------------
-							 * ---------------------------------------
-							 */
 
 							// ITEM 31 - Consumo Médio
 							Integer consumoMedio = getControladorMicromedicao().pesquisarConsumoMedioImovel(
@@ -39642,47 +38937,8 @@ public class ControladorCobranca implements SessionBean {
 								cobrancaDocumentoTxt.append(Util.completaString("", 20));
 							}
 
-							// ITEM 46 - Hidrômetro
-							/*
-							 * Collection dadosHidrometro = null;
-							 * 
-							 * try {
-							 * 
-							 * dadosHidrometro = this.repositorioMicromedicao
-							 * .pesquisarDadosHidrometroTipoLigacaoAgua
-							 * (cobrancaDocumento.getImovel().getId());
-							 * 
-							 * } catch (ErroRepositorioException ex) {
-							 * ex.printStackTrace(); throw new
-							 * ControladorException("erro.sistema", ex); }
-							 * 
-							 * if (dadosHidrometro != null &&
-							 * !dadosHidrometro.isEmpty()){
-							 * 
-							 * Object[] objetoDados = (Object[])
-							 * Util.retonarObjetoDeColecao(dadosHidrometro);
-							 * String numeroHidrometro =
-							 * String.valueOf(objetoDados[1]);
-							 * 
-							 * if (numeroHidrometro != null &&
-							 * !numeroHidrometro.equalsIgnoreCase("")){
-							 * 
-							 * cobrancaDocumentoTxt.append(Util.completaString(
-							 * numeroHidrometro, 10)); } else{
-							 * 
-							 * cobrancaDocumentoTxt.append(Util.completaString(""
-							 * , 10)); } } else{
-							 * 
-							 * cobrancaDocumentoTxt.append(Util.completaString(""
-							 * , 10)); }
-							 */
-
-							// ==========================================================================================
-
 							cobrancaDocumentoTxt.append(System.getProperty("line.separator"));
-
 						}
-
 						colecaoCobrancaDocumentoItemConta = null;
 					}
 
@@ -40923,23 +40179,6 @@ public class ControladorCobranca implements SessionBean {
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		registradorOperacao.registrarOperacao(cobrancaAcao);
 
-		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		// Operacao.OPERACAO_COBRANCA_ACAO_INSERIR,
-		// new UsuarioAcaoUsuarioHelper(cobrancaAcaoHelper.getUsuarioLogado(),
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		//
-		// Operacao operacao = new Operacao();
-		// operacao.setId(Operacao.OPERACAO_COBRANCA_ACAO_INSERIR);
-		//
-		// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		// operacaoEfetuada.setOperacao(operacao);
-		//
-		// cobrancaAcao.setOperacaoEfetuada(operacaoEfetuada);
-		// cobrancaAcao.adicionarUsuario(cobrancaAcaoHelper.getUsuarioLogado(),
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		// registradorOperacao.registrarOperacao(cobrancaAcao);
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
 		idCobrancaAcao = (Integer) getControladorUtil().inserir(cobrancaAcao);
 
 		return idCobrancaAcao;
@@ -41262,24 +40501,6 @@ public class ControladorCobranca implements SessionBean {
 					posIni = posFinal + 1;
 				}
 			}
-
-			/*
-			 * if (colecaoIdImoveis != null & !colecaoIdImoveis.isEmpty()) {
-			 * Iterator icolecaoImoveis = colecaoIdImoveis.iterator();
-			 * 
-			 * while (icolecaoImoveis.hasNext()) { imovel += ((Integer)
-			 * icolecaoImoveis.next()).toString() + ","; }
-			 * 
-			 * // Retira a ultima virgula da lista
-			 * 
-			 * imovel = imovel.substring(0, (imovel.length() - 1));
-			 * 
-			 * colecaoImoveisFaixaValores = repositorioCobranca
-			 * .pesquisarDebitoImovelPorFaixaValores(imovel, valorMinimoDebito,
-			 * anoMesReferenciaInicial, anoMesReferenciaFinal, classificacao);
-			 * 
-			 * }
-			 */
 
 		} catch (ErroRepositorioException e) {
 			// sessionContext.setRollbackOnly();

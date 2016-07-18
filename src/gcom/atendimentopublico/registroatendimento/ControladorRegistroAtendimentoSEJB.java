@@ -55,6 +55,8 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
+import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroCliente;
@@ -6254,8 +6256,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 									FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 									filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
 									filtroClienteImovel.adicionarParametro(
-											new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, 
-													ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL));
+											new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL.intValue()));
 									filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
 									
 									filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
@@ -6324,8 +6325,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 											FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 											filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
 											filtroClienteImovel.adicionarParametro(
-													new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, 
-															ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL));
+													new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL.intValue()));
 											filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
 											
 											filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);

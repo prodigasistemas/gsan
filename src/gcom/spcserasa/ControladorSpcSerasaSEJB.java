@@ -4322,7 +4322,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 		try {
 			Object[] retorno = new Object[3];
-			retorno[0] = new Integer(0);
+			retorno[0] = new Integer(1);
 			retorno[1] = new BigDecimal(0);
 			retorno[2] = new Integer(0);
 

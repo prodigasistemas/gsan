@@ -2384,4 +2384,8 @@ public class Imovel extends ObjetoTransacao implements IImovel {
         
         return false;
     }
+    
+    public boolean isTarifaSocial() {
+    	return this.imovelPerfil.getId().equals(ConstantesSistema.INDICADOR_TARIFA_SOCIAL);
+    }
 }

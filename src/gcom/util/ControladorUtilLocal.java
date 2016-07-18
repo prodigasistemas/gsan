@@ -98,4 +98,6 @@ public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 	public Collection pesquisarGerencial(Filtro filtro, String pacoteNomeObjeto) throws ControladorException;
 	
 	public Object inserirComCommit(Object objeto) throws ControladorException;
+	
+	public String getCaminhoDownloadArquivos(String modulo);
 }

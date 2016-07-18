@@ -308,6 +308,8 @@ import gcom.relatorio.faturamento.conta.ContasEmitidasRelatorioHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioMapaControleConta;
 import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
@@ -16504,36 +16506,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					valorItemFaturamento = repositorioFaturamento
-							.acumularValorAguaPorSituacaoConta(
-									anoMesFaturamento, idLocalidade,
-									idCategoria,
-									DebitoCreditoSituacao.CANCELADA);
+					valorItemFaturamento = repositorioFaturamento.acumularValorAguaPorSituacaoConta(
+									anoMesFaturamento, idLocalidade,idCategoria,DebitoCreditoSituacao.CANCELADA);
 
-					lancamentoTipo = new LancamentoTipo(
-							LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario
-							.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade
-							.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
-							.getUnidadeNegocio());
+					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario
-							.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario
-							.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario
-							.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario
-							.setSequenciaTipoLancamento(new Short("900"));
-					resumoFaturamentoTemporario
-							.setSequenciaItemTipoLancamento(new Short("10"));
+					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("900"));
+					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
 					BigDecimal somaValorAguaSituacaoCanceladaPorRetificacao = null;
@@ -16544,38 +16534,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// retificacao(DebitoCreditoSituacao = 4) - valor de conta
 					// retificada (DebitoCreditoSituacao = 1) por conta
 					// categoria
-					somaValorAguaSituacaoCanceladaPorRetificacao = repositorioFaturamento
-							.diferencaValorAguaCanceladaRetificacao(
-									anoMesFaturamento, idLocalidade,
-									idCategoria);
+					somaValorAguaSituacaoCanceladaPorRetificacao = repositorioFaturamento.diferencaValorAguaCanceladaRetificacao(
+									anoMesFaturamento, idLocalidade,idCategoria);
 
 					// Acumula todas todas os valores retificados que tem contas
 					// canceladas por retificacao, eh do valor de conta
 					// retificado(DebitoCreditoSituacao = 1) - valor de conta
 					// cancelada por retificacao (DebitoCreditoSituacao = 4) por
 					// conta categoria
-					somaValorAguaSituacaoRetificada = repositorioFaturamento
-							.diferencaValorAguaRetificada(anoMesFaturamento,
-									idLocalidade, idCategoria);
+					somaValorAguaSituacaoRetificada = repositorioFaturamento.diferencaValorAguaRetificada(anoMesFaturamento,idLocalidade, idCategoria);
 
 					// Guarda todos os valores cancelados por retificacao que tb
 					// tiveram cancelamentos por retificacao
-					resumoFaturamentoTemporario = this
-							.acumularValorResumoFaturamento(
-									resumoFaturamentoTemporario,
-									somaValorAguaSituacaoCanceladaPorRetificacao);
-					resumoFaturamentoReceitaCancelada = this
-							.acumularValorResumoFaturamento(
-									resumoFaturamentoReceitaCancelada,
-									resumoFaturamentoTemporario
-											.getValorItemFaturamento());
+					resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, somaValorAguaSituacaoCanceladaPorRetificacao);
+					resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada,resumoFaturamentoTemporario.getValorItemFaturamento());
 
-//					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-//						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-//						// Monta LancamentoAgenciaReguladora
-//						LancamentoAgenciaReguladora lar = this.buildLancamentoAgenciaReguladoraCancelados(idLocalidade, anoMesFaturamento, true, LancamentoAgenciaReguladora.CANCELAMENTOS_POR_REFATURAMENTO);
-//						lancamentosAgenciaReguladora.add(lar);
-//					}
+					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					}
+					
 					
 					// acumular o valor de água para situação atual ou anterior
 					// igual a incluída
@@ -28013,15 +27990,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			BufferedWriter out = null;
 			ZipOutputStream zos = null;
-			File compactadoTipo = new File(nomeZip + ".zip");
-
-			File leituraTipo = new File(nomeZip + ".txt");
+			
+			File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+			File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 
 			if (arquivoFaturaTXT != null && arquivoFaturaTXT.length() != 0) {
 				try {
 
-					zos = new ZipOutputStream(new FileOutputStream(
-							compactadoTipo));
+					zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
 
 					out = new BufferedWriter(
 							new OutputStreamWriter(new FileOutputStream(
@@ -28712,19 +28688,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				BufferedWriter outCartas = null;
 
-				File leituraTipo = new File(nomeZip + ".txt");
+				File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 				File leituraTipoCarta = null;
 				if (nomeZipCartaConta != null) {
-					leituraTipoCarta = new File(nomeZipCartaConta + ".txt");
-					outCartas = new BufferedWriter(new OutputStreamWriter(
-							new FileOutputStream(
-									leituraTipoCarta.getAbsolutePath())));
+					leituraTipoCarta = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZipCartaConta + ".txt");
+					outCartas = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipoCarta.getAbsolutePath())));
 
 				}
 
-				BufferedWriter outContas = new BufferedWriter(
-						new OutputStreamWriter(new FileOutputStream(
-								leituraTipo.getAbsolutePath())));
+				BufferedWriter outContas = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
 
 				try {
 
@@ -31655,62 +31627,38 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									ZipOutputStream zosCartasPart = null;
 									ZipOutputStream zosContasPart = null;
-									File compactadoTipoPart = new File(nomeZip
-											+ "Part_" + numeroPart + ".zip");
+									File compactadoTipoPart = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip+ "Part_" + numeroPart + ".zip");
 									File compactadoTipoCartaPart = null;
 
 									if (nomeZipCartaConta != null) {
-										compactadoTipoCartaPart = new File(
-												nomeZipCartaConta + "Part_"
-														+ numeroPart + ".zip");
+										compactadoTipoCartaPart = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZipCartaConta + "Part_"+ numeroPart + ".zip");
 
-										zosCartasPart = new ZipOutputStream(
-												new FileOutputStream(
-														compactadoTipoCartaPart));
+										zosCartasPart = new ZipOutputStream(new FileOutputStream(compactadoTipoCartaPart));
 
-										ZipUtil.adicionarArquivo(zosCartasPart,
-												leituraTipoCarta);
+										ZipUtil.adicionarArquivo(zosCartasPart,leituraTipoCarta);
 										zosCartasPart.close();
 
 										outCartas.close();
 										leituraTipoCarta.delete();
 
-										leituraTipoCarta = new File(
-												nomeZipCartaConta + "Part_"
-														+ (numeroPart + 1)
-														+ ".txt");
-										outCartas = new BufferedWriter(
-												new OutputStreamWriter(
-														new FileOutputStream(
-																leituraTipoCarta
-																		.getAbsolutePath())));
+										leituraTipoCarta = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZipCartaConta + "Part_"+ (numeroPart + 1)+ ".txt");
+										outCartas = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipoCarta.getAbsolutePath())));
 									}
 
 									if (geraArquivo) {
-										zosContasPart = new ZipOutputStream(
-												new FileOutputStream(
-														compactadoTipoPart));
-										ZipUtil.adicionarArquivo(zosContasPart,
-												leituraTipo);
+										zosContasPart = new ZipOutputStream(new FileOutputStream(compactadoTipoPart));
+										ZipUtil.adicionarArquivo(zosContasPart,leituraTipo);
 										zosContasPart.close();
 
 										outContas.close();
 										leituraTipo.delete();
 
-										leituraTipo = new File(nomeZip
-												+ "Part_" + (numeroPart + 1)
-												+ ".txt");
-										outContas = new BufferedWriter(
-												new OutputStreamWriter(
-														new FileOutputStream(
-																leituraTipo
-																		.getAbsolutePath())));
+										leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + "Part_" + (numeroPart + 1) + ".txt");
+										outContas = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
 									}
 								} else {
-									if (cartasTxtListaConta != null
-											&& cartasTxtListaConta.length() != 0) {
-										outCartas.write(cartasTxtListaConta
-												.toString());
+									if (cartasTxtListaConta != null && cartasTxtListaConta.length() != 0) {
+										outCartas.write(cartasTxtListaConta.toString());
 										outCartas.flush();
 									}
 
@@ -31750,8 +31698,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												+ (numeroPart + 1) + ".zip");
 							}
 							// **********************************************************
-							zosCartas = new ZipOutputStream(
-									new FileOutputStream(compactadoTipoCarta));
+							zosCartas = new ZipOutputStream(new FileOutputStream(compactadoTipoCarta));
 
 							ZipUtil.adicionarArquivo(zosCartas,
 									leituraTipoCarta);
@@ -31774,12 +31721,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// renomea
 							// **********************************************************
 							if (numeroPart > 0) {
-								compactadoTipo = new File(nomeZip + "Part_"
-										+ (numeroPart + 1) + ".zip");
+								compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + "Part_" + (numeroPart + 1) + ".zip");
 							}
 							// **********************************************************
-							zosContas = new ZipOutputStream(
-									new FileOutputStream(compactadoTipo));
+							zosContas = new ZipOutputStream(new FileOutputStream(compactadoTipo));
 
 							ZipUtil.adicionarArquivo(zosContas, leituraTipo);
 							zosContas.close();
@@ -43128,41 +43073,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// criar o arquivo zip
-					// File compactado = new File("GRUPO_" + idFaturamento
-					// + "_extratoConsumoImovelCondominio" + ".zip"); // nomeZip
-					// ZipOutputStream zos = new ZipOutputStream(
-					// new FileOutputStream(compactado));
-					//
-					// File leitura = File.createTempFile("GRUPO_" +
-					// idFaturamento
-					// + "_extratoConsumoImovelCondominio", ".txt");
-					// BufferedWriter out = new BufferedWriter(
-					// new OutputStreamWriter(new FileOutputStream(leitura
-					// .getAbsolutePath())));
-					// out.write(txt.toString());
-					// out.close();
-					//
-					// out.close();
-					// ZipUtil.adicionarArquivo(zos, leitura);
-					//
-					// // close the stream
-					// zos.close();
-					// leitura.delete();
-					EnvioEmail envioEmial = getControladorCadastro()
-							.pesquisarEnvioEmail(
-									EnvioEmail.EMITIR_EXTRATO_CONSUMO_IMOVEL_CONDOMINIO);
+					EnvioEmail envioEmial = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.EMITIR_EXTRATO_CONSUMO_IMOVEL_CONDOMINIO);
 
 					String emailRemetente = envioEmial.getEmailRemetente();
 					String tituloMensagem = envioEmial.getTituloMensagem();
 					String corpoMensagem = envioEmial.getCorpoMensagem();
 					String emailReceptor = envioEmial.getEmailReceptor();
 
-					getControladorUtil().mandaArquivoLeituraEmail(
-							"GRUPO_" + idFaturamento
-									+ "_extratoConsumoImovelCondominio", txt,
-							emailReceptor, emailRemetente, tituloMensagem,
-							corpoMensagem);
+					getControladorUtil().mandaArquivoLeituraEmail("GRUPO_" + idFaturamento+ "_extratoConsumoImovelCondominio", txt,
+							emailReceptor, emailRemetente, tituloMensagem, corpoMensagem);
 
 					// leitura.delete();
 				}
@@ -43774,10 +43693,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (indicadorFichaCompensacao.equals("1")) {
 						nomeZip = "relatorio_mapa_controle_conta_grupo_"
 								+ faturamentoGrupo.getDescricao();
-						File leitura = new File(nomeZip + ".PDF");
-						File compactado = new File(nomeZip + ".zip"); // nomeZip
-						zos = new ZipOutputStream(new FileOutputStream(
-								compactado));
+						File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".PDF");
+						File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip"); // nomeZip
+						zos = new ZipOutputStream(new FileOutputStream(compactado));
 						out = new FileOutputStream(leitura.getAbsolutePath());
 						out.write(relatorioGerado);
 						out.flush();
@@ -43793,10 +43711,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else if (indicadorFichaCompensacao.equals("2")) {
 						nomeZip = "relatorio_mapa_controle_conta_grupo_boleto_bancario_"
 								+ faturamentoGrupo.getDescricao();
-						File leitura = new File(nomeZip + ".PDF");
-						File compactado = new File(nomeZip + ".zip"); // nomeZip
-						zos = new ZipOutputStream(new FileOutputStream(
-								compactado));
+						File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".PDF");
+						File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip"); // nomeZip
+						
+						zos = new ZipOutputStream(new FileOutputStream(compactado));
 						out = new FileOutputStream(leitura.getAbsolutePath());
 						out.write(relatorioGerado);
 						out.flush();
@@ -46366,15 +46284,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					ZipOutputStream zos = null;
 					try {
 						// criar o arquivo zip
-						File compactado = new File("" + idCliente + "_"
-								+ anoMes + ".zip"); // nomeZip
+						File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + "" + idCliente + "_"+ anoMes + ".zip"); // nomeZip
 
-						zos = new ZipOutputStream(new FileOutputStream(
-								compactado));
+						zos = new ZipOutputStream(new FileOutputStream(compactado));
 
 						File leitura;
-						leitura = new File("" + idCliente + "_" + anoMes
-								+ ".txt");
+						leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + "" + idCliente + "_" + anoMes + ".txt");
 
 						out = new BufferedWriter(
 								new OutputStreamWriter(new FileOutputStream(
@@ -57773,15 +57688,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			try {
 
-				String mesReferencia = anoMesFaturamento.toString().substring(
-						4, 6);
-				String anoReferencia = anoMesFaturamento.toString().substring(
-						0, 4);
+				String mesReferencia = anoMesFaturamento.toString().substring(4, 6);
+				String anoReferencia = anoMesFaturamento.toString().substring(0, 4);
 
-				String nomeRelatorio = "RELATORIO_RELACAO_ANALITICA_FATURA_"
-						+ mesReferencia + "_" + anoReferencia + ".PDF";
+				String nomeRelatorio = "RELATORIO_RELACAO_ANALITICA_FATURA_" + mesReferencia + "_" + anoReferencia + ".PDF";
 
-				File leitura = new File(nomeRelatorio);
+				File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeRelatorio);
 				out = new FileOutputStream(leitura.getAbsolutePath());
 				out.write(relatorioGerado);
 				out.flush();
@@ -63667,15 +63579,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				ZipOutputStream zos = null;
 				File compactadoTipoCarta = null;
 
-				File compactadoTipo = new File(nomeZip + ".zip");
+				File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
 				if (nomeZipCartaConta != null) {
-					compactadoTipoCarta = new File(nomeZipCartaConta + ".zip");
+					compactadoTipoCarta = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZipCartaConta + ".zip");
 				}
 
-				File leituraTipo = new File(nomeZip + ".txt");
+				File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 				File leituraTipoCarta = null;
 				if (nomeZipCartaConta != null) {
-					leituraTipoCarta = new File(nomeZipCartaConta + ".txt");
+					leituraTipoCarta = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZipCartaConta + ".txt");
 				}
 
 				if (contasTxtLista != null && contasTxtLista.length() != 0) {
@@ -63683,11 +63595,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contasTxtLista.append("\u0004");
 					// ************ TIPO E *************
 
-					zos = new ZipOutputStream(new FileOutputStream(
-							compactadoTipo));
-					out = new BufferedWriter(
-							new OutputStreamWriter(new FileOutputStream(
-									leituraTipo.getAbsolutePath())));
+					zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
+					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
+					
 					out.write(contasTxtLista.toString());
 					out.flush();
 					ZipUtil.adicionarArquivo(zos, leituraTipo);
@@ -63703,11 +63613,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contasTxtLista.append("\u0004");
 					// ************ TIPO N *************
 
-					zos = new ZipOutputStream(new FileOutputStream(
-							compactadoTipoCarta));
-					out = new BufferedWriter(new OutputStreamWriter(
-							new FileOutputStream(
-									leituraTipoCarta.getAbsolutePath())));
+					zos = new ZipOutputStream(new FileOutputStream(compactadoTipoCarta));
+					
+					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipoCarta.getAbsolutePath())));
 					out.write(cartasTxtListaConta.toString());
 					out.flush();
 					ZipUtil.adicionarArquivo(zos, leituraTipoCarta);

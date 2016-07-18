@@ -286,10 +286,11 @@ function continuar(objeto){
 			</table>
 			<table width="100%">
 				<tr>
-					<td><input name="Button2" type="button" class="bottonRightCol"
-						value="Voltar" onclick="javascript:history.back()"> <input
-						align="right" name="Button1" type="button" class="bottonRightCol"
-						value="Atualizar" onclick="atualizar()"></td>
+					<td>
+						<input name="Button2" type="button" class="bottonRightCol" value="Voltar"
+							onclick="window.location.href='<html:rewrite page="/filtrarProcessoAction.do"/>'">
+						<input align="right" name="Button1" type="button" class="bottonRightCol" value="Atualizar" onclick="atualizar()">
+					</td>
 					<td colspan="2" align="right">
 					<c:if
 						test="${requestScope.processoIniciado.processoSituacao.id == requestScope.concluidoComErro || 

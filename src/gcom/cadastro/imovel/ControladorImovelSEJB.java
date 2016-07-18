@@ -1228,7 +1228,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			
 			for (ClienteImovel clienteImovel : clientes) {
 				
-				if (clienteImovel.getClienteRelacaoTipo().getId().equals(ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL)){
+				if (clienteImovel.isClienteResponsavel()){
 					clienteResponsavel = true;
 				}
 				
