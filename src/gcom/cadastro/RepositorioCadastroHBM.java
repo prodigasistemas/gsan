@@ -3780,59 +3780,66 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	public ImovelAtualizacaoCadastral obterImovelGeracaoTabelasTemporarias(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta;
 		ImovelAtualizacaoCadastral retorno = null;
 
 		Query query = null;
 
 		try {
 
-			consulta = "SELECT distinct new gcom.cadastro.imovel.ImovelAtualizacaoCadastral(imov.id as idImovel, " + // 0
-					" imov.localidade.id as idLocalidade, " + // 1
-					" stcm.codigo as codigoSetorComercial, " + // 2
-					" qdra.numeroQuadra as numeroQuadra, " + // 3
-					" imov.lote, " + // 4
-					" imov.subLote, " + // 5
-					" imov.numeroSequencialRota, " + // 6
-					" imov.numeroMorador, " + // 7
-					" coalesce(imov.logradouroCep.id, imov.logradouroBairro.id), " + // 8 e 9
-					" cep.codigo as codigoCep," + // 10
-					" bairro.id as idBairro," + // 11
-					" bairro.nome as descricaoBairro," + // 12
-					" imov.enderecoReferencia.id as enderecoReferencia, " + // 13
-					" imov.numeroImovel, " + // 14
-					" imov.complementoEndereco, " + // 15
-					" imov.areaConstruida, " + // 16
-					" imov.ligacaoAguaSituacao.id, " + // 17
-					" imov.volumeReservatorioInferior, " + // 18
-					" imov.volumeReservatorioSuperior, " + // 19
-					" imov.volumePiscina, " + // 20
-					" imov.indicadorJardim, " + // 21
-					" imov.pavimentoCalcada.id, " + // 22
-					" imov.pavimentoRua.id, " + // 23
-					" imov.fonteAbastecimento.id, " + // 24
-					" imov.pocoTipo.id, " + // 25
-					" imov.numeroPontosUtilizacao, " + // 26
-					" imov.ligacaoEsgotoSituacao.id, " + // 27
-					" imov.imovelPerfil.id, " + // 28
-					" imov.despejo.id, " + // 29
-					" imov.coordenadaX, " + // 30
-					" imov.coordenadaY, " + // 31
-					" imov.imovelPrincipal.id, " + // 32
-					" imov.numeroIptu, " + // 33
-					" imov.numeroCelpe, " + // 34
-					" lagu.ramalLocalInstalacao.id) " + // 35
-					" from Imovel imov "
-					+ " inner join imov.setorComercial stcm "
-					+ " inner join imov.quadra qdra "
-					+ " left join  imov.logradouroCep lgcp "
-					+ " left join  lgcp.cep cep "
-					+ " left join  imov.logradouroBairro lgbr "
-					+ " left join  lgbr.bairro bairro"
-					+ " left join  imov.ligacaoAgua lagu"
-					+ " where imov.id =:idImovel";
+			consulta = new StringBuilder("SELECT distinct new gcom.cadastro.imovel.ImovelAtualizacaoCadastral(imov.id as idImovel, ")
+			.append(" imov.localidade.id as idLocalidade, ") 
+			.append(" stcm.codigo as codigoSetorComercial, ")
+			.append(" qdra.numeroQuadra as numeroQuadra, ")
+			.append(" imov.lote, ")
+			.append(" imov.subLote, ")
+			.append(" imov.numeroSequencialRota, ")
+			.append(" imov.numeroMorador, ")
+			.append(" coalesce(imov.logradouroCep.id, imov.logradouroBairro.id), ")
+			.append(" cep.codigo as codigoCep, ")
+			.append(" bairro.id as idBairro, ")
+			.append(" bairro.nome as descricaoBairro, ")
+			.append(" imov.enderecoReferencia.id as enderecoReferencia, ")
+			.append(" imov.numeroImovel, ")
+			.append(" imov.complementoEndereco, ")
+			.append(" imov.areaConstruida, ")
+			.append(" imov.ligacaoAguaSituacao.id, ")
+			.append(" imov.volumeReservatorioInferior, ")
+			.append(" imov.volumeReservatorioSuperior, ") 
+			.append(" imov.volumePiscina, ")
+			.append(" imov.indicadorJardim, ")
+			.append(" imov.pavimentoCalcada.id, ")
+			.append(" imov.pavimentoRua.id, ") 
+			.append(" imov.fonteAbastecimento.id, ")
+			.append(" imov.pocoTipo.id, ")
+			.append(" imov.numeroPontosUtilizacao, ") 
+			.append(" imov.ligacaoEsgotoSituacao.id, ")
+			.append(" imov.imovelPerfil.id, ")
+			.append(" imov.despejo.id, ")
+			.append(" imov.coordenadaX, ")
+			.append(" imov.coordenadaY, ") 
+			.append(" imov.imovelPrincipal.id, ")
+			.append(" imov.numeroIptu, ")
+			.append(" imov.numeroCelpe, ")
+			.append(" lagu.ramalLocalInstalacao.id, ")
+			.append(" imov.ocupacaoImovel, ")
+			.append(" imov.classeSocial, ")
+			.append(" imov.quantidadeAnimaisDomesticos, ")
+			.append(" imov.volumeCisterna, ")
+			.append(" imov.volumeCaixaDagua, ")
+			.append(" imov.tipoUso, ")
+			.append(" imov.acessoHidrometro) ")
+			.append(" from Imovel imov ")
+			.append(" inner join imov.setorComercial stcm ")
+			.append(" inner join imov.quadra qdra ")
+			.append(" left join  imov.logradouroCep lgcp ")
+			.append(" left join  lgcp.cep cep ")
+			.append(" left join  imov.logradouroBairro lgbr ")
+			.append(" left join  lgbr.bairro bairro ")
+			.append(" left join  imov.ligacaoAgua lagu ")
+			.append(" where imov.id =:idImovel ");
 
-			query = session.createQuery(consulta)
+			query = session.createQuery(consulta.toString())
 					.setInteger("idImovel", idImovel);
 
 			retorno = (ImovelAtualizacaoCadastral) query.uniqueResult();

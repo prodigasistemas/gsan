@@ -198,8 +198,28 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer idRota;
 	
-	private Integer localInstalacaoRamal;
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short ocupacaoImovel;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short classeSocial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short quantidadeAnimaisDomesticos;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private BigDecimal volumeCisterna;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private BigDecimal volumeCaixaDagua;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short tipoUso;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short acessoHidrometro;     
 	
+		
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
 			Integer codigoSetorComercial, 
@@ -234,7 +254,14 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Integer codigoImovelPrincipal,
 			String numeroIptu,
 			Long numeroContratoEnergia, 
-			Integer localInstalacaoRamal) {
+			Integer idLocalInstalacaoRamal,
+			Short ocupacaoImovel,
+			Short classeSocial,
+			Short quantidadeAnimaisDomesticos,
+			BigDecimal volumeCisterna,
+			BigDecimal volumeCaixaDagua,
+			Short tipoUso,
+			Short acessoHidrometro) {
 	    this.idImovel                   = idImovel;
 	    this.idLocalidade               = idLocalidade;
 	    this.codigoSetorComercial       = codigoSetorComercial;
@@ -269,7 +296,14 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	    this.codigoImovelPrincipal      = codigoImovelPrincipal;
 	    this.numeroIptu                 = numeroIptu;
 	    this.numeroContratoEnergia      = numeroContratoEnergia ;
-	    this.localInstalacaoRamal       = localInstalacaoRamal;	    
+	    this.idLocalInstalacaoRamal     = idLocalInstalacaoRamal;
+        this.ocupacaoImovel             = ocupacaoImovel; 
+        this.classeSocial               = classeSocial; 
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+        this.volumeCaixaDagua            = volumeCaixaDagua;
+        this.volumeCisterna              = volumeCisterna;
+        this.tipoUso                     = tipoUso;
+        this.acessoHidrometro            = acessoHidrometro;
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -991,12 +1025,59 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
-
-    public Integer getLocalInstalacaoRamal() {
-        return localInstalacaoRamal;
+    public Short getOcupacaoImovel() {
+        return ocupacaoImovel;
     }
 
-    public void setLocalInstalacaoRamal(Integer localInstalacaoRamal) {
-        this.localInstalacaoRamal = localInstalacaoRamal;
+    public void setOcupacaoImovel(Short ocupacaoImovel) {
+        this.ocupacaoImovel = ocupacaoImovel;
     }
+
+    public Short getClasseSocial() {
+        return classeSocial;
+    }
+
+    public void setClasseSocial(Short classeSocial) {
+        this.classeSocial = classeSocial;
+    }
+
+    public Short getQuantidadeAnimaisDomesticos() {
+        return quantidadeAnimaisDomesticos;
+    }
+
+    public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) {
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+    }
+
+    public BigDecimal getVolumeCisterna() {
+        return volumeCisterna;
+    }
+
+    public void setVolumeCisterna(BigDecimal volumeCisterna) {
+        this.volumeCisterna = volumeCisterna;
+    }
+
+    public BigDecimal getVolumeCaixaDagua() {
+        return volumeCaixaDagua;
+    }
+
+    public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) {
+        this.volumeCaixaDagua = volumeCaixaDagua;
+    }
+
+    public Short getTipoUso() {
+        return tipoUso;
+    }
+
+    public void setTipoUso(Short tipoUso) {
+        this.tipoUso = tipoUso;
+    }
+
+    public Short getAcessoHidrometro() {
+        return acessoHidrometro;
+    }
+
+    public void setAcessoHidrometro(Short acessoHidrometro) {
+        this.acessoHidrometro = acessoHidrometro;
+    }	
 }

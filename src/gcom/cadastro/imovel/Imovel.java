@@ -299,6 +299,27 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Date dataVisitaComercial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short ocupacaoImovel;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short classeSocial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short quantidadeAnimaisDomesticos;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private BigDecimal volumeCisterna;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private BigDecimal volumeCaixaDagua;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short tipoUso;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short acessoHidrometro;     
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
 	public final static Short INDICADOR_CONTA_IMOVEL = new Short("2");
@@ -2350,6 +2371,62 @@ public class Imovel extends ObjetoTransacao implements IImovel {
         return ligacaoAguaSituacao.getId().equals(LigacaoAguaSituacao.LIGADO);
     }
     
+    public Short getOcupacaoImovel() {
+        return ocupacaoImovel;
+    }
+
+    public void setOcupacaoImovel(Short ocupacaoImovel) {
+        this.ocupacaoImovel = ocupacaoImovel;
+    }
+
+    public Short getClasseSocial() {
+        return classeSocial;
+    }
+
+    public void setClasseSocial(Short classeSocial) {
+        this.classeSocial = classeSocial;
+    }
+
+    public Short getQuantidadeAnimaisDomesticos() {
+        return quantidadeAnimaisDomesticos;
+    }
+
+    public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) {
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+    }
+
+    public BigDecimal getVolumeCisterna() {
+        return volumeCisterna;
+    }
+
+    public void setVolumeCisterna(BigDecimal volumeCisterna) {
+        this.volumeCisterna = volumeCisterna;
+    }
+
+    public BigDecimal getVolumeCaixaDagua() {
+        return volumeCaixaDagua;
+    }
+
+    public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) {
+        this.volumeCaixaDagua = volumeCaixaDagua;
+    }
+
+    public Short getTipoUso() {
+        return tipoUso;
+    }
+
+    public void setTipoUso(Short tipoUso) {
+        this.tipoUso = tipoUso;
+    }
+
+    public Short getAcessoHidrometro() {
+        return acessoHidrometro;
+    }
+
+    public void setAcessoHidrometro(Short acessoHidrometro) {
+        this.acessoHidrometro = acessoHidrometro;
+    }
+
     public boolean useNovaChecagemGerarConta(){
         int [] ids = new int[]{7814933,7814950
          ,7815085,7815093,7816723,7814852,7814836,7815735,7815530,7815549
