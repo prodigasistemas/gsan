@@ -6876,76 +6876,18 @@ public class ControladorCadastro implements SessionBean {
 	 * @author Vinicius Medeiros
 	 * @date 25/08/2008
 	 */
-	public ImovelAtualizacaoCadastral obterImovelGeracaoTabelasTemporarias(
-			Integer idImovel) throws ControladorException {
+	public ImovelAtualizacaoCadastral obterImovelGeracaoTabelasTemporarias(Integer idImovel) throws ControladorException {
 
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
 
 		try {
+		    
+			imovelAtualizacaoCadastral = repositorioCadastro.obterImovelGeracaoTabelasTemporarias(idImovel);
 
-			Object[] element = repositorioCadastro
-					.obterImovelGeracaoTabelasTemporarias(idImovel);
-
-			// Imóvel
-			imovelAtualizacaoCadastral = new ImovelAtualizacaoCadastral();
-			if (element != null) {
-				// Id Imóvel
-				imovelAtualizacaoCadastral.setIdImovel((Integer) element[0]);
-
-				// Localidade
-				if (element[1] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLocalidade((Integer) element[1]);
-				}
-
-				// Setor Comercial
-				if (element[2] != null) {
-					imovelAtualizacaoCadastral
-							.setCodigoSetorComercial((Integer) element[2]);
-				}
-
-				// Quadra
-				if (element[3] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroQuadra((Integer) element[3]);
-				}
-
-				// Lote
-				if (element[4] != null) {
-					imovelAtualizacaoCadastral.setLote(Short
-							.parseShort(element[4].toString()));
-				}
-
-				// SubLote
-				if (element[5] != null) {
-					imovelAtualizacaoCadastral.setSubLote(Short
-							.parseShort(element[5].toString()));
-				}
-
-				// Sequência de Rota
-				if (element[6] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroSequencialRota((Integer) element[6]);
-				}
-
-				// Número de moradores
-				if (element[7] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroMorador((Short) element[7]);
-				}
-
-				// Código Logradouro
-				if (element[8] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLogradouro((Integer) element[8]);
-				} else if (element[9] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLogradouro((Integer) element[9]);
-				}
-
+			if (imovelAtualizacaoCadastral != null) {
 				// Logradouro
-				Collection colecaoEndereco = getControladorEndereco()
-						.pesquisarLogradouro(idImovel);
+				Collection colecaoEndereco = getControladorEndereco().pesquisarLogradouro(idImovel);
+				
 				if (colecaoEndereco != null && !colecaoEndereco.isEmpty()) {
 
 					Iterator enderecoIterator = colecaoEndereco.iterator();
@@ -6964,233 +6906,59 @@ public class ControladorCadastro implements SessionBean {
 
 					if (arrayEndereco[4] != null) {
 						Integer idTitulo = (Integer) arrayEndereco[4];
-						imovelAtualizacaoCadastral
-								.setIdLogradouroTitulo(idTitulo);
+						imovelAtualizacaoCadastral.setIdLogradouroTitulo(idTitulo);
 						String titulo = (String) arrayEndereco[2];
-						imovelAtualizacaoCadastral
-								.setDsLogradouroTitulo(titulo);
+						imovelAtualizacaoCadastral.setDsLogradouroTitulo(titulo);
 					}
 
 					if (arrayEndereco[5] != null) {
 						Integer idMunicipio = (Integer) arrayEndereco[5];
 						imovelAtualizacaoCadastral.setIdMunicipio(idMunicipio);
 						String nomeMunicipio = (String) arrayEndereco[6];
-						imovelAtualizacaoCadastral
-								.setNomeMunicipio(nomeMunicipio);
+						imovelAtualizacaoCadastral.setNomeMunicipio(nomeMunicipio);
 					}
 
 					if (arrayEndereco[7] != null) {
 						Integer idUnidadeFederacao = (Integer) arrayEndereco[7];
-						imovelAtualizacaoCadastral
-								.setIdUinidadeFederacao(idUnidadeFederacao);
+						imovelAtualizacaoCadastral.setIdUinidadeFederacao(idUnidadeFederacao);
 						String dsUnidadeFederacao = (String) arrayEndereco[8];
-						imovelAtualizacaoCadastral
-								.setDsUFSiglaMunicipio(dsUnidadeFederacao);
+						imovelAtualizacaoCadastral.setDsUFSiglaMunicipio(dsUnidadeFederacao);
 					}
 				}
 
-				// Cep
-				if (element[10] != null) {
-					imovelAtualizacaoCadastral
-							.setCodigoCep((Integer) element[10]);
-				}
-
-				// Bairro
-				if (element[11] != null) {
-					imovelAtualizacaoCadastral
-							.setIdBairro((Integer) element[11]);
-				}
-
-				// Descrição do bairro
-				if (element[12] != null) {
-					imovelAtualizacaoCadastral
-							.setNomeBairro((String) element[12]);
-				}
-
-				// Código de referência
-				if (element[13] != null) {
-					imovelAtualizacaoCadastral
-							.setIdEnderecoReferencia((Integer) element[13]);
-				}
-
-				// Número do imóvel
-				imovelAtualizacaoCadastral
-						.setNumeroImovel((String) element[14]);
-
-				// Complemento do Imóvel
-				imovelAtualizacaoCadastral
-						.setComplementoEndereco((String) element[15]);
-
-				// Área Construida
-				if (element[16] != null) {
-					imovelAtualizacaoCadastral
-							.setAreaConstruida((BigDecimal) element[16]);
-				}
-
-				// Situação de água
-				if (element[17] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLigacaoAguaSituacao((Integer) element[17]);
-				}
-
-				// Volume do resevatório inferior
-				if (element[18] != null) {
-					imovelAtualizacaoCadastral
-							.setVolumeReservatorioInferior((BigDecimal) element[18]);
-				}
-
-				// Volume do resevatório superior
-				if (element[19] != null) {
-					imovelAtualizacaoCadastral
-							.setVolumeReservatorioSuperior((BigDecimal) element[19]);
-				}
-
-				// Volume Piscina
-				if (element[20] != null) {
-					imovelAtualizacaoCadastral
-							.setVolumePiscina((BigDecimal) element[20]);
-				}
-
-				// Indicador de Jardim
-				if (element[21] != null) {
-					imovelAtualizacaoCadastral
-							.setIndicadorJardim((Short) element[21]);
-				}
-
-				// Pavimento calçada
-				if (element[22] != null) {
-					imovelAtualizacaoCadastral
-							.setIdPavimentoCalcada((Integer) element[22]);
-				}
-
-				// Pavimento rua
-				if (element[23] != null) {
-					imovelAtualizacaoCadastral
-							.setIdPavimentoRua((Integer) element[23]);
-				}
-
-				// Fonte de abastecimento
-				if (element[24] != null) {
-					imovelAtualizacaoCadastral
-							.setIdFonteAbastecimento((Integer) element[24]);
-				}
-
-				// Poço
-				if (element[25] != null) {
-					imovelAtualizacaoCadastral
-							.setIdPocoTipo((Integer) element[25]);
-				}
-
-				// Número de pontos
-				if (element[26] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroPontosUtilizacao((Short) element[26]);
-				}
-
-				// Situação da ligação de esgoto
-				if (element[27] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLigacaoEsgotoSituacao((Integer) element[27]);
-				}
-
-				// Perfil do Imóvel
-				if (element[28] != null) {
-					imovelAtualizacaoCadastral
-							.setIdImovelPerfil((Integer) element[28]);
-				}
-
-				// Tipo despejo
-				if (element[29] != null) {
-					imovelAtualizacaoCadastral
-							.setIdDespejo((Integer) element[29]);
-				}
-
-				// Coordenadas UTMX
-				if (element[30] != null) {
-					imovelAtualizacaoCadastral
-							.setCoordenadaX((String) element[30]);
-				}
-
-				// Coordenadas UTMY
-				if (element[31] != null) {
-					imovelAtualizacaoCadastral
-							.setCoordenadaY((String) element[31]);
-				}
-
-				// Imóvel Principal
-				if (element[32] != null) {
-					imovelAtualizacaoCadastral
-							.setCodigoImovelPrincipal((Integer) element[32]);
-				}
-
-				// Número de IPTU
-				if (element[33] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroIptu((String) element[33]);
-				}
-
-				// Contrato de energia
-				if (element[34] != null) {
-					imovelAtualizacaoCadastral
-							.setNumeroContratoEnergia((Long) element[34]);
-				}
-				
-				if (element[35] != null) {
-					imovelAtualizacaoCadastral
-							.setIdLocalInstalacaoRamal((Integer) element[35]);
-				}
-				
-				// Hidrometro
-				Object[] hidrometro = getControladorMicromedicao()
-						.obterDadosHidrometroAtualizacaoCadastral(idImovel);
+				Object[] hidrometro = getControladorMicromedicao().obterDadosHidrometroAtualizacaoCadastral(idImovel);
 
 				if (hidrometro != null) {
-					// Leitura inicial do Hidrômetro
 					if (hidrometro[0] != null) {
-						imovelAtualizacaoCadastral
-								.setNumeroLeituraInstalacaoHidrometro((Integer) hidrometro[0]);
+						imovelAtualizacaoCadastral.setNumeroLeituraInstalacaoHidrometro((Integer) hidrometro[0]);
 					}
 
-					// Capacidade do Hidrômetro
 					if (hidrometro[1] != null) {
-						imovelAtualizacaoCadastral
-								.setIdCapacidadeHidrometro((Integer) hidrometro[1]);
+						imovelAtualizacaoCadastral.setIdCapacidadeHidrometro((Integer) hidrometro[1]);
 					}
 
-					// Marca do Hidrômetro
 					if (hidrometro[2] != null) {
-						imovelAtualizacaoCadastral
-								.setIdMarcaHidrometro((Integer) hidrometro[2]);
+						imovelAtualizacaoCadastral.setIdMarcaHidrometro((Integer) hidrometro[2]);
 					}
 
-					// Local do Hidrômetro
 					if (hidrometro[3] != null) {
-						imovelAtualizacaoCadastral
-								.setIdLocalInstalacaoHidrometro((Integer) hidrometro[3]);
+						imovelAtualizacaoCadastral.setIdLocalInstalacaoHidrometro((Integer) hidrometro[3]);
 					}
 
-					// Proteção do Hidrômetro
 					if (hidrometro[4] != null) {
-						imovelAtualizacaoCadastral
-								.setIdProtecaoHidrometro((Integer) hidrometro[4]);
+						imovelAtualizacaoCadastral.setIdProtecaoHidrometro((Integer) hidrometro[4]);
 					}
 
-					// Cavalte
 					if (hidrometro[5] != null) {
-						imovelAtualizacaoCadastral
-								.setIndicadorCavalete((Short) hidrometro[5]);
+						imovelAtualizacaoCadastral.setIndicadorCavalete((Short) hidrometro[5]);
 					}
 
-					// Número do Hidrômetro
 					if (hidrometro[6] != null) {
-						imovelAtualizacaoCadastral
-								.setNumeroHidrometro((String) hidrometro[6]);
+						imovelAtualizacaoCadastral.setNumeroHidrometro((String) hidrometro[6]);
 					}
-
 				}
 			}
 		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
 		}
 

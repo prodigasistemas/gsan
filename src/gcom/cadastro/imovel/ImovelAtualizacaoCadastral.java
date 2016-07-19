@@ -198,98 +198,78 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer idRota;
 	
-	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
-			int codigoSetorComercial, int numeroQuadra, short lote,
-			short subLote, Integer numeroSequencialRota,
-			Integer idLogradouroTipo, String dsLogradouroTipo,
-			Integer idLogradouroTitulo, String dsLogradouroTitulo,
-			Integer idLogradouro, String descricaoLogradouro, Integer idBairro,
-			String nomeBairro, Integer codigoCep, String numeroImovel,
-			String complementoEndereco, Integer idEnderecoReferencia,
-			Integer idDespejo, BigDecimal volumeReservatorioSuperior,
-			BigDecimal volumeReservatorioInferior, Integer idPavimentoCalcada,
-			Integer idPavimentoRua, Integer idFonteAbastecimento,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, BigDecimal volumePiscina,
-			Integer idPocoTipo, Short numeroPontosUtilizacao,
-			Short numeroMorador, String numeroIptu,
-			Long numeroContratoEnergia, String coordenadaX,
-			String coordenadaY, Date ultimaAlteracao,
-			BigDecimal areaConstruida, Short indicadorJardim,
-			Integer numeroLeituraInstalacaoHidrometro,
-			Integer idCapacidadeHidrometro, Integer idMarcaHidrometro,
-			Integer idLocalInstalacaoHidrometro, Integer idProtecaoHidrometro,
-			String numeroHidrometro, Short indicadorCavalete,
-			String numeroMedidorEnergia, Integer idCadastroOcorrencia,
-			String descricaoOutrasInformacoes, String tipoEntrevistado,
+	private Integer localInstalacaoRamal;
+	
+	public ImovelAtualizacaoCadastral(Integer idImovel, 
+	        Integer idLocalidade,
+			Integer codigoSetorComercial, 
+			Integer numeroQuadra, 
+			short lote,
+			short subLote, 
+			Integer numeroSequencialRota,
+			Short numeroMorador, 
+			Integer idLogradouro,
+			Integer codigoCep,
+			Integer idBairro,
+			String nomeBairro, 
+			Integer idEnderecoReferencia,
+			String numeroImovel,
+			String complementoEndereco,
+			BigDecimal areaConstruida,
+			Integer idLigacaoAguaSituacao, 
+			BigDecimal volumeReservatorioInferior,
+			BigDecimal volumeReservatorioSuperior,
+			BigDecimal volumePiscina,
+			Short indicadorJardim,
+			Integer idPavimentoCalcada,
+			Integer idPavimentoRua,
+			Integer idFonteAbastecimento,
+			Integer idPocoTipo, 
+			Short numeroPontosUtilizacao,
+			Integer idLigacaoEsgotoSituacao,
+			Integer idImovelPerfil,
+			Integer idDespejo, 
+			String coordenadaX,
+			String coordenadaY,
 			Integer codigoImovelPrincipal,
-			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
-			Integer idMunicipio, Integer codigoMunicipio, String nomeMunicipio,
-			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
-			Integer idArquivoTexto, Integer indicadorAtualizado,
-			Integer tipoOperacao) {
-		this.id = id;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.codigoSetorComercial = codigoSetorComercial;
-		this.numeroQuadra = numeroQuadra;
-		this.lote = lote;
-		this.subLote = subLote;
-		this.numeroSequencialRota = numeroSequencialRota;
-		this.idLogradouroTipo = idLogradouroTipo;
-		this.dsLogradouroTipo = dsLogradouroTipo;
-		this.idLogradouroTitulo = idLogradouroTitulo;
-		this.dsLogradouroTitulo = dsLogradouroTitulo;
-		this.idLogradouro = idLogradouro;
-		this.descricaoLogradouro = descricaoLogradouro;
-		this.idBairro = idBairro;
-		this.nomeBairro = nomeBairro;
-		this.codigoCep = codigoCep;
-		this.numeroImovel = numeroImovel;
-		this.complementoEndereco = complementoEndereco;
-		this.idEnderecoReferencia = idEnderecoReferencia;
-		this.idDespejo = idDespejo;
-		this.volumeReservatorioSuperior = volumeReservatorioSuperior;
-		this.volumeReservatorioInferior = volumeReservatorioInferior;
-		this.idPavimentoCalcada = idPavimentoCalcada;
-		this.idPavimentoRua = idPavimentoRua;
-		this.idFonteAbastecimento = idFonteAbastecimento;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.volumePiscina = volumePiscina;
-		this.idPocoTipo = idPocoTipo;
-		this.numeroPontosUtilizacao = numeroPontosUtilizacao;
-		this.numeroMorador = numeroMorador;
-		this.numeroIptu = numeroIptu;
-		this.numeroContratoEnergia = numeroContratoEnergia;
-		this.coordenadaX = coordenadaX;
-		this.coordenadaY = coordenadaY;
-		this.ultimaAlteracao = ultimaAlteracao;
-		this.areaConstruida = areaConstruida;
-		this.indicadorJardim = indicadorJardim;
-		this.numeroLeituraInstalacaoHidrometro = numeroLeituraInstalacaoHidrometro;
-		this.idCapacidadeHidrometro = idCapacidadeHidrometro;
-		this.idMarcaHidrometro = idMarcaHidrometro;
-		this.idLocalInstalacaoHidrometro = idLocalInstalacaoHidrometro;
-		this.idProtecaoHidrometro = idProtecaoHidrometro;
-		this.numeroHidrometro = numeroHidrometro;
-		this.indicadorCavalete = indicadorCavalete;
-		this.numeroMedidorEnergia = numeroMedidorEnergia;
-		this.idCadastroOcorrencia = idCadastroOcorrencia;
-		this.descricaoOutrasInformacoes = descricaoOutrasInformacoes;
-		this.tipoEntrevistado = tipoEntrevistado;
-		this.codigoImovelPrincipal = codigoImovelPrincipal;
-		this.idSituacaoAtualizacaoCadastral = idSituacaoAtualizacaoCadastral;
-		this.idEmpresa = idEmpresa;
-		this.idMunicipio = idMunicipio;
-		this.codigoMunicipio = codigoMunicipio;
-		this.nomeMunicipio = nomeMunicipio;
-		this.idUinidadeFederacao = idUinidadeFederacao;
-		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
-		this.idArquivoTexto = idArquivoTexto;
-		this.indicadorAtualizado = indicadorAtualizado;
-		this.tipoOperacao = tipoOperacao;
+			String numeroIptu,
+			Long numeroContratoEnergia, 
+			Integer localInstalacaoRamal) {
+	    this.idImovel                   = idImovel;
+	    this.idLocalidade               = idLocalidade;
+	    this.codigoSetorComercial       = codigoSetorComercial;
+	    this.numeroQuadra               = numeroQuadra;
+	    this.lote                       = lote;
+	    this.subLote                    = subLote;
+	    this.numeroSequencialRota       = numeroSequencialRota;
+	    this.numeroMorador              = numeroMorador;
+	    this.idLogradouro               = idLogradouro;
+	    this.codigoCep                  = codigoCep;
+	    this.idBairro                   = idBairro;
+	    this.nomeBairro                 = nomeBairro;
+	    this.idEnderecoReferencia       = idEnderecoReferencia;
+	    this.numeroImovel               = numeroImovel;
+	    this.complementoEndereco        = complementoEndereco;
+	    this.areaConstruida             = areaConstruida;
+	    this.idLigacaoAguaSituacao      = idLigacaoAguaSituacao ;
+	    this.volumeReservatorioInferior = volumeReservatorioInferior;
+	    this.volumeReservatorioSuperior = volumeReservatorioSuperior;
+	    this.volumePiscina              = volumePiscina;
+	    this.indicadorJardim            = indicadorJardim;
+	    this.idPavimentoCalcada         = idPavimentoCalcada;
+	    this.idPavimentoRua             = idPavimentoRua;
+	    this.idFonteAbastecimento       = idFonteAbastecimento;
+	    this.idPocoTipo                 = idPocoTipo;
+	    this.numeroPontosUtilizacao     = numeroPontosUtilizacao;
+	    this.idLigacaoEsgotoSituacao    = idLigacaoEsgotoSituacao;
+	    this.idImovelPerfil             = idImovelPerfil;
+	    this.idDespejo                  = idDespejo;
+	    this.coordenadaX                = coordenadaX;
+	    this.coordenadaY                = coordenadaY;
+	    this.codigoImovelPrincipal      = codigoImovelPrincipal;
+	    this.numeroIptu                 = numeroIptu;
+	    this.numeroContratoEnergia      = numeroContratoEnergia ;
+	    this.localInstalacaoRamal       = localInstalacaoRamal;	    
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -1011,4 +991,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
+
+    public Integer getLocalInstalacaoRamal() {
+        return localInstalacaoRamal;
+    }
+
+    public void setLocalInstalacaoRamal(Integer localInstalacaoRamal) {
+        this.localInstalacaoRamal = localInstalacaoRamal;
+    }
 }
