@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-    Created by the Middlegen Hibernate plugin
-
-    http://boss.bekk.no/boss/middlegen/
-    http://hibernate.sourceforge.net/
--->
 	<class name="gcom.cadastro.imovel.Imovel" table="cadastro.imovel">
 		<id name="id" type="java.lang.Integer" column="imov_id">
 			<generator class="assigned"/>
@@ -57,7 +51,6 @@
 		<property name="indicadorImovelAreaComum" type="java.lang.Short" column="imov_icimovelareacomum" not-null="false"/>
 		<property name="categoriaPrincipalId" type="java.lang.Integer" column="imov_idcategoriaprincipal" not-null="false"/>
 		<property name="subCategoriaPrincipalId" type="java.lang.Integer" column="imov_idsubcategoriaprincipal" not-null="false"/>
-        <property name="ocupacaoImovel"              type="java.lang.Short"      column="imov_ocupacao_imovel"               not-null="false"/>
         <property name="classeSocial"                type="java.lang.Short"      column="imov_classe_social"                 not-null="false"/>
         <property name="quantidadeAnimaisDomesticos" type="java.lang.Short"      column="imov_quantidade_animais_domesticos" not-null="false"/>
         <property name="volumeCisterna"              type="java.math.BigDecimal" column="imov_vol_cisterna"                  not-null="false"/>
@@ -268,5 +261,11 @@
 			</key>
 			<one-to-many class="gcom.faturamento.conta.Conta"/>
 		</set>
+		<set name="quantidadesOcupantes" table="cadastro.imovel_tipo_ocupante_quantidade" inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="imov_id" not-null="true" />
+            </key>
+            <one-to-many class="gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade"/>
+        </set>		
 	</class>
 </hibernate-mapping>

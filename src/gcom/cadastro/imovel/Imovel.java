@@ -1,6 +1,7 @@
 package gcom.cadastro.imovel;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -301,9 +302,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     private Date dataVisitaComercial;
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
-    private Short ocupacaoImovel;
-    
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Short classeSocial;
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
@@ -319,7 +317,9 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     private Short tipoUso;
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
-    private Short acessoHidrometro;     
+    private Short acessoHidrometro;
+    
+    private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
 	public final static Short INDICADOR_CONTA_IMOVEL = new Short("2");
@@ -2371,14 +2371,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
         return ligacaoAguaSituacao.getId().equals(LigacaoAguaSituacao.LIGADO);
     }
     
-    public Short getOcupacaoImovel() {
-        return ocupacaoImovel;
-    }
-
-    public void setOcupacaoImovel(Short ocupacaoImovel) {
-        this.ocupacaoImovel = ocupacaoImovel;
-    }
-
     public Short getClasseSocial() {
         return classeSocial;
     }
@@ -2425,6 +2417,14 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
     public void setAcessoHidrometro(Short acessoHidrometro) {
         this.acessoHidrometro = acessoHidrometro;
+    }
+
+    public Collection<ImovelTipoOcupanteQuantidade> getQuantidadesOcupantes() {
+        return quantidadesOcupantes;
+    }
+
+    public void setQuantidadesOcupantes(Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes) {
+        this.quantidadesOcupantes = quantidadesOcupantes;
     }
 
     public boolean useNovaChecagemGerarConta(){

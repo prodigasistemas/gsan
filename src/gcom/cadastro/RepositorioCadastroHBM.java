@@ -3822,7 +3822,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			.append(" imov.numeroIptu, ")
 			.append(" imov.numeroCelpe, ")
 			.append(" lagu.ramalLocalInstalacao.id, ")
-			.append(" imov.ocupacaoImovel, ")
 			.append(" imov.classeSocial, ")
 			.append(" imov.quantidadeAnimaisDomesticos, ")
 			.append(" imov.volumeCisterna, ")

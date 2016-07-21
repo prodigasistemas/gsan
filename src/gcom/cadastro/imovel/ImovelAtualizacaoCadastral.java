@@ -198,9 +198,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer idRota;
 	
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Short ocupacaoImovel;
-    
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short classeSocial;
     
@@ -255,7 +252,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			String numeroIptu,
 			Long numeroContratoEnergia, 
 			Integer idLocalInstalacaoRamal,
-			Short ocupacaoImovel,
 			Short classeSocial,
 			Short quantidadeAnimaisDomesticos,
 			BigDecimal volumeCisterna,
@@ -297,7 +293,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	    this.numeroIptu                 = numeroIptu;
 	    this.numeroContratoEnergia      = numeroContratoEnergia ;
 	    this.idLocalInstalacaoRamal     = idLocalInstalacaoRamal;
-        this.ocupacaoImovel             = ocupacaoImovel; 
         this.classeSocial               = classeSocial; 
         this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
         this.volumeCaixaDagua            = volumeCaixaDagua;
@@ -1025,13 +1020,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
-    public Short getOcupacaoImovel() {
-        return ocupacaoImovel;
-    }
-
-    public void setOcupacaoImovel(Short ocupacaoImovel) {
-        this.ocupacaoImovel = ocupacaoImovel;
-    }
 
     public Short getClasseSocial() {
         return classeSocial;

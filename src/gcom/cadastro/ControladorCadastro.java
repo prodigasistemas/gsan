@@ -7648,150 +7648,90 @@ public class ControladorCadastro implements SessionBean {
 	 * @param idImovel
 	 * @throws ControladorException
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoImovel(Integer idImovel)
-			throws ControladorException {
-
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
-		Imovel imovel = null;
-
-		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
-				.pesquisarImovelAtualizacaoCadastral(idImovel);
-		imovel = getControladorImovel().pesquisarImovel(idImovel);
+	public StringBuilder gerarArquivoTextoRegistroTipoImovel(Integer idImovel) throws ControladorException {
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
+		
+		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
 		StringBuilder arquivoTextoRegistroTipoImovel = new StringBuilder();
 
 		// TIPO DO REGISTRO (DADOS DO IMÓVEL)
 		arquivoTextoRegistroTipoImovel.append("02");
 
-		// MATRÍCULA DO IMÓVEL
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				9, imovelAtualizacaoCadastral.getIdImovel().toString()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(9, imovelAtualizacaoCadastral.getIdImovel().toString()));
 
 		// CÓDIGO CLIENTE (?)
 		arquivoTextoRegistroTipoImovel.append(Util.completaString("", 30));
-
-		// INSCRIÇÃO DO IMÓVEL
-		// LOCALIDADE
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				3, imovel.getLocalidade().getId().toString()));
-		// SETOR COMERCIAL
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				3, imovel.getSetorComercial().getCodigo() + ""));
-		// QUADRA
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				4, imovel.getQuadra().getNumeroQuadra() + ""));
-		// LOTE
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				4, imovel.getLote() + ""));
-		// SUBLOTE
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				3, imovel.getSubLote() + ""));
-
-		// ROTA DO IMÓVEL
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovel.getLocalidade().getId().toString()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovel.getSetorComercial().getCodigo() + ""));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(4, imovel.getQuadra().getNumeroQuadra() + ""));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(4, imovel.getLote() + ""));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovel.getSubLote() + ""));
 		Rota rotaImovel = imovel.getQuadra().getRota();
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				2, rotaImovel.getCodigo().toString()));
-
-		// FACE DA QUADRA
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				2, imovel.getQuadraFace().getNumeroQuadraFace().toString()));
-
-		// CÓDIGO DO MUNÍCIPIO
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				8, imovelAtualizacaoCadastral.getIdMunicipio().toString()));
-
-		// NUMERO IPTU
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(2, rotaImovel.getCodigo().toString()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(2, imovel.getQuadraFace().getNumeroQuadraFace().toString()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(8, imovelAtualizacaoCadastral.getIdMunicipio().toString()));
+		
 		if (imovelAtualizacaoCadastral.getNumeroIptu() != null) {
-			arquivoTextoRegistroTipoImovel.append(Util
-					.adicionarZerosEsquedaNumero(31, imovelAtualizacaoCadastral
-							.getNumeroIptu().toString()));
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(31, imovelAtualizacaoCadastral.getNumeroIptu().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 31));
 		}
-
-		// NUMERO MEDIDOR ENERGIA
+		
 		if (imovelAtualizacaoCadastral.getNumeroMedidorEnergia() != null
-				&& !imovelAtualizacaoCadastral.getNumeroMedidorEnergia()
-						.equals("")) {
-			arquivoTextoRegistroTipoImovel.append(Util
-					.adicionarZerosEsquedaNumero(20, imovelAtualizacaoCadastral
-							.getNumeroMedidorEnergia().toString()));
+				&& !imovelAtualizacaoCadastral.getNumeroMedidorEnergia().equals("")) {
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(20, imovelAtualizacaoCadastral.getNumeroMedidorEnergia().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 20));
 		}
 		
-		//Pontos de utilização
 		if(imovel.getNumeroPontosUtilizacao()!= null){
 			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(5, imovel.getNumeroPontosUtilizacao()+""));
 		}else{
 			arquivoTextoRegistroTipoImovel.append("00000");
 		}
 		
-		//Número de moradores
 		if(imovel.getNumeroMorador() != null){
 			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(5, imovel.getNumeroMorador()+""));
 		}else{
 			arquivoTextoRegistroTipoImovel.append("00000");
 		}
 
-		// Descricao do Tipo do Logradouro
 		if (imovelAtualizacaoCadastral.getIdLogradouroTipo() != null) {
 			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral.getIdLogradouroTipo().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append("00");
 		}
 		
-		// NOME LOGRADOURO
-		arquivoTextoRegistroTipoImovel.append(Util.completaString(
-				imovelAtualizacaoCadastral.getDescricaoLogradouro(), 40));
+		arquivoTextoRegistroTipoImovel.append(Util.completaString(imovelAtualizacaoCadastral.getDescricaoLogradouro(), 40));
+		arquivoTextoRegistroTipoImovel.append(Util.completaString(imovelAtualizacaoCadastral.getNumeroImovel().trim(), 5));
 
-		// NÚMERO DO IMÓVEL
-		arquivoTextoRegistroTipoImovel.append(Util.completaString(
-				imovelAtualizacaoCadastral.getNumeroImovel().trim(), 5));
-
-		// COMPLEMENTO
 		if (imovelAtualizacaoCadastral.getComplementoEndereco() != null
-				&& !imovelAtualizacaoCadastral.getComplementoEndereco().equals(
-						"")) {
-			arquivoTextoRegistroTipoImovel.append(Util.completaString(
-					imovelAtualizacaoCadastral.getComplementoEndereco(), 25));
+				&& !imovelAtualizacaoCadastral.getComplementoEndereco().equals("")) {
+			arquivoTextoRegistroTipoImovel.append(Util.completaString(imovelAtualizacaoCadastral.getComplementoEndereco(), 25));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 25));
 		}
 
-		// BAIRRO
-		if (imovelAtualizacaoCadastral.getNomeBairro() != null
-				&& !imovelAtualizacaoCadastral.getNomeBairro().equals("")) {
-			arquivoTextoRegistroTipoImovel.append(Util.completaString(
-					imovelAtualizacaoCadastral.getNomeBairro(), 20));
+		if (imovelAtualizacaoCadastral.getNomeBairro() != null && !imovelAtualizacaoCadastral.getNomeBairro().equals("")) {
+			arquivoTextoRegistroTipoImovel.append(Util.completaString(imovelAtualizacaoCadastral.getNomeBairro(), 20));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 20));
 		}
 
-		// CEP
-		if (imovelAtualizacaoCadastral.getCodigoCep() != null
-				&& !imovelAtualizacaoCadastral.getCodigoCep().equals("")) {
-			arquivoTextoRegistroTipoImovel.append(Util
-					.adicionarZerosEsquedaNumero(8, imovelAtualizacaoCadastral
-							.getCodigoCep().toString()));
+		if (imovelAtualizacaoCadastral.getCodigoCep() != null && !imovelAtualizacaoCadastral.getCodigoCep().equals("")) {
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(8, imovelAtualizacaoCadastral.getCodigoCep().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 8));
 		}
 
-		// NOME MUNICÍPIO
-		arquivoTextoRegistroTipoImovel.append(Util.completaString(
-				imovelAtualizacaoCadastral.getNomeMunicipio(), 15));
-
-		// CÓDIGO DO LOGRADOURO
-		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(
-				9, imovelAtualizacaoCadastral.getIdLogradouro().toString()));
+		arquivoTextoRegistroTipoImovel.append(Util.completaString(imovelAtualizacaoCadastral.getNomeMunicipio(), 15));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(9, imovelAtualizacaoCadastral.getIdLogradouro().toString()));
 
 		// Subcategorias
-		Collection colecaoImovelSubcategoria = getControladorAtualizacaoCadastral()
-				.pesquisarImovelSubcategoriaAtualizacaoCadastral(idImovel, null, null);
+		Collection colecaoImovelSubcategoria = getControladorAtualizacaoCadastral().pesquisarImovelSubcategoriaAtualizacaoCadastral(idImovel, null, null);
 
-		Iterator imovelSubcategoriaIterator = colecaoImovelSubcategoria
-				.iterator();
+		Iterator imovelSubcategoriaIterator = colecaoImovelSubcategoria.iterator();
 
 		ImovelSubcategoriaAtualizacaoCadastral residencial1 = null;
 		ImovelSubcategoriaAtualizacaoCadastral residencial2 = null;
@@ -7885,13 +7825,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria R1
 		if (residencial1 != null) {
 			if (new Short(residencial1.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, residencial1
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, residencial1.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7900,13 +7836,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria R2
 		if (residencial2 != null) {
 			if (new Short(residencial2.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, residencial2
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, residencial2.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7915,13 +7847,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria R3
 		if (residencial3 != null) {
 			if (new Short(residencial3.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, residencial3
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, residencial3.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7930,13 +7858,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria R4
 		if (residencial4 != null) {
 			if (new Short(residencial4.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, residencial4
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, residencial4.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7945,13 +7869,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria C1
 		if (comercial1 != null) {
 			if (new Short(comercial1.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, comercial1
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, comercial1.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7960,13 +7880,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria C2
 		if (comercial2 != null) {
 			if (new Short(comercial2.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, comercial2
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, comercial2.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7975,13 +7891,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria C3
 		if (comercial3 != null) {
 			if (new Short(comercial3.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, comercial3
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, comercial3.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -7990,13 +7902,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria C4
 		if (comercial4 != null) {
 			if (new Short(comercial4.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, comercial4
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, comercial4.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8005,13 +7913,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria P1
 		if (publica1 != null) {
 			if (new Short(publica1.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, publica1
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, publica1.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8020,13 +7924,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria P2
 		if (publica2 != null) {
 			if (new Short(publica2.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, publica2
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, publica2.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8035,13 +7935,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria P3
 		if (publica3 != null) {
 			if (new Short(publica3.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, publica3
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, publica3.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8050,13 +7946,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria P4
 		if (publica4 != null) {
 			if (new Short(publica4.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, publica4
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, publica4.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8065,13 +7957,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria I1
 		if (industrial1 != null) {
 			if (new Short(industrial1.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, industrial1
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, industrial1.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8080,13 +7968,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria I2
 		if (industrial2 != null) {
 			if (new Short(industrial2.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, industrial2
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, industrial2.getQuantidadeEconomias()	+ ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8095,13 +7979,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria I3
 		if (industrial3 != null) {
 			if (new Short(industrial3.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, industrial3
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, industrial3.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8110,13 +7990,9 @@ public class ControladorCadastro implements SessionBean {
 		// Subcategoria I4
 		if (industrial4 != null) {
 			if (new Short(industrial4.getQuantidadeEconomias()) != null) {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.adicionarZerosEsquedaNumero(3, industrial4
-								.getQuantidadeEconomias()
-								+ ""));
+				arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, industrial4.getQuantidadeEconomias() + ""));
 			} else {
-				arquivoTextoRegistroTipoImovel.append(Util
-						.completaString("", 3));
+				arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
 			}
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 3));
@@ -8124,19 +8000,13 @@ public class ControladorCadastro implements SessionBean {
 
 		// FONTE DE ABASTECIMENTO (Tabela cadastro.fonte_abastecimento)
 		if (imovelAtualizacaoCadastral.getIdFonteAbastecimento() != null
-				&& !imovelAtualizacaoCadastral.getIdFonteAbastecimento()
-						.equals("")) {
-
-			arquivoTextoRegistroTipoImovel.append(Util
-					.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral
-							.getIdFonteAbastecimento().toString()));
-
+				&& !imovelAtualizacaoCadastral.getIdFonteAbastecimento().equals("")) {
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral.getIdFonteAbastecimento().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append("00");
 		}
 
-		arquivoTextoRegistroTipoImovel.append(System
-				.getProperty("line.separator"));
+		arquivoTextoRegistroTipoImovel.append(System.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipoImovel;
 
