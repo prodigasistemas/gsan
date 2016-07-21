@@ -102,6 +102,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
     private Integer idImovelPerfil;
 
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal volumePiscina;
 
     private Integer idPocoTipo;
@@ -126,6 +127,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
     private Date ultimaAlteracao;
 
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal areaConstruida;
 
     private Short indicadorJardim;

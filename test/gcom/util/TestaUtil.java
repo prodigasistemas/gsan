@@ -78,4 +78,36 @@ public class TestaUtil {
 	    valorBase  = new BigDecimal(80);
 	    assertEquals(5.60, Util.calcularPercentual(valorBase, 7D).doubleValue(), 0.01);
 	}
+	
+    @Test
+    public void testaConversaoDecimalParaString(){
+        BigDecimal valorBase  = new BigDecimal(999.65);
+        assertEquals("999.65", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(9);
+        assertEquals("9.00", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(9.68);
+        assertEquals("9.68", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(99.500000);
+        assertEquals("99.50", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(99999.55);
+        assertEquals("99999.55", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(9999999.55);
+        assertEquals("9999999.55", Util.converterDecimalParaString(valorBase));
+        valorBase  = new BigDecimal(999.5);
+        assertEquals("999.50", Util.converterDecimalParaString(valorBase));
+    }
+    
+    @Test
+    public void testaConversaoDecimalParaStringComZerosEsquerda(){
+        BigDecimal valorBase  = new BigDecimal(999.65);
+        assertEquals("0099965", Util.adicionarZerosEsquedaNumero(7, valorBase));
+        valorBase  = new BigDecimal(100);
+        assertEquals("0010000", Util.adicionarZerosEsquedaNumero(7, valorBase));        
+    }
+    
+    @Test
+    public void testaAdicionarZerosEsquedaNumero(){
+        BigDecimal nulo = null;
+        assertEquals("0000", Util.adicionarZerosEsquedaNumero(4, nulo));
+    }
 }

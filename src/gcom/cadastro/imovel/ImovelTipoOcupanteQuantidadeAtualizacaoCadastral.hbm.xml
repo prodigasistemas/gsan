@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral" table="cadastro.imovel_tipo_ocupante_quantidade_atualizacao_cadastral">
+		<id name="id" type="java.lang.Integer" column="itqa_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_tipo_ocupante_quantidade_atualizacao_cadastral</param>
+			</generator>
+		</id>
+		<property name="quantidade"   type="java.lang.Integer"  column="itqa_quantidade"        length="4"/>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="tipoOcupante" class="gcom.cadastro.imovel.ImovelTipoOcupante" not-null="true">
+			<column name="itpo_id"/>
+		</many-to-one>		
+	</class>
+</hibernate-mapping>

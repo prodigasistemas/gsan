@@ -64,6 +64,22 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 	}
 
+    public Collection listar(Class classe) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+
+        try {
+            Query query = session.createQuery("select e from " + classe.getName() + " e");
+
+            return (Collection) query.list();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+    }
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection limiteMaximoFiltroPesquisa(Filtro filtro, String pacoteNomeObjeto, int limite) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();

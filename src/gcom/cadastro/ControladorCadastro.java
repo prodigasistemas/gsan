@@ -1,21 +1,45 @@
 package gcom.cadastro;
 
-import gcom.arrecadacao.ControladorArrecadacaoLocal;
-import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocalHome;
 import gcom.atendimentopublico.bean.DadosLigacoesBoletimCadastroHelper;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
@@ -25,11 +49,7 @@ import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
@@ -60,8 +80,6 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteConta;
@@ -83,8 +101,6 @@ import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.empresa.FiltroEmpresaContratoCobranca;
 import gcom.cadastro.empresa.IRepositorioEmpresa;
 import gcom.cadastro.empresa.RepositorioEmpresaHBM;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroTipo;
@@ -98,8 +114,6 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.EntidadeBeneficente;
 import gcom.cadastro.imovel.FiltroCategoria;
 import gcom.cadastro.imovel.FiltroEntidadeBeneficente;
@@ -118,6 +132,8 @@ import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.ImovelTipoOcupante;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
@@ -155,8 +171,6 @@ import gcom.cobranca.CobrancaAcaoAtividadeCronograma;
 import gcom.cobranca.CobrancaSituacaoHistorico;
 import gcom.cobranca.CobrancaSituacaoMotivo;
 import gcom.cobranca.CobrancaSituacaoTipo;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
@@ -165,8 +179,6 @@ import gcom.cobranca.bean.EmitirDocumentoCobrancaBoletimCadastroHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.RepositorioFaturamentoHBM;
@@ -184,8 +196,6 @@ import gcom.gui.relatorio.cadastro.micromedicao.FiltrarRelatorioColetaMedidorEne
 import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoLigacoesHidrometroHelper;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.Leiturista;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
@@ -231,14 +241,9 @@ import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
@@ -247,9 +252,6 @@ import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
 import gcom.util.ParserUtil;
 import gcom.util.RepositorioUtilHBM;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
@@ -257,41 +259,6 @@ import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorCadastro extends ControladorComum {
 
@@ -6545,12 +6512,10 @@ public class ControladorCadastro extends ControladorComum {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
 					idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
 
-			Collection colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
-					idRota, helper);
+			Collection colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(idRota, helper);
 
 			if (helper.getImovelSituacao() != null && new Integer(helper.getImovelSituacao()) == 2) {
-				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(
-						colecaoIdsImovel);
+				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(colecaoIdsImovel);
 			}
 
 			IClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
@@ -6575,29 +6540,29 @@ public class ControladorCadastro extends ControladorComum {
 						getControladorUtil().inserir(imovelAtualizacaoCadastral);
 						
 						// Imovel Subcategoria
-						Collection imovelSubcategorias = obterImovelSubcategoriaAtualizacaoCadastral(idImovel);
-						Iterator iteratorImovelSubcategoria = imovelSubcategorias.iterator();
+						Collection imovelSubcategorias = repositorioCadastro.obterImovelSubcategoriaAtualizacaoCadastral(idImovel);
 						
-						while (iteratorImovelSubcategoria.hasNext()) {
-							ImovelSubcategoriaAtualizacaoCadastral imovSubAtual =
-									(ImovelSubcategoriaAtualizacaoCadastral) iteratorImovelSubcategoria.next();
+						for (Object item: imovelSubcategorias) {
+							ImovelSubcategoriaAtualizacaoCadastral imovSubAtual = (ImovelSubcategoriaAtualizacaoCadastral) item;
 							imovSubAtual.setUltimaAlteracao(new Date());
-							
 							getControladorUtil().inserir(imovSubAtual);
 						}
 						
+						Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> quantidadesTiposOcupantes = repositorioCadastro.obterQuantidadesTiposOcupantesParaAtualizacaoCadastral(idImovel);
+						for (ImovelTipoOcupanteQuantidadeAtualizacaoCadastral item : quantidadesTiposOcupantes) {
+                            item.setUltimaAlteracao(new Date());
+                            getControladorUtil().inserir(item);
+                        }
+						
 						Collection imovelRamoAtividade = obterImovelRamoAtividadeAtualizacaoCadastral(idImovel);
-						Iterator iteratorImovelRamoAtividade = imovelRamoAtividade.iterator();
-						while (iteratorImovelRamoAtividade.hasNext()) {
-							ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividade =
-									(ImovelRamoAtividadeAtualizacaoCadastral) iteratorImovelRamoAtividade.next();
+						for (Object item: imovelRamoAtividade) {
+							ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividade =	(ImovelRamoAtividadeAtualizacaoCadastral) item;
 							imovRamoAtividade.setUltimaAlteracao(new Date());
 							getControladorUtil().inserir(imovRamoAtividade);
 						}
 
 						// Cliente Usuario
-						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClienteAtualizacaoCadastral(
-								idImovel, ClienteRelacaoTipo.USUARIO);
+						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClienteAtualizacaoCadastral(idImovel, ClienteRelacaoTipo.USUARIO);
 
 						if (clienteAtualizacaoCadastralUsuario != null) {
 
@@ -6708,28 +6673,6 @@ public class ControladorCadastro extends ControladorComum {
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 18/08/2008
-	 */
-	public Collection obterImovelSubcategoriaAtualizacaoCadastral(
-			Integer idImovel) throws ControladorException {
-
-		try {
-
-			return this.repositorioCadastro
-					.obterImovelSubcategoriaAtualizacaoCadastral(idImovel);
-
-		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-
 	}
 
 	// Método para verificar se já existe o Cliente no banco
@@ -6902,17 +6845,14 @@ public class ControladorCadastro extends ControladorComum {
 
 				Integer idImovel = (Integer) imovelFiltradoIterator.next();
 
-				Collection colecaoClienteImovel = repositorioClienteImovel
-						.pesquisarClienteImovelAtualizacaoCadastral(idImovel);
+				Collection colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel);
 
 				// REGISTRO_TIPO_01(Dados do cliente)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoCliente(
-						colecaoClienteImovel, idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoCliente(colecaoClienteImovel, idImovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				// REGISTRO_TIPO_02(Dados do imóvel)
-				arquivoTexto.append(this
-						.gerarArquivoTextoRegistroTipoImovel(idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
@@ -6924,39 +6864,31 @@ public class ControladorCadastro extends ControladorComum {
 				}
 
 				// REGISTRO_TIPO_04 (Dados Serviços)
-				arquivoTexto.append(this
-						.gerarArquivoTextoRegistroTipoServicos(idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoServicos(idImovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				// REGISTRO_TIPO_05 (Dados Medidor)
-				arquivoTexto.append(this
-						.gerarArquivoTextoRegistroTipoMedidor(idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoMedidor(idImovel));
 				qtdRegistro = qtdRegistro + 1;
 				
 				//Registro_Tipo_06 (Localização)
-				arquivoTexto.append(this
-						.gerarArquivoTextoRegistroTipoLocalizacao(idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoLocalizacao(idImovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				// Seta o imóvel com situação "em campo"
-				getControladorImovel()
-						.atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(
-								idImovel,
-								SituacaoAtualizacaoCadastral.EM_CAMPO, null);
+				getControladorImovel().atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(
+								idImovel, SituacaoAtualizacaoCadastral.EM_CAMPO, null);
 				
 				getControladorImovel().atualizarIdArquivoTextoImovelAtualizacaoCadastral(idArquivoTexto, idImovel);
 			}
 
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(
-					qtdRegistro, rota);
-			arquivoTexto
-					.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota);
+			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
 			// Quantidade Total de Linhas
-			arquivoTextoFinal
-					.append((Integer) arquivoTrailerEQuantidadeTotalDeLinhas[1]);
+			arquivoTextoFinal.append((Integer) arquivoTrailerEQuantidadeTotalDeLinhas[1]);
 			arquivoTextoFinal.append(System.getProperty("line.separator"));
 			arquivoTextoFinal.append(arquivoTexto);
 
@@ -7567,11 +7499,58 @@ public class ControladorCadastro extends ControladorComum {
 		} else {
 			arquivoTextoRegistroTipoImovel.append("00");
 		}
+		
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(10, imovelAtualizacaoCadastral.getAreaConstruida()));
+		
+		if (imovelAtualizacaoCadastral.getClasseSocial() != null){
+		    arquivoTextoRegistroTipoImovel.append(imovelAtualizacaoCadastral.getClasseSocial());
+		}else{
+		    arquivoTextoRegistroTipoImovel.append(" ");
+		}
 
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(4, imovelAtualizacaoCadastral.getQuantidadeAnimaisDomesticos()));
+		
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(7, imovelAtualizacaoCadastral.getVolumeCisterna()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(7, imovelAtualizacaoCadastral.getVolumePiscina()));
+		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(7, imovelAtualizacaoCadastral.getVolumeCaixaDagua()));
+
+        if (imovelAtualizacaoCadastral.getTipoUso() != null){
+            arquivoTextoRegistroTipoImovel.append(imovelAtualizacaoCadastral.getTipoUso());
+        }else{
+            arquivoTextoRegistroTipoImovel.append(" ");
+        }
+		
+        if (imovelAtualizacaoCadastral.getAcessoHidrometro() != null){
+            arquivoTextoRegistroTipoImovel.append(imovelAtualizacaoCadastral.getAcessoHidrometro());
+        }else{
+            arquivoTextoRegistroTipoImovel.append(" ");
+        }
+        
+        try {
+            Collection<ImovelTipoOcupante> lista = repositorioUtil.listar(ImovelTipoOcupante.class);
+            
+            Map<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> hashQuantidades = new HashMap<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>();
+
+            Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> quantidadesOcupantes = repositorioCadastro.recuperarTipoOcupantesParaAtualizacaoCadastral(idImovel);
+            
+            for (ImovelTipoOcupanteQuantidadeAtualizacaoCadastral item : quantidadesOcupantes) {
+                hashQuantidades.put(item.getTipoOcupante().getId(), item);
+            }
+            
+            for (ImovelTipoOcupante tipo : lista) {
+                Integer qtd = 0;
+                if (hashQuantidades.containsKey(tipo.getId())){
+                    qtd = hashQuantidades.get(tipo.getId()).getQuantidade();
+                }
+                arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(4, qtd));
+            }
+        } catch (Exception e) {
+            throw new ControladorException("Erro ao recuperar ocupantes para atualizacao cadastral", e);
+        }
+        
 		arquivoTextoRegistroTipoImovel.append(System.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipoImovel;
-
 	}
 
 	/**

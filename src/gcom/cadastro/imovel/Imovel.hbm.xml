@@ -12,7 +12,7 @@
 		<property name="nomeImovel" type="java.lang.String" column="imov_nmimovel" not-null="false" length="30"/>
 		<property name="complementoEndereco" type="java.lang.String" column="imov_dscomplementoendereco" length="25"/>
 		<property name="informacoesComplementares" type="java.lang.String" column="imov_dsinformacaocomplementar" length="750"/>
-		<property name="areaConstruida" type="java.math.BigDecimal" column="imov_nnareaconstruida" length="8"/>
+		<property name="areaConstruida" type="java.math.BigDecimal" column="imov_nnareaconstruida" length="10"/>
 		<property name="indicadorImovelCondominio" type="java.lang.Short" column="imov_icimovelcondominio" length="2" not-null="true"/>
 		<property name="volumeReservatorioSuperior" type="java.math.BigDecimal" column="imov_voreservatoriosuperior" length="5"/>
 		<property name="volumeReservatorioInferior" type="java.math.BigDecimal" column="imov_voreservatorioinferior" length="5"/>

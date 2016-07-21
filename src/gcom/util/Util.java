@@ -1,10 +1,5 @@
 package gcom.util;
 
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -53,9 +48,14 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.NumberUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
 
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import sun.management.ManagementFactory;
 
 public class Util {
@@ -547,19 +547,24 @@ public class Util {
 
 		return retorno;
 	}
+	
+	public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, Number numero) {
+	    if (numero != null)
+	        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, numero.toString());
+	    else
+	        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, "");
+	}
+	
+    public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, BigDecimal decimal) {
+        String numero = "";
+        if (decimal != null){
+            numero = converterDecimalParaString(decimal).replace(".", "");
+        }
 
-	/**
-	 * Método que converte uma hora passa em Date onde contém apenas a hora
-	 * informada EX: 11:30
-	 * 
-	 * 
-	 * @param horaMinuto
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @author thiago toscano
-	 */
+        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, numero);
+    }
+   
 	public static Date converterStringParaHoraMinuto(String horaMinuto) {
-
 		Date retorno = null;
 
 		// Obtém a hora
@@ -4227,7 +4232,6 @@ public class Util {
 	 * @return
 	 */
 	public static String formatarBigDecimalParaString(BigDecimal valor) {
-
 		String valorItemAnterior = "" + valor;
 		valorItemAnterior = valorItemAnterior.replace(".", "");
 		return valorItemAnterior;
@@ -6457,4 +6461,9 @@ public class Util {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
+
+    public static String converterDecimalParaString(BigDecimal valorBase) {
+        DecimalFormat format = new DecimalFormat("#.00");
+        return format.format(valorBase.doubleValue());
+    }
 }

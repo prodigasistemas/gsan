@@ -11,6 +11,7 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
@@ -398,4 +399,8 @@ public interface IRepositorioCadastro {
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
 	
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> obterQuantidadesTiposOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+
+    public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> recuperarTipoOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException; 
 }

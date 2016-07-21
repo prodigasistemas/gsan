@@ -40,6 +40,7 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.Localidade;
@@ -8851,5 +8852,66 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		
 		return retorno;
+	}
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> obterQuantidadesTiposOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta;
+        Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> retorno = null;
+
+        Query query = null;
+
+        try {
+
+            consulta = new StringBuilder("SELECT distinct new gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral(qtd.quantidade, ")
+            .append(" qtd.imovel, ") 
+            .append(" qtd.tipoOcupante) ")
+            .append(" from ImovelTipoOcupanteQuantidade qtd ")
+            .append(" inner join qtd.imovel imov ")
+            .append(" inner join qtd.tipoOcupante tipo ")
+            .append(" where qtd.imovel.id =:idImovel ");
+
+            query = session.createQuery(consulta.toString())
+                    .setInteger("idImovel", idImovel);
+
+            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) query.list();
+
+        }catch (NonUniqueResultException e ){
+            retorno = null;
+        }catch (HibernateException e) {
+            throw new ErroRepositorioException("Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+    }
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> recuperarTipoOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException{
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta;
+        Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> retorno = null;
+
+        Query query = null;
+
+        try {
+            consulta = new StringBuilder("SELECT e ")
+            .append(" from ImovelTipoOcupanteQuantidadeAtualizacaoCadastral e ")
+            .append(" inner join fetch e.tipoOcupante tipo ")
+            .append(" where e.imovel.id =:idImovel ");
+
+            query = session.createQuery(consulta.toString())
+                    .setInteger("idImovel", idImovel);
+
+            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) query.list();
+        }catch (NonUniqueResultException e ){
+            retorno = null;
+        }catch (HibernateException e) {
+            throw new ErroRepositorioException("Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
 	}
 }

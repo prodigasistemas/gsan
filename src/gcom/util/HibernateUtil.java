@@ -301,6 +301,7 @@ import gcom.cadastro.imovel.ImovelTipoConstrucao;
 import gcom.cadastro.imovel.ImovelTipoHabitacao;
 import gcom.cadastro.imovel.ImovelTipoOcupante;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoPropriedade;
 import gcom.cadastro.imovel.PavimentoCalcada;
 import gcom.cadastro.imovel.PavimentoRua;
@@ -1451,6 +1452,7 @@ public class HibernateUtil {
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
 					.addClass(ImovelTipoOcupante.class)
 					.addClass(ImovelTipoOcupanteQuantidade.class)
+					.addClass(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral.class)
 			;
 
 			configuration.setInterceptor(Interceptador.getInstancia());
