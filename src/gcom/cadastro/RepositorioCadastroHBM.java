@@ -3828,7 +3828,9 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			.append(" imov.volumeCisterna, ")
 			.append(" imov.volumeCaixaDagua, ")
 			.append(" imov.tipoUso, ")
-			.append(" imov.acessoHidrometro) ")
+			.append(" imov.acessoHidrometro, ")
+			.append(" imov.quantidadeEconomiasSocial, ")
+			.append(" imov.quantidadeEconomiasOutra) ")
 			.append(" from Imovel imov ")
 			.append(" inner join imov.setorComercial stcm ")
 			.append(" inner join imov.quadra qdra ")
@@ -3847,7 +3849,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}catch (NonUniqueResultException e ){
 		    retorno = null;
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

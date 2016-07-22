@@ -40,6 +40,8 @@
         <property name="volumeCaixaDagua"            type="java.math.BigDecimal" column="imre_vol_cx_dagua"                  not-null="false"/>
         <property name="tipoUso"                     type="java.lang.Short"      column="imre_tipo_uso"                      not-null="false"/>
         <property name="acessoHidrometro"            type="java.lang.Short"      column="imre_acesso_hidrometro"             not-null="false"/>
+        <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imre_qtd_economias_social"          not-null="false"/>
+        <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imre_qtd_economias_outra"           not-null="false"/>
 		
 
 		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento">

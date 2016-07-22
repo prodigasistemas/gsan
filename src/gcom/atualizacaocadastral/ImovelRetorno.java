@@ -71,6 +71,10 @@ public class ImovelRetorno implements IImovel{
     private Short tipoUso;
     
     private Short acessoHidrometro;
+    
+    private Integer quantidadeEconomiasSocial;     
+    
+    private Integer quantidadeEconomiasOutra;         
 
 	public ImovelRetorno () {
 	}
@@ -496,5 +500,21 @@ public class ImovelRetorno implements IImovel{
 
     public void setAcessoHidrometro(Short acessoHidrometro) {
         this.acessoHidrometro = acessoHidrometro;
+    }
+
+    public Integer getQuantidadeEconomiasSocial() {
+        return quantidadeEconomiasSocial;
+    }
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial) {
+        this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+    }
+
+    public Integer getQuantidadeEconomiasOutra() {
+        return quantidadeEconomiasOutra;
+    }
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
+        this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
     }
 }

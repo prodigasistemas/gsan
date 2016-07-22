@@ -218,6 +218,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short acessoHidrometro;     
 	
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Integer quantidadeEconomiasSocial;     
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Integer quantidadeEconomiasOutra;     
+    
 		
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
@@ -259,7 +265,9 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			BigDecimal volumeCisterna,
 			BigDecimal volumeCaixaDagua,
 			Short tipoUso,
-			Short acessoHidrometro) {
+			Short acessoHidrometro,
+			Integer quantidadeEconomiasSocial,
+			Integer quantidadeEconomiasOutra) {
 	    this.idImovel                   = idImovel;
 	    this.idLocalidade               = idLocalidade;
 	    this.codigoSetorComercial       = codigoSetorComercial;
@@ -301,6 +309,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
         this.volumeCisterna              = volumeCisterna;
         this.tipoUso                     = tipoUso;
         this.acessoHidrometro            = acessoHidrometro;
+        this.quantidadeEconomiasSocial   = quantidadeEconomiasSocial;
+        this.quantidadeEconomiasOutra    = quantidadeEconomiasOutra;
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -1069,5 +1079,21 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
     public void setAcessoHidrometro(Short acessoHidrometro) {
         this.acessoHidrometro = acessoHidrometro;
-    }	
+    }
+
+    public Integer getQuantidadeEconomiasSocial() {
+        return quantidadeEconomiasSocial;
+    }
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial) {
+        this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+    }
+
+    public Integer getQuantidadeEconomiasOutra() {
+        return quantidadeEconomiasOutra;
+    }
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
+        this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
+    }
 }

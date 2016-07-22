@@ -7555,6 +7555,9 @@ public class ControladorCadastro extends ControladorComum {
             throw new ControladorException("Erro ao recuperar ocupantes para atualizacao cadastral", e);
         }
         
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial()));
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra()));
+        
 		arquivoTextoRegistroTipoImovel.append(System.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipoImovel;

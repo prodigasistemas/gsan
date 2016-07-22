@@ -192,4 +192,13 @@ public interface IImovel {
     public Short getAcessoHidrometro();
 
     public void setAcessoHidrometro(Short acessoHidrometro);
+    
+    public Integer getQuantidadeEconomiasSocial();
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial);
+
+    public Integer getQuantidadeEconomiasOutra();
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra);
+    
 }

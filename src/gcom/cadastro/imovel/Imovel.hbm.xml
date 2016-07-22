@@ -57,6 +57,8 @@
         <property name="volumeCaixaDagua"            type="java.math.BigDecimal" column="imov_vol_cx_dagua"                  not-null="false"/>
         <property name="tipoUso"                     type="java.lang.Short"      column="imov_tipo_uso"                      not-null="false"/>
         <property name="acessoHidrometro"            type="java.lang.Short"      column="imov_acesso_hidrometro"             not-null="false"/>
+        <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imov_qtd_economias_social"          not-null="false"/>
+        <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imov_qtd_economias_outra"           not-null="false"/>
 		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->

@@ -318,6 +318,12 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Short acessoHidrometro;
     
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Integer quantidadeEconomiasSocial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Integer quantidadeEconomiasOutra;
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
@@ -2424,6 +2430,22 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
     public void setQuantidadesOcupantes(Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes) {
         this.quantidadesOcupantes = quantidadesOcupantes;
+    }
+
+    public Integer getQuantidadeEconomiasSocial() {
+        return quantidadeEconomiasSocial;
+    }
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial) {
+        this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+    }
+
+    public Integer getQuantidadeEconomiasOutra() {
+        return quantidadeEconomiasOutra;
+    }
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
+        this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
     }
 
     public boolean useNovaChecagemGerarConta(){
