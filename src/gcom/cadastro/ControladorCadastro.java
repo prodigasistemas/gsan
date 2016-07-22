@@ -51,6 +51,10 @@ import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.arquivo.GeradorRegistroAcessoHidrometro;
+import gcom.cadastro.arquivo.GeradorRegistroClasseSocial;
+import gcom.cadastro.arquivo.GeradorRegistroTipoLogradouro;
+import gcom.cadastro.arquivo.GeradorRegistroTipoUsoImovel;
 import gcom.cadastro.atualizacaocadastral.FiltroArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
@@ -137,6 +141,9 @@ import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
+import gcom.cadastro.imovel.enums.AcessoHidrometro;
+import gcom.cadastro.imovel.enums.ClasseSocial;
+import gcom.cadastro.imovel.enums.TipoUsoImovel;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroQuadra;
 import gcom.cadastro.localidade.FiltroSetorComercial;
@@ -8845,29 +8852,6 @@ public class ControladorCadastro extends ControladorComum {
 		return arquivoTextoRegistroTipoHidrometroCapacidade;
 	}
 
-	public StringBuilder gerarArquivoTextoRegistroTipoLogradouroTipo(
-			LogradouroTipo logradouroTipo, Boolean possuiMaisRegistros)
-			throws ControladorException {
-
-		StringBuilder arquivoTextoRegistroTipoLogradouroTipo = new StringBuilder();
-
-		arquivoTextoRegistroTipoLogradouroTipo.append("17");
-
-		arquivoTextoRegistroTipoLogradouroTipo.append(Util
-				.adicionarZerosEsquedaNumero(2, logradouroTipo.getId()
-						.toString()));
-
-		arquivoTextoRegistroTipoLogradouroTipo.append(Util.completaString(
-				logradouroTipo.getDescricao(), 20));
-
-		if (possuiMaisRegistros) {
-			arquivoTextoRegistroTipoLogradouroTipo.append(System
-					.getProperty("line.separator"));
-		}
-		
-		return arquivoTextoRegistroTipoLogradouroTipo;
-	}
-	
 	/**
 	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
@@ -8879,205 +8863,144 @@ public class ControladorCadastro extends ControladorComum {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro,
-			Rota rota) throws ControladorException {
+    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota) throws ControladorException {
+        Object[] retorno = new Object[2];
+        StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
-		Object[] retorno = new Object[2];
-		StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
+        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota));
+        qtdRegistro = qtdRegistro + 1;
 
-		arquivoTextoRegistroTipoTrailer.append(this
-				.gerarArquivoTextoRegistroTipoGeral(rota));
-		qtdRegistro = qtdRegistro + 1;
+        Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this.pesquisarOcorrenciasCadastro();
+        if (ocorrenciasCadastroCollection != null && !ocorrenciasCadastroCollection.isEmpty()) {
+            Iterator colecaoIterator = ocorrenciasCadastroCollection.iterator();
 
-		Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this
-				.pesquisarOcorrenciasCadastro();
+            while (colecaoIterator.hasNext()) {
+                CadastroOcorrencia cadastroOcorrencia = (CadastroOcorrencia) colecaoIterator.next();
 
-		if (ocorrenciasCadastroCollection != null
-				&& !ocorrenciasCadastroCollection.isEmpty()) {
-			Iterator colecaoIterator = ocorrenciasCadastroCollection.iterator();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoAnormalidades(cadastroOcorrencia));
+                qtdRegistro = qtdRegistro + 1;
 
-			while (colecaoIterator.hasNext()) {
-				CadastroOcorrencia cadastroOcorrencia = (CadastroOcorrencia) colecaoIterator
-						.next();
+            }
+        }
 
-				arquivoTextoRegistroTipoTrailer
-						.append(this
-								.gerarArquivoTextoRegistroTipoAnormalidades(cadastroOcorrencia));
-				qtdRegistro = qtdRegistro + 1;
+        Collection<RamoAtividade> ramoAtividadeCollection = this.pesquisarRamosAtividade();
+        if (ramoAtividadeCollection != null && !ramoAtividadeCollection.isEmpty()) {
+            Iterator colecaoIterator = ramoAtividadeCollection.iterator();
 
-			}
-		}
+            while (colecaoIterator.hasNext()) {
+                RamoAtividade ramoAtividade = (RamoAtividade) colecaoIterator.next();
 
-		Collection<RamoAtividade> ramoAtividadeCollection = this
-				.pesquisarRamosAtividade();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoRamoAtividade(ramoAtividade));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-		if (ramoAtividadeCollection != null
-				&& !ramoAtividadeCollection.isEmpty()) {
-			Iterator colecaoIterator = ramoAtividadeCollection.iterator();
+        Collection<LigacaoAguaSituacao> ligacaoAguaSituacaoCollection = getControladorLigacaoAgua().pesquisarLigacaoAguaSituacao();
+        if (ligacaoAguaSituacaoCollection != null && !ligacaoAguaSituacaoCollection.isEmpty()) {
+            Iterator colecaoIterator = ligacaoAguaSituacaoCollection.iterator();
 
-			while (colecaoIterator.hasNext()) {
-				RamoAtividade ramoAtividade = (RamoAtividade) colecaoIterator
-						.next();
+            while (colecaoIterator.hasNext()) {
+                LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) colecaoIterator.next();
 
-				arquivoTextoRegistroTipoTrailer
-						.append(this
-								.gerarArquivoTextoRegistroTipoRamoAtividade(ramoAtividade));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoLigacaoAguaSituacao(ligacaoAguaSituacao));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-		Collection<LigacaoAguaSituacao> ligacaoAguaSituacaoCollection = getControladorLigacaoAgua()
-				.pesquisarLigacaoAguaSituacao();
+        Collection<LigacaoEsgotoSituacao> ligacaoEsgotoSituacaoCollection = getControladorLigacaoEsgoto().pesquisarLigacaoEsgotoSituacao();
+        if (ligacaoEsgotoSituacaoCollection != null && !ligacaoEsgotoSituacaoCollection.isEmpty()) {
+            Iterator colecaoIterator = ligacaoEsgotoSituacaoCollection.iterator();
 
-		if (ligacaoAguaSituacaoCollection != null
-				&& !ligacaoAguaSituacaoCollection.isEmpty()) {
-			Iterator colecaoIterator = ligacaoAguaSituacaoCollection.iterator();
+            while (colecaoIterator.hasNext()) {
+                LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) colecaoIterator.next();
 
-			while (colecaoIterator.hasNext()) {
-				LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) colecaoIterator
-						.next();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoLigacaoEsgotoSituacao(ligacaoEsgotoSituacao));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-				arquivoTextoRegistroTipoTrailer
-						.append(this
-								.gerarArquivoTextoRegistroTipoLigacaoAguaSituacao(ligacaoAguaSituacao));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
+        Collection<HidrometroProtecao> hidrometroProtecaoCollection = getControladorMicromedicao().pesquisarHidrometroProtecao();
+        if (hidrometroProtecaoCollection != null && !hidrometroProtecaoCollection.isEmpty()) {
+            Iterator colecaoIterator = hidrometroProtecaoCollection.iterator();
 
-		Collection<LigacaoEsgotoSituacao> ligacaoEsgotoSituacaoCollection = getControladorLigacaoEsgoto()
-				.pesquisarLigacaoEsgotoSituacao();
+            while (colecaoIterator.hasNext()) {
+                HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) colecaoIterator.next();
 
-		if (ligacaoEsgotoSituacaoCollection != null
-				&& !ligacaoEsgotoSituacaoCollection.isEmpty()) {
-			Iterator colecaoIterator = ligacaoEsgotoSituacaoCollection
-					.iterator();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoHidrometroProtecao(hidrometroProtecao));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-			while (colecaoIterator.hasNext()) {
-				LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) colecaoIterator
-						.next();
+        Collection<FonteAbastecimento> fonteAbastecimentoCollection = this.pesquisarFonteAbastecimento();
+        if (fonteAbastecimentoCollection != null && !fonteAbastecimentoCollection.isEmpty()) {
+            Iterator colecaoIterator = fonteAbastecimentoCollection.iterator();
 
-				arquivoTextoRegistroTipoTrailer
-						.append(this
-								.gerarArquivoTextoRegistroTipoLigacaoEsgotoSituacao(ligacaoEsgotoSituacao));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
+            while (colecaoIterator.hasNext()) {
+                FonteAbastecimento fonteAbastecimento = (FonteAbastecimento) colecaoIterator.next();
 
-		Collection<HidrometroProtecao> hidrometroProtecaoCollection = getControladorMicromedicao()
-				.pesquisarHidrometroProtecao();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoFonteAbastecimento(fonteAbastecimento));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-		if (hidrometroProtecaoCollection != null
-				&& !hidrometroProtecaoCollection.isEmpty()) {
-			Iterator colecaoIterator = hidrometroProtecaoCollection.iterator();
+        Collection<HidrometroMarca> hidrometroMarcaCollection = getControladorMicromedicao().pesquisarHidrometroMarca();
+        if (hidrometroMarcaCollection != null && !hidrometroMarcaCollection.isEmpty()) {
+            Iterator colecaoIterator = hidrometroMarcaCollection.iterator();
 
-			while (colecaoIterator.hasNext()) {
-				HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) colecaoIterator
-						.next();
+            while (colecaoIterator.hasNext()) {
+                HidrometroMarca hidrometroMarca = (HidrometroMarca) colecaoIterator.next();
 
-				arquivoTextoRegistroTipoTrailer
-						.append(this
-								.gerarArquivoTextoRegistroTipoHidrometroProtecao(hidrometroProtecao));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoHidrometroMarca(hidrometroMarca));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-		Collection<FonteAbastecimento> fonteAbastecimentoCollection = this
-				.pesquisarFonteAbastecimento();
+        Collection<RamalLocalInstalacao> ramalLocalInstalacaoCollection = getControladorAtendimentoPublico().pesquisarRamalLocalInstalacao();
+        if (ramalLocalInstalacaoCollection != null && !ramalLocalInstalacaoCollection.isEmpty()) {
+            Iterator colecaoIterator = ramalLocalInstalacaoCollection.iterator();
 
-		if (fonteAbastecimentoCollection != null
-				&& !fonteAbastecimentoCollection.isEmpty()) {
-			Iterator colecaoIterator = fonteAbastecimentoCollection.iterator();
+            while (colecaoIterator.hasNext()) {
+                RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) colecaoIterator.next();
 
-			while (colecaoIterator.hasNext()) {
-				FonteAbastecimento fonteAbastecimento = (FonteAbastecimento) colecaoIterator
-						.next();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoRamalLocalInstalacao(ramalLocalInstalacao));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-				arquivoTextoRegistroTipoTrailer.append(this
-						.gerarArquivoTextoRegistroTipoFonteAbastecimento(
-								fonteAbastecimento));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
+        FiltroHidrometroCapacidade filtroHidrometroCapacidade = new FiltroHidrometroCapacidade();
+        filtroHidrometroCapacidade.adicionarParametro(new ParametroSimples(FiltroHidrometroCapacidade.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+        Collection<HidrometroCapacidade> hidrometroCapacidadeCollection = Fachada.getInstancia().pesquisar(filtroHidrometroCapacidade,
+                HidrometroCapacidade.class.getName());
 
-		Collection<HidrometroMarca> hidrometroMarcaCollection = getControladorMicromedicao()
-				.pesquisarHidrometroMarca();
+        if (hidrometroCapacidadeCollection != null && !hidrometroCapacidadeCollection.isEmpty()) {
+            Iterator colecaoIterator = hidrometroCapacidadeCollection.iterator();
 
-		if (hidrometroMarcaCollection != null
-				&& !hidrometroMarcaCollection.isEmpty()) {
-			Iterator colecaoIterator = hidrometroMarcaCollection.iterator();
+            while (colecaoIterator.hasNext()) {
+                HidrometroCapacidade hidrometroCapacidade = (HidrometroCapacidade) colecaoIterator.next();
 
-			while (colecaoIterator.hasNext()) {
-				HidrometroMarca hidrometroMarca = (HidrometroMarca) colecaoIterator
-						.next();
+                arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoHidrometroCapacidade(hidrometroCapacidade));
+                qtdRegistro = qtdRegistro + 1;
+            }
+        }
 
-				arquivoTextoRegistroTipoTrailer.append(this
-						.gerarArquivoTextoRegistroTipoHidrometroMarca(
-								hidrometroMarca));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
-		
-		Collection<RamalLocalInstalacao> ramalLocalInstalacaoCollection = getControladorAtendimentoPublico()
-			.pesquisarRamalLocalInstalacao();
+        FiltroLogradouroTipo filtroLogradouroTipo = new FiltroLogradouroTipo();
+        filtroLogradouroTipo.adicionarParametro(new ParametroSimples(FiltroLogradouroTipo.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+        Collection<LogradouroTipo> logradouroTipoCollection = Fachada.getInstancia().pesquisar(filtroLogradouroTipo, LogradouroTipo.class.getName());
 
-		if (ramalLocalInstalacaoCollection != null
-				&& !ramalLocalInstalacaoCollection.isEmpty()) {
-				Iterator colecaoIterator = ramalLocalInstalacaoCollection.iterator();
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroTipoLogradouro(logradouroTipoCollection).build());
+        qtdRegistro += logradouroTipoCollection.size();
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroClasseSocial().build());
+        qtdRegistro += ClasseSocial.values().length;
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroTipoUsoImovel().build());
+        qtdRegistro += TipoUsoImovel.values().length;
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroAcessoHidrometro().build());
+        qtdRegistro += AcessoHidrometro.values().length;
+        
+        retorno[0] = arquivoTextoRegistroTipoTrailer;
+        retorno[1] = qtdRegistro;
 
-				while (colecaoIterator.hasNext()) {
-					RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) colecaoIterator
-					.next();
-
-					arquivoTextoRegistroTipoTrailer.append(this
-							.gerarArquivoTextoRegistroTipoRamalLocalInstalacao(ramalLocalInstalacao));
-					qtdRegistro = qtdRegistro + 1;
-				}
-		}
-		
-		FiltroHidrometroCapacidade filtroHidrometroCapacidade = new FiltroHidrometroCapacidade();
-		filtroHidrometroCapacidade.adicionarParametro(new ParametroSimples (FiltroHidrometroCapacidade.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-		Collection<HidrometroCapacidade> hidrometroCapacidadeCollection = Fachada.getInstancia().pesquisar(filtroHidrometroCapacidade, HidrometroCapacidade.class.getName());
-
-		if (hidrometroCapacidadeCollection != null
-			&& !hidrometroCapacidadeCollection.isEmpty()) {
-			Iterator colecaoIterator = hidrometroCapacidadeCollection.iterator();
-
-			while (colecaoIterator.hasNext()) {
-				HidrometroCapacidade hidrometroCapacidade = (HidrometroCapacidade) colecaoIterator
-				.next();
-
-				arquivoTextoRegistroTipoTrailer.append(this
-						.gerarArquivoTextoRegistroTipoHidrometroCapacidade(hidrometroCapacidade));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
-		
-		
-		FiltroLogradouroTipo filtroLogradouroTipo = new FiltroLogradouroTipo();
-		filtroLogradouroTipo.adicionarParametro(new ParametroSimples (FiltroLogradouroTipo.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-		Collection<LogradouroTipo> logradouroTipoCollection = Fachada.getInstancia().pesquisar(filtroLogradouroTipo, LogradouroTipo.class.getName());
-
-		if (logradouroTipoCollection != null
-			&& !logradouroTipoCollection.isEmpty()) {
-			Iterator colecaoIterator = logradouroTipoCollection.iterator();
-
-			while (colecaoIterator.hasNext()) {
-				LogradouroTipo logradouroTipo = (LogradouroTipo) colecaoIterator
-				.next();
-
-				Boolean possuiMaisRegistros = colecaoIterator.hasNext();
-
-				arquivoTextoRegistroTipoTrailer.append(this
-						.gerarArquivoTextoRegistroTipoLogradouroTipo(logradouroTipo, possuiMaisRegistros));
-				qtdRegistro = qtdRegistro + 1;
-			}
-		}
-
-		retorno[0] = arquivoTextoRegistroTipoTrailer;
-		retorno[1] = qtdRegistro;
-
-		return retorno;
-	}
+        return retorno;
+    }
 
 	/**
 	 * 
