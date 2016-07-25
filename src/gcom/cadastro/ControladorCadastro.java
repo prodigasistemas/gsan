@@ -53,7 +53,10 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.arquivo.GeradorRegistroAcessoHidrometro;
 import gcom.cadastro.arquivo.GeradorRegistroClasseSocial;
+import gcom.cadastro.arquivo.GeradorRegistroLocalizacao;
 import gcom.cadastro.arquivo.GeradorRegistroTipoLogradouro;
+import gcom.cadastro.arquivo.GeradorRegistroHidromedro;
+import gcom.cadastro.arquivo.GeradorRegistroServicos;
 import gcom.cadastro.arquivo.GeradorRegistroTipoUsoImovel;
 import gcom.cadastro.atualizacaocadastral.FiltroArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
@@ -6870,16 +6873,20 @@ public class ControladorCadastro extends ControladorComum {
 					qtdRegistro = qtdRegistro + colecaoImovelRamoAtividade.size();
 				}
 
+				
+		        ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);;
+		        Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);;
+				
 				// REGISTRO_TIPO_04 (Dados Serviços)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoServicos(idImovel));
+				arquivoTexto.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro = qtdRegistro + 1;
 
 				// REGISTRO_TIPO_05 (Dados Medidor)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoMedidor(idImovel));
+				arquivoTexto.append(new GeradorRegistroHidromedro(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro = qtdRegistro + 1;
 				
 				//Registro_Tipo_06 (Localização)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoLocalizacao(idImovel));
+				arquivoTexto.append(new GeradorRegistroLocalizacao(idImovel).build());
 				qtdRegistro = qtdRegistro + 1;
 
 				// Seta o imóvel com situação "em campo"
@@ -8339,63 +8346,6 @@ public class ControladorCadastro extends ControladorComum {
 	/**
 	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
-	 * Registro Tipo 04 - Dados Serviços
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/03/2012
-	 * 
-	 * @param imovel
-	 * @throws ControladorException
-	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoServicos(Integer idImovel)
-			throws ControladorException {
-
-		StringBuilder arquivoTextoRegistroTipoServicos = new StringBuilder();
-
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
-		Imovel imovel = null;
-
-		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
-				.pesquisarImovelAtualizacaoCadastral(idImovel);
-		imovel = getControladorImovel().pesquisarImovel(idImovel);
-
-		// TIPO DO REGISTRO
-		arquivoTextoRegistroTipoServicos.append("04");
-
-		// MATRÍCULA DO IMÓVEL
-		arquivoTextoRegistroTipoServicos.append(Util
-				.adicionarZerosEsquedaNumero(9, imovelAtualizacaoCadastral
-						.getIdImovel().toString()));
-
-		// LIGACAO_SITUACAO_AGUA
-		arquivoTextoRegistroTipoServicos.append(Util
-				.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral
-						.getIdLigacaoAguaSituacao().toString()));
-
-		// LIGACAO_SITUACAO_ESGOTO
-		arquivoTextoRegistroTipoServicos.append(Util
-				.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral
-						.getIdLigacaoEsgotoSituacao().toString()));
-
-		if(imovel.getLigacaoAgua() != null
-				&& imovel.getLigacaoAgua().getRamalLocalInstalacao()!= null){
-			arquivoTextoRegistroTipoServicos.append(Util
-					.adicionarZerosEsquedaNumero(2,imovel.getLigacaoAgua().getRamalLocalInstalacao().getId()+""));
-		}else{
-			arquivoTextoRegistroTipoServicos.append("00");
-		}
-		
-
-		arquivoTextoRegistroTipoServicos.append(System
-				.getProperty("line.separator"));
-
-		return arquivoTextoRegistroTipoServicos;
-
-	}
-
-	/**
-	 * Gerar Arquivo Texto para Atualização Cadastral
-	 * 
 	 * Registro Tipo 03 - Ramos Atividade do Imovel
 	 * 
 	 * @author Wellington Rocha
@@ -8428,45 +8378,6 @@ public class ControladorCadastro extends ControladorComum {
 	/**
 	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
-	 * Registro Tipo 06 - Localização
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/03/2012
-	 * 
-	 * @param imovel
-	 * @throws ControladorException
-	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoLocalizacao(
-			Integer idImovel)
-			throws ControladorException {
-
-		StringBuilder arquivoTextoRegistroTipoLocalizacao = new StringBuilder();
-
-		// TIPO DO REGISTRO
-		arquivoTextoRegistroTipoLocalizacao.append("06");
-
-		// ID IMOVEL
-		arquivoTextoRegistroTipoLocalizacao.append(Util
-					.adicionarZerosEsquedaNumero(9, idImovel.toString()));
-
-		// Latitude
-		arquivoTextoRegistroTipoLocalizacao.append(Util
-					.adicionarZerosEsquedaNumero(15,"0"));
-
-		//Longitude
-		arquivoTextoRegistroTipoLocalizacao.append(Util
-				.adicionarZerosEsquedaNumero(15,"0"));
-		
-		arquivoTextoRegistroTipoLocalizacao.append(System
-					.getProperty("line.separator"));
-
-		
-		return arquivoTextoRegistroTipoLocalizacao;
-	}
-
-	/**
-	 * Gerar Arquivo Texto para Atualização Cadastral
-	 * 
 	 * Registro Tipo 05 - Dados Medidor
 	 * 
 	 * @author Wellington Rocha
@@ -8475,101 +8386,6 @@ public class ControladorCadastro extends ControladorComum {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoMedidor(Integer idImovel)
-			throws ControladorException {
-
-		StringBuilder arquivoTextoRegistroTipoMedidor = new StringBuilder();
-
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
-		Imovel imovel = null;
-
-		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
-				.pesquisarImovelAtualizacaoCadastral(idImovel);
-		imovel = getControladorImovel().pesquisarImovel(idImovel);
-
-		// TIPO DO REGISTRO
-		arquivoTextoRegistroTipoMedidor.append("05");
-
-		// MATRÍCULA DO IMÓVEL
-		arquivoTextoRegistroTipoMedidor.append(Util
-				.adicionarZerosEsquedaNumero(9, imovelAtualizacaoCadastral
-						.getIdImovel().toString()));
-
-		// IMOVEL POSSUI HIDROMETRO (1-SIM/2-NAO)
-		boolean possuiHidrometro = false;
-		if (imovel.getLigacaoAgua() != null
-				&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
-				&& (imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico()
-						.getDataRetirada() == null || imovel.getLigacaoAgua()
-						.getHidrometroInstalacaoHistorico().getDataRetirada()
-						.equals(""))) {
-			possuiHidrometro = true;
-			arquivoTextoRegistroTipoMedidor.append("1");
-		} else {
-			arquivoTextoRegistroTipoMedidor.append("2");
-		}
-
-		if (possuiHidrometro) {
-
-			// Número hidrômetro
-			if (imovelAtualizacaoCadastral.getNumeroHidrometro() != null) {
-				arquivoTextoRegistroTipoMedidor.append(Util.completaString(
-						imovelAtualizacaoCadastral.getNumeroHidrometro()
-								.toString(), 10));
-			} else {
-				arquivoTextoRegistroTipoMedidor.append(Util.completaString("",
-						10));
-			}
-
-			// Marca hidrômetro
-			if (imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico()
-					.getHidrometro() != null
-					&& imovel.getLigacaoAgua()
-							.getHidrometroInstalacaoHistorico().getHidrometro()
-							.getHidrometroMarca() != null
-					&& imovel.getLigacaoAgua()
-							.getHidrometroInstalacaoHistorico().getHidrometro()
-							.getHidrometroMarca().getId() != null) {
-				arquivoTextoRegistroTipoMedidor.append(Util.adicionarZerosEsquedaNumero(2,(
-						imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico()
-								.getHidrometro().getHidrometroMarca()
-								.getId().toString())));
-			} else {
-				arquivoTextoRegistroTipoMedidor.append(Util.completaString("",
-						2));
-			}
-
-			// Capacidade hidrômetro
-			if (imovelAtualizacaoCadastral.getIdCapacidadeHidrometro()!= null) {
-				arquivoTextoRegistroTipoMedidor.append(Util
-						.adicionarZerosEsquedaNumero(2, imovelAtualizacaoCadastral.getIdCapacidadeHidrometro().toString()));
-			} else {
-				arquivoTextoRegistroTipoMedidor.append(Util.completaString("",
-						2));
-			}
-
-			// Proteção hidrômetro
-			if (imovelAtualizacaoCadastral.getIdProtecaoHidrometro() != null) {
-				arquivoTextoRegistroTipoMedidor.append(Util
-						.adicionarZerosEsquedaNumero(2,
-								imovelAtualizacaoCadastral
-										.getIdProtecaoHidrometro().toString()));
-			} else {
-				arquivoTextoRegistroTipoMedidor.append(Util.completaString("",
-						2));
-			}
-
-		} else {
-			arquivoTextoRegistroTipoMedidor.append(Util.completaString("", 16));
-		}
-
-		arquivoTextoRegistroTipoMedidor.append(System
-				.getProperty("line.separator"));
-
-		return arquivoTextoRegistroTipoMedidor;
-
-	}
 
 	
 	/**
