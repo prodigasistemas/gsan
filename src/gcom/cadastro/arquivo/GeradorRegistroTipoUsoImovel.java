@@ -12,7 +12,7 @@ public class GeradorRegistroTipoUsoImovel {
 
             linha.append(Util.adicionarZerosEsquedaNumero(2, classe.getId()));
 
-            linha.append(Util.completaString(classe.getDescricao(), 10));
+            linha.append(Util.completaString(classe.getDescricao(), 20));
             
             linha.append(System.getProperty("line.separator"));
         }
