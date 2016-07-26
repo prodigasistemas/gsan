@@ -1,10 +1,10 @@
 package gcom.cadastro.imovel.enums;
 
 public enum TipoUsoImovel {
-    DORMITORIO ((short) 1, "Dormitorio"), 
-    MORADA     ((short) 2, "Morada"), 
-    VERANEIO   ((short) 3, "Veraneio"), 
-    OUTROS     ((short) 4, "Outros");
+    DORMITORIO ((short) 1, "DORMITORIO"), 
+    MORADA     ((short) 2, "MORADA"), 
+    VERANEIO   ((short) 3, "VERANEIO"), 
+    OUTROS     ((short) 4, "OUTROS");
     
     private short id;
     private String descricao;

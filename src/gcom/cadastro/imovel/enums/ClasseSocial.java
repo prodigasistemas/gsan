@@ -1,10 +1,10 @@
 package gcom.cadastro.imovel.enums;
 
 public enum ClasseSocial {
-    ALTA ((short) 1, "Alta"), 
-    MEDIA((short) 2, "Media"), 
-    BAIXA((short) 3, "Baixa"), 
-    SUB  ((short) 4, "Sub");
+    ALTA ((short) 1, "ALTA"), 
+    MEDIA((short) 2, "MEDIA"), 
+    BAIXA((short) 3, "BAIXA"), 
+    SUB  ((short) 4, "SUB");
     
     private short id;
     private String descricao;

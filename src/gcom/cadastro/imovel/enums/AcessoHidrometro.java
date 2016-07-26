@@ -1,9 +1,9 @@
 package gcom.cadastro.imovel.enums;
 
 public enum AcessoHidrometro {
-    BOM  ((short) 1, "Bom"), 
-    RUIM ((short) 2, "Ruim"), 
-    SEM  ((short) 3, "Sem"); 
+    BOM  ((short) 1, "BOM"), 
+    RUIM ((short) 2, "RUIM"), 
+    SEM  ((short) 3, "SEM"); 
     
     private short id;
     private String descricao;
