@@ -115,12 +115,14 @@ public class ImovelRetorno implements IImovel{
 		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
 		this.informacoesComplementares = imovelAtualizacaoCadastral.getInformacoesComplementares();
 		this.tipoEntrevistado = imovelAtualizacaoCadastral.getTipoEntrevistado();
-		this.classeSocial                = imovelAtualizacaoCadastral.getClasseSocial();
-		this.quantidadeAnimaisDomesticos = imovelAtualizacaoCadastral.getQuantidadeAnimaisDomesticos();
-		this.volumeCisterna              = imovelAtualizacaoCadastral.getVolumeCisterna();
-		this.volumeCaixaDagua            = imovelAtualizacaoCadastral.getVolumeCaixaDagua();
-		this.tipoUso                     = imovelAtualizacaoCadastral.getTipoUso();
-		this.acessoHidrometro            = imovelAtualizacaoCadastral.getAcessoHidrometro();
+		this.classeSocial                 = imovelAtualizacaoCadastral.getClasseSocial();
+		this.quantidadeAnimaisDomesticos  = imovelAtualizacaoCadastral.getQuantidadeAnimaisDomesticos();
+		this.volumeCisterna               = imovelAtualizacaoCadastral.getVolumeCisterna();
+		this.volumeCaixaDagua             = imovelAtualizacaoCadastral.getVolumeCaixaDagua();
+		this.tipoUso                      = imovelAtualizacaoCadastral.getTipoUso();
+		this.acessoHidrometro             = imovelAtualizacaoCadastral.getAcessoHidrometro();
+		this.quantidadeEconomiasSocial    = imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial();
+		this.quantidadeEconomiasOutra     = imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra();
 	}
 
 	public Integer getId() {

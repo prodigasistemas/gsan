@@ -7013,12 +7013,6 @@ public class ControladorCadastro extends ControladorComum {
 					}
 				}
 				
-//				if (atualizacao.getImovelAtual().getLinhaImovel() != null
-//						&& !atualizacao.getImovelAtual().getLinhaImovel().isEmpty()
-//						&& atualizacao.getImovelAtual().getLinhaImovel().get("matricula").equals("6803091")) {
-//					System.out.println("Achei um imovel sem retorno...");
-//				}
-				
 				if (atualizacao.getImovelAtual().getLinhaImovel() != null
 						&& !atualizacao.getImovelAtual().getLinhaImovel().isEmpty()
 						&& atualizacao.getImovelAtual().getLinhaImovel().get("matricula").equals("6794297")) {

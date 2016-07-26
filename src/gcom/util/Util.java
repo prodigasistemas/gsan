@@ -1585,19 +1585,18 @@ public class Util {
 		bigDecimalFormatado = new BigDecimal(valor);
 		return bigDecimalFormatado;
 	}
-
-	/**
-	 * Método que verifica se a string passada já tem casa decimal
-	 * 
-	 * 
-	 * @param data
-	 * @autor Sávio Luiz
-	 * @date 15/02/2006
-	 * @return
-	 */
+	
+	public static boolean isBigDecimal(String valor){
+	    try {
+	        new BigDecimal(valor);
+	        return true;
+        } catch (Exception e) {
+            return false;
+        }
+	}
 
 	public static boolean verificaSeBigDecimal(String valor) {
-
+	    
 		boolean temCasaDecimal = false;
 		if (valor.length() > 2
 				&& (valor.substring(valor.length() - 3, valor.length() - 2).equals(".") || valor.substring(valor.length() - 3, valor.length() - 2).equals(","))) {
@@ -6465,5 +6464,13 @@ public class Util {
     public static String converterDecimalParaString(BigDecimal valorBase) {
         DecimalFormat format = new DecimalFormat("#.00");
         return format.format(valorBase.doubleValue());
+    }
+
+    public static boolean isPositivo(String numero) {
+        try {
+            return Integer.parseInt(numero) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -110,4 +110,21 @@ public class TestaUtil {
         BigDecimal nulo = null;
         assertEquals("0000", Util.adicionarZerosEsquedaNumero(4, nulo));
     }
+    
+    @Test
+    public void testaSeNumeroEhDecimal(){
+        assertTrue(Util.isBigDecimal("0"));
+        assertTrue(Util.isBigDecimal("190.00"));
+        assertTrue(Util.isBigDecimal("-40.67"));
+        assertTrue(Util.isBigDecimal("0.67"));
+        assertFalse(Util.isBigDecimal(""));
+        assertFalse(Util.isBigDecimal(null));
+    }
+    
+    @Test
+    public void testaSeNumeroEhPositivo(){
+        assertTrue(Util.isPositivo("1"));
+        assertFalse(Util.isPositivo("0"));
+        assertFalse(Util.isPositivo("-1"));
+    }
 }
