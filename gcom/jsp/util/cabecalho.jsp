@@ -12,7 +12,11 @@
 					<tr>
 						<td height="0" 
 							valign="bottom">
-							<img src="${applicationScope.logoMarca}">
+							<% if  (getServletContext().getAttribute("logoMarca").equals("")) {%>
+							     <div style="width:150 ; height: 20"></div>
+							<% }  else {%>
+								 <img src="${applicationScope.logoMarca}">
+							<% } %>
 						</td>
 		
 						<td width="35%" 
