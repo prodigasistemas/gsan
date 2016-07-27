@@ -1,8 +1,9 @@
 package gcom.cadastro.endereco;
 
-import gcom.util.ErroRepositorioException;
-
 import java.util.Collection;
+
+import gcom.cadastro.endereco.to.LogradouroTO;
+import gcom.util.ErroRepositorioException;
 
 /**
  * Interface para o repositório de cliente
@@ -324,11 +325,7 @@ public interface IRepositorioEndereco {
 	public Collection<Object[]> pesquisarDadosClienteEnderecoArquivoTextoContasCobrancaEmpresa(
 			Integer idCliente) throws ErroRepositorioException;
 	
-	/**
-	 * Obter Logradouro(Tipo + Nome Logradouro + Título)
-	 */	
-	public Collection pesquisarLogradouro(Integer idImovel)
-		throws ErroRepositorioException;
+	public LogradouroTO pesquisarLogradouro(Integer idImovel)	throws ErroRepositorioException;
 	
 	/**
 	 * Obter Logradouro(Tipo + Nome Logradouro + Título)

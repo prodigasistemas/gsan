@@ -109,10 +109,9 @@ import gcom.cadastro.empresa.FiltroEmpresaContratoCobranca;
 import gcom.cadastro.empresa.IRepositorioEmpresa;
 import gcom.cadastro.empresa.RepositorioEmpresaHBM;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
-import gcom.cadastro.endereco.IRepositorioEndereco;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroTipo;
-import gcom.cadastro.endereco.RepositorioEnderecoHBM;
+import gcom.cadastro.endereco.to.LogradouroTO;
 import gcom.cadastro.funcionario.FiltroFuncionario;
 import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.Bairro;
@@ -6418,53 +6417,25 @@ public class ControladorCadastro extends ControladorComum {
 	 * @date 25/08/2008
 	 */
 	public ImovelAtualizacaoCadastral obterImovelGeracaoTabelasTemporarias(Integer idImovel) throws ControladorException {
-
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
 
 		try {
-		    
 			imovelAtualizacaoCadastral = repositorioCadastro.obterImovelGeracaoTabelasTemporarias(idImovel);
 
 			if (imovelAtualizacaoCadastral != null) {
-				// Logradouro
-				Collection colecaoEndereco = getControladorEndereco().pesquisarLogradouro(idImovel);
+			    LogradouroTO logradouro = getControladorEndereco().pesquisarLogradouro(idImovel);
 				
-				if (colecaoEndereco != null && !colecaoEndereco.isEmpty()) {
-
-					Iterator enderecoIterator = colecaoEndereco.iterator();
-
-					Object[] arrayEndereco = (Object[]) enderecoIterator.next();
-
-					String nome = (String) arrayEndereco[0];
-					imovelAtualizacaoCadastral.setDescricaoLogradouro(nome);
-
-					if (arrayEndereco[3] != null) {
-						Integer idTipo = (Integer) arrayEndereco[3];
-						imovelAtualizacaoCadastral.setIdLogradouroTipo(idTipo);
-						String tipo = (String) arrayEndereco[1];
-						imovelAtualizacaoCadastral.setDsLogradouroTipo(tipo);
-					}
-
-					if (arrayEndereco[4] != null) {
-						Integer idTitulo = (Integer) arrayEndereco[4];
-						imovelAtualizacaoCadastral.setIdLogradouroTitulo(idTitulo);
-						String titulo = (String) arrayEndereco[2];
-						imovelAtualizacaoCadastral.setDsLogradouroTitulo(titulo);
-					}
-
-					if (arrayEndereco[5] != null) {
-						Integer idMunicipio = (Integer) arrayEndereco[5];
-						imovelAtualizacaoCadastral.setIdMunicipio(idMunicipio);
-						String nomeMunicipio = (String) arrayEndereco[6];
-						imovelAtualizacaoCadastral.setNomeMunicipio(nomeMunicipio);
-					}
-
-					if (arrayEndereco[7] != null) {
-						Integer idUnidadeFederacao = (Integer) arrayEndereco[7];
-						imovelAtualizacaoCadastral.setIdUinidadeFederacao(idUnidadeFederacao);
-						String dsUnidadeFederacao = (String) arrayEndereco[8];
-						imovelAtualizacaoCadastral.setDsUFSiglaMunicipio(dsUnidadeFederacao);
-					}
+				if (logradouro != null) {
+				    imovelAtualizacaoCadastral.setIdLogradouro(logradouro.getId());
+					imovelAtualizacaoCadastral.setDescricaoLogradouro(logradouro.getNome());
+					imovelAtualizacaoCadastral.setIdLogradouroTipo(logradouro.getIdTipo());
+					imovelAtualizacaoCadastral.setDsLogradouroTipo(logradouro.getDescricaoTipo());
+					imovelAtualizacaoCadastral.setIdLogradouroTitulo(logradouro.getIdTitulo());
+					imovelAtualizacaoCadastral.setDsLogradouroTitulo(logradouro.getDescricaoTitulo());
+					imovelAtualizacaoCadastral.setIdMunicipio(logradouro.getIdMunicipio());
+					imovelAtualizacaoCadastral.setNomeMunicipio(logradouro.getDescricaoMunicipio());
+					imovelAtualizacaoCadastral.setIdUinidadeFederacao(logradouro.getIdUf());
+					imovelAtualizacaoCadastral.setDsUFSiglaMunicipio(logradouro.getSiglaUf());
 				}
 
 				Object[] hidrometro = getControladorMicromedicao().obterDadosHidrometroAtualizacaoCadastral(idImovel);
