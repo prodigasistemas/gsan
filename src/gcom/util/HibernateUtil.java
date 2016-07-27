@@ -191,6 +191,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
 import gcom.batch.Processo;
@@ -1453,6 +1454,7 @@ public class HibernateUtil {
 					.addClass(ImovelTipoOcupante.class)
 					.addClass(ImovelTipoOcupanteQuantidade.class)
 					.addClass(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral.class)
+					.addClass(ImovelTipoOcupanteQuantidadeRetorno.class)
 			;
 
 			configuration.setInterceptor(Interceptador.getInstancia());

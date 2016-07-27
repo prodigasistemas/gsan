@@ -52,6 +52,7 @@ import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
@@ -113,6 +114,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		apagarImovelRetorno(idImovel);
 		apagarImagemRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
+		apagarImovelQuantidadesOcupantes(idImovel);
 		apagarImovelRamoAtividade(idImovel);
 		apagarInformacoesRetornoCliente(idImovel);
 	}
@@ -579,10 +581,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	private void apagarImovelRamoAtividade(Integer idImovel) throws Exception {
-		repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
+	private void apagarImovelQuantidadesOcupantes(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImovelQuantidadesOcupantes(idImovel);
 	}
 
+	private void apagarImovelRamoAtividade(Integer idImovel) throws Exception {
+	    repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
+	}
+	
 	private void apagarClienteEnderecoRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) throws Exception{
 		repositorioAtualizacaoCadastral.apagarClienteEnderecoRetorno(idsClientesRetorno);
 	}
@@ -1292,5 +1298,13 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			e.printStackTrace();
 		}
 		return temPermissao;
+	}
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ControladorException{
+	    try {
+	        return repositorioAtualizacaoCadastral.pesquisarOcupantesAtualizacaoCadastral(idImovel);
+        } catch (Exception e) {
+            throw new ControladorException("Erro ao recuperar os tipos de ocupantes", e);
+        }
 	}
 }

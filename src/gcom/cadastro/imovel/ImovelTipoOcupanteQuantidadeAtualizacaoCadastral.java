@@ -7,7 +7,7 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 
 @ControleAlteracao()
-public class ImovelTipoOcupanteQuantidadeAtualizacaoCadastral extends ObjetoTransacao{
+public class ImovelTipoOcupanteQuantidadeAtualizacaoCadastral extends ObjetoTransacao implements IImovelTipoOcupanteQuantidade{
     private static final long serialVersionUID = 1199546479830159223L;
 
     public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
@@ -20,6 +20,8 @@ public class ImovelTipoOcupanteQuantidadeAtualizacaoCadastral extends ObjetoTran
     private Imovel imovel;
     
     private ImovelTipoOcupante tipoOcupante;
+    
+    private Integer idImovelRetorno;
     
     public ImovelTipoOcupanteQuantidadeAtualizacaoCadastral() {
     }
@@ -61,6 +63,14 @@ public class ImovelTipoOcupanteQuantidadeAtualizacaoCadastral extends ObjetoTran
 
     public void setTipoOcupante(ImovelTipoOcupante tipoOcupante) {
         this.tipoOcupante = tipoOcupante;
+    }
+
+    public Integer getIdImovelRetorno() {
+        return idImovelRetorno;
+    }
+
+    public void setIdImovelRetorno(Integer idImovelRetorno) {
+        this.idImovelRetorno = idImovelRetorno;
     }
 
     public String[] retornaCamposChavePrimaria() {

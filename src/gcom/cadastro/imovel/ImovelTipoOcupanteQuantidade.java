@@ -7,7 +7,7 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 
 @ControleAlteracao()
-public class ImovelTipoOcupanteQuantidade extends ObjetoTransacao{
+public class ImovelTipoOcupanteQuantidade extends ObjetoTransacao implements IImovelTipoOcupanteQuantidade{
     private static final long serialVersionUID = 1199546479830159223L;
 
     private Integer id;

@@ -7,6 +7,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
@@ -190,17 +191,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	public void apagarImovelQuantidadesOcupantes(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
-			String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
-					+ " WHERE ramo.imovel.id = :idImovel ";
+			String consulta = " DELETE ImovelTipoOcupanteQuantidadeRetorno e WHERE e.imovel.id = :idImovel ";
 			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao apagar imovel retorno ramo atividade");
+			throw new ErroRepositorioException(e, "Erro ao apagar quantidades de ocupantes");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	    Session session = HibernateUtil.getSession();
+	    try{
+	        String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
+	                + " WHERE ramo.imovel.id = :idImovel ";
+	        session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+	    }catch (HibernateException e) {
+	        throw new ErroRepositorioException(e, "Erro ao apagar imovel retorno ramo atividade");
+	    } finally {
+	        HibernateUtil.closeSession(session);
+	    }
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1171,5 +1184,25 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 		
 		return retorno;
+	}
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException{
+        Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+        
+        String consulta = null;
+        try {
+            
+            consulta = "from ImovelTipoOcupanteQuantidadeAtualizacaoCadastral e "
+                    + " where e.imovel.id = :idImovel " ;
+            
+            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
 	}
 }

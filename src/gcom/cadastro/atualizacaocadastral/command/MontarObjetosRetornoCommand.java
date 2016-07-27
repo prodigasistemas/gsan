@@ -1,5 +1,13 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
@@ -10,6 +18,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ClienteBuilder;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
@@ -29,18 +38,13 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupante;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
+import gcom.util.Util;
 
 public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -99,6 +103,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		salvarImovelRetorno(imovelTxt);
 		salvarRamoAtividadeRetorno();
 		salvarImovelSubcategoriaRetorno();
+		salvarImovelQuantidadesOcupantes();
 	}
 	
 	private void salvarRamoAtividadeRetorno() throws Exception {
@@ -267,6 +272,21 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		imovelSubcategoriaRetorno.setIdImovelRetorno(idImovelRetorno);
 		controladorUtil.inserir(imovelSubcategoriaRetorno);
 	}
+	
+    private void salvarImovelQuantidadesOcupantes() throws ControladorException {
+        Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
+        
+        for (ImovelTipoOcupante tipo : todosTipos) {
+            ImovelTipoOcupanteQuantidadeRetorno retorno = new ImovelTipoOcupanteQuantidadeRetorno();
+            retorno.setIdImovelRetorno(idImovelRetorno);
+            retorno.setImovel(new Imovel(matriculaImovel));
+            retorno.setTipoOcupante(tipo);
+            Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante") + Util.removerCaractereEspecial(tipo.getDescricao()));
+            retorno.setQuantidade(qtd);
+            
+            controladorUtil.inserir(retorno);
+        }
+    }
 	
 	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt) throws ControladorException {
 		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
