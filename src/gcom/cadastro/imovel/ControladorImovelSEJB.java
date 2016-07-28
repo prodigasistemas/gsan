@@ -1291,7 +1291,7 @@ public class ControladorImovelSEJB implements SessionBean {
 						
 						if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.RESPONSAVEL.intValue()
 							|| clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.USUARIO.intValue())
-						excluirDebitoAutomaticoClienteImovel(clienteImovel);
+						excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
 					}
 			}
 		}
@@ -16569,13 +16569,22 @@ public class ControladorImovelSEJB implements SessionBean {
 		return debitoAutomatico;
 	}
 	
-	public void excluirDebitoAutomaticoClienteImovel(ClienteImovel clienteImovel) throws ControladorException {
+	public void excluirDebitoAutomaticoClienteImovel(ClienteImovel clienteImovel, InserirImovelHelper inserirImovelHelper) throws ControladorException {
 		
 		DebitoAutomatico debitoAutomatico = this.pesquisarDebitoAutomaticoAtivoImovel(clienteImovel.getImovel().getId());
 		
+		Imovel imovel = this.pesquisarImovel(clienteImovel.getImovel().getId());
+		
 		if (debitoAutomatico != null ) {
 			debitoAutomatico.setDataExclusao(new Date());
+			debitoAutomatico.setUltimaAlteracao(new Date());
 			getControladorUtil().atualizar(debitoAutomatico);
+			
+			imovel.setIndicadorDebitoConta(ConstantesSistema.NAO);
+			imovel.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(imovel);
+			
+			inserirImovelHelper.setImovel(imovel);
 		}
 	}
 }
