@@ -281,7 +281,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
             retorno.setIdImovelRetorno(idImovelRetorno);
             retorno.setImovel(new Imovel(matriculaImovel));
             retorno.setTipoOcupante(tipo);
-            Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante") + Util.removerCaractereEspecial(tipo.getDescricao()));
+            Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante" + tipo.getDescricaoSemCaracteresEspeciais()));
             retorno.setQuantidade(qtd);
             
             controladorUtil.inserir(retorno);

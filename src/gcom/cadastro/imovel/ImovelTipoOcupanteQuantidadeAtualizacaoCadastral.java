@@ -26,6 +26,10 @@ public class ImovelTipoOcupanteQuantidadeAtualizacaoCadastral extends ObjetoTran
     public ImovelTipoOcupanteQuantidadeAtualizacaoCadastral() {
     }
     
+    public ImovelTipoOcupanteQuantidadeAtualizacaoCadastral(Integer qtd) {
+        this.quantidade = qtd;
+    }
+    
     public ImovelTipoOcupanteQuantidadeAtualizacaoCadastral(Integer quantidade, Imovel imovel, ImovelTipoOcupante tipoOcupante) {
         super();
         this.quantidade = quantidade;

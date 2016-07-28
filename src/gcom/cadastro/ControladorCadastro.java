@@ -7558,8 +7558,7 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTextoRegistroTipoCliente.append("01");
 
 		// IMOVEL
-		arquivoTextoRegistroTipoCliente.append(Util
-				.adicionarZerosEsquedaNumero(9, idImovel.toString()));
+		arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, idImovel.toString()));
 
 		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
@@ -7578,12 +7577,7 @@ public class ControladorCadastro extends ControladorComum {
 		}
 
 		// Descrição Gerencia Regional
-		if (descricaoGerenciaRegional != null) {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString(
-					descricaoGerenciaRegional, 25));
-		} else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 25));
-		}
+		arquivoTextoRegistroTipoCliente.append(Util.completaString(descricaoGerenciaRegional, 25));
 
 		Iterator colecaoClienteImovelIterator = colecaoClienteImovel.iterator();
 
@@ -7664,17 +7658,8 @@ public class ControladorCadastro extends ControladorComum {
 
 		// Dados Cliente Usuário
 		if (clienteUsuario != null) {
-			
-			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteUsuario.getIdCliente().toString()));
-			
-			// Nome do Cliente Usuário
-			if (clienteUsuario.getNome() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getNome(), 50));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						50));
-			}
+			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteUsuario.getIdCliente()));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getNome(), 50));
 
 			// Pessoa Física/Jurídica (1-Física/2-Jurídica)
 			if (clienteUsuario.getIdClienteTipo() != null) {
@@ -7690,622 +7675,262 @@ public class ControladorCadastro extends ControladorComum {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
 
-			// CPF/CNPJ Cliente
 			if (clienteUsuario.getCpf() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getCpf(), 14));
-				
+				arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getCpf(), 14));
 			} else if (clienteUsuario.getCnpj() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getCnpj(), 14));
+				arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getCnpj(), 14));
 			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						14));
+				arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
 			}
 
-			// RG Cliente
-			if (clienteUsuario.getRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getRg(), 9));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						9));
-			}
+			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getRg(), 9));
 
-			// UF Cliente usuário
-			if (clienteUsuario.getDsUFSiglaOrgaoExpedidorRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getDsUFSiglaOrgaoExpedidorRg(), 2));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						2));
-			}
+			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteUsuario.getPessoaSexo() != null && clienteUsuario.getPessoaSexo().getId() != null
-					&& !clienteUsuario.getPessoaSexo().getId().equals("")) {
-				arquivoTextoRegistroTipoCliente.append(clienteUsuario
-						.getPessoaSexo().getId());
+			if (clienteUsuario.getPessoaSexo() != null) {
+				arquivoTextoRegistroTipoCliente.append(clienteUsuario.getPessoaSexo().getId());
 			} else {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
 
 			// Telefone Usuário
-			Collection colecaoClienteFone = getControladorCliente()
-					.pesquisarClienteFoneAtualizacaoCadastral(
-							clienteUsuario.getIdCliente(), idImovel, null,
-							clienteUsuario.getIdClienteRelacaoTipo(), null);
+            Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteUsuario.getIdCliente(), idImovel, null,
+                    clienteUsuario.getIdClienteRelacaoTipo(), null);
 
-			ClienteFoneAtualizacaoCadastral residencial = null;
-			ClienteFoneAtualizacaoCadastral celular = null;
-			ClienteFoneAtualizacaoCadastral comercial = null;
-			ClienteFoneAtualizacaoCadastral fax = null;
+            ClienteFoneAtualizacaoCadastral residencial = null;
+            ClienteFoneAtualizacaoCadastral celular = null;
+            ClienteFoneAtualizacaoCadastral comercial = null;
+            ClienteFoneAtualizacaoCadastral fax = null;
 
-			Iterator clienteFoneIterator = colecaoClienteFone.iterator();
-			while (clienteFoneIterator.hasNext()) {
+            Iterator clienteFoneIterator = colecaoClienteFone.iterator();
+            while (clienteFoneIterator.hasNext()) {
 
-				ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator
-						.next();
+                ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator.next();
 
-				if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
-					celular = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.RESIDENCIAL)) {
-					residencial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.COMERCIAL)) {
-					comercial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
-					fax = clienteFone;
-				}
-			}
+                if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
+                    celular = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.RESIDENCIAL)) {
+                    residencial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.COMERCIAL)) {
+                    comercial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
+                    fax = clienteFone;
+                }
+            }
 
-			if (residencial != null) {
-				if (residencial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (residencial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-
-			} else if (comercial != null) {
-				if (comercial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (comercial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
+            if (residencial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+            } else if (comercial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
 			// Celular Usuário
-			if (celular != null) {
-				if (celular.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (celular.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
+            if (celular != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
 			// E-mail usuário
-			if (clienteUsuario.getEmail() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getEmail(), 30));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						30));
-			}
-
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getEmail(), 30));
 		} else {
-			arquivoTextoRegistroTipoCliente
-					.append(Util.completaString("", 136));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 136));
 		}
 
 		// Dados Cliente Proprietário
-		if (clienteProprietario != null) {
-			
-			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteProprietario.getIdCliente().toString()));
-			
-			// Nome do Cliente Proprietário
-			if (clienteProprietario.getNome() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getNome(), 50));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						50));
-			}
+        if (clienteProprietario != null) {
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteProprietario.getIdCliente()));
 
-			// Pessoa Física/Jurídica (1-Física/2-Jurídica)
-			if (clienteProprietario.getIdClienteTipo() != null) {
-				ClienteTipo clienteTipo = getControladorCliente()
-						.pesquisarClienteTipo(
-								clienteProprietario.getIdClienteTipo());
-				if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
-					arquivoTextoRegistroTipoCliente.append(clienteTipo
-							.getIndicadorPessoaFisicaJuridica());
-				} else {
-					arquivoTextoRegistroTipoCliente.append(" ");
-				}
-			} else {
-				arquivoTextoRegistroTipoCliente.append(" ");
-			}
+            // Nome do Cliente Proprietário
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNome(), 50));
 
-			// CPF/CNPJ Cliente
-			if (clienteProprietario.getCpf() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getCpf(), 14));
-				
-			} else if (clienteProprietario.getCnpj() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getCnpj(), 14));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						14));
-			}
+            // Pessoa Física/Jurídica (1-Física/2-Jurídica)
+            if (clienteProprietario.getIdClienteTipo() != null) {
+                ClienteTipo clienteTipo = getControladorCliente().pesquisarClienteTipo(clienteProprietario.getIdClienteTipo());
+                if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
+                    arquivoTextoRegistroTipoCliente.append(clienteTipo.getIndicadorPessoaFisicaJuridica());
+                } else {
+                    arquivoTextoRegistroTipoCliente.append(" ");
+                }
+            } else {
+                arquivoTextoRegistroTipoCliente.append(" ");
+            }
 
-			// RG Cliente
-			if (clienteProprietario.getRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getRg(), 9));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						9));
-			}
+            // CPF/CNPJ Cliente
+            if (clienteProprietario.getCpf() != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCpf(), 14));
 
-			// UF Cliente Proprietário
-			if (clienteProprietario.getDsUFSiglaOrgaoExpedidorRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getDsUFSiglaOrgaoExpedidorRg(), 2));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						2));
-			}
+            } else if (clienteProprietario.getCnpj() != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCnpj(), 14));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
+            }
 
-			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteProprietario.getPessoaSexo() != null && clienteProprietario.getPessoaSexo().getId() != null
-					&& !clienteProprietario.getPessoaSexo().getId().equals("")) {
-				arquivoTextoRegistroTipoCliente.append(clienteProprietario
-						.getPessoaSexo().getId());
-			} else {
-				arquivoTextoRegistroTipoCliente.append(" ");
-			}
+            // RG Cliente
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 9));
 
-			// Telefone Proprietário
-			Collection colecaoClienteFone = getControladorCliente()
-					.pesquisarClienteFoneAtualizacaoCadastral(
-							clienteProprietario.getIdCliente(), idImovel, null,
-							clienteProprietario.getIdClienteRelacaoTipo(), null);
+            // UF Cliente Proprietário
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
-			ClienteFoneAtualizacaoCadastral residencial = null;
-			ClienteFoneAtualizacaoCadastral celular = null;
-			ClienteFoneAtualizacaoCadastral comercial = null;
-			ClienteFoneAtualizacaoCadastral fax = null;
+            // Sexo do Cliente (1-Masculino/2-Feminino)
+            if (clienteProprietario.getPessoaSexo() != null) {
+                arquivoTextoRegistroTipoCliente.append(clienteProprietario.getPessoaSexo().getId());
+            } else {
+                arquivoTextoRegistroTipoCliente.append(" ");
+            }
 
-			Iterator clienteFoneIterator = colecaoClienteFone.iterator();
-			while (clienteFoneIterator.hasNext()) {
+            // Telefone Proprietário
+            Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteProprietario.getIdCliente(), idImovel, null,
+                    clienteProprietario.getIdClienteRelacaoTipo(), null);
 
-				ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator
-						.next();
+            ClienteFoneAtualizacaoCadastral residencial = null;
+            ClienteFoneAtualizacaoCadastral celular = null;
+            ClienteFoneAtualizacaoCadastral comercial = null;
+            ClienteFoneAtualizacaoCadastral fax = null;
 
-				if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
-					celular = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.RESIDENCIAL)) {
-					residencial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.COMERCIAL)) {
-					comercial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
-					fax = clienteFone;
-				}
-			}
+            Iterator clienteFoneIterator = colecaoClienteFone.iterator();
+            while (clienteFoneIterator.hasNext()) {
 
-			if (residencial != null) {
-				if (residencial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
+                ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator.next();
 
-				if (residencial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
+                if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
+                    celular = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.RESIDENCIAL)) {
+                    residencial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.COMERCIAL)) {
+                    comercial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
+                    fax = clienteFone;
+                }
+            }
 
-			} else if (comercial != null) {
-				if (comercial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
+            if (residencial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+            } else if (comercial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
-				if (comercial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
+            // Celular Proprietário
+            if (celular != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
-			// Celular Proprietário
-			if (celular != null) {
-				if (celular.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (celular.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
-
-			// E-mail Proprietário
-			if (clienteProprietario.getEmail() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getEmail(), 30));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						30));
-			}
-			
-			// Descricao do Tipo do Logradouro
-			if (clienteProprietario.getIdLogradouroTipo() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteProprietario.getIdLogradouroTipo().toString()));
-			} else {
-				arquivoTextoRegistroTipoCliente.append("00");
-			}
-
-			// Logradouro
-			if (clienteProprietario.getDescricaoLogradouro() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getDescricaoLogradouro(), 40));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						40));
-			}
-
-			// Numero Imovel
-			if (clienteProprietario.getNumeroImovel() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getNumeroImovel(), 5));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						5));
-			}
-
-			// Complemento
-			if (clienteProprietario.getComplementoEndereco() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getComplementoEndereco(), 25));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						25));
-			}
-
-			// Bairro
-			if (clienteProprietario.getNomeBairro() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getNomeBairro(), 20));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						20));
-			}
-
-			// CEP
-			if (clienteProprietario.getCodigoCep() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getCodigoCep().toString(), 8));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						8));
-			}
-
-			// Municipio
-			if (clienteProprietario.getNomeMunicipio() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getNomeMunicipio(), 15));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						15));
-			}
-
-		} else {
-			arquivoTextoRegistroTipoCliente
-					.append(Util.completaString("", 251));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getEmail(), 30));
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteProprietario.getIdLogradouroTipo()));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDescricaoLogradouro(), 40));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNumeroImovel(), 5));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getComplementoEndereco(), 25));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeBairro(), 20));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCodigoCep().toString(), 8));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeMunicipio(), 15));
+        } else {
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 251));
 		}
 
 		// Dados Cliente Responsável
-		if (clienteResponsavel != null) {
-			
-			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteResponsavel.getIdCliente().toString()));
-			
-			// Nome do Cliente Proprietário
-			if (clienteResponsavel.getNome() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getNome(), 50));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						50));
-			}
+        if (clienteResponsavel != null) {
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteResponsavel.getIdCliente()));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNome(), 50));
 
-			// Pessoa Física/Jurídica (1-Física/2-Jurídica)
-			if (clienteResponsavel.getIdClienteTipo() != null) {
-				ClienteTipo clienteTipo = getControladorCliente()
-						.pesquisarClienteTipo(
-								clienteResponsavel.getIdClienteTipo());
-				if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
-					arquivoTextoRegistroTipoCliente.append(clienteTipo
-							.getIndicadorPessoaFisicaJuridica());
-				} else {
-					arquivoTextoRegistroTipoCliente.append(" ");
-				}
-			} else {
-				arquivoTextoRegistroTipoCliente.append(" ");
-			}
+            // Pessoa Física/Jurídica (1-Física/2-Jurídica)
+            if (clienteResponsavel.getIdClienteTipo() != null) {
+                ClienteTipo clienteTipo = getControladorCliente().pesquisarClienteTipo(clienteResponsavel.getIdClienteTipo());
+                if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
+                    arquivoTextoRegistroTipoCliente.append(clienteTipo.getIndicadorPessoaFisicaJuridica());
+                } else {
+                    arquivoTextoRegistroTipoCliente.append(" ");
+                }
+            } else {
+                arquivoTextoRegistroTipoCliente.append(" ");
+            }
 
-			// CPF/CNPJ Cliente
-			if (clienteResponsavel.getCpf() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getCpf(), 14));
-				
-			} else if (clienteResponsavel.getCnpj() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getCnpj(), 14));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						14));
-			}
+            // CPF/CNPJ Cliente
+            if (clienteResponsavel.getCpf() != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCpf(), 14));
+            } else if (clienteResponsavel.getCnpj() != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCnpj(), 14));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
+            }
 
-			// RG Cliente
-			if (clienteResponsavel.getRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getRg(), 9));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						9));
-			}
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getRg(), 9));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
-			// UF Cliente Responsável
-			if (clienteResponsavel.getDsUFSiglaOrgaoExpedidorRg() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getDsUFSiglaOrgaoExpedidorRg(), 2));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						2));
-			}
+            if (clienteResponsavel.getPessoaSexo() != null) {
+                arquivoTextoRegistroTipoCliente.append(clienteResponsavel.getPessoaSexo().getId());
+            } else {
+                arquivoTextoRegistroTipoCliente.append(" ");
+            }
 
-			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteResponsavel.getPessoaSexo() != null && clienteResponsavel.getPessoaSexo().getId() != null
-					&& !clienteResponsavel.getPessoaSexo().getId().equals("")) {
-				arquivoTextoRegistroTipoCliente.append(clienteResponsavel
-						.getPessoaSexo().getId());
-			} else {
-				arquivoTextoRegistroTipoCliente.append(" ");
-			}
+            // Telefone Responsável
+            Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteResponsavel.getIdCliente(), idImovel, null,
+                    clienteResponsavel.getIdClienteRelacaoTipo(), null);
 
-			// Telefone Responsável
-			Collection colecaoClienteFone = getControladorCliente()
-					.pesquisarClienteFoneAtualizacaoCadastral(
-							clienteResponsavel.getIdCliente(), idImovel, null,
-							clienteResponsavel.getIdClienteRelacaoTipo(), null);
+            ClienteFoneAtualizacaoCadastral residencial = null;
+            ClienteFoneAtualizacaoCadastral celular = null;
+            ClienteFoneAtualizacaoCadastral comercial = null;
+            ClienteFoneAtualizacaoCadastral fax = null;
 
-			ClienteFoneAtualizacaoCadastral residencial = null;
-			ClienteFoneAtualizacaoCadastral celular = null;
-			ClienteFoneAtualizacaoCadastral comercial = null;
-			ClienteFoneAtualizacaoCadastral fax = null;
+            Iterator clienteFoneIterator = colecaoClienteFone.iterator();
+            while (clienteFoneIterator.hasNext()) {
 
-			Iterator clienteFoneIterator = colecaoClienteFone.iterator();
-			while (clienteFoneIterator.hasNext()) {
+                ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator.next();
 
-				ClienteFoneAtualizacaoCadastral clienteFone = (ClienteFoneAtualizacaoCadastral) clienteFoneIterator
-						.next();
+                if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
+                    celular = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.RESIDENCIAL)) {
+                    residencial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.COMERCIAL)) {
+                    comercial = clienteFone;
+                } else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
+                    fax = clienteFone;
+                }
+            }
 
-				if (clienteFone.getIdFoneTipo().equals(FoneTipo.CELULAR)) {
-					celular = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.RESIDENCIAL)) {
-					residencial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(
-						FoneTipo.COMERCIAL)) {
-					comercial = clienteFone;
-				} else if (clienteFone.getIdFoneTipo().equals(FoneTipo.FAX)) {
-					fax = clienteFone;
-				}
-			}
+            if (residencial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+            } else if (comercial != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
-			if (residencial != null) {
-				if (residencial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
+            // Celular Responsável
+            if (celular != null) {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
 
-				if (residencial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							residencial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-
-			} else if (comercial != null) {
-				if (comercial.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (comercial.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							comercial.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
-
-			// Celular Responsável
-			if (celular != null) {
-				if (celular.getDdd() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getDdd(), 2));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 2));
-				}
-
-				if (celular.getTelefone() != null) {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							celular.getTelefone(), 8));
-				} else {
-					arquivoTextoRegistroTipoCliente.append(Util.completaString(
-							"", 8));
-				}
-
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						10));
-			}
-
-			// E-mail Responsável
-			if (clienteResponsavel.getEmail() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getEmail(), 30));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						30));
-			}
-			
-			// Descricao do Tipo do Logradouro
-			if (clienteResponsavel.getIdLogradouroTipo() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteResponsavel.getIdLogradouroTipo().toString()));
-			} else {
-				arquivoTextoRegistroTipoCliente.append("00");
-			}
-
-			// Logradouro
-			if (clienteResponsavel.getDescricaoLogradouro() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getDescricaoLogradouro(), 40));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						40));
-			}
-
-			// Numero Imovel
-			if (clienteResponsavel.getNumeroImovel() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getNumeroImovel(), 5));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						5));
-			}
-
-			// Complemento
-			if (clienteResponsavel.getComplementoEndereco() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getComplementoEndereco(), 25));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						25));
-			}
-
-			// Bairro
-			if (clienteResponsavel.getNomeBairro() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getNomeBairro(), 20));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						20));
-			}
-
-			// CEP
-			if (clienteResponsavel.getCodigoCep() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getCodigoCep().toString(), 8));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						8));
-			}
-
-			// Municipio
-			if (clienteResponsavel.getNomeMunicipio() != null) {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getNomeMunicipio(), 15));
-			} else {
-				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
-						15));
-			}
-		} else {
-			arquivoTextoRegistroTipoCliente
-					.append(Util.completaString("", 251));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getEmail(), 30));
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteResponsavel.getIdLogradouroTipo()));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDescricaoLogradouro(), 40));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNumeroImovel(), 5));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getComplementoEndereco(), 25));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeBairro(), 20));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCodigoCep().toString(), 8));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeMunicipio(), 15));
+        } else {
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 251));
 		}
 
-		arquivoTextoRegistroTipoCliente.append(System
-				.getProperty("line.separator"));
+		arquivoTextoRegistroTipoCliente.append(System.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipoCliente;
 	}

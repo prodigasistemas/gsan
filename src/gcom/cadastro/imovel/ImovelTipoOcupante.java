@@ -2,6 +2,9 @@ package gcom.cadastro.imovel;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
+import gcom.util.Util;
 import gcom.util.tabelaauxiliar.TabelaAuxiliar;
 
 public class ImovelTipoOcupante extends TabelaAuxiliar{
@@ -28,6 +31,11 @@ public class ImovelTipoOcupante extends TabelaAuxiliar{
         this.descricao = descricao;
     }
 
+    public String getDescricaoSemCaracteresEspeciais(){
+        String tipo = Util.removerCaractereEspecial(getDescricao()).toLowerCase();
+        return StringUtils.capitalise(tipo);
+    }
+
     public Short getIndicadorUso() {
         return indicadorUso;
     }
@@ -43,6 +51,7 @@ public class ImovelTipoOcupante extends TabelaAuxiliar{
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
     }
+    
 
     @Override
     public String[] retornaCamposChavePrimaria() {

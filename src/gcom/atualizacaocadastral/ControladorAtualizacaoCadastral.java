@@ -111,10 +111,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws Exception {
 		atualizarImovelControle(idImovel);
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
+		apagarImovelQuantidadesOcupantes(idImovel);
 		apagarImovelRetorno(idImovel);
 		apagarImagemRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
-		apagarImovelQuantidadesOcupantes(idImovel);
 		apagarImovelRamoAtividade(idImovel);
 		apagarInformacoesRetornoCliente(idImovel);
 	}

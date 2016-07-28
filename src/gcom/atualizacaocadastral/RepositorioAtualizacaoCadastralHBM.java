@@ -1190,13 +1190,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> retorno = null;
         Session session = HibernateUtil.getSession();
         
-        String consulta = null;
+        StringBuilder consulta = new StringBuilder();
         try {
             
-            consulta = "from ImovelTipoOcupanteQuantidadeAtualizacaoCadastral e "
-                    + " where e.imovel.id = :idImovel " ;
+            consulta.append("from ImovelTipoOcupanteQuantidadeAtualizacaoCadastral e ")
+                .append(" inner join fetch e.tipoOcupante")
+                .append(" where e.imovel.id = :idImovel ") ;
             
-            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel).list();
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
         } finally {

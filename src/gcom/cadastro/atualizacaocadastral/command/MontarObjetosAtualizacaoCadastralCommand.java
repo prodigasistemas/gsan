@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
@@ -144,25 +145,27 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	private void salvarImovelQuantidadesOcupantes() throws ControladorException {
-	    Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
-	    
 	    Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> tiposImovel = controladorAtualizacaoCadastral.pesquisarOcupantesAtualizacaoCadastral(matriculaImovel);
 	    
 	    Map<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> mapTiposImovel = new HashMap<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>();
 	    
 	    for(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral tipo : tiposImovel){
-	        mapTiposImovel.put(tipo.getId(), tipo);
+	        mapTiposImovel.put(tipo.getTipoOcupante().getId(), tipo);
 	    }
 	    
+	    Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
 	    for (ImovelTipoOcupante tipo : todosTipos) {
-	        ImovelTipoOcupanteQuantidadeAtualizacaoCadastral tipoImovel = mapTiposImovel.get(tipo.getId());
-	        if (mapTiposImovel.containsKey(tipo.getId())) {
-	            tipoImovel = mapTiposImovel.get(tipo.getId());
-	        } else {
-	            tipoImovel = new ImovelTipoOcupanteQuantidadeAtualizacaoCadastral();
-	        }
+	        Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante" + tipo.getDescricaoSemCaracteresEspeciais()));
 	        
-	        salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, tipo, tipoImovel, matriculaImovel, tipoOperacao);
+	        ImovelTipoOcupanteQuantidadeAtualizacaoCadastral valorBase = mapTiposImovel.get(tipo.getId());
+	        if (valorBase == null){
+	            valorBase = new ImovelTipoOcupanteQuantidadeAtualizacaoCadastral(0);
+	        }
+	        ImovelTipoOcupanteQuantidadeAtualizacaoCadastral valorTxt  = new ImovelTipoOcupanteQuantidadeAtualizacaoCadastral();
+	        valorTxt.setQuantidade(qtd);
+	        valorTxt.setTipoOcupante(tipo);
+	        
+	        salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, valorBase, valorTxt, matriculaImovel, tipoOperacao);
 	    }
 	}
 	

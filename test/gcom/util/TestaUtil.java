@@ -127,4 +127,11 @@ public class TestaUtil {
         assertFalse(Util.isPositivo("0"));
         assertFalse(Util.isPositivo("-1"));
     }
+    
+    @Test
+    public void testaCompletaString(){
+        assertEquals("dez       ", Util.completaString("dez", 10));
+        assertEquals("          ", Util.completaString("", 10));
+        assertEquals("          ", Util.completaString(null, 10));
+    }
 }
