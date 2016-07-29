@@ -8916,4 +8916,17 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
         return retorno;
 	}
+	
+    public void removerQuantidadesOcupantesImovel(Integer idImovel) throws ErroRepositorioException { 
+        Session session = HibernateUtil.getSession();
+        try {
+            String consulta = "delete from ImovelTipoOcupanteQuantidade where imovel.id = :idImovel " ;
+            
+            session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao remover ocupantes cadastrados no imovel.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+    }	
 }

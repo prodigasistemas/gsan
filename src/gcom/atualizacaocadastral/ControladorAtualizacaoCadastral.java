@@ -36,6 +36,8 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.ClienteFone;
@@ -44,6 +46,7 @@ import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
+import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelImagem;
@@ -52,6 +55,7 @@ import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
@@ -66,7 +70,9 @@ import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.IRepositorioUtil;
 import gcom.util.MergeProperties;
+import gcom.util.RepositorioUtilHBM;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -77,12 +83,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
 	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
-	private IRepositorioSeguranca repositorioSeguranca;
+	private IRepositorioCadastro             repositorioCadastro = null;
+	private IRepositorioSeguranca            repositorioSeguranca;
+	private IRepositorioUtil                 repositorioUtil;
 	private static List<Integer> listaRAParaExclusao = new ArrayList<Integer>();
 
 	public void ejbCreate() throws CreateException {
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
-		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
+		repositorioSeguranca            = RepositorioSegurancaHBM.getInstancia();
+		repositorioCadastro             = RepositorioCadastroHBM.getInstancia();
+		repositorioUtil                 = RepositorioUtilHBM.getInstancia();
 	}
 
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException{
@@ -317,7 +327,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private void atualizarImovelSubcategoriaAtualizacaoCadastral(IImovel imovelRetorno) throws Exception {
 		imovelRetorno.setId(imovelRetorno.getIdImovel());
 
-		Collection<IImovelSubcategoria> subcategoriasRetorno = this.obterImovelSubcategoriaParaAtualizar(imovelRetorno.getIdImovel());
+        Collection<IImovelSubcategoria> subcategoriasRetorno = repositorioAtualizacaoCadastral.obterImovelSubcategoriaParaAtualizar(imovelRetorno.getIdImovel());
 		Collection<Integer> idsSubcategorias = this.obterIdsSubcategoriasImovel(imovelRetorno.getIdImovel());
 		
 		for (IImovelSubcategoria subcategoriaRetorno : subcategoriasRetorno) {
@@ -341,9 +351,29 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		this.removerSubcategoriasDoImovel(imovelRetorno.getIdImovel(), idsSubcategorias);
 	}
 	
+	private void atualizarImovelQuantidadesOcupantes(IImovel imovelRetorno) throws Exception {
+	    try {
+            Collection<IImovelTipoOcupanteQuantidade> ocupantes = repositorioAtualizacaoCadastral.obterImovelQuantidadesOcupantesParaAtualizar(imovelRetorno.getIdImovel());
+            
+            repositorioCadastro.removerQuantidadesOcupantesImovel(imovelRetorno.getIdImovel());
+            
+            for (IImovelTipoOcupanteQuantidade item : ocupantes) {
+                ImovelTipoOcupanteQuantidade novoRegistro = new ImovelTipoOcupanteQuantidade();
+                novoRegistro.setImovel(item.getImovel());
+                novoRegistro.setTipoOcupante(item.getTipoOcupante());
+                novoRegistro.setQuantidade(item.getQuantidade());
+                repositorioUtil.inserir(novoRegistro);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao atualizar quantidades de ocupantes do imovel", e);
+            
+        }
+	}
+	
 	private void atualizarImovelRamoAtividadeAtualizacaoCadastral(IImovel imovelRetorno) throws Exception {
 		try {
-			Collection<IImovelRamoAtividade> ramosAtividadeRetorno = this.obterImovelRamoAtividadeParaAtualizar(imovelRetorno.getIdImovel());
+			Collection<IImovelRamoAtividade> ramosAtividadeRetorno = repositorioAtualizacaoCadastral.obterImovelRamoAtividadeParaAtualizar(imovelRetorno.getIdImovel());
+
 			Collection<Integer> idsRamosAtividadesImovel = this.obterIdsRamosAtividadesImovel(imovelRetorno.getIdImovel());
 			
 			for (IImovelRamoAtividade ramoAtividadeRetorno : ramosAtividadeRetorno) {
@@ -468,16 +498,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return imoveis;
 	}
 	
-	private Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws Exception {
-		Collection<IImovelSubcategoria> subcategorias = repositorioAtualizacaoCadastral.obterImovelSubcategoriaParaAtualizar(idImovel);
-		return subcategorias;
-	}
-	
-	private Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(Integer idImovel) throws Exception {
-		Collection<IImovelRamoAtividade> ramosAtividade = repositorioAtualizacaoCadastral.obterImovelRamoAtividadeParaAtualizar(idImovel);
-		return ramosAtividade;
-	}
-
 	private Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
 		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
 		try {
@@ -623,6 +643,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					atualizarImovelAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelSubcategoriaAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovelRetorno);
+					atualizarImovelQuantidadesOcupantes(imovelRetorno);
 					atualizarImovelProcessado(idImovelRetorno);
 				}
 			}

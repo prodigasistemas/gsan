@@ -4,6 +4,7 @@ import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
+import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
@@ -91,6 +92,23 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	
+    public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
+        Collection<IImovelTipoOcupanteQuantidade> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        try {
+            String consulta = "from ImovelTipoOcupanteQuantidadeRetorno e where e.imovel.id = :idImovel " ;
+            
+            retorno = (Collection<IImovelTipoOcupanteQuantidade>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar quantidades de ocupantes em retorno.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+    }
+    
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		ImovelControleAtualizacaoCadastral retorno = null;
