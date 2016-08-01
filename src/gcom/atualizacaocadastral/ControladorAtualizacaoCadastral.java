@@ -107,6 +107,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			listaRAParaExclusao.clear();
 		} catch (Exception e) {
+		    logger.error("Erro ao processar imoveis aprovados", e);
 			
 			if (!listaRAParaExclusao.isEmpty()) {
 				deletarRAsPendente(listaRAParaExclusao);

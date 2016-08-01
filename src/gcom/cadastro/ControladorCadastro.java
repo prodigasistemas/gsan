@@ -7047,7 +7047,8 @@ public class ControladorCadastro extends ControladorComum {
 						SituacaoTransmissaoLeitura.TRANSMITIDO);
 			}
 		} catch (Exception e) {
-			throw e;
+		    logger.error("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
+			throw new Exception("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
 		} finally {
 			if (buffer != null) {
 				try {
