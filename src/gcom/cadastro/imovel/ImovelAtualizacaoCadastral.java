@@ -268,6 +268,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Short acessoHidrometro,
 			Integer quantidadeEconomiasSocial,
 			Integer quantidadeEconomiasOutra) {
+		this.id                         = idImovel;
 	    this.idImovel                   = idImovel;
 	    this.idLocalidade               = idLocalidade;
 	    this.codigoSetorComercial       = codigoSetorComercial;
