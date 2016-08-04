@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
-
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
 	<class name="gcom.seguranca.transacao.Tabela" table="seguranca.tabela">
 		<id name="id" type="java.lang.Integer" column="tabe_id">
 			<generator class="sequence">
@@ -16,36 +10,6 @@
 		<property name="descricao" type="java.lang.String" column="tabe_dstabela" length="100"/>
 		<property name="nomeTabela" type="java.lang.String" column="tabe_nmtabela" length="50"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tabe_tmultimaalteracao" length="8"/>
-		<!-- Associations -->
-		<!-- bi-directional one-to-many association to TabelaCasoDeUso -->
-		<!-- <set
-        name="tabelaCasoDeUsos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="tabe_id" />
-        </key>
-        <one-to-many 
-            class="gcom.TabelaCasoDeUso"
-        />
-    </set> 
-    <set
-        name="tabelaLinhaAlteracaos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="tabe_id" />
-        </key>
-        <one-to-many 
-            class="gcom.TabelaLinhaAlteracao"
-        />
-    </set> 
-
-     -->
 		<set name="tabelaColunas" lazy="true" inverse="true">
 			<key>
 				<column name="tabe_id"/>

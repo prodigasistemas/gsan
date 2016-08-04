@@ -1,13 +1,27 @@
 package gcom.atualizacaocadastral;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+
+import org.apache.log4j.Logger;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServicoUnidade;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.OrdemServicoUnidade;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoUnidade;
@@ -20,24 +34,19 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
+import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.IClienteFone;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
+import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelImagem;
@@ -46,9 +55,9 @@ import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -58,206 +67,34 @@ import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
-import gcom.util.ConstantesJNDI;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.IRepositorioUtil;
 import gcom.util.MergeProperties;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
+import gcom.util.RepositorioUtilHBM;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-import org.apache.log4j.Logger;
-
-public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoCadastral, SessionBean {
-
+public class ControladorAtualizacaoCadastral extends ControladorComum implements IControladorAtualizacaoCadastral {
 
 	private static final long serialVersionUID = -3792912776769033056L;
 	
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
 	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
-	private IRepositorioSeguranca repositorioSeguranca;
+	private IRepositorioCadastro             repositorioCadastro = null;
+	private IRepositorioSeguranca            repositorioSeguranca;
+	private IRepositorioUtil                 repositorioUtil;
 	private static List<Integer> listaRAParaExclusao = new ArrayList<Integer>();
 
-	
-	SessionContext sessionContext;
-	
 	public void ejbCreate() throws CreateException {
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
-		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
+		repositorioSeguranca            = RepositorioSegurancaHBM.getInstancia();
+		repositorioCadastro             = RepositorioCadastroHBM.getInstancia();
+		repositorioUtil                 = RepositorioUtilHBM.getInstancia();
 	}
 
-	public void ejbActivate() throws EJBException, RemoteException {
-	}
-
-	public void ejbPassivate() throws EJBException, RemoteException {
-	}
-
-	public void ejbRemove() throws EJBException, RemoteException {
-	}
-
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-	
-	private ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	
-	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
-		ControladorRegistroAtendimentoLocalHome localHome = null;
-		ControladorRegistroAtendimentoLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	protected ControladorUtilLocal getControladorUtil() {
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	
-	protected ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			local = (ControladorImovelLocal) localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	protected ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	protected ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException{
 		int idUnidadeIniciada = 0;
 		
@@ -270,6 +107,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			listaRAParaExclusao.clear();
 		} catch (Exception e) {
+		    logger.error("Erro ao processar imoveis aprovados", e);
 			
 			if (!listaRAParaExclusao.isEmpty()) {
 				deletarRAsPendente(listaRAParaExclusao);
@@ -284,6 +122,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws Exception {
 		atualizarImovelControle(idImovel);
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
+		apagarImovelQuantidadesOcupantes(idImovel);
 		apagarImovelRetorno(idImovel);
 		apagarImagemRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
@@ -374,12 +213,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		int ordemImagem = 0;
 		
 		for (ImagemRetorno imagemRetorno : colecaoImagemRetorno) {
-			File imagem = null;
-			try {
-				imagem = this.copiarImagensRetorno(imagemRetorno);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			File imagem = this.copiarImagensRetorno(imagemRetorno);
 			
 			ImovelImagem imovelImagem = new ImovelImagem();
 			imovelImagem.setIdImovel(idImovel);
@@ -422,7 +256,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return colecaoImagemRetorno;
 	}
 
-	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws IOException {
+	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws ControladorException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
@@ -439,11 +273,18 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			destinoChannel = new FileOutputStream(arquivoDestino).getChannel();
 			
 			origemChannel.transferTo(0, origemChannel.size(), destinoChannel);
-		} finally {
-			if (origemChannel != null && origemChannel.isOpen())
-				origemChannel.close();
-			if (destinoChannel != null && destinoChannel.isOpen())
-				destinoChannel.close();
+		}
+		catch (IOException e){
+		    throw new ControladorException("Erro ao copiar imagens do retorno", e);
+		}
+		finally {
+		    try {
+		        if (origemChannel != null && origemChannel.isOpen())
+		            origemChannel.close();
+		        if (destinoChannel != null && destinoChannel.isOpen())
+		            destinoChannel.close();
+            } catch (Exception e) {
+            }
 		}
 		
 		return arquivoDestino;
@@ -487,7 +328,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void atualizarImovelSubcategoriaAtualizacaoCadastral(IImovel imovelRetorno) throws Exception {
 		imovelRetorno.setId(imovelRetorno.getIdImovel());
 
-		Collection<IImovelSubcategoria> subcategoriasRetorno = this.obterImovelSubcategoriaParaAtualizar(imovelRetorno.getIdImovel());
+        Collection<IImovelSubcategoria> subcategoriasRetorno = repositorioAtualizacaoCadastral.obterImovelSubcategoriaParaAtualizar(imovelRetorno.getIdImovel());
 		Collection<Integer> idsSubcategorias = this.obterIdsSubcategoriasImovel(imovelRetorno.getIdImovel());
 		
 		for (IImovelSubcategoria subcategoriaRetorno : subcategoriasRetorno) {
@@ -511,9 +352,29 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		this.removerSubcategoriasDoImovel(imovelRetorno.getIdImovel(), idsSubcategorias);
 	}
 	
+	private void atualizarImovelQuantidadesOcupantes(IImovel imovelRetorno) throws Exception {
+	    try {
+            Collection<IImovelTipoOcupanteQuantidade> ocupantes = repositorioAtualizacaoCadastral.obterImovelQuantidadesOcupantesParaAtualizar(imovelRetorno.getIdImovel());
+            
+            repositorioCadastro.removerQuantidadesOcupantesImovel(imovelRetorno.getIdImovel());
+            
+            for (IImovelTipoOcupanteQuantidade item : ocupantes) {
+                ImovelTipoOcupanteQuantidade novoRegistro = new ImovelTipoOcupanteQuantidade();
+                novoRegistro.setImovel(item.getImovel());
+                novoRegistro.setTipoOcupante(item.getTipoOcupante());
+                novoRegistro.setQuantidade(item.getQuantidade());
+                repositorioUtil.inserir(novoRegistro);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao atualizar quantidades de ocupantes do imovel", e);
+            
+        }
+	}
+	
 	private void atualizarImovelRamoAtividadeAtualizacaoCadastral(IImovel imovelRetorno) throws Exception {
 		try {
-			Collection<IImovelRamoAtividade> ramosAtividadeRetorno = this.obterImovelRamoAtividadeParaAtualizar(imovelRetorno.getIdImovel());
+			Collection<IImovelRamoAtividade> ramosAtividadeRetorno = repositorioAtualizacaoCadastral.obterImovelRamoAtividadeParaAtualizar(imovelRetorno.getIdImovel());
+
 			Collection<Integer> idsRamosAtividadesImovel = this.obterIdsRamosAtividadesImovel(imovelRetorno.getIdImovel());
 			
 			for (IImovelRamoAtividade ramoAtividadeRetorno : ramosAtividadeRetorno) {
@@ -638,16 +499,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return imoveis;
 	}
 	
-	private Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws Exception {
-		Collection<IImovelSubcategoria> subcategorias = repositorioAtualizacaoCadastral.obterImovelSubcategoriaParaAtualizar(idImovel);
-		return subcategorias;
-	}
-	
-	private Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(Integer idImovel) throws Exception {
-		Collection<IImovelRamoAtividade> ramosAtividade = repositorioAtualizacaoCadastral.obterImovelRamoAtividadeParaAtualizar(idImovel);
-		return ramosAtividade;
-	}
-
 	private Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
 		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
 		try {
@@ -751,10 +602,14 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void apagarImovelRamoAtividade(Integer idImovel) throws Exception {
-		repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
+	private void apagarImovelQuantidadesOcupantes(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImovelQuantidadesOcupantes(idImovel);
 	}
 
+	private void apagarImovelRamoAtividade(Integer idImovel) throws Exception {
+	    repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
+	}
+	
 	private void apagarClienteEnderecoRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) throws Exception{
 		repositorioAtualizacaoCadastral.apagarClienteEnderecoRetorno(idsClientesRetorno);
 	}
@@ -789,6 +644,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					atualizarImovelAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelSubcategoriaAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovelRetorno);
+					atualizarImovelQuantidadesOcupantes(imovelRetorno);
 					atualizarImovelProcessado(idImovelRetorno);
 				}
 			}
@@ -1169,29 +1025,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return null;
 	}
 	
-	private boolean isRAGerada(Integer matricula) {
-		
-		try {
-			FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
-			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.IMOVEL, matricula));
-			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.CODIGO_SITUACAO, String.valueOf(RegistroAtendimento.SITUACAO_PENDENTE)));
-			filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.SOLICITACAO_TIPO_ESPECIFICACAO, 1227)); // "ATUALIZACAO CADASTRAL GSAN"
-			
-			Collection<RegistroAtendimento> colecaoRegistroAtendimento = getControladorUtil().pesquisar(filtroRegistroAtendimento, RegistroAtendimento.class.getName());
-			
-			if (!colecaoRegistroAtendimento.isEmpty()) {
-				return true;
-			}
-			
-			return false;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
-	
 	private void excluirClientes() throws ControladorException, ErroRepositorioException {
 		Collection<IClienteImovel> clientesImovelExcluirRelacao = this.obterClientesParaExcluirRelacao();
 		
@@ -1274,22 +1107,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			throw new ControladorException("Erro ao obter dados para analise do aquivo.", e);
 		}
 		return mapDadosAnalise;
-	}
-	
-	private void atualizarImovelControlePorSituacao(Integer idImovel, Integer situacao) throws ControladorException {
-		try {
-			ImovelControleAtualizacaoCadastral controle = repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
-			
-			if (controle != null){
-				controle.setImovelRetorno(null);
-				controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
-				
-				this.getControladorUtil().atualizar(controle);
-			}
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	public void fiscalizarImovel(Integer idImovel) throws ControladorException {
@@ -1503,5 +1320,13 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			e.printStackTrace();
 		}
 		return temPermissao;
+	}
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ControladorException{
+	    try {
+	        return repositorioAtualizacaoCadastral.pesquisarOcupantesAtualizacaoCadastral(idImovel);
+        } catch (Exception e) {
+            throw new ControladorException("Erro ao recuperar os tipos de ocupantes", e);
+        }
 	}
 }

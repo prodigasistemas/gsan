@@ -1,5 +1,8 @@
 package gcom.atualizacaocadastral;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -8,8 +11,6 @@ import gcom.cadastro.imovel.IImovel;
 import gcom.micromedicao.hidrometro.HidrometroCapacidade;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
-
-import java.util.Date;
 
 public class ImovelRetorno implements IImovel{
 
@@ -58,9 +59,24 @@ public class ImovelRetorno implements IImovel{
     private String tipoEntrevistado;
     
 	private Date ultimaAlteracao;
+	
+    private Short classeSocial;
+    
+    private Short quantidadeAnimaisDomesticos;
+    
+    private BigDecimal volumeCisterna;
+    
+    private BigDecimal volumeCaixaDagua;
+    
+    private Short tipoUso;
+    
+    private Short acessoHidrometro;
+    
+    private Integer quantidadeEconomiasSocial;     
+    
+    private Integer quantidadeEconomiasOutra;         
 
 	public ImovelRetorno () {
-		
 	}
 	
 	public ImovelRetorno(Integer id) {
@@ -99,6 +115,14 @@ public class ImovelRetorno implements IImovel{
 		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
 		this.informacoesComplementares = imovelAtualizacaoCadastral.getInformacoesComplementares();
 		this.tipoEntrevistado = imovelAtualizacaoCadastral.getTipoEntrevistado();
+		this.classeSocial                 = imovelAtualizacaoCadastral.getClasseSocial();
+		this.quantidadeAnimaisDomesticos  = imovelAtualizacaoCadastral.getQuantidadeAnimaisDomesticos();
+		this.volumeCisterna               = imovelAtualizacaoCadastral.getVolumeCisterna();
+		this.volumeCaixaDagua             = imovelAtualizacaoCadastral.getVolumeCaixaDagua();
+		this.tipoUso                      = imovelAtualizacaoCadastral.getTipoUso();
+		this.acessoHidrometro             = imovelAtualizacaoCadastral.getAcessoHidrometro();
+		this.quantidadeEconomiasSocial    = imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial();
+		this.quantidadeEconomiasOutra     = imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra();
 	}
 
 	public Integer getId() {
@@ -431,4 +455,68 @@ public class ImovelRetorno implements IImovel{
 
 	public void setIdMarcaHidrometro(Integer idMarcaHidrometro) {
 	}
+
+    public Short getClasseSocial() {
+        return classeSocial;
+    }
+
+    public void setClasseSocial(Short classeSocial) {
+        this.classeSocial = classeSocial;
+    }
+
+    public Short getQuantidadeAnimaisDomesticos() {
+        return quantidadeAnimaisDomesticos;
+    }
+
+    public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) {
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+    }
+
+    public BigDecimal getVolumeCisterna() {
+        return volumeCisterna;
+    }
+
+    public void setVolumeCisterna(BigDecimal volumeCisterna) {
+        this.volumeCisterna = volumeCisterna;
+    }
+
+    public BigDecimal getVolumeCaixaDagua() {
+        return volumeCaixaDagua;
+    }
+
+    public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) {
+        this.volumeCaixaDagua = volumeCaixaDagua;
+    }
+
+    public Short getTipoUso() {
+        return tipoUso;
+    }
+
+    public void setTipoUso(Short tipoUso) {
+        this.tipoUso = tipoUso;
+    }
+
+    public Short getAcessoHidrometro() {
+        return acessoHidrometro;
+    }
+
+    public void setAcessoHidrometro(Short acessoHidrometro) {
+        this.acessoHidrometro = acessoHidrometro;
+    }
+
+    public Integer getQuantidadeEconomiasSocial() {
+        return quantidadeEconomiasSocial;
+    }
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial) {
+        this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+    }
+
+    public Integer getQuantidadeEconomiasOutra() {
+        return quantidadeEconomiasOutra;
+    }
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
+        this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
+    }
 }

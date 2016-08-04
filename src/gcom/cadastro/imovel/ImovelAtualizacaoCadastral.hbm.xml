@@ -71,6 +71,15 @@
 		<property name="idArquivoTexto" type="java.lang.Integer" column="txac_id" length="10"/>
 		<property name="indicadorAtualizado" type="java.lang.Integer" column="imac_icatualizado" length="2" not-null="false"/>
 		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1"/>
+        <property name="classeSocial"                type="java.lang.Short"      column="imac_classe_social"                 not-null="false"/>
+        <property name="quantidadeAnimaisDomesticos" type="java.lang.Short"      column="imac_quantidade_animais_domesticos" not-null="false"/>
+        <property name="volumeCisterna"              type="java.math.BigDecimal" column="imac_vol_cisterna"                  not-null="false"/>
+        <property name="volumeCaixaDagua"            type="java.math.BigDecimal" column="imac_vol_cx_dagua"                  not-null="false"/>
+        <property name="tipoUso"                     type="java.lang.Short"      column="imac_tipo_uso"                      not-null="false"/>
+        <property name="acessoHidrometro"            type="java.lang.Short"      column="imac_acesso_hidrometro"             not-null="false"/>
+        <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imac_qtd_economias_social"          not-null="false"/>
+        <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imac_qtd_economias_outra"           not-null="false"/>
+		
 
 	</class>
 </hibernate-mapping>

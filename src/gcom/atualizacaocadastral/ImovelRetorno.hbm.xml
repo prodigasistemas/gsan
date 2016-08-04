@@ -34,6 +34,15 @@
 		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
 		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
 		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
+        <property name="classeSocial"                type="java.lang.Short"      column="imre_classe_social"                 not-null="false"/>
+        <property name="quantidadeAnimaisDomesticos" type="java.lang.Short"      column="imre_quantidade_animais_domesticos" not-null="false"/>
+        <property name="volumeCisterna"              type="java.math.BigDecimal" column="imre_vol_cisterna"                  not-null="false"/>
+        <property name="volumeCaixaDagua"            type="java.math.BigDecimal" column="imre_vol_cx_dagua"                  not-null="false"/>
+        <property name="tipoUso"                     type="java.lang.Short"      column="imre_tipo_uso"                      not-null="false"/>
+        <property name="acessoHidrometro"            type="java.lang.Short"      column="imre_acesso_hidrometro"             not-null="false"/>
+        <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imre_qtd_economias_social"          not-null="false"/>
+        <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imre_qtd_economias_outra"           not-null="false"/>
+		
 
 		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento">
 			<column name="ftab_id"/>

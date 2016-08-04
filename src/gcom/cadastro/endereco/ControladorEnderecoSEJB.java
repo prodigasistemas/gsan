@@ -1,5 +1,17 @@
 package gcom.cadastro.endereco;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
@@ -12,6 +24,7 @@ import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.endereco.bean.AtualizarLogradouroBairroHelper;
 import gcom.cadastro.endereco.bean.AtualizarLogradouroCepHelper;
+import gcom.cadastro.endereco.to.LogradouroTO;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.FiltroBairro;
 import gcom.cadastro.geografico.Municipio;
@@ -42,18 +55,6 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ComparacaoTextoCompleto;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
 
 
 /**
@@ -4961,15 +4962,12 @@ public class ControladorEnderecoSEJB implements SessionBean {
 	 * Obter Logradouro(Tipo + Título + Nome Logradouro)
 	 */
 	
-	public Collection pesquisarLogradouro(Integer idImovel)
-		throws ControladorException {
-		Collection colecaoEndereco = null;
+	public LogradouroTO pesquisarLogradouro(Integer idImovel) throws ControladorException {
 		try {
-			colecaoEndereco = repositorioEndereco.pesquisarLogradouro(idImovel);
+			return repositorioEndereco.pesquisarLogradouro(idImovel);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-		return colecaoEndereco;
 	}
 	
 	/**

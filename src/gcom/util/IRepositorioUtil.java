@@ -14,6 +14,8 @@ public interface IRepositorioUtil {
 
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException;
+	
+	public Collection listar(Class classe) throws ErroRepositorioException;	
 
 	@SuppressWarnings("rawtypes")
 	public int valorMaximo(Class classe, String atributo) throws ErroRepositorioException;

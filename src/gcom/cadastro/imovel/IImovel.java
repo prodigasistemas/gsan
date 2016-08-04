@@ -1,12 +1,13 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.micromedicao.hidrometro.HidrometroCapacidade;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
-
-import java.util.Date;
 
 public interface IImovel {
 	
@@ -167,4 +168,37 @@ public interface IImovel {
 	public void setIdLocalInstalacaoRamal(Integer idRamalLocalInstalacao);
 	
 	public Integer getIdLocalInstalacaoRamal();
+	
+    public Short getClasseSocial() ;
+
+    public void setClasseSocial(Short classeSocial) ;
+
+    public Short getQuantidadeAnimaisDomesticos() ;
+
+    public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) ;
+
+    public BigDecimal getVolumeCisterna() ;
+
+    public void setVolumeCisterna(BigDecimal volumeCisterna) ;
+
+    public BigDecimal getVolumeCaixaDagua() ;
+
+    public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) ;
+
+    public Short getTipoUso() ;
+
+    public void setTipoUso(Short tipoUso) ;
+
+    public Short getAcessoHidrometro();
+
+    public void setAcessoHidrometro(Short acessoHidrometro);
+    
+    public Integer getQuantidadeEconomiasSocial();
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial);
+
+    public Integer getQuantidadeEconomiasOutra();
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra);
+    
 }

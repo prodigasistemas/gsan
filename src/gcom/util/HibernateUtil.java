@@ -1,5 +1,21 @@
 package gcom.util;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.EntityKey;
+import org.hibernate.mapping.Column;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.Property;
+
 import gcom.arrecadacao.ArrecadacaoContabilParametros;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoDadosDiariosAuxiliar;
@@ -175,6 +191,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
 import gcom.batch.Processo;
@@ -283,6 +300,9 @@ import gcom.cadastro.imovel.ImovelSuprimido;
 import gcom.cadastro.imovel.ImovelTipoCobertura;
 import gcom.cadastro.imovel.ImovelTipoConstrucao;
 import gcom.cadastro.imovel.ImovelTipoHabitacao;
+import gcom.cadastro.imovel.ImovelTipoOcupante;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoPropriedade;
 import gcom.cadastro.imovel.PavimentoCalcada;
 import gcom.cadastro.imovel.PavimentoRua;
@@ -757,22 +777,6 @@ import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaLinhaAlteracao;
 import gcom.seguranca.transacao.TabelaLinhaColunaAlteracao;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.MappingException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.EntityKey;
-import org.hibernate.mapping.Column;
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.mapping.Property;
 
 public class HibernateUtil {
 
@@ -1447,6 +1451,10 @@ public class HibernateUtil {
 					.addClass(QuestionarioSatisfacaoCliente.class)
 
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
+					.addClass(ImovelTipoOcupante.class)
+					.addClass(ImovelTipoOcupanteQuantidade.class)
+					.addClass(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral.class)
+					.addClass(ImovelTipoOcupanteQuantidadeRetorno.class)
 			;
 
 			configuration.setInterceptor(Interceptador.getInstancia());

@@ -1,6 +1,7 @@
 package gcom.cadastro.imovel;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -130,7 +131,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private String complementoEndereco;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL,
 			TarifaSocialDadoEconomia.ATRIBUTOS_INSERIR_TARIFA_SOCIAL,
 			TarifaSocialDadoEconomia.ATRIBUTOS_MANTER_TARIFA_SOCIAL})
 	private BigDecimal areaConstruida;
@@ -141,9 +142,8 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
 	private BigDecimal volumeReservatorioInferior;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private BigDecimal volumePiscina;
-
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
 	private Short numeroPontosUtilizacao;
@@ -299,6 +299,32 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Date dataVisitaComercial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short classeSocial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short quantidadeAnimaisDomesticos;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private BigDecimal volumeCisterna;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private BigDecimal volumeCaixaDagua;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short tipoUso;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short acessoHidrometro;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Integer quantidadeEconomiasSocial;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Integer quantidadeEconomiasOutra;
+    
+    private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
 	public final static Short INDICADOR_CONTA_IMOVEL = new Short("2");
@@ -2350,6 +2376,78 @@ public class Imovel extends ObjetoTransacao implements IImovel {
         return ligacaoAguaSituacao.getId().equals(LigacaoAguaSituacao.LIGADO);
     }
     
+    public Short getClasseSocial() {
+        return classeSocial;
+    }
+
+    public void setClasseSocial(Short classeSocial) {
+        this.classeSocial = classeSocial;
+    }
+
+    public Short getQuantidadeAnimaisDomesticos() {
+        return quantidadeAnimaisDomesticos;
+    }
+
+    public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) {
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+    }
+
+    public BigDecimal getVolumeCisterna() {
+        return volumeCisterna;
+    }
+
+    public void setVolumeCisterna(BigDecimal volumeCisterna) {
+        this.volumeCisterna = volumeCisterna;
+    }
+
+    public BigDecimal getVolumeCaixaDagua() {
+        return volumeCaixaDagua;
+    }
+
+    public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) {
+        this.volumeCaixaDagua = volumeCaixaDagua;
+    }
+
+    public Short getTipoUso() {
+        return tipoUso;
+    }
+
+    public void setTipoUso(Short tipoUso) {
+        this.tipoUso = tipoUso;
+    }
+
+    public Short getAcessoHidrometro() {
+        return acessoHidrometro;
+    }
+
+    public void setAcessoHidrometro(Short acessoHidrometro) {
+        this.acessoHidrometro = acessoHidrometro;
+    }
+
+    public Collection<ImovelTipoOcupanteQuantidade> getQuantidadesOcupantes() {
+        return quantidadesOcupantes;
+    }
+
+    public void setQuantidadesOcupantes(Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes) {
+        this.quantidadesOcupantes = quantidadesOcupantes;
+    }
+
+    public Integer getQuantidadeEconomiasSocial() {
+        return quantidadeEconomiasSocial;
+    }
+
+    public void setQuantidadeEconomiasSocial(Integer quantidadeEconomiasSocial) {
+        this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+    }
+
+    public Integer getQuantidadeEconomiasOutra() {
+        return quantidadeEconomiasOutra;
+    }
+
+    public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
+        this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
+    }
+
     public boolean useNovaChecagemGerarConta(){
         int [] ids = new int[]{7814933,7814950
          ,7815085,7815093,7816723,7814852,7814836,7815735,7815530,7815549
