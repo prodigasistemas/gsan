@@ -52139,7 +52139,7 @@ public class ControladorArrecadacao implements SessionBean {
 			credito.setQuadra(imovel.getQuadra());
 			credito.setLocalidade(imovel.getLocalidade());
 			credito.setNumeroPrestacaoCredito((short) 1);
-			credito.setNumeroPrestacaoRealizada((short)1);
+			credito.setNumeroPrestacaoRealizada((short)0);
 			credito.setValorResidualMesAnterior(new BigDecimal(0.00));
 			credito.setValorCredito(pagamento.getValorPagamento());
 			credito.setGeracaoCredito(new Date());
