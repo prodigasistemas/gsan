@@ -7723,11 +7723,7 @@ public class ControladorCadastro extends ControladorComum {
             if (residencial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
-            } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
-            }
-            
-            if (comercial != null) {	
+            } else if (comercial != null) {	
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
             } else {
