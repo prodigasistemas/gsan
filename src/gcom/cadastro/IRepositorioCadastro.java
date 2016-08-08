@@ -1,10 +1,17 @@
 package gcom.cadastro;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
@@ -30,11 +37,6 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAgua
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.util.ErroRepositorioException;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface IRepositorioCadastro {
 	
@@ -129,7 +131,7 @@ public interface IRepositorioCadastro {
 	public Collection pesquisarSetorComercialPorQualidadeAgua(int tipoArgumento, BigDecimal indiceInicial, 
 		BigDecimal indiceFinal, Integer anoMesReferencia) throws ErroRepositorioException ;
 	
-	public Object[] obterImovelGeracaoTabelasTemporarias(Integer idImovel) throws ErroRepositorioException;
+	public ImovelAtualizacaoCadastral obterImovelGeracaoTabelasTemporarias(Integer idImovel) throws ErroRepositorioException;
 
  	@SuppressWarnings("rawtypes")
 	public Collection obterImovelSubcategoriaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
@@ -397,4 +399,11 @@ public interface IRepositorioCadastro {
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
 	
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> obterQuantidadesTiposOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+
+    public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> recuperarTipoOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+    
+    public void removerQuantidadesOcupantesImovel(Integer idImovel) throws ErroRepositorioException;
+
 }

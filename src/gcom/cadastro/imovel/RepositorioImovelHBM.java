@@ -31143,7 +31143,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
 					.setInteger("idImovel", idImovel).uniqueResult();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

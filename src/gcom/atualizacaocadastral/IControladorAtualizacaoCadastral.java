@@ -4,6 +4,7 @@ import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCada
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -52,4 +53,6 @@ public interface IControladorAtualizacaoCadastral {
 	public Collection<RelatorioRelacaoImoveisRotaBean> pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String localidade, String setorComercial, String rota) throws ControladorException;
 
 	public boolean verificarPermissaoAprovarImovel(Integer idUsuarioLogado, Integer idImovel);
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ControladorException;
 }

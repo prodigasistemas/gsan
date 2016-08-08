@@ -616,7 +616,6 @@ public class ControladorUtilSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -630,5 +629,14 @@ public class ControladorUtilSEJB implements SessionBean {
 		
 		return caminho.getValor() + "/" + modulo + "/";
 
+	}
+	
+	public Collection listar(Class tipo) throws ControladorException{
+        try {
+            return repositorioUtil.listar(tipo);
+        } catch (ErroRepositorioException ex) {
+            sessionContext.setRollbackOnly();
+            throw new ControladorException("erro.sistema", ex);
+        }
 	}
 }

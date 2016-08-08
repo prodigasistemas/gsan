@@ -1,7 +1,18 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import org.apache.commons.lang.StringUtils;
+
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
@@ -25,20 +36,14 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupante;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.apache.commons.lang.StringUtils;
 
 public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -102,6 +107,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		salvarRamoAtividade();
 		salvarImovelSubcategoria();
+		salvarImovelQuantidadesOcupantes();
 	}
 	
 	private void salvarRamoAtividade() throws Exception {
@@ -136,6 +142,31 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelSubcategoriaAtualizacaoCadastral, subcategoria, matriculaImovel, tipoOperacao);
 		}
+	}
+	
+	private void salvarImovelQuantidadesOcupantes() throws ControladorException {
+	    Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> tiposImovel = controladorAtualizacaoCadastral.pesquisarOcupantesAtualizacaoCadastral(matriculaImovel);
+	    
+	    Map<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> mapTiposImovel = new HashMap<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>();
+	    
+	    for(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral tipo : tiposImovel){
+	        mapTiposImovel.put(tipo.getTipoOcupante().getId(), tipo);
+	    }
+	    
+	    Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
+	    for (ImovelTipoOcupante tipo : todosTipos) {
+	        Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante" + tipo.getDescricaoSemCaracteresEspeciais()));
+	        
+	        ImovelTipoOcupanteQuantidadeAtualizacaoCadastral valorBase = mapTiposImovel.get(tipo.getId());
+	        if (valorBase == null){
+	            valorBase = new ImovelTipoOcupanteQuantidadeAtualizacaoCadastral(0);
+	        }
+	        ImovelTipoOcupanteQuantidadeAtualizacaoCadastral valorTxt  = new ImovelTipoOcupanteQuantidadeAtualizacaoCadastral();
+	        valorTxt.setQuantidade(qtd);
+	        valorTxt.setTipoOcupante(tipo);
+	        
+	        salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, valorBase, valorTxt, matriculaImovel, tipoOperacao);
+	    }
 	}
 	
 	private List<ImovelSubcategoriaAtualizacaoCadastral> getImovelSubcategorias() {

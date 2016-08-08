@@ -100,4 +100,6 @@ public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 	public Object inserirComCommit(Object objeto) throws ControladorException;
 	
 	public String getCaminhoDownloadArquivos(String modulo);
+	
+	public Collection listar(Class tipo) throws ControladorException;
 }

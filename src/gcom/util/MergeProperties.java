@@ -41,8 +41,6 @@ public class MergeProperties {
 					if (metodo.getParameterTypes().length != 0)
 						continue;
 					Object valor = metodo.invoke(origem);
-					if (valor == null)
-						continue;
 					// Captura o metodo SET de acordo com o tipo de retorno do metodo GET
 					Method metodoSET = destino.getClass().getMethod("set" + nomeMetodoSemGet, metodo.getReturnType());
 					if (metodo != null)
