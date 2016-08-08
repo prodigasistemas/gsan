@@ -7689,7 +7689,7 @@ public class ControladorCadastro extends ControladorComum {
 			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteUsuario.getPessoaSexo() != null) {
+			if (clienteUsuario.getPessoaSexo() != null && clienteUsuario.getPessoaSexo().getId() != null) {
 				arquivoTextoRegistroTipoCliente.append(clienteUsuario.getPessoaSexo().getId());
 			} else {
 				arquivoTextoRegistroTipoCliente.append(" ");
@@ -7723,7 +7723,11 @@ public class ControladorCadastro extends ControladorComum {
             if (residencial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
-            } else if (comercial != null) {
+            } else {
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+            }
+            
+            if (comercial != null) {	
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
             } else {
