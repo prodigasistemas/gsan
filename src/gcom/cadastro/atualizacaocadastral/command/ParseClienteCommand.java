@@ -5,7 +5,9 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.cliente.IClienteFone;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.IRepositorioImovel;
+import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 import gcom.util.exception.MatriculaProprietarioException;
 import gcom.util.exception.MatriculaResponsavelException;
@@ -13,6 +15,7 @@ import gcom.util.exception.MatriculaUsuarioException;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
@@ -23,11 +26,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 	
 	public ParseClienteCommand(ParserUtil parser,
+			ControladorUtilLocal controladorUtil,
 			IRepositorioImovel repositorioImovel,
 			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
 
 		super(parser);
 
+		this.controladorUtil = controladorUtil;
 		this.repositorioImovel = repositorioImovel;
 		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
@@ -135,6 +140,11 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String tipoLogradouroProprietario = parser.obterDadoParser(2).trim();
 			linha.put("idTipoLogradouroProprietario", tipoLogradouroProprietario);
+			
+			if (StringUtils.isNotEmpty(tipoLogradouroProprietario) && StringUtils.isNumeric(tipoLogradouroProprietario) && Integer.valueOf(tipoLogradouroProprietario) > 0){
+				LogradouroTipo tipo = (LogradouroTipo) controladorUtil.obterPorId(LogradouroTipo.class, Integer.valueOf(tipoLogradouroProprietario));
+				linha.put("dsTipoLogradouroProprietario", tipo.getDescricao());
+			}
 
 			String logradouroProprietario = parser.obterDadoParser(40).trim();
 			linha.put("logradouroProprietario", logradouroProprietario);
@@ -192,6 +202,11 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String tipoLogradouroResponsavel = parser.obterDadoParser(2).trim();
 			linha.put("idTipoLogradouroResponsavel", tipoLogradouroResponsavel);
 
+			if (StringUtils.isNotEmpty(tipoLogradouroResponsavel) && StringUtils.isNumeric(tipoLogradouroResponsavel) && Integer.valueOf(tipoLogradouroResponsavel) > 0){
+				LogradouroTipo tipo = (LogradouroTipo) controladorUtil.obterPorId(LogradouroTipo.class, Integer.valueOf(tipoLogradouroResponsavel));
+				linha.put("dsTipoLogradouroResponsavel", tipo.getDescricao());
+			}
+			
 			String logradouroResponsavel = parser.obterDadoParser(40).trim();
 			linha.put("logradouroResponsavel", logradouroResponsavel);
 

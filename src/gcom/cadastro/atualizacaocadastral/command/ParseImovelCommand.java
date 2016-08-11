@@ -2,6 +2,7 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
@@ -45,7 +46,16 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("numeroCelpa",                   parser.obterDadoParser(20).trim());
 			linha.put("numeroPontosUteis",             parser.obterDadoParser(5).trim());
 			linha.put("numeroOcupantes",               parser.obterDadoParser(5).trim());
-			linha.put("idTipoLogradouroImovel",        parser.obterDadoParser(2).trim());
+			
+			String idTipoLogradouroImovel = parser.obterDadoParser(2).trim();
+			
+			linha.put("idTipoLogradouroImovel",        idTipoLogradouroImovel);
+			
+			if (StringUtils.isNotEmpty(idTipoLogradouroImovel) && StringUtils.isNumeric(idTipoLogradouroImovel) && Integer.valueOf(idTipoLogradouroImovel) > 0){
+				LogradouroTipo tipo = (LogradouroTipo) controladorUtil.obterPorId(LogradouroTipo.class, Integer.valueOf(idTipoLogradouroImovel));
+				linha.put("dsTipoLogradouroImovel", tipo.getDescricao());
+			}
+			
 			linha.put("logradouroImovel",              parser.obterDadoParser(40).trim());
 			linha.put("numeroImovel",                  parser.obterDadoParser(5).trim());
 			linha.put("complementoImovel",             parser.obterDadoParser(25).trim());

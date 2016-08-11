@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IRepositorioUtil {
+	
+	public Object obterPorId(Class classe, Integer id) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException;

@@ -43,6 +43,20 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 		return instancia;
 	}
+	
+	public Object obterPorId(Class classe, Integer id) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			Query query = session.createQuery("select e from " + classe.getName() + " e where e.id = " + id);
+		
+			return query.uniqueResult(); 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter " + classe.getName() + " pelo id");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException {

@@ -59,6 +59,15 @@ public class ControladorUtilSEJB implements SessionBean {
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
+	
+	public Object obterPorId(Class classe, Integer id) throws ControladorException{
+		try {
+			return repositorioUtil.obterPorId(classe, id);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}		
+	}
 
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ControladorException {
