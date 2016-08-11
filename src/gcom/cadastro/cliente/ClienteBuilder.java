@@ -38,6 +38,8 @@ public abstract class ClienteBuilder {
 		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rg" + tipoCliente));
 
 		clienteTxt.setUnidadeFederacao(getUnidadeFederecao(atualizacaoCadastralImovel.getLinhaCliente("ufRg" + tipoCliente)));
+		
+		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRg" + tipoCliente));
 
 		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexo" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)) {

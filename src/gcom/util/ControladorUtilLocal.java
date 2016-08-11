@@ -16,6 +16,8 @@ import java.util.Map;
 
 public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 
+	public Object obterPorId(Class classe, Integer id) throws ControladorException;
+	
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ControladorException;
 

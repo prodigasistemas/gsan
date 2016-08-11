@@ -6919,6 +6919,7 @@ public class ControladorCadastro extends ControladorComum {
 
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(
 							parserConteudo,
+							getControladorUtil(),
 							repositorioImovel,
 							getControladorAtualizacaoCadastral());
 					command.execute(atualizacao);
