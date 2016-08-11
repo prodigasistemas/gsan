@@ -4,6 +4,7 @@ import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ParserUtil;
 import gcom.util.exception.MatriculaProprietarioException;
@@ -87,10 +88,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String sexoUsuario = parser.obterDadoParser(1).trim();
 			linha.put("sexoUsuario", sexoUsuario);
 
-			String telefoneUsuario = parser.obterDadoParser(11).trim();
+			String telefoneUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneUsuario", telefoneUsuario);
 
-			String celularUsuario = parser.obterDadoParser(11).trim();
+			String celularUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularUsuario", celularUsuario);
 
 			String emailUsuario = parser.obterDadoParser(30).trim();
@@ -123,10 +124,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String sexoProprietario = parser.obterDadoParser(1).trim();
 			linha.put("sexoProprietario", sexoProprietario);
 
-			String telefoneProprietario = parser.obterDadoParser(11).trim();
+			String telefoneProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneProprietario", telefoneProprietario);
 
-			String celularProprietario = parser.obterDadoParser(11).trim();
+			String celularProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularProprietario", celularProprietario);
 
 			String emailProprietario = parser.obterDadoParser(30).trim();
@@ -179,10 +180,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String sexoResponsavel = parser.obterDadoParser(1).trim();
 			linha.put("sexoResponsavel", sexoResponsavel);
 
-			String telefoneResponsavel = parser.obterDadoParser(11).trim();
+			String telefoneResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneResponsavel", telefoneResponsavel);
 
-			String celularResponsavel = parser.obterDadoParser(11).trim();
+			String celularResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularResponsavel", celularResponsavel);
 
 			String emailResponsavel = parser.obterDadoParser(30).trim();

@@ -25,6 +25,7 @@ import gcom.cadastro.cliente.ClienteUsuarioBuilder;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
@@ -271,10 +272,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, matriculaImovel, tipoOperacao);
 	}
 
-	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
+	private void salvarClienteFoneAtualizacaoCadastral(String telefone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
 		
-		if (!tipoClientFone.trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(tipoClientFone, foneTipo, matriculaCliente);
+		if (!telefone.trim().equals("")) {
+			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(telefone, foneTipo, matriculaCliente);
 
 			try {
 				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
@@ -298,7 +299,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() == 10) {
+		if (tipoClientFone.length() == IClienteFone.TAMANHO_TELEFONE) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {
