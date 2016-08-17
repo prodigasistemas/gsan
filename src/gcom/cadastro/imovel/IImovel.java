@@ -177,6 +177,14 @@ public interface IImovel {
 
     public void setQuantidadeAnimaisDomesticos(Short quantidadeAnimaisDomesticos) ;
 
+    public BigDecimal getVolumePiscina() ;
+
+    public void setVolumePiscina(BigDecimal volumePiscina) ;
+
+    public BigDecimal getAreaConstruida() ;
+
+    public void setAreaConstruida(BigDecimal areaConstruida) ;
+
     public BigDecimal getVolumeCisterna() ;
 
     public void setVolumeCisterna(BigDecimal volumeCisterna) ;

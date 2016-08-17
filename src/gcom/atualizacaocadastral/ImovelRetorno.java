@@ -64,6 +64,10 @@ public class ImovelRetorno implements IImovel{
     
     private Short quantidadeAnimaisDomesticos;
     
+	private BigDecimal areaConstruida;
+
+	private BigDecimal volumePiscina;
+    
     private BigDecimal volumeCisterna;
     
     private BigDecimal volumeCaixaDagua;
@@ -117,6 +121,8 @@ public class ImovelRetorno implements IImovel{
 		this.tipoEntrevistado = imovelAtualizacaoCadastral.getTipoEntrevistado();
 		this.classeSocial                 = imovelAtualizacaoCadastral.getClasseSocial();
 		this.quantidadeAnimaisDomesticos  = imovelAtualizacaoCadastral.getQuantidadeAnimaisDomesticos();
+		this.areaConstruida               = imovelAtualizacaoCadastral.getAreaConstruida();
+		this.volumePiscina                = imovelAtualizacaoCadastral.getVolumePiscina();
 		this.volumeCisterna               = imovelAtualizacaoCadastral.getVolumeCisterna();
 		this.volumeCaixaDagua             = imovelAtualizacaoCadastral.getVolumeCaixaDagua();
 		this.tipoUso                      = imovelAtualizacaoCadastral.getTipoUso();
@@ -472,7 +478,23 @@ public class ImovelRetorno implements IImovel{
         this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
     }
 
-    public BigDecimal getVolumeCisterna() {
+    public BigDecimal getAreaConstruida() {
+		return areaConstruida;
+	}
+
+	public void setAreaConstruida(BigDecimal areaConstruida) {
+		this.areaConstruida = areaConstruida;
+	}
+
+	public BigDecimal getVolumePiscina() {
+		return volumePiscina;
+	}
+
+	public void setVolumePiscina(BigDecimal volumePiscina) {
+		this.volumePiscina = volumePiscina;
+	}
+
+	public BigDecimal getVolumeCisterna() {
         return volumeCisterna;
     }
 

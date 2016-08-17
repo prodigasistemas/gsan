@@ -85,12 +85,19 @@ public class ImovelAtualizacaoCadastralBuilder {
 		    imovelAtualizacaoCadastral.setQuantidadeAnimaisDomesticos(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos")));
 		}
 		
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volumeCisterna"))){
-		    imovelAtualizacaoCadastral.setVolumeCisterna(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volumeCisterna")));
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida"))){
+		    imovelAtualizacaoCadastral.setAreaConstruida(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida")));
+		}
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina"))){
+		    imovelAtualizacaoCadastral.setVolumePiscina(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina")));
+		}
+
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna"))){
+		    imovelAtualizacaoCadastral.setVolumeCisterna(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna")));
 		}
 		
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volumeCaixaDagua"))){
-		    imovelAtualizacaoCadastral.setVolumeCaixaDagua(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volumeCaixaDagua")));
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua"))){
+		    imovelAtualizacaoCadastral.setVolumeCaixaDagua(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua")));
 		}
 		
 		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("tipoUso"))){

@@ -1,6 +1,7 @@
 package gcom.util;
 
 import gcom.cadastro.DbVersaoBase;
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
@@ -28,8 +29,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.hibernate.exception.GenericJDBCException;
+import org.jboss.logging.Logger;
 
 public class RepositorioUtilHBM implements IRepositorioUtil {
+
+	private Logger logger = Logger.getLogger(RepositorioUtilHBM.class);
 
 	private static RepositorioUtilHBM instancia;
 
@@ -70,7 +74,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -86,7 +89,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
             return (Collection) query.list();
         } catch (HibernateException e) {
-            e.printStackTrace();
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
             HibernateUtil.closeSession(session);
@@ -130,7 +132,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			}
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -148,7 +149,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -180,14 +180,8 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			session.flush();
 
 			return retorno;
-		} catch (GenericJDBCException ex) {
-			ex.printStackTrace();
-			throw new ErroRepositorioException(ex, "Erro no Hibernate");
-		} catch (CallbackException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException(e, e.getMessage());
-		} catch (HibernateException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Erro ao inserir objeto", e);
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
