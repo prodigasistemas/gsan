@@ -181,6 +181,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
                     tabelaAtualizacaoCadastral.setIdRegistroAlterado((long) matriculaImovel);
                     tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
+                    tabelaAtualizacaoCadastral.setComplemento(txt.getTipoOcupante().getDescricao());
                     tabela.setId(Tabela.IMOVEL_QUANTIDADE_TIPO_OCUPANTE_ATUALIZACAO_CADASTRAL);
                     tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
                 }
