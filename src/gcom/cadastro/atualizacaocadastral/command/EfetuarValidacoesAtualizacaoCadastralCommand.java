@@ -4,7 +4,6 @@ import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
@@ -25,8 +24,6 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.util.Map;
 
 public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -69,8 +66,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			validarLinhaImovel();
 			validarLinhaRamoAtividade();
 			validarLinhaMedidor();
-			
-			atualizacao.setImovelSemOcorrencias(true);
 		}
 	}
 
