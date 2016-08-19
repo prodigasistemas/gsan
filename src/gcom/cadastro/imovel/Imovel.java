@@ -324,6 +324,9 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Integer quantidadeEconomiasOutra;
     
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
+    private Short percentualAbastecimento;    
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
@@ -2448,7 +2451,15 @@ public class Imovel extends ObjetoTransacao implements IImovel {
         this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
     }
 
-    public boolean useNovaChecagemGerarConta(){
+    public Short getPercentualAbastecimento() {
+		return percentualAbastecimento;
+	}
+
+	public void setPercentualAbastecimento(Short percentualAbastecimento) {
+		this.percentualAbastecimento = percentualAbastecimento;
+	}
+
+	public boolean useNovaChecagemGerarConta(){
         int [] ids = new int[]{7814933,7814950
          ,7815085,7815093,7816723,7814852,7814836,7815735,7815530,7815549
          ,7815557,7814259,7815611,7815654,7814291,7814321,7815026,7814410

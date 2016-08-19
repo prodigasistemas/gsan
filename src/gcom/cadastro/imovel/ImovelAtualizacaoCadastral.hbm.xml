@@ -79,6 +79,7 @@
         <property name="acessoHidrometro"            type="java.lang.Short"      column="imac_acesso_hidrometro"             not-null="false"/>
         <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imac_qtd_economias_social"          not-null="false"/>
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imac_qtd_economias_outra"           not-null="false"/>
+        <property name="percentualAbastecimento"     type="java.lang.Short"      column="imac_percentual_abastecimento"      not-null="false"/>
 		
 
 	</class>

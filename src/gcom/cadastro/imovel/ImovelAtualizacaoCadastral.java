@@ -222,8 +222,10 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     private Integer quantidadeEconomiasSocial;     
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer quantidadeEconomiasOutra;     
+    private Integer quantidadeEconomiasOutra;
     
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Short percentualAbastecimento;
 		
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
@@ -267,7 +269,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Short tipoUso,
 			Short acessoHidrometro,
 			Integer quantidadeEconomiasSocial,
-			Integer quantidadeEconomiasOutra) {
+			Integer quantidadeEconomiasOutra,
+			Short percentualAbastecimento) {
 		this.id                         = idImovel;
 	    this.idImovel                   = idImovel;
 	    this.idLocalidade               = idLocalidade;
@@ -312,6 +315,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
         this.acessoHidrometro            = acessoHidrometro;
         this.quantidadeEconomiasSocial   = quantidadeEconomiasSocial;
         this.quantidadeEconomiasOutra    = quantidadeEconomiasOutra;
+        this.percentualAbastecimento     = percentualAbastecimento;
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -1097,4 +1101,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
         this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
     }
+
+	public Short getPercentualAbastecimento() {
+		return percentualAbastecimento;
+	}
+
+	public void setPercentualAbastecimento(Short percentualAbastecimento) {
+		this.percentualAbastecimento = percentualAbastecimento;
+	}
 }

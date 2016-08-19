@@ -208,5 +208,8 @@ public interface IImovel {
     public Integer getQuantidadeEconomiasOutra();
 
     public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra);
-    
+
+    public Short getPercentualAbastecimento();
+
+	public void setPercentualAbastecimento(Short percentualAbastecimento);    
 }
