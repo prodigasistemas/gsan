@@ -7014,7 +7014,7 @@ public class ControladorCadastro extends ControladorComum {
 							repositorioClienteImovel);
 					command.execute(atualizacao);
 					
-					if (atualizacao.isImovelValidado()) {
+					if (atualizacao.isImovelSemOcorrencias()) {
 						AbstractAtualizacaoCadastralCommand retornoCommand = new MontarObjetosRetornoCommand(
 								parserConteudo,
 								repositorioCadastro, 

@@ -70,7 +70,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			validarLinhaRamoAtividade();
 			validarLinhaMedidor();
 			
-			atualizacao.setImovelValidado(true);
+			atualizacao.setImovelSemOcorrencias(true);
 		}
 	}
 
