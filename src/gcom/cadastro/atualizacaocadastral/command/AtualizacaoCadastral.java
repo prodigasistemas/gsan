@@ -21,8 +21,6 @@ public class AtualizacaoCadastral {
 	
 	private int totalImoveis = 0;
 	
-	private boolean imovelSemOcorrencias = false;
-	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
 	}
@@ -41,7 +39,6 @@ public class AtualizacaoCadastral {
 	
 	public AtualizacaoCadastralImovel novaAtualizacaoImovel(){
 		validacaoLiberada = false;
-		imovelSemOcorrencias = false;
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
 		imoveisComErro.add(imovel);
@@ -91,13 +88,5 @@ public class AtualizacaoCadastral {
 
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
-	}
-
-	public boolean isImovelSemOcorrencias() {
-		return imovelSemOcorrencias;
-	}
-
-	public void setImovelSemOcorrencias(boolean imovelSemOcorrencias) {
-		this.imovelSemOcorrencias = imovelSemOcorrencias;
 	}
 }
