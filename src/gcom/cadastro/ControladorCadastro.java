@@ -7020,19 +7020,17 @@ public class ControladorCadastro extends ControladorComum {
 							repositorioClienteImovel);
 					command.execute(atualizacao);
 					
-					if (atualizacao.isImovelValidado()) {
-						AbstractAtualizacaoCadastralCommand retornoCommand = new MontarObjetosRetornoCommand(
-								parserConteudo,
-								repositorioCadastro, 
-								getControladorUtil(),
-								getControladorTransacao(),
-								repositorioImovel,
-								getControladorEndereco(), 
-								getControladorAtualizacaoCadastral(),
-								getControladorCliente(),
-								repositorioClienteImovel);
-						retornoCommand.execute(atualizacao);
-					}
+					AbstractAtualizacaoCadastralCommand retornoCommand = new MontarObjetosRetornoCommand(
+							parserConteudo,
+							repositorioCadastro, 
+							getControladorUtil(),
+							getControladorTransacao(),
+							repositorioImovel,
+							getControladorEndereco(), 
+							getControladorAtualizacaoCadastral(),
+							getControladorCliente(),
+							repositorioClienteImovel);
+					retornoCommand.execute(atualizacao);
 					
 					atualizacao.excluirImovelSemErros();
 				}
