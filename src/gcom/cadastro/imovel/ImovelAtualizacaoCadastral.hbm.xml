@@ -25,7 +25,7 @@
 		<property name="idLigacaoAguaSituacao" type="java.lang.Integer" column="last_id"/>
 		<property name="idLigacaoEsgotoSituacao" type="java.lang.Integer" column="lest_id"/>
 		<property name="idImovelPerfil" type="java.lang.Integer" column="iper_id"/>
-		<property name="volumePiscina" type="java.math.BigDecimal" column="imac_vol_piscina" length="5"/>
+		<property name="volumePiscina" type="java.math.BigDecimal" column="imac_vopiscina" length="5"/>
 		<property name="idPocoTipo" type="java.lang.Integer" column="poco_id"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
 		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
@@ -79,6 +79,7 @@
         <property name="acessoHidrometro"            type="java.lang.Short"      column="imac_acesso_hidrometro"             not-null="false"/>
         <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imac_qtd_economias_social"          not-null="false"/>
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imac_qtd_economias_outra"           not-null="false"/>
+        <property name="percentualAbastecimento"     type="java.lang.Short"      column="imac_percentual_abastecimento"      not-null="false"/>
 		
 
 	</class>

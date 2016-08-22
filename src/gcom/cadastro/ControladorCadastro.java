@@ -6986,13 +6986,7 @@ public class ControladorCadastro extends ControladorComum {
 						atualizacao.liberarValidacao();
 					}
 				}
-				
-				if (atualizacao.getImovelAtual().getLinhaImovel() != null
-						&& !atualizacao.getImovelAtual().getLinhaImovel().isEmpty()
-						&& atualizacao.getImovelAtual().getLinhaImovel().get("matricula").equals("6794297")) {
-					System.out.println("Achei um imovel COM retorno...");
-				}
-				
+								
 				if (atualizacao.validacaoLiberada()) {
 					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand(
 								parserConteudo,
@@ -7531,6 +7525,7 @@ public class ControladorCadastro extends ControladorComum {
         
         arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial()));
         arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra()));
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getPercentualAbastecimento()));
         
 		arquivoTextoRegistroTipoImovel.append(System.getProperty("line.separator"));
 

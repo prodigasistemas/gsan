@@ -78,7 +78,9 @@ public class ImovelRetorno implements IImovel{
     
     private Integer quantidadeEconomiasSocial;     
     
-    private Integer quantidadeEconomiasOutra;         
+    private Integer quantidadeEconomiasOutra;
+    
+    private Short percentualAbastecimento;
 
 	public ImovelRetorno () {
 	}
@@ -129,6 +131,7 @@ public class ImovelRetorno implements IImovel{
 		this.acessoHidrometro             = imovelAtualizacaoCadastral.getAcessoHidrometro();
 		this.quantidadeEconomiasSocial    = imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial();
 		this.quantidadeEconomiasOutra     = imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra();
+		this.percentualAbastecimento      = imovelAtualizacaoCadastral.getPercentualAbastecimento();
 	}
 
 	public Integer getId() {
@@ -541,4 +544,12 @@ public class ImovelRetorno implements IImovel{
     public void setQuantidadeEconomiasOutra(Integer quantidadeEconomiasOutra) {
         this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
     }
+
+	public Short getPercentualAbastecimento() {
+		return percentualAbastecimento;
+	}
+
+	public void setPercentualAbastecimento(Short percentualAbastecimento) {
+		this.percentualAbastecimento = percentualAbastecimento;
+	}
 }

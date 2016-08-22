@@ -204,6 +204,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		
 		getControladorUtil().atualizar(imovel);
 		
+		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
+		
 		inserirImovelImagens(imovel.getId());
 	}
 	

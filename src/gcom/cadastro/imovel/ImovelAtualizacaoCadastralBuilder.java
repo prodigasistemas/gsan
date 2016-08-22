@@ -115,7 +115,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra"))){
 		    imovelAtualizacaoCadastral.setQuantidadeEconomiasOutra(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra")));
 		}
-
+		
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
 		imovelAtualizacaoCadastral.setIdLigacaoEsgotoSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")));

@@ -59,6 +59,7 @@
         <property name="acessoHidrometro"            type="java.lang.Short"      column="imov_acesso_hidrometro"             not-null="false"/>
         <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imov_qtd_economias_social"          not-null="false"/>
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imov_qtd_economias_outra"           not-null="false"/>
+        <property name="percentualAbastecimento"     type="java.lang.Short"      column="imov_percentual_abastecimento"      not-null="false"/>
 		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->
