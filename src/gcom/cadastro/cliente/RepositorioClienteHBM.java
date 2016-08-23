@@ -1642,7 +1642,6 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					   " where clienteImovel.imov_id = :idImovel " +
 					   " and clienteImovel.crtp_id = :idClienteRelacaoTipo " +
 					   " and clienteImovel.clim_dtrelacaofim is null" +
-					   " and cled_icenderecocorrespondencia = 1"+
 					   " order by clie_cdclienteresponsavel desc";
 			
 				
