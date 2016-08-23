@@ -64,19 +64,16 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
         	clientesImoveis = (String[]) sessao.getAttribute("arrayClientesImoveis");
         }
 
-        Imovel imovel = null;
 
         ActionForward retorno = actionMapping.findForward("atualizarImovelCliente");
-            imovel = (Imovel) sessao.getAttribute("imovelAtualizacao");
+        
+        Imovel imovel = (Imovel) sessao.getAttribute("imovelAtualizacao");
  
         Collection colecaoClientesImoveisFimRelacao = new ArrayList();
             
         // instancia cliente
-        ClienteImovel clienteImovel = null;
-        Collection colecaoClientesImoveisRemovidos = null;
-        if(sessao.getAttribute("colecaoClientesImoveisRemovidos") == null ){
-        	colecaoClientesImoveisRemovidos = new ArrayList();	
-        }else{
+        Collection colecaoClientesImoveisRemovidos = new ArrayList();
+        if(sessao.getAttribute("colecaoClientesImoveisRemovidos") != null ){
         	colecaoClientesImoveisRemovidos = (Collection) sessao.getAttribute("colecaoClientesImoveisRemovidos");
         }
         
@@ -86,7 +83,7 @@ public class RemoverAtualizarImovelClienteAction extends GcomAction {
             Iterator clienteImovelIterator = imovelClientesNovos.iterator();
 
             while (clienteImovelIterator.hasNext()) {
-                clienteImovel = (ClienteImovel) clienteImovelIterator.next();
+            	ClienteImovel clienteImovel = (ClienteImovel) clienteImovelIterator.next();
                 //Verifica se pode remover o cliente.
                           
                 for (int i = 0; i < clientesImoveis.length; i++) {
