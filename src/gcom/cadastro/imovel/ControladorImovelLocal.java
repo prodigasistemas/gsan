@@ -3458,47 +3458,13 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) throws ControladorException;
 	
-	/**
-	 * Obtém a principal categoria
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 13/09/2011
-	 * 
-	 * @param colecaoImovelSubCategorias
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Categoria obterPrincipalCategoria(Collection colecaoImovelSubCategorias)
-		throws ControladorException;
+	public Categoria obterPrincipalCategoria(Collection colecaoImovelSubCategorias)	throws ControladorException;
 	
-	/**
-	 * Seleciona a Subcategoria principal de uma categoria
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 13/09/2011 
-	 * 
-	 * @param idCategoria
-	 * @return
-	 * @throws ControladorException
-	 */
-	public ImovelSubcategoria obterPrincipalSubcategoria( Integer idCategoria, Collection colecaoImovelSubCategorias )
-		throws ControladorException;
+	public ImovelSubcategoria obterPrincipalSubcategoria( Integer idCategoria, Collection colecaoImovelSubCategorias ) throws ControladorException;
 	
-	public void atualizarImovel(Imovel imovel) throws ControladorException;
-
-	/**
-	 * Geração da Rota para recadastramento.
-	 * 
-	 * @author Wellington
-	 * @return Coleção de RamoAtividade
-	 * @exception ErroRepositorioException
-	 *                Erro no hibernate
-	 */
-	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
-		throws ControladorException;
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)	throws ControladorException;
 	
-	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(
-			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
+	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(Integer idArquivoTexto, Integer idImovel) throws ControladorException;
 	
     public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException;
     

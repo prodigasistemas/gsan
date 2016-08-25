@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="gcom.cadastro.imovel.ImovelHistorico" table="cadastro.imovel_historico">
+    <id name="id" type="java.lang.Integer" column="imhi_id">
+		<generator class="sequence">
+			<param name="sequence">cadastro.seq_imovel_historico</param>
+		</generator>
+    </id>
+    <property name="lote"                               type="short"                column="imhi_nnlote"                        not-null="true"  length="2"/>
+    <property name="subLote"                            type="short"                column="imhi_nnsublote"                     not-null="true"  length="2"/>
+    <property name="testadaLote"                        type="short"                column="imhi_nntestadalote"                                  length="2"/>
+    <property name="numeroImovel"                       type="java.lang.String"     column="imhi_nnimovel"                      not-null="true"  length="5"/>
+    <property name="nomeImovel"                         type="java.lang.String"     column="imhi_nmimovel"                      not-null="false" length="30"/>
+    <property name="complementoEndereco"                type="java.lang.String"     column="imhi_dscomplementoendereco"                          length="25"/>
+    <property name="informacoesComplementares"          type="java.lang.String"     column="imhi_dsinformacaocomplementar"                       length="750"/>
+    <property name="areaConstruida"                     type="java.math.BigDecimal" column="imhi_nnareaconstruida"                               length="10"/>
+    <property name="indicadorImovelCondominio"          type="java.lang.Short"      column="imhi_icimovelcondominio"            not-null="true"  length="2"/>
+    <property name="volumeReservatorioSuperior"         type="java.math.BigDecimal" column="imhi_voreservatoriosuperior"                         length="5"/>
+    <property name="volumeReservatorioInferior"         type="java.math.BigDecimal" column="imhi_voreservatorioinferior"                         length="5"/>
+    <property name="volumePiscina"                      type="java.math.BigDecimal" column="imhi_vol_piscina"                                    length="5"/>
+    <property name="dataSupressaoParcial"               type="java.sql.Date"        column="imhi_dtsupressaoparcial"                             length="4"/>
+    <property name="dataInfracao"                       type="java.sql.Date"        column="imhi_dtinfracao"                                     length="4"/>
+    <property name="numeroPontosUtilizacao"             type="java.lang.Short"      column="imhi_nnpontosutilizacao"                             length="2"/>
+    <property name="numeroMorador"                      type="java.lang.Short"      column="imhi_nnmorador"                                      length="2"/>
+    <property name="numeroRetificacao"                  type="java.lang.Short"      column="imhi_nnretificacao"                                  length="2"/>
+    <property name="numeroLeituraExcecao"               type="java.lang.Short"      column="imhi_nnleituraexcecao"                               length="2"/>
+    <property name="numeroParcelamento"                 type="java.lang.Short"      column="imhi_nnparcelamento"                                 length="2"/>
+    <property name="numeroReparcelamento"               type="java.lang.Short"      column="imhi_nnreparcelamento"                               length="2"/>
+    <property name="numeroReparcelamentoConsecutivos"   type="java.lang.Short"      column="imhi_nnreparcmtconsec"                               length="2"/>
+    <property name="diaVencimento"                      type="java.lang.Short"      column="imhi_ddvencimento"                                   length="2"/>
+    <property name="numeroIptu"                         type="java.lang.String"     column="imhi_nniptu"                                         length="31"/>
+    <property name="numeroCelpe"                        type="java.lang.Long"       column="imhi_nncontratoenergia"                              length="10"/>
+    <property name="indicadorEmissaoExtratoFaturamento" type="java.lang.Short"      column="imhi_icemsextfatmt"                                  length="2"/>
+    <property name="indicadorDebitoConta"               type="java.lang.Short"      column="imhi_icdebitoconta"                 not-null="true"  length="2"/>
+    <property name="indicadorExclusao"                  type="java.lang.Short"      column="imhi_icexclusao"                                     length="2"/>
+    <property name="coordenadaX"                        type="java.lang.String"     column="imhi_nncoordenadax"                                  length="50"/>
+    <property name="coordenadaY"                        type="java.lang.String"     column="imhi_nncoordenaday"                                  length="50"/>
+    <property name="ultimaAlteracao"                    type="java.sql.Timestamp"   column="imhi_tmultimaalteracao"                              length="8"/>
+    <property name="indicadorSuspensaoAbastecimento"    type="java.lang.Short"      column="imhi_icsuspensaoabastecimento"                       length="2"/>
+    <property name="quantidadeEconomias"                type="java.lang.Short"      column="imhi_qteconomia"                                     length="2"/>
+    <property name="indicadorJardim"                    type="java.lang.Short"      column="imhi_icjardim"                                       length="2"/>
+    <property name="numeroSequencialRota"               type="java.lang.Integer"    column="imhi_nnsequencialrota"                               length="4"/>
+    <property name="numeroSequencialRotaEntrega"        type="java.lang.Integer"    column="imhi_nnsequencialrotaentrega"                        length="4"/>
+    <property name="numeroMedidorEnergia"               type="java.lang.String"     column="imhi_nnmedidorenergia"                               length="10"/>
+    <property name="dataVisitaComercial"                type="java.sql.Date"        column="imhi_dtvisitacomercial"                              length="4"/>
+    <property name="indicadorVencimentoMesSeguinte"     type="java.lang.Short"      column="imhi_icvencimentomesseguinte"       not-null="true"  length="2" />
+    <property name="indicadorReincidenciaInfracao"      type="java.lang.Integer"    column="imhi_icreincidenciainfracao"        not-null="false" />
+    <property name="codigoDebitoAutomatico"             type="java.lang.Integer"    column="imhi_cddebitoautomatico"            not-null="false" />
+    <property name="numeroQuadraEntrega"                type="java.lang.Integer"    column="imhi_nnquadraentrega"               not-null="false" />
+    <property name="anoMesExclusaoTarifaSocial"         type="java.lang.Integer"    column="imhi_amrefexclusaotarifasocial"     not-null="false" />
+    <property name="indicadorNivelInstalacaoEsgoto"     type="java.lang.Short"      column="imhi_icnivelinstalacaoesgoto"       not-null="false" />
+    <property name="indicadorImovelAreaComum"           type="java.lang.Short"      column="imhi_icimovelareacomum"             not-null="false" />
+    <property name="categoriaPrincipalId"               type="java.lang.Integer"    column="imhi_idcategoriaprincipal"          not-null="false" />
+    <property name="subCategoriaPrincipalId"            type="java.lang.Integer"    column="imhi_idsubcategoriaprincipal"       not-null="false" />
+    <property name="classeSocial"                       type="java.lang.Short"      column="imhi_classe_social"                 not-null="false" />
+    <property name="quantidadeAnimaisDomesticos"        type="java.lang.Short"      column="imhi_quantidade_animais_domesticos" not-null="false" />
+    <property name="volumeCisterna"                     type="java.math.BigDecimal" column="imhi_vol_cisterna"                  not-null="false" />
+    <property name="volumeCaixaDagua"                   type="java.math.BigDecimal" column="imhi_vol_cx_dagua"                  not-null="false" />
+    <property name="tipoUso"                            type="java.lang.Short"      column="imhi_tipo_uso"                      not-null="false" />
+    <property name="acessoHidrometro"                   type="java.lang.Short"      column="imhi_acesso_hidrometro"             not-null="false" />
+    <property name="quantidadeEconomiasSocial"          type="java.lang.Integer"    column="imhi_qtd_economias_social"          not-null="false" />
+    <property name="quantidadeEconomiasOutra"           type="java.lang.Integer"    column="imhi_qtd_economias_outra"           not-null="false" />
+    <property name="percentualAbastecimento"            type="java.lang.Short"      column="imhi_percentual_abastecimento"      not-null="false" />
+    
+    <many-to-one name="imovelContaEnvio" class="gcom.cadastro.imovel.ImovelContaEnvio" not-null="true">
+      <column name="icte_id"/>
+    </many-to-one>    
+
+    <one-to-one name="ligacaoEsgoto" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto" outer-join="auto"/>
+
+    <many-to-one name="imovelPrincipal" class="gcom.cadastro.imovel.Imovel" not-null="true">
+      <column name="imhi_idimovelprincipal"/>
+    </many-to-one>
+
+    <many-to-one name="imovelCondominio" class="gcom.cadastro.imovel.Imovel" not-null="true">
+      <column name="imhi_idimovelcondominio"/>
+    </many-to-one>
+    
+    <many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="false">
+      <column name="lgbr_id"/>
+    </many-to-one>
+
+    <many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="false">
+      <column name="lgcp_id"/>
+    </many-to-one>
+    
+    <many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario" not-null="true">
+      <column name="func_id"/>
+    </many-to-one>
+    
+    <many-to-one name="rotaEntrega" class="gcom.micromedicao.Rota" not-null="false">
+      <column name="rota_identrega"/>
+    </many-to-one>
+
+    <many-to-one name="rotaAlternativa" class="gcom.micromedicao.Rota" not-null="false">
+      <column name="rota_idalternativa"/>
+    </many-to-one>
+
+    <one-to-one name="ligacaoAgua" class="gcom.atendimentopublico.ligacaoagua.LigacaoAgua" outer-join="auto"/>
+
+    <one-to-one name="imovelEnderecoAnterior" class="gcom.cadastro.imovel.ImovelEnderecoAnterior" outer-join="auto"/>
+
+    <many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+      <column name="lest_id"/>
+    </many-to-one>
+
+    <many-to-one name="hidrometroInstalacaoHistorico" class="gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico" not-null="true">
+      <column name="hidi_id"/>
+    </many-to-one>
+
+    <many-to-one name="leituraAnormalidade" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="true">
+      <column name="ltan_id"/>
+    </many-to-one>
+
+    <many-to-one name="eloAnormalidade" class="gcom.cadastro.imovel.EloAnormalidade" not-null="true">
+      <column name="eanm_id"/>
+    </many-to-one>
+
+    <many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+      <column name="stcm_id"/>
+    </many-to-one>
+
+    <many-to-one name="areaConstruidaFaixa" class="gcom.cadastro.imovel.AreaConstruidaFaixa" not-null="false">
+      <column name="acon_id"/>
+    </many-to-one>
+
+    <many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="true">
+      <column name="pcal_id"/>
+    </many-to-one>
+
+    <many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+      <column name="iper_id"/>
+    </many-to-one>
+
+    <many-to-one name="reservatorioVolumeFaixaSuperior" class="gcom.cadastro.imovel.ReservatorioVolumeFaixa" not-null="true">
+      <column name="resv_idreservatoriosuperior"/>
+    </many-to-one>
+
+    <many-to-one name="reservatorioVolumeFaixaInferior" class="gcom.cadastro.imovel.ReservatorioVolumeFaixa" not-null="true">
+      <column name="resv_idreservatorioinferior"/>
+    </many-to-one>
+
+    <many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+      <column name="loca_id"/>
+    </many-to-one>
+
+    <many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+      <column name="qdra_id"/>
+    </many-to-one>
+
+    <many-to-one name="cobrancaSituacaoTipo" class="gcom.cobranca.CobrancaSituacaoTipo" not-null="true">
+      <column name="cbsp_id"/>
+    </many-to-one>
+
+    <many-to-one name="cobrancaSituacao" class="gcom.cobranca.CobrancaSituacao" not-null="true">
+      <column name="cbst_id"/>
+    </many-to-one>
+
+    <many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua" not-null="true">
+      <column name="prua_id"/>
+    </many-to-one>
+
+    <many-to-one name="enderecoReferencia" class="gcom.cadastro.endereco.EnderecoReferencia" not-null="true">
+      <column name="edrf_id"/>
+    </many-to-one>
+
+    <many-to-one name="cadastroOcorrencia" class="gcom.cadastro.imovel.CadastroOcorrencia" not-null="true">
+      <column name="cocr_id"/>
+    </many-to-one>
+
+    <many-to-one name="pocoTipo" class="gcom.cadastro.imovel.PocoTipo" not-null="true">
+      <column name="poco_id"/>
+    </many-to-one>
+
+    <many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+      <column name="last_id"/>
+    </many-to-one>
+
+    <many-to-one name="despejo" class="gcom.cadastro.imovel.Despejo" not-null="true">
+      <column name="depj_id"/>
+    </many-to-one>
+
+    <many-to-one name="faturamentoSituacaoTipo" class="gcom.faturamento.FaturamentoSituacaoTipo" not-null="true">
+      <column name="ftst_id"/>
+    </many-to-one>
+
+    <many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento" not-null="true">
+      <column name="ftab_id"/>
+    </many-to-one>
+
+    <many-to-one name="piscinaVolumeFaixa" class="gcom.cadastro.imovel.PiscinaVolumeFaixa" not-null="true">
+      <column name="pisc_id"/>
+    </many-to-one>
+
+    <many-to-one name="consumoTarifa" class="gcom.faturamento.consumotarifa.ConsumoTarifa" not-null="true">
+      <column name="cstf_id"/>
+    </many-to-one>
+
+    <many-to-one name="imovelTipoHabitacao" class="gcom.cadastro.imovel.ImovelTipoHabitacao">
+      <column name="imha_id"/>
+    </many-to-one>
+
+    <many-to-one name="imovelTipoPropriedade" class="gcom.cadastro.imovel.ImovelTipoPropriedade">
+      <column name="impr_id"/>
+    </many-to-one>
+
+    <many-to-one name="imovelTipoConstrucao" class="gcom.cadastro.imovel.ImovelTipoConstrucao">
+      <column name="imco_id"/>
+    </many-to-one>
+
+    <many-to-one name="imovelTipoCobertura" class="gcom.cadastro.imovel.ImovelTipoCobertura">
+      <column name="imcb_id"/>
+    </many-to-one>
+
+    <many-to-one name="faturamentoTipo" class="gcom.faturamento.FaturamentoTipo" not-null="true">
+      <column name="fttp_id"/>
+    </many-to-one>
+
+    <many-to-one name="faturamentoSituacaoMotivo" class="gcom.faturamento.FaturamentoSituacaoMotivo" not-null="true">
+      <column name="ftsm_id"/>
+    </many-to-one>
+
+    <many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
+      <column name="siac_id"/>
+    </many-to-one>
+
+    <many-to-one name="quadraFace" class="gcom.cadastro.localidade.QuadraFace" not-null="false">
+      <column name="qdfa_id"/>
+    </many-to-one>
+
+    <many-to-one name="perimetroInicial" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+      <column name="logr_idinicioperimetro"/>
+    </many-to-one>
+
+    <many-to-one name="perimetroFinal" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+      <column name="logr_idfimperimetro"/>
+    </many-to-one>
+    
+    <many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+      <column name="usur_id"/>
+    </many-to-one>
+    
+    <many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+      <column name="imov_id"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

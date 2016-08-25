@@ -3738,7 +3738,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		Short indIncluirDebito = null;
 		Integer idDebitoTipo = null;
 		Object[] parmsServTipo = null;
-		/* Integer idServicoTipo = null; */
 		Integer idImovel = null;
 		BigDecimal valorServico = null;
 		try {
@@ -3757,10 +3756,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			if (parmsServTipo[2] != null) {
 				idImovel = (Integer) parmsServTipo[2];
 			}
-			/*
-			 * if (parmsServTipo[3] != null) { idServicoTipo = (Integer)
-			 * parmsServTipo[3]; }
-			 */
 			if (parmsServTipo[4] != null) {
 				indIncluirDebito = (Short) parmsServTipo[4];
 			}
@@ -3792,33 +3787,8 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					}
 				}
 
-			} /*
-			 * else { if (idDebitoTipo != null) { osNaBase
-			 * .setIndicadorComercialAtualizado
-			 * (ServicoTipo.INDICADOR_ATUALIZA_COMERCIAL_NAO); Integer
-			 * idHidrometroInstalacaoHistorico = getControladorLigacaoAgua()
-			 * .pesquisarIdHidrometroInstalacaoHistorico(idImovel); Integer
-			 * idTipoMedicao = null; if (idHidrometroInstalacaoHistorico !=
-			 * null) { idTipoMedicao = MedicaoTipo.LIGACAO_AGUA; } else {
-			 * idTipoMedicao = MedicaoTipo.POCO; } BigDecimal valorAtual =
-			 * getControladorAtendimentoPublico()
-			 * .obterValorDebito(idServicoTipo, idImovel,
-			 * idTipoMedicao.shortValue()); gerarDebitoOrdemServico(numeroOS,
-			 * idDebitoTipo, valorAtual, 1); } }
-			 */
-		} /*
-		 * else { if (idDebitoTipo != null) { osNaBase
-		 * .setIndicadorComercialAtualizado
-		 * (ServicoTipo.INDICADOR_ATUALIZA_COMERCIAL_NAO); Integer
-		 * idHidrometroInstalacaoHistorico = getControladorLigacaoAgua()
-		 * .pesquisarIdHidrometroInstalacaoHistorico(idImovel); Integer
-		 * idTipoMedicao = null; if (idHidrometroInstalacaoHistorico != null) {
-		 * idTipoMedicao = MedicaoTipo.LIGACAO_AGUA; } else { idTipoMedicao =
-		 * MedicaoTipo.POCO; } BigDecimal valorAtual =
-		 * getControladorAtendimentoPublico() .obterValorDebito(idServicoTipo,
-		 * idImovel, idTipoMedicao.shortValue());
-		 * gerarDebitoOrdemServico(numeroOS, idDebitoTipo, valorAtual, 1); } }
-		 */
+			} 
+		}
 
 		AtendimentoMotivoEncerramento atendimentoMotivoEncerramento = new AtendimentoMotivoEncerramento();
 		atendimentoMotivoEncerramento.setId(idMotivoEncerramento);
@@ -3908,7 +3878,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					 */
 					if (situacaoEspecial) {
 						imovel.setFaturamentoSituacaoTipo(null);
-						this.repositorioImovel.atualizarImovel(imovel);
+						this.repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
 
 						FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
 						if (historico != null) {
@@ -4075,8 +4045,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			try {
 				idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
 			} catch (ErroRepositorioException e) {
-				
-				e.printStackTrace();
 				throw new ControladorException("erro.sistema", e);
 			}
 			if (idOSReferenciaRejeitada != null && !idOSReferenciaRejeitada.equals("")) {
@@ -4663,7 +4631,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 						 */
 						if (situacaoEspecial) {
 							imovel.setFaturamentoSituacaoTipo(null);
-							this.repositorioImovel.atualizarImovel(imovel);
+							this.repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
 
 							FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
 							if (historico != null) {

@@ -1,5 +1,11 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
@@ -31,14 +37,9 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public interface IRepositorioImovel {
 
@@ -61,128 +62,31 @@ public interface IRepositorioImovel {
 	 * @exception ErroRepositorioException
 	 *                Descrição da exceção
 	 */
-	public void atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(Imovel imovel,
-			LigacaoEsgotoSituacao situacaoEsgoto)
-			throws ErroRepositorioException;
+	public void atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(Imovel imovel, LigacaoEsgotoSituacao situacaoEsgoto) throws ErroRepositorioException;
 
-	/**
-	 * Inseri um imovel na base
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public void inserirImovel(Imovel imovel) throws ErroRepositorioException;
 
-	/**
-	 * Atualiza um imovel na base
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public void atualizarImovel(Imovel imovel) throws ErroRepositorioException;
-
-	/**
-	 * Remove um cliente imovel economia
-	 * 
-	 * @param id
-	 *            Description of the Parameter
-	 * @exception ErroRepositorioException
-	 *                Description of the Exception
-	 */
-	public void removerClienteImovelEconomia(Integer id)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param objeto
-	 *            Descrição do parâmetro
-	 * @param condicional
-	 *            Descrição do parâmetro
-	 * @param id
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public void removerTodos(String objeto, String condicional, Integer id)
-			throws ErroRepositorioException;
-
-	/**
-	 * Pesquisa uma coleção de imóveis com uma query especifica
-	 * 
-	 * @param idLocalidade
-	 *            parametros para a consulta
-	 * @param idSetorComercial
-	 *            parametros para a consulta
-	 * @param idQuadra
-	 *            parametros para a consulta
-	 * @param lote
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarImovel(Integer idLocalidade,
-			Integer idSetorComercial, Integer idQuadra, Short lote,
-			int indicadorExclusao) throws ErroRepositorioException;
-
-	/**
-	 * Atualiza apenas os dados (Localidade, Setor, Quadra e lote) do imóvel
-	 * 
-	 * @param imovel
-	 *            parametros para a consulta
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public void atualizarImovelInscricao(Imovel imovel)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovelSubcategoria
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public void atualizarImovelSubCategoria(
-			ImovelSubcategoria imovelSubcategoria)
-			throws ErroRepositorioException;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Object pesquisarObterQuantidadeEconomias(Imovel imovel)
-			throws ErroRepositorioException;
 	
-	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) 
-		throws ErroRepositorioException;
+	public void atualizarImovelRegistrandoHistorico(Imovel imovel, Usuario usuario) throws ErroRepositorioException;
 
+	public void removerClienteImovelEconomia(Integer id) throws ErroRepositorioException;
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarObterQuantidadeEconomiasCategoria(
-			Integer idImovel) throws ErroRepositorioException;
+	public void removerTodos(String objeto, String condicional, Integer id) throws ErroRepositorioException;
 
-	public Collection obterQuantidadeEconomiasCategoria(Integer idConta)
-			throws ErroRepositorioException;
+	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra, Short lote, int indicadorExclusao) throws ErroRepositorioException;
+
+	public void atualizarImovelInscricao(Imovel imovel) throws ErroRepositorioException;
+
+	public void atualizarImovelSubCategoria(ImovelSubcategoria imovelSubcategoria) throws ErroRepositorioException;
+
+	public Object pesquisarObterQuantidadeEconomias(Imovel imovel) throws ErroRepositorioException;
+	
+	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ErroRepositorioException;
+
+	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer idImovel) throws ErroRepositorioException;
+
+	public Collection obterQuantidadeEconomiasCategoria(Integer idConta) throws ErroRepositorioException;
 
 	/**
 	 * < <Descrição do método>>
