@@ -27161,4 +27161,33 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	}
 	
+	public Double getValorDescontoPorFaixa(Integer referencia) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		Double valorDesconto = 0.0;
+
+		try {
+
+			consulta = "select faixa.pfds_percentual_desconto "
+					+ "from cobranca.parcelamento_faixa_desconto faixa "
+					+ "where faixa.pfds_referencia_minima < :referencia "
+					+ "and faixa.pfds_referencia_maxima > :referencia ";
+
+			valorDesconto = (Double) session.createQuery(consulta)
+											.setInteger("referencia", referencia)
+											.setMaxResults(1)
+											.uniqueResult();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return valorDesconto;
+	}
+	
 }
