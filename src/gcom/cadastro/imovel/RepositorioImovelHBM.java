@@ -100,21 +100,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return instancia;
 	}
-	/**
-	 * 
-	 * Inseri um imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
+	
+	public Imovel obterImovelPorId(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			return (Imovel) session.createQuery("select i from Imovel i where i.id = :id")
+			.setParameter("id", idImovel)
+			.uniqueResult();
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao recuperar imovel pelo id");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 	public void inserirImovel(Imovel imovel) throws ErroRepositorioException {
 
@@ -145,7 +144,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public void atualizarImovelRegistrandoHistorico(Imovel imovel, Usuario usuario) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
-			ImovelHistorico historico = new ImovelHistorico(imovel, usuario);
+			Imovel original = this.obterImovelPorId(imovel.getId());
+			
+			ImovelHistorico historico = new ImovelHistorico(original, usuario);
+			
 			session.save(historico);
 			session.update(imovel);
 			session.flush();

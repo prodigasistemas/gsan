@@ -34,6 +34,8 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
+import gcom.batch.IRepositorioBatch;
+import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -47,6 +49,7 @@ import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
+import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelImagem;
@@ -57,6 +60,7 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
@@ -86,13 +90,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private IRepositorioCadastro             repositorioCadastro = null;
 	private IRepositorioSeguranca            repositorioSeguranca;
 	private IRepositorioUtil                 repositorioUtil;
+	private IRepositorioBatch                repositorioBatch;
+	private IRepositorioImovel               repositorioImovel;
 	private static List<Integer> listaRAParaExclusao = new ArrayList<Integer>();
+	private Usuario usuario = null;
 
 	public void ejbCreate() throws CreateException {
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
 		repositorioSeguranca            = RepositorioSegurancaHBM.getInstancia();
 		repositorioCadastro             = RepositorioCadastroHBM.getInstancia();
 		repositorioUtil                 = RepositorioUtilHBM.getInstancia();
+		repositorioBatch                = RepositorioBatchHBM.getInstancia();
+		repositorioImovel               = RepositorioImovelHBM.getInstancia();
 	}
 
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException{
@@ -100,6 +109,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		
 		try {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
+			
+			
+			usuario = repositorioBatch.obterUsuarioQueDisparouProcesso(idFuncionalidade);
 			
 			processarClientes();
 			processarImoveis();
@@ -202,7 +214,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
 		
-		getControladorUtil().atualizar(imovel);
+		try {
+			repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuario);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao atualizar imovel", e);
+		}
 		
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
 		

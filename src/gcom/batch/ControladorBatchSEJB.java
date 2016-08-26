@@ -1,5 +1,24 @@
 package gcom.batch;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
@@ -252,25 +271,6 @@ import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
 
 /**
  * Controlador que possui os metodos de negocio de toda a parte que da suporte
@@ -10027,5 +10027,4 @@ public class ControladorBatchSEJB implements SessionBean {
 
 		 return ((SegurancaParametro) parametros.iterator().next()).getValor();
 	}
-
 }

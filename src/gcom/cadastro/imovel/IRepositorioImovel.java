@@ -43,25 +43,10 @@ import gcom.util.ErroRepositorioException;
 
 public interface IRepositorioImovel {
 
-	/**
-	 * Atualizar um os campos lastId,dataUltimaAtualização do imovel na base
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public void atualizarImovelExecucaoOrdemServicoLigacaoAgua(Imovel imovel,
-			LigacaoAguaSituacao situacaoAgua) throws ErroRepositorioException;
+	public Imovel obterImovelPorId(Integer idImovel) throws ErroRepositorioException;
+	
+	public void atualizarImovelExecucaoOrdemServicoLigacaoAgua(Imovel imovel, LigacaoAguaSituacao situacaoAgua) throws ErroRepositorioException;
 
-	/**
-	 * Atualizar um os campos lastId,dataUltimaAtualização do imovel na base
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public void atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(Imovel imovel, LigacaoEsgotoSituacao situacaoEsgoto) throws ErroRepositorioException;
 
 	public void inserirImovel(Imovel imovel) throws ErroRepositorioException;
