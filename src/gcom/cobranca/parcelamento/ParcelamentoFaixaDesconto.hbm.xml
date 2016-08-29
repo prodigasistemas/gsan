@@ -12,7 +12,7 @@
 		
 		<property name="referenciaMinima" type="java.lang.Integer" column="pfds_referencia_minima"/>
 		<property name="referenciaMaxima" type="java.lang.Integer" column="pfds_referencia_maxima"/>
-		<property name="percentualDesconto" type="java.lang.Double" column="pfds_percentual_desconto" length="5"/>
+		<property name="percentualDesconto" type="java.math.BigDecimal" column="pfds_percentual_desconto" length="5"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pfds_tmcriacao" not-null="true" length="8" />
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pfds_tmultimaalteracao" not-null="true" length="8" />
 	</class>

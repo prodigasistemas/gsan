@@ -1,19 +1,20 @@
 package gcom.cobranca.parcelamento;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ParcelamentoFaixaDesconto implements Serializable {
 
 	private static final long serialVersionUID = 656378329631476730L;
 
-	private long id;
+	private Integer id;
 
-	private int referenciaMinima;
+	private Integer referenciaMinima;
 
-	private int referenciaMaxima;
+	private Integer referenciaMaxima;
 
-	private double percentualDesconto;
+	private BigDecimal percentualDesconto;
 
 	private Date dataCriacao;
 
@@ -23,7 +24,7 @@ public class ParcelamentoFaixaDesconto implements Serializable {
 		super();
 	}
 
-	public ParcelamentoFaixaDesconto(long id, int referenciaMinima, int referenciaMaxima, double percentualDesconto, Date dataCriacao, Date ultimaAlteracao) {
+	public ParcelamentoFaixaDesconto(Integer id, Integer referenciaMinima, Integer referenciaMaxima, BigDecimal percentualDesconto, Date dataCriacao, Date ultimaAlteracao) {
 		super();
 		this.id = id;
 		this.referenciaMinima = referenciaMinima;
@@ -33,35 +34,35 @@ public class ParcelamentoFaixaDesconto implements Serializable {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getReferenciaMinima() {
+	public Integer getReferenciaMinima() {
 		return referenciaMinima;
 	}
 
-	public void setReferenciaMinima(int referenciaMinima) {
+	public void setReferenciaMinima(Integer referenciaMinima) {
 		this.referenciaMinima = referenciaMinima;
 	}
 
-	public int getReferenciaMaxima() {
+	public Integer getReferenciaMaxima() {
 		return referenciaMaxima;
 	}
 
-	public void setReferenciaMaxima(int referenciaMaxima) {
+	public void setReferenciaMaxima(Integer referenciaMaxima) {
 		this.referenciaMaxima = referenciaMaxima;
 	}
 
-	public double getPercentualDesconto() {
+	public BigDecimal getPercentualDesconto() {
 		return percentualDesconto;
 	}
 
-	public void setPercentualDesconto(double percentualDesconto) {
+	public void setPercentualDesconto(BigDecimal percentualDesconto) {
 		this.percentualDesconto = percentualDesconto;
 	}
 
