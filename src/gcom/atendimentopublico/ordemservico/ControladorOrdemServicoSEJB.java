@@ -7809,6 +7809,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						&& fiscalizacaoSituacao.getIndicadorVerificarReincidencia().compareTo(ConstantesSistema.SIM) == 0) {
 
 					imovelPesquisa.setIndicadorReincidenciaInfracao(ConstantesSistema.SIM.intValue());
+					imovelPesquisa.setUsuarioParaLog(usuarioLogado);
 					this.getControladorUtil().atualizar(imovelPesquisa);
 				}
 
