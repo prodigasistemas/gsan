@@ -2095,8 +2095,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @param usuarioLogado
 	 * @throws ControladorException
 	 */
-	public void removerImovel(String[] ids, Usuario usuarioLogado)
-			throws ControladorException {
+	public void removerImovel(String[] ids, Usuario usuarioLogado) throws ControladorException {
 		// filtro imovel
 		FiltroImovel filtroImovel = new FiltroImovel();
 		Imovel imovel = new Imovel();
@@ -2110,12 +2109,10 @@ public class ControladorImovelSEJB implements SessionBean {
 
 				filtroImovel.limparListaParametros();
 				// pesquissou o imovel na base
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, idUltimaAlteracao[0].trim()));
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idUltimaAlteracao[0].trim()));
 
 				// coleção com resultado da pesquisa de imovel
-				Collection imoveisNaBase = getControladorUtil().pesquisar(
-						filtroImovel, Imovel.class.getName());
+				Collection imoveisNaBase = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 				// imovel encontrado
 				Imovel imovelNaBase = (Imovel) imoveisNaBase.iterator().next();
 
@@ -2123,39 +2120,36 @@ public class ControladorImovelSEJB implements SessionBean {
 				// durante
 				// esta atualização
 				Calendar data = new GregorianCalendar();
-				data.setTimeInMillis(new Long(idUltimaAlteracao[1].trim())
-						.longValue());
+				data.setTimeInMillis(new Long(idUltimaAlteracao[1].trim()).longValue());
 
 				if (imovelNaBase.getUltimaAlteracao().after(data.getTime())) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
+					throw new ControladorException("atencao.atualizacao.timestamp");
 				}
 
-				// filtroImovel.limparListaParametros();
 				imovel = imovelNaBase;
-				
+
 				/**
-				 * Alteração realizada por Ana Maria em 13/10/2008 (Analista: Fabíola Araújo)
-				 * [FS0017] Registrar Fim de Relação do(s) Cliente(s) com o Imóvel
-				 * (Caso existam clientes com relação ativa com o imóvel, o sistema deverá encerrar
-				 *  esta relação, atualizando a data do término da relação e seu motivo de encerramento)
+				 * Alteração realizada por Ana Maria em 13/10/2008 (Analista:
+				 * Fabíola Araújo) [FS0017] Registrar Fim de Relação do(s)
+				 * Cliente(s) com o Imóvel (Caso existam clientes com relação
+				 * ativa com o imóvel, o sistema deverá encerrar esta relação,
+				 * atualizando a data do término da relação e seu motivo de
+				 * encerramento)
 				 */
 				Collection clientesImovel = getControladorCliente().pesquisarClienteImovel(imovel.getId());
-				
+
 				Iterator clientesImovelIterator = clientesImovel.iterator();
 				while (clientesImovelIterator.hasNext()) {
 					ClienteImovel clienteImovel = (ClienteImovel) clientesImovelIterator.next();
 					ClienteImovelFimRelacaoMotivo clienteImovelFimRelacaoMotivo = new ClienteImovelFimRelacaoMotivo();
 					clienteImovelFimRelacaoMotivo.setId(ClienteImovelFimRelacaoMotivo.EXCLUSAO_IMOVEL);
-					clienteImovel.setClienteImovelFimRelacaoMotivo(clienteImovelFimRelacaoMotivo);	
+					clienteImovel.setClienteImovelFimRelacaoMotivo(clienteImovelFimRelacaoMotivo);
 					clienteImovel.setDataFimRelacao(new Date());
 					clienteImovel.setUltimaAlteracao(new Date());
 					getControladorUtil().inserirOuAtualizar(clienteImovel);
 				}
 
-
-				// imovel = (Imovel) imoveis.iterator().next();
 				imovel.setIndicadorExclusao(Imovel.IMOVEL_EXCLUIDO);
 				imovel.setUltimaAlteracao(new Date());
 
@@ -2163,31 +2157,21 @@ public class ControladorImovelSEJB implements SessionBean {
 				 * alterado por pedro alexandre dia 18/11/2006 alteração feita
 				 * para acoplar o controle de abrangência de usuário
 				 */
-				// ------------ CONTROLE DE ABRANGENCIA --------------------
 				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
-				if (!getControladorAcesso().verificarAcessoAbrangencia(
-						abrangencia)) {
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.acesso.negado.abrangencia");
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
 				} else {
-					
-					// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
-
-					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-							Operacao.OPERACAO_IMOVEL_REMOVER, imovel.getId(), imovel.getId(),
-							new UsuarioAcaoUsuarioHelper(usuarioLogado,
-									UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_REMOVER,
+							imovel.getId(), imovel.getId(),
+							new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 					registradorOperacao.registrarOperacao(imovel);
-					
-					// ------------ </REGISTRAR TRANSAÇÃO>----------------------------		
-					
-					
+
+					imovel.setUsuarioParaLog(usuarioLogado);
 					getControladorUtil().atualizar(imovel);
 				}
-				// ------------ CONTROLE DE ABRANGENCIA ---------------------
 			}
 		}
 
@@ -13047,8 +13031,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			faturamentoSituacaoHistorico.setImovel(inserirImovelHelper.getImovel());
 			
 			//ANO_MES_INICIAL = ANO_MES_FATURAMENTO
-			faturamentoSituacaoHistorico
-			.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
+			faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
 			
 			//ANO_MES_FINAL = ANO_MES_FATURAMENTO + Quantidade de meses da tabela LigacaoEsgotoEsgotamento
 			faturamentoSituacaoHistorico
@@ -13059,12 +13042,10 @@ public class ControladorImovelSEJB implements SessionBean {
 			faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
 			
 			//FATURAMENTO_SITUACAO_MOTIVO
-			faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(
-			inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
+			faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
 
 			//FATURAMENTO_SITUACAO_TIPO
-			faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(
-			inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoTipo());
+			faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoTipo());
 			
 			//USUÁRIO
 			faturamentoSituacaoHistorico.setUsuario(inserirImovelHelper.getUsuario());
@@ -13078,11 +13059,10 @@ public class ControladorImovelSEJB implements SessionBean {
 			this.getControladorUtil().inserir(faturamentoSituacaoHistorico);
 			
 			Imovel imovel = inserirImovelHelper.getImovel();
-			imovel.setFaturamentoSituacaoTipo(
-				inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoTipo());
-			imovel.setFaturamentoSituacaoMotivo(
-					inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
+			imovel.setFaturamentoSituacaoTipo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoTipo());
+			imovel.setFaturamentoSituacaoMotivo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
 			
+			imovel.setUsuarioParaLog(inserirImovelHelper.getUsuario());
 			this.getControladorUtil().atualizar(imovel);
 			
 			

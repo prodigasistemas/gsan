@@ -10027,4 +10027,12 @@ public class ControladorBatchSEJB implements SessionBean {
 
 		 return ((SegurancaParametro) parametros.iterator().next()).getValor();
 	}
+	
+	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ControladorException{
+		try {
+			return repositorioBatch.obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter usuario que disparou processo", e);
+		}
+	}
 }
