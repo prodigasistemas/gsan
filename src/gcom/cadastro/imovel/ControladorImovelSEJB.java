@@ -9178,24 +9178,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		getControladorUtil().inserir(imovelCobrancaSituacao);
 
-		//CRC3323 - comentado por Vivianne Sousa - analista:Fatima Sampaio - 12/05/2010
-//		Imovel imovelAtualiza = this.pesquisarImovelDigitado(imovel.getId());
-//
-//		if (imovelAtualiza.getIndicadorExclusao().equals("1")) {
-//			throw new ControladorException("atencao.imovel.excluido");
-//		}
-//
-//		imovelAtualiza.setCobrancaSituacao(imovelCobrancaSituacao
-//				.getCobrancaSituacao());
-//		imovelAtualiza.setUltimaAlteracao(new Date());
-//
-//		imovelAtualiza.setOperacaoEfetuada(operacaoEfetuada);
-//		imovelAtualiza.adicionarUsuario(usuarioLogado,
-//				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-//		registradorOperacaoRota.registrarOperacao(imovelAtualiza);
-//
-//		getControladorUtil().atualizar(imovelAtualiza);
-
 		FiltroCobrancaSituacao filtroCobrancaSituacao = new FiltroCobrancaSituacao();
 		filtroCobrancaSituacao.adicionarParametro(new ParametroSimples(
 				FiltroCobrancaSituacao.ID, cobrancaSituacao.getId()));
@@ -9322,104 +9304,6 @@ public class ControladorImovelSEJB implements SessionBean {
 			//[FS0008 – Verificar seleção das situações de cobrança para retirada].
 			throw new ControladorException("atencao.necessario_selcionar_situacao_cobranca");
 		}
-
-		
-//		FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
-//		filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(
-//				FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel.toString()));
-//		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("imovel");
-//
-//		Collection colecaoICS = getControladorUtil().pesquisar(
-//				filtroImovelCobrancaSituacao,ImovelCobrancaSituacao.class.getName());
-//
-//		if (colecaoICS != null && !colecaoICS.isEmpty()) {
-//			ImovelCobrancaSituacao iCS = null;
-//
-//			for (Iterator iter = colecaoICS.iterator(); iter.hasNext();) {
-//				ImovelCobrancaSituacao imovelCobrancaSituacao = (ImovelCobrancaSituacao) iter
-//						.next();
-//
-//				if (imovelCobrancaSituacao.getDataRetiradaCobranca() == null) {
-//					iCS = imovelCobrancaSituacao;
-//					break;
-//				}
-//			}
-//
-//			iCS.setDataRetiradaCobranca(new Date());
-//
-//			Imovel imovel = this.pesquisarImovelDigitado(idImovel);
-//
-//			CobrancaSituacao cobrancaSituacao = imovel.getCobrancaSituacao();
-//
-//			FiltroCobrancaSituacao filtroCobrancaSituacao = new FiltroCobrancaSituacao();
-//			filtroCobrancaSituacao.adicionarParametro(new ParametroSimples(
-//					FiltroCobrancaSituacao.ID, cobrancaSituacao.getId()));
-//			filtroCobrancaSituacao
-//					.adicionarCaminhoParaCarregamentoEntidade("contaMotivoRevisao");
-//			Collection cCS = (Collection) getControladorUtil().pesquisar(
-//					filtroCobrancaSituacao, CobrancaSituacao.class.getName());
-//
-//			CobrancaSituacao cS = (CobrancaSituacao) cCS.iterator().next();
-//			Integer idContaMotivoRevisao = null;
-//			try {
-//				idContaMotivoRevisao = repositorioImovel
-//						.pesquisarContaMotivoRevisao(idImovel);
-//			} catch (ErroRepositorioException ex) {
-//				throw new ControladorException("erro.sistema", ex);
-//			}
-//			if (idContaMotivoRevisao != null
-//					&& !idContaMotivoRevisao.equals("")) {
-//				if (cS.getContaMotivoRevisao() != null
-//						&& iCS.getAnoMesReferenciaInicio() != null
-//						&& iCS.getAnoMesReferenciaFinal() != null) {
-//					Collection conta = (Collection) getControladorFaturamento()
-//							.obterContasImovelIntervalo(imovel.getId(),
-//									DebitoCreditoSituacao.NORMAL,
-//									DebitoCreditoSituacao.INCLUIDA,
-//									DebitoCreditoSituacao.RETIFICADA,
-//									iCS.getAnoMesReferenciaInicio(),
-//									iCS.getAnoMesReferenciaFinal(),
-//									idContaMotivoRevisao);
-//
-//					if (conta != null && !conta.isEmpty()) {
-//						getControladorFaturamento().retirarRevisaoConta(conta,
-//								null, usuarioLogado, true);
-//					}
-//				}
-//			}
-//
-//			imovel.setCobrancaSituacao(null);
-//			// ------------ REGISTRAR TRANSAÇÃO ROTA----------------------------
-//			RegistradorOperacao registradorOperacaoRota = new RegistradorOperacao(
-//					Operacao.OPERACAO_IMOVEL_COBRANCA_SITUACAO_RETIRAR,
-//					new UsuarioAcaoUsuarioHelper(usuarioLogado,
-//							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-//
-//			Operacao operacao = new Operacao();
-//			operacao.setId(Operacao.OPERACAO_IMOVEL_COBRANCA_SITUACAO_RETIRAR);
-//
-//			OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-//			operacaoEfetuada.setOperacao(operacao);
-//
-//			imovel.setOperacaoEfetuada(operacaoEfetuada);
-//			imovel.adicionarUsuario(usuarioLogado,
-//					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-//			registradorOperacaoRota.registrarOperacao(imovel);
-//
-//			// ------------ REGISTRAR TRANSAÇÃO ROTA----------------------------
-//			getControladorUtil().atualizar(imovel);
-//
-//			// ------------ REGISTRAR TRANSAÇÃO ROTA----------------------------
-//
-//			iCS.setOperacaoEfetuada(operacaoEfetuada);
-//			iCS.adicionarUsuario(usuarioLogado,
-//					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-//			registradorOperacaoRota.registrarOperacao(iCS);
-//
-//			// ------------ REGISTRAR TRANSAÇÃO ROTA----------------------------
-//			getControladorUtil().atualizar(iCS);
-//		}
-
 	}
 
 	/**
