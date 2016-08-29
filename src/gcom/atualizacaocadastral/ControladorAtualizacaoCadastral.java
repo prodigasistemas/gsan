@@ -213,12 +213,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setUltimaAlteracao(new Date());
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
+		imovel.setUsuarioParaLog(usuario);
 		
-		try {
-			repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuario);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("Erro ao atualizar imovel", e);
-		}
+		getControladorUtil().atualizar(imovel);
 		
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
 		

@@ -1620,15 +1620,6 @@ public class Fachada {
 		}
 	}
 
-	public void atualizarImovel(Imovel imovel) {
-		try {
-			this.getControladorUtil().atualizar(imovel);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
 	public void transferirImovel(Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 		try {
 			this.getControladorImovel().transferirImovel(imovel, usuarioLogado);

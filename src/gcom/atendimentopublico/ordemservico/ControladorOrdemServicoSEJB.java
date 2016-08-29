@@ -3878,7 +3878,8 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					 */
 					if (situacaoEspecial) {
 						imovel.setFaturamentoSituacaoTipo(null);
-						this.repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
+						imovel.setUsuarioParaLog(usuarioLogado);
+						getControladorUtil().atualizar(imovel);
 
 						FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
 						if (historico != null) {
@@ -4631,7 +4632,8 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 						 */
 						if (situacaoEspecial) {
 							imovel.setFaturamentoSituacaoTipo(null);
-							this.repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
+							imovel.setUsuarioParaLog(usuarioLogado);
+							getControladorUtil().atualizar(imovel);
 
 							FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
 							if (historico != null) {

@@ -1,5 +1,25 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.transaction.SystemException;
+
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.banco.Agencia;
 import gcom.arrecadacao.banco.Banco;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
@@ -170,26 +190,6 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.transaction.SystemException;
-
-import org.jboss.logging.Logger;
 
 public class ControladorImovelSEJB implements SessionBean {
 
@@ -916,47 +916,44 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public void atualizarImovel(Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+		// filtro imovel
+		FiltroImovel filtroImovel = new FiltroImovel();
 
-		try {
-			// filtro imovel
-			FiltroImovel filtroImovel = new FiltroImovel();
+		// Parte de Validacao com Timestamp
 
-			// Parte de Validacao com Timestamp
+		filtroImovel.limparListaParametros();
 
-			filtroImovel.limparListaParametros();
+		// Seta o filtro para buscar o imovel na base
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
 
-			// Seta o filtro para buscar o imovel na base
-			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+		// Procura o imovel na base
+		Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
 
-			// Procura o imovel na base
-			Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
-
-			// Verificar se o imovel já foi atualizado por outro usuário
-			// durante
-			// esta atualização
-			if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("atencao.atualizacao.timestamp");
-			}
-
-			imovel.setUltimaAlteracao(new Date());
-
-			// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
-
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_ATUALIZAR,
-					imovel.getId(), imovel.getId(),
-					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-			registradorOperacao.registrarOperacao(imovel);
-
-			getControladorTransacao().registrarTransacao(imovel);
-
-			// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
-
-			repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
+		// Verificar se o imovel já foi atualizado por outro usuário
+		// durante
+		// esta atualização
+		if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
+
+		imovel.setUltimaAlteracao(new Date());
+
+		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
+
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_ATUALIZAR,
+				imovel.getId(), imovel.getId(),
+				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
+		registradorOperacao.registrarOperacao(imovel);
+
+		getControladorTransacao().registrarTransacao(imovel);
+
+		// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
+
+		imovel.setUsuarioParaLog(usuarioLogado);
+		
+		getControladorUtil().atualizar(imovel);
 	}
 	
 	/**
@@ -970,51 +967,40 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public void transferirImovel(Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+		FiltroImovel filtroImovel = new FiltroImovel();
 
-		try {
-			// filtro imovel
-			FiltroImovel filtroImovel = new FiltroImovel();
+		filtroImovel.limparListaParametros();
 
-			// Parte de Validacao com Timestamp
-			filtroImovel.limparListaParametros();
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
 
-			// Seta o filtro para buscar o imovel na base
-			filtroImovel.adicionarParametro(new ParametroSimples(
-					FiltroImovel.ID, imovel.getId()));
+		Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
 
-			// Procura o imovel na base
-			Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil()
-					.pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
-
-			// Verificar se o imovel já foi atualizado por 
-			// outro usuário durante esta atualização
-			if (imovelNaBase.getUltimaAlteracao().after(
-					imovel.getUltimaAlteracao())) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("atencao.atualizacao.timestamp");
-			}
-
-			imovel.setUltimaAlteracao(new Date());
-			
-			// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
-
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_TRANSFERIR_IMOVEL_LOGRADOURO, imovel.getId(),
-					imovel.getId(),
-						new UsuarioAcaoUsuarioHelper(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-			registradorOperacao.registrarOperacao(imovel);
-
-			getControladorTransacao().registrarTransacao(imovel);
-			
-			// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
-			
-			// atualiza o imovel na base
-			repositorioImovel.atualizarImovelRegistrandoHistorico(imovel, usuarioLogado);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
+		// Verificar se o imovel já foi atualizado por 
+		// outro usuário durante esta atualização
+		if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
+
+		imovel.setUltimaAlteracao(new Date());
+		
+		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
+
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+			Operacao.OPERACAO_TRANSFERIR_IMOVEL_LOGRADOURO, imovel.getId(),
+				imovel.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado,
+						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
+		registradorOperacao.registrarOperacao(imovel);
+
+		getControladorTransacao().registrarTransacao(imovel);
+		
+		// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
+		
+		imovel.setUsuarioParaLog(usuarioLogado);
+		
+		getControladorUtil().atualizar(imovel);
 	}
 
 	/**
@@ -1049,8 +1035,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			removerRamoAvididadeManterImovel(registradorOperacao, inserirImovelHelper.getColecaoRamoAtividadesRemovidas());
 			atualizarRamoAtividadeManterImovel(inserirImovelHelper, registradorOperacao);
 			
-			Abrangencia abrangencia = new Abrangencia(inserirImovelHelper.getUsuario(), 
-			inserirImovelHelper.getImovel());
+			Abrangencia abrangencia = new Abrangencia(inserirImovelHelper.getUsuario(), inserirImovelHelper.getImovel());
 
 			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 				sessionContext.setRollbackOnly();
@@ -1239,21 +1224,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			}
 			
 			if (!clienteResponsavel){
-				
-				if(inserirImovelHelper.getImovel().getImovelContaEnvio() == null ||
-						(inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_EMAIL.intValue() &&
-						inserirImovelHelper.getImovel().getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_IMOVEL_E_PARA_EMAIL.intValue()) ){
-					
-					ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
-					imovelContaEnvio.setId(2);
-					
-					inserirImovelHelper.getImovel().setImovelContaEnvio(imovelContaEnvio);
-				}
-				
-				inserirImovelHelper.getImovel().setIndicadorConta(new Short("2"));
-				inserirImovelHelper.getImovel().setIndicadorEmissaoExtratoFaturamento(new Short("2"));
-				
-				getControladorUtil().atualizar(inserirImovelHelper.getImovel());
+				inserirImovelHelper.getImovel().definirEnvioContaQuandoNaoHaResponsavel();								
 			}
 		}
 	}

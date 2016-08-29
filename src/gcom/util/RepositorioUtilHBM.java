@@ -1,18 +1,6 @@
 package gcom.util;
 
-import gcom.cadastro.DbVersaoBase;
-import gcom.cadastro.RepositorioCadastroHBM;
-import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.interceptor.ObjetoTransacao;
-import gcom.seguranca.acesso.OperacaoEfetuada;
-import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.util.filtro.Filtro;
-import gcom.util.filtro.GeradorHQLCondicional;
-import gcom.util.filtro.PersistenciaUtil;
-
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +18,20 @@ import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.hibernate.exception.GenericJDBCException;
 import org.jboss.logging.Logger;
+
+import gcom.cadastro.DbVersaoBase;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.interceptor.ObjetoTransacao;
+import gcom.model.IHistorico;
+import gcom.seguranca.acesso.OperacaoEfetuada;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.GeradorHQLCondicional;
+import gcom.util.filtro.PersistenciaUtil;
 
 public class RepositorioUtilHBM implements IRepositorioUtil {
 
@@ -308,19 +310,32 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		return retorno;
 	}
 
+	@SuppressWarnings({"unchecked","rawtypes"})
 	public void atualizar(Object objeto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 		try {
+			
+			if (objeto instanceof IHistorico){
+				if (((ObjetoTransacao) objeto).logarAlteracoes()){
+					IHistorico iHistorico = (IHistorico) objeto;
+					
+					Object original = this.obterPorId(iHistorico.getClasseOrigem(), iHistorico.getId());
+
+					Constructor constructor = iHistorico.getClasseHistorico().getDeclaredConstructor(iHistorico.getClasseOrigem(), Usuario.class);
+					
+					Usuario user = ((ObjetoTransacao) objeto).getUsuarioParaLog();
+
+					Object historico = constructor.newInstance(original, user);
+					
+					session.save(historico);
+				}
+			}
+			
 			session.update(objeto);
 			session.flush();
-
-		} catch (CallbackException e) {
-			throw new ErroRepositorioException(e, e.getMessage());
-		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
-
+		} catch (Exception e){
+			throw new ErroRepositorioException(e, "Erro ao atualizar objeto");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

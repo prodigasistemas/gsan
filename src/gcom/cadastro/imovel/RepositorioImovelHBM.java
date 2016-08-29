@@ -141,24 +141,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 
-	public void atualizarImovelRegistrandoHistorico(Imovel imovel, Usuario usuario) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-			Imovel original = this.obterImovelPorId(imovel.getId());
-			
-			ImovelHistorico historico = new ImovelHistorico(original, usuario);
-			
-			session.save(historico);
-			session.update(imovel);
-			session.flush();
-		} catch (HibernateException e) {
-			logger.error("Erro ao atualizar imovel", e);
-			throw new ErroRepositorioException(e, "Erro ao atualizar imovel");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-
 	public void atualizarImovel(Imovel imovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
