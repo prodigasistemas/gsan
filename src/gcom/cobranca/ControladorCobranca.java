@@ -227,6 +227,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
+import gcom.cobranca.parcelamento.ParcelamentoFaixaDescontoBO;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
@@ -10331,7 +10332,19 @@ public class ControladorCobranca implements SessionBean {
 
 		// ============================================================================================================
 
+
+		ParcelamentoFaixaDescontoBO parcelamentoFaixaDescontoBO = new ParcelamentoFaixaDescontoBO(repositorioCobranca);
+		BigDecimal valorDescontoConta = new BigDecimal(0.00);
+		for (ContaValoresHelper contaHelper : helper.getColecaoContaValores()) {
+			try {
+				valorDescontoConta = valorDescontoConta.add(parcelamentoFaixaDescontoBO.calcularValorDescontoConta(contaHelper.getConta()));
+			} catch (ErroRepositorioException e) {
+				throw new ControladorException("erro.sistema", e);
+			}
+		}
+		
 		// Coloca os valores dos descontos no objeto helper
+		negociacaoOpcoesParcelamentoHelper.setValorDescontoConta(valorDescontoConta);
 		negociacaoOpcoesParcelamentoHelper.setValorDescontoAcrecismosImpotualidade(valorDescontoAcrescimosImpontualidade);
 		negociacaoOpcoesParcelamentoHelper.setValorDescontoInatividade(valorDescontoInatividade);
 		negociacaoOpcoesParcelamentoHelper.setValorDescontoAntiguidade(valorDescontoAntiguidade);
