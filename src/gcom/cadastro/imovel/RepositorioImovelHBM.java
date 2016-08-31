@@ -100,21 +100,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return instancia;
 	}
-	/**
-	 * 
-	 * Inseri um imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
+	
+	public Imovel obterImovelPorId(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			return (Imovel) session.createQuery("select i from Imovel i where i.id = :id")
+			.setParameter("id", idImovel)
+			.uniqueResult();
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao recuperar imovel pelo id");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 	public void inserirImovel(Imovel imovel) throws ErroRepositorioException {
 
@@ -142,65 +141,18 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 
-	/**
-	 * 
-	 * altera um imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
-
 	public void atualizarImovel(Imovel imovel) throws ErroRepositorioException {
-
 		Session session = HibernateUtil.getSession();
-
 		try {
-
 			session.update(imovel);
-
 			session.flush();
-
 		} catch (HibernateException e) {
-
-			e.printStackTrace();
-
-			throw new ErroRepositorioException("Erro no Hibernate");
-
+			logger.error("Erro ao atualizar imovel", e);
+			throw new ErroRepositorioException(e, "Erro ao atualizar imovel");
 		} finally {
-
 			HibernateUtil.closeSession(session);
-
-			// session.close();
-
 		}
-
 	}
-
-	/**
-	 * 
-	 * Pesquisa de Imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param filtroImovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @return Descrição do retorno
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
 
 	public Collection pesquisarImovel(FiltroImovel filtroImovel)
 

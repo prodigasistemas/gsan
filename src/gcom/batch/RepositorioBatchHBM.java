@@ -2155,4 +2155,29 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 	
+	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		
+		StringBuilder sql = new StringBuilder();
+		
+		try {
+			sql.append("select proi.usuario ")
+			.append(" from ProcessoIniciado proi ")
+			.append(" inner join proi.funcionalidadesIniciadas fuin ")
+			.append(" where fuin.id = :idFuncionalidadeIniciada");
+			
+			Usuario user = (Usuario) session.createQuery(sql.toString())
+					.setParameter("idFuncionalidadeIniciada", idFuncionalidadeIniciada)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			return user;
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao consultar usuario que disparou processo");
+		}
+		finally{
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
 }

@@ -2390,7 +2390,6 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 		
 		this.getControladorImovel().verificarImovelControleConcorrencia(imovel);
-		// this.getControladorUtil().atualizar(imovel);
 
 		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = imovel
 				.getLigacaoEsgotoSituacao();
@@ -3726,46 +3725,31 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 
-	public void efetuarSupressaoLigacaoAgua(
-			IntegracaoComercialHelper integracaoComercialHelper)
-			throws ControladorException {
-
+	public void efetuarSupressaoLigacaoAgua(IntegracaoComercialHelper integracaoComercialHelper) throws ControladorException {
 		Imovel imovel = integracaoComercialHelper.getImovel();
 		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
 		LigacaoAgua ligacaoAgua = integracaoComercialHelper.getLigacaoAgua();
-		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper
-				.getHidrometroInstalacaoHistorico();
+		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper.getHidrometroInstalacaoHistorico();
 
-		// Vivianne Sousa - 09/03/2009 - analista: Denys Tavares
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		// 4.3.1 Caso PARM_ICSUPRESSAO = 1
-		if (sistemaParametro.getIndicadorSupressao().equals(
-				ConstantesSistema.SIM)) {
+		if (sistemaParametro.getIndicadorSupressao().equals(ConstantesSistema.SIM)) {
 
-			// 4.3.1.1 caso o motivo de supressão selecionado seja igual a "A
-			// PEDIDO DO CLIENTE",
+			// 4.3.1.1 caso o motivo de supressão selecionado seja igual a "A PEDIDO DO CLIENTE",
 			// verificar se existe débito para o imóvel
 			SupressaoMotivo supressaoMotivo = ligacaoAgua.getSupressaoMotivo();
-			if (supressaoMotivo.getId() != null
-					&& supressaoMotivo.getId().equals(
-							SupressaoMotivo.A_PEDIDO_DO_CLIENTE)) {
+			if (supressaoMotivo.getId() != null && supressaoMotivo.getId().equals(SupressaoMotivo.A_PEDIDO_DO_CLIENTE)) {
 
 				// FS0015 - Verificar existencia de débitos
 				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = getControladorCobranca()
-						.obterDebitoImovelOuCliente(1, // Indicador débito
-														// imóvel
-								imovel.getId().toString(), // Matrícula do
-															// imóvel
+						.obterDebitoImovelOuCliente(1, // Indicador débito imóvel
+								imovel.getId().toString(), // Matrícula do imóvel
 								null, // Código do cliente
-								null, // Tipo de relação do cliento com o
-										// imóvel
+								null, // Tipo de relação do cliento com o imóvel
 								"190101", // Referência inicial do débito
 								"999912", // Referência final do débito
-								Util.converteStringParaDate("01/01/1901"), // Inicio
-																			// Vencimento
-								Util.converteStringParaDate("31/12/9999"), // Final
-																			// Vencimento
+								Util.converteStringParaDate("01/01/1901"), // Inicio Vencimento
+								Util.converteStringParaDate("31/12/9999"), // Final Vencimento
 								1, // Indicador pagamento
 								1, // Indicador conta em revisão
 								1, // Indicador débito a cobrar
@@ -3775,16 +3759,11 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 								1, // Indicador acréscimos por impontualidade
 								null); // Indicador Contas
 
-				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() != null && colecaoDebitoImovel
-						.getColecaoContasValoresImovel().size() > 0)
-						|| (colecaoDebitoImovel
-								.getColecaoGuiasPagamentoValores() != null && colecaoDebitoImovel
-								.getColecaoGuiasPagamentoValores().size() > 0)
-						|| (colecaoDebitoImovel.getColecaoDebitoACobrar() != null && colecaoDebitoImovel
-								.getColecaoDebitoACobrar().size() > 0)) {
+				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() != null && colecaoDebitoImovel.getColecaoContasValoresImovel().size() > 0)
+						|| (colecaoDebitoImovel.getColecaoGuiasPagamentoValores() != null && colecaoDebitoImovel.getColecaoGuiasPagamentoValores().size() > 0)
+						|| (colecaoDebitoImovel.getColecaoDebitoACobrar() != null && colecaoDebitoImovel.getColecaoDebitoACobrar().size() > 0)) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.nao_e_possivel_efetuar_supressao");
+					throw new ControladorException("atencao.nao_e_possivel_efetuar_supressao");
 				}
 
 			}
@@ -3793,35 +3772,28 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 			// exibir a mensagem "Necessário permissão especial para efetuar
 			// supressão
 			else {
-
-				boolean temPermissaoEfetuarSupressaoAgua = getControladorPermissaoEspecial()
-						.verificarPermissaoEfetuarSupressaoAgua(
-								integracaoComercialHelper.getUsuarioLogado());
+				boolean temPermissaoEfetuarSupressaoAgua = getControladorPermissaoEspecial().verificarPermissaoEfetuarSupressaoAgua(integracaoComercialHelper.getUsuarioLogado());
 
 				if (!temPermissaoEfetuarSupressaoAgua) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.necessario_permissao_para_efetuar_supressao");
+					throw new ControladorException("atencao.necessario_permissao_para_efetuar_supressao");
 				}
-
 			}
-
 		}
 
 		/*
 		 * [UC0107] Registrar Transação
 		 * 
 		 */
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_SUPRESSAO_LIGACAO_AGUA_EFETUAR, imovel
-						.getId(), imovel.getId(), new UsuarioAcaoUsuarioHelper(
-						integracaoComercialHelper.getUsuarioLogado(),
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_SUPRESSAO_LIGACAO_AGUA_EFETUAR, 
+				imovel.getId(), imovel.getId(), 
+				new UsuarioAcaoUsuarioHelper(integracaoComercialHelper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		// [UC0107] -Fim- Registrar Transação
 
 		// [SB0001] Atualizar Ligação de Água
 		this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 		registradorOperacao.registrarOperacao(ligacaoAgua);
+		imovel.setUsuarioParaLog(integracaoComercialHelper.getUsuarioLogado());
 		getControladorUtil().atualizar(ligacaoAgua);
 
 		// [SB0001] Atualizar Imovel
@@ -3830,11 +3802,8 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		getControladorUtil().atualizar(imovel);
 
 		if (hidrometroInstalacaoHistorico != null) {
-			hidrometroInstalacaoHistorico
-					.setUsuarioRetirada(integracaoComercialHelper
-							.getUsuarioLogado());
-			registradorOperacao
-					.registrarOperacao(hidrometroInstalacaoHistorico);
+			hidrometroInstalacaoHistorico.setUsuarioRetirada(integracaoComercialHelper.getUsuarioLogado());
+			registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
 			/**
 			 * Alterado por Arthur Carvalho
 			 * Analista: Rosana Carvalho
@@ -3847,16 +3816,12 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		}
 		// Atualiza Ordem de Servico
 		FiltroOrdemServico filtroOrdemServico = new FiltroOrdemServico();
-		filtroOrdemServico.adicionarParametro(new ParametroSimples(
-				FiltroOrdemServico.ID, ordemServico.getId()));
-		Collection colecaoOrdemServico = getControladorUtil().pesquisar(
-				filtroOrdemServico, OrdemServico.class.getName());
+		filtroOrdemServico.adicionarParametro(new ParametroSimples(FiltroOrdemServico.ID, ordemServico.getId()));
+		Collection colecaoOrdemServico = getControladorUtil().pesquisar(filtroOrdemServico, OrdemServico.class.getName());
 		if (!colecaoOrdemServico.isEmpty()) {
-			OrdemServico ordemServicoBase = (OrdemServico) Util
-					.retonarObjetoDeColecao(colecaoOrdemServico);
+			OrdemServico ordemServicoBase = (OrdemServico) Util.retonarObjetoDeColecao(colecaoOrdemServico);
 
-			if (ordemServicoBase.getUltimaAlteracao().after(
-					ordemServico.getUltimaAlteracao())) {
+			if (ordemServicoBase.getUltimaAlteracao().after(ordemServico.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
@@ -6791,20 +6756,8 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 
-	public Integer alterarSituacaoLigacao(Imovel imovel,
-			String indicadorTipoLigacao, String idSituacaoLigacaoAguaNova,
-			String idSituacaoLigacaoEsgotoNova, String idOrdemServico,
-			Usuario usuarioLogado) throws ControladorException {
-
-		/*
-		 * [UC0107] Registrar Transação
-		 * 
-		 */
-
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_SITUACAO_LIGACAO_ALTERAR,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+	public Integer alterarSituacaoLigacao(Imovel imovel, String indicadorTipoLigacao, String idSituacaoLigacaoAguaNova, String idSituacaoLigacaoEsgotoNova, String idOrdemServico, Usuario usuarioLogado) throws ControladorException {
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_SITUACAO_LIGACAO_ALTERAR, new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_SITUACAO_LIGACAO_ALTERAR);
@@ -6815,88 +6768,63 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 
 		// [FS0009] - Verificar existencia de debitos
 		// adicionadao por Vivianne Sousa - 18/03/2009 - analista: Dennys
-		boolean temPermissaoAlterarSituacaoLigacaoParaImovelComDebito = getControladorPermissaoEspecial()
-				.verificarPermissaoAlterarSituacaoLigacaoParaImovelComDebito(
-						usuarioLogado);
+		boolean temPermissaoAlterarSituacaoLigacaoParaImovelComDebito = getControladorPermissaoEspecial().verificarPermissaoAlterarSituacaoLigacaoParaImovelComDebito(usuarioLogado);
 		// caso o usuario tenha permisão especial, não verificar existencia de
 		// debitos
 		if (!temPermissaoAlterarSituacaoLigacaoParaImovelComDebito) {
 
 			ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = getControladorCobranca()
-					.obterDebitoImovelOuCliente(1, imovel.getId().toString(),
-							null, null, "190101", "999912",
-							Util.converteStringParaDate("01/01/1901"),
-							Util.converteStringParaDate("31/12/9999"), 1, 1, 1,
-							1, 1, 1, 1, null);
+					.obterDebitoImovelOuCliente(1, imovel.getId().toString(), null, null, "190101", "999912",
+							Util.converteStringParaDate("01/01/1901"), Util.converteStringParaDate("31/12/9999"), 1, 1,
+							1, 1, 1, 1, 1, null);
 
 			Integer quantidadeDebitos = 0;
-			if (obterDebitoImovelOuClienteHelper
-					.getColecaoContasValoresImovel() != null) {
-				quantidadeDebitos += obterDebitoImovelOuClienteHelper
-						.getColecaoContasValoresImovel().size();
+			if (obterDebitoImovelOuClienteHelper.getColecaoContasValoresImovel() != null) {
+				quantidadeDebitos += obterDebitoImovelOuClienteHelper.getColecaoContasValoresImovel().size();
 			}
-			if (obterDebitoImovelOuClienteHelper
-					.getColecaoGuiasPagamentoValores() != null) {
-				quantidadeDebitos += obterDebitoImovelOuClienteHelper
-						.getColecaoGuiasPagamentoValores().size();
+			if (obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores() != null) {
+				quantidadeDebitos += obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores().size();
 			}
 			if (obterDebitoImovelOuClienteHelper.getColecaoCreditoARealizar() != null) {
-				quantidadeDebitos += obterDebitoImovelOuClienteHelper
-						.getColecaoCreditoARealizar().size();
+				quantidadeDebitos += obterDebitoImovelOuClienteHelper.getColecaoCreditoARealizar().size();
 			}
 			if (obterDebitoImovelOuClienteHelper.getColecaoDebitoACobrar() != null) {
-				quantidadeDebitos += obterDebitoImovelOuClienteHelper
-						.getColecaoDebitoACobrar().size();
+				quantidadeDebitos += obterDebitoImovelOuClienteHelper.getColecaoDebitoACobrar().size();
 			}
 			if (quantidadeDebitos > 0) {
-				throw new ControladorException(
-						"atencao.existencia.debitos.alterar.ligacao.situacao");
+				throw new ControladorException("atencao.existencia.debitos.alterar.ligacao.situacao");
 			}
 
 		}
 
 		// [FS0006] - Verificar existencia de hidrometro
 
-		if ((indicadorTipoLigacao.equalsIgnoreCase(""
-				+ LigacaoTipo.LIGACAO_AGUA) || (indicadorTipoLigacao
-				.equalsIgnoreCase("3") && !indicadorTipoLigacao
-				.equalsIgnoreCase("-1")))
+		if ((indicadorTipoLigacao.equalsIgnoreCase("" + LigacaoTipo.LIGACAO_AGUA)
+				|| (indicadorTipoLigacao.equalsIgnoreCase("3") && !indicadorTipoLigacao.equalsIgnoreCase("-1")))
 				&& idSituacaoLigacaoAguaNova != null) {
 
-			if (!idSituacaoLigacaoAguaNova.equalsIgnoreCase(""
-					+ LigacaoAguaSituacao.LIGADO)
-					|| !idSituacaoLigacaoAguaNova.equalsIgnoreCase(""
-							+ LigacaoAguaSituacao.FACTIVEL)) {
+			if (!idSituacaoLigacaoAguaNova.equalsIgnoreCase("" + LigacaoAguaSituacao.LIGADO)
+					|| !idSituacaoLigacaoAguaNova.equalsIgnoreCase("" + LigacaoAguaSituacao.FACTIVEL)) {
 
 				if (imovel.getLigacaoAgua() != null) {
-
 					FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
-					filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
-							FiltroLigacaoAgua.ID, imovel.getLigacaoAgua()
-									.getId()));
+					filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getLigacaoAgua().getId()));
 
-					Collection colecaoLigacaoAgua = getControladorUtil()
-							.pesquisar(filtroLigacaoAgua,
-									LigacaoAgua.class.getName());
+					Collection colecaoLigacaoAgua = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 
-					filtroLigacaoAgua
-							.adicionarCaminhoParaCarregamentoEntidade("hidrometroInstalacaoHistorico");
+					filtroLigacaoAgua.adicionarCaminhoParaCarregamentoEntidade("hidrometroInstalacaoHistorico");
 
-					LigacaoAgua ligacaoAgua = (LigacaoAgua) colecaoLigacaoAgua
-							.iterator().next();
+					LigacaoAgua ligacaoAgua = (LigacaoAgua) colecaoLigacaoAgua.iterator().next();
 
 					if (ligacaoAgua.getHidrometroInstalacaoHistorico() != null) {
 						sessionContext.setRollbackOnly();
-						throw new ControladorException(
-								"atencao.hidrometro_ja_instalado_ligacao_agua",
-								null, ligacaoAgua.getId().toString());
+						throw new ControladorException("atencao.hidrometro_ja_instalado_ligacao_agua", null, ligacaoAgua.getId().toString());
 					} else {
 						// [SB0001]- Deletar Dados da Ligacao
 
 						// Registrar Transacao
 						ligacaoAgua.setOperacaoEfetuada(operacaoEfetuada);
-						ligacaoAgua.adicionarUsuario(usuarioLogado,
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+						ligacaoAgua.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 						registradorOperacao.registrarOperacao(ligacaoAgua);
 						// Registrar Transacao
 
@@ -6908,36 +6836,28 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 						getControladorUtil().remover(ligacaoAgua);
 						// [SB0002]- Atualizar Situacao do Imovel
 						LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
-						ligacaoAguaSituacao.setId(new Integer(
-								idSituacaoLigacaoAguaNova));
+						ligacaoAguaSituacao.setId(new Integer(idSituacaoLigacaoAguaNova));
 						imovel.setLigacaoAguaSituacao(ligacaoAguaSituacao);
 					}
 
 				} else {
 					LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
-					ligacaoAguaSituacao.setId(new Integer(
-							idSituacaoLigacaoAguaNova));
+					ligacaoAguaSituacao.setId(new Integer(idSituacaoLigacaoAguaNova));
 					imovel.setLigacaoAguaSituacao(ligacaoAguaSituacao);
 				}
 			}
 
 		}
 
-		if ((indicadorTipoLigacao.equalsIgnoreCase(""
-				+ LigacaoTipo.LIGACAO_ESGOTO) || indicadorTipoLigacao
-				.equalsIgnoreCase("3"))
-				&& idSituacaoLigacaoEsgotoNova != null) {
+		if ((indicadorTipoLigacao.equalsIgnoreCase("" + LigacaoTipo.LIGACAO_ESGOTO)
+				|| indicadorTipoLigacao.equalsIgnoreCase("3")) && idSituacaoLigacaoEsgotoNova != null) {
 
-			if (!idSituacaoLigacaoEsgotoNova.equalsIgnoreCase(""
-					+ LigacaoEsgotoSituacao.POTENCIAL)
-					|| !idSituacaoLigacaoEsgotoNova.equalsIgnoreCase(""
-							+ LigacaoEsgotoSituacao.FACTIVEL)) {
+			if (!idSituacaoLigacaoEsgotoNova.equalsIgnoreCase("" + LigacaoEsgotoSituacao.POTENCIAL)
+					|| !idSituacaoLigacaoEsgotoNova.equalsIgnoreCase("" + LigacaoEsgotoSituacao.FACTIVEL)) {
 
 				if (imovel.getHidrometroInstalacaoHistorico() != null) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.hidrometro_ja_instalado_ligacao_esgoto",
-							null, imovel.getId().toString());
+					throw new ControladorException("atencao.hidrometro_ja_instalado_ligacao_esgoto", null, imovel.getId().toString());
 
 				} else {
 					// [SB0001]- Deletar Dados da Ligacao
@@ -6945,8 +6865,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 					if (ligacaoEsgoto != null) {
 						// Registrar Transacao
 						ligacaoEsgoto.setOperacaoEfetuada(operacaoEfetuada);
-						ligacaoEsgoto.adicionarUsuario(usuarioLogado,
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+						ligacaoEsgoto.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 						registradorOperacao.registrarOperacao(ligacaoEsgoto);
 						// Registrar Transacao
 
@@ -6954,8 +6873,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 					}
 					// [SB0002]- Atualizar Situacao do Imovel
 					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
-					ligacaoEsgotoSituacao.setId(new Integer(
-							idSituacaoLigacaoEsgotoNova));
+					ligacaoEsgotoSituacao.setId(new Integer(idSituacaoLigacaoEsgotoNova));
 					imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 				}
 			}
@@ -6965,17 +6883,14 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 
 		// [FS0005]- Atualizacao Realizada por outro Usuario
 		FiltroImovel filtroImovelBase = new FiltroImovel();
-		filtroImovelBase.adicionarParametro(new ParametroSimples(
-				FiltroImovel.ID, imovel.getId()));
-		Collection colecaoImovelBase = getControladorUtil().pesquisar(
-				filtroImovelBase, Imovel.class.getSimpleName());
+		filtroImovelBase.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+		Collection colecaoImovelBase = getControladorUtil().pesquisar(filtroImovelBase, Imovel.class.getSimpleName());
 		if (colecaoImovelBase != null && !colecaoImovelBase.isEmpty()) {
 			// Recupera o grupo na base de dados
 			Imovel imovelBase = (Imovel) colecaoImovelBase.iterator().next();
 
 			// [FS0004] - Atualização realizada por outro usuário
-			if (imovelBase.getUltimaAlteracao().after(
-					imovel.getUltimaAlteracao())) {
+			if (imovelBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
@@ -6984,24 +6899,22 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		// Registrar Transacao
 
 		imovel.setOperacaoEfetuada(operacaoEfetuada);
-		imovel.adicionarUsuario(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		imovel.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(imovel);
 
 		// Registrar Transacao
 
 		// [SB0002]- Atualizar Situacao do Imovel
+		imovel.setUsuarioParaLog(usuarioLogado);
 		getControladorUtil().atualizar(imovel);
 
 		// [SB0003]- Atualizar Ordem de Servico
 
-		String idMotivoEncerramento = AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO
-				.toString();
+		String idMotivoEncerramento = AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO.toString();
 		// Chamada ao [UC0457]Encerrar Ordem de Servico
-		getControladorOrdemServico().encerrarOSComExecucaoSemReferencia(
-				new Integer(idOrdemServico), new Date(), usuarioLogado,
-				idMotivoEncerramento, new Date(), null, null, null, null, null,
-				null, null, null, null,null,null,null);
+		getControladorOrdemServico().encerrarOSComExecucaoSemReferencia(new Integer(idOrdemServico), new Date(),
+				usuarioLogado, idMotivoEncerramento, new Date(), null, null, null, null, null, null, null, null, null,
+				null, null, null);
 
 		return imovel.getId();
 

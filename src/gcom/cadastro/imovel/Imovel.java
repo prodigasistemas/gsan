@@ -43,12 +43,13 @@ import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.model.IHistorico;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 @ControleAlteracao()
-public class Imovel extends ObjetoTransacao implements IImovel {
+public class Imovel extends ObjetoTransacao implements IImovel, IHistorico{
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -2497,4 +2498,27 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     public boolean isTarifaSocial() {
     	return this.imovelPerfil.getId().equals(ConstantesSistema.INDICADOR_TARIFA_SOCIAL);
     }
+
+	public Class getClasseOrigem(){
+		return Imovel.class;
+	}
+	
+    public Class getClasseHistorico() {
+		return ImovelHistorico.class;
+	}
+
+    public void definirEnvioContaQuandoNaoHaResponsavel() {
+		if(this.getImovelContaEnvio() == null ||
+				(this.getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_EMAIL.intValue() &&
+				this.getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_IMOVEL_E_PARA_EMAIL.intValue()) ){
+			
+			ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
+			imovelContaEnvio.setId(ImovelContaEnvio.ENVIAR_IMOVEL);
+			
+			this.setImovelContaEnvio(imovelContaEnvio);
+		}
+		
+		this.setIndicadorConta(new Short("2"));
+		this.setIndicadorEmissaoExtratoFaturamento(new Short("2"));		
+	}
 }

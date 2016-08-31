@@ -34,6 +34,8 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
+import gcom.batch.IRepositorioBatch;
+import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -87,6 +89,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private IRepositorioSeguranca            repositorioSeguranca;
 	private IRepositorioUtil                 repositorioUtil;
 	private static List<Integer> listaRAParaExclusao = new ArrayList<Integer>();
+	private Usuario usuario = null;
 
 	public void ejbCreate() throws CreateException {
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
@@ -100,6 +103,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		
 		try {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
+			
+			
+			usuario = getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidade);
 			
 			processarClientes();
 			processarImoveis();
@@ -201,6 +207,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setUltimaAlteracao(new Date());
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
+		imovel.setUsuarioParaLog(usuario);
 		
 		getControladorUtil().atualizar(imovel);
 		

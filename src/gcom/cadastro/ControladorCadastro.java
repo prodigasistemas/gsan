@@ -9929,11 +9929,8 @@ public class ControladorCadastro extends ControladorComum {
 	 * @return Id do arquivo texto recém-inserido
 	 * @throws ControladorException
 	 */
-	public Integer inserirArquivoTextoAtualizacaoCadastralSimplificado(
-			AtualizacaoCadastralSimplificado arquivo,
-			AtualizacaoCadastralSimplificadoBinario arquivoBinario,
-			Collection<AtualizacaoCadastralSimplificadoLinha> linhas)
-			throws ControladorException {
+	public Integer inserirArquivoTextoAtualizacaoCadastralSimplificado(AtualizacaoCadastralSimplificado arquivo,
+			AtualizacaoCadastralSimplificadoBinario arquivoBinario,	Collection<AtualizacaoCadastralSimplificadoLinha> linhas) throws ControladorException {
 
 		Integer retorno = null;
 
@@ -9944,20 +9941,18 @@ public class ControladorCadastro extends ControladorComum {
 		int numeroDaLinha = 0;
 
 		// buscando todas as críticas de uma vez para armazená-las em memória
-		// e depois percorrê-las visando não pesquisar a mesma crítica várias
+		// e depois percorrê-las visando não pesquisar a mesma crítica
+		// várias
 		// vezes (otimização)
 		FiltroAtualizacaoCadastralSimplificadoCritica filtro = new FiltroAtualizacaoCadastralSimplificadoCritica();
-		Collection<AtualizacaoCadastralSimplificadoCritica> criticas = getControladorUtil()
-				.pesquisar(filtro,
-						AtualizacaoCadastralSimplificadoCritica.class.getName());
+		Collection<AtualizacaoCadastralSimplificadoCritica> criticas = getControladorUtil().pesquisar(filtro, AtualizacaoCadastralSimplificadoCritica.class.getName());
 
 		// percore todas as linhas do arquivo
 		for (AtualizacaoCadastralSimplificadoLinha linha : linhas) {
 			numeroDaLinha++;
 			try {
 				// se há hidrômetro no imóvel
-				if (linha.getNumeroMedidor() != null
-						&& !"".equals(linha.getNumeroMedidor().trim())) {
+				if (linha.getNumeroMedidor() != null && !"".equals(linha.getNumeroMedidor().trim())) {
 					qtdeImoveisComHidrometro++;
 
 					// código do retorno da validação e atualização do
@@ -9972,16 +9967,12 @@ public class ControladorCadastro extends ControladorComum {
 																// já está
 																// atualizado no
 																// sistema
-						adicionarCritica(criticas, linha,
-								validouEAtualizouHidrometro);
+						adicionarCritica(criticas, linha, validouEAtualizouHidrometro);
 				} else { // caso não tenha hidrômetro no imóvel
 					final boolean haHidrometroNoImovel = verificarAusenciaHidrometro(linha);
 					// caso não exista hidrômetro no imóvel
 					if (!haHidrometroNoImovel)
-						adicionarCritica(
-								criticas,
-								linha,
-								AtualizacaoCadastralSimplificadoCritica.IMOVEL_COM_HIDROMETRO);
+						adicionarCritica(criticas, linha, AtualizacaoCadastralSimplificadoCritica.IMOVEL_COM_HIDROMETRO);
 				}
 			} catch (ParseException pe) {
 				throw new ControladorException("erro.sistema", pe);
@@ -9989,7 +9980,8 @@ public class ControladorCadastro extends ControladorComum {
 				throw new ControladorException("erro.sistema", ere);
 			}
 
-			// código do retorno da validação e atualização de subcategorias e
+			// código do retorno da validação e atualização de
+			// subcategorias e
 			// economias
 			final Integer validouEAtualizouEconomias = validarEAtualizarEconomias(linha);
 
@@ -9998,17 +9990,19 @@ public class ControladorCadastro extends ControladorComum {
 				qtdeImoveisComEconomiasAtualizados++;
 			} else if (validouEAtualizouEconomias != -1) { // -1 indica que as
 															// economias já
-															// estão atualizadas
+															// estão
+															// atualizadas
 															// no sistema
 				adicionarCritica(criticas, linha, validouEAtualizouEconomias);
 			}
 
-			// [SB0004] Validar e atualizar numero do medidor de energia do imovel
-			if (linha.getNumeroMedidorEnergia() != null
-					&& !"".equals(linha.getNumeroMedidorEnergia().trim())) {
+			// [SB0004] Validar e atualizar numero do medidor de energia do
+			// imovel
+			if (linha.getNumeroMedidorEnergia() != null && !"".equals(linha.getNumeroMedidorEnergia().trim())) {
 
 				// codigo do retorno da validacao e atualizacao do numero do
 				// medidor de energia
+				linha.setUsuario(arquivo.getUsuario());
 				final Integer validouEAtualizouMedidorEnergia = validarEAtualizarMedidorEnergia(linha);
 
 				// se o retorno for nulo, e pq atualizou com sucesso
@@ -10019,8 +10013,7 @@ public class ControladorCadastro extends ControladorComum {
 					// numero do medidor ja
 					// esta atualizado
 					// no sistema
-					adicionarCritica(criticas, linha,
-							validouEAtualizouMedidorEnergia);
+					adicionarCritica(criticas, linha, validouEAtualizouMedidorEnergia);
 				}
 			}
 
@@ -10029,13 +10022,10 @@ public class ControladorCadastro extends ControladorComum {
 		// considera-se que há um imóvel por linha no arquivo
 		Integer qtdeTotalImoveis = linhas.size();
 
-		arquivo
-				.setQtdeImoveisComEconomiasAtualizados(qtdeImoveisComEconomiasAtualizados);
+		arquivo.setQtdeImoveisComEconomiasAtualizados(qtdeImoveisComEconomiasAtualizados);
 		arquivo.setQtdeImoveisComHidrometro(qtdeImoveisComHidrometro);
-		arquivo
-				.setQtdeImoveisComHidrometroAtualizados(qtdeImoveisComHidrometroAtualizados);
-		arquivo.setQtdeImoveisSemHidrometro(qtdeTotalImoveis
-				- qtdeImoveisComHidrometro);
+		arquivo.setQtdeImoveisComHidrometroAtualizados(qtdeImoveisComHidrometroAtualizados);
+		arquivo.setQtdeImoveisSemHidrometro(qtdeTotalImoveis - qtdeImoveisComHidrometro);
 		arquivo.setQtdeImoveisComMedidorEnergiaAtualizados(qtdeImoveisComMedidorEnergiaAtualizados);
 		arquivo.setQtdeTotalImoveis(qtdeTotalImoveis);
 
@@ -10547,27 +10537,21 @@ public class ControladorCadastro extends ControladorComum {
 	 *         houve critica.
 	 * @throws ControladorException
 	 */
-	public Integer validarEAtualizarMedidorEnergia(
-			AtualizacaoCadastralSimplificadoLinha linha)
+	public Integer validarEAtualizarMedidorEnergia(AtualizacaoCadastralSimplificadoLinha linha)
 			throws ControladorException {
-		Integer retorno = null; // por padrao, retorna nulo que indica a
-		// atualizacao com sucesso
+		Integer retorno = null; // por padrao, retorna nulo que indica a atualizacao com sucesso
 
 		// obtendo o imovel a partir da matricula
 		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				linha.getImovel().getId()));
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, linha.getImovel().getId()));
 
 		// Pesquisa o imovel
-		Imovel imovel = (Imovel) Util
-				.retonarObjetoDeColecao(getControladorUtil().pesquisar(
-						filtroImovel, Imovel.class.getName()));
+		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()));
 
 		// Atualiza imovel com o numero do medidor caso nao esteja atualizado
-		if (imovel.getNumeroMedidorEnergia() == null
-				|| !imovel.getNumeroMedidorEnergia().equals(
-						linha.getNumeroMedidorEnergia())) {
+		if (imovel.getNumeroMedidorEnergia() == null || !imovel.getNumeroMedidorEnergia().equals(linha.getNumeroMedidorEnergia())) {
 			imovel.setNumeroMedidorEnergia(linha.getNumeroMedidorEnergia());
+			imovel.setUsuarioParaLog(linha.getUsuario());
 			getControladorUtil().atualizar(imovel);
 		} else {
 			retorno = -1;// retorna -1 se o medidor de energia do imovel ja esta
@@ -10810,10 +10794,10 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setIndicadorEmissaoExtratoFaturamento(ConstantesSistema.NAO);
 		imovel.setImovelPerfil(imovelPerfil);
 		imovel.setUltimaAlteracao(dataAtual);
+		imovel.setUsuarioParaLog(usuarioLogado);
 
 		this.getControladorUtil().atualizar(imovel);		
 			
-		imovelProgramaEspecial.setUltimaAlteracao(dataAtual);
 		imovelProgramaEspecial.setMesAnoSaidaPrograma(imovel.getQuadra().getRota().getFaturamentoGrupo().getAnoMesReferencia());
 		imovelProgramaEspecial.setUsuarioSuspensao(usuarioLogado);
 		imovelProgramaEspecial.setFormaSuspensao(formaSuspensao);
@@ -10889,6 +10873,7 @@ public class ControladorCadastro extends ControladorComum {
 		cobrancaSituacaoTipo.setId(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA);
 		imovel.setCobrancaSituacaoTipo(cobrancaSituacaoTipo);
 		
+		imovel.setUsuarioParaLog(usuarioLogado);
 		this.getControladorUtil().atualizar(imovel);
 		
 		/**
@@ -11536,6 +11521,7 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setIndicadorEmissaoExtratoFaturamento(ConstantesSistema.NAO);
 		imovel.setImovelPerfil(imovelPerfil);
 		imovel.setUltimaAlteracao(dataAtual);
+		imovel.setUsuarioParaLog(usuarioLogado);
 
 		this.getControladorUtil().atualizar(imovel);		
 			

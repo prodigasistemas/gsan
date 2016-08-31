@@ -10711,8 +10711,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 * @data 08/07/201
 	 */
-	public void alterarInscricoesImoveis(Integer idFuncionalidadeIniciada,
-			Integer idLocalidade) throws ControladorException {
+	public void alterarInscricoesImoveis(Integer idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
@@ -10720,9 +10719,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		 * Registrar o início do processamento da Unidade de Processamento do
 		 * Batch
 		 */
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.LOCALIDADE, idLocalidade);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
 
@@ -10737,8 +10735,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			while (!flagTerminou) {
 
 				Collection colecaoDados = this.repositorioFaturamento
-						.pesquisarImoveisComInscricaoPedenteParaAtualizacao(
-								idLocalidade, numeroIndice, quantidadeRegistros);
+						.pesquisarImoveisComInscricaoPedenteParaAtualizacao(idLocalidade, numeroIndice,
+								quantidadeRegistros);
 
 				if (colecaoDados != null && !colecaoDados.isEmpty()) {
 
@@ -10751,54 +10749,35 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						ImovelInscricaoAlterada imovelInscricaoAlterada = (ImovelInscricaoAlterada) dadosIterator
 								.next();
 
-						Imovel imovelAtualizar = imovelInscricaoAlterada
-								.getImovel();
-						Localidade localidade = imovelInscricaoAlterada
-								.getLocalidadeAtual();
-						SetorComercial setorComercial = imovelInscricaoAlterada
-								.getSetorComercialAtual();
-						Quadra quadra = imovelInscricaoAlterada
-								.getQuadraAtual();
+						Imovel imovelAtualizar = imovelInscricaoAlterada.getImovel();
+						Localidade localidade = imovelInscricaoAlterada.getLocalidadeAtual();
+						SetorComercial setorComercial = imovelInscricaoAlterada.getSetorComercialAtual();
+						Quadra quadra = imovelInscricaoAlterada.getQuadraAtual();
 						Short lote = imovelInscricaoAlterada.getLoteAtual();
-						Short subLote = imovelInscricaoAlterada
-								.getSubLoteAtual();
+						Short subLote = imovelInscricaoAlterada.getSubLoteAtual();
 
 						QuadraFace quadraFace = null;
 						if (imovelInscricaoAlterada.getQuadraFaceAtual() != null) {
-							quadraFace = imovelInscricaoAlterada
-									.getQuadraFaceAtual();
+							quadraFace = imovelInscricaoAlterada.getQuadraFaceAtual();
 						}
 
 						// Inicio [FS0002] Verificar duplicidade de inscrição
 						FiltroImovel filtroImovel = new FiltroImovel();
-						filtroImovel
-								.adicionarParametro(new ParametroSimples(
-										FiltroImovel.LOCALIDADE_ID, localidade
-												.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.SETOR_COMERCIAL_ID, setorComercial
-										.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.QUADRA_ID, quadra.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.LOTE, lote));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.SUBLOTE, subLote));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.LOCALIDADE_ID, localidade.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.SETOR_COMERCIAL_ID, setorComercial.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.QUADRA_ID, quadra.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.LOTE, lote));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.SUBLOTE, subLote));
 
 						if (quadraFace != null) {
-							filtroImovel
-									.adicionarParametro(new ParametroSimples(
-											FiltroImovel.QUADRA_FACE_ID,
-											quadraFace.getId()));
+							filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.QUADRA_FACE_ID, quadraFace.getId()));
 						}
 
-						Collection colecaoImoveis = getControladorUtil()
-								.pesquisar(filtroImovel, Imovel.class.getName());
+						Collection colecaoImoveis = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 
 						if (colecaoImoveis != null && !colecaoImoveis.isEmpty()) {
 
-							Imovel imovelMesmaInscricao = (Imovel) Util
-									.retonarObjetoDeColecao(colecaoImoveis);
+							Imovel imovelMesmaInscricao = (Imovel) Util.retonarObjetoDeColecao(colecaoImoveis);
 
 							if (imovelMesmaInscricao != null) {
 								existeImovelComMesmaIncricao = true;
@@ -10807,10 +10786,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						// Caso exista não efetua a alteração na tabela imovel.
 						if (existeImovelComMesmaIncricao) {
-							imovelInscricaoAlterada
-									.setIndicadorErroAlteracao(ConstantesSistema.SIM);
-							imovelInscricaoAlterada
-									.setIndicadorAtualizado(ConstantesSistema.NAO);
+							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.SIM);
+							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.NAO);
 						}
 						// Caso contrario
 						else {
@@ -10826,46 +10803,38 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								imovelAtualizar.setQuadraFace(quadraFace);
 							}
 
-							if (imovelInscricaoAlterada.getUsuarioAlteracao() != null
-									&& !imovelInscricaoAlterada
-											.getUsuarioAlteracao().equals("")) {
+							if (imovelInscricaoAlterada.getUsuarioAlteracao() != null && !imovelInscricaoAlterada.getUsuarioAlteracao().equals("")) {
 
 								// ------------ <REGISTRAR
 								// TRANSAÇÃO>----------------------------
 
 								RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-										Operacao.OPERACAO_IMOVEL_ATUALIZAR,
+										Operacao.OPERACAO_IMOVEL_ATUALIZAR, imovelAtualizar.getId(),
 										imovelAtualizar.getId(),
-										imovelAtualizar.getId(),
-										new UsuarioAcaoUsuarioHelper(
-												imovelInscricaoAlterada
-														.getUsuarioAlteracao(),
+										new UsuarioAcaoUsuarioHelper(imovelInscricaoAlterada.getUsuarioAlteracao(),
 												UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
-								registradorOperacao
-										.registrarOperacao(imovelAtualizar);
+								registradorOperacao.registrarOperacao(imovelAtualizar);
 
-								getControladorTransacao().registrarTransacao(
-										imovelAtualizar);
+								getControladorTransacao().registrarTransacao(imovelAtualizar);
 
 								// ------------ </REGISTRAR
 								// TRANSAÇÃO>----------------------------
 							}
 
+							imovelAtualizar.setUsuarioParaLog(getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada));
+							
 							getControladorUtil().atualizar(imovelAtualizar);
 
-							imovelInscricaoAlterada
-									.setIndicadorErroAlteracao(ConstantesSistema.NAO);
-							imovelInscricaoAlterada
-									.setIndicadorAtualizado(ConstantesSistema.SIM);
+							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.NAO);
+							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.SIM);
 						}
 
 						// Atualiza a tabela IMOVEL_INSCR_ALTERADA
 
 						Date dataAtual = new Date();
 
-						imovelInscricaoAlterada
-								.setDataAlteracaoBatch(dataAtual);
+						imovelInscricaoAlterada.setDataAlteracaoBatch(dataAtual);
 						imovelInscricaoAlterada.setUltimaAlteracao(dataAtual);
 						getControladorUtil().atualizar(imovelInscricaoAlterada);
 					}
@@ -10881,8 +10850,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				 * quantidade de registros seta a flag indicando que a paginação
 				 * terminou.
 				 */
-				if (colecaoDados == null
-						|| colecaoDados.size() < quantidadeRegistros) {
+				if (colecaoDados == null || colecaoDados.size() < quantidadeRegistros) {
 
 					flagTerminou = true;
 				}
@@ -10894,13 +10862,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
 	}

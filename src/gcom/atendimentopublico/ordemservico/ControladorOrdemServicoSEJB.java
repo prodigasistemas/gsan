@@ -1,5 +1,39 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
@@ -183,6 +217,7 @@ import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -204,54 +239,16 @@ import gcom.util.filtro.Intervalo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
-public class ControladorOrdemServicoSEJB implements SessionBean {
-
-	private static final long serialVersionUID = 1L;
+public class ControladorOrdemServicoSEJB extends ControladorComum{
+	private static final long serialVersionUID = -9200009057620946040L;
+	
+	private static final Logger logger = Logger.getLogger(ControladorOrdemServicoSEJB.class);
 
 	private IRepositorioOrdemServico repositorioOrdemServico = null;
-
-	private IRepositorioImovel repositorioImovel = null;
-	private IRepositorioFaturamento repositorioFaturamento = null;
-
-	private IRepositorioCobranca repositorioCobranca = null;
-
+	private IRepositorioImovel       repositorioImovel       = null;
+	private IRepositorioFaturamento  repositorioFaturamento  = null;
+	private IRepositorioCobranca     repositorioCobranca     = null;
 	private IRepositorioMicromedicao repositorioMicromedicao = null;
-
-	SessionContext sessionContext;
 
 	public void ejbCreate() throws CreateException {
 		repositorioOrdemServico = RepositorioOrdemServicoHBM.getInstancia();
@@ -259,468 +256,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
-	private ControladorImovelLocal getControladorImovel() {
-
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
-	private ControladorUsuarioLocal getControladorUsuario() {
-		ControladorUsuarioLocalHome localHome = null;
-		ControladorUsuarioLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUsuarioLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
-		ControladorSpcSerasaLocalHome localHome = null;
-		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o controladorLigacaoEsgoto
-	 * 
-	 * @author Leonardo Regis
-	 * @date 18/08/2006
-	 * 
-	 */
-	private ControladorLigacaoEsgotoLocal getControladorLigacaoEsgoto() {
-		ControladorLigacaoEsgotoLocalHome localHome = null;
-		ControladorLigacaoEsgotoLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLigacaoEsgotoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_ESGOTO_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
-	private ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o controladorLigacaoAgua
-	 * 
-	 * @author Leonardo Regis
-	 * @date 09/09/2006
-	 * 
-	 */
-	private ControladorLigacaoAguaLocal getControladorLigacaoAgua() {
-		ControladorLigacaoAguaLocalHome localHome = null;
-		ControladorLigacaoAguaLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLigacaoAguaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_AGUA_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de controladorUnidade
-	 * 
-	 * @return O valor de controladorUnidade
-	 */
-	private ControladorUnidadeLocal getControladorUnidade() {
-
-		ControladorUnidadeLocalHome localHome = null;
-		ControladorUnidadeLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUnidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
-
-	private ControladorEnderecoLocal getControladorEndereco() {
-
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
-
-		ControladorRegistroAtendimentoLocalHome localHome = null;
-		ControladorRegistroAtendimentoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorAtendimentoPublico
-	 * 
-	 * @return O valor de controladorAtendimentoPublico
-	 */
-
-	private ControladorAtendimentoPublicoLocal getControladorAtendimentoPublico() {
-		ControladorAtendimentoPublicoLocalHome localHome = null;
-		ControladorAtendimentoPublicoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAtendimentoPublicoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATENDIMENTO_PUBLICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorCliente
-	 * 
-	 * @return O valor de controladorCliente
-	 */
-
-	private ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorCobranca
-	 * 
-	 * @return O valor de controladorCobranca
-	 */
-
-	protected ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorPermissaoEspecial
-	 * 
-	 * @return O valor de controladorPermissaoEspecial
-	 */
-	private ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
 	}
 
 	/**
@@ -1672,37 +1207,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			objeto = (T) colecao.iterator().next();
 		}
 		return objeto;
-	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
 	}
 
 	/**
@@ -3512,26 +3016,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 				// fiscalização,
 				// indicando a situação do serviço como REJEITADO,
 
-				Integer idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
-				if (idOSReferenciaRejeitada != null && !idOSReferenciaRejeitada.equals("")) {
-					// o sistema pesquisa se a ordem de serviço referida já
-					// existe na tabela de OS não aceita
-					// (selecionar na tabela cobranca.cob_ac_os_nao_aceitas com
-					// orse_id = orse_idreferencia),
-					FiltroCobrancaAcaoOrdemServicoNaoAceitas filtroCobrancaAcaoOrdemServicoNaoAceitas = new FiltroCobrancaAcaoOrdemServicoNaoAceitas();
-
-					filtroCobrancaAcaoOrdemServicoNaoAceitas.adicionarParametro(new ParametroSimples(FiltroCobrancaAcaoOrdemServicoNaoAceitas.ORDEM_SERVICO_ID,
-							idOSReferenciaRejeitada));
-
-					Collection<CobrancaAcaoOrdemServicoNaoAceitas> colecao = getControladorUtil().pesquisar(filtroCobrancaAcaoOrdemServicoNaoAceitas,
-							CobrancaAcaoOrdemServicoNaoAceitas.class.getName());
-
-					if (colecao == null || colecao.isEmpty()) {
-						// Caso não exista[SB0008-Incluir Ordem Serviço Não
-						// Aceita].
-						incluirOrdemServicoNaoAceita(idOSReferenciaRejeitada, usuarioLogado);
-					}
-				}
+				rejeitarOrdemServico(numeroOS, usuarioLogado);
 			}
 
 		} catch (ErroRepositorioException e) {
@@ -3738,7 +3223,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		Short indIncluirDebito = null;
 		Integer idDebitoTipo = null;
 		Object[] parmsServTipo = null;
-		/* Integer idServicoTipo = null; */
 		Integer idImovel = null;
 		BigDecimal valorServico = null;
 		try {
@@ -3757,10 +3241,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			if (parmsServTipo[2] != null) {
 				idImovel = (Integer) parmsServTipo[2];
 			}
-			/*
-			 * if (parmsServTipo[3] != null) { idServicoTipo = (Integer)
-			 * parmsServTipo[3]; }
-			 */
 			if (parmsServTipo[4] != null) {
 				indIncluirDebito = (Short) parmsServTipo[4];
 			}
@@ -3792,33 +3272,8 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					}
 				}
 
-			} /*
-			 * else { if (idDebitoTipo != null) { osNaBase
-			 * .setIndicadorComercialAtualizado
-			 * (ServicoTipo.INDICADOR_ATUALIZA_COMERCIAL_NAO); Integer
-			 * idHidrometroInstalacaoHistorico = getControladorLigacaoAgua()
-			 * .pesquisarIdHidrometroInstalacaoHistorico(idImovel); Integer
-			 * idTipoMedicao = null; if (idHidrometroInstalacaoHistorico !=
-			 * null) { idTipoMedicao = MedicaoTipo.LIGACAO_AGUA; } else {
-			 * idTipoMedicao = MedicaoTipo.POCO; } BigDecimal valorAtual =
-			 * getControladorAtendimentoPublico()
-			 * .obterValorDebito(idServicoTipo, idImovel,
-			 * idTipoMedicao.shortValue()); gerarDebitoOrdemServico(numeroOS,
-			 * idDebitoTipo, valorAtual, 1); } }
-			 */
-		} /*
-		 * else { if (idDebitoTipo != null) { osNaBase
-		 * .setIndicadorComercialAtualizado
-		 * (ServicoTipo.INDICADOR_ATUALIZA_COMERCIAL_NAO); Integer
-		 * idHidrometroInstalacaoHistorico = getControladorLigacaoAgua()
-		 * .pesquisarIdHidrometroInstalacaoHistorico(idImovel); Integer
-		 * idTipoMedicao = null; if (idHidrometroInstalacaoHistorico != null) {
-		 * idTipoMedicao = MedicaoTipo.LIGACAO_AGUA; } else { idTipoMedicao =
-		 * MedicaoTipo.POCO; } BigDecimal valorAtual =
-		 * getControladorAtendimentoPublico() .obterValorDebito(idServicoTipo,
-		 * idImovel, idTipoMedicao.shortValue());
-		 * gerarDebitoOrdemServico(numeroOS, idDebitoTipo, valorAtual, 1); } }
-		 */
+			} 
+		}
 
 		AtendimentoMotivoEncerramento atendimentoMotivoEncerramento = new AtendimentoMotivoEncerramento();
 		atendimentoMotivoEncerramento.setId(idMotivoEncerramento);
@@ -3873,61 +3328,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 				}
 			}
 
-			/*
-			 * Alterado por Diogo Peixoto em 30/08/2011 [SB0009]- Verificar
-			 * Situação Especial de Faturamento
-			 */
-			// 4.6. Caso o tipo de serviço da ordem de serviço corresponda a
-			// SUBSTITUIÇÃO ou RETIRADA de hidrômetro
-			if (osNaBase.getServicoTipo().getId().equals(310) || osNaBase.getServicoTipo().getId().equals(307)) {
-				boolean situacaoEspecial = false;
-				Imovel imovel = null;
-				// [SB0009 - Verificar Situação Especial de Faturamento]
-
-				// Caso o imov_id na tabela ordem_servico diferente de nulo
-				try {
-					if (osNaBase.getImovel() != null && osNaBase.getImovel().getId() != null) {
-						imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(osNaBase.getImovel().getId());
-						if (imovel != null) {
-							situacaoEspecial = true;
-						}
-					} else {
-						RegistroAtendimento ra = osNaBase.getRegistroAtendimento();
-						if (ra != null && ra.getImovel() != null && ra.getImovel().getId() != null) {
-							imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(ra.getImovel().getId());
-							if (imovel != null) {
-								situacaoEspecial = true;
-							}
-						}
-					}
-
-					/*
-					 * Verifica se o imóvel está em situação especial de
-					 * faturamento. O booleano foi setado no trecho de código
-					 * logo acima ([SB0009])
-					 */
-					if (situacaoEspecial) {
-						imovel.setFaturamentoSituacaoTipo(null);
-						this.repositorioImovel.atualizarImovel(imovel);
-
-						FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
-						if (historico != null) {
-							SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-							historico.setAnoMesFaturamentoRetirada(sistemaParametro.getAnoMesFaturamento());
-							historico.setUsuarioRetira(usuarioLogado);
-							String observacao = "EXCLUÍDO DA SITUAÇÃO ESPECIAL DE FATURAMENTO DECORRENTE DE RETIRADA/SUBSTITUIÇAO "
-									+ "DE HIDRÔMETRO ATRAVÉS DA ORDEM DE SERVIÇO " + osNaBase.getId();
-							historico.setObservacaoRetira(observacao);
-							historico.setUltimaAlteracao(new Date());
-							this.repositorioFaturamento.atualizarFaturamentoSituacaoHistorico(historico);
-						}
-					}
-				} catch (ErroRepositorioException e) {
-					e.printStackTrace();
-					throw new ControladorException("erro.sistema", e);
-				}
-			}
+			verificarSituacaoFaturamento(usuarioLogado, osNaBase);
 		}
 
 		// Alterado por Francisco - 22/05/08, por conta do [UC478 - Gerar Resumo
@@ -4068,37 +3469,36 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		// RM777 - adicionado por Vivianne Sousa 03/06/2011 - analista:Claudio
 		// Lira
 		if (indicadorServicoAceito != null && indicadorServicoAceito.equals(ConstantesSistema.NAO)) {
-			// 4.5. Caso o usuário rejeite o retorno encontrado na fiscalização,
-			// indicando a situação do serviço como REJEITADO,
+			rejeitarOrdemServico(numeroOS, usuarioLogado);
+		}
 
-			Integer idOSReferenciaRejeitada = null;
-			try {
-				idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
-			} catch (ErroRepositorioException e) {
-				
-				e.printStackTrace();
-				throw new ControladorException("erro.sistema", e);
-			}
+	}
+
+	private void rejeitarOrdemServico(Integer numeroOS, Usuario usuarioLogado) throws ControladorException {
+		try {
+			Integer idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
+			
 			if (idOSReferenciaRejeitada != null && !idOSReferenciaRejeitada.equals("")) {
 				// o sistema pesquisa se a ordem de serviço referida já existe
 				// na tabela de OS não aceita
 				// (selecionar na tabela cobranca.cob_ac_os_nao_aceitas com
 				// orse_id = orse_idreferencia),
 				FiltroCobrancaAcaoOrdemServicoNaoAceitas filtroCobrancaAcaoOrdemServicoNaoAceitas = new FiltroCobrancaAcaoOrdemServicoNaoAceitas();
-
+				
 				filtroCobrancaAcaoOrdemServicoNaoAceitas.adicionarParametro(new ParametroSimples(FiltroCobrancaAcaoOrdemServicoNaoAceitas.ORDEM_SERVICO_ID,
 						idOSReferenciaRejeitada));
-
+				
 				Collection<CobrancaAcaoOrdemServicoNaoAceitas> colecao = getControladorUtil().pesquisar(filtroCobrancaAcaoOrdemServicoNaoAceitas,
 						CobrancaAcaoOrdemServicoNaoAceitas.class.getName());
-
+				
 				if (colecao == null || colecao.isEmpty()) {
 					// Caso não exista[SB0008-Incluir Ordem Serviço Não Aceita].
 					incluirOrdemServicoNaoAceita(idOSReferenciaRejeitada, usuarioLogado);
 				}
 			}
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao rejeitar ordem de servico", e);
 		}
-
 	}
 
 	private void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException {
@@ -4601,30 +4001,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			// RM777 - adicionado por Vivianne Sousa 03/06/2011 -
 			// analista:Claudio Lira
 			if (indicadorServicoAceito != null && indicadorServicoAceito.equals(ConstantesSistema.NAO)) {
-				// 4.5. Caso o usuário rejeite o retorno encontrado na
-				// fiscalização,
-				// indicando a situação do serviço como REJEITADO,
-
-				Integer idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
-				if (idOSReferenciaRejeitada != null && !idOSReferenciaRejeitada.equals("")) {
-					// o sistema pesquisa se a ordem de serviço referida já
-					// existe na tabela de OS não aceita
-					// (selecionar na tabela cobranca.cob_ac_os_nao_aceitas com
-					// orse_id = orse_idreferencia),
-					FiltroCobrancaAcaoOrdemServicoNaoAceitas filtroCobrancaAcaoOrdemServicoNaoAceitas = new FiltroCobrancaAcaoOrdemServicoNaoAceitas();
-
-					filtroCobrancaAcaoOrdemServicoNaoAceitas.adicionarParametro(new ParametroSimples(FiltroCobrancaAcaoOrdemServicoNaoAceitas.ORDEM_SERVICO_ID,
-							idOSReferenciaRejeitada));
-
-					Collection<CobrancaAcaoOrdemServicoNaoAceitas> colecao = getControladorUtil().pesquisar(filtroCobrancaAcaoOrdemServicoNaoAceitas,
-							CobrancaAcaoOrdemServicoNaoAceitas.class.getName());
-
-					if (colecao == null || colecao.isEmpty()) {
-						// Caso não exista[SB0008-Incluir Ordem Serviço Não
-						// Aceita].
-						incluirOrdemServicoNaoAceita(idOSReferenciaRejeitada, usuarioLogado);
-					}
-				}
+				rejeitarOrdemServico(numeroOS, usuarioLogado);
 			}
 
 			/*
@@ -4634,59 +4011,62 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			if (osNaBase.getServicoTipo() != null || osNaBase.getServicoTipo().getId() != null) {
 				// 4.6. Caso o tipo de serviço da ordem de serviço corresponda a
 				// SUBSTITUIÇÃO ou RETIRADA de hidrômetro
-				if (osNaBase.getServicoTipo().getId().equals(310) && osNaBase.getServicoTipo().getId().equals(307)) {
-					boolean situacaoEspecial = false;
-					Imovel imovel = null;
-					// [SB0009 - Verificar Situação Especial de Faturamento]
-
-					// Caso o imov_id na tabela ordem_servico diferente de nulo
-					try {
-						if (osNaBase.getImovel() != null && osNaBase.getImovel().getId() != null) {
-							imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(osNaBase.getImovel().getId());
-							if (imovel != null) {
-								situacaoEspecial = true;
-							}
-						} else {
-							RegistroAtendimento ra = osNaBase.getRegistroAtendimento();
-							if (ra != null && ra.getImovel() != null && ra.getImovel().getId() != null) {
-								imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(ra.getImovel().getId());
-								if (imovel != null) {
-									situacaoEspecial = true;
-								}
-							}
-						}
-
-						/*
-						 * Verifica se o imóvel está em situação especial de
-						 * faturamento. O booleano foi setado no trecho de
-						 * código logo acima ([SB0009])
-						 */
-						if (situacaoEspecial) {
-							imovel.setFaturamentoSituacaoTipo(null);
-							this.repositorioImovel.atualizarImovel(imovel);
-
-							FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
-							if (historico != null) {
-								SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-								historico.setAnoMesFaturamentoRetirada(sistemaParametro.getAnoMesFaturamento());
-								historico.setUsuarioRetira(usuarioLogado);
-								String observacao = "EXCLUÍDO DA SITUAÇÃO ESPECIAL DE FATURAMENTO DECORRENTE DE RETIRADA/SUBSTITUIÇAO "
-										+ "DE HIDRÔMETRO ATRAVÉS DA ORDEM DE SERVIÇO " + osNaBase.getId();
-								historico.setObservacaoRetira(observacao);
-								historico.setUltimaAlteracao(new Date());
-								this.repositorioFaturamento.atualizarFaturamentoSituacaoHistorico(historico);
-							}
-						}
-					} catch (ErroRepositorioException e) {
-						e.printStackTrace();
-					}
-				}
+				verificarSituacaoFaturamento(usuarioLogado, osNaBase);
 			}
 			return idOrdemServicoDiagnostico;
-		} catch (ErroRepositorioException e) {
+		} catch (Exception e) {
+			logger.error("Erro ao encerrar OS executada com referencia", e);
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
+			throw new ControladorException("Erro ao encerrar OS executada com referencia", e);
+		}
+	}
+
+	private void verificarSituacaoFaturamento(Usuario usuarioLogado, OrdemServico osNaBase)	throws ControladorException {
+		// 4.6. Caso o tipo de serviço da ordem de serviço corresponda a SUBSTITUIÇÃO ou RETIRADA de hidrômetro
+	
+		if (osNaBase.getServicoTipo().getId().equals(310) && osNaBase.getServicoTipo().getId().equals(307)) {
+			boolean situacaoEspecial = false;
+			Imovel imovel = null;
+			// [SB0009 - Verificar Situação Especial de Faturamento]
+			
+			// Caso o imov_id na tabela ordem_servico diferente de nulo
+			try {
+				if (osNaBase.getImovel() != null && osNaBase.getImovel().getId() != null) {
+					imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(osNaBase.getImovel().getId());
+					if (imovel != null) {
+						situacaoEspecial = true;
+					}
+				} else {
+					RegistroAtendimento ra = osNaBase.getRegistroAtendimento();
+					if (ra != null && ra.getImovel() != null && ra.getImovel().getId() != null) {
+						imovel = this.repositorioImovel.pesquisarImovelSituacaoEspecialFaturamento(ra.getImovel().getId());
+						if (imovel != null) {
+							situacaoEspecial = true;
+						}
+					}
+				}
+				
+				if (situacaoEspecial) {
+					imovel.setFaturamentoSituacaoTipo(null);
+					imovel.setUsuarioParaLog(usuarioLogado);
+					getControladorUtil().atualizar(imovel);
+					
+					FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
+					if (historico != null) {
+						SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+						
+						historico.setAnoMesFaturamentoRetirada(sistemaParametro.getAnoMesFaturamento());
+						historico.setUsuarioRetira(usuarioLogado);
+						String observacao = "EXCLUÍDO DA SITUAÇÃO ESPECIAL DE FATURAMENTO DECORRENTE DE RETIRADA/SUBSTITUIÇAO "
+								+ "DE HIDRÔMETRO ATRAVÉS DA ORDEM DE SERVIÇO " + osNaBase.getId();
+						historico.setObservacaoRetira(observacao);
+						historico.setUltimaAlteracao(new Date());
+						this.repositorioFaturamento.atualizarFaturamentoSituacaoHistorico(historico);
+					}
+				}
+			} catch (ErroRepositorioException e) {
+				throw new ControladorException("Erro ao verificar situacao do faturamento", e);
+			}
 		}
 	}
 
@@ -8429,6 +7809,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 						&& fiscalizacaoSituacao.getIndicadorVerificarReincidencia().compareTo(ConstantesSistema.SIM) == 0) {
 
 					imovelPesquisa.setIndicadorReincidenciaInfracao(ConstantesSistema.SIM.intValue());
+					imovelPesquisa.setUsuarioParaLog(usuarioLogado);
 					this.getControladorUtil().atualizar(imovelPesquisa);
 				}
 
@@ -10307,23 +9688,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		}
 
 		return idOrdemServico;
-	}
-
-	private ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorTransacaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
 	}
 
 	/**

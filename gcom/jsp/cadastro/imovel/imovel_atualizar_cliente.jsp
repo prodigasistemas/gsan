@@ -109,57 +109,35 @@ function limparPesquisaImovel() {
 
     form.idCliente.value = "";
     form.nomeCliente.value = "";
-
-
-  }
-  
-  
-function verificarAberturaPopup(abertura){
-
-	alert("vai abrir o popup??" + (abertura == 1));
-	if(abertura == 1){
-		abrirPopup('exibirManterImovelFimRelacaoClienteImovelAction.do', 475, 765);	
-	}
-
-}  
-  
-  
-function validarNomeConta(valor){
-
-	   var formulario = document.forms[0]; 
- 	   formulario.nomeContaSelecionado.value = valor;
-       formulario.action='atualizarImovelWizardAction.do?action=exibirAtualizarImovelClienteAction&indicadorNomeConta=SIM';
-  	   formulario.submit(); 				
-
 }
   
   
-function verficarSelecao(objeto, tipoObjeto){
+  function verificarAberturaPopup(abertura){
+	if(abertura == 1){
+		abrirPopup('exibirManterImovelFimRelacaoClienteImovelAction.do', 475, 765);	
+	}
+  }  
+  
+  
+  function validarNomeConta(valor){
+    var formulario = document.forms[0]; 
+    formulario.nomeContaSelecionado.value = valor;
+    formulario.action='atualizarImovelWizardAction.do?action=exibirAtualizarImovelClienteAction&indicadorNomeConta=SIM';
+    formulario.submit(); 				
+  }
+  
+  function verficarSelecao(objeto, tipoObjeto){
 
        var indice;
        var array = new Array(objeto.length);
-///       var selecionado = "";
 	   var formulario = document.forms[0]; 
 		var cont = 0;
 	   for(indice = 0; indice < formulario.elements.length; indice++){
-//	   alert("formulario.elements[indice].type="+formulario.elements[indice].type+" - "+
-  //     "formulario.elements[indice].checked="+formulario.elements[indice].checked);	   
 		 if (formulario.elements[indice].type == tipoObjeto && formulario.elements[indice].checked == true) {
-			//selecionado = formulario.elements[indice].value;
 			cont = cont +1;
-			///break;
 		 }	
 	   }
 	   
-	   //var qtdRadio = 0;
-///	   for(indice = 0; indice < formulario.elements.length; indice++){
-	//	 if (formulario.elements[indice].type == tipoObjeto) {
-		//	qtdRadio = qtdRadio +1;
-//		 }
-	//   }
-
-//		alert("selecionado="+cont);
-
        if (cont < 1) {
 
 	       var array = new Array(objeto.length);
@@ -179,11 +157,7 @@ function verficarSelecao(objeto, tipoObjeto){
     	         formulario.action='atualizarImovelWizardAction.do?action=exibirAtualizarImovelClienteAction&indicadorNomeConta=SIM';
 	    	     formulario.submit(); 				
 			 }
-		   }
-       
-       }else {
-       
-       
+		   }       
        }
    }
   
@@ -192,7 +166,6 @@ function verficarSelecao(objeto, tipoObjeto){
 		if(confirm('Confirma remoção ?')){
 	       var form = document.forms[0];
 	    	form.action = url;
-		    //form.submit()
 		    submitForm(form);	
 		}
 	}
@@ -219,19 +192,6 @@ function verficarSelecao(objeto, tipoObjeto){
 		form.action = "atualizarImovelWizardAction.do?action=exibirAtualizarImovelClienteAction";
 	   	submitForm(form);
 		
-		/*
-		var form = document.forms[0];
-		var html =
-			'<a href="javascript:abrirPopupModalDeNome(\'exibirAtualizarClienteAction.do?POPUP=true&idRegistroAtualizacao=' + codigoCliente
-			+ '&PopUpAtualizarClienteRetorno=exibirAtualizarImovelClienteAction\', 500, 800, \'POPUP3\', \'yes\');">'
-			+ nomeCliente + '</a>';
-		
-		var objNome = document.getElementById('cliente_' + codigoCliente);
-		var objCpfCnpj = document.getElementById('cliente_cpfcnpj_' + codigoCliente);
-
-		objNome.innerHTML = html;
-		objCpfCnpj.innerHTML = cpfCnpj;
-		*/
 	}
   
 -->
@@ -455,27 +415,30 @@ function verficarSelecao(objeto, tipoObjeto){
     											</div>									
 											</td>
 											<td width="10%">
-											<div align="center"><bean:write name="imovelClienteNovo"
-												property="cliente.id" /></div>
+												<div align="center">
+													<bean:write name="imovelClienteNovo" property="cliente.id" />
+												</div>
 											</td>
 											<td align="left" width="35%">
-											<div align="left"id='cliente_<bean:write name="imovelClienteNovo" property="cliente.id" />'>
-												<a href="javascript:abrirPopupModalDeNome('exibirAtualizarClienteAction.do?POPUP=true&idRegistroAtualizacao=<bean:write name="imovelClienteNovo" property="cliente.id" />&PopUpAtualizarClienteRetorno=exibirAtualizarImovelClienteAction', 500, 800, 'POPUP2', 'yes');">
-													<bean:write name="imovelClienteNovo" property="cliente.nome" />
-												</a>
-											</div>
+												<div align="left"id='cliente_<bean:write name="imovelClienteNovo" property="cliente.id" />'>
+													<a href="javascript:abrirPopupModalDeNome('exibirAtualizarClienteAction.do?POPUP=true&idRegistroAtualizacao=<bean:write name="imovelClienteNovo" property="cliente.id" />&PopUpAtualizarClienteRetorno=exibirAtualizarImovelClienteAction', 500, 800, 'POPUP2', 'yes');">
+														<bean:write name="imovelClienteNovo" property="cliente.nome" />
+													</a>
+												</div>
 											</td>
 											<td width="15%">
-											<div align="left"><bean:write name="imovelClienteNovo"
-												property="clienteRelacaoTipo.descricao" /></div>
+												<div align="left">
+													<bean:write name="imovelClienteNovo" property="clienteRelacaoTipo.descricao" />
+												</div>
 											</td>
-											<td width="20%" align="right"><logic:notEmpty name="imovelClienteNovo"
-												property="cliente.cpf">
-												<bean:write name="imovelClienteNovo" property="cliente.cpfFormatado" />
-											</logic:notEmpty> <logic:notEmpty name="imovelClienteNovo"
-												property="cliente.cnpj">
-												<bean:write name="imovelClienteNovo" property="cliente.cnpjFormatado"  />
-											</logic:notEmpty></td>
+											<td width="20%" align="right">
+												<logic:notEmpty name="imovelClienteNovo" property="cliente.cpf">
+													<bean:write name="imovelClienteNovo" property="cliente.cpfFormatado" />
+												</logic:notEmpty>
+												<logic:notEmpty name="imovelClienteNovo" property="cliente.cnpj">
+													<bean:write name="imovelClienteNovo" property="cliente.cnpjFormatado"  />
+												</logic:notEmpty>
+											</td>
 										</tr>
 									</logic:iterate>
 								</logic:notEmpty>
