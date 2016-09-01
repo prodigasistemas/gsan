@@ -39,447 +39,338 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-/**
- * UC0214] Efetuar Parcelamento de Débitos
- * 
- * @author Roberta Costa
- * @date 08/03/2006  
- */
 public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 
-    public ActionForward execute(ActionMapping actionMapping,
-            ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-        
-    	ActionForward retorno = actionMapping.findForward("telaSucesso");
+	@SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse httpServletResponse) {
 
-        HttpSession sessao = httpServletRequest.getSession(false);
+		ActionForward retorno = actionMapping.findForward("telaSucesso");
 
-		DynaActionForm efetuarParcelamentoDebitosActionForm = (DynaActionForm) actionForm;
-		
+		HttpSession sessao = request.getSession(false);
+
+		DynaActionForm form = (DynaActionForm) actionForm;
+
 		Fachada fachada = Fachada.getInstancia();
-		
+
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
-		
-        // ABA 1 - 6.1 Caso o usuario confirme o parecelamento
-        String codigoImovel = (String) efetuarParcelamentoDebitosActionForm.get("matriculaImovel");
-		Integer situacaoAguaId = new Integer ((String)(efetuarParcelamentoDebitosActionForm.get("situacaoAguaId")));
-        Date dataParcelamento = Util.converteStringParaDate((String) efetuarParcelamentoDebitosActionForm.get("dataParcelamento"));
-        String resolucaoDiretoria = (String) efetuarParcelamentoDebitosActionForm.get("resolucaoDiretoria");
-        String fimIntervaloParcelamento = (String) efetuarParcelamentoDebitosActionForm.get("fimIntervaloParcelamento");
-        String indicadorRestabelecimento = (String) efetuarParcelamentoDebitosActionForm.get("indicadorRestabelecimento");
-        String indicadorContasRevisao = (String) efetuarParcelamentoDebitosActionForm.get("indicadorContasRevisao");
-        String indicadorGuiasPagamento = (String) efetuarParcelamentoDebitosActionForm.get("indicadorGuiasPagamento");
-        String indicadorAcrescimosImpotualidade = (String) efetuarParcelamentoDebitosActionForm.get("indicadorAcrescimosImpotualidade");
-        String indicadorDebitosACobrar = (String) efetuarParcelamentoDebitosActionForm.get("indicadorDebitosACobrar");
-        String indicadorCreditoARealizar = (String) efetuarParcelamentoDebitosActionForm.get("indicadorCreditoARealizar");
-        String indicadorConfirmacaoParcelamento = (String) efetuarParcelamentoDebitosActionForm.get("indicadorConfirmacaoParcelamento");
-        String cpfClienteParcelamentoDigitado = (String) efetuarParcelamentoDebitosActionForm.get("cpfClienteParcelamentoDigitado");
-        String indicadorDividaAtiva = (String) efetuarParcelamentoDebitosActionForm.get("indicadorDividaAtiva");
-        ParcelamentoPerfil parcelamentoPerfil = (ParcelamentoPerfil)sessao.getAttribute("parcelamentoPerfil");
-        
-        // Caso o fim do parcelamento não seja informado
-		if( fimIntervaloParcelamento == null || fimIntervaloParcelamento.equals("")){
+
+		// ABA 1 - 6.1 Caso o usuario confirme o parecelamento
+		String codigoImovel = (String) form.get("matriculaImovel");
+		Integer situacaoAguaId = new Integer((String) (form.get("situacaoAguaId")));
+		Date dataParcelamento = Util.converteStringParaDate((String) form.get("dataParcelamento"));
+		String resolucaoDiretoria = (String) form.get("resolucaoDiretoria");
+		String fimIntervaloParcelamento = (String) form.get("fimIntervaloParcelamento");
+		String indicadorRestabelecimento = (String) form.get("indicadorRestabelecimento");
+		String indicadorContasRevisao = (String) form.get("indicadorContasRevisao");
+		String indicadorGuiasPagamento = (String) form.get("indicadorGuiasPagamento");
+		String indicadorAcrescimosImpotualidade = (String) form.get("indicadorAcrescimosImpotualidade");
+		String indicadorDebitosACobrar = (String) form.get("indicadorDebitosACobrar");
+		String indicadorCreditoARealizar = (String) form.get("indicadorCreditoARealizar");
+		String indicadorConfirmacaoParcelamento = (String) form.get("indicadorConfirmacaoParcelamento");
+		String cpfClienteParcelamentoDigitado = (String) form.get("cpfClienteParcelamentoDigitado");
+		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
+		ParcelamentoPerfil parcelamentoPerfil = (ParcelamentoPerfil) sessao.getAttribute("parcelamentoPerfil");
+
+		// Caso o fim do parcelamento não seja informado
+		if (fimIntervaloParcelamento == null || fimIntervaloParcelamento.equals("")) {
 			fimIntervaloParcelamento = "12/9999";
 		}
-		
-        // [FS0009] - Verificar preenchimento dos campos
-        if( codigoImovel == null || codigoImovel.trim().equals("") ){
+
+		// [FS0009] - Verificar preenchimento dos campos
+		if (codigoImovel == null || codigoImovel.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_texto.obrigatorio", null, "Matricula do Imóvel");
 		}
-        if( dataParcelamento == null || dataParcelamento.equals("") ){
+		if (dataParcelamento == null || dataParcelamento.equals("")) {
 			throw new ActionServletException("atencao.campo_texto.obrigatorio", null, "Data do Parcelamento");
 		}
-        if( resolucaoDiretoria == null || resolucaoDiretoria.trim().equals("") ){
+		if (resolucaoDiretoria == null || resolucaoDiretoria.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_texto.obrigatorio", null, "RD do Parcelamento");
 		}
-        if (situacaoAguaId.equals(LigacaoAguaSituacao.SUPRIMIDO)
-				|| situacaoAguaId.equals(LigacaoAguaSituacao.SUPR_PARC)
-				|| situacaoAguaId.equals(LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
-	        if( indicadorRestabelecimento == null || indicadorRestabelecimento.trim().equals("") ){
+		if (situacaoAguaId.equals(LigacaoAguaSituacao.SUPRIMIDO) || situacaoAguaId.equals(LigacaoAguaSituacao.SUPR_PARC) || situacaoAguaId.equals(LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
+			if (indicadorRestabelecimento == null || indicadorRestabelecimento.trim().equals("")) {
 				throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "Com Restabelecimento?");
 			}
-        }
-        if( indicadorContasRevisao == null || indicadorContasRevisao.trim().equals("") ){
+		}
+		if (indicadorContasRevisao == null || indicadorContasRevisao.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "Considerar Contas em Revisão?");
 		}
-        if( indicadorGuiasPagamento == null || indicadorGuiasPagamento.trim().equals("") ){
+		if (indicadorGuiasPagamento == null || indicadorGuiasPagamento.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "Considerar Guias de Pagamento?");
 		}
-        if( indicadorAcrescimosImpotualidade == null || indicadorAcrescimosImpotualidade.trim().equals("") ){
+		if (indicadorAcrescimosImpotualidade == null || indicadorAcrescimosImpotualidade.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "Considerar Acréscimos por Impontualidade?");
 		}
-        if( indicadorDebitosACobrar == null || indicadorDebitosACobrar.trim().equals("") ){
+		if (indicadorDebitosACobrar == null || indicadorDebitosACobrar.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "Considerar Débitos a Cobrar?");
 		}
 
-        if( indicadorCreditoARealizar == null || indicadorCreditoARealizar.trim().equals("") ){
+		if (indicadorCreditoARealizar == null || indicadorCreditoARealizar.trim().equals("")) {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "'Considerar Créditos a Realizar?'");
 		}
-        
-        // ABA 3 - Verifica se foi escolhido alguma opção de parcelamento
-        Collection<OpcoesParcelamentoHelper> colecaoOpcoesParcelamento = (Collection<OpcoesParcelamentoHelper>)
-			sessao.getAttribute("colecaoOpcoesParcelamento");
 
-        Short numeroPrestacoes = new Short("0");
+		// ABA 3 - Verifica se foi escolhido alguma opção de parcelamento
+		Collection<OpcoesParcelamentoHelper> colecaoOpcoesParcelamento = (Collection<OpcoesParcelamentoHelper>) sessao.getAttribute("colecaoOpcoesParcelamento");
+
+		Short numeroPrestacoes = new Short("0");
 		BigDecimal valorPrestacao = new BigDecimal("0.00");
 		BigDecimal valorEntradaMinima = new BigDecimal("0.00");
 		BigDecimal taxaJuros = new BigDecimal("0.00");
-		if( colecaoOpcoesParcelamento != null && ! colecaoOpcoesParcelamento.isEmpty() ){
-			Iterator opcoesParcelamentoValores = colecaoOpcoesParcelamento.iterator();
+		
+		if (colecaoOpcoesParcelamento != null && !colecaoOpcoesParcelamento.isEmpty()) {
+			Iterator<OpcoesParcelamentoHelper> opcoesParcelamentoValores = colecaoOpcoesParcelamento.iterator();
+			
 			boolean opcaoMarcada = false;
-			while(opcoesParcelamentoValores.hasNext()) {
-				OpcoesParcelamentoHelper opcoesParcelamentoHelper = 
-					(OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
-				if( ((String)efetuarParcelamentoDebitosActionForm.get("indicadorQuantidadeParcelas"))
-						.equals(opcoesParcelamentoHelper.getQuantidadePrestacao().toString()) ){
+			
+			while (opcoesParcelamentoValores.hasNext()) {
+				
+				OpcoesParcelamentoHelper opcoesParcelamentoHelper = (OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
+				
+				if (((String) form.get("indicadorQuantidadeParcelas")).equals(opcoesParcelamentoHelper.getQuantidadePrestacao().toString())) {
 					opcaoMarcada = true;
-					//valorJurosParcelamento = opcoesParcelamentoHelper.getTaxaJuros(); 
 					numeroPrestacoes = opcoesParcelamentoHelper.getQuantidadePrestacao();
 					valorPrestacao = opcoesParcelamentoHelper.getValorPrestacao();
 					valorEntradaMinima = opcoesParcelamentoHelper.getValorEntradaMinima();
 					taxaJuros = opcoesParcelamentoHelper.getTaxaJuros();
 				}
 			}
-			if( ! opcaoMarcada ){
-				throw new ActionServletException(
-					"atencao.pelo.menos.uma.opcao.parcelamento.marcada");
-			}	
-		}else{
-			throw new ActionServletException(
-				"atencao.parametros.obrigatorios.nao.selecionados");
+			
+			if (!opcaoMarcada) {
+				throw new ActionServletException("atencao.pelo.menos.uma.opcao.parcelamento.marcada");
+			}
+		} else {
+			throw new ActionServletException("atencao.parametros.obrigatorios.nao.selecionados");
 		}
-		
-//		//[FS0012] Verificar existência de parcelamento no mês
-//		Collection<Parcelamento> colecaoParcelamento = fachada.verificarParcelamentoMesImovel(new Integer(codigoImovel));
-//
-//		if (colecaoParcelamento != null	&& !colecaoParcelamento.isEmpty()) {
-//			throw new ActionServletException("atencao.debito.ja.parcelado.mes.faturamento.corrente",null);
-//		}
 
-		
-        // Pega os dados do formulário
-		BigDecimal valorEntradaInformado = Util.formatarMoedaRealparaBigDecimal(
-				(String)(efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado")));
-		
+		BigDecimal valorEntradaInformado = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorEntradaInformado")));
+
 		BigDecimal valorDebitoTotalAtualizado = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("valorDebitoTotalAtualizado") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoTotalAtualizado").equals("")){
-			valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoTotalAtualizado")));
+		if (form.get("valorDebitoTotalAtualizado") != null && !form.get("valorDebitoTotalAtualizado").equals("")) {
+			valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoTotalAtualizado")));
 		}
-		
-		//verificar valor da entrada mínima permitida
-		verificarValorEntradaMinimaPermitida( numeroPrestacoes,
-				valorEntradaInformado,  valorDebitoTotalAtualizado, parcelamentoPerfil);
-		
+
+		verificarValorEntradaMinimaPermitida(numeroPrestacoes, valorEntradaInformado, valorDebitoTotalAtualizado, parcelamentoPerfil);
+
 		BigDecimal valorTotalContaValores = BigDecimal.ZERO;
-		if (efetuarParcelamentoDebitosActionForm.get("valorTotalContaValores") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorTotalContaValores").equals("")){
-			valorTotalContaValores = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorTotalContaValores")));
+		if (form.get("valorTotalContaValores") != null && !form.get("valorTotalContaValores").equals("")) {
+			valorTotalContaValores = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorTotalContaValores")));
 		}
 		BigDecimal valorGuiasPagamento = BigDecimal.ZERO;
-		if (efetuarParcelamentoDebitosActionForm.get("valorGuiasPagamento") !=null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorGuiasPagamento").equals("")){
-			valorGuiasPagamento = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorGuiasPagamento")));
+		if (form.get("valorGuiasPagamento") != null && !form.get("valorGuiasPagamento").equals("")) {
+			valorGuiasPagamento = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorGuiasPagamento")));
 		}
-		
+
 		BigDecimal valorDebitoACobrarServico = BigDecimal.ZERO;
-		if (efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServico") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServico").equals("")){
-			valorDebitoACobrarServico = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServico")));
+		if (form.get("valorDebitoACobrarServico") != null && !form.get("valorDebitoACobrarServico").equals("")) {
+			valorDebitoACobrarServico = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarServico")));
 		}
-		
+
 		BigDecimal valorDebitoACobrarParcelamento = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamento")!=null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamento").equals("")){
-			valorDebitoACobrarParcelamento = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamento")));
+		if (form.get("valorDebitoACobrarParcelamento") != null && !form.get("valorDebitoACobrarParcelamento").equals("")) {
+			valorDebitoACobrarParcelamento = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarParcelamento")));
 		}
-		
+
 		BigDecimal valorCreditoARealizar = BigDecimal.ZERO;
-		if (efetuarParcelamentoDebitosActionForm.get("valorCreditoARealizar") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorCreditoARealizar").equals("")){
-			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorCreditoARealizar")));
+		if (form.get("valorCreditoARealizar") != null && !form.get("valorCreditoARealizar").equals("")) {
+			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditoARealizar")));
 		}
-		
+
 		BigDecimal valorAtualizacaoMonetaria = BigDecimal.ZERO;
-		if (efetuarParcelamentoDebitosActionForm.get("valorAtualizacaoMonetaria")!= null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorAtualizacaoMonetaria").equals("")){
-			valorAtualizacaoMonetaria = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorAtualizacaoMonetaria")));
+		if (form.get("valorAtualizacaoMonetaria") != null && !form.get("valorAtualizacaoMonetaria").equals("")) {
+			valorAtualizacaoMonetaria = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorAtualizacaoMonetaria")));
 		}
-		
+
 		BigDecimal valorJurosMora = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("valorJurosMora") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorJurosMora").equals("")){
-			valorJurosMora = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorJurosMora")));
+		if (form.get("valorJurosMora") != null && !form.get("valorJurosMora").equals("")) {
+			valorJurosMora = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorJurosMora")));
 		}
-		
+
 		BigDecimal valorMulta = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("valorMulta") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("valorMulta").equals("")){
-			valorMulta = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorMulta")));
+		if (form.get("valorMulta") != null && !form.get("valorMulta").equals("")) {
+			valorMulta = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorMulta")));
+		}
+
+		BigDecimal descontoFaixaReferenciaConta = BigDecimal.ZERO;
+		if (form.get("descontoFaixaReferenciaConta") != null && !form.get("descontoFaixaReferenciaConta").equals("")) {
+			descontoFaixaReferenciaConta = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoFaixaReferenciaConta")));
 		}
 		
 		BigDecimal descontoAcrescimosImpontualidade = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("descontoAcrescimosImpontualidade") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("descontoAcrescimosImpontualidade").equals("")){
-			descontoAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("descontoAcrescimosImpontualidade")));
+		if (form.get("descontoAcrescimosImpontualidade") != null && !form.get("descontoAcrescimosImpontualidade").equals("")) {
+			descontoAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoAcrescimosImpontualidade")));
 		}
-		
+
 		BigDecimal descontoSancoesRDEspecial = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("descontoSancoesRDEspecial") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("descontoSancoesRDEspecial").equals("")){
-			descontoSancoesRDEspecial = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("descontoSancoesRDEspecial")));
+		if (form.get("descontoSancoesRDEspecial") != null && !form.get("descontoSancoesRDEspecial").equals("")) {
+			descontoSancoesRDEspecial = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoSancoesRDEspecial")));
 		}
-		
-		
+
 		BigDecimal descontoTarifaSocialRDEspecial = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("descontoTarifaSocialRDEspecial") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("descontoTarifaSocialRDEspecial").equals("")){
-			descontoTarifaSocialRDEspecial = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("descontoTarifaSocialRDEspecial")));
+		if (form.get("descontoTarifaSocialRDEspecial") != null && !form.get("descontoTarifaSocialRDEspecial").equals("")) {
+			descontoTarifaSocialRDEspecial = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoTarifaSocialRDEspecial")));
 		}
-		
+
 		BigDecimal descontoAntiguidadeDebito = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("descontoAntiguidadeDebito") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("descontoAntiguidadeDebito").equals("")){
-			descontoAntiguidadeDebito = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("descontoAntiguidadeDebito")));
+		if (form.get("descontoAntiguidadeDebito") != null && !form.get("descontoAntiguidadeDebito").equals("")) {
+			descontoAntiguidadeDebito = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoAntiguidadeDebito")));
 		}
-		
+
 		BigDecimal descontoInatividadeLigacaoAgua = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("descontoInatividadeLigacaoAgua") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("descontoInatividadeLigacaoAgua").equals("")){
-			descontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("descontoInatividadeLigacaoAgua")));
+		if (form.get("descontoInatividadeLigacaoAgua") != null && !form.get("descontoInatividadeLigacaoAgua").equals("")) {
+			descontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal((String) (form.get("descontoInatividadeLigacaoAgua")));
 		}
 
 		BigDecimal percentualDescontoAcrescimosImpontualidade = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("percentualDescontoAcrescimosImpontualidade") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("percentualDescontoAcrescimosImpontualidade").equals("")){
-			percentualDescontoAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("percentualDescontoAcrescimosImpontualidade")));
+		if (form.get("percentualDescontoAcrescimosImpontualidade") != null && !form.get("percentualDescontoAcrescimosImpontualidade").equals("")) {
+			percentualDescontoAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) (form.get("percentualDescontoAcrescimosImpontualidade")));
 		}
-		
+
 		BigDecimal percentualDescontoAntiguidadeDebito = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("percentualDescontoAntiguidadeDebito") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("percentualDescontoAntiguidadeDebito").equals("")){
-			percentualDescontoAntiguidadeDebito = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("percentualDescontoAntiguidadeDebito")));
+		if (form.get("percentualDescontoAntiguidadeDebito") != null && !form.get("percentualDescontoAntiguidadeDebito").equals("")) {
+			percentualDescontoAntiguidadeDebito = Util.formatarMoedaRealparaBigDecimal((String) (form.get("percentualDescontoAntiguidadeDebito")));
 		}
 
 		BigDecimal percentualDescontoInatividadeLigacaoAgua = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("percentualDescontoInatividadeLigacaoAgua") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("percentualDescontoInatividadeLigacaoAgua").equals("")){
-			percentualDescontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("percentualDescontoInatividadeLigacaoAgua")));
+		if (form.get("percentualDescontoInatividadeLigacaoAgua") != null
+				&& !form.get("percentualDescontoInatividadeLigacaoAgua").equals("")) {
+			percentualDescontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal((String) (form.get("percentualDescontoInatividadeLigacaoAgua")));
 		}
-		
+
 		BigDecimal valorAcrescimosImpontualidade = BigDecimal.ZERO;
-		if(efetuarParcelamentoDebitosActionForm.get("valorAcrescimosImpontualidade") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("valorAcrescimosImpontualidade").equals("")){
-			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorAcrescimosImpontualidade")));
+		if (form.get("valorAcrescimosImpontualidade") != null && !form.get("valorAcrescimosImpontualidade").equals("")) {
+			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorAcrescimosImpontualidade")));
 		}
 
-		Integer parcelamentoPerfilId = new Integer(
-				(String)(efetuarParcelamentoDebitosActionForm.get("parcelamentoPerfilId")));
+		Integer parcelamentoPerfilId = new Integer((String) (form.get("parcelamentoPerfilId")));
 
-		
 		BigDecimal valorDebitoACobrarServicoLongoPrazo = new BigDecimal("0.00");
-		if( efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoLongoPrazo") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoLongoPrazo").equals("")){
-			valorDebitoACobrarServicoLongoPrazo = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoLongoPrazo")));
-		}	
-		
+		if (form.get("valorDebitoACobrarServicoLongoPrazo") != null && !form.get("valorDebitoACobrarServicoLongoPrazo").equals("")) {
+			valorDebitoACobrarServicoLongoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarServicoLongoPrazo")));
+		}
+
 		BigDecimal valorDebitoACobrarServicoCurtoPrazo = new BigDecimal("0.00");
-		if( efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoCurtoPrazo") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoCurtoPrazo").equals("")){
-			valorDebitoACobrarServicoCurtoPrazo = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarServicoCurtoPrazo")));
+		if (form.get("valorDebitoACobrarServicoCurtoPrazo") != null && !form.get("valorDebitoACobrarServicoCurtoPrazo").equals("")) {
+			valorDebitoACobrarServicoCurtoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarServicoCurtoPrazo")));
 		}
-		
+
 		BigDecimal valorDebitoACobrarParcelamentoLongoPrazo = new BigDecimal("0.00");
-		if( efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoLongoPrazo") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoLongoPrazo").equals("")){
-			valorDebitoACobrarParcelamentoLongoPrazo = Util.formatarMoedaRealparaBigDecimal(
-				(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoLongoPrazo")));
+		if (form.get("valorDebitoACobrarParcelamentoLongoPrazo") != null
+				&& !form.get("valorDebitoACobrarParcelamentoLongoPrazo").equals("")) {
+			valorDebitoACobrarParcelamentoLongoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarParcelamentoLongoPrazo")));
 		}
-		
+
 		BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo = new BigDecimal("0.00");
-		if( efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoCurtoPrazo") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoCurtoPrazo").equals("")){
-			valorDebitoACobrarParcelamentoCurtoPrazo = Util.formatarMoedaRealparaBigDecimal(
-					(String)(efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoCurtoPrazo")));
+		if (form.get("valorDebitoACobrarParcelamentoCurtoPrazo") != null
+				&& !form.get("valorDebitoACobrarParcelamentoCurtoPrazo").equals("")) {
+			valorDebitoACobrarParcelamentoCurtoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorDebitoACobrarParcelamentoCurtoPrazo")));
 		}
-		
-		// Valor a ser Negociado
+
 		BigDecimal valorASerParcelado = new BigDecimal("0.00");
 		BigDecimal valorASerNegociado = new BigDecimal("0.00");
-//		boolean existeValor = false;
-//		if( efetuarParcelamentoDebitosActionForm.get("valorASerParcelado") != null 
-//				&& !efetuarParcelamentoDebitosActionForm.get("valorASerParcelado").equals("") ){
-//			valorASerParcelado = Util.formatarMoedaRealparaBigDecimal(
-//					(String)(efetuarParcelamentoDebitosActionForm.get("valorASerParcelado")));
-////			existeValor = true;
-//    	}	
-//		if( efetuarParcelamentoDebitosActionForm.get("valorASerParcelado") != null 
-//				&& !efetuarParcelamentoDebitosActionForm.get("valorASerParcelado").equals("") ){
-//			valorASerNegociado = Util.formatarMoedaRealparaBigDecimal(
-//					(String)(efetuarParcelamentoDebitosActionForm.get("valorNegociado")));
-////			existeValor = true;
-//    	}
-//		if( !existeValor ){
-			if( colecaoOpcoesParcelamento != null && ! colecaoOpcoesParcelamento.isEmpty() ){
-				Iterator opcoesParcelamentoValores = colecaoOpcoesParcelamento.iterator();
-				while(opcoesParcelamentoValores.hasNext()) {
-					OpcoesParcelamentoHelper opcoesParcelamento = 
-						(OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
-					if( ((String)efetuarParcelamentoDebitosActionForm.get("indicadorQuantidadeParcelas"))
-							.equals(opcoesParcelamento.getQuantidadePrestacao().toString()) ){
-						valorASerParcelado = opcoesParcelamento.getValorPrestacao()
-							.multiply(new BigDecimal(opcoesParcelamento.getQuantidadePrestacao())); 
-					}
+
+		if (colecaoOpcoesParcelamento != null && !colecaoOpcoesParcelamento.isEmpty()) {
+			Iterator opcoesParcelamentoValores = colecaoOpcoesParcelamento.iterator();
+			while (opcoesParcelamentoValores.hasNext()) {
+				OpcoesParcelamentoHelper opcoesParcelamento = (OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
+				if (((String) form.get("indicadorQuantidadeParcelas")).equals(opcoesParcelamento.getQuantidadePrestacao().toString())) {
+					valorASerParcelado = opcoesParcelamento.getValorPrestacao().multiply(new BigDecimal(opcoesParcelamento.getQuantidadePrestacao()));
 				}
 			}
-			
-			BigDecimal valorDesconto = new BigDecimal("0.00");
-			valorDesconto = valorDesconto.add(descontoAcrescimosImpontualidade);
-			valorDesconto = valorDesconto.add(descontoAntiguidadeDebito);
-			valorDesconto = valorDesconto.add(descontoInatividadeLigacaoAgua);
-			
-			efetuarParcelamentoDebitosActionForm
-				.set("valorDesconto",Util.formatarMoedaReal(valorDesconto));
-			
-			valorASerNegociado = valorDebitoTotalAtualizado.subtract(valorDesconto);
-//		}	
-		
-		// Montar o objeto Imovel para as inserções no banco
-		Imovel imovel = null;
-		
+		}
+
+		BigDecimal valorDesconto = new BigDecimal("0.00");
+		valorDesconto = valorDesconto.add(descontoFaixaReferenciaConta);
+		valorDesconto = valorDesconto.add(descontoAcrescimosImpontualidade);
+		valorDesconto = valorDesconto.add(descontoAntiguidadeDebito);
+		valorDesconto = valorDesconto.add(descontoInatividadeLigacaoAgua);
+
+		form.set("valorDesconto", Util.formatarMoedaReal(valorDesconto));
+
+		valorASerNegociado = valorDebitoTotalAtualizado.subtract(valorDesconto);
+
 		FiltroImovel filtroImovel = new FiltroImovel();
-		
-		filtroImovel
-			.adicionarParametro(new ParametroSimples(FiltroImovel.ID, codigoImovel));
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("localidade");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("setorComercial");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("quadra");
-		filtroImovel
-		.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-		filtroImovel
-			.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.CONSUMO_TARIFA);
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, codigoImovel));
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("setorComercial");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.CONSUMO_TARIFA);
 
-		Collection<Imovel> imovelPesquisado = fachada
-			.pesquisar(filtroImovel, Imovel.class.getName());
+		Collection<Imovel> imovelPesquisado = fachada.pesquisar(filtroImovel, Imovel.class.getName());
 
+		Imovel imovel = null;
 		if (imovelPesquisado != null && !imovelPesquisado.isEmpty()) {
 			imovel = imovelPesquisado.iterator().next();
 		}
 
-		
-		Collection<ContaValoresHelper> colecaoContaValores = new ArrayList();
-		if (sessao.getAttribute("colecaoContaValores")!= null){
-			colecaoContaValores = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValores");
-		}else{
-			 colecaoContaValores = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValoresImovel");
-		}
-		
-		Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores = new ArrayList();
-		if (sessao.getAttribute("colecaoGuiaPagamentoValores") != null  || indicadorGuiasPagamento.equals("2")){
-			colecaoGuiaPagamentoValores = (Collection<GuiaPagamentoValoresHelper>) 
-			sessao.getAttribute("colecaoGuiaPagamentoValores");
-		}else{
-			colecaoGuiaPagamentoValores = (Collection<GuiaPagamentoValoresHelper>) 
-			sessao.getAttribute("colecaoGuiaPagamentoValoresImovel");
-		}
-		
-		Collection<DebitoACobrar> colecaoDebitoACobrar = new ArrayList();
-		if(sessao.getAttribute("colecaoDebitoACobrar") != null || indicadorDebitosACobrar.equals("2")){
-			colecaoDebitoACobrar = (Collection<DebitoACobrar>)sessao.getAttribute("colecaoDebitoACobrar");
-		}else{
-			colecaoDebitoACobrar = (Collection<DebitoACobrar>)sessao.getAttribute("colecaoDebitoACobrarImovel");
+		Collection<ContaValoresHelper> colecaoContaValores = new ArrayList<ContaValoresHelper>();
+		if (sessao.getAttribute("colecaoContaValores") != null) {
+			colecaoContaValores = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValores");
+		} else {
+			colecaoContaValores = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValoresImovel");
 		}
 
-		Collection<CreditoARealizar> colecaoCreditoARealizar = new ArrayList();
-		if (sessao.getAttribute("colecaoCreditoARealizar") != null || indicadorCreditoARealizar.equals("2")){
-			colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizar");
-		}else{
-			colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizarImovel");
+		Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores = new ArrayList<GuiaPagamentoValoresHelper>();
+		if (sessao.getAttribute("colecaoGuiaPagamentoValores") != null || indicadorGuiasPagamento.equals("2")) {
+			colecaoGuiaPagamentoValores = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
+		} else {
+			colecaoGuiaPagamentoValores = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValoresImovel");
 		}
-		
-		
+
+		Collection<DebitoACobrar> colecaoDebitoACobrar = new ArrayList<DebitoACobrar>();
+		if (sessao.getAttribute("colecaoDebitoACobrar") != null || indicadorDebitosACobrar.equals("2")) {
+			colecaoDebitoACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
+		} else {
+			colecaoDebitoACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrarImovel");
+		}
+
+		Collection<CreditoARealizar> colecaoCreditoARealizar = new ArrayList<CreditoARealizar>();
+		if (sessao.getAttribute("colecaoCreditoARealizar") != null || indicadorCreditoARealizar.equals("2")) {
+			colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizar");
+		} else {
+			colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizarImovel");
+		}
+
 		Cliente cliente = new Cliente();
 		Integer idCliente = 0;
-		//Id do cliente responsável pelo parcelamento, se tiver sido informado
-		//caso contrário Id do Cliente usuário do imóvel
-		if (efetuarParcelamentoDebitosActionForm.get("idClienteParcelamento") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("idClienteParcelamento").equals("")){
-			idCliente = new Integer ((String)efetuarParcelamentoDebitosActionForm.get("idClienteParcelamento"));
-		}else{
-			idCliente = (Integer)sessao.getAttribute("idClienteImovel");
+		if (form.get("idClienteParcelamento") != null && !form.get("idClienteParcelamento").equals("")) {
+			idCliente = new Integer((String) form.get("idClienteParcelamento"));
+		} else {
+			idCliente = (Integer) sessao.getAttribute("idClienteImovel");
 		}
 		cliente.setId(idCliente);
-		
-		/*
-		 * Colocado por Raphael Rossiter em 25/08/2008 - Analista: Rosana Carvalho
-		 * 
-		 * O sistema verifica se o parcelamento é para ser incluído obrigatoriamente já confirmado
-		 */
+
+		// O sistema verifica se o parcelamento é para ser incluído obrigatoriamente já confirmado
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		
-		if (sistemaParametro.getIndicadorParcelamentoConfirmado() == 
-			ConstantesSistema.SIM.shortValue()){
-			
+
+		if (sistemaParametro.getIndicadorParcelamentoConfirmado() == ConstantesSistema.SIM.shortValue()) {
+
 			indicadorConfirmacaoParcelamento = ConstantesSistema.SIM.toString();
 		}
-		
-		//CARREGANDO INFORMAÇÕES PARA CONCLUSÃO DO PARCELAMENTO
-		//=============================================================================================================
-		NegociacaoOpcoesParcelamentoHelper opcoesParcelamento = 
-		(NegociacaoOpcoesParcelamentoHelper) sessao.getAttribute("opcoesParcelamento");
-		
+
+		// CARREGANDO INFORMAÇÕES PARA CONCLUSÃO DO PARCELAMENTO
+		NegociacaoOpcoesParcelamentoHelper opcoesParcelamento = (NegociacaoOpcoesParcelamentoHelper) sessao.getAttribute("opcoesParcelamento");
+
 		Collection colecaoContasEmAntiguidade = null;
-		
-		if (opcoesParcelamento != null){
+		if (opcoesParcelamento != null) {
 			colecaoContasEmAntiguidade = opcoesParcelamento.getColecaoContasEmAntiguidade();
 		}
-		
-		ConcluirParcelamentoDebitosHelper concluirParcelamentoDebitosHelper = 
-		new	ConcluirParcelamentoDebitosHelper(colecaoContaValores, 
+
+		ConcluirParcelamentoDebitosHelper helper = new ConcluirParcelamentoDebitosHelper(
+				colecaoContaValores,
 				colecaoGuiaPagamentoValores,
-				colecaoDebitoACobrar, 
-				colecaoCreditoARealizar, 
-				indicadorRestabelecimento,
+				colecaoDebitoACobrar,
+				colecaoCreditoARealizar,
+				indicadorRestabelecimento, 
 				indicadorContasRevisao, 
 				indicadorGuiasPagamento, 
-				indicadorAcrescimosImpotualidade,
-				indicadorDebitosACobrar, 
+				indicadorAcrescimosImpotualidade, 
+				indicadorDebitosACobrar,
 				indicadorCreditoARealizar, 
 				indicadorDividaAtiva,
 				imovel, 
@@ -487,114 +378,109 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				valorASerNegociado, 
 				valorASerParcelado, 
 				dataParcelamento, 
-				valorTotalContaValores,
-				valorGuiasPagamento, 
+				valorTotalContaValores, 
+				valorGuiasPagamento,
 				valorDebitoACobrarServico, 
 				valorDebitoACobrarParcelamento,
-				valorCreditoARealizar, 
-				valorAtualizacaoMonetaria, 
+				valorCreditoARealizar,
+				valorAtualizacaoMonetaria,
 				valorJurosMora, 
 				valorMulta,
-				valorDebitoTotalAtualizado, 
+				valorDebitoTotalAtualizado,
+				descontoFaixaReferenciaConta,
 				descontoAcrescimosImpontualidade, 
 				descontoAntiguidadeDebito,
-				descontoInatividadeLigacaoAgua, 
-				percentualDescontoAcrescimosImpontualidade, 
-				percentualDescontoAntiguidadeDebito, 
+				descontoInatividadeLigacaoAgua,
+				percentualDescontoAcrescimosImpontualidade,
+				percentualDescontoAntiguidadeDebito,
 				percentualDescontoInatividadeLigacaoAgua, 
 				parcelamentoPerfilId, 
 				valorAcrescimosImpontualidade, 
 				valorDebitoACobrarServicoLongoPrazo,
-				valorDebitoACobrarServicoCurtoPrazo, 
+				valorDebitoACobrarServicoCurtoPrazo,
 				valorDebitoACobrarParcelamentoLongoPrazo,
 				valorDebitoACobrarParcelamentoCurtoPrazo, 
 				numeroPrestacoes, 
 				valorPrestacao,
 				valorEntradaMinima,
-				taxaJuros,
+				taxaJuros, 
 				indicadorConfirmacaoParcelamento,
-				cliente,
-				usuarioLogado,
-				cpfClienteParcelamentoDigitado,
+				cliente, 
+				usuarioLogado, 
+				cpfClienteParcelamentoDigitado, 
 				descontoSancoesRDEspecial,
-				descontoTarifaSocialRDEspecial, colecaoContasEmAntiguidade);
+				descontoTarifaSocialRDEspecial, 
+				colecaoContasEmAntiguidade);
+
+		Integer idParcelamento = fachada.concluirParcelamentoDebitos(helper, usuarioLogado);
 		
-		//Log
-		System.out.println(" ====== ConcluirEfetuarParcelamentoDebitosAction ====== "
-							+ "\n Matricula: " + imovel.getId()
-							+ "\n Acréscimos de Impontualidade: " + valorAcrescimosImpontualidade
-							+ "\n Descontos de acréscimos de impontualidade " + descontoAcrescimosImpontualidade);
-		
-		//=============================================================================================================
-		
-		Integer idParcelamento = fachada.concluirParcelamentoDebitos(
-		concluirParcelamentoDebitosHelper, usuarioLogado);
-		
+		System.out.println(" ====== ConcluirEfetuarParcelamentoDebitosAction ====== " 
+				+ "\n Matricula: " + imovel.getId() 
+				+ "\n Acrescimos de Impontualidade: " + valorAcrescimosImpontualidade
+				+ "\n Descontos de acrescimos de impontualidade " + descontoAcrescimosImpontualidade
+				+ "\n Descontos por faixa de referencia da conta " + descontoFaixaReferenciaConta);
+
 		sessao.setAttribute("idParcelamento", idParcelamento.toString());
 
+		Collection idsContaEP = (Collection) sessao.getAttribute("idsContaEP");
 		
-		//[FS0013] - Verificar sucesso da transação
-		// Monta a página de sucesso
-		Collection idsContaEP = (Collection)sessao.getAttribute("idsContaEP");
-		if (idsContaEP != null && !idsContaEP.isEmpty()){
-			montarPaginaSucesso(httpServletRequest, "Parcelamento de Débitos do Imóvel "+codigoImovel+" efetuado com sucesso.",
-                    "Efetuar outro Parcelamento de Débitos", "exibirEfetuarParcelamentoDebitosAction.do?menu=sim",
-                    "gerarRelatorioParcelamentoAction.do", "Imprimir Termo",
-                    "Imprimir Contas EP" ,"gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N" );
-			
-		}else{
-			
+		if (idsContaEP != null && !idsContaEP.isEmpty()) {
+			montarPaginaSucesso(request, 
+					"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
+					"Efetuar outro Parcelamento de Débitos",
+					"exibirEfetuarParcelamentoDebitosAction.do?menu=sim", 
+					"gerarRelatorioParcelamentoAction.do", 
+					"Imprimir Termo",
+					"Imprimir Contas EP",
+					"gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N");
+		} else {
 			FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-			filtroGuiaPagamento.adicionarParametro(new ParametroSimples
-	        			(FiltroGuiaPagamento.PARCELAMENTO_ID,new Integer(idParcelamento)));
-			 
-	       	Collection<GuiaPagamento> collectionGuiaPagamento = fachada.pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
-	       	sessao.setAttribute("usuarioLogado", usuarioLogado);
-	    	String idGuiaPagamento = "" ;
-	       	if (collectionGuiaPagamento != null &&
-	       			!collectionGuiaPagamento.isEmpty()){
-	       		GuiaPagamento guiaPagamento = (GuiaPagamento)Util.retonarObjetoDeColecao(collectionGuiaPagamento);
-	       		idGuiaPagamento = "" + guiaPagamento .getId();
-	       		
-	       		if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
-		            montarPaginaSucesso(httpServletRequest, "Parcelamento de Débitos do Imóvel "+codigoImovel+" efetuado com sucesso.",
-	                    "Efetuar outro Parcelamento de Débitos", "exibirEfetuarParcelamentoDebitosAction.do?menu=sim",
-	                    "gerarRelatorioParcelamentoAction.do", "Imprimir Termo",
-	                    "Imprimir Guia Pagto Entrada",
-	                    "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
-		        }
-	       		
-	       	}else if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
-		            montarPaginaSucesso(httpServletRequest, "Parcelamento de Débitos do Imóvel "+codigoImovel+" efetuado com sucesso.",
-	                    "Efetuar outro Parcelamento de Débitos", "exibirEfetuarParcelamentoDebitosAction.do?menu=sim",
-	                    "gerarRelatorioParcelamentoAction.do", "Imprimir Termo");
-		    }
+			filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, new Integer(idParcelamento)));
+
+			Collection<GuiaPagamento> collectionGuiaPagamento = fachada.pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
+			sessao.setAttribute("usuarioLogado", usuarioLogado);
+			String idGuiaPagamento = "";
+			
+			if (collectionGuiaPagamento != null && !collectionGuiaPagamento.isEmpty()) {
+				GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(collectionGuiaPagamento);
+				idGuiaPagamento = "" + guiaPagamento.getId();
+
+				if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
+					montarPaginaSucesso(request,
+							"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
+							"Efetuar outro Parcelamento de Débitos",
+							"exibirEfetuarParcelamentoDebitosAction.do?menu=sim", 
+							"gerarRelatorioParcelamentoAction.do", 
+							"Imprimir Termo", 
+							"Imprimir Guia Pagto Entrada",
+							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
+				}
+
+			} else if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
+				montarPaginaSucesso(request, 
+						"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
+						"Efetuar outro Parcelamento de Débitos",
+						"exibirEfetuarParcelamentoDebitosAction.do?menu=sim", 
+						"gerarRelatorioParcelamentoAction.do", 
+						"Imprimir Termo");
+			}
 		}
-        
+
 		return retorno;
-    }
-    
-	//Vivianne Sousa 10/07/2008
-	public void verificarValorEntradaMinimaPermitida(Short numeroPrestacoesSelecionada,
-    		BigDecimal valorEntrada, BigDecimal valorDebitoTotalAtualizado,
-    		ParcelamentoPerfil parcelamentoPerfil){
-		
-		//caso o indicador de entrada mínima seja SIM
-		if (parcelamentoPerfil.getIndicadorEntradaMinima() != null &&
-				parcelamentoPerfil.getIndicadorEntradaMinima().equals(ConstantesSistema.SIM)){
-			
-			BigDecimal valorPrestacao = Util.dividirArredondando(
-					valorDebitoTotalAtualizado, new BigDecimal(numeroPrestacoesSelecionada));
-			
-			valorPrestacao = valorPrestacao.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO);
-			
-			//o sistema verificará se a entrada informada está menor 
-			//que o valor da prestação calculada da opção de qtde de parcelas selecionada
-			if(valorPrestacao.compareTo(valorEntrada) == 1){
+	}
+
+	public void verificarValorEntradaMinimaPermitida(Short numeroPrestacoesSelecionada, BigDecimal valorEntrada, BigDecimal valorDebitoTotalAtualizado, ParcelamentoPerfil parcelamentoPerfil) {
+		// caso o indicador de entrada mínima seja SIM
+		if (parcelamentoPerfil.getIndicadorEntradaMinima() != null && parcelamentoPerfil.getIndicadorEntradaMinima().equals(ConstantesSistema.SIM)) {
+
+			BigDecimal valorPrestacao = Util.dividirArredondando(valorDebitoTotalAtualizado, new BigDecimal(numeroPrestacoesSelecionada));
+
+			valorPrestacao = valorPrestacao.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+
+			// o sistema verificará se a entrada informada está menor que o valor da prestação calculada da opção de qtde de parcelas selecionada
+			if (valorPrestacao.compareTo(valorEntrada) == 1) {
 				throw new ActionServletException("atencao.valor.entrada.menor.possivel");
 			}
-			
 		}
-		
 	}
 }

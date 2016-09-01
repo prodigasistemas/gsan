@@ -15934,11 +15934,6 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * Faz as atualizações e inserções do parcelamento do débito
 	 * 
-	 * concluirParcelamentoDebitos
-	 * 
-	 * @author Roberta Costa - Vivianne Sousa - Raphael Rossiter
-	 * @date 26/04/2006 - 26/09/2006 - 29/09/2008
-	 * 
 	 * @param ConcluirParcelamentoDebitosHelper
 	 * @return Integer
 	 * @throws ControladorException
