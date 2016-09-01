@@ -4048,7 +4048,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 				
 				if (situacaoEspecial) {
 					imovel.setFaturamentoSituacaoTipo(null);
-					imovel.setUsuarioParaLog(usuarioLogado);
+					imovel.setUsuarioParaHistorico(usuarioLogado);
 					getControladorUtil().atualizar(imovel);
 					
 					FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
@@ -7809,7 +7809,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						&& fiscalizacaoSituacao.getIndicadorVerificarReincidencia().compareTo(ConstantesSistema.SIM) == 0) {
 
 					imovelPesquisa.setIndicadorReincidenciaInfracao(ConstantesSistema.SIM.intValue());
-					imovelPesquisa.setUsuarioParaLog(usuarioLogado);
+					imovelPesquisa.setUsuarioParaHistorico(usuarioLogado);
 					this.getControladorUtil().atualizar(imovelPesquisa);
 				}
 

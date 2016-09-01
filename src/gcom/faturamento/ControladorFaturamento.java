@@ -10822,7 +10822,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								// TRANSAÇÃO>----------------------------
 							}
 
-							imovelAtualizar.setUsuarioParaLog(getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada));
+							imovelAtualizar.setUsuarioParaHistorico(getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada));
 							
 							getControladorUtil().atualizar(imovelAtualizar);
 

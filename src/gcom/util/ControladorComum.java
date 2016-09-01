@@ -25,6 +25,8 @@ import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocal;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocalHome;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.ControladorGeograficoLocal;
@@ -542,6 +544,22 @@ public abstract class ControladorComum implements SessionBean{
 
 			ControladorUnidadeLocal local = localHome.create();
 
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorAtualizacaoCadastroLocal getControladorAtualizacaoCadastro() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+			
+			ControladorAtualizacaoCadastroLocalHome localHome = (ControladorAtualizacaoCadastroLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRO);
+			
+			ControladorAtualizacaoCadastroLocal local = localHome.create();
+			
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);

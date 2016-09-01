@@ -34,8 +34,6 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
-import gcom.batch.IRepositorioBatch;
-import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -207,7 +205,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setUltimaAlteracao(new Date());
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
-		imovel.setUsuarioParaLog(usuario);
+		imovel.setUsuarioParaHistorico(usuario);
 		
 		getControladorUtil().atualizar(imovel);
 		

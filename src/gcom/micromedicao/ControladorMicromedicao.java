@@ -11867,7 +11867,7 @@ public class ControladorMicromedicao implements SessionBean {
 				throw new ControladorException(
 						"atencao.acesso.negado.abrangencia");
 			} else {
-				imovel.setUsuarioParaLog(usuarioLogado);
+				imovel.setUsuarioParaHistorico(usuarioLogado);
 				
 				getControladorUtil().atualizar(imovel);
 			}
@@ -12079,7 +12079,7 @@ public class ControladorMicromedicao implements SessionBean {
 					getControladorTransacao().processaRegistroOperacaoObjetohelper(usuarioAcaoUsuarioHelper,
 							AlteracaoTipo.EXCLUSAO, helper, operacaoEfetuada, ImovelRegistrarTransacaoHelper.TABELA_ID);
 
-					imovel.setUsuarioParaLog(usuarioLogado);
+					imovel.setUsuarioParaHistorico(usuarioLogado);
 
 					getControladorUtil().atualizar(imovel);
 				}

@@ -10551,7 +10551,7 @@ public class ControladorCadastro extends ControladorComum {
 		// Atualiza imovel com o numero do medidor caso nao esteja atualizado
 		if (imovel.getNumeroMedidorEnergia() == null || !imovel.getNumeroMedidorEnergia().equals(linha.getNumeroMedidorEnergia())) {
 			imovel.setNumeroMedidorEnergia(linha.getNumeroMedidorEnergia());
-			imovel.setUsuarioParaLog(linha.getUsuario());
+			imovel.setUsuarioParaHistorico(linha.getUsuario());
 			getControladorUtil().atualizar(imovel);
 		} else {
 			retorno = -1;// retorna -1 se o medidor de energia do imovel ja esta
@@ -10794,7 +10794,7 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setIndicadorEmissaoExtratoFaturamento(ConstantesSistema.NAO);
 		imovel.setImovelPerfil(imovelPerfil);
 		imovel.setUltimaAlteracao(dataAtual);
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 
 		this.getControladorUtil().atualizar(imovel);		
 			
@@ -10873,7 +10873,7 @@ public class ControladorCadastro extends ControladorComum {
 		cobrancaSituacaoTipo.setId(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA);
 		imovel.setCobrancaSituacaoTipo(cobrancaSituacaoTipo);
 		
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 		this.getControladorUtil().atualizar(imovel);
 		
 		/**
@@ -11521,7 +11521,7 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setIndicadorEmissaoExtratoFaturamento(ConstantesSistema.NAO);
 		imovel.setImovelPerfil(imovelPerfil);
 		imovel.setUltimaAlteracao(dataAtual);
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 
 		this.getControladorUtil().atualizar(imovel);		
 			

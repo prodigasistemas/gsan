@@ -4738,7 +4738,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 				faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.FATURAR_NORMAL);			
 				imovelSessao.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 					
-				imovelSessao.setUsuarioParaLog(usuarioLogado);
+				imovelSessao.setUsuarioParaHistorico(usuarioLogado);
 				getControladorUtil().atualizar(imovelSessao);
 				
 				// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
@@ -4939,7 +4939,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 					faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_FATURAMENTO_DE_ESGOTO);
 					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 
-					imovel.setUsuarioParaLog(usuarioLogado);
+					imovel.setUsuarioParaHistorico(usuarioLogado);
 					this.atualizarImovelPerfilTarifaSocial(imovel);
 
 					FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = new FaturamentoSituacaoHistorico();

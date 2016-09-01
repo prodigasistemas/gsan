@@ -3793,7 +3793,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		// [SB0001] Atualizar Ligação de Água
 		this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 		registradorOperacao.registrarOperacao(ligacaoAgua);
-		imovel.setUsuarioParaLog(integracaoComercialHelper.getUsuarioLogado());
+		imovel.setUsuarioParaHistorico(integracaoComercialHelper.getUsuarioLogado());
 		getControladorUtil().atualizar(ligacaoAgua);
 
 		// [SB0001] Atualizar Imovel
@@ -6905,7 +6905,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		// Registrar Transacao
 
 		// [SB0002]- Atualizar Situacao do Imovel
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 		getControladorUtil().atualizar(imovel);
 
 		// [SB0003]- Atualizar Ordem de Servico

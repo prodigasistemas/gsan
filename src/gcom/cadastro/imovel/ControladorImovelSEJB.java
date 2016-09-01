@@ -174,6 +174,7 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -191,11 +192,8 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-public class ControladorImovelSEJB implements SessionBean {
-
-	private static final long serialVersionUID = 1L;
-
-	SessionContext sessionContext;
+public class ControladorImovelSEJB extends ControladorComum {
+	private static final long serialVersionUID = -1644768299562397955L;
 
 	private IRepositorioImovel repositorioImovel;
 	private IRepositorioCategoria repositorioCategoria;
@@ -203,6 +201,13 @@ public class ControladorImovelSEJB implements SessionBean {
 	private IRepositorioCobranca repositorioCobranca;
 	
 	private Logger logger = Logger.getLogger(ControladorImovelSEJB.class);
+	
+	public void ejbCreate() throws CreateException {
+		repositorioImovel = RepositorioImovelHBM.getInstancia();
+		repositorioCategoria = RepositorioCategoriaHBM.getInstancia();
+		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
+		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
+	}	
 
 	public void atualizarImovelLigacaoAgua(Imovel imovel, Integer idLigacaoAguaSituacao) throws ControladorException {
 
@@ -233,160 +238,6 @@ public class ControladorImovelSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}
-
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	private ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	private ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorAcessoLocal getControladorAcesso() {
-		ControladorAcessoLocalHome localHome = null;
-		ControladorAcessoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorEnderecoLocal getControladorEndereco() {
-
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	public void ejbCreate() throws CreateException {
-		repositorioImovel = RepositorioImovelHBM.getInstancia();
-		repositorioCategoria = RepositorioCategoriaHBM.getInstancia();
-		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
-		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
-	}
-
-	public void ejbRemove() {
-	}
-
-	public void ejbActivate() {
-	}
-
-	public void ejbPassivate() {
-	}
-
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
 	}
 
 	public void inserirImovel(Imovel imovel) throws ControladorException {
@@ -951,7 +802,7 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
 
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 		
 		getControladorUtil().atualizar(imovel);
 	}
@@ -998,7 +849,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		
 		// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
 		
-		imovel.setUsuarioParaLog(usuarioLogado);
+		imovel.setUsuarioParaHistorico(usuarioLogado);
 		
 		getControladorUtil().atualizar(imovel);
 	}
@@ -2098,7 +1949,6 @@ public class ControladorImovelSEJB implements SessionBean {
 	public void removerImovel(String[] ids, Usuario usuarioLogado) throws ControladorException {
 		// filtro imovel
 		FiltroImovel filtroImovel = new FiltroImovel();
-		Imovel imovel = new Imovel();
 
 		// Parte de Validacao com Timestamp
 
@@ -2114,21 +1964,34 @@ public class ControladorImovelSEJB implements SessionBean {
 				// coleção com resultado da pesquisa de imovel
 				Collection imoveisNaBase = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 				// imovel encontrado
-				Imovel imovelNaBase = (Imovel) imoveisNaBase.iterator().next();
+				Imovel imovel = (Imovel) imoveisNaBase.iterator().next();
 
-				// Verificar se o imovel já foi atualizada por outro usuário
-				// durante
-				// esta atualização
+				// Verificar se o imovel já foi atualizada por outro usuário durante esta atualização
 				Calendar data = new GregorianCalendar();
 				data.setTimeInMillis(new Long(idUltimaAlteracao[1].trim()).longValue());
 
-				if (imovelNaBase.getUltimaAlteracao().after(data.getTime())) {
+				if (imovel.getUltimaAlteracao().after(data.getTime())) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("atencao.atualizacao.timestamp");
 				}
 
-				imovel = imovelNaBase;
+				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
+				} else {
+					imovel.setUsuarioParaHistorico(usuarioLogado);
+					imovel.setValidarSeImovelEmCampo(true);
+					getControladorAtualizacaoCadastro().atualizar(imovel);
+					
+					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_REMOVER,
+							imovel.getId(), imovel.getId(),
+							new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
+					registradorOperacao.registrarOperacao(imovel);
+				}
+				
 				/**
 				 * Alteração realizada por Ana Maria em 13/10/2008 (Analista:
 				 * Fabíola Araújo) [FS0017] Registrar Fim de Relação do(s)
@@ -2152,26 +2015,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 				imovel.setIndicadorExclusao(Imovel.IMOVEL_EXCLUIDO);
 				imovel.setUltimaAlteracao(new Date());
-
-				/**
-				 * alterado por pedro alexandre dia 18/11/2006 alteração feita
-				 * para acoplar o controle de abrangência de usuário
-				 */
-				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException("atencao.acesso.negado.abrangencia");
-				} else {
-					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_REMOVER,
-							imovel.getId(), imovel.getId(),
-							new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-					registradorOperacao.registrarOperacao(imovel);
-
-					imovel.setUsuarioParaLog(usuarioLogado);
-					getControladorUtil().atualizar(imovel);
-				}
 			}
 		}
 
@@ -2364,37 +2207,6 @@ public class ControladorImovelSEJB implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
 		}
 	}
 
@@ -12341,57 +12153,6 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 	
-	private ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorTransacaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	
-	protected ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
-
-		ControladorAtualizacaoCadastralLocalHome localHome = null;
-		ControladorAtualizacaoCadastralLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAtualizacaoCadastralLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-    /**
-     * [UC0541] Emitir 2 Via de Conta Internet
-     * 
-     * @author Vivianne Sousa
-     * @date 02/09/2007
-     * 
-     * @throws ErroRepositorioException
-     */
-
     public Imovel pesquisarDadosImovel(Integer idImovel)throws ControladorException {
         try {
             return repositorioImovel.pesquisarDadosImovel(idImovel);
@@ -13062,7 +12823,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			imovel.setFaturamentoSituacaoTipo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoTipo());
 			imovel.setFaturamentoSituacaoMotivo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
 			
-			imovel.setUsuarioParaLog(inserirImovelHelper.getUsuario());
+			imovel.setUsuarioParaHistorico(inserirImovelHelper.getUsuario());
 			this.getControladorUtil().atualizar(imovel);
 			
 			
