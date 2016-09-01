@@ -315,23 +315,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			
-			if (objeto instanceof IHistorico){
-				if (((ObjetoTransacao) objeto).logarAlteracoes()){
-					IHistorico iHistorico = (IHistorico) objeto;
-					
-					Object original = this.obterPorId(iHistorico.getClasseOrigem(), iHistorico.getId());
-
-					Constructor constructor = iHistorico.getClasseHistorico().getDeclaredConstructor(iHistorico.getClasseOrigem(), Usuario.class);
-					
-					Usuario user = ((ObjetoTransacao) objeto).getUsuarioParaLog();
-
-					Object historico = constructor.newInstance(original, user);
-					
-					session.save(historico);
-				}
-			}
-			
 			session.update(objeto);
 			session.flush();
 		} catch (Exception e){
