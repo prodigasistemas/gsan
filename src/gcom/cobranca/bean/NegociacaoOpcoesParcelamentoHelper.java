@@ -14,7 +14,7 @@ public class NegociacaoOpcoesParcelamentoHelper implements Serializable {
 
 	private BigDecimal valorEntradaMinima;
 
-	private BigDecimal valorDescontoConta;
+	private BigDecimal valorDescontoFaixaReferenciaConta;
 
 	private BigDecimal valorDescontoAcrecismosImpotualidade;
 
@@ -195,11 +195,11 @@ public class NegociacaoOpcoesParcelamentoHelper implements Serializable {
 		this.valorDebitoDesconto = valorDebitoDesconto;
 	}
 
-	public BigDecimal getValorDescontoConta() {
-		return valorDescontoConta;
+	public BigDecimal getValorDescontoFaixaReferenciaConta() {
+		return valorDescontoFaixaReferenciaConta;
 	}
 
-	public void setValorDescontoConta(BigDecimal valorDescontoConta) {
-		this.valorDescontoConta = valorDescontoConta;
+	public void setValorDescontoFaixaReferenciaConta(BigDecimal valorDescontoFaixaReferenciaConta) {
+		this.valorDescontoFaixaReferenciaConta = valorDescontoFaixaReferenciaConta;
 	}
 }

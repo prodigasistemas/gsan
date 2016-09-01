@@ -27169,15 +27169,15 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "select faixa.pfds_percentual_desconto "
-					+ "from cobranca.parcelamento_faixa_desconto faixa "
-					+ "where faixa.pfds_referencia_minima < :referencia "
-					+ "and faixa.pfds_referencia_maxima > :referencia ";
+			consulta = "SELECT pfds_percentual_desconto as percentual "
+					+ "FROM cobranca.parcelamento_faixa_desconto "
+					+ "WHERE pfds_referencia_minima <= :referencia AND pfds_referencia_maxima >= :referencia ";
 
-			valorDesconto = (BigDecimal) session.createQuery(consulta)
-											.setInteger("referencia", referencia)
-											.setMaxResults(1)
-											.uniqueResult();
+			valorDesconto = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("percentual", Hibernate.BIG_DECIMAL)
+					.setInteger("referencia", referencia)
+					.setMaxResults(1)
+					.uniqueResult();
 			
 			if (valorDesconto == null)
 				valorDesconto = new BigDecimal(0.0);

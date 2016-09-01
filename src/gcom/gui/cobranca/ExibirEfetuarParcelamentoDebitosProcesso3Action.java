@@ -35,16 +35,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-/**
- * Permite efetuar o parcelamento dos débitos de um imóvel
- * 
- * [UC0214] Efetuar Parcelamento de Débitos
- * 
- * Pré-processamento da terceira página
- * 
- * @author Roberta Costa
- * @date 10/03/2006
- */
 public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping,
@@ -59,7 +49,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		
-		DynaActionForm efetuarParcelamentoDebitosActionForm = (DynaActionForm) actionForm;
+		DynaActionForm form = (DynaActionForm) actionForm;
 
 		// Faz os cálculos quando a entrada for modificada
 		String calculaOpcaoParcelamento = null;
@@ -70,23 +60,23 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		}
 		
 		// Pega variáveis do formulário
-		String codigoImovel = (String) efetuarParcelamentoDebitosActionForm.get("matriculaImovel");
-		String codigoImovelAntes = (String) efetuarParcelamentoDebitosActionForm.get("codigoImovelAntes");
-		Integer situacaoAguaId = new Integer( (String) efetuarParcelamentoDebitosActionForm.get("situacaoAguaId"));
-		Integer situacaoEsgotoId = new Integer( (String) efetuarParcelamentoDebitosActionForm.get("situacaoEsgotoId"));
-		Integer perfilImovel = new Integer( (String) efetuarParcelamentoDebitosActionForm.get("perfilImovel"));
-		Integer numeroReparcelamentoConsecutivos = new Integer( (String) efetuarParcelamentoDebitosActionForm.get("numeroReparcelamentoConsecutivos"));
-		String dataParcelamento = (String)(efetuarParcelamentoDebitosActionForm.get("dataParcelamento"));
-		String resolucaoDiretoria = (String) efetuarParcelamentoDebitosActionForm.get("resolucaoDiretoria");
-		String inicioIntervaloParcelamento = (String) efetuarParcelamentoDebitosActionForm.get("inicioIntervaloParcelamento");
-		String fimIntervaloParcelamento = (String)efetuarParcelamentoDebitosActionForm.get("fimIntervaloParcelamento");
-		String indicadorContasRevisao = (String) efetuarParcelamentoDebitosActionForm.get("indicadorContasRevisao");
-		String indicadorGuiasPagamento = (String) efetuarParcelamentoDebitosActionForm.get("indicadorGuiasPagamento");
-		String indicadorAcrescimosImpotualidade = (String) efetuarParcelamentoDebitosActionForm.get("indicadorAcrescimosImpotualidade");
-		String indicadorDebitosACobrar = (String) efetuarParcelamentoDebitosActionForm.get("indicadorDebitosACobrar");
-		String indicadorCreditoARealizar = (String) efetuarParcelamentoDebitosActionForm.get("indicadorCreditoARealizar");
-		String valorDebitoACobrarParcelamentoImovel =( (String)efetuarParcelamentoDebitosActionForm.get("valorDebitoACobrarParcelamentoImovel"));
-		String indicadorDividaAtiva = (String) efetuarParcelamentoDebitosActionForm.get("indicadorDividaAtiva");
+		String codigoImovel = (String) form.get("matriculaImovel");
+		String codigoImovelAntes = (String) form.get("codigoImovelAntes");
+		Integer situacaoAguaId = new Integer( (String) form.get("situacaoAguaId"));
+		Integer situacaoEsgotoId = new Integer( (String) form.get("situacaoEsgotoId"));
+		Integer perfilImovel = new Integer( (String) form.get("perfilImovel"));
+		Integer numeroReparcelamentoConsecutivos = new Integer( (String) form.get("numeroReparcelamentoConsecutivos"));
+		String dataParcelamento = (String)(form.get("dataParcelamento"));
+		String resolucaoDiretoria = (String) form.get("resolucaoDiretoria");
+		String inicioIntervaloParcelamento = (String) form.get("inicioIntervaloParcelamento");
+		String fimIntervaloParcelamento = (String)form.get("fimIntervaloParcelamento");
+		String indicadorContasRevisao = (String) form.get("indicadorContasRevisao");
+		String indicadorGuiasPagamento = (String) form.get("indicadorGuiasPagamento");
+		String indicadorAcrescimosImpotualidade = (String) form.get("indicadorAcrescimosImpotualidade");
+		String indicadorDebitosACobrar = (String) form.get("indicadorDebitosACobrar");
+		String indicadorCreditoARealizar = (String) form.get("indicadorCreditoARealizar");
+		String valorDebitoACobrarParcelamentoImovel =( (String)form.get("valorDebitoACobrarParcelamentoImovel"));
+		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
 		
 		BigDecimal valorDebitoACobrarParcelamentoImovelBigDecimal = new BigDecimal("0.00");
 		
@@ -127,41 +117,36 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		// Valor Entrada Informado
 		BigDecimal valorEntradaInformado = null;
 		BigDecimal valorEntradaInformadoAntes = new BigDecimal("0.00");
-		//*********************************************************
-		// Por: Iavn Sergio
-		// 01/06/2010
-		// CRC4062
-		//*********************************************************
-		if( efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado") != null 
-				&& efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado").equals("")) {
+		if( form.get("valorEntradaInformado") != null 
+				&& form.get("valorEntradaInformado").equals("")) {
 			valorEntradaInformado = BigDecimal.ZERO;
-			efetuarParcelamentoDebitosActionForm.set("valorEntradaInformado",Util.formatarMoedaReal(valorEntradaInformado));
+			form.set("valorEntradaInformado",Util.formatarMoedaReal(valorEntradaInformado));
 		}
-		//*********************************************************
-		if( efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado").equals("")
-					&& !efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado").equals("0.00")){
+		
+		if( form.get("valorEntradaInformado") != null 
+				&& !form.get("valorEntradaInformado").equals("")
+					&& !form.get("valorEntradaInformado").equals("0.00")){
 			
-			if (efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado").equals("0") ){
+			if (form.get("valorEntradaInformado").equals("0") ){
 				valorEntradaInformado = BigDecimal.ZERO;
-				efetuarParcelamentoDebitosActionForm.set("valorEntradaInformado",Util.formatarMoedaReal(valorEntradaInformado));
+				form.set("valorEntradaInformado",Util.formatarMoedaReal(valorEntradaInformado));
 			}else{
-				valorEntradaInformado = Util.formatarMoedaRealparaBigDecimal((String) efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado"));
+				valorEntradaInformado = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorEntradaInformado"));
 			}
 			
 		}
-		if( efetuarParcelamentoDebitosActionForm.get("valorEntradaInformadoAntes") != null 
-				&& !efetuarParcelamentoDebitosActionForm.get("valorEntradaInformadoAntes").equals("")
-					&& !efetuarParcelamentoDebitosActionForm.get("valorEntradaInformadoAntes").equals("0.00")){
-			valorEntradaInformadoAntes = Util.formatarMoedaRealparaBigDecimal((String) efetuarParcelamentoDebitosActionForm.get("valorEntradaInformadoAntes"));
+		if( form.get("valorEntradaInformadoAntes") != null 
+				&& !form.get("valorEntradaInformadoAntes").equals("")
+					&& !form.get("valorEntradaInformadoAntes").equals("0.00")){
+			valorEntradaInformadoAntes = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorEntradaInformadoAntes"));
 		}
 		
 		// O indicador só será usado caso a situação de Água do Imóvel seja
 		// SUPRIMIDO, SUPRIMIDO PARCIAL, SUPRIMIDO PARCIAL A PEDIDO
 		Integer indicadorRestabelecimento = new Integer("0");
-		if (efetuarParcelamentoDebitosActionForm.get("indicadorRestabelecimento") != null
-				&& !efetuarParcelamentoDebitosActionForm.get("indicadorRestabelecimento").equals("")) {
-			indicadorRestabelecimento = new Integer(String.valueOf(efetuarParcelamentoDebitosActionForm.get("indicadorRestabelecimento")));
+		if (form.get("indicadorRestabelecimento") != null
+				&& !form.get("indicadorRestabelecimento").equals("")) {
+			indicadorRestabelecimento = new Integer(String.valueOf(form.get("indicadorRestabelecimento")));
 		}
 
 		
@@ -186,14 +171,14 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			colecaoGuiaPagamento = (Collection<GuiaPagamento>) sessao.getAttribute("colecaoGuiaPagamentoValores");
 			valorDebitoTotalAtualizado = BigDecimal.ZERO;
 			
-			if (!((String) efetuarParcelamentoDebitosActionForm.get("valorDebitoTotalAtualizado")).equals("")){
+			if (!((String) form.get("valorDebitoTotalAtualizado")).equals("")){
 				
-				valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal((String) efetuarParcelamentoDebitosActionForm.get("valorDebitoTotalAtualizado"));
+				valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorDebitoTotalAtualizado"));
 				
 			}
 			
-			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) efetuarParcelamentoDebitosActionForm.get("valorAcrescimosImpontualidade"));
-			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String)  efetuarParcelamentoDebitosActionForm.get("valorCreditoARealizar"));
+			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorAcrescimosImpontualidade"));
+			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String)  form.get("valorCreditoARealizar"));
 
 		} 
 		else {
@@ -211,8 +196,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 
 			//Obter todo o débito do imóvel para exibição na ABA 4(Conclusão)
 			//ou para inserir a partir da aba 3 
-			ObterDebitoImovelOuClienteHelper colecaoDebitoCliente = fachada
-					.obterDebitoImovelOuCliente(
+			ObterDebitoImovelOuClienteHelper colecaoDebitoCliente = fachada.obterDebitoImovelOuCliente(
 							1, // Indicador de débito do imóvel
 							codigoImovel, // Matrícula do imóvel
 							null, // Código do cliente
@@ -228,7 +212,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 							1, // Indicador de notas promissórias
 							new Integer(indicadorGuiasPagamento), //guias pagamento
 							new Integer(indicadorAcrescimosImpotualidade), // acréscimos impontualidade
-							indicadorContas, new Integer(indicadorDividaAtiva));
+							indicadorContas,
+							new Integer(indicadorDividaAtiva));
 
 			// Para o cálculo do Débito Total Atualizado
 			BigDecimal valorTotalContas = new BigDecimal("0.00");
@@ -356,7 +341,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					//=============================================================================================
 				}
 				
-				efetuarParcelamentoDebitosActionForm.set("valorTotalContaValores", Util.formatarMoedaReal(valorTotalContas));
+				form.set("valorTotalContaValores", Util.formatarMoedaReal(valorTotalContas));
 
 				sessao.setAttribute("valorTotalContaValores",valorTotalContas);
 				
@@ -367,7 +352,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			} 
 			else {
 				
-				efetuarParcelamentoDebitosActionForm.set("valorTotalContaValores", "0,00");
+				form.set("valorTotalContaValores", "0,00");
 				
 				sessao.setAttribute("valorTotalContaValores",valorTotalContas);
 			}
@@ -408,7 +393,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 						valorTotalAcrescimoImpontualidadeGuias.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalAcrescimoImpontualidadeGuias = valorTotalAcrescimoImpontualidadeGuias.add(guiaPagamentoValoresHelper.getValorAcrescimosImpontualidade());
 					}
-					efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamento",Util.formatarMoedaReal(valorTotalGuiasPagamento));
+					form.set("valorGuiasPagamento",Util.formatarMoedaReal(valorTotalGuiasPagamento));
 					
 					if(!guiasRemovidas.isEmpty())
 						colecaoGuiaPagamentoValores.removeAll(guiasRemovidas);
@@ -416,10 +401,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					// Pega as Guias de Pagamento em Débito
 					sessao.setAttribute("colecaoGuiaPagamentoValores", colecaoGuiaPagamentoValores);
 				} else {
-					efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamento", "0,00");
+					form.set("valorGuiasPagamento", "0,00");
 				}
 			}else{
-				efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamento", "0,00");
+				form.set("valorGuiasPagamento", "0,00");
 			}
 			
 			// Acrescimos por Impotualidade
@@ -429,16 +414,16 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
 
-				efetuarParcelamentoDebitosActionForm.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
+				form.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
 				sessao.setAttribute("valorAcrescimosImpontualidade", retornoSoma);
 			}else{
-				efetuarParcelamentoDebitosActionForm.set("valorAcrescimosImpontualidade", "0,00");
+				form.set("valorAcrescimosImpontualidade", "0,00");
 				sessao.setAttribute("valorAcrescimosImpontualidade", new BigDecimal("0.00"));
 			}
 
-			efetuarParcelamentoDebitosActionForm.set("valorAtualizacaoMonetaria", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
-			efetuarParcelamentoDebitosActionForm.set("valorJurosMora", Util.formatarMoedaReal(valorJurosMora));
-			efetuarParcelamentoDebitosActionForm.set("valorMulta", Util.formatarMoedaReal(valorMulta));
+			form.set("valorAtualizacaoMonetaria", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
+			form.set("valorJurosMora", Util.formatarMoedaReal(valorJurosMora));
+			form.set("valorMulta", Util.formatarMoedaReal(valorMulta));
 			
 			// Para o cálculo do Débito Total Atualizado
 			valorTotalAcrescimoImpontualidade = retornoSoma;
@@ -515,35 +500,27 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					
 					sessao.setAttribute("colecaoDebitoACobrar",	colecaoDebitoACobrar);
 	
-					// Serviços
 					valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 					valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo.add(valorTotalRestanteServicosACobrarLongoPrazo);
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServico", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
-					// Parcelamentos
+					form.set("valorDebitoACobrarServico", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
 					valorTotalRestanteParcelamentosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 					valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamento", Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
+					form.set("valorDebitoACobrarParcelamento", Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
 				}else{
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServico", "0,00");
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamento", "0,00");
-					
-					// Alterado por Rafael Corrêa
-					// Data: 26/08/2009
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoLongoPrazo", "0,00");
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoCurtoPrazo", "0,00");
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoLongoPrazo", "0,00");
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoCurtoPrazo", "0,00");
+					form.set("valorDebitoACobrarServico", "0,00");
+					form.set("valorDebitoACobrarParcelamento", "0,00");
+					form.set("valorDebitoACobrarServicoLongoPrazo", "0,00");
+					form.set("valorDebitoACobrarServicoCurtoPrazo", "0,00");
+					form.set("valorDebitoACobrarParcelamentoLongoPrazo", "0,00");
+					form.set("valorDebitoACobrarParcelamentoCurtoPrazo", "0,00");
 				}
 			}else{
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServico", "0,00");
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamento", "0,00");
-				
-				// Alterado por Rafael Corrêa
-				// Data: 26/08/2009
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoLongoPrazo", "0,00");
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoCurtoPrazo", "0,00");
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoLongoPrazo", "0,00");
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoCurtoPrazo", "0,00");
+				form.set("valorDebitoACobrarServico", "0,00");
+				form.set("valorDebitoACobrarParcelamento", "0,00");
+				form.set("valorDebitoACobrarServicoLongoPrazo", "0,00");
+				form.set("valorDebitoACobrarServicoCurtoPrazo", "0,00");
+				form.set("valorDebitoACobrarParcelamentoLongoPrazo", "0,00");
+				form.set("valorDebitoACobrarParcelamentoCurtoPrazo", "0,00");
 			}
 			
 			// Crédito A Realizar
@@ -567,16 +544,15 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 					if(!creditosRemovidos.isEmpty())
 						colecaoCreditoARealizar.removeAll(creditosRemovidos);
 					sessao.setAttribute("colecaoCreditoARealizar",colecaoCreditoARealizar);
-					efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizar",Util.formatarMoedaReal(valorCreditoARealizar));
+					form.set("valorCreditoARealizar",Util.formatarMoedaReal(valorCreditoARealizar));
 				}else{
-					efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizar", "0,00");
+					form.set("valorCreditoARealizar", "0,00");
 				}
 			}else{
-				efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizar", "0,00");
+				form.set("valorCreditoARealizar", "0,00");
 			}	
 			
 			// Débito Total Atualizado
-//			BigDecimal debitoTotalAtualizado = new BigDecimal("0.00");
 			valorDebitoTotalAtualizado.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 			valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.add(valorTotalContas);
 			valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.add(valorTotalGuiasPagamento);
@@ -591,6 +567,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		BigDecimal valorTotalMultas = new BigDecimal("0.00");
 		BigDecimal valorTotalJurosMora = new BigDecimal("0.00");
 		BigDecimal valorTotalAtualizacoesMonetarias = new BigDecimal("0.00");
+		BigDecimal descontoFaixaReferenciaConta = new BigDecimal("0.00");
 		BigDecimal descontoAcrescimosImpontualidade = new BigDecimal("0.00");
 		BigDecimal descontoAntiguidadeDebito = new BigDecimal("0.00");
 		BigDecimal descontoInatividadeLigacaoAgua = new BigDecimal("0.00");
@@ -628,9 +605,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			}	
 			
 			BigDecimal valorEntradaDebitos = new BigDecimal("0.00"); // Valor de Entrada da Aba 2
-			if( efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado") != null
-					&& !efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado").equals("") && !marcadaEP ){
-				valorEntradaDebitos = Util.formatarMoedaRealparaBigDecimal((String) efetuarParcelamentoDebitosActionForm.get("valorEntradaInformado"));
+			if( form.get("valorEntradaInformado") != null
+					&& !form.get("valorEntradaInformado").equals("") && !marcadaEP ){
+				valorEntradaDebitos = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorEntradaInformado"));
 			}else{
 				valorEntradaDebitos = (BigDecimal) sessao.getAttribute("valorEntradaMinima");	
 			}
@@ -706,17 +683,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			NegociacaoOpcoesParcelamentoHelper opcoesParcelamento =  null;
 			
 			opcoesParcelamento = fachada.obterOpcoesDeParcelamento(helper);
-			
-			// [SB0002] - Obter Opções de Parcelamento
-			/*opcoesParcelamento = fachada.obterOpcoesDeParcelamento(
-			new Integer(resolucaoDiretoria), new Integer(codigoImovel), valorEntradaInformado,
-			situacaoAguaId, situacaoEsgotoId, perfilImovel, inicioIntervaloParcelamento,
-			indicadorRestabelecimento, colecaoContaValoresNegociacao, valorDebitoTotalAtualizado, 
-			valorTotalMultas, valorTotalJurosMora, valorTotalAtualizacoesMonetarias,
-			numeroReparcelamentoConsecutivos, colecaoGuiaPagamento,usuario, 
-			valorDebitoACobrarParcelamentoImovelBigDecimal, inicioIntervaloParcelamentoFormatado,
-			fimIntervaloParcelamentoFormatado, indicadoresParcelamentoHelper);*/
-			
 			colecaoOpcoesParcelamento = opcoesParcelamento.getOpcoesParcelamento();
 			
 			// Verifica se alguma opção de parcelamento foi marcada
@@ -724,8 +690,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				Iterator opcoesParcelamentoValores = colecaoOpcoesParcelamento.iterator();
 				while(opcoesParcelamentoValores.hasNext()) {
 					OpcoesParcelamentoHelper opcoesParcelamentoHelper = (OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
-					if(efetuarParcelamentoDebitosActionForm.get("indicadorQuantidadeParcelas") != null ){
-						if( ((String)efetuarParcelamentoDebitosActionForm.get("indicadorQuantidadeParcelas")).equals(opcoesParcelamentoHelper.getQuantidadePrestacao().toString()) ){
+					if(form.get("indicadorQuantidadeParcelas") != null ){
+						if( ((String)form.get("indicadorQuantidadeParcelas")).equals(opcoesParcelamentoHelper.getQuantidadePrestacao().toString()) ){
 							opcoesParcelamentoHelper.setIndicadorQuantidadeParcelas(new Short(opcoesParcelamentoHelper.getQuantidadePrestacao().toString()));
 						}
 					}	
@@ -736,6 +702,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			sessao.setAttribute("opcoesParcelamento",opcoesParcelamento);
 			sessao.setAttribute("colecaoOpcoesParcelamento",colecaoOpcoesParcelamento);
 			
+			descontoFaixaReferenciaConta = opcoesParcelamento.getValorDescontoFaixaReferenciaConta();
 			descontoAcrescimosImpontualidade = opcoesParcelamento.getValorDescontoAcrecismosImpotualidade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 			descontoSancoesRDEspecial = opcoesParcelamento.getValorDescontoSancoesRDEspecial();
 			descontoTarifaSocialRDEspecial = opcoesParcelamento.getValorDescontoTarifaSocialRDEspecial();
@@ -752,15 +719,15 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			
 			// Inicia o valor da Entrada com a Miníma caso não tenha marcardo nenhuma conta
 			if( marcadaEP ){
-				efetuarParcelamentoDebitosActionForm.set("valorEntradaInformado", Util.formatarMoedaReal(valorEntradaInformado));
-				efetuarParcelamentoDebitosActionForm.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaInformado));
+				form.set("valorEntradaInformado", Util.formatarMoedaReal(valorEntradaInformado));
+				form.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaInformado));
 			}else{
 				if( (valorEntradaInformado != null && ! (valorEntradaMinima.compareTo(valorEntradaInformado) == 0))
 						&& sessao.getAttribute("calculaNegociacao") != null ){
 					valorEntradaMinima = valorEntradaInformado;
 				}
-				efetuarParcelamentoDebitosActionForm.set("valorEntradaInformado", Util.formatarMoedaReal(valorEntradaMinima));
-				efetuarParcelamentoDebitosActionForm.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaMinima));
+				form.set("valorEntradaInformado", Util.formatarMoedaReal(valorEntradaMinima));
+				form.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaMinima));
 			}
 		
 		// Caso tenha acionado o botão calcular da aba 3
@@ -813,16 +780,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			
 			NegociacaoOpcoesParcelamentoHelper opcoesParcelamento = fachada.obterOpcoesDeParcelamento(helper);
 			
-			// [SB0002] - Obter Opções de Parcelamento
-			/*opcoesParcelamento = fachada.obterOpcoesDeParcelamento(
-			new Integer(resolucaoDiretoria), new Integer(codigoImovel), valorEntradaInformado,
-			situacaoAguaId, situacaoEsgotoId, perfilImovel, inicioIntervaloParcelamento,
-			indicadorRestabelecimento, colecaoContaValoresNegociacao, valorDebitoTotalAtualizado, 
-			valorTotalMultas, valorTotalJurosMora, valorTotalAtualizacoesMonetarias,
-			numeroReparcelamentoConsecutivos, colecaoGuiaPagamento,usuario, 
-			valorDebitoACobrarParcelamentoImovelBigDecimal, inicioIntervaloParcelamentoFormatado,
-			fimIntervaloParcelamentoFormatado, indicadoresParcelamentoHelper);*/
-
+			descontoFaixaReferenciaConta = opcoesParcelamento.getValorDescontoFaixaReferenciaConta();
 			descontoAcrescimosImpontualidade = opcoesParcelamento.getValorDescontoAcrecismosImpotualidade();
 			descontoSancoesRDEspecial = opcoesParcelamento.getValorDescontoSancoesRDEspecial();
 			descontoTarifaSocialRDEspecial = opcoesParcelamento.getValorDescontoTarifaSocialRDEspecial();
@@ -876,12 +834,12 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				while(opcoesParcelamentoValores.hasNext()) {
 					OpcoesParcelamentoHelper opcoesParcelamentoHelper = (OpcoesParcelamentoHelper) opcoesParcelamentoValores.next();
 					opcoesParcelamentoHelper.setIndicadorQuantidadeParcelas(null);
-					efetuarParcelamentoDebitosActionForm.set("indicadorQuantidadeParcelas", null);
+					form.set("indicadorQuantidadeParcelas", null);
 				}
 			}
 			
 			// Atribui ao hidden o valor da entrada digitado
-			efetuarParcelamentoDebitosActionForm.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaInformado));
+			form.set("valorEntradaInformadoAntes", Util.formatarMoedaReal(valorEntradaInformado));
 		}
 		
 		// Verifica se o valor do débito menos o valor dos descontos é menor que o valor minimo da parcela
@@ -889,6 +847,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		BigDecimal resultadoDiferenca = new BigDecimal("0.00");
 		valorTotalDescontos.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 		valorTotalDescontos = descontoAcrescimosImpontualidade.add(descontoAntiguidadeDebito);
+		valorTotalDescontos = valorTotalDescontos.add(descontoFaixaReferenciaConta);
 		valorTotalDescontos = valorTotalDescontos.add(descontoInatividadeLigacaoAgua);
 		valorTotalDescontos = valorTotalDescontos.add(descontoSancoesRDEspecial);
 		valorTotalDescontos = valorTotalDescontos.add(descontoTarifaSocialRDEspecial);
@@ -902,26 +861,15 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		}
 		
 		// Coloca os valores no formulário
-		efetuarParcelamentoDebitosActionForm.set("descontoAcrescimosImpontualidade", Util.formatarMoedaReal(descontoAcrescimosImpontualidade));
-		efetuarParcelamentoDebitosActionForm.set("descontoAntiguidadeDebito",Util.formatarMoedaReal(descontoAntiguidadeDebito));
-		efetuarParcelamentoDebitosActionForm.set("descontoInatividadeLigacaoAgua", Util.formatarMoedaReal(descontoInatividadeLigacaoAgua));
-		efetuarParcelamentoDebitosActionForm.set("percentualDescontoAcrescimosImpontualidade", Util.formatarMoedaReal(percentualDescontoAcrescimosImpontualidade));
-		efetuarParcelamentoDebitosActionForm.set("valorTotalDescontos", Util.formatarMoedaReal(valorTotalDescontos));
-		efetuarParcelamentoDebitosActionForm.set("descontoSancoesRDEspecial",Util.formatarMoedaReal(descontoSancoesRDEspecial));
-		efetuarParcelamentoDebitosActionForm.set("descontoTarifaSocialRDEspecial",Util.formatarMoedaReal(descontoTarifaSocialRDEspecial));
+		form.set("descontoFaixaReferenciaConta", Util.formatarMoedaReal(descontoFaixaReferenciaConta));
+		form.set("descontoAcrescimosImpontualidade", Util.formatarMoedaReal(descontoAcrescimosImpontualidade));
+		form.set("descontoAntiguidadeDebito",Util.formatarMoedaReal(descontoAntiguidadeDebito));
+		form.set("descontoInatividadeLigacaoAgua", Util.formatarMoedaReal(descontoInatividadeLigacaoAgua));
+		form.set("percentualDescontoAcrescimosImpontualidade", Util.formatarMoedaReal(percentualDescontoAcrescimosImpontualidade));
+		form.set("valorTotalDescontos", Util.formatarMoedaReal(valorTotalDescontos));
+		form.set("descontoSancoesRDEspecial",Util.formatarMoedaReal(descontoSancoesRDEspecial));
+		form.set("descontoTarifaSocialRDEspecial",Util.formatarMoedaReal(descontoTarifaSocialRDEspecial));
 		
-		/*if(parcelamentoPerfil.getPercentualDescontoAVista() != null){
-			valorDescontoPagamentoAVista = valorDescontoPagamentoAVista.add(descontoPagamentoAVistaRDEspecial);
-			valorDescontoPagamentoAVista = valorDescontoPagamentoAVista.add(valorTotalDescontos);
-		}else{
-			// Valor desconto para pagamento à vista (maior valor entre o valor total dos descontos e
-			// o valor dos acréscimos por impontualidade)
-			if(valorTotalDescontos.compareTo(valorAcrescimosImpontualidade) == 1){
-				valorDescontoPagamentoAVista = valorTotalDescontos;
-			}else{
-				valorDescontoPagamentoAVista = valorAcrescimosImpontualidade;
-			}
-		}*/
 		
 		valorTotalImpostosConta = obterValorImpostosDasContasDoParcelamento(colecaoContaValoresNegociacao);
 		
@@ -930,34 +878,29 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 
 		valorPagamentoAVista = valorPagamentoAVista.subtract(valorTotalImpostosConta);
         
-//        if (valorPagamentoAVista.compareTo(BigDecimal.ZERO)< 1){
-//            throw new ActionServletException(
-//                    "atencao.cliente_debito_zerado", null);
-//        }
-		
 		// Colocando os valores no formulário
-		efetuarParcelamentoDebitosActionForm.set("valorDebitoTotalAtualizado",Util.formatarMoedaReal(valorDebitoTotalAtualizado));
-		efetuarParcelamentoDebitosActionForm.set("valorDescontoPagamentoAVista",Util.formatarMoedaReal(descontoTotalPagamentoAVista));
-		efetuarParcelamentoDebitosActionForm.set("valorPagamentoAVista",Util.formatarMoedaReal(valorPagamentoAVista));
-		efetuarParcelamentoDebitosActionForm.set("valorTotalImpostos",Util.formatarMoedaReal(valorTotalImpostosConta));
+		form.set("valorDebitoTotalAtualizado",Util.formatarMoedaReal(valorDebitoTotalAtualizado));
+		form.set("valorDescontoPagamentoAVista",Util.formatarMoedaReal(descontoTotalPagamentoAVista));
+		form.set("valorPagamentoAVista",Util.formatarMoedaReal(valorPagamentoAVista));
+		form.set("valorTotalImpostos",Util.formatarMoedaReal(valorTotalImpostosConta));
 		
 		if (percentualDescontoAntiguidadeDebito != null) {
-			efetuarParcelamentoDebitosActionForm.set("percentualDescontoAntiguidadeDebito", Util.formatarMoedaReal(percentualDescontoAntiguidadeDebito));
+			form.set("percentualDescontoAntiguidadeDebito", Util.formatarMoedaReal(percentualDescontoAntiguidadeDebito));
 		} else {
-			efetuarParcelamentoDebitosActionForm.set("percentualDescontoAntiguidadeDebito", "0.00");
+			form.set("percentualDescontoAntiguidadeDebito", "0.00");
 		}
 
 		if (percentualDescontoInatividadeLigacaoAgua != null) {
-			efetuarParcelamentoDebitosActionForm.set("percentualDescontoInatividadeLigacaoAgua", Util
+			form.set("percentualDescontoInatividadeLigacaoAgua", Util
 					.formatarMoedaReal(percentualDescontoInatividadeLigacaoAgua));
 		} else {
-			efetuarParcelamentoDebitosActionForm.set("percentualDescontoInatividadeLigacaoAgua", "0.00");
+			form.set("percentualDescontoInatividadeLigacaoAgua", "0.00");
 		}
 
 		if (parcelamentoPerfil != null) {
-			efetuarParcelamentoDebitosActionForm.set("parcelamentoPerfilId",parcelamentoPerfil.getId().toString());
+			form.set("parcelamentoPerfilId",parcelamentoPerfil.getId().toString());
 		} else {
-			efetuarParcelamentoDebitosActionForm.set("parcelamentoPerfilId", "0");
+			form.set("parcelamentoPerfilId", "0");
 		}
 		
 		// O valor do débito é menor que o valor da parcela mínima permitida.
@@ -965,7 +908,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		if (valorDebitoTotalAtualizado.compareTo(valorMinimoPrestacao) == -1){
 			httpServletRequest.setAttribute("vlDebitoMenor","1");
 		}
-		efetuarParcelamentoDebitosActionForm.set("valorMinimoPrestacao", Util.formatarMoedaReal(valorMinimoPrestacao));
+		form.set("valorMinimoPrestacao", Util.formatarMoedaReal(valorMinimoPrestacao));
 		
 		String habilitaPagamentoAVista = "1";
 		if (colecaoContaValoresNegociacao == null || colecaoContaValoresNegociacao.isEmpty()) {
