@@ -9,47 +9,57 @@ import java.math.BigDecimal;
 public class DeterminarValorDescontoPagamentoAVistaHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private ObterOpcoesDeParcelamentoHelper obterOpcoesDeParcelamentoHelper;
-	
+
 	private ParcelamentoPerfil parcelamentoPerfil;
+
+	private BigDecimal valorDescontoFaixaReferenciaConta;
 	
 	private BigDecimal valorDescontoAcrecismosImpotualidade;
-	
+
 	private BigDecimal valorDescontoInatividade;
-	
+
 	private BigDecimal valorDescontoAntiguidade;
-	
+
 	private BigDecimal valorDescontoSancoes;
-	
+
 	private BigDecimal valorDescontoTarifaSocial;
-	
+
 	private Integer anoMesLimiteMaximo;
-	
+
 	private ResolucaoDiretoria resolucaoDiretoria;
-	
+
 	private BigDecimal valorCreditoARealizar;
-	
+
 	private BigDecimal valorDescontoInatividadeAVista;
-	   
-    public DeterminarValorDescontoPagamentoAVistaHelper(ObterOpcoesDeParcelamentoHelper helper, ParcelamentoPerfil parcelamentoPerfil,
-        BigDecimal valorDescontoAcrecismosImpotualidade, BigDecimal valorDescontoInatividade,
-        BigDecimal valorDescontoAntiguidade, BigDecimal valorDescontoSancoes,
-        BigDecimal valorDescontoTarifaSocial, Integer anoMesLimiteMaximo,
-        ResolucaoDiretoria resolucaoDiretoria, BigDecimal valorCreditoARealizar,
-        BigDecimal valorDescontoInatividadeAVista){
-       
-        this.setObterOpcoesDeParcelamentoHelper(helper);
-        this.setParcelamentoPerfil(parcelamentoPerfil);
-        this.setValorDescontoAcrecismosImpotualidade(valorDescontoAcrecismosImpotualidade);
-        this.setValorDescontoInatividade(valorDescontoInatividade);
-        this.setValorDescontoAntiguidade(valorDescontoAntiguidade);
-        this.setValorDescontoSancoes(valorDescontoSancoes);
-        this.setValorDescontoTarifaSocial(valorDescontoTarifaSocial);
-        this.setAnoMesLimiteMaximo(anoMesLimiteMaximo);
-        this.setResolucaoDiretoria(resolucaoDiretoria);
-        this.setValorCreditoARealizar(valorCreditoARealizar);
-        this.valorDescontoInatividadeAVista = valorDescontoInatividadeAVista;
-    }
-	
+
+	public DeterminarValorDescontoPagamentoAVistaHelper(
+			ObterOpcoesDeParcelamentoHelper helper, 
+			ParcelamentoPerfil parcelamentoPerfil,
+			BigDecimal valorDescontoFaixaReferenciaConta,
+			BigDecimal valorDescontoAcrecismosImpotualidade,
+			BigDecimal valorDescontoInatividade, 
+			BigDecimal valorDescontoAntiguidade, 
+			BigDecimal valorDescontoSancoes, 
+			BigDecimal valorDescontoTarifaSocial, 
+			Integer anoMesLimiteMaximo,
+			ResolucaoDiretoria resolucaoDiretoria, 
+			BigDecimal valorCreditoARealizar, 
+			BigDecimal valorDescontoInatividadeAVista) {
+
+		this.setObterOpcoesDeParcelamentoHelper(helper);
+		this.setParcelamentoPerfil(parcelamentoPerfil);
+		this.setValorDescontoFaixaReferenciaConta(valorDescontoFaixaReferenciaConta);
+		this.setValorDescontoAcrecismosImpotualidade(valorDescontoAcrecismosImpotualidade);
+		this.setValorDescontoInatividade(valorDescontoInatividade);
+		this.setValorDescontoAntiguidade(valorDescontoAntiguidade);
+		this.setValorDescontoSancoes(valorDescontoSancoes);
+		this.setValorDescontoTarifaSocial(valorDescontoTarifaSocial);
+		this.setAnoMesLimiteMaximo(anoMesLimiteMaximo);
+		this.setResolucaoDiretoria(resolucaoDiretoria);
+		this.setValorCreditoARealizar(valorCreditoARealizar);
+		this.valorDescontoInatividadeAVista = valorDescontoInatividadeAVista;
+	}
+
 	public Integer getAnoMesLimiteMaximo() {
 		return anoMesLimiteMaximo;
 	}
@@ -62,8 +72,7 @@ public class DeterminarValorDescontoPagamentoAVistaHelper implements Serializabl
 		return obterOpcoesDeParcelamentoHelper;
 	}
 
-	public void setObterOpcoesDeParcelamentoHelper(
-			ObterOpcoesDeParcelamentoHelper obterOpcoesDeParcelamentoHelper) {
+	public void setObterOpcoesDeParcelamentoHelper(ObterOpcoesDeParcelamentoHelper obterOpcoesDeParcelamentoHelper) {
 		this.obterOpcoesDeParcelamentoHelper = obterOpcoesDeParcelamentoHelper;
 	}
 
@@ -75,12 +84,19 @@ public class DeterminarValorDescontoPagamentoAVistaHelper implements Serializabl
 		this.parcelamentoPerfil = parcelamentoPerfil;
 	}
 
+	public BigDecimal getValorDescontoFaixaReferenciaConta() {
+		return valorDescontoFaixaReferenciaConta;
+	}
+
+	public void setValorDescontoFaixaReferenciaConta(BigDecimal valorDescontoFaixaReferenciaConta) {
+		this.valorDescontoFaixaReferenciaConta = valorDescontoFaixaReferenciaConta;
+	}
+
 	public BigDecimal getValorDescontoAcrecismosImpotualidade() {
 		return valorDescontoAcrecismosImpotualidade;
 	}
 
-	public void setValorDescontoAcrecismosImpotualidade(
-			BigDecimal valorDescontoAcrecismosImpotualidade) {
+	public void setValorDescontoAcrecismosImpotualidade(BigDecimal valorDescontoAcrecismosImpotualidade) {
 		this.valorDescontoAcrecismosImpotualidade = valorDescontoAcrecismosImpotualidade;
 	}
 
@@ -136,10 +152,7 @@ public class DeterminarValorDescontoPagamentoAVistaHelper implements Serializabl
 		return valorDescontoInatividadeAVista;
 	}
 
-	public void setValorDescontoInatividadeAVista(
-			BigDecimal valorDescontoInatividadeAVista) {
+	public void setValorDescontoInatividadeAVista(BigDecimal valorDescontoInatividadeAVista) {
 		this.valorDescontoInatividadeAVista = valorDescontoInatividadeAVista;
 	}
-	
-	
 }
