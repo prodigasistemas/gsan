@@ -53,8 +53,6 @@ public interface IRepositorioImovel {
 
 	public void atualizarImovel(Imovel imovel) throws ErroRepositorioException;
 	
-	public void atualizarImovelRegistrandoHistorico(Imovel imovel, Usuario usuario) throws ErroRepositorioException;
-
 	public void removerClienteImovelEconomia(Integer id) throws ErroRepositorioException;
 
 	public void removerTodos(String objeto, String condicional, Integer id) throws ErroRepositorioException;

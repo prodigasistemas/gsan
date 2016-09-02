@@ -33,6 +33,8 @@ import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.localidade.ControladorLocalidadeLocal;
 import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
+import gcom.cadastro.unidade.ControladorUnidadeLocal;
+import gcom.cadastro.unidade.ControladorUnidadeLocalHome;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
@@ -53,6 +55,8 @@ import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.ControladorAcessoLocal;
 import gcom.seguranca.acesso.ControladorAcessoLocalHome;
+import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
+import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
@@ -514,4 +518,36 @@ public abstract class ControladorComum implements SessionBean{
         }
     }
     
+	protected ControladorUsuarioLocal getControladorUsuario() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorUsuarioLocalHome localHome = (ControladorUsuarioLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
+
+			ControladorUsuarioLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorUnidadeLocal getControladorUnidade() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorUnidadeLocalHome localHome = (ControladorUnidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
+
+			ControladorUnidadeLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 }

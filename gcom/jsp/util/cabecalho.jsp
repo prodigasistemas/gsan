@@ -34,15 +34,7 @@
 								<font color="black">
 									<strong>${requestScope.mensagemAviso} </strong>
 								</font>
-							</marquee>
-							
-					<%	if (!getServletContext().getAttribute("nomeEmpresa").equals("IPAD")){ %>
-							<a href="http://xwiki.ipad.com.br/" style="text-decoration: none;" target="_blank">
-								<img src="<bean:message key="caminho.imagens"/>ajuda2.gif" border="0">
-							</a>
-		    		<%	} else {	%>
-							<img src="<bean:message key="caminho.imagens"/>ajuda2.gif" border="0">
-		    		<%	}	%>
+							</marquee>							
 						</td>
 						
 						<td align="right" valign="bottom">

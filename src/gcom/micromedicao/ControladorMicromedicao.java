@@ -11867,7 +11867,8 @@ public class ControladorMicromedicao implements SessionBean {
 				throw new ControladorException(
 						"atencao.acesso.negado.abrangencia");
 			} else {
-
+				imovel.setUsuarioParaLog(usuarioLogado);
+				
 				getControladorUtil().atualizar(imovel);
 			}
 			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
@@ -12055,20 +12056,14 @@ public class ControladorMicromedicao implements SessionBean {
 				// ------------ CONTROLE DE ABRANGENCIA ----------------
 				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
-				if (!getControladorAcesso().verificarAcessoAbrangencia(
-						abrangencia)) {
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.acesso.negado.abrangencia");
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
 				} else {
-
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
-
 					UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
 
-					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(
-							usuarioLogado, usuarioAcao);
+					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado,
+							usuarioAcao);
 
 					OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 					Operacao operacao = new Operacao();
@@ -12081,14 +12076,10 @@ public class ControladorMicromedicao implements SessionBean {
 
 					operacaoEfetuada.setArgumentoValor(new Integer(id.trim()));
 
-					getControladorTransacao()
-							.processaRegistroOperacaoObjetohelper(
-									usuarioAcaoUsuarioHelper,
-									AlteracaoTipo.EXCLUSAO, helper,
-									operacaoEfetuada,
-									ImovelRegistrarTransacaoHelper.TABELA_ID);
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
+					getControladorTransacao().processaRegistroOperacaoObjetohelper(usuarioAcaoUsuarioHelper,
+							AlteracaoTipo.EXCLUSAO, helper, operacaoEfetuada, ImovelRegistrarTransacaoHelper.TABELA_ID);
+
+					imovel.setUsuarioParaLog(usuarioLogado);
 
 					getControladorUtil().atualizar(imovel);
 				}
