@@ -11832,83 +11832,76 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [UC0214] Efetuar Parcelamento de Débitos
 	 * 
-	 * Gera os Crédito a Realizar do Parcelamento
-	 * 
 	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
-	 * 
-	 * @author Roberta Costa
-	 * @date 29/03/2006
-	 * 
-	 * @param resolucaoDiretoria
-	 * @param codigoImovel
-	 * @param valorEntrada
-	 * @param situacaoAgua
-	 * @param situacaoEsgoto
-	 * @return
 	 */
-	public void gerarCreditoARealizarParcelamento(Imovel imovel, Short numeroPrestacao, BigDecimal taxaJuros, Integer parcelamentoId,
-			BigDecimal valorDescontoAcresimosImpontualidade, BigDecimal valorDescontoAntiguidadeDebito,
-			BigDecimal valorDescontoInatividadeLigacaoAgua, BigDecimal valorCreditoAnteriores, Collection<Categoria> colecaoCategoria,
-			BigDecimal valorDescontoSancoesRDEspecial, BigDecimal descontoTarifaSocialRDEspecial, boolean isContaEntradaParcelamento,
-			Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
+	public void gerarCreditoARealizarParcelamento(Imovel imovel, Short numeroPrestacao, BigDecimal taxaJuros,
+			Integer parcelamentoId, BigDecimal valorDescontoFaixaReferenciaConta, BigDecimal valorDescontoAcresimosImpontualidade, 
+			BigDecimal valorDescontoAntiguidadeDebito, BigDecimal valorDescontoInatividadeLigacaoAgua, BigDecimal valorCreditoAnteriores, 
+			Collection<Categoria> colecaoCategoria, BigDecimal valorDescontoSancoesRDEspecial, BigDecimal descontoTarifaSocialRDEspecial, 
+			boolean isContaEntradaParcelamento, Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
 
 		// 1. Desconto por Acréscimo por Impontualidade
 		if (valorDescontoAcresimosImpontualidade != null && !valorDescontoAcresimosImpontualidade.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoDescontoAcrescimoImpotualidade = filtrarCreditoTipo(CreditoTipo.DESCONTO_ACRESCIMOS_IMPONTUALIDADE);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_ACRESCIMOS_IMPONTUALIDADE);
 
-			// 1. Inclui o crédito a realizar para Desconto Acréscimo por
-			// Impontualidade
-			inserirCreditoARealizarCreditoTipo(creditoTipoDescontoAcrescimoImpotualidade, imovel, valorDescontoAcresimosImpontualidade,
-					numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			// 1. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoAcresimosImpontualidade, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 2. Desconto por Antiguidade do Débito
 		if (valorDescontoAntiguidadeDebito != null && !valorDescontoAntiguidadeDebito.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoAntiguidadeDebito = filtrarCreditoTipo(CreditoTipo.DESCONTO_ANTIGUIDADE_DEBITO);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_ANTIGUIDADE_DEBITO);
 
-			// 2. Inclui o crédito a realizar para Desconto por Antiguidade do
-			// Débito
-			inserirCreditoARealizarCreditoTipo(creditoTipoAntiguidadeDebito, imovel, valorDescontoAntiguidadeDebito, numeroPrestacao,
-					parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			// 2. Inclui o crédito a realizar para Desconto por Antiguidade do Débito
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoAntiguidadeDebito, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 3. Desconto por Inatividade dea Ligação da Água
 		if (valorDescontoInatividadeLigacaoAgua != null && !valorDescontoInatividadeLigacaoAgua.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoInatividadeLigacaoAgua = filtrarCreditoTipo(CreditoTipo.DESCONTO_INATIVIDADE_LIGACAO_AGUA);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_INATIVIDADE_LIGACAO_AGUA);
 
-			// 3. Inclui o crédito a realizar para Desconto por Inatividade dea
-			// Ligação da Água
-			inserirCreditoARealizarCreditoTipo(creditoTipoInatividadeLigacaoAgua, imovel, valorDescontoInatividadeLigacaoAgua,
-					numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			// 3. Inclui o crédito a realizar para Desconto por Inatividade de Ligação da Água
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoInatividadeLigacaoAgua, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 4. Créditos Anteriores
 		if (valorCreditoAnteriores != null && !valorCreditoAnteriores.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoCreditoAnteriores = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
 
 			// 4. Inclui o crédito a realizar para Créditos Anteriores
-			inserirCreditoARealizarCreditoTipo(creditoTipoCreditoAnteriores, imovel, valorCreditoAnteriores, numeroPrestacao,
-					parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 5. Desconto por Sanções
 		if (valorDescontoSancoesRDEspecial != null && !valorDescontoSancoesRDEspecial.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoSancoes = filtrarCreditoTipo(CreditoTipo.DESCONTO_SANCOES);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_SANCOES);
 
 			// 5. Inclui o crédito a realizar para Desconto por Sanções
-			inserirCreditoARealizarCreditoTipo(creditoTipoSancoes, imovel, valorDescontoSancoesRDEspecial, numeroPrestacao, parcelamentoId,
-					colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoSancoesRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 6. Desconto por Tarifa Social
 		if (descontoTarifaSocialRDEspecial != null && !descontoTarifaSocialRDEspecial.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipoTarifaSocial = filtrarCreditoTipo(CreditoTipo.DESCONTO_TARIFA_SOCIAL);
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_TARIFA_SOCIAL);
 
 			// 5. Inclui o crédito a realizar para Desconto por Tarifa Social
-			inserirCreditoARealizarCreditoTipo(creditoTipoTarifaSocial, imovel, descontoTarifaSocialRDEspecial, numeroPrestacao,
-					parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(credito, imovel, descontoTarifaSocialRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
+		// 1. Desconto por Acréscimo por Impontualidade
+		if (valorDescontoFaixaReferenciaConta != null && !valorDescontoFaixaReferenciaConta.equals(new BigDecimal("0.00"))) {
+			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_FAIXA_REFERENCIA_CONTA);
+
+			// 1. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
+			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoFaixaReferenciaConta, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+		}
 	}
 
 	/**
@@ -16306,6 +16299,7 @@ public class ControladorCobranca implements SessionBean {
 					helper.getNumeroPrestacoes(), 
 					valorJurosParcelamento, 
 					parcelamentoId,
+					helper.getDescontoFaixaReferenciaConta(),
 					helper.getDescontoAcrescimosImpontualidade(),
 					helper.getDescontoAntiguidadeDebito(), 
 					helper.getDescontoInatividadeLigacaoAgua(),

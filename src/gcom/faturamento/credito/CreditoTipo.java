@@ -26,6 +26,7 @@ public class CreditoTipo extends ObjetoTransacao {
 	public final static Integer DESCONTO_TARIFA_SOCIAL = new Integer(11);
 	public final static Integer PAGAMENTO_PARCIAL = new Integer(856);
 	public final static Integer PAGAMENTO_NAO_CONFERE = new Integer(860);
+	public final static Integer DESCONTO_FAIXA_REFERENCIA_CONTA = new Integer(863);
 	
 	private Integer id;
 	private String descricao;
