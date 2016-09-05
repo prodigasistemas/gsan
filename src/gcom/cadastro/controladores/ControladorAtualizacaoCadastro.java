@@ -1,7 +1,5 @@
 package gcom.cadastro.controladores;
 
-import java.lang.reflect.Constructor;
-
 import javax.ejb.CreateException;
 
 import gcom.cadastro.imovel.Imovel;
@@ -10,7 +8,6 @@ import gcom.faturamento.FaturamentoAtividadeCronograma;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.Rota;
 import gcom.model.IAtualizacaoCadastro;
-import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.RepositorioUtilHBM;

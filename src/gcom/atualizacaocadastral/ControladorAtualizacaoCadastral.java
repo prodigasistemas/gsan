@@ -207,7 +207,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
 		imovel.setUsuarioParaHistorico(usuario);
 		
-		getControladorUtil().atualizar(imovel);
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 		
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
 		

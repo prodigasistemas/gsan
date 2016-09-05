@@ -179,6 +179,7 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -225,373 +226,18 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
-/**
- * Definição da lógica de negócio do Session Bean de ControladorCliente
- * 
- * @author Leandro Cavalcanti
- * @created 12 de junho de 2006
- */
-public class ControladorAtendimentoPublicoSEJB implements SessionBean {
+public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	private static final long serialVersionUID = 1L;
 
-	SessionContext sessionContext;
-
 	private IRepositorioAtendimentoPublico repositorioAtendimentoPublico = null;	
-	private IRepositorioUtil repositorioUtil = null;
-	private IRepositorioUsuario repositorioUsuario = null;
+	private IRepositorioUtil repositorioUtil                             = null;
+	private IRepositorioUsuario repositorioUsuario                       = null;
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-		repositorioAtendimentoPublico = RepositorioAtendimentoPublicoHBM
-				.getInstancia();
-		repositorioUtil = RepositorioUtilHBM.getInstancia();
-		repositorioUsuario = RepositorioUsuarioHBM.getInstancia(); 
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
-	private ControladorLocalidadeLocal getControladorLocalidade() {
-		ControladorLocalidadeLocalHome localHome = null;
-		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLocalidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorFaturamento
-	 * 
-	 * @return O valor de controladorFaturamento
-	 */
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de controladorCobranca
-	 * 
-	 * @return O valor de controladorCobranca
-	 */
-	private ControladorCobrancaLocal getControladorCobranca() {
-
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
-	private ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor do ControladorMicromedicao
-	 * 
-	 * @author Leonardo Regis
-	 * @date 20/07/2006
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor do ControladorOrdemServico
-	 * 
-	 * @author Leonardo Regis
-	 * @date 23/09/2006
-	 * 
-	 * @return O valor de ControladorOrdemServico
-	 */
-	private ControladorOrdemServicoLocal getControladorOrdemServico() {
-		ControladorOrdemServicoLocalHome localHome = null;
-		ControladorOrdemServicoLocal local = null;
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorOrdemServicoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ORDEM_SERVICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor do ControladorLigacaoAgua
-	 * 
-	 * @author Flávio Cordeiro
-	 * @date 28/09/2006
-	 * 
-	 * @return O valor de controladorLigacaoAgua
-	 */
-	private ControladorLigacaoAguaLocal getControladorLigacaoAgua() {
-		ControladorLigacaoAguaLocalHome localHome = null;
-		ControladorLigacaoAguaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLigacaoAguaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_AGUA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorEnderecoLocal getControladorEndereco() {
-
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Retorna o valor do ControladorBatch
-	 * 
-	 * @author Sávio Luiz
-	 * @date 08/05/2009
-	 * 
-	 * @return O valor de ControladorBatch
-	 */
-	protected ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
+		repositorioAtendimentoPublico = RepositorioAtendimentoPublicoHBM.getInstancia();
+		repositorioUtil               = RepositorioUtilHBM.getInstancia();
+		repositorioUsuario            = RepositorioUsuarioHBM.getInstancia(); 
 	}
 
 	/**
@@ -3793,13 +3439,13 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		// [SB0001] Atualizar Ligação de Água
 		this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 		registradorOperacao.registrarOperacao(ligacaoAgua);
-		imovel.setUsuarioParaHistorico(integracaoComercialHelper.getUsuarioLogado());
 		getControladorUtil().atualizar(ligacaoAgua);
 
 		// [SB0001] Atualizar Imovel
 		this.getControladorImovel().verificarImovelControleConcorrencia(imovel);
 		registradorOperacao.registrarOperacao(imovel);
-		getControladorUtil().atualizar(imovel);
+		imovel.setUsuarioParaHistorico(integracaoComercialHelper.getUsuarioLogado());
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 
 		if (hidrometroInstalacaoHistorico != null) {
 			hidrometroInstalacaoHistorico.setUsuarioRetirada(integracaoComercialHelper.getUsuarioLogado());
@@ -6906,7 +6552,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 
 		// [SB0002]- Atualizar Situacao do Imovel
 		imovel.setUsuarioParaHistorico(usuarioLogado);
-		getControladorUtil().atualizar(imovel);
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 
 		// [SB0003]- Atualizar Ordem de Servico
 
@@ -8444,32 +8090,6 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		 */
 	}
 
-	private ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorTransacaoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
 	/**
 	 * [UC0778] Gerar Relatório Gestão de Serviços UPA<br>
 	 * [UC0497] Gerar Relatório Resumo de Solicitações de RA por Unidade
@@ -8838,36 +8458,6 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	}
 
 	/**
-	 * Controlador Permissao Especial
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 24/10/2008
-	 * 
-	 * @return ControladorLocalidadeLocal
-	 */
-	private ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
 	 * [UC0861] Inserir Perfil da ligacao de esgoto
 	 * 
 	 * @author Arthur Carvalho
@@ -8876,10 +8466,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	 * @return Integer
 	 * @throws ControladorException
 	 */
-
-	public Integer inserirPerfilLigacaoEsgoto(
-			LigacaoEsgotoPerfil ligacaoEsgotoPerfil, Usuario usuarioLogado)
-			throws ControladorException {
+	public Integer inserirPerfilLigacaoEsgoto(LigacaoEsgotoPerfil ligacaoEsgotoPerfil, Usuario usuarioLogado) throws ControladorException {
 
 		Integer retorno = null;
 

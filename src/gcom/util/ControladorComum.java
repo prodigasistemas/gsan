@@ -15,6 +15,8 @@ import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
 import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
@@ -567,5 +569,20 @@ public abstract class ControladorComum implements SessionBean{
 			throw new SistemaException(e);
 		}
 	}
-	
+
+	protected ControladorOrdemServicoLocal getControladorOrdemServico() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorOrdemServicoLocalHome localHome = (ControladorOrdemServicoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ORDEM_SERVICO_SEJB);
+
+			ControladorOrdemServicoLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}	
 }

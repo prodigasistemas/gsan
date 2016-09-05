@@ -4049,7 +4049,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 				if (situacaoEspecial) {
 					imovel.setFaturamentoSituacaoTipo(null);
 					imovel.setUsuarioParaHistorico(usuarioLogado);
-					getControladorUtil().atualizar(imovel);
+					getControladorAtualizacaoCadastro().atualizar(imovel);
 					
 					FaturamentoSituacaoHistorico historico = this.repositorioFaturamento.pesquisarFaturamentoSituacaoHistorico(imovel.getId());
 					if (historico != null) {
@@ -7810,7 +7810,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 					imovelPesquisa.setIndicadorReincidenciaInfracao(ConstantesSistema.SIM.intValue());
 					imovelPesquisa.setUsuarioParaHistorico(usuarioLogado);
-					this.getControladorUtil().atualizar(imovelPesquisa);
+					this.getControladorAtualizacaoCadastro().atualizar(imovelPesquisa);
 				}
 
 				// [SB0008] - Inserir Dados da Ligação de Esgoto
