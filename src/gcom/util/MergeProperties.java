@@ -40,19 +40,20 @@ public class MergeProperties {
 						continue;
 					if (metodo.getParameterTypes().length != 0)
 						continue;
-					Object valor = metodo.invoke(origem);
 					// Captura o metodo SET de acordo com o tipo de retorno do metodo GET
 					Method metodoSET = destino.getClass().getMethod("set" + nomeMetodoSemGet, metodo.getReturnType());
-					if (metodo != null)
+					
+					if (metodo != null){
+						Object valor = metodo.invoke(origem);
 						metodoSET.invoke(destino, valor);
+					}
 			} catch (NoSuchMethodException e) {
-				System.out.println("Metodo nao encontrado: " + nomeMetodoSemGet);
 			} catch (InvocationTargetException e) {
-				System.out.println("Chamada de metodo incorreta.");
+				System.out.println("Chamada de metodo incorreta." + nomeMetodoSemGet);
 			} catch (IllegalAccessException e) {
-				System.out.println("Metodo inacessivel.");
+				System.out.println("Metodo inacessivel." + nomeMetodoSemGet);
 			} catch (IllegalArgumentException e) {
-				System.out.println("Argumentos incorretos.");
+				System.out.println("Argumentos incorretos." + nomeMetodoSemGet);
 			}
 		}
 

@@ -2,8 +2,10 @@ package gcom.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -313,7 +315,14 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 	public void atualizar(Object objeto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
-		try {			
+		try {
+			Method method = objeto.getClass().getDeclaredMethod("setUltimaAlteracao", Date.class);
+			method.invoke(objeto, new Date());
+		} catch (Exception e1) {
+			logger.info("Objeto nao possui metodo setUltimaAlteracao");
+		}
+		
+		try {
 			session.update(objeto);
 			session.flush();
 		} catch (Exception e){
