@@ -7076,13 +7076,6 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 								// agua do imóvel
 
 								if (fiscalizacaoSituacaoEsgoto == null) {
-									// [SB0001 - Atualizar Ordem de Serviço]
-									// atualizarOrdemServico(idOrdemServico,indicadorDocumentoEntregue,
-									// indicadorAtualizacaoSituacaoLigacaoAgua,
-									// indicadorAtualizacaoSituacaoLigacaoEsgoto,
-									// colecaoFiscalizacaoSituacaoSelecionada,
-									// idCobrancaDocumento);
-									// finalizador = true;
 									FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
 									filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID,
 											idLigacaoEsgotoSituacaoImovel));
@@ -7312,16 +7305,12 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 							Short codigoConsumoCalculado = (Short) fiscalizacaoSituacaoServicoACobrar[0];
 							Integer idDebitoTipo = (Integer) fiscalizacaoSituacaoServicoACobrar[1];
 
-							// BigDecimal valorMultaAutoInfracao = (BigDecimal)
-							// fiscalizacaoSituacaoServicoACobrar[2];
-
 							// 7.1.1. Caso o código do calculo de consumo=1
 							if (codigoConsumoCalculado != null && codigoConsumoCalculado.equals(FiscalizacaoSituacaoServicoACobrar.CONSUMO_CALCULO_UM)) {
 
 								BigDecimal valorDebito = new BigDecimal("0.00");
 
-								// 7.1.1.1 Caso o imóvel tenha consumo medido
-								// maior que zero
+								// 7.1.1.1 Caso o imóvel tenha consumo medido maior que zero
 								if (consumoMedioMedido > 0) {
 									// [SB0004 - Calcular Valor de Água e/ou
 									// Esgoto]
