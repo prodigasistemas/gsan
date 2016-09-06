@@ -10518,44 +10518,20 @@ public class ControladorCadastro extends ControladorComum {
 
 	}
 	
-	/**
-	 * Busca o imovel atraves do identificador unico (id).
-	 * Caso o numero do medidor de energia seja nulo ou diferente das informacoes
-	 * vindas na atualizacao, atualiza o numero do medidor de energia
-	 * 
-	 * [SB0004] Validar e atualizar numero do medidor de energia do imovel
-	 * [UC0969] Importar arquivo de atualizacao cadastral simplificado
-	 * 
-	 * @author Higor Gondim
-	 * @date 21/05/2010
-	 * 
-	 * @param linha
-	 *            Linha contendo a matricula do imovel bem como o numero do
-	 *            medidor de energia que vem de campo
-	 * @return Codigo indicativo da validacao: nulo se foi atualizado com
-	 *         sucesso, -1 se ja estava atualizado e um numero maior que zero se
-	 *         houve critica.
-	 * @throws ControladorException
-	 */
-	public Integer validarEAtualizarMedidorEnergia(AtualizacaoCadastralSimplificadoLinha linha)
-			throws ControladorException {
+	public Integer validarEAtualizarMedidorEnergia(AtualizacaoCadastralSimplificadoLinha linha)	throws ControladorException {
 		Integer retorno = null; // por padrao, retorna nulo que indica a atualizacao com sucesso
 
-		// obtendo o imovel a partir da matricula
 		FiltroImovel filtroImovel = new FiltroImovel();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, linha.getImovel().getId()));
 
-		// Pesquisa o imovel
 		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()));
 
-		// Atualiza imovel com o numero do medidor caso nao esteja atualizado
 		if (imovel.getNumeroMedidorEnergia() == null || !imovel.getNumeroMedidorEnergia().equals(linha.getNumeroMedidorEnergia())) {
 			imovel.setNumeroMedidorEnergia(linha.getNumeroMedidorEnergia());
 			imovel.setUsuarioParaHistorico(linha.getUsuario());
-			getControladorUtil().atualizar(imovel);
+			getControladorAtualizacaoCadastro().atualizar(imovel);
 		} else {
-			retorno = -1;// retorna -1 se o medidor de energia do imovel ja esta
-			// atualizada
+			retorno = -1;// retorna -1 se o medidor de energia do imovel ja esta atualizada
 		}
 
 		return retorno;
@@ -10793,10 +10769,9 @@ public class ControladorCadastro extends ControladorComum {
 		imovelPerfil.setId(ImovelPerfil.NORMAL);
 		imovel.setIndicadorEmissaoExtratoFaturamento(ConstantesSistema.NAO);
 		imovel.setImovelPerfil(imovelPerfil);
-		imovel.setUltimaAlteracao(dataAtual);
 		imovel.setUsuarioParaHistorico(usuarioLogado);
 
-		this.getControladorUtil().atualizar(imovel);		
+		this.getControladorAtualizacaoCadastro().atualizar(imovel);		
 			
 		imovelProgramaEspecial.setMesAnoSaidaPrograma(imovel.getQuadra().getRota().getFaturamentoGrupo().getAnoMesReferencia());
 		imovelProgramaEspecial.setUsuarioSuspensao(usuarioLogado);
@@ -10816,30 +10791,22 @@ public class ControladorCadastro extends ControladorComum {
 	 * @since 13/01/2010
 	 *
 	 */
-	public Integer inserirImovelEmProgramaEspecial(ImovelProgramaEspecial imovelProgramaEspecial,
-			Usuario usuarioLogado) throws ControladorException{
+	public Integer inserirImovelEmProgramaEspecial(ImovelProgramaEspecial imovelProgramaEspecial, Usuario usuarioLogado) throws ControladorException{
 		
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 		
 		Date dataAtual = new Date();
 		
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-		filtroClienteImovel
-				.adicionarCaminhoParaCarregamentoEntidade("cliente");
-		filtroClienteImovel
-				.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
 		
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.IMOVEL_ID, imovelProgramaEspecial.getImovel().getId()));
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL));
-		filtroClienteImovel.adicionarParametro(new ParametroNulo(
-				FiltroClienteImovel.DATA_FIM_RELACAO));
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.CLIENTE_ID, sistemaParametro.getClienteResponsavelProgramaEspecial().getId()));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, imovelProgramaEspecial.getImovel().getId()));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL));
+		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, sistemaParametro.getClienteResponsavelProgramaEspecial().getId()));
 
-		Collection clientesImovel = this.getControladorUtil().pesquisar(
-				filtroClienteImovel, ClienteImovel.class.getName());
+		Collection clientesImovel = this.getControladorUtil().pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
 		
 		ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(clientesImovel);
 		
@@ -10874,7 +10841,7 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setCobrancaSituacaoTipo(cobrancaSituacaoTipo);
 		
 		imovel.setUsuarioParaHistorico(usuarioLogado);
-		this.getControladorUtil().atualizar(imovel);
+		this.getControladorAtualizacaoCadastro().atualizar(imovel);
 		
 		/**
 		 * Inserir Situacao de cobranca historico
@@ -11478,38 +11445,28 @@ public class ControladorCadastro extends ControladorComum {
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("cliente");
 		
-		filtroClienteImovel
-				.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
 		
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.IMOVEL_ID, imovelProgramaEspecial
-						.getImovel().getId()));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, imovelProgramaEspecial.getImovel().getId()));
 		
-		filtroClienteImovel.adicionarParametro(
-				new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
 		
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID,
-				ClienteRelacaoTipo.RESPONSAVEL));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL));
 		
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(
 				FiltroClienteImovel.CLIENTE_ID, sistemaParametro
 						.getClienteResponsavelProgramaEspecial().getId()));
 
-		Collection clientesImovel = this.getControladorUtil().pesquisar(filtroClienteImovel,
-				ClienteImovel.class.getName());
+		Collection clientesImovel = this.getControladorUtil().pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
 
-		ClienteImovel clienteImovelAtulizar = (ClienteImovel) Util
-				.retonarObjetoDeColecao(clientesImovel);
+		ClienteImovel clienteImovelAtulizar = (ClienteImovel) Util.retonarObjetoDeColecao(clientesImovel);
 		
 		if(clienteImovelAtulizar!=null){
 		
 			clienteImovelAtulizar.setDataFimRelacao(dataAtual);
 			ClienteImovelFimRelacaoMotivo clienteImovelFimRelacaoMotivo = new ClienteImovelFimRelacaoMotivo();
-			clienteImovelFimRelacaoMotivo
-					.setId(ClienteImovelFimRelacaoMotivo.EXCLUSAO_PROGRAMA_ESPECIAL);
-			clienteImovelAtulizar
-					.setClienteImovelFimRelacaoMotivo(clienteImovelFimRelacaoMotivo);
+			clienteImovelFimRelacaoMotivo.setId(ClienteImovelFimRelacaoMotivo.EXCLUSAO_PROGRAMA_ESPECIAL);
+			clienteImovelAtulizar.setClienteImovelFimRelacaoMotivo(clienteImovelFimRelacaoMotivo);
 			clienteImovelAtulizar.setUltimaAlteracao(dataAtual);
 
 			this.getControladorUtil().atualizar(clienteImovelAtulizar);
@@ -11523,7 +11480,7 @@ public class ControladorCadastro extends ControladorComum {
 		imovel.setUltimaAlteracao(dataAtual);
 		imovel.setUsuarioParaHistorico(usuarioLogado);
 
-		this.getControladorUtil().atualizar(imovel);		
+		this.getControladorAtualizacaoCadastro().atualizar(imovel);		
 			
 		imovelProgramaEspecial.setUltimaAlteracao(dataAtual);
 		imovelProgramaEspecial.setMesAnoSaidaPrograma(imovel.getQuadra().getRota().getFaturamentoGrupo().getAnoMesReferencia());
