@@ -10715,12 +10715,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		int idUnidadeIniciada = 0;
 
-		/*
-		 * Registrar o início do processamento da Unidade de Processamento do
-		 * Batch
-		 */
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.LOCALIDADE, idLocalidade);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
 
@@ -10734,9 +10729,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			while (!flagTerminou) {
 
-				Collection colecaoDados = this.repositorioFaturamento
-						.pesquisarImoveisComInscricaoPedenteParaAtualizacao(idLocalidade, numeroIndice,
-								quantidadeRegistros);
+				Collection colecaoDados = this.repositorioFaturamento.pesquisarImoveisComInscricaoPedenteParaAtualizacao(idLocalidade, numeroIndice, quantidadeRegistros);
 
 				if (colecaoDados != null && !colecaoDados.isEmpty()) {
 
@@ -10746,8 +10739,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						boolean existeImovelComMesmaIncricao = false;
 
-						ImovelInscricaoAlterada imovelInscricaoAlterada = (ImovelInscricaoAlterada) dadosIterator
-								.next();
+						ImovelInscricaoAlterada imovelInscricaoAlterada = (ImovelInscricaoAlterada) dadosIterator.next();
 
 						Imovel imovelAtualizar = imovelInscricaoAlterada.getImovel();
 						Localidade localidade = imovelInscricaoAlterada.getLocalidadeAtual();
@@ -10789,10 +10781,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.SIM);
 							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.NAO);
 						}
-						// Caso contrario
 						else {
-
-							// Atualiza a tabela IMOVEL
 							imovelAtualizar.setLocalidade(localidade);
 							imovelAtualizar.setSetorComercial(setorComercial);
 							imovelAtualizar.setQuadra(quadra);
@@ -10804,10 +10793,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 
 							if (imovelInscricaoAlterada.getUsuarioAlteracao() != null && !imovelInscricaoAlterada.getUsuarioAlteracao().equals("")) {
-
-								// ------------ <REGISTRAR
-								// TRANSAÇÃO>----------------------------
-
 								RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 										Operacao.OPERACAO_IMOVEL_ATUALIZAR, imovelAtualizar.getId(),
 										imovelAtualizar.getId(),
@@ -10817,14 +10802,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								registradorOperacao.registrarOperacao(imovelAtualizar);
 
 								getControladorTransacao().registrarTransacao(imovelAtualizar);
-
-								// ------------ </REGISTRAR
-								// TRANSAÇÃO>----------------------------
 							}
 
 							imovelAtualizar.setUsuarioParaHistorico(getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada));
 							
-							getControladorUtil().atualizar(imovelAtualizar);
+							getControladorAtualizacaoCadastro().atualizar(imovelAtualizar);
 
 							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.NAO);
 							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.SIM);
