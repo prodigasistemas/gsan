@@ -851,7 +851,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		
 		imovel.setUsuarioParaHistorico(usuarioLogado);
 		
-		getControladorUtil().atualizar(imovel);
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 	}
 
 	/**
