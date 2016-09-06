@@ -249,6 +249,7 @@ import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -271,209 +272,32 @@ import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
-public class ControladorMicromedicao implements SessionBean {
+public class ControladorMicromedicao extends ControladorComum {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected IRepositorioHidrometro repositorioHidrometro = null;
-	protected IRepositorioMicromedicao repositorioMicromedicao = null;
-	protected IRepositorioFaturamento repositorioFaturamento = null;
-	protected IRepositorioClienteImovel repositorioClienteImovel = null;
+	protected IRepositorioHidrometro repositorioHidrometro                 = null;
+	protected IRepositorioMicromedicao repositorioMicromedicao             = null;
+	protected IRepositorioFaturamento repositorioFaturamento               = null;
+	protected IRepositorioClienteImovel repositorioClienteImovel           = null;
 	protected IRepositorioAtendimentoPublico repositorioAtendimentoPublico = null;
-	protected IRepositorioUtil repositorioUtil = null;
-	protected IRepositorioImovel repositorioImovel = null;
-	protected IRepositorioFuncionario repositorioFuncionario = null;
-
-	SessionContext sessionContext;
+	protected IRepositorioUtil repositorioUtil                             = null;
+	protected IRepositorioImovel repositorioImovel                         = null;
+	protected IRepositorioFuncionario repositorioFuncionario               = null;
 
 	private static Logger logger = Logger.getLogger(ControladorMicromedicao.class);
 
 	public void ejbCreate() throws CreateException {
-		repositorioUtil = RepositorioUtilHBM.getInstancia();
-		repositorioHidrometro = RepositorioHidrometroHBM.getInstancia();
-		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
-		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
-		repositorioClienteImovel = RepositorioClienteImovelHBM.getInstancia();
-		repositorioImovel = RepositorioImovelHBM.getInstancia();
-		repositorioFuncionario = RepositorioFuncionarioHBM.getInstancia();
+		repositorioUtil               = RepositorioUtilHBM.getInstancia();
+		repositorioHidrometro         = RepositorioHidrometroHBM.getInstancia();
+		repositorioMicromedicao       = RepositorioMicromedicaoHBM.getInstancia();
+		repositorioFaturamento        = RepositorioFaturamentoHBM.getInstancia();
+		repositorioClienteImovel      = RepositorioClienteImovelHBM.getInstancia();
+		repositorioImovel             = RepositorioImovelHBM.getInstancia();
+		repositorioFuncionario        = RepositorioFuncionarioHBM.getInstancia();
 		repositorioAtendimentoPublico = RepositorioAtendimentoPublicoHBM.getInstancia();
 	}
 
-	public void ejbRemove() {
-	}
-
-	public void ejbActivate() {
-	}
-
-	public void ejbPassivate() {
-	}
-
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	protected ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	protected ControladorCadastroLocal getControladorCadastro() {
-
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorFaturamentoLocal getControladorFaturamento() {
-
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorAcessoLocal getControladorAcesso() {
-		ControladorAcessoLocalHome localHome = null;
-		ControladorAcessoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorTransacaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorEnderecoLocal getControladorEndereco() {
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
 
 	/**
 	 * [UC0083] Gerar Dados para Leitura [SB0004] Gerar Movimento do Roteiro
@@ -11454,426 +11278,313 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 	}
 
-	/**
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo Atualizar Tipo
-	 * Rateio com Vinculo com o Imovel Author: Rafael Santos Data: 16/01/2006
-	 * Estabelecer Vinculo ao Imovel
-	 * 
-	 * @imovel Imovel
-	 * @param imoveisASerVinculados
-	 * @param imoveisASerDesvinculados
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
-	public void estabelecerVinculo(Imovel imovel,
-			Collection imoveisASerVinculados,
+	
+	public void estabelecerVinculo(Imovel imovel, Collection imoveisASerVinculados,
 			Collection imoveisASerDesvinculados,
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua,
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoPoco,
-			Usuario usuarioLogado) throws ControladorException,
-			ErroRepositorioException {
-
-		FiltroImovel filtroImovel = new FiltroImovel();
-
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				imovel.getId()));
-
-		// Procura Imovel na base
-		Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(
-				filtroImovel, Imovel.class.getName()))).get(0);
-
-		Integer anoMesFaturamentoGrupo0 = repositorioFaturamento
-				.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
-
-		Collection<Imovel> colImovel0 = new ArrayList();
-
-		Imovel imovelVinculo0 = new Imovel();
-
-		imovelVinculo0.setId(imovelNaBase.getId());
-
-		colImovel0.add(imovelVinculo0);
-
-		Collection colContas0 = repositorioMicromedicao
-				.verificarImoveisCicloFaturamento(colImovel0,
-						anoMesFaturamentoGrupo0);
-
-		if (colContas0 != null && !colContas0.isEmpty()) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.impossivel.vinculo.desvinculo");
-		}
-
-		imovel.setUltimaAlteracao(new Date());
-		// Verificar se Imovel já foi atualizada por outro usuário durante esta
-		// atualização
-		// [FS0007] Atualização realizada por outro usuário
-		if (imovelNaBase.getUltimaAlteracao()
-				.after(imovel.getUltimaAlteracao())) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.atualizacao.timestamp");
-		}
-
-		// [FS0011] -Verifica a existenica de imovel micro em processo de
-		// faturamento
-
-		/*
-		 * Caso o imóvel condomínio informado esteja vinculado a algum imóvel
-		 * (IMOV_IDIMOVELCONDOMINIO na tabela IMOVEL igual ao IMOV_ID do imóvel
-		 * condomínio) que já possua conta pre-faturada para o mês/ano do seu
-		 * grupo de faturamento (CNTA_AMREFERENCIACONTA da tabela de CONTA igual
-		 * ao FTGR_AMREFERENCIA da tabela de FATURAMENTO_GRUPO com FTGR_ID igual
-		 * FTGR_ID da tabela de CONTA e DCST_IDATUAL da tabela de CONTA igual a
-		 * 9 ?PRE FATURADA?, exibir a mensagem ?Não é possível
-		 * vincular/desvincular imóvel ao imóvel condominio informado pois ele
-		 * já se encontra em processo de faturamento? e retornar para o passo
-		 * correspondente no fluxo principal.
-		 */
-
-		// Por Tiago Moreno - 22/02/2011
-		Collection imoveisVinculados = repositorioMicromedicao
-				.recuperarImoveisVinculadosAoCondominio(imovel.getId());
-
-		if (imoveisVinculados != null && !imoveisVinculados.isEmpty()) {
-			Integer anoMesFaturamentoGrupo = repositorioFaturamento
-					.retornaAnoMesGrupoFaturamento(imovel.getId());
-
-			Collection colContas = repositorioMicromedicao
-					.verificarImoveisCicloFaturamento(imoveisVinculados,
-							anoMesFaturamentoGrupo);
-
-			if (colContas != null && !colContas.isEmpty()) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.impossivel.vinculo.desvinculo");
-			}
-		}
-
-		// [SB0001]Atualizar o Tipo Rateio do Imovel
-		// atualizar o tipo rateio de agua
-		if (hidrometroInstalacaoHistoricoAgua != null) {
-			hidrometroInstalacaoHistoricoAgua.setUltimaAlteracao(new Date());
-
-			/**
-			 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
-			} else {
-
-				Integer anoMesFaturamentoGrupo = repositorioFaturamento
-						.retornaAnoMesGrupoFaturamento(hidrometroInstalacaoHistoricoAgua
-								.getLigacaoAgua().getId());
-
-				Collection<Imovel> colImovel = new ArrayList();
-
-				Imovel imovelVinculo = new Imovel();
-
-				imovelVinculo.setId(hidrometroInstalacaoHistoricoAgua
-						.getLigacaoAgua().getId());
-
-				colImovel.add(imovelVinculo);
-
-				Collection colContas = repositorioMicromedicao
-						.verificarImoveisCicloFaturamento(colImovel,
-								anoMesFaturamentoGrupo);
-
-				if (colContas != null && !colContas.isEmpty()) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.impossivel.vinculo.desvinculo");
-				}
-
-				getControladorUtil().atualizar(
-						hidrometroInstalacaoHistoricoAgua);
-			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-		}
-
-		// atualizar tipo poco
-		if (hidrometroInstalacaoHistoricoPoco != null) {
-			hidrometroInstalacaoHistoricoPoco.setUltimaAlteracao(new Date());
-
-			/**
-			 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
-			} else {
-
-				Integer anoMesFaturamentoGrupo = repositorioFaturamento
-						.retornaAnoMesGrupoFaturamento(hidrometroInstalacaoHistoricoPoco
-								.getLigacaoAgua().getId());
-
-				Collection<Imovel> colImovel = new ArrayList();
-
-				Imovel imovelVinculo = new Imovel();
-
-				imovelVinculo.setId(hidrometroInstalacaoHistoricoPoco
-						.getLigacaoAgua().getId());
-
-				colImovel.add(imovelVinculo);
-
-				Collection colContas = repositorioMicromedicao
-						.verificarImoveisCicloFaturamento(colImovel,
-								anoMesFaturamentoGrupo);
-
-				if (colContas != null && !colContas.isEmpty()) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.impossivel.vinculo.desvinculo");
-				}
-
-				getControladorUtil().atualizar(
-						hidrometroInstalacaoHistoricoPoco);
-			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-		}
-
-		// atualizar o indicador de imovel condominio
-		if (imovel != null) {
-			/**
-			 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
-			} else {
-				getControladorUtil().atualizar(imovel);
-			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-		}
-
-		// Desvicular imoveis
-		if (imoveisASerDesvinculados != null
-				&& !imoveisASerDesvinculados.isEmpty()) {
-			Iterator iImoveisASerDesvinculados = imoveisASerDesvinculados
-					.iterator();
-
-			while (iImoveisASerDesvinculados.hasNext()) {
-				Imovel imovelASerDesvinculado = (Imovel) iImoveisASerDesvinculados
-						.next();
-
-				filtroImovel = new FiltroImovel();
-
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, imovel.getId()));
-
-				// Procura Imovel na base
-				imovelNaBase = (Imovel) ((List) (getControladorUtil()
-						.pesquisar(filtroImovel, Imovel.class.getName())))
-						.get(0);
-				imovelASerDesvinculado.setUltimaAlteracao(new Date());
-				// Verificar se Imovel já foi atualizada por outro usuário
-				// durante esta
-				// atualização
-				// [FS0007] Atualização realizada por outro usuário
-				if (imovelNaBase.getUltimaAlteracao().after(
-						imovel.getUltimaAlteracao())) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
-				}
-
-				/**
-				 * alterado por pedro alexandre dia 20/11/2006 alteração feita
-				 * para acoplar o controle de abrangência de usuário
-				 */
-				// ------------ CONTROLE DE ABRANGENCIA ----------------
-				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-				if (!getControladorAcesso().verificarAcessoAbrangencia(
-						abrangencia)) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.acesso.negado.abrangencia");
-				} else {
-
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
-
-					UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
-
-					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(
-							usuarioLogado, usuarioAcao);
-
-					OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-					Operacao operacao = new Operacao();
-					operacao.setId(Operacao.OPERACAO_ESTABELECER_VINCULO);
-					operacaoEfetuada.setOperacao(operacao);
-
-					ImovelRegistrarTransacaoHelper helper = new ImovelRegistrarTransacaoHelper();
-
-					helper.setImovelCondominio(imovel);
-
-					operacaoEfetuada.setArgumentoValor(imovelASerDesvinculado
-							.getId());
-
-					getControladorTransacao()
-							.processaRegistroOperacaoObjetohelper(
-									usuarioAcaoUsuarioHelper,
-									AlteracaoTipo.EXCLUSAO, helper,
-									operacaoEfetuada,
-									ImovelRegistrarTransacaoHelper.TABELA_ID);
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
-
-					getControladorUtil().atualizar(imovelASerDesvinculado);
-				}
-				// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-			}
-
-		}
-
-		// estebelcer os imoveis aos condominios
-		if (imoveisASerVinculados != null && !imoveisASerVinculados.isEmpty()) {
-
-			Integer anoMesFaturamentoGrupo = repositorioFaturamento
-					.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
-
-			Collection colContas = repositorioMicromedicao
-					.verificarImoveisCicloFaturamento(imoveisASerVinculados,
-							anoMesFaturamentoGrupo);
-
-			if (colContas != null && !colContas.isEmpty()) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.impossivel.vinculo.desvinculo");
-			}
-
-			Iterator iImoveisASerVinculados = imoveisASerVinculados.iterator();
-
-			while (iImoveisASerVinculados.hasNext()) {
-				Imovel imovelASerVinculado = (Imovel) iImoveisASerVinculados
-						.next();
-
-				filtroImovel = new FiltroImovel();
-
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, imovelASerVinculado.getId()));
-
-				// Procura Imovel na base
-				imovelNaBase = (Imovel) ((List) (getControladorUtil()
-						.pesquisar(filtroImovel, Imovel.class.getName())))
-						.get(0);
-				imovelASerVinculado.setUltimaAlteracao(new Date());
-				// Verificar se Imovel já foi atualizada por outro usuário
-				// durante esta
-				// atualização
-				// [FS0007] Atualização realizada por outro usuário
-				if (imovelNaBase.getUltimaAlteracao().after(
-						imovel.getUltimaAlteracao())) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
-				}
-
-				/**
-				 * alterado por pedro alexandre dia 20/11/2006 alteração feita
-				 * para acoplar o controle de abrangência de usuário
-				 */
-				// ------------ CONTROLE DE ABRANGENCIA ----------------
-				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-				if (!getControladorAcesso().verificarAcessoAbrangencia(
-						abrangencia)) {
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.acesso.negado.abrangencia");
-				} else {
-
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
-
-					UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
-
-					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(
-							usuarioLogado, usuarioAcao);
-
-					OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-					Operacao operacao = new Operacao();
-					operacao.setId(Operacao.OPERACAO_ESTABELECER_VINCULO);
-					operacaoEfetuada.setOperacao(operacao);
-
-					ImovelRegistrarTransacaoHelper helper = new ImovelRegistrarTransacaoHelper();
-
-					helper.setImovelCondominio(imovel);
-
-					operacaoEfetuada.setArgumentoValor(imovelASerVinculado
-							.getId());
-
-					getControladorTransacao()
-							.processaRegistroOperacaoObjetohelper(
-									usuarioAcaoUsuarioHelper,
-									AlteracaoTipo.INCLUSAO, helper,
-									operacaoEfetuada,
-									ImovelRegistrarTransacaoHelper.TABELA_ID);
-					// ------------ REGISTRAR
-					// TRANSAÇÃO----------------------------
-
-					getControladorUtil().atualizar(imovelASerVinculado);
-				}
-				// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-			}
-
-		} else {
-
-			filtroImovel = new FiltroImovel();
-
-			filtroImovel.adicionarParametro(new ParametroSimples(
-					FiltroImovel.ID, imovel.getId()));
-
+			Usuario usuarioLogado) throws ControladorException {
+		
+		try {
+			FiltroImovel filtroImovel = new FiltroImovel();
+	
+			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+	
 			// Procura Imovel na base
-			imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(
-					filtroImovel, Imovel.class.getName()))).get(0);
+			Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
+	
+			Integer anoMesFaturamentoGrupo0 = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
+	
+			Collection<Imovel> colImovel0 = new ArrayList();
+	
+			Imovel imovelVinculo0 = new Imovel();
+	
+			imovelVinculo0.setId(imovelNaBase.getId());
+	
+			colImovel0.add(imovelVinculo0);
+	
+			Collection colContas0 = repositorioMicromedicao.verificarImoveisCicloFaturamento(colImovel0, anoMesFaturamentoGrupo0);
+	
+			if (colContas0 != null && !colContas0.isEmpty()) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
+			}
+	
 			imovel.setUltimaAlteracao(new Date());
-			// Verificar se Imovel já foi atualizada por outro usuário durante
-			// esta
+			// Verificar se Imovel já foi atualizada por outro usuário durante esta
 			// atualização
 			// [FS0007] Atualização realizada por outro usuário
-			if (imovelNaBase.getUltimaAlteracao().after(
-					imovel.getUltimaAlteracao())) {
+			if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
-			// imovel sem ninguem vinculado a ele
-			imovel.setIndicadorImovelCondominio(Imovel.IMOVEL_NAO_CONDOMINIO);
-
-			/**
-			 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
-			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
-			} else {
-				imovel.setUsuarioParaHistorico(usuarioLogado);
-				
-				getControladorUtil().atualizar(imovel);
+	
+			// Por Tiago Moreno - 22/02/2011
+			Collection imoveisVinculados = repositorioMicromedicao.recuperarImoveisVinculadosAoCondominio(imovel.getId());
+	
+			if (imoveisVinculados != null && !imoveisVinculados.isEmpty()) {
+				Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovel.getId());
+	
+				Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(imoveisVinculados, anoMesFaturamentoGrupo);
+	
+				if (colContas != null && !colContas.isEmpty()) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
+				}
 			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
-		}
-
+	
+			// [SB0001]Atualizar o Tipo Rateio do Imovel
+			// atualizar o tipo rateio de agua
+			if (hidrometroInstalacaoHistoricoAgua != null) {
+				hidrometroInstalacaoHistoricoAgua.setUltimaAlteracao(new Date());
+	
+				/**
+				 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
+				 * acoplar o controle de abrangência de usuário
+				 */
+				// ------------ CONTROLE DE ABRANGENCIA ----------------
+				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
+				} else {
+	
+					Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(hidrometroInstalacaoHistoricoAgua.getLigacaoAgua().getId());
+	
+					Collection<Imovel> colImovel = new ArrayList();
+	
+					Imovel imovelVinculo = new Imovel();
+	
+					imovelVinculo.setId(hidrometroInstalacaoHistoricoAgua.getLigacaoAgua().getId());
+	
+					colImovel.add(imovelVinculo);
+	
+					Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(colImovel, anoMesFaturamentoGrupo);
+	
+					if (colContas != null && !colContas.isEmpty()) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
+					}
+	
+					getControladorUtil().atualizar(hidrometroInstalacaoHistoricoAgua);
+				}
+				// ------------ FIM CONTROLE DE ABRANGENCIA -------------
+			}
+	
+			// atualizar tipo poco
+			if (hidrometroInstalacaoHistoricoPoco != null) {
+				hidrometroInstalacaoHistoricoPoco.setUltimaAlteracao(new Date());
+	
+				/**
+				 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
+				 * acoplar o controle de abrangência de usuário
+				 */
+				// ------------ CONTROLE DE ABRANGENCIA ----------------
+				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
+				} else {
+	
+					Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(hidrometroInstalacaoHistoricoPoco.getLigacaoAgua().getId());
+	
+					Collection<Imovel> colImovel = new ArrayList();
+	
+					Imovel imovelVinculo = new Imovel();
+	
+					imovelVinculo.setId(hidrometroInstalacaoHistoricoPoco.getLigacaoAgua().getId());
+	
+					colImovel.add(imovelVinculo);
+	
+					Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(colImovel, anoMesFaturamentoGrupo);
+	
+					if (colContas != null && !colContas.isEmpty()) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
+					}
+	
+					getControladorUtil().atualizar(hidrometroInstalacaoHistoricoPoco);
+				}
+			}
+	
+			// atualizar o indicador de imovel condominio
+			if (imovel != null) {
+				/**
+				 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
+				 * acoplar o controle de abrangência de usuário
+				 */
+				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
+				} else {
+					getControladorAtualizacaoCadastro().atualizar(imovel);
+				}
+			}
+	
+			// Desvicular imoveis
+			if (imoveisASerDesvinculados != null && !imoveisASerDesvinculados.isEmpty()) {
+				Iterator iImoveisASerDesvinculados = imoveisASerDesvinculados.iterator();
+	
+				while (iImoveisASerDesvinculados.hasNext()) {
+					Imovel imovelASerDesvinculado = (Imovel) iImoveisASerDesvinculados.next();
+	
+					filtroImovel = new FiltroImovel();
+	
+					filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+	
+					// Procura Imovel na base
+					imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
+					imovelASerDesvinculado.setUltimaAlteracao(new Date());
+					// Verificar se Imovel já foi atualizada por outro usuário
+					// durante esta
+					// atualização
+					// [FS0007] Atualização realizada por outro usuário
+					if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.atualizacao.timestamp");
+					}
+	
+					/**
+					 * alterado por pedro alexandre dia 20/11/2006 alteração feita
+					 * para acoplar o controle de abrangência de usuário
+					 */
+					Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+					if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.acesso.negado.abrangencia");
+					} else {
+						UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
+	
+						UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, usuarioAcao);
+	
+						OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
+						Operacao operacao = new Operacao();
+						operacao.setId(Operacao.OPERACAO_ESTABELECER_VINCULO);
+						operacaoEfetuada.setOperacao(operacao);
+	
+						ImovelRegistrarTransacaoHelper helper = new ImovelRegistrarTransacaoHelper();
+	
+						helper.setImovelCondominio(imovel);
+	
+						operacaoEfetuada.setArgumentoValor(imovelASerDesvinculado.getId());
+	
+						getControladorTransacao().processaRegistroOperacaoObjetohelper(usuarioAcaoUsuarioHelper,
+								AlteracaoTipo.EXCLUSAO, helper, operacaoEfetuada, ImovelRegistrarTransacaoHelper.TABELA_ID);
+	
+						getControladorAtualizacaoCadastro().atualizar(imovelASerDesvinculado);
+					}
+				}
+	
+			}
+	
+			// estebelcer os imoveis aos condominios
+			if (imoveisASerVinculados != null && !imoveisASerVinculados.isEmpty()) {
+	
+				Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
+	
+				Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(imoveisASerVinculados, anoMesFaturamentoGrupo);
+	
+				if (colContas != null && !colContas.isEmpty()) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
+				}
+	
+				Iterator iImoveisASerVinculados = imoveisASerVinculados.iterator();
+	
+				while (iImoveisASerVinculados.hasNext()) {
+					Imovel imovelASerVinculado = (Imovel) iImoveisASerVinculados.next();
+	
+					filtroImovel = new FiltroImovel();
+	
+					filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovelASerVinculado.getId()));
+	
+					// Procura Imovel na base
+					imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
+					imovelASerVinculado.setUltimaAlteracao(new Date());
+					// Verificar se Imovel já foi atualizada por outro usuário
+					// durante esta
+					// atualização
+					// [FS0007] Atualização realizada por outro usuário
+					if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.atualizacao.timestamp");
+					}
+	
+					/**
+					 * alterado por pedro alexandre dia 20/11/2006 alteração feita
+					 * para acoplar o controle de abrangência de usuário
+					 */
+					Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+					if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("atencao.acesso.negado.abrangencia");
+					} else {
+						UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
+	
+						UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado,	usuarioAcao);
+	
+						OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
+						Operacao operacao = new Operacao();
+						operacao.setId(Operacao.OPERACAO_ESTABELECER_VINCULO);
+						operacaoEfetuada.setOperacao(operacao);
+	
+						ImovelRegistrarTransacaoHelper helper = new ImovelRegistrarTransacaoHelper();
+	
+						helper.setImovelCondominio(imovel);
+	
+						operacaoEfetuada.setArgumentoValor(imovelASerVinculado.getId());
+	
+						getControladorTransacao().processaRegistroOperacaoObjetohelper(usuarioAcaoUsuarioHelper,
+								AlteracaoTipo.INCLUSAO, helper, operacaoEfetuada, ImovelRegistrarTransacaoHelper.TABELA_ID);
+	
+						getControladorAtualizacaoCadastro().atualizar(imovelASerVinculado);
+					}
+				}
+	
+			} else {
+				filtroImovel = new FiltroImovel();
+	
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+	
+				// Procura Imovel na base
+				imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
+				imovel.setUltimaAlteracao(new Date());
+				// Verificar se Imovel já foi atualizada por outro usuário durante
+				// esta
+				// atualização
+				// [FS0007] Atualização realizada por outro usuário
+				if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.atualizacao.timestamp");
+				}
+				// imovel sem ninguem vinculado a ele
+				imovel.setIndicadorImovelCondominio(Imovel.IMOVEL_NAO_CONDOMINIO);
+	
+				/**
+				 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
+				 * acoplar o controle de abrangência de usuário
+				 */
+				Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
+	
+				if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.acesso.negado.abrangencia");
+				} else {
+					imovel.setUsuarioParaHistorico(usuarioLogado);
+					getControladorAtualizacaoCadastro().atualizar(imovel);
+				}
+			}
+		} catch (ControladorException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao gerenciar vinculo", e);
+		}		
 	}
 
 	/**
@@ -11886,23 +11597,19 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ErroRepositorioException
 	 */
-	public void desfazerVinculo(Imovel imovel, String[] ids,
-			boolean desvincular, Usuario usuarioLogado)
+	public void desfazerVinculo(Imovel imovel, String[] ids, boolean desvincular, Usuario usuarioLogado)
 			throws ControladorException, ErroRepositorioException {
 
 		Imovel controle = imovel;
 
 		FiltroImovel filtroImovel = new FiltroImovel();
 
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				imovel.getId()));
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
 
 		// Procura Imovel na base
-		Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(
-				filtroImovel, Imovel.class.getName()))).get(0);
+		Imovel imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
 
-		Integer anoMesFaturamentoGrupo0 = repositorioFaturamento
-				.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
+		Integer anoMesFaturamentoGrupo0 = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovelNaBase.getId());
 
 		Collection<Imovel> colImovel0 = new ArrayList();
 
@@ -11912,58 +11619,33 @@ public class ControladorMicromedicao implements SessionBean {
 
 		colImovel0.add(imovelVinculo0);
 
-		Collection colContas0 = repositorioMicromedicao
-				.verificarImoveisCicloFaturamento(colImovel0,
-						anoMesFaturamentoGrupo0);
+		Collection colContas0 = repositorioMicromedicao.verificarImoveisCicloFaturamento(colImovel0, anoMesFaturamentoGrupo0);
 
 		if (colContas0 != null && !colContas0.isEmpty()) {
 			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.impossivel.vinculo.desvinculo");
+			throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
 		}
 
 		imovel.setUltimaAlteracao(new Date());
 
-		// [FS0011] -Verifica a existenica de imovel micro em processo de
-		// faturamento
-
-		/*
-		 * Caso o imóvel condomínio informado esteja vinculado a algum imóvel
-		 * (IMOV_IDIMOVELCONDOMINIO na tabela IMOVEL igual ao IMOV_ID do imóvel
-		 * condomínio) que já possua conta pre-faturada para o mês/ano do seu
-		 * grupo de faturamento (CNTA_AMREFERENCIACONTA da tabela de CONTA igual
-		 * ao FTGR_AMREFERENCIA da tabela de FATURAMENTO_GRUPO com FTGR_ID igual
-		 * FTGR_ID da tabela de CONTA e DCST_IDATUAL da tabela de CONTA igual a
-		 * 9 ?PRE FATURADA?, exibir a mensagem ?Não é possível
-		 * vincular/desvincular imóvel ao imóvel condominio informado pois ele
-		 * já se encontra em processo de faturamento? e retornar para o passo
-		 * correspondente no fluxo principal.
-		 */
-
-		// Por Tiago Moreno - 22/02/2011
-		Collection imoveisVinculados = repositorioMicromedicao
-				.recuperarImoveisVinculadosAoCondominio(imovel.getId());
+		Collection imoveisVinculados = repositorioMicromedicao.recuperarImoveisVinculadosAoCondominio(imovel.getId());
 
 		if (imoveisVinculados != null && !imoveisVinculados.isEmpty()) {
-			Integer anoMesFaturamentoGrupo = repositorioFaturamento
-					.retornaAnoMesGrupoFaturamento(imovel.getId());
+			Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovel.getId());
 
-			Collection colContas = repositorioMicromedicao
-					.verificarImoveisCicloFaturamento(imoveisVinculados,
-							anoMesFaturamentoGrupo);
+			Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(imoveisVinculados,
+					anoMesFaturamentoGrupo);
 
 			if (colContas != null && !colContas.isEmpty()) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.impossivel.vinculo.desvinculo");
+				throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
 			}
 		}
 
 		// Verificar se Imovel já foi atualizada por outro usuário durante esta
 		// atualização
 		// [FS0007] Atualização realizada por outro usuário
-		if (imovelNaBase.getUltimaAlteracao()
-				.after(imovel.getUltimaAlteracao())) {
+		if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
@@ -11976,18 +11658,15 @@ public class ControladorMicromedicao implements SessionBean {
 			 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
 			 * acoplar o controle de abrangência de usuário
 			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
 			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
 			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
+				throw new ControladorException("atencao.acesso.negado.abrangencia");
 			} else {
-
-				getControladorUtil().atualizar(imovel);
+				imovel.setUsuarioParaHistorico(usuarioLogado);
+				getControladorAtualizacaoCadastro().atualizar(imovel);
 			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA -------------
 		}
 
 		if (ids != null) {
@@ -11996,16 +11675,11 @@ public class ControladorMicromedicao implements SessionBean {
 
 				filtroImovel = new FiltroImovel();
 
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, id.trim()));
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, id.trim()));
 
-				imovel = (Imovel) (getControladorUtil().pesquisar(filtroImovel,
-						Imovel.class.getName()).iterator().next());
+				imovel = (Imovel) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()).iterator().next());
 
-				// imovel = (Imovel) ((List) ()).get(0);
-
-				Integer anoMesFaturamentoGrupo = repositorioFaturamento
-						.retornaAnoMesGrupoFaturamento(imovel.getId());
+				Integer anoMesFaturamentoGrupo = repositorioFaturamento.retornaAnoMesGrupoFaturamento(imovel.getId());
 
 				Collection<Imovel> colImovel = new ArrayList();
 
@@ -12015,14 +11689,11 @@ public class ControladorMicromedicao implements SessionBean {
 
 				colImovel.add(imovelVinculo);
 
-				Collection colContas = repositorioMicromedicao
-						.verificarImoveisCicloFaturamento(colImovel,
-								anoMesFaturamentoGrupo);
+				Collection colContas = repositorioMicromedicao.verificarImoveisCicloFaturamento(colImovel, anoMesFaturamentoGrupo);
 
 				if (colContas != null && !colContas.isEmpty()) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.impossivel.vinculo.desvinculo");
+					throw new ControladorException("atencao.impossivel.vinculo.desvinculo");
 				}
 
 				imovel.setImovelCondominio(null);
@@ -12030,23 +11701,16 @@ public class ControladorMicromedicao implements SessionBean {
 
 				filtroImovel = new FiltroImovel();
 
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, imovel.getId()));
-				imovel.setUltimaAlteracao(new Date());
-				// Procura Imovel na base
-				imovelNaBase = (Imovel) ((List) (getControladorUtil()
-						.pesquisar(filtroImovel, Imovel.class.getName())))
-						.get(0);
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
+				imovelNaBase = (Imovel) ((List) (getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName()))).get(0);
 				imovel.setUltimaAlteracao(new Date());
 				// Verificar se Imovel já foi atualizada por outro usuário
 				// durante esta
 				// atualização
 				// [FS0007] Atualização realizada por outro usuário
-				if (imovelNaBase.getUltimaAlteracao().after(
-						imovel.getUltimaAlteracao())) {
+				if (imovelNaBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
+					throw new ControladorException("atencao.atualizacao.timestamp");
 				}
 
 				/**
@@ -12062,8 +11726,7 @@ public class ControladorMicromedicao implements SessionBean {
 				} else {
 					UsuarioAcao usuarioAcao = UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO;
 
-					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado,
-							usuarioAcao);
+					UsuarioAcaoUsuarioHelper usuarioAcaoUsuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, usuarioAcao);
 
 					OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 					Operacao operacao = new Operacao();
@@ -12079,11 +11742,8 @@ public class ControladorMicromedicao implements SessionBean {
 					getControladorTransacao().processaRegistroOperacaoObjetohelper(usuarioAcaoUsuarioHelper,
 							AlteracaoTipo.EXCLUSAO, helper, operacaoEfetuada, ImovelRegistrarTransacaoHelper.TABELA_ID);
 
-					imovel.setUsuarioParaHistorico(usuarioLogado);
-
-					getControladorUtil().atualizar(imovel);
+					getControladorAtualizacaoCadastro().atualizar(imovel);
 				}
-				// ------------ FIM CONTROLE DE ABRANGENCIA -------------
 			}
 		}
 	}
@@ -16594,30 +16254,6 @@ public class ControladorMicromedicao implements SessionBean {
 
 	}
 
-	protected ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
 	/**
 	 * Método que retorna um arrey de Object com informações do histórico de
 	 * consumo com tipo de medição poco
@@ -20521,36 +20157,6 @@ public class ControladorMicromedicao implements SessionBean {
 			throw new ControladorException("atencao.quadras_nao_informadas");
 		}
 
-	}
-
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
-	private ControladorLocalidadeLocal getControladorLocalidade() {
-		ControladorLocalidadeLocalHome localHome = null;
-		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLocalidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
 	}
 
 	/**
