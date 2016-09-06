@@ -116,10 +116,6 @@ public class ImovelAtualizacaoCadastralBuilder {
 		    imovelAtualizacaoCadastral.setQuantidadeEconomiasOutra(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra")));
 		}
 		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento"))){
-			imovelAtualizacaoCadastral.setPercentualAbastecimento(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento")));
-		}
-
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
 		imovelAtualizacaoCadastral.setIdLigacaoEsgotoSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")));

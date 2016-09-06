@@ -39,7 +39,7 @@ public abstract class ObjetoTransacao extends ObjetoGcom {
 	// Utilizada para classes com chaves compostas
 	private Integer id2;
 	
-	private Usuario usuarioParaLog = null;
+	private Usuario usuarioParaHistorico = null;
 	
 	/**
 	 * @return Retorna o campo id2.
@@ -400,15 +400,15 @@ public abstract class ObjetoTransacao extends ObjetoGcom {
 		return (String) retorno; 
 	}
 
-	public Usuario getUsuarioParaLog() {
-		return usuarioParaLog;
+	public Usuario getUsuarioParaHistorico() {
+		return usuarioParaHistorico;
 	}
 
-	public void setUsuarioParaLog(Usuario usuarioParaLog) {
-		this.usuarioParaLog = usuarioParaLog;
+	public void setUsuarioParaHistorico(Usuario usuarioParaLog) {
+		this.usuarioParaHistorico = usuarioParaLog;
 	}
 	
-	public boolean logarAlteracoes(){
-		return usuarioParaLog != null;
+	public boolean registrarHistorico(){
+		return usuarioParaHistorico != null;
 	}
 }

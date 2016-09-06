@@ -3749,15 +3749,6 @@ public class ControladorCobranca implements SessionBean {
 				obterDebitoImovelOuClienteHelper.setColecaoCreditoARealizar(creditosARealizar);
 			}
 
-			// Indicador de Notas Promissorias
-			if (indicadorNotasPromissorias == 1) {
-
-				if (indicadorDebito == 1) { // caso imovel
-				} else if (indicadorDebito == 2) { // caso cliente
-				}
-
-			}
-
 			// Indicador de Guias de Pagamentos
 			if (indicadorGuiasPagamento == 1) {
 

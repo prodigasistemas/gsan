@@ -15,6 +15,8 @@ import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
 import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
@@ -25,6 +27,8 @@ import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocal;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocalHome;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.ControladorGeograficoLocal;
@@ -550,4 +554,35 @@ public abstract class ControladorComum implements SessionBean{
 		}
 	}
 	
+	protected ControladorAtualizacaoCadastroLocal getControladorAtualizacaoCadastro() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+			
+			ControladorAtualizacaoCadastroLocalHome localHome = (ControladorAtualizacaoCadastroLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRO);
+			
+			ControladorAtualizacaoCadastroLocal local = localHome.create();
+			
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+
+	protected ControladorOrdemServicoLocal getControladorOrdemServico() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorOrdemServicoLocalHome localHome = (ControladorOrdemServicoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ORDEM_SERVICO_SEJB);
+
+			ControladorOrdemServicoLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}	
 }

@@ -9,6 +9,7 @@ public class ConstantesJNDI {
 
 	public static String CONTROLADOR_DEBITO_A_COBRAR = "";
 	public static String CONTROLADOR_ANALISE_GERACAO_CONTA = "";
+	public static String CONTROLADOR_ATUALIZACAO_CADASTRO = "";
 	
 	public static String FUNCOES_EJB = "";
 	public static String CONTROLADOR_TABELA_AUXILIAR_SEJB = "";
@@ -294,6 +295,7 @@ public class ConstantesJNDI {
 			
             CONTROLADOR_DEBITO_A_COBRAR = propriedades.getProperty("ControladorDebitoACobrar");
             CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
+            CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");
 
 			CONTROLADOR_USUARIO_SEJB = propriedades.getProperty("ControladorUsuario");
 			CONTROLADOR_GERENCIAL_CADASTRO_SEJB = propriedades.getProperty("ControladorGerencialCadastro");

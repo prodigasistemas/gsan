@@ -162,11 +162,6 @@ public interface IControladorMicromedicao {
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoPoco, Usuario usuarioLogado, boolean indicadorRateioPorAreaComum, Integer imovelRemover)
 			throws ControladorException;
 
-	/**
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo Atualizar Tipo
-	 * Rateio com Vinculo com o Imovel Author: Rafael Santos Data: 16/01/2006
-	 * Estabelecer Vinculo ao Imovel
-	 */
 	@SuppressWarnings("rawtypes")
 	public void estabelecerVinculo(Imovel imovel, Collection imoveisASerVinculados, Collection imoveisASerDesvinculados,
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua, HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoPoco,

@@ -43,13 +43,13 @@ import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
-import gcom.model.IHistorico;
+import gcom.model.IAtualizacaoCadastro;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 @ControleAlteracao()
-public class Imovel extends ObjetoTransacao implements IImovel, IHistorico{
+public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCadastro{
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -112,6 +112,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IHistorico{
 	private String nomeMunicipio;
 	private String dsUFSiglaMunicipio;
 	private CobrancaSituacaoTipo cobrancaSituacaoTipo;
+	private transient boolean validarSeImovelEmCampo;
 
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
@@ -2506,8 +2507,16 @@ public class Imovel extends ObjetoTransacao implements IImovel, IHistorico{
     public Class getClasseHistorico() {
 		return ImovelHistorico.class;
 	}
+    
+    public boolean validarSeImovelEmCampo() {
+		return validarSeImovelEmCampo;
+	}
 
-    public void definirEnvioContaQuandoNaoHaResponsavel() {
+	public void setValidarSeImovelEmCampo(boolean validarSeImovelEmCampo) {
+		this.validarSeImovelEmCampo = validarSeImovelEmCampo;
+	}
+
+	public void definirEnvioContaQuandoNaoHaResponsavel() {
 		if(this.getImovelContaEnvio() == null ||
 				(this.getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_EMAIL.intValue() &&
 				this.getImovelContaEnvio().getId().intValue() != ImovelContaEnvio.ENVIAR_PARA_IMOVEL_E_PARA_EMAIL.intValue()) ){
