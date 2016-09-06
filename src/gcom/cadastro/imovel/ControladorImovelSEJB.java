@@ -12824,7 +12824,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 			imovel.setFaturamentoSituacaoMotivo(inserirImovelHelper.getLigacaoEsgotoEsgotamento().getFaturamentoSituacaoMotivo());
 			
 			imovel.setUsuarioParaHistorico(inserirImovelHelper.getUsuario());
-			this.getControladorUtil().atualizar(imovel);
+			this.getControladorAtualizacaoCadastro().atualizar(imovel);
 			
 			
 		}
