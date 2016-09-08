@@ -61,7 +61,6 @@ import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
-import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
@@ -1047,23 +1046,15 @@ public interface IControladorCobranca {
 	 * 
 	 * [UC0214] Efetuar Parcelamento de Débitos
 	 * 
-	 * Gera os Crédito a Realizar do Parcelamento
 	 * 
 	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
-	 * 
-	 * @author Roberta Costa
-	 * @date 29/03/2006
-	 * 
-	 * @param resolucaoDiretoria
-	 * @param codigoImovel
-	 * @param valorEntrada
-	 * @param situacaoAgua
-	 * @param situacaoEsgoto
-	 * @return
 	 */
-	public void gerarCreditoARealizarParcelamento(Imovel imovel,
-			Short numeroPrestacao, BigDecimal taxaJuros,
+	public void gerarCreditoARealizarParcelamento(
+			Imovel imovel,
+			Short numeroPrestacao,
+			BigDecimal taxaJuros,
 			Integer parcelamentoId,
+			BigDecimal valorDescontoFaixaReferenciaConta,
 			BigDecimal valorDescontoAcresimosImpontualidade,
 			BigDecimal valorDescontoAntiguidadeDebito,
 			BigDecimal valorDescontoInatividadeLigacaoAgua,
@@ -1071,86 +1062,9 @@ public interface IControladorCobranca {
 			Collection<Categoria> colecaoCategoria,
 			BigDecimal valorDescontoSancoesRDEspecial,
 			BigDecimal valorDescontoTarifaSocialRDEspecial, 
-			boolean isContaEntradaParcelamento, Integer anoMesGuiaEntrada, Integer maiorAnoMesConta) throws ControladorException;
-
-	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
-	 * 
-	 * [UC0214] Efetuar Parcelamento de Débitos
-	 * 
-	 * Gera os Dados do Parcelamento
-	 * 
-	 * [SB0008] - Gerar Dados do Parcelamento
-	 * 
-	 * @author Roberta Costa - Vivianne Sousa
-	 * @date 29/03/2006 - 26/09/2006
-	 * 
-	 * @param dataParcelamento
-	 * @param valorConta
-	 * @param valorGuiaPapagamento
-	 * @param valorServicosACobrar
-	 * @param valorParcelamentosACobrar
-	 * @param valorCreditoARealizar
-	 * @param valorAtualizacaoMonetaria
-	 * @param valorJurosMora
-	 * @param valorMulta
-	 * @param valorDebitoAtualizado
-	 * @param valorDescontoAcrescimos
-	 * @param valorDescontoAntiguidade
-	 * @param valorDescontoInatividade
-	 * @param valorEntrada
-	 * @param valorJurosParcelamento
-	 * @param numeroPrestacoes
-	 * @param valorPrestacao
-	 * @param indicadorRestabelecimento
-	 * @param indicadorContasRevisao
-	 * @param indicadorGuiasPagamento
-	 * @param indicadorAcrescimosImpotualidade
-	 * @param indicadorDebitosACobrar
-	 * @param indicadorCreditoARealizar
-	 * @param percentualDescontoAcrescimos
-	 * @param percentualDescontoAntiguidade
-	 * @param percentualDescontoInatividadeLigacaoAgua
-	 * @param imovel
-	 * @param usuario
-	 * @param parcelamentoPerfilId
-	 * @param colecaoContaValores
-	 * @param colecaoGuiaPagamentoValores
-	 * @param colecaoDebitoACobrar
-	 * @param colecaoCreditoARealizar
-	 * @param taxaJuros
-	 * @param indicadorConfirmacaoParcelamento
-	 * @param cliente
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Integer gerarDadosParcelamento(Date dataParcelamento,
-			BigDecimal valorConta, BigDecimal valorGuiaPapagamento,
-			BigDecimal valorServicosACobrar,
-			BigDecimal valorParcelamentosACobrar,
-			BigDecimal valorCreditoARealizar,
-			BigDecimal valorAtualizacaoMonetaria, BigDecimal valorJurosMora,
-			BigDecimal valorMulta, BigDecimal valorDebitoAtualizado,
-			BigDecimal valorDescontoAcrescimos,
-			BigDecimal valorDescontoAntiguidade,
-			BigDecimal valorDescontoInatividade, BigDecimal valorEntrada,
-			BigDecimal valorJurosParcelamento, Short numeroPrestacoes,
-			BigDecimal valorPrestacao, Short indicadorRestabelecimento,
-			Short indicadorContasRevisao, Short indicadorGuiasPagamento,
-			Short indicadorAcrescimosImpotualidade,
-			Short indicadorDebitosACobrar, Short indicadorCreditoARealizar,
-			BigDecimal percentualDescontoAcrescimos,
-			BigDecimal percentualDescontoAntiguidade,
-			BigDecimal percentualDescontoInatividadeLigacaoAgua, Imovel imovel,
-			Usuario usuario, Integer parcelamentoPerfilId,
-			Collection<ContaValoresHelper> colecaoContaValores,
-			Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores,
-			Collection<DebitoACobrar> colecaoDebitoACobrar,
-			Collection<CreditoARealizar> colecaoCreditoARealizar,
-			BigDecimal taxaJuros, Short indicadorConfirmacaoParcelamento,
-			Cliente cliente,BigDecimal descontoSancoesRDEspecial,
-			BigDecimal descontoTarifaSocialRDEspecial,
-			Integer anoMesReferenciaContabil) throws ControladorException;
+			boolean isContaEntradaParcelamento,
+			Integer anoMesGuiaEntrada,
+			Integer maiorAnoMesConta) throws ControladorException;
 
 	/**
 	 * 

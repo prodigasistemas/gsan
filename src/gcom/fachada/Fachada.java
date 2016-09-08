@@ -5932,25 +5932,39 @@ public class Fachada {
 	 * Gera os Crédito a Realizar do Parcelamento
 	 * 
 	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
-	 * 
-	 * @author Roberta Costa
-	 * @date 29/03/2006
-	 * 
-	 * @param resolucaoDiretoria
-	 * @param codigoImovel
-	 * @param valorEntrada
-	 * @param situacaoAgua
-	 * @param situacaoEsgoto
-	 * @return
 	 */
-	public void gerarCreditoARealizarParcelamento(Imovel imovel, Short numeroPrestacao, BigDecimal taxaJuros, Integer parcelamentoId,
-			BigDecimal valorDescontoAcresimosImpontualidade, BigDecimal valorDescontoAntiguidadeDebito, BigDecimal valorDescontoInatividadeLigacaoAgua,
-			BigDecimal valorCreditoAnteriores, Collection<Categoria> colecaoCategoria, BigDecimal valorDescontoSancoesRDEspecial,
-			BigDecimal valorDescontoTarifaSocialRDEspecial, boolean isContaEntradaParcelamento, Integer anoMesGuiaEntrada, Integer maiorAnoMesConta) {
+	public void gerarCreditoARealizarParcelamento(
+			Imovel imovel,
+			Short numeroPrestacao,
+			BigDecimal taxaJuros,
+			Integer parcelamentoId,
+			BigDecimal valorDescontoFaixaReferenciaConta, 
+			BigDecimal valorDescontoAcresimosImpontualidade, 
+			BigDecimal valorDescontoAntiguidadeDebito, 
+			BigDecimal valorDescontoInatividadeLigacaoAgua,
+			BigDecimal valorCreditoAnteriores,
+			Collection<Categoria> colecaoCategoria,
+			BigDecimal valorDescontoSancoesRDEspecial,
+			BigDecimal valorDescontoTarifaSocialRDEspecial,
+			boolean isContaEntradaParcelamento, 
+			Integer anoMesGuiaEntrada, 
+			Integer maiorAnoMesConta) {
 		try {
-			this.getControladorCobranca().gerarCreditoARealizarParcelamento(imovel, numeroPrestacao, taxaJuros, parcelamentoId,
-					valorDescontoAcresimosImpontualidade, valorDescontoAntiguidadeDebito, valorDescontoInatividadeLigacaoAgua, valorCreditoAnteriores,
-					colecaoCategoria, valorDescontoSancoesRDEspecial, valorDescontoTarifaSocialRDEspecial, isContaEntradaParcelamento, anoMesGuiaEntrada,
+			this.getControladorCobranca().gerarCreditoARealizarParcelamento(
+					imovel,
+					numeroPrestacao,
+					taxaJuros, 
+					parcelamentoId,
+					valorDescontoFaixaReferenciaConta,
+					valorDescontoAcresimosImpontualidade, 
+					valorDescontoAntiguidadeDebito,
+					valorDescontoInatividadeLigacaoAgua,
+					valorCreditoAnteriores,
+					colecaoCategoria, 
+					valorDescontoSancoesRDEspecial, 
+					valorDescontoTarifaSocialRDEspecial,
+					isContaEntradaParcelamento,
+					anoMesGuiaEntrada,
 					maiorAnoMesConta);
 
 		} catch (ControladorException ex) {

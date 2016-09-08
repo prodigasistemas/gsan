@@ -11834,11 +11834,22 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
 	 */
-	public void gerarCreditoARealizarParcelamento(Imovel imovel, Short numeroPrestacao, BigDecimal taxaJuros,
-			Integer parcelamentoId, BigDecimal valorDescontoFaixaReferenciaConta, BigDecimal valorDescontoAcresimosImpontualidade, 
-			BigDecimal valorDescontoAntiguidadeDebito, BigDecimal valorDescontoInatividadeLigacaoAgua, BigDecimal valorCreditoAnteriores, 
-			Collection<Categoria> colecaoCategoria, BigDecimal valorDescontoSancoesRDEspecial, BigDecimal descontoTarifaSocialRDEspecial, 
-			boolean isContaEntradaParcelamento, Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
+	public void gerarCreditoARealizarParcelamento(
+			Imovel imovel,
+			Short numeroPrestacao,
+			BigDecimal taxaJuros,
+			Integer parcelamentoId, 
+			BigDecimal valorDescontoFaixaReferenciaConta,
+			BigDecimal valorDescontoAcresimosImpontualidade, 
+			BigDecimal valorDescontoAntiguidadeDebito,
+			BigDecimal valorDescontoInatividadeLigacaoAgua,
+			BigDecimal valorCreditoAnteriores, 
+			Collection<Categoria> colecaoCategoria,
+			BigDecimal valorDescontoSancoesRDEspecial,
+			BigDecimal descontoTarifaSocialRDEspecial, 
+			boolean isContaEntradaParcelamento,
+			Integer anoMesEntradaGuia,
+			Integer maiorAnoMesConta) throws ControladorException {
 
 		// 1. Desconto por Acréscimo por Impontualidade
 		if (valorDescontoAcresimosImpontualidade != null && !valorDescontoAcresimosImpontualidade.equals(new BigDecimal("0.00"))) {
@@ -11894,11 +11905,11 @@ public class ControladorCobranca implements SessionBean {
 					anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
-		// 1. Desconto por Acréscimo por Impontualidade
+		// 7. Desconto por Acréscimo por Impontualidade
 		if (valorDescontoFaixaReferenciaConta != null && !valorDescontoFaixaReferenciaConta.equals(new BigDecimal("0.00"))) {
 			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_FAIXA_REFERENCIA_CONTA);
 
-			// 1. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
+			// 7. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
 			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoFaixaReferenciaConta, numeroPrestacao, parcelamentoId, colecaoCategoria,
 					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
 		}
@@ -12287,7 +12298,7 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [SB0009] - Gerar Dados do Parcelamento
 	 */
-	public Integer gerarDadosParcelamento(
+	private Integer gerarDadosParcelamento(
 			Date dataParcelamento, 
 			BigDecimal valorConta, 
 			BigDecimal valorGuiaPapagamento,
@@ -26583,7 +26594,7 @@ public class ControladorCobranca implements SessionBean {
 	public ParcelamentoRelatorioHelper pesquisarParcelamentoRelatorio(Integer idParcelamento) throws ControladorException {
 
 		Collection colecaoParcelamentos = null;
-		ParcelamentoRelatorioHelper parcelamentoRelatorioHelper = null;
+		ParcelamentoRelatorioHelper helper = null;
 
 		try {
 
@@ -26599,7 +26610,7 @@ public class ControladorCobranca implements SessionBean {
 
 			// dados da conta
 			while (colecaoParcelamentosIterator.hasNext()) {
-				parcelamentoRelatorioHelper = new ParcelamentoRelatorioHelper();
+				helper = new ParcelamentoRelatorioHelper();
 
 				Object[] dadosParcelamento = (Object[]) colecaoParcelamentosIterator.next();
 
@@ -26612,204 +26623,206 @@ public class ControladorCobranca implements SessionBean {
 
 				if (dadosParcelamento[0] != null) {// 0
 					// Imóvel
-					parcelamentoRelatorioHelper.setIdImovel((Integer) dadosParcelamento[0]);
+					helper.setIdImovel((Integer) dadosParcelamento[0]);
 				}
 
 				if (dadosParcelamento[1] != null) {// 1
 					// Nome do Município
-					parcelamentoRelatorioHelper.setNomeMunicipio(dadosParcelamento[1].toString());
+					helper.setNomeMunicipio(dadosParcelamento[1].toString());
 				}
 
 				if (dadosParcelamento[2] != null) {// 2
 					// Data do Parcelamento
-					parcelamentoRelatorioHelper.setDataParcelamento((Date) dadosParcelamento[2]);
+					helper.setDataParcelamento((Date) dadosParcelamento[2]);
 				}
 
 				// Débitos
 				if (dadosParcelamento[3] != null) {// 3
 					// Valor das Faturas em Aberto
-					parcelamentoRelatorioHelper.setValorFaturasEmAberto((BigDecimal) dadosParcelamento[3]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorFaturasEmAberto());
+					helper.setValorFaturasEmAberto((BigDecimal) dadosParcelamento[3]);
+					totalDebitos = totalDebitos.add(helper.getValorFaturasEmAberto());
 				} else {
-					parcelamentoRelatorioHelper.setValorFaturasEmAberto(new BigDecimal("0.00"));
+					helper.setValorFaturasEmAberto(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[4] != null) {// 4
 					// Valor dos Serviços A Cobrar
-					parcelamentoRelatorioHelper.setValorServicosACobrar((BigDecimal) dadosParcelamento[4]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorServicosACobrar());
+					helper.setValorServicosACobrar((BigDecimal) dadosParcelamento[4]);
+					totalDebitos = totalDebitos.add(helper.getValorServicosACobrar());
 				} else {
-					parcelamentoRelatorioHelper.setValorServicosACobrar(new BigDecimal("0.00"));
+					helper.setValorServicosACobrar(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[5] != null) {// 5
 					// Valor das Atualizações Monetárias
-					parcelamentoRelatorioHelper.setValorAtualizacaoMonetaria((BigDecimal) dadosParcelamento[5]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorAtualizacaoMonetaria());
+					helper.setValorAtualizacaoMonetaria((BigDecimal) dadosParcelamento[5]);
+					totalDebitos = totalDebitos.add(helper.getValorAtualizacaoMonetaria());
 				} else {
-					parcelamentoRelatorioHelper.setValorAtualizacaoMonetaria(new BigDecimal("0.00"));
+					helper.setValorAtualizacaoMonetaria(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[6] != null) {// 6
 					// Valor dos Juros/Mora
-					parcelamentoRelatorioHelper.setValorJurosMora((BigDecimal) dadosParcelamento[6]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorJurosMora());
+					helper.setValorJurosMora((BigDecimal) dadosParcelamento[6]);
+					totalDebitos = totalDebitos.add(helper.getValorJurosMora());
 				} else {
-					parcelamentoRelatorioHelper.setValorJurosMora(new BigDecimal("0.00"));
+					helper.setValorJurosMora(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[7] != null) {// 7
 					// Valor das Multas
-					parcelamentoRelatorioHelper.setValorMultas((BigDecimal) dadosParcelamento[7]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorMultas());
+					helper.setValorMultas((BigDecimal) dadosParcelamento[7]);
+					totalDebitos = totalDebitos.add(helper.getValorMultas());
 				} else {
-					parcelamentoRelatorioHelper.setValorMultas(new BigDecimal("0.00"));
+					helper.setValorMultas(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[8] != null) {// 8
 					// Valor das Guais de Pagamento
-					parcelamentoRelatorioHelper.setValorGuiaPagamento((BigDecimal) dadosParcelamento[8]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorGuiaPagamento());
+					helper.setValorGuiaPagamento((BigDecimal) dadosParcelamento[8]);
+					totalDebitos = totalDebitos.add(helper.getValorGuiaPagamento());
 				} else {
-					parcelamentoRelatorioHelper.setValorGuiaPagamento(new BigDecimal("0.00"));
+					helper.setValorGuiaPagamento(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[9] != null) {// 9
 					// Valor do Parcelamento a Cobrar
-					parcelamentoRelatorioHelper.setValorParcelamentoACobrar((BigDecimal) dadosParcelamento[9]);
-					totalDebitos = totalDebitos.add(parcelamentoRelatorioHelper.getValorParcelamentoACobrar());
+					helper.setValorParcelamentoACobrar((BigDecimal) dadosParcelamento[9]);
+					totalDebitos = totalDebitos.add(helper.getValorParcelamentoACobrar());
 				} else {
-					parcelamentoRelatorioHelper.setValorParcelamentoACobrar(new BigDecimal("0.00"));
+					helper.setValorParcelamentoACobrar(new BigDecimal("0.00"));
 				}
 
 				// Seta o valor do total dos débitos, pois todos os dados de
 				// débito já foram passados
-				parcelamentoRelatorioHelper.setValorTotalDebitos(totalDebitos);
+				helper.setValorTotalDebitos(totalDebitos);
 
 				// Descontos/Créditos
 
+				if (dadosParcelamento[41] != null) {
+					helper.setValorDescontoFaixaReferenciaConta((BigDecimal) dadosParcelamento[41]);
+					totalDescontos = totalDescontos.add(helper.getValorDescontoFaixaReferenciaConta());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoFaixaReferenciaConta());
+				} else {
+					helper.setValorDescontoFaixaReferenciaConta(new BigDecimal("0.00"));
+				}
+				
 				if (dadosParcelamento[10] != null) {// 10
 					// Valor dos Descontos de Acréscimo
-					parcelamentoRelatorioHelper.setValorDescontoAcrescimo((BigDecimal) dadosParcelamento[10]);
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorDescontoAcrescimo());
-					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(parcelamentoRelatorioHelper
-							.getValorDescontoAcrescimo());
+					helper.setValorDescontoAcrescimo((BigDecimal) dadosParcelamento[10]);
+					totalDescontos = totalDescontos.add(helper.getValorDescontoAcrescimo());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoAcrescimo());
 				} else {
-					parcelamentoRelatorioHelper.setValorDescontoAcrescimo(new BigDecimal("0.00"));
+					helper.setValorDescontoAcrescimo(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[11] != null) {// 11
 					// Valor dos Descontos de Antiguidade
-					parcelamentoRelatorioHelper.setValorDescontoAntiguidade((BigDecimal) dadosParcelamento[11]);
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorDescontoAntiguidade());
-					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(parcelamentoRelatorioHelper
-							.getValorDescontoAntiguidade());
+					helper.setValorDescontoAntiguidade((BigDecimal) dadosParcelamento[11]);
+					totalDescontos = totalDescontos.add(helper.getValorDescontoAntiguidade());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoAntiguidade());
 				} else {
-					parcelamentoRelatorioHelper.setValorDescontoAntiguidade(new BigDecimal("0.00"));
+					helper.setValorDescontoAntiguidade(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[12] != null) {// 12
 					// Valor dos Descontos de Inatividade
-					parcelamentoRelatorioHelper.setValorDescontoInatividade((BigDecimal) dadosParcelamento[12]);
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorDescontoInatividade());
-					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(parcelamentoRelatorioHelper
-							.getValorDescontoInatividade());
+					helper.setValorDescontoInatividade((BigDecimal) dadosParcelamento[12]);
+					totalDescontos = totalDescontos.add(helper.getValorDescontoInatividade());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoInatividade());
 				} else {
-					parcelamentoRelatorioHelper.setValorDescontoInatividade(new BigDecimal("0.00"));
+					helper.setValorDescontoInatividade(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[13] != null) {// 13
 					// Valor dos Créditos a Realizar
-					parcelamentoRelatorioHelper.setValorCreditosRealizar((BigDecimal) dadosParcelamento[13]);
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorCreditosRealizar());
+					helper.setValorCreditosRealizar((BigDecimal) dadosParcelamento[13]);
+					totalDescontos = totalDescontos.add(helper.getValorCreditosRealizar());
 				} else {
-					parcelamentoRelatorioHelper.setValorCreditosRealizar(new BigDecimal("0.00"));
+					helper.setValorCreditosRealizar(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[24] != null) {// 24
 					// Valor Desconto de Sanções Regulamentares
-					parcelamentoRelatorioHelper.setValorDescontoSancoesRegulamentares((BigDecimal) dadosParcelamento[24]);
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorDescontoSancoesRegulamentares());
-					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(parcelamentoRelatorioHelper
-							.getValorDescontoSancoesRegulamentares());
+					helper.setValorDescontoSancoesRegulamentares((BigDecimal) dadosParcelamento[24]);
+					totalDescontos = totalDescontos.add(helper.getValorDescontoSancoesRegulamentares());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoSancoesRegulamentares());
 
 				} else {
-					parcelamentoRelatorioHelper.setValorDescontoSancoesRegulamentares(new BigDecimal("0.00"));
+					helper.setValorDescontoSancoesRegulamentares(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[25] != null) {// 25
 					// Valor Desconto de Sanções Regulamentares
-					parcelamentoRelatorioHelper.setValorDescontoTarifaSocial((BigDecimal) dadosParcelamento[25]);
+					helper.setValorDescontoTarifaSocial((BigDecimal) dadosParcelamento[25]);
 
-					totalDescontos = totalDescontos.add(parcelamentoRelatorioHelper.getValorDescontoTarifaSocial());
-					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(parcelamentoRelatorioHelper
-							.getValorDescontoTarifaSocial());
+					totalDescontos = totalDescontos.add(helper.getValorDescontoTarifaSocial());
+					totalDescontosSemValorCreditos = totalDescontosSemValorCreditos.add(helper.getValorDescontoTarifaSocial());
 
 				} else {
-					parcelamentoRelatorioHelper.setValorDescontoTarifaSocial(new BigDecimal("0.00"));
+					helper.setValorDescontoTarifaSocial(new BigDecimal("0.00"));
 				}
 
 				// Seta o valor do total dos descontos/créditos, pois todos os
 				// dados de desconto/crédito já foram passados
-				parcelamentoRelatorioHelper.setValorTotalDescontos(totalDescontos);
-				parcelamentoRelatorioHelper.setValorTotalDescontosSemValorCreditos(totalDescontosSemValorCreditos);
+				helper.setValorTotalDescontos(totalDescontos);
+				helper.setValorTotalDescontosSemValorCreditos(totalDescontosSemValorCreditos);
 
 				if (dadosParcelamento[14] != null) {// 14
 					// Valor a Ser Negociado
-					parcelamentoRelatorioHelper.setValorASerNegociado((BigDecimal) dadosParcelamento[14]);
+					helper.setValorASerNegociado((BigDecimal) dadosParcelamento[14]);
 				} else {
-					parcelamentoRelatorioHelper.setValorASerNegociado(new BigDecimal("0.00"));
+					helper.setValorASerNegociado(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[15] != null) {// 15
 					// Valor da Entrada
-					parcelamentoRelatorioHelper.setValorEntrada((BigDecimal) dadosParcelamento[15]);
+					helper.setValorEntrada((BigDecimal) dadosParcelamento[15]);
 				} else {
-					parcelamentoRelatorioHelper.setValorEntrada(new BigDecimal("0.00"));
+					helper.setValorEntrada(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[16] != null) {// 16
 					// Número de Parcelas
-					parcelamentoRelatorioHelper.setNumeroParcelas((Short) dadosParcelamento[16]);
+					helper.setNumeroParcelas((Short) dadosParcelamento[16]);
 				}
 
 				if (dadosParcelamento[17] != null) {// 17
 					// Valor da Parcela
-					parcelamentoRelatorioHelper.setValorParcela((BigDecimal) dadosParcelamento[17]);
+					helper.setValorParcela((BigDecimal) dadosParcelamento[17]);
 					// Valor a Ser Parcelado
-					BigDecimal valorASerParcelado = parcelamentoRelatorioHelper.getValorParcela();
-					valorASerParcelado = valorASerParcelado.multiply(new BigDecimal(parcelamentoRelatorioHelper.getNumeroParcelas()
-							.toString()));
-					parcelamentoRelatorioHelper.setValorASerParcelado(valorASerParcelado);
+					BigDecimal valorASerParcelado = helper.getValorParcela();
+					valorASerParcelado = valorASerParcelado.multiply(new BigDecimal(helper.getNumeroParcelas().toString()));
+					helper.setValorASerParcelado(valorASerParcelado);
 				} else {
-					parcelamentoRelatorioHelper.setValorParcela(new BigDecimal("0.00"));
-					parcelamentoRelatorioHelper.setValorASerParcelado(new BigDecimal("0.00"));
+					helper.setValorParcela(new BigDecimal("0.00"));
+					helper.setValorASerParcelado(new BigDecimal("0.00"));
 				}
 
 				if (dadosParcelamento[18] != null) {// 18
 					// Indicador Restabelecimento
 					if (((Short) dadosParcelamento[18]).equals(ConstantesSistema.SIM)) {
-						parcelamentoRelatorioHelper.setSolicitacaoRestabelecimento("SIM");
+						helper.setSolicitacaoRestabelecimento("SIM");
 					} else {
-						parcelamentoRelatorioHelper.setSolicitacaoRestabelecimento("NÃO");
+						helper.setSolicitacaoRestabelecimento("NÃO");
 					}
 				} else {
-					parcelamentoRelatorioHelper.setSolicitacaoRestabelecimento("");
+					helper.setSolicitacaoRestabelecimento("");
 				}
 
 				if (dadosParcelamento[19] != null) {// 19
 					// Id do Funcionário
-					parcelamentoRelatorioHelper.setIdFuncionario((Integer) dadosParcelamento[19]);
+					helper.setIdFuncionario((Integer) dadosParcelamento[19]);
 				} else if (dadosParcelamento[26] != null) {// 26
 					// Id do Funcionário
-					parcelamentoRelatorioHelper.setIdFuncionario((Integer) dadosParcelamento[26]);
+					helper.setIdFuncionario((Integer) dadosParcelamento[26]);
 				}
 
 				if (dadosParcelamento[20] != null) {// 20
 					// Nome do Cliente do Parcelamento
-					parcelamentoRelatorioHelper.setNomeClienteParcelamento((String) dadosParcelamento[20]);
+					helper.setNomeClienteParcelamento((String) dadosParcelamento[20]);
 				} else {
-					parcelamentoRelatorioHelper.setNomeClienteParcelamento("");
+					helper.setNomeClienteParcelamento("");
 				}
 
 				if (dadosParcelamento[21] != null && !((String) dadosParcelamento[21]).equals("")) {// 21
@@ -26824,10 +26837,9 @@ public class ControladorCobranca implements SessionBean {
 					// caso o numero seja diferente de nulo
 					cpfFormatado = zeros.concat(cpfFormatado);
 
-					cpfFormatado = cpfFormatado.substring(0, 3) + "." + cpfFormatado.substring(3, 6) + "." + cpfFormatado.substring(6, 9)
-							+ "-" + cpfFormatado.substring(9, 11);
+					cpfFormatado = cpfFormatado.substring(0, 3) + "." + cpfFormatado.substring(3, 6) + "." + cpfFormatado.substring(6, 9) + "-" + cpfFormatado.substring(9, 11);
 
-					parcelamentoRelatorioHelper.setCpfClienteParcelamento(cpfFormatado);
+					helper.setCpfClienteParcelamento(cpfFormatado);
 				} else if (dadosParcelamento[22] != null && !((String) dadosParcelamento[22]).equals("")) {// 21
 					// CNPJ do Cliente do Parcelamento
 					String cnpjFormatado = (String) dadosParcelamento[22];
@@ -26840,99 +26852,95 @@ public class ControladorCobranca implements SessionBean {
 					// caso o numero seja diferente de nulo
 					cnpjFormatado = zeros.concat(cnpjFormatado);
 
-					cnpjFormatado = cnpjFormatado.substring(0, 2) + "." + cnpjFormatado.substring(2, 5) + "."
-							+ cnpjFormatado.substring(5, 8) + "/" + cnpjFormatado.substring(8, 12) + "-" + cnpjFormatado.substring(12, 14);
+					cnpjFormatado = cnpjFormatado.substring(0, 2) + "." + cnpjFormatado.substring(2, 5) + "." + cnpjFormatado.substring(5, 8) + "/" + cnpjFormatado.substring(8, 12) + "-"
+							+ cnpjFormatado.substring(12, 14);
 
-					parcelamentoRelatorioHelper.setCpfClienteParcelamento(cnpjFormatado);
+					helper.setCpfClienteParcelamento(cnpjFormatado);
 				} else {
-					parcelamentoRelatorioHelper.setCpfClienteParcelamento("");
+					helper.setCpfClienteParcelamento("");
 				}
 
 				if (dadosParcelamento[23] != null) {
 					// taxaJuros
-					parcelamentoRelatorioHelper.setTaxaJuros(Util.formatarMoedaReal((BigDecimal) dadosParcelamento[23]));
+					helper.setTaxaJuros(Util.formatarMoedaReal((BigDecimal) dadosParcelamento[23]));
 				} else {
-					parcelamentoRelatorioHelper.setTaxaJuros("0,00");
+					helper.setTaxaJuros("0,00");
 				}
 
 				String rgClienteParcelamento = "";
-				Cliente clienteParcelamento = getControladorCliente().pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(
-						idParcelamento);
+				Cliente clienteParcelamento = getControladorCliente().pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(idParcelamento);
 
 				if (clienteParcelamento != null) {
 
 					if (clienteParcelamento.getRg() != null) {
 						if (clienteParcelamento.getOrgaoExpedidorRg() != null && clienteParcelamento.getUnidadeFederacao() != null) {
-							rgClienteParcelamento = clienteParcelamento.getRg() + "-"
-									+ clienteParcelamento.getOrgaoExpedidorRg().getDescricao().trim() + "/"
+							rgClienteParcelamento = clienteParcelamento.getRg() + "-" + clienteParcelamento.getOrgaoExpedidorRg().getDescricao().trim() + "/"
 									+ clienteParcelamento.getUnidadeFederacao().getSigla();
 						} else {
 							rgClienteParcelamento = clienteParcelamento.getRg();
 						}
 					}
-					parcelamentoRelatorioHelper.setRgClienteParcelamento(rgClienteParcelamento);
+					helper.setRgClienteParcelamento(rgClienteParcelamento);
 				}
 
 				if (dadosParcelamento[27] != null) {
-					parcelamentoRelatorioHelper.setNomeDiretorComercial((String) dadosParcelamento[27]);
+					helper.setNomeDiretorComercial((String) dadosParcelamento[27]);
 				}
 
 				if (dadosParcelamento[28] != null) {
-					parcelamentoRelatorioHelper.setCpfDiretorComercial(Util.formatarCpf((String) dadosParcelamento[28]));
+					helper.setCpfDiretorComercial(Util.formatarCpf((String) dadosParcelamento[28]));
 				}
 
 				if (dadosParcelamento[29] != null) {
-					parcelamentoRelatorioHelper.setProfissao((String) dadosParcelamento[29]);
+					helper.setProfissao((String) dadosParcelamento[29]);
 				}
 
 				if (dadosParcelamento[30] != null) {
-					parcelamentoRelatorioHelper.setIndicadorPessoaJuridica((Short) dadosParcelamento[30]);
+					helper.setIndicadorPessoaJuridica((Short) dadosParcelamento[30]);
 				}
 
 				if (dadosParcelamento[31] != null) {
-					parcelamentoRelatorioHelper.setNomeDevedor((String) dadosParcelamento[31]);
+					helper.setNomeDevedor((String) dadosParcelamento[31]);
 				}
 
 				if (dadosParcelamento[32] != null) {
-					parcelamentoRelatorioHelper.setCnpjDevedor(Util.formatarCnpj((String) dadosParcelamento[32]));
+					helper.setCnpjDevedor(Util.formatarCnpj((String) dadosParcelamento[32]));
 				}
 
 				if (dadosParcelamento[33] != null) {
-					parcelamentoRelatorioHelper.setIdDevedor((Integer) dadosParcelamento[33]);
+					helper.setIdDevedor((Integer) dadosParcelamento[33]);
 				}
 
 				// Endereço
-				String endereco = getControladorEndereco().pesquisarEndereco(parcelamentoRelatorioHelper.getIdImovel());
-				parcelamentoRelatorioHelper.setEndereco(endereco);
+				String endereco = getControladorEndereco().pesquisarEndereco(helper.getIdImovel());
+				helper.setEndereco(endereco);
 
-				parcelamentoRelatorioHelper.setEnderecoDevedor(getControladorEndereco().pesquisarEnderecoClienteAbreviado(
-						parcelamentoRelatorioHelper.getIdDevedor()));
+				helper.setEnderecoDevedor(getControladorEndereco().pesquisarEnderecoClienteAbreviado(helper.getIdDevedor()));
 
 				// Dados do Cliente
-				Cliente cliente = getControladorCliente().pesquisarDadosClienteRelatorioParcelamentoPorImovel(
-						parcelamentoRelatorioHelper.getIdImovel());
+				Cliente cliente = getControladorCliente().pesquisarDadosClienteRelatorioParcelamentoPorImovel(helper.getIdImovel());
 
 				// NomeRepositorio
-				parcelamentoRelatorioHelper.setNomeCliente(cliente.getNome());
+				helper.setNomeCliente(cliente.getNome());
 
 				// RG
-				parcelamentoRelatorioHelper.setRgCliente(cliente.getRg());
+				helper.setRgCliente(cliente.getRg());
 
 				// CPF/CNPJ
 				if (cliente.getCpf() != null) {
-					parcelamentoRelatorioHelper.setCpfCnpj(cliente.getCpfFormatado());
+					helper.setCpfCnpj(cliente.getCpfFormatado());
 				} else if (cliente.getCnpj() != null) {
-					parcelamentoRelatorioHelper.setCpfCnpj(cliente.getCnpjFormatado());
+					helper.setCpfCnpj(cliente.getCnpjFormatado());
 				} else {
-					parcelamentoRelatorioHelper.setCpfCnpj("");
+					helper.setCpfCnpj("");
 				}
 
 				if (cliente.getOrgaoExpedidorRg() != null && cliente.getOrgaoExpedidorRg().getDescricao() != null) {
-					parcelamentoRelatorioHelper.setDescOrgaoExpRgCliente(cliente.getOrgaoExpedidorRg().getDescricao());
+					helper.setDescOrgaoExpRgCliente(cliente.getOrgaoExpedidorRg().getDescricao());
 				}
 
 				if (cliente.getUnidadeFederacao() != null && cliente.getUnidadeFederacao().getSigla() != null) {
-					parcelamentoRelatorioHelper.setSiglaUnidadeFederacaoRgCliente(cliente.getUnidadeFederacao().getSigla());
+					helper.setSiglaUnidadeFederacaoRgCliente(cliente.getUnidadeFederacao().getSigla());
 				}
 
 				// Telefone
@@ -26947,20 +26955,19 @@ public class ControladorCobranca implements SessionBean {
 					while (colecaoClienteFoneIterator.hasNext()) {
 						clienteFone = (ClienteFone) colecaoClienteFoneIterator.next();
 
-						if (clienteFone.getIndicadorTelefonePadrao() != null
-								&& clienteFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
+						if (clienteFone.getIndicadorTelefonePadrao() != null && clienteFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
 							break;
 						}
 					}
 
-					parcelamentoRelatorioHelper.setTelefone(clienteFone.getDddTelefone());
+					helper.setTelefone(clienteFone.getDddTelefone());
 
 				} else {
-					parcelamentoRelatorioHelper.setTelefone("");
+					helper.setTelefone("");
 				}
 
 				// Telefone do Devedor
-				Collection colecaoDevedorFone = getControladorCliente().pesquisarClienteFone(parcelamentoRelatorioHelper.getIdDevedor());
+				Collection colecaoDevedorFone = getControladorCliente().pesquisarClienteFone(helper.getIdDevedor());
 
 				ClienteFone devedorFone = null;
 
@@ -26971,84 +26978,68 @@ public class ControladorCobranca implements SessionBean {
 					while (colecaoDevedorFoneIterator.hasNext()) {
 						devedorFone = (ClienteFone) colecaoDevedorFoneIterator.next();
 
-						if (devedorFone.getIndicadorTelefonePadrao() != null
-								&& devedorFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
+						if (devedorFone.getIndicadorTelefonePadrao() != null && devedorFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
 							break;
 						}
 					}
 
-					parcelamentoRelatorioHelper.setTelefoneDevedor(devedorFone.getDddTelefone());
+					helper.setTelefoneDevedor(devedorFone.getDddTelefone());
 
 				} else {
-					parcelamentoRelatorioHelper.setTelefoneDevedor("");
+					helper.setTelefoneDevedor("");
 				}
 
-				int numeroParcelas = parcelamentoRelatorioHelper.getNumeroParcelas().intValue();
+				int numeroParcelas = helper.getNumeroParcelas().intValue();
 
-				// alterado por Flávio Leonardo 09/07/2008
-				// inicio parcelamento deve ser pelo anoMesReferenciaFaturamento
-				// e naum pelo anomes faturamento do grupo
-				/*
-				 * parcelamentoRelatorioHelper .setMesAnoInicioParcelamento(Util
-				 * .formatarAnoMesParaMesAno(anoMesReferenciaFaturamentoGrupo));
-				 * parcelamentoRelatorioHelper.setMesAnoFinalParcelamento(Util
-				 * .formatarAnoMesParaMesAno(Util.somaMesAnoMesReferencia(
-				 * anoMesReferenciaFaturamentoGrupo, numeroParcelasMenosUm)));
-				 */
-				// 35 anoMesReferenciaFaturamento
-				parcelamentoRelatorioHelper.setMesAnoInicioParcelamento(Util.formatarAnoMesParaMesAno(Util.somaMesAnoMesReferencia(
-						(Integer) dadosParcelamento[35], 1)));
-				parcelamentoRelatorioHelper.setMesAnoFinalParcelamento(Util.formatarAnoMesParaMesAno(Util.somaMesAnoMesReferencia(
-						(Integer) dadosParcelamento[35], numeroParcelas)));
+				helper.setMesAnoInicioParcelamento(Util.formatarAnoMesParaMesAno(Util.somaMesAnoMesReferencia((Integer) dadosParcelamento[35], 1)));
+				helper.setMesAnoFinalParcelamento(Util.formatarAnoMesParaMesAno(Util.somaMesAnoMesReferencia((Integer) dadosParcelamento[35], numeroParcelas)));
 
 				if (dadosParcelamento[34] != null) {// 34
 					// nome do usuario que efetuou parcelamento
-					parcelamentoRelatorioHelper.setNomeUsuarioParcelamento((String) dadosParcelamento[34]);
+					helper.setNomeUsuarioParcelamento((String) dadosParcelamento[34]);
 				} else {
-					parcelamentoRelatorioHelper.setNomeUsuarioParcelamento("");
+					helper.setNomeUsuarioParcelamento("");
 				}
 
 				// Bairro
 				if (dadosParcelamento[36] != null) {
-					parcelamentoRelatorioHelper.setBairro((String) dadosParcelamento[36]);
+					helper.setBairro((String) dadosParcelamento[36]);
 				} else {
-					parcelamentoRelatorioHelper.setBairro("");
+					helper.setBairro("");
 				}
 
 				// Codigo da rota
 				if (dadosParcelamento[37] != null) {
-					parcelamentoRelatorioHelper.setCodigoRota((Short) dadosParcelamento[37]);
+					helper.setCodigoRota((Short) dadosParcelamento[37]);
 				} else {
-					parcelamentoRelatorioHelper.setCodigoRota(new Short(""));
+					helper.setCodigoRota(new Short(""));
 				}
 
 				// Localidade
 				if (dadosParcelamento[38] != null) {
-					parcelamentoRelatorioHelper.setLocalidade((String) dadosParcelamento[38]);
+					helper.setLocalidade((String) dadosParcelamento[38]);
 				} else {
-					parcelamentoRelatorioHelper.setLocalidade("");
+					helper.setLocalidade("");
 				}
 
 				// Setor Comercial
 				if (dadosParcelamento[39] != null) {
 					int setorCodigo = (Integer) dadosParcelamento[39];
-					parcelamentoRelatorioHelper.setSetorComercial(String.valueOf(setorCodigo));
+					helper.setSetorComercial(String.valueOf(setorCodigo));
 				} else {
-					parcelamentoRelatorioHelper.setSetorComercial("");
+					helper.setSetorComercial("");
 				}
-				
+
 				// CPF Usuario
 				if (dadosParcelamento[40] != null) {
-					parcelamentoRelatorioHelper.setCpfUsuario(String.valueOf(dadosParcelamento[40]));
+					helper.setCpfUsuario(String.valueOf(dadosParcelamento[40]));
 				} else {
-					parcelamentoRelatorioHelper.setCpfUsuario("");
+					helper.setCpfUsuario("");
 				}
-
 			}
-
 		}
 
-		return parcelamentoRelatorioHelper;
+		return helper;
 	}
 
 	/**
