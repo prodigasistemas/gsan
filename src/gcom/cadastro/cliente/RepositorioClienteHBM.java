@@ -360,54 +360,25 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa um cliente carregando os dados do relacionamento com ClienteTipo
-	 * 
-	 * [UC0321] Emitir Fatura de Cliente Responsável
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 02/05/2006
-	 * 
-	 * @param idCliente
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Cliente pesquisarCliente(Integer idCliente)
-			throws ErroRepositorioException {
-
-		// Cria uma sessão com ohibernate
+	public Cliente pesquisarCliente(Integer idCliente) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
-		// Cria a variável que vai armazenar o cliente responsável
 		Cliente cliente = new Cliente();
 		String consulta = null;
-
 		try {
-
-			// Monta o HQL
 			consulta = "select cliente from Cliente cliente "
 					+ "INNER JOIN FETCH cliente.clienteTipo "
-					+ "where cliente.id = :idCliente ";
+					+ "where cliente.id = :idCliente";
 
-			// Executa o HQL
-			cliente = (Cliente) session.createQuery(consulta).setInteger(
-					"idCliente", idCliente).uniqueResult();
-
-			/*
-			 * if (cliente != null){ // Carrega o relacionamento entre cliente e
-			 * tipo Hibernate.initialize(cliente.getClienteTipo()); }
-			 */
-
-			// Erro no hibernate
+			cliente = (Cliente) session.createQuery(consulta)
+					.setInteger("idCliente", idCliente)
+					.uniqueResult();
 		} catch (HibernateException e) {
-			// Levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
-		// Retorna o cliente pesquisado
 		return cliente;
 	}
 
