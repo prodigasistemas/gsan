@@ -47,7 +47,7 @@ public class Parcelamento extends ObjetoTransacao {
 	private BigDecimal valorDebitoAtualizado;
 
 	private BigDecimal valorDescontoFaixaReferenciaConta;
-	
+
 	private BigDecimal valorDescontoAcrescimos;
 
 	private BigDecimal valorEntrada;
@@ -199,7 +199,8 @@ public class Parcelamento extends ObjetoTransacao {
 		this.valorDescontoSancao = valorDescontoSancao;
 	}
 
-	public Parcelamento() {}
+	public Parcelamento() {
+	}
 
 	public Parcelamento(gcom.cobranca.parcelamento.ParcelamentoTipo parcelamentoTipo, gcom.cobranca.parcelamento.ParcelamentoSituacao parcelamentoSituacao, RegistroAtendimento registroAtendimento,
 			Imovel imovel, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, gcom.cobranca.parcelamento.ParcelamentoPerfil parcelamentoPerfil, ImovelPerfil imovelPerfil, CobrancaForma cobrancaForma,
@@ -592,75 +593,40 @@ public class Parcelamento extends ObjetoTransacao {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/*
-	 * Metodo que calcula o valor do desconto concedido no parcelamento -
-	 * Fernanda Paiva
-	 */
 	public BigDecimal getValorDesconto() {
+		BigDecimal retorno = valorDescontoAcrescimos.add(valorDescontoAntiguidade).add(valorDescontoInatividade);
 
-		BigDecimal retorno = new BigDecimal("0.00");
-		BigDecimal retornoSoma = new BigDecimal("0.00");
-
-		retornoSoma = this.valorDescontoAcrescimos.add(this.valorDescontoAntiguidade);
-
-		retorno = this.valorDescontoInatividade.add(retornoSoma);
-
-		if (this.valorDescontoSancao != null) {
-			retorno = this.valorDescontoSancao.add(retorno);
+		if (valorDescontoSancao != null) {
+			retorno = valorDescontoSancao.add(retorno);
 		}
 
-		if (this.valorDescontoTarifaSocial != null) {
-			retorno = this.valorDescontoTarifaSocial.add(retorno);
+		if (valorDescontoTarifaSocial != null) {
+			retorno = valorDescontoTarifaSocial.add(retorno);
 		}
 
-		retorno = retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
+		if (valorDescontoFaixaReferenciaConta != null) {
+			retorno = valorDescontoFaixaReferenciaConta.add(retorno);
+		}
 
-		return retorno;
+		return retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
-	/*
-	 * Metodo que calcula o valor do acrescimo por impontualidade - Fernanda
-	 * Paiva
-	 */
 	public BigDecimal getValorAcrescimoImpontualidade() {
+		BigDecimal retorno = valorMulta.add(valorJurosMora).add(valorAtualizacaoMonetaria);
 
-		BigDecimal retorno = new BigDecimal("0.00");
-		BigDecimal retornoSoma = new BigDecimal("0.00");
-
-		retornoSoma = this.valorMulta.add(this.valorJurosMora);
-
-		retorno = this.valorAtualizacaoMonetaria.add(retornoSoma);
-
-		retorno = retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-		return retorno;
+		return retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
-	/* Metodo que calcula o valor do negociado - Fernanda Paiva */
 	public BigDecimal getValorNegociado() {
+		BigDecimal retorno = valorDebitoAtualizado.subtract(getValorDesconto());
 
-		BigDecimal retorno = new BigDecimal("0.00");
-
-		retorno = this.valorDebitoAtualizado.subtract(getValorDesconto());
-
-		retorno = retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-		return retorno;
+		return retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
-	/* Metodo que calcula o valor do parcelado - Fernanda Paiva */
 	public BigDecimal getValorParcelado() {
+		BigDecimal retorno = getValorNegociado().subtract(valorEntrada).add(valorJurosParcelamento);
 
-		BigDecimal retorno = new BigDecimal("0.00");
-		BigDecimal retornoSubtracao = new BigDecimal("0.00");
-
-		retornoSubtracao = getValorNegociado().subtract(this.valorEntrada);
-
-		retorno = retornoSubtracao.add(this.valorJurosParcelamento);
-
-		retorno = retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-		return retorno;
+		return retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	public String[] retornaCamposChavePrimaria() {
