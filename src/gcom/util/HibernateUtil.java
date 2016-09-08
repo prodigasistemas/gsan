@@ -213,6 +213,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
+import gcom.cadastro.cliente.ClienteHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteImovelEconomia;
 import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
@@ -955,6 +956,7 @@ public class HibernateUtil {
 					.addClass(VersaoMobile.class)
 					.addClass(CpfTipo.class)
 					.addClass(Cliente.class)
+					.addClass(ClienteHistorico.class)
 					.addClass(ClienteEndereco.class)
 					.addClass(ImovelCadastroOcorrencia.class)
 					.addClass(ImovelEloAnormalidade.class)

@@ -34,14 +34,13 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.Tramite;
-import gcom.batch.IRepositorioBatch;
-import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
@@ -207,9 +206,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setUltimaAlteracao(new Date());
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
-		imovel.setUsuarioParaLog(usuario);
+		imovel.setUsuarioParaHistorico(usuario);
 		
-		getControladorUtil().atualizar(imovel);
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 		
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
 		
@@ -812,8 +811,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			
 			if (cliente != null) {
 				MergeProperties.mergeInterfaceProperties(cliente, clienteRetorno);
-				cliente.setUltimaAlteracao(new Date());
-				getControladorUtil().atualizar(cliente);
+				
+				((Cliente)cliente).setUsuarioParaHistorico(usuario);
+				
+				getControladorAtualizacaoCadastro().atualizar(cliente);
 			}
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao atualizar cliente imovel retorno: " + clienteImovelRetorno.getId(), e);

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+	<display-name>Controladores de Cadastro</display-name>
+	<ejb-client-jar>ControladoresCadastro.jar</ejb-client-jar>
+    <enterprise-beans>
+        <session>
+            <display-name>ControladorAtualizacaoCadastroGCOM</display-name>
+            <ejb-name>ControladorAtualizacaoCadastroGCOM</ejb-name>
+            <local-home>gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocalHome</local-home>
+            <local>gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocal</local>
+            <ejb-class>gcom.cadastro.controladores.ControladorAtualizacaoCadastro</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorAtualizacaoCadastroGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>    
+    </assembly-descriptor>
+</ejb-jar>

@@ -64,4 +64,6 @@ public interface IRepositorioUtil {
 	public Collection pesquisarGerencial(Filtro filtro, String pacoteNomeObjeto) throws ErroRepositorioException;
 	
 	public Object inserirComCommit(Object objeto) throws ErroRepositorioException;
+	
+	public void registrarHistorico(Object objeto) throws ErroRepositorioException;
 }

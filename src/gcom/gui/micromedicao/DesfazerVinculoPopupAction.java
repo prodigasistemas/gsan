@@ -82,7 +82,6 @@ public class DesfazerVinculoPopupAction extends GcomAction {
          */
         Usuario usuarioLogado = (Usuario) sessao.getAttribute(Usuario.USUARIO_LOGADO);
         fachada.desfazerVinculo(imovelCondominio, ids, desvincular, usuarioLogado);
-        //fachada.desfazerVinculo(imovel,ids,desvincular);
         
         //remove da sessao
         if(sessao.getAttribute("colecaoImoveisVinculados") != null){
