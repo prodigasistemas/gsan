@@ -7,77 +7,114 @@ import gcom.util.filtro.ParametroSimples;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-
-/** @author Hibernate CodeGenerator */
 public class ResolucaoDiretoria extends ObjetoTransacao {
-	
+
 	private static final long serialVersionUID = 1L;
+
+	private Integer id;
+
+	private String numeroResolucaoDiretoria;
+
+	private String descricaoAssunto;
+
+	private Date dataVigenciaInicio;
+
+	private Date dataVigenciaFim;
+
+	private Date ultimaAlteracao;
+
+	private Short indicadorParcelamentoUnico;
 	
-	public Filtro retornaFiltro(){
-		FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
+	private Short indicadorUtilizacaoLivre;
+	
+	private Short indicadorDescontoFaixaReferenciaConta;
+	
+	private Short indicadorDescontoSancoes;
+	
+	private Short indicadorParcelamentoLojaVirtual;
+	
+	private Short indicadorParcelasEmAtraso;
+	
+	private Short indicadorParcelamentoEmAndamento;
+	
+	private ResolucaoDiretoria rdParcelasEmAtraso;
+	
+	private ResolucaoDiretoria rdParcelamentoEmAndamento;
+	
+	private Short indicadorNegociacaoSoAVista;
+	
+	private Short indicadorDescontoSoEmContaAVista;
+	
+	private BigDecimal percentualDoacao;
 
-		filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO,
-				this.getId()));
-
+	public ResolucaoDiretoria() {}
+	
+	public ResolucaoDiretoria(
+			String numeroResolucaoDiretoria, 
+			String descricaoAssunto, 
+			Date dataVigenciaInicio, 
+			Date dataVigenciaFim, 
+			Date ultimaAlteracao, 
+			Short indicadorParcelamentoUnico,
+			Short indicadorUtilizacaoLivre, 
+			Short indicadorDescontoSancoes) {
 		
-		return filtroResolucaoDiretoria;
+		this.numeroResolucaoDiretoria = numeroResolucaoDiretoria;
+		this.descricaoAssunto = descricaoAssunto;
+		this.dataVigenciaInicio = dataVigenciaInicio;
+		this.dataVigenciaFim = dataVigenciaFim;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.indicadorParcelamentoUnico = indicadorParcelamentoUnico;
+		this.indicadorUtilizacaoLivre = indicadorUtilizacaoLivre;
+		this.indicadorDescontoSancoes = indicadorDescontoSancoes;
 	}
 	
-    /** identifier field */
-    private Integer id;
-
-    /** nullable persistent field */
-    private String numeroResolucaoDiretoria;
-
-    /** nullable persistent field */
-    private String descricaoAssunto;
-
-    /** nullable persistent field */
-    private Date dataVigenciaInicio;
-
-    /** nullable persistent field */
-    private Date dataVigenciaFim;
-
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-    
-    private Short indicadorParcelamentoUnico;
-    private Short indicadorUtilizacaoLivre;
-    private Short indicadorDescontoSancoes;
-    private Short indicadorParcelamentoLojaVirtual;
-    private Short indicadorParcelasEmAtraso;
-    private Short indicadorParcelamentoEmAndamento;
-    private ResolucaoDiretoria rdParcelasEmAtraso;
-    private ResolucaoDiretoria rdParcelamentoEmAndamento;
-    private Short indicadorNegociacaoSoAVista;
-    private Short indicadorDescontoSoEmContaAVista;
-    private BigDecimal percentualDoacao;
-    
-	public BigDecimal getPercentualDoacao() {
-		return percentualDoacao;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setPercentualDoacao(BigDecimal percentualDoacao) {
-		this.percentualDoacao = percentualDoacao;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public Short getIndicadorDescontoSoEmContaAVista() {
-		return indicadorDescontoSoEmContaAVista;
+	public String getNumeroResolucaoDiretoria() {
+		return numeroResolucaoDiretoria;
 	}
 
-	public void setIndicadorDescontoSoEmContaAVista(
-			Short indicadorDescontoSoEmContaAVista) {
-		this.indicadorDescontoSoEmContaAVista = indicadorDescontoSoEmContaAVista;
+	public void setNumeroResolucaoDiretoria(String numeroResolucaoDiretoria) {
+		this.numeroResolucaoDiretoria = numeroResolucaoDiretoria;
 	}
 
-	public Short getIndicadorNegociacaoSoAVista() {
-		return indicadorNegociacaoSoAVista;
+	public String getDescricaoAssunto() {
+		return descricaoAssunto;
 	}
 
-	public void setIndicadorNegociacaoSoAVista(Short indicadorNegociacaoSoAVista) {
-		this.indicadorNegociacaoSoAVista = indicadorNegociacaoSoAVista;
+	public void setDescricaoAssunto(String descricaoAssunto) {
+		this.descricaoAssunto = descricaoAssunto;
+	}
+
+	public Date getDataVigenciaInicio() {
+		return dataVigenciaInicio;
+	}
+
+	public void setDataVigenciaInicio(Date dataVigenciaInicio) {
+		this.dataVigenciaInicio = dataVigenciaInicio;
+	}
+
+	public Date getDataVigenciaFim() {
+		return dataVigenciaFim;
+	}
+
+	public void setDataVigenciaFim(Date dataVigenciaFim) {
+		this.dataVigenciaFim = dataVigenciaFim;
+	}
+
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
 	public Short getIndicadorParcelamentoUnico() {
@@ -96,103 +133,28 @@ public class ResolucaoDiretoria extends ObjetoTransacao {
 		this.indicadorUtilizacaoLivre = indicadorUtilizacaoLivre;
 	}
 
-	public String[] retornaCamposChavePrimaria(){
-		String[] retorno = new String[1];
-		retorno[0] = "id";
-		return retorno;
+	public Short getIndicadorDescontoFaixaReferenciaConta() {
+		return indicadorDescontoFaixaReferenciaConta;
 	}
-    
-    /** full constructor */
-    public ResolucaoDiretoria(String numeroResolucaoDiretoria, String descricaoAssunto, Date dataVigenciaInicio, Date dataVigenciaFim, Date ultimaAlteracao,Short indicadorParcelamentoUnico, Short indicadorUtilizacaoLivre,Short indicadorDescontoSancoes) {
-        this.numeroResolucaoDiretoria = numeroResolucaoDiretoria;
-        this.descricaoAssunto = descricaoAssunto;
-        this.dataVigenciaInicio = dataVigenciaInicio;
-        this.dataVigenciaFim = dataVigenciaFim;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.indicadorParcelamentoUnico = indicadorParcelamentoUnico;          
-        this.indicadorUtilizacaoLivre = indicadorUtilizacaoLivre;
-        this.indicadorDescontoSancoes = indicadorDescontoSancoes;
-    }
 
-    /** default constructor */
-    public ResolucaoDiretoria() {
-    }
+	public void setIndicadorDescontoFaixaReferenciaConta(Short indicadorDescontoFaixaReferenciaConta) {
+		this.indicadorDescontoFaixaReferenciaConta = indicadorDescontoFaixaReferenciaConta;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNumeroResolucaoDiretoria() {
-        return this.numeroResolucaoDiretoria;
-    }
-
-    public void setNumeroResolucaoDiretoria(String numeroResolucaoDiretoria) {
-        this.numeroResolucaoDiretoria = numeroResolucaoDiretoria;
-    }
-
-    public String getDescricaoAssunto() {
-        return this.descricaoAssunto;
-    }
-
-    public void setDescricaoAssunto(String descricaoAssunto) {
-        this.descricaoAssunto = descricaoAssunto;
-    }
-
-    public Date getDataVigenciaInicio() {
-        return this.dataVigenciaInicio;
-    }
-
-    public void setDataVigenciaInicio(Date dataVigenciaInicio) {
-        this.dataVigenciaInicio = dataVigenciaInicio;
-    }
-
-    public Date getDataVigenciaFim() {
-        return this.dataVigenciaFim;
-    }
-
-    public void setDataVigenciaFim(Date dataVigenciaFim) {
-        this.dataVigenciaFim = dataVigenciaFim;
-    }
-
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
-
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
-
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
-
-	/**
-	 * @return Retorna o campo indicadorDescontoSancoes.
-	 */
 	public Short getIndicadorDescontoSancoes() {
 		return indicadorDescontoSancoes;
 	}
 
-	/**
-	 * @param indicadorDescontoSancoes O indicadorDescontoSancoes a ser setado.
-	 */
 	public void setIndicadorDescontoSancoes(Short indicadorDescontoSancoes) {
 		this.indicadorDescontoSancoes = indicadorDescontoSancoes;
 	}
 
-	public Short getIndicadorParcelamentoEmAndamento() {
-		return indicadorParcelamentoEmAndamento;
+	public Short getIndicadorParcelamentoLojaVirtual() {
+		return indicadorParcelamentoLojaVirtual;
 	}
 
-	public void setIndicadorParcelamentoEmAndamento(
-			Short indicadorParcelamentoEmAndamento) {
-		this.indicadorParcelamentoEmAndamento = indicadorParcelamentoEmAndamento;
+	public void setIndicadorParcelamentoLojaVirtual(Short indicadorParcelamentoLojaVirtual) {
+		this.indicadorParcelamentoLojaVirtual = indicadorParcelamentoLojaVirtual;
 	}
 
 	public Short getIndicadorParcelasEmAtraso() {
@@ -203,13 +165,12 @@ public class ResolucaoDiretoria extends ObjetoTransacao {
 		this.indicadorParcelasEmAtraso = indicadorParcelasEmAtraso;
 	}
 
-	public ResolucaoDiretoria getRdParcelamentoEmAndamento() {
-		return rdParcelamentoEmAndamento;
+	public Short getIndicadorParcelamentoEmAndamento() {
+		return indicadorParcelamentoEmAndamento;
 	}
 
-	public void setRdParcelamentoEmAndamento(
-			ResolucaoDiretoria rdParcelamentoEmAndamento) {
-		this.rdParcelamentoEmAndamento = rdParcelamentoEmAndamento;
+	public void setIndicadorParcelamentoEmAndamento(Short indicadorParcelamentoEmAndamento) {
+		this.indicadorParcelamentoEmAndamento = indicadorParcelamentoEmAndamento;
 	}
 
 	public ResolucaoDiretoria getRdParcelasEmAtraso() {
@@ -220,12 +181,48 @@ public class ResolucaoDiretoria extends ObjetoTransacao {
 		this.rdParcelasEmAtraso = rdParcelasEmAtraso;
 	}
 
-	public Short getIndicadorParcelamentoLojaVirtual() {
-		return indicadorParcelamentoLojaVirtual;
+	public ResolucaoDiretoria getRdParcelamentoEmAndamento() {
+		return rdParcelamentoEmAndamento;
 	}
 
-	public void setIndicadorParcelamentoLojaVirtual(
-			Short indicadorParcelamentoLojaVirtual) {
-		this.indicadorParcelamentoLojaVirtual = indicadorParcelamentoLojaVirtual;
-	}	
+	public void setRdParcelamentoEmAndamento(ResolucaoDiretoria rdParcelamentoEmAndamento) {
+		this.rdParcelamentoEmAndamento = rdParcelamentoEmAndamento;
+	}
+
+	public Short getIndicadorNegociacaoSoAVista() {
+		return indicadorNegociacaoSoAVista;
+	}
+
+	public void setIndicadorNegociacaoSoAVista(Short indicadorNegociacaoSoAVista) {
+		this.indicadorNegociacaoSoAVista = indicadorNegociacaoSoAVista;
+	}
+
+	public Short getIndicadorDescontoSoEmContaAVista() {
+		return indicadorDescontoSoEmContaAVista;
+	}
+
+	public void setIndicadorDescontoSoEmContaAVista(Short indicadorDescontoSoEmContaAVista) {
+		this.indicadorDescontoSoEmContaAVista = indicadorDescontoSoEmContaAVista;
+	}
+
+	public BigDecimal getPercentualDoacao() {
+		return percentualDoacao;
+	}
+
+	public void setPercentualDoacao(BigDecimal percentualDoacao) {
+		this.percentualDoacao = percentualDoacao;
+	}
+
+	public Filtro retornaFiltro() {
+		FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+		filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, this.getId()));
+
+		return filtro;
+	}
+	
+	public String[] retornaCamposChavePrimaria() {
+		String[] retorno = new String[1];
+		retorno[0] = "id";
+		return retorno;
+	}
 }

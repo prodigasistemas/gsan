@@ -1,14 +1,13 @@
 package gcom.gui.cobranca;
 
-import java.util.Collection;
-
 import gcom.cobranca.FiltroResolucaoDiretoria;
 import gcom.cobranca.ResolucaoDiretoria;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
+
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,115 +16,72 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Action utilizado para inserir uma resolução de diretoria no banco
- * 
- * [UC0217] Inserir Resolução de Diretoria Permite inserir uma
- * ResolucaoDiretoria
- * 
- * @author Rafael Corrêa
- * @since 30/03/2006
- */
 public class InserirResolucaoDiretoriaAction extends GcomAction {
 
-	/**
-	 * 
-	 * @param actionMapping
-	 * @param actionForm
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-
-		// Seta o mapeamento de retorno
+	@SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 
-		Fachada fachada = Fachada.getInstancia();
+		InserirResolucaoDiretoriaActionForm form = (InserirResolucaoDiretoriaActionForm) actionForm;
 
-		InserirResolucaoDiretoriaActionForm inserirResolucaoDiretoriaActionForm = (InserirResolucaoDiretoriaActionForm) actionForm;
-
-		// Cria uma resolução de diretoria setando os valores informados pelo
-		// usuário na pagina para ser inserido no banco
 		ResolucaoDiretoria resolucaoDiretoria = new ResolucaoDiretoria();
+		resolucaoDiretoria.setNumeroResolucaoDiretoria(form.getNumero());
+		resolucaoDiretoria.setDescricaoAssunto(form.getAssunto());
+		resolucaoDiretoria.setDataVigenciaInicio(Util.converteStringParaDate(form.getDataInicio()));
+		resolucaoDiretoria.setIndicadorParcelamentoUnico(new Short(form.getIndicadorParcelamentoUnico()));
+		resolucaoDiretoria.setIndicadorUtilizacaoLivre(new Short(form.getIndicadorUtilizacaoLivre()));
+		resolucaoDiretoria.setIndicadorDescontoFaixaReferenciaConta(new Short(form.getIndicadorDescontoFaixaReferenciaConta()));
+		resolucaoDiretoria.setIndicadorDescontoSancoes(new Short(form.getIndicadorDescontoSancoes()));
+		resolucaoDiretoria.setIndicadorParcelasEmAtraso(new Short(form.getIndicadorParcelasEmAtraso()));
+		resolucaoDiretoria.setIndicadorNegociacaoSoAVista(new Short(form.getIndicadorNegociacaoSoAVista()));
+		resolucaoDiretoria.setIndicadorDescontoSoEmContaAVista(new Short(form.getIndicadorDescontoSoEmContaAVista()));
+		resolucaoDiretoria.setIndicadorParcelamentoLojaVirtual(new Short(form.getIndicadorParcelamentoLojaVirtual()));
 
-		resolucaoDiretoria.setNumeroResolucaoDiretoria(inserirResolucaoDiretoriaActionForm.getNumero());
-		resolucaoDiretoria.setDescricaoAssunto(inserirResolucaoDiretoriaActionForm.getAssunto());
-		resolucaoDiretoria.setDataVigenciaInicio(Util.converteStringParaDate(inserirResolucaoDiretoriaActionForm.getDataInicio()));
-		resolucaoDiretoria.setIndicadorParcelamentoUnico(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorParcelamentoUnico()));
-		resolucaoDiretoria.setIndicadorUtilizacaoLivre(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorUtilizacaoLivre()));
-		resolucaoDiretoria.setIndicadorDescontoSancoes(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorDescontoSancoes()));
-		
-		resolucaoDiretoria.setIndicadorParcelasEmAtraso(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorParcelasEmAtraso()));
-		resolucaoDiretoria.setIndicadorNegociacaoSoAVista(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorNegociacaoSoAVista()));
-		resolucaoDiretoria.setIndicadorDescontoSoEmContaAVista(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorDescontoSoEmContaAVista()));
-		resolucaoDiretoria.setIndicadorParcelamentoLojaVirtual(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorParcelamentoLojaVirtual()));
-		
-		if (inserirResolucaoDiretoriaActionForm.getIdParcelasEmAtraso()!= null &&
-				!inserirResolucaoDiretoriaActionForm.getIdParcelasEmAtraso().equals("")){
-			
-			FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-			FiltroResolucaoDiretoria.CODIGO, new Integer(inserirResolucaoDiretoriaActionForm.getIdParcelasEmAtraso())));
-			
-			Collection colecaoRD = fachada.pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
+		if (form.getIdParcelasEmAtraso() != null && !form.getIdParcelasEmAtraso().equals("")) {
+			FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, new Integer(form.getIdParcelasEmAtraso())));
 
-			if(colecaoRD != null && !colecaoRD.isEmpty()){
+			Collection<ResolucaoDiretoria> colecaoRD = getFachada().pesquisar(filtro, ResolucaoDiretoria.class.getName());
+
+			if (colecaoRD != null && !colecaoRD.isEmpty()) {
 				ResolucaoDiretoria rdParcelasEmAtraso = new ResolucaoDiretoria();
-				rdParcelasEmAtraso.setId(new Integer(inserirResolucaoDiretoriaActionForm.getIdParcelasEmAtraso()));
+				rdParcelasEmAtraso.setId(new Integer(form.getIdParcelasEmAtraso()));
 				resolucaoDiretoria.setRdParcelasEmAtraso(rdParcelasEmAtraso);
-			}else{
-				//RD Parcelas em Atraso inexistente.
-				throw new ActionServletException(
-				"atencao.pesquisa_inexistente", null, "RD Parcelas em Atraso");
+			} else {
+				throw new ActionServletException("atencao.pesquisa_inexistente", null, "RD Parcelas em Atraso");
 			}
 		}
-		
-		resolucaoDiretoria.setIndicadorParcelamentoEmAndamento(new Short(inserirResolucaoDiretoriaActionForm.getIndicadorParcelamentoEmAndamento()));
-		
-		if (inserirResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento()!= null &&
-				!inserirResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento().equals("")){
-			
-			FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-			FiltroResolucaoDiretoria.CODIGO, new Integer(inserirResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento())));
 
-			Collection colecaoRD = fachada.pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
+		resolucaoDiretoria.setIndicadorParcelamentoEmAndamento(new Short(form.getIndicadorParcelamentoEmAndamento()));
 
-			if(colecaoRD != null && !colecaoRD.isEmpty()){
+		if (form.getIdParcelamentoEmAndamento() != null && !form.getIdParcelamentoEmAndamento().equals("")) {
+			FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, new Integer(form.getIdParcelamentoEmAndamento())));
+
+			Collection<ResolucaoDiretoria> colecaoRD = getFachada().pesquisar(filtro, ResolucaoDiretoria.class.getName());
+
+			if (colecaoRD != null && !colecaoRD.isEmpty()) {
 				ResolucaoDiretoria rdParcelamentoEmAndamento = new ResolucaoDiretoria();
-				rdParcelamentoEmAndamento.setId(new Integer(inserirResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento()));
+				rdParcelamentoEmAndamento.setId(new Integer(form.getIdParcelamentoEmAndamento()));
 				resolucaoDiretoria.setRdParcelamentoEmAndamento(rdParcelamentoEmAndamento);
-			}else{
-				//RD Parcelamento em Andamento inexistente.
-				throw new ActionServletException(
-				"atencao.pesquisa_inexistente", null, "RD Parcelamento em Andamento");
+			} else {
+				throw new ActionServletException("atencao.pesquisa_inexistente", null, "RD Parcelamento em Andamento");
 			}
-			
+
 		}
 
-		// verifica se a data final foi digitada em caso afirmativo seta-a no objeto
-		if (inserirResolucaoDiretoriaActionForm.getDataFim() != null
-				&& !inserirResolucaoDiretoriaActionForm.getDataFim().equals("")) {
-			resolucaoDiretoria.setDataVigenciaFim(Util.converteStringParaDate(
-					inserirResolucaoDiretoriaActionForm.getDataFim()));
+		if (form.getDataFim() != null && !form.getDataFim().equals("")) {
+			resolucaoDiretoria.setDataVigenciaFim(Util.converteStringParaDate(form.getDataFim()));
 		}
 
-		// Insere uma Resolução de Diretoria na base, mas fazendo, antes,
-		// algumas verificações no ControladorCobrancaSEJB.
-		Integer id = (Integer) fachada.inserirResolucaoDiretoria(
-				resolucaoDiretoria, this.getUsuarioLogado(httpServletRequest));
+		Integer id = (Integer) getFachada().inserirResolucaoDiretoria(resolucaoDiretoria, this.getUsuarioLogado(request));
 
-		// Monta a página de sucesso de acordo com o padrão do sistema.
-		montarPaginaSucesso(httpServletRequest, "Resolução de Diretoria "
-				+ resolucaoDiretoria.getNumeroResolucaoDiretoria()
-				+ " inserida com sucesso.",
+		montarPaginaSucesso(request, 
+				"Resolução de Diretoria " + resolucaoDiretoria.getNumeroResolucaoDiretoria() + " inserida com sucesso.", 
 				"Inserir outra Resolução de Diretoria",
-				"exibirInserirResolucaoDiretoriaAction.do?menu=sim",
-				"exibirAtualizarResolucaoDiretoriaAction.do?inserir=sim&resolucaoDiretoriaID="
-						+ id, "Atualizar Resolução de Diretoria inserida");
+				"exibirInserirResolucaoDiretoriaAction.do?menu=sim", 
+				"exibirAtualizarResolucaoDiretoriaAction.do?inserir=sim&resolucaoDiretoriaID=" + id, 
+				"Atualizar Resolução de Diretoria inserida");
 
 		return retorno;
 
