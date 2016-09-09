@@ -2049,13 +2049,11 @@ public class ControladorCobranca implements SessionBean {
 			// Pega os acréscimos de Guias de Pagamento
 			if (helper.getColecaoGuiaPagamento() != null && !helper.getColecaoGuiaPagamento().isEmpty()) {
 
-				// colecaoGuiaPagamentoValores = new ArrayList();
 				Iterator guiaPagamentoValores = helper.getColecaoGuiaPagamento().iterator();
 
 				while (guiaPagamentoValores.hasNext()) {
 					GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
 
-					// valorAtualizacaoMonetaria = new BigDecimal("0.00");
 					if (guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria() != null
 							&& !guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria().equals("")) {
 						valorAcrescimosImpontualidadeGuiaPagamentoAtualizacaoMonetaria = valorAcrescimosImpontualidadeGuiaPagamentoAtualizacaoMonetaria
@@ -2063,7 +2061,6 @@ public class ControladorCobranca implements SessionBean {
 										Parcelamento.TIPO_ARREDONDAMENTO));
 					}
 
-					// valorJurosMora = new BigDecimal("0.00");
 					if (guiaPagamentoValoresHelper.getValorJurosMora() != null
 							&& !guiaPagamentoValoresHelper.getValorJurosMora().equals("")) {
 						valorAcrescimosImpontualidadeGuiaPagamentoJurosMora = valorAcrescimosImpontualidadeGuiaPagamentoJurosMora
@@ -2072,20 +2069,27 @@ public class ControladorCobranca implements SessionBean {
 
 					}
 
-					// valorMulta = new BigDecimal("0.00");
 					if (guiaPagamentoValoresHelper.getValorMulta() != null && !guiaPagamentoValoresHelper.getValorMulta().equals("")) {
 						valorAcrescimosImpontualidadeGuiaPagamentoMulta = valorAcrescimosImpontualidadeGuiaPagamentoMulta
 								.add(guiaPagamentoValoresHelper.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS,
 										Parcelamento.TIPO_ARREDONDAMENTO));
 					}
 
-					// colecaoGuiaPagamentoValores.add(guiaPagamentoValoresHelper);
 				}
 			}
 		}
 
+		FiltroResolucaoDiretoria filtroRD = new FiltroResolucaoDiretoria();
+		filtroRD.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, helper.getIdResolucaoDiretoria()));
+		
+		Collection colecaoRD = getControladorUtil().pesquisar(filtroRD, ResolucaoDiretoria.class.getName());
+		ResolucaoDiretoria rd = (ResolucaoDiretoria) Util.retonarObjetoDeColecao(colecaoRD);
+		
 		// CALCULANDO O VALOR DO DESCONTO POR FAIXA DE REFERENCIA DA CONTA
-		BigDecimal valorDescontoFaixaReferenciaConta = this.determinarValorDescontoFaixaReferenciaConta(helper.getColecaoContaValores());
+		BigDecimal valorDescontoFaixaReferenciaConta = new BigDecimal("0.00");
+		if (rd.getIndicadorDescontoFaixaReferenciaConta().equals(ConstantesSistema.SIM)) {
+			valorDescontoFaixaReferenciaConta = this.determinarValorDescontoFaixaReferenciaConta(helper.getColecaoContaValores());
+		}
 		
 		// CALCULANDO O VALOR DO DESCONTO DOS ACRÉSCIMOS POR IMPONTUALIDADE
 		DeterminarValorDescontoAcrescimosImpontualidadeHelper valorDescontoAcrescimosImpontualidadeHelper = new DeterminarValorDescontoAcrescimosImpontualidadeHelper(
@@ -2258,13 +2262,6 @@ public class ControladorCobranca implements SessionBean {
 				.subtract(valorDescontoInatividade.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 		
 		valorDebitoDesconto = valorDebitoDesconto.subtract(valorDescontoAntiguidade.setScale(Parcelamento.CASAS_DECIMAIS,Parcelamento.TIPO_ARREDONDAMENTO));
-
-		FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
-		filtroResolucaoDiretoria
-				.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, helper.getIdResolucaoDiretoria()));
-
-		Collection colecaoRD = getControladorUtil().pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
-		ResolucaoDiretoria rd = (ResolucaoDiretoria) Util.retonarObjetoDeColecao(colecaoRD);
 
 		DeterminarValorDescontoPagamentoAVistaHelper valorDescontoPagamentoAVistaHelper = new DeterminarValorDescontoPagamentoAVistaHelper(
 				helper,
@@ -10009,7 +10006,10 @@ public class ControladorCobranca implements SessionBean {
 		}
 		
 		// CALCULANDO O VALOR DO DESCONTO POR FAIXA DE REFERENCIA DA CONTA
-		BigDecimal valorDescontoFaixaReferenciaConta = this.determinarValorDescontoFaixaReferenciaConta(helper.getColecaoContaValores());
+		BigDecimal valorDescontoFaixaReferenciaConta = new BigDecimal("0.00");
+		if (rd.getIndicadorDescontoFaixaReferenciaConta().equals(ConstantesSistema.SIM)) {
+			valorDescontoFaixaReferenciaConta = this.determinarValorDescontoFaixaReferenciaConta(helper.getColecaoContaValores());
+		}
 
 		// CALCULANDO O VALOR DO DESCONTO DOS ACRÉSCIMOS POR IMPONTUALIDADE
 		DeterminarValorDescontoAcrescimosImpontualidadeHelper valorDescontoAcrescimosImpontualidadeHelper = new DeterminarValorDescontoAcrescimosImpontualidadeHelper(parcelamentoPerfil,
