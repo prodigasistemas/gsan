@@ -27,7 +27,6 @@
 	src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
 
 	function limparForm(form) {
 	
@@ -75,7 +74,6 @@
 			}
    	}
 
--->
 </script>
 
 </head>
@@ -192,6 +190,15 @@
 					<html:radio property="indicadorUtilizacaoLivre" tabindex="7" value="<%=ConstantesSistema.TODOS.toString()%>" /><strong>Todos</strong></td>
 					<td>&nbsp;</td>
 				</tr>
+				
+				<tr>
+					<td><strong>Desconto por Faixa de Referência das Contas? </strong></td>
+					<td><html:radio property="indicadorDescontoFaixaReferenciaConta" tabindex="5" value="<%=ConstantesSistema.SIM.toString()%>" /><strong>Sim</strong>
+					<html:radio property="indicadorDescontoFaixaReferenciaConta" tabindex="6" value="<%=ConstantesSistema.NAO.toString()%>" /><strong>N&atilde;o</strong>
+					<html:radio property="indicadorDescontoFaixaReferenciaConta" tabindex="7" value="<%=ConstantesSistema.TODOS.toString()%>" /><strong>Todos</strong></td>
+					<td>&nbsp;</td>
+				</tr>
+				
 				<tr>
 					<td><strong>Descontos e San&ccedil;&otilde;es? </strong></td>
 					<td><html:radio property="indicadorDescontoSancoes" tabindex="8" value="1" /><strong>Sim</strong>

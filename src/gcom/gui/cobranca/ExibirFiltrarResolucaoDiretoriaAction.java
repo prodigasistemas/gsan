@@ -1,6 +1,7 @@
 package gcom.gui.cobranca;
 
 import gcom.gui.GcomAction;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,67 +10,41 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Permite filtrar resoluções de diretoria [UC0219] Filtrar Resolução de
- * Diretoria
- * 
- * @author Rafael Corrêa
- * @since 31/03/2006
- */
 public class ExibirFiltrarResolucaoDiretoriaAction extends GcomAction {
 
-	/**
-	 * 
-	 * @param actionMapping
-	 * @param actionForm
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		FiltrarResolucaoDiretoriaActionForm form = (FiltrarResolucaoDiretoriaActionForm) actionForm;
 
-		FiltrarResolucaoDiretoriaActionForm filtrarResolucaoDiretoriaActionForm = (FiltrarResolucaoDiretoriaActionForm) actionForm;
+		form.setAtualizar("1");
 
-		filtrarResolucaoDiretoriaActionForm.setAtualizar("1");
-		
-		HttpSession sessao = httpServletRequest.getSession(false);
-		
+		HttpSession sessao = request.getSession(false);
+
 		sessao.removeAttribute("filtroResolucaoDiretoria");
-		
-		if (httpServletRequest.getParameter("paginacao") != null) {
-		
-			filtrarResolucaoDiretoriaActionForm.setNumero((String) sessao.getAttribute("numero"));
-			filtrarResolucaoDiretoriaActionForm.setAssunto((String) sessao.getAttribute("assunto"));
-			filtrarResolucaoDiretoriaActionForm.setDataInicio((String) sessao.getAttribute("dataInicio"));
-			filtrarResolucaoDiretoriaActionForm.setDataFim((String) sessao.getAttribute("dataFim"));
-			filtrarResolucaoDiretoriaActionForm.setIndicadorParcelamentoUnico((String) sessao.getAttribute("indicadorParcelamentoUnico"));
-			filtrarResolucaoDiretoriaActionForm.setIndicadorUtilizacaoLivre((String) sessao.getAttribute("indicadorUtilizacaoLivre"));
-			filtrarResolucaoDiretoriaActionForm.setIndicadorDescontoSancoes((String) sessao.getAttribute("indicadorDescontoSancoes"));
-			
-			filtrarResolucaoDiretoriaActionForm.setIndicadorParcelasEmAtraso((String) sessao.getAttribute("indicadorParcelasEmAtraso"));
 
-			if(sessao.getAttribute("idParcelasEmAtraso") != null){
-				filtrarResolucaoDiretoriaActionForm.setIdParcelasEmAtraso((String) 
-						sessao.getAttribute("idParcelasEmAtraso"));
+		if (request.getParameter("paginacao") != null) {
+			form.setNumero((String) sessao.getAttribute("numero"));
+			form.setAssunto((String) sessao.getAttribute("assunto"));
+			form.setDataInicio((String) sessao.getAttribute("dataInicio"));
+			form.setDataFim((String) sessao.getAttribute("dataFim"));
+			form.setIndicadorParcelamentoUnico((String) sessao.getAttribute("indicadorParcelamentoUnico"));
+			form.setIndicadorUtilizacaoLivre((String) sessao.getAttribute("indicadorUtilizacaoLivre"));
+			form.setIndicadorDescontoFaixaReferenciaConta((String) sessao.getAttribute("indicadorDescontoFaixaReferenciaConta"));
+			form.setIndicadorDescontoSancoes((String) sessao.getAttribute("indicadorDescontoSancoes"));
+			form.setIndicadorParcelasEmAtraso((String) sessao.getAttribute("indicadorParcelasEmAtraso"));
+
+			if (sessao.getAttribute("idParcelasEmAtraso") != null) {
+				form.setIdParcelasEmAtraso((String) sessao.getAttribute("idParcelasEmAtraso"));
 			}
-			
-			filtrarResolucaoDiretoriaActionForm.setIndicadorParcelamentoEmAndamento((String) sessao.getAttribute("indicadorParcelamentoEmAndamento"));
-			
-			if(sessao.getAttribute("idParcelamentoEmAndamento") != null){
-				filtrarResolucaoDiretoriaActionForm.setIdParcelamentoEmAndamento((String) 
-						sessao.getAttribute("idParcelamentoEmAndamento"));
+
+			form.setIndicadorParcelamentoEmAndamento((String) sessao.getAttribute("indicadorParcelamentoEmAndamento"));
+
+			if (sessao.getAttribute("idParcelamentoEmAndamento") != null) {
+				form.setIdParcelamentoEmAndamento((String) sessao.getAttribute("idParcelamentoEmAndamento"));
 			}
-			
 		}
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("exibirFiltrarResolucaoDiretoria");
+		ActionForward retorno = actionMapping.findForward("exibirFiltrarResolucaoDiretoria");
 
 		return retorno;
-
 	}
-
 }
