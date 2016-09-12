@@ -20,156 +20,119 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarResolucaoDiretoriaAction extends GcomAction {
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param actionMapping
-	 *            Descrição do parâmetro
-	 * @param actionForm
-	 *            Descrição do parâmetro
-	 * @param httpServletRequest
-	 *            Descrição do parâmetro
-	 * @param httpServletResponse
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("manterResolucaoDiretoria");
+		ActionForward retorno = actionMapping.findForward("manterResolucaoDiretoria");
 
-		FiltrarResolucaoDiretoriaActionForm filtrarResolucaoDiretoriaActionForm = (FiltrarResolucaoDiretoriaActionForm) actionForm;
+		FiltrarResolucaoDiretoriaActionForm form = (FiltrarResolucaoDiretoriaActionForm) actionForm;
 
-		HttpSession sessao = httpServletRequest.getSession(false);
+		HttpSession sessao = request.getSession(false);
 
-		// Limpa todo o formulário para evitar "sujeiras" na tela
 		String numero = "";
 		String assunto = "";
 		String dataInicio = "";
 		String dataFim = "";
-	    String indicadorParcelamentoUnico = "";
-	    String indicadorUtilizacaoLivre = "";
-	    String indicadorDescontoSancoes = "";
-	    
-	    String indicadorParcelasEmAtraso = "";
-	    String idParcelasEmAtraso = "";
-	    String indicadorParcelamentoEmAndamento = "";
-	    String idParcelamentoEmAndamento = "";
-	    String indicadorNegociacaoSoAVista = "";
-	    String indicadorDescontoSoEmContaAVista = "";
-	    String indicadorParcelamentoLojaVirtual = "";
+		String indicadorParcelamentoUnico = "";
+		String indicadorUtilizacaoLivre = "";
+		String indicadorDescontoFaixaReferenciaConta = "";
+		String indicadorDescontoSancoes = "";
+		String indicadorParcelasEmAtraso = "";
+		String idParcelasEmAtraso = "";
+		String indicadorParcelamentoEmAndamento = "";
+		String idParcelamentoEmAndamento = "";
+		String indicadorNegociacaoSoAVista = "";
+		String indicadorDescontoSoEmContaAVista = "";
+		String indicadorParcelamentoLojaVirtual = "";
 
-		// Verifica se voltou do ManterResolucaoDiretoria e para isso, verifica
-		// se a paginação é nula
-		if (httpServletRequest.getParameter("page.offset") == null) {
+		if (request.getParameter("page.offset") == null) {
 
-			// Variaveis
-			// Recupera os parâmetros do form, setando-os na sessão para poder
-			// recuperá-los e colocá-los novamente na página caso o usuário
-			// deseje voltar para o filtro
-			numero = filtrarResolucaoDiretoriaActionForm.getNumero();
+			numero = form.getNumero();
 			sessao.setAttribute("numero", numero);
-			
-			assunto = filtrarResolucaoDiretoriaActionForm.getAssunto();
-			sessao.setAttribute("assunto", assunto);
-			
-			dataInicio = filtrarResolucaoDiretoriaActionForm.getDataInicio();
-			sessao.setAttribute("dataInicio", dataInicio);
-			
-			dataFim = filtrarResolucaoDiretoriaActionForm.getDataFim();
-			sessao.setAttribute("dataFim", dataFim);
-			
-			indicadorParcelamentoUnico = filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoUnico();
-			sessao.setAttribute("indicadorParcelamentoUnico", indicadorParcelamentoUnico);
-			
-			indicadorUtilizacaoLivre = filtrarResolucaoDiretoriaActionForm.getIndicadorUtilizacaoLivre();
-			sessao.setAttribute("indicadorUtilizacaoLivre", indicadorUtilizacaoLivre);
-			
-			indicadorDescontoSancoes = filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSancoes();
-			sessao.setAttribute("indicadorDescontoSancoes", indicadorDescontoSancoes);
-			
-			indicadorParcelasEmAtraso = filtrarResolucaoDiretoriaActionForm.getIndicadorParcelasEmAtraso();
-			sessao.setAttribute("indicadorParcelasEmAtraso", indicadorParcelasEmAtraso);
-			
-			idParcelasEmAtraso = filtrarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso();
-			sessao.setAttribute("idParcelasEmAtraso", idParcelasEmAtraso);
-			
-			indicadorParcelamentoEmAndamento = filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoEmAndamento();
-			sessao.setAttribute("indicadorParcelamentoEmAndamento", indicadorParcelamentoEmAndamento);
-			
-			idParcelamentoEmAndamento = filtrarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento();
-			sessao.setAttribute("idParcelamentoEmAndamento", idParcelamentoEmAndamento);
-		    
-			indicadorNegociacaoSoAVista = filtrarResolucaoDiretoriaActionForm.getIndicadorNegociacaoSoAVista();
-			sessao.setAttribute("indicadorNegociacaoSoAVista", indicadorNegociacaoSoAVista);
-			
-			indicadorDescontoSoEmContaAVista = filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSoEmContaAVista();
-			sessao.setAttribute("indicadorDescontoSoEmContaAVista",indicadorDescontoSoEmContaAVista);
 
-			indicadorParcelamentoLojaVirtual = filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoLojaVirtual();
-			sessao.setAttribute("indicadorParcelamentoLojaVirtual",indicadorParcelamentoLojaVirtual);
+			assunto = form.getAssunto();
+			sessao.setAttribute("assunto", assunto);
+
+			dataInicio = form.getDataInicio();
+			sessao.setAttribute("dataInicio", dataInicio);
+
+			dataFim = form.getDataFim();
+			sessao.setAttribute("dataFim", dataFim);
+
+			indicadorParcelamentoUnico = form.getIndicadorParcelamentoUnico();
+			sessao.setAttribute("indicadorParcelamentoUnico", indicadorParcelamentoUnico);
+
+			indicadorUtilizacaoLivre = form.getIndicadorUtilizacaoLivre();
+			sessao.setAttribute("indicadorUtilizacaoLivre", indicadorUtilizacaoLivre);
+
+			indicadorDescontoFaixaReferenciaConta = form.getIndicadorDescontoFaixaReferenciaConta();
+			sessao.setAttribute("indicadorDescontoFaixaReferenciaConta", indicadorDescontoFaixaReferenciaConta);
+			
+			indicadorDescontoSancoes = form.getIndicadorDescontoSancoes();
+			sessao.setAttribute("indicadorDescontoSancoes", indicadorDescontoSancoes);
+
+			indicadorParcelasEmAtraso = form.getIndicadorParcelasEmAtraso();
+			sessao.setAttribute("indicadorParcelasEmAtraso", indicadorParcelasEmAtraso);
+
+			idParcelasEmAtraso = form.getIdParcelasEmAtraso();
+			sessao.setAttribute("idParcelasEmAtraso", idParcelasEmAtraso);
+
+			indicadorParcelamentoEmAndamento = form.getIndicadorParcelamentoEmAndamento();
+			sessao.setAttribute("indicadorParcelamentoEmAndamento", indicadorParcelamentoEmAndamento);
+
+			idParcelamentoEmAndamento = form.getIdParcelamentoEmAndamento();
+			sessao.setAttribute("idParcelamentoEmAndamento", idParcelamentoEmAndamento);
+
+			indicadorNegociacaoSoAVista = form.getIndicadorNegociacaoSoAVista();
+			sessao.setAttribute("indicadorNegociacaoSoAVista", indicadorNegociacaoSoAVista);
+
+			indicadorDescontoSoEmContaAVista = form.getIndicadorDescontoSoEmContaAVista();
+			sessao.setAttribute("indicadorDescontoSoEmContaAVista", indicadorDescontoSoEmContaAVista);
+
+			indicadorParcelamentoLojaVirtual = form.getIndicadorParcelamentoLojaVirtual();
+			sessao.setAttribute("indicadorParcelamentoLojaVirtual", indicadorParcelamentoLojaVirtual);
 		} else {
-			// Recupera as variáveis digitadas anteriormente para colocá-los
-			// novamente no filtro, pois devido ao esquema de
-			// paginação, cada vez que o usuário seleciona a visualização das
-			// anteriores ou próximas resoluções de diretoria é efetuado um novo
-			// filtro
 			numero = (String) sessao.getAttribute("numero");
 			assunto = (String) sessao.getAttribute("assunto");
 			dataInicio = (String) sessao.getAttribute("dataInicio");
 			dataFim = (String) sessao.getAttribute("dataFim");
 			indicadorParcelamentoUnico = (String) sessao.getAttribute("indicadorParcelamentoUnico");
 			indicadorUtilizacaoLivre = (String) sessao.getAttribute("indicadorUtilizacaoLivre");
+			indicadorDescontoFaixaReferenciaConta = (String) sessao.getAttribute("indicadorDescontoFaixaReferenciaConta");
 			indicadorDescontoSancoes = (String) sessao.getAttribute("indicadorDescontoSancoes");
-			
-			indicadorParcelasEmAtraso = (String)sessao.getAttribute("indicadorParcelasEmAtraso");
-			if (sessao.getAttribute("idParcelasEmAtraso") != null){
-				idParcelasEmAtraso = (String)sessao.getAttribute("idParcelasEmAtraso");
+
+			indicadorParcelasEmAtraso = (String) sessao.getAttribute("indicadorParcelasEmAtraso");
+			if (sessao.getAttribute("idParcelasEmAtraso") != null) {
+				idParcelasEmAtraso = (String) sessao.getAttribute("idParcelasEmAtraso");
 			}
-			indicadorParcelamentoEmAndamento = (String)sessao.getAttribute("indicadorParcelamentoEmAndamento");
-			
-			if(sessao.getAttribute("idParcelamentoEmAndamento")!= null){
-				idParcelamentoEmAndamento = (String)sessao.getAttribute("idParcelamentoEmAndamento");
+			indicadorParcelamentoEmAndamento = (String) sessao.getAttribute("indicadorParcelamentoEmAndamento");
+
+			if (sessao.getAttribute("idParcelamentoEmAndamento") != null) {
+				idParcelamentoEmAndamento = (String) sessao.getAttribute("idParcelamentoEmAndamento");
 			}
-			indicadorNegociacaoSoAVista = (String)sessao.getAttribute("indicadorNegociacaoSoAVista");
-			indicadorDescontoSoEmContaAVista = (String)sessao.getAttribute("indicadorDescontoSoEmContaAVista");
-			indicadorParcelamentoLojaVirtual = (String)sessao.getAttribute("indicadorParcelamentoLojaVirtual");
+			indicadorNegociacaoSoAVista = (String) sessao.getAttribute("indicadorNegociacaoSoAVista");
+			indicadorDescontoSoEmContaAVista = (String) sessao.getAttribute("indicadorDescontoSoEmContaAVista");
+			indicadorParcelamentoLojaVirtual = (String) sessao.getAttribute("indicadorParcelamentoLojaVirtual");
 		}
 
-		// Cria o filtro
-		FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
+		FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+		filtro.setCampoOrderBy("numeroResolucaoDiretoria");
 
-		// Ordena a pesquisa por um parâmetro pré-definido
-		filtroResolucaoDiretoria.setCampoOrderBy("numeroResolucaoDiretoria");
-
-		if (dataInicio != null && !dataInicio.trim().equals("")
-				&& dataFim != null && !dataFim.trim().equals("")) {
-			if ((Util.converteStringParaDate(dataInicio)).compareTo(Util
-					.converteStringParaDate(dataFim)) >= 0) {
-				throw new ActionServletException(
-						"atencao.termino_vigencia.anterior.inicio_vigencia");
+		if (dataInicio != null && !dataInicio.trim().equals("") && dataFim != null && !dataFim.trim().equals("")) {
+			if ((Util.converteStringParaDate(dataInicio)).compareTo(Util.converteStringParaDate(dataFim)) >= 0) {
+				throw new ActionServletException("atencao.termino_vigencia.anterior.inicio_vigencia");
 			}
 		}
 
 		boolean peloMenosUmParametroInformado = false;
 
-		// Neste ponto o filtro é criado com os parâmetros informados na página
-		// de filtrar resolução de diretoria para ser executada a pesquisa no
-		// ExibirManterResolucaoDiretoriaAction
-
 		if (numero != null && !numero.trim().equalsIgnoreCase("")) {
 			peloMenosUmParametroInformado = true;
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-					FiltroResolucaoDiretoria.NUMERO, numero));
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.NUMERO, numero));
 		}
 
 		if (assunto != null && !assunto.trim().equalsIgnoreCase("")) {
 			peloMenosUmParametroInformado = true;
-			filtroResolucaoDiretoria.adicionarParametro(new ComparacaoTexto(
-					FiltroResolucaoDiretoria.DESCRICAO, assunto));
+			filtro.adicionarParametro(new ComparacaoTexto(FiltroResolucaoDiretoria.DESCRICAO, assunto));
 		}
 
 		if (dataInicio != null && !dataInicio.trim().equalsIgnoreCase("")) {
@@ -177,100 +140,78 @@ public class FiltrarResolucaoDiretoriaAction extends GcomAction {
 
 			Date dataInicioFormatada = Util.converteStringParaDate(dataInicio);
 
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-					FiltroResolucaoDiretoria.DATA_VIGENCIA_INICIO,
-					dataInicioFormatada));
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.DATA_VIGENCIA_INICIO, dataInicioFormatada));
 		}
 
 		if (dataFim != null && !dataFim.trim().equalsIgnoreCase("")) {
 			peloMenosUmParametroInformado = true;
 
 			Date dataFimFormatada = Util.converteStringParaDate(dataFim);
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.DATA_VIGENCIA_FIM, dataFimFormatada));
+		}
 
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-					FiltroResolucaoDiretoria.DATA_VIGENCIA_FIM,
-					dataFimFormatada));
+		if (!form.getIndicadorParcelamentoUnico().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_UNICO, form.getIndicadorParcelamentoUnico()));
+			peloMenosUmParametroInformado = true;
 		}
-		
-		// Indicador Parcelamento Unico
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoUnico().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_UNICO, filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoUnico() ) );
-			peloMenosUmParametroInformado = true;			
-		}
-		
-		// Indicador de Utilizacao Livre
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorUtilizacaoLivre().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_UTILIZACAO_LIVRE, filtrarResolucaoDiretoriaActionForm.getIndicadorUtilizacaoLivre() ) );
-			peloMenosUmParametroInformado = true;			
-		}
-		
-		// Indicador de Descontos e Sancoes
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSancoes().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_DESCONTOS_SANCOES, filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSancoes() ) );
-			peloMenosUmParametroInformado = true;			
-		}
-		
-		//Indicador de Parcelas em Atraso
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorParcelasEmAtraso().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_PARCELAS_EM_ATRASO, filtrarResolucaoDiretoriaActionForm.getIndicadorParcelasEmAtraso() ) );
-			peloMenosUmParametroInformado = true;	
-			
-			//Id da RD Parcelas em Atraso 
-			if (filtrarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso().equals( ConstantesSistema.SIM.toString() ) ){
-				filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.ID_RD_PARCELAS_EM_ATRASO, filtrarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso() ) );
-			}
-		}
-		
-		//Indicador de Parcelamento em Andamento
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoEmAndamento().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_EM_ANDAMENTO, filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoEmAndamento() ) );
-			peloMenosUmParametroInformado = true;	
-			
-			//Id da RD Parcelamento em Andamento
-			if (filtrarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento().equals( ConstantesSistema.SIM.toString() ) ){
-				filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.ID_RD_PARCELAMENTO_EM_ANDAMENTO, filtrarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento() ) );
-			}
-		}
-		
-		//Indicador de Negociação só a vista
-		if ( !filtrarResolucaoDiretoriaActionForm.getIndicadorNegociacaoSoAVista().equals( ConstantesSistema.TODOS.toString() ) ){
-			filtroResolucaoDiretoria.adicionarParametro( new ParametroSimples( FiltroResolucaoDiretoria.INDICADOR_NEGOCIACAO_SO_A_VISTA, filtrarResolucaoDiretoriaActionForm.getIndicadorNegociacaoSoAVista() ) );
-			peloMenosUmParametroInformado = true;			
-		}
-		
-		//
-		if (!filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.TODOS.toString())){
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_DESCONTO_SO_EM_CONTA_A_VISTA,filtrarResolucaoDiretoriaActionForm.getIndicadorDescontoSoEmContaAVista()));
+
+		if (!form.getIndicadorUtilizacaoLivre().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_UTILIZACAO_LIVRE, form.getIndicadorUtilizacaoLivre()));
 			peloMenosUmParametroInformado = true;
 		}
 		
-		//Indicador Parcelamento Loja Virtual
-		if (!filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoLojaVirtual().equals(ConstantesSistema.TODOS.toString())){
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_LOJA_VIRTUAL,filtrarResolucaoDiretoriaActionForm.getIndicadorParcelamentoLojaVirtual()));
+		if (!form.getIndicadorDescontoFaixaReferenciaConta().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_DESCONTO_FAIXA_REFERENCIA_CONTA, form.getIndicadorDescontoFaixaReferenciaConta()));
 			peloMenosUmParametroInformado = true;
 		}
-		
-		// Erro caso o usuário mandou filtrar sem nenhum parâmetro
+
+		if (!form.getIndicadorDescontoSancoes().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_DESCONTOS_SANCOES, form.getIndicadorDescontoSancoes()));
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (!form.getIndicadorParcelasEmAtraso().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_PARCELAS_EM_ATRASO, form.getIndicadorParcelasEmAtraso()));
+			peloMenosUmParametroInformado = true;
+
+			if (form.getIdParcelasEmAtraso().equals(ConstantesSistema.SIM.toString())) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.ID_RD_PARCELAS_EM_ATRASO, form.getIdParcelasEmAtraso()));
+			}
+		}
+
+		if (!form.getIndicadorParcelamentoEmAndamento().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_EM_ANDAMENTO, form.getIndicadorParcelamentoEmAndamento()));
+			peloMenosUmParametroInformado = true;
+
+			if (form.getIdParcelamentoEmAndamento().equals(ConstantesSistema.SIM.toString())) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.ID_RD_PARCELAMENTO_EM_ANDAMENTO, form.getIdParcelamentoEmAndamento()));
+			}
+		}
+
+		if (!form.getIndicadorNegociacaoSoAVista().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_NEGOCIACAO_SO_A_VISTA, form.getIndicadorNegociacaoSoAVista()));
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (!form.getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_DESCONTO_SO_EM_CONTA_A_VISTA, form.getIndicadorDescontoSoEmContaAVista()));
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (!form.getIndicadorParcelamentoLojaVirtual().equals(ConstantesSistema.TODOS.toString())) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.INDICADOR_PARCELAMENTO_LOJA_VIRTUAL, form.getIndicadorParcelamentoLojaVirtual()));
+			peloMenosUmParametroInformado = true;
+		}
+
 		if (!peloMenosUmParametroInformado) {
-			throw new ActionServletException(
-					"atencao.filtro.nenhum_parametro_informado");
+			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 
-		// Verifica se o checkbox Atualizar está marcado e em caso afirmativo
-		// manda pelo um request uma variável para o
-		// ExibirManterResolucaoDiretoriaAction e nele verificar se irá para o
-		// atualizar ou para o manter
-		if (filtrarResolucaoDiretoriaActionForm.getAtualizar() != null
-				&& filtrarResolucaoDiretoriaActionForm.getAtualizar()
-						.equalsIgnoreCase("1")) {
-			httpServletRequest.setAttribute("atualizar",
-					filtrarResolucaoDiretoriaActionForm.getAtualizar());
+		if (form.getAtualizar() != null && form.getAtualizar().equalsIgnoreCase("1")) {
+			request.setAttribute("atualizar", form.getAtualizar());
 		}
 
-		// Manda o filtro pela sessao para o
-		// ExibirManterResolucaoDiretoriaAction
-		sessao.setAttribute("filtroResolucaoDiretoria",
-				filtroResolucaoDiretoria);
+		sessao.setAttribute("filtroResolucaoDiretoria", filtro);
 
 		return retorno;
 	}

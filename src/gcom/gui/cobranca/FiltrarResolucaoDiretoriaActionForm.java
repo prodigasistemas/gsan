@@ -4,47 +4,50 @@ import gcom.util.ConstantesSistema;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * [UC0217] Inserir Resolução de Diretoria
- * @author Rafael Corrêa
- * @since 30/03/2006
- */
-public class FiltrarResolucaoDiretoriaActionForm  extends ActionForm {
+public class FiltrarResolucaoDiretoriaActionForm extends ActionForm {
+
 	private static final long serialVersionUID = 1L;
+
 	private String numero;
-	
+
 	private String assunto;
-	
+
 	private String dataInicio;
-	
+
 	private String dataFim;
-	
+
 	private String atualizar;
+
+	private String indicadorParcelamentoUnico = ConstantesSistema.TODOS.toString();
+
+	private String indicadorUtilizacaoLivre = ConstantesSistema.TODOS.toString();
 	
-    private String indicadorParcelamentoUnico = ConstantesSistema.TODOS.toString();
-    
-    private String indicadorUtilizacaoLivre = ConstantesSistema.TODOS.toString();
-    
-    private String indicadorDescontoSancoes = ConstantesSistema.TODOS.toString();	
-    
-    private String indicadorParcelasEmAtraso = ConstantesSistema.TODOS.toString();
-    private String idParcelasEmAtraso;
-    private String indicadorParcelamentoEmAndamento = ConstantesSistema.TODOS.toString();
-    private String idParcelamentoEmAndamento;
-    private String indicadorNegociacaoSoAVista = ConstantesSistema.TODOS.toString();
-    private String indicadorDescontoSoEmContaAVista = ConstantesSistema.TODOS.toString();
+	private String indicadorDescontoFaixaReferenciaConta = ConstantesSistema.TODOS.toString();
+
+	private String indicadorDescontoSancoes = ConstantesSistema.TODOS.toString();
+
+	private String indicadorParcelasEmAtraso = ConstantesSistema.TODOS.toString();
+
+	private String idParcelasEmAtraso;
+
+	private String indicadorParcelamentoEmAndamento = ConstantesSistema.TODOS.toString();
+
+	private String idParcelamentoEmAndamento;
+
+	private String indicadorNegociacaoSoAVista = ConstantesSistema.TODOS.toString();
+
+	private String indicadorDescontoSoEmContaAVista = ConstantesSistema.TODOS.toString();
+
 	private String indicadorParcelamentoLojaVirtual = ConstantesSistema.TODOS.toString();
-    
+
 	public String getIndicadorDescontoSoEmContaAVista() {
 		return indicadorDescontoSoEmContaAVista;
 	}
 
-	public void setIndicadorDescontoSoEmContaAVista(
-			String indicadorDescontoSoEmContaAVista) {
+	public void setIndicadorDescontoSoEmContaAVista(String indicadorDescontoSoEmContaAVista) {
 		this.indicadorDescontoSoEmContaAVista = indicadorDescontoSoEmContaAVista;
 	}
 
@@ -56,15 +59,7 @@ public class FiltrarResolucaoDiretoriaActionForm  extends ActionForm {
 		this.atualizar = atualizar;
 	}
 
-	public ActionErrors validate(ActionMapping actionMapping,
-			HttpServletRequest httpServletRequest) {
-		/** @todo: finish this method, this is just the skeleton. */
-		return null;
-	}
-
-	public void reset(ActionMapping actionMapping,
-			HttpServletRequest httpServletRequest) {
-
+	public void reset(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
 		numero = null;
 		assunto = null;
 		dataInicio = null;
@@ -87,7 +82,6 @@ public class FiltrarResolucaoDiretoriaActionForm  extends ActionForm {
 		this.dataInicio = dataInicio;
 	}
 
-	
 	public String getIndicadorDescontoSancoes() {
 		return indicadorDescontoSancoes;
 	}
@@ -148,8 +142,7 @@ public class FiltrarResolucaoDiretoriaActionForm  extends ActionForm {
 		return indicadorParcelamentoEmAndamento;
 	}
 
-	public void setIndicadorParcelamentoEmAndamento(
-			String indicadorParcelamentoEmAndamento) {
+	public void setIndicadorParcelamentoEmAndamento(String indicadorParcelamentoEmAndamento) {
 		this.indicadorParcelamentoEmAndamento = indicadorParcelamentoEmAndamento;
 	}
 
@@ -173,8 +166,15 @@ public class FiltrarResolucaoDiretoriaActionForm  extends ActionForm {
 		return indicadorParcelamentoLojaVirtual;
 	}
 
-	public void setIndicadorParcelamentoLojaVirtual(
-			String indicadorParcelamentoLojaVirtual) {
+	public void setIndicadorParcelamentoLojaVirtual(String indicadorParcelamentoLojaVirtual) {
 		this.indicadorParcelamentoLojaVirtual = indicadorParcelamentoLojaVirtual;
+	}
+
+	public String getIndicadorDescontoFaixaReferenciaConta() {
+		return indicadorDescontoFaixaReferenciaConta;
+	}
+
+	public void setIndicadorDescontoFaixaReferenciaConta(String indicadorDescontoFaixaReferenciaConta) {
+		this.indicadorDescontoFaixaReferenciaConta = indicadorDescontoFaixaReferenciaConta;
 	}
 }
