@@ -332,6 +332,7 @@ public class ControladorBatchSEJB implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Integer inserirProcessoIniciado(ProcessoIniciado processoIniciado)
 			throws ControladorException {
 		Integer codigoProcessoIniciadoGerado = null;
@@ -3596,29 +3597,19 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento()
-								.obterDadosPrescricaoDebitosAutomaticos();
+						Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento().obterDadosPrescricaoDebitosAutomaticos();
 
 						//Adicionar o conjunto de parametros informados pelo
 						//usuário através da interface do sistema
-						
 						if (Util.isVazioOrNulo(colecaoDadosPrescricaoAutomaticos)){
 
 							colecaoDadosPrescricaoAutomaticos = new ArrayList();
 
-							Object[] idEsferapoder = new Object[2];
-							idEsferapoder[0] = EsferaPoder.ESTADUAL;
-							idEsferapoder[1] = EsferaPoder.FEDERAL;
-
-							colecaoDadosPrescricaoAutomaticos.add(idEsferapoder);
+							colecaoDadosPrescricaoAutomaticos.add(EsferaPoder.obterIdsEsferaPoderPublico());
 						}
-
 						
-						prescricao.addParametro("colecaoDadosPrescricao",
-								colecaoDadosPrescricaoAutomaticos);
-
-						prescricao.addParametro("anoMesFaturamento",
-								sistemaParametros.getAnoMesFaturamento());
+						prescricao.addParametro("colecaoDadosPrescricao",colecaoDadosPrescricaoAutomaticos);
+						prescricao.addParametro("anoMesFaturamento",sistemaParametros.getAnoMesFaturamento());
 
 						// Seta o objeto para ser serializado no banco, onde
 						// depois sera executado por uma thread

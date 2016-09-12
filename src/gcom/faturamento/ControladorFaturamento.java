@@ -12242,20 +12242,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC1083] Prescrever Débitos de Imóveis Públicos Automático
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/10/2010
-	 * 
-	 */
-	public Collection obterDadosPrescricaoDebitosAutomaticos()
-			throws ControladorException {
+	public Collection obterDadosPrescricaoDebitosAutomaticos()throws ControladorException {
 
 		try {
-			return repositorioFaturamento
-					.obterDadosPrescricaoDebitosAutomaticos();
+			return repositorioFaturamento.obterDadosPrescricaoDebitosAutomaticos();
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -12263,17 +12253,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC1083] Prescrever Débitos de Imóveis Públicos Automático
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/10/2010
-	 * 
-	 */
 	public void prescreverDebitosImoveisPublicosAutomatico(
 			Integer idFuncionalidadeIniciada, Integer anoMesReferencia,
-			Integer anoMesPrescricao, Integer usuario, String idsEsferaPoder)
+			Date dataPrescricao, Integer usuario, String idsEsferaPoder)
 			throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -12290,7 +12272,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			this.repositorioFaturamento
 					.prescreverDebitosImoveisPublicosAutomatico(
-							anoMesReferencia, anoMesPrescricao, usuario,
+							anoMesReferencia, dataPrescricao, usuario,
 							idsEsferaPoder);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -13474,7 +13456,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer retorno = 0;
 			// data corrente menos 1 ano
 			Date dataLimite = new Date();
-			dataLimite = Util.subtrairNumeroAnosDeUmaData(dataLimite, -1);
+			dataLimite = Util.subtrairNumeroAnosDeUmaData(dataLimite, 1);
 
 			Integer qtdeConta = repositorioFaturamento
 					.pesquisaQtdeContaRetificadaMotivo(idMotivo, idImovel,

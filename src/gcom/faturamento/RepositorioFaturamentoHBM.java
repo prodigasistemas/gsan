@@ -50178,7 +50178,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				  + " 		select cnta_id "
 				  + " 		from faturamento.conta c "
 				  + " 		inner join cadastro.cliente_imovel ci on ( " 
-				  +	" 			c.imov_id = ci.imov_id and ci.clim_dtrelacaofim is null and ci.crtp_id in (2,3) ) "
+				  +	" 			c.imov_id = ci.imov_id and ci.clim_dtrelacaofim is null and ci.crtp_id in (2) ) "
 				  + " 		inner join cadastro.cliente cl on (ci.clie_id = cl.clie_id ) "
 				  + " 		inner join cadastro.cliente_tipo ct on (cl.cltp_id = ct.cltp_id) "
 				  + " 		where ";
@@ -50250,15 +50250,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			retorno = (Collection) session.createQuery(consulta).list();
 
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
 	}
 	
@@ -50273,10 +50269,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @param anoMesFaturamento
 	 * @throws ErroRepositorioException
 	 */
-	public void prescreverDebitosImoveisPublicosAutomatico(Integer anoMesReferencia, Integer anoMesPrescricao, 
+	public void prescreverDebitosImoveisPublicosAutomatico(Integer anoMesReferencia, Date dataPrescricao, 
 			Integer usuario, String idsEsferaPoder) throws ErroRepositorioException {
 
-		String update;
+		String update = new String();
 		Session session = HibernateUtil.getSession();
 		
 		PreparedStatement st = null;
@@ -50296,24 +50292,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				  + " 		cnta_amreferenciacontabil = " + anoMesReferencia.intValue() + ", "
 				  + "       cnta_tmultimaalteracao =   " + Util.obterSQLDataAtual()
 				  + " where cnta_id in ( "
-				  + " 		select cnta_id "
+				  + " 		select c.cnta_id "
 				  + " 		from faturamento.conta c "
-				  + " 		inner join cadastro.cliente_imovel ci on ( " 
-				  +	" 			c.imov_id = ci.imov_id and ci.clim_dtrelacaofim is null and ci.crtp_id in (2,3) ) "
-				  + " 		inner join cadastro.cliente cl on (ci.clie_id = cl.clie_id ) "
-				  + " 		inner join cadastro.cliente_tipo ct on (cl.cltp_id = ct.cltp_id) "
+				  + " 		inner join cadastro.cliente_conta cc on ( c.cnta_id = cc.cnta_id and cc.crtp_id in (2) )  "
+				  + " 		inner join cadastro.cliente cl on (cc.clie_id = cl.clie_id )  "
+				  + " 		inner join cadastro.cliente_tipo ct on (cl.cltp_id = ct.cltp_id)  "
 				  + " 		where "
 				  + " 		ct.epod_id in ( " + idsEsferaPoder + " ) and "
 				  + " 		dcst_idatual in (0,1,2) and "
-				  + " 		cnta_amreferenciaconta < " + anoMesPrescricao.toString() + " and "
-				  + " 		cnta_amreferenciacontabil < " + anoMesReferencia.toString() + " and "
-				  + " 		not exists ( "
-				  + " 				select cnta_id "
-				  + " 				from faturamento.conta_categoria g "
-				  + " 				where c.cnta_id = g.cnta_id "
-				  + " 				and catg_id in (1,2,3) "
-				  + " 			) "
-				  + " 	) ";
+				  + " 		cnta_dtvencimentoconta < '" + dataPrescricao.toString() + "' and "
+				  + " 		cnta_amreferenciacontabil < " + anoMesReferencia.toString() 
+				  + " 		) "
+				  + "       and not exists (select cnta_id from arrecadacao.pagamento p where p.cnta_id = c.cnta_id)";
 			
 			st = jdbcCon.prepareStatement(update);
 			
@@ -50322,6 +50312,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				
 			// erro no hibernate
 		} catch (SQLException e) {
+			e.printStackTrace();
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
