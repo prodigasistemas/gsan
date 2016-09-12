@@ -8,6 +8,8 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 
+import java.util.Date;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
@@ -49,7 +51,7 @@ public class BatchPrescreverDebitosImoveisPublicosAutomaticoMDB implements Messa
             	this.getControladorFaturamento().prescreverDebitosImoveisPublicosAutomatico(
             			(Integer) ((Object[]) objectMessage.getObject())[0],
 						(Integer) ((Object[]) objectMessage.getObject())[1],
-						(Integer) ((Object[]) objectMessage.getObject())[2],
+						(Date) ((Object[]) objectMessage.getObject())[2],
 						(Integer) ((Object[]) objectMessage.getObject())[3],
 						(String) ((Object[]) objectMessage.getObject())[4]);
 

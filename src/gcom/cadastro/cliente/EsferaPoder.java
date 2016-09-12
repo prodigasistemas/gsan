@@ -92,5 +92,15 @@ public class EsferaPoder implements Serializable {
 			Short indicadorPermiteCertidaoNegativaDebitosParaImovel) {
 		this.indicadorPermiteCertidaoNegativaDebitosParaImovel = indicadorPermiteCertidaoNegativaDebitosParaImovel;
 	}
+	
+	public static Integer[] obterIdsEsferaPoderPublico() {
+		Integer[] ids = new Integer[3];
+		
+		ids[0] = EsferaPoder.ESTADUAL.intValue();
+		ids[1] = EsferaPoder.FEDERAL.intValue();
+		ids[2] = EsferaPoder.MUNICIPAL.intValue();
+		
+		return ids;
+	}
 
 }
