@@ -2773,7 +2773,7 @@ public class Util {
 	 * @param data
 	 * @return data menos o nº de anos informado
 	 */
-	public static Date subtrairNumeroAnosDeUmaData(Date data, int numeroAnos) {
+	public static Date somarNumeroAnosDeUmaData(Date data, int numeroAnos) {
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -2782,6 +2782,11 @@ public class Util {
 
 		return calendar.getTime();
 
+	}
+	
+	public static Date subtrairNumeroAnosDeUmaData(Date data, int numeroAnos) {
+
+		return Util.somarNumeroAnosDeUmaData(data, numeroAnos * -1);
 	}
 
 	/**

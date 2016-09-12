@@ -13393,7 +13393,7 @@ public class ControladorCadastro extends ControladorComum {
 			Date dataRecadastramento = tarifaSocialDadoEconomia.getDataRecadastramento();
 		
 			if(dataRecadastramento != null){
-				dataRecadastramento = Util.subtrairNumeroAnosDeUmaData(dataRecadastramento,2);
+				dataRecadastramento = Util.somarNumeroAnosDeUmaData(dataRecadastramento,2);
 				
 				if(dataRecadastramento.compareTo(new Date()) == -1){
 					return 10;

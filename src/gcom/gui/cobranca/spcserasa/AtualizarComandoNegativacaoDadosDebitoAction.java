@@ -65,7 +65,7 @@ public class AtualizarComandoNegativacaoDadosDebitoAction extends GcomAction {
         
 		//Período de vencimento do débito	
 		Integer numeroDiasVencimentoCobranca = new Integer(sistemaParametro.getNumeroDiasVencimentoCobranca());			
-		Date dataMinima = Util.subtrairNumeroAnosDeUmaData(Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca), -5);
+		Date dataMinima = Util.subtrairNumeroAnosDeUmaData(Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca), 5);
 
 		if(form.getDataVencimentoInicial() != null && !form.getDataVencimentoInicial().equals("")){
 			Date vencimentoDebInicialInformado = Util.converteStringParaDate(form.getDataVencimentoInicial());	
