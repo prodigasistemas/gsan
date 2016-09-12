@@ -94,8 +94,6 @@ public class RemoverManterImovelAction extends GcomAction {
 			dataFim.set(Calendar.MONTH,11);
 			dataFim.set(Calendar.DATE,31);		
 			
-        	fachada.validarImovelEmCampo(Integer.parseInt(idImovel));
-			
 			ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper =  fachada.obterDebitoImovelOuCliente(1,idImovel,null,null,"190001","999912",dataInicio.getTime(),dataFim.getTime(),1,1,1,1,1,1,1,null);
         	boolean existeDebito = false;
         	if(obterDebitoImovelOuClienteHelper != null){
@@ -136,21 +134,14 @@ public class RemoverManterImovelAction extends GcomAction {
         		Imovel imovel = (Imovel)colecaoImovel.iterator().next();
 
        		if((imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.LIGADO.intValue() 
-        				
-        			| imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.CORTADO.intValue())
-        				
-        			| (imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIGADO.intValue())){
-    				
-        			throw new ActionServletException(
-    					"atencao.imovel.possui.ligacao_agua.ligacao_esgoto");
+        			|| imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.CORTADO.intValue())
+        			|| (imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIGADO.intValue())){
+        			throw new ActionServletException("atencao.imovel.possui.ligacao_agua.ligacao_esgoto");
         		}
 
-	        		
-	        	if((imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) | 
-	        		 imovel.getHidrometroInstalacaoHistorico() != null){
-	        		//Não é possível excluir o(s) imóvel(is) selecionado(s) devido a existência de hidrômetro na ligação de e/ou no poço
-	        		throw new ActionServletException(
-					"atencao.imovel.possui.hidrometro.ligacao.poco");
+	        	if((imovel.getLigacaoAgua() != null	&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) 
+	        			|| imovel.getHidrometroInstalacaoHistorico() != null){
+	        		throw new ActionServletException("atencao.imovel.possui.hidrometro.ligacao.poco");
 	        	}
 	        	
 	        	FiltroImovel filtroImovelVinculados = new FiltroImovel();
@@ -159,16 +150,13 @@ public class RemoverManterImovelAction extends GcomAction {
 	        	Collection<Imovel> imovelPesquisadoVinculados = fachada.pesquisar(filtroImovelVinculados, Imovel.class.getName());
 	        	
 	        	if((imovel.getIndicadorImovelCondominio() != null &&  imovel.getIndicadorImovelCondominio().shortValue() == Imovel.IMOVEL_CONDOMINIO.shortValue())
-	        			& (imovelPesquisadoVinculados != null && !imovelPesquisadoVinculados.isEmpty())
+	        			&& (imovelPesquisadoVinculados != null && !imovelPesquisadoVinculados.isEmpty())
 	        		){
 	        		//Não é possível excluir o(s) imóvel(is) selecionado(s) devido a ser(em) imóvel(is) condomínio, com outros imóveis associados
 	        		throw new ActionServletException(
 					"atencao.imovel.ser.condominio.outros.imoveis");
 	        	}
-        		
         	}
-        	
-        	
 		}
         
         

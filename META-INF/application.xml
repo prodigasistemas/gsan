@@ -876,6 +876,10 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorAtualizacaoCadastroGCOM.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

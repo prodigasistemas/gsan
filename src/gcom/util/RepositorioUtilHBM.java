@@ -2,8 +2,10 @@ package gcom.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -25,7 +27,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.interceptor.ObjetoTransacao;
-import gcom.model.IHistorico;
+import gcom.model.IAtualizacaoCadastro;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
@@ -310,28 +312,17 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		return retorno;
 	}
 
-	@SuppressWarnings({"unchecked","rawtypes"})
 	public void atualizar(Object objeto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			
-			if (objeto instanceof IHistorico){
-				if (((ObjetoTransacao) objeto).logarAlteracoes()){
-					IHistorico iHistorico = (IHistorico) objeto;
-					
-					Object original = this.obterPorId(iHistorico.getClasseOrigem(), iHistorico.getId());
-
-					Constructor constructor = iHistorico.getClasseHistorico().getDeclaredConstructor(iHistorico.getClasseOrigem(), Usuario.class);
-					
-					Usuario user = ((ObjetoTransacao) objeto).getUsuarioParaLog();
-
-					Object historico = constructor.newInstance(original, user);
-					
-					session.save(historico);
-				}
-			}
-			
+			Method method = objeto.getClass().getDeclaredMethod("setUltimaAlteracao", Date.class);
+			method.invoke(objeto, new Date());
+		} catch (Exception e1) {
+			logger.info("Objeto nao possui metodo setUltimaAlteracao");
+		}
+		
+		try {
 			session.update(objeto);
 			session.flush();
 		} catch (Exception e){
@@ -604,5 +595,27 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			HibernateUtil.closeSession(session);
 		}
 
+	}
+	
+	public void registrarHistorico(Object objeto) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+
+		try {
+			IAtualizacaoCadastro iHistorico = (IAtualizacaoCadastro) objeto;
+			
+			Object original = this.obterPorId(iHistorico.getClasseOrigem(), iHistorico.getId());
+			
+			Constructor constructor = iHistorico.getClasseHistorico().getDeclaredConstructor(iHistorico.getClasseOrigem(), Usuario.class);
+			
+			Usuario user = ((ObjetoTransacao) objeto).getUsuarioParaHistorico();
+			
+			Object historico = constructor.newInstance(original, user);
+			
+			this.inserir(historico);
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao registrar historico para o objeto");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }
