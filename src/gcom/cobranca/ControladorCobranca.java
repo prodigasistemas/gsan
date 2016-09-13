@@ -11825,7 +11825,7 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
 	 */
-	public void gerarCreditoARealizarParcelamento(
+	private void gerarCreditoARealizarParcelamento(
 			Imovel imovel,
 			Short numeroPrestacao,
 			BigDecimal taxaJuros,
@@ -11844,65 +11844,65 @@ public class ControladorCobranca implements SessionBean {
 
 		// 1. Desconto por Acréscimo por Impontualidade
 		if (valorDescontoAcresimosImpontualidade != null && !valorDescontoAcresimosImpontualidade.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_ACRESCIMOS_IMPONTUALIDADE);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_ACRESCIMOS_IMPONTUALIDADE);
 
 			// 1. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoAcresimosImpontualidade, numeroPrestacao, parcelamentoId, colecaoCategoria,
-					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoAcresimosImpontualidade, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 2. Desconto por Antiguidade do Débito
 		if (valorDescontoAntiguidadeDebito != null && !valorDescontoAntiguidadeDebito.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_ANTIGUIDADE_DEBITO);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_ANTIGUIDADE_DEBITO);
 
 			// 2. Inclui o crédito a realizar para Desconto por Antiguidade do Débito
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoAntiguidadeDebito, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoAntiguidadeDebito, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 3. Desconto por Inatividade dea Ligação da Água
 		if (valorDescontoInatividadeLigacaoAgua != null && !valorDescontoInatividadeLigacaoAgua.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_INATIVIDADE_LIGACAO_AGUA);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_INATIVIDADE_LIGACAO_AGUA);
 
 			// 3. Inclui o crédito a realizar para Desconto por Inatividade de Ligação da Água
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoInatividadeLigacaoAgua, numeroPrestacao, parcelamentoId, colecaoCategoria,
-					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoInatividadeLigacaoAgua, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 4. Créditos Anteriores
 		if (valorCreditoAnteriores != null && !valorCreditoAnteriores.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
 
 			// 4. Inclui o crédito a realizar para Créditos Anteriores
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 5. Desconto por Sanções
 		if (valorDescontoSancoesRDEspecial != null && !valorDescontoSancoesRDEspecial.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_SANCOES);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_SANCOES);
 
 			// 5. Inclui o crédito a realizar para Desconto por Sanções
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoSancoesRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoSancoesRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 6. Desconto por Tarifa Social
 		if (descontoTarifaSocialRDEspecial != null && !descontoTarifaSocialRDEspecial.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_TARIFA_SOCIAL);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_TARIFA_SOCIAL);
 
 			// 5. Inclui o crédito a realizar para Desconto por Tarifa Social
-			inserirCreditoARealizarCreditoTipo(credito, imovel, descontoTarifaSocialRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, descontoTarifaSocialRDEspecial, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
 		// 7. Desconto por Acréscimo por Impontualidade
 		if (valorDescontoFaixaReferenciaConta != null && !valorDescontoFaixaReferenciaConta.equals(new BigDecimal("0.00"))) {
-			CreditoTipo credito = filtrarCreditoTipo(CreditoTipo.DESCONTO_FAIXA_REFERENCIA_CONTA);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_FAIXA_REFERENCIA_CONTA);
 
 			// 7. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
-			inserirCreditoARealizarCreditoTipo(credito, imovel, valorDescontoFaixaReferenciaConta, numeroPrestacao, parcelamentoId, colecaoCategoria,
-					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoFaixaReferenciaConta, numeroPrestacao, parcelamentoId, colecaoCategoria,
+					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
 		}
 	}
 
@@ -11910,38 +11910,29 @@ public class ControladorCobranca implements SessionBean {
 	 * Permite efetuar o parcelamento dos débitos de um imóvel
 	 * 
 	 * [UC0214] Efetuar Parcelamento de Débitos
-	 * 
-	 * Insere Crédito A Realizar de acordo com Tipo do Crédito do Imóvel
-	 * 
-	 * inserirCreditoARealizarCreditoTipo
-	 * 
-	 * @author Roberta Costa - Vivianne Sousa
-	 * @date 05/04/2006 - 27/09/2006
-	 * 
-	 * @param resolucaoDiretoria
-	 * @param codigoImovel
-	 * @param valorEntrada
-	 * @param situacaoAgua
-	 * @param situacaoEsgoto
-	 * @return
 	 */
-	public void inserirCreditoARealizarCreditoTipo(CreditoTipo creditoTipo, Imovel imovel, BigDecimal valorCredito, Short numeroPrestacao,
-			Integer parcelamentoId, Collection<Categoria> colecaoCategoria, boolean isContaEntradaParcelamento, Integer anoMesEntradaGuia,
-			Integer maiorAnoMesConta) throws ControladorException {
+	public void inserirCreditoARealizarCreditoTipo(
+			CreditoTipo creditoTipo, 
+			Imovel imovel, 
+			BigDecimal valorCredito, 
+			Short numeroPrestacao,
+			Integer parcelamentoId, 
+			Collection<Categoria> colecaoCategoria, 
+			boolean isContaEntradaParcelamento, 
+			Integer anoMesEntradaGuia,
+			Integer maiorAnoMesConta,
+			Integer idCreditoOrigem) throws ControladorException {
 
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-		// Insere o crédito a realizar na tabela CREDITO_A_REALIZAR_GERAL
 		CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 		creditoARealizarGeral.setIndicadorHistorico(new Short("2"));
 		creditoARealizarGeral.setUltimaAlteracao(new Date());
-		// Recupera o código do crédito a realizar geral inserido Integer
+
 		Integer creditoARealizarGeralIdBase = (Integer) getControladorUtil().inserir(creditoARealizarGeral);
 		creditoARealizarGeral.setId(creditoARealizarGeralIdBase);
 
-		// Seta o objeto crédito a realizar com os parâmtros solicitados
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
-
 		creditoARealizar.setId(creditoARealizarGeralIdBase);
 		creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
 		creditoARealizar.setImovel(imovel);
@@ -11949,11 +11940,8 @@ public class ControladorCobranca implements SessionBean {
 		creditoARealizar.setGeracaoCredito(new Date());
 		creditoARealizar.setAnoMesReferenciaCredito(sistemaParametros.getAnoMesFaturamento());
 		creditoARealizar.setAnoMesCobrancaCredito(sistemaParametros.getAnoMesArrecadacao());
-		// creditoARealizar.setAnoMesReferenciaContabil(sistemaParametros.getAnoMesFaturamento());
-		// alterado por Vivianne Sousa 01/09/2008
-		// analista :Aryed
-		Integer referenciaContabil = obterReferenciaContabilParcelamentoOUConta(isContaEntradaParcelamento, anoMesEntradaGuia,
-				maiorAnoMesConta);
+
+		Integer referenciaContabil = obterReferenciaContabilParcelamentoOUConta(isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
 		creditoARealizar.setAnoMesReferenciaContabil(referenciaContabil);
 
 		creditoARealizar.setValorCredito(valorCredito);
@@ -11967,11 +11955,6 @@ public class ControladorCobranca implements SessionBean {
 		creditoARealizar.setNumeroLote(imovel.getLote());
 		creditoARealizar.setNumeroSubLote(imovel.getSubLote());
 
-		/*
-		 * RegistroAtendimento registroAtendimento = new RegistroAtendimento();
-		 * registroAtendimento.setId(new Integer("1"));
-		 * creditoARealizar.setRegistroAtendimento(registroAtendimento);
-		 */
 		creditoARealizar.setRegistroAtendimento(null);
 		creditoARealizar.setOrdemServico(null);
 
@@ -11983,8 +11966,7 @@ public class ControladorCobranca implements SessionBean {
 
 		creditoARealizar.setDebitoCreditoSituacaoAnterior(null);
 
-		CreditoOrigem creditoOrigem = new CreditoOrigem();
-		creditoOrigem.setId(CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+		CreditoOrigem creditoOrigem = new CreditoOrigem(idCreditoOrigem);
 		creditoARealizar.setCreditoOrigem(creditoOrigem);
 
 		Parcelamento parcelamento = new Parcelamento();
@@ -11993,46 +11975,27 @@ public class ControladorCobranca implements SessionBean {
 
 		creditoARealizar.setUltimaAlteracao(new Date());
 
-		// Insere o crédito a realizar na base
-		// Integer creditoARealizarIdBase = (Integer)
 		getControladorUtil().inserir(creditoARealizar);
 
-		// 2.1. [UC0185] Obter Valor por Categoria
 		Collection<BigDecimal> colecaoValorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoria, valorCredito);
 
-		// Cria as iterações de categoria e valor
 		Iterator iteratorCategoria = colecaoCategoria.iterator();
 		Iterator iteratorValorCategoria = colecaoValorCategoria.iterator();
 
-		// Laço para criar os débitos a cobrar por categoria
 		while (iteratorCategoria.hasNext()) {
-			// Recupera a categoria
 			Categoria categoria = (Categoria) iteratorCategoria.next();
 
-			// Recupera o valor da categoria
 			BigDecimal valorPorCategoria = (BigDecimal) iteratorValorCategoria.next();
 
-			// Cria o débito a cobrar categoria
 			CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
-
-			CreditoARealizarCategoriaPK creditoARealizarCategoriaPK = new CreditoARealizarCategoriaPK(creditoARealizar.getId(),
-					categoria.getId());
+			CreditoARealizarCategoriaPK creditoARealizarCategoriaPK = new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId());
 			creditoARealizarCategoria.setComp_id(creditoARealizarCategoriaPK);
-
-			/*
-			 * CreditoARealizar creditoARealizarBase = new CreditoARealizar();
-			 * creditoARealizarBase.setId(creditoARealizarIdBase);
-			 * creditoARealizarCategoria
-			 * .setCreditoARealizar(creditoARealizarBase);
-			 */
 			creditoARealizarCategoria.setCreditoARealizar(creditoARealizar);
-
 			creditoARealizarCategoria.setCategoria(categoria);
 			creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			creditoARealizarCategoria.setValorCategoria(valorPorCategoria);
 			creditoARealizarCategoria.setUltimaAlteracao(new Date());
 
-			// 2.2. Inclui na tabela DEBITO_A_COBRAR_CATEGORIA
 			getControladorUtil().inserir(creditoARealizarCategoria);
 		}
 	}
