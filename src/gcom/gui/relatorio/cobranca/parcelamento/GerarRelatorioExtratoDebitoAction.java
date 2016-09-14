@@ -48,9 +48,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-/**
- * [UC0444] Gerar e Emitir Extrato de Débito
- */
 @SuppressWarnings("unchecked")
 public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTarefaRelatorio {
 
