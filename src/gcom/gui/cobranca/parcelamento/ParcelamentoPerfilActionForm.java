@@ -7,86 +7,100 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 public class ParcelamentoPerfilActionForm extends ActionForm {
-	private static final long serialVersionUID = 1L;
 	
-	/*
-	 *
-	 */
-    private String percentualDescontoAcrescimoMulta;
-    
-    private String percentualDescontoAcrescimoJurosMora;
-    
-    private String percentualDescontoAcrescimoAtualizacaoMonetaria;
-    // fim alteração
-    
-    private String percentualDescontoAcrescimoPagamentoAVista;
-    
-    private String percentualTarifaMinimaPrestacao;
+	private static final long serialVersionUID = 1L;
 
-    private String ultimaAlteracao;
+	private String percentualDescontoAcrescimoMulta;
 
-    private String subcategoria;
+	private String percentualDescontoAcrescimoJurosMora;
 
-    private String imovelSituacaoTipo;
+	private String percentualDescontoAcrescimoAtualizacaoMonetaria;
 
-    private String imovelPerfil;
-    
-    private String resolucaoDiretoria;    		
-   
-    private String qtdeMaximaReparcelamento;
-    
-    private String percentualEntradaSugerida;
-    
-    private String quantidadeMinimaMesesDebito;
-    
-    private String percentualDescontoSemRestabelecimentoAntiguidade;
-    
-    private String percentualDescontoComRestabelecimentoAntiguidade;
-    
-    private String percentualDescontoAtivo;
-    
-    private String idContaMotivoRevisao;
+	private String percentualDescontoAcrescimoPagamentoAVista;
+	
+	private String percentualDescontoTotalPagamentoAVista;
 
-    private String quantidadeMaximaMesesInatividade;
-    
-    private String percentualDescontoSemRestabelecimentoInatividade;
-    
-    private String percentualDescontoComRestabelecimentoInatividade;
-    
-    private String consumoMinimo;
-    
-    private String percentualVariacaoConsumoMedio;
-    
-    private String indicadorParcelarChequeDevolvido;
-    
-    private String indicadorParcelarSancoesMaisDeUmaConta;
-    
-    private String categoria;
-    private String numeroConsumoEconomia;
-    private String numeroAreaConstruida;    
-    private String indicadorRetroativoTarifaSocial;
-    private String anoMesReferenciaLimiteInferior;
-    private String anoMesReferenciaLimiteSuperior;
-    private String percentualDescontoTarifaSocial;  
-    private String parcelaQuantidadeMinimaFatura;
-    private String indicadorAlertaParcelaMinima;
-    private String percentualDescontoSancao;
-    private String quantidadeEconomias; 
-    private String capacidadeHidrometro; 
-    private String indicadorEntradaMinima;
-    private String quantidadeMaximaReparcelamento;
-    private String dataLimiteDescontoPagamentoAVista;
-    
-    private String quantidadeMaximaMesesInatividadeAVista;  
-    private String percentualDescontoSemRestabelecimentoInatividadeAVista; 
-    private String percentualDescontoComRestabelecimentoInatividadeAVista; 
-    
+	private String percentualTarifaMinimaPrestacao;
+
+	private String ultimaAlteracao;
+
+	private String subcategoria;
+
+	private String imovelSituacaoTipo;
+
+	private String imovelPerfil;
+
+	private String resolucaoDiretoria;
+
+	private String qtdeMaximaReparcelamento;
+
+	private String percentualEntradaSugerida;
+
+	private String quantidadeMinimaMesesDebito;
+
+	private String percentualDescontoSemRestabelecimentoAntiguidade;
+
+	private String percentualDescontoComRestabelecimentoAntiguidade;
+
+	private String percentualDescontoAtivo;
+
+	private String idContaMotivoRevisao;
+
+	private String quantidadeMaximaMesesInatividade;
+
+	private String percentualDescontoSemRestabelecimentoInatividade;
+
+	private String percentualDescontoComRestabelecimentoInatividade;
+
+	private String consumoMinimo;
+
+	private String percentualVariacaoConsumoMedio;
+
+	private String indicadorParcelarChequeDevolvido;
+
+	private String indicadorParcelarSancoesMaisDeUmaConta;
+
+	private String categoria;
+	
+	private String numeroConsumoEconomia;
+	
+	private String numeroAreaConstruida;
+	
+	private String indicadorRetroativoTarifaSocial;
+	
+	private String anoMesReferenciaLimiteInferior;
+	
+	private String anoMesReferenciaLimiteSuperior;
+	
+	private String percentualDescontoTarifaSocial;
+	
+	private String parcelaQuantidadeMinimaFatura;
+	
+	private String indicadorAlertaParcelaMinima;
+	
+	private String percentualDescontoSancao;
+	
+	private String quantidadeEconomias;
+	
+	private String capacidadeHidrometro;
+	
+	private String indicadorEntradaMinima;
+	
+	private String quantidadeMaximaReparcelamento;
+	
+	private String dataLimiteDescontoPagamentoAVista;
+
+	private String quantidadeMaximaMesesInatividadeAVista;
+	
+	private String percentualDescontoSemRestabelecimentoInatividadeAVista;
+	
+	private String percentualDescontoComRestabelecimentoInatividadeAVista;
+
 	public String getQuantidadeMaximaReparcelamento() {
 		return quantidadeMaximaReparcelamento;
 	}
 
-	public void setQuantidadeMaximaReparcelamento(
-			String quantidadeMaximaReparcelamento) {
+	public void setQuantidadeMaximaReparcelamento(String quantidadeMaximaReparcelamento) {
 		this.quantidadeMaximaReparcelamento = quantidadeMaximaReparcelamento;
 	}
 
@@ -106,18 +120,12 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		this.qtdeMaximaReparcelamento = qtdeMaximaReparcelamento;
 	}
 
-	public ActionErrors validate(ActionMapping actionMapping,
-            HttpServletRequest httpServletRequest) {
-        /** @todo: finish this method, this is just the skeleton. */
-        return null;
-    }
+	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
+		return null;
+	}
 
-    public void reset(ActionMapping actionMapping,
-            HttpServletRequest httpServletRequest) {
-    }
-
-
-	
+	public void reset(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
+	}
 
 	public String getImovelPerfil() {
 		return imovelPerfil;
@@ -143,7 +151,6 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		this.subcategoria = subcategoria;
 	}
 
-
 	public String getResolucaoDiretoria() {
 		return resolucaoDiretoria;
 	}
@@ -159,7 +166,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 	public void setPercentualDescontoAcrescimoMulta(String percentualDescontoAcrescimoMulta) {
 		this.percentualDescontoAcrescimoMulta = percentualDescontoAcrescimoMulta;
 	}
-	
+
 	public String getPercentualDescontoAcrescimoJurosMora() {
 		return percentualDescontoAcrescimoJurosMora;
 	}
@@ -167,7 +174,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 	public void setPercentualDescontoAcrescimoJurosMora(String percentualDescontoAcrescimoJurosMora) {
 		this.percentualDescontoAcrescimoJurosMora = percentualDescontoAcrescimoJurosMora;
 	}
-	
+
 	public String getPercentualDescontoAcrescimoAtualizacaoMonetaria() {
 		return percentualDescontoAcrescimoAtualizacaoMonetaria;
 	}
@@ -188,8 +195,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoComRestabelecimentoAntiguidade;
 	}
 
-	public void setPercentualDescontoComRestabelecimentoAntiguidade(
-			String percentualDescontoComRestabelecimentoAntiguidade) {
+	public void setPercentualDescontoComRestabelecimentoAntiguidade(String percentualDescontoComRestabelecimentoAntiguidade) {
 		this.percentualDescontoComRestabelecimentoAntiguidade = percentualDescontoComRestabelecimentoAntiguidade;
 	}
 
@@ -197,8 +203,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoComRestabelecimentoInatividade;
 	}
 
-	public void setPercentualDescontoComRestabelecimentoInatividade(
-			String percentualDescontoComRestabelecimentoInatividade) {
+	public void setPercentualDescontoComRestabelecimentoInatividade(String percentualDescontoComRestabelecimentoInatividade) {
 		this.percentualDescontoComRestabelecimentoInatividade = percentualDescontoComRestabelecimentoInatividade;
 	}
 
@@ -206,8 +211,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoSemRestabelecimentoAntiguidade;
 	}
 
-	public void setPercentualDescontoSemRestabelecimentoAntiguidade(
-			String percentualDescontoSemRestabelecimentoAntiguidade) {
+	public void setPercentualDescontoSemRestabelecimentoAntiguidade(String percentualDescontoSemRestabelecimentoAntiguidade) {
 		this.percentualDescontoSemRestabelecimentoAntiguidade = percentualDescontoSemRestabelecimentoAntiguidade;
 	}
 
@@ -215,8 +219,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoSemRestabelecimentoInatividade;
 	}
 
-	public void setPercentualDescontoSemRestabelecimentoInatividade(
-			String percentualDescontoSemRestabelecimentoInatividade) {
+	public void setPercentualDescontoSemRestabelecimentoInatividade(String percentualDescontoSemRestabelecimentoInatividade) {
 		this.percentualDescontoSemRestabelecimentoInatividade = percentualDescontoSemRestabelecimentoInatividade;
 	}
 
@@ -224,8 +227,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return quantidadeMaximaMesesInatividade;
 	}
 
-	public void setQuantidadeMaximaMesesInatividade(
-			String quantidadeMaximaMesesInatividade) {
+	public void setQuantidadeMaximaMesesInatividade(String quantidadeMaximaMesesInatividade) {
 		this.quantidadeMaximaMesesInatividade = quantidadeMaximaMesesInatividade;
 	}
 
@@ -249,8 +251,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualTarifaMinimaPrestacao;
 	}
 
-	public void setPercentualTarifaMinimaPrestacao(
-			String percentualTarifaMinimaPrestacao) {
+	public void setPercentualTarifaMinimaPrestacao(String percentualTarifaMinimaPrestacao) {
 		this.percentualTarifaMinimaPrestacao = percentualTarifaMinimaPrestacao;
 	}
 
@@ -266,8 +267,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualVariacaoConsumoMedio;
 	}
 
-	public void setPercentualVariacaoConsumoMedio(
-			String percentualVariacaoConsumoMedio) {
+	public void setPercentualVariacaoConsumoMedio(String percentualVariacaoConsumoMedio) {
 		this.percentualVariacaoConsumoMedio = percentualVariacaoConsumoMedio;
 	}
 
@@ -275,8 +275,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return indicadorParcelarChequeDevolvido;
 	}
 
-	public void setIndicadorParcelarChequeDevolvido(
-			String indicadorParcelarChequeDevolvido) {
+	public void setIndicadorParcelarChequeDevolvido(String indicadorParcelarChequeDevolvido) {
 		this.indicadorParcelarChequeDevolvido = indicadorParcelarChequeDevolvido;
 	}
 
@@ -284,8 +283,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return indicadorParcelarSancoesMaisDeUmaConta;
 	}
 
-	public void setIndicadorParcelarSancoesMaisDeUmaConta(
-			String indicadorParcelarSancoesMaisDeUmaConta) {
+	public void setIndicadorParcelarSancoesMaisDeUmaConta(String indicadorParcelarSancoesMaisDeUmaConta) {
 		this.indicadorParcelarSancoesMaisDeUmaConta = indicadorParcelarSancoesMaisDeUmaConta;
 	}
 
@@ -293,8 +291,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return anoMesReferenciaLimiteInferior;
 	}
 
-	public void setAnoMesReferenciaLimiteInferior(
-			String anoMesReferenciaLimiteInferior) {
+	public void setAnoMesReferenciaLimiteInferior(String anoMesReferenciaLimiteInferior) {
 		this.anoMesReferenciaLimiteInferior = anoMesReferenciaLimiteInferior;
 	}
 
@@ -302,8 +299,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return anoMesReferenciaLimiteSuperior;
 	}
 
-	public void setAnoMesReferenciaLimiteSuperior(
-			String anoMesReferenciaLimiteSuperior) {
+	public void setAnoMesReferenciaLimiteSuperior(String anoMesReferenciaLimiteSuperior) {
 		this.anoMesReferenciaLimiteSuperior = anoMesReferenciaLimiteSuperior;
 	}
 
@@ -335,8 +331,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return indicadorRetroativoTarifaSocial;
 	}
 
-	public void setIndicadorRetroativoTarifaSocial(
-			String indicadorRetroativoTarifaSocial) {
+	public void setIndicadorRetroativoTarifaSocial(String indicadorRetroativoTarifaSocial) {
 		this.indicadorRetroativoTarifaSocial = indicadorRetroativoTarifaSocial;
 	}
 
@@ -360,8 +355,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return parcelaQuantidadeMinimaFatura;
 	}
 
-	public void setParcelaQuantidadeMinimaFatura(
-			String parcelaQuantidadeMinimaFatura) {
+	public void setParcelaQuantidadeMinimaFatura(String parcelaQuantidadeMinimaFatura) {
 		this.parcelaQuantidadeMinimaFatura = parcelaQuantidadeMinimaFatura;
 	}
 
@@ -372,7 +366,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 	public void setPercentualDescontoTarifaSocial(String percentualDescontoTarifaSocial) {
 		this.percentualDescontoTarifaSocial = percentualDescontoTarifaSocial;
 	}
-	
+
 	public String getPercentualDescontoSancao() {
 		return percentualDescontoSancao;
 	}
@@ -401,8 +395,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoAcrescimoPagamentoAVista;
 	}
 
-	public void setPercentualDescontoAcrescimoPagamentoAVista(
-			String percentualDescontoAcrescimoPagamentoAVista) {
+	public void setPercentualDescontoAcrescimoPagamentoAVista(String percentualDescontoAcrescimoPagamentoAVista) {
 		this.percentualDescontoAcrescimoPagamentoAVista = percentualDescontoAcrescimoPagamentoAVista;
 	}
 
@@ -418,8 +411,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return dataLimiteDescontoPagamentoAVista;
 	}
 
-	public void setDataLimiteDescontoPagamentoAVista(
-			String dataLimiteDescontoPagamentoAVista) {
+	public void setDataLimiteDescontoPagamentoAVista(String dataLimiteDescontoPagamentoAVista) {
 		this.dataLimiteDescontoPagamentoAVista = dataLimiteDescontoPagamentoAVista;
 	}
 
@@ -427,8 +419,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoComRestabelecimentoInatividadeAVista;
 	}
 
-	public void setPercentualDescontoComRestabelecimentoInatividadeAVista(
-			String percentualDescontoComRestabelecimentoInatividadeAVista) {
+	public void setPercentualDescontoComRestabelecimentoInatividadeAVista(String percentualDescontoComRestabelecimentoInatividadeAVista) {
 		this.percentualDescontoComRestabelecimentoInatividadeAVista = percentualDescontoComRestabelecimentoInatividadeAVista;
 	}
 
@@ -436,8 +427,7 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return percentualDescontoSemRestabelecimentoInatividadeAVista;
 	}
 
-	public void setPercentualDescontoSemRestabelecimentoInatividadeAVista(
-			String percentualDescontoSemRestabelecimentoInatividadeAVista) {
+	public void setPercentualDescontoSemRestabelecimentoInatividadeAVista(String percentualDescontoSemRestabelecimentoInatividadeAVista) {
 		this.percentualDescontoSemRestabelecimentoInatividadeAVista = percentualDescontoSemRestabelecimentoInatividadeAVista;
 	}
 
@@ -445,11 +435,16 @@ public class ParcelamentoPerfilActionForm extends ActionForm {
 		return quantidadeMaximaMesesInatividadeAVista;
 	}
 
-	public void setQuantidadeMaximaMesesInatividadeAVista(
-			String quantidadeMaximaMesesInatividadeAVista) {
+	public void setQuantidadeMaximaMesesInatividadeAVista(String quantidadeMaximaMesesInatividadeAVista) {
 		this.quantidadeMaximaMesesInatividadeAVista = quantidadeMaximaMesesInatividadeAVista;
 	}
-	
-	
+
+	public String getPercentualDescontoTotalPagamentoAVista() {
+		return percentualDescontoTotalPagamentoAVista;
+	}
+
+	public void setPercentualDescontoTotalPagamentoAVista(String percentualDescontoTotalPagamentoAVista) {
+		this.percentualDescontoTotalPagamentoAVista = percentualDescontoTotalPagamentoAVista;
+	}
 }
 

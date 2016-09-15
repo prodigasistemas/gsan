@@ -303,9 +303,9 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 
 			verificarPercentualMaximo(percentual);
 
-			parcelamentoPerfil.setPercentualDescontoPagamentoAVista(percentual);
+			parcelamentoPerfil.setPercentualDescontoAcrescimoPagamentoAVista(percentual);
 		} else {
-			parcelamentoPerfil.setPercentualDescontoPagamentoAVista(new BigDecimal(0));
+			parcelamentoPerfil.setPercentualDescontoAcrescimoPagamentoAVista(new BigDecimal(0));
 		}
 
 		if (percentualTarifaMinimaPrestacao != null

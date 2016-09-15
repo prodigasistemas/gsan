@@ -1,38 +1,17 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
 
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
-	<class name="gcom.cobranca.parcelamento.ParcelamentoPerfil" table="cobranca.parcelamento_perfil">
+    <class name="gcom.cobranca.parcelamento.ParcelamentoPerfil" table="cobranca.parcelamento_perfil">
 		<id name="id" type="java.lang.Integer" column="pcpf_id">
 			<generator class="sequence">
 				<param name="sequence">cobranca.seq_parcelamento_perfil</param>
 			</generator>
 		</id>
-		<property
-        name="percentualDescontoAcrescimoMulta"
-        type="java.math.BigDecimal"
-        column="pcpf_pcdescontoacrescimomulta"
-        length="5"
-    />
-    
-    <property
-        name="percentualDescontoAcrescimoJurosMora"
-        type="java.math.BigDecimal"
-        column="pcpf_pcdescontoacrescimojurosmora"
-        length="5"
-    />
-    
-    <property
-        name="percentualDescontoAcrescimoAtualizacaoMonetaria"
-        type="java.math.BigDecimal"
-        column="pcpf_pcdescontoacrescimoatualizacaomonetaria"
-        length="5"
-    />
+		
+		<property name="percentualDescontoAcrescimoMulta" type="java.math.BigDecimal" column="pcpf_pcdescontoacrescimomulta" length="5" />
+		<property name="percentualDescontoAcrescimoJurosMora" type="java.math.BigDecimal" column="pcpf_pcdescontoacrescimojurosmora" length="5" />
+		<property name="percentualDescontoAcrescimoAtualizacaoMonetaria" type="java.math.BigDecimal" column="pcpf_pcdescontoacrescimoatualizacaomonetaria" length="5" />
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pcpf_tmultimaalteracao" length="8"/>
 		<property name="percentualTarifaMinimaPrestacao" type="java.math.BigDecimal" column="pcpf_pctarifaminimaprestacao" length="5"/>
 		<property name="numeroConsumoMinimo" type="java.lang.Integer" not-null="false" column="pcpf_nnconsumominimo"/>
@@ -52,89 +31,26 @@
 		<property name="capacidadeHidrometro" type="java.lang.Short" column="pcpf_icpesquisacapchidmt" not-null="true" length="2"/>
 		<property name="indicadorEntradaMinima" type="java.lang.Short" column="pcpf_icentradaminima" not-null="true" length="2"/>
 		<property name="quantidadeMaximaReparcelamento" type="java.lang.Integer" column="pcpf_qqmaximoreparcelamento"/>
-		<property name="percentualDescontoPagamentoAVista" type="java.math.BigDecimal" column="pcpf_pcdescontopagamentoavista" length="5"/>
+		<property name="percentualDescontoAcrescimoPagamentoAVista" type="java.math.BigDecimal" column="pcpf_pcdescontoacrescimospagamentoavista" length="5"/>
 		<property name="dataLimiteDescontoPagamentoAVista" type="java.sql.Date" column="pcpf_dtlimitedescpagmtavista" length="4"/>
-		<!-- Associations -->
-		<!-- bi-directional many-to-one association to Subcategoria -->
+		<property name="percentualDescontoTotalPagamentoAVista" type="java.math.BigDecimal" column="pcpf_pcdescontototalpagamentoavista" length="5"/>
+
 		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="true">
 			<column name="scat_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to ParcelamentoDescontoInativid -->
-		<!--
-    <set
-        name="parcelamentoDescontoInativids"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="pcpf_id" />
-        </key>
-        <one-to-many 
-            class="gcom.ParcelamentoDescontoInativid"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to ParcelamentoDescontoAntiguid -->
-		<!--
-    <set
-        name="parcelamentoDescontoAntiguids"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="pcpf_id" />
-        </key>
-        <one-to-many 
-            class="gcom.ParcelamentoDescontoAntiguid"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to ParcelamentoQtdeReparcel -->
-		<!--
-    <set
-        name="parcelamentoQtdeReparcels"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="pcpf_id" />
-        </key>
-        <one-to-many 
-            class="gcom.ParcelamentoQtdeReparcel"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to Parcelamento -->
-		<!--
-    <set
-        name="parcelamentos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="pcpf_id" />
-        </key>
-        <one-to-many 
-            class="gcom.Parcelamento"
-        />
-    </set>
-    -->
-		<!-- bi-directional many-to-one association to ImovelSituacaoTipo -->
+		
 		<many-to-one name="imovelSituacaoTipo" class="gcom.cadastro.imovel.ImovelSituacaoTipo" not-null="true">
 			<column name="istp_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		
 		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
 			<column name="iper_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ResolucaoDiretoria -->
+		
 		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.ResolucaoDiretoria" not-null="true">
 			<column name="rdir_id"/>
 		</many-to-one>
+		
 		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
 			<column name="catg_id"/>
 		</many-to-one>

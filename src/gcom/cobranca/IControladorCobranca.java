@@ -1042,31 +1042,6 @@ public interface IControladorCobranca {
 			boolean isContaEntradaParcelamento, Integer anoMesGuiaEntrada, Integer maiorAnoMesConta) throws ControladorException;
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
-	 * 
-	 * [UC0214] Efetuar Parcelamento de Débitos
-	 * 
-	 * 
-	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
-	 */
-	public void gerarCreditoARealizarParcelamento(
-			Imovel imovel,
-			Short numeroPrestacao,
-			BigDecimal taxaJuros,
-			Integer parcelamentoId,
-			BigDecimal valorDescontoFaixaReferenciaConta,
-			BigDecimal valorDescontoAcresimosImpontualidade,
-			BigDecimal valorDescontoAntiguidadeDebito,
-			BigDecimal valorDescontoInatividadeLigacaoAgua,
-			BigDecimal valorCreditoAnteriores,
-			Collection<Categoria> colecaoCategoria,
-			BigDecimal valorDescontoSancoesRDEspecial,
-			BigDecimal valorDescontoTarifaSocialRDEspecial, 
-			boolean isContaEntradaParcelamento,
-			Integer anoMesGuiaEntrada,
-			Integer maiorAnoMesConta) throws ControladorException;
-
-	/**
 	 * 
 	 * Inserir um comando de atividade de cobrança eventual
 	 * 
