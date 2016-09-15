@@ -63,8 +63,8 @@ public class ControladorCobrancaCAEMASEJB extends ControladorCobranca implements
 		
 		BigDecimal retorno = BigDecimal.ZERO;
 		
-		if (valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista() != null && 
-			!valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista()
+		if (valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista() != null && 
+			!valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista()
 			.equals(BigDecimal.ZERO)) {
 			
 			BigDecimal valorDescontos = BigDecimal.ZERO;
@@ -73,7 +73,7 @@ public class ControladorCobrancaCAEMASEJB extends ControladorCobranca implements
 
 			//CALCULANDO O PERCENTUAL DO DESCONTO
 			percentualDesconto = Util.dividirArredondando(
-			valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista().setScale(
+			valorDescontoPagamentoAVista.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista().setScale(
 			Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO), ConstantesSistema.CEM);
 			
 			//TOTALIZANDO O VALOR DOS ACRÉSCIMOS POR IMPONTUALIDADE (ANTIGUIDADE + GUIA_PAGAMENTO)

@@ -230,9 +230,9 @@ public class InserirPerfilParcelamentoAction extends GcomAction {
         
         if (parcelamentoPerfilActionForm.getPercentualDescontoAcrescimoPagamentoAVista() != null
 			&& !parcelamentoPerfilActionForm.getPercentualDescontoAcrescimoPagamentoAVista().equalsIgnoreCase("")){
-        	parcelamentoPerfilNova.setPercentualDescontoPagamentoAVista(new BigDecimal(percentualDescontoAcrescimoPagamentoAVista));	
+        	parcelamentoPerfilNova.setPercentualDescontoAcrescimoPagamentoAVista(new BigDecimal(percentualDescontoAcrescimoPagamentoAVista));	
         }else{
-        	parcelamentoPerfilNova.setPercentualDescontoPagamentoAVista(new BigDecimal(0));
+        	parcelamentoPerfilNova.setPercentualDescontoAcrescimoPagamentoAVista(new BigDecimal(0));
         }
                 
         if (parcelamentoPerfilActionForm.getPercentualTarifaMinimaPrestacao() != null
