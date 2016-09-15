@@ -25,7 +25,7 @@
 		<property name="idLigacaoAguaSituacao" type="java.lang.Integer" column="last_id"/>
 		<property name="idLigacaoEsgotoSituacao" type="java.lang.Integer" column="lest_id"/>
 		<property name="idImovelPerfil" type="java.lang.Integer" column="iper_id"/>
-		<property name="volumePiscina" type="java.math.BigDecimal" column="imac_vopiscina" length="5"/>
+		<property name="volumePiscina" type="java.math.BigDecimal" column="imac_vol_piscina" length="5"/>
 		<property name="idPocoTipo" type="java.lang.Integer" column="poco_id"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
 		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
