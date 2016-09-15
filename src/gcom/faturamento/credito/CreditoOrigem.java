@@ -24,6 +24,7 @@ public class CreditoOrigem extends ObjetoTransacao {
 	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(11);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(12);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(13);
+	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA = new Integer(14);
 
 	private Integer id;
 	private String descricaoCreditoOrigem;
