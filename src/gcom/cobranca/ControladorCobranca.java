@@ -10188,6 +10188,7 @@ public class ControladorCobranca implements SessionBean {
 				valorDescontoInatividadePagamentoAVista);
 
 		BigDecimal valorDescontoPagamentoAVista = this.determinarValorDescontoPagamentoAVista(valorDescontoPagamentoAVistaHelper, valorDescontoAcrescimosImpontualidadeHelper, true);
+		valorDescontoPagamentoAVista = calcularDescontoTotalPagamentoAVista(helper, parcelamentoPerfil, valorDescontoPagamentoAVista);
 
 		negociacaoOpcoesParcelamentoHelper.setValorDescontoFaixaReferenciaConta(valorDescontoFaixaReferenciaConta);
 		negociacaoOpcoesParcelamentoHelper.setValorDescontoAcrecismosImpotualidade(valorDescontoAcrescimosImpontualidade);
@@ -10361,6 +10362,18 @@ public class ControladorCobranca implements SessionBean {
 		negociacaoOpcoesParcelamentoHelper.setValorEntradaMinima(valorEntrada.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
 		return negociacaoOpcoesParcelamentoHelper;
+	}
+
+	private BigDecimal calcularDescontoTotalPagamentoAVista(ObterOpcoesDeParcelamentoHelper helper, ParcelamentoPerfil parcelamentoPerfil, BigDecimal valorDescontoPagamentoAVista) {
+		if (parcelamentoPerfil.getPercentualDescontoTotalPagamentoAVista() != null && !parcelamentoPerfil.getPercentualDescontoTotalPagamentoAVista().equals(new BigDecimal("0.00"))) {
+			BigDecimal percentualDescontoTotalPagamentoAVista = Util.dividirArredondando(parcelamentoPerfil.getPercentualDescontoTotalPagamentoAVista(),ConstantesSistema.CEM);
+			
+			BigDecimal valorDebitoTotalAVista = helper.getValorDebitoAtualizado().subtract(valorDescontoPagamentoAVista);
+			BigDecimal valorDescontoTotalPagamentoAVista = valorDebitoTotalAVista.multiply(percentualDescontoTotalPagamentoAVista);
+			
+			valorDescontoPagamentoAVista = valorDescontoPagamentoAVista.add(valorDescontoTotalPagamentoAVista);
+		}
+		return valorDescontoPagamentoAVista;
 	}
 
 	/**
@@ -42465,7 +42478,7 @@ public class ControladorCobranca implements SessionBean {
 	 * @return BigDecimal
 	 * @throws ControladorException
 	 */
-	public BigDecimal determinarValorDescontoPagamentoAVista(DeterminarValorDescontoPagamentoAVistaHelper valorDescontoPagamentoAVistaHelper,
+	public BigDecimal determinarValorDescontoPagamentoAVista(DeterminarValorDescontoPagamentoAVistaHelper helper,
 			DeterminarValorDescontoAcrescimosImpontualidadeHelper valorDescontoAcrescimos, boolean isParcelamento)
 			throws ControladorException {
 
@@ -42473,34 +42486,34 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorTotalDescontos = BigDecimal.ZERO;
 
 		// Calcula o valor de desconto por inatividade para pagamento a vista
-		if (valorDescontoPagamentoAVistaHelper.getValorDescontoInatividadeAVista() != null
-				&& !valorDescontoPagamentoAVistaHelper.getValorDescontoInatividadeAVista().equals(new BigDecimal("0.00"))) {
+		if (helper.getValorDescontoInatividadeAVista() != null
+				&& !helper.getValorDescontoInatividadeAVista().equals(new BigDecimal("0.00"))) {
 
 			// SOMANDO O VALOR DO DESCONTO DOS ACRESCIMOS + O VALOR DO DESCONTO POR INATIVIDADE
-			valorTotalDescontos = valorDescontoPagamentoAVistaHelper.getValorDescontoAcrecismosImpotualidade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO)
-					.add(valorDescontoPagamentoAVistaHelper.getValorDescontoInatividadeAVista().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+			valorTotalDescontos = helper.getValorDescontoAcrecismosImpotualidade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO)
+					.add(helper.getValorDescontoInatividadeAVista().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
 		} else {
 			// SOMANDO O VALOR DO DESCONTO DOS ACRESCIMOS + O VALOR DO DESCONTO POR INATIVIDADE
-			valorTotalDescontos = valorDescontoPagamentoAVistaHelper.getValorDescontoAcrecismosImpotualidade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO)
-					.add(valorDescontoPagamentoAVistaHelper.getValorDescontoInatividade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+			valorTotalDescontos = helper.getValorDescontoAcrecismosImpotualidade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO)
+					.add(helper.getValorDescontoInatividade().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
 		}
 
 		// SOMANDO O VALOR DO DESCONTO POR FAIXA DE REFERENCIA DA CONTA
-		valorTotalDescontos = valorTotalDescontos.add(valorDescontoPagamentoAVistaHelper.getValorDescontoFaixaReferenciaConta().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+		valorTotalDescontos = valorTotalDescontos.add(helper.getValorDescontoFaixaReferenciaConta().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 		
 		// SOMANDO O VALOR DO DESCONTO POR ANTIGUIDADE
-		valorTotalDescontos = valorTotalDescontos.add(valorDescontoPagamentoAVistaHelper.getValorDescontoAntiguidade().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+		valorTotalDescontos = valorTotalDescontos.add(helper.getValorDescontoAntiguidade().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
 		// SOMANDO O VALOR DO DESCONTO DAS SANÇÕES
-		valorTotalDescontos = valorTotalDescontos.add(valorDescontoPagamentoAVistaHelper.getValorDescontoSancoes().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+		valorTotalDescontos = valorTotalDescontos.add(helper.getValorDescontoSancoes().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
 		// SOMANDO O VALOR DO DESCONTO DA TARIFA SOCIAL
-		valorTotalDescontos = valorTotalDescontos.add(valorDescontoPagamentoAVistaHelper.getValorDescontoTarifaSocial().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+		valorTotalDescontos = valorTotalDescontos.add(helper.getValorDescontoTarifaSocial().setScale( Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
 
-		if (valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista() != null
-				&& !valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista().equals(new BigDecimal("0.00"))) {
+		if (helper.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista() != null
+				&& !helper.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista().equals(new BigDecimal("0.00"))) {
 
 			// SOMANDO O VALOR TOTAL DOS DESCONTOS
 			retorno = retorno.add(valorTotalDescontos);
@@ -42508,12 +42521,12 @@ public class ControladorCobranca implements SessionBean {
 
 			// OBTENDO O VALOR TOTAL DO DÉBITO ATUALIZADO
 			Object[] valorDebitoTotalEAcrescimoImpontualidadeTotal = this.obterValorTotalDebitoAtualizadoParaParcelamento(
-					valorDescontoPagamentoAVistaHelper.getObterOpcoesDeParcelamentoHelper().getIdImovel(),
-					valorDescontoPagamentoAVistaHelper.getObterOpcoesDeParcelamentoHelper().getAnoMesInicialReferenciaDebito(),
-					valorDescontoPagamentoAVistaHelper.getAnoMesLimiteMaximo(),
-					valorDescontoPagamentoAVistaHelper.getObterOpcoesDeParcelamentoHelper().getIndicadoresParcelamentoHelper(),
-					valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil(),
-					valorDescontoPagamentoAVistaHelper.getResolucaoDiretoria());
+					helper.getObterOpcoesDeParcelamentoHelper().getIdImovel(),
+					helper.getObterOpcoesDeParcelamentoHelper().getAnoMesInicialReferenciaDebito(),
+					helper.getAnoMesLimiteMaximo(),
+					helper.getObterOpcoesDeParcelamentoHelper().getIndicadoresParcelamentoHelper(),
+					helper.getParcelamentoPerfil(),
+					helper.getResolucaoDiretoria());
 
 			BigDecimal valorDebitoTotalAtualizado = BigDecimal.ZERO;
 			BigDecimal valorAcrescimosImpontualidadeTotal = BigDecimal.ZERO;
@@ -42523,17 +42536,17 @@ public class ControladorCobranca implements SessionBean {
 				valorAcrescimosImpontualidadeTotal = (BigDecimal) valorDebitoTotalEAcrescimoImpontualidadeTotal[1];
 			}
 
-			if (valorDescontoPagamentoAVistaHelper.getResolucaoDiretoria().getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.SIM)) {
+			if (helper.getResolucaoDiretoria().getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.SIM)) {
 				Object[] debitoACobrarParcelamentoImovel = this.pesquisaSomatorioValorDebitoACobrarParcelamentoImovel(
-						valorDescontoPagamentoAVistaHelper.getObterOpcoesDeParcelamentoHelper().getIdImovel(),
-						valorDescontoPagamentoAVistaHelper.getAnoMesLimiteMaximo());
+						helper.getObterOpcoesDeParcelamentoHelper().getIdImovel(),
+						helper.getAnoMesLimiteMaximo());
 
 				BigDecimal somatorioValorDebitoACobrarParcelamento = (BigDecimal) debitoACobrarParcelamentoImovel[0];
 
 				valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.add(somatorioValorDebitoACobrarParcelamento);
 
-				if (valorDescontoPagamentoAVistaHelper.getValorCreditoARealizar() != null) {
-					valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.subtract(valorDescontoPagamentoAVistaHelper.getValorCreditoARealizar());
+				if (helper.getValorCreditoARealizar() != null) {
+					valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.subtract(helper.getValorCreditoARealizar());
 				}
 			}
 
@@ -42541,11 +42554,11 @@ public class ControladorCobranca implements SessionBean {
 
 				BigDecimal descontoAVistaAcrescimoImpontualidade = BigDecimal.ZERO;
 
-				if (valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista().compareTo(new BigDecimal("0.00")) == 1) {
+				if (helper.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista().compareTo(new BigDecimal("0.00")) == 1) {
 
 					// CALCULANDO O PERCENTUAL DO DESCONTO DOS ACRESCIMOS IMPONTUALIDADE
 					BigDecimal percentualDescontoAcrescimoImpontualidade = Util.dividirArredondando(
-							valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista(),ConstantesSistema.CEM);
+							helper.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista(),ConstantesSistema.CEM);
 
 					descontoAVistaAcrescimoImpontualidade = valorAcrescimosImpontualidadeTotal
 							.multiply(percentualDescontoAcrescimoImpontualidade);
@@ -42556,12 +42569,12 @@ public class ControladorCobranca implements SessionBean {
 				// se so entrar as contas para calcular o desconto a vista, não
 				// subtrair do valor das conta os 'descontos'
 				// o PercentualDescontoAVista vai ser aplicado diretamente no  valor total das contas
-				if (valorDescontoPagamentoAVistaHelper.getResolucaoDiretoria().getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.NAO)) {
+				if (helper.getResolucaoDiretoria().getIndicadorDescontoSoEmContaAVista().equals(ConstantesSistema.NAO)) {
 					valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.subtract(valorTotalDescontos);
 				}
 
 				// CALCULANDO O PERCENTUAL DO DESCONTO
-				BigDecimal percentualDesconto = Util.dividirArredondando(valorDescontoPagamentoAVistaHelper.getParcelamentoPerfil().getPercentualDescontoPagamentoAVista(), ConstantesSistema.CEM);
+				BigDecimal percentualDesconto = Util.dividirArredondando(helper.getParcelamentoPerfil().getPercentualDescontoAcrescimoPagamentoAVista(), ConstantesSistema.CEM);
 
 				BigDecimal descontoAVista = valorDebitoTotalAtualizado.multiply(percentualDesconto);
 
@@ -42572,10 +42585,9 @@ public class ControladorCobranca implements SessionBean {
 			}
 
 		} else {
-
 			BigDecimal valorTotalAcrescimosImpontualidade = this.obterValorTotalAcrescimosImpontualidadeParaParcelamento(
-					valorDescontoPagamentoAVistaHelper.getObterOpcoesDeParcelamentoHelper(),
-					valorDescontoPagamentoAVistaHelper.getAnoMesLimiteMaximo(), isParcelamento);
+					helper.getObterOpcoesDeParcelamentoHelper(),
+					helper.getAnoMesLimiteMaximo(), isParcelamento);
 
 			if (valorTotalDescontos.compareTo(valorTotalAcrescimosImpontualidade) == 1) {
 				retorno = valorTotalDescontos;
@@ -42583,7 +42595,7 @@ public class ControladorCobranca implements SessionBean {
 				retorno = valorTotalAcrescimosImpontualidade;
 			}
 		}
-
+		
 		return retorno;
 	}
 
@@ -42915,7 +42927,7 @@ public class ControladorCobranca implements SessionBean {
 
 			valorDebitoTotalAtualizado = valorDebitoTotalAtualizado.subtract(valorDescontos);
 
-			BigDecimal descontoAVista = parcelamentoPerfil.getPercentualDescontoPagamentoAVista();
+			BigDecimal descontoAVista = parcelamentoPerfil.getPercentualDescontoAcrescimoPagamentoAVista();
 			if (descontoAVista != null && !descontoAVista.equals(BigDecimal.ZERO)) {
 				descontoAVista = descontoAVista.divide(new BigDecimal("100.00"));
 				valorDescontoPagamentoAVista = valorDebitoTotalAtualizado.multiply(descontoAVista.setScale(Parcelamento.CASAS_DECIMAIS,

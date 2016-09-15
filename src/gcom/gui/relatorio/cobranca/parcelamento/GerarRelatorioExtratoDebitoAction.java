@@ -48,22 +48,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-/**
- * [UC0444] Gerar e Emitir Extrato de Débito
- */
 @SuppressWarnings("unchecked")
 public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTarefaRelatorio {
 
 	private Usuario usuarioLogado = null;
-	
+
 	private Imovel imovel = null;
-	private String inscricao = "";    	
+	private String inscricao = "";
 	private String matricula = "";
 	private String nomeUsuario = "";
 	private String cpfCnpj = "";
 	private String enderecoImovel = "";
-	
-	private Collection<ContaValoresHelper> colecaoContas =  null;
+
+	private Collection<ContaValoresHelper> colecaoContas = null;
 	private Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamento = null;
 	private Collection<DebitoACobrar> colecaoDebitosACobrar = null;
 	private Collection<CreditoARealizar> colecaoCreditoARealizar = null;
@@ -71,35 +68,34 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	private Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento = null;
 	private BigDecimal valorAcrescimosImpontualidade = BigDecimal.ZERO;
 	private BigDecimal valorDocumento = BigDecimal.ZERO;
-	private BigDecimal valorDesconto =  BigDecimal.ZERO;
-	private BigDecimal valorDescontoCredito =  BigDecimal.ZERO;
-	
-	private Short indicadorGeracaoTaxaCobranca = new Short("2") ;
-	
+	private BigDecimal valorDesconto = BigDecimal.ZERO;
+	private BigDecimal valorDescontoCredito = BigDecimal.ZERO;
+
+	private Short indicadorGeracaoTaxaCobranca = new Short("2");
+
 	private BigDecimal parcelamentoValorDebitoACobrarServico = null;
 	private BigDecimal parcelamentoValorDebitoACobrarParcelamento = null;
-	
+
 	private ResolucaoDiretoria resolucaoDiretoria = null;
-	
+
 	private static Logger logger = Logger.getLogger(GerarRelatorioExtratoDebitoAction.class);
-	
-	public ActionForward execute(ActionMapping actionMapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) {
-		
+
+	public ActionForward execute(ActionMapping actionMapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+
 		Fachada fachada = Fachada.getInstancia();
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		
+
 		HttpSession sessao = request.getSession(false);
 		usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
-			
+
 		try {
-			
+
 			if (usuarioLogado != null) {
 				logger.info("[Usuario logado: " + usuarioLogado.getLogin() + "]");
 			}
-			
+
 			if (request.getParameter("extratoDebito") != null) {
-					setDadosExtratoDebito(fachada, sessao);
+				setDadosExtratoDebito(fachada, sessao);
 			} else if (request.getParameter("parcelamento") != null) {
 				setDadosEfetuarParcelamento(form, request, sessao);
 			} else if (request.getParameter("consultarDebito") != null) {
@@ -107,33 +103,31 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			} else {
 				setDadosConsultarImovelAbaDebitos(fachada, sessao);
 			}
-			
-			// Caso não seja possível emitir documento de cobrança
+
 			if (imovel.getCobrancaSituacaoTipo() != null) {
 				if (imovel.getCobrancaSituacaoTipo().getIndicadorEmitirDocumentoCobranca().equals(ConstantesSistema.NAO)) {
 					throw new ActionServletException("atencao.extratonaoemitido_imovel_situacaoespecial");
 				}
 			}
-	
+
 			if (valorDocumento.compareTo(BigDecimal.ZERO) < 0) {
 				throw new ActionServletException("atencao.resultado.extrato.negativo");
 			}
-	
+
 			if (valorAcrescimosImpontualidade == null) {
 				valorAcrescimosImpontualidade = BigDecimal.ZERO;
 			}
-	
+
 			if (valorDesconto == null) {
 				valorDesconto = BigDecimal.ZERO;
 			}
-			
+
 			ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = gerarDocumentoCobranca(fachada);
 			CobrancaDocumento documentoCobranca = getDocumentoCobranca(fachada, sessao, extratoDebitoRelatorioHelper);
-	
-			return gerarRelatorio(actionMapping, request, response, fachada,
-					sistemaParametro, extratoDebitoRelatorioHelper, documentoCobranca);
+
+			return gerarRelatorio(actionMapping, request, response, fachada, sistemaParametro, extratoDebitoRelatorioHelper, documentoCobranca);
 		} catch (ControladorException e) {
-			
+
 			e.printStackTrace();
 		} finally {
 			limparSessao(request);
@@ -141,50 +135,39 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		return null;
 	}
 
-	private ActionForward gerarRelatorio(ActionMapping actionMapping,
-			HttpServletRequest request, HttpServletResponse response,
-			Fachada fachada, SistemaParametro sistemaParametro,
-			ExtratoDebitoRelatorioHelper extratoDebitoHelper,
-			CobrancaDocumento documentoCobranca) throws NumberFormatException {
-		
+	private ActionForward gerarRelatorio(ActionMapping actionMapping, HttpServletRequest request, HttpServletResponse response, Fachada fachada, SistemaParametro sistemaParametro,
+			ExtratoDebitoRelatorioHelper extratoDebitoHelper, CobrancaDocumento documentoCobranca) throws NumberFormatException {
+
 		BigDecimal valorTotalContas = extratoDebitoHelper.getValorTotalConta();
 		valorTotalContas = valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-		
+
 		BigDecimal valorTotalRestanteDebitosACobrar = new BigDecimal("0.00");
-		
-		if (parcelamentoValorDebitoACobrarServico != null
-				&& parcelamentoValorDebitoACobrarParcelamento != null) {
+
+		if (parcelamentoValorDebitoACobrarServico != null && parcelamentoValorDebitoACobrarParcelamento != null) {
 			valorTotalRestanteDebitosACobrar = parcelamentoValorDebitoACobrarServico.add(parcelamentoValorDebitoACobrarParcelamento);
 		} else {
 			valorTotalRestanteDebitosACobrar = extratoDebitoHelper.getValorTotalRestanteDebitosACobrar();
 		}
-		
+
 		BigDecimal valorServicosAtualizacoes = BigDecimal.ZERO;
-		valorServicosAtualizacoes = valorAcrescimosImpontualidade.add(
-				extratoDebitoHelper.getValorTotalGuiaPagamento().add(valorTotalRestanteDebitosACobrar));
-		
+		valorServicosAtualizacoes = valorAcrescimosImpontualidade.add(extratoDebitoHelper.getValorTotalGuiaPagamento().add(valorTotalRestanteDebitosACobrar));
+
 		String valorTotalContasString = Util.formatarMoedaReal(valorTotalContas);
 		String valorServicosAtualizacoesString = Util.formatarMoedaReal(valorServicosAtualizacoes);
-		valorDescontoCredito  = valorDescontoCredito.add(valorDesconto);
+		valorDescontoCredito = valorDescontoCredito.add(valorDesconto);
 		String valorDescontoString = Util.formatarMoedaReal(valorDescontoCredito);
-		String valorTotalComDescontoString = Util.formatarMoedaReal(valorDocumento); 
-		 
-		return processarRelatorio(actionMapping, request, response, fachada,
-				sistemaParametro, extratoDebitoHelper, documentoCobranca,
-				valorTotalContasString, valorServicosAtualizacoesString,
+		String valorTotalComDescontoString = Util.formatarMoedaReal(valorDocumento);
+
+		return processarRelatorio(actionMapping, request, response, fachada, sistemaParametro, extratoDebitoHelper, documentoCobranca, valorTotalContasString, valorServicosAtualizacoesString,
 				valorDescontoString, valorTotalComDescontoString);
 	}
 
-	private ActionForward processarRelatorio(ActionMapping actionMapping,
-			HttpServletRequest request, HttpServletResponse response,
-			Fachada fachada, SistemaParametro sistemaParametro,
-			ExtratoDebitoRelatorioHelper extratoDebitoHelper,
-			CobrancaDocumento documentoCobranca, String valorTotalContasString,
-			String valorServicosAtualizacoesString, String valorDescontoString,
+	private ActionForward processarRelatorio(ActionMapping actionMapping, HttpServletRequest request, HttpServletResponse response, Fachada fachada, SistemaParametro sistemaParametro,
+			ExtratoDebitoRelatorioHelper extratoDebitoHelper, CobrancaDocumento documentoCobranca, String valorTotalContasString, String valorServicosAtualizacoesString, String valorDescontoString,
 			String valorTotalComDescontoString) {
 
 		ActionForward retorno = null;
-		
+
 		RelatorioExtratoDebito relatorioExtratoDebito = new RelatorioExtratoDebito(usuarioLogado);
 
 		relatorioExtratoDebito.addParametro("nomeLocalidade", documentoCobranca.getLocalidade().getDescricao());
@@ -198,7 +181,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		relatorioExtratoDebito.addParametro("situacaoEsgoto", documentoCobranca.getImovel().getLigacaoEsgotoSituacao().getId().toString());
 
 		Collection<Categoria> colecaoCategorias = fachada.obterQuantidadeEconomiasCategoria(imovel);
-		relatorioExtratoDebito.addParametro("qtdResidencial",getQuantidadeEconomias(fachada, Categoria.RESIDENCIAL, colecaoCategorias));
+		relatorioExtratoDebito.addParametro("qtdResidencial", getQuantidadeEconomias(fachada, Categoria.RESIDENCIAL, colecaoCategorias));
 		relatorioExtratoDebito.addParametro("qtdComercial", getQuantidadeEconomias(fachada, Categoria.COMERCIAL, colecaoCategorias));
 		relatorioExtratoDebito.addParametro("qtdIndustrial", getQuantidadeEconomias(fachada, Categoria.INDUSTRIAL, colecaoCategorias));
 		relatorioExtratoDebito.addParametro("qtdPublico", getQuantidadeEconomias(fachada, Categoria.PUBLICO, colecaoCategorias));
@@ -206,8 +189,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		relatorioExtratoDebito.addParametro("descPerfilImovel", documentoCobranca.getImovelPerfil().getDescricao());
 		relatorioExtratoDebito.addParametro("dataEmissao", Util.formatarData(documentoCobranca.getEmissao()));
 
-		String dataValidade = Util.formatarData(Util.adicionarNumeroDiasDeUmaData(
-				new Date(), sistemaParametro.getNumeroDiasValidadeExtrato()));
+		String dataValidade = Util.formatarData(Util.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroDiasValidadeExtrato()));
 		relatorioExtratoDebito.addParametro("dataValidade", dataValidade);
 
 		relatorioExtratoDebito.addParametro("valorTotalContas", valorTotalContasString);
@@ -216,8 +198,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		relatorioExtratoDebito.addParametro("valorTotalComDesconto", valorTotalComDescontoString);
 		relatorioExtratoDebito.addParametro("imovel", imovel);
 
-		if (extratoDebitoHelper.getDocumentoCobranca().getValorDocumento() != null
-				&& sistemaParametro.getValorExtratoFichaComp() != null
+		if (extratoDebitoHelper.getDocumentoCobranca().getValorDocumento() != null && sistemaParametro.getValorExtratoFichaComp() != null
 				&& !sistemaParametro.getValorExtratoFichaComp().equals(BigDecimal.ZERO)
 				&& extratoDebitoHelper.getDocumentoCobranca().getValorDocumento().compareTo(sistemaParametro.getValorExtratoFichaComp()) >= 0) {
 
@@ -233,10 +214,9 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		relatorioExtratoDebito.addParametro("codigoRotaESequencialRota", codigoRotaESequencialRota);
 
 		relatorioExtratoDebito.addParametro("tipoFormatoRelatorio", TarefaRelatorio.TIPO_PDF);
-		
+
 		try {
-			retorno = processarExibicaoRelatorio(relatorioExtratoDebito, TarefaRelatorio.TIPO_PDF + "",
-					request, response, actionMapping);
+			retorno = processarExibicaoRelatorio(relatorioExtratoDebito, TarefaRelatorio.TIPO_PDF + "", request, response, actionMapping);
 
 		} catch (RelatorioVazioException ex) {
 			reportarErros(request, "atencao.relatorio.vazio");
@@ -245,138 +225,104 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		return retorno;
 	}
 
-	private RelatorioExtratoDebito obterCodigoBarras(Fachada fachada,
-			CobrancaDocumento documentoCobranca,
-			RelatorioExtratoDebito relatorioExtratoDebito) {
-		
-		String representacaoNumericaCodBarra = fachada.obterRepresentacaoNumericaCodigoBarra(5, valorDocumento,
-				documentoCobranca.getLocalidade().getId(), imovel.getId(), null, null, null, null,
-				documentoCobranca.getNumeroSequenciaDocumento() + "",
-				documentoCobranca.getDocumentoTipo().getId(), null, null, null);
+	private RelatorioExtratoDebito obterCodigoBarras(Fachada fachada, CobrancaDocumento documentoCobranca, RelatorioExtratoDebito relatorioExtratoDebito) {
 
-		String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
-				+ "-" + representacaoNumericaCodBarra.substring(11, 12)
-				+ " " + representacaoNumericaCodBarra.substring(12, 23)
-				+ "-" + representacaoNumericaCodBarra.substring(23, 24)
-				+ " " + representacaoNumericaCodBarra.substring(24, 35)
-				+ "-" + representacaoNumericaCodBarra.substring(35, 36)
-				+ " " + representacaoNumericaCodBarra.substring(36, 47)
-				+ "-" + representacaoNumericaCodBarra.substring(47, 48);
+		String representacaoNumericaCodBarra = fachada.obterRepresentacaoNumericaCodigoBarra(5, valorDocumento, documentoCobranca.getLocalidade().getId(), imovel.getId(), null, null, null, null,
+				documentoCobranca.getNumeroSequenciaDocumento() + "", documentoCobranca.getDocumentoTipo().getId(), null, null, null);
+
+		String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
+				+ representacaoNumericaCodBarra.substring(12, 23) + "-" + representacaoNumericaCodBarra.substring(23, 24) + " " + representacaoNumericaCodBarra.substring(24, 35) + "-"
+				+ representacaoNumericaCodBarra.substring(35, 36) + " " + representacaoNumericaCodBarra.substring(36, 47) + "-" + representacaoNumericaCodBarra.substring(47, 48);
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarra", representacaoNumericaCodBarraFormatada);
 
-		String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
-				+ representacaoNumericaCodBarra.substring(12, 23)
-				+ representacaoNumericaCodBarra.substring(24, 35)
-				+ representacaoNumericaCodBarra.substring(36, 47);
+		String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11) + representacaoNumericaCodBarra.substring(12, 23)
+				+ representacaoNumericaCodBarra.substring(24, 35) + representacaoNumericaCodBarra.substring(36, 47);
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarraSemDigito", representacaoNumericaCodBarraSemDigito);
-		
+
 		return relatorioExtratoDebito;
 	}
 
-	private RelatorioExtratoDebito obterCodigoBarrasFichaCompensacao(Fachada fachada,
-			CobrancaDocumento documentoCobranca,
-			RelatorioExtratoDebito relatorioExtratoDebito) {
-		
-		StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-				DocumentoTipo.EXTRATO_DE_DEBITO.toString(), documentoCobranca.getId().toString());
-		
+	private RelatorioExtratoDebito obterCodigoBarrasFichaCompensacao(Fachada fachada, CobrancaDocumento documentoCobranca, RelatorioExtratoDebito relatorioExtratoDebito) {
+
+		StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(DocumentoTipo.EXTRATO_DE_DEBITO.toString(), documentoCobranca.getId().toString());
+
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 		relatorioExtratoDebito.addParametro("nossoNumero", nossoNumero.toString());
 
 		Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(), 75);
 		String fatorVencimento = fachada.obterFatorVencimento(dataVencimentoMais75);
 
-		String especificacaoCodigoBarra = fachada.obterEspecificacaoCodigoBarraFichaCompensacao(
-				ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
-				ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
-				documentoCobranca.getValorDocumento(),
-				nossoNumeroSemDV.toString(),
-				ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
-				fatorVencimento);
+		String especificacaoCodigoBarra = fachada.obterEspecificacaoCodigoBarraFichaCompensacao(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+				documentoCobranca.getValorDocumento(), nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 
-		String representacaoNumericaCodigoBarraFichaCompensacao = fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(
-				especificacaoCodigoBarra);
+		String representacaoNumericaCodigoBarraFichaCompensacao = fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarraSemDigito", especificacaoCodigoBarra);
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarra", representacaoNumericaCodigoBarraFichaCompensacao);
-		
+
 		return relatorioExtratoDebito;
 	}
 
 	private String getQuantidadeEconomias(Fachada fachada, Integer idCategoria, Collection<Categoria> colecaoCategorias) {
 		String quantidade = "";
-		for (Categoria categoria : colecaoCategorias) {
-			if (categoria.getId().equals(idCategoria)) {
-				quantidade = categoria.getQuantidadeEconomiasCategoria().toString();
+
+		if (colecaoCategorias != null && !colecaoCategorias.isEmpty()) {
+			for (Categoria categoria : colecaoCategorias) {
+				if (categoria.getId().equals(idCategoria)) {
+					quantidade = categoria.getQuantidadeEconomiasCategoria().toString();
+				}
 			}
 		}
 		return quantidade;
 	}
 
 	private ExtratoDebitoRelatorioHelper gerarDocumentoCobranca(Fachada fachada) {
-		
-		return fachada.gerarEmitirExtratoDebito(imovel, indicadorGeracaoTaxaCobranca,
-				colecaoContas, colecaoGuiasPagamento, colecaoDebitosACobrar,
-				valorAcrescimosImpontualidade, valorDesconto, valorDocumento,
-				colecaoCreditoARealizar, null, resolucaoDiretoria,
-				colecaoAntecipacaoDebitosDeParcelamento,
-				colecaoAntecipacaoCreditosDeParcelamento);
+
+		return fachada.gerarEmitirExtratoDebito(imovel, indicadorGeracaoTaxaCobranca, colecaoContas, colecaoGuiasPagamento, colecaoDebitosACobrar, valorAcrescimosImpontualidade, valorDesconto,
+				valorDocumento, colecaoCreditoARealizar, null, resolucaoDiretoria, colecaoAntecipacaoDebitosDeParcelamento, colecaoAntecipacaoCreditosDeParcelamento);
 	}
 
-	private CobrancaDocumento getDocumentoCobranca(Fachada fachada, HttpSession sessao,
-			ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper) {
+	private CobrancaDocumento getDocumentoCobranca(Fachada fachada, HttpSession sessao, ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper) {
 		CobrancaDocumento documentoCobranca = extratoDebitoRelatorioHelper.getDocumentoCobranca();
 		documentoCobranca.setUsuario(usuarioLogado);
 		fachada.atualizar(documentoCobranca);
-		
+
 		return documentoCobranca;
 	}
 
 	private void setDadosConsultarImovelAbaDebitos(Fachada fachada, HttpSession sessao) throws ControladorException {
-		Integer idImovel = new Integer((String)sessao.getAttribute("idImovelPrincipalAba"));
-		
+		Integer idImovel = new Integer((String) sessao.getAttribute("idImovelPrincipalAba"));
+
 		imovel = fachada.pesquisarImovel(idImovel);
 		inscricao = imovel.getInscricaoFormatada();
 		matricula = idImovel.toString();
 		setNomeUsuarioECpfCnpj(fachada, idImovel);
-		
+
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
-		
-		colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContas");
+
+		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContas");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
-		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoValores");
-		colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizar");
-		
-		
-		valorDesconto = (BigDecimal)sessao.getAttribute("valorTotalDescontoPagamentoAVista");
-		valorDescontoCredito = Util.formatarMoedaRealparaBigDecimal((String)sessao.getAttribute("valorCreditoARealizar"));
-		
-		valorDocumento = (BigDecimal)sessao.getAttribute("valorPagamentoAVista");
+		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
+		colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizar");
+
+		valorDesconto = (BigDecimal) sessao.getAttribute("valorTotalDescontoPagamentoAVista");
+		valorDescontoCredito = Util.formatarMoedaRealparaBigDecimal((String) sessao.getAttribute("valorCreditoARealizar"));
+
+		valorDocumento = (BigDecimal) sessao.getAttribute("valorPagamentoAVista");
 		if (valorDocumento == null) {
-			valorDocumento = Util.formatarMoedaRealparaBigDecimal((String)sessao.getAttribute("valorToralSemAcrescimoESemJurosParcelamento"));
+			valorDocumento = Util.formatarMoedaRealparaBigDecimal((String) sessao.getAttribute("valorToralSemAcrescimoESemJurosParcelamento"));
 			valorDocumento = valorDocumento.subtract(valorDescontoCredito);
 		} else {
-			valorAcrescimosImpontualidade =  Util.formatarMoedaRealparaBigDecimal((String)sessao.getAttribute("valorAcrescimo")); 
+			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) sessao.getAttribute("valorAcrescimo"));
 		}
-		
+
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarSemJurosParcelamento(colecaoDebitosACobrar);
-		
-		logger.info("[ " + idImovel + "	- GERANDO EXTRATO DE DEBITO ]");
-		String valoresTotaisContas = "";
-		if (colecaoContas != null && !colecaoContas.isEmpty()) {
-			for (ContaValoresHelper conta : colecaoContas) {
-				valoresTotaisContas += conta.getValorTotalConta() + ",";
-			}
-			
-			
-			logger.info("[ " + idImovel + "	- valoresTotaisContas: " + valoresTotaisContas.substring(0, valoresTotaisContas.length()-1) + "]");
-		}
 	}
 
 	private void setNomeUsuarioECpfCnpj(Fachada fachada, Integer idImovel) {
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO,ClienteRelacaoTipo.USUARIO));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO, ClienteRelacaoTipo.USUARIO));
 		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
 
@@ -386,9 +332,9 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 
 		if (cliente != null) {
 			nomeUsuario = cliente.getNome();
-			if ( cliente.getCpf()!= null ) {
+			if (cliente.getCpf() != null) {
 				cpfCnpj = cliente.getCpfFormatado();
-			} else if ( cliente.getCnpj() != null ) {
+			} else if (cliente.getCnpj() != null) {
 				cpfCnpj = cliente.getCnpjFormatado();
 			}
 		}
@@ -401,9 +347,9 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		inscricao = imovel.getInscricaoFormatada();
 		matricula = idImovel.toString();
 		setNomeUsuarioECpfCnpj(fachada, idImovel);
-		
+
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
-		
+
 		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValores");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
@@ -420,36 +366,32 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 
 	private void setDadosEfetuarParcelamento(ActionForm actionForm, HttpServletRequest request, HttpSession sessao) {
 		imovel = (Imovel) sessao.getAttribute("imovel");
-		
-		logger.info("[ " + imovel.getId() + "	- setDadosEfetuarParcelamento -  RD: " + request.getParameter("RD") + "]");
+
 		if (request.getParameter("RD") != null) {
 			resolucaoDiretoria = new ResolucaoDiretoria();
 			resolucaoDiretoria.setId(new Integer(request.getParameter("RD")));
 		}
-		
+
 		// Verifica se a aba 3 é chamada pela aba 2 (colecaoContaValores) ou pela aba 1 (colecaoContaValoresImovel)
 		if (sessao.getAttribute("colecaoContaValoresSemContasNB") != null || sessao.getAttribute("colecaoGuiasPagamento") != null) {
-			
-			colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValoresSemContasNB");
-			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoValores");
+			colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValoresSemContasNB");
+			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoValores");
 			valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimosImpontualidade");
-			
 		} else if (sessao.getAttribute("colecaoContaValoresNegociacao") != null || (sessao.getAttribute("colecaoContaValoresNegociacao") != null)) {
-			
-			colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValoresNegociacao");
-			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoNegociacao");
+			colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValoresNegociacao");
+			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiaPagamentoNegociacao");
 			valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimosImpontualidadeNegociacao");
 		}
-		
+
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
-		colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizar");
+		colecaoCreditoARealizar = (Collection<CreditoARealizar>) sessao.getAttribute("colecaoCreditoARealizar");
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarDoParcelamento(colecaoDebitosACobrar);
-		
+
 		String parcelamentoPortal = request.getParameter("parcelamentoPortal");
-		
+
 		if (Util.verificarNaoVazio(parcelamentoPortal) && parcelamentoPortal.equalsIgnoreCase("sim")) {
 			EfetuarParcelamentoDebitosPortalActionForm debitosPortalForm = (EfetuarParcelamentoDebitosPortalActionForm) sessao.getAttribute("formParcelamento");
-			
+
 			valorDocumento = Util.formatarMoedaRealparaBigDecimal(debitosPortalForm.getValorPagamentoAVista());
 			valorDesconto = Util.formatarMoedaRealparaBigDecimal(debitosPortalForm.getValorDescontoPagamentoAVista());
 			valorDescontoCredito = Util.formatarMoedaRealparaBigDecimal(debitosPortalForm.getValorCreditoARealizar());
@@ -468,7 +410,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			valorDescontoCredito = Util.formatarMoedaRealparaBigDecimal(debitosForm.get("valorCreditoARealizar").toString());
 			parcelamentoValorDebitoACobrarServico = Util.formatarMoedaRealparaBigDecimal(debitosForm.get("valorDebitoACobrarServico").toString());
 			parcelamentoValorDebitoACobrarParcelamento = Util.formatarMoedaRealparaBigDecimal(debitosForm.get("valorDebitoACobrarParcelamento").toString());
-			
+
 			inscricao = (String) debitosForm.get("inscricaoImovel");
 			matricula = (String) debitosForm.get("matriculaImovel");
 			nomeUsuario = (String) debitosForm.get("nomeCliente");
@@ -479,16 +421,16 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 
 	private void setDadosExtratoDebito(Fachada fachada, HttpSession sessao) throws ControladorException {
 		Integer idImovel = new Integer((String) sessao.getAttribute("idImovelExtrato"));
-		
+
 		logger.info("[ " + idImovel + "	- GERANDO EXTRATO DE DEBITO ]");
 		imovel = fachada.pesquisarImovel(idImovel);
 		inscricao = imovel.getInscricaoFormatada();
 		matricula = imovel.getId().toString();
 		nomeUsuario = (String) sessao.getAttribute("nomeClienteExtrato");
 		cpfCnpj = (String) sessao.getAttribute("cpfCnpj");
-		
+
 		enderecoImovel = fachada.pesquisarEnderecoFormatado(idImovel);
-		
+
 		colecaoContas = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContasExtrato");
 		colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>) sessao.getAttribute("colecaoGuiasPagamentoExtrato");
 		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitosACobrarExtrato");
@@ -499,63 +441,54 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		valorDocumento = (BigDecimal) sessao.getAttribute("valorDocumentoExtrato");
 		valorDesconto = (BigDecimal) sessao.getAttribute("valorDescontoExtrato");
 		valorDescontoCredito = (BigDecimal) sessao.getAttribute("valorCreditoARealizar");
+		
 		logger.info("[ " + idImovel + "	- valorAcrescimosImpontualidade: " + valorAcrescimosImpontualidade + "]");
 		logger.info("[ " + idImovel + "	- valorDocumento: " + valorDocumento + "]");
 		logger.info("[ " + idImovel + "	- valorDesconto: " + valorDesconto + "]");
 		logger.info("[ " + idImovel + "	- valorDescontoCredito: " + valorDescontoCredito + "]");
-		String valoresTotaisContas = "";
-		if (colecaoContas != null && !colecaoContas.isEmpty()) {
-			for (ContaValoresHelper conta : colecaoContas) {
-				valoresTotaisContas += conta.getValorTotalConta() + ",";
-			}
-			
-			
-			logger.info("[ " + idImovel + "	- valoresTotaisContas: " + valoresTotaisContas.substring(0, valoresTotaisContas.length()-1) + "]");
-		}
+		
 	}
 
-	private Collection obterColecaoDebitosACobrarDoParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
-		Collection<DebitoACobrar> colecaoDebitosACobrarParcelamento = new ArrayList();
+	private Collection<DebitoACobrar> obterColecaoDebitosACobrarDoParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
+		Collection<DebitoACobrar> colecaoDebitosACobrarParcelamento = new ArrayList<DebitoACobrar>();
 
-		for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
-			// Verificar existência de juros sobre imóvel
-			if (debitoACobrar.getDebitoTipo().getId() != null 
-					&& !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)) {
-				// Debitos A Cobrar - Serviço
-				if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.SERVICO_NORMAL)) {
-					colecaoDebitosACobrarParcelamento.add(debitoACobrar);
-				}
-				
-				// Debitos A Cobrar - Parcelamento
-				if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_AGUA)
-						|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
-						|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO)) {
-					colecaoDebitosACobrarParcelamento.add(debitoACobrar);
+		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
+			for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
+				if (debitoACobrar.getDebitoTipo().getId() != null && !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)) {
+					if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.SERVICO_NORMAL)) {
+						colecaoDebitosACobrarParcelamento.add(debitoACobrar);
+					}
+
+					if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_AGUA)
+							|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+							|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO)) {
+						
+						colecaoDebitosACobrarParcelamento.add(debitoACobrar);
+					}
 				}
 			}
 		}
-		
+
 		return colecaoDebitosACobrarParcelamento;
 	}
-	
-	private Collection obterColecaoDebitosACobrarSemJurosParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
-		Collection<DebitoACobrar> colecaoDebitosACobrarParcelamento = new ArrayList();
 
-		for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
-			// Verificar existência de juros sobre imóvel
-			if (debitoACobrar.getDebitoTipo().getId() != null 
-					&& !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)) {
-				colecaoDebitosACobrarParcelamento.add(debitoACobrar);
+	private Collection<DebitoACobrar> obterColecaoDebitosACobrarSemJurosParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
+		Collection<DebitoACobrar> colecaoDebitosACobrarParcelamento = new ArrayList<DebitoACobrar>();
+
+		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
+			for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
+				if (debitoACobrar.getDebitoTipo().getId() != null && !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)) {
+					colecaoDebitosACobrarParcelamento.add(debitoACobrar);
+				}
 			}
 		}
-		
+
 		return colecaoDebitosACobrarParcelamento;
 	}
-	
+
 	private void limparSessao(HttpServletRequest request) {
-		
 		HttpSession sessao = request.getSession(false);
-		
+
 		sessao.removeAttribute("formParcelamento");
 		sessao.removeAttribute("idImovel");
 		sessao.removeAttribute("idImovelExtrato");
@@ -593,14 +526,14 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		request.removeAttribute("consultarDebito");
 		request.removeAttribute("RD");
 		request.removeAttribute("parcelamentoPortal");
-		
-		inscricao = "";    	
+
+		inscricao = "";
 		matricula = "";
 		nomeUsuario = "";
 		cpfCnpj = "";
 		enderecoImovel = "";
 		imovel = null;
-		colecaoContas =  null;
+		colecaoContas = null;
 		colecaoGuiasPagamento = null;
 		colecaoDebitosACobrar = null;
 		colecaoCreditoARealizar = null;
@@ -608,9 +541,9 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		colecaoAntecipacaoCreditosDeParcelamento = null;
 		valorAcrescimosImpontualidade = BigDecimal.ZERO;
 		valorDocumento = BigDecimal.ZERO;
-		valorDesconto =  BigDecimal.ZERO;
-		valorDescontoCredito =  BigDecimal.ZERO;
-		indicadorGeracaoTaxaCobranca = new Short("2") ;
+		valorDesconto = BigDecimal.ZERO;
+		valorDescontoCredito = BigDecimal.ZERO;
+		indicadorGeracaoTaxaCobranca = new Short("2");
 		parcelamentoValorDebitoACobrarServico = null;
 		parcelamentoValorDebitoACobrarParcelamento = null;
 		resolucaoDiretoria = null;
