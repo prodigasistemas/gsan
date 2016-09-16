@@ -18806,7 +18806,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(resumoValoresDevolvidosNasContas
-										.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
+									.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
@@ -19800,7 +19800,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem,DebitoCreditoSituacao.CANCELADA);
 
 					BigDecimal[] diferencaCreditoOrigemDescontosParcelamentoFaixaContaCanceladaPorRetificacaoeERetificada = this.obterDiferencaValoresCreditosRealizadosContaRetificada(anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem);
-
+					
 					valorCredito = valorCredito.add(diferencaCreditoOrigemDescontosParcelamentoFaixaContaCanceladaPorRetificacaoeERetificada[0]);
 
 					if (valorCredito.compareTo(BigDecimal.ZERO) != 0) {
