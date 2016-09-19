@@ -27800,7 +27800,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					  + " where imov.imov_id = :idImovel ";
 					
 			retorno = (Date)session.createSQLQuery(consulta)
-					.addScalar("ultimaAlteracao" , Hibernate.DATE)
+					.addScalar("ultimaAlteracao" , Hibernate.TIMESTAMP)
 					.setInteger("idImovel", idImovel).uniqueResult();		    
 			
 		} catch (HibernateException e) {
