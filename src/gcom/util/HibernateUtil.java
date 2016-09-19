@@ -1,21 +1,5 @@
 package gcom.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.MappingException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.EntityKey;
-import org.hibernate.mapping.Column;
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.mapping.Property;
-
 import gcom.arrecadacao.ArrecadacaoContabilParametros;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoDadosDiariosAuxiliar;
@@ -445,6 +429,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
+import gcom.cobranca.parcelamento.ParcelamentoFaixaDesconto;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
@@ -779,6 +764,22 @@ import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaLinhaAlteracao;
 import gcom.seguranca.transacao.TabelaLinhaColunaAlteracao;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.EntityKey;
+import org.hibernate.mapping.Column;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.Property;
 
 public class HibernateUtil {
 
@@ -1459,6 +1460,8 @@ public class HibernateUtil {
 					.addClass(ImovelTipoOcupanteQuantidade.class)
 					.addClass(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral.class)
 					.addClass(ImovelTipoOcupanteQuantidadeRetorno.class)
+					
+					.addClass(ParcelamentoFaixaDesconto.class)
 			;
 
 			configuration.setInterceptor(Interceptador.getInstancia());

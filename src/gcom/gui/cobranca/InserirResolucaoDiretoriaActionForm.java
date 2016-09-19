@@ -2,57 +2,52 @@ package gcom.gui.cobranca;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * [UC0217] Inserir Resolução de Diretoria
- * @author Rafael Corrêa
- * @since 30/03/2006
- */
-public class InserirResolucaoDiretoriaActionForm  extends ActionForm {
+public class InserirResolucaoDiretoriaActionForm extends ActionForm {
+
 	private static final long serialVersionUID = 1L;
+
 	private String numero;
-	
+
 	private String assunto;
-	
+
 	private String dataInicio;
-	
+
 	private String dataFim;
+
+	private String indicadorParcelamentoUnico;
+
+	private String indicadorUtilizacaoLivre;
 	
-    private String indicadorParcelamentoUnico;
-    
-    private String indicadorUtilizacaoLivre;
-    
-    private String indicadorDescontoSancoes;	
-    
-    private String indicadorParcelasEmAtraso;
-    private String idParcelasEmAtraso;
-    private String indicadorParcelamentoEmAndamento;
-    private String idParcelamentoEmAndamento;
-    private String indicadorNegociacaoSoAVista;
-    private String indicadorDescontoSoEmContaAVista;
+	private String indicadorDescontoFaixaReferenciaConta;
+
+	private String indicadorDescontoSancoes;
+
+	private String indicadorParcelasEmAtraso;
+
+	private String idParcelasEmAtraso;
+
+	private String indicadorParcelamentoEmAndamento;
+
+	private String idParcelamentoEmAndamento;
+
+	private String indicadorNegociacaoSoAVista;
+
+	private String indicadorDescontoSoEmContaAVista;
+
 	private String indicadorParcelamentoLojaVirtual;
-    
+	
 	public String getIndicadorDescontoSoEmContaAVista() {
 		return indicadorDescontoSoEmContaAVista;
 	}
 
-	public void setIndicadorDescontoSoEmContaAVista(
-			String indicadorDescontoSoEmContaAVista) {
+	public void setIndicadorDescontoSoEmContaAVista(String indicadorDescontoSoEmContaAVista) {
 		this.indicadorDescontoSoEmContaAVista = indicadorDescontoSoEmContaAVista;
 	}
 
-	public ActionErrors validate(ActionMapping actionMapping,
-			HttpServletRequest httpServletRequest) {
-		/** @todo: finish this method, this is just the skeleton. */
-		return null;
-	}
-
-	public void reset(ActionMapping actionMapping,
-			HttpServletRequest httpServletRequest) {
-
+	public void reset(ActionMapping actionMapping, HttpServletRequest request) {
 		numero = null;
 		assunto = null;
 		dataInicio = null;
@@ -135,8 +130,7 @@ public class InserirResolucaoDiretoriaActionForm  extends ActionForm {
 		return indicadorParcelamentoEmAndamento;
 	}
 
-	public void setIndicadorParcelamentoEmAndamento(
-			String indicadorParcelamentoEmAndamento) {
+	public void setIndicadorParcelamentoEmAndamento(String indicadorParcelamentoEmAndamento) {
 		this.indicadorParcelamentoEmAndamento = indicadorParcelamentoEmAndamento;
 	}
 
@@ -160,8 +154,15 @@ public class InserirResolucaoDiretoriaActionForm  extends ActionForm {
 		return indicadorParcelamentoLojaVirtual;
 	}
 
-	public void setIndicadorParcelamentoLojaVirtual(
-			String indicadorParcelamentoLojaVirtual) {
+	public void setIndicadorParcelamentoLojaVirtual(String indicadorParcelamentoLojaVirtual) {
 		this.indicadorParcelamentoLojaVirtual = indicadorParcelamentoLojaVirtual;
+	}
+
+	public String getIndicadorDescontoFaixaReferenciaConta() {
+		return indicadorDescontoFaixaReferenciaConta;
+	}
+
+	public void setIndicadorDescontoFaixaReferenciaConta(String indicadorDescontoFaixaReferenciaConta) {
+		this.indicadorDescontoFaixaReferenciaConta = indicadorDescontoFaixaReferenciaConta;
 	}
 }

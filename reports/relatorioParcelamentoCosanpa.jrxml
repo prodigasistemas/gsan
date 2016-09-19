@@ -103,6 +103,7 @@
 	<field name="getDia" class="java.lang.String"/>
 	<field name="getMenorAnoMesReferenciaDocumentos" class="java.lang.String"/>
 	<field name="getMaiorAnoMesReferenciaDocumentos" class="java.lang.String"/>
+	<field name="getDescontoFaixaReferenciaConta" class="java.lang.String"/>
 
 	<variable name="mensagemReferenciaDocumentos" class="java.lang.String" resetType="None" calculation="Nothing">
 		<variableExpression><![CDATA[( $F{getMenorAnoMesReferenciaDocumentos} != null && !$F{getMenorAnoMesReferenciaDocumentos}.equals( "0" ) ? ", no período de " + $F{getMenorAnoMesReferenciaDocumentos} +" a "+ $F{getMaiorAnoMesReferenciaDocumentos} : "" )]]></variableExpression>

@@ -8,64 +8,63 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 public class ObterOpcoesDeParcelamentoHelper implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
-	private Integer idResolucaoDiretoria; 
 	
+	private Integer idResolucaoDiretoria;
+
 	private Integer idImovel;
-	
+
 	private BigDecimal valorEntradaInformado;
-	
+
 	private Integer idLigacaoAguaSituacao;
-	
+
 	private Integer idLigacaoEsgotoSituacao;
-	
+
 	private Integer idImovelPerfil;
-	
+
 	private String inicioIntervaloParcelamento;
-	
+
 	private Integer indicadorRestabelecimento;
-	
-	private Collection colecaoContaValores;
-	
+
+	private Collection<ContaValoresHelper> colecaoContaValores;
+
 	private BigDecimal valorDebitoAtualizado;
-	
+
 	private BigDecimal valorTotalMultas;
-	
+
 	private BigDecimal valorTotalJurosMora;
-	
+
 	private BigDecimal valorTotalAtualizacoesMonetarias;
-	
+
 	private Integer numeroReparcelamentoConsecutivos;
-	
+
 	private Collection<GuiaPagamento> colecaoGuiaPagamento;
-	
+
 	private Usuario usuario;
-	
+
 	private BigDecimal valorDebitoACobrarParcelamentoImovel;
-	
+
 	private Integer anoMesInicialReferenciaDebito;
-	
+
 	private Integer anoMesFinalReferenciaDebito;
-	
+
 	private IndicadoresParcelamentoHelper indicadoresParcelamentoHelper;
-	
+
 	private BigDecimal valorCreditoARealizarParcelamentoImovel;
-	
-	//UTILIZADO APENAS VIA EXTRATO DE DÉBITO
+
 	private Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores;
-	
-	public ObterOpcoesDeParcelamentoHelper(){}
-	
-	public ObterOpcoesDeParcelamentoHelper(Integer resolucaoDiretoria,
-			Integer codigoImovel, BigDecimal valorEntradaInformado, Integer situacaoAguaId, Integer situacaoEsgotoId,
-			Integer perfilImovel, String inicioIntervaloParcelamento, Integer indicadorRestabelecimento,
-			Collection colecaoContaValoresNegociacao, BigDecimal valorDebitoTotalAtualizado, 
-			BigDecimal valorTotalMultas, BigDecimal valorTotalJurosMora, BigDecimal valorTotalAtualizacoesMonetarias,
-			Integer numeroReparcelamentoConsecutivos, Collection colecaoGuiaPagamento, Usuario  usuario,
-			BigDecimal valorDebitoACobrarParcelamentoImovelBigDecimal, Integer inicioIntervaloParcelamentoFormatado,
-			Integer fimIntervaloParcelamentoFormatado, IndicadoresParcelamentoHelper indicadoresParcelamentoHelper,
-			BigDecimal valorCreditoARealizarParcelamentoImovel){
-		
+
+	public ObterOpcoesDeParcelamentoHelper() {}
+
+	public ObterOpcoesDeParcelamentoHelper(Integer resolucaoDiretoria, Integer codigoImovel, BigDecimal valorEntradaInformado, Integer situacaoAguaId,
+			Integer situacaoEsgotoId, Integer perfilImovel, String inicioIntervaloParcelamento, Integer indicadorRestabelecimento,
+			Collection<ContaValoresHelper> colecaoContaValoresNegociacao, BigDecimal valorDebitoTotalAtualizado, BigDecimal valorTotalMultas,
+			BigDecimal valorTotalJurosMora, BigDecimal valorTotalAtualizacoesMonetarias, Integer numeroReparcelamentoConsecutivos,
+			Collection colecaoGuiaPagamento, Usuario usuario, BigDecimal valorDebitoACobrarParcelamentoImovelBigDecimal,
+			Integer inicioIntervaloParcelamentoFormatado, Integer fimIntervaloParcelamentoFormatado,
+			IndicadoresParcelamentoHelper indicadoresParcelamentoHelper, BigDecimal valorCreditoARealizarParcelamentoImovel) {
+
 		this.setIdResolucaoDiretoria(resolucaoDiretoria);
 		this.setIdImovel(codigoImovel);
 		this.setValorEntradaInformado(valorEntradaInformado);
@@ -101,16 +100,15 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return anoMesInicialReferenciaDebito;
 	}
 
-	public void setAnoMesInicialReferenciaDebito(
-			Integer anoMesInicialReferenciaDebito) {
+	public void setAnoMesInicialReferenciaDebito(Integer anoMesInicialReferenciaDebito) {
 		this.anoMesInicialReferenciaDebito = anoMesInicialReferenciaDebito;
 	}
 
-	public Collection getColecaoContaValores() {
+	public Collection<ContaValoresHelper> getColecaoContaValores() {
 		return colecaoContaValores;
 	}
 
-	public void setColecaoContaValores(Collection colecaoContaValores) {
+	public void setColecaoContaValores(Collection<ContaValoresHelper> colecaoContaValores) {
 		this.colecaoContaValores = colecaoContaValores;
 	}
 
@@ -118,8 +116,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return colecaoGuiaPagamento;
 	}
 
-	public void setColecaoGuiaPagamento(
-			Collection<GuiaPagamento> colecaoGuiaPagamento) {
+	public void setColecaoGuiaPagamento(Collection<GuiaPagamento> colecaoGuiaPagamento) {
 		this.colecaoGuiaPagamento = colecaoGuiaPagamento;
 	}
 
@@ -167,8 +164,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return indicadoresParcelamentoHelper;
 	}
 
-	public void setIndicadoresParcelamentoHelper(
-			IndicadoresParcelamentoHelper indicadoresParcelamentoHelper) {
+	public void setIndicadoresParcelamentoHelper(IndicadoresParcelamentoHelper indicadoresParcelamentoHelper) {
 		this.indicadoresParcelamentoHelper = indicadoresParcelamentoHelper;
 	}
 
@@ -192,8 +188,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return numeroReparcelamentoConsecutivos;
 	}
 
-	public void setNumeroReparcelamentoConsecutivos(
-			Integer numeroReparcelamentoConsecutivos) {
+	public void setNumeroReparcelamentoConsecutivos(Integer numeroReparcelamentoConsecutivos) {
 		this.numeroReparcelamentoConsecutivos = numeroReparcelamentoConsecutivos;
 	}
 
@@ -209,8 +204,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return valorDebitoACobrarParcelamentoImovel;
 	}
 
-	public void setValorDebitoACobrarParcelamentoImovel(
-			BigDecimal valorDebitoACobrarParcelamentoImovel) {
+	public void setValorDebitoACobrarParcelamentoImovel(BigDecimal valorDebitoACobrarParcelamentoImovel) {
 		this.valorDebitoACobrarParcelamentoImovel = valorDebitoACobrarParcelamentoImovel;
 	}
 
@@ -234,8 +228,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return valorTotalAtualizacoesMonetarias;
 	}
 
-	public void setValorTotalAtualizacoesMonetarias(
-			BigDecimal valorTotalAtualizacoesMonetarias) {
+	public void setValorTotalAtualizacoesMonetarias(BigDecimal valorTotalAtualizacoesMonetarias) {
 		this.valorTotalAtualizacoesMonetarias = valorTotalAtualizacoesMonetarias;
 	}
 
@@ -259,8 +252,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return valorCreditoARealizarParcelamentoImovel;
 	}
 
-	public void setValorCreditoARealizarParcelamentoImovel(
-			BigDecimal valorCreditoARealizarParcelamentoImovel) {
+	public void setValorCreditoARealizarParcelamentoImovel(BigDecimal valorCreditoARealizarParcelamentoImovel) {
 		this.valorCreditoARealizarParcelamentoImovel = valorCreditoARealizarParcelamentoImovel;
 	}
 
@@ -268,8 +260,7 @@ public class ObterOpcoesDeParcelamentoHelper implements Serializable {
 		return colecaoGuiaPagamentoValores;
 	}
 
-	public void setColecaoGuiaPagamentoValores(
-			Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores) {
+	public void setColecaoGuiaPagamentoValores(Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores) {
 		this.colecaoGuiaPagamentoValores = colecaoGuiaPagamentoValores;
 	}
 }

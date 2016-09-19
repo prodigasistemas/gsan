@@ -333,9 +333,9 @@ public class ExibirAtualizarPerfilParcelamentoAction extends GcomAction {
         		}
         		// fim alteração
         		
-        		if (parcelamentoPerfil.getPercentualDescontoPagamentoAVista() != null){
+        		if (parcelamentoPerfil.getPercentualDescontoAcrescimoPagamentoAVista() != null){
         			atualizarParcelamentoPerfilActionForm.setPercentualDescontoAcrescimoPagamentoAVista("" +
-        					parcelamentoPerfil.getPercentualDescontoPagamentoAVista().toString().replace(".", ","));
+        					parcelamentoPerfil.getPercentualDescontoAcrescimoPagamentoAVista().toString().replace(".", ","));
         		}
         		
         		if (parcelamentoPerfil.getPercentualTarifaMinimaPrestacao()!= null){

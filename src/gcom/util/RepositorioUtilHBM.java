@@ -318,9 +318,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		try {
 			Method method = objeto.getClass().getDeclaredMethod("setUltimaAlteracao", Date.class);
 			method.invoke(objeto, new Date());
-		} catch (Exception e1) {
-			logger.info("Objeto nao possui metodo setUltimaAlteracao");
-		}
+		} catch (Exception e1) {}
 		
 		try {
 			session.update(objeto);

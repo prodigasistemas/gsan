@@ -328,25 +328,14 @@
 					</table>
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr bordercolor="#90c7fc">
-							<td bgcolor="#90c7fc" colspan="2" align="center"><strong> Nos Acr&eacute;scimos
-							Impontualidade</strong></td>
-							<td colspan="2" bgcolor="#90c7fc" align="center"><strong>Por Antiguidade do
-							D&eacute;bito</strong></td>
-							<td colspan="2" bgcolor="#90c7fc" align="center"><strong>Por Inatividade da Lig.
-							&Aacute;gua</strong></td>
+							<td bgcolor="#90c7fc" align="center"><strong>Por Faixa de Referência da Conta</strong></td>
+							<td bgcolor="#90c7fc" align="center"><strong>Nos Acr&eacute;scimos Impontualidade</strong></td>
+							<td bgcolor="#90c7fc" align="center"><strong>Por Antiguidade do D&eacute;bito</strong></td>
+							<td bgcolor="#90c7fc" align="center"><strong>Por Inatividade da Lig. &Aacute;gua</strong></td>
 							<td bgcolor="#90c7fc" align="center"><strong>Por Sanções Regulamentares</strong></td>
 							<td bgcolor="#90c7fc" align="center"><strong>Por Tarifa Social</strong></td>
 						</tr>
-						<tr bordercolor="#90c7fc">
-							<td align="center" bgcolor="#cbe5fe"><strong>Percentual</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Valor</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Percentual</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Valor</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Percentual</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Valor</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Valor</strong></td>
-							<td align="center" bgcolor="#cbe5fe"><strong>Valor</strong></td>
-						</tr>
+
 						<% cor = "#FFFFFF";%>	
 						<logic:present name="colecaoParcelamento">
 						<logic:iterate name="colecaoParcelamento" id="parcelamento">
@@ -357,14 +346,16 @@
 								cor = "#FFFFFF";%>
 							<tr bgcolor="#FFFFFF">
 								<%}%>
+							
 							<td align="right">
-								<logic:notEmpty name="parcelamento" property="percentualDescontoAcrescimos">	
-									<bean:write name="parcelamento" property="percentualDescontoAcrescimos" formatKey="money.format"/>%
+								<logic:notEmpty name="parcelamento" property="valorDescontoFaixaReferenciaConta">	
+									<bean:write name="parcelamento" property="valorDescontoFaixaReferenciaConta" formatKey="money.format"/>
 								</logic:notEmpty>
-								<logic:empty name="parcelamento" property="percentualDescontoAcrescimos">	
-								   0,00%
+								<logic:empty name="parcelamento" property="valorDescontoFaixaReferenciaConta">	
+								   0,00
 								</logic:empty>
 							</td>
+							
 							<td align="right">
 								<logic:notEmpty name="parcelamento" property="valorDescontoAcrescimos">	
 									<bean:write name="parcelamento" property="valorDescontoAcrescimos" formatKey="money.format"/>
@@ -373,14 +364,7 @@
 									0,00
 								</logic:empty>
 							</td>
-							<td align="right">
-								<logic:notEmpty name="parcelamento" property="percentualDescontoAntiguidade">	
-									<bean:write name="parcelamento" property="percentualDescontoAntiguidade" formatKey="money.format"/>%
-								</logic:notEmpty>
-								<logic:empty name="parcelamento" property="percentualDescontoAntiguidade">	
-								   0,00%
-								</logic:empty>
-							</td>
+							
 							<td align="right">
 								<logic:notEmpty name="parcelamento" property="valorDescontoAntiguidade">	
 									<bean:write name="parcelamento" property="valorDescontoAntiguidade" formatKey="money.format"/>
@@ -389,14 +373,7 @@
 								   0,00
 								</logic:empty>
 							</td>
-							<td align="right">
-								<logic:notEmpty name="parcelamento" property="percentualDescontoInatividade">	
-									<bean:write name="parcelamento" property="percentualDescontoInatividade" formatKey="money.format"/>%
-								</logic:notEmpty>
-								<logic:empty name="parcelamento" property="percentualDescontoInatividade">	
-								   0,00%
-								</logic:empty>
-							</td>
+							
 							<td align="right">
 								<logic:notEmpty name="parcelamento" property="valorDescontoInatividade">	
 									<bean:write name="parcelamento" property="valorDescontoInatividade" formatKey="money.format"/>
@@ -405,6 +382,7 @@
 								   0,00
 								</logic:empty>
 							</td>
+							
 							<td align="right">
 								<logic:notEmpty name="parcelamento" property="valorDescontoSancao">	
 									<bean:write name="parcelamento" property="valorDescontoSancao" formatKey="money.format"/>
@@ -413,6 +391,7 @@
 								   0,00
 								</logic:empty>
 							</td>
+							
 							<td align="right">
 								<logic:notEmpty name="parcelamento" property="valorDescontoTarifaSocial">	
 									<bean:write name="parcelamento" property="valorDescontoTarifaSocial" formatKey="money.format"/>
