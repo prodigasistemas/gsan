@@ -1,24 +1,22 @@
 package gcom.util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import gcom.fachada.Fachada;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
 
 public class GerenciadorSSO {
-
-	private final String ATRIBUTO_USUARIO = "usuario";
-	private final String ATRIBUTO_TOKEN = "token";
-
-	private final String URL_AUTH = "http://10.20.0.83:3000/authorization?token=";
 	private Cookie[] cookies;
 	private String conteudoDoCookie;
 	private HttpServletRequest httpRequest;
@@ -81,7 +79,14 @@ public class GerenciadorSSO {
 	private void validarToken() throws IOException {
 		if (existeAlgumCookie())
 			this.token = getCookie().getValue();
-		this.conteudoDoCookie = http.GetPageContent(URL_AUTH + token);
+		
+		FiltroSegurancaParametro filtro = new FiltroSegurancaParametro();
+		filtro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGURANCA.name()));
+		filtro.adicionarParametro(new ParametroNaoNulo(FiltroSegurancaParametro.NOME));
+		
+		SegurancaParametro parametro = (SegurancaParametro) Fachada.getInstancia().pesquisar(filtro, SegurancaParametro.class.getName()).iterator().next();
+		
+		this.conteudoDoCookie = http.GetPageContent(parametro.getValor() + "/authorization?token=" + token);
 	}
 
 	private boolean existeAlgumCookie() {
