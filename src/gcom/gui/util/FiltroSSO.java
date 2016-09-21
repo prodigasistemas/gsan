@@ -21,6 +21,8 @@ public class FiltroSSO extends HttpServlet implements Filter{
 
 		if (sso.isLogado()) {
 			chain.doFilter(request, response);
+		}else{
+			chain.doFilter(request, response);
 		}
 	}
 
