@@ -133,7 +133,6 @@ public class RelatorioConsultarOperacao extends TarefaRelatorio {
 	
 		nomeUsuario = usuarioAlteracao.getUsuario().getNomeUsuario();
 
-//		ipUsuario = usuarioAlteracao.getUsuario().getIpLogado();
 		ipUsuario = usuarioAlteracao.getIpAlteracao();
 				}
 				
