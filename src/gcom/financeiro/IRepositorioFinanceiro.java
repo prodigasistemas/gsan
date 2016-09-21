@@ -1119,8 +1119,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
-	public Collection<Object[]> pesquisarDadosCreditosARealizarCategoriaDescontosParcelamento(
-			int anoMesReferenciaContabil, Integer idLocalidade)
+	public Collection<Object[]> pesquisarDadosCreditosARealizarCategoriaDescontosParcelamento(int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
 			throws ErroRepositorioException;
 	
 	/**
@@ -1138,7 +1137,7 @@ public interface IRepositorioFinanceiro {
 	 *             Erro no hibernate
 	 */
 	public Collection<Object[]> pesquisarDadosCreditosARealizarCategoriaValorResidualDescontosParcelamento(
-			int anoMesReferenciaContabil, Integer idLocalidade)
+			int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
 			throws ErroRepositorioException;
 	
 	/**
