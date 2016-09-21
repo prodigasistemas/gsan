@@ -1,5 +1,9 @@
 package gcom.seguranca.acesso;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpSession;
+
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.relatorio.seguranca.FiltrarRelatorioAcessosUsuariosHelper;
 import gcom.relatorio.seguranca.FiltrarRelatorioFuncionalidadeOperacoesPorGrupoHelper;
@@ -9,8 +13,6 @@ import gcom.seguranca.acesso.usuario.UsuarioAbrangencia;
 import gcom.seguranca.acesso.usuario.UsuarioSituacao;
 import gcom.seguranca.transacao.Tabela;
 import gcom.util.ControladorException;
-
-import java.util.Collection;
 
 public interface ControladorAcessoLocal extends javax.ejb.EJBLocalObject {
 
@@ -94,4 +96,6 @@ public interface ControladorAcessoLocal extends javax.ejb.EJBLocalObject {
 	public Collection pesquisarRelatorioSolicitacaoAcesso(FiltrarRelatorioSolicitacaoAcessoHelper helper) throws ControladorException;
 	
 	public String getSegurancaParametro(String parametro) throws ControladorException;
+
+	public void montarMenuUsuario(HttpSession sessao, String enderecoIp) throws ControladorException;
 }

@@ -19,7 +19,7 @@ public class ValidadorTamanhoLinhaImovelCommand extends ValidadorCommand {
 	
 	@Override
 	public void execute() {
-		if (parser.getFonte().length() != 442){
+		if (parser.getFonte().length() != 445){
 			cadastroImovel.addMensagemErroLayout("Linha Tipo 02 (Imóvel) não compatível com o Layout");
 		}
 	}

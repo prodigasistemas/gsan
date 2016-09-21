@@ -13,7 +13,8 @@ public class SegurancaParametro implements Serializable {
 	public enum NOME_PARAMETRO_SEGURANCA {
 		CAMINHO_ARQUIVOS,
 		IP_NOVO_BATCH,
-		URL_GSAN_RELATORIOS;
+		URL_GSAN_RELATORIOS,
+		URL_SEGURANCA;
 	}
 
 	public Integer getId() {
