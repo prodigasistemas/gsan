@@ -69,6 +69,8 @@
 		<pathelement location="${ApacheCommons.home}/commons-lang.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-logging.jar" />
 		<pathelement location="${ApacheCommons.home}/commons-validator.jar" />
+		<pathelement location="${ApacheCommons.home}/httpclient-4.5.2.jar" />
+		<pathelement location="${ApacheCommons.home}/httpcore-4.5.5.jar" />
 		<pathelement location="${Axis2.home}/axiom-api-1.2.8.jar" />
 		<pathelement location="${Axis2.home}/axiom-impl-1.2.8.jar" />
 		<pathelement location="${Axis2.home}/axis2-adb-1.5.1.jar" />
