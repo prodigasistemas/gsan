@@ -655,6 +655,7 @@ import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -44170,5 +44171,14 @@ public class Fachada {
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
+	}
+
+	public void montarMenuUsuario(HttpSession sessao, String enderecoIp) {
+		try {
+			this.getControladorAcesso().montarMenuUsuario(sessao, enderecoIp);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+		
 	}
 }
