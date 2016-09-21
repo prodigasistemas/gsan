@@ -24076,7 +24076,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 									// PCPF_PCDESCONTOPAGAMENTOAVISTA da tabela
 									// PARCELAMENTO_PERFIL
-									BigDecimal parcentualDescontoAVista = parcelamentoPerfil.getPercentualDescontoPagamentoAVista();
+									BigDecimal parcentualDescontoAVista = parcelamentoPerfil.getPercentualDescontoAcrescimoPagamentoAVista();
 									BigDecimal valorDevolucaoDesconto = mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.get(idCategoria);
 									// [SB0009] - Calcula o valor com Direito ao
 									// Desconto

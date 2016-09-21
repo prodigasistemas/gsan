@@ -5925,54 +5925,6 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
-	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
-	 * 
-	 * Gera os Crédito a Realizar do Parcelamento
-	 * 
-	 * [SB0006] - Gerar Crédito a Realizar do Parcelamento
-	 */
-	public void gerarCreditoARealizarParcelamento(
-			Imovel imovel,
-			Short numeroPrestacao,
-			BigDecimal taxaJuros,
-			Integer parcelamentoId,
-			BigDecimal valorDescontoFaixaReferenciaConta, 
-			BigDecimal valorDescontoAcresimosImpontualidade, 
-			BigDecimal valorDescontoAntiguidadeDebito, 
-			BigDecimal valorDescontoInatividadeLigacaoAgua,
-			BigDecimal valorCreditoAnteriores,
-			Collection<Categoria> colecaoCategoria,
-			BigDecimal valorDescontoSancoesRDEspecial,
-			BigDecimal valorDescontoTarifaSocialRDEspecial,
-			boolean isContaEntradaParcelamento, 
-			Integer anoMesGuiaEntrada, 
-			Integer maiorAnoMesConta) {
-		try {
-			this.getControladorCobranca().gerarCreditoARealizarParcelamento(
-					imovel,
-					numeroPrestacao,
-					taxaJuros, 
-					parcelamentoId,
-					valorDescontoFaixaReferenciaConta,
-					valorDescontoAcresimosImpontualidade, 
-					valorDescontoAntiguidadeDebito,
-					valorDescontoInatividadeLigacaoAgua,
-					valorCreditoAnteriores,
-					colecaoCategoria, 
-					valorDescontoSancoesRDEspecial, 
-					valorDescontoTarifaSocialRDEspecial,
-					isContaEntradaParcelamento,
-					anoMesGuiaEntrada,
-					maiorAnoMesConta);
-
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-
-	/**
 	 * O sistema seleciona os grupos de faturamento que possuem cronograma para
 	 * o mês corrente * [UC0144] Inserir Comando Atividade de Faturamento
 	 * 
