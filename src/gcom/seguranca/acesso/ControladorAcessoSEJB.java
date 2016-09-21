@@ -12,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ejb.CreateException;
-import javax.ejb.SessionContext;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.GerenciaRegional;
@@ -38,8 +38,6 @@ import gcom.relatorio.seguranca.RelatorioFuncionalidadeOperacoesPorGrupoHelper;
 import gcom.relatorio.seguranca.RelatorioSolicitacaoAcessoHelper;
 import gcom.seguranca.FiltroSegurancaParametro;
 import gcom.seguranca.SegurancaParametro;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
 import gcom.seguranca.acesso.usuario.FiltroAbrangenciaUsuario;
 import gcom.seguranca.acesso.usuario.FiltroSituacaoUsuario;
 import gcom.seguranca.acesso.usuario.FiltroSolicitacaoAcesso;
@@ -66,21 +64,15 @@ import gcom.seguranca.acesso.usuario.UsuarioTipo;
 import gcom.seguranca.transacao.FiltroTabelaColuna;
 import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaColuna;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.IRepositorioUtil;
 import gcom.util.RepositorioUtilHBM;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
@@ -105,6 +97,8 @@ import gcom.util.filtro.PersistenciaUtil;
  */
 public class ControladorAcessoSEJB extends ControladorComum {
 	private static final long serialVersionUID = 1L;
+	
+	private static Logger logger = Logger.getLogger(ControladorAcessoSEJB.class);
 
 	private IRepositorioAcesso repositorioAcesso;
 	
@@ -5268,150 +5262,155 @@ public class ControladorAcessoSEJB extends ControladorComum {
 	}
 	
 	public void montarMenuUsuario(HttpSession sessao, String enderecoIp) throws ControladorException{
-        // Buscar as permissões do(s) grupo(s) do usuário
-        FiltroGrupoFuncionalidadeOperacao filtroGrupoFuncionalidadeOperacao = new FiltroGrupoFuncionalidadeOperacao();
-                  filtroGrupoFuncionalidadeOperacao.setCampoOrderBy(FiltroGrupoFuncionalidadeOperacao.FUNCIONALIDADE_NUMERO_ORDEM_MENU);
-        filtroGrupoFuncionalidadeOperacao.setConsultaSemLimites(true);
-        
-        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
-        
-        // Pesquisa os grupos do usuário
-        Collection colecaoGruposUsuario = getControladorUsuario().pesquisarGruposUsuario(usuarioLogado.getId());
+		try {
+	        // Buscar as permissões do(s) grupo(s) do usuário
+	        FiltroGrupoFuncionalidadeOperacao filtroGrupoFuncionalidadeOperacao = new FiltroGrupoFuncionalidadeOperacao();
+	                  filtroGrupoFuncionalidadeOperacao.setCampoOrderBy(FiltroGrupoFuncionalidadeOperacao.FUNCIONALIDADE_NUMERO_ORDEM_MENU);
+	        filtroGrupoFuncionalidadeOperacao.setConsultaSemLimites(true);
+	        
+	        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
+	        
+	        // Pesquisa os grupos do usuário
+	        Collection colecaoGruposUsuario = getControladorUsuario().pesquisarGruposUsuario(usuarioLogado.getId());
 
-        // Seta na sessão os grupos aos que o usuário pertence
-        sessao.setAttribute("colecaoGruposUsuario",colecaoGruposUsuario);
+	        // Seta na sessão os grupos aos que o usuário pertence
+	        sessao.setAttribute("colecaoGruposUsuario",colecaoGruposUsuario);
 
-        // Cria o iterator dos grupos do usuário logado
-        Iterator iterator = colecaoGruposUsuario.iterator();
+	        // Cria o iterator dos grupos do usuário logado
+	        Iterator iterator = colecaoGruposUsuario.iterator();
 
-        // Laço para adicionar todos os id's dos grupos no filtro
-        // para pesquisar os acessos de todos os grupos do usuário
-        // logado
-        while (iterator.hasNext()) {
-          Grupo grupoUsuario = (Grupo) iterator.next();
-          filtroGrupoFuncionalidadeOperacao.adicionarParametro(new ParametroSimples(FiltroGrupoFuncionalidadeOperacao.GRUPO_ID,grupoUsuario.getId(),FiltroParametro.CONECTOR_OR));
-          
-          // Verifica se existe alguma mensagem para o
-          // grupo que o usuario logado pertence.
-          if(grupoUsuario.getMensagem()!=null 
-              && !grupoUsuario.getMensagem().equals("")){           
-            // Coloca a mensagem na sessao
-            sessao.setAttribute("mensagemGrupo",grupoUsuario.getMensagem());              
-          } 
-        }
+	        // Laço para adicionar todos os id's dos grupos no filtro
+	        // para pesquisar os acessos de todos os grupos do usuário
+	        // logado
+	        while (iterator.hasNext()) {
+	          Grupo grupoUsuario = (Grupo) iterator.next();
+	          filtroGrupoFuncionalidadeOperacao.adicionarParametro(new ParametroSimples(FiltroGrupoFuncionalidadeOperacao.GRUPO_ID,grupoUsuario.getId(),FiltroParametro.CONECTOR_OR));
+	          
+	          // Verifica se existe alguma mensagem para o
+	          // grupo que o usuario logado pertence.
+	          if(grupoUsuario.getMensagem()!=null 
+	              && !grupoUsuario.getMensagem().equals("")){           
+	            // Coloca a mensagem na sessao
+	            sessao.setAttribute("mensagemGrupo",grupoUsuario.getMensagem());              
+	          } 
+	        }
 
-        /*
-         * Pesquisa todas as permissões do usuário
-         * pesquisa ocorrência na tabela GrupoFuncionalidadeOperacao para os grupos
-         * aos quais o usuário logado pertence 
-         */
-        Collection permissoes = getControladorUtil().pesquisar(filtroGrupoFuncionalidadeOperacao,GrupoFuncionalidadeOperacao.class.getName());
+	        /*
+	         * Pesquisa todas as permissões do usuário
+	         * pesquisa ocorrência na tabela GrupoFuncionalidadeOperacao para os grupos
+	         * aos quais o usuário logado pertence 
+	         */
+	        Collection permissoes = getControladorUtil().pesquisar(filtroGrupoFuncionalidadeOperacao,GrupoFuncionalidadeOperacao.class.getName());
 
-        /*
-         * Pesquisa todas as restrições do usuário
-         * pesquisa se existe ocorrência na tabela UsuarioGrupoRestricao para o usuário 
-         * que está logado.
-         */
-        Collection restricoes = this.pesquisarRestricaoUsuario(usuarioLogado);
-        
-        //Caso exista restrições para o usuário logado 
-        //remove todas as funcionalidades que o usuário não tem acesso
-        if(restricoes != null && !restricoes.isEmpty()){
-          permissoes.removeAll(restricoes);
-        }
-        
-        // Obtém a árvore de funcionalidades do sistema
-        FuncionalidadeCategoria arvoreFuncionalidades = this.pesquisarArvoreFuncionalidades(permissoes);
-        
-        usuarioLogado.setIpLogado(enderecoIp);
+	        /*
+	         * Pesquisa todas as restrições do usuário
+	         * pesquisa se existe ocorrência na tabela UsuarioGrupoRestricao para o usuário 
+	         * que está logado.
+	         */
+	        Collection restricoes = this.pesquisarRestricaoUsuario(usuarioLogado);
+	        
+	        //Caso exista restrições para o usuário logado 
+	        //remove todas as funcionalidades que o usuário não tem acesso
+	        if(restricoes != null && !restricoes.isEmpty()){
+	          permissoes.removeAll(restricoes);
+	        }
+	        
+	        // Obtém a árvore de funcionalidades do sistema
+	        FuncionalidadeCategoria arvoreFuncionalidades = this.pesquisarArvoreFuncionalidades(permissoes);
+	        
+	        usuarioLogado.setIpLogado(enderecoIp);
 
-        // Coloca a árvore de funcionalidades/permissões na sessão
-        // para
-        // futuras consultas
-        sessao.setAttribute("arvoreFuncionalidades",arvoreFuncionalidades);
-                
-        // Cria uma instância do menu para gerar a arvóre do menu
-        MenuGCOM menu = new MenuGCOM();
-        String menuGerado = menu.gerarMenu(arvoreFuncionalidades, usuarioLogado);
+	        // Coloca a árvore de funcionalidades/permissões na sessão
+	        // para
+	        // futuras consultas
+	        sessao.setAttribute("arvoreFuncionalidades",arvoreFuncionalidades);
+	                
+	        // Cria uma instância do menu para gerar a arvóre do menu
+	        MenuGCOM menu = new MenuGCOM();
+	        String menuGerado = menu.gerarMenu(arvoreFuncionalidades, usuarioLogado);
 
-        // Coloca o menu gerado na sessão
-        sessao.setAttribute("menuGCOM", menuGerado);
+	        // Coloca o menu gerado na sessão
+	        sessao.setAttribute("menuGCOM", menuGerado);
 
-        // Seta o tempo máximo que o usuário tem para expirar sua
-        // sessão
-        // caso nenhuma requisição seja feita em 1000(mil) segundos
-        sessao.setMaxInactiveInterval(900);
+	        // Seta o tempo máximo que o usuário tem para expirar sua
+	        // sessão
+	        // caso nenhuma requisição seja feita em 1000(mil) segundos
+	        sessao.setMaxInactiveInterval(900);
 
-        /*
-         * Recupera a data do último acesso do usuário caso seja a
-         * primeira vez que o usuário acesse a aplicação cria uma
-         * nova data e seta essa data na sessão para a página de
-         * informaçãoes do usuário
-         */
-        Date data = usuarioLogado.getUltimoAcesso();
-        if (data == null) {
-          data = new Date();
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-        String ultimaDataAcesso = formatter.format(data);
-        sessao.setAttribute("dataUltimoAcesso", ultimaDataAcesso);
+	        /*
+	         * Recupera a data do último acesso do usuário caso seja a
+	         * primeira vez que o usuário acesse a aplicação cria uma
+	         * nova data e seta essa data na sessão para a página de
+	         * informaçãoes do usuário
+	         */
+	        Date data = usuarioLogado.getUltimoAcesso();
+	        if (data == null) {
+	          data = new Date();
+	        }
+	        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+	        String ultimaDataAcesso = formatter.format(data);
+	        sessao.setAttribute("dataUltimoAcesso", ultimaDataAcesso);
 
-        // Cria a data atual e seta essa data na sessão
-        data = new Date();
-        SimpleDateFormat formatterDataAtual = new SimpleDateFormat("dd/MM/yyyy");
-        String dataAtual = formatterDataAtual.format(data);
-        sessao.setAttribute("dataAtual", dataAtual);
+	        // Cria a data atual e seta essa data na sessão
+	        data = new Date();
+	        SimpleDateFormat formatterDataAtual = new SimpleDateFormat("dd/MM/yyyy");
+	        String dataAtual = formatterDataAtual.format(data);
+	        sessao.setAttribute("dataAtual", dataAtual);
 
-        //Coloca na sessão a mensagem informando quantos dias falta para 
-        //a senha do usuário expirar
-        sessao.setAttribute("mensagemExpiracao",montaMensagemExpiracaoSenha(usuarioLogado));
-        
-        /*
-         * Cria a lista de últimos acessos do usuário logado 
-         * e seta essa lista html na sessão para ser recuperada
-         * na página de informações do usuário 
-         */
-        String ultimosAcessos = this.construirUltimosAcessos(usuarioLogado);
-        sessao.setAttribute("ultimosAcessos",ultimosAcessos);
-        
-        // Registra o acesso do usuário no sistema
-        this.registrarAcessoUsuario(usuarioLogado);
-        
-        //Registra a Sessao para nao permitir acesso simultaneo no sistema
-        SessaoHttpListener.registrarAcessoUsuario(sessao, getControladorUtil().pesquisarParametrosDoSistema());
-      
-        Collection colecaoIndicadorReiteracao  = getControladorAtendimentoPublico().verificarUsuarioRegistroAtendimentoUrgencia(usuarioLogado.getId());
-        
-        if(colecaoIndicadorReiteracao != null && !colecaoIndicadorReiteracao.isEmpty()){
-          
-          Iterator iterIndicadorReiteracao = colecaoIndicadorReiteracao.iterator();
-          String msgUrgencia1 = "";
-          String msgUrgencia2 = "";
-          while (iterIndicadorReiteracao.hasNext()) {
-            Short indicadorReiteracao = (Short) iterIndicadorReiteracao.next();
-            if(indicadorReiteracao.equals(ConstantesSistema.NAO)){
-              msgUrgencia1 = "Existem registros de atendimento em caráter de urgência";
-            }
-            if(indicadorReiteracao.equals(ConstantesSistema.SIM)){
-              msgUrgencia2 = "Existe(m) registro(s) de atendimento reiterado";
-            }
-          }
-          sessao.setAttribute("RAUrgencia", "true");
-          if(!msgUrgencia1.equalsIgnoreCase("")){
-            sessao.setAttribute("msgUrgencia1",msgUrgencia1);
-          }else{
-            sessao.removeAttribute("msgUrgencia1");
-          }
-          if(!msgUrgencia2.equalsIgnoreCase("")){
-            sessao.setAttribute("msgUrgencia2",msgUrgencia2);
-          }else{
-            sessao.removeAttribute("msgUrgencia2");
-          }
-        }else{          
-          sessao.removeAttribute("RAUrgencia");
-          sessao.removeAttribute("msgUrgencia1");
-          sessao.removeAttribute("msgUrgencia2");
-        }		
+	        //Coloca na sessão a mensagem informando quantos dias falta para 
+	        //a senha do usuário expirar
+	        sessao.setAttribute("mensagemExpiracao",montaMensagemExpiracaoSenha(usuarioLogado));
+	        
+	        /*
+	         * Cria a lista de últimos acessos do usuário logado 
+	         * e seta essa lista html na sessão para ser recuperada
+	         * na página de informações do usuário 
+	         */
+	        String ultimosAcessos = this.construirUltimosAcessos(usuarioLogado);
+	        sessao.setAttribute("ultimosAcessos",ultimosAcessos);
+	        
+	        // Registra o acesso do usuário no sistema
+	        this.registrarAcessoUsuario(usuarioLogado);
+	        
+	        //Registra a Sessao para nao permitir acesso simultaneo no sistema
+	        SessaoHttpListener.registrarAcessoUsuario(sessao, getControladorUtil().pesquisarParametrosDoSistema());
+	      
+	        Collection colecaoIndicadorReiteracao  = getControladorAtendimentoPublico().verificarUsuarioRegistroAtendimentoUrgencia(usuarioLogado.getId());
+	        
+	        if(colecaoIndicadorReiteracao != null && !colecaoIndicadorReiteracao.isEmpty()){
+	          
+	          Iterator iterIndicadorReiteracao = colecaoIndicadorReiteracao.iterator();
+	          String msgUrgencia1 = "";
+	          String msgUrgencia2 = "";
+	          while (iterIndicadorReiteracao.hasNext()) {
+	            Short indicadorReiteracao = (Short) iterIndicadorReiteracao.next();
+	            if(indicadorReiteracao.equals(ConstantesSistema.NAO)){
+	              msgUrgencia1 = "Existem registros de atendimento em caráter de urgência";
+	            }
+	            if(indicadorReiteracao.equals(ConstantesSistema.SIM)){
+	              msgUrgencia2 = "Existe(m) registro(s) de atendimento reiterado";
+	            }
+	          }
+	          sessao.setAttribute("RAUrgencia", "true");
+	          if(!msgUrgencia1.equalsIgnoreCase("")){
+	            sessao.setAttribute("msgUrgencia1",msgUrgencia1);
+	          }else{
+	            sessao.removeAttribute("msgUrgencia1");
+	          }
+	          if(!msgUrgencia2.equalsIgnoreCase("")){
+	            sessao.setAttribute("msgUrgencia2",msgUrgencia2);
+	          }else{
+	            sessao.removeAttribute("msgUrgencia2");
+	          }
+	        }else{          
+	          sessao.removeAttribute("RAUrgencia");
+	          sessao.removeAttribute("msgUrgencia1");
+	          sessao.removeAttribute("msgUrgencia2");
+	        }			
+		} catch (Exception e) {
+			logger.error("Erro ao montar menu do usuario", e);
+			throw new ControladorException("Erro ao montar menu do usuario", e);
+		}
 	}
 	
 	private Collection<GrupoFuncionalidadeOperacao> pesquisarRestricaoUsuario(Usuario usuarioLogado){
