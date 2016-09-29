@@ -7732,7 +7732,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         // Descontos concedidos no parcelamento
         Collection colecaoDadosCreditosRealizadosDescontoParcelamento = repositorioFinanceiro
                 .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
-                        anoMesAnteriorFaturamento, idLocalidade);
+                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 
         if (colecaoDadosCreditosRealizadosDescontoParcelamento != null
                 && !colecaoDadosCreditosRealizadosDescontoParcelamento
@@ -7776,6 +7776,51 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
             }
 
             colecaoDadosCreditosRealizadosDescontoParcelamento = null;
+
+        }
+        
+     // Descontos concedidos no parcelamento
+        Collection creditosDescontoParcelamentoFaixaConta = repositorioFinanceiro
+                .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
+                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
+
+        if (creditosDescontoParcelamentoFaixaConta != null && !creditosDescontoParcelamentoFaixaConta.isEmpty()) {
+
+            Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = creditosDescontoParcelamentoFaixaConta.iterator();
+
+            while (colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.hasNext()) {
+
+                Object[] dadosCreditosRealizadosDescontoParcelamento = (Object[]) colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.next();
+
+                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[0];
+                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[1];
+                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[2];
+                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
+
+                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
+
+                if (valorCategoria != null
+                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
+
+                    // Cria o objeto com os valores passados
+                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+                            anoMesAnteriorFaturamento,
+                            idGerenciaRegionalConta,
+                            idUnidadeNegocioConta,
+                            idLocalidadeConta,
+                            idCategoriaConta,
+                            valorCategoria.multiply(new BigDecimal("-1")),
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS,
+                            100,
+                            LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
+                            65, null);
+
+                    colecaoContasAReceberContabil.add(contaAReceberContabil);
+                }
+
+            }
+
+            creditosDescontoParcelamentoFaixaConta = null;
 
         }
 
@@ -8499,8 +8544,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
             throws ErroRepositorioException {
 
     	Collection contasCreditosARealizarDescontoParcelamento = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
-				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
+				CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+				LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
 				500, 70, 600, 60);
 
     	if (contasCreditosARealizarDescontoParcelamento != null && !contasCreditosARealizarDescontoParcelamento.isEmpty()) {
