@@ -15,7 +15,6 @@ import gcom.util.GerenciadorSSO;
 
 public class FiltroSSO extends HttpServlet implements Filter{
 
-	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		GerenciadorSSO sso = new GerenciadorSSO((HttpServletRequest) request);
 
@@ -26,7 +25,6 @@ public class FiltroSSO extends HttpServlet implements Filter{
 		}
 	}
 
-	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		
 	}

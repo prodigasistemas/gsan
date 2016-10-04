@@ -7783,7 +7783,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         Collection creditosDescontoParcelamentoFaixaConta = repositorioFinanceiro
                 .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
                         anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
-
+        System.out.println("------> " + creditosDescontoParcelamentoFaixaConta.size());
         if (creditosDescontoParcelamentoFaixaConta != null && !creditosDescontoParcelamentoFaixaConta.isEmpty()) {
 
             Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = creditosDescontoParcelamentoFaixaConta.iterator();
@@ -7798,7 +7798,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                 Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
 
                 BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
-
+                System.out.println("Valor: " + valorCategoria);
                 if (valorCategoria != null
                         && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
 
@@ -8672,7 +8672,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             idLocalidadeCredito, idCategoriaCredito,
                             valorCurtoPrazo.multiply(new BigDecimal("-1")),
                             LancamentoTipo.PARCELAMENTOS_A_COBRAR_CURTO_PRAZO,
-                            500, LancamentoItem.DESCONTOS_CONCEDIDOS, 70, null);
+                            500, idLancamentoItem, 70, null);
 
                     colecaoContas.add(contaAReceberContabil);
                 }
@@ -8688,7 +8688,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             idLocalidadeCredito, idCategoriaCredito,
                             valorLongoPrazo.multiply(new BigDecimal("-1")),
                             LancamentoTipo.PARCELAMENTOS_A_COBRAR_LONGO_PRAZO,
-                            600, LancamentoItem.DESCONTOS_CONCEDIDOS, 60, null);
+                            600, idLancamentoItem, 60, null);
 
                     colecaoContas.add(contaAReceberContabil);
                 }
@@ -8718,7 +8718,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             idLocalidadeCreditoValorResidual, idCategoriaCreditoValorResidual,
                             valorResidual.multiply(new BigDecimal("-1")),
                             LancamentoTipo.PARCELAMENTOS_A_COBRAR_CURTO_PRAZO,
-                            500, LancamentoItem.DESCONTOS_CONCEDIDOS, 70, null);
+                            500, idLancamentoItem, 70, null);
 
                     colecaoContas.add(contaAReceberContabil);
                 }

@@ -5930,9 +5930,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ " where (im.indicadorExclusao <> :idExclusao OR im.indicadorExclusao is null) and ";
 
-			String setorComercialOrigemID = helper.getSetorComercialOrigemID();
-			String setorComercialDestinoID = helper.getSetorComercialDestinoID();
-
 			if (helper.getLocalidadeOrigemID() != null && !helper.getLocalidadeOrigemID().equals("") 
 					&& helper.getLocalidadeDestinoID() != null && !helper.getLocalidadeDestinoID().equals(""))
 				consulta += " lo.id between " + helper.getLocalidadeOrigemID() + " and " + helper.getLocalidadeDestinoID() + " and ";
@@ -5942,8 +5939,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				consulta += "sc.id between " + helper.getSetorComercialOrigemID() + " and " + helper.getSetorComercialDestinoID() + " and ";
 
 			if (helper.getCodigoRotaInicial() != null && !helper.getCodigoRotaInicial().equalsIgnoreCase("") && !helper.getCodigoRotaInicial().equalsIgnoreCase(""))
-				System.out.println("rt.rota_cdrota between " + helper.getCodigoRotaInicial() + " and " + helper.getCodigoRotaFinal() + " and ");
-				//consulta += "rt.rota_cdrota between " + helper.getCodigoRotaInicial() + " and " + helper.getCodigoRotaFinal() + " and ";
+				consulta += "rt.codigo between " + helper.getCodigoRotaInicial() + " and " + helper.getCodigoRotaFinal() + " and ";
 			
 			if (!helper.getQuadraOrigemID().equalsIgnoreCase("") && !helper.getQuadraOrigemID().equalsIgnoreCase(""))
 				consulta += "qu.id between " + helper.getQuadraOrigemID() + " and " + helper.getQuadraDestinoID() + " and ";
