@@ -1,14 +1,7 @@
 package gcom.gui.batch;
 
-import gcom.fachada.Fachada;
-import gcom.gui.operacional.AcessarOperacionalServlet;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.Util;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -21,6 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.logging.Logger;
+
+import gcom.fachada.Fachada;
+import gcom.gui.operacional.AcessarOperacionalServlet;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.Util;
 
 public class AcessarNovoBatchServlet extends HttpServlet{
 	
@@ -84,12 +82,7 @@ public class AcessarNovoBatchServlet extends HttpServlet{
 			
 			StringBuilder builder = new StringBuilder();
 			builder.append("http://")
-					.append(fachada.getInstancia().retornaIpServidorNovoBatch())
-					.append("/autenticar_usuario")
-					.append("?usuario=").append(nomeUsuario)
-					.append("&token=").append(token);
-			
-			System.out.println("Marcelo");
+					.append(fachada.getInstancia().retornaIpServidorNovoBatch());
 			
 			response.sendRedirect(builder.toString());
 		} catch (Exception e) {
