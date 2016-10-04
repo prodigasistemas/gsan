@@ -1,8 +1,6 @@
 package gcom.util;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,7 @@ public class GerenciadorSSO {
 	private HttpServletRequest httpRequest;
 	private HttpClient http = new HttpClient();
 	private String token;
+	private SegurancaParametro parametro;
 
 	public GerenciadorSSO(HttpServletRequest httpRequest) throws IOException {
 		this.httpRequest = httpRequest;
@@ -75,6 +74,10 @@ public class GerenciadorSSO {
 
 		return false;
 	}
+	
+	public String getUrlPortal(){
+		return parametro.getValor();
+	}
 
 	private void validarToken() throws IOException {
 		if (existeAlgumCookie())
@@ -84,7 +87,7 @@ public class GerenciadorSSO {
 		filtro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGURANCA.name()));
 		filtro.adicionarParametro(new ParametroNaoNulo(FiltroSegurancaParametro.NOME));
 		
-		SegurancaParametro parametro = (SegurancaParametro) Fachada.getInstancia().pesquisar(filtro, SegurancaParametro.class.getName()).iterator().next();
+		parametro = (SegurancaParametro) Fachada.getInstancia().pesquisar(filtro, SegurancaParametro.class.getName()).iterator().next();
 		
 		this.conteudoDoCookie = http.GetPageContent(parametro.getValor() + "/authorization?token=" + token);
 	}
