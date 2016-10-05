@@ -15,14 +15,20 @@ import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
 import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
 import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
+import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocal;
+import gcom.cadastro.controladores.ControladorAtualizacaoCadastroLocalHome;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.ControladorGeograficoLocal;
@@ -31,10 +37,14 @@ import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.localidade.ControladorLocalidadeLocal;
 import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
+import gcom.cadastro.unidade.ControladorUnidadeLocal;
+import gcom.cadastro.unidade.ControladorUnidadeLocalHome;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
+import gcom.faturamento.ControladorFaturamentoLocal;
+import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocal;
 import gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocalHome;
 import gcom.faturamento.controladores.ControladorDebitoACobrarLocal;
@@ -49,6 +59,10 @@ import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.ControladorAcessoLocal;
 import gcom.seguranca.acesso.ControladorAcessoLocalHome;
+import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
+import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
+import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
 import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 
@@ -459,5 +473,116 @@ public abstract class ControladorComum implements SessionBean{
         } catch (ServiceLocatorException e) {
             throw new SistemaException(e);
         }
-    }    
+    }
+    
+    protected ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+        try {
+            ServiceLocator locator = ServiceLocator.getInstancia();
+
+            ControladorAtualizacaoCadastralLocalHome localHome = (ControladorAtualizacaoCadastralLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
+
+            ControladorAtualizacaoCadastralLocal local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+    
+    protected ControladorTransacaoLocal getControladorTransacao() {
+        try {
+            ServiceLocator locator = ServiceLocator.getInstancia();
+
+            ControladorTransacaoLocalHome localHome = (ControladorTransacaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
+
+            ControladorTransacaoLocal local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+    
+    protected ControladorFaturamentoLocal getControladorFaturamento() {
+        try {
+            ServiceLocator locator = ServiceLocator.getInstancia();
+
+            ControladorFaturamentoLocalHome localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+            ControladorFaturamentoLocal local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+    
+	protected ControladorUsuarioLocal getControladorUsuario() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorUsuarioLocalHome localHome = (ControladorUsuarioLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
+
+			ControladorUsuarioLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorUnidadeLocal getControladorUnidade() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorUnidadeLocalHome localHome = (ControladorUnidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
+
+			ControladorUnidadeLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorAtualizacaoCadastroLocal getControladorAtualizacaoCadastro() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+			
+			ControladorAtualizacaoCadastroLocalHome localHome = (ControladorAtualizacaoCadastroLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRO);
+			
+			ControladorAtualizacaoCadastroLocal local = localHome.create();
+			
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+
+	protected ControladorOrdemServicoLocal getControladorOrdemServico() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorOrdemServicoLocalHome localHome = (ControladorOrdemServicoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ORDEM_SERVICO_SEJB);
+
+			ControladorOrdemServicoLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}	
 }

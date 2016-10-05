@@ -4,7 +4,7 @@ import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepImovelCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
@@ -25,8 +25,6 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.util.Map;
 
 public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -69,9 +67,9 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			validarLinhaImovel();
 			validarLinhaRamoAtividade();
 			validarLinhaMedidor();
-			
-			atualizacao.setImovelValidado(true);
 		}
+		
+		new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();		
 	}
 
 	private void validarLinhaMedidor() {
@@ -96,7 +94,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 		new ValidadorTipoOperacaoCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
 		new ValidadorTipoLogradouroCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
 		new ValidadorLogradouroCommand(imovelAtual, imovelAtual.getLinhaImovel(), repositorioImovel).execute();
-//		new ValidadorCoordenadasCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 		new ValidadorEconomiasCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 	}
 

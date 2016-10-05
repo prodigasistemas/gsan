@@ -7,32 +7,63 @@
 				<param name="sequence">cadastro.seq_cliente</param>
 			</generator>
 		</id>
-		<property name="nome" type="java.lang.String" column="clie_nmcliente" length="50"/>
-		<property name="nomeAbreviado" type="java.lang.String" column="clie_nmabreviado" length="40"/>
-		<property name="cpf" type="java.lang.String" column="clie_nncpf" length="11"/>
-		<property name="rg" type="java.lang.String" column="clie_nnrg" length="13"/>
-		<property name="dataEmissaoRg" type="java.sql.Date" column="clie_dtrgemissao" length="4"/>
-		<property name="dataVencimento" type="java.lang.Short" column="clie_ddvencimento" length="2"/>
-		<property name="dataNascimento" type="java.sql.Date" column="clie_dtnascimento" length="4"/>
-		<property name="cnpj" type="java.lang.String" column="clie_nncnpj" length="14"/>
-		<property name="email" type="java.lang.String" column="clie_dsemail" length="40"/>
-		<property name="indicadorUso" type="java.lang.Short" column="clie_icuso" length="2"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="clie_tmultimaalteracao" length="8"/>
-		<property name="indicadorAcaoCobranca" type="java.lang.Short" column="clie_icacaocobranca" length="2"/>
-		<property name="nomeMae" type="java.lang.String" column="clie_nnmae" length="50"/>
-		<property name="indicadorAcrescimos" type="java.lang.Short" column="clie_iccobrancaacrescimos" not-null="true" length="2"/>
-		<property name="indicadorGeraArquivoTexto" type="java.lang.Short" column="clie_icgeraarquivotexto" not-null="true" length="2"/>
-		<property name="indicadorGeraFaturaAntecipada" type="java.lang.Short" column="clie_icgerafaturaantecipada" not-null="true" length="2"/>
-		<property name="indicadorVencimentoMesSeguinte" type="java.lang.Short" column="clie_icvencimentomesseguinte" not-null="true" length="2"/>
-		<property name="indicadorUsoNomeFantasiaConta" type="java.lang.Short" column="clie_icusonomefantasiaconta" not-null="false" length="2"/>
-		<property name="indicadorPermiteNegativacao" type="java.lang.Short" column="clie_icpermitenegativacao" not-null="false" length="2"/>
-		<property name="indicadorNegativacaoPeriodo" type="java.lang.Short" column="clie_icnegativacaoperiodo" not-null="true" length="2"/>  
+        <property name="nome"                           type="java.lang.String"   column="clie_nmcliente"                length="50"/>
+        <property name="nomeAbreviado"                  type="java.lang.String"   column="clie_nmabreviado"              length="40"/>
+        <property name="cpf"                            type="java.lang.String"   column="clie_nncpf"                    length="11"/>
+        <property name="rg"                             type="java.lang.String"   column="clie_nnrg"                     length="13"/>
+        <property name="dataEmissaoRg"                  type="java.sql.Date"      column="clie_dtrgemissao"              length="4"/>
+        <property name="dataVencimento"                 type="java.lang.Short"    column="clie_ddvencimento"             length="2"/>
+        <property name="dataNascimento"                 type="java.sql.Date"      column="clie_dtnascimento"             length="4"/>
+        <property name="cnpj"                           type="java.lang.String"   column="clie_nncnpj"                   length="14"/>
+        <property name="email"                          type="java.lang.String"   column="clie_dsemail"                  length="40"/>
+        <property name="indicadorUso"                   type="java.lang.Short"    column="clie_icuso"                    length="2"/>
+        <property name="ultimaAlteracao"                type="java.sql.Timestamp" column="clie_tmultimaalteracao"        length="8"/>
+        <property name="indicadorAcaoCobranca"          type="java.lang.Short"    column="clie_icacaocobranca"           length="2"/>
+        <property name="nomeMae"                        type="java.lang.String"   column="clie_nnmae"                    length="50"/>
+        <property name="indicadorAcrescimos"            type="java.lang.Short"    column="clie_iccobrancaacrescimos"     length="2" not-null="true" />
+        <property name="indicadorGeraArquivoTexto"      type="java.lang.Short"    column="clie_icgeraarquivotexto"       length="2" not-null="true" />
+        <property name="indicadorGeraFaturaAntecipada"  type="java.lang.Short"    column="clie_icgerafaturaantecipada"   length="2" not-null="true" />
+        <property name="indicadorVencimentoMesSeguinte" type="java.lang.Short"    column="clie_icvencimentomesseguinte"  length="2" not-null="true" />
+        <property name="indicadorUsoNomeFantasiaConta"  type="java.lang.Short"    column="clie_icusonomefantasiaconta"   length="2" not-null="false"/>
+        <property name="indicadorPermiteNegativacao"    type="java.lang.Short"    column="clie_icpermitenegativacao"     length="2" not-null="false"/>
+        <property name="indicadorNegativacaoPeriodo"    type="java.lang.Short"    column="clie_icnegativacaoperiodo"     length="2" not-null="true" />  
 		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->
 		<many-to-one name="orgaoExpedidorRg" class="gcom.cadastro.cliente.OrgaoExpedidorRg" not-null="true">
 			<column name="oerg_id"/>
 		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_cdclienteresponsavel"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to PessoaSexo -->
+		<many-to-one name="pessoaSexo" class="gcom.cadastro.cliente.PessoaSexo" not-null="true">
+			<column name="psex_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Profissao -->
+		<many-to-one name="profissao" class="gcom.cadastro.cliente.Profissao" not-null="true">
+			<column name="prof_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to UnidadeFederacao -->
+		<many-to-one name="unidadeFederacao" class="gcom.cadastro.geografico.UnidadeFederacao" not-null="true">
+			<column name="unfe_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to ClienteTipo -->
+		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to RamoAtividade -->
+		<many-to-one name="ramoAtividade" class="gcom.cadastro.cliente.RamoAtividade" not-null="true">
+			<column name="ratv_id"/>
+		</many-to-one>
+
 		<!-- bi-directional one-to-many association to ClienteFone -->
 		<set name="clienteFones" lazy="true" inverse="true" cascade="delete">
 			<key>
@@ -40,6 +71,7 @@
 			</key>
 			<one-to-many class="gcom.cadastro.cliente.ClienteFone"/>
 		</set>
+
 		<!-- bi-directional one-to-many association to ClienteImovel -->
 		<set name="clienteImoveis" lazy="true" inverse="true">
 			<key>
@@ -47,36 +79,7 @@
 			</key>
 			<one-to-many class="gcom.cadastro.cliente.ClienteImovel"/>
 		</set>
-		<!-- bi-directional one-to-many association to Cliente
-    <set
-        name="clientes"
-        lazy="true"
-        inverse="true"
-    >
-        <key>
-            <column name="clie_cdclienteresponsavel" />
-        </key>
-        <one-to-many
-            class="gcom.cadastro.Cliente"
-        />
-    </set> -->
-		<!-- bi-directional many-to-one association to Cliente -->
-		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
-			<column name="clie_cdclienteresponsavel"/>
-		</many-to-one>
-		<!-- bi-directional one-to-many association to ClienteImovelEconomia
-    <set
-        name="clienteImovelEconomias"
-        lazy="true"
-        inverse="true"
-    >
-        <key>
-            <column name="clie_id" />
-        </key>
-        <one-to-many
-            class="gcom.cadastro.ClienteImovelEconomia"
-        />
-    </set> -->
+
 		<!-- bi-directional one-to-many association to ClienteEndereco -->
 		<set name="clienteEnderecos" lazy="true" inverse="true" cascade="delete">
 			<key>
@@ -84,25 +87,5 @@
 			</key>
 			<one-to-many class="gcom.cadastro.cliente.ClienteEndereco"/>
 		</set>
-		<!-- bi-directional many-to-one association to PessoaSexo -->
-		<many-to-one name="pessoaSexo" class="gcom.cadastro.cliente.PessoaSexo" not-null="true">
-			<column name="psex_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to Profissao -->
-		<many-to-one name="profissao" class="gcom.cadastro.cliente.Profissao" not-null="true">
-			<column name="prof_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to UnidadeFederacao -->
-		<many-to-one name="unidadeFederacao" class="gcom.cadastro.geografico.UnidadeFederacao" not-null="true">
-			<column name="unfe_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to ClienteTipo -->
-		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
-			<column name="cltp_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to RamoAtividade -->
-		<many-to-one name="ramoAtividade" class="gcom.cadastro.cliente.RamoAtividade" not-null="true">
-			<column name="ratv_id"/>
-		</many-to-one>
 	</class>
 </hibernate-mapping>

@@ -4807,7 +4807,7 @@ public interface IControladorFaturamento {
 	 * 
 	 */
 	public void prescreverDebitosImoveisPublicosAutomatico(Integer idFuncionalidadeIniciada, 
-			Integer anoMesReferencia, Integer anoMesPrescricao, Integer usuario, String idsEsferaPoder) 
+			Integer anoMesReferencia, Date dataPrescricao, Integer usuario, String idsEsferaPoder) 
 		throws ControladorException;
 	
 	/**

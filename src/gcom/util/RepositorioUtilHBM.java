@@ -1,20 +1,11 @@
 package gcom.util;
 
-import gcom.cadastro.DbVersaoBase;
-import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.interceptor.ObjetoTransacao;
-import gcom.seguranca.acesso.OperacaoEfetuada;
-import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.util.filtro.Filtro;
-import gcom.util.filtro.GeradorHQLCondicional;
-import gcom.util.filtro.PersistenciaUtil;
-
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -28,8 +19,25 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.hibernate.exception.GenericJDBCException;
+import org.jboss.logging.Logger;
+
+import gcom.cadastro.DbVersaoBase;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.interceptor.ObjetoTransacao;
+import gcom.model.IAtualizacaoCadastro;
+import gcom.seguranca.acesso.OperacaoEfetuada;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.GeradorHQLCondicional;
+import gcom.util.filtro.PersistenciaUtil;
 
 public class RepositorioUtilHBM implements IRepositorioUtil {
+
+	private Logger logger = Logger.getLogger(RepositorioUtilHBM.class);
 
 	private static RepositorioUtilHBM instancia;
 
@@ -42,6 +50,20 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		}
 
 		return instancia;
+	}
+	
+	public Object obterPorId(Class classe, Integer id) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			Query query = session.createQuery("select e from " + classe.getName() + " e where e.id = " + id);
+		
+			return query.uniqueResult(); 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter " + classe.getName() + " pelo id");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -56,13 +78,27 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
 	}
+
+    public Collection listar(Class classe) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+
+        try {
+            Query query = session.createQuery("select e from " + classe.getName() + " e");
+
+            return (Collection) query.list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+    }
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection limiteMaximoFiltroPesquisa(Filtro filtro, String pacoteNomeObjeto, int limite) throws ErroRepositorioException {
@@ -100,7 +136,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			}
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -118,7 +153,6 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 			return retorno.intValue();
 		} catch (HibernateException e) {
-			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -150,14 +184,8 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			session.flush();
 
 			return retorno;
-		} catch (GenericJDBCException ex) {
-			ex.printStackTrace();
-			throw new ErroRepositorioException(ex, "Erro no Hibernate");
-		} catch (CallbackException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException(e, e.getMessage());
-		} catch (HibernateException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Erro ao inserir objeto", e);
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -288,15 +316,15 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		Session session = HibernateUtil.getSession();
 
 		try {
+			Method method = objeto.getClass().getDeclaredMethod("setUltimaAlteracao", Date.class);
+			method.invoke(objeto, new Date());
+		} catch (Exception e1) {}
+		
+		try {
 			session.update(objeto);
 			session.flush();
-
-		} catch (CallbackException e) {
-			throw new ErroRepositorioException(e, e.getMessage());
-		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
-
+		} catch (Exception e){
+			throw new ErroRepositorioException(e, "Erro ao atualizar objeto");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -565,5 +593,27 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			HibernateUtil.closeSession(session);
 		}
 
+	}
+	
+	public void registrarHistorico(Object objeto) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+
+		try {
+			IAtualizacaoCadastro iHistorico = (IAtualizacaoCadastro) objeto;
+			
+			Object original = this.obterPorId(iHistorico.getClasseOrigem(), iHistorico.getId());
+			
+			Constructor constructor = iHistorico.getClasseHistorico().getDeclaredConstructor(iHistorico.getClasseOrigem(), Usuario.class);
+			
+			Usuario user = ((ObjetoTransacao) objeto).getUsuarioParaHistorico();
+			
+			Object historico = constructor.newInstance(original, user);
+			
+			this.inserir(historico);
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao registrar historico para o objeto");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }

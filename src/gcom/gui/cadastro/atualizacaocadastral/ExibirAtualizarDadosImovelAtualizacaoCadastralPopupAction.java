@@ -68,18 +68,18 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 					form.setDescricaoImovel(imovel.getId().toString());
 					
-					Localidade localidade = (Localidade) imovel.getLocalidade();
+					Localidade localidade = imovel.getLocalidade();
 					form.setIdLocalidade(localidade.getId().toString());
 					form.setDescricaoLocalidade(localidade.getDescricao());
 					
-					SetorComercial setorComercial = (SetorComercial) imovel.getSetorComercial();
+					SetorComercial setorComercial = imovel.getSetorComercial();
 					form.setIdSetorComercial(setorComercial.getId().toString());
-					form.setCodigoSetorComercial("" + setorComercial.getCodigo());
+					form.setCodigoSetorComercial(Integer.toString(setorComercial.getCodigo()));
 					form.setDescricaoSetorComercial(setorComercial.getDescricao());
 					
 					Quadra quadra = (Quadra) imovel.getQuadra();
 					form.setIdQuadra(quadra.getId().toString());
-					form.setNumeroQuadra("" + quadra.getNumeroQuadra());
+					form.setNumeroQuadra(Integer.toString(quadra.getNumeroQuadra()));
 					
 					resumoImovel.add(new SituacaoAguaHelper(imovel.getLigacaoAguaSituacao().getDescricao()));
 					resumoImovel.add(new SituacaoEsgotoHelper(imovel.getLigacaoEsgotoSituacao().getDescricao()));
@@ -146,7 +146,6 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 	}
 	
 	public boolean temPermissaoAprovarImovel(Integer idUsuario, String idImovel) {
-		System.out.println("temPermissaoAprovarImovel - action");
 		return fachada.verificarPermissaoAprovarImovel(idUsuario, new Integer(idImovel));
 	}
 	

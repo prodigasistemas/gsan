@@ -204,18 +204,13 @@ public class AtualizarDadosClientesPopupAction extends GcomAction {
 				//Se foi modificado algum dado do cliente, atualiza o cliente.
 				if(isAlterado){	
 					
-					//Registrar Transação
-					//-----------------REGISTRAR TRANSAÇÂO-----------------------
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_ATUALIZAR_DADOS_CLIENTE_PROMAIS,
 							cliente.getId(), cliente.getId(), new UsuarioAcaoUsuarioHelper( usuarioLogado,UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 							
 					registradorOperacao.registrarOperacao(cliente);		
-					//---------------FIM REGISTRAR TRANSAÇÂO---------------------
 					
-					//getFachada().atualizarCliente(cliente,null,null,usuarioLogado);
-					
-					getFachada().atualizar(cliente);
+					getFachada().atualizarCliente(cliente,null,null,usuarioLogado);
 					
 					montarPaginaSucesso(httpServletRequest,
 							"Cliente alterado com sucesso.",

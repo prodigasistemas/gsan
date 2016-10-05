@@ -14,88 +14,73 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ParcelamentoPerfil extends ObjetoTransacao {
+	
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
 
-    /*
-     * Felipe Santos
-     * 
-     */
-    private BigDecimal percentualDescontoAcrescimoMulta;
-    
-    private BigDecimal percentualDescontoAcrescimoJurosMora;
-    
-    private BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria;
-    // fim alteração
+	private Integer id;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
+	private BigDecimal percentualDescontoAcrescimoMulta;
 
-    /** persistent field */
-    private Subcategoria subcategoria;
+	private BigDecimal percentualDescontoAcrescimoJurosMora;
 
-    /** persistent field */
-    private ImovelSituacaoTipo imovelSituacaoTipo;
+	private BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria;
 
-    /** persistent field */
-    private ImovelPerfil imovelPerfil;
+	private Date ultimaAlteracao;
 
-    /** persistent field */
-    private ResolucaoDiretoria resolucaoDiretoria;
-    
-    /** persistent field */
-    private BigDecimal  percentualTarifaMinimaPrestacao;
-    
-    /** persistent field */
-    private Integer  numeroConsumoMinimo;
-    
-    /** persistent field */
-    private BigDecimal  percentualVariacaoConsumoMedio;
-    
-    /** persistent field */
-    private Short  indicadorChequeDevolvido;
-    
-    /** persistent field */
-    private Short  indicadorSancoesUnicaConta;
-    
-    private Short  indicadorRetroativoTarifaSocial;
-    
-    private Integer anoMesReferenciaLimiteInferior;
-    
-    private Integer anoMesReferenciaLimiteSuperior;
-    
-    private BigDecimal percentualDescontoTarifaSocial;
-    
-    private Integer parcelaQuantidadeMinimaFatura;
-    
-    private Short  indicadorAlertaParcelaMinima;
-    
-    private Integer numeroConsumoEconomia;
-    
-    private BigDecimal numeroAreaConstruida;
-    
-    private Categoria categoria;
-    
-    private BigDecimal percentualDescontoSancao;
-    
-    private Integer quantidadeEconomias;
-   
-    private Short capacidadeHidrometro;
-   
-    private Short indicadorEntradaMinima;
-    
-    private Integer  quantidadeMaximaReparcelamento;
-    
-    private BigDecimal percentualDescontoPagamentoAVista;
-    
-    private Date dataLimiteDescontoPagamentoAVista;
-    
+	private Subcategoria subcategoria;
 
-    public Short getCapacidadeHidrometro() {
+	private ImovelSituacaoTipo imovelSituacaoTipo;
+
+	private ImovelPerfil imovelPerfil;
+
+	private ResolucaoDiretoria resolucaoDiretoria;
+
+	private BigDecimal percentualTarifaMinimaPrestacao;
+
+	private Integer numeroConsumoMinimo;
+
+	private BigDecimal percentualVariacaoConsumoMedio;
+
+	private Short indicadorChequeDevolvido;
+
+	private Short indicadorSancoesUnicaConta;
+
+	private Short indicadorRetroativoTarifaSocial;
+
+	private Integer anoMesReferenciaLimiteInferior;
+
+	private Integer anoMesReferenciaLimiteSuperior;
+
+	private BigDecimal percentualDescontoTarifaSocial;
+
+	private Integer parcelaQuantidadeMinimaFatura;
+
+	private Short indicadorAlertaParcelaMinima;
+
+	private Integer numeroConsumoEconomia;
+
+	private BigDecimal numeroAreaConstruida;
+
+	private Categoria categoria;
+
+	private BigDecimal percentualDescontoSancao;
+
+	private Integer quantidadeEconomias;
+
+	private Short capacidadeHidrometro;
+
+	private Short indicadorEntradaMinima;
+
+	private Integer quantidadeMaximaReparcelamento;
+
+	private BigDecimal percentualDescontoAcrescimoPagamentoAVista;
+
+	private Date dataLimiteDescontoPagamentoAVista;
+	
+	private BigDecimal percentualDescontoTotalPagamentoAVista;
+
+	public Short getCapacidadeHidrometro() {
 		return capacidadeHidrometro;
 	}
 
@@ -103,155 +88,136 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		this.capacidadeHidrometro = capacidadeHidrometro;
 	}
 
-	/**
-	 * @return Retorna o campo quantidadeEconomias.
-	 */
 	public Integer getQuantidadeEconomias() {
 		return quantidadeEconomias;
 	}
-	
-	/**
-	 * @param quantidadeEconomias O quantidadeEconomias a ser setado.
-	 */
+
 	public void setQuantidadeEconomias(Integer quantidadeEconomias) {
 		this.quantidadeEconomias = quantidadeEconomias;
 	}
 
-	/**
-	 * @return Retorna o campo percentualTarifaMinimaPrestacao.
-	 */
 	public BigDecimal getPercentualTarifaMinimaPrestacao() {
 		return percentualTarifaMinimaPrestacao;
 	}
 
-	/**
-	 * @param percentualTarifaMinimaPrestacao O percentualTarifaMinimaPrestacao a ser setado.
-	 */
-	public void setPercentualTarifaMinimaPrestacao(
-			BigDecimal percentualTarifaMinimaPrestacao) {
+	public void setPercentualTarifaMinimaPrestacao(BigDecimal percentualTarifaMinimaPrestacao) {
 		this.percentualTarifaMinimaPrestacao = percentualTarifaMinimaPrestacao;
 	}
 
-	public String[] retornaCamposChavePrimaria(){
+	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
 	}
-	
-	public Filtro retornaFiltro(){
+
+	public Filtro retornaFiltro() {
 		FiltroParcelamentoPerfil filtroParcelamentoPerfil = new FiltroParcelamentoPerfil();
-		
-		filtroParcelamentoPerfil. adicionarCaminhoParaCarregamentoEntidade("subcategoria");
-		filtroParcelamentoPerfil. adicionarCaminhoParaCarregamentoEntidade("imovelSituacaoTipo");
-		filtroParcelamentoPerfil. adicionarCaminhoParaCarregamentoEntidade("imovelPerfil");
-		filtroParcelamentoPerfil. adicionarCaminhoParaCarregamentoEntidade("resolucaoDiretoria");
-		filtroParcelamentoPerfil. adicionarParametro(
-				new ParametroSimples(FiltroParcelamentoPerfil.ID, this.getId()));
-		return filtroParcelamentoPerfil; 
+
+		filtroParcelamentoPerfil.adicionarCaminhoParaCarregamentoEntidade("subcategoria");
+		filtroParcelamentoPerfil.adicionarCaminhoParaCarregamentoEntidade("imovelSituacaoTipo");
+		filtroParcelamentoPerfil.adicionarCaminhoParaCarregamentoEntidade("imovelPerfil");
+		filtroParcelamentoPerfil.adicionarCaminhoParaCarregamentoEntidade("resolucaoDiretoria");
+		filtroParcelamentoPerfil.adicionarParametro(new ParametroSimples(FiltroParcelamentoPerfil.ID, this.getId()));
+		return filtroParcelamentoPerfil;
 	}
-    
-    /** full constructor */
-    public ParcelamentoPerfil(BigDecimal percentualDescontoAcrescimoMulta, BigDecimal percentualDescontoAcrescimoJurosMora, BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria, 
-    		Date ultimaAlteracao, Subcategoria subcategoria, ImovelSituacaoTipo imovelSituacaoTipo, ImovelPerfil imovelPerfil, ResolucaoDiretoria resolucaoDiretoria) {
-        this.percentualDescontoAcrescimoMulta = percentualDescontoAcrescimoMulta;
-        this.percentualDescontoAcrescimoJurosMora = percentualDescontoAcrescimoJurosMora;
-        this.percentualDescontoAcrescimoAtualizacaoMonetaria = percentualDescontoAcrescimoAtualizacaoMonetaria;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.subcategoria = subcategoria;
-        this.imovelSituacaoTipo = imovelSituacaoTipo;
-        this.imovelPerfil = imovelPerfil;
-        this.resolucaoDiretoria = resolucaoDiretoria;
-    }
 
-    /** default constructor */
-    public ParcelamentoPerfil() {
-    }
+	public ParcelamentoPerfil(BigDecimal percentualDescontoAcrescimoMulta, BigDecimal percentualDescontoAcrescimoJurosMora, BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria,
+			Date ultimaAlteracao, Subcategoria subcategoria, ImovelSituacaoTipo imovelSituacaoTipo, ImovelPerfil imovelPerfil, ResolucaoDiretoria resolucaoDiretoria) {
+		this.percentualDescontoAcrescimoMulta = percentualDescontoAcrescimoMulta;
+		this.percentualDescontoAcrescimoJurosMora = percentualDescontoAcrescimoJurosMora;
+		this.percentualDescontoAcrescimoAtualizacaoMonetaria = percentualDescontoAcrescimoAtualizacaoMonetaria;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.subcategoria = subcategoria;
+		this.imovelSituacaoTipo = imovelSituacaoTipo;
+		this.imovelPerfil = imovelPerfil;
+		this.resolucaoDiretoria = resolucaoDiretoria;
+	}
 
-    /** minimal constructor */
-    public ParcelamentoPerfil(Subcategoria subcategoria, ImovelSituacaoTipo imovelSituacaoTipo, ImovelPerfil imovelPerfil, ResolucaoDiretoria resolucaoDiretoria) {
-        this.subcategoria = subcategoria;
-        this.imovelSituacaoTipo = imovelSituacaoTipo;
-        this.imovelPerfil = imovelPerfil;
-        this.resolucaoDiretoria = resolucaoDiretoria;
-    }
+	public ParcelamentoPerfil() {
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public ParcelamentoPerfil(Subcategoria subcategoria, ImovelSituacaoTipo imovelSituacaoTipo, ImovelPerfil imovelPerfil, ResolucaoDiretoria resolucaoDiretoria) {
+		this.subcategoria = subcategoria;
+		this.imovelSituacaoTipo = imovelSituacaoTipo;
+		this.imovelPerfil = imovelPerfil;
+		this.resolucaoDiretoria = resolucaoDiretoria;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public BigDecimal getPercentualDescontoAcrescimoMulta() {
-        return this.percentualDescontoAcrescimoMulta;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setPercentualDescontoAcrescimoMulta(BigDecimal percentualDescontoAcrescimoMulta) {
-        this.percentualDescontoAcrescimoMulta = percentualDescontoAcrescimoMulta;
-    }
-    
-    public BigDecimal getPercentualDescontoAcrescimoJurosMora() {
-        return this.percentualDescontoAcrescimoJurosMora;
-    }
+	public BigDecimal getPercentualDescontoAcrescimoMulta() {
+		return this.percentualDescontoAcrescimoMulta;
+	}
 
-    public void setPercentualDescontoAcrescimoJurosMora(BigDecimal percentualDescontoAcrescimoJurosMora) {
-        this.percentualDescontoAcrescimoJurosMora = percentualDescontoAcrescimoJurosMora;
-    }
-    
-    public BigDecimal getPercentualDescontoAcrescimoAtualizacaoMonetaria() {
-        return this.percentualDescontoAcrescimoAtualizacaoMonetaria;
-    }
+	public void setPercentualDescontoAcrescimoMulta(BigDecimal percentualDescontoAcrescimoMulta) {
+		this.percentualDescontoAcrescimoMulta = percentualDescontoAcrescimoMulta;
+	}
 
-    public void setPercentualDescontoAcrescimoAtualizacaoMonetaria(BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria) {
-        this.percentualDescontoAcrescimoAtualizacaoMonetaria = percentualDescontoAcrescimoAtualizacaoMonetaria;
-    }
-    
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public BigDecimal getPercentualDescontoAcrescimoJurosMora() {
+		return this.percentualDescontoAcrescimoJurosMora;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setPercentualDescontoAcrescimoJurosMora(BigDecimal percentualDescontoAcrescimoJurosMora) {
+		this.percentualDescontoAcrescimoJurosMora = percentualDescontoAcrescimoJurosMora;
+	}
 
-    public Subcategoria getSubcategoria() {
-        return this.subcategoria;
-    }
+	public BigDecimal getPercentualDescontoAcrescimoAtualizacaoMonetaria() {
+		return this.percentualDescontoAcrescimoAtualizacaoMonetaria;
+	}
 
-    public void setSubcategoria(Subcategoria subcategoria) {
-        this.subcategoria = subcategoria;
-    }
+	public void setPercentualDescontoAcrescimoAtualizacaoMonetaria(BigDecimal percentualDescontoAcrescimoAtualizacaoMonetaria) {
+		this.percentualDescontoAcrescimoAtualizacaoMonetaria = percentualDescontoAcrescimoAtualizacaoMonetaria;
+	}
 
-    public ImovelSituacaoTipo getImovelSituacaoTipo() {
-        return this.imovelSituacaoTipo;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public void setImovelSituacaoTipo(ImovelSituacaoTipo imovelSituacaoTipo) {
-        this.imovelSituacaoTipo = imovelSituacaoTipo;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public ImovelPerfil getImovelPerfil() {
-        return this.imovelPerfil;
-    }
+	public Subcategoria getSubcategoria() {
+		return this.subcategoria;
+	}
 
-    public void setImovelPerfil(ImovelPerfil imovelPerfil) {
-        this.imovelPerfil = imovelPerfil;
-    }
+	public void setSubcategoria(Subcategoria subcategoria) {
+		this.subcategoria = subcategoria;
+	}
 
-    public ResolucaoDiretoria getResolucaoDiretoria() {
-        return this.resolucaoDiretoria;
-    }
+	public ImovelSituacaoTipo getImovelSituacaoTipo() {
+		return this.imovelSituacaoTipo;
+	}
 
-    public void setResolucaoDiretoria(ResolucaoDiretoria resolucaoDiretoria) {
-        this.resolucaoDiretoria = resolucaoDiretoria;
-    }
+	public void setImovelSituacaoTipo(ImovelSituacaoTipo imovelSituacaoTipo) {
+		this.imovelSituacaoTipo = imovelSituacaoTipo;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+	public ImovelPerfil getImovelPerfil() {
+		return this.imovelPerfil;
+	}
+
+	public void setImovelPerfil(ImovelPerfil imovelPerfil) {
+		this.imovelPerfil = imovelPerfil;
+	}
+
+	public ResolucaoDiretoria getResolucaoDiretoria() {
+		return this.resolucaoDiretoria;
+	}
+
+	public void setResolucaoDiretoria(ResolucaoDiretoria resolucaoDiretoria) {
+		this.resolucaoDiretoria = resolucaoDiretoria;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 
 	public Short getIndicadorChequeDevolvido() {
 		return indicadorChequeDevolvido;
@@ -281,8 +247,7 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return percentualVariacaoConsumoMedio;
 	}
 
-	public void setPercentualVariacaoConsumoMedio(
-			BigDecimal percentualVariacaoConsumoMedio) {
+	public void setPercentualVariacaoConsumoMedio(BigDecimal percentualVariacaoConsumoMedio) {
 		this.percentualVariacaoConsumoMedio = percentualVariacaoConsumoMedio;
 	}
 
@@ -314,8 +279,7 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return anoMesReferenciaLimiteInferior;
 	}
 
-	public void setAnoMesReferenciaLimiteInferior(
-			Integer anoMesReferenciaLimiteInferior) {
+	public void setAnoMesReferenciaLimiteInferior(Integer anoMesReferenciaLimiteInferior) {
 		this.anoMesReferenciaLimiteInferior = anoMesReferenciaLimiteInferior;
 	}
 
@@ -323,8 +287,7 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return anoMesReferenciaLimiteSuperior;
 	}
 
-	public void setAnoMesReferenciaLimiteSuperior(
-			Integer anoMesReferenciaLimiteSuperior) {
+	public void setAnoMesReferenciaLimiteSuperior(Integer anoMesReferenciaLimiteSuperior) {
 		this.anoMesReferenciaLimiteSuperior = anoMesReferenciaLimiteSuperior;
 	}
 
@@ -340,8 +303,7 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return indicadorRetroativoTarifaSocial;
 	}
 
-	public void setIndicadorRetroativoTarifaSocial(
-			Short indicadorRetroativoTarifaSocial) {
+	public void setIndicadorRetroativoTarifaSocial(Short indicadorRetroativoTarifaSocial) {
 		this.indicadorRetroativoTarifaSocial = indicadorRetroativoTarifaSocial;
 	}
 
@@ -349,35 +311,22 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return parcelaQuantidadeMinimaFatura;
 	}
 
-	public void setParcelaQuantidadeMinimaFatura(
-			Integer parcelaQuantidadeMinimaFatura) {
+	public void setParcelaQuantidadeMinimaFatura(Integer parcelaQuantidadeMinimaFatura) {
 		this.parcelaQuantidadeMinimaFatura = parcelaQuantidadeMinimaFatura;
 	}
 
-	/**
-	 * @return Retorna o campo percentualDescontoAVista.
-	 */
 	public BigDecimal getPercentualDescontoTarifaSocial() {
 		return percentualDescontoTarifaSocial;
 	}
 
-	/**
-	 * @param percentualDescontoAVista O percentualDescontoAVista a ser setado.
-	 */
 	public void setPercentualDescontoTarifaSocial(BigDecimal percentualDescontoTarifaSocial) {
 		this.percentualDescontoTarifaSocial = percentualDescontoTarifaSocial;
 	}
 
-	/**
-	 * @return Retorna o campo percentualDescontoSancao.
-	 */
 	public BigDecimal getPercentualDescontoSancao() {
 		return percentualDescontoSancao;
 	}
 
-	/**
-	 * @param percentualDescontoSancao O percentualDescontoSancao a ser setado.
-	 */
 	public void setPercentualDescontoSancao(BigDecimal percentualDescontoSancao) {
 		this.percentualDescontoSancao = percentualDescontoSancao;
 	}
@@ -394,28 +343,32 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
 		return quantidadeMaximaReparcelamento;
 	}
 
-	public void setQuantidadeMaximaReparcelamento(
-			Integer quantidadeMaximaReparcelamento) {
+	public void setQuantidadeMaximaReparcelamento(Integer quantidadeMaximaReparcelamento) {
 		this.quantidadeMaximaReparcelamento = quantidadeMaximaReparcelamento;
-	}
-
-	public BigDecimal getPercentualDescontoPagamentoAVista() {
-		return percentualDescontoPagamentoAVista;
-	}
-
-	public void setPercentualDescontoPagamentoAVista(
-			BigDecimal percentualDescontoPagamentoAVista) {
-		this.percentualDescontoPagamentoAVista = percentualDescontoPagamentoAVista;
 	}
 
 	public Date getDataLimiteDescontoPagamentoAVista() {
 		return dataLimiteDescontoPagamentoAVista;
 	}
 
-	public void setDataLimiteDescontoPagamentoAVista(
-			Date dataLimiteDescontoPagamentoAVista) {
+	public void setDataLimiteDescontoPagamentoAVista(Date dataLimiteDescontoPagamentoAVista) {
 		this.dataLimiteDescontoPagamentoAVista = dataLimiteDescontoPagamentoAVista;
 	}
-	
+
+	public BigDecimal getPercentualDescontoAcrescimoPagamentoAVista() {
+		return percentualDescontoAcrescimoPagamentoAVista;
+	}
+
+	public void setPercentualDescontoAcrescimoPagamentoAVista(BigDecimal percentualDescontoAcrescimoPagamentoAVista) {
+		this.percentualDescontoAcrescimoPagamentoAVista = percentualDescontoAcrescimoPagamentoAVista;
+	}
+
+	public BigDecimal getPercentualDescontoTotalPagamentoAVista() {
+		return percentualDescontoTotalPagamentoAVista;
+	}
+
+	public void setPercentualDescontoTotalPagamentoAVista(BigDecimal percentualDescontoTotalPagamentoAVista) {
+		this.percentualDescontoTotalPagamentoAVista = percentualDescontoTotalPagamentoAVista;
+	}
 	
 }

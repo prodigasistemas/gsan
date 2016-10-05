@@ -120,9 +120,9 @@ public class ConcluirInserirComandoNegativacaoPorCriterioAction extends GcomActi
 		} else {
 			Date dataReferenciaInicial = null;
 			if (form.getReferenciaFinal() != null && !form.getReferenciaFinal().equals("")) {
-				dataReferenciaInicial = Util.subtrairNumeroAnosDeUmaData(Util.converteStringParaDate("01/" + form.getReferenciaFinal()), -5);
+				dataReferenciaInicial = Util.subtrairNumeroAnosDeUmaData(Util.converteStringParaDate("01/" + form.getReferenciaFinal()), 5);
 			} else {
-				dataReferenciaInicial = Util.subtrairNumeroAnosDeUmaData(new Date(), -5);
+				dataReferenciaInicial = Util.subtrairNumeroAnosDeUmaData(new Date(), 5);
 			}
 			negativacaoCriterio.setAnoMesReferenciaContaInicial(Util.formataAnoMes(dataReferenciaInicial));
 		}
@@ -138,9 +138,9 @@ public class ConcluirInserirComandoNegativacaoPorCriterioAction extends GcomActi
 		} else {
 			Date dataVencimentoDebitoInicial = null;
 			if (form.getDataVencimentoFinal() != null && !form.getDataVencimentoFinal().equals("")) {
-				dataVencimentoDebitoInicial = Util.subtrairNumeroAnosDeUmaData(Util.converteStringParaDate(form.getDataVencimentoFinal()), -5);
+				dataVencimentoDebitoInicial = Util.subtrairNumeroAnosDeUmaData(Util.converteStringParaDate(form.getDataVencimentoFinal()), 5);
 			} else {
-				dataVencimentoDebitoInicial = Util.subtrairNumeroAnosDeUmaData(new Date(), -5);
+				dataVencimentoDebitoInicial = Util.subtrairNumeroAnosDeUmaData(new Date(), 5);
 			}
 			negativacaoCriterio.setDataVencimentoDebitoInicial(dataVencimentoDebitoInicial);
 		}
@@ -446,7 +446,7 @@ public class ConcluirInserirComandoNegativacaoPorCriterioAction extends GcomActi
 
 		// Período de vencimento do débito
 		Integer numeroDiasVencimentoCobranca = new Integer(sistemaParametro.getNumeroDiasVencimentoCobranca());
-		Date dataMinima = Util.subtrairNumeroAnosDeUmaData(Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca), -5);
+		Date dataMinima = Util.subtrairNumeroAnosDeUmaData(Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca), 5);
 
 		if (form.getDataVencimentoInicial() != null && !form.getDataVencimentoInicial().equals("")) {
 			if (Util.validarDiaMesAno(form.getDataVencimentoInicial())) {

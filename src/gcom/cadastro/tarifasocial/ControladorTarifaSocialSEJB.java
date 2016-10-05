@@ -1,5 +1,18 @@
 package gcom.cadastro.tarifasocial;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionContext;
+
 import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
 import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
@@ -63,6 +76,7 @@ import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -77,72 +91,20 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 /**
  * < <Descrição da Classe>>
  * 
  * @author rodrigo
  */
 
-public class ControladorTarifaSocialSEJB implements SessionBean {
+public class ControladorTarifaSocialSEJB extends ControladorComum {
 
 	private static final long serialVersionUID = 1L;
 
 	private IRepositorioImovelTarifaSocial repositorioImovelTarifaSocial = null;
 
-	SessionContext sessionContext;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-
-		repositorioImovelTarifaSocial = RepositorioImovelTarifaSocialHBM
-				.getInstancia();
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
+		repositorioImovelTarifaSocial = RepositorioImovelTarifaSocialHBM.getInstancia();
 	}
 
 	/**
@@ -1699,8 +1661,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	public void atualizarImovelPerfilTarifaSocial(Imovel imovel)
-			throws ControladorException {
+	public void atualizarImovelPerfilTarifaSocial(Imovel imovel) throws ControladorException {
 
 		// Atualizar o Perfil do Imovel
 		ImovelPerfil imovelPerfil = new ImovelPerfil();
@@ -1710,7 +1671,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 		imovel.setImovelPerfil(imovelPerfil);
 		imovel.setConsumoTarifa(consumoTarifa);
 
-		getControladorUtil().atualizar(imovel);
+		getControladorAtualizacaoCadastro().atualizar(imovel);
 	}
 
 	/**
@@ -1731,147 +1692,6 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 		getControladorUtil().atualizar(tarifaSocialDadoEconomia);
 
 	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * 
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
-	private ControladorImovelLocal getControladorImovel() {
-
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * 
-	 * Retorna o valor de controladorMicroMedicao
-	 * 
-	 * @return O valor de controladorMicroMedicao
-	 */
-	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
-
-		ControladorRegistroAtendimentoLocalHome localHome = null;
-		ControladorRegistroAtendimentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * 
-	 * Retorna o valor de controladorLigacaoAgua
-	 * 
-	 * @return O valor de controladorLigacaoAgua
-	 */
-	private ControladorLigacaoAguaLocal getControladorLigacaoAgua() {
-
-		ControladorLigacaoAguaLocalHome localHome = null;
-		ControladorLigacaoAguaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLigacaoAguaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LIGACAO_AGUA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Pesquisa uma coleção de Tarifa Social Dado Economia.
-	 * 
-	 * @param filtroTarifaSocialDadoEconomia
-	 *            Description of the Parameter
-	 * @author Thiago
-	 * @date 12/12/2005
-	 * @return Description of the Return Value
-	 */
 
 	public Collection pesquisarTarifaSocialDadoEconomia(
 			FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia)
@@ -1895,24 +1715,12 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 		return tarifasocialDadoEconomeia;
 	}
 
-	/**
-	 * Método que remover o imover da tarifa social
-	 * 
-	 * @param idImovel
-	 * @param idMotivoTarifaSocial
-	 * @throws ControladorException
-	 */
-	public void removerImovelTarfiaSocial(Integer idImovel,
-			Integer idMotivoTarifaSocial) throws ControladorException {
-
+	public void removerImovelTarfiaSocial(Integer idImovel, Integer idMotivoTarifaSocial) throws ControladorException {
 		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				idImovel));
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("imovelPerfil");
-		filtroImovel
-				.adicionarCaminhoParaCarregamentoEntidade("tarifaSocialDado");
-		Collection coll = Fachada.getInstancia().pesquisar(filtroImovel,
-				Imovel.class.getName());
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("tarifaSocialDado");
+		Collection coll = Fachada.getInstancia().pesquisar(filtroImovel, Imovel.class.getName());
 
 		Imovel imovel = null;
 		if (coll != null && !coll.isEmpty()) {
@@ -1920,122 +1728,37 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 			imovel.getImovelPerfil().setId(ImovelPerfil.NORMAL);
 
-			getControladorUtil().atualizar(imovel);
+			getControladorAtualizacaoCadastro().atualizar(imovel);
 
 			TarifaSocialExclusaoMotivo tarifaSocialExclusaoMotivo = new TarifaSocialExclusaoMotivo();
 			tarifaSocialExclusaoMotivo.setId(idMotivoTarifaSocial);
-
-			// TarifaSocialDado tarifasocial = imovel.getTarifaSocialDado();
-			// tarifasocial.setDataExclusao(new
-			// Date(System.currentTimeMillis()));
-			// tarifasocial
-			// .setTarifaSocialExclusaoMotivo(tarifaSocialExclusaoMotivo);
-			// TarifaSocialDado tarifasocial = imovel.getTarifaSocialDado();
-			/*
-			 * tarifasocial.setDataExclusao(new
-			 * Date(System.currentTimeMillis())); tarifasocial
-			 * .setTarifaSocialExclusaoMotivo(tarifaSocialExclusaoMotivo);
-			 * >>>>>>> 1.5 <<<<<<< ControladorTarifaSocialSEJB.java
-			 * //getControladorUtil().atualizar(tarifasocial); =======
-			 * getControladorUtil().atualizar(tarifasocial);
-			 */
-
 		}
 	}
 
-	/**
-	 * Método que pesquisa uma tarifa social com o parametros do fitlro passado
-	 * 
-	 * @param filtroClienteImovel
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarImovelTarfiaSocial(
-			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina)
-			throws ControladorException {
+	public Collection pesquisarImovelTarfiaSocial(FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) throws ControladorException {
 		try {
-			return repositorioImovelTarifaSocial.pesquisarImovelTarfiaSocial(
-					filtroClienteImovel, numeroPagina);
+			return repositorioImovelTarifaSocial.pesquisarImovelTarfiaSocial(filtroClienteImovel, numeroPagina);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 
-	/**
-	 * Método que pesquisa a quantidade de tarifa social
-	 * 
-	 * @author Rafael Santos
-	 * @since 05/09/2006
-	 * 
-	 * @param filtroClienteImovel
-	 * @return
-	 * @throws ControladorException
-	 */
-	public int pesquisarQuantidadeImovelTarfiaSocial(
-			FiltroClienteImovel filtroClienteImovel)
-			throws ControladorException {
+	public int pesquisarQuantidadeImovelTarfiaSocial(FiltroClienteImovel filtroClienteImovel) throws ControladorException {
 		try {
-			return repositorioImovelTarifaSocial
-					.pesquisarQuantidadeImovelTarfiaSocial(filtroClienteImovel);
+			return repositorioImovelTarifaSocial.pesquisarQuantidadeImovelTarfiaSocial(filtroClienteImovel);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorCobranca
-	 * 
-	 * @return O valor de controladorCobranca
-	 */
-	private ControladorCobrancaLocal getControladorCobranca() {
-
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
+	public Collection pesquisarTarifaSocialDadoEconomia(Integer idImovel)throws ControladorException {
 		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * [UC0054] - Inserir Dados Tarifa Social
-	 * 
-	 * Pesquisa as Tarifas Sociais Dado Economia pelo id do Imóvel carregando a
-	 * Tarifa Social Revisao Motivo
-	 * 
-	 * Autor: Rafael Corrêa
-	 * 
-	 * Data: 27/12/2006
-	 */
-	public Collection pesquisarTarifaSocialDadoEconomia(Integer idImovel)
-			throws ControladorException {
-
-		try {
-			return repositorioImovelTarifaSocial
-					.pesquisarTarifaSocialDadoEconomia(idImovel);
+			return repositorioImovelTarifaSocial.pesquisarTarifaSocialDadoEconomia(idImovel);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -4194,15 +3917,13 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 				Collection colecaoTarifaSocialDadoEconomiaOutroImovel = null;
 
 				if (idClienteUsuario != null) {
-					colecaoTarifaSocialDadoEconomiaOutroImovel = this
-							.pesquisarClientesUsuarioExistenteTarifaSocial(idClienteUsuario);
+					colecaoTarifaSocialDadoEconomiaOutroImovel = this.pesquisarClientesUsuarioExistenteTarifaSocial(idClienteUsuario);
 				}
 
                 // Verifica para casos de múltiplas economias se existe outra
                 // economia na tarifa social, caso não exista retira o imóvel da
                 // tarifa social
-				if (colecaoTarifaSocialDadoEconomiaOutroImovel != null
-						&& !colecaoTarifaSocialDadoEconomiaOutroImovel.isEmpty()) {
+				if (colecaoTarifaSocialDadoEconomiaOutroImovel != null && !colecaoTarifaSocialDadoEconomiaOutroImovel.isEmpty()) {
                     
                     exclusaoTarifaSocial = true;
 
@@ -4231,15 +3952,10 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 							
 							getControladorUtil().atualizar(tarifaSocialDadoEconomiaImovelAnterior);
 
-							Collection colecaoTarifaSocialNaoExcluidasImovel = this
-									.pesquisarTarifaSocialImovel(tarifaSocialDadoEconomia.getImovel().getId());
+							Collection colecaoTarifaSocialNaoExcluidasImovel = this.pesquisarTarifaSocialImovel(tarifaSocialDadoEconomia.getImovel().getId());
 
-							if (colecaoTarifaSocialNaoExcluidasImovel == null
-									|| colecaoTarifaSocialNaoExcluidasImovel.isEmpty()) {
-								
-								getControladorImovel().atualizarImovelPerfilNormal(
-										tarifaSocialDadoEconomia.getImovel(), registradorOperacao2);
-
+							if (colecaoTarifaSocialNaoExcluidasImovel == null || colecaoTarifaSocialNaoExcluidasImovel.isEmpty()) {
+								getControladorImovel().atualizarImovelPerfilNormal(tarifaSocialDadoEconomia.getImovel(), registradorOperacao2);
 							}
 
 							break;
@@ -4254,12 +3970,10 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 						throw new ControladorException("atencao.tarifa_social_motivo_exclusao_nao_informado");
 					}
 				}
-				// ----- REGISTRAR TRANSação -------
+
 				registradorOperacao.registrarOperacao(tarifaSocialDadoEconomia);
-				// ---- REGISTRAR TRANSação-------
 
 				getControladorUtil().atualizar(tarifaSocialDadoEconomia);
-
 			}
 		}
 
@@ -4279,18 +3993,15 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 				boolean alterou = false;
 
 				FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia = new FiltroTarifaSocialDadoEconomia();
-				filtroTarifaSocialDadoEconomia.adicionarParametro(new ParametroSimples(
-								FiltroTarifaSocialDadoEconomia.ID,tarifaSocialDadoEconomiaAtualizar.getId()));
+				filtroTarifaSocialDadoEconomia.adicionarParametro(new ParametroSimples(FiltroTarifaSocialDadoEconomia.ID,tarifaSocialDadoEconomiaAtualizar.getId()));
 				filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade("tarifaSocialRevisaoMotivo");
 				filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade("tarifaSocialExclusaoMotivo");
 				filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade("rendaTipo");
 				filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade("tarifaSocialCartaoTipo");
 
-				Collection colecaoTarifaSocialDadoEconomiaBase = getControladorUtil()
-						.pesquisar(filtroTarifaSocialDadoEconomia,TarifaSocialDadoEconomia.class.getName());
+				Collection colecaoTarifaSocialDadoEconomiaBase = getControladorUtil().pesquisar(filtroTarifaSocialDadoEconomia,TarifaSocialDadoEconomia.class.getName());
 
-				TarifaSocialDadoEconomia tarifaSocialDadoEconomiaBase = (TarifaSocialDadoEconomia) Util
-						.retonarObjetoDeColecao(colecaoTarifaSocialDadoEconomiaBase);
+				TarifaSocialDadoEconomia tarifaSocialDadoEconomiaBase = (TarifaSocialDadoEconomia) Util.retonarObjetoDeColecao(colecaoTarifaSocialDadoEconomiaBase);
 
 				tarifaSocialDadoEconomiaAtualizar.setDataImplantacao(tarifaSocialDadoEconomiaBase.getDataImplantacao());
 
@@ -4317,7 +4028,6 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
                 // se houve alteração cadastral para ser considerado um
                 // recadastramento
 				if (!recadastrou) {
-
 					boolean igual = false;
 
 					if (tarifaSocialDadoEconomiaAtualizar.getTarifaSocialRevisaoMotivo() == null
@@ -4338,8 +4048,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 						Imovel imovelBase = null;
 
 						if (tarifaSocialHelper.getClienteImovelEconomia() != null) {
-							imovelEconomiaBase = this.pesquisarImovelEconomiaPeloId(tarifaSocialDadoEconomiaAtualizar
-											.getImovelEconomia().getId());
+							imovelEconomiaBase = this.pesquisarImovelEconomiaPeloId(tarifaSocialDadoEconomiaAtualizar.getImovelEconomia().getId());
 						} else {
 							imovelBase = imovelSessao;
 						}
@@ -4444,12 +4153,10 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 					int qtdeRecadastramentos = 1;
 
 					if (tarifaSocialDadoEconomiaBase.getQuantidadeRecadastramento() != null) {
-						qtdeRecadastramentos = tarifaSocialDadoEconomiaBase
-								.getQuantidadeRecadastramento().shortValue() + 1;
+						qtdeRecadastramentos = tarifaSocialDadoEconomiaBase.getQuantidadeRecadastramento().shortValue() + 1;
 					}
 
-					tarifaSocialDadoEconomiaAtualizar
-							.setQuantidadeRecadastramento(new Short("" + qtdeRecadastramentos));
+					tarifaSocialDadoEconomiaAtualizar.setQuantidadeRecadastramento(new Short("" + qtdeRecadastramentos));
 					tarifaSocialDadoEconomiaAtualizar.setDataRecadastramento(new Date());
 
 				} else {
@@ -4457,15 +4164,11 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 					if (!recadastrou) {
                         atualizacaoTarifaSocial = true;
                         
-						tarifaSocialDadoEconomiaAtualizar.setQuantidadeRecadastramento(
-                                tarifaSocialDadoEconomiaBase.getQuantidadeRecadastramento());
-						tarifaSocialDadoEconomiaAtualizar.setDataRecadastramento(
-                                tarifaSocialDadoEconomiaBase.getDataRecadastramento());
+						tarifaSocialDadoEconomiaAtualizar.setQuantidadeRecadastramento(tarifaSocialDadoEconomiaBase.getQuantidadeRecadastramento());
+						tarifaSocialDadoEconomiaAtualizar.setDataRecadastramento(tarifaSocialDadoEconomiaBase.getDataRecadastramento());
 					} else {
-						tarifaSocialDadoEconomiaAtualizar.setQuantidadeRecadastramento(
-                                tarifaSocialDadoEconomiaRecadastrada.getQuantidadeRecadastramento());
-						tarifaSocialDadoEconomiaAtualizar.setDataRecadastramento(
-                                tarifaSocialDadoEconomiaRecadastrada.getDataRecadastramento());
+						tarifaSocialDadoEconomiaAtualizar.setQuantidadeRecadastramento(tarifaSocialDadoEconomiaRecadastrada.getQuantidadeRecadastramento());
+						tarifaSocialDadoEconomiaAtualizar.setDataRecadastramento(tarifaSocialDadoEconomiaRecadastrada.getDataRecadastramento());
 					}
 				}
 
@@ -4521,28 +4224,21 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 					// nao é possivel abrir a tela de alteracao da tarifa social e eh justamente nesta tela que 
 					// sao carregados os clientesimoveleconomias de uma economia. 
 					if (imovelEconomia.getClienteImovelEconomias() == null){
-						Collection colecaoClienteImovelEconomia = 
-							this.pesquisarClientesImovelEconomiaTarifaSocial(imovelEconomia.getId());						
+						Collection colecaoClienteImovelEconomia = this.pesquisarClientesImovelEconomiaTarifaSocial(imovelEconomia.getId());						
 						imovelEconomia.setClienteImovelEconomias(new HashSet(colecaoClienteImovelEconomia));						
 					}
 					
-					// ----- REGISTRAR TRANSação -------
 					registradorOperacao.registrarOperacao(imovelEconomia);
-					// ---- REGISTRAR TRANSação-------
 
 					getControladorUtil().atualizar(imovelEconomia);
-
 				} else {
 
 					Imovel imovel = tarifaSocialDadoEconomiaAtualizar.getImovel();
 					imovel.setUltimaAlteracao(new Date());
 
-					// ----- REGISTRAR TRANSação -------
 					registradorOperacao.registrarOperacao(imovel);
-					// ---- REGISTRAR TRANSação-------
 
 					getControladorUtil().atualizar(imovel);
-
 				}
 				
 				// Remover os clientes selecionados
@@ -4551,20 +4247,16 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 				if (colecaoClienteImovelRemovidos != null && !colecaoClienteImovelRemovidos.isEmpty()) {
 
-					Iterator colecaoClienteImovelRemovidosIterator = colecaoClienteImovelRemovidos
-							.iterator();
+					Iterator colecaoClienteImovelRemovidosIterator = colecaoClienteImovelRemovidos.iterator();
 
 					while (colecaoClienteImovelRemovidosIterator.hasNext()) {
 						ClienteImovel clienteImovelRemovido = (ClienteImovel) colecaoClienteImovelRemovidosIterator.next();
 						clienteImovelRemovido.setUltimaAlteracao(new Date());
 						clienteImovelRemovido.setIndicadorNomeConta(new Short("2"));
 
-						// ----- REGISTRAR TRANSação -------
 						registradorOperacao.registrarOperacao(clienteImovelRemovido);
-						// ---- REGISTRAR TRANSação-------
 
 						getControladorUtil().atualizar(clienteImovelRemovido);
-
 					}
 
 				} else if (colecaoClienteImovelEconomiaRemovidos != null
@@ -4576,14 +4268,10 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 						ClienteImovelEconomia clienteImovelEconomiaRemovido = (ClienteImovelEconomia) colecaoClienteImovelEconomiaRemovidosIterator								.next();
 						clienteImovelEconomiaRemovido.setUltimaAlteracao(new Date());
 
-						// ----- REGISTRAR TRANSação -------
 						registradorOperacao.registrarOperacao(clienteImovelEconomiaRemovido);
-						// ---- REGISTRAR TRANSação-------
 
 						getControladorUtil().atualizar(clienteImovelEconomiaRemovido);
-
 					}
-
 				}
 
 				
@@ -4623,9 +4311,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 										tarifaSocialDadoEconomiaImovelAnterior.setDataExclusao(new Date());
 										tarifaSocialDadoEconomiaImovelAnterior.setUltimaAlteracao(new Date());
-										// ----- REGISTRAR TRANSação -------
 										registradorOperacao.registrarOperacao(tarifaSocialDadoEconomiaImovelAnterior);
-										// ---- REGISTRAR TRANSação-------
 
 										getControladorUtil().atualizar(tarifaSocialDadoEconomiaImovelAnterior);
 										break;
@@ -4639,14 +4325,10 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 						clienteImovelInserido.setUltimaAlteracao(new Date());
 						this.atualizarNomeContaClienteImovelTarifaSocial(imovelSessao.getId());
 
-						// ----- REGISTRAR TRANSação -------
 						registradorOperacao.registrarOperacao(clienteImovelInserido);
-						// ---- REGISTRAR TRANSação-------
 
 						getControladorUtil().inserir(clienteImovelInserido);
-
 					}
-
 				}
 				// Múltiplas Economias
 				else if (colecaoClienteImovelEconomiaInseridos != null
@@ -4758,8 +4440,8 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 				FaturamentoSituacaoTipo faturamentoSituacaoTipo =  new FaturamentoSituacaoTipo();				
 				faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.FATURAR_NORMAL);			
 				imovelSessao.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					
-				getControladorUtil().atualizar(imovelSessao);
+				imovelSessao.setUsuarioParaHistorico(usuarioLogado);
+				getControladorAtualizacaoCadastro().atualizar(imovelSessao);
 				
 				// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
 				//
@@ -4856,19 +4538,14 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 	 * 
 	 * Data: 13/02/2007
 	 */
-	public void inserirTarifaSocial(Imovel imovelSessao,
-			ClienteImovel clienteImovel,
-			RegistroAtendimento registroAtendimento,
-			RegistroAtendimentoUnidade registroAtendimentoUnidade,
-			Usuario usuarioLogado, Integer idTarifaSocialDadoEconomiaExcluida,
-			Collection colecaoTarifaSocialDadoEconomia,
-			Collection colecaoClienteImovelEconomia,
-			Collection colecaoTarifaSocialRecadastrar, Imovel imovelAtualizar,
-			Collection colecaoImovelEconomiaAtualizar)
-			throws ControladorException {
-		
+	public void inserirTarifaSocial(Imovel imovelSessao, ClienteImovel clienteImovel,
+			RegistroAtendimento registroAtendimento, RegistroAtendimentoUnidade registroAtendimentoUnidade,
+			Usuario usuarioLogado, Integer idTarifaSocialDadoEconomiaExcluida, Collection colecaoTarifaSocialDadoEconomia,
+			Collection colecaoClienteImovelEconomia,Collection colecaoTarifaSocialRecadastrar, Imovel imovelAtualizar,
+			Collection colecaoImovelEconomiaAtualizar) throws ControladorException {
+
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
-		
+
 		// Identificar a realização de alguma manipulação de registros
 		boolean manipulacaoRegistro = false;
 
@@ -4876,21 +4553,15 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 		// será excluída, caso seja necessário
 		Integer idImovel = null;
 
-		// ------------ REGISTRAR
-		// TRANSação----------------------------
-
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_INSERIR_TARIFA_SOCIAL,
-				imovelSessao.getId(),imovelSessao.getId(),				
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// -----------------------------------------
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_INSERIR_TARIFA_SOCIAL,
+				imovelSessao.getId(), imovelSessao.getId(),
+				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+				// -----------------------------------------
 
 		// Verifica a existência de alguma Tarifa Social para ser inserida ou
 		// alterada
 		// PARA UMA ECONOMIA
-		if (colecaoTarifaSocialDadoEconomia != null
-				&& !colecaoTarifaSocialDadoEconomia.isEmpty()) {
+		if (colecaoTarifaSocialDadoEconomia != null && !colecaoTarifaSocialDadoEconomia.isEmpty()) {
 
 			TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) Util
 					.retonarObjetoDeColecao(colecaoTarifaSocialDadoEconomia);
@@ -4904,86 +4575,36 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 						.retonarObjetoDeColecao(colecaoTarifaSocialRecadastrar);
 
 				if (tarifaSocialDadoEconomiaRecadastrar.getDataExclusao() != null) {
-					// ATUALIZAR - RECADASTRAMENTO
+					Integer idTarifaSocial = tarifaSocialDadoEconomiaRecadastrar.getId();
 
-					Integer idTarifaSocial = tarifaSocialDadoEconomiaRecadastrar
-							.getId();
+					Collection colecaoTarifaSocialDadoEconomiaOutroImovel = this.pesquisarClientesUsuarioExistenteTarifaSocial(clienteImovel.getCliente().getId());
 
-					Collection colecaoTarifaSocialDadoEconomiaOutroImovel = this
-							.pesquisarClientesUsuarioExistenteTarifaSocial(clienteImovel
-									.getCliente().getId());
-
-					if (colecaoTarifaSocialDadoEconomiaOutroImovel != null
-							&& !colecaoTarifaSocialDadoEconomiaOutroImovel
-									.isEmpty()) {
+					if (colecaoTarifaSocialDadoEconomiaOutroImovel != null && !colecaoTarifaSocialDadoEconomiaOutroImovel.isEmpty()) {
 						if (idTarifaSocialDadoEconomiaExcluida == null) {
-							throw new ControladorException(
-									"atencao.tarifa_social_motivo_exclusao_nao_informado");
+							throw new ControladorException("atencao.tarifa_social_motivo_exclusao_nao_informado");
 						} else {
 							TarifaSocialDadoEconomia tarifaSocialDadoEconomiaExcluir = (TarifaSocialDadoEconomia) Util
 									.retonarObjetoDeColecao(colecaoTarifaSocialDadoEconomiaOutroImovel);
 
-							// Verifica se o cliente está em revisão e em caso
-							// afirmativo
-							// recupera o id da antiga tarifa social
-							// FiltroTarifaSocialDadoEconomia
-							// filtroTarifaSocialDadoEconomia = new
-							// FiltroTarifaSocialDadoEconomia();
-							// filtroTarifaSocialDadoEconomia
-							// .adicionarParametro(new ParametroSimples(
-							// FiltroTarifaSocialDadoEconomia.ID,
-							// tarifaSocialDadoEconomiaExcluir.getId()));
-							//                    		
-							// Collection colecaoTarifaSocialDadoEconomiaExcluir
-							// = getControladorUtil()
-							// .pesquisar(filtroTarifaSocialDadoEconomia,
-							// TarifaSocialDadoEconomia.class.getName());
-							//                    		
-							// if (colecaoTarifaSocialDadoEconomiaExcluir !=
-							// null &&
-							// !colecaoTarifaSocialDadoEconomiaExcluir.isEmpty())
-							// {
-							// tarifaSocialDadoEconomiaExcluir =
-							// (TarifaSocialDadoEconomia)
-							// colecaoTarifaSocialDadoEconomiaExcluir.iterator().next();
+							tarifaSocialDadoEconomiaExcluir = this.pesquisarTarifaSocial(tarifaSocialDadoEconomiaExcluir.getId());
 
-							tarifaSocialDadoEconomiaExcluir = this
-									.pesquisarTarifaSocial(tarifaSocialDadoEconomiaExcluir
-											.getId());
-
-							tarifaSocialDadoEconomiaExcluir
-									.setTarifaSocialExclusaoMotivo(tarifaSocialDadoEconomia
-											.getTarifaSocialExclusaoMotivo());
-							tarifaSocialDadoEconomiaExcluir
-									.setTarifaSocialRevisaoMotivo(null);
-							tarifaSocialDadoEconomiaExcluir
-									.setDataRevisao(null);
-							tarifaSocialDadoEconomiaExcluir
-									.setDataExclusao(new Date());
-							tarifaSocialDadoEconomiaExcluir
-									.setUltimaAlteracao(new Date());
-							idImovel = tarifaSocialDadoEconomiaExcluir
-									.getImovel().getId();
-
-							// }
+							tarifaSocialDadoEconomiaExcluir.setTarifaSocialExclusaoMotivo(tarifaSocialDadoEconomia.getTarifaSocialExclusaoMotivo());
+							tarifaSocialDadoEconomiaExcluir.setTarifaSocialRevisaoMotivo(null);
+							tarifaSocialDadoEconomiaExcluir.setDataRevisao(null);
+							tarifaSocialDadoEconomiaExcluir.setDataExclusao(new Date());
+							tarifaSocialDadoEconomiaExcluir.setUltimaAlteracao(new Date());
+							idImovel = tarifaSocialDadoEconomiaExcluir.getImovel().getId();
 
 							if (tarifaSocialDadoEconomiaExcluir != null) {
 
-//								 ------------ REGISTRAR TRANSação----------------------------
 								registradorOperacao.registrarOperacao(tarifaSocialDadoEconomiaExcluir);
-								// --------FIM---- REGISTRAR TRANSação----------------------------					
 
 								getControladorUtil().atualizar(tarifaSocialDadoEconomiaExcluir);
 
-								Collection colecaoTarifaSocialNaoExcluidasImovel = this
-										.pesquisarTarifaSocialImovel(idImovel);
+								Collection colecaoTarifaSocialNaoExcluidasImovel = this.pesquisarTarifaSocialImovel(idImovel);
 
-								if (colecaoTarifaSocialNaoExcluidasImovel == null
-										|| colecaoTarifaSocialNaoExcluidasImovel
-												.isEmpty()) {
-									getControladorImovel()
-											.atualizarImovelPerfilNormal(tarifaSocialDadoEconomiaExcluir
-													.getImovel(), registradorOperacao);
+								if (colecaoTarifaSocialNaoExcluidasImovel == null || colecaoTarifaSocialNaoExcluidasImovel.isEmpty()) {
+									getControladorImovel().atualizarImovelPerfilNormal(tarifaSocialDadoEconomiaExcluir.getImovel(), registradorOperacao);
 								}
 
 							}
@@ -4992,83 +4613,55 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 					}
 
 					int quantidade = 1;
-					if (tarifaSocialDadoEconomiaRecadastrar
-							.getQuantidadeRecadastramento() != null) {
-						quantidade = tarifaSocialDadoEconomiaRecadastrar
-								.getQuantidadeRecadastramento().shortValue() + 1;
+					if (tarifaSocialDadoEconomiaRecadastrar.getQuantidadeRecadastramento() != null) {
+						quantidade = tarifaSocialDadoEconomiaRecadastrar.getQuantidadeRecadastramento().shortValue() + 1;
 					}
 
 					// atualizar a quantidade e data recadastramento
 					tarifaSocialDadoEconomia.setId(idTarifaSocial);
-					tarifaSocialDadoEconomia
-							.setQuantidadeRecadastramento(new Short(quantidade
-									+ ""));
+					tarifaSocialDadoEconomia.setQuantidadeRecadastramento(new Short(quantidade + ""));
 					tarifaSocialDadoEconomia.setDataRecadastramento(new Date());
 					tarifaSocialDadoEconomia.setDataExclusao(null);
-					tarifaSocialDadoEconomia
-							.setTarifaSocialExclusaoMotivo(null);
-					
-//					 ------------ REGISTRAR TRANSação----------------------------
+					tarifaSocialDadoEconomia.setTarifaSocialExclusaoMotivo(null);
+
 					registradorOperacao.registrarOperacao(tarifaSocialDadoEconomia);
-					// --------FIM---- REGISTRAR TRANSação----------------------------					
+
 					this.atualizarDadosTarifaSocialImovel(tarifaSocialDadoEconomia);
 
 					// atualizar cliente usuario para indicador de nome conta
 					clienteImovel.setIndicadorNomeConta(new Short("1"));
 
-					// ------------ REGISTRAR
-					// TRANSação----------------------------
-//					registradorOperacao.registrarOperacao(clienteImovel);
-					// --------FIM---- REGISTRAR
-					// TRANSação----------------------------
-
 					getControladorUtil().atualizar(clienteImovel);
 
-					this.atualizarNomeContaClienteImovelTarifaSocial(imovel
-							.getId());
+					this.atualizarNomeContaClienteImovelTarifaSocial(imovel.getId());
 
-					// ------------ REGISTRAR TRANSação----------------------------
 					registradorOperacao.registrarOperacao(imovel);
-					// --------FIM---- REGISTRAR TRANSação----------------------------					
-					
-					// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
-					//
-					//16.4.	Atualizar a situação especial de faturamento do imovel (ftst_id na tabela cadastro.imovel)
-					//com o valor correspondente a PARALIZAR FATURAMENTO DE ESGOTO da tabela 
-					//faturamento.faturamento_situacao_tipo;
-					//
-						FaturamentoSituacaoTipo faturamentoSituacaoTipo =  new FaturamentoSituacaoTipo();				
-						faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_FATURAMENTO_DE_ESGOTO);			
-						imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);						
-					
-					// atualizar o perfil para Tarifa Social
+
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+					faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_FATURAMENTO_DE_ESGOTO);
+					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+
+					imovel.setUsuarioParaHistorico(usuarioLogado);
 					this.atualizarImovelPerfilTarifaSocial(imovel);
-					
-					// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
-					//
-					//16.5.	Incluir os dados da tarifa social na tabela de faturamento_situacao_historico
-					//	[SB0001 Incluir FATURAMENTO_SITUACAO_HISTORICO];
-					//						
-						FaturamentoSituacaoHistorico faturamentoSituacaoHistorico
-							= new FaturamentoSituacaoHistorico();
-						faturamentoSituacaoHistorico.setImovel(imovel);
-						faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-						
-						FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = new FaturamentoSituacaoMotivo();
-						faturamentoSituacaoMotivo.setId(FaturamentoSituacaoMotivo.ISENCAO_TARIFA_ESGOTO_DECRETO_18251_94);			
-						
-						faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);						
-						faturamentoSituacaoHistorico.setUltimaAlteracao(new Date());
-						
-						faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
-						faturamentoSituacaoHistorico.setUsuario(usuarioLogado);
-						faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(new Integer(201910));
-						faturamentoSituacaoHistorico
-							.setObservacaoInforma("ESGOTO SUSPENSO POR ORDEM DO GOVERNADOR PARA IMOVEL TAR. SOCIAL, A PARTIR DA FATURA 10/2009");
-						faturamentoSituacaoHistorico.setObservacaoRetira("");
-						faturamentoSituacaoHistorico.setUsuarioInforma(usuarioLogado);
-						
-						this.getControladorUtil().inserir(faturamentoSituacaoHistorico);
+
+					FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = new FaturamentoSituacaoHistorico();
+					faturamentoSituacaoHistorico.setImovel(imovel);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+
+					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = new FaturamentoSituacaoMotivo();
+					faturamentoSituacaoMotivo.setId(FaturamentoSituacaoMotivo.ISENCAO_TARIFA_ESGOTO_DECRETO_18251_94);
+
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setUltimaAlteracao(new Date());
+
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
+					faturamentoSituacaoHistorico.setUsuario(usuarioLogado);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(new Integer(201910));
+					faturamentoSituacaoHistorico.setObservacaoInforma("ESGOTO SUSPENSO POR ORDEM DO GOVERNADOR PARA IMOVEL TAR. SOCIAL, A PARTIR DA FATURA 10/2009");
+					faturamentoSituacaoHistorico.setObservacaoRetira("");
+					faturamentoSituacaoHistorico.setUsuarioInforma(usuarioLogado);
+
+					this.getControladorUtil().inserir(faturamentoSituacaoHistorico);
 
 				}
 			} else {
@@ -5079,137 +4672,90 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 				// recupera o id da antiga tarifa social
 				if (tarifaSocialDadoEconomia.getTarifaSocialExclusaoMotivo() != null) {
 
-					// FiltroTarifaSocialDadoEconomia
-					// filtroTarifaSocialDadoEconomia = new
-					// FiltroTarifaSocialDadoEconomia();
-					// filtroTarifaSocialDadoEconomia
-					// .adicionarParametro(new ParametroSimples(
-					// FiltroTarifaSocialDadoEconomia.ID,
-					// tarifaSocialDadoEconomia.getId()));
-					//            		
-					// Collection colecaoTarifaSocialDadoEconomiaExcluir =
-					// getControladorUtil()
-					// .pesquisar(filtroTarifaSocialDadoEconomia,
-					// TarifaSocialDadoEconomia.class.getName());
-					//            		
-					// if (colecaoTarifaSocialDadoEconomiaExcluir != null &&
-					// !colecaoTarifaSocialDadoEconomiaExcluir.isEmpty()) {
+					tarifaSocialDadoEconomiaExcluir = this.pesquisarTarifaSocial(tarifaSocialDadoEconomia.getId());
 
-					tarifaSocialDadoEconomiaExcluir = this
-							.pesquisarTarifaSocial(tarifaSocialDadoEconomia
-									.getId());
-
-					// tarifaSocialDadoEconomiaExcluir =
-					// (TarifaSocialDadoEconomia)
-					// colecaoTarifaSocialDadoEconomiaExcluir.iterator().next();
-
-					tarifaSocialDadoEconomiaExcluir
-							.setTarifaSocialExclusaoMotivo(tarifaSocialDadoEconomia
-									.getTarifaSocialExclusaoMotivo());
-					tarifaSocialDadoEconomiaExcluir
-							.setTarifaSocialRevisaoMotivo(null);
+					tarifaSocialDadoEconomiaExcluir.setTarifaSocialExclusaoMotivo(tarifaSocialDadoEconomia.getTarifaSocialExclusaoMotivo());
+					tarifaSocialDadoEconomiaExcluir.setTarifaSocialRevisaoMotivo(null);
 					tarifaSocialDadoEconomiaExcluir.setDataRevisao(null);
 					tarifaSocialDadoEconomiaExcluir.setDataExclusao(new Date());
-					tarifaSocialDadoEconomiaExcluir
-							.setUltimaAlteracao(new Date());
-					idImovel = tarifaSocialDadoEconomiaExcluir.getImovel()
-							.getId();
-
-					// }
+					tarifaSocialDadoEconomiaExcluir.setUltimaAlteracao(new Date());
+					
+					idImovel = tarifaSocialDadoEconomiaExcluir.getImovel().getId();
 
 					tarifaSocialDadoEconomia.setId(null);
-					tarifaSocialDadoEconomia
-							.setTarifaSocialExclusaoMotivo(null);
+					tarifaSocialDadoEconomia.setTarifaSocialExclusaoMotivo(null);
 
 				}
 
 				imovel.setQuadra(imovelSessao.getQuadra());
 
-				// ------------ REGISTRAR
-				// TRANSação----------------------------
 				registradorOperacao.registrarOperacao(tarifaSocialDadoEconomia);
-
-				// --------FIM---- REGISTRAR
-				// TRANSação----------------------------
 
 				tarifaSocialDadoEconomia.setDataImplantacao(new Date());
 
 				getControladorUtil().inserir(tarifaSocialDadoEconomia);
-				// getControladorRegistroAtendimento()
-				// .encerrarRegistroAtendimento(registroAtendimento,
-				// registroAtendimentoUnidade, usuarioLogado);
 
 				clienteImovel.setIndicadorNomeConta(new Short("1"));
 
-				// ------------ REGISTRAR
-				// TRANSação----------------------------
-
 				registradorOperacao.registrarOperacao(clienteImovel);
-
-				// --------FIM---- REGISTRAR
-				// TRANSação----------------------------
 
 				getControladorUtil().atualizar(clienteImovel);
 
-				// ------------ REGISTRAR Transação----------------------------
-				//no registrar transacao estava dando erro pela ausencia da quadra
 				registradorOperacao.registrarOperacao(imovel);
-				// --------FIM---- REGISTRAR TRANSação----------------------------
 
-				
 				this.atualizarNomeContaClienteImovelTarifaSocial(imovel.getId());
-				
-				// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
+
+				// Author: Hugo Amorim Analista:Jeferson Pedrosa Data:21/05/2010
 				//
-				//16.4.	Atualizar a situação especial de faturamento do imovel (ftst_id na tabela cadastro.imovel)
-				//com o valor correspondente a PARALIZAR FATURAMENTO DE ESGOTO da tabela 
-				//faturamento.faturamento_situacao_tipo;
+				// 16.4. Atualizar a situação especial de faturamento do imovel
+				// (ftst_id na tabela cadastro.imovel)
+				// com o valor correspondente a PARALIZAR FATURAMENTO DE ESGOTO
+				// da tabela
+				// faturamento.faturamento_situacao_tipo;
 				//
-					FaturamentoSituacaoTipo faturamentoSituacaoTipo =  new FaturamentoSituacaoTipo();				
-					faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_FATURAMENTO_DE_ESGOTO);			
-					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);						
+				FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+				faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_FATURAMENTO_DE_ESGOTO);
+				imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 
 				this.atualizarImovelPerfilTarifaSocial(imovel);
-				
-				// Author: Hugo Amorim  Analista:Jeferson Pedrosa  Data:21/05/2010
+
+				// Author: Hugo Amorim Analista:Jeferson Pedrosa Data:21/05/2010
 				//
-				//16.5.	Incluir os dados da tarifa social na tabela de faturamento_situacao_historico
-				//	[SB0001 Incluir FATURAMENTO_SITUACAO_HISTORICO];
-				//						
-					FaturamentoSituacaoHistorico faturamentoSituacaoHistorico
-						= new FaturamentoSituacaoHistorico();
-					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					
-					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = new FaturamentoSituacaoMotivo();
-					faturamentoSituacaoMotivo.setId(FaturamentoSituacaoMotivo.ISENCAO_TARIFA_ESGOTO_DECRETO_18251_94);			
-					
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);						
-					faturamentoSituacaoHistorico.setUltimaAlteracao(new Date());
-					
-					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
-					faturamentoSituacaoHistorico.setUsuario(usuarioLogado);
-					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(new Integer(201910));
-					faturamentoSituacaoHistorico
-						.setObservacaoInforma("ESGOTO SUSPENSO POR ORDEM DO GOVERNADOR PARA IMOVEL TAR. SOCIAL, A PARTIR DA FATURA 10/2009");
-					faturamentoSituacaoHistorico.setObservacaoRetira("");
-					faturamentoSituacaoHistorico.setUsuarioInforma(usuarioLogado);
-					
-					this.getControladorUtil().inserir(faturamentoSituacaoHistorico);
+				// 16.5. Incluir os dados da tarifa social na tabela de
+				// faturamento_situacao_historico
+				// [SB0001 Incluir FATURAMENTO_SITUACAO_HISTORICO];
+				//
+				FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = new FaturamentoSituacaoHistorico();
+				faturamentoSituacaoHistorico.setImovel(imovel);
+				faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+
+				FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = new FaturamentoSituacaoMotivo();
+				faturamentoSituacaoMotivo.setId(FaturamentoSituacaoMotivo.ISENCAO_TARIFA_ESGOTO_DECRETO_18251_94);
+
+				faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+				faturamentoSituacaoHistorico.setUltimaAlteracao(new Date());
+
+				faturamentoSituacaoHistorico
+						.setAnoMesFaturamentoSituacaoInicio(sistemaParametro.getAnoMesFaturamento());
+				faturamentoSituacaoHistorico.setUsuario(usuarioLogado);
+				faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(new Integer(201910));
+				faturamentoSituacaoHistorico.setObservacaoInforma(
+						"ESGOTO SUSPENSO POR ORDEM DO GOVERNADOR PARA IMOVEL TAR. SOCIAL, A PARTIR DA FATURA 10/2009");
+				faturamentoSituacaoHistorico.setObservacaoRetira("");
+				faturamentoSituacaoHistorico.setUsuarioInforma(usuarioLogado);
+
+				this.getControladorUtil().inserir(faturamentoSituacaoHistorico);
 
 				if (tarifaSocialDadoEconomiaExcluir != null) {
 
-					getControladorUtil().atualizar(
-							tarifaSocialDadoEconomiaExcluir);
+					getControladorUtil().atualizar(tarifaSocialDadoEconomiaExcluir);
 
-					Collection colecaoTarifaSocialNaoExcluidasImovel = this
-							.pesquisarTarifaSocialImovel(idImovel);
+					Collection colecaoTarifaSocialNaoExcluidasImovel = this.pesquisarTarifaSocialImovel(idImovel);
 
 					if (colecaoTarifaSocialNaoExcluidasImovel == null
 							|| colecaoTarifaSocialNaoExcluidasImovel.isEmpty()) {
-																	
-						getControladorImovel().atualizarImovelPerfilNormal(
-								imovel, registradorOperacao);
+
+						getControladorImovel().atualizarImovelPerfilNormal(imovel, registradorOperacao);
 					}
 
 				}
@@ -5218,24 +4764,17 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 			if (imovelAtualizar != null) {
 				imovelAtualizar.setUltimaAlteracao(new Date());
 
-				// ------------ REGISTRAR
-				// TRANSação----------------------------
-
 				registradorOperacao.registrarOperacao(imovelAtualizar);
 
-				// --------FIM---- REGISTRAR
-				// TRANSação----------------------------
 				getControladorUtil().atualizar(imovelAtualizar);
 			}
 
 			manipulacaoRegistro = true;
 
 			// PARA MAIS DE UMA ECONOMIA
-		} else if (colecaoClienteImovelEconomia != null
-				&& !colecaoClienteImovelEconomia.isEmpty()) {
+		} else if (colecaoClienteImovelEconomia != null && !colecaoClienteImovelEconomia.isEmpty()) {
 
-			Iterator colecaoClienteImovelEconomiaIterator = colecaoClienteImovelEconomia
-					.iterator();
+			Iterator colecaoClienteImovelEconomiaIterator = colecaoClienteImovelEconomia.iterator();
 			ClienteImovelEconomia clienteImovelEconomia = null;
 			Collection colecaoTarifaSocialDadoMultiplasEconomia = null;
 
@@ -5243,10 +4782,9 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 			while (colecaoClienteImovelEconomiaIterator.hasNext()) {
 
-				clienteImovelEconomia = (ClienteImovelEconomia) colecaoClienteImovelEconomiaIterator
-						.next();
-				colecaoTarifaSocialDadoMultiplasEconomia = clienteImovelEconomia
-						.getImovelEconomia().getTarifaSocialDadoEconomias();
+				clienteImovelEconomia = (ClienteImovelEconomia) colecaoClienteImovelEconomiaIterator.next();
+				colecaoTarifaSocialDadoMultiplasEconomia = clienteImovelEconomia.getImovelEconomia()
+						.getTarifaSocialDadoEconomias();
 
 				if (colecaoTarifaSocialDadoMultiplasEconomia != null
 						&& !colecaoTarifaSocialDadoMultiplasEconomia.isEmpty()) {
@@ -5257,24 +4795,20 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 			// Todas as economias terão que ser informadas
 			// =============================================================================
-			if (qtdEconomiaTarifaSocial != getControladorImovel()
-					.obterQuantidadeEconomias(imovelSessao)) {
-				throw new ControladorException(
-						"atencao.informar.tarifa_social.economias");
+			if (qtdEconomiaTarifaSocial != getControladorImovel().obterQuantidadeEconomias(imovelSessao)) {
+				throw new ControladorException("atencao.informar.tarifa_social.economias");
 			}
 			// =============================================================================
 
-			colecaoClienteImovelEconomiaIterator = colecaoClienteImovelEconomia
-					.iterator();
+			colecaoClienteImovelEconomiaIterator = colecaoClienteImovelEconomia.iterator();
 			clienteImovelEconomia = null;
 			colecaoTarifaSocialDadoMultiplasEconomia = null;
 
 			while (colecaoClienteImovelEconomiaIterator.hasNext()) {
 
-				clienteImovelEconomia = (ClienteImovelEconomia) colecaoClienteImovelEconomiaIterator
-						.next();
-				colecaoTarifaSocialDadoMultiplasEconomia = clienteImovelEconomia
-						.getImovelEconomia().getTarifaSocialDadoEconomias();
+				clienteImovelEconomia = (ClienteImovelEconomia) colecaoClienteImovelEconomiaIterator.next();
+				colecaoTarifaSocialDadoMultiplasEconomia = clienteImovelEconomia.getImovelEconomia()
+						.getTarifaSocialDadoEconomias();
 
 				if (colecaoTarifaSocialDadoMultiplasEconomia != null
 						&& !colecaoTarifaSocialDadoMultiplasEconomia.isEmpty()) {
@@ -5285,15 +4819,12 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 							.retonarObjetoDeColecao(colecaoTarifaSocialDadoMultiplasEconomia);
 
 					Collection colecaoTarifaSocialDadoEconomiaOutroImovel = this
-							.pesquisarClientesUsuarioExistenteTarifaSocial(clienteImovelEconomia
-									.getCliente().getId());
+							.pesquisarClientesUsuarioExistenteTarifaSocial(clienteImovelEconomia.getCliente().getId());
 
 					if (colecaoTarifaSocialDadoEconomiaOutroImovel != null
-							&& !colecaoTarifaSocialDadoEconomiaOutroImovel
-									.isEmpty()) {
+							&& !colecaoTarifaSocialDadoEconomiaOutroImovel.isEmpty()) {
 						if (idTarifaSocialDadoEconomiaExcluida == null) {
-							throw new ControladorException(
-									"atencao.tarifa_social_motivo_exclusao_nao_informado");
+							throw new ControladorException("atencao.tarifa_social_motivo_exclusao_nao_informado");
 						} else {
 							TarifaSocialDadoEconomia tarifaSocialDadoEconomiaExcluir = (TarifaSocialDadoEconomia) Util
 									.retonarObjetoDeColecao(colecaoTarifaSocialDadoEconomiaOutroImovel);
@@ -5303,46 +4834,35 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 							// recupera o id da antiga tarifa social
 
 							tarifaSocialDadoEconomiaExcluir = this
-									.pesquisarTarifaSocial(tarifaSocialDadoEconomiaExcluir
-											.getId());
+									.pesquisarTarifaSocial(tarifaSocialDadoEconomiaExcluir.getId());
 
-							tarifaSocialDadoEconomiaExcluir
-									.setTarifaSocialExclusaoMotivo(tarifaSocialDadoEconomia
-											.getTarifaSocialExclusaoMotivo());
-							tarifaSocialDadoEconomiaExcluir
-									.setTarifaSocialRevisaoMotivo(null);
-							tarifaSocialDadoEconomiaExcluir
-									.setDataRevisao(null);
-							tarifaSocialDadoEconomiaExcluir
-									.setDataExclusao(new Date());
-							tarifaSocialDadoEconomiaExcluir
-									.setUltimaAlteracao(new Date());
-							idImovel = tarifaSocialDadoEconomiaExcluir
-									.getImovel().getId();
+							tarifaSocialDadoEconomiaExcluir.setTarifaSocialExclusaoMotivo(
+									tarifaSocialDadoEconomia.getTarifaSocialExclusaoMotivo());
+							tarifaSocialDadoEconomiaExcluir.setTarifaSocialRevisaoMotivo(null);
+							tarifaSocialDadoEconomiaExcluir.setDataRevisao(null);
+							tarifaSocialDadoEconomiaExcluir.setDataExclusao(new Date());
+							tarifaSocialDadoEconomiaExcluir.setUltimaAlteracao(new Date());
+							idImovel = tarifaSocialDadoEconomiaExcluir.getImovel().getId();
 
 							if (tarifaSocialDadoEconomiaExcluir != null) {
 
 								// ------------ REGISTRAR
 								// TRANSação----------------------------
 
-								registradorOperacao
-										.registrarOperacao(tarifaSocialDadoEconomiaExcluir);
+								registradorOperacao.registrarOperacao(tarifaSocialDadoEconomiaExcluir);
 
 								// --------FIM---- REGISTRAR
 								// TRANSação----------------------------
 
-								getControladorUtil().atualizar(
-										tarifaSocialDadoEconomiaExcluir);
+								getControladorUtil().atualizar(tarifaSocialDadoEconomiaExcluir);
 
 								Collection colecaoTarifaSocialNaoExcluidasImovel = this
 										.pesquisarTarifaSocialImovel(idImovel);
 
 								if (colecaoTarifaSocialNaoExcluidasImovel == null
-										|| colecaoTarifaSocialNaoExcluidasImovel
-												.isEmpty()) {
-									getControladorImovel()
-											.atualizarImovelPerfilNormal(tarifaSocialDadoEconomiaExcluir
-													.getImovel(), registradorOperacao);
+										|| colecaoTarifaSocialNaoExcluidasImovel.isEmpty()) {
+									getControladorImovel().atualizarImovelPerfilNormal(
+											tarifaSocialDadoEconomiaExcluir.getImovel(), registradorOperacao);
 								}
 
 							}
@@ -5352,95 +4872,61 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 					// Para mais de uma economia é obrigatório informar o
 					// imovelEconomia
-					tarifaSocialDadoEconomia
-							.setImovelEconomia(clienteImovelEconomia
-									.getImovelEconomia());
+					tarifaSocialDadoEconomia.setImovelEconomia(clienteImovelEconomia.getImovelEconomia());
 					tarifaSocialDadoEconomia.setImovel(imovelSessao);
 
 					// Carregando o imóvel
 					FiltroImovel filtroImovel = new FiltroImovel();
 
 					// Objetos que serão retornados pelo hibernate
-					filtroImovel
-							.adicionarCaminhoParaCarregamentoEntidade("imovelPerfil");
+					filtroImovel.adicionarCaminhoParaCarregamentoEntidade("imovelPerfil");
 
 					// Inseri ou atualiza na base.
 					if (tarifaSocialDadoEconomia.getId() != null) {
 
 						FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia = new FiltroTarifaSocialDadoEconomia();
 						filtroTarifaSocialDadoEconomia.setInitializeLazy(true);
-						filtroTarifaSocialDadoEconomia
-								.adicionarParametro(new ParametroSimples(
-										FiltroTarifaSocialDadoEconomia.ID,
-										tarifaSocialDadoEconomia.getId()));
+						filtroTarifaSocialDadoEconomia.adicionarParametro(new ParametroSimples(
+								FiltroTarifaSocialDadoEconomia.ID, tarifaSocialDadoEconomia.getId()));
 
 						Collection colecaoTarifaSocialAtualizar = getControladorUtil()
-								.pesquisar(
-										filtroTarifaSocialDadoEconomia,
-										TarifaSocialDadoEconomia.class
-												.getName());
+								.pesquisar(filtroTarifaSocialDadoEconomia, TarifaSocialDadoEconomia.class.getName());
 
 						TarifaSocialDadoEconomia tarifaSocialDadoEconomiaAtualizar = (TarifaSocialDadoEconomia) Util
 								.retonarObjetoDeColecao(colecaoTarifaSocialAtualizar);
 
 						int qtdeRecadastramento = 1;
 
-						if (tarifaSocialDadoEconomiaAtualizar
-								.getQuantidadeRecadastramento() != null) {
-							qtdeRecadastramento = tarifaSocialDadoEconomiaAtualizar
-									.getQuantidadeRecadastramento()
+						if (tarifaSocialDadoEconomiaAtualizar.getQuantidadeRecadastramento() != null) {
+							qtdeRecadastramento = tarifaSocialDadoEconomiaAtualizar.getQuantidadeRecadastramento()
 									.shortValue() + 1;
 						}
 
 						tarifaSocialDadoEconomia.setUltimaAlteracao(new Date());
 						tarifaSocialDadoEconomia.setDataExclusao(null);
-						tarifaSocialDadoEconomia
-								.setTarifaSocialExclusaoMotivo(null);
-						tarifaSocialDadoEconomia
-								.setQuantidadeRecadastramento(new Short(""
-										+ qtdeRecadastramento));
-						tarifaSocialDadoEconomia
-								.setDataRecadastramento(new Date());
-						
-						// ------------ REGISTRAR Transação----------------------------
+						tarifaSocialDadoEconomia.setTarifaSocialExclusaoMotivo(null);
+						tarifaSocialDadoEconomia.setQuantidadeRecadastramento(new Short("" + qtdeRecadastramento));
+						tarifaSocialDadoEconomia.setDataRecadastramento(new Date());
 
 						registradorOperacao.registrarOperacao(tarifaSocialDadoEconomia);
 
-						// --------FIM---- REGISTRAR TRANSação----------------------------
-						
-						this
-								.atualizarDadosTarifaSocialImovel(tarifaSocialDadoEconomia);
-						// getControladorRegistroAtendimento()
-						// .encerrarRegistroAtendimento(
-						// registroAtendimento,
-						// registroAtendimentoUnidade,
-						// usuarioLogado);
+						this.atualizarDadosTarifaSocialImovel(tarifaSocialDadoEconomia);
 					} else {
 						tarifaSocialDadoEconomia.setUltimaAlteracao(new Date());
 						tarifaSocialDadoEconomia.setDataExclusao(null);
-						tarifaSocialDadoEconomia
-								.setTarifaSocialExclusaoMotivo(null);
+						tarifaSocialDadoEconomia.setTarifaSocialExclusaoMotivo(null);
 						tarifaSocialDadoEconomia.setDataImplantacao(new Date());
-						
-						// ------------ REGISTRAR Transação----------------------------
+
 						registradorOperacao.registrarOperacao(tarifaSocialDadoEconomia);
-						// --------FIM---- REGISTRAR TRANSação----------------------------
-						
+
 						getControladorUtil().inserir(tarifaSocialDadoEconomia);
-						// getControladorRegistroAtendimento()
-						// .encerrarRegistroAtendimento(
-						// registroAtendimento,
-						// registroAtendimentoUnidade,
-						// usuarioLogado);
 					}
 				}
 			}
 
-			if (colecaoImovelEconomiaAtualizar != null
-					&& !colecaoImovelEconomiaAtualizar.isEmpty()) {
+			if (colecaoImovelEconomiaAtualizar != null && !colecaoImovelEconomiaAtualizar.isEmpty()) {
 
-				Iterator colecaoImovelEconomiaAtualizarIterator = colecaoImovelEconomiaAtualizar
-						.iterator();
+				Iterator colecaoImovelEconomiaAtualizarIterator = colecaoImovelEconomiaAtualizar.iterator();
 
 				while (colecaoImovelEconomiaAtualizarIterator.hasNext()) {
 					ImovelEconomia imovelEconomiaAtualizar = (ImovelEconomia) colecaoImovelEconomiaAtualizarIterator
@@ -5448,14 +4934,7 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 					imovelEconomiaAtualizar.setUltimaAlteracao(new Date());
 
-					// ------------ REGISTRAR
-					// TRANSação----------------------------
-
-					registradorOperacao
-							.registrarOperacao(imovelEconomiaAtualizar);
-
-					// --------FIM---- REGISTRAR
-					// TRANSação----------------------------
+					registradorOperacao.registrarOperacao(imovelEconomiaAtualizar);
 
 					getControladorUtil().atualizar(imovelEconomiaAtualizar);
 
@@ -5464,42 +4943,40 @@ public class ControladorTarifaSocialSEJB implements SessionBean {
 
 		} else {
 			// Nenhuma tarifa social foi encontrada
-			throw new ControladorException(
-					"atencao.nenhuma.tarifa_social.encontrada");
+			throw new ControladorException("atencao.nenhuma.tarifa_social.encontrada");
 		}
 
 		if (!manipulacaoRegistro) {
 			// Nenhuma tarifa social foi encontrada
-			throw new ControladorException(
-					"atencao.nenhuma.tarifa_social.encontrada");
+			throw new ControladorException("atencao.nenhuma.tarifa_social.encontrada");
 		}
 
 		if (imovelAtualizar != null) {
 			// ------------ REGISTRAR Transação----------------------------
 			registradorOperacao.registrarOperacao(imovelAtualizar);
-			// --------FIM---- REGISTRAR TRANSação----------------------------			
+			// --------FIM---- REGISTRAR TRANSação----------------------------
 			this.atualizarImovelPerfilTarifaSocial(imovelAtualizar);
 		} else {
 			// ------------ REGISTRAR Transação----------------------------
 			registradorOperacao.registrarOperacao(imovelSessao);
-			// --------FIM---- REGISTRAR TRANSação----------------------------			
+			// --------FIM---- REGISTRAR TRANSação----------------------------
 			this.atualizarImovelPerfilTarifaSocial(imovelSessao);
 		}
 
-		//Colocado por Raphael Rossiter em 10/03/2008
-		ObterDadosRegistroAtendimentoHelper registroAtendimentoHelper = 
-		getControladorRegistroAtendimento().obterDadosRegistroAtendimento(registroAtendimento.getId());
-		
-		SolicitacaoTipoEspecificacao especificacao = registroAtendimentoHelper
-		.getRegistroAtendimento().getSolicitacaoTipoEspecificacao();
-		
-		if (especificacao.getDebitoTipo() != null){			
-			getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento,registroAtendimentoUnidade, 
-			usuarioLogado, especificacao.getDebitoTipo().getId(), especificacao.getValorDebito(), 1, "100", false,null,false);
-		}
-		else{
-			getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento,registroAtendimentoUnidade, 
-			usuarioLogado, null, null, null, null, false,null,false);
+		// Colocado por Raphael Rossiter em 10/03/2008
+		ObterDadosRegistroAtendimentoHelper registroAtendimentoHelper = getControladorRegistroAtendimento()
+				.obterDadosRegistroAtendimento(registroAtendimento.getId());
+
+		SolicitacaoTipoEspecificacao especificacao = registroAtendimentoHelper.getRegistroAtendimento()
+				.getSolicitacaoTipoEspecificacao();
+
+		if (especificacao.getDebitoTipo() != null) {
+			getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento,
+					registroAtendimentoUnidade, usuarioLogado, especificacao.getDebitoTipo().getId(),
+					especificacao.getValorDebito(), 1, "100", false, null, false);
+		} else {
+			getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento,
+					registroAtendimentoUnidade, usuarioLogado, null, null, null, null, false, null, false);
 		}
 
 	}

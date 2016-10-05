@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class CreditoOrigem extends ObjetoTransacao {
+	
 	private static final long serialVersionUID = 1L;
 
 	public final static Integer CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO = new Integer(1);
@@ -20,19 +21,23 @@ public class CreditoOrigem extends ObjetoTransacao {
 	public final static Integer VALORES_COBRADOS_INDEVIDAMENTE = new Integer(7);
 	public final static Integer DESCONTOS_INCONDICIONAIS = new Integer(8);
 	public final static Integer AJUSTES_PARA_ZERAR_CONTA = new Integer(9);
-	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer (10);
+	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer(10);
 	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(11);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(12);
 	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(13);
+	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA = new Integer(14);
 
 	private Integer id;
+	
 	private String descricaoCreditoOrigem;
+	
 	private String descricaoAbreviada;
+	
 	private Short indicadorUso;
+	
 	private Date ultimaAlteracao;
 
-	public CreditoOrigem(String descricaoCreditoOrigem,
-			String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
+	public CreditoOrigem(String descricaoCreditoOrigem, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
 		this.descricaoCreditoOrigem = descricaoCreditoOrigem;
 		this.descricaoAbreviada = descricaoAbreviada;
 		this.indicadorUso = indicadorUso;
@@ -99,17 +104,16 @@ public class CreditoOrigem extends ObjetoTransacao {
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroCreditoOrigem filtro = new FiltroCreditoOrigem();
-		
-		filtro.adicionarParametro(
-				new ParametroSimples(FiltroCreditoOrigem.ID, this.getId()));		
+
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoOrigem.ID, this.getId()));
 		return filtro;
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricaoCreditoOrigem();
 	}
-	
+
 	@Override
 	public void initializeLazy() {
 		retornaCamposChavePrimaria();

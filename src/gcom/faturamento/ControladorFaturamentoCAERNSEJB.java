@@ -6610,9 +6610,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 							.obterMes(anoMesFaturamentoGrupo), Util
 							.obterAno(anoMesFaturamentoGrupo));
 
-					Date dataAnoMesFaturamentoMenos2Anos = Util
-							.subtrairNumeroAnosDeUmaData(dataAnoMesFaturamento,
-									-2);
+					Date dataAnoMesFaturamentoMenos2Anos = Util.subtrairNumeroAnosDeUmaData(dataAnoMesFaturamento,2);
 
 					if (ligacaoAgua.getDataCorte().compareTo(
 							dataAnoMesFaturamentoMenos2Anos) == -1) {

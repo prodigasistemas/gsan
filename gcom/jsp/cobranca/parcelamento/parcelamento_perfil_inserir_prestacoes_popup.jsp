@@ -434,25 +434,25 @@
 				<tr>
 					<td width="25%"><strong> Qtd. Máx. Prestações:<font color="#FF0000">*</font></strong></td>
 					<logic:equal name="readOnly" value="true">
-						<td><html:text property="quantidadeMaximaPrestacao" size="2"
-							maxlength="2" tabindex="1" readonly="true"/>
+						<td><html:text property="quantidadeMaximaPrestacao" size="3"
+							maxlength="3" tabindex="1" readonly="true"/>
 						</td>
 					</logic:equal>
 					<logic:notEqual name="readOnly" value="true">
-						<td> <html:text property="quantidadeMaximaPrestacao" size="2"
-							maxlength="2" tabindex="1" onkeypress="return isCampoNumerico(event);" />
+						<td> <html:text property="quantidadeMaximaPrestacao" size="3"
+							maxlength="3" tabindex="1" onkeypress="return isCampoNumerico(event);" />
 						</td>
 					</logic:notEqual>
 					
 					<td width="25%"><strong> Qtd. Máx. Prestações p/ Parc. com Permissão Especial:</strong></td>
 					<logic:equal name="readOnly" value="true">
-						<td colspan="2"><html:text property="quantidadeMaxPrestacaoEspecial" size="2"
-							maxlength="2" tabindex="2" readonly="true"/>
+						<td colspan="2"><html:text property="quantidadeMaxPrestacaoEspecial" size="3"
+							maxlength="3" tabindex="2" readonly="true"/>
 						</td>
 					</logic:equal>
 					<logic:notEqual name="readOnly" value="true">
-						<td colspan="2"><html:text property="quantidadeMaxPrestacaoEspecial" size="2"
-							maxlength="2" tabindex="2" onkeypress="return isCampoNumerico(event);" />
+						<td colspan="2"><html:text property="quantidadeMaxPrestacaoEspecial" size="3"
+							maxlength="3" tabindex="2" onkeypress="return isCampoNumerico(event);" />
 						</td>
 					</logic:notEqual>
 				</tr>

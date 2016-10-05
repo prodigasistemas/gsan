@@ -1,5 +1,15 @@
 package gcom.cadastro.cliente;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionContext;
+
 import gcom.cadastro.cliente.bean.ClienteEmitirBoletimCadastroHelper;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.endereco.Cep;
@@ -28,6 +38,7 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -39,152 +50,29 @@ import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 /**
  * Definição da lógica de negócio do Session Bean de ControladorCliente
  * 
  * @author Sávio Luiz
  * @created 25 de Abril de 2005
  */
-public class ControladorClienteSEJB implements SessionBean {
+public class ControladorClienteSEJB extends ControladorComum {
 	
 	private static final long serialVersionUID = 1L;
 
-	private IRepositorioCliente repositorioCliente = null;
+	private IRepositorioCliente repositorioCliente                 = null;
 
-	private IRepositorioClienteImovel repositorioClienteImovel = null;
+	private IRepositorioClienteImovel repositorioClienteImovel     = null;
 
 	private IRepositorioClienteEndereco repositorioClienteEndereco = null;
 
-	SessionContext sessionContext;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-
-		repositorioCliente = RepositorioClienteHBM.getInstancia();
-		repositorioClienteImovel = RepositorioClienteImovelHBM.getInstancia();
-		repositorioClienteEndereco = RepositorioClienteEnderecoHBM
-				.getInstancia();
+		repositorioCliente         = RepositorioClienteHBM.getInstancia();
+		repositorioClienteImovel   = RepositorioClienteImovelHBM.getInstancia();
+		repositorioClienteEndereco = RepositorioClienteEnderecoHBM.getInstancia();
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
-	private ControladorEnderecoLocal getControladorEndereco() {
-
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	/**
-	 * Insere um cliente no sistema
-	 * 
-	 * @param cliente
-	 *            Cliente a ser inserido
-	 * @param telefones
-	 *            Telefones do cliente
-	 * @param enderecos
-	 *            Endereços do cliente
-	 * @return Descrição do retorno
-	 * @throws ControladorException
-	 */
 	public Integer inserirCliente(Cliente cliente, Collection telefones,
 			Collection enderecos, Usuario usuario) throws ControladorException {
 		FiltroCliente filtroCliente = new FiltroCliente();
@@ -284,23 +172,17 @@ public class ControladorClienteSEJB implements SessionBean {
 		}
 		//*************************************************************************
 		
-//		cliente.setClienteFones(new HashSet(telefones));
-//		cliente.setClienteEnderecos(new HashSet(enderecos));	
 		cliente.setIndicadorAcaoCobranca(ConstantesSistema.INDICADOR_USO_ATIVO);
 		
-		Integer chaveClienteGerada = (Integer) getControladorUtil().inserir(
-				cliente);
+		Integer chaveClienteGerada = (Integer) getControladorUtil().inserir(cliente);
 
 		cliente.setId(chaveClienteGerada);
 
 		if (telefones != null) {
-
-			// Inserir os fones do cliente
 			Iterator iteratorTelefones = telefones.iterator();
 
 			while (iteratorTelefones.hasNext()) {
-				ClienteFone clienteFone = (ClienteFone) iteratorTelefones
-						.next();
+				ClienteFone clienteFone = (ClienteFone) iteratorTelefones.next();
 
 				clienteFone.setCliente(cliente);
 				registradorOperacao.registrarOperacao(clienteFone);
@@ -313,110 +195,80 @@ public class ControladorClienteSEJB implements SessionBean {
 		Iterator iteratorEnderecos = enderecos.iterator();
 
 		while (iteratorEnderecos.hasNext()) {
-			ClienteEndereco clienteEndereco = (ClienteEndereco) iteratorEnderecos
-					.next();
+			ClienteEndereco clienteEndereco = (ClienteEndereco) iteratorEnderecos.next();
 
 			clienteEndereco.setCliente(cliente);
 			registradorOperacao.registrarOperacao(clienteEndereco);
 			getControladorUtil().inserir(clienteEndereco);
-
 		}
 
 		return chaveClienteGerada;
-		/*
-		 * } catch (ErroRepositorioException ex) {
-		 * sessionContext.setRollbackOnly(); throw new
-		 * ControladorException("erro.sistema", ex); }
-		 */
-		// -------------Fim da parte que insere um cliente na
-		// base---------------
 	}
 
-	/**
-	 * Atualiza um cliente no sistema
-	 * 
-	 * @param cliente
-	 *            Cliente a ser atualizado
-	 * @param telefones
-	 *            Telefones do cliente
-	 * @param enderecos
-	 *            Endereços do cliente
-	 * @throws ControladorException
-	 */
-	public void atualizarCliente(Cliente cliente, Collection telefones,
-			Collection enderecos, Usuario usuario) throws ControladorException {
+	public void atualizarCliente(Cliente cliente, Collection telefones, Collection enderecos, Usuario usuario)	throws ControladorException {
+		if (telefones == null){
+			telefones = new ArrayList<ClienteFone>();
+		}
 
+		if (enderecos == null){
+			enderecos = new ArrayList<ClienteEndereco>();
+		}
 		
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CLIENTE_ATUALIZAR, cliente.getId(), cliente.getId(), 
-				new UsuarioAcaoUsuarioHelper(usuario,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CLIENTE_ATUALIZAR, cliente.getId(), cliente.getId(),
+				new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
 		FiltroCliente filtroCliente = new FiltroCliente();
 
 		try {
-			// -------------Parte que atualiza um cliente na
-			// base----------------------
-			// Verifica se já existe o cnpj cadastrado na base
 			if (cliente.getCnpj() != null) {
 				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.CNPJ, cliente.getCnpj()));
 				filtroCliente.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroCliente.ID, cliente.getId()));
-				
+
 				Collection colecaoClientes = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
-				
+
 				if (colecaoClientes != null && !colecaoClientes.isEmpty()) {
-					Cliente clienteComCnpj = (Cliente) Util
-							.retonarObjetoDeColecao(colecaoClientes);
+					Cliente clienteComCnpj = (Cliente) Util.retonarObjetoDeColecao(colecaoClientes);
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.cnpj.cliente.ja_cadastrado", null, ""
-									+ clienteComCnpj.getId());
+					throw new ControladorException("atencao.cnpj.cliente.ja_cadastrado", null, "" + clienteComCnpj.getId());
 				}
 			}
-			
-			
+
 			// Parte de Validacao com Timestamp
 			filtroCliente.limparListaParametros();
 
 			// Seta o filtro para buscar o cliente na base
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.ID, cliente.getId()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, cliente.getId()));
 
-			Collection colecaoCliente = getControladorUtil()
-			.pesquisar(filtroCliente, Cliente.class.getName());
+			Collection colecaoCliente = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
 
-			//verifica se o cliente ainda existe na base, porque ele pode ter sido excluido com isso
-			//não é possível analizar a data de ultima alteração
-			if(colecaoCliente == null || colecaoCliente.isEmpty()){
+			// verifica se o cliente ainda existe na base, porque ele pode ter
+			// sido excluido com isso
+			// não é possível analizar a data de ultima alteração
+			if (colecaoCliente == null || colecaoCliente.isEmpty()) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
-			
+
 			// Procura o cliente na base
-			Cliente clienteNaBase = (Cliente) ((List)colecaoCliente).get(0);
+			Cliente clienteNaBase = (Cliente) ((List) colecaoCliente).get(0);
 
-			// Verificar se o cliente já foi atualizado por outro usuário
-			// durante
-			// esta atualização
-			if (clienteNaBase.getUltimaAlteracao().after(
-					cliente.getUltimaAlteracao())) {
+			// Verificar se o cliente já foi atualizado por outro usuário durante esta atualização
+			if (clienteNaBase.getUltimaAlteracao().after(cliente.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 
-			//Altualiza o indicadorGeraArquivotexto
+			// Altualiza o indicadorGeraArquivotexto
 			cliente.setIndicadorGeraArquivoTexto(clienteNaBase.getIndicadorGeraArquivoTexto());
 			// Atualiza a data de última alteração
 			cliente.setUltimaAlteracao(new Date());
-			
-			//*************************************************************************
+
+			// *************************************************************************
 			// Autor: Ivan Sergio
 			// Data: 06/08/2009
 			// CRC2103
-			// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter Imovel 
-			//*************************************************************************
+			// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter Imovel
+			// *************************************************************************
 			AtributoGrupo atributoGrupo = null;
 			if (cliente.getOperacaoEfetuada() != null) {
 				if (cliente.getOperacaoEfetuada().getAtributoGrupo() != null) {
@@ -425,60 +277,53 @@ public class ControladorClienteSEJB implements SessionBean {
 			}
 
 			registradorOperacao.registrarOperacao(cliente);
-			
+
 			if (atributoGrupo != null) {
 				cliente.getOperacaoEfetuada().setAtributoGrupo(atributoGrupo);
 			}
-			//*************************************************************************
-			
+			// *************************************************************************
+
 			cliente.setClienteFones(new HashSet(telefones));
 			cliente.setClienteEnderecos(new HashSet(enderecos));
-			
+
 			// Atualiza o cliente
-			getControladorUtil().atualizar(cliente);
+			cliente.setUsuarioParaHistorico(usuario);
+			getControladorAtualizacaoCadastro().atualizar(cliente);
 
 			// Atualizar os fones do cliente
 			Iterator iteratorTelefones = telefones.iterator();
 
-			// Remover a lista dos telefones do cliente para adicionar a nova
-			// lista depois
+			// Remover a lista dos telefones do cliente para adicionar a nova lista depois
 			repositorioCliente.removerTodosTelefonesPorCliente(cliente.getId());
 
 			// Adicionar os telefones novos informados para o cliente
 			while (iteratorTelefones.hasNext()) {
-				ClienteFone clienteFone = (ClienteFone) iteratorTelefones
-						.next();
+				ClienteFone clienteFone = (ClienteFone) iteratorTelefones.next();
 
 				clienteFone.setUltimaAlteracao(new Date());
 				clienteFone.setCliente(cliente);
 				getControladorUtil().inserir(clienteFone);
-
 			}
 
 			// Inserir os endereços do cliente
 			Iterator iteratorEnderecos = enderecos.iterator();
 
-			// Remover a lista dos endereços do cliente para adicionar a nova
-			// lista depois
+			// Remover a lista dos endereços do cliente para adicionar a nova lista depois
 			repositorioCliente.removerTodosEnderecosPorCliente(cliente.getId());
 
 			// Adicionar os endereços novos informados para o cliente
 			while (iteratorEnderecos.hasNext()) {
-				ClienteEndereco clienteEndereco = (ClienteEndereco) iteratorEnderecos
-						.next();
+				ClienteEndereco clienteEndereco = (ClienteEndereco) iteratorEnderecos.next();
 
 				clienteEndereco.setUltimaAlteracao(new Date());
 				clienteEndereco.setCliente(cliente);
 				getControladorUtil().inserir(clienteEndereco);
-
 			}
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		// -------------Fim da parte que atualiza um cliente na
-		// base---------------
 	}
 
 	/**
@@ -563,37 +408,14 @@ public class ControladorClienteSEJB implements SessionBean {
 
 	}
 
-	/**
-	 * Metodo que retorno todos os clinte do filtro passado
-	 * 
-	 * @param filtroCliente
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 * @autor thiago toscano
-	 * @date 15/12/2005
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarCliente(FiltroCliente filtroCliente)
-			throws ControladorException {
-		Collection coll = getControladorUtil().pesquisar(filtroCliente,
-				Cliente.class.getSimpleName());
+	public Collection pesquisarCliente(FiltroCliente filtroCliente) throws ControladorException {
+		Collection coll = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getSimpleName());
 		return coll;
 	}
 
-	/**
-	 * Pesquisa uma coleção de cliente imovel com uma query especifica
-	 * 
-	 * @param filtroClienteEndereco
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarClienteEndereco(
-			FiltroClienteEndereco filtroClienteEndereco)
-			throws ControladorException {
+	public Collection pesquisarClienteEndereco(FiltroClienteEndereco filtroClienteEndereco)	throws ControladorException {
 		try {
-			return repositorioClienteEndereco
-					.pesquisarClienteEndereco(filtroClienteEndereco);
+			return repositorioClienteEndereco.pesquisarClienteEndereco(filtroClienteEndereco);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -799,22 +621,7 @@ public class ControladorClienteSEJB implements SessionBean {
 		return clienteDigitado;
 	}
 
-	/**
-	 * Pesquisa um cliente carregando os dados do relacionamento com ClienteTipo
-	 * 
-	 * [UC0321] Emitir Fatura de Cliente Responsável
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 02/05/2006
-	 * 
-	 * @param idCliente
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Cliente pesquisarCliente(Integer idCliente)
-			throws ControladorException {
-
-		// Retorna o cliente encontrado ou vazio se não existir
+	public Cliente pesquisarCliente(Integer idCliente) throws ControladorException {
 		try {
 			return repositorioCliente.pesquisarCliente(idCliente);
 		} catch (ErroRepositorioException e) {
@@ -2452,94 +2259,26 @@ public class ControladorClienteSEJB implements SessionBean {
 		
 	}
 	
-	private ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorTransacaoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-/////////////////////////////////////////////////////////////////////////	
- 	
-	/**
-	 * 
-	 *Retorna o cliente usuario apartir do id do imovel
-	 *
-	 * @author Flávio Cordeiro
-	 * @date 08/01/2007
-	 *
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException 
-	 */
 	public Cliente retornaClienteUsuario(Integer idImovel)throws ControladorException{
-	
 		try {
-
 			return this.repositorioClienteImovel.retornaClienteUsuario(idImovel);
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
 	
 	
-	/**
-	 * 
-	 *Retorna o cliente proprietario a partir do id do imovel
-	 *
-	 * @author Vinicius Medeiros
-	 * @date 29/08/2008
-	 *
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException 
-	 */
 	public Cliente retornaClienteProprietario(Integer idImovel) throws ControladorException{
-	
 		try {
-
 			return this.repositorioClienteImovel.retornaClienteProprietario(idImovel);
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
 	
-	
-	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 25/08/2008
-	 * 
-	 * @return Cliente
-	 * @throws ErroRepositorioException
-	 */
-
 	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, 
 			Short idClienteRelacaoTipo) throws ControladorException{
 	

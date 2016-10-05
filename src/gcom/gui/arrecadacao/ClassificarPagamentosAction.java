@@ -3,6 +3,7 @@ package gcom.gui.arrecadacao;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.fachada.Fachada;
+import gcom.faturamento.ControladorFaturamento;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.gui.GcomAction;
@@ -21,11 +22,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.jboss.logging.Logger;
 
 public class ClassificarPagamentosAction extends GcomAction {
 
 	private CreditoTipo creditoTipo;
 	private CreditoOrigem creditoOrigem;
+	private static Logger logger = Logger.getLogger(ClassificarPagamentosAction.class);
 	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
@@ -42,11 +45,12 @@ public class ClassificarPagamentosAction extends GcomAction {
 		this.setParametros(new Integer(form.getIdSituacaoPagamento()));
 		
 		String[] registrosClassificacao = form.getIdRegistrosClassificacao();
+		logger.info("RECUPERACAO CREDITO 2.1");
 		Collection<Pagamento> colecaoPagamentos = obterPagamentosSelecionados(form, registrosClassificacao);
 		Integer idSituacaoPagamento = new Integer(form.getIdSituacaoPagamento());
 		
 		try {
-			
+			logger.info("			RECUPERACAO CREDITO 2.4: " + colecaoPagamentos.size() + " pagamentos");
 			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, this.creditoTipo, 
 					this.creditoOrigem, isDevolucao(sessao, parametroDevolver), idSituacaoPagamento);
 			
@@ -83,12 +87,13 @@ public class ClassificarPagamentosAction extends GcomAction {
 			Collection<Pagamento> pagamentos =	(Collection<Pagamento>) form.getColecaoPagamentosAClassificar();
 			
 			Iterator<Pagamento> iteratorPagamentos = pagamentos.iterator();
+			logger.info("	RECUPERACAO CREDITO 2.2");
 			while (iteratorPagamentos.hasNext()) {
 				Pagamento pagamento = (Pagamento) iteratorPagamentos.next();
-				
 				for (int i = 0; i < registrosClassificacao.length; i++) {
 					String idPagamento = registrosClassificacao[i];
 					if(idPagamento.equals(pagamento.getId().toString())){
+						logger.info("		RECUPERACAO CREDITO 2.3 (adicionado) " + pagamento.getId());
 						colecaoPagamentos.add(pagamento);
 					}
 				}

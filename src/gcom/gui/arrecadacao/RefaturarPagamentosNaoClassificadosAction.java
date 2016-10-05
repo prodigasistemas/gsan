@@ -20,11 +20,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.jboss.logging.Logger;
 
 public class RefaturarPagamentosNaoClassificadosAction extends GcomAction {
 
 	private CreditoTipo creditoTipo;
 	private CreditoOrigem creditoOrigem;
+	private static Logger logger = Logger.getLogger(ClassificarPagamentosAction.class);
 	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
@@ -47,26 +49,11 @@ public class RefaturarPagamentosNaoClassificadosAction extends GcomAction {
 		
 		String[] registrosClassificacao = classificarPagamentosActionForm.getIdRegistrosClassificacao();
 		
-		Collection<Pagamento> colecaoPagamentos = new ArrayList<Pagamento>();
-		
-		if(!classificarPagamentosActionForm.getColecaoPagamentosAClassificar().isEmpty()){
-			Collection<Pagamento> pagamentos =	(Collection<Pagamento>) classificarPagamentosActionForm.getColecaoPagamentosAClassificar();
-			
-			Iterator<Pagamento> iteratorPagamentos = pagamentos.iterator();
-			while (iteratorPagamentos.hasNext()) {
-				Pagamento pagamento = (Pagamento) iteratorPagamentos.next();
-				
-				for (int i = 0; i < registrosClassificacao.length; i++) {
-					String idPagamento = registrosClassificacao[i];
-					if(idPagamento.equals(pagamento.getId().toString())){
-						colecaoPagamentos.add(pagamento);
-					}
-				}
-			}
-		}
+		logger.info("RECUPERACAO CREDITO 3.1");
+		Collection<Pagamento> colecaoPagamentos = obterPagamentosSelecionados(classificarPagamentosActionForm, registrosClassificacao);
 		
 		try {
-			
+			logger.info("			RECUPERACAO CREDITO 3.4: " + colecaoPagamentos.size() + " pagamentos");
 			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, 
 					this.creditoTipo, this.creditoOrigem, false, new Integer(classificarPagamentosActionForm.getIdSituacaoPagamento()));
 			
@@ -81,6 +68,29 @@ public class RefaturarPagamentosNaoClassificadosAction extends GcomAction {
 		
 		sessao.removeAttribute("contas");
 		return retorno;
+	}
+
+	private Collection<Pagamento> obterPagamentosSelecionados(PagamentosAClassificarActionForm classificarPagamentosActionForm, String[] registrosClassificacao) {
+		Collection<Pagamento> colecaoPagamentos = new ArrayList<Pagamento>();
+		
+		if(!classificarPagamentosActionForm.getColecaoPagamentosAClassificar().isEmpty()){
+			Collection<Pagamento> pagamentos =	(Collection<Pagamento>) classificarPagamentosActionForm.getColecaoPagamentosAClassificar();
+			
+			Iterator<Pagamento> iteratorPagamentos = pagamentos.iterator();
+			logger.info("	RECUPERACAO CREDITO 3.2");
+			while (iteratorPagamentos.hasNext()) {
+				Pagamento pagamento = (Pagamento) iteratorPagamentos.next();
+				
+				for (int i = 0; i < registrosClassificacao.length; i++) {
+					String idPagamento = registrosClassificacao[i];
+					if(idPagamento.equals(pagamento.getId().toString())){
+						logger.info("		RECUPERACAO CREDITO 3.3 (adicionado) " + pagamento.getId());
+						colecaoPagamentos.add(pagamento);
+					}
+				}
+			}
+		}
+		return colecaoPagamentos;
 	}
 	
 	/**

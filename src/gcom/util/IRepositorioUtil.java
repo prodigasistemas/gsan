@@ -11,9 +11,13 @@ import java.util.Collection;
 import java.util.List;
 
 public interface IRepositorioUtil {
+	
+	public Object obterPorId(Class classe, Integer id) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException;
+	
+	public Collection listar(Class classe) throws ErroRepositorioException;	
 
 	@SuppressWarnings("rawtypes")
 	public int valorMaximo(Class classe, String atributo) throws ErroRepositorioException;
@@ -60,4 +64,6 @@ public interface IRepositorioUtil {
 	public Collection pesquisarGerencial(Filtro filtro, String pacoteNomeObjeto) throws ErroRepositorioException;
 	
 	public Object inserirComCommit(Object objeto) throws ErroRepositorioException;
+	
+	public void registrarHistorico(Object objeto) throws ErroRepositorioException;
 }

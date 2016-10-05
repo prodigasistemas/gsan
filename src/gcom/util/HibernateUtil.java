@@ -175,6 +175,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
 import gcom.batch.Processo;
@@ -212,6 +213,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
+import gcom.cadastro.cliente.ClienteHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteImovelEconomia;
 import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
@@ -269,6 +271,7 @@ import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelEconomia;
 import gcom.cadastro.imovel.ImovelEloAnormalidade;
 import gcom.cadastro.imovel.ImovelEnderecoAnterior;
+import gcom.cadastro.imovel.ImovelHistorico;
 import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
@@ -283,6 +286,9 @@ import gcom.cadastro.imovel.ImovelSuprimido;
 import gcom.cadastro.imovel.ImovelTipoCobertura;
 import gcom.cadastro.imovel.ImovelTipoConstrucao;
 import gcom.cadastro.imovel.ImovelTipoHabitacao;
+import gcom.cadastro.imovel.ImovelTipoOcupante;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoPropriedade;
 import gcom.cadastro.imovel.PavimentoCalcada;
 import gcom.cadastro.imovel.PavimentoRua;
@@ -423,6 +429,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
+import gcom.cobranca.parcelamento.ParcelamentoFaixaDesconto;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
@@ -949,6 +956,7 @@ public class HibernateUtil {
 					.addClass(VersaoMobile.class)
 					.addClass(CpfTipo.class)
 					.addClass(Cliente.class)
+					.addClass(ClienteHistorico.class)
 					.addClass(ClienteEndereco.class)
 					.addClass(ImovelCadastroOcorrencia.class)
 					.addClass(ImovelEloAnormalidade.class)
@@ -1006,6 +1014,7 @@ public class HibernateUtil {
 					.addClass(EloAnormalidade.class)
 					.addClass(FonteAbastecimento.class)
 					.addClass(Imovel.class)
+					.addClass(ImovelHistorico.class)
 					.addClass(ImovelCobrancaSituacao.class)
 					.addClass(ImovelEconomia.class)
 					.addClass(ImovelEnderecoAnterior.class)
@@ -1447,6 +1456,12 @@ public class HibernateUtil {
 					.addClass(QuestionarioSatisfacaoCliente.class)
 
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
+					.addClass(ImovelTipoOcupante.class)
+					.addClass(ImovelTipoOcupanteQuantidade.class)
+					.addClass(ImovelTipoOcupanteQuantidadeAtualizacaoCadastral.class)
+					.addClass(ImovelTipoOcupanteQuantidadeRetorno.class)
+					
+					.addClass(ParcelamentoFaixaDesconto.class)
 			;
 
 			configuration.setInterceptor(Interceptador.getInstancia());

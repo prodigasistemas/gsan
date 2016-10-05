@@ -8,6 +8,7 @@ import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -29,15 +30,16 @@ public class TarefaBatchPrescreverDebitosImoveisPublicosAutomatico extends Taref
 		super(null, 0);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object executar() throws TarefaException {
 		
-		Collection<Integer> colecaoDadosPrescricaoAutomaticos = (Collection<Integer>) 
-			getParametro("colecaoDadosPrescricao"); 
+		Collection<Integer> colecaoDadosPrescricaoAutomaticos = (Collection<Integer>) getParametro("colecaoDadosPrescricao"); 
+		
+		
+		String idsEsferaPoder = "";
 		
 		Iterator iterator = colecaoDadosPrescricaoAutomaticos.iterator();
 		
-    	String idsEsferaPoder = "";
-	
     	Object[] idEsferapoder = null;
 	
 		if(iterator.hasNext()){
@@ -51,7 +53,11 @@ public class TarefaBatchPrescreverDebitosImoveisPublicosAutomatico extends Taref
 				idsEsferaPoder += idEsferapoder[1].toString() + ",";				
 			}
 			
-			if(idEsferapoder[0] != null || idEsferapoder[1] != null){
+			if ( idEsferapoder[2] != null ) {				
+				idsEsferaPoder += idEsferapoder[2].toString() + ",";				
+			}
+			
+			if(idEsferapoder[0] != null || idEsferapoder[1] != null || idEsferapoder[2] != null ){
 				
 				idsEsferaPoder = Util.removerUltimosCaracteres(idsEsferaPoder, 1);
 			}
@@ -61,13 +67,13 @@ public class TarefaBatchPrescreverDebitosImoveisPublicosAutomatico extends Taref
 	    
 		// AnoMesReferencia - 5 Anos
 	    Integer anoMesPrescricao = Util.subtrairAnoAnoMesReferencia(anoMesFaturamento, 5);
-	    
+	    Date dataPrescricao = Util.subtrairNumeroAnosDeUmaData(new Date(), 5);
 	    Integer usuarioLogado = Usuario.USUARIO_BATCH.getId();
 		
 		enviarMensagemControladorBatch(
 				ConstantesJNDI.BATCH_PRESCREVER_DEBITOS_IMOVEIS_PUBLICOS_AUTOMATICO_MDB, 
 				new Object[] {this.getIdFuncionalidadeIniciada(),
-						anoMesFaturamento, anoMesPrescricao, usuarioLogado, idsEsferaPoder});
+						anoMesFaturamento, dataPrescricao, usuarioLogado, idsEsferaPoder});
 
 		return null;
 	}

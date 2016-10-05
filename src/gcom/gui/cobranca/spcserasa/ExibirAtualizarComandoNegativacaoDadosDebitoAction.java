@@ -60,7 +60,7 @@ public class ExibirAtualizarComandoNegativacaoDadosDebitoAction extends GcomActi
 			//Período de vencimento do débito	
 			Integer numeroDiasVencimentoCobranca = new Integer(sistemaParametro.getNumeroDiasVencimentoCobranca());			
 			Date dataVencimentoFinal = Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca);
-			Date dataVencimentoInicial = Util.subtrairNumeroAnosDeUmaData(dataVencimentoFinal, -5);
+			Date dataVencimentoInicial = Util.subtrairNumeroAnosDeUmaData(dataVencimentoFinal, 5);
 			form.setDataVencimentoInicial(Util.formatarData(dataVencimentoInicial));
 			form.setDataVencimentoFinal(Util.formatarData(dataVencimentoFinal));
   	    }

@@ -100,21 +100,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return instancia;
 	}
-	/**
-	 * 
-	 * Inseri um imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
+	
+	public Imovel obterImovelPorId(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			return (Imovel) session.createQuery("select i from Imovel i where i.id = :id")
+			.setParameter("id", idImovel)
+			.uniqueResult();
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao recuperar imovel pelo id");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 	public void inserirImovel(Imovel imovel) throws ErroRepositorioException {
 
@@ -142,65 +141,18 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 
-	/**
-	 * 
-	 * altera um imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
-
 	public void atualizarImovel(Imovel imovel) throws ErroRepositorioException {
-
 		Session session = HibernateUtil.getSession();
-
 		try {
-
 			session.update(imovel);
-
 			session.flush();
-
 		} catch (HibernateException e) {
-
-			e.printStackTrace();
-
-			throw new ErroRepositorioException("Erro no Hibernate");
-
+			logger.error("Erro ao atualizar imovel", e);
+			throw new ErroRepositorioException(e, "Erro ao atualizar imovel");
 		} finally {
-
 			HibernateUtil.closeSession(session);
-
-			// session.close();
-
 		}
-
 	}
-
-	/**
-	 * 
-	 * Pesquisa de Imovel na base
-	 * 
-	 * 
-	 * 
-	 * @param filtroImovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @return Descrição do retorno
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
 
 	public Collection pesquisarImovel(FiltroImovel filtroImovel)
 
@@ -4413,7 +4365,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	public Collection pesquisarImovelSituacaoEspecialFaturamento(String valor,
 
-	SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper)
+	SituacaoEspecialFaturamentoHelper helper)
 
 	throws ErroRepositorioException {
 
@@ -4421,27 +4373,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = null;
 
-		// Escolha de que tipo de consulta será
-
 		if (valor.equals("COM")
-				&& ((situacaoEspecialFaturamentoHelper.getIndicadorComercial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorComercial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorIndustrial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorPublico() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorPublico().toString().equals(
-								"" + ConstantesSistema.NAO))				
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorResidencial().toString().equals(
-								"" + ConstantesSistema.NAO)))
-								
-		) {
+				&& ((helper.getIndicadorComercial() == null 
+						|| helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.NAO))
+				&& (helper.getIndicadorIndustrial() == null 
+						|| helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.NAO))
+				&& (helper.getIndicadorPublico() == null 
+						|| helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.NAO))				
+				&& (helper.getIndicadorResidencial() == null 
+						|| helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.NAO)))) {
 
 			consulta = "select imovel.id, imovel.ultimaAlteracao  " 
 					
@@ -4461,29 +4401,21 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ "where fst.id is not null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and ";
 			
-			if(situacaoEspecialFaturamentoHelper.getIndicadorConsumoImovel().equals("1")){
+			if(helper.getIndicadorConsumoImovel().equals("1")){
 				consulta = consulta + " lagu.hidrometroInstalacaoHistorico.id is not null and ";
-			}else if(situacaoEspecialFaturamentoHelper.getIndicadorConsumoImovel().equals("2")){
+			}else if(helper.getIndicadorConsumoImovel().equals("2")){
 				consulta = consulta + " lagu.hidrometroInstalacaoHistorico.id is null and ";
 			}
 
 		} else if (!valor.equals("COM")
-				&& ((situacaoEspecialFaturamentoHelper.getIndicadorComercial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorComercial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorIndustrial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorPublico() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorPublico().toString().equals(
-								"" + ConstantesSistema.NAO))				
-				&& (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() == null 
-						|| situacaoEspecialFaturamentoHelper
-						.getIndicadorResidencial().toString().equals(
-								"" + ConstantesSistema.NAO)))) {
+				&& ((helper.getIndicadorComercial() == null 
+						|| helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.NAO))
+				&& (helper.getIndicadorIndustrial() == null 
+						|| helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.NAO))
+				&& (helper.getIndicadorPublico() == null 
+						|| helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.NAO))				
+				&& (helper.getIndicadorResidencial() == null 
+						|| helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.NAO)))) {
 
 			consulta = "select imovel.id, imovel.ultimaAlteracao  " 
 					+ "from Imovel imovel "
@@ -4503,29 +4435,21 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "where fst.id is null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and ";
 			
 		
-			if(situacaoEspecialFaturamentoHelper.getIndicadorConsumoImovel().equals("1")){
+			if(helper.getIndicadorConsumoImovel().equals("1")){
 				consulta = consulta + " lagu.hidrometroInstalacaoHistorico.id is not null and ";
-			}else if(situacaoEspecialFaturamentoHelper.getIndicadorConsumoImovel().equals("2")){
+			}else if(helper.getIndicadorConsumoImovel().equals("2")){
 				consulta = consulta + " lagu.hidrometroInstalacaoHistorico.id is null and ";
 			}
 		
 		} else if (valor.equals("COM")
-				&& ((situacaoEspecialFaturamentoHelper.getIndicadorComercial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorComercial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				||(situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorIndustrial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				|| (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorPublico().toString().equals(
-								"" + ConstantesSistema.NAO))			
-				|| (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorResidencial().toString().equals(
-								"" + ConstantesSistema.NAO)))) {
+				&& ((helper.getIndicadorComercial() != null 
+						&& !helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.NAO))
+				||(helper.getIndicadorIndustrial() != null 
+						&& !helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.NAO))
+				|| (helper.getIndicadorPublico() != null 
+						&& !helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.NAO))			
+				|| (helper.getIndicadorResidencial() != null 
+						&& !helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.NAO)))) {
 
 			consulta = "select distinct imovelSubcategoria.comp_id.imovel.id , imovel.ultimaAlteracao  " 
 					
@@ -4549,75 +4473,52 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 			boolean aux = false;
 			
-			if (situacaoEspecialFaturamentoHelper.getIndicadorComercial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorComercial().toString().equals(
-									"" + ConstantesSistema.SIM)) {
+			if (helper.getIndicadorComercial() != null
+					&& helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.SIM)) {
 				consulta = consulta + " " + Categoria.COMERCIAL;
 				aux = true;
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorIndustrial().toString().equals(
-									"" + ConstantesSistema.SIM) && aux) {
+			if (helper.getIndicadorIndustrial() != null
+					&& helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.SIM) && aux) {
 				consulta = consulta + ", " + Categoria.INDUSTRIAL ;
-				
-			
-			} else if (situacaoEspecialFaturamentoHelper
-					.getIndicadorIndustrial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorIndustrial().toString().equals(
-									"" + ConstantesSistema.SIM) && !aux) {
+			} else if (helper.getIndicadorIndustrial() != null
+					&& helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.SIM) && !aux) {
 				consulta = consulta + " " + Categoria.INDUSTRIAL;
 				aux = true;
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null
-					&& situacaoEspecialFaturamentoHelper.getIndicadorPublico()
-							.toString().equals("" + ConstantesSistema.SIM) && aux) {
-				
+			
+			if (helper.getIndicadorPublico() != null
+					&& helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.SIM) && aux) {
 				consulta = consulta + ", " + Categoria.PUBLICO ;
 				
-			}else if (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null
-					&& situacaoEspecialFaturamentoHelper.getIndicadorPublico()
-					.toString().equals("" + ConstantesSistema.SIM) && !aux) {
-				
+			}else if (helper.getIndicadorPublico() != null
+					&& helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.SIM) && !aux) {
 				consulta = consulta + " " + Categoria.PUBLICO ;
 				aux = true;
-		
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorResidencial().toString().equals(
-									"" + ConstantesSistema.SIM)&& aux) {
+			
+			if (helper.getIndicadorResidencial() != null
+					&& helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.SIM)&& aux) {
 				consulta = consulta + ", " + Categoria.RESIDENCIAL ;
 				
-			}else if (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null
-					&& situacaoEspecialFaturamentoHelper
-					.getIndicadorResidencial().toString().equals(
-							"" + ConstantesSistema.SIM)&& !aux) {
+			}else if (helper.getIndicadorResidencial() != null
+					&& helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.SIM)&& !aux) {
 				consulta = consulta + " " + Categoria.RESIDENCIAL + " ";
 			}
 					
 					
-					consulta = consulta + ") and fst.id is not null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and";
+			consulta = consulta + ") and fst.id is not null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and";
 
 		} else if (!valor.equals("COM")
-				&& ((situacaoEspecialFaturamentoHelper.getIndicadorComercial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorComercial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				||(situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorIndustrial().toString().equals(
-								"" + ConstantesSistema.NAO))
-				|| (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorPublico().toString().equals(
-								"" + ConstantesSistema.NAO))			
-				|| (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null 
-						&& !situacaoEspecialFaturamentoHelper
-						.getIndicadorResidencial().toString().equals(
-								"" + ConstantesSistema.NAO)))) {
+				&& ((helper.getIndicadorComercial() != null 
+						&& !helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.NAO))
+				||(helper.getIndicadorIndustrial() != null 
+						&& !helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.NAO))
+				|| (helper.getIndicadorPublico() != null 
+						&& !helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.NAO))			
+				|| (helper.getIndicadorResidencial() != null 
+						&& !helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.NAO)))) {
+			
 			consulta = "select distinct imovelSubcategoria.comp_id.imovel.id , imovel.ultimaAlteracao  " 
 					
 					+ "from ImovelSubcategoria imovelSubcategoria "
@@ -4640,212 +4541,93 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 			boolean aux = false;
 			
-			if (situacaoEspecialFaturamentoHelper.getIndicadorComercial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorComercial().toString().equals(
-									"" + ConstantesSistema.SIM)) {
+			if (helper.getIndicadorComercial() != null
+					&& helper.getIndicadorComercial().toString().equals("" + ConstantesSistema.SIM)) {
 				consulta = consulta + " " + Categoria.COMERCIAL;
 				aux = true;
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorIndustrial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorIndustrial().toString().equals(
-									"" + ConstantesSistema.SIM) && aux) {
-				consulta = consulta + ", " + Categoria.INDUSTRIAL ;
-				
 			
-			} else if (situacaoEspecialFaturamentoHelper
-					.getIndicadorIndustrial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorIndustrial().toString().equals(
-									"" + ConstantesSistema.SIM) && !aux) {
+			if (helper.getIndicadorIndustrial() != null
+					&& helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.SIM) && aux) {
+				consulta = consulta + ", " + Categoria.INDUSTRIAL ;
+			} else if (helper.getIndicadorIndustrial() != null
+					&& helper.getIndicadorIndustrial().toString().equals("" + ConstantesSistema.SIM) && !aux) {
 				consulta = consulta + " " + Categoria.INDUSTRIAL;
 				aux = true;
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null
-					&& situacaoEspecialFaturamentoHelper.getIndicadorPublico()
-							.toString().equals("" + ConstantesSistema.SIM) && aux) {
-				
+			
+			if (helper.getIndicadorPublico() != null
+					&& helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.SIM) && aux) {
 				consulta = consulta + ", " + Categoria.PUBLICO ;
-				
-			}else if (situacaoEspecialFaturamentoHelper.getIndicadorPublico() != null
-					&& situacaoEspecialFaturamentoHelper.getIndicadorPublico()
-					.toString().equals("" + ConstantesSistema.SIM) && !aux) {
-				
+			}else if (helper.getIndicadorPublico() != null
+					&& helper.getIndicadorPublico().toString().equals("" + ConstantesSistema.SIM) && !aux) {
 				consulta = consulta + " " + Categoria.PUBLICO ;
 				aux = true;
-		
 			}
-			if (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null
-					&& situacaoEspecialFaturamentoHelper
-							.getIndicadorResidencial().toString().equals(
-									"" + ConstantesSistema.SIM)&& aux) {
+			
+			if (helper.getIndicadorResidencial() != null
+					&& helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.SIM)&& aux) {
 				consulta = consulta + ", " + Categoria.RESIDENCIAL ;
 				
-			}else if (situacaoEspecialFaturamentoHelper.getIndicadorResidencial() != null
-					&& situacaoEspecialFaturamentoHelper
-					.getIndicadorResidencial().toString().equals(
-							"" + ConstantesSistema.SIM)&& !aux) {
+			}else if (helper.getIndicadorResidencial() != null
+					&& helper.getIndicadorResidencial().toString().equals("" + ConstantesSistema.SIM)&& !aux) {
 				consulta = consulta + " " + Categoria.RESIDENCIAL + " ";
 			}
-					
-					
-				consulta = consulta + ") and fst.id is null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and ";
-
+			consulta = consulta + ") and fst.id is null and (imovel.indicadorExclusao <> :idExclusao OR imovel.indicadorExclusao is null) and ";
 		}
 
-		String idImovel = situacaoEspecialFaturamentoHelper.getIdImovel();
-
-		String idLocalidadeOrigem = situacaoEspecialFaturamentoHelper
-
-		.getLocalidadeOrigemID();
-
-		String idLocalidadeDestino = situacaoEspecialFaturamentoHelper
-
-		.getLocalidadeDestinoID();
-
-		String setorComercialOrigemCD = situacaoEspecialFaturamentoHelper
-
-		.getSetorComercialOrigemCD();
-
-		String setorComercialDestinoCD = situacaoEspecialFaturamentoHelper
-
-		.getSetorComercialDestinoCD();
-
-		String quadraOrigemNM = situacaoEspecialFaturamentoHelper
-
-		.getQuadraOrigemNM();
-		
-		String quadraDestinoNM = situacaoEspecialFaturamentoHelper
-
-		.getQuadraDestinoNM();
-		
-		String loteOrigem = situacaoEspecialFaturamentoHelper.getLoteOrigem();
-
-		String loteDestino = situacaoEspecialFaturamentoHelper.getLoteDestino();
-
-		String subLoteOrigem = situacaoEspecialFaturamentoHelper
-
-		.getSubloteOrigem();
-
-		String subLoteDestino = situacaoEspecialFaturamentoHelper
-
-		.getSubloteDestino();
-
-		String codigoRotaInicial = situacaoEspecialFaturamentoHelper
-
-		.getCodigoRotaInicial();
-
-		String codigoRotaFinal = situacaoEspecialFaturamentoHelper
-
-		.getCodigoRotaFinal();
-
-		String sequencialRotaInicial = situacaoEspecialFaturamentoHelper
-
-		.getSequencialRotaInicial();
-
-		String sequencialRotaFinal = situacaoEspecialFaturamentoHelper
-
-		.getSequencialRotaFinal();
+		String idImovel = helper.getIdImovel();
+		String idLocalidadeOrigem = helper.getLocalidadeOrigemID();
+		String idLocalidadeDestino = helper.getLocalidadeDestinoID();
+		String setorComercialOrigemCD = helper.getSetorComercialOrigemCD();
+		String setorComercialDestinoCD = helper.getSetorComercialDestinoCD();
+		String quadraOrigemNM = helper.getQuadraOrigemNM();
+		String quadraDestinoNM = helper.getQuadraDestinoNM();
+		String loteOrigem = helper.getLoteOrigem();
+		String loteDestino = helper.getLoteDestino();
+		String subLoteOrigem = helper.getSubloteOrigem();
+		String subLoteDestino = helper.getSubloteDestino();
+		String codigoRotaInicial = helper.getCodigoRotaInicial();
+		String codigoRotaFinal = helper.getCodigoRotaFinal();
+		String sequencialRotaInicial = helper.getSequencialRotaInicial();
+		String sequencialRotaFinal = helper.getSequencialRotaFinal();
 
 		if (idImovel != null && !idImovel.equals("")) {
-
 			consulta += " imovel.id = " + idImovel + " and";
-
 		}
 
-		if (!idLocalidadeOrigem.equalsIgnoreCase("")
+		if (!idLocalidadeOrigem.equalsIgnoreCase("") && !idLocalidadeDestino.equalsIgnoreCase(""))
+			consulta += " lo.id between " + idLocalidadeOrigem + " and " + idLocalidadeDestino + " and";
 
-		&& !idLocalidadeDestino.equalsIgnoreCase(""))
+		if (!setorComercialOrigemCD.equalsIgnoreCase("") && !setorComercialDestinoCD.equalsIgnoreCase(""))
+			consulta += " sc.codigo between " + setorComercialOrigemCD + " and " + setorComercialDestinoCD + " and";
 
-			consulta += " lo.id between " + idLocalidadeOrigem + " and "
+		if (!quadraOrigemNM.equalsIgnoreCase("") && !quadraDestinoNM.equalsIgnoreCase(""))
+			consulta += " qu.numeroQuadra between " + quadraOrigemNM + " and " + quadraDestinoNM + " and";
 
-			+ idLocalidadeDestino + " and";
+		if (!loteOrigem.equalsIgnoreCase("") && !loteDestino.equalsIgnoreCase(""))
+			consulta += " imovel.lote between " + new Integer(loteOrigem) + " and " + new Integer(loteDestino) + " and";
 
-		if (!setorComercialOrigemCD.equalsIgnoreCase("")
+		if (!subLoteOrigem.equalsIgnoreCase("") && !subLoteDestino.equalsIgnoreCase(""))
+			consulta += " imovel.subLote between " + new Integer(subLoteOrigem) + " and " + new Integer(subLoteDestino) + " and";
 
-		&& !setorComercialDestinoCD.equalsIgnoreCase(""))
-
-			consulta += " sc.codigo between " + setorComercialOrigemCD + " and "
-
-			+ setorComercialDestinoCD + " and";
-
-		if (!quadraOrigemNM.equalsIgnoreCase("")
-
-		&& !quadraDestinoNM.equalsIgnoreCase(""))
-
-			consulta += " qu.numeroQuadra between " + quadraOrigemNM + " and "
-
-			+ quadraDestinoNM + " and";
-
-		if (!loteOrigem.equalsIgnoreCase("")
-
-		&& !loteDestino.equalsIgnoreCase(""))
-
-			consulta += " imovel.lote between " + new Integer(loteOrigem)
-					+ " and "
-
-					+ new Integer(loteDestino) + " and";
-
-		if (!subLoteOrigem.equalsIgnoreCase("")
-
-		&& !subLoteDestino.equalsIgnoreCase(""))
-
-			consulta += " imovel.subLote between " + new Integer(subLoteOrigem)
-					+ " and "
-
-					+ new Integer(subLoteDestino) + " and";
-
-		if ((codigoRotaInicial != null && !codigoRotaInicial.equals(""))
-
-		&& (codigoRotaFinal != null && !codigoRotaFinal.equals(""))) {
-
-			consulta = consulta + " rota.codigo between "
-					+ new Integer(codigoRotaInicial)
-
-					+ " and " + new Integer(codigoRotaFinal) + " and";
-
+		if ((codigoRotaInicial != null && !codigoRotaInicial.equals("")) && (codigoRotaFinal != null && !codigoRotaFinal.equals(""))) {
+			consulta = consulta + " rota.codigo between " + new Integer(codigoRotaInicial) + " and " + new Integer(codigoRotaFinal) + " and";
 		}
 
-		if ((sequencialRotaInicial != null && !sequencialRotaInicial.equals(""))
-
-				&& (sequencialRotaFinal != null && !sequencialRotaFinal
-
-				.equals(""))) {
-
-			consulta = consulta + " imovel.numeroSequencialRota between "
-
-			+ new Integer(sequencialRotaInicial) + " and "
-					+ new Integer(sequencialRotaFinal)
-
-					+ " and";
-
+		if ((sequencialRotaInicial != null && !sequencialRotaInicial.equals("")) && (sequencialRotaFinal != null && !sequencialRotaFinal.equals(""))) {
+			consulta = consulta + " imovel.numeroSequencialRota between " + new Integer(sequencialRotaInicial) + " and " + new Integer(sequencialRotaFinal) + " and";
 		}
 
 		System.out.println(Util.removerUltimosCaracteres(consulta, 4));
 
-		// Consulta
-
 		try {
-
-			return session.createQuery(Util.removerUltimosCaracteres(consulta, 4)).setShort(
-
-			"idExclusao", Imovel.IMOVEL_EXCLUIDO).list();
-
+			return session.createQuery(Util.removerUltimosCaracteres(consulta, 4)).setShort("idExclusao", Imovel.IMOVEL_EXCLUIDO).list();
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 	}
 
 	/**
@@ -6098,7 +5880,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	public Integer validarMesAnoReferencia(
 
-	SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper)
+	SituacaoEspecialFaturamentoHelper helper)
 
 	throws ErroRepositorioException {
 
@@ -6108,9 +5890,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		// Escolha de que tipo de consulta será
 
-		if (situacaoEspecialFaturamentoHelper != null
+		if (helper != null
 
-		&& !situacaoEspecialFaturamentoHelper.getIdImovel().equals(""))
+		&& !helper.getIdImovel().equals(""))
 
 			consulta = "select max(fg.anoMesReferencia) from Imovel im"
 
@@ -6126,7 +5908,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ " where im.id = "
 
-					+ situacaoEspecialFaturamentoHelper.getIdImovel()
+					+ helper.getIdImovel()
 
 					+ " and"
 
@@ -6148,134 +5930,39 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ " where (im.indicadorExclusao <> :idExclusao OR im.indicadorExclusao is null) and ";
 
-			// String idImovel =
+			if (helper.getLocalidadeOrigemID() != null && !helper.getLocalidadeOrigemID().equals("") 
+					&& helper.getLocalidadeDestinoID() != null && !helper.getLocalidadeDestinoID().equals(""))
+				consulta += " lo.id between " + helper.getLocalidadeOrigemID() + " and " + helper.getLocalidadeDestinoID() + " and ";
 
-			// situacaoEspecialFaturamentoHelper.getIdImovel();
+			if (helper.getSetorComercialOrigemID() != null && !helper.getSetorComercialOrigemID().equalsIgnoreCase("") 
+					&& !helper.getSetorComercialOrigemID().equalsIgnoreCase(""))
+				consulta += "sc.id between " + helper.getSetorComercialOrigemID() + " and " + helper.getSetorComercialDestinoID() + " and ";
 
-			String idLocalidadeOrigem = situacaoEspecialFaturamentoHelper
+			if (helper.getCodigoRotaInicial() != null && !helper.getCodigoRotaInicial().equalsIgnoreCase("") && !helper.getCodigoRotaInicial().equalsIgnoreCase(""))
+				consulta += "rt.codigo between " + helper.getCodigoRotaInicial() + " and " + helper.getCodigoRotaFinal() + " and ";
+			
+			if (!helper.getQuadraOrigemID().equalsIgnoreCase("") && !helper.getQuadraOrigemID().equalsIgnoreCase(""))
+				consulta += "qu.id between " + helper.getQuadraOrigemID() + " and " + helper.getQuadraDestinoID() + " and ";
 
-			.getLocalidadeOrigemID();
+			if (!helper.getLoteOrigem().equalsIgnoreCase("") && !helper.getLoteOrigem().equalsIgnoreCase(""))
+				consulta += "im.lote between " + new Integer(helper.getLoteOrigem()) + " and " + new Integer(helper.getLoteDestino()) + " and ";
 
-			String idLocalidadeDestino = situacaoEspecialFaturamentoHelper
+			if (!helper.getSubloteOrigem().equalsIgnoreCase("") && !helper.getSubloteOrigem().equalsIgnoreCase(""))
+				consulta += "im.subLote between " + new Integer(helper.getSubloteOrigem()) + " and " + new Integer(helper.getSubloteDestino()) + " and ";
 
-			.getLocalidadeDestinoID();
-
-			String setorComercialOrigemID = situacaoEspecialFaturamentoHelper
-
-			.getSetorComercialOrigemID();
-
-			String setorComercialDestinoID = situacaoEspecialFaturamentoHelper
-
-			.getSetorComercialDestinoID();
-
-			String quadraOrigemID = situacaoEspecialFaturamentoHelper
-
-			.getQuadraOrigemID();
-
-			String quadraDestinoID = situacaoEspecialFaturamentoHelper
-
-			.getQuadraDestinoID();
-
-			String loteOrigem = situacaoEspecialFaturamentoHelper
-
-			.getLoteOrigem();
-
-			String loteDestino = situacaoEspecialFaturamentoHelper
-
-			.getLoteDestino();
-
-			String subLoteOrigem = situacaoEspecialFaturamentoHelper
-
-			.getSubloteOrigem();
-
-			String subLoteDestino = situacaoEspecialFaturamentoHelper
-
-			.getSubloteDestino();
-
-			/*
-			 * 
-			 * if (!idImovel.equalsIgnoreCase("") &&
-			 * 
-			 * !idImovel.equalsIgnoreCase("")) consulta += "imovel.id " +
-			 * 
-			 * idImovel;
-			 * 
-			 */
-
-			if (idLocalidadeOrigem != null && !idLocalidadeOrigem.equals("")
-
-			&& idLocalidadeDestino != null
-
-			&& !idLocalidadeDestino.equals(""))
-
-				consulta += " lo.id between " + idLocalidadeOrigem + " and "
-
-				+ idLocalidadeDestino + " and ";
-
-			if (setorComercialOrigemID != null
-
-			&& !setorComercialOrigemID.equalsIgnoreCase("")
-
-			&& !setorComercialOrigemID.equalsIgnoreCase(""))
-
-				consulta += "sc.id between " + setorComercialOrigemID + " and "
-
-				+ setorComercialDestinoID + " and ";
-
-			if (!quadraOrigemID.equalsIgnoreCase("")
-
-			&& !quadraOrigemID.equalsIgnoreCase(""))
-
-				consulta += "qu.id between " + quadraOrigemID + " and "
-
-				+ quadraDestinoID + " and ";
-
-			if (!loteOrigem.equalsIgnoreCase("")
-
-			&& !loteOrigem.equalsIgnoreCase(""))
-
-				consulta += "im.lote between " + new Integer(loteOrigem) + " and "
-
-				+ new Integer(loteDestino) + " and ";
-
-			if (!subLoteOrigem.equalsIgnoreCase("")
-
-			&& !subLoteOrigem.equalsIgnoreCase(""))
-
-				consulta += "im.subLote between " + new Integer(subLoteOrigem) + " and "
-
-				+ new Integer(subLoteDestino) + " and ";
-
-			System.out.println(Util.removerUltimosCaracteres(consulta, 4));
-
+			Util.removerUltimosCaracteres(consulta, 4);
 		}
-
-		// Consulta
 
 		try {
 
-			Integer i = (Integer) session.createQuery(
-
-			Util.removerUltimosCaracteres(consulta, 4)).setShort("idExclusao",
-
-			Imovel.IMOVEL_EXCLUIDO).uniqueResult();
-
+			Integer i = (Integer) session.createQuery(Util.removerUltimosCaracteres(consulta, 4))
+					.setShort("idExclusao", Imovel.IMOVEL_EXCLUIDO).uniqueResult();
 			return i;
-
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 	}
 
 	/**
@@ -27848,7 +27535,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					  + " where imov.imov_id = :idImovel ";
 					
 			retorno = (Date)session.createSQLQuery(consulta)
-					.addScalar("ultimaAlteracao" , Hibernate.DATE)
+					.addScalar("ultimaAlteracao" , Hibernate.TIMESTAMP)
 					.setInteger("idImovel", idImovel).uniqueResult();		    
 			
 		} catch (HibernateException e) {
@@ -31143,7 +30830,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
 					.setInteger("idImovel", idImovel).uniqueResult();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

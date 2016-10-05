@@ -2527,7 +2527,7 @@ public interface IRepositorioFaturamento {
 	public Collection obterDadosPrescricaoDebitosAutomaticos() throws ErroRepositorioException;
 
 	public void prescreverDebitosImoveisPublicosAutomatico(
-			Integer anoMesReferencia, Integer anoMesPrescricao,
+			Integer anoMesReferencia, Date dataPrescricao,
 			Integer usuario, String idsEsferaPoder)
 			throws ErroRepositorioException;
 

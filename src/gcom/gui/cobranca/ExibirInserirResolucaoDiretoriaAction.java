@@ -10,43 +10,23 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Action que faz a exibição da tela para o usuário setar os campos e permitir
- * que ele insera uma resolução de diretoria [UC0217] Inserir Resolução de
- * Diretoria
- * 
- * @author Rafael Corrêa
- * @since 30/03/2006
- */
 public class ExibirInserirResolucaoDiretoriaAction extends GcomAction {
 
-	/**
-	 * 
-	 * @param actionMapping
-	 * @param actionForm
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = actionMapping.findForward("exibirInserirResolucaoDiretoria");
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("exibirInserirResolucaoDiretoria");
-		
-		InserirResolucaoDiretoriaActionForm inserirResolucaoDiretoriaActionForm = (InserirResolucaoDiretoriaActionForm) actionForm;
+		InserirResolucaoDiretoriaActionForm form = (InserirResolucaoDiretoriaActionForm) actionForm;
 
-		inserirResolucaoDiretoriaActionForm.setIndicadorParcelamentoUnico(ConstantesSistema.SIM.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorUtilizacaoLivre(ConstantesSistema.SIM.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorDescontoSancoes(ConstantesSistema.SIM.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorParcelasEmAtraso(ConstantesSistema.NAO.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorParcelamentoEmAndamento(ConstantesSistema.NAO.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorNegociacaoSoAVista(ConstantesSistema.NAO.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorDescontoSoEmContaAVista(ConstantesSistema.NAO.toString());
-		inserirResolucaoDiretoriaActionForm.setIndicadorParcelamentoLojaVirtual(ConstantesSistema.NAO.toString());
-		
+		form.setIndicadorParcelamentoUnico(ConstantesSistema.SIM.toString());
+		form.setIndicadorUtilizacaoLivre(ConstantesSistema.SIM.toString());
+		form.setIndicadorDescontoFaixaReferenciaConta(ConstantesSistema.NAO.toString());
+		form.setIndicadorDescontoSancoes(ConstantesSistema.SIM.toString());
+		form.setIndicadorParcelasEmAtraso(ConstantesSistema.NAO.toString());
+		form.setIndicadorParcelamentoEmAndamento(ConstantesSistema.NAO.toString());
+		form.setIndicadorNegociacaoSoAVista(ConstantesSistema.NAO.toString());
+		form.setIndicadorDescontoSoEmContaAVista(ConstantesSistema.NAO.toString());
+		form.setIndicadorParcelamentoLojaVirtual(ConstantesSistema.NAO.toString());
+
 		return retorno;
 
 	}

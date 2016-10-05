@@ -12,144 +12,121 @@ import java.util.Collection;
 import java.util.Date;
 
 public class ConcluirParcelamentoDebitosHelper implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private Collection<ContaValoresHelper> colecaoContaValores;
-	
+
 	private Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores;
-	
+
 	private Collection<DebitoACobrar> colecaoDebitoACobrar;
-	
+
 	private Collection<CreditoARealizar> colecaoCreditoARealizar;
-	
+
 	private String indicadorRestabelecimento;
-	
+
 	private String indicadorContasRevisao;
-	
+
 	private String indicadorGuiasPagamento;
-	
+
 	private String indicadorAcrescimosImpotualidade;
-	
-	private String indicadorDebitosACobrar; 
-	
+
+	private String indicadorDebitosACobrar;
+
 	private String indicadorCreditoARealizar;
-	
+
 	private String indicadorDividaAtiva;
-	
+
 	private Imovel imovel;
-	
+
 	private BigDecimal valorEntradaInformado;
-	
+
 	private BigDecimal valorASerNegociado;
-	
+
 	private BigDecimal valorASerParcelado;
-	
+
 	private Date dataParcelamento;
-	
+
 	private BigDecimal valorTotalContaValores;
-	
+
 	private BigDecimal valorGuiasPagamento;
-	
+
 	private BigDecimal valorDebitoACobrarServico;
-	
+
 	private BigDecimal valorDebitoACobrarParcelamento;
-	
+
 	private BigDecimal valorCreditoARealizar;
-	
+
 	private BigDecimal valorAtualizacaoMonetaria;
-	
+
 	private BigDecimal valorJurosMora;
-	
+
 	private BigDecimal valorMulta;
-	
+
 	private BigDecimal valorDebitoTotalAtualizado;
+
+	private BigDecimal descontoFaixaReferenciaConta;
 	
 	private BigDecimal descontoAcrescimosImpontualidade;
-	
+
 	private BigDecimal descontoAntiguidadeDebito;
-	
+
 	private BigDecimal descontoInatividadeLigacaoAgua;
-	
+
 	private BigDecimal percentualDescontoAcrescimosImpontualidade;
-	
+
 	private BigDecimal percentualDescontoAntiguidadeDebito;
-	
+
 	private BigDecimal percentualDescontoInatividadeLigacaoAgua;
-	
+
 	private Integer parcelamentoPerfilId;
-	
+
 	private BigDecimal valorAcrescimosImpontualidade;
-	
+
 	private BigDecimal valorDebitoACobrarServicoLongoPrazo;
-	
+
 	private BigDecimal valorDebitoACobrarServicoCurtoPrazo;
-	
+
 	private BigDecimal valorDebitoACobrarParcelamentoLongoPrazo;
-	
+
 	private BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo;
-	
-	private Short numeroPrestacoes; 
-	
+
+	private Short numeroPrestacoes;
+
 	private BigDecimal valorPrestacao;
-	
-	private BigDecimal valorEntradaMinima; 
-	
+
+	private BigDecimal valorEntradaMinima;
+
 	private BigDecimal taxaJuros;
-	
+
 	private String indicadorConfirmacaoParcelamento;
-	
+
 	private Cliente cliente;
-	
+
 	private Usuario usuarioLogado;
-	
+
 	private String cpfClienteParcelamentoDigitado;
-	
+
 	private BigDecimal descontoSancoesRDEspecial;
-	
+
 	private BigDecimal descontoTarifaSocialRDEspecial;
-	
+
 	private Collection colecaoContasEmAntiguidade;
 
-	public ConcluirParcelamentoDebitosHelper(
-			Collection<ContaValoresHelper> colecaoContaValores,
-			Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores,
-			Collection<DebitoACobrar> colecaoDebitoACobrar,
-			Collection<CreditoARealizar> colecaoCreditoARealizar,
-			String indicadorRestabelecimento, String indicadorContasRevisao,
-			String indicadorGuiasPagamento,
-			String indicadorAcrescimosImpotualidade,
-			String indicadorDebitosACobrar, String indicadorCreditoARealizar,
-			String indicadorDividaAtiva, Imovel imovel,
-			BigDecimal valorEntradaInformado, BigDecimal valorASerNegociado,
-			BigDecimal valorASerParcelado, Date dataParcelamento,
-			BigDecimal valorTotalContaValores, BigDecimal valorGuiasPagamento,
-			BigDecimal valorDebitoACobrarServico,
-			BigDecimal valorDebitoACobrarParcelamento,
-			BigDecimal valorCreditoARealizar,
-			BigDecimal valorAtualizacaoMonetaria, BigDecimal valorJurosMora,
-			BigDecimal valorMulta, BigDecimal valorDebitoTotalAtualizado,
-			BigDecimal descontoAcrescimosImpontualidade,
-			BigDecimal descontoAntiguidadeDebito,
-			BigDecimal descontoInatividadeLigacaoAgua,
-			BigDecimal percentualDescontoAcrescimosImpontualidade,
-			BigDecimal percentualDescontoAntiguidadeDebito,
-			BigDecimal percentualDescontoInatividadeLigacaoAgua,
-			Integer parcelamentoPerfilId,
-			BigDecimal valorAcrescimosImpontualidade,
-			BigDecimal valorDebitoACobrarServicoLongoPrazo,
-			BigDecimal valorDebitoACobrarServicoCurtoPrazo,
-			BigDecimal valorDebitoACobrarParcelamentoLongoPrazo,
-			BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo,
-			Short numeroPrestacoes, BigDecimal valorPrestacao,
-			BigDecimal valorEntradaMinima, BigDecimal taxaJuros,
-			String indicadorConfirmacaoParcelamento, Cliente cliente,
-			Usuario usuarioLogado, String cpfClienteParcelamentoDigitado,
-			BigDecimal descontoSancoesRDEspecial,
-			BigDecimal descontoTarifaSocialRDEspecial,
-			Collection colecaoContasEmAntiguidade) {
-		super();
+	public ConcluirParcelamentoDebitosHelper(Collection<ContaValoresHelper> colecaoContaValores, Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores,
+			Collection<DebitoACobrar> colecaoDebitoACobrar, Collection<CreditoARealizar> colecaoCreditoARealizar, String indicadorRestabelecimento, String indicadorContasRevisao,
+			String indicadorGuiasPagamento, String indicadorAcrescimosImpotualidade, String indicadorDebitosACobrar, String indicadorCreditoARealizar, String indicadorDividaAtiva, Imovel imovel,
+			BigDecimal valorEntradaInformado, BigDecimal valorASerNegociado, BigDecimal valorASerParcelado, Date dataParcelamento, BigDecimal valorTotalContaValores, BigDecimal valorGuiasPagamento,
+			BigDecimal valorDebitoACobrarServico, BigDecimal valorDebitoACobrarParcelamento, BigDecimal valorCreditoARealizar, BigDecimal valorAtualizacaoMonetaria, BigDecimal valorJurosMora,
+			BigDecimal valorMulta, BigDecimal valorDebitoTotalAtualizado, BigDecimal descontoFaixaReferenciaConta, BigDecimal descontoAcrescimosImpontualidade, BigDecimal descontoAntiguidadeDebito, BigDecimal descontoInatividadeLigacaoAgua,
+			BigDecimal percentualDescontoAcrescimosImpontualidade, BigDecimal percentualDescontoAntiguidadeDebito, BigDecimal percentualDescontoInatividadeLigacaoAgua, Integer parcelamentoPerfilId,
+			BigDecimal valorAcrescimosImpontualidade, BigDecimal valorDebitoACobrarServicoLongoPrazo, BigDecimal valorDebitoACobrarServicoCurtoPrazo,
+			BigDecimal valorDebitoACobrarParcelamentoLongoPrazo, BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo, Short numeroPrestacoes, BigDecimal valorPrestacao, BigDecimal valorEntradaMinima,
+			BigDecimal taxaJuros, String indicadorConfirmacaoParcelamento, Cliente cliente, Usuario usuarioLogado, String cpfClienteParcelamentoDigitado, BigDecimal descontoSancoesRDEspecial,
+			BigDecimal descontoTarifaSocialRDEspecial, Collection colecaoContasEmAntiguidade) {
 		
+		super();
+
 		this.colecaoContaValores = colecaoContaValores;
 		this.colecaoGuiaPagamentoValores = colecaoGuiaPagamentoValores;
 		this.colecaoDebitoACobrar = colecaoDebitoACobrar;
@@ -175,6 +152,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		this.valorJurosMora = valorJurosMora;
 		this.valorMulta = valorMulta;
 		this.valorDebitoTotalAtualizado = valorDebitoTotalAtualizado;
+		this.descontoFaixaReferenciaConta = descontoFaixaReferenciaConta;
 		this.descontoAcrescimosImpontualidade = descontoAcrescimosImpontualidade;
 		this.descontoAntiguidadeDebito = descontoAntiguidadeDebito;
 		this.descontoInatividadeLigacaoAgua = descontoInatividadeLigacaoAgua;
@@ -212,8 +190,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return colecaoContaValores;
 	}
 
-	public void setColecaoContaValores(
-			Collection<ContaValoresHelper> colecaoContaValores) {
+	public void setColecaoContaValores(Collection<ContaValoresHelper> colecaoContaValores) {
 		this.colecaoContaValores = colecaoContaValores;
 	}
 
@@ -221,8 +198,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return colecaoCreditoARealizar;
 	}
 
-	public void setColecaoCreditoARealizar(
-			Collection<CreditoARealizar> colecaoCreditoARealizar) {
+	public void setColecaoCreditoARealizar(Collection<CreditoARealizar> colecaoCreditoARealizar) {
 		this.colecaoCreditoARealizar = colecaoCreditoARealizar;
 	}
 
@@ -230,8 +206,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return colecaoDebitoACobrar;
 	}
 
-	public void setColecaoDebitoACobrar(
-			Collection<DebitoACobrar> colecaoDebitoACobrar) {
+	public void setColecaoDebitoACobrar(Collection<DebitoACobrar> colecaoDebitoACobrar) {
 		this.colecaoDebitoACobrar = colecaoDebitoACobrar;
 	}
 
@@ -239,8 +214,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return colecaoGuiaPagamentoValores;
 	}
 
-	public void setColecaoGuiaPagamentoValores(
-			Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores) {
+	public void setColecaoGuiaPagamentoValores(Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores) {
 		this.colecaoGuiaPagamentoValores = colecaoGuiaPagamentoValores;
 	}
 
@@ -248,8 +222,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return cpfClienteParcelamentoDigitado;
 	}
 
-	public void setCpfClienteParcelamentoDigitado(
-			String cpfClienteParcelamentoDigitado) {
+	public void setCpfClienteParcelamentoDigitado(String cpfClienteParcelamentoDigitado) {
 		this.cpfClienteParcelamentoDigitado = cpfClienteParcelamentoDigitado;
 	}
 
@@ -261,12 +234,19 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		this.dataParcelamento = dataParcelamento;
 	}
 
+	public BigDecimal getDescontoFaixaReferenciaConta() {
+		return descontoFaixaReferenciaConta;
+	}
+
+	public void setDescontoFaixaReferenciaConta(BigDecimal descontoFaixaReferenciaConta) {
+		this.descontoFaixaReferenciaConta = descontoFaixaReferenciaConta;
+	}
+
 	public BigDecimal getDescontoAcrescimosImpontualidade() {
 		return descontoAcrescimosImpontualidade;
 	}
 
-	public void setDescontoAcrescimosImpontualidade(
-			BigDecimal descontoAcrescimosImpontualidade) {
+	public void setDescontoAcrescimosImpontualidade(BigDecimal descontoAcrescimosImpontualidade) {
 		this.descontoAcrescimosImpontualidade = descontoAcrescimosImpontualidade;
 	}
 
@@ -282,8 +262,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return descontoInatividadeLigacaoAgua;
 	}
 
-	public void setDescontoInatividadeLigacaoAgua(
-			BigDecimal descontoInatividadeLigacaoAgua) {
+	public void setDescontoInatividadeLigacaoAgua(BigDecimal descontoInatividadeLigacaoAgua) {
 		this.descontoInatividadeLigacaoAgua = descontoInatividadeLigacaoAgua;
 	}
 
@@ -299,8 +278,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return descontoTarifaSocialRDEspecial;
 	}
 
-	public void setDescontoTarifaSocialRDEspecial(
-			BigDecimal descontoTarifaSocialRDEspecial) {
+	public void setDescontoTarifaSocialRDEspecial(BigDecimal descontoTarifaSocialRDEspecial) {
 		this.descontoTarifaSocialRDEspecial = descontoTarifaSocialRDEspecial;
 	}
 
@@ -316,8 +294,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return indicadorAcrescimosImpotualidade;
 	}
 
-	public void setIndicadorAcrescimosImpotualidade(
-			String indicadorAcrescimosImpotualidade) {
+	public void setIndicadorAcrescimosImpotualidade(String indicadorAcrescimosImpotualidade) {
 		this.indicadorAcrescimosImpotualidade = indicadorAcrescimosImpotualidade;
 	}
 
@@ -325,8 +302,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return indicadorConfirmacaoParcelamento;
 	}
 
-	public void setIndicadorConfirmacaoParcelamento(
-			String indicadorConfirmacaoParcelamento) {
+	public void setIndicadorConfirmacaoParcelamento(String indicadorConfirmacaoParcelamento) {
 		this.indicadorConfirmacaoParcelamento = indicadorConfirmacaoParcelamento;
 	}
 
@@ -390,8 +366,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return percentualDescontoAcrescimosImpontualidade;
 	}
 
-	public void setPercentualDescontoAcrescimosImpontualidade(
-			BigDecimal percentualDescontoAcrescimosImpontualidade) {
+	public void setPercentualDescontoAcrescimosImpontualidade(BigDecimal percentualDescontoAcrescimosImpontualidade) {
 		this.percentualDescontoAcrescimosImpontualidade = percentualDescontoAcrescimosImpontualidade;
 	}
 
@@ -399,8 +374,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return percentualDescontoAntiguidadeDebito;
 	}
 
-	public void setPercentualDescontoAntiguidadeDebito(
-			BigDecimal percentualDescontoAntiguidadeDebito) {
+	public void setPercentualDescontoAntiguidadeDebito(BigDecimal percentualDescontoAntiguidadeDebito) {
 		this.percentualDescontoAntiguidadeDebito = percentualDescontoAntiguidadeDebito;
 	}
 
@@ -408,8 +382,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return percentualDescontoInatividadeLigacaoAgua;
 	}
 
-	public void setPercentualDescontoInatividadeLigacaoAgua(
-			BigDecimal percentualDescontoInatividadeLigacaoAgua) {
+	public void setPercentualDescontoInatividadeLigacaoAgua(BigDecimal percentualDescontoInatividadeLigacaoAgua) {
 		this.percentualDescontoInatividadeLigacaoAgua = percentualDescontoInatividadeLigacaoAgua;
 	}
 
@@ -433,8 +406,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorAcrescimosImpontualidade;
 	}
 
-	public void setValorAcrescimosImpontualidade(
-			BigDecimal valorAcrescimosImpontualidade) {
+	public void setValorAcrescimosImpontualidade(BigDecimal valorAcrescimosImpontualidade) {
 		this.valorAcrescimosImpontualidade = valorAcrescimosImpontualidade;
 	}
 
@@ -474,8 +446,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorDebitoACobrarParcelamento;
 	}
 
-	public void setValorDebitoACobrarParcelamento(
-			BigDecimal valorDebitoACobrarParcelamento) {
+	public void setValorDebitoACobrarParcelamento(BigDecimal valorDebitoACobrarParcelamento) {
 		this.valorDebitoACobrarParcelamento = valorDebitoACobrarParcelamento;
 	}
 
@@ -483,8 +454,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorDebitoACobrarParcelamentoCurtoPrazo;
 	}
 
-	public void setValorDebitoACobrarParcelamentoCurtoPrazo(
-			BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo) {
+	public void setValorDebitoACobrarParcelamentoCurtoPrazo(BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo) {
 		this.valorDebitoACobrarParcelamentoCurtoPrazo = valorDebitoACobrarParcelamentoCurtoPrazo;
 	}
 
@@ -492,8 +462,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorDebitoACobrarParcelamentoLongoPrazo;
 	}
 
-	public void setValorDebitoACobrarParcelamentoLongoPrazo(
-			BigDecimal valorDebitoACobrarParcelamentoLongoPrazo) {
+	public void setValorDebitoACobrarParcelamentoLongoPrazo(BigDecimal valorDebitoACobrarParcelamentoLongoPrazo) {
 		this.valorDebitoACobrarParcelamentoLongoPrazo = valorDebitoACobrarParcelamentoLongoPrazo;
 	}
 
@@ -509,8 +478,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorDebitoACobrarServicoCurtoPrazo;
 	}
 
-	public void setValorDebitoACobrarServicoCurtoPrazo(
-			BigDecimal valorDebitoACobrarServicoCurtoPrazo) {
+	public void setValorDebitoACobrarServicoCurtoPrazo(BigDecimal valorDebitoACobrarServicoCurtoPrazo) {
 		this.valorDebitoACobrarServicoCurtoPrazo = valorDebitoACobrarServicoCurtoPrazo;
 	}
 
@@ -518,8 +486,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		return valorDebitoACobrarServicoLongoPrazo;
 	}
 
-	public void setValorDebitoACobrarServicoLongoPrazo(
-			BigDecimal valorDebitoACobrarServicoLongoPrazo) {
+	public void setValorDebitoACobrarServicoLongoPrazo(BigDecimal valorDebitoACobrarServicoLongoPrazo) {
 		this.valorDebitoACobrarServicoLongoPrazo = valorDebitoACobrarServicoLongoPrazo;
 	}
 
@@ -602,7 +569,5 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 	public void setIndicadorDividaAtiva(String indicadorDividaAtiva) {
 		this.indicadorDividaAtiva = indicadorDividaAtiva;
 	}
-	
-	
 
 }

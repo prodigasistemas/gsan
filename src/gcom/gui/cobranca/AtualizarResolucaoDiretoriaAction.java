@@ -2,7 +2,6 @@ package gcom.gui.cobranca;
 
 import gcom.cobranca.FiltroResolucaoDiretoria;
 import gcom.cobranca.ResolucaoDiretoria;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
@@ -20,84 +19,69 @@ import org.apache.struts.action.ActionMapping;
 
 public class AtualizarResolucaoDiretoriaAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	@SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-		// Seta o retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 
-		// Obtém a instância da fachada
-		Fachada fachada = Fachada.getInstancia();
+		HttpSession sessao = request.getSession(false);
 
-		// Mudar isso quando tiver esquema de segurança
-		HttpSession sessao = httpServletRequest.getSession(false);
+		AtualizarResolucaoDiretoriaActionForm form = (AtualizarResolucaoDiretoriaActionForm) actionForm;
 
-		AtualizarResolucaoDiretoriaActionForm atualizarResolucaoDiretoriaActionForm = (AtualizarResolucaoDiretoriaActionForm) actionForm;
+		ResolucaoDiretoria resolucaoDiretoria = (ResolucaoDiretoria) sessao.getAttribute("resolucaoDiretoriaAtualizar");
+		resolucaoDiretoria.setNumeroResolucaoDiretoria(form.getNumero());
+		resolucaoDiretoria.setDescricaoAssunto(form.getAssunto());
+		resolucaoDiretoria.setDataVigenciaInicio(Util.converteStringParaDate(form.getDataInicio()));
+		resolucaoDiretoria.setIndicadorParcelamentoUnico(new Short(form.getIndicadorParcelamentoUnico()));
+		resolucaoDiretoria.setIndicadorUtilizacaoLivre(new Short(form.getIndicadorUtilizacaoLivre()));
+		resolucaoDiretoria.setIndicadorDescontoFaixaReferenciaConta(new Short(form.getIndicadorDescontoFaixaReferenciaConta()));
+		resolucaoDiretoria.setIndicadorDescontoSancoes(new Short(form.getIndicadorDescontoSancoes()));
+		resolucaoDiretoria.setIndicadorParcelasEmAtraso(new Short(form.getIndicadorParcelasEmAtraso()));
+		resolucaoDiretoria.setIndicadorParcelamentoEmAndamento(new Short(form.getIndicadorParcelamentoEmAndamento()));
+		resolucaoDiretoria.setIndicadorNegociacaoSoAVista(new Short(form.getIndicadorNegociacaoSoAVista()));
+		resolucaoDiretoria.setIndicadorDescontoSoEmContaAVista(new Short(form.getIndicadorDescontoSoEmContaAVista()));
+		resolucaoDiretoria.setIndicadorParcelamentoLojaVirtual(new Short(form.getIndicadorParcelamentoLojaVirtual()));
 
-		ResolucaoDiretoria resolucaoDiretoria = (ResolucaoDiretoria) sessao
-				.getAttribute("resolucaoDiretoriaAtualizar");
+		if (form.getIdParcelasEmAtraso() != null && !form.getIdParcelasEmAtraso().equals("")) {
+			FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, new Integer(form.getIdParcelasEmAtraso())));
 
-		resolucaoDiretoria.setNumeroResolucaoDiretoria(atualizarResolucaoDiretoriaActionForm.getNumero());
-		resolucaoDiretoria.setDescricaoAssunto(atualizarResolucaoDiretoriaActionForm.getAssunto());
-		resolucaoDiretoria.setDataVigenciaInicio(Util.converteStringParaDate(atualizarResolucaoDiretoriaActionForm.getDataInicio()));
-		resolucaoDiretoria.setIndicadorParcelamentoUnico(new Short (atualizarResolucaoDiretoriaActionForm.getIndicadorParcelamentoUnico()));
-		resolucaoDiretoria.setIndicadorUtilizacaoLivre(new Short (atualizarResolucaoDiretoriaActionForm.getIndicadorUtilizacaoLivre()));
-		resolucaoDiretoria.setIndicadorDescontoSancoes(new Short (atualizarResolucaoDiretoriaActionForm.getIndicadorDescontoSancoes()));
-		resolucaoDiretoria.setIndicadorParcelasEmAtraso(new Short(atualizarResolucaoDiretoriaActionForm.getIndicadorParcelasEmAtraso()));
-		resolucaoDiretoria.setIndicadorParcelamentoEmAndamento(new Short(atualizarResolucaoDiretoriaActionForm.getIndicadorParcelamentoEmAndamento()));
-		resolucaoDiretoria.setIndicadorNegociacaoSoAVista(new Short(atualizarResolucaoDiretoriaActionForm.getIndicadorNegociacaoSoAVista()));
-		resolucaoDiretoria.setIndicadorDescontoSoEmContaAVista(new Short(atualizarResolucaoDiretoriaActionForm.getIndicadorDescontoSoEmContaAVista()));
-		resolucaoDiretoria.setIndicadorParcelamentoLojaVirtual(new Short(atualizarResolucaoDiretoriaActionForm.getIndicadorParcelamentoLojaVirtual()));
-		
-		if (atualizarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso()!= null &&
-				!atualizarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso().equals("")){
-			
-			FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-			FiltroResolucaoDiretoria.CODIGO, new Integer(atualizarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso())));
-			Collection<ResolucaoDiretoria> colecaoRD = fachada.pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
+			Collection<ResolucaoDiretoria> colecaoRD = getFachada().pesquisar(filtro, ResolucaoDiretoria.class.getName());
 
-			if(!Util.isVazioOrNulo(colecaoRD)){
+			if (!Util.isVazioOrNulo(colecaoRD)) {
 				ResolucaoDiretoria rdParcelasEmAtraso = new ResolucaoDiretoria();
-				rdParcelasEmAtraso.setId(new Integer(atualizarResolucaoDiretoriaActionForm.getIdParcelasEmAtraso()));
+				rdParcelasEmAtraso.setId(new Integer(form.getIdParcelasEmAtraso()));
 				resolucaoDiretoria.setRdParcelasEmAtraso(rdParcelasEmAtraso);
-			}else{
-				//RD Parcelas em Atraso inexistente.
-				throw new ActionServletException(
-				"atencao.pesquisa_inexistente", null, "RD Parcelas em Atraso");
+			} else {
+				throw new ActionServletException("atencao.pesquisa_inexistente", null, "RD Parcelas em Atraso");
 			}
 		}
 
-		if (atualizarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento()!= null &&
-				!atualizarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento().equals("")){
-			
-			FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
-			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(
-			FiltroResolucaoDiretoria.CODIGO, new Integer(atualizarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento())));
+		if (form.getIdParcelamentoEmAndamento() != null && !form.getIdParcelamentoEmAndamento().equals("")) {
+			FiltroResolucaoDiretoria filtro = new FiltroResolucaoDiretoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, new Integer(form.getIdParcelamentoEmAndamento())));
 
-			Collection<ResolucaoDiretoria> colecaoRD = fachada.pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
+			Collection<ResolucaoDiretoria> colecaoRD = getFachada().pesquisar(filtro, ResolucaoDiretoria.class.getName());
 
-			if(!Util.isVazioOrNulo(colecaoRD)){
+			if (!Util.isVazioOrNulo(colecaoRD)) {
 				ResolucaoDiretoria rdParcelamentoEmAndamento = new ResolucaoDiretoria();
-				rdParcelamentoEmAndamento.setId(new Integer(atualizarResolucaoDiretoriaActionForm.getIdParcelamentoEmAndamento()));
+				rdParcelamentoEmAndamento.setId(new Integer(form.getIdParcelamentoEmAndamento()));
 				resolucaoDiretoria.setRdParcelamentoEmAndamento(rdParcelamentoEmAndamento);
-			}else{
-				//RD Parcelamento em Andamento inexistente.
+			} else {
 				throw new ActionServletException("atencao.pesquisa_inexistente", null, "RD Parcelamento em Andamento");
 			}
-			
-		}
-		if (atualizarResolucaoDiretoriaActionForm.getDataFim() != null 
-				&& !atualizarResolucaoDiretoriaActionForm.getDataFim().equals("")) {
-			resolucaoDiretoria.setDataVigenciaFim(Util.converteStringParaDate(atualizarResolucaoDiretoriaActionForm.getDataFim()));
-		}
-		fachada.atualizarResolucaoDiretoria(resolucaoDiretoria, this.getUsuarioLogado(httpServletRequest));
 
-		montarPaginaSucesso(httpServletRequest, "Resolução de Diretoria "
-				+ resolucaoDiretoria.getNumeroResolucaoDiretoria()
-				+ " atualizado com sucesso.",
-				"Realizar outra Manutenção de Resolução de Diretoria",
+		}
+		
+		if (form.getDataFim() != null && !form.getDataFim().equals("")) {
+			resolucaoDiretoria.setDataVigenciaFim(Util.converteStringParaDate(form.getDataFim()));
+		}
+		
+		getFachada().atualizarResolucaoDiretoria(resolucaoDiretoria, this.getUsuarioLogado(request));
+
+		montarPaginaSucesso(request, 
+				"Resolução de Diretoria " + resolucaoDiretoria.getNumeroResolucaoDiretoria() + " atualizado com sucesso.",
+				"Realizar outra Manutenção de Resolução de Diretoria", 
 				"exibirFiltrarResolucaoDiretoriaAction.do?menu=sim");
 
 		return retorno;

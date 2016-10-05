@@ -37,8 +37,10 @@ public abstract class ObjetoTransacao extends ObjetoGcom {
 	private Collection usuarioAcaoUsuario = new HashSet();
 	
 	// Utilizada para classes com chaves compostas
-	private Integer id2;	
-
+	private Integer id2;
+	
+	private Usuario usuarioParaHistorico = null;
+	
 	/**
 	 * @return Retorna o campo id2.
 	 */
@@ -397,5 +399,16 @@ public abstract class ObjetoTransacao extends ObjetoGcom {
 		}
 		return (String) retorno; 
 	}
+
+	public Usuario getUsuarioParaHistorico() {
+		return usuarioParaHistorico;
+	}
+
+	public void setUsuarioParaHistorico(Usuario usuarioParaLog) {
+		this.usuarioParaHistorico = usuarioParaLog;
+	}
 	
+	public boolean registrarHistorico(){
+		return usuarioParaHistorico != null;
+	}
 }

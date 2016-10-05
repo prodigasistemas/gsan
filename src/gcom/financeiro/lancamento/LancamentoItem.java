@@ -93,6 +93,7 @@ public class LancamentoItem implements Serializable {
 	public final static Integer RECUPERACAO_CREDITO_DUPLICIDADE = new Integer(85);
 	public final static Integer RECUPERACAO_CREDITO_CANCELADO = new Integer(86);
 	public final static Integer BONUS_SOCIAL = new Integer(87);
+	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA = new Integer(88);
 	
     private Integer id;
     private String descricao;

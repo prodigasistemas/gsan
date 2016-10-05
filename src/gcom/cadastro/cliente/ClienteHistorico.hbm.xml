@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.cliente.ClienteHistorico" table="cadastro.cliente_historico">
+		<id name="id" type="java.lang.Integer" column="clhi_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_cliente_historico</param>
+			</generator>
+		</id>
+        <property name="nome"                           type="java.lang.String"   column="clhi_nmcliente"                length="50"/>
+        <property name="nomeAbreviado"                  type="java.lang.String"   column="clhi_nmabreviado"              length="40"/>
+        <property name="cpf"                            type="java.lang.String"   column="clhi_nncpf"                    length="11"/>
+        <property name="rg"                             type="java.lang.String"   column="clhi_nnrg"                     length="13"/>
+        <property name="dataEmissaoRg"                  type="java.sql.Date"      column="clhi_dtrgemissao"              length="4"/>
+        <property name="dataVencimento"                 type="java.lang.Short"    column="clhi_ddvencimento"             length="2"/>
+        <property name="dataNascimento"                 type="java.sql.Date"      column="clhi_dtnascimento"             length="4"/>
+        <property name="cnpj"                           type="java.lang.String"   column="clhi_nncnpj"                   length="14"/>
+        <property name="email"                          type="java.lang.String"   column="clhi_dsemail"                  length="40"/>
+        <property name="indicadorUso"                   type="java.lang.Short"    column="clhi_icuso"                    length="2"/>
+        <property name="ultimaAlteracao"                type="java.sql.Timestamp" column="clhi_tmultimaalteracao"        length="8"/>
+        <property name="indicadorAcaoCobranca"          type="java.lang.Short"    column="clhi_icacaocobranca"           length="2"/>
+        <property name="nomeMae"                        type="java.lang.String"   column="clhi_nnmae"                    length="50"/>
+        <property name="indicadorAcrescimos"            type="java.lang.Short"    column="clhi_iccobrancaacrescimos"     length="2" not-null="true" />
+        <property name="indicadorGeraArquivoTexto"      type="java.lang.Short"    column="clhi_icgeraarquivotexto"       length="2" not-null="true" />
+        <property name="indicadorGeraFaturaAntecipada"  type="java.lang.Short"    column="clhi_icgerafaturaantecipada"   length="2" not-null="true" />
+        <property name="indicadorVencimentoMesSeguinte" type="java.lang.Short"    column="clhi_icvencimentomesseguinte"  length="2" not-null="true" />
+        <property name="indicadorUsoNomeFantasiaConta"  type="java.lang.Short"    column="clhi_icusonomefantasiaconta"   length="2" not-null="false"/>
+        <property name="indicadorPermiteNegativacao"    type="java.lang.Short"    column="clhi_icpermitenegativacao"     length="2" not-null="false"/>
+        <property name="indicadorNegativacaoPeriodo"    type="java.lang.Short"    column="clhi_icnegativacaoperiodo"     length="2" not-null="true" />  
+		
+		<!-- associations -->
+		<many-to-one name="clienteBase" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->
+		<many-to-one name="orgaoExpedidorRg" class="gcom.cadastro.cliente.OrgaoExpedidorRg" not-null="true">
+			<column name="oerg_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clhi_cdclienteresponsavel"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to PessoaSexo -->
+		<many-to-one name="pessoaSexo" class="gcom.cadastro.cliente.PessoaSexo" not-null="true">
+			<column name="psex_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Profissao -->
+		<many-to-one name="profissao" class="gcom.cadastro.cliente.Profissao" not-null="true">
+			<column name="prof_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to UnidadeFederacao -->
+		<many-to-one name="unidadeFederacao" class="gcom.cadastro.geografico.UnidadeFederacao" not-null="true">
+			<column name="unfe_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to ClienteTipo -->
+		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to RamoAtividade -->
+		<many-to-one name="ramoAtividade" class="gcom.cadastro.cliente.RamoAtividade" not-null="true">
+			<column name="ratv_id"/>
+		</many-to-one>
+		
+        <many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario">
+            <column name="usur_id"/>
+        </many-to-one>
+	</class>
+</hibernate-mapping>

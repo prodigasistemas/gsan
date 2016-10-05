@@ -1,12 +1,5 @@
 package gcom.cadastro.endereco;
 
-import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.util.ConstantesSistema;
-import gcom.util.ErroRepositorioException;
-import gcom.util.HibernateUtil;
-import gcom.util.Util;
-import gcom.util.filtro.GeradorHQLCondicional;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +11,14 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+
+import gcom.cadastro.cliente.ClienteEndereco;
+import gcom.cadastro.endereco.to.LogradouroTO;
+import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
+import gcom.util.Util;
+import gcom.util.filtro.GeradorHQLCondicional;
 
 /**
  * O repositório faz a comunicação com a base de dados através do hibernate. O
@@ -1894,33 +1895,37 @@ public class RepositorioEnderecoHBM implements IRepositorioEndereco {
 	 * Obter Logradouro(Tipo + Nome Logradouro + Título)
 	 */
 	
-	public Collection pesquisarLogradouro(Integer idImovel)
-	throws ErroRepositorioException {
-		Collection retorno = null;
+	public LogradouroTO pesquisarLogradouro(Integer idImovel) throws ErroRepositorioException {
+		LogradouroTO retorno = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = null;
-		try {
-			consulta = "select logradouro.nome," // 0
-					+ "logradouroTipo.descricao,"  // 1
-					+ "logradouroTitulo.descricao, "  // 2	
-					+ "logradouroTipo.id, "//3
-					+ "logradouroTitulo.id, "//4
-					+ "municipio.id,"//5
-					+ "municipio.nome,"//6
-					+ "unidadeFederacao.id,"//7
-					+ "unidadeFederacao.sigla "//8
-					+ "from Imovel imovel "
-					+ "left join imovel.logradouroCep logradouroCep "
-					+ "left join logradouroCep.cep cep "
-					+ "left join logradouroCep.logradouro logradouro "
-					+ "left join logradouro.logradouroTipo logradouroTipo "
-					+ "left join logradouro.logradouroTitulo logradouroTitulo "		
-					+ "inner join logradouro.municipio municipio "	
-					+ "inner join municipio.unidadeFederacao unidadeFederacao "
-					+ "where imovel.id = :idImovel";
-			retorno = session.createQuery(consulta).setInteger("idImovel",
-					idImovel.intValue()).list();
+		StringBuilder consulta = new StringBuilder();
 		
+		try {
+		    consulta.append("select new gcom.cadastro.endereco.to.LogradouroTO(")
+		        .append("logradouro.id,")
+		        .append("logradouro.nome,")
+		        .append("logradouroTipo.id, ")
+		        .append("logradouroTipo.descricao,")
+		        .append("logradouroTitulo.id, ")
+		        .append("logradouroTitulo.descricao, ")
+		        .append("municipio.id,")
+		        .append("municipio.nome,")
+		        .append("unidadeFederacao.id,")
+		        .append("unidadeFederacao.sigla) ")
+		        .append("from Imovel imovel ")
+		        .append("left join imovel.logradouroCep logradouroCep ")
+		        .append("left join logradouroCep.cep cep ")
+		        .append("left join logradouroCep.logradouro logradouro ")
+		        .append("left join logradouro.logradouroTipo logradouroTipo ")
+		        .append("left join logradouro.logradouroTitulo logradouroTitulo ")		
+		        .append("inner join logradouro.municipio municipio ")	
+		        .append("inner join municipio.unidadeFederacao unidadeFederacao ")
+		        .append("where imovel.id = :idImovel");
+			
+		    retorno = (LogradouroTO) session.createQuery(consulta.toString())
+		            .setInteger("idImovel",	idImovel.intValue())
+		            .setMaxResults(1)
+		            .uniqueResult();
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
