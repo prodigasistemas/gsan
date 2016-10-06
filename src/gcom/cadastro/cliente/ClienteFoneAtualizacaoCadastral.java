@@ -44,8 +44,6 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements
     /** persistent field */
     private Date ultimaAlteracao;
     
-    /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorFonePadrao;
 
     public ClienteFoneAtualizacaoCadastral(Integer id, Integer idClienteAtualizacaoCadastral, Integer idFoneTipo, String ddd, String telefone, String ramal, Date ultimaAlteracao) {

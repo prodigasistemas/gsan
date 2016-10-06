@@ -1,10 +1,5 @@
 package gcom.util;
 
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -56,6 +51,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
 
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import sun.management.ManagementFactory;
 
 public class Util {
@@ -547,19 +546,24 @@ public class Util {
 
 		return retorno;
 	}
+	
+	public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, Number numero) {
+	    if (numero != null)
+	        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, numero.toString());
+	    else
+	        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, "");
+	}
+	
+    public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, BigDecimal decimal) {
+        String numero = "";
+        if (decimal != null){
+            numero = converterDecimalParaString(decimal).replace(".", "");
+        }
 
-	/**
-	 * Método que converte uma hora passa em Date onde contém apenas a hora
-	 * informada EX: 11:30
-	 * 
-	 * 
-	 * @param horaMinuto
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @author thiago toscano
-	 */
+        return adicionarZerosEsquedaNumero(tamanhoMaximoCampo, numero);
+    }
+   
 	public static Date converterStringParaHoraMinuto(String horaMinuto) {
-
 		Date retorno = null;
 
 		// Obtém a hora
@@ -1580,19 +1584,18 @@ public class Util {
 		bigDecimalFormatado = new BigDecimal(valor);
 		return bigDecimalFormatado;
 	}
-
-	/**
-	 * Método que verifica se a string passada já tem casa decimal
-	 * 
-	 * 
-	 * @param data
-	 * @autor Sávio Luiz
-	 * @date 15/02/2006
-	 * @return
-	 */
+	
+	public static boolean isBigDecimal(String valor){
+	    try {
+	        new BigDecimal(valor);
+	        return true;
+        } catch (Exception e) {
+            return false;
+        }
+	}
 
 	public static boolean verificaSeBigDecimal(String valor) {
-
+	    
 		boolean temCasaDecimal = false;
 		if (valor.length() > 2
 				&& (valor.substring(valor.length() - 3, valor.length() - 2).equals(".") || valor.substring(valor.length() - 3, valor.length() - 2).equals(","))) {
@@ -2770,7 +2773,7 @@ public class Util {
 	 * @param data
 	 * @return data menos o nº de anos informado
 	 */
-	public static Date subtrairNumeroAnosDeUmaData(Date data, int numeroAnos) {
+	public static Date somarNumeroAnosDeUmaData(Date data, int numeroAnos) {
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -2779,6 +2782,11 @@ public class Util {
 
 		return calendar.getTime();
 
+	}
+	
+	public static Date subtrairNumeroAnosDeUmaData(Date data, int numeroAnos) {
+
+		return Util.somarNumeroAnosDeUmaData(data, numeroAnos * -1);
 	}
 
 	/**
@@ -4227,7 +4235,6 @@ public class Util {
 	 * @return
 	 */
 	public static String formatarBigDecimalParaString(BigDecimal valor) {
-
 		String valorItemAnterior = "" + valor;
 		valorItemAnterior = valorItemAnterior.replace(".", "");
 		return valorItemAnterior;
@@ -6457,4 +6464,17 @@ public class Util {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
+
+    public static String converterDecimalParaString(BigDecimal valorBase) {
+        DecimalFormat format = new DecimalFormat("#.00");
+        return format.format(valorBase.doubleValue());
+    }
+
+    public static boolean isPositivo(String numero) {
+        try {
+            return Integer.parseInt(numero) > 0 ? true : false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

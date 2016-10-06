@@ -3,234 +3,120 @@ package gcom.cobranca.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author Rafael Corrêa
- * @since 25/09/2006
- *
- */
 public class ParcelamentoRelatorioHelper {
-	
-	/**
-	 * Id do Imóvel
-	 */
+
 	private Integer idImovel;
-	
-	/**
-	 * Nome do Cliente
-	 */
+
 	private String nomeCliente;
-	
-	/**
-	 * Endereço
-	 */
+
 	private String endereco;
-	
-	/**
-	 * CPF/CNPJ
-	 */
+
 	private String cpfCnpj;
 
-	/**
-	 * Telefone
-	 */
 	private String telefone;
-	
-	/**
-	 * Data do Parcelamento
-	 */
+
 	private Date dataParcelamento;
-	
-	/**
-	 * Valor das Faturas em Aberto
-	 */
+
 	private BigDecimal valorFaturasEmAberto;
-	
-	/**
-	 * Valor dos Serviços a Cobrar
-	 */
+
 	private BigDecimal valorServicosACobrar;
-	
-	/**
-	 * Valor de Atualizacao Monetaria
-	 */
+
 	private BigDecimal valorAtualizacaoMonetaria;
-	
-	/**
-	 * Valor de Juros/Mora
-	 */
+
 	private BigDecimal valorJurosMora;
-	
-	/**
-	 * Valor das Multas
-	 */
+
 	private BigDecimal valorMultas;
-	
-	/**
-	 * Valor das Guias de Pagamento
-	 */
+
 	private BigDecimal valorGuiaPagamento;
 
-	/**
-	 * Valor do Parcelamento a Cobrar
-	 */
 	private BigDecimal valorParcelamentoACobrar;
-	
-	/**
-	 * Valor Total dos Débitos
-	 */
+
 	private BigDecimal valorTotalDebitos;
-	
-	/**
-	 * Valor dos Descontos de Acréscimos
-	 */
+
+	private BigDecimal valorDescontoFaixaReferenciaConta;
+
 	private BigDecimal valorDescontoAcrescimo;
-	
-	/**
-	 * Valor dos Descontos em Antiguidade
-	 */
+
 	private BigDecimal valorDescontoAntiguidade;
-	
-	/**
-	 * Valor dos Descontos de Inatividade
-	 */
+
 	private BigDecimal valorDescontoInatividade;
-	
-	/**
-	 * Valor dos Créditos a Realizar
-	 */
+
 	private BigDecimal valorCreditosRealizar;
-	
-	/**
-	 * Valor Total dos Descontos
-	 */
+
 	private BigDecimal valorTotalDescontos;
-	
-	/**
-	 * Valor a Ser Negociado
-	 */
+
 	private BigDecimal valorASerNegociado;
-	
-	/**
-	 * Valor da Entrada
-	 */
+
 	private BigDecimal valorEntrada;
-	
-	/**
-	 * Número de Parcelas
-	 */
+
 	private Short numeroParcelas;
-	
-	/**
-	 * Valor da Parcela
-	 */
+
 	private BigDecimal valorParcela;
-	
-	/**
-	 * Valor a Ser Parcelado
-	 */
+
 	private BigDecimal valorASerParcelado;
-	
-	/**
-	 * Solicitação de Restabelecimento
-	 */
+
 	private String solicitacaoRestabelecimento;
-	
-	/**
-	 * Nome do Munícipio
-	 */
+
 	private String nomeMunicipio;
-	
-	/**
-	 * Id do Funcionário
-	 */
+
 	private Integer idFuncionario;
-	
-	/**
-	 * Unidade do Usuário
-	 */
+
 	private BigDecimal unidadeUsuario;
-	
-	/**
-	 * Nome do Cliente do Parcelamento
-	 */
+
 	private String nomeClienteParcelamento;
-	
-	/**
-	 * CPF do Cliente do Parcelamento
-	 */
+
 	private String cpfClienteParcelamento;
-	
-	/**
-	 * RG do Cliente 
-	 */
+
 	private String rgCliente;
-	
-	/**
-	 * orgao expedidor RG do Cliente 
-	 */
+
 	private String descOrgaoExpRgCliente;
-	
-	/**
-	 * unidade federacao RG do Cliente 
-	 */
+
 	private String siglaUnidadeFederacaoRgCliente;
 
-
 	private String mesAnoInicioParcelamento;
-	
+
 	private String mesAnoFinalParcelamento;
-	
-	/**
-	 * RG do Cliente do Parcelamento 
-	 */
+
 	private String rgClienteParcelamento;
-	
-	
+
 	private String taxaJuros;
-	
-	/**
-	 * Valor dos Descontos de Sanções Regulamentares
-	 */
+
 	private BigDecimal valorDescontoSancoesRegulamentares;
-    
-    
-    private BigDecimal valorDescontoTarifaSocial;
-    
-    private String nomeDiretorComercial;
-    
-    private String cpfDiretorComercial;
-    
-    private String profissao;
-    
-    private String nomeDevedor;
-    
-    private String cnpjDevedor;
-    
-    private String enderecoDevedor;
-    
-    private String telefoneDevedor;
-    
-    private Short indicadorPessoaJuridica;
-    
-    private Integer idDevedor;
-    
-    private String NomeUsuarioParcelamento;
-    
-    private String bairro;
-    
-    private Short codigoRota;
-    
-    private String localidade;
-    
-    private String setorComercial;
-    
-    private String cpfUsuario;
-    
-	/**
-	 * Valor Total dos Descontos sem Valor dos Creditos
-	 */
+
+	private BigDecimal valorDescontoTarifaSocial;
+
+	private String nomeDiretorComercial;
+
+	private String cpfDiretorComercial;
+
+	private String profissao;
+
+	private String nomeDevedor;
+
+	private String cnpjDevedor;
+
+	private String enderecoDevedor;
+
+	private String telefoneDevedor;
+
+	private Short indicadorPessoaJuridica;
+
+	private Integer idDevedor;
+
+	private String NomeUsuarioParcelamento;
+
+	private String bairro;
+
+	private Short codigoRota;
+
+	private String localidade;
+
+	private String setorComercial;
+
+	private String cpfUsuario;
+
 	private BigDecimal valorTotalDescontosSemValorCreditos;
-	
+
 	public Integer getIdDevedor() {
 		return idDevedor;
 	}
@@ -239,8 +125,7 @@ public class ParcelamentoRelatorioHelper {
 		return valorTotalDescontosSemValorCreditos;
 	}
 
-	public void setValorTotalDescontosSemValorCreditos(
-			BigDecimal valorTotalDescontosSemValorCreditos) {
+	public void setValorTotalDescontosSemValorCreditos(BigDecimal valorTotalDescontosSemValorCreditos) {
 		this.valorTotalDescontosSemValorCreditos = valorTotalDescontosSemValorCreditos;
 	}
 
@@ -528,30 +413,18 @@ public class ParcelamentoRelatorioHelper {
 		this.valorTotalDescontos = valorTotalDescontos;
 	}
 
-	/**
-	 * @return Retorna o campo cpfClienteParcelamento.
-	 */
 	public String getCpfClienteParcelamento() {
 		return cpfClienteParcelamento;
 	}
 
-	/**
-	 * @param cpfClienteParcelamento O cpfClienteParcelamento a ser setado.
-	 */
 	public void setCpfClienteParcelamento(String cpfClienteParcelamento) {
 		this.cpfClienteParcelamento = cpfClienteParcelamento;
 	}
 
-	/**
-	 * @return Retorna o campo nomeClienteParcelamento.
-	 */
 	public String getNomeClienteParcelamento() {
 		return nomeClienteParcelamento;
 	}
 
-	/**
-	 * @param nomeClienteParcelamento O nomeClienteParcelamento a ser setado.
-	 */
 	public void setNomeClienteParcelamento(String nomeClienteParcelamento) {
 		this.nomeClienteParcelamento = nomeClienteParcelamento;
 	}
@@ -563,8 +436,6 @@ public class ParcelamentoRelatorioHelper {
 	public void setRgCliente(String rgCliente) {
 		this.rgCliente = rgCliente;
 	}
-
-
 
 	public String getDescOrgaoExpRgCliente() {
 		return descOrgaoExpRgCliente;
@@ -578,8 +449,7 @@ public class ParcelamentoRelatorioHelper {
 		return siglaUnidadeFederacaoRgCliente;
 	}
 
-	public void setSiglaUnidadeFederacaoRgCliente(
-			String siglaUnidadeFederacaoRgCliente) {
+	public void setSiglaUnidadeFederacaoRgCliente(String siglaUnidadeFederacaoRgCliente) {
 		this.siglaUnidadeFederacaoRgCliente = siglaUnidadeFederacaoRgCliente;
 	}
 
@@ -619,18 +489,17 @@ public class ParcelamentoRelatorioHelper {
 		return valorDescontoSancoesRegulamentares;
 	}
 
-	public void setValorDescontoSancoesRegulamentares(
-			BigDecimal valorDescontoSancoesRegulamentares) {
+	public void setValorDescontoSancoesRegulamentares(BigDecimal valorDescontoSancoesRegulamentares) {
 		this.valorDescontoSancoesRegulamentares = valorDescontoSancoesRegulamentares;
 	}
 
-    public BigDecimal getValorDescontoTarifaSocial() {
-        return valorDescontoTarifaSocial;
-    }
+	public BigDecimal getValorDescontoTarifaSocial() {
+		return valorDescontoTarifaSocial;
+	}
 
-    public void setValorDescontoTarifaSocial(BigDecimal valorDescontoTarifaSocial) {
-        this.valorDescontoTarifaSocial = valorDescontoTarifaSocial;
-    }
+	public void setValorDescontoTarifaSocial(BigDecimal valorDescontoTarifaSocial) {
+		this.valorDescontoTarifaSocial = valorDescontoTarifaSocial;
+	}
 
 	public Short getIndicadorPessoaJuridica() {
 		return indicadorPessoaJuridica;
@@ -640,27 +509,20 @@ public class ParcelamentoRelatorioHelper {
 		this.indicadorPessoaJuridica = indicadorPessoaJuridica;
 	}
 
-    public String getNomeUsuarioParcelamento() {
-        return NomeUsuarioParcelamento;
-    }
+	public String getNomeUsuarioParcelamento() {
+		return NomeUsuarioParcelamento;
+	}
 
-    public void setNomeUsuarioParcelamento(String nomeUsuarioParcelamento) {
-        NomeUsuarioParcelamento = nomeUsuarioParcelamento;
-    }	
-    
-    public BigDecimal getValorASerNegociadoSemDesconto() {
-    	
-    	BigDecimal valorASerNegociadoSemDesconto = getValorASerNegociado();
-    	
-//    	if (getValorTotalDescontosSemValorCreditos() != null &&
-//    		!getValorTotalDescontosSemValorCreditos().equals(new BigDecimal("0.00"))){
-//    		
-//    		valorASerNegociadoSemDesconto = 
-//    			valorASerNegociadoSemDesconto.add(getValorTotalDescontosSemValorCreditos());
-//    	}
-    	
-        return valorASerNegociadoSemDesconto;
-    }
+	public void setNomeUsuarioParcelamento(String nomeUsuarioParcelamento) {
+		NomeUsuarioParcelamento = nomeUsuarioParcelamento;
+	}
+
+	public BigDecimal getValorASerNegociadoSemDesconto() {
+
+		BigDecimal valorASerNegociadoSemDesconto = getValorASerNegociado();
+
+		return valorASerNegociadoSemDesconto;
+	}
 
 	public String getBairro() {
 		return bairro;
@@ -678,30 +540,18 @@ public class ParcelamentoRelatorioHelper {
 		this.codigoRota = codigoRota;
 	}
 
-	/**
-	 * @return Returns the localidade.
-	 */
 	public String getLocalidade() {
 		return localidade;
 	}
 
-	/**
-	 * @param localidade The localidade to set.
-	 */
 	public void setLocalidade(String localidade) {
 		this.localidade = localidade;
 	}
 
-	/**
-	 * @return Returns the setorComercial.
-	 */
 	public String getSetorComercial() {
 		return setorComercial;
 	}
 
-	/**
-	 * @param setorComercial The setorComercial to set.
-	 */
 	public void setSetorComercial(String setorComercial) {
 		this.setorComercial = setorComercial;
 	}
@@ -713,7 +563,12 @@ public class ParcelamentoRelatorioHelper {
 	public void setCpfUsuario(String cpfUsuario) {
 		this.cpfUsuario = cpfUsuario;
 	}
-	
-	
 
+	public BigDecimal getValorDescontoFaixaReferenciaConta() {
+		return valorDescontoFaixaReferenciaConta;
+	}
+
+	public void setValorDescontoFaixaReferenciaConta(BigDecimal valorDescontoFaixaReferenciaConta) {
+		this.valorDescontoFaixaReferenciaConta = valorDescontoFaixaReferenciaConta;
+	}
 }

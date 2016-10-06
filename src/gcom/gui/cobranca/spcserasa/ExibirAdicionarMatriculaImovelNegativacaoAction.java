@@ -217,7 +217,7 @@ public class ExibirAdicionarMatriculaImovelNegativacaoAction extends
 				//[SB0005] Obter Débito do Imóvel	
 
 				//Período de referência do débito
-				String referenciaInicial = Util.getAnoMesComoString(Util.subtrairNumeroAnosDeUmaData(new Date(), -5));
+				String referenciaInicial = Util.getAnoMesComoString(Util.subtrairNumeroAnosDeUmaData(new Date(), 5));
 				String referenciaFinal = Util.getAnoMesComoString(new Date());
 				inserirComandoNegativacaoActionForm.setReferenciaInicial(Util.formatarAnoMesParaMesAno(referenciaInicial));
 				inserirComandoNegativacaoActionForm.setReferenciaFinal(Util.formatarAnoMesParaMesAno(referenciaFinal));
@@ -226,7 +226,7 @@ public class ExibirAdicionarMatriculaImovelNegativacaoAction extends
 					
 				Integer numeroDiasVencimentoCobranca = new Integer(sistemaParametro.getNumeroDiasVencimentoCobranca());			
 				Date dataVencimentoFinal = Util.subtrairNumeroDiasDeUmaData(new Date(), numeroDiasVencimentoCobranca);
-				Date dataVencimentoInicial = Util.subtrairNumeroAnosDeUmaData(dataVencimentoFinal, -5);
+				Date dataVencimentoInicial = Util.subtrairNumeroAnosDeUmaData(dataVencimentoFinal, 5);
 				inserirComandoNegativacaoActionForm.setDataVencimentoInicial(Util.formatarData(dataVencimentoInicial));
 				inserirComandoNegativacaoActionForm.setDataVencimentoFinal(Util.formatarData(dataVencimentoFinal));
 				

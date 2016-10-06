@@ -24,13 +24,13 @@ public class DebitoCreditoSituacao extends ObjetoTransacao {
 	public final static Integer PARCELADA = new Integer(5);
 	public final static Integer ARRASTADA = new Integer(6);
 	public final static Integer ENTRADA_DE_PARCELAMENTO = new Integer(7);
-	public final static Integer PAGA = new Integer(8);
+	public final static Integer DEBITO_PRESCRITO = new Integer(8);
 	public final static Integer PRE_FATURADA = new Integer(9);
 	public final static Integer CARTAO_CREDITO = new Integer(10);
 	
-	public final static Integer DEBITO_PRESCRITO = new Integer(8);
-	public final static Integer DEBITO_PRESCRITO_CONTAS_INCLUIDAS = new Integer(12);
 	public final static Integer ERRO_PROCESSAMENTO = new Integer(11);
+	public final static Integer DEBITO_PRESCRITO_CONTAS_INCLUIDAS = new Integer(12);
+	public final static Integer PAGA = new Integer(13);
 
 	public DebitoCreditoSituacao(String descricaoDebitoCreditoSituacao, String descricaoAbreviada, Date ultimaAlteracao) {
 		this.descricaoDebitoCreditoSituacao = descricaoDebitoCreditoSituacao;

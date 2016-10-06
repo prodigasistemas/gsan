@@ -5,6 +5,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -253,4 +254,17 @@ public class ClienteImovel extends ObjetoTransacao implements IClienteImovel {
 	public String getDescricaoParaRegistroTransacao() {
 		return this.getDescricao() + " (" + this.getClienteRelacaoTipo().getDescricao() + ")";
 	}
+	
+	public boolean isClienteUsuario() {
+		return this.clienteRelacaoTipo.getId().shortValue() == ClienteRelacaoTipo.USUARIO.shortValue();
+	}
+	
+	public boolean isClienteResponsavel() {
+		return this.clienteRelacaoTipo.getId().shortValue() == ClienteRelacaoTipo.RESPONSAVEL.shortValue();
+	}
+	
+	public boolean isClienteProprietario() {
+		return this.clienteRelacaoTipo.getId().shortValue() == ClienteRelacaoTipo.PROPRIETARIO.shortValue();
+	}
+	
 }

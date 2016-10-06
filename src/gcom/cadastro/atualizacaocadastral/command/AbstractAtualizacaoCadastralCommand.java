@@ -16,6 +16,7 @@ import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.fachada.Fachada;
 import gcom.interceptor.Interceptador;
 import gcom.interceptor.ObjetoTransacao;
@@ -175,7 +176,15 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 					tabela.setId(Tabela.IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
-				}
+				}  else if (objetoAtualizacaoCadastralBase instanceof ImovelTipoOcupanteQuantidadeAtualizacaoCadastral) {
+				    ImovelTipoOcupanteQuantidadeAtualizacaoCadastral txt = (ImovelTipoOcupanteQuantidadeAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+
+                    tabelaAtualizacaoCadastral.setIdRegistroAlterado((long) matriculaImovel);
+                    tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
+                    tabelaAtualizacaoCadastral.setComplemento(txt.getTipoOcupante().getDescricao());
+                    tabela.setId(Tabela.IMOVEL_QUANTIDADE_TIPO_OCUPANTE_ATUALIZACAO_CADASTRAL);
+                    tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
+                }
 
 				tabelaAtualizacaoCadastral.setCodigoImovel(matriculaImovel);
 				tabelaAtualizacaoCadastral.setLeiturista(arquivoTexto.getLeiturista());
@@ -197,6 +206,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.COLUNA, tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna()));
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.TABELA, tabela));
 					Collection<TabelaColuna> tabelas = Fachada.getInstancia().pesquisar(filtroColuna, TabelaColuna.class.getName());
+					
+					if (tabelas.isEmpty()){
+					    throw new Exception("Nao ha registro em tabela_coluna para " + tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna());
+					}
 					for (TabelaColuna tabelaColuna : tabelas) {
 						tabelaLinhaColunaAlteracao.setTabelaColuna(tabelaColuna);
 					}

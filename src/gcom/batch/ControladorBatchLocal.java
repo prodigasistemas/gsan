@@ -170,6 +170,8 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	public FaturamentoAtividadeCronograma pesquisarProcessoIniciadoParaGrupo(Integer idGrupo, Integer referencia, Integer idAtividadeFaturamento) throws ControladorException; 
 	
 	public String getIpNovoBatch();
+	
+	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ControladorException;
 }
 
 

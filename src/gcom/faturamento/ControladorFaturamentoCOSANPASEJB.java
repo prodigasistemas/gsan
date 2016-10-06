@@ -544,8 +544,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								}
 
 								contaTxt = null;
-
-								logger.info("ID_CONTA:" + emitirContaHelper.getIdConta() + " SEQUENCIAL:" + sequencialImpressao + " CONT:" + cont);
 								
 								if (flagTerminou && ehFaturamentoAntecipado) {
 									if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
@@ -693,8 +691,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private void formatarArquivoContas(StringBuilder contasTxtLista, String nomeZip)
 			throws FileNotFoundException, IOException {
 		
-		File compactadoTipo = new File(nomeZip + ".zip");
-		File leituraTipo = new File(nomeZip + ".txt");
+		File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+		File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") +nomeZip + ".txt");
 		BufferedWriter out = null;
 		ZipOutputStream zos = null;
 
@@ -726,7 +724,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		ZipOutputStream zos;
 		if (stringFormatadaImpressaoTermica != null && stringFormatadaImpressaoTermica.size() > 0) {
 
-			File arquivoImpressaoTermicaCompactado = new File(nomeArquivoImpressaoFormatada + ".zip");
+			File arquivoImpressaoTermicaCompactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoImpressaoFormatada + ".zip");
 
 			zos = new ZipOutputStream(new FileOutputStream(arquivoImpressaoTermicaCompactado));
 			BufferedWriter[] buf = new BufferedWriter[localidadesArquivo.size()];
@@ -1484,8 +1482,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				
 				int comparacaoData = Util.compararData(emitirConta.getDataVencimentoConta(), novaDataVencimento);
 
-				System.out.println("Imóvel " + emitirConta.getIdImovel() + ": [" + emitirConta.getDataVencimentoConta() + " < " + novaDataVencimento + "? " + comparacaoData);
-				
 				if (comparacaoData == -1) {
 					Conta conta = (Conta) repositorioFaturamento.obterConta(emitirConta.getIdConta()).iterator().next();
 					conta.setDataVencimentoConta(novaDataVencimento);

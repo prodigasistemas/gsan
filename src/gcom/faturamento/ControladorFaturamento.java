@@ -175,6 +175,8 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -631,7 +633,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        								 DebitoCreditoSituacao.PRE_FATURADA);
 	        					 
 	        					 if (contaAtualizacao == null || contaAtualizacao.getId() == null){
-	        						 System.out.println("Imovel sem conta: " + helper.getImovel().getId());
 	        						 continue;
 	        					 }
 	        				 } catch (ErroRepositorioException ex) {
@@ -7368,13 +7369,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeArquivo = "contas_projetos_especiais_" + anoMes;
 
 			// criar o arquivo zip
-			File compactado = new File(nomeArquivo + ".zip"); // nomeZip
+			File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".zip"); // nomeZip
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
 
-			File leitura = new File(nomeArquivo + ".txt");
+			File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".txt");
 
-			out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(leitura.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 
 			while (!flagTerminou) {
 
@@ -9220,13 +9220,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							+ Util.formatarData(dataAtual) + "_"
 							+ Util.formatarHoraSemDataSemDoisPontos(dataAtual);
 					nomeZip = nomeZip.replace("/", "_");
-					File compactado = new File(nomeZip + ".zip");
-					File leitura = new File(nomeZip + ".txt");
-					ZipOutputStream zos = new ZipOutputStream(
-							new FileOutputStream(compactado));
-					BufferedWriter out = new BufferedWriter(
-							new OutputStreamWriter(new FileOutputStream(
-									leitura.getAbsolutePath())));
+					File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
+					
+					ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
+					BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 					// ========================================================================
 
 					flagTerminouParte = false;
@@ -10713,18 +10711,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 * @data 08/07/201
 	 */
-	public void alterarInscricoesImoveis(Integer idFuncionalidadeIniciada,
-			Integer idLocalidade) throws ControladorException {
+	public void alterarInscricoesImoveis(Integer idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
-		/*
-		 * Registrar o início do processamento da Unidade de Processamento do
-		 * Batch
-		 */
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.LOCALIDADE, idLocalidade);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
 
@@ -10738,9 +10729,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			while (!flagTerminou) {
 
-				Collection colecaoDados = this.repositorioFaturamento
-						.pesquisarImoveisComInscricaoPedenteParaAtualizacao(
-								idLocalidade, numeroIndice, quantidadeRegistros);
+				Collection colecaoDados = this.repositorioFaturamento.pesquisarImoveisComInscricaoPedenteParaAtualizacao(idLocalidade, numeroIndice, quantidadeRegistros);
 
 				if (colecaoDados != null && !colecaoDados.isEmpty()) {
 
@@ -10750,57 +10739,37 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						boolean existeImovelComMesmaIncricao = false;
 
-						ImovelInscricaoAlterada imovelInscricaoAlterada = (ImovelInscricaoAlterada) dadosIterator
-								.next();
+						ImovelInscricaoAlterada imovelInscricaoAlterada = (ImovelInscricaoAlterada) dadosIterator.next();
 
-						Imovel imovelAtualizar = imovelInscricaoAlterada
-								.getImovel();
-						Localidade localidade = imovelInscricaoAlterada
-								.getLocalidadeAtual();
-						SetorComercial setorComercial = imovelInscricaoAlterada
-								.getSetorComercialAtual();
-						Quadra quadra = imovelInscricaoAlterada
-								.getQuadraAtual();
+						Imovel imovelAtualizar = imovelInscricaoAlterada.getImovel();
+						Localidade localidade = imovelInscricaoAlterada.getLocalidadeAtual();
+						SetorComercial setorComercial = imovelInscricaoAlterada.getSetorComercialAtual();
+						Quadra quadra = imovelInscricaoAlterada.getQuadraAtual();
 						Short lote = imovelInscricaoAlterada.getLoteAtual();
-						Short subLote = imovelInscricaoAlterada
-								.getSubLoteAtual();
+						Short subLote = imovelInscricaoAlterada.getSubLoteAtual();
 
 						QuadraFace quadraFace = null;
 						if (imovelInscricaoAlterada.getQuadraFaceAtual() != null) {
-							quadraFace = imovelInscricaoAlterada
-									.getQuadraFaceAtual();
+							quadraFace = imovelInscricaoAlterada.getQuadraFaceAtual();
 						}
 
 						// Inicio [FS0002] Verificar duplicidade de inscrição
 						FiltroImovel filtroImovel = new FiltroImovel();
-						filtroImovel
-								.adicionarParametro(new ParametroSimples(
-										FiltroImovel.LOCALIDADE_ID, localidade
-												.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.SETOR_COMERCIAL_ID, setorComercial
-										.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.QUADRA_ID, quadra.getId()));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.LOTE, lote));
-						filtroImovel.adicionarParametro(new ParametroSimples(
-								FiltroImovel.SUBLOTE, subLote));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.LOCALIDADE_ID, localidade.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.SETOR_COMERCIAL_ID, setorComercial.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.QUADRA_ID, quadra.getId()));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.LOTE, lote));
+						filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.SUBLOTE, subLote));
 
 						if (quadraFace != null) {
-							filtroImovel
-									.adicionarParametro(new ParametroSimples(
-											FiltroImovel.QUADRA_FACE_ID,
-											quadraFace.getId()));
+							filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.QUADRA_FACE_ID, quadraFace.getId()));
 						}
 
-						Collection colecaoImoveis = getControladorUtil()
-								.pesquisar(filtroImovel, Imovel.class.getName());
+						Collection colecaoImoveis = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 
 						if (colecaoImoveis != null && !colecaoImoveis.isEmpty()) {
 
-							Imovel imovelMesmaInscricao = (Imovel) Util
-									.retonarObjetoDeColecao(colecaoImoveis);
+							Imovel imovelMesmaInscricao = (Imovel) Util.retonarObjetoDeColecao(colecaoImoveis);
 
 							if (imovelMesmaInscricao != null) {
 								existeImovelComMesmaIncricao = true;
@@ -10809,15 +10778,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						// Caso exista não efetua a alteração na tabela imovel.
 						if (existeImovelComMesmaIncricao) {
-							imovelInscricaoAlterada
-									.setIndicadorErroAlteracao(ConstantesSistema.SIM);
-							imovelInscricaoAlterada
-									.setIndicadorAtualizado(ConstantesSistema.NAO);
+							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.SIM);
+							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.NAO);
 						}
-						// Caso contrario
 						else {
-
-							// Atualiza a tabela IMOVEL
 							imovelAtualizar.setLocalidade(localidade);
 							imovelAtualizar.setSetorComercial(setorComercial);
 							imovelAtualizar.setQuadra(quadra);
@@ -10828,46 +10792,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								imovelAtualizar.setQuadraFace(quadraFace);
 							}
 
-							if (imovelInscricaoAlterada.getUsuarioAlteracao() != null
-									&& !imovelInscricaoAlterada
-											.getUsuarioAlteracao().equals("")) {
-
-								// ------------ <REGISTRAR
-								// TRANSAÇÃO>----------------------------
-
+							if (imovelInscricaoAlterada.getUsuarioAlteracao() != null && !imovelInscricaoAlterada.getUsuarioAlteracao().equals("")) {
 								RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-										Operacao.OPERACAO_IMOVEL_ATUALIZAR,
+										Operacao.OPERACAO_IMOVEL_ATUALIZAR, imovelAtualizar.getId(),
 										imovelAtualizar.getId(),
-										imovelAtualizar.getId(),
-										new UsuarioAcaoUsuarioHelper(
-												imovelInscricaoAlterada
-														.getUsuarioAlteracao(),
+										new UsuarioAcaoUsuarioHelper(imovelInscricaoAlterada.getUsuarioAlteracao(),
 												UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
-								registradorOperacao
-										.registrarOperacao(imovelAtualizar);
+								registradorOperacao.registrarOperacao(imovelAtualizar);
 
-								getControladorTransacao().registrarTransacao(
-										imovelAtualizar);
-
-								// ------------ </REGISTRAR
-								// TRANSAÇÃO>----------------------------
+								getControladorTransacao().registrarTransacao(imovelAtualizar);
 							}
 
-							getControladorUtil().atualizar(imovelAtualizar);
+							imovelAtualizar.setUsuarioParaHistorico(getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada));
+							
+							getControladorAtualizacaoCadastro().atualizar(imovelAtualizar);
 
-							imovelInscricaoAlterada
-									.setIndicadorErroAlteracao(ConstantesSistema.NAO);
-							imovelInscricaoAlterada
-									.setIndicadorAtualizado(ConstantesSistema.SIM);
+							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.NAO);
+							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.SIM);
 						}
 
 						// Atualiza a tabela IMOVEL_INSCR_ALTERADA
 
 						Date dataAtual = new Date();
 
-						imovelInscricaoAlterada
-								.setDataAlteracaoBatch(dataAtual);
+						imovelInscricaoAlterada.setDataAlteracaoBatch(dataAtual);
 						imovelInscricaoAlterada.setUltimaAlteracao(dataAtual);
 						getControladorUtil().atualizar(imovelInscricaoAlterada);
 					}
@@ -10883,8 +10832,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				 * quantidade de registros seta a flag indicando que a paginação
 				 * terminou.
 				 */
-				if (colecaoDados == null
-						|| colecaoDados.size() < quantidadeRegistros) {
+				if (colecaoDados == null || colecaoDados.size() < quantidadeRegistros) {
 
 					flagTerminou = true;
 				}
@@ -10896,13 +10844,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
 	}
@@ -12296,20 +12242,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC1083] Prescrever Débitos de Imóveis Públicos Automático
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/10/2010
-	 * 
-	 */
-	public Collection obterDadosPrescricaoDebitosAutomaticos()
-			throws ControladorException {
+	public Collection obterDadosPrescricaoDebitosAutomaticos()throws ControladorException {
 
 		try {
-			return repositorioFaturamento
-					.obterDadosPrescricaoDebitosAutomaticos();
+			return repositorioFaturamento.obterDadosPrescricaoDebitosAutomaticos();
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -12317,17 +12253,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC1083] Prescrever Débitos de Imóveis Públicos Automático
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/10/2010
-	 * 
-	 */
 	public void prescreverDebitosImoveisPublicosAutomatico(
 			Integer idFuncionalidadeIniciada, Integer anoMesReferencia,
-			Integer anoMesPrescricao, Integer usuario, String idsEsferaPoder)
+			Date dataPrescricao, Integer usuario, String idsEsferaPoder)
 			throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -12344,7 +12272,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			this.repositorioFaturamento
 					.prescreverDebitosImoveisPublicosAutomatico(
-							anoMesReferencia, anoMesPrescricao, usuario,
+							anoMesReferencia, dataPrescricao, usuario,
 							idsEsferaPoder);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -13528,7 +13456,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer retorno = 0;
 			// data corrente menos 1 ano
 			Date dataLimite = new Date();
-			dataLimite = Util.subtrairNumeroAnosDeUmaData(dataLimite, -1);
+			dataLimite = Util.subtrairNumeroAnosDeUmaData(dataLimite, 1);
 
 			Integer qtdeConta = repositorioFaturamento
 					.pesquisaQtdeContaRetificadaMotivo(idMotivo, idImovel,
@@ -14006,12 +13934,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				// Definindo arquivo para escrita
 				nomeZip = nomeZip.replace("/", "_");
-				File compactado = new File(nomeZip + ".zip");
-				leitura = new File(nomeZip + ".txt");
+				File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+				leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
-				out = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(leitura.getAbsolutePath())));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 
 				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
 				System.out.println("***************************************");
@@ -15604,14 +15531,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private byte[] compactarArquivoRetorno(String nomeArquivo, StringBuilder arquivoTexto) throws IOException {
 		byte[] retorno;
 		
-		File compactado = new File(nomeArquivo + ".tar.gz");
+		File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".tar.gz");
 		ByteArrayOutputStream baosArquivoZip = new ByteArrayOutputStream();
 		
 		GZIPOutputStream zos = new GZIPOutputStream(new FileOutputStream(compactado));
-		File leitura = new File(nomeArquivo + ".txt");
+		File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivo + ".txt");
 
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(leitura.getAbsolutePath())));
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
+		
 		out.write(arquivoTexto.toString());
 		out.flush();
 		ZipUtil.adicionarArquivo(zos, leitura);

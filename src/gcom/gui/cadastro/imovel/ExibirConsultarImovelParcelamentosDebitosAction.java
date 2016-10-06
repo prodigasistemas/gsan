@@ -3,7 +3,6 @@ package gcom.gui.cadastro.imovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.ParametroSimples;
@@ -18,249 +17,180 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * 9° Aba - Parcelamento efetuados para o imóvel
- * 
- * @author Rafael Santos
- * @since 20/09/2006
- */
 public class ExibirConsultarImovelParcelamentosDebitosAction extends GcomAction {
 
-    /**
-     * 
-     * @param actionMapping
-     *            Descrição do parâmetro
-     * @param actionForm
-     *            Descrição do parâmetro
-     * @param httpServletRequest
-     *            Descrição do parâmetro
-     * @param httpServletResponse
-     *            Descrição do parâmetro
-     * @return Descrição do retorno
-     */
-    public ActionForward execute(ActionMapping actionMapping,
-            ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-        ActionForward retorno = actionMapping
-                .findForward("consultarImovelParcelamentosDebitos");
+		ActionForward retorno = actionMapping.findForward("consultarImovelParcelamentosDebitos");
 
-        //Obtendo uma instancia da sessao
-        HttpSession sessao = httpServletRequest.getSession(false);
+		HttpSession sessao = request.getSession(false);
 
-        ConsultarImovelActionForm consultarImovelActionForm = (ConsultarImovelActionForm) actionForm;
+		ConsultarImovelActionForm form = (ConsultarImovelActionForm) actionForm;
 
-        //id do imovel da aba documento de cobranca
-        String idImovelParcelamentosDebitos = consultarImovelActionForm.getIdImovelParcelamentosDebitos();
-        String limparForm = httpServletRequest.getParameter("limparForm");
-        String indicadorNovo = httpServletRequest.getParameter("indicadorNovo");
+		String idImovelParcelamentosDebitos = form.getIdImovelParcelamentosDebitos();
+		String limparForm = request.getParameter("limparForm");
+		String indicadorNovo = request.getParameter("indicadorNovo");
+		
 		String idImovelPrincipalAba = null;
-		if(sessao.getAttribute("idImovelPrincipalAba") != null){
-			idImovelPrincipalAba = (String)sessao.getAttribute("idImovelPrincipalAba");
-		}          
-        
-        if(limparForm != null && !limparForm.equals("")){
-            //limpar os dados 
-        	httpServletRequest.setAttribute(
-                    "idImovelParcelamentosDebitosNaoEncontrado", null);
+		if (sessao.getAttribute("idImovelPrincipalAba") != null) {
+			idImovelPrincipalAba = (String) sessao.getAttribute("idImovelPrincipalAba");
+		}
 
-        	sessao.removeAttribute("imovelParcelamentosDebitos");
-        	sessao.removeAttribute("colecaoParcelamento");
-        	sessao.removeAttribute("idImovelPrincipalAba");
-        	sessao.removeAttribute("imovelClientes");
+		if (limparForm != null && !limparForm.equals("")) {
+			request.setAttribute("idImovelParcelamentosDebitosNaoEncontrado", null);
 
-			consultarImovelActionForm.setIdImovelDadosComplementares(null);
-			consultarImovelActionForm.setIdImovelDadosCadastrais(null);
-			consultarImovelActionForm.setIdImovelAnaliseMedicaoConsumo(null);
-			consultarImovelActionForm.setIdImovelHistoricoFaturamento(null);
-			consultarImovelActionForm.setIdImovelDebitos(null);
-			consultarImovelActionForm.setIdImovelPagamentos(null);
-			consultarImovelActionForm.setIdImovelDevolucoesImovel(null);
-			consultarImovelActionForm.setIdImovelDocumentosCobranca(null);
-			consultarImovelActionForm.setIdImovelParcelamentosDebitos(null);
-			consultarImovelActionForm.setIdImovelRegistroAtendimento(null);
-			consultarImovelActionForm.setImovIdAnt(null);
+			sessao.removeAttribute("imovelParcelamentosDebitos");
+			sessao.removeAttribute("colecaoParcelamento");
+			sessao.removeAttribute("idImovelPrincipalAba");
+			sessao.removeAttribute("imovelClientes");
 
-        	consultarImovelActionForm.setIdImovelParcelamentosDebitos(null);
-        	consultarImovelActionForm.setMatriculaImovelParcelamentosDebitos(null);
-        	consultarImovelActionForm.setSituacaoAguaParcelamentosDebitos(null);
-        	consultarImovelActionForm.setSituacaoEsgotoParcelamentosDebitos(null);
-        	consultarImovelActionForm.setParcelamento(null);
-        	consultarImovelActionForm.setReparcelamento(null);
-        	consultarImovelActionForm.setReparcelamentoConsecutivo(null);        	
-            
-        //}else if(idImovelParcelamentosDebitos != null && !idImovelParcelamentosDebitos.equalsIgnoreCase("")){
-        }else if( (idImovelParcelamentosDebitos != null && !idImovelParcelamentosDebitos.equalsIgnoreCase(""))
-            	|| (idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase("")) ){
-            	
-        	if(idImovelParcelamentosDebitos != null && !idImovelParcelamentosDebitos.equalsIgnoreCase("")){
-        		
-           		
-        		if(idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase("")){
-            		
-        			if(indicadorNovo != null && !indicadorNovo.equals("")){
-            			consultarImovelActionForm.setIdImovelParcelamentosDebitos(idImovelParcelamentosDebitos);            		
-        				
-        			}else if(!(idImovelParcelamentosDebitos.equals(idImovelPrincipalAba))){
-            			consultarImovelActionForm.setIdImovelParcelamentosDebitos(idImovelPrincipalAba);            		
-                		idImovelParcelamentosDebitos = idImovelPrincipalAba;
-            		}
-            		
-            		
-            	}
-        	}else if(idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase("")){
-            		consultarImovelActionForm.setIdImovelRegistroAtendimento(idImovelPrincipalAba);            		
-            		idImovelParcelamentosDebitos = idImovelPrincipalAba;
-            } 	                	
-        	
-	        //Obtém a instância da Fachada
-	        Fachada fachada = Fachada.getInstancia();
-	        Imovel imovel = null;
-	        //verifica se o objeto imovel é o mesmo ja pesquisado, para não precisar pesquisar mas.
-	        boolean imovelNovoPesquisado = false;
-	        if(sessao.getAttribute("imovelParcelamentosDebitos") != null){
-	        	imovel = (Imovel) sessao.getAttribute("imovelParcelamentosDebitos");
-	        	if(!(imovel.getId().toString().equals(idImovelParcelamentosDebitos.trim()))){
-	        		imovel = fachada.consultarParcelamentosDebitosImovel(new Integer(idImovelParcelamentosDebitos.trim()));
-	        		imovelNovoPesquisado = true;
-	        	}
-	        }else{
-	        	imovel = fachada.consultarParcelamentosDebitosImovel(new Integer(idImovelParcelamentosDebitos.trim()));
-	        	imovelNovoPesquisado = true;
-	        }
-	
-            if (imovel != null) {
-                sessao.setAttribute("imovelParcelamentosDebitos", imovel);
-                sessao.setAttribute("idImovelPrincipalAba", imovel.getId().toString());
-                consultarImovelActionForm.setIdImovelParcelamentosDebitos(imovel.getId().toString());
-                
+			form.setIdImovelDadosComplementares(null);
+			form.setIdImovelDadosCadastrais(null);
+			form.setIdImovelAnaliseMedicaoConsumo(null);
+			form.setIdImovelHistoricoFaturamento(null);
+			form.setIdImovelDebitos(null);
+			form.setIdImovelPagamentos(null);
+			form.setIdImovelDevolucoesImovel(null);
+			form.setIdImovelDocumentosCobranca(null);
+			form.setIdImovelParcelamentosDebitos(null);
+			form.setIdImovelRegistroAtendimento(null);
+			form.setImovIdAnt(null);
+
+			form.setIdImovelParcelamentosDebitos(null);
+			form.setMatriculaImovelParcelamentosDebitos(null);
+			form.setSituacaoAguaParcelamentosDebitos(null);
+			form.setSituacaoEsgotoParcelamentosDebitos(null);
+			form.setParcelamento(null);
+			form.setReparcelamento(null);
+			form.setReparcelamentoConsecutivo(null);
+
+		} else if ((idImovelParcelamentosDebitos != null && !idImovelParcelamentosDebitos.equalsIgnoreCase("")) || (idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase(""))) {
+
+			if (idImovelParcelamentosDebitos != null && !idImovelParcelamentosDebitos.equalsIgnoreCase("")) {
+
+				if (idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase("")) {
+
+					if (indicadorNovo != null && !indicadorNovo.equals("")) {
+						form.setIdImovelParcelamentosDebitos(idImovelParcelamentosDebitos);
+
+					} else if (!(idImovelParcelamentosDebitos.equals(idImovelPrincipalAba))) {
+						form.setIdImovelParcelamentosDebitos(idImovelPrincipalAba);
+						idImovelParcelamentosDebitos = idImovelPrincipalAba;
+					}
+
+				}
+			} else if (idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase("")) {
+				form.setIdImovelRegistroAtendimento(idImovelPrincipalAba);
+				idImovelParcelamentosDebitos = idImovelPrincipalAba;
+			}
+
+			Imovel imovel = null;
+			boolean imovelNovoPesquisado = false;
+			if (sessao.getAttribute("imovelParcelamentosDebitos") != null) {
+				imovel = (Imovel) sessao.getAttribute("imovelParcelamentosDebitos");
+				if (!(imovel.getId().toString().equals(idImovelParcelamentosDebitos.trim()))) {
+					imovel = getFachada().consultarParcelamentosDebitosImovel(new Integer(idImovelParcelamentosDebitos.trim()));
+					imovelNovoPesquisado = true;
+				}
+			} else {
+				imovel = getFachada().consultarParcelamentosDebitosImovel(new Integer(idImovelParcelamentosDebitos.trim()));
+				imovelNovoPesquisado = true;
+			}
+
+			if (imovel != null) {
+				sessao.setAttribute("imovelParcelamentosDebitos", imovel);
+				sessao.setAttribute("idImovelPrincipalAba", imovel.getId().toString());
+				form.setIdImovelParcelamentosDebitos(imovel.getId().toString());
+
 				if (imovel.getIndicadorExclusao().equals(ConstantesSistema.SIM)) {
-					httpServletRequest.setAttribute("imovelExcluido", true);
+					request.setAttribute("imovelExcluido", true);
 				}
 
-                //caso o imovel pesquisado seja diferente do pesquisado anterior ou seja a primeira vez que se esteja pesquisando
-                if(imovelNovoPesquisado){
-	            	//seta na tela a inscrição do imovel
-	                httpServletRequest.setAttribute(
-	                        "idImovelParcelamentosDebitosNaoEncontrado", null);
-	                
-	                consultarImovelActionForm.setMatriculaImovelParcelamentosDebitos(fachada.pesquisarInscricaoImovelExcluidoOuNao(new Integer(idImovelParcelamentosDebitos.trim())));
-	                
-					//seta a situação de agua
-					if(imovel.getLigacaoAguaSituacao() != null){
-						consultarImovelActionForm.setSituacaoAguaParcelamentosDebitos(imovel.getLigacaoAguaSituacao().getDescricao());
-					}
-					//seta a situação de esgoto
-					if(imovel.getLigacaoEsgotoSituacao() != null){
-						consultarImovelActionForm.setSituacaoEsgotoParcelamentosDebitos(imovel.getLigacaoEsgotoSituacao().getDescricao());
+				if (imovelNovoPesquisado) {
+					request.setAttribute("idImovelParcelamentosDebitosNaoEncontrado", null);
+
+					form.setMatriculaImovelParcelamentosDebitos(getFachada().pesquisarInscricaoImovelExcluidoOuNao(new Integer(idImovelParcelamentosDebitos.trim())));
+
+					if (imovel.getLigacaoAguaSituacao() != null) {
+						form.setSituacaoAguaParcelamentosDebitos(imovel.getLigacaoAguaSituacao().getDescricao());
 					}
 
-					//numero de parcelamentos
-					if (imovel.getNumeroParcelamento() != null)	{
-						consultarImovelActionForm.setParcelamento(""
-								+ imovel.getNumeroParcelamento());
-					}else {
-						consultarImovelActionForm.setParcelamento(null);
+					if (imovel.getLigacaoEsgotoSituacao() != null) {
+						form.setSituacaoEsgotoParcelamentosDebitos(imovel.getLigacaoEsgotoSituacao().getDescricao());
 					}
 
-					//numero de reparcelamento
-					if (imovel.getNumeroReparcelamento() != null){
-						consultarImovelActionForm.setReparcelamento(""
-								+ imovel.getNumeroReparcelamento());
-					}else {
-						consultarImovelActionForm.setReparcelamento(null);
+					if (imovel.getNumeroParcelamento() != null) {
+						form.setParcelamento("" + imovel.getNumeroParcelamento());
+					} else {
+						form.setParcelamento(null);
 					}
 
-					//numero de reparcelamento consecutivo
-					if (imovel.getNumeroReparcelamentoConsecutivos() != null){
-						consultarImovelActionForm.setReparcelamentoConsecutivo(""
-								+ imovel.getNumeroReparcelamentoConsecutivos());
-					}else {
-						consultarImovelActionForm.setReparcelamentoConsecutivo(null);
+					if (imovel.getNumeroReparcelamento() != null) {
+						form.setReparcelamento("" + imovel.getNumeroReparcelamento());
+					} else {
+						form.setReparcelamento(null);
+					}
+
+					if (imovel.getNumeroReparcelamentoConsecutivos() != null) {
+						form.setReparcelamentoConsecutivo("" + imovel.getNumeroReparcelamentoConsecutivos());
+					} else {
+						form.setReparcelamentoConsecutivo(null);
 					}
 
 					FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
-					filtroParcelamento.adicionarParametro(new ParametroSimples(
-								FiltroParcelamento.IMOVEL_ID, idImovelParcelamentosDebitos.trim()));
-					filtroParcelamento
-							.adicionarCaminhoParaCarregamentoEntidade("parcelamentoSituacao");
+					filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.IMOVEL_ID, idImovelParcelamentosDebitos.trim()));
+					filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("parcelamentoSituacao");
 
-					Collection<Parcelamento> colecaoParcelamento = fachada.pesquisar(filtroParcelamento, Parcelamento.class.getName() );
-					
-					if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()){
+					Collection<Parcelamento> colecaoParcelamento = getFachada().pesquisar(filtroParcelamento, Parcelamento.class.getName());
+
+					if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
 						sessao.setAttribute("colecaoParcelamento", colecaoParcelamento);
-					}else{
-						/*if (colecaoParcelamento == null || colecaoParcelamento.isEmpty()){
-							httpServletRequest.setAttribute(
-				                    "idImovelParcelamentosDebitosNaoEncontrado", null);
-
-				        	sessao.removeAttribute("imovelParcelamentosDebitos");
-				        	sessao.removeAttribute("colecaoParcelamento");
-				        	sessao.removeAttribute("idImovelPrincipalAba");
-				        	consultarImovelActionForm.setIdImovelParcelamentosDebitos(null);
-				        	consultarImovelActionForm.setMatriculaImovelParcelamentosDebitos(null);
-				        	consultarImovelActionForm.setSituacaoAguaParcelamentosDebitos(null);
-				        	consultarImovelActionForm.setSituacaoEsgotoParcelamentosDebitos(null);
-				        	consultarImovelActionForm.setParcelamento(null);
-				        	consultarImovelActionForm.setReparcelamento(null);
-				        	consultarImovelActionForm.setReparcelamentoConsecutivo(null);        	
-
-							throw new ActionServletException("atencao.parcelamento.inexistente");
-			        	}
-			        	*/
-						
-						//Colocado por Raphael Rossiter em 12/01/2007
+					} else {
 						sessao.removeAttribute("colecaoParcelamento");
 					}
-					
-                }
-            } else {
-                httpServletRequest.setAttribute(
-                        "idImovelParcelamentosDebitosNaoEncontrado", "true");
-                consultarImovelActionForm.setMatriculaImovelParcelamentosDebitos("IMÓVEL INEXISTENTE");
-                
-                //limpar os dados pesquisados
-                sessao.removeAttribute("imovelParcelamentosDebitos");
-                sessao.removeAttribute("colecaoParcelamento");
-                sessao.removeAttribute("idImovelPrincipalAba");
-                consultarImovelActionForm.setIdImovelDadosComplementares(null);
-				consultarImovelActionForm.setIdImovelDadosCadastrais(null);
-				consultarImovelActionForm.setIdImovelAnaliseMedicaoConsumo(null);
-				consultarImovelActionForm.setIdImovelHistoricoFaturamento(null);
-				consultarImovelActionForm.setIdImovelDebitos(null);
-				consultarImovelActionForm.setIdImovelPagamentos(null);
-				consultarImovelActionForm.setIdImovelDevolucoesImovel(null);
-				consultarImovelActionForm.setIdImovelDocumentosCobranca(null);
-				consultarImovelActionForm.setIdImovelParcelamentosDebitos(null);
-				consultarImovelActionForm.setIdImovelRegistroAtendimento(null);
-				consultarImovelActionForm.setImovIdAnt(null);
-            	consultarImovelActionForm.setSituacaoAguaParcelamentosDebitos(null);
-            	consultarImovelActionForm.setSituacaoEsgotoParcelamentosDebitos(null);
-            	consultarImovelActionForm.setParcelamento(null);
-            	consultarImovelActionForm.setReparcelamento(null);
-            	consultarImovelActionForm.setReparcelamentoConsecutivo(null);               	
-                
-            }
-        }else{
-        	 consultarImovelActionForm.setIdImovelParcelamentosDebitos(idImovelParcelamentosDebitos);
-         	httpServletRequest.setAttribute(
-                    "idImovelParcelamentosDebitosNaoEncontrado", null);
 
-        	sessao.removeAttribute("imovelParcelamentosDebitos");
-        	sessao.removeAttribute("colecaoParcelamento");
-        	sessao.removeAttribute("idImovelPrincipalAba");
-        	
-        	consultarImovelActionForm.setMatriculaImovelParcelamentosDebitos(null);
-        	consultarImovelActionForm.setSituacaoAguaParcelamentosDebitos(null);
-        	consultarImovelActionForm.setSituacaoEsgotoParcelamentosDebitos(null);
-        	consultarImovelActionForm.setParcelamento(null);
-        	consultarImovelActionForm.setReparcelamento(null);
-        	consultarImovelActionForm.setReparcelamentoConsecutivo(null);        	
+				}
+			} else {
+				request.setAttribute("idImovelParcelamentosDebitosNaoEncontrado", "true");
+				form.setMatriculaImovelParcelamentosDebitos("IMÓVEL INEXISTENTE");
 
-        
-        }
+				sessao.removeAttribute("imovelParcelamentosDebitos");
+				sessao.removeAttribute("colecaoParcelamento");
+				sessao.removeAttribute("idImovelPrincipalAba");
+				form.setIdImovelDadosComplementares(null);
+				form.setIdImovelDadosCadastrais(null);
+				form.setIdImovelAnaliseMedicaoConsumo(null);
+				form.setIdImovelHistoricoFaturamento(null);
+				form.setIdImovelDebitos(null);
+				form.setIdImovelPagamentos(null);
+				form.setIdImovelDevolucoesImovel(null);
+				form.setIdImovelDocumentosCobranca(null);
+				form.setIdImovelParcelamentosDebitos(null);
+				form.setIdImovelRegistroAtendimento(null);
+				form.setImovIdAnt(null);
+				form.setSituacaoAguaParcelamentosDebitos(null);
+				form.setSituacaoEsgotoParcelamentosDebitos(null);
+				form.setParcelamento(null);
+				form.setReparcelamento(null);
+				form.setReparcelamentoConsecutivo(null);
 
-        return retorno;
-    }
+			}
+		} else {
+			form.setIdImovelParcelamentosDebitos(idImovelParcelamentosDebitos);
+			request.setAttribute("idImovelParcelamentosDebitosNaoEncontrado", null);
 
+			sessao.removeAttribute("imovelParcelamentosDebitos");
+			sessao.removeAttribute("colecaoParcelamento");
+			sessao.removeAttribute("idImovelPrincipalAba");
+
+			form.setMatriculaImovelParcelamentosDebitos(null);
+			form.setSituacaoAguaParcelamentosDebitos(null);
+			form.setSituacaoEsgotoParcelamentosDebitos(null);
+			form.setParcelamento(null);
+			form.setReparcelamento(null);
+			form.setReparcelamentoConsecutivo(null);
+		}
+
+		return retorno;
+	}
 }

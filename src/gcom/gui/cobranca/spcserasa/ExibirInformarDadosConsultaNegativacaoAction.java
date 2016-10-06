@@ -49,381 +49,302 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
-/**
- * Description of the Class
- * 
- * @author Thiago Vieira
- */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ExibirInformarDadosConsultaNegativacaoAction extends GcomAction {
 
-    /**
-     * Description of the Method
-     * 
-     * @param actionMapping
-     *            Description of the Parameter
-     * @param actionForm
-     *            Description of the Parameter
-     * @param httpServletRequest
-     *            Description of the Parameter
-     * @param httpServletResponse
-     *            Description of the Parameter
-     * @return Description of the Return Value
-     */
-    public ActionForward execute(ActionMapping actionMapping,
-            ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
-
-//    	 localiza o action no objeto actionmapping
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = actionMapping.findForward("exibirInformarDadosConsultaNegativacao");
-		HttpSession sessao = httpServletRequest.getSession(false);
+		HttpSession sessao = request.getSession(false);
 		InformarDadosConsultaNegativacaoActionForm form = (InformarDadosConsultaNegativacaoActionForm) actionForm;
-		
-		// Obtém a instância da Fachada
-		Fachada fachada = Fachada.getInstancia();
-			
-		String gerarRelatorio = (String) sessao.getAttribute("gerarRelatorio");
-		
-		if(httpServletRequest.getParameter("gerarRelatorio")!= null && httpServletRequest.getParameter("gerarRelatorio").equals("nao")){			
-			gerarRelatorio = "exibirResumoNegativacaoParametros";		
-			form.setIndicadorRelExclusao(null);
-			form.setIndicadorRelAcompanhamentoClientesNegativados(null);
+
+		setarTipoRelatorio(form);
+		setarTipoConsulta(form);
+		pesquisarNegativador(sessao);
+		selecionarNegativador(sessao, form);
+		pesquisarCobrancaGrupo(sessao);
+		pesquisarGerenciaRegional(sessao);
+		pesquisarUnidadeNegocio(sessao);
+		pesquisarEloPolo(request, form);
+		pesquisarLocalidade(request, form);
+		pesquisarSetorComercial(request, form);
+		pesquisarQuadra(form, request);
+		pesquisarImovelPerfil(sessao);
+		pesquisarCategoria(sessao);
+		pesquisarClienteTipo(sessao);
+		pesquisarEsferaPoder(sessao);
+		pesquisarLigacaoAguaSituacao(sessao);
+		pesquisarLigacaoEsgotoSituacao(sessao);
+		pesquisarMotivoRejeicao(sessao, form);
+
+		return retorno;
+	}
+
+	private void pesquisarMotivoRejeicao(HttpSession sessao, InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getArrayNegativador() != null && form.getArrayNegativador().length > 0
+				&& form.getIndicadorRelAcompanhamentoClientesNegativados() != null
+				&& form.getIndicadorRelAcompanhamentoClientesNegativados().equals("sim")) {
+
+			Collection colecaoNegativador = new ArrayList();
+			for (int i = 0; i < form.getArrayNegativador().length; i++) {
+				colecaoNegativador.add(form.getArrayNegativador()[i]);
+			}
+
+			FiltroNegativadorRetornoMotivo filtro = new FiltroNegativadorRetornoMotivo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.INDICADOR_REGISTRO_ACEITO, ConstantesSistema.NAO));
+			filtro.adicionarParametro(new ParametroSimplesIn(FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR, colecaoNegativador));
+			filtro.setCampoOrderBy("descricaoRetornocodigo");
+
+			Collection colecaoMotivoRejeicao = Fachada.getInstancia().pesquisar(filtro, NegativadorRetornoMotivo.class.getName());
+			sessao.setAttribute("collMotivoRejeicao", colecaoMotivoRejeicao);
 		}
-		if(httpServletRequest.getParameter("gerarRelatorio")!= null && httpServletRequest.getParameter("gerarRelatorio").equals("relatorioAcompanhamentoClientesNegativados")){			
-			gerarRelatorio = "relatorioAcompanhamentoClientesNegativados";		
+	}
+
+	private void pesquisarLigacaoEsgotoSituacao(HttpSession sessao) {
+		if (sessao.getAttribute("collLigacaoEsgotoSituacao") == null) {
+			FiltroLigacaoEsgotoSituacao filtro = new FiltroLigacaoEsgotoSituacao();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoLigacaoEsgotoSituacao = Fachada.getInstancia().pesquisar(filtro, LigacaoEsgotoSituacao.class.getName());
+			sessao.setAttribute("collLigacaoEsgotoSituacao", colecaoLigacaoEsgotoSituacao);
+		}
+	}
+
+	private void pesquisarLigacaoAguaSituacao(HttpSession sessao) {
+		if (sessao.getAttribute("collLigacaoAguaSituacao") == null) {
+			FiltroLigacaoAguaSituacao filtro = new FiltroLigacaoAguaSituacao();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoLigacaoAguaSituacao = Fachada.getInstancia().pesquisar(filtro, LigacaoAguaSituacao.class.getName());
+			sessao.setAttribute("collLigacaoAguaSituacao", colecaoLigacaoAguaSituacao);
+		}
+	}
+
+	private void pesquisarEsferaPoder(HttpSession sessao) {
+		if (sessao.getAttribute("collEsferaPoder") == null) {
+			FiltroEsferaPoder filtro = new FiltroEsferaPoder();
+			filtro.adicionarParametro(new ParametroSimples(FiltroEsferaPoder.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoEsferaPoder = Fachada.getInstancia().pesquisar(filtro, EsferaPoder.class.getName());
+			sessao.setAttribute("collEsferaPoder", colecaoEsferaPoder);
+		}
+	}
+
+	private void pesquisarClienteTipo(HttpSession sessao) {
+		if (sessao.getAttribute("collClienteTipo") == null) {
+			FiltroClienteTipo filtro = new FiltroClienteTipo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoClienteTipo = Fachada.getInstancia().pesquisar(filtro, ClienteTipo.class.getName());
+			sessao.setAttribute("collClienteTipo", colecaoClienteTipo);
+		}
+	}
+
+	private void pesquisarCategoria(HttpSession sessao) {
+		if (sessao.getAttribute("collCategoria") == null) {
+			FiltroCategoria filtro = new FiltroCategoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCategoria.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoCategoria = Fachada.getInstancia().pesquisar(filtro, Categoria.class.getName());
+			sessao.setAttribute("collCategoria", colecaoCategoria);
+		}
+	}
+
+	private void pesquisarImovelPerfil(HttpSession sessao) {
+		if (sessao.getAttribute("collImovelPerfil") == null) {
+			FiltroImovelPerfil filtro = new FiltroImovelPerfil();
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovelPerfil.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecaoImovelPerfil = Fachada.getInstancia().pesquisar(filtro, ImovelPerfil.class.getName());
+			sessao.setAttribute("collImovelPerfil", colecaoImovelPerfil);
+		}
+	}
+
+	private void pesquisarSetorComercial(HttpServletRequest request, InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getIdSetorComercial() != null && !form.getIdSetorComercial().trim().equals("")) {
+			FiltroSetorComercial filtro = new FiltroSetorComercial();
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getIdSetorComercial()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidade()));
+
+			Collection colecaoSetorComercial = Fachada.getInstancia().pesquisar(filtro, SetorComercial.class.getName());
+
+			if (colecaoSetorComercial != null && !colecaoSetorComercial.isEmpty()) {
+				if (((SetorComercial) ((List) colecaoSetorComercial).get(0)).getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+					throw new ActionServletException("atencao.setor_comercial_inativo", null, ((SetorComercial) ((List) colecaoSetorComercial).get(0)).getId().toString());
+				}
+
+				Integer codigoSetorComercial = ((SetorComercial) ((List) colecaoSetorComercial).get(0)).getCodigo();
+				form.setIdSetorComercial(codigoSetorComercial.toString());
+				form.setDescricaoSetorComercial(((SetorComercial) ((List) colecaoSetorComercial).get(0)).getDescricao());
+			} else {
+				request.setAttribute("corSetorComercial", "exception");
+				form.setDescricaoSetorComercial(ConstantesSistema.CODIGO_SETOR_COMERCIAL_INEXISTENTE);
+				form.setIdSetorComercial("");
+			}
+		}
+	}
+
+	private void pesquisarLocalidade(HttpServletRequest request, InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getIdLocalidade() != null && !form.getIdLocalidade().trim().equals("")) {
+			FiltroLocalidade filtro = new FiltroLocalidade();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidade()));
+
+			Collection colecaoLocalidade = Fachada.getInstancia().pesquisar(filtro, Localidade.class.getName());
+
+			if (colecaoLocalidade != null && !colecaoLocalidade.isEmpty()) {
+				if (((Localidade) ((List) colecaoLocalidade).get(0)).getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+					throw new ActionServletException("atencao.localidade_inativa", null, "" + ((Localidade) ((List) colecaoLocalidade).get(0)).getId());
+				}
+
+				form.setIdLocalidade(((Localidade) ((List) colecaoLocalidade).get(0)).getId().toString());
+				form.setDescricaoLocalidade(((Localidade) ((List) colecaoLocalidade).get(0)).getDescricao());
+			} else {
+				request.setAttribute("corLocalidade", "exception");
+				form.setDescricaoLocalidade(ConstantesSistema.CODIGO_LOCALIDADE_INEXISTENTE);
+				form.setIdLocalidade("");
+			}
+		}
+	}
+
+	private void pesquisarEloPolo(HttpServletRequest request, InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getIdEloPolo() != null && !form.getIdEloPolo().trim().equals("")) {
+			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdEloPolo()));
+
+			Collection colecaoEloPolo = Fachada.getInstancia().pesquisar(filtroLocalidade, Localidade.class.getName());
+
+			if (colecaoEloPolo != null && !colecaoEloPolo.isEmpty()) {
+				if (((Localidade) ((List) colecaoEloPolo).get(0)).getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+					throw new ActionServletException("atencao.localidade_inativa", null, "" + ((Localidade) ((List) colecaoEloPolo).get(0)).getId());
+				}
+
+				form.setIdEloPolo(((Localidade) ((List) colecaoEloPolo).get(0)).getId().toString());
+				form.setDescricaoEloPolo(((Localidade) ((List) colecaoEloPolo).get(0)).getDescricao());
+			} else {
+				request.setAttribute("corEloPolo", "exception");
+				form.setDescricaoEloPolo(ConstantesSistema.CODIGO_ELO_POLO_INEXISTENTE);
+				form.setIdEloPolo("");
+			}
+		}
+	}
+
+	private void pesquisarUnidadeNegocio(HttpSession sessao) {
+		if (sessao.getAttribute("collUnidadeNegocio") == null) {
+			FiltroUnidadeNegocio filtro = new FiltroUnidadeNegocio();
+			filtro.adicionarParametro(new ParametroSimples(FiltroUnidadeNegocio.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("nome");
+			Collection colecaoUnidadeNegocio = Fachada.getInstancia().pesquisar(filtro, UnidadeNegocio.class.getName());
+			sessao.setAttribute("collUnidadeNegocio", colecaoUnidadeNegocio);
+		}
+	}
+
+	private void pesquisarGerenciaRegional(HttpSession sessao) {
+		if (sessao.getAttribute("collGerenciaRegional") == null) {
+			FiltroGerenciaRegional filtro = new FiltroGerenciaRegional();
+			filtro.adicionarParametro(new ParametroSimples(FiltroGerenciaRegional.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("nome");
+			Collection colecao = Fachada.getInstancia().pesquisar(filtro, GerenciaRegional.class.getName());
+			sessao.setAttribute("collGerenciaRegional", colecao);
+		}
+	}
+
+	private void setarTipoRelatorio(InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getTipoRelatorioNegativacao() == null || form.getTipoRelatorioNegativacao().trim().equals("")) {
+			form.setTipoRelatorioNegativacao("1");
+		}
+	}
+
+	private void pesquisarCobrancaGrupo(HttpSession sessao) {
+		if (sessao.getAttribute("collCobrancaGrupo") == null) {
+			FiltroCobrancaGrupo filtro = new FiltroCobrancaGrupo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaGrupo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy("descricao");
+			Collection colecao = Fachada.getInstancia().pesquisar(filtro, CobrancaGrupo.class.getName());
+			sessao.setAttribute("collCobrancaGrupo", colecao);
+		}
+	}
+
+	private void selecionarNegativador(HttpSession sessao, InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getArrayNegativador() != null && form.getArrayNegativador().length > 0) {
+			Collection colecao = new ArrayList();
+			for (int i = 0; i < form.getArrayNegativador().length; i++) {
+				colecao.add(form.getArrayNegativador()[i]);
+			}
+
+			pesquisarNegativadorExclusaoMotivo(sessao, colecao);
+		}
+	}
+
+	private void pesquisarNegativadorExclusaoMotivo(HttpSession sessao, Collection colecaoNegativador) {
+		FiltroNegativadorExclusaoMotivo filtro = new FiltroNegativadorExclusaoMotivo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroNegativadorExclusaoMotivo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+		filtro.adicionarParametro(new ParametroSimplesIn(FiltroNegativadorExclusaoMotivo.NEGATIVADOR_ID, colecaoNegativador));
+		Collection colecao = Fachada.getInstancia().pesquisar(filtro, NegativadorExclusaoMotivo.class.getName());
+		sessao.setAttribute("collNegativadorExclusaoMotivo", colecao);
+	}
+
+	private void pesquisarNegativador(HttpSession sessao) {
+		if (sessao.getAttribute("collNegativador") == null) {
+			FiltroNegativador filtro = new FiltroNegativador();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativador.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
+			filtro.setCampoOrderBy("cliente.nome");
+			
+			Collection colecao = Fachada.getInstancia().pesquisar(filtro, Negativador.class.getName());
+			sessao.setAttribute("collNegativador", colecao);
+		}
+	}
+
+	private void setarTipoConsulta(InformarDadosConsultaNegativacaoActionForm form) {
+		if (form.getTipoConsulta() == null || form.getTipoConsulta().trim().equals("")) {
+			form.setTipoConsulta(InformarDadosConsultaNegativacaoActionForm.ACOMPANHAMENTO);
 			form.setIndicadorRelExclusao(null);
 			form.setIndicadorRelAcompanhamentoClientesNegativados("sim");
 			form.setIndicadorApenasNegativacoesRejeitadas(ConstantesSistema.NAO.toString());
-		}
-		if((httpServletRequest.getParameter("gerarRelatorio")!= null && httpServletRequest.getParameter("gerarRelatorio").equals("relatorioNegativacoesExcluidas")) 
-			|| (gerarRelatorio!=null && gerarRelatorio.equals("relatorioNegativacoesExcluidas"))){			
-			gerarRelatorio = "relatorioNegativacoesExcluidas";		
-			form.setIndicadorRelExclusao("sim");
-			form.setIndicadorRelAcompanhamentoClientesNegativados(null);
-		}
-		
-	
-		sessao.setAttribute("gerarRelatorio", gerarRelatorio);
-		sessao.setAttribute("indicadorRelExclusao", form.getIndicadorRelExclusao());
-		
-		if (sessao.getAttribute("collNegativador") == null){
-			FiltroNegativador filtroNegativador = new FiltroNegativador();
-			filtroNegativador.adicionarParametro(new ParametroSimples(FiltroNegativador.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroNegativador.adicionarCaminhoParaCarregamentoEntidade("cliente");
-			filtroNegativador.setCampoOrderBy("cliente.nome");
-			Collection collNegativador = Fachada.getInstancia().pesquisar(filtroNegativador, Negativador.class.getName());
-			sessao.setAttribute("collNegativador", collNegativador);
-		}
-		
-		//*********************************************************
-		// RM3755
-		// Autor: Ivan Sergio
-		// Data: 11/01/2011
-		//*********************************************************
-		if (form.getArrayNegativador() != null && form.getArrayNegativador().length > 0) {
-			
-			Collection colecaoNegativador = new ArrayList();
-			for (int i = 0; i < form.getArrayNegativador().length; i++) {
-				colecaoNegativador.add(form.getArrayNegativador()[i]);
-			}
-			
-			FiltroNegativadorExclusaoMotivo filtroNegativadorExclusaoMotivo = new FiltroNegativadorExclusaoMotivo();
-			filtroNegativadorExclusaoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorExclusaoMotivo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));		
-			filtroNegativadorExclusaoMotivo.adicionarParametro(new ParametroSimplesIn(FiltroNegativadorExclusaoMotivo.NEGATIVADOR_ID, colecaoNegativador));
-			Collection collNegativadorExclusaoMotivo = Fachada.getInstancia().pesquisar(filtroNegativadorExclusaoMotivo, NegativadorExclusaoMotivo.class.getName());
-			sessao.setAttribute("collNegativadorExclusaoMotivo", collNegativadorExclusaoMotivo);
-		}
-		//*********************************************************
-		
-		if (sessao.getAttribute("collCobrancaGrupo") == null){
-			FiltroCobrancaGrupo filtroCobrancaGrupo = new FiltroCobrancaGrupo();
-			filtroCobrancaGrupo.adicionarParametro(new ParametroSimples(FiltroCobrancaGrupo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroCobrancaGrupo.setCampoOrderBy("descricao");
-			Collection collCobrancaGrupo = Fachada.getInstancia().pesquisar(filtroCobrancaGrupo, CobrancaGrupo.class.getName());
-			sessao.setAttribute("collCobrancaGrupo", collCobrancaGrupo);
-		}
-		
-		if (sessao.getAttribute("collGerenciaRegional") == null){
-			FiltroGerenciaRegional filtroGerenciaRegional = new FiltroGerenciaRegional();
-			filtroGerenciaRegional.adicionarParametro(new ParametroSimples(FiltroGerenciaRegional.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroGerenciaRegional.setCampoOrderBy("nome");
-			Collection collGerenciaRegional = Fachada.getInstancia().pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
-			sessao.setAttribute("collGerenciaRegional", collGerenciaRegional);
-		}
-		
-		if (sessao.getAttribute("collUnidadeNegocio") == null){
-			FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
-			filtroUnidadeNegocio.adicionarParametro(new ParametroSimples(FiltroUnidadeNegocio.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroUnidadeNegocio.setCampoOrderBy("nome");
-			Collection collUnidadeNegocio = Fachada.getInstancia().pesquisar(filtroUnidadeNegocio , UnidadeNegocio.class.getName());
-			sessao.setAttribute("collUnidadeNegocio", collUnidadeNegocio);
-		}
-		
-		if (form.getIdEloPolo() != null && !form.getIdEloPolo().trim().equals("")){
-			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdEloPolo()));
-			
-			Collection collEloPolo = Fachada.getInstancia().pesquisar(filtroLocalidade, Localidade.class.getName());
-			
-			if (collEloPolo != null && !collEloPolo.isEmpty()) {
-				if (((Localidade) ((List) collEloPolo).get(0))
-						.getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-					throw new ActionServletException("atencao.localidade_inativa",
-							null, "" + ((Localidade) ((List) collEloPolo).get(0)).getId());
-				}
-
-				form.setIdEloPolo(((Localidade) ((List) collEloPolo)
-								.get(0)).getId().toString());
-				form.setDescricaoEloPolo(((Localidade) ((List) collEloPolo)
-								.get(0)).getDescricao());
-			} else {
-				httpServletRequest.setAttribute("corEloPolo","exception");
-               	form.setDescricaoEloPolo(ConstantesSistema.CODIGO_ELO_POLO_INEXISTENTE);
-               	form.setIdEloPolo("");
-			}
-		}
-		
-		if (form.getIdLocalidade() != null && !form.getIdLocalidade().trim().equals("")){
-			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidade()));
-			
-			Collection collLocalidade = Fachada.getInstancia().pesquisar(filtroLocalidade, Localidade.class.getName());
-			
-			if (collLocalidade != null && !collLocalidade.isEmpty()) {
-				if (((Localidade) ((List) collLocalidade).get(0))
-						.getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-					throw new ActionServletException("atencao.localidade_inativa",
-							null, "" + ((Localidade) ((List) collLocalidade).get(0)).getId());
-				}
-
-				form.setIdLocalidade(((Localidade) ((List) collLocalidade)
-								.get(0)).getId().toString());
-				form.setDescricaoLocalidade(((Localidade) ((List) collLocalidade)
-								.get(0)).getDescricao());
-			} else {
-				httpServletRequest.setAttribute("corLocalidade","exception");
-               	form.setDescricaoLocalidade(ConstantesSistema.CODIGO_LOCALIDADE_INEXISTENTE);
-               	form.setIdLocalidade("");
-			}
-		}
-		
-		if (form.getIdSetorComercial() != null && !form.getIdSetorComercial().trim().equals("")){
-			FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getIdSetorComercial()));
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidade()));
-			
-			Collection collSetorComercial = Fachada.getInstancia().pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-			
-			if (collSetorComercial != null && !collSetorComercial.isEmpty()) {
-				if (((SetorComercial) ((List) collSetorComercial).get(0))
-						.getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-					throw new ActionServletException("atencao.setor_comercial_inativo",
-							null, "" + ((SetorComercial) ((List) collSetorComercial).get(0)).getId());
-				}
-
-				Integer codigoSetorComercial = ((SetorComercial) ((List) collSetorComercial).get(0)).getCodigo();				
-				form.setIdSetorComercial(codigoSetorComercial.toString());
-				form.setDescricaoSetorComercial(((SetorComercial) ((List) collSetorComercial)
-								.get(0)).getDescricao());
-			} else {
-				httpServletRequest.setAttribute("corSetorComercial","exception");
-               	form.setDescricaoSetorComercial(ConstantesSistema.CODIGO_SETOR_COMERCIAL_INEXISTENTE);
-               	form.setIdSetorComercial("");
-			}
-		} 
-		
-		/*
-		if (form.getIdQuadra() != null && !form.getIdQuadra().trim().equals("")){
-			FiltroQuadra filtroQuadra= new FiltroQuadra();
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID, form.getIdQuadra()));
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, form.getIdSetorComercial()));
-			
-			Collection collQuadra = Fachada.getInstancia().pesquisar(filtroQuadra, Quadra.class.getName());
-			
-			if (collQuadra != null && !collQuadra.isEmpty()) {
-				if (((Quadra) ((List) collQuadra).get(0))
-						.getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-					throw new ActionServletException("atencao.quadra_inativa",
-							null, "" + ((Quadra) ((List) collQuadra).get(0)).getId());
-				}
-
-				form.setIdQuadra(((Quadra) ((List) collQuadra)
-								.get(0)).getId().toString());
-				form.setDescricaoQuadra(((Quadra) ((List) collQuadra)
-								.get(0)).getDescricao());
-			} else {
-				httpServletRequest.setAttribute("corQuadra","exception");
-               	form.setDescricaoQuadra(ConstantesSistema.CODIGO_QUADRA_INEXISTENTE);
-               	form.setIdQuadra("");
-			}
-		}
-		*/
-		
-		if (form.getIdQuadra() != null && !form.getIdQuadra().trim().equals("")&& 
-				(form.getIdSetorComercial() != null && !form.getIdSetorComercial()
-				.toString().trim().equalsIgnoreCase(""))
-				&& (form.getIdLocalidade() != null && !form.getIdLocalidade()
-						.toString().trim().equalsIgnoreCase(""))){
-			
-			this.pesquisarQuadra(form.getIdQuadra(),form.getIdSetorComercial(),form.getIdLocalidade(),
-					form,fachada,httpServletRequest);
-			
-		}
-		
-		if (sessao.getAttribute("collImovelPerfil") == null){
-			FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
-			filtroImovelPerfil.adicionarParametro(new ParametroSimples(FiltroImovelPerfil.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroImovelPerfil.setCampoOrderBy("descricao");
-			Collection collImovelPerfil = Fachada.getInstancia().pesquisar(filtroImovelPerfil , ImovelPerfil.class.getName());
-			sessao.setAttribute("collImovelPerfil", collImovelPerfil);
-		}
-		
-		if (sessao.getAttribute("collCategoria") == null){
-			FiltroCategoria filtroCategoria= new FiltroCategoria();
-			filtroCategoria.adicionarParametro(new ParametroSimples(FiltroCategoria.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroCategoria.setCampoOrderBy("descricao");
-			Collection collCategoria = Fachada.getInstancia().pesquisar(filtroCategoria , Categoria.class.getName());
-			sessao.setAttribute("collCategoria", collCategoria);
-		}
-		
-		if (sessao.getAttribute("collClienteTipo") == null){
-			FiltroClienteTipo filtroClienteTipo= new FiltroClienteTipo();
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroClienteTipo.setCampoOrderBy("descricao");
-			Collection collClienteTipo = Fachada.getInstancia().pesquisar(filtroClienteTipo , ClienteTipo.class.getName());
-			sessao.setAttribute("collClienteTipo", collClienteTipo);
-		}
-		
-		if (sessao.getAttribute("collEsferaPoder") == null){
-			FiltroEsferaPoder filtroEsferaPoder = new FiltroEsferaPoder();
-			filtroEsferaPoder.adicionarParametro(new ParametroSimples(FiltroEsferaPoder.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroEsferaPoder.setCampoOrderBy("descricao");
-			Collection collEsferaPoder = Fachada.getInstancia().pesquisar(filtroEsferaPoder , EsferaPoder.class.getName());
-			sessao.setAttribute("collEsferaPoder", collEsferaPoder);
-		}
-		
-		//*********************************************************
-		// RM3755
-		// Autor: Ivan Sergio
-		// Data: 11/01/2011
-		//*********************************************************
-		if (sessao.getAttribute("collLigacaoAguaSituacao") == null){
-			FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
-			filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(
-					FiltroLigacaoAguaSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroLigacaoAguaSituacao.setCampoOrderBy("descricao");
-			Collection collLigacaoAguaSituacao = Fachada.getInstancia().pesquisar(
-					filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
-			sessao.setAttribute("collLigacaoAguaSituacao", collLigacaoAguaSituacao);
-		}
-		
-		if (sessao.getAttribute("collLigacaoEsgotoSituacao") == null){
-			FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
-			filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(
-					FiltroLigacaoEsgotoSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroLigacaoEsgotoSituacao.setCampoOrderBy("descricao");
-			Collection collLigacaoEsgotoSituacao = Fachada.getInstancia().pesquisar(
-					filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
-			sessao.setAttribute("collLigacaoEsgotoSituacao", collLigacaoEsgotoSituacao);
-		}
-		
-		if (form.getArrayNegativador() != null && form.getArrayNegativador().length > 0
-			&& form.getIndicadorRelAcompanhamentoClientesNegativados() != null 
-			&& form.getIndicadorRelAcompanhamentoClientesNegativados().equals("sim")){
-			
-			Collection colecaoNegativador = new ArrayList();
-			for (int i = 0; i < form.getArrayNegativador().length; i++) {
-				colecaoNegativador.add(form.getArrayNegativador()[i]);
-			}
-			
-			FiltroNegativadorRetornoMotivo filtroNegativadorRetornoMotivo = new FiltroNegativadorRetornoMotivo();
-			filtroNegativadorRetornoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.INDICADOR_REGISTRO_ACEITO, new Short("2") ));
-			filtroNegativadorRetornoMotivo.adicionarParametro(new ParametroSimplesIn(FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR, colecaoNegativador));
-			filtroNegativadorRetornoMotivo.setCampoOrderBy("descricaoRetornocodigo");
-			
-			Collection collMotivoRejeicao = Fachada.getInstancia().pesquisar(filtroNegativadorRetornoMotivo , NegativadorRetornoMotivo.class.getName());
-			sessao.setAttribute("collMotivoRejeicao", collMotivoRejeicao);
-		}
-		//*********************************************************
-		
-		return retorno;
-        
-    }
-    
-
-	/**
-	 * Pesquisar Quadra
-	 * 
-	 * @param filtroQuadra
-	 * @param numeroQuadra
-	 * @param codigoSetorComercial
-	 * @param quadras
-	 * @param form
-	 * @param fachada
-	 * @param httpServletRequest
-	 */
-	public void pesquisarQuadra (String numeroQuadra, String codigoSetorComercial, 
-			String idLocalidadeFiltroFiltro,
-			InformarDadosConsultaNegativacaoActionForm form,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
-			
-		FiltroQuadra filtroQuadra = new FiltroQuadra();		
-		
-		if (idLocalidadeFiltroFiltro != null
-				&& !idLocalidadeFiltroFiltro.toString().trim()
-						.equalsIgnoreCase("")) {
-			// coloca parametro no filtro
-			filtroQuadra.adicionarParametro(new ParametroSimples(
-					FiltroQuadra.ID_LOCALIDADE, new Integer(
-							idLocalidadeFiltroFiltro)));
-		}
-
-		if (codigoSetorComercial != null
-				&& !codigoSetorComercial.toString().trim()
-						.equalsIgnoreCase("")) {
-			// coloca parametro no filtro
-			filtroQuadra.adicionarParametro(new ParametroSimples(
-					FiltroQuadra.ID_LOCALIDADE, new Integer(
-							idLocalidadeFiltroFiltro)));
-		}
-
-		if (codigoSetorComercial != null
-				&& !codigoSetorComercial.toString().trim()
-						.equalsIgnoreCase("")) {
-			// coloca parametro no filtro
-			filtroQuadra.adicionarParametro(new ParametroSimples(
-					FiltroQuadra.CODIGO_SETORCOMERCIAL, new Integer(
-							codigoSetorComercial)));
-		}
-		filtroQuadra.adicionarParametro(new ParametroSimples(
-				FiltroQuadra.NUMERO_QUADRA, new Integer(numeroQuadra)));
-
-		//filtroQuadra.adicionarParametro(new ParametroSimples(
-			//	FiltroQuadra.INDICADORUSO,
-				//ConstantesSistema.INDICADOR_USO_ATIVO));
-		//filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bairro");
-		// pesquisa
-		Collection quadras = fachada.pesquisar(filtroQuadra, Quadra.class
-				.getName());
-		if (quadras != null && !quadras.isEmpty()) {
-			// O cliente foi encontrado
-			
-			form.setIdQuadra(""
-					+ ((Quadra) ((List) quadras).get(0)).getNumeroQuadra());
-			httpServletRequest
-					.setAttribute("idQuadraNaoEncontrada", "true");
-			httpServletRequest.setAttribute("nomeCampo", "loteFiltro");
-
 		} else {
-            httpServletRequest.setAttribute(
-                    "codigoQuadraNaoEncontrada", "true");
+			if (form.getTipoConsulta().equals(InformarDadosConsultaNegativacaoActionForm.ACOMPANHAMENTO)) {
+				form.setIndicadorRelExclusao(null);
+				form.setIndicadorRelAcompanhamentoClientesNegativados("sim");
+				form.setIndicadorApenasNegativacoesRejeitadas(ConstantesSistema.NAO.toString());
+			} else if (form.getTipoConsulta().equals(InformarDadosConsultaNegativacaoActionForm.EXCLUSOES)) {
+				form.setIndicadorRelExclusao("sim");
+				form.setIndicadorRelAcompanhamentoClientesNegativados(null);
+			} else if (form.getTipoConsulta().equals(InformarDadosConsultaNegativacaoActionForm.RESUMO)) {
+				form.setIndicadorRelExclusao(null);
+				form.setIndicadorRelAcompanhamentoClientesNegativados(null);
+			}
+		}
+	}
 
-			httpServletRequest.setAttribute("idQuadraNaoEncontrada",
-					"exception");
-			form.setIdQuadra("");
-			httpServletRequest.setAttribute
-					("msgQuadra", "QUADRA INEXISTENTE");
-			httpServletRequest.setAttribute("nomeCampo", "idQuadraFiltro");
+	public void pesquisarQuadra(InformarDadosConsultaNegativacaoActionForm form, HttpServletRequest request) {
+		if (form.getIdQuadra() != null && !form.getIdQuadra().trim().equals("")
+				&& (form.getIdSetorComercial() != null && !form.getIdSetorComercial().toString().trim().equalsIgnoreCase(""))
+				&& (form.getIdLocalidade() != null && !form.getIdLocalidade().toString().trim().equalsIgnoreCase(""))) {
+			
+			FiltroQuadra filtro = new FiltroQuadra();
+			
+			if (form.getIdLocalidade() != null && !form.getIdLocalidade().equalsIgnoreCase("")) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_LOCALIDADE, new Integer(form.getIdLocalidade())));
+			}
+			
+			if (form.getIdSetorComercial() != null && !form.getIdSetorComercial().equalsIgnoreCase("")) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.CODIGO_SETORCOMERCIAL, new Integer(form.getIdSetorComercial())));
+			}
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, new Integer(form.getIdQuadra())));
+			
+			Collection quadras = getFachada().pesquisar(filtro, Quadra.class.getName());
+			
+			if (quadras != null && !quadras.isEmpty()) {
+				form.setIdQuadra("" + ((Quadra) ((List) quadras).get(0)).getNumeroQuadra());
+				request.setAttribute("idQuadraNaoEncontrada", "true");
+				request.setAttribute("nomeCampo", "loteFiltro");
+			} else {
+				form.setIdQuadra("");
+				request.setAttribute("codigoQuadraNaoEncontrada", "true");
+				request.setAttribute("idQuadraNaoEncontrada", "exception");
+				request.setAttribute("msgQuadra", "QUADRA INEXISTENTE");
+				request.setAttribute("nomeCampo", "idQuadraFiltro");
+			}
 		}
 	}
 }

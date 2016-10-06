@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Set;
 
 public class ClienteRetorno implements ICliente {
-
+    
 	private Integer id;
 	private Integer idCliente;
 	private String nome;

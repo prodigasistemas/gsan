@@ -1,10 +1,13 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.fachada.Fachada;
+import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
 public class ImovelAtualizacaoCadastralBuilder {
@@ -73,7 +76,50 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
 		imovelAtualizacaoCadastral.setIdLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoLogradouro")));
 		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("classeSocial"))){
+		    imovelAtualizacaoCadastral.setClasseSocial(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("classeSocial")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos"))){
+		    imovelAtualizacaoCadastral.setQuantidadeAnimaisDomesticos(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos")));
+		}
+		
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida"))){
+		    imovelAtualizacaoCadastral.setAreaConstruida(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida")));
+		}
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina"))){
+		    imovelAtualizacaoCadastral.setVolumePiscina(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina")));
+		}
 
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna"))){
+		    imovelAtualizacaoCadastral.setVolumeCisterna(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna")));
+		}
+		
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua"))){
+		    imovelAtualizacaoCadastral.setVolumeCaixaDagua(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("tipoUso"))){
+		    imovelAtualizacaoCadastral.setTipoUso(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("tipoUso")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro"))){
+		    imovelAtualizacaoCadastral.setAcessoHidrometro(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial"))){
+		    imovelAtualizacaoCadastral.setQuantidadeEconomiasSocial(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra"))){
+		    imovelAtualizacaoCadastral.setQuantidadeEconomiasOutra(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra")));
+		}
+		
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento"))){
+ 			imovelAtualizacaoCadastral.setPercentualAbastecimento(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento")));
+ 		}		
+		
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
 		imovelAtualizacaoCadastral.setIdLigacaoEsgotoSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")));

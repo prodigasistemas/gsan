@@ -793,15 +793,8 @@ public class AtualizarClienteAction extends GcomAction {
 			 */
 			
 			if(atualizaImovel){
-				// Atualiza o cliente
-				this.getFachada().atualizarCliente(cliente, 
-					colecaoFones,
-					colecaoEnderecos, 
-					usuario);
+				this.getFachada().atualizarCliente(cliente, colecaoFones, colecaoEnderecos, usuario);
 			}
-			
-			
-
 			
 			if ((confirmado != null) ||
 					(clienteCadastradoNaReceita.getCodigoAcaoOperador() != null &&

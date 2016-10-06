@@ -153,7 +153,6 @@ public class ProcessarRequisicaoDipositivoMovelAction extends GcomAction {
 			HttpServletResponse response, OutputStream out,SistemaParametro sistemaParametro) throws IOException {
 		Fachada fachada = Fachada.getInstancia();
 		long imei = data.readLong();
-		System.out.println("imei: " + imei);
 
 		// ******************************************************************
 		// 08/01/2009
@@ -419,7 +418,6 @@ public class ProcessarRequisicaoDipositivoMovelAction extends GcomAction {
 					imei, new Byte(data.readByte()),
 					new Integer(data.readInt())));
 
-			// System.out.println("imovel=" + data.read());
 			imovel = data.read();
 		}
 		return dados;

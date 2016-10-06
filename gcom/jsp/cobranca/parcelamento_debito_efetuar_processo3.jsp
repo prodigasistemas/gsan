@@ -220,7 +220,10 @@ function enviar(){
 				<tr>
 					<td colspan="2">
 						<table width="100%" bgcolor="#99CCFF">
-							<tr bgcolor="#90c7fc">  
+							<tr bgcolor="#90c7fc">
+								<td align="center">
+									<strong>Por Faixa de Referência da Conta</strong>
+								</td>  
 								<td align="center">
 									<strong>Nos Acréscimos por Impontualidade</strong>
 								</td>
@@ -238,7 +241,11 @@ function enviar(){
 								</td>
 								
 							</tr>
-							<tr bgcolor="#cbe5fe"> 
+							<tr bgcolor="#cbe5fe">
+								<td align="right" bgcolor="#FFFFFF">
+									<bean:write name="EfetuarParcelamentoDebitosActionForm" 
+											property="descontoFaixaReferenciaConta"/>
+								</td>
 								<td align="right" bgcolor="#FFFFFF">
 									<bean:write name="EfetuarParcelamentoDebitosActionForm" 
 											property="descontoAcrescimosImpontualidade"/>

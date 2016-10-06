@@ -4,9 +4,11 @@ import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
+import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
@@ -90,6 +92,23 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	
+    public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
+        Collection<IImovelTipoOcupanteQuantidade> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        try {
+            String consulta = "from ImovelTipoOcupanteQuantidadeRetorno e where e.imovel.id = :idImovel " ;
+            
+            retorno = (Collection<IImovelTipoOcupanteQuantidade>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar quantidades de ocupantes em retorno.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+    }
+    
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		ImovelControleAtualizacaoCadastral retorno = null;
@@ -190,17 +209,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	public void apagarImovelQuantidadesOcupantes(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
-			String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
-					+ " WHERE ramo.imovel.id = :idImovel ";
+			String consulta = " DELETE ImovelTipoOcupanteQuantidadeRetorno e WHERE e.imovel.id = :idImovel ";
 			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao apagar imovel retorno ramo atividade");
+			throw new ErroRepositorioException(e, "Erro ao apagar quantidades de ocupantes");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	    Session session = HibernateUtil.getSession();
+	    try{
+	        String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
+	                + " WHERE ramo.imovel.id = :idImovel ";
+	        session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+	    }catch (HibernateException e) {
+	        throw new ErroRepositorioException(e, "Erro ao apagar imovel retorno ramo atividade");
+	    } finally {
+	        HibernateUtil.closeSession(session);
+	    }
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1171,5 +1202,26 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 		
 		return retorno;
+	}
+	
+	public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException{
+        Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+        
+        StringBuilder consulta = new StringBuilder();
+        try {
+            
+            consulta.append("from ImovelTipoOcupanteQuantidadeAtualizacaoCadastral e ")
+                .append(" inner join fetch e.tipoOcupante")
+                .append(" where e.imovel.id = :idImovel ") ;
+            
+            retorno = (Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel).list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
 	}
 }

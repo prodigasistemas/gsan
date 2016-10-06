@@ -24,6 +24,7 @@ public class ClienteUsuarioBuilder extends ClienteBuilder {
 		campo = atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo));
+			clienteTxt.setDsLogradouroTipo(atualizacaoCadastralImovel.getLinhaImovel("dsTipoLogradouroImovel"));
 		}
 
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));

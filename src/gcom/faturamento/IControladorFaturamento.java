@@ -4807,7 +4807,7 @@ public interface IControladorFaturamento {
 	 * 
 	 */
 	public void prescreverDebitosImoveisPublicosAutomatico(Integer idFuncionalidadeIniciada, 
-			Integer anoMesReferencia, Integer anoMesPrescricao, Integer usuario, String idsEsferaPoder) 
+			Integer anoMesReferencia, Date dataPrescricao, Integer usuario, String idsEsferaPoder) 
 		throws ControladorException;
 	
 	/**
@@ -5716,4 +5716,5 @@ public interface IControladorFaturamento {
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ControladorException;
 	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia);
+	
 }

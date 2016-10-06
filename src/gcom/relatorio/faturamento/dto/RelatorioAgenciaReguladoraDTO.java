@@ -23,7 +23,7 @@ public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
   @ReportElementType(description="Valor esgoto", type=ReportElementType.TYPE_MONEY, totalizer=true)
   private String valorEsgoto;
   
-  @ReportElementType(description="Total", type=ReportElementType.TYPE_MONEY)
+  @ReportElementType(description="Total", type=ReportElementType.TYPE_MONEY, totalizer=true)
   private String valorTotal;
   
   public RelatorioAgenciaReguladoraDTO(String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {

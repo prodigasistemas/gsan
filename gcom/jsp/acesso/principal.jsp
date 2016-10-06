@@ -490,6 +490,7 @@
 
                       </table>
               <%    }    %>
+
              
               <%    if (getServletContext().getAttribute("nomeEmpresa").equals("IPAD")){    %>
                 
@@ -565,6 +566,36 @@
                       </table>
               <%    }    %>
              
+              <%    if (getServletContext().getAttribute("nomeEmpresa").equals("")) {    %>
+                
+                     <table width="95%">
+                        <tr>
+                             <td>
+                                <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p><div align="center" style="height: 300; width:400">                                      
+                                  </div>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+								   <logic:notEmpty name="mensagemGrupo" scope="session">		
+								  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+								  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>
+								  <p>&nbsp;</p>
+                                  <p>&nbsp;</p>		
+								  </logic:notEmpty>		 
+                             <td>
+                        </tr>
+                      </table>
+              <%    }    %>
         </td>
       </tr>
     </table>

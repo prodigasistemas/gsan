@@ -25,7 +25,6 @@
 	src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
 
 	function validarForm(form){
 				
@@ -101,7 +100,6 @@
 			}
    	}
 
--->
 </script>
 
 </head>
@@ -222,6 +220,17 @@
 						property="indicadorUtilizacaoLivre"
 						value="2" /> N&atilde;o</strong> </strong></td>
 				</tr>
+				
+				<tr>
+					<td><strong>Desconto por Faixa de Referência das Contas? <font color="#FF0000">*</font></strong></td>
+					<td>
+						<strong>
+							<html:radio property="indicadorDescontoFaixaReferenciaConta" value="1" /> Sim
+							<html:radio property="indicadorDescontoFaixaReferenciaConta" value="2" /> N&atilde;o
+						</strong>
+					</td>
+				</tr>
+				
 				<tr>
 					<td><strong>Descontos e San&ccedil;&otilde;es? <font
 						color="#FF0000">*</font></strong></td>

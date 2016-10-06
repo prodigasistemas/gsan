@@ -234,4 +234,8 @@ public class DeterminarValoresFaturamentoAguaEsgotoHelper {
             
         }        
     }
+    
+    public boolean imovelSemConsumo(){
+        return valorTotalAgua == BigDecimal.ZERO && valorTotalEsgoto == BigDecimal.ZERO;
+    }
 }

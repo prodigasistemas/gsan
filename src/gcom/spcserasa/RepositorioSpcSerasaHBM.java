@@ -3682,22 +3682,17 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			
 			DebitoCreditoSituacao dcst = new DebitoCreditoSituacao();
 			dcst.setId((Integer)retorno[0]);
-		//	System.out.println("DebitoCreditoSituacao = " + (Integer)retorno[0]);
-			
 			
 			Imovel imovel= new Imovel();
 			imovel.setId((Integer)retorno[2]);	
-		//	System.out.println("Imovel = " + (Integer)retorno[2]);
 		
 			c.setReferencia((Integer)retorno[1]);
 			c.setDebitoCreditoSituacaoAtual(dcst);			
 			c.setImovel(imovel);
-		//	System.out.println("Referencia = " + (Integer)retorno[1]);
 			
 			if(retorno[3] != null){
 				c.setDataCancelamento((Date)retorno[3]);
 			}
-		//	System.out.println("DataCancelamento = " + (Date)retorno[3]);
 			
 			c.setId((Integer)retorno[4]);
 			

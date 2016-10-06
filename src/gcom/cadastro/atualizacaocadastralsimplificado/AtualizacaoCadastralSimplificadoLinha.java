@@ -1,10 +1,11 @@
 package gcom.cadastro.atualizacaocadastralsimplificado;
 
-import gcom.cadastro.imovel.Imovel;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+
+import gcom.cadastro.imovel.Imovel;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 public class AtualizacaoCadastralSimplificadoLinha {
 
@@ -44,6 +45,8 @@ public class AtualizacaoCadastralSimplificadoLinha {
 	private String recadastroRealizado;
 	
 	private Date ultimaAlteracao;
+	
+	private transient Usuario usuario;
 
 	public AtualizacaoCadastralSimplificadoLinha() {
 	}
@@ -379,14 +382,20 @@ public class AtualizacaoCadastralSimplificadoLinha {
 		this.recadastroRealizado = recadastroRealizado;
 	}
 	
-	
-
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
 	}
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	/**
@@ -514,9 +523,6 @@ public class AtualizacaoCadastralSimplificadoLinha {
 		} else if (!numeroLinha.equals(other.numeroLinha))
 			return false;
 		return true;
-	}
-
-	
-	
+	}	
 
 }

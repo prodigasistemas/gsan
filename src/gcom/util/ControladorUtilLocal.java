@@ -16,6 +16,8 @@ import java.util.Map;
 
 public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 
+	public Object obterPorId(Class classe, Integer id) throws ControladorException;
+	
 	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ControladorException;
 
@@ -98,4 +100,8 @@ public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 	public Collection pesquisarGerencial(Filtro filtro, String pacoteNomeObjeto) throws ControladorException;
 	
 	public Object inserirComCommit(Object objeto) throws ControladorException;
+	
+	public String getCaminhoDownloadArquivos(String modulo);
+	
+	public Collection listar(Class tipo) throws ControladorException;
 }

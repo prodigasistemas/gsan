@@ -1,18 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
 
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
-	<class name="gcom.cobranca.ResolucaoDiretoria" table="cobranca.resolucao_diretoria">
+    <class name="gcom.cobranca.ResolucaoDiretoria" table="cobranca.resolucao_diretoria">
 		<id name="id" type="java.lang.Integer" column="rdir_id">
 			<generator class="sequence">
 				<param name="sequence">cobranca.seq_resolucao_diretoria</param>
 			</generator>
 		</id>
+		
 		<property name="numeroResolucaoDiretoria" type="java.lang.String" column="rdir_nnresolucaodiretoria" length="15"/>
 		<property name="descricaoAssunto" type="java.lang.String" column="rdir_dsassunto" length="50"/>
 		<property name="dataVigenciaInicio" type="java.sql.Date" column="rdir_dtvigenciainicio" length="4"/>
@@ -20,6 +16,7 @@
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rdir_tmultimaalteracao" length="8"/>
 		<property name="indicadorParcelamentoUnico" column="rdir_icparcelamentounico" type="java.lang.Short" length="2" not-null="true"/>
 		<property name="indicadorUtilizacaoLivre" column="rdir_icutilizacaolivre" type="java.lang.Short" length="2"/>
+		<property name="indicadorDescontoFaixaReferenciaConta" column="rdir_icdescontofaixarefconta" type="java.lang.Short" length="2"/>
 		<property name="indicadorDescontoSancoes" column="rdir_icdescontosancoes" type="java.lang.Short" length="2"/>
 		<property name="indicadorParcelasEmAtraso" column="rdir_icparcelasematraso" type="java.lang.Short" length="2"/>
 		<property name="indicadorParcelamentoEmAndamento" column="rdir_icparcelamentoemandamento" type="java.lang.Short" length="2"/>
@@ -27,28 +24,14 @@
 		<property name="indicadorDescontoSoEmContaAVista" column="rdir_icdescontosoemcontaavista" type="java.lang.Short" length="2" not-null="true"/>
 		<property name="indicadorParcelamentoLojaVirtual" column="rdir_icparcelamentolojavirtual" type="java.lang.Short" length="2" not-null="true"/>
 		<property name="percentualDoacao" type="java.math.BigDecimal" column="rdir_pcdoacao" not-null="false" length="5"/>
-		<!-- Associations -->
+
 		<many-to-one name="rdParcelasEmAtraso" class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
 			<column name="rdir_idparcelasematraso"/>
 		</many-to-one>
+		
 		<many-to-one name="rdParcelamentoEmAndamento" class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
 			<column name="rdir_idparcelamentoemandamento"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to ParcelamentoPerfil -->
-		<!--
-    <set
-        name="parcelamentoPerfils"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="rd_id" />
-        </key>
-        <one-to-many 
-            class="gcom.ParcelamentoPerfil"
-        />
-    </set>
-	-->
+		
 	</class>
 </hibernate-mapping>

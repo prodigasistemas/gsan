@@ -4,6 +4,7 @@ import gcom.atualizacaocadastral.ICliente;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.model.IAtualizacaoCadastro;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -14,7 +15,7 @@ import java.util.Set;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
-public class Cliente extends ObjetoTransacao implements ICliente {
+public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCadastro {
 
 	public static final int ATRIBUTOS_CLIENTE_INSERIR = 28;
 	public static final int ATRIBUTOS_CLIENTE_ATUALIZAR = 38;
@@ -678,5 +679,13 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	
 	public boolean isClienteFederal() {
 		return this.getClienteTipo() != null && this.getClienteTipo().getEsferaPoder()!=null && this.getClienteTipo().getEsferaPoder().getId().compareTo(EsferaPoder.FEDERAL.intValue())==0;
+	}
+
+	public Class getClasseOrigem() {
+		return Cliente.class;
+	}
+
+	public Class getClasseHistorico() {
+		return ClienteHistorico.class;
 	}
 }

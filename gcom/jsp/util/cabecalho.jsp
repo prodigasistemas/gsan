@@ -12,7 +12,11 @@
 					<tr>
 						<td height="0" 
 							valign="bottom">
-							<img src="${applicationScope.logoMarca}">
+							<% if  (getServletContext().getAttribute("logoMarca").equals("")) {%>
+							     <div style="width:150 ; height: 20"></div>
+							<% }  else {%>
+								 <img src="${applicationScope.logoMarca}">
+							<% } %>
 						</td>
 		
 						<td width="35%" 
@@ -30,15 +34,7 @@
 								<font color="black">
 									<strong>${requestScope.mensagemAviso} </strong>
 								</font>
-							</marquee>
-							
-					<%	if (!getServletContext().getAttribute("nomeEmpresa").equals("IPAD")){ %>
-							<a href="http://xwiki.ipad.com.br/" style="text-decoration: none;" target="_blank">
-								<img src="<bean:message key="caminho.imagens"/>ajuda2.gif" border="0">
-							</a>
-		    		<%	} else {	%>
-							<img src="<bean:message key="caminho.imagens"/>ajuda2.gif" border="0">
-		    		<%	}	%>
+							</marquee>							
 						</td>
 						
 						<td align="right" valign="bottom">

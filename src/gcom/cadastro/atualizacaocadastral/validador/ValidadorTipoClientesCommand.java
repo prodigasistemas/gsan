@@ -28,11 +28,7 @@ public class ValidadorTipoClientesCommand extends ValidadorCommand {
 
 		if (!tipoProprietarioValido(usuarioProprietario)){
 			cadastroImovel.addMensagemErro(MSG_TIPO_PROPRIETARIO_INVALIDO);
-		}
-		
-		if (responsavelIgualProprietario(tipoResponsavel) && proprietarioIgualUsuario(usuarioProprietario)){
-			cadastroImovel.addMensagemErro(MSG_TIPO_RESPONSAVEL_INCONSISTENTE);
-		}
+		}		
 	}
 
 	private boolean tipoResponsavelValido(String tipo) {

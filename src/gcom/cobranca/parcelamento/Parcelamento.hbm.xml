@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
-
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
+	
 	<class name="gcom.cobranca.parcelamento.Parcelamento" table="cobranca.parcelamento">
 		<id name="id" type="java.lang.Integer" column="parc_id">
 			<generator class="sequence">
@@ -21,6 +16,7 @@
 		<property name="valorJurosMora" type="java.math.BigDecimal" column="parc_vljurosmora" length="13"/>
 		<property name="valorMulta" type="java.math.BigDecimal" column="parc_vlmulta" length="13"/>
 		<property name="valorDebitoAtualizado" type="java.math.BigDecimal" column="parc_vldebitoatualizado" length="13"/>
+		<property name="valorDescontoFaixaReferenciaConta" type="java.math.BigDecimal" column="parc_vldescontofaixa" length="13"/>
 		<property name="valorDescontoAcrescimos" type="java.math.BigDecimal" column="parc_vldescontoacrescimos" length="13"/>
 		<property name="valorEntrada" type="java.math.BigDecimal" column="parc_vlentrada" length="13"/>
 		<property name="valorJurosParcelamento" type="java.math.BigDecimal" column="parc_vljurosparcelamento" length="13"/>
@@ -57,102 +53,6 @@
 		<many-to-one name="parcelamentoSituacao" class="gcom.cobranca.parcelamento.ParcelamentoSituacao" not-null="true">
 			<column name="pcst_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to CreditoARealizarHistorico -->
-		<!-- 
-    <set
-        name="creditoARealizarHistoricos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.CreditoARealizarHistorico"
-        />
-    </set>
-     -->
-		<!-- bi-directional one-to-many association to DebitoACobrarHistorico -->
-		<!--
-    <set
-        name="debitoACobrarHistoricos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.DebitoACobrarHistorico"
-        />
-    </set>
-     -->
-		<!-- bi-directional one-to-many association to GuiaPagamento -->
-		<!--
-    <set
-        name="guiaPagamentos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.GuiaPagamento"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to CreditoARealizar -->
-		<!--
-    <set
-        name="creditoARealizars"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.CreditoARealizar"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to DebitoACobrar -->
-		<!--
-    <set
-        name="debitoACobrars"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.DebitoACobrar"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to ParcelamentoItem -->
-		<!--
-    <set
-        name="parcelamentoItems"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="parc_id" />
-        </key>
-        <one-to-many 
-            class="gcom.ParcelamentoItem"
-        />
-    </set>
-    -->
 		<!-- bi-directional many-to-one association to RegistroAtendimento -->
 		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
 			<column name="rgat_id"/>

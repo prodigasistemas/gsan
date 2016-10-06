@@ -1603,47 +1603,4 @@ public class ImpressaoContaImpressoraTermica {
 			}
 			return parmsConsumoHistorico;
 		}
-	
-//	public void Imprimir(String stringImpressao) {
-//		StreamConnection conn = null;
-//		DataOutputStream out = null;
-//		String printerURL = "btspp://00225807b684:1;authenticate=true;encrypt=true;master=true;";
-//
-//		try {
-//
-//			/*
-//			 * StreamConnection printerConnection = (StreamConnection)
-//			 * Connector.open(printerURL, Connector.WRITE); DataOutputStream
-//			 * writer = null; writer = printerConnection.openDataOutputStream();
-//			 * writer.write(stringImpressao.getBytes()); writer.flush();
-//			 * writer.close(); printerConnection.close();
-//			 */
-//			conn = (StreamConnection) Connector.open(printerURL,
-//					Connector.WRITE);
-//			out = conn.openDataOutputStream();
-//			out.writeBytes(stringImpressao);
-//			/*
-//			 * out.writeBytes("! 0 200 200 203 1" + '\n' + "CENTER" + '\n');
-//			 * out.writeBytes("TEXT 0 3 10 50 JAVA TEST" + '\n' + "PRINT" +
-//			 * '\n');
-//			 */
-//			System.out.println("Impressao Enviada!!!!!!");
-//			out.flush();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				if (out != null) {
-//					out.close();
-//				}
-//
-//				if (conn != null) {
-//					conn.close();
-//				}
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-
 }

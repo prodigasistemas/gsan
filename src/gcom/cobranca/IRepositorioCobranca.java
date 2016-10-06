@@ -5985,4 +5985,5 @@ public interface IRepositorioCobranca {
 	
 	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
 	
+	public BigDecimal getPercentualDescontoPorFaixa(Integer referencia) throws ErroRepositorioException;
 }

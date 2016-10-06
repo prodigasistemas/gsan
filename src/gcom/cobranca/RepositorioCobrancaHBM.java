@@ -5035,7 +5035,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					"localidade.descricao, "
 					+ // 38
 					"setor.codigo, " // 39
-					+ "usur.cpf " // 40
+					+ "usur.cpf, " // 40
+					+ "parc.valorDescontoFaixaReferenciaConta " // 41
 					+ "from Parcelamento parc " + "left join parc.cliente clie " + "left join clie.profissao prof "
 					+ "left join parc.usuario usur " + "left join usur.funcionario func " + "inner join parc.imovel imov "
 					+ "inner join imov.localidade localidade " + "inner join imov.setorComercial setor "
@@ -27169,6 +27170,36 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public BigDecimal getPercentualDescontoPorFaixa(Integer referencia) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		BigDecimal valorDesconto;
+
+		try {
+
+			consulta = "SELECT pfds_percentual_desconto as percentual "
+					+ "FROM cobranca.parcelamento_faixa_desconto "
+					+ "WHERE pfds_referencia_minima <= :referencia AND pfds_referencia_maxima >= :referencia ";
+
+			valorDesconto = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("percentual", Hibernate.BIG_DECIMAL)
+					.setInteger("referencia", referencia)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			if (valorDesconto == null)
+				valorDesconto = new BigDecimal(0.0);
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return valorDesconto;
 	}
 	
 }

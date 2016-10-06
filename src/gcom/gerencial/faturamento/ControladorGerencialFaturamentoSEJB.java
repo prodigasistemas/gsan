@@ -1,16 +1,25 @@
 package gcom.gerencial.faturamento;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSubcategoria;
@@ -24,8 +33,7 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.ParcelamentoGrupo;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
+import gcom.faturamento.ControladorFaturamentoFINAL;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.IRepositorioFaturamento;
@@ -94,14 +102,11 @@ import gcom.gerencial.faturamento.debito.GDebitoTipo;
 import gcom.gerencial.financeiro.GFinanciamentoTipo;
 import gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil;
 import gcom.gerencial.micromedicao.GRota;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.Rota;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -109,209 +114,24 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
+    private static final long serialVersionUID = -5996920706815852008L;
+    
+    private static Logger logger = Logger.getLogger(ControladorGerencialFaturamentoSEJB.class);    
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-/**
- * 
- * 
- * @author Thiago Toscano
- * @created 19/04/2006
- */
-public class ControladorGerencialFaturamentoSEJB implements SessionBean {
-	private static final long serialVersionUID = 1L;
-	private IRepositorioGerencialCobranca repositorioGerencialCobranca = null;
+    private IRepositorioGerencialCobranca repositorioGerencialCobranca = null;
 	private IRepositorioGerencialCadastro repositorioGerencialCadastro = null;
 	private IRepositorioGerencialFaturamento repositorioGerencial = null;
 	private IRepositorioFaturamento repositorioFaturamento = null;
-
-	// private IRepositorioUtil repositorioUtil = null;
-
 	private IRepositorioGerencialFaturamento repositorioGerencialFaturamento = null;
 
-	SessionContext sessionContext;
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-		// repositorioUtil = RepositorioUtilHBM.getInstancia();
-		repositorioGerencial = RepositorioGerencialFaturamentoHBM
-				.getInstancia();
-		repositorioGerencialFaturamento = RepositorioGerencialFaturamentoHBM
-				.getInstancia();
-		repositorioGerencialCobranca = RepositorioGerencialCobrancaHBM
-				.getInstancia();
-		
-		repositorioGerencialCadastro = RepositorioGerencialCadastroHBM
-				.getInstancia();
-		
+		repositorioGerencial = RepositorioGerencialFaturamentoHBM.getInstancia();
+		repositorioGerencialFaturamento = RepositorioGerencialFaturamentoHBM.getInstancia();
+		repositorioGerencialCobranca = RepositorioGerencialCobrancaHBM.getInstancia();
+		repositorioGerencialCadastro = RepositorioGerencialCadastroHBM.getInstancia();
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
 	}
-
-	/**
-	 * Retorna o valor do ControladorMicromedicao
-	 * 
-	 * @author Leonardo Regis
-	 * @date 20/07/2006
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
-	private ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		// pega a instáncia do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	 
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbRemove() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbActivate() {
-	}
-
-	/**
-	 * < <Descrição do método>>
-	 */
-	public void ejbPassivate() {
-	}
-
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
-	public void setSessionContext(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
-	}
-
-	/**
-	 * CASO DE USO: CONSULTAR RESUMO DE SITUACAO ESPECIAL DE FATURAMENTO AUTOR:
-	 * TIAGO MORENO RODRIGUES
-	 * 
-	 * DATA: 26/05/2006
-	 */
 
 	public Collection<ResumoFaturamentoSituacaoEspecialConsultaGerenciaRegHelper> recuperaResumoSituacaoEspecialFaturamento(
 			ConsultarResumoSituacaoEspecialHelper helper)
@@ -940,8 +760,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 					// pesquisando a categoria
 					// [UC0306] - Obtter principal categoria do imóvel
 					Categoria categoria = null;
-					categoria = this.getControladorImovel()
-							.obterPrincipalCategoriaImovel(idImovel);
+					categoria = getControladorImovel().obterPrincipalCategoriaImovel(idImovel);
 
 					if (categoria != null) {
 						helper.setIdCategoria(categoria.getId());
@@ -1132,46 +951,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 		}
 	}
 
-	private ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	/**
-	 * Este caso de uso permite consultar o resumo da análise de faturamento,
-	 * com a opção de impressão da consulta. Dependendo da opção de totalização
-	 * sempre é gerado o relatório, sem a feração da consulta.
-	 * 
-	 * [UC0339] Consultar Resumo da Análise Faturamento
-	 * 
-	 * consultarResumoAnaliseFaturamento
-	 * 
-	 * @author Fernanda Paiva
-	 * @date 31/05/2006
-	 * 
-	 * @param informarDadosGeracaoRelatorioConsultaHelper
-	 * @return
-	 * @throws ControladorException
-	 */
 	public List consultarResumoAnaliseFaturamento(
 			InformarDadosGeracaoRelatorioConsultaHelper informarDadosGeracaoRelatorioConsultaHelper)
 			throws ControladorException {
@@ -1788,19 +1567,8 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
 					idUnidadeIniciada, false);
 		} catch (Exception ex) {
-			// Este catch serve para interceptar qualquer exceção que o processo
-			// batch venha a lançar e garantir que a unidade de processamento do
-			// batch será atualizada com o erro ocorrido
-			
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO AGUA ESGOTO"); 										
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			
-			ex.printStackTrace();
-			// sessionContext.setRollbackOnly();
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-					idUnidadeIniciada, true);
-
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO AGUA ESGOTO", ex);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,	idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
 	}
@@ -2837,18 +2605,9 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 					idUnidadeIniciada, false);
 
 		} catch (Exception ex) {
-			// Este catch serve para interceptar qualquer exceção que o processo
-			// batch venha a lançar e garantir que a unidade de processamento do
-			// batch será atualizada com o erro ocorrido
-			
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO"); 										
-			
-			ex.printStackTrace();
-			 sessionContext.setRollbackOnly();
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-					idUnidadeIniciada, true);
-
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO", ex);
+			sessionContext.setRollbackOnly();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
 	}
@@ -3261,10 +3020,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO OUTROS"); 										
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO OUTROS" + "\n" + " IMOVEL ====> " + idImovelError, ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -3703,10 +3459,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO CREDITOS"); 										
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO CREDITOS" + "\n" + " IMOVEL ====> " + idImovelError, ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -4204,10 +3957,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO DEBITO A COBRAR"); 										
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO DEBITO A COBRAR" + "\n" + " IMOVEL ====> " + idImovelError, ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -4591,10 +4341,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO IMPOSTOS");
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO IMPOSTOS" + "\n" + " IMOVEL ====> " + idImovelError, ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -5041,10 +4788,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO GUIA DE PAGAMENTO"); 										
-			System.out.println( " IMOVEL ====> " + idImovelError);
-			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO GUIA DE PAGAMENTO" + "\n" + " IMOVEL ====> " + idImovelError, ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -5529,9 +5273,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO GUIA DE PAGAMENTO"); 										
-			ex.printStackTrace();
-			 sessionContext.setRollbackOnly();
+		    logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO GUIA DE PAGAMENTO", ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -5622,30 +5364,12 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
                     idUnidadeIniciada, false);
 
         } catch (Exception ex) {
-            // Este catch serve para interceptar qualquer execução que o processo
-            // batch venha a lançar e garantir que a unidade de processamento do
-            // batch será atualizada com o erro ocorrido
-            System.out.println(" ERRO NO SETOR" + idSetor);
-            ex.printStackTrace();
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-                    idUnidadeIniciada, true);
-
+            logger.error(" ERRO NO SETOR" + idSetor, ex);
+            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
             throw new EJBException(ex);
         }        
     }
     
-    /**
-     * [UC057] - Gerar Resumo do Faturamento
-     *
-     * [SB001] - Gerar Resumo de Contas
-     *
-     * @author Bruno Barros
-     * @date 18/08/2008
-     *
-     * @param idSetor
-     * @param idFuncionalidadeIniciada
-     * @throws ControladorException
-     */
     private void gerarResumoContas(int idSetor, int idFuncionalidadeIniciada) throws ControladorException{
         
         try{
@@ -6861,14 +6585,8 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
                     idUnidadeIniciada, false);
 
         } catch (Exception ex) {
-            // Este catch serve para interceptar qualquer execução que o processo
-            // batch venha a lançar e garantir que a unidade de processamento do
-            // batch será atualizada com o erro ocorrido
-            System.out.println(" ERRO NO SETOR" + idSetor);
-            ex.printStackTrace();
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-                    idUnidadeIniciada, true);
-
+            logger.error(" ERRO NO SETOR" + idSetor, ex);
+            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
             throw new EJBException(ex);
         }          
     }
@@ -7437,30 +7155,12 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
                     idUnidadeIniciada, false);
 
         } catch (Exception ex) {
-            // Este catch serve para interceptar qualquer execução que o processo
-            // batch venha a lançar e garantir que a unidade de processamento do
-            // batch será atualizada com o erro ocorrido
-            System.out.println(" ERRO NO SETOR" + idSetor);
-            ex.printStackTrace();
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-                    idUnidadeIniciada, true);
-
+            logger.error(" ERRO NO SETOR" + idSetor, ex);
+            getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
             throw new EJBException(ex);
         }        
     }
-    
-    /**
-     * Gerar Resumo do Faturamento Por Ano
-     *
-     * Gerar Resumo de Contas Por ANo
-     *
-     * @author Fernando Fontelles
-     * @date 25/05/2010
-     *
-     * @param idSetor
-     * @param idFuncionalidadeIniciada
-     * @throws ControladorException
-     */
+
     private void gerarResumoContasPorAno(int idSetor, int idFuncionalidadeIniciada) 
     	throws ControladorException{
         
@@ -7806,20 +7506,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
        
    }
     
-   /**
-    * 
-    * Gerar Resumo do Faturamento Por Ano
-    * Preparar dados do Resumo Agua e Esgotos
-    *
-    * @author Fernando Fontelles
-    * @date 25/05/2010
-    *
-    * @param objeto - Resumo do faturamento montado anteriormente para o valor de agua 
-    * @param linha - Linha do select que contem os dados da conta
-    * @return
-    * @throws ControladorException
-    * @throws ErroRepositorioException
-    */
    private Collection<ResumoFaturamentoPorAnoHelper> montarResumosFaturamentoDebitosCobradosPorAno
    ( ResumoFaturamentoPorAnoHelper objeto, Object[] linha )throws ControladorException, ErroRepositorioException{        
        
@@ -7878,10 +7564,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
        helperDebitosCobrados.setIdLocalidade( objeto.getIdLocalidade() );
        helperDebitosCobrados.setIdSetorComercial( objeto.getIdSetorComercial() );
        helperDebitosCobrados.setCdSetorComercial( objeto.getCdSetorComercial() );
-//       helperDebitosCobrados.setIdRota( objeto.getIdRota() );
-//       helperDebitosCobrados.setCdRota( objeto.getCdRota() );
-//       helperDebitosCobrados.setIdQuadra( objeto.getIdQuadra() );
-//       helperDebitosCobrados.setNmQuadra( objeto.getNmQuadra() );
        helperDebitosCobrados.setIdPerfilImovel( objeto.getIdPerfilImovel() );
        helperDebitosCobrados.setSituacaoLigacaoAgua( objeto.getSituacaoLigacaoAgua() );
        helperDebitosCobrados.setSituacaoLigacaoEsgoto( objeto.getSituacaoLigacaoEsgoto() );
@@ -7893,24 +7575,11 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
        helperDebitosCobrados.setIdPerfilLigacaoEsgoto( objeto.getIdPerfilLigacaoEsgoto() );
        helperDebitosCobrados.setIdTarifaConsumo( objeto.getIdTarifaConsumo() );
        helperDebitosCobrados.setIdGrupoFaturamento( objeto.getIdGrupoFaturamento() );
-//       helperDebitosCobrados.setIdEmpresa( objeto.getIdEmpresa() );
        helperDebitosCobrados.setIndHidrometro( objeto.getIndHidrometro() );
        
        return helperDebitosCobrados;
    }
    
-   /**
-   *
-   * Gerar Resumo Faturasmento Por Ano
-   * Soma os valores relavantes ao resumo de debitos cobrados
-   *
-   * @author Fernando Fontelles
-   * @date 25/05/2010
-   *
-   * @param jaCadastrado
-   * @param helperAguaEsgoto
-   * @return
-   */
   private void somarValoresParaResumoFaturamentoDebitosCobradosPorAno(
 		  ResumoFaturamentoPorAnoHelper jaCadastrado, ResumoFaturamentoPorAnoHelper helperDebitosCobrados ){
       
@@ -8167,12 +7836,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
      if ( (Integer) linha[15] != null ){
          helperGuia.setIdSetorComercial( (Integer) linha[4] );
          helperGuia.setCdSetorComercial( (Integer) linha[5] );
-//         helperGuia.setIdRota( (Integer) linha[6] );
-//         helperGuia.setCdRota( (Short) linha[7] );
-//         helperGuia.setIdQuadra( (Integer) linha[8] );
-//         helperGuia.setNmQuadra( (Integer) linha[9] );          
-//         helperGuia.setIdGrupoFaturamento( (Integer) linha[18] );
-//         helperGuia.setIdEmpresa( (Integer) linha[23] );          
          
          // [UC0306] - Obter Principal Categoria do Imovel
          // pesquisando a categoria
@@ -8213,26 +7876,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
          
          // Setamos o setor comercial no helper
          helperGuia.setIdSetorComercial( setorComercial.getId() );
-         helperGuia.setCdSetorComercial( setorComercial.getCodigo() );
-         
-         // Com o setor comercial selecionado, selecionamos a primeira quadra
-//         FiltroQuadra filtroQuadra = new FiltroQuadra();
-//         filtroQuadra.adicionarParametro( new ParametroSimples( FiltroQuadra.ID_SETORCOMERCIAL, setorComercial.getId() ) );
-//         filtroQuadra.adicionarCaminhoParaCarregamentoEntidade( "rota.faturamentoGrupo" );
-//         filtroQuadra.setCampoOrderBy( FiltroQuadra.ID );
-//         Quadra quadra = 
-//             (Quadra) Fachada.getInstancia().pesquisar( filtroQuadra, Quadra.class.getName() ).iterator().next();    
-         
-         // Setamos a rota no helper
-//         helperGuia.setIdRota( quadra.getRota().getId() );
-//         helperGuia.setCdRota( quadra.getRota().getCodigo() );
-     
-//         helperGuia.setIdGrupoFaturamento( quadra.getRota().getFaturamentoGrupo().getId() );
-         // Setamos a quadra no helper
-//         helperGuia.setIdQuadra( quadra.getId() );
-//         helperGuia.setNmQuadra( quadra.getNumeroQuadra() );          
-//         helperGuia.setIdEmpresa( quadra.getRota().getEmpresa().getId() );
-         
+         helperGuia.setCdSetorComercial( setorComercial.getCodigo() );         
          helperGuia.setIdCategoria( 1 );
          helperGuia.setIdSubcategoria( 10 );
          helperGuia.setIndHidrometro( 2 );
@@ -9031,14 +8675,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 												
 											}
 										}
-											
-//										if ( jaCadastrado.getIcExistenciaContaCanceladaRetificacao() != null ){
-//											
-//											Integer icExistContaCancRetficacao = jaCadastrado.getIcExistenciaContaCanceladaRetificacao()
-//																					.compareTo(new Short("1"));
-//											
-//											if ( icExistContaCancRetficacao != null && icExistContaCancRetficacao == 0 ){
-												
+																							
 												//Valor de Agua
 												if ( valorRetificadoAgua != null && 
 														( valorRetificadoAgua.compareTo(new BigDecimal(0)) > 0 ) ){
@@ -9070,22 +8707,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 															jaCadastrado.getVlIncluidoEsgoto().add( valorRetificadoEsgoto.negate() ));
 													
 												}
-												
-												//Valor de Debito
-												/*if ( valorRetificadoDebitos != null && 
-														( valorRetificadoDebitos.compareTo(new BigDecimal(0)) > 0 ) ){
-													
-													//Acumula o valor cancelado debito
-													jaCadastrado.setVlCanceladoOutro(jaCadastrado.getVlCanceladoOutro().add(valorDebitoCancelado) );
-													
-												} else {
-													
-													//Acumula valor incluido de debito
-													jaCadastrado.setVlIncluidoOutros( 
-															jaCadastrado.getVlIncluidoOutros().add(valorDebitoIncluido));
-													
-												}*/
-												
+																								
 												jaCadastrado.setVlCanceladoOutro(jaCadastrado.getVlCanceladoOutro().add(valorDebitoCancelado) );
 												jaCadastrado.setVlIncluidoOutros(jaCadastrado.getVlIncluidoOutros().add(valorDebitoIncluido));
 												
@@ -9095,20 +8717,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 												
 												jaCadastrado.setVlIncluidoCreditos(jaCadastrado.getVlIncluidoCreditos().add(valorCreditoIncluido));
 												
-												/*if ( valorRetificadoCreditos != null &&
-														(valorRetificadoCreditos.compareTo(new BigDecimal(0)) > 0 )){
-												
-													//Acumula os valor cancelado de credito
-													jaCadastrado.setVlCanceladoCreditos( 
-															jaCadastrado.getVlCanceladoCreditos().add(valorRetificadoCreditos));
-													
-												} else {
-													
-													//Acumula os valor incluido de credito
-													jaCadastrado.setVlIncluidoCreditos( 
-															jaCadastrado.getVlIncluidoCreditos().add(valorRetificadoCreditos.negate()));
-													
-												}*/
 												
 												//Valor Imposto
 												if ( valorRetificadoImpostos != null && 
@@ -9157,21 +8765,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 															jaCadastrado.getVoIncluidoEsgoto() + (consumoRetificadoEsgoto * -1));
 													
 												}
-												
-//											} /*else {
-												
-//												jaCadastrado.setVlIncluidoAgua(jaCadastrado.getVlIncluidoAgua().add(valorAgua));
-//												jaCadastrado.setVlIncluidoEsgoto(jaCadastrado.getVlIncluidoEsgoto().add(valorEsgoto));
-//												jaCadastrado.setVlIncluidoOutros(jaCadastrado.getVlIncluidoOutros().add(valorDebitos));
-//												jaCadastrado.setVlIncluidoCreditos(jaCadastrado.getVlIncluidoCreditos().add(valorCreditos));
-//												jaCadastrado.setVlIncluidoImpostos(jaCadastrado.getVlIncluidoImpostos().add(valorImpostos));
-//												jaCadastrado.setVoIncludoAgua(jaCadastrado.getVoIncludoAgua() +consumoAgua);
-//												jaCadastrado.setVoIncluidoEsgoto(jaCadastrado.getVoIncluidoEsgoto() +consumoEsgoto);
-//												
-//											}*/
-											
-//										}
-										
+																						
 									} else
 									
 									//Canceladas por Retificacao
@@ -9372,23 +8966,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 															helper.getVlIncluidoEsgoto().add( valorRetificadoEsgoto.negate() ));
 													
 												}
-												
-												//Valor de Debito
-												/*if ( valorRetificadoDebitos != null && 
-														( valorRetificadoDebitos.compareTo(new BigDecimal(0)) > 0 ) ){
-													
-													//Acumula o valor cancelado debito
-													helper.setVlCanceladoOutro( 
-															helper.getVlCanceladoOutro().add(valorDebitoCancelado) );
-													
-												} else {
-													
-													//Acumula valor incluido de debito
-													helper.setVlIncluidoOutros( 
-															helper.getVlIncluidoOutros().add(valorDebitoIncluido));
-													
-												}*/
-												
+																								
 												helper.setVlCanceladoOutro(helper.getVlCanceladoOutro().add(valorDebitoCancelado) );
 												
 												helper.setVlIncluidoOutros(helper.getVlIncluidoOutros().add(valorDebitoIncluido));
@@ -9398,20 +8976,6 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 												helper.setVlCanceladoCreditos(helper.getVlCanceladoCreditos().add(valorCreditoCancelado));
 												
 												helper.setVlIncluidoCreditos(helper.getVlIncluidoCreditos().add(valorCreditoIncluido));
-												/*if ( valorRetificadoCreditos != null &&
-														(valorRetificadoCreditos.compareTo(new BigDecimal(0)) > 0 )){
-												
-													//Acumula os valor cancelado de credito
-													helper.setVlCanceladoCreditos( 
-															helper.getVlCanceladoCreditos().add(valorRetificadoCreditos));
-													
-												} else {
-													
-													//Acumula os valor incluido de credito
-													helper.setVlIncluidoCreditos( 
-															helper.getVlIncluidoCreditos().add(valorRetificadoCreditos.negate()));
-													
-												}*/
 												
 												//Valor Imposto
 												if ( valorRetificadoImpostos != null && 
@@ -9575,22 +9139,12 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 						idUnidadeIniciada, false);
 				
 			} catch (Exception ex) {
-				// Este catch serve para interceptar qualquer exceção que o processo
-				// batch venha a lançar e garantir que a unidade de processamento do
-				// batch será atualizada com o erro ocorrido
-				
-				System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO"); 										
-				
-				ex.printStackTrace();
-//				 sessionContext.setRollbackOnly();
-
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-						idUnidadeIniciada, true);
-
+				logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO", ex);
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 				throw new EJBException(ex);
 			}
 		
-		}
+	}
 	
 	/**
 	 * [UC0572] - Gerar Resumo ReFaturamento Novo
@@ -9795,9 +9349,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			}// do for lista simplificada
 			
 		}catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO GUIA DE PAGAMENTO"); 										
-			ex.printStackTrace();
-//			 sessionContext.setRollbackOnly();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO GUIA DE PAGAMENTO", ex);
 			throw new EJBException(ex);
 		}
 	}
@@ -11012,12 +10564,10 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 				
 		} catch (Exception ex) {
-			System.out.println( " ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO"); 										
-			ex.printStackTrace();
+			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO REFATURAMENTO", ex);
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,	idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
-		
 	}
 	
 	
@@ -11112,9 +10662,5 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 		}
 		
 		return colContaCategoria;
-	}
-	
-	
-
-    
+	}    
 }

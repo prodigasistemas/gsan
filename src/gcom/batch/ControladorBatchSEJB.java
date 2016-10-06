@@ -1,5 +1,24 @@
 package gcom.batch;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
@@ -252,25 +271,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 /**
  * Controlador que possui os metodos de negocio de toda a parte que da suporte
  * ao batch
@@ -331,6 +331,7 @@ public class ControladorBatchSEJB implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Integer inserirProcessoIniciado(ProcessoIniciado processoIniciado)
 			throws ControladorException {
 		Integer codigoProcessoIniciadoGerado = null;
@@ -3572,29 +3573,19 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento()
-								.obterDadosPrescricaoDebitosAutomaticos();
+						Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento().obterDadosPrescricaoDebitosAutomaticos();
 
 						//Adicionar o conjunto de parametros informados pelo
 						//usuário através da interface do sistema
-						
 						if (Util.isVazioOrNulo(colecaoDadosPrescricaoAutomaticos)){
 
 							colecaoDadosPrescricaoAutomaticos = new ArrayList();
 
-							Object[] idEsferapoder = new Object[2];
-							idEsferapoder[0] = EsferaPoder.ESTADUAL;
-							idEsferapoder[1] = EsferaPoder.FEDERAL;
-
-							colecaoDadosPrescricaoAutomaticos.add(idEsferapoder);
+							colecaoDadosPrescricaoAutomaticos.add(EsferaPoder.obterIdsEsferaPoderPublico());
 						}
-
 						
-						prescricao.addParametro("colecaoDadosPrescricao",
-								colecaoDadosPrescricaoAutomaticos);
-
-						prescricao.addParametro("anoMesFaturamento",
-								sistemaParametros.getAnoMesFaturamento());
+						prescricao.addParametro("colecaoDadosPrescricao",colecaoDadosPrescricaoAutomaticos);
+						prescricao.addParametro("anoMesFaturamento",sistemaParametros.getAnoMesFaturamento());
 
 						// Seta o objeto para ser serializado no banco, onde
 						// depois sera executado por uma thread
@@ -9998,5 +9989,12 @@ public class ControladorBatchSEJB implements SessionBean {
 
 		 return ((SegurancaParametro) parametros.iterator().next()).getValor();
 	}
-
+	
+	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ControladorException{
+		try {
+			return repositorioBatch.obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter usuario que disparou processo", e);
+		}
+	}
 }

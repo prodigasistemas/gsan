@@ -1348,6 +1348,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// TIPO DO REGISTRO
 		arquivoTextoRegistroTipo01.append("01");
 
+		System.out.println("Montando arquivo do imóvel " + imovel.getId());
 		// MATRÍCULA DO IMÓVEL
 		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, imovel.getId().toString()));
 
@@ -3682,13 +3683,12 @@ public class UC0745GerarArquivoTextoFaturamento {
 			// arquivoTextoByte =
 			// IoUtil.transformarObjetoParaBytes(arquivoTexto);
 
-			File compactado = new File(nomeArquivoTexto + ".tar.gz");
+			File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoTexto + ".tar.gz");
 
 			zos = new GZIPOutputStream(new FileOutputStream(compactado));
-			File leitura = new File(nomeArquivoTexto + ".txt");
+			File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoTexto + ".txt");
 
-			out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(leitura.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 			out.write(arquivoTexto.toString());
 			out.flush();
 			ZipUtil.adicionarArquivo(zos, leitura);
@@ -6300,13 +6300,12 @@ public class UC0745GerarArquivoTextoFaturamento {
 			// arquivoTextoByte =
 			// IoUtil.transformarObjetoParaBytes(arquivoTexto);
 
-			File compactado = new File(nomeArquivoTexto + ".tar.gz");
+			File compactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoTexto + ".tar.gz");
 
 			zos = new GZIPOutputStream(new FileOutputStream(compactado));
-			File leitura = new File(nomeArquivoTexto + ".txt");
+			File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoTexto + ".txt");
 
-			out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(leitura.getAbsolutePath())));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 			out.write(arquivoTexto.toString());
 			out.flush();
 			ZipUtil.adicionarArquivo(zos, leitura);

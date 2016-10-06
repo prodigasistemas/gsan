@@ -2,7 +2,6 @@ package gcom.gui.cobranca;
 
 import gcom.cobranca.FiltroResolucaoDiretoria;
 import gcom.cobranca.ResolucaoDiretoria;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
@@ -19,70 +18,59 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 public class ExibirAtualizarResolucaoDiretoriaAction extends GcomAction {
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	
+	@SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = actionMapping.findForward("exibirAtualizarResolucaoDiretoria");
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("exibirAtualizarResolucaoDiretoria");
+		AtualizarResolucaoDiretoriaActionForm form = (AtualizarResolucaoDiretoriaActionForm) actionForm;
 
-		AtualizarResolucaoDiretoriaActionForm atualizarResolucaoDiretoriaActionForm = (AtualizarResolucaoDiretoriaActionForm) actionForm;
+		HttpSession sessao = request.getSession(false);
 
-		Fachada fachada = Fachada.getInstancia();
-
-		// Mudar isso quando tiver esquema de segurança
-		HttpSession sessao = httpServletRequest.getSession(false);
-
-		if (httpServletRequest.getParameter("inserir") != null
-				&& !httpServletRequest.getParameter("inserir").equals("")) {
-			String inserir = httpServletRequest.getParameter("inserir");
-			httpServletRequest.setAttribute("inserir", inserir);
+		if (request.getParameter("inserir") != null && !request.getParameter("inserir").equals("")) {
+			String inserir = request.getParameter("inserir");
+			request.setAttribute("inserir", inserir);
 		}
 
 		if (sessao.getAttribute("resolucaoDiretoria") != null) {
 
-			ResolucaoDiretoria resolucaoDiretoria = (ResolucaoDiretoria) sessao
-					.getAttribute("resolucaoDiretoria");
+			ResolucaoDiretoria resolucaoDiretoria = (ResolucaoDiretoria) sessao.getAttribute("resolucaoDiretoria");
 
-			atualizarResolucaoDiretoriaActionForm.setNumero(resolucaoDiretoria.getNumeroResolucaoDiretoria());
-			atualizarResolucaoDiretoriaActionForm.setAssunto(resolucaoDiretoria.getDescricaoAssunto());
-			atualizarResolucaoDiretoriaActionForm.setDataInicio(Util.formatarData(resolucaoDiretoria.getDataVigenciaInicio()));
-			atualizarResolucaoDiretoriaActionForm.setDataFim(Util.formatarData(resolucaoDiretoria.getDataVigenciaFim()));
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoUnico(resolucaoDiretoria.getIndicadorParcelamentoUnico().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorUtilizacaoLivre(resolucaoDiretoria.getIndicadorUtilizacaoLivre().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorDescontoSancoes(resolucaoDiretoria.getIndicadorDescontoSancoes().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoLojaVirtual(resolucaoDiretoria.getIndicadorParcelamentoLojaVirtual().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelasEmAtraso(resolucaoDiretoria.getIndicadorParcelasEmAtraso().toString());
-			
-			if (resolucaoDiretoria.getRdParcelasEmAtraso()!= null &&
-					!resolucaoDiretoria.getRdParcelasEmAtraso().equals("")){
-				atualizarResolucaoDiretoriaActionForm.setIdParcelasEmAtraso(resolucaoDiretoria.getRdParcelasEmAtraso().getId().toString());
-			}
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoEmAndamento(resolucaoDiretoria.getIndicadorParcelamentoEmAndamento().toString());
-			
-			if (resolucaoDiretoria.getRdParcelamentoEmAndamento()!= null &&
-					!resolucaoDiretoria.getRdParcelamentoEmAndamento().equals("")){
-				atualizarResolucaoDiretoriaActionForm.setIdParcelamentoEmAndamento(resolucaoDiretoria.getRdParcelamentoEmAndamento().getId().toString());
-			}
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorNegociacaoSoAVista(resolucaoDiretoria.getIndicadorNegociacaoSoAVista().toString());
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorDescontoSoEmContaAVista(resolucaoDiretoria.getIndicadorDescontoSoEmContaAVista().toString());
+			form.setNumero(resolucaoDiretoria.getNumeroResolucaoDiretoria());
+			form.setAssunto(resolucaoDiretoria.getDescricaoAssunto());
+			form.setDataInicio(Util.formatarData(resolucaoDiretoria.getDataVigenciaInicio()));
+			form.setDataFim(Util.formatarData(resolucaoDiretoria.getDataVigenciaFim()));
+			form.setIndicadorParcelamentoUnico(resolucaoDiretoria.getIndicadorParcelamentoUnico().toString());
+			form.setIndicadorUtilizacaoLivre(resolucaoDiretoria.getIndicadorUtilizacaoLivre().toString());
+			form.setIndicadorDescontoFaixaReferenciaConta(resolucaoDiretoria.getIndicadorDescontoFaixaReferenciaConta().toString());
+			form.setIndicadorDescontoSancoes(resolucaoDiretoria.getIndicadorDescontoSancoes().toString());
+			form.setIndicadorParcelamentoLojaVirtual(resolucaoDiretoria.getIndicadorParcelamentoLojaVirtual().toString());
+			form.setIndicadorParcelasEmAtraso(resolucaoDiretoria.getIndicadorParcelasEmAtraso().toString());
 
-			sessao.setAttribute("resolucaoDiretoriaAtualizar",
-					resolucaoDiretoria);
+			if (resolucaoDiretoria.getRdParcelasEmAtraso() != null && !resolucaoDiretoria.getRdParcelasEmAtraso().equals("")) {
+				form.setIdParcelasEmAtraso(resolucaoDiretoria.getRdParcelasEmAtraso().getId().toString());
+			}
+
+			form.setIndicadorParcelamentoEmAndamento(resolucaoDiretoria.getIndicadorParcelamentoEmAndamento().toString());
+
+			if (resolucaoDiretoria.getRdParcelamentoEmAndamento() != null && !resolucaoDiretoria.getRdParcelamentoEmAndamento().equals("")) {
+				form.setIdParcelamentoEmAndamento(resolucaoDiretoria.getRdParcelamentoEmAndamento().getId().toString());
+			}
+
+			form.setIndicadorNegociacaoSoAVista(resolucaoDiretoria.getIndicadorNegociacaoSoAVista().toString());
+
+			form.setIndicadorDescontoSoEmContaAVista(resolucaoDiretoria.getIndicadorDescontoSoEmContaAVista().toString());
+
+			sessao.setAttribute("resolucaoDiretoriaAtualizar", resolucaoDiretoria);
 			sessao.removeAttribute("resolucaoDiretoria");
 
 		} else {
-
-			String idResolucaoDiretoria = httpServletRequest.getParameter("resolucaoDiretoriaID");
+			String idResolucaoDiretoria = request.getParameter("resolucaoDiretoriaID");
 
 			FiltroResolucaoDiretoria filtroResolucaoDiretoria = new FiltroResolucaoDiretoria();
 			filtroResolucaoDiretoria.adicionarParametro(new ParametroSimples(FiltroResolucaoDiretoria.CODIGO, idResolucaoDiretoria));
 
-			Collection<ResolucaoDiretoria> colecaoResolucaoDiretoria = fachada.pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
+			Collection<ResolucaoDiretoria> colecaoResolucaoDiretoria = getFachada().pesquisar(filtroResolucaoDiretoria, ResolucaoDiretoria.class.getName());
 
 			if (Util.isVazioOrNulo(colecaoResolucaoDiretoria)) {
 				throw new ActionServletException("atencao.atualizacao.timestamp");
@@ -90,34 +78,32 @@ public class ExibirAtualizarResolucaoDiretoriaAction extends GcomAction {
 
 			ResolucaoDiretoria resolucaoDiretoria = (ResolucaoDiretoria) colecaoResolucaoDiretoria.iterator().next();
 
-			atualizarResolucaoDiretoriaActionForm.setNumero(resolucaoDiretoria.getNumeroResolucaoDiretoria());
-			atualizarResolucaoDiretoriaActionForm.setAssunto(resolucaoDiretoria.getDescricaoAssunto());
-			atualizarResolucaoDiretoriaActionForm.setDataInicio(Util.formatarData(resolucaoDiretoria.getDataVigenciaInicio()));
-			atualizarResolucaoDiretoriaActionForm.setDataFim(Util.formatarData(resolucaoDiretoria.getDataVigenciaFim()));
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoUnico(resolucaoDiretoria.getIndicadorParcelamentoUnico().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorUtilizacaoLivre(resolucaoDiretoria.getIndicadorUtilizacaoLivre().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorDescontoSancoes(resolucaoDiretoria.getIndicadorDescontoSancoes().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelasEmAtraso(resolucaoDiretoria.getIndicadorParcelasEmAtraso().toString());
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoLojaVirtual(resolucaoDiretoria.getIndicadorParcelamentoLojaVirtual().toString());
-			
-			if (resolucaoDiretoria.getRdParcelasEmAtraso()!= null &&
-					!resolucaoDiretoria.getRdParcelasEmAtraso().equals("")){
-				atualizarResolucaoDiretoriaActionForm.setIdParcelasEmAtraso(resolucaoDiretoria.getRdParcelasEmAtraso().getId().toString());
+			form.setNumero(resolucaoDiretoria.getNumeroResolucaoDiretoria());
+			form.setAssunto(resolucaoDiretoria.getDescricaoAssunto());
+			form.setDataInicio(Util.formatarData(resolucaoDiretoria.getDataVigenciaInicio()));
+			form.setDataFim(Util.formatarData(resolucaoDiretoria.getDataVigenciaFim()));
+			form.setIndicadorParcelamentoUnico(resolucaoDiretoria.getIndicadorParcelamentoUnico().toString());
+			form.setIndicadorUtilizacaoLivre(resolucaoDiretoria.getIndicadorUtilizacaoLivre().toString());
+			form.setIndicadorDescontoFaixaReferenciaConta(resolucaoDiretoria.getIndicadorDescontoFaixaReferenciaConta().toString());
+			form.setIndicadorDescontoSancoes(resolucaoDiretoria.getIndicadorDescontoSancoes().toString());
+			form.setIndicadorParcelasEmAtraso(resolucaoDiretoria.getIndicadorParcelasEmAtraso().toString());
+			form.setIndicadorParcelamentoLojaVirtual(resolucaoDiretoria.getIndicadorParcelamentoLojaVirtual().toString());
+
+			if (resolucaoDiretoria.getRdParcelasEmAtraso() != null && !resolucaoDiretoria.getRdParcelasEmAtraso().equals("")) {
+				form.setIdParcelasEmAtraso(resolucaoDiretoria.getRdParcelasEmAtraso().getId().toString());
 			}
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorParcelamentoEmAndamento(resolucaoDiretoria.getIndicadorParcelamentoEmAndamento().toString());
-			
-			if (resolucaoDiretoria.getRdParcelamentoEmAndamento()!= null &&
-					!resolucaoDiretoria.getRdParcelamentoEmAndamento().equals("")){
-				atualizarResolucaoDiretoriaActionForm.setIdParcelamentoEmAndamento(resolucaoDiretoria.getRdParcelamentoEmAndamento().getId().toString());
+
+			form.setIndicadorParcelamentoEmAndamento(resolucaoDiretoria.getIndicadorParcelamentoEmAndamento().toString());
+
+			if (resolucaoDiretoria.getRdParcelamentoEmAndamento() != null && !resolucaoDiretoria.getRdParcelamentoEmAndamento().equals("")) {
+				form.setIdParcelamentoEmAndamento(resolucaoDiretoria.getRdParcelamentoEmAndamento().getId().toString());
 			}
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorNegociacaoSoAVista(resolucaoDiretoria.getIndicadorNegociacaoSoAVista().toString());
-			
-			atualizarResolucaoDiretoriaActionForm.setIndicadorDescontoSoEmContaAVista(resolucaoDiretoria.getIndicadorDescontoSoEmContaAVista().toString());
-			
-			sessao.setAttribute("resolucaoDiretoriaAtualizar",
-					resolucaoDiretoria);
+
+			form.setIndicadorNegociacaoSoAVista(resolucaoDiretoria.getIndicadorNegociacaoSoAVista().toString());
+
+			form.setIndicadorDescontoSoEmContaAVista(resolucaoDiretoria.getIndicadorDescontoSoEmContaAVista().toString());
+
+			sessao.setAttribute("resolucaoDiretoriaAtualizar", resolucaoDiretoria);
 
 		}
 

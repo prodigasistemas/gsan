@@ -3,6 +3,8 @@ package gcom.cadastro.cliente;
 import java.util.Date;
 
 public interface IClienteFone {
+	
+	int TAMANHO_TELEFONE = 11;
 
 	public abstract Integer getId();
 

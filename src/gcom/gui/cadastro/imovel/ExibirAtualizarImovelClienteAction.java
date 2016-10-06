@@ -115,7 +115,7 @@ public class ExibirAtualizarImovelClienteAction extends GcomAction {
 			
 				filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(
 						FiltroClienteRelacaoTipo.CLIENTE_RELACAO_TIPO_ID,
-						ConstantesSistema.CLIENTE_IMOVEL_TIPO_RESPONSAVEL));
+						ClienteRelacaoTipo.RESPONSAVEL.intValue()));
 			}
 		}
 		filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(

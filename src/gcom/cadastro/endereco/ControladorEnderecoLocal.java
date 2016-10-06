@@ -1,8 +1,11 @@
 package gcom.cadastro.endereco;
 
+import java.util.Collection;
+
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.endereco.bean.AtualizarLogradouroBairroHelper;
 import gcom.cadastro.endereco.bean.AtualizarLogradouroCepHelper;
+import gcom.cadastro.endereco.to.LogradouroTO;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Imovel;
@@ -10,8 +13,6 @@ import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.util.Collection;
 
 /**
  * Description of the Interface
@@ -456,12 +457,7 @@ public interface ControladorEnderecoLocal extends javax.ejb.EJBLocalObject {
 	public Collection<Object[]> pesquisarDadosClienteEnderecoArquivoTextoContasCobrancaEmpresa(
 			Integer idCliente) throws ControladorException;
 	
-	/**
-	 * Obter Logradouro(Tipo + Título + Nome Logradouro)
-	 */
-	
-	public Collection pesquisarLogradouro(Integer idImovel)
-		throws ControladorException;
+	public LogradouroTO pesquisarLogradouro(Integer idImovel) throws ControladorException;
 	
 	/**
 	 * Obter Logradouro(Tipo + Título + Nome Logradouro)
