@@ -340,8 +340,8 @@ public class ControladorBatchSEJB implements SessionBean {
 		SistemaParametro sistemaParametros = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
-		Integer anoMesFaturamentoSistemaParametro = sistemaParametros
-				.getAnoMesFaturamento();
+		Integer anoMesFaturamentoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
+		Integer anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
 
 		/** Colecao de ids de localidades para encerrar a arrecadacacao do mes */
 		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao()
@@ -695,55 +695,27 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 
-					/** Pedro Alexandre */
 					case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
 
-						// Verificamos se o resumo da arrecadação foi gerado
-						// para esse o ano mes de referencia
-						if (!getControladorArrecadacao()
-								.verificarExistenciaResumoArrecadacaoParaAnoMes(
-										getControladorUtil()
-												.pesquisarParametrosDoSistema()
-												.getAnoMesArrecadacao())) {
-							throw new ControladorException(
-									"Não existem dados do resumo da arrecadação para o ano/mês de referencia");
+						// Verificamos se o resumo da arrecadação foi gerado para esse o ano mes de referencia
+						if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
+										getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
+							throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
 						}
 
 						TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						/**
-						 * Coleaao de ids de localidades para encerrar a
-						 * ARRECADACAO do mes
-						 */
-						/*
-						 * Collection<Integer>
-						 * colecaoIdsSetoresEncerrarArrecadacaoMes =
-						 * getControladorArrecadacao().pesquisarIdsSetoresComPagamentosOuDevolucoes();
-						 */
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao",anoMesArrecadacaoSistemaParametro);
 
-						// Seta os parametros para rodar a funcionalidade
-						dadosGerarHistoricoEncerrarArrecadacaoMes
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-
-						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(
-								"anoMesReferenciaArrecadacao",
-								anoMesFaturamentoSistemaParametro);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
 
-					/** Pedro Alexandre */
 					case Funcionalidade.GERAR_HISTORICO_CONTA:
 						TarefaBatchGerarHistoricoConta dadosGerarHistoricoConta = new TarefaBatchGerarHistoricoConta(
 								processoIniciado.getUsuario(),
@@ -2749,9 +2721,7 @@ public class ControladorBatchSEJB implements SessionBean {
 										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
 										colecaoIdsLocalidadesAtualizarPagamentos);
 
-						atualizarPagamentosContasCobranca.addParametro(
-								"anoMesArrecadacaoSistemaParametro",
-								sistemaParametros.getAnoMesArrecadacao());
+						atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
 
 						// Seta o objeto para ser serializado no banco, onde
 						// depois sera executado por uma thread
