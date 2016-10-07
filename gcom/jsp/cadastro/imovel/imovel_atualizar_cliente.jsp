@@ -112,7 +112,7 @@ function limparPesquisaImovel() {
 }
   
   
-  function verificarAberturaPopup(abertura){
+function verificarAberturaPopup(abertura){
 	if(abertura == 1){
 		abrirPopup('exibirManterImovelFimRelacaoClienteImovelAction.do', 475, 765);	
 	}
