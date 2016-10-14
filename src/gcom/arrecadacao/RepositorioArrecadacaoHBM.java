@@ -18396,74 +18396,57 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * Pesquisa as guias de pagamento correspondentes aos pagamentos
-	 * classificados de guia de pagamento e aos pagamentos anteriores de guia de
-	 * pagamento classificados no mês.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 09/01/2007
-	 * 
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idLocalidade
-	 * @param numeroIndice
-	 * @param quantidadeRegistros
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(
-			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
-			Integer numeroIndice, Integer quantidadeRegistros)
-			throws ErroRepositorioException {
-
-		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
-		Collection<GuiaPagamento> retorno = null;
-
-		// Cria uma instância da sessão
-		Session session = HibernateUtil.getSession();
-
-		// Cria a variável que vai conter o hql
-		String consulta = "";
-		
-		/**
-		 * Alguns pagamentos foram para histórico indevidamente
-		 * Alterado clausula where de <= para < no anoMesReferenciaArrecadacao
-		 * 
-		 * @author Wellington Rocha
-		 * @date 18/09/2012*/
-
-		try {
-
-			// Cria o hql de pesquisa
-			consulta = "select pgmt.guiaPagamento from Pagamento pgmt "
-					+ "inner join pgmt.localidade loca "
-					+ "where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
-					+ "and (pgmt.pagamentoSituacaoAtual.id = "
-					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO + " or "
-					+ "pgmt.pagamentoSituacaoAtual.id = "
-					+ PagamentoSituacao.VALOR_A_BAIXAR + ") "
-					+ "and pgmt.guiaPagamento.id is not null "
-					+ "and loca.id = :idLocalidade "
-					+ "order by pgmt.guiaPagamento.id";
-			// Executa o hql
-			retorno = session.createQuery(consulta).setInteger("idLocalidade",
-					idLocalidade).setInteger("anoMesReferenciaArrecadacao",
-					anoMesReferenciaArrecadacao).setMaxResults(
-					quantidadeRegistros).setFirstResult(numeroIndice).list();
-
-			// Erro no hibernate
-		} catch (HibernateException e) {
-			// Levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// Fecha a sessão com o hibernate
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
+//	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(
+//			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
+//			Integer numeroIndice, Integer quantidadeRegistros)
+//			throws ErroRepositorioException {
+//
+//		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
+//		Collection<GuiaPagamento> retorno = null;
+//
+//		// Cria uma instância da sessão
+//		Session session = HibernateUtil.getSession();
+//
+//		// Cria a variável que vai conter o hql
+//		String consulta = "";
+//		
+//		/**
+//		 * Alguns pagamentos foram para histórico indevidamente
+//		 * Alterado clausula where de <= para < no anoMesReferenciaArrecadacao
+//		 * 
+//		 * @author Wellington Rocha
+//		 * @date 18/09/2012*/
+//
+//		try {
+//
+//			// Cria o hql de pesquisa
+//			consulta = "select pgmt.guiaPagamento from Pagamento pgmt "
+//					+ "inner join pgmt.localidade loca "
+//					+ "where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+//					+ "and (pgmt.pagamentoSituacaoAtual.id = "
+//					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO + " or "
+//					+ "pgmt.pagamentoSituacaoAtual.id = "
+//					+ PagamentoSituacao.VALOR_A_BAIXAR + ") "
+//					+ "and pgmt.guiaPagamento.id is not null "
+//					+ "and loca.id = :idLocalidade "
+//					+ "order by pgmt.guiaPagamento.id";
+//			// Executa o hql
+//			retorno = session.createQuery(consulta).setInteger("idLocalidade",
+//					idLocalidade).setInteger("anoMesReferenciaArrecadacao",
+//					anoMesReferenciaArrecadacao).setMaxResults(
+//					quantidadeRegistros).setFirstResult(numeroIndice).list();
+//
+//			// Erro no hibernate
+//		} catch (HibernateException e) {
+//			// Levanta a exceção para a próxima camada
+//			throw new ErroRepositorioException(e, "Erro no Hibernate");
+//		} finally {
+//			// Fecha a sessão com o hibernate
+//			HibernateUtil.closeSession(session);
+//		}
+//
+//		return retorno;
+//	}
 
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
@@ -18539,11 +18522,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("inner join pgmt.localidade loca ")
 					.append("where ((loca.id= :idLocalidade) and ")
 					.append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
-					.append("and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))")
+					.append("and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao))")
 					.append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
 					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
 					.append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
-					.append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
+					.append(" and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao) ) ")
 					.append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
 					.append(" order by pgmt.id");
 
@@ -19836,7 +19819,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select devl from Devolucao devl "
 					+ "inner join devl.localidade loca "
 					+ "where loca.id= :idLocalidade and "
-					+ "devl.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "devl.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and ( devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_CLASSIFICADA 
 					+ " or devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES
 					+ ")"
@@ -20080,7 +20063,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select dbac from DebitoACobrar dbac "
 					+ "inner join dbac.localidade loca "
 					+ "where dbac.id in "
-					+ "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and (pgmt.pagamentoSituacaoAtual.id = "
 					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO
 					+ " or pgmt.pagamentoSituacaoAtual.id = "
@@ -23905,7 +23888,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "inner join crar.localidade loca "
 					+ "where crar.id in "
 					+ "(select distinct devl.creditoARealizarGeral.id from Devolucao devl " 
-					+ "where devl.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+					+ "where devl.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
 					+ "and devl.devolucaoSituacaoAtual.id = " + DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES 
 					+ " and devl.creditoARealizarGeral.id is not null and devl.localidade.id = :idLocalidade) "
 					+ " and loca.id = :idLocalidade ";
