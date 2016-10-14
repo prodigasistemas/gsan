@@ -7362,50 +7362,45 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEndereco(
-			Integer idRota) throws ErroRepositorioException {
-
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException {
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
-					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
-					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento    "
-					+ "from ClienteImovel ci "
-					+ "inner join ci.imovel i "
-					+ "inner join i.ligacaoAguaSituacao last "
-					+ "inner join i.ligacaoEsgotoSituacao lest "
-					+ "inner join ci.cliente clie "
-					+ "inner join clie.clienteTipo cltp "
-					+ "inner join cltp.esferaPoder epod "
-					+ "inner join ci.clienteRelacaoTipo crt "
-					+ "inner join i.quadra q "
-					+ "inner join q.rota r "
-					+ "inner join i.setorComercial sc "
-					+ "inner join i.imovelPerfil ip "
-					+ "inner join i.faturamentoSituacaoTipo fst "
-					+ "WHERE q.rota.id = :idRota AND i.rotaAlternativa IS NULL "
-					+ "AND i.indicadorImovelCondominio <> 1 "
-					+ "AND i.imovelContaEnvio.id <> 4 "
-					+ "AND i.indicadorExclusao <> 1 "
-					+ "AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder "
-					+ "AND crt.id = " + ClienteRelacaoTipo.RESPONSAVEL
-					+ " AND (i.imovelContaEnvio.id = " + ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
-					+ " OR i.imovelContaEnvio = " + ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
-					+ " )";
+			consulta.append("select i")
+	          .append(" from ClienteImovel ci ")
+	          .append(" inner join ci.imovel i ")
+	          .append(" inner join fetch i.ligacaoAguaSituacao last ")
+	          .append(" inner join fetch i.ligacaoEsgotoSituacao lest ")
+	          .append(" inner join ci.cliente clie ")
+	          .append(" inner join clie.clienteTipo cltp ")
+	          .append(" inner join cltp.esferaPoder epod ")
+	          .append(" inner join ci.clienteRelacaoTipo crt ")
+	          .append(" inner join fetch i.quadra q ")
+	          .append(" inner join q.rota r ")
+	          .append(" inner join fetch i.setorComercial sc ")
+	          .append(" inner join fetch i.imovelPerfil ip ")
+	          .append(" left join  i.faturamentoSituacaoTipo fst ")
+	          .append(" WHERE q.rota.id = :idRota AND i.rotaAlternativa IS NULL ")
+	          .append(" AND i.indicadorImovelCondominio <> 1 ")
+	          .append(" AND i.imovelContaEnvio.id <> 4 ")
+	          .append(" AND i.indicadorExclusao <> 1 ")
+	          .append(" AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder ")
+	          .append(" AND crt.id = " + ClienteRelacaoTipo.RESPONSAVEL)
+	          .append(" AND (i.imovelContaEnvio.id = " + ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+	          .append(" OR i.imovelContaEnvio = " + ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+	          .append(" )");
 
-			retorno = session.createQuery(consulta).setInteger("idEsferaPoder",
-					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idEsferaPoder", EsferaPoder.PARTICULAR)
+					.setInteger("idRota", idRota)
+					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -43030,54 +43025,49 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(
-			Integer idRota) throws ErroRepositorioException {
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException {
 
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
-					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
-					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento  "
-					+ "from ClienteImovel ci "
-					+ "inner join ci.imovel i "
-					+ "inner join i.rotaAlternativa rotaAlternativa "
-					+ "inner join i.ligacaoAguaSituacao last "
-					+ "inner join i.ligacaoEsgotoSituacao lest "
-					+ "inner join ci.cliente clie "
-					+ "inner join clie.clienteTipo cltp "
-					+ "inner join cltp.esferaPoder epod "
-					+ "inner join ci.clienteRelacaoTipo crt "
-					+ "inner join i.quadra q "
-					+ "inner join q.rota r "
-					+ "inner join i.setorComercial sc "
-					+ "inner join i.imovelPerfil ip "
-					+ "inner join i.faturamentoSituacaoTipo fst "
-					+ "WHERE rotaAlternativa.id = :idRota "
-					+ "AND i.indicadorImovelCondominio <> 1 "
-					+ "AND i.imovelContaEnvio.id <> 4 "
-					+ "AND i.indicadorExclusao <> 1 "
-					+ "AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder "
-					+ "AND crt.id = "
-					+ ClienteRelacaoTipo.RESPONSAVEL
-					+ " AND (i.imovelContaEnvio.id = "
-					+ ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
-					+ " OR i.imovelContaEnvio = "
-					+ ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
-					+ " )";
+			consulta.append("select i")
+            .append(" from ClienteImovel ci ")
+            .append(" inner join ci.imovel i ")
+            .append(" inner join i.rotaAlternativa rotaAlternativa ")
+            .append(" inner join fetch i.ligacaoAguaSituacao last ")
+            .append(" inner join fetch i.ligacaoEsgotoSituacao lest ")
+            .append(" inner join ci.cliente clie ")
+            .append(" inner join clie.clienteTipo cltp ")
+            .append(" inner join cltp.esferaPoder epod ")
+            .append(" inner join ci.clienteRelacaoTipo crt ")
+            .append(" inner join fetch i.quadra q ")
+            .append(" inner join q.rota r ")
+            .append(" inner join fetch i.setorComercial sc ")
+            .append(" inner join fetch i.imovelPerfil ip ")
+            .append(" left  join i.faturamentoSituacaoTipo fst ")
+            .append(" WHERE rotaAlternativa.id = :idRota ")
+            .append(" AND i.indicadorImovelCondominio <> 1 ")
+            .append(" AND i.imovelContaEnvio.id <> 4 ")
+            .append(" AND i.indicadorExclusao <> 1 ")
+            .append(" AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder ")
+            .append(" AND crt.id = ")
+            .append(ClienteRelacaoTipo.RESPONSAVEL)
+            .append(" AND (i.imovelContaEnvio.id = ")
+            .append(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+            .append(" OR i.imovelContaEnvio = ")
+            .append(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+            .append(" )");
 
-			retorno = session.createQuery(consulta).setInteger("idEsferaPoder",
-					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
-
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idEsferaPoder", EsferaPoder.PARTICULAR)
+					.setInteger("idRota", idRota)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;

@@ -491,8 +491,7 @@ public interface IRepositorioFaturamento {
 
 	public Integer pesquisarFaturamentoAtividadeCronogramaComandadaNaoRealizadaCount() throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException;
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException;
 
 	public DebitoTipo getDebitoTipo(Integer id) throws ErroRepositorioException;
 
@@ -2054,8 +2053,7 @@ public interface IRepositorioFaturamento {
 			Integer idRota, int numeroPaginas, int quantidadeRegistros,
 			boolean preFaturar, boolean resumo) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisDasQuadrasPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;

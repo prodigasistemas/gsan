@@ -20786,133 +20786,59 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(recebimentos.getRecuperacaoCreditoCanceladoMesesAnteriores());
 						}
 						
-						/*
-						 * Seqüêncial de Tipo de Lançamento 1000 Para os
-						 * pagamento classificados de conta acumula o valor dos
-						 * créditos realizados por categoria para a origem do
-						 * crédito igual a descontos concedidos e gera o resumo
-						 * da arrecadação caso o valor acumulado seja maior que
-						 * 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosConcedidosNoParcelamento = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
-
-						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosConcedidosNoParcelamento != null
-								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosConcedidosNoParcelamento.doubleValue() > 0.00) {
-
+						
+						ResumoArrecadacao resumo = obterResumoDescontosConcedidosParcelamento(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+								LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("1000"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosConcedidosNoParcelamento);
-
-							lancamentoItemTemp = new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
-							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosConcedidosNoParcelamento,
-									lancamentoItemTemp, null, new Short("1000"), new Short("0"));
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+									.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
+						
+						
+						resumo = obterResumoDescontosConcedidosParcelamento(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
+								LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, new Short("1000"), new Short("10"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
+						}
+						
 
-						/*
-						 * Seqüêncial de Tipo de Lançamento 1010 Para os
-						 * pagamento classificados de conta acumula o valor dos
-						 * créditos realizados por categoria para a origem do
-						 * crédito igual a descontos condicionais e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
-						 * maior que 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosCondicionais = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.DESCONTOS_CONDICIONAIS);
-
-						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosCondicionais != null
-								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosCondicionais.doubleValue() > 0.00) {
-
+						resumo = obterResumoDescontosConcedidosParcelamento(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS,
+								LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1010"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosCondicionais);
-
-							lancamentoItemTemp = new LancamentoItem(LancamentoItem.DESCONTOS_CONDICIONAIS);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
-							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosCondicionais,
-									lancamentoItemTemp, null, new Short("1010"), new Short("0"));
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+									.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
+						
 
-						/*
-						 * Seqüêncial de Tipo de Lançamento 1020 Para os
-						 * pagamento classificados de conta acumula o valor dos
-						 * créditos realizados por categoria para a origem do
-						 * crédito igual a descontos incondicionais e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
-						 * maior que 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosIncondicionais = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.DESCONTOS_INCONDICIONAIS);
-
-						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosIncondicionais != null
-								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosIncondicionais.doubleValue() > 0.00) {
-
+						resumo = obterResumoDescontosConcedidosParcelamento(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_INCONDICIONAIS,
+								LancamentoItem.DESCONTOS_INCONDICIONAIS, new Short("1020"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosIncondicionais);
-
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem(LancamentoItem.DESCONTOS_INCONDICIONAIS);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
-							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoDescontosIncondicionais,
-									lancamentoItemTemp, null, new Short("1020"), new Short("0"));
-							
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+									.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
-
-						/*
-						 * Seqüêncial de Tipo de Lançamento 1030 Para os
-						 * pagamento classificados de conta acumula o valor dos
-						 * créditos realizados por categoria para a origem do
-						 * crédito igual a ajustes para zerar conta e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
-						 * maior que 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoAjustesParaZerarConta = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA);
-
-						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoAjustesParaZerarConta != null
-								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoAjustesParaZerarConta.doubleValue() > 0.00) {
-
+						
+						resumo = obterResumoDescontosConcedidosParcelamento(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
+								LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short("1030"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoAjustesParaZerarConta);
-
-							lancamentoItemTemp = new LancamentoItem(LancamentoItem.AJUSTES_PARA_ZERAR_CONTA);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
-							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
-									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoAjustesParaZerarConta,
-									lancamentoItemTemp, null, new Short("1030"), new Short("0"));
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+									.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
-
-						/*
-						 * Seqüêncial de Tipo de Lançamento 1700 Para os
-						 * pagamento classificados de guias de pagamento acumula
-						 * o valor das entradas do parcelamento por categoria
-						 * para tipo de financiamento igual a entrada de
-						 * parcelamento e gera o resumo da arrecadação caso o
-						 * valor acumulado seja maior que 0(zero)
-						 */
+						
 						BigDecimal somaValorEntradaParcelamentoPagamentosClassificadosGuiaPagamento = repositorioArrecadacao
 								.acumularValorEntradaParcelamentoPagamentosClassificadosGuiaPagamentoFinanciamentoTipoEntradaParcelamento(idLocalidade,
 										anoMesReferenciaArrecadacao, idCategoria);
@@ -21355,183 +21281,63 @@ public class ControladorArrecadacao implements SessionBean {
 							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4200"));
 							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
 							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoContasPagasEmExcesso);
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
-						}
-						/*
-						 * Seqüêncial de Tipo de Lançamento 4400 Para os
-						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos créditos
-						 * realizados por categoria para origem do crédito igual
-						 * a descontos concedidos e gera o resumo da arrecadação
-						 * caso o valor acumulado seja maior que 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosConcedidos = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(idLocalidade,
-										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
-
-						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosConcedidos != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosConcedidos
-										.doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosConcedidos);
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem();
-
-							resumoArrecadacaoTemp = new ResumoArrecadacao();
-							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES);
-							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_CONCEDIDOS);
-							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
-							resumoArrecadacaoTemp.setLocalidade(localidade);
-							resumoArrecadacaoTemp.setCategoria(categoria);
-							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
-							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
-							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4400"));
-							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
-							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosConcedidos);
+							resumoArrecadacaoTemp.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoContasPagasEmExcesso);
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
-						/*
-						 * Seqüêncial de Tipo de Lançamento 4410 Para os
-						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos créditos
-						 * realizados por categoria para origem do crédito igual
-						 * a descontos condicionais e gera o resumo da
-						 * arrecadação caso o valor acumulado seja maior que
-						 * 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosCondicionais = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(idLocalidade,
-										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CONDICIONAIS);
-
-						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosCondicionais != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosCondicionais
-										.doubleValue() > 0.00) {
-
-							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosCondicionais);
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem();
-
-							resumoArrecadacaoTemp = new ResumoArrecadacao();
-							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES);
-							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_CONDICIONAIS);
-							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
-							resumoArrecadacaoTemp.setLocalidade(localidade);
-							resumoArrecadacaoTemp.setCategoria(categoria);
-							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
-							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
-							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4410"));
-							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
-							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosCondicionais);
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							
+							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
 
-						/*
-						 * Seqüêncial de Tipo de Lançamento 4420 Para os
-						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos créditos
-						 * realizados por categoria para origem do crédito igual
-						 * a descontos incondicionais e gera o resumo da
-						 * arrecadação caso o valor acumulado seja maior que
-						 * 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosIncondicionais = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(idLocalidade,
-										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_INCONDICIONAIS);
-
-						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosIncondicionais != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosIncondicionais
-										.doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosIncondicionais);
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem();
-
-							resumoArrecadacaoTemp = new ResumoArrecadacao();
-							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES);
-							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_INCONDICIONAIS);
-							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
-							resumoArrecadacaoTemp.setLocalidade(localidade);
-							resumoArrecadacaoTemp.setCategoria(categoria);
-							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
-							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
-							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4420"));
-							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
-							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoDescontosIncondicionais);
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+						
+						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 
+								new Short("4400"), new Short("10"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							
+							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
-
-						/*
-						 * Seqüêncial de Tipo de Lançamento 4430 Para os
-						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos créditos
-						 * realizados por categoria para origem do crédito igual
-						 * a ajustes para zerar conta e gera o resumo da
-						 * arrecadação caso o valor acumulado seja maior que
-						 * 0(zero)
-						 */
-						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoAjustesParaZerarConta = repositorioArrecadacao
-								.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(idLocalidade,
-										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA);
-
-						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoAjustesParaZerarConta != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoAjustesParaZerarConta
-										.doubleValue() > 0.00) {
-
-							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoAjustesParaZerarConta);
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem();
-
-							resumoArrecadacaoTemp = new ResumoArrecadacao();
-							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES);
-							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							lancamentoItemTemp.setId(LancamentoItem.AJUSTES_PARA_ZERAR_CONTA);
-							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
-							resumoArrecadacaoTemp.setLocalidade(localidade);
-							resumoArrecadacaoTemp.setCategoria(categoria);
-							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
-							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
-							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
-							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4430"));
-							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
-							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoAjustesParaZerarConta);
-							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+						
+						
+						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								CreditoOrigem.DESCONTOS_CONDICIONAIS, LancamentoItem.DESCONTOS_CONDICIONAIS, 
+								new Short("4410"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							
+							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
 						}
+						
 
+						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								CreditoOrigem.DESCONTOS_INCONDICIONAIS, LancamentoItem.DESCONTOS_INCONDICIONAIS, 
+								new Short("4420"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							
+							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
+						}
+						
+
+						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 
+								new Short("4430"), new Short("0"));
+						
+						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
+							
+							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
+							colecaoResumoArrecadacao.add(resumo);
+						}
+						
 						/*
 						 * Seqüêncial de Tipo de Lançamento 5100 Para os
 						 * pagamentos de guias de pagamento efetuadas em meses
@@ -21814,6 +21620,39 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
+						somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos = repositorioArrecadacao
+								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
+										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
+
+						// [FS0005] - Verificar valor acumulado igual a zero
+						if (somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos != null
+								&& somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos.doubleValue() > 0.00) {
+							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4210e4499
+									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+							recebimentoTipoTemp = new RecebimentoTipo();
+							lancamentoTipoTemp = new LancamentoTipo();
+							lancamentoItemTemp = new LancamentoItem();
+
+							resumoArrecadacaoTemp = new ResumoArrecadacao();
+							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ATE_31_12_2012_CLASSIFICADOS_NO_MES);
+							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
+							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
+							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
+							resumoArrecadacaoTemp.setLocalidade(localidade);
+							resumoArrecadacaoTemp.setCategoria(categoria);
+							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
+							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
+							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
+							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
+							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4440"));
+							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("10"));
+							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
+							resumoArrecadacaoTemp.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+						}
+
+						
 						// 4450
 						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosCondicionais = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
@@ -25193,6 +25032,51 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 
+	private ResumoArrecadacao obterResumoDescontosConcedidosParcelamento(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		BigDecimal valor = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
+				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+
+		if (valor != null && valor.doubleValue() > 0.00) {
+
+			LancamentoItem lancamentoItem = new LancamentoItem(idLancamentoItem);
+
+			resumo = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
+					anoMesReferenciaArrecadacao, valor, lancamentoItem, null, seqTipoLancamento, seqItemTipoLancamento);
+		}
+		return resumo;
+	}
+
+	private ResumoArrecadacao obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		BigDecimal soma = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+						anoMesReferenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+
+		if (soma != null && soma.doubleValue() > 0.00) {
+			
+			resumo = new ResumoArrecadacao();
+			resumo.setGerenciaRegional(localidade.getGerenciaRegional());
+			resumo.setLocalidade(localidade);
+			resumo.setCategoria(categoria);
+			resumo.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+			resumo.setRecebimentoTipo(new RecebimentoTipo(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES));
+			resumo.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
+			resumo.setLancamentoItem(new LancamentoItem(idLancamentoItem));
+			resumo.setLancamentoItemContabil(null);
+			resumo.setSequenciaTipoLancamento(new Short("4400"));
+			resumo.setSequenciaItemTipoLancamento(new Short("0"));
+			resumo.setUltimaAlteracao(new Date());
+			resumo.setValorItemArrecadacao(soma);
+		}
+		
+		return resumo;
+
+	}
 	private Map<Integer, BigDecimal> obterValorImpostoPagamentosClassificadosConta(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, Integer tipoImposto) 
 			throws ErroRepositorioException, ControladorException {
 		
