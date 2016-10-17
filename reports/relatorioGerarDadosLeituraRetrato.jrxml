@@ -52,6 +52,18 @@
 			<groupExpression><![CDATA[$F{getRota}]]></groupExpression>
 			<groupHeader>
 			<band height="114"  isSplitAllowed="true" >
+				<rectangle radius="0" >
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="70"
+						width="535"
+						height="44"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch" fill="Solid" />
+				</rectangle>
 				<rectangle>
 					<reportElement
 						x="0"
@@ -186,18 +198,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{tipoFormatoRelatorio}]]></textFieldExpression>
 				</textField>
-				<rectangle radius="0" >
-					<reportElement
-						mode="Opaque"
-						x="0"
-						y="70"
-						width="535"
-						height="44"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="rectangle-1"/>
-					<graphicElement stretchType="NoStretch" fill="Solid" />
-				</rectangle>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -281,9 +281,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="483"
+						x="490"
 						y="72"
-						width="50"
+						width="43"
 						height="16"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -297,9 +297,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="483"
+						x="490"
 						y="95"
-						width="50"
+						width="43"
 						height="16"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -312,7 +312,7 @@
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="419"
+						x="424"
 						y="70"
 						width="0"
 						height="44"
@@ -321,7 +321,7 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="481"
+						x="487"
 						y="70"
 						width="0"
 						height="44"
@@ -462,7 +462,7 @@
 						mode="Opaque"
 						x="379"
 						y="72"
-						width="38"
+						width="43"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -478,7 +478,7 @@
 						mode="Opaque"
 						x="379"
 						y="87"
-						width="38"
+						width="43"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -695,7 +695,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="421"
+						x="426"
 						y="72"
 						width="58"
 						height="11"
@@ -711,7 +711,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="421"
+						x="426"
 						y="87"
 						width="58"
 						height="25"
@@ -730,7 +730,7 @@ Seq. Leit.]]></text>
 						mode="Opaque"
 						x="379"
 						y="101"
-						width="38"
+						width="43"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -777,7 +777,7 @@ Seq. Leit.]]></text>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="419"
+						x="424"
 						y="85"
 						width="63"
 						height="0"
@@ -786,9 +786,9 @@ Seq. Leit.]]></text>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="481"
+						x="488"
 						y="91"
-						width="54"
+						width="47"
 						height="0"
 						key="line-47"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -969,7 +969,7 @@ Seq. Leit.]]></text>
 						mode="Opaque"
 						x="379"
 						y="3"
-						width="38"
+						width="43"
 						height="9"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -985,7 +985,7 @@ Seq. Leit.]]></text>
 						mode="Opaque"
 						x="379"
 						y="14"
-						width="38"
+						width="43"
 						height="9"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -1016,7 +1016,7 @@ Seq. Leit.]]></text>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="419"
+						x="424"
 						y="1"
 						width="0"
 						height="35"
@@ -1025,7 +1025,7 @@ Seq. Leit.]]></text>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="481"
+						x="487"
 						y="1"
 						width="0"
 						height="35"
@@ -1035,7 +1035,7 @@ Seq. Leit.]]></text>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="421"
+						x="426"
 						y="2"
 						width="58"
 						height="15"
@@ -1051,7 +1051,7 @@ Seq. Leit.]]></text>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="421"
+						x="426"
 						y="20"
 						width="58"
 						height="15"
@@ -1069,7 +1069,7 @@ Seq. Leit.]]></text>
 						mode="Opaque"
 						x="379"
 						y="25"
-						width="38"
+						width="43"
 						height="9"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -1118,16 +1118,7 @@ Seq. Leit.]]></text>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="481"
-						y="18"
-						width="54"
-						height="0"
-						key="line-48"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="419"
+						x="424"
 						y="18"
 						width="63"
 						height="0"
@@ -1159,6 +1150,15 @@ Seq. Leit.]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getMatriculaImovel}]]></textFieldExpression>
 				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="488"
+						y="18"
+						width="47"
+						height="0"
+						key="line-52"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>
