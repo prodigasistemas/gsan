@@ -1,5 +1,30 @@
 package gcom.faturamento;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
@@ -55,7 +80,6 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
-import gcom.faturamento.conta.IConta;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -90,7 +114,6 @@ import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
@@ -108,32 +131,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.apache.struts.taglib.tiles.GetAttributeTag;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
@@ -60245,30 +60242,35 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 		try {
-			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
-				+ " (SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
-				+ " FROM faturamento.conta as conta, "
-				+ " cadastro.cliente_imovel cliente_imovel, " 
-				+ " cadastro.cliente cliente "
-				+ " WHERE cnta_amreferenciaconta = :anoMesReferencia "
-				+ " and dcst_idatual in (0, 1, 2, 5) "
-				+ " and ftgr_id = :idGrupo "
-				+ " and conta.imov_id = cliente_imovel.imov_id " 
-				+ " and cliente.clie_id = cliente_imovel.clie_id "
-				+ " and cliente_imovel.crtp_id = 2 " 
-				+ " and cliente_imovel.clim_dtrelacaofim is null "
-				+ " UNION  "
-				+ " SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
-				+ " FROM faturamento.conta_historico as conta_historico, "
-				+ " cadastro.cliente_imovel cliente_imovel, "
-				+ " cadastro.cliente cliente "
-				+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia "
-				+ " and dcst_idatual in (0, 1, 2, 5) "
-				+ " and ftgr_id = :idGrupo "
-				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
-				+ " and cliente.clie_id = cliente_imovel.clie_id "
-				+ " and cliente_imovel.crtp_id = 2 "
-				+ " and cliente_imovel.clim_dtrelacaofim is null) as conta ";
+			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto, categoria FROM "
+					+ "     (    "
+					+ "         SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto, categoria.catg_dscategoria as categoria "
+					+ "         FROM faturamento.conta as conta "
+					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta.imov_id = cliente_imovel.imov_id "
+					+ "           JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
+					+ "           JOIN faturamento.conta_categoria conta_categoria ON conta_categoria.cnta_id = conta.cnta_id "
+					+ "           JOIN cadastro.categoria categoria ON conta_categoria.catg_id = categoria.catg_id "
+					+ "         WHERE cnta_amreferenciaconta = :anoMesReferencia "
+					+ "         and dcst_idatual in (0, 1, 2, 5) "
+					+ "         and ftgr_id = :idGrupo "
+					+ "         and cliente_imovel.crtp_id = 2 "
+					+ "         and cliente_imovel.clim_dtrelacaofim is null "
+					+ "         GROUP BY categoria.catg_dscategoria "
+					+ "         UNION "
+					+ "         SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto, categoria.catg_dscategoria as categoria "
+					+ "         FROM faturamento.conta_historico as conta_historico "
+					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta_historico.imov_id = cliente_imovel.imov_id "
+					+ "         JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
+					+ "         JOIN faturamento.conta_catg_hist conta_categoria ON conta_categoria.cnta_id = conta_historico.cnta_id "
+					+ "         JOIN cadastro.categoria categoria ON conta_categoria.catg_id = categoria.catg_id "
+					+ "         WHERE cnhi_amreferenciaconta = :anoMesReferencia "
+					+ "         and dcst_idatual in (0, 1, 2, 5) "
+					+ "         and ftgr_id = :idGrupo "
+					+ "         and cliente_imovel.crtp_id = 2 "
+					+ "         and cliente_imovel.clim_dtrelacaofim is null "
+					+ "         GROUP BY categoria.catg_dscategoria "
+					+ " ) as conta "
+					+ " group by categoria ";
 
 			retorno = (Collection) session.createSQLQuery(consulta)
 				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)

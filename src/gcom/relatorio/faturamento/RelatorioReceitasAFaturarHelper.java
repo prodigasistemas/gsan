@@ -20,6 +20,7 @@ public class RelatorioReceitasAFaturarHelper {
 	private BigDecimal valorEsgoto;
 	private BigDecimal valorEsgotoDiario;
 	private BigDecimal valorEsgotoAFaturar;
+	private Integer idCategoria;
 
 	public RelatorioReceitasAFaturarHelper() {
 		super();
@@ -153,6 +154,14 @@ public class RelatorioReceitasAFaturarHelper {
 
 	public void setValorEsgotoAFaturar(BigDecimal valorEsgotoAFaturar) {
 		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
+	}
+
+	public Integer getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(Integer idCategoria) {
+		this.idCategoria = idCategoria;
 	}
 
 }

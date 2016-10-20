@@ -42,6 +42,8 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 	
 	private Date ultimaAlteracao;
 	
+	private Integer idCategoria;
+	
 	public ReceitasAFaturarResumo() {
 		super();
 	}
@@ -59,6 +61,7 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		this.valorEsgoto = helper.getValorEsgoto();
 		this.valorEsgotoDiario = helper.getValorEsgotoDiario();
 		this.valorEsgotoAFaturar = helper.getValorEsgotoAFaturar();
+		this.idCategoria = helper.getIdCategoria();
 	}
 
 	public Integer getId() {
@@ -174,6 +177,14 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public Integer getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(Integer idCategoria) {
+		this.idCategoria = idCategoria;
 	}
 
 	@Override

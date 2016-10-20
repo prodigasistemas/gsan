@@ -16330,41 +16330,47 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			DataLeituraAnteriorHelper dataLeituraAnteriorHelper = DataLeituraAnteriorHelper.getListaDatasLeituraAnteriorHelperPorGrupo(
 					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(idGrupo, anoMes));
 			
-			ValorAFaturarHelper valorAFaturarHelper = ValorAFaturarHelper.getListaValoresAFaturarHelper(
+			 Collection<ValorAFaturarHelper> valorAFaturarHelpers = ValorAFaturarHelper.getListaValoresAFaturarHelper(
 					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(idGrupo, anoMes));
 			
-			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
-			helper.setIdGrupo(idGrupo);
-			helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
-			helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
-			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
-			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+			for (ValorAFaturarHelper valorAFaturarHelper : valorAFaturarHelpers) {
+				
+				RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
+				helper.setIdGrupo(idGrupo);
+				helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
+				helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
+				helper.setValorAgua(valorAFaturarHelper.getValorAgua());
+				helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+				helper.setIdCategoria(valorAFaturarHelper.getIdCategoria());
 
-			if (helper.gerar()) {
-				Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
-				helper.setDiferencaDias(diferencaDias);			
+				if (helper.gerar()) {
+					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+					helper.setDiferencaDias(diferencaDias);			
+					
+					int mes = Integer.parseInt(anoMes.toString().substring(4));
+					int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
+					Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
+					int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+					helper.setDiasNaoFaturados(diasNaoFaturados);
+					
+					BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
+					BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+					BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+					helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+					helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
+					
+					BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
+					helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
+					helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
+					
+					ReceitasAFaturarResumo receitasAFaturarResumo = new ReceitasAFaturarResumo(helper);
+					receitasAFaturarResumo.setAnoMesReferencia(anoMes);
+					receitasAFaturarResumo.setUltimaAlteracao(new Date());
+					getControladorUtil().inserir(receitasAFaturarResumo);
+				}
 				
-				int mes = Integer.parseInt(anoMes.toString().substring(4));
-				int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
-				Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
-				int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
-				helper.setDiasNaoFaturados(diasNaoFaturados);
 				
-				BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
-				BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
-				BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
-				helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
-				helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
-				
-				BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
-				helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
-				helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
-				
-				ReceitasAFaturarResumo receitasAFaturarResumo = new ReceitasAFaturarResumo(helper);
-				receitasAFaturarResumo.setAnoMesReferencia(anoMes);
-				receitasAFaturarResumo.setUltimaAlteracao(new Date());
-				getControladorUtil().inserir(receitasAFaturarResumo);
-			}			
+			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {

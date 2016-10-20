@@ -12,6 +12,7 @@ public class ValorAFaturarHelper {
 	private String nomeCliente;	
 	private BigDecimal valorAgua;
 	private BigDecimal valorEsgoto;
+	private Integer idCategoria;
 	
 	public ValorAFaturarHelper() {
 		super();
@@ -21,6 +22,13 @@ public class ValorAFaturarHelper {
 		super();
 		this.valorAgua = valorAgua;
 		this.valorEsgoto = valorEsgoto;
+	}
+	
+	public ValorAFaturarHelper(BigDecimal valorAgua, BigDecimal valorEsgoto, Integer idCategoria) {
+		super();
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.idCategoria = idCategoria;
 	}
 	
 	public ValorAFaturarHelper(Integer idGrupo, Integer imovel, String nomeCliente, BigDecimal valorAgua, BigDecimal valorEsgoto) {
@@ -72,13 +80,26 @@ public class ValorAFaturarHelper {
 		this.valorEsgoto = valorEsgoto;
 	}
 
-	public static ValorAFaturarHelper getListaValoresAFaturarHelper(Collection colecao) {
-		ValorAFaturarHelper helper = new ValorAFaturarHelper();
-		if (colecao != null && !colecao.isEmpty()) {
-			Object[] objeto = (Object[]) colecao.iterator().next();
-			helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1]);
+	public Integer getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(Integer idCategoria) {
+		this.idCategoria = idCategoria;
+	}
+
+	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelper(Collection colecao) {
+		ArrayList<ValorAFaturarHelper> lista = new ArrayList<ValorAFaturarHelper>();
+		
+		Iterator iterator = colecao.iterator();
+		
+		while (iterator.hasNext()) {
+			Object[] objeto = (Object[]) iterator.next();
+			ValorAFaturarHelper helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1], (Integer) objeto[3]);
+			lista.add(helper);
 		}
-		return helper;
+		
+		return lista;
 	}
 	
 	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelperPorGrupo(Integer idGrupo, Collection colecao) {
