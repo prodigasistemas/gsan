@@ -60244,7 +60244,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto, categoria FROM "
 					+ "     (    "
-					+ "         SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto, categoria.catg_dscategoria as categoria "
+					+ "         SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto, categoria.catg_id as categoria "
 					+ "         FROM faturamento.conta as conta "
 					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta.imov_id = cliente_imovel.imov_id "
 					+ "           JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
@@ -60255,9 +60255,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "         and ftgr_id = :idGrupo "
 					+ "         and cliente_imovel.crtp_id = 2 "
 					+ "         and cliente_imovel.clim_dtrelacaofim is null "
-					+ "         GROUP BY categoria.catg_dscategoria "
+					+ "         GROUP BY categoria.catg_id "
 					+ "         UNION "
-					+ "         SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto, categoria.catg_dscategoria as categoria "
+					+ "         SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto, categoria.catg_id as categoria "
 					+ "         FROM faturamento.conta_historico as conta_historico "
 					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta_historico.imov_id = cliente_imovel.imov_id "
 					+ "         JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
@@ -60268,13 +60268,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "         and ftgr_id = :idGrupo "
 					+ "         and cliente_imovel.crtp_id = 2 "
 					+ "         and cliente_imovel.clim_dtrelacaofim is null "
-					+ "         GROUP BY categoria.catg_dscategoria "
+					+ "         GROUP BY categoria.catg_id "
 					+ " ) as conta "
 					+ " group by categoria ";
 
 			retorno = (Collection) session.createSQLQuery(consulta)
 				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
 				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+				.addScalar("categoria", Hibernate.INTEGER)
 				.setInteger("anoMesReferencia", anoMesReferencia)
 				.setInteger("idGrupo", idGrupo)
 				.list();

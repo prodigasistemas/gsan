@@ -95,7 +95,7 @@ public class ValorAFaturarHelper {
 		
 		while (iterator.hasNext()) {
 			Object[] objeto = (Object[]) iterator.next();
-			ValorAFaturarHelper helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1], (Integer) objeto[3]);
+			ValorAFaturarHelper helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1], (Integer) objeto[2]);
 			lista.add(helper);
 		}
 		
