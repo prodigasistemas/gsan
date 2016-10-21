@@ -16295,23 +16295,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes)
-			throws ControladorException {
+	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes) throws ControladorException {
 		
 		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
-		
-		FiltroReceitasAFaturarResumo filtro = new FiltroReceitasAFaturarResumo(FiltroReceitasAFaturarResumo.GRUPO_ID);
-		filtro.adicionarParametro(new ParametroSimples(FiltroReceitasAFaturarResumo.ANO_MES_REFERENCIA, anoMes));
-		
-		Collection<ReceitasAFaturarResumo> colecao = getControladorUtil().pesquisar(filtro, ReceitasAFaturarResumo.class.getName());
-		
-		for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
+
+		Collection<ReceitasAFaturarResumo> colecao = this.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes);
+
+			for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
 			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper(receitasAFaturarResumo);
 			retorno.add(helper);
 		}
-		
-		return retorno;
+
+			return retorno;
 	}
+	
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ControladorException {
+		try{
+		  return repositorioFaturamento.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
+	
 
 	public void gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) 
 			throws ControladorException, ErroRepositorioException {
@@ -16341,7 +16346,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
 				helper.setValorAgua(valorAFaturarHelper.getValorAgua());
 				helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
-				helper.setIdCategoria(valorAFaturarHelper.getIdCategoria());
+				helper.setCategoria(valorAFaturarHelper.getCategoria());
 
 				if (helper.gerar()) {
 					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());

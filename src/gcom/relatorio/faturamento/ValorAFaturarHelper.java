@@ -1,5 +1,7 @@
 package gcom.relatorio.faturamento;
 
+import gcom.cadastro.imovel.Categoria;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +14,7 @@ public class ValorAFaturarHelper {
 	private String nomeCliente;	
 	private BigDecimal valorAgua;
 	private BigDecimal valorEsgoto;
-	private Integer idCategoria;
+	private Categoria categoria;
 	
 	public ValorAFaturarHelper() {
 		super();
@@ -28,7 +30,7 @@ public class ValorAFaturarHelper {
 		super();
 		this.valorAgua = valorAgua;
 		this.valorEsgoto = valorEsgoto;
-		this.idCategoria = idCategoria;
+		this.categoria = new Categoria(idCategoria);
 	}
 	
 	public ValorAFaturarHelper(Integer idGrupo, Integer imovel, String nomeCliente, BigDecimal valorAgua, BigDecimal valorEsgoto) {
@@ -80,12 +82,12 @@ public class ValorAFaturarHelper {
 		this.valorEsgoto = valorEsgoto;
 	}
 
-	public Integer getIdCategoria() {
-		return idCategoria;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setIdCategoria(Integer idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelper(Collection colecao) {

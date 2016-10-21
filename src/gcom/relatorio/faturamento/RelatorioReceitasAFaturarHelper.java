@@ -1,5 +1,6 @@
 package gcom.relatorio.faturamento;
 
+import gcom.cadastro.imovel.Categoria;
 import gcom.faturamento.ReceitasAFaturarResumo;
 
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class RelatorioReceitasAFaturarHelper {
 	private BigDecimal valorEsgoto;
 	private BigDecimal valorEsgotoDiario;
 	private BigDecimal valorEsgotoAFaturar;
-	private Integer idCategoria;
+	private Categoria categoria;
 
 	public RelatorioReceitasAFaturarHelper() {
 		super();
@@ -38,6 +39,7 @@ public class RelatorioReceitasAFaturarHelper {
 		this.valorEsgoto = receitasAFaturarResumo.getValorEsgoto();
 		this.valorEsgotoDiario = receitasAFaturarResumo.getValorEsgotoDiario();
 		this.valorEsgotoAFaturar = receitasAFaturarResumo.getValorEsgotoAFaturar();
+		this.categoria = receitasAFaturarResumo.getCategoria();
 	}
 
 	public boolean gerar() {
@@ -156,12 +158,12 @@ public class RelatorioReceitasAFaturarHelper {
 		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
 	}
 
-	public Integer getIdCategoria() {
-		return idCategoria;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setIdCategoria(Integer idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 }

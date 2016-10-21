@@ -21,6 +21,7 @@ public class RelatorioReceitasAFaturarBean implements RelatorioBean {
 	private BigDecimal valorEsgotoAFaturar;
 	private Integer imovel;
 	private String nomeCliente;
+	private String descricaoCategoria;
 	
 	public RelatorioReceitasAFaturarBean() {
 		super();
@@ -42,6 +43,7 @@ public class RelatorioReceitasAFaturarBean implements RelatorioBean {
 		this.valorEsgotoAFaturar = helper.getValorEsgotoAFaturar();
 		this.imovel = helper.getImovel();
 		this.nomeCliente = helper.getNomeCliente();
+		this.descricaoCategoria = helper.getCategoria().getDescricaoAbreviada();
 	}
 
 	public Integer getIdGrupo() {
@@ -148,4 +150,11 @@ public class RelatorioReceitasAFaturarBean implements RelatorioBean {
 		this.nomeCliente = nomeCliente;
 	}
 
+	public String getDescricaoCategoria() {
+		return descricaoCategoria;
+	}
+
+	public void setDescricaoCategoria(String descricaoCategoria) {
+		this.descricaoCategoria = descricaoCategoria;
+	}
 }

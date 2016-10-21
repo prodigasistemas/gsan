@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="relatorioRelacaoImoveisRota"
+		 name="relatorioReceitasAFaturar"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Landscape"
@@ -41,6 +41,7 @@
 	<field name="getValorEsgotoAFaturar" class="java.math.BigDecimal"/>
 	<field name="getImovel" class="java.lang.Integer"/>
 	<field name="getNomeCliente" class="java.lang.String"/>
+	<field name="getDescricaoCategoria" class="java.lang.String"/>
 
 	<variable name="COUNT_unidadeNegocios" class="java.math.BigDecimal" resetType="Report" incrementType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$V{COUNT_unidadeNegocios}.add(new BigDecimal(1)) ]]></variableExpression>
@@ -55,7 +56,7 @@
 		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
 	</variable>
 
-		<group  name="quebraPagina" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+		<group  name="quebraPagina" >
 			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="118"  isSplitAllowed="true" >
@@ -253,9 +254,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="43"
+						x="37"
 						y="79"
-						width="125"
+						width="105"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -271,7 +272,7 @@
 						mode="Opaque"
 						x="2"
 						y="76"
-						width="37"
+						width="27"
 						height="36"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -285,9 +286,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="225"
-						y="76"
-						width="50"
+						x="198"
+						y="77"
+						width="42"
 						height="36"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -332,7 +333,7 @@
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="39"
+						x="32"
 						y="74"
 						width="0"
 						height="40"
@@ -357,7 +358,7 @@
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="170"
+						x="145"
 						y="74"
 						width="0"
 						height="40"
@@ -367,9 +368,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="41"
+						x="35"
 						y="100"
-						width="61"
+						width="49"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -382,16 +383,16 @@
 				</staticText>
 				<line direction="BottomUp">
 					<reportElement
-						x="39"
-						y="95"
-						width="131"
-						height="1"
+						x="33"
+						y="96"
+						width="112"
+						height="0"
 						key="line-21"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="103"
+						x="89"
 						y="96"
 						width="0"
 						height="18"
@@ -400,7 +401,7 @@
 				</line>
 				<line direction="TopDown">
 					<reportElement
-						x="223"
+						x="196"
 						y="74"
 						width="0"
 						height="40"
@@ -410,9 +411,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="172"
-						y="76"
-						width="50"
+						x="147"
+						y="77"
+						width="46"
 						height="36"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -425,7 +426,7 @@
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="276"
+						x="243"
 						y="74"
 						width="0"
 						height="40"
@@ -601,9 +602,9 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="107"
+						x="94"
 						y="100"
-						width="61"
+						width="49"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -614,10 +615,35 @@
 					</textElement>
 				<text><![CDATA[Atual]]></text>
 				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="246"
+						y="76"
+						width="28"
+						height="36"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-114"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[CAT]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="277"
+						y="75"
+						width="0"
+						height="40"
+						key="line-31"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="18"  isSplitAllowed="true" >
+			<band height="23"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
@@ -687,6 +713,34 @@
 			</band>
 			</groupFooter>
 		</group>
+		<group  name="categoria" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
+			<groupExpression><![CDATA[$F{getDescricaoCategoria}]]></groupExpression>
+			<groupHeader>
+			<band height="19"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="246"
+						y="2"
+						width="28"
+						height="11"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-104"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricaoCategoria}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -704,13 +758,13 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="18"  isSplitAllowed="true" >
+			<band height="21"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
 						x="1"
 						y="4"
-						width="37"
+						width="27"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -725,9 +779,9 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
-						x="105"
+						x="93"
 						y="4"
-						width="64"
+						width="52"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -742,9 +796,9 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
-						x="172"
+						x="149"
 						y="4"
-						width="50"
+						width="42"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -759,9 +813,9 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
-						x="225"
+						x="199"
 						y="4"
-						width="50"
+						width="42"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -878,9 +932,9 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
-						x="41"
+						x="35"
 						y="4"
-						width="64"
+						width="52"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
