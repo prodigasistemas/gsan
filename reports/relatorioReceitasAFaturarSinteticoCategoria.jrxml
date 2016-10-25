@@ -42,7 +42,7 @@
 		<group  name="quebraPagina" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
 			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
-			<band height="73"  isSplitAllowed="true" >
+			<band height="72"  isSplitAllowed="true" >
 				<rectangle>
 					<reportElement
 						x="0"
@@ -278,7 +278,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="61"  isSplitAllowed="true" >
+			<band height="86"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -299,36 +299,34 @@
 				</staticText>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						mode="Transparent"
+						mode="Opaque"
 						x="66"
 						y="2"
 						width="142"
 						height="12"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
-						key="textField-104"
-						stretchType="RelativeToTallestObject">
+						key="textField-104">
 							<printWhenExpression><![CDATA[new Boolean(!$F{getDescricaoCategoria}.equals(null))]]></printWhenExpression>
 						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricaoCategoria}]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="3"
-						y="17"
-						width="775"
-						height="30"
-						key="subreport-1"
-						positionType="Float"/>
+						x="0"
+						y="27"
+						width="782"
+						height="43"
+						key="subreport-1"/>
 					<subreportParameter  name="relatorioReceitasAFaturarHelpersDS">
 						<subreportParameterExpression><![CDATA[$F{getRelatorioReceitasAFaturarHelpersDS}]]></subreportParameterExpression>
 					</subreportParameter>
 					<dataSourceExpression><![CDATA[$F{getRelatorioReceitasAFaturarHelpersDS}]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "relatorioReceitasAFaturarSinteticoCategoriaDetail.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioReceitasAFaturarSintetico.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
 		</detail>
