@@ -34,9 +34,12 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 	@Override
 	public Object executar() throws TarefaException {
 		Collection colecaoDados = (Collection) getParametro("colecaoDadosRelatorio");
-		Collection<RelatorioReceitasAFaturarBean> colecaoBean = this.inicializarBeanRelatorio(colecaoDados);
+		
+		String idGrupo = String.valueOf(getParametro("idGrupo"));
+		
+		//Collection<RelatorioReceitasAFaturarBean> colecaoBean = this.inicializarBeanRelatorio(colecaoDados);
 
-		if (colecaoBean == null || colecaoBean.isEmpty()) {
+		if (colecaoDados == null || colecaoDados.isEmpty()) {
 			throw new RelatorioVazioException("atencao.relatorio.vazio");
 		}
 		
@@ -52,16 +55,18 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 		
 		byte[] retorno = null;
 
-		RelatorioDataSource ds = new RelatorioDataSource((List<RelatorioReceitasAFaturarBean>) colecaoBean);
-		
-		if(getParametro("idGrupo") == null)
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		String dataLeituraAnterior = formatter.format(getParametro("dataLeituraAnterior"));
+		String dataLeituraAtual = formatter.format(getParametro("dataLeituraAtual"));
+		parametros.put("dataLeituraAnterior", dataLeituraAnterior);
+		parametros.put("dataLeituraAtual", dataLeituraAtual);
+
+		RelatorioDataSource ds;
+		if(getParametro("idGrupo") == null) {
+			ds = new RelatorioDataSource((List<RelatorioReceitasAFaturarPorCategoriaHelper>) colecaoDados);
 			retorno = this.gerarRelatorio(ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO, parametros, ds, TarefaRelatorio.TIPO_PDF);
-		else {
-			Format formatter = new SimpleDateFormat("dd/MM/yyyy");
-			String dataLeituraAnterior = formatter.format(getParametro("dataLeituraAnterior"));
-			String dataLeituraAtual = formatter.format(getParametro("dataLeituraAtual"));
-			parametros.put("dataLeituraAnterior", dataLeituraAnterior);
-			parametros.put("dataLeituraAtual", dataLeituraAtual);
+		} else {
+			ds = new RelatorioDataSource((List<RelatorioReceitasAFaturarBean>) colecaoDados);
 			retorno = this.gerarRelatorio(ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_ANALITICO, parametros, ds, TarefaRelatorio.TIPO_PDF);
 		}
 		
@@ -71,21 +76,28 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 	@Override
 	public void agendarTarefaBatch() {}
 	
-	private Collection<RelatorioReceitasAFaturarBean> inicializarBeanRelatorio(Collection colecaoDados) {
-		
-		Collection<RelatorioReceitasAFaturarBean> retorno = new ArrayList<RelatorioReceitasAFaturarBean>();
-
-		Iterator iterator = colecaoDados.iterator();
-		
-		while (iterator.hasNext()) {
-			
-			RelatorioReceitasAFaturarHelper helper = (RelatorioReceitasAFaturarHelper) iterator.next();
-
-			RelatorioReceitasAFaturarBean relatorioBean = new RelatorioReceitasAFaturarBean(helper);
-			
-			retorno.add(relatorioBean);
-		}
-
-		return retorno;
-	}
+//	private Collection inicializarBeanRelatorio(Collection colecaoDados) {
+//		
+//		
+//		String idGrupo = String.valueOf(getParametro("idGrupo"));
+//		
+//		if (idGrupo != null) {
+//			Collection<RelatorioReceitasAFaturarBean> retorno = new ArrayList<RelatorioReceitasAFaturarBean>();
+//			
+//			Iterator iterator = colecaoDados.iterator();
+//			
+//			while (iterator.hasNext()) {
+//				
+//				RelatorioReceitasAFaturarHelper helper = (RelatorioReceitasAFaturarHelper) iterator.next();
+//				
+//				RelatorioReceitasAFaturarBean relatorioBean = new RelatorioReceitasAFaturarBean(helper);
+//				
+//				retorno.add(relatorioBean);
+//			}
+//		} else {
+//			//sintetico
+//		}
+//
+//		return retorno;
+//	}
 }

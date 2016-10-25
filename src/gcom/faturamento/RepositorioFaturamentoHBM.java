@@ -60982,7 +60982,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 
-	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException {
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes, Integer idCategoria) throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
 		
@@ -60993,9 +60993,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append("resumo.diasNaoFaturados, resumo.valorAgua, resumo.valorAguaDiario, resumo.valorAguaAFaturar, resumo.valorEsgoto, resumo.valorEsgotoDiario, resumo.valorEsgotoAFaturar, categoria) ")
 					.append(" from ReceitasAFaturarResumo resumo ")
 					.append(" inner join fetch resumo.categoria categoria")
-					.append(" where resumo.anoMesReferencia = :anoMes");
+					.append(" where resumo.anoMesReferencia = :anoMes")
+					.append(" and categoria.id = :idCategoria");
 			
-			return session.createQuery(consulta.toString()).setInteger("anoMes", anoMes).list();
+			return session.createQuery(consulta.toString())
+					.setInteger("anoMes", anoMes)
+					.setInteger("idCategoria", idCategoria).list();
+			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao obter dados para o relatorio sintetico de receitas a faturar");
 		} finally {

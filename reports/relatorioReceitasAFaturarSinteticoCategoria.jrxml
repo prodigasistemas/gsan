@@ -27,32 +27,16 @@
 	<parameter name="imagem" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="mes" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="ano" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["/Users/pamelagatinho/Projects/java/cosanpa/gsan/reports/"]]></defaultValueExpression>
+	</parameter>
 
-	<field name="getIdGrupo" class="java.lang.Integer"/>
-	<field name="getDataLeituraAnterior" class="java.lang.String"/>
-	<field name="getDataLeituraAtual" class="java.lang.String"/>
-	<field name="getDiferencaDias" class="java.lang.Integer"/>
-	<field name="getDiasNaoFaturados" class="java.lang.Integer"/>
-	<field name="getValorAgua" class="java.math.BigDecimal"/>
-	<field name="getValorAguaDiario" class="java.math.BigDecimal"/>
-	<field name="getValorAguaAFaturar" class="java.math.BigDecimal"/>
-	<field name="getValorEsgoto" class="java.math.BigDecimal"/>
-	<field name="getValorEsgotoDiario" class="java.math.BigDecimal"/>
-	<field name="getValorEsgotoAFaturar" class="java.math.BigDecimal"/>
-	<field name="getImovel" class="java.lang.Integer"/>
-	<field name="getNomeCliente" class="java.lang.String"/>
+	<field name="getDescricaoCategoria" class="java.lang.String"/>
+	<field name="getRelatorioReceitasAFaturarHelpersDS" class="java.lang.Object"/>
 
 	<variable name="COUNT_unidadeNegocios" class="java.math.BigDecimal" resetType="Report" incrementType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$V{COUNT_unidadeNegocios}.add(new BigDecimal(1)) ]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
-	</variable>
-	<variable name="totalAgua" class="java.math.BigDecimal" resetType="Group" resetGroup="quebraPagina" calculation="Sum">
-		<variableExpression><![CDATA[$F{getValorAguaAFaturar}]]></variableExpression>
-		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
-	</variable>
-	<variable name="totalEsgoto" class="java.math.BigDecimal" resetType="Group" resetGroup="quebraPagina" calculation="Sum">
-		<variableExpression><![CDATA[$F{getValorEsgotoAFaturar}]]></variableExpression>
-		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
 	</variable>
 
 		<group  name="quebraPagina" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
@@ -241,22 +225,6 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="2"
-						y="76"
-						width="61"
-						height="12"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText-82"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[Categoria:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
 						x="79"
 						y="6"
 						width="608"
@@ -286,93 +254,10 @@
 					</textElement>
 				<text><![CDATA[Relatório de Receitas a Faturar - Sintético]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="66"
-						y="76"
-						width="142"
-						height="12"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField-104"
-						stretchType="RelativeToTallestObject"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricaoCategoria}]]></textFieldExpression>
-				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
 			<band height="18"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="700"
-						y="4"
-						width="80"
-						height="11"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField-102"
-						stretchType="RelativeToTallestObject"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{totalEsgoto}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="446"
-						y="4"
-						width="80"
-						height="11"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField-103"
-						stretchType="RelativeToTallestObject"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{totalAgua}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="615"
-						y="4"
-						width="80"
-						height="11"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText-111"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[Total]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="362"
-						y="4"
-						width="80"
-						height="11"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText-112"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[Total]]></text>
-				</staticText>
 			</band>
 			</groupFooter>
 		</group>
@@ -394,15 +279,51 @@
 		</columnHeader>
 		<detail>
 			<band height="101"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="2"
+						y="6"
+						width="61"
+						height="12"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-82"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[Categoria:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="66"
+						y="6"
+						width="142"
+						height="12"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-104"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricaoCategoria}]]></textFieldExpression>
+				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="3"
-						y="1"
-						width="777"
-						height="97"
+						x="13"
+						y="27"
+						width="759"
+						height="66"
 						key="subreport-1"/>
-					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA["/Users/pamelagatinho/Projects/java/cosanpa/gsan/reports/relatorioReceitasAFaturarSintetico.jrxml"]]></subreportExpression>
+					<subreportParameter  name="relatorioReceitasAFaturarHelpersDS">
+						<subreportParameterExpression><![CDATA[$F{getRelatorioReceitasAFaturarHelpersDS}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[$F{getRelatorioReceitasAFaturarHelpersDS}]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "relatorioReceitasAFaturarSintetico.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
 		</detail>

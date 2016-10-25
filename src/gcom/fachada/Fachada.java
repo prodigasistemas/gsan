@@ -565,6 +565,8 @@ import gcom.relatorio.faturamento.RelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.RelatorioFaturasAgrupadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarPorCategoriaHelper;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
@@ -44054,13 +44056,22 @@ public class Fachada {
 		}
 	}
 	
-	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMesReferencia) {
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMesReferencia) {
 		try {
-			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturar(idGrupo, anoMesReferencia);
+			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMesReferencia);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMesReferencia) {
+		try {
+			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturarSintetico(anoMesReferencia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota) {
 		try {

@@ -1,8 +1,12 @@
 package gcom.relatorio.faturamento;
 
+import gcom.relatorio.RelatorioBean;
+
 import java.util.Collection;
 
-public class RelatorioReceitasAFaturarPorCategoriaHelper {
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+public class RelatorioReceitasAFaturarPorCategoriaHelper implements RelatorioBean {
 	
 	private String descricaoCategoria;
 	private Collection<RelatorioReceitasAFaturarHelper> relatorioReceitasAFaturarHelpers;
@@ -19,6 +23,10 @@ public class RelatorioReceitasAFaturarPorCategoriaHelper {
 	public void setRelatorioReceitasAFaturarHelpers(
 			Collection<RelatorioReceitasAFaturarHelper> relatorioReceitasAFaturarHelpers) {
 		this.relatorioReceitasAFaturarHelpers = relatorioReceitasAFaturarHelpers;
+	}
+	
+	public JRBeanCollectionDataSource getRelatorioReceitasAFaturarHelpersDS() {
+		return new JRBeanCollectionDataSource(this.relatorioReceitasAFaturarHelpers);
 	}
 	
 }

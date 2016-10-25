@@ -2,11 +2,14 @@ package gcom.relatorio.faturamento;
 
 import gcom.cadastro.imovel.Categoria;
 import gcom.faturamento.ReceitasAFaturarResumo;
+import gcom.relatorio.RelatorioBean;
 
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RelatorioReceitasAFaturarHelper {
+public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 
 	private Integer idGrupo;
 	private Integer imovel;
@@ -22,6 +25,9 @@ public class RelatorioReceitasAFaturarHelper {
 	private BigDecimal valorEsgotoDiario;
 	private BigDecimal valorEsgotoAFaturar;
 	private Categoria categoria;
+	
+	private String dataLeituraAnteriorStr;
+	private String dataLeituraPrevistaStr;
 
 	public RelatorioReceitasAFaturarHelper() {
 		super();
@@ -29,8 +35,13 @@ public class RelatorioReceitasAFaturarHelper {
 	
 	public RelatorioReceitasAFaturarHelper(ReceitasAFaturarResumo receitasAFaturarResumo) {
 		this.idGrupo = receitasAFaturarResumo.getIdGrupo();
+		
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		this.dataLeituraAnteriorStr = formatter.format(receitasAFaturarResumo.getDataLeituraAnterior());
+		this.dataLeituraPrevistaStr = formatter.format(receitasAFaturarResumo.getDataLeituraAnterior());	
 		this.dataLeituraAnterior = receitasAFaturarResumo.getDataLeituraAnterior();
 		this.dataLeituraPrevista = receitasAFaturarResumo.getDataLeituraAtual();
+		
 		this.diferencaDias = receitasAFaturarResumo.getDiferencaDias();
 		this.diasNaoFaturados = receitasAFaturarResumo.getDiasNaoFaturados();
 		this.valorAgua = receitasAFaturarResumo.getValorAgua();
@@ -81,6 +92,10 @@ public class RelatorioReceitasAFaturarHelper {
 	public Date getDataLeituraAnterior() {
 		return dataLeituraAnterior;
 	}
+	
+	public String getDataLeituraAnteriorStr() {
+		return dataLeituraAnteriorStr;
+	}
 
 	public void setDataLeituraAnterior(Date dataLeituraAnterior) {
 		this.dataLeituraAnterior = dataLeituraAnterior;
@@ -90,6 +105,10 @@ public class RelatorioReceitasAFaturarHelper {
 		return dataLeituraPrevista;
 	}
 
+	public String getDataLeituraPrevistaStr() {
+		return dataLeituraPrevistaStr;
+	}
+	
 	public void setDataLeituraPrevista(Date dataLeituraPrevista) {
 		this.dataLeituraPrevista = dataLeituraPrevista;
 	}

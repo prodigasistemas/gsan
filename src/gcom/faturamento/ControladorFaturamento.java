@@ -171,6 +171,7 @@ import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioMedicaoFaturamentoHelper;
 import gcom.relatorio.faturamento.RelatorioMultasAutosInfracaoPendentesBean;
 import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarPorCategoriaHelper;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultanea;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
@@ -16277,44 +16278,51 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	    }
 	}
 	
-	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException {
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes) throws ControladorException {
 		try {
-			Collection<RelatorioReceitasAFaturarHelper> retorno;
-			
-			if (idGrupo != null) {
-				retorno = gerarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMes);
-			}
-			else {
-				retorno = gerarDadosRelatorioReceitasAFaturarSintetico(anoMes);
-			}
+		
+			return gerarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMes);
 
-			return retorno;
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
 
-	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes) throws ControladorException {
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes) throws ControladorException {
 		
-		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
-
-		Collection<ReceitasAFaturarResumo> colecao = this.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes);
-
-			for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
-			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper(receitasAFaturarResumo);
-			retorno.add(helper);
-		}
-
-			return retorno;
-	}
-	
-	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ControladorException {
+		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> retorno = new ArrayList<RelatorioReceitasAFaturarPorCategoriaHelper>();
 		try{
-		  return repositorioFaturamento.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes);
+			FiltroCategoria filtro = new FiltroCategoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCategoria.INDICADOR_USO, ConstantesSistema.SIM));
+			Collection<Categoria> colecao = getControladorUtil().pesquisar(filtro, Categoria.class.getName());
+			
+			for (Categoria categoria : colecao) {
+				RelatorioReceitasAFaturarPorCategoriaHelper receitaCategoria = new RelatorioReceitasAFaturarPorCategoriaHelper();
+				
+				receitaCategoria.setDescricaoCategoria(categoria.getDescricao());
+				
+				Collection<ReceitasAFaturarResumo> receitas = repositorioFaturamento.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes, categoria.getId()); 
+				receitaCategoria.setRelatorioReceitasAFaturarHelpers(getRelatorioReceitasAFaturarHelpers(receitas));
+				
+				retorno.add(receitaCategoria);
+			}
+			
+		  return retorno;
 		} catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
+	}
+	
+	private Collection<RelatorioReceitasAFaturarHelper> getRelatorioReceitasAFaturarHelpers(Collection<ReceitasAFaturarResumo> receitas) {
+
+		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList<RelatorioReceitasAFaturarHelper>();
+		
+		for (ReceitasAFaturarResumo receita : receitas) {
+			retorno.add(new RelatorioReceitasAFaturarHelper(receita));
+		}
+		
+		return retorno;
 	}
 	
 

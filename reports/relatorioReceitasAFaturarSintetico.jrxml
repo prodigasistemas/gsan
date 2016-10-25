@@ -28,30 +28,29 @@
 	<parameter name="mes" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="ano" isForPrompting="false" class="java.lang.String"/>
 
-	<field name="getIdGrupo" class="java.lang.Integer"/>
-	<field name="getDataLeituraAnterior" class="java.lang.String"/>
-	<field name="getDataLeituraAtual" class="java.lang.String"/>
-	<field name="getDiferencaDias" class="java.lang.Integer"/>
-	<field name="getDiasNaoFaturados" class="java.lang.Integer"/>
-	<field name="getValorAgua" class="java.math.BigDecimal"/>
-	<field name="getValorAguaDiario" class="java.math.BigDecimal"/>
-	<field name="getValorAguaAFaturar" class="java.math.BigDecimal"/>
-	<field name="getValorEsgoto" class="java.math.BigDecimal"/>
-	<field name="getValorEsgotoDiario" class="java.math.BigDecimal"/>
-	<field name="getValorEsgotoAFaturar" class="java.math.BigDecimal"/>
-	<field name="getImovel" class="java.lang.Integer"/>
-	<field name="getNomeCliente" class="java.lang.String"/>
+	<field name="idGrupo" class="java.lang.Integer"/>
+	<field name="dataLeituraAnteriorStr" class="java.lang.String"/>
+	<field name="diferencaDias" class="java.lang.Integer"/>
+	<field name="diasNaoFaturados" class="java.lang.Integer"/>
+	<field name="valorAgua" class="java.math.BigDecimal"/>
+	<field name="valorAguaDiario" class="java.math.BigDecimal"/>
+	<field name="valorAguaAFaturar" class="java.math.BigDecimal"/>
+	<field name="valorEsgoto" class="java.math.BigDecimal"/>
+	<field name="valorEsgotoDiario" class="java.math.BigDecimal"/>
+	<field name="valorEsgotoAFaturar" class="java.math.BigDecimal"/>
+	<field name="imovel" class="java.lang.Integer"/>
+	<field name="nomeCliente" class="java.lang.String"/>
 
 	<variable name="COUNT_unidadeNegocios" class="java.math.BigDecimal" resetType="Report" incrementType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$V{COUNT_unidadeNegocios}.add(new BigDecimal(1)) ]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalAgua" class="java.math.BigDecimal" resetType="Group" resetGroup="quebraPagina" calculation="Sum">
-		<variableExpression><![CDATA[$F{getValorAguaAFaturar}]]></variableExpression>
+		<variableExpression><![CDATA[$F{valorAguaAFaturar}]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
 	</variable>
 	<variable name="totalEsgoto" class="java.math.BigDecimal" resetType="Group" resetGroup="quebraPagina" calculation="Sum">
-		<variableExpression><![CDATA[$F{getValorEsgotoAFaturar}]]></variableExpression>
+		<variableExpression><![CDATA[$F{valorEsgotoAFaturar}]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal("0.00")]]></initialValueExpression>
 	</variable>
 
@@ -509,24 +508,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getIdGrupo}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="105"
-						y="4"
-						width="64"
-						height="11"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField-88"
-						stretchType="RelativeToTallestObject"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDataLeituraAtual}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{idGrupo}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -543,7 +525,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDiferencaDias}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{diferencaDias}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -560,7 +542,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDiasNaoFaturados}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{diasNaoFaturados}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -577,7 +559,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorEsgotoAFaturar}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorEsgotoAFaturar}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -594,7 +576,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorEsgotoDiario}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorEsgotoDiario}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -611,7 +593,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorEsgoto}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorEsgoto}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -628,7 +610,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorAguaAFaturar}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorAguaAFaturar}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -645,7 +627,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorAguaDiario}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorAguaDiario}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -662,7 +644,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getValorAgua}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{valorAgua}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -679,7 +661,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDataLeituraAnterior}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataLeituraAnteriorStr}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

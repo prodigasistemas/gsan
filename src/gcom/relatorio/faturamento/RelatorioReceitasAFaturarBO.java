@@ -28,6 +28,7 @@ public class RelatorioReceitasAFaturarBO {
 		this.form = (RelatorioReceitasAFaturarActionForm) actionForm;
 		this.usuario = (Usuario) httpServletRequest.getSession(false).getAttribute("usuarioLogado");
 		this.mesAno = form.getMesAno();
+		
 		if(form.getGrupoFaturamentoID() <= 0) {
 			this.grupoFaturamentoID = null;
 			nomeRelatorio = ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO;
@@ -38,40 +39,66 @@ public class RelatorioReceitasAFaturarBO {
 		}
 	}
 
-	public RelatorioReceitasAFaturar getRelatorioRelacaoImoveisRota() {
+	public RelatorioReceitasAFaturar getRelatorioReceitasAFaturar() {
 		if(getAnoMesReferencia().equals("")){
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
 		RelatorioReceitasAFaturar relatorioReceitasAFaturar = new RelatorioReceitasAFaturar(usuario, nomeRelatorio);
-
-		Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio = getColecaoDadosRelatorio();
-		String totalResgistros = String.valueOf(colecaoDadosRelatorio.size());
-
-		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
-		relatorioReceitasAFaturar.addParametro("idGrupo", this.grupoFaturamentoID);
+		
 		relatorioReceitasAFaturar.addParametro("ano", this.mesAno.substring(3));
 		relatorioReceitasAFaturar.addParametro("mes", this.mesAno.substring(0, 2));
-		
-		if(this.grupoFaturamentoID != null) {
-			getDataLeituraAnteriorAtual(relatorioReceitasAFaturar, colecaoDadosRelatorio);
+		relatorioReceitasAFaturar.addParametro("idGrupo", this.grupoFaturamentoID);
+
+		if(this.grupoFaturamentoID != null) { 
+			relatorioReceitasAFaturar = getRelatorioReceitasAFaturarAnalitico(relatorioReceitasAFaturar);
+		} else {
+			relatorioReceitasAFaturar = getRelatorioReceitasAFaturarSintetico(relatorioReceitasAFaturar);
 		}
+		
+		
+		return relatorioReceitasAFaturar;
+	}
+	
+	public RelatorioReceitasAFaturar getRelatorioReceitasAFaturarSintetico(RelatorioReceitasAFaturar relatorioReceitasAFaturar) {
+		
+		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio = getColecaoDadosRelatorioSintetico();
+		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
+		
+		return relatorioReceitasAFaturar;
+	}
+
+	public RelatorioReceitasAFaturar getRelatorioReceitasAFaturarAnalitico(RelatorioReceitasAFaturar relatorioReceitasAFaturar) {
+		
+		Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio = getColecaoDadosRelatorioAnalitico();
+		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
+		
+		getDataLeituraAnteriorAtualAnalitico(relatorioReceitasAFaturar, colecaoDadosRelatorio);
 
 		return relatorioReceitasAFaturar;
 	}
 
-	private void getDataLeituraAnteriorAtual(RelatorioReceitasAFaturar relatorioReceitasAFaturar, Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio) {
+	private void getDataLeituraAnteriorAtualAnalitico(RelatorioReceitasAFaturar relatorioReceitasAFaturar, Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio) {
 		ArrayList<RelatorioReceitasAFaturarHelper> lista = (ArrayList) colecaoDadosRelatorio;
 		Date dataLeituraAnterior = lista.get(0).getDataLeituraAnterior();
 		Date dataLeituraAtual = lista.get(0).getDataLeituraPrevista();
 		relatorioReceitasAFaturar.addParametro("dataLeituraAnterior", dataLeituraAnterior);
 		relatorioReceitasAFaturar.addParametro("dataLeituraAtual", dataLeituraAtual);
 	}
+	
+	private void getDataLeituraAnteriorAtualSintetico(RelatorioReceitasAFaturar relatorioReceitasAFaturar, Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio) {
+		ArrayList<RelatorioReceitasAFaturarPorCategoriaHelper> listaCategoria = (ArrayList) colecaoDadosRelatorio;
+		
+		//ArrayList<RelatorioReceitasAFaturarHelper> listaHelper = (ArrayList) lista.get(0).ge;
+//		Date dataLeituraAnterior = lista.get(0).getDataLeituraAnterior();
+//		Date dataLeituraAtual = lista.get(0).getDataLeituraPrevista();
+//		relatorioReceitasAFaturar.addParametro("dataLeituraAnterior", dataLeituraAnterior);
+//		relatorioReceitasAFaturar.addParametro("dataLeituraAtual", dataLeituraAtual);
+	}
 
-	// parametros: grupo(um ou todos) e ano/mes de referencia
-	private Collection<RelatorioReceitasAFaturarHelper> getColecaoDadosRelatorio() {
-		Collection colecaoDadosRelatorio = Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturar(this.grupoFaturamentoID,
-				Integer.parseInt(getAnoMesReferencia()));
+	private Collection<RelatorioReceitasAFaturarHelper> getColecaoDadosRelatorioAnalitico() {
+		Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio = 
+				Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturarAnalitico(this.grupoFaturamentoID, Integer.parseInt(getAnoMesReferencia()));
 
 		if (colecaoDadosRelatorio == null || colecaoDadosRelatorio.isEmpty()) {
 			throw new ActionServletException("atencao.relatorio.vazio");
@@ -80,6 +107,17 @@ public class RelatorioReceitasAFaturarBO {
 		return colecaoDadosRelatorio;
 	}
 
+	private Collection<RelatorioReceitasAFaturarPorCategoriaHelper> getColecaoDadosRelatorioSintetico() {
+		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio = 
+				Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer.parseInt(getAnoMesReferencia()));
+
+		if (colecaoDadosRelatorio == null || colecaoDadosRelatorio.isEmpty()) {
+			throw new ActionServletException("atencao.relatorio.vazio");
+		}
+
+		return colecaoDadosRelatorio;
+	}
+	
 	public String getAnoMesReferencia() {
 		String anoMes = "";
 
