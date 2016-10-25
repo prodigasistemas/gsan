@@ -32,7 +32,8 @@ public class RelatorioReceitasAFaturarBean implements RelatorioBean {
 		this.idGrupo = helper.getIdGrupo();
 		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
 		this.dataLeituraAnterior = formatter.format(helper.getDataLeituraAnterior());
-		this.dataLeituraAtual = formatter.format(helper.getDataLeituraPrevista());
+		this.dataLeituraAtual = formatter.format(helper.getDataLeituraAtual());
+		
 		this.diferencaDias = helper.getDiferencaDias();
 		this.diasNaoFaturados = helper.getDiasNaoFaturados();
 		this.valorAgua = helper.getValorAgua();

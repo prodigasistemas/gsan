@@ -16350,20 +16350,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				
 				RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
 				helper.setIdGrupo(idGrupo);
-				helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
+				helper.setDataLeituraAtual(dataLeituraPrevistaHelper.getDataPrevista());
 				helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
 				helper.setValorAgua(valorAFaturarHelper.getValorAgua());
 				helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
 				helper.setCategoria(valorAFaturarHelper.getCategoria());
 
 				if (helper.gerar()) {
-					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraAtual(), helper.getDataLeituraAnterior());
 					helper.setDiferencaDias(diferencaDias);			
 					
 					int mes = Integer.parseInt(anoMes.toString().substring(4));
 					int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
 					Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
-					int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+					int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraAtual());
 					helper.setDiasNaoFaturados(diasNaoFaturados);
 					
 					BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
@@ -16429,19 +16429,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
 			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
 			helper.setDataLeituraAnterior(datasLeituraAnterior.get(0).getDataAnterior());
-			helper.setDataLeituraPrevista(datasLeituraPrevista.get(0).getDataPrevista());
+			helper.setDataLeituraAtual(datasLeituraPrevista.get(0).getDataPrevista());
 			
 			retorno.add(helper);
 		}
 
 		for (RelatorioReceitasAFaturarHelper helper : retorno) {
-			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraAtual(), helper.getDataLeituraAnterior());
 			helper.setDiferencaDias(diferencaDias);			
 			
 			int mes = Integer.parseInt(anoMes.toString().substring(4));
 			int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
 			Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
-			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraAtual());
 			helper.setDiasNaoFaturados(diasNaoFaturados);
 			
 			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);

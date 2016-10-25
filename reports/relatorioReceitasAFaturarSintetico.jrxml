@@ -40,6 +40,7 @@
 	<field name="valorEsgotoAFaturar" class="java.math.BigDecimal"/>
 	<field name="imovel" class="java.lang.Integer"/>
 	<field name="nomeCliente" class="java.lang.String"/>
+	<field name="dataLeituraAtualStr" class="java.lang.String"/>
 
 	<variable name="COUNT_unidadeNegocios" class="java.math.BigDecimal" resetType="Report" incrementType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$V{COUNT_unidadeNegocios}.add(new BigDecimal(1)) ]]></variableExpression>
@@ -662,6 +663,23 @@
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataLeituraAnteriorStr}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="107"
+						y="4"
+						width="64"
+						height="11"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-104"
+						stretchType="RelativeToTallestObject"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataLeituraAtualStr}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

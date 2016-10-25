@@ -15,7 +15,7 @@ public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 	private Integer imovel;
 	private String nomeCliente;
 	private Date dataLeituraAnterior;
-	private Date dataLeituraPrevista;
+	private Date dataLeituraAtual;
 	private Integer diferencaDias;
 	private Integer diasNaoFaturados;
 	private BigDecimal valorAgua;
@@ -27,7 +27,7 @@ public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 	private Categoria categoria;
 	
 	private String dataLeituraAnteriorStr;
-	private String dataLeituraPrevistaStr;
+	private String dataLeituraAtualStr;
 
 	public RelatorioReceitasAFaturarHelper() {
 		super();
@@ -38,9 +38,9 @@ public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 		
 		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
 		this.dataLeituraAnteriorStr = formatter.format(receitasAFaturarResumo.getDataLeituraAnterior());
-		this.dataLeituraPrevistaStr = formatter.format(receitasAFaturarResumo.getDataLeituraAnterior());	
+		this.dataLeituraAtualStr = formatter.format(receitasAFaturarResumo.getDataLeituraAtual());	
 		this.dataLeituraAnterior = receitasAFaturarResumo.getDataLeituraAnterior();
-		this.dataLeituraPrevista = receitasAFaturarResumo.getDataLeituraAtual();
+		this.dataLeituraAtual = receitasAFaturarResumo.getDataLeituraAtual();
 		
 		this.diferencaDias = receitasAFaturarResumo.getDiferencaDias();
 		this.diasNaoFaturados = receitasAFaturarResumo.getDiasNaoFaturados();
@@ -55,7 +55,7 @@ public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 
 	public boolean gerar() {
 		if (dataLeituraAnterior != null
-				&& dataLeituraPrevista != null
+				&& dataLeituraAtual != null
 				&& valorAgua != null
 				&& valorEsgoto != null) {
 			
@@ -101,16 +101,16 @@ public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 		this.dataLeituraAnterior = dataLeituraAnterior;
 	}
 
-	public Date getDataLeituraPrevista() {
-		return dataLeituraPrevista;
+	public Date getDataLeituraAtual() {
+		return dataLeituraAtual;
 	}
 
-	public String getDataLeituraPrevistaStr() {
-		return dataLeituraPrevistaStr;
+	public String getDataLeituraAtualStr() {
+		return dataLeituraAtualStr;
 	}
 	
-	public void setDataLeituraPrevista(Date dataLeituraPrevista) {
-		this.dataLeituraPrevista = dataLeituraPrevista;
+	public void setDataLeituraAtual(Date dataLeituraAtual) {
+		this.dataLeituraAtual = dataLeituraAtual;
 	}
 
 	public Integer getDiferencaDias() {

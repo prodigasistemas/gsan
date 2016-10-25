@@ -53,7 +53,7 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		super();
 		this.idGrupo = helper.getIdGrupo();
 		this.dataLeituraAnterior = helper.getDataLeituraAnterior();
-		this.dataLeituraAtual = helper.getDataLeituraPrevista();
+		this.dataLeituraAtual = helper.getDataLeituraAtual();
 		this.diferencaDias = helper.getDiferencaDias();
 		this.diasNaoFaturados = helper.getDiasNaoFaturados();
 		this.valorAgua = helper.getValorAgua();

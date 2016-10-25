@@ -65,6 +65,8 @@ public class RelatorioReceitasAFaturarBO {
 		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio = getColecaoDadosRelatorioSintetico();
 		relatorioReceitasAFaturar.addParametro("colecaoDadosRelatorio", colecaoDadosRelatorio);
 		
+		getDataLeituraAnteriorAtualSintetico(relatorioReceitasAFaturar, colecaoDadosRelatorio);
+		
 		return relatorioReceitasAFaturar;
 	}
 
@@ -81,7 +83,7 @@ public class RelatorioReceitasAFaturarBO {
 	private void getDataLeituraAnteriorAtualAnalitico(RelatorioReceitasAFaturar relatorioReceitasAFaturar, Collection<RelatorioReceitasAFaturarHelper> colecaoDadosRelatorio) {
 		ArrayList<RelatorioReceitasAFaturarHelper> lista = (ArrayList) colecaoDadosRelatorio;
 		Date dataLeituraAnterior = lista.get(0).getDataLeituraAnterior();
-		Date dataLeituraAtual = lista.get(0).getDataLeituraPrevista();
+		Date dataLeituraAtual = lista.get(0).getDataLeituraAtual();
 		relatorioReceitasAFaturar.addParametro("dataLeituraAnterior", dataLeituraAnterior);
 		relatorioReceitasAFaturar.addParametro("dataLeituraAtual", dataLeituraAtual);
 	}
@@ -89,11 +91,11 @@ public class RelatorioReceitasAFaturarBO {
 	private void getDataLeituraAnteriorAtualSintetico(RelatorioReceitasAFaturar relatorioReceitasAFaturar, Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio) {
 		ArrayList<RelatorioReceitasAFaturarPorCategoriaHelper> listaCategoria = (ArrayList) colecaoDadosRelatorio;
 		
-		//ArrayList<RelatorioReceitasAFaturarHelper> listaHelper = (ArrayList) lista.get(0).ge;
-//		Date dataLeituraAnterior = lista.get(0).getDataLeituraAnterior();
-//		Date dataLeituraAtual = lista.get(0).getDataLeituraPrevista();
-//		relatorioReceitasAFaturar.addParametro("dataLeituraAnterior", dataLeituraAnterior);
-//		relatorioReceitasAFaturar.addParametro("dataLeituraAtual", dataLeituraAtual);
+		ArrayList<RelatorioReceitasAFaturarHelper> lista = (ArrayList) listaCategoria.get(0).getRelatorioReceitasAFaturarHelpers();
+		Date dataLeituraAnterior = lista.get(0).getDataLeituraAnterior();
+		Date dataLeituraAtual = lista.get(0).getDataLeituraAtual();
+		relatorioReceitasAFaturar.addParametro("dataLeituraAnterior", dataLeituraAnterior);
+		relatorioReceitasAFaturar.addParametro("dataLeituraAtual", dataLeituraAtual);
 	}
 
 	private Collection<RelatorioReceitasAFaturarHelper> getColecaoDadosRelatorioAnalitico() {
