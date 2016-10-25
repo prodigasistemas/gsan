@@ -829,7 +829,9 @@ public class ConstantesRelatorios {
 	
 	public static final String RELATORIO_FICHA_FISCALIZACAO_CADASTRAL = "/relatorioFichaFiscalizacaoCadastral.jasper";
 	
-	public static final String RELATORIO_RECEITAS_A_FATURAR_SINTETICO = "/relatorioReceitasAFaturarSinteticoCategoria.jasper";
+	public static final String RELATORIO_RECEITAS_A_FATURAR_SINTETICO = "/relatorioReceitasAFaturarSintetico.jasper";
+	
+	public static final String RELATORIO_RECEITAS_A_FATURAR_SINTETICO_CATEGORIA = "/relatorioReceitasAFaturarSinteticoCategoria.jasper";
 	
 	public static final String RELATORIO_RECEITAS_A_FATURAR_ANALITICO = "/relatorioReceitasAFaturarAnalitico.jasper";
 	

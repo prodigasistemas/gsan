@@ -3044,5 +3044,7 @@ public interface IRepositorioFaturamento {
 	
 	public void excluirLancamentoAgenciaReguladoraPorAnoMesArrecadacaoPorLocalidade(int anoMesReferenciaFaturamento, Integer idLocalidade) throws ErroRepositorioException;
 	
-	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes, Integer idCategoria) throws ErroRepositorioException;
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(Integer anoMes, Integer idCategoria) throws ErroRepositorioException;
+	
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException;
 }

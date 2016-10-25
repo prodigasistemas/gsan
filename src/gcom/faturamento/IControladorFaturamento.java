@@ -5706,7 +5706,7 @@ public interface IControladorFaturamento {
 	
 	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes) throws ControladorException;
 	
-	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes) throws ControladorException;
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes, Short indicadorCategoria) throws ControladorException;
 	
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
 	

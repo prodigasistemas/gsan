@@ -83,6 +83,23 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		this.categoria = categoria;
 	}
 	
+	public ReceitasAFaturarResumo(Integer idGrupo, Date dataLeituraAnterior, Date dataLeituraAtual, Integer diferencaDias,
+			Integer diasNaoFaturados, BigDecimal valorAgua, BigDecimal valorAguaDiario, BigDecimal valorAguaAFaturar, BigDecimal valorEsgoto, 
+			BigDecimal valorEsgotoDiario, BigDecimal valorEsgotoAFaturar) {
+		super();
+		this.idGrupo = idGrupo;
+		this.dataLeituraAnterior = dataLeituraAnterior;
+		this.dataLeituraAtual = dataLeituraAtual;
+		this.diferencaDias = diferencaDias;
+		this.diasNaoFaturados = diasNaoFaturados;
+		this.valorAgua = valorAgua;
+		this.valorAguaDiario = valorAguaDiario;
+		this.valorAguaAFaturar = valorAguaAFaturar;
+		this.valorEsgoto = valorEsgoto;
+		this.valorEsgotoDiario = valorEsgotoDiario;
+		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

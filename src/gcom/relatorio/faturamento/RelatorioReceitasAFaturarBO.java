@@ -5,6 +5,7 @@ import gcom.gui.ActionServletException;
 import gcom.gui.relatorio.faturamento.RelatorioReceitasAFaturarActionForm;
 import gcom.relatorio.ConstantesRelatorios;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesSistema;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,18 +24,20 @@ public class RelatorioReceitasAFaturarBO {
 	private String mesAno;
 	private Integer grupoFaturamentoID;
 	private String nomeRelatorio;
+	private Short indicadorCategoria;
 
 	public RelatorioReceitasAFaturarBO(ActionForm actionForm, HttpServletRequest httpServletRequest) {
 		this.form = (RelatorioReceitasAFaturarActionForm) actionForm;
 		this.usuario = (Usuario) httpServletRequest.getSession(false).getAttribute("usuarioLogado");
 		this.mesAno = form.getMesAno();
+		this.indicadorCategoria = form.getIndicadorCategoria();
 		
 		if(form.getGrupoFaturamentoID() <= 0) {
 			this.grupoFaturamentoID = null;
-			nomeRelatorio = ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO;
-		}
-		else {
+				nomeRelatorio = ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO_CATEGORIA;
+		} else {
 			this.grupoFaturamentoID = form.getGrupoFaturamentoID();
+			
 			nomeRelatorio = ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_ANALITICO;
 		}
 	}
@@ -49,6 +52,7 @@ public class RelatorioReceitasAFaturarBO {
 		relatorioReceitasAFaturar.addParametro("ano", this.mesAno.substring(3));
 		relatorioReceitasAFaturar.addParametro("mes", this.mesAno.substring(0, 2));
 		relatorioReceitasAFaturar.addParametro("idGrupo", this.grupoFaturamentoID);
+		relatorioReceitasAFaturar.addParametro("indicadorCategoria", this.indicadorCategoria);
 
 		if(this.grupoFaturamentoID != null) { 
 			relatorioReceitasAFaturar = getRelatorioReceitasAFaturarAnalitico(relatorioReceitasAFaturar);
@@ -111,7 +115,7 @@ public class RelatorioReceitasAFaturarBO {
 
 	private Collection<RelatorioReceitasAFaturarPorCategoriaHelper> getColecaoDadosRelatorioSintetico() {
 		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> colecaoDadosRelatorio = 
-				Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer.parseInt(getAnoMesReferencia()));
+				Fachada.getInstancia().pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer.parseInt(getAnoMesReferencia()), this.indicadorCategoria);
 
 		if (colecaoDadosRelatorio == null || colecaoDadosRelatorio.isEmpty()) {
 			throw new ActionServletException("atencao.relatorio.vazio");

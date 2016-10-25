@@ -44064,9 +44064,9 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMesReferencia) {
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMesReferencia, Short indicadorCategoria) {
 		try {
-			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturarSintetico(anoMesReferencia);
+			return this.getControladorFaturamento().pesquisarDadosRelatorioReceitasAFaturarSintetico(anoMesReferencia, indicadorCategoria);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

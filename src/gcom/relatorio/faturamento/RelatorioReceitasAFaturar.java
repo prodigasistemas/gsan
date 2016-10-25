@@ -37,8 +37,6 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 		
 		String idGrupo = String.valueOf(getParametro("idGrupo"));
 		
-		//Collection<RelatorioReceitasAFaturarBean> colecaoBean = this.inicializarBeanRelatorio(colecaoDados);
-
 		if (colecaoDados == null || colecaoDados.isEmpty()) {
 			throw new RelatorioVazioException("atencao.relatorio.vazio");
 		}
@@ -64,7 +62,7 @@ public class RelatorioReceitasAFaturar extends TarefaRelatorio {
 		RelatorioDataSource ds;
 		if(getParametro("idGrupo") == null) {
 			ds = new RelatorioDataSource((List<RelatorioReceitasAFaturarPorCategoriaHelper>) colecaoDados);
-			retorno = this.gerarRelatorio(ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO, parametros, ds, TarefaRelatorio.TIPO_PDF);
+			retorno = this.gerarRelatorio(ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_SINTETICO_CATEGORIA, parametros, ds, TarefaRelatorio.TIPO_PDF);
 		} else {
 			ds = new RelatorioDataSource((List<RelatorioReceitasAFaturarBean>) colecaoDados);
 			retorno = this.gerarRelatorio(ConstantesRelatorios.RELATORIO_RECEITAS_A_FATURAR_ANALITICO, parametros, ds, TarefaRelatorio.TIPO_PDF);
