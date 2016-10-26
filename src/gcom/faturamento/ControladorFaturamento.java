@@ -171,6 +171,7 @@ import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioMedicaoFaturamentoHelper;
 import gcom.relatorio.faturamento.RelatorioMultasAutosInfracaoPendentesBean;
 import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarPorCategoriaHelper;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultanea;
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
@@ -16277,41 +16278,80 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	    }
 	}
 	
-	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException {
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes) throws ControladorException {
 		try {
-			Collection<RelatorioReceitasAFaturarHelper> retorno;
-			
-			if (idGrupo != null) {
-				retorno = gerarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMes);
-			}
-			else {
-				retorno = gerarDadosRelatorioReceitasAFaturarSintetico(anoMes);
-			}
+		
+			return gerarDadosRelatorioReceitasAFaturarAnalitico(idGrupo, anoMes);
 
-			return retorno;
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
 
-	private Collection<RelatorioReceitasAFaturarHelper> gerarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes)
-			throws ControladorException {
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes, Short indicadorCategoria) throws ControladorException {
 		
-		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList();
+		if (indicadorCategoria.shortValue() == ConstantesSistema.SIM.shortValue()) {
+			return pesquisarDadosRelatorioReceitasAFaturarSinteticoPorCategoria(anoMes);
+		} else {
+			return pesquisarDadosRelatorioReceitasAFaturarSintetico(anoMes);
+		}
+	}
+	
+	private Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSinteticoPorCategoria(Integer anoMes) throws ControladorException {
+		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> retorno = new ArrayList<RelatorioReceitasAFaturarPorCategoriaHelper>();
 		
-		FiltroReceitasAFaturarResumo filtro = new FiltroReceitasAFaturarResumo(FiltroReceitasAFaturarResumo.GRUPO_ID);
-		filtro.adicionarParametro(new ParametroSimples(FiltroReceitasAFaturarResumo.ANO_MES_REFERENCIA, anoMes));
+		try{
+			FiltroCategoria filtro = new FiltroCategoria();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCategoria.INDICADOR_USO, ConstantesSistema.SIM));
+			Collection<Categoria> colecao = getControladorUtil().pesquisar(filtro, Categoria.class.getName());
+			
+			for (Categoria categoria : colecao) {
+				RelatorioReceitasAFaturarPorCategoriaHelper receitaCategoria = new RelatorioReceitasAFaturarPorCategoriaHelper();
+				
+				receitaCategoria.setDescricaoCategoria(categoria.getDescricao());
+				
+				Collection<ReceitasAFaturarResumo> receitas = repositorioFaturamento.obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(anoMes, categoria.getId()); 
+				receitaCategoria.setRelatorioReceitasAFaturarHelpers(getRelatorioReceitasAFaturarHelpers(receitas));
+				
+				retorno.add(receitaCategoria);
+			}
+		return retorno;
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
 		
-		Collection<ReceitasAFaturarResumo> colecao = getControladorUtil().pesquisar(filtro, ReceitasAFaturarResumo.class.getName());
+	}
+	
+	private Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes) throws ControladorException {
+		Collection<RelatorioReceitasAFaturarPorCategoriaHelper> retorno = new ArrayList<RelatorioReceitasAFaturarPorCategoriaHelper>();
 		
-		for (ReceitasAFaturarResumo receitasAFaturarResumo : colecao) {
-			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper(receitasAFaturarResumo);
-			retorno.add(helper);
+		try{
+			RelatorioReceitasAFaturarPorCategoriaHelper receitaCategoria = new RelatorioReceitasAFaturarPorCategoriaHelper();
+			
+			Collection<ReceitasAFaturarResumo> receitas = repositorioFaturamento.obterDadosRelatorioSinteticoReceitasAFaturar(anoMes); 
+			receitaCategoria.setRelatorioReceitasAFaturarHelpers(getRelatorioReceitasAFaturarHelpers(receitas));
+			
+			retorno.add(receitaCategoria);
+		return retorno;
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+	}
+	
+	
+	private Collection<RelatorioReceitasAFaturarHelper> getRelatorioReceitasAFaturarHelpers(Collection<ReceitasAFaturarResumo> receitas) {
+
+		Collection<RelatorioReceitasAFaturarHelper> retorno = new ArrayList<RelatorioReceitasAFaturarHelper>();
+		
+		for (ReceitasAFaturarResumo receita : receitas) {
+			retorno.add(new RelatorioReceitasAFaturarHelper(receita));
 		}
 		
 		return retorno;
 	}
+	
 
 	public void gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) 
 			throws ControladorException, ErroRepositorioException {
@@ -16330,41 +16370,47 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			DataLeituraAnteriorHelper dataLeituraAnteriorHelper = DataLeituraAnteriorHelper.getListaDatasLeituraAnteriorHelperPorGrupo(
 					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(idGrupo, anoMes));
 			
-			ValorAFaturarHelper valorAFaturarHelper = ValorAFaturarHelper.getListaValoresAFaturarHelper(
+			 Collection<ValorAFaturarHelper> valorAFaturarHelpers = ValorAFaturarHelper.getListaValoresAFaturarHelper(
 					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(idGrupo, anoMes));
 			
-			RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
-			helper.setIdGrupo(idGrupo);
-			helper.setDataLeituraPrevista(dataLeituraPrevistaHelper.getDataPrevista());
-			helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
-			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
-			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+			for (ValorAFaturarHelper valorAFaturarHelper : valorAFaturarHelpers) {
+				
+				RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
+				helper.setIdGrupo(idGrupo);
+				helper.setDataLeituraAtual(dataLeituraPrevistaHelper.getDataPrevista());
+				helper.setDataLeituraAnterior(dataLeituraAnteriorHelper.getDataAnterior());
+				helper.setValorAgua(valorAFaturarHelper.getValorAgua());
+				helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
+				helper.setCategoria(valorAFaturarHelper.getCategoria());
 
-			if (helper.gerar()) {
-				Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
-				helper.setDiferencaDias(diferencaDias);			
+				if (helper.gerar()) {
+					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraAtual(), helper.getDataLeituraAnterior());
+					helper.setDiferencaDias(diferencaDias);			
+					
+					int mes = Integer.parseInt(anoMes.toString().substring(4));
+					int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
+					Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
+					int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraAtual());
+					helper.setDiasNaoFaturados(diasNaoFaturados);
+					
+					BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
+					BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+					BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
+					helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
+					helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
+					
+					BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
+					helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
+					helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
+					
+					ReceitasAFaturarResumo receitasAFaturarResumo = new ReceitasAFaturarResumo(helper);
+					receitasAFaturarResumo.setAnoMesReferencia(anoMes);
+					receitasAFaturarResumo.setUltimaAlteracao(new Date());
+					getControladorUtil().inserir(receitasAFaturarResumo);
+				}
 				
-				int mes = Integer.parseInt(anoMes.toString().substring(4));
-				int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
-				Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
-				int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
-				helper.setDiasNaoFaturados(diasNaoFaturados);
 				
-				BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
-				BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
-				BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
-				helper.setValorAguaDiario(valorDiarioAgua.setScale(2, RoundingMode.HALF_UP));
-				helper.setValorEsgotoDiario(valorDiarioEsgoto.setScale(2, RoundingMode.HALF_UP));
-				
-				BigDecimal bdDiasNaoFaturados = new BigDecimal(diasNaoFaturados);
-				helper.setValorAguaAFaturar(bdDiasNaoFaturados.multiply(valorDiarioAgua));
-				helper.setValorEsgotoAFaturar(bdDiasNaoFaturados.multiply(valorDiarioEsgoto));
-				
-				ReceitasAFaturarResumo receitasAFaturarResumo = new ReceitasAFaturarResumo(helper);
-				receitasAFaturarResumo.setAnoMesReferencia(anoMes);
-				receitasAFaturarResumo.setUltimaAlteracao(new Date());
-				getControladorUtil().inserir(receitasAFaturarResumo);
-			}			
+			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
@@ -16410,19 +16456,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			helper.setValorAgua(valorAFaturarHelper.getValorAgua());
 			helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
 			helper.setDataLeituraAnterior(datasLeituraAnterior.get(0).getDataAnterior());
-			helper.setDataLeituraPrevista(datasLeituraPrevista.get(0).getDataPrevista());
+			helper.setDataLeituraAtual(datasLeituraPrevista.get(0).getDataPrevista());
 			
 			retorno.add(helper);
 		}
 
 		for (RelatorioReceitasAFaturarHelper helper : retorno) {
-			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraPrevista(), helper.getDataLeituraAnterior());
+			Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraAtual(), helper.getDataLeituraAnterior());
 			helper.setDiferencaDias(diferencaDias);			
 			
 			int mes = Integer.parseInt(anoMes.toString().substring(4));
 			int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
 			Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
-			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraPrevista());
+			int diasNaoFaturados = Util.obterQuantidadeDiasEntreDuasDatasPositivo(ultimoDiaMes, helper.getDataLeituraAtual());
 			helper.setDiasNaoFaturados(diasNaoFaturados);
 			
 			BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);

@@ -1,5 +1,7 @@
 package gcom.relatorio.faturamento;
 
+import gcom.cadastro.imovel.Categoria;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +14,7 @@ public class ValorAFaturarHelper {
 	private String nomeCliente;	
 	private BigDecimal valorAgua;
 	private BigDecimal valorEsgoto;
+	private Categoria categoria;
 	
 	public ValorAFaturarHelper() {
 		super();
@@ -21,6 +24,13 @@ public class ValorAFaturarHelper {
 		super();
 		this.valorAgua = valorAgua;
 		this.valorEsgoto = valorEsgoto;
+	}
+	
+	public ValorAFaturarHelper(BigDecimal valorAgua, BigDecimal valorEsgoto, Integer idCategoria) {
+		super();
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.categoria = new Categoria(idCategoria);
 	}
 	
 	public ValorAFaturarHelper(Integer idGrupo, Integer imovel, String nomeCliente, BigDecimal valorAgua, BigDecimal valorEsgoto) {
@@ -72,13 +82,26 @@ public class ValorAFaturarHelper {
 		this.valorEsgoto = valorEsgoto;
 	}
 
-	public static ValorAFaturarHelper getListaValoresAFaturarHelper(Collection colecao) {
-		ValorAFaturarHelper helper = new ValorAFaturarHelper();
-		if (colecao != null && !colecao.isEmpty()) {
-			Object[] objeto = (Object[]) colecao.iterator().next();
-			helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1]);
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelper(Collection colecao) {
+		ArrayList<ValorAFaturarHelper> lista = new ArrayList<ValorAFaturarHelper>();
+		
+		Iterator iterator = colecao.iterator();
+		
+		while (iterator.hasNext()) {
+			Object[] objeto = (Object[]) iterator.next();
+			ValorAFaturarHelper helper = new ValorAFaturarHelper((BigDecimal) objeto[0], (BigDecimal) objeto[1], (Integer) objeto[2]);
+			lista.add(helper);
 		}
-		return helper;
+		
+		return lista;
 	}
 	
 	public static ArrayList<ValorAFaturarHelper> getListaValoresAFaturarHelperPorGrupo(Integer idGrupo, Collection colecao) {

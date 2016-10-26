@@ -59,8 +59,10 @@ function validaSelecaoRelatorioOrdenacao(relatorioTipo){
 		
 		if(obj == 2){
 			document.getElementById("relatorioOrdenacao").style.visibility = "visible" ;
+			document.getElementById("usarCategoria").style.visibility = "hidden" ;
 		}else{
 			document.getElementById("relatorioOrdenacao").style.visibility = "hidden" ;
+			document.getElementById("usarCategoria").style.visibility = "visible" ;
 		}
 		
 }
@@ -164,6 +166,17 @@ function validaSelecaoRelatorioOrdenacao(relatorioTipo){
 							<html:option value="-1">&nbsp;</html:option>
 							<html:options collection="colecaoFaturamentoGrupo" labelProperty="descricao" property="id" />
 						</html:select>
+					</td>
+				</tr>
+				<tr id="usarCategoria" style="visibility:visible;">
+					<td width="30%">
+						<strong>Agrupar por categoria:</strong>
+					</td>
+					<td width="70%">
+						<strong> 
+						<html:radio property="indicadorCategoria" value="1" /> Sim 
+						<html:radio property="indicadorCategoria" value="2" /> N&atilde;o
+						</strong>
 					</td>
 				</tr>
 				<tr>

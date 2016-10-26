@@ -1,17 +1,21 @@
 package gcom.relatorio.faturamento;
 
+import gcom.cadastro.imovel.Categoria;
 import gcom.faturamento.ReceitasAFaturarResumo;
+import gcom.relatorio.RelatorioBean;
 
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RelatorioReceitasAFaturarHelper {
+public class RelatorioReceitasAFaturarHelper implements RelatorioBean{
 
 	private Integer idGrupo;
 	private Integer imovel;
 	private String nomeCliente;
 	private Date dataLeituraAnterior;
-	private Date dataLeituraPrevista;
+	private Date dataLeituraAtual;
 	private Integer diferencaDias;
 	private Integer diasNaoFaturados;
 	private BigDecimal valorAgua;
@@ -20,6 +24,10 @@ public class RelatorioReceitasAFaturarHelper {
 	private BigDecimal valorEsgoto;
 	private BigDecimal valorEsgotoDiario;
 	private BigDecimal valorEsgotoAFaturar;
+	private Categoria categoria;
+	
+	private String dataLeituraAnteriorStr;
+	private String dataLeituraAtualStr;
 
 	public RelatorioReceitasAFaturarHelper() {
 		super();
@@ -27,8 +35,13 @@ public class RelatorioReceitasAFaturarHelper {
 	
 	public RelatorioReceitasAFaturarHelper(ReceitasAFaturarResumo receitasAFaturarResumo) {
 		this.idGrupo = receitasAFaturarResumo.getIdGrupo();
+		
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+		this.dataLeituraAnteriorStr = formatter.format(receitasAFaturarResumo.getDataLeituraAnterior());
+		this.dataLeituraAtualStr = formatter.format(receitasAFaturarResumo.getDataLeituraAtual());	
 		this.dataLeituraAnterior = receitasAFaturarResumo.getDataLeituraAnterior();
-		this.dataLeituraPrevista = receitasAFaturarResumo.getDataLeituraAtual();
+		this.dataLeituraAtual = receitasAFaturarResumo.getDataLeituraAtual();
+		
 		this.diferencaDias = receitasAFaturarResumo.getDiferencaDias();
 		this.diasNaoFaturados = receitasAFaturarResumo.getDiasNaoFaturados();
 		this.valorAgua = receitasAFaturarResumo.getValorAgua();
@@ -37,11 +50,12 @@ public class RelatorioReceitasAFaturarHelper {
 		this.valorEsgoto = receitasAFaturarResumo.getValorEsgoto();
 		this.valorEsgotoDiario = receitasAFaturarResumo.getValorEsgotoDiario();
 		this.valorEsgotoAFaturar = receitasAFaturarResumo.getValorEsgotoAFaturar();
+		this.categoria = receitasAFaturarResumo.getCategoria();
 	}
 
 	public boolean gerar() {
 		if (dataLeituraAnterior != null
-				&& dataLeituraPrevista != null
+				&& dataLeituraAtual != null
 				&& valorAgua != null
 				&& valorEsgoto != null) {
 			
@@ -78,17 +92,25 @@ public class RelatorioReceitasAFaturarHelper {
 	public Date getDataLeituraAnterior() {
 		return dataLeituraAnterior;
 	}
+	
+	public String getDataLeituraAnteriorStr() {
+		return dataLeituraAnteriorStr;
+	}
 
 	public void setDataLeituraAnterior(Date dataLeituraAnterior) {
 		this.dataLeituraAnterior = dataLeituraAnterior;
 	}
 
-	public Date getDataLeituraPrevista() {
-		return dataLeituraPrevista;
+	public Date getDataLeituraAtual() {
+		return dataLeituraAtual;
 	}
 
-	public void setDataLeituraPrevista(Date dataLeituraPrevista) {
-		this.dataLeituraPrevista = dataLeituraPrevista;
+	public String getDataLeituraAtualStr() {
+		return dataLeituraAtualStr;
+	}
+	
+	public void setDataLeituraAtual(Date dataLeituraAtual) {
+		this.dataLeituraAtual = dataLeituraAtual;
 	}
 
 	public Integer getDiferencaDias() {
@@ -153,6 +175,14 @@ public class RelatorioReceitasAFaturarHelper {
 
 	public void setValorEsgotoAFaturar(BigDecimal valorEsgotoAFaturar) {
 		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 }

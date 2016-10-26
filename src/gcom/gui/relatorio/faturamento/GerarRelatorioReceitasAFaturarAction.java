@@ -25,7 +25,7 @@ public class GerarRelatorioReceitasAFaturarAction extends ExibidorProcessamentoT
 		try {
 			RelatorioReceitasAFaturarBO relatorioBO = new RelatorioReceitasAFaturarBO(actionForm, httpServletRequest);
 
-			RelatorioReceitasAFaturar relatorio = relatorioBO.getRelatorioRelacaoImoveisRota();
+			RelatorioReceitasAFaturar relatorio = relatorioBO.getRelatorioReceitasAFaturar();
 
 			httpServletRequest.setAttribute("telaSucessoRelatorio",true);
 			
