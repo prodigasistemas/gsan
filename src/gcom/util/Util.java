@@ -6466,10 +6466,10 @@ public class Util {
 	}
 
     public static String converterDecimalParaString(BigDecimal valorBase) {
-        DecimalFormat format = new DecimalFormat("#.00");
+        DecimalFormat format = new DecimalFormat("#0.00");
         return format.format(valorBase.doubleValue());
     }
-
+    
     public static boolean isPositivo(String numero) {
         try {
             return Integer.parseInt(numero) > 0 ? true : false;
