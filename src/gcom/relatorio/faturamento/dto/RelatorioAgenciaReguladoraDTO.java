@@ -29,10 +29,10 @@ public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
   public RelatorioAgenciaReguladoraDTO(String localidade, BigDecimal valorAgua, BigDecimal valorEsgoto, String situacao, BigDecimal valorTotal) {
     super();
     this.localidade = localidade;
-    this.valorAgua = Util.formatarMoedaReal(valorAgua);
-    this.valorEsgoto = Util.formatarMoedaReal(valorEsgoto);
+    this.valorAgua = Util.converterDecimalParaString(valorAgua);
+    this.valorEsgoto = Util.converterDecimalParaString(valorEsgoto);
     this.situacao = situacao;
-    this.valorTotal = Util.formatarMoedaReal(valorTotal);
+    this.valorTotal = Util.converterDecimalParaString(valorTotal);
   }
 
   public RelatorioAgenciaReguladoraDTO(){}
