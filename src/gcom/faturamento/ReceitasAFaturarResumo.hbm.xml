@@ -37,6 +37,10 @@
 		<property name="valorEsgotoAFaturar" type="java.math.BigDecimal" column="rafr_vlesgotoafaturar" not-null="true" length="13"/>
 			
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rafr_tmultimaalteracao" length="15" />
+		
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
 
 	</class>
 </hibernate-mapping>
