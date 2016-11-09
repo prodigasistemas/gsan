@@ -984,26 +984,6 @@ public interface IControladorFaturamento {
 			Map<ConsumoTarifaVigencia, Map<ConsumoTarifaCategoria, BigDecimal>> mapReajuste)
 			throws ControladorException;
 
-	/**
-	 * 
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * <Breve descrição sobre o subfluxo>
-	 * 
-	 * <Identificador e nome do subfluxo>
-	 * 
-	 * <Breve descrição sobre o fluxo secundário>
-	 * 
-	 * <Identificador e nome do fluxo secundário>
-	 * 
-	 * @author Administrador
-	 * @date 03/04/2006
-	 * 
-	 * @param rotas
-	 * @throws ControladorException
-	 */
 	public void gerarTaxaEntregaDeContaEmOutroEndereco(Collection<Rota> rotas,
 			Integer anoMes, int idFuncionalidadeIniciada)
 			throws ControladorException;
