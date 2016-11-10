@@ -22,7 +22,7 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 	@ReportElementType(description="Arrecadador")
 	private String descricaoArrecadador;
 	
-	@ReportElementType(description="Valor do Pagamento (R$)", align="right", totalizer=true)
+	@ReportElementType(description="Valor do Pagamento (R$)", align="right", totalizer=true, type=ReportElementType.TYPE_MONEY)
 	private String valorPagamento;
 
 	public ResumoCreditosAvisosBancariosDTO() {}
@@ -32,7 +32,7 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO);
 		this.dataRealizada = Util.formatarData(dataRealizada, FormatoData.AMERICANO_COM_TRACO);
 		this.descricaoArrecadador = descricaoArrecadador;
-		this.valorPagamento = Util.formatarMoedaReal(valorPagamento);
+		this.valorPagamento = Util.converterDecimalParaString(valorPagamento);
 	}
 
 	public String getDataPagamentoPrevisto() {

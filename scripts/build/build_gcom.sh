@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
 rm -rf $JBOSS_GSAN/server/default/work/*
 rm -rf $JBOSS_GSAN/server/default/tmp/*
 rm -rf $JBOSS_GSAN/server/default/data/*

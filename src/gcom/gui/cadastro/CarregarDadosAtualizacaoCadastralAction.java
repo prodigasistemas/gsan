@@ -82,7 +82,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 							|| nomeItem.endsWith(".jpg")
 							|| nomeItem.endsWith(".png")) {
 
-						imagens = this.lerImagem(zipInputStream, zipEntry, imagens, nomeArquivoTxt, caminhoJboss);
+						imagens = this.lerImagem(zipInputStream, zipEntry, imagens, nomeArquivoZip, nomeArquivoTxt, caminhoJboss);
 					}
 				}
 
@@ -163,12 +163,11 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 	}
 
 	private List<String> lerImagem(ZipInputStream zipInputStream,
-			ZipEntry zipEntry, List<String> imagens, String nomeArquivo,
-			String caminhoJboss) throws FileNotFoundException, IOException {
+			ZipEntry zipEntry, List<String> imagens, String nomeArquivoZip,
+			String nomeImagem, String caminhoJboss) throws FileNotFoundException, IOException {
 
 		try {
-			File pasta = new File(caminhoJboss + "/images", nomeArquivo);
-
+			File pasta = new File(caminhoJboss + "/images/" + nomeArquivoZip.substring(0, 10) , nomeImagem);
 			if (!pasta.exists()) {
 				pasta.mkdir();
 			} else {

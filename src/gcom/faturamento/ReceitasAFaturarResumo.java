@@ -1,5 +1,6 @@
 package gcom.faturamento;
 
+import gcom.cadastro.imovel.Categoria;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
@@ -42,6 +43,8 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 	
 	private Date ultimaAlteracao;
 	
+	private Categoria categoria;
+	
 	public ReceitasAFaturarResumo() {
 		super();
 	}
@@ -50,7 +53,7 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		super();
 		this.idGrupo = helper.getIdGrupo();
 		this.dataLeituraAnterior = helper.getDataLeituraAnterior();
-		this.dataLeituraAtual = helper.getDataLeituraPrevista();
+		this.dataLeituraAtual = helper.getDataLeituraAtual();
 		this.diferencaDias = helper.getDiferencaDias();
 		this.diasNaoFaturados = helper.getDiasNaoFaturados();
 		this.valorAgua = helper.getValorAgua();
@@ -59,8 +62,44 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		this.valorEsgoto = helper.getValorEsgoto();
 		this.valorEsgotoDiario = helper.getValorEsgotoDiario();
 		this.valorEsgotoAFaturar = helper.getValorEsgotoAFaturar();
+		this.categoria = helper.getCategoria();
 	}
 
+	public ReceitasAFaturarResumo(Integer idGrupo, Date dataLeituraAnterior, Date dataLeituraAtual, Integer diferencaDias,
+			Integer diasNaoFaturados, BigDecimal valorAgua, BigDecimal valorAguaDiario, BigDecimal valorAguaAFaturar, BigDecimal valorEsgoto, 
+			BigDecimal valorEsgotoDiario, BigDecimal valorEsgotoAFaturar, Categoria categoria) {
+		super();
+		this.idGrupo = idGrupo;
+		this.dataLeituraAnterior = dataLeituraAnterior;
+		this.dataLeituraAtual = dataLeituraAtual;
+		this.diferencaDias = diferencaDias;
+		this.diasNaoFaturados = diasNaoFaturados;
+		this.valorAgua = valorAgua;
+		this.valorAguaDiario = valorAguaDiario;
+		this.valorAguaAFaturar = valorAguaAFaturar;
+		this.valorEsgoto = valorEsgoto;
+		this.valorEsgotoDiario = valorEsgotoDiario;
+		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
+		this.categoria = categoria;
+	}
+	
+	public ReceitasAFaturarResumo(Integer idGrupo, Date dataLeituraAnterior, Date dataLeituraAtual, Integer diferencaDias,
+			Integer diasNaoFaturados, BigDecimal valorAgua, BigDecimal valorAguaDiario, BigDecimal valorAguaAFaturar, BigDecimal valorEsgoto, 
+			BigDecimal valorEsgotoDiario, BigDecimal valorEsgotoAFaturar) {
+		super();
+		this.idGrupo = idGrupo;
+		this.dataLeituraAnterior = dataLeituraAnterior;
+		this.dataLeituraAtual = dataLeituraAtual;
+		this.diferencaDias = diferencaDias;
+		this.diasNaoFaturados = diasNaoFaturados;
+		this.valorAgua = valorAgua;
+		this.valorAguaDiario = valorAguaDiario;
+		this.valorAguaAFaturar = valorAguaAFaturar;
+		this.valorEsgoto = valorEsgoto;
+		this.valorEsgotoDiario = valorEsgotoDiario;
+		this.valorEsgotoAFaturar = valorEsgotoAFaturar;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -176,6 +215,14 @@ public class ReceitasAFaturarResumo extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+	
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroReceitasAFaturarResumo filtro = new FiltroReceitasAFaturarResumo(FiltroReceitasAFaturarResumo.GRUPO_ID);
