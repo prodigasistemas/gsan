@@ -248,4 +248,12 @@ public class ContaValoresHelper implements Serializable {
 	public void setIndicadorDebitoPago(Short indicadorDebitoPago) {
 		this.indicadorDebitoPago = indicadorDebitoPago;
 	}
+	
+	public boolean isContaEP() {
+		return this.indicadorContasDebito.equals(new Integer("1"));
+	}
+	
+	public boolean isContaNB() {
+		return this.indicadorContasDebito.equals(new Integer("2"));
+	}
 }

@@ -1358,46 +1358,53 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// DESCRIÇÃO DA LOCALIDADE
 		arquivoTextoRegistroTipo01.append(Util.completaString(descricaoLocalidade, 25));
 
+			
 		Iterator iteratorClienteImovelOUConta = colecaoClienteImovelOUConta.iterator();
 
 		Cliente clienteNomeConta = null;
 
-		while (iteratorClienteImovelOUConta.hasNext()) {
-
-			Object clienteImovelOUConta = iteratorClienteImovelOUConta.next();
-
-			ClienteRelacaoTipo clienteRelacaoTipo = null;
-			Cliente cliente = null;
-
-			if (clienteImovelOUConta instanceof ClienteImovel) {
-
-				ClienteImovel clienteImovel = (ClienteImovel) clienteImovelOUConta;
-				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta).getClienteRelacaoTipo();
-
-				FiltroCliente filtroCliente = new FiltroCliente();
-				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, new Integer(clienteImovel.getCliente().getId())));
-				Collection clientes = Fachada.getInstancia().pesquisarCliente(filtroCliente);
-				if (!clientes.isEmpty()) {
-					cliente = (Cliente) clientes.iterator().next();
+		if  (colecaoClienteImovelOUConta != null && !colecaoClienteImovelOUConta.isEmpty()) {
+			while (iteratorClienteImovelOUConta.hasNext()) {
+	
+				Object clienteImovelOUConta = iteratorClienteImovelOUConta.next();
+	
+				ClienteRelacaoTipo clienteRelacaoTipo = null;
+				Cliente cliente = null;
+	
+				if (clienteImovelOUConta instanceof ClienteImovel) {
+	
+					ClienteImovel clienteImovel = (ClienteImovel) clienteImovelOUConta;
+					clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta).getClienteRelacaoTipo();
+	
+					FiltroCliente filtroCliente = new FiltroCliente();
+					filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, new Integer(clienteImovel.getCliente().getId())));
+					Collection clientes = Fachada.getInstancia().pesquisarCliente(filtroCliente);
+					if (!clientes.isEmpty()) {
+						cliente = (Cliente) clientes.iterator().next();
+					}
+					if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+						clienteNomeConta = cliente;
+					}
+				} else {
+	
+					clienteRelacaoTipo = ((ClienteConta) clienteImovelOUConta).getClienteRelacaoTipo();
+					cliente = ((ClienteConta) clienteImovelOUConta).getCliente();
 				}
-				if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
-					clienteNomeConta = cliente;
+	
+				if (clienteRelacaoTipo.getId().equals(ClienteRelacaoTipo.USUARIO.intValue())) {
+					clienteUsuario = cliente;
+				} else {
+					clienteResponsavel = cliente;
 				}
-			} else {
-
-				clienteRelacaoTipo = ((ClienteConta) clienteImovelOUConta).getClienteRelacaoTipo();
-				cliente = ((ClienteConta) clienteImovelOUConta).getCliente();
-			}
-
-			if (clienteRelacaoTipo.getId().equals(ClienteRelacaoTipo.USUARIO.intValue())) {
-				clienteUsuario = cliente;
-			} else {
-				clienteResponsavel = cliente;
 			}
 		}
 
 		// NOME DO IMÓVEL OU NOME DO CLIENTE USUÁRIO
-		arquivoTextoRegistroTipo01.append(Util.completaString(clienteUsuario.getNome(), 30));
+		if (clienteUsuario != null) {
+			arquivoTextoRegistroTipo01.append(Util.completaString(clienteUsuario.getNome(), 30));
+		} else {
+			arquivoTextoRegistroTipo01.append(Util.completaString("", 30));
+		}
 
 		// DATA DE VENCIMENTO E DATA DE VALIDADE DA CONTA
 		if (conta != null) {
