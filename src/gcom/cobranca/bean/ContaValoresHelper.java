@@ -2,6 +2,7 @@ package gcom.cobranca.bean;
 
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.conta.Conta;
+import gcom.util.Util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -255,5 +256,13 @@ public class ContaValoresHelper implements Serializable {
 	
 	public boolean isContaNB() {
 		return this.indicadorContasDebito.equals(new Integer("2"));
+	}
+	
+	public String getValorTotalContaFormatado() {
+		return Util.converterDecimalParaString(this.getValorTotalConta());
+	}
+	
+	public String getValorTotalContaValoresFormatado() {
+		return Util.converterDecimalParaString(this.getValorTotalContaValores());
 	}
 }

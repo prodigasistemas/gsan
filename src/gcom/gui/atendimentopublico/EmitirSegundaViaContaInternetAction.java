@@ -205,8 +205,9 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 					
 				}
 				
-				
-				httpServletRequest.setAttribute("totalContas", totalContas.add(totalContasPreterito));
+				httpServletRequest.setAttribute("totalContas", getTotalContasFormatado(totalContas.add(totalContasPreterito)));
+				//
+				//httpServletRequest.setAttribute("totalContas", totalContas.add(totalContasPreterito));
 				form.setValorDebito(Util.formatarMoedaReal(totalContas));
 				form.setValorEncargosACobrar(Util.formatarMoedaReal(valorTotalAcrescimoImpontualidadeContas));
 			}
@@ -296,5 +297,9 @@ public class EmitirSegundaViaContaInternetAction extends GcomAction {
 				Localidade.class.getName());
 		
 		return colecaoLocalidadeElo;
+	}
+	
+	public String getTotalContasFormatado(BigDecimal totalContas) {
+		return Util.converterDecimalParaString(totalContas);
 	}
 }
