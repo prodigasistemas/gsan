@@ -268,9 +268,7 @@ function validarForm(form){
 											
 											<td width="15%">
 												<div align="center">
-												<bean:write name="contaValoresHelper"
-													property="valorTotalConta" 
-													formatKey="money.format" />
+												<bean:write name="contaValoresHelper" property="valorTotalContaFormatado"/>
 												</div>
 											</td>
 											
@@ -321,9 +319,7 @@ function validarForm(form){
 											
 											<td width="15%">
 												<div align="center">
-												<bean:write name="contaValoresPreteritosHelper"
-													property="valorTotalConta" 
-													formatKey="money.format" />
+												<bean:write name="contaValoresPreteritosHelper" property="valorTotalContaFormatado" />
 												</div>
 											</td>
 											
@@ -357,8 +353,7 @@ function validarForm(form){
 			
 											<td width="15%">
 												<div align="center">
-													<bean:write name="totalContas"
-													formatKey="money.format" /></div>
+													<bean:write name="totalContas"/></div>
 											</td>
 											
 											<td width="15%" align="center">&nbsp;</td>
