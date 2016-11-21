@@ -1,5 +1,30 @@
 package gcom.faturamento;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
@@ -55,7 +80,6 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
-import gcom.faturamento.conta.IConta;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -90,7 +114,6 @@ import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
@@ -108,32 +131,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.apache.struts.taglib.tiles.GetAttributeTag;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
@@ -7362,50 +7359,45 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEndereco(
-			Integer idRota) throws ErroRepositorioException {
-
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException {
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
-					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
-					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento    "
-					+ "from ClienteImovel ci "
-					+ "inner join ci.imovel i "
-					+ "inner join i.ligacaoAguaSituacao last "
-					+ "inner join i.ligacaoEsgotoSituacao lest "
-					+ "inner join ci.cliente clie "
-					+ "inner join clie.clienteTipo cltp "
-					+ "inner join cltp.esferaPoder epod "
-					+ "inner join ci.clienteRelacaoTipo crt "
-					+ "inner join i.quadra q "
-					+ "inner join q.rota r "
-					+ "inner join i.setorComercial sc "
-					+ "inner join i.imovelPerfil ip "
-					+ "inner join i.faturamentoSituacaoTipo fst "
-					+ "WHERE q.rota.id = :idRota AND i.rotaAlternativa IS NULL "
-					+ "AND i.indicadorImovelCondominio <> 1 "
-					+ "AND i.imovelContaEnvio.id <> 4 "
-					+ "AND i.indicadorExclusao <> 1 "
-					+ "AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder "
-					+ "AND crt.id = " + ClienteRelacaoTipo.RESPONSAVEL
-					+ " AND (i.imovelContaEnvio.id = " + ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
-					+ " OR i.imovelContaEnvio = " + ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
-					+ " )";
+			consulta.append("select i")
+	          .append(" from ClienteImovel ci ")
+	          .append(" inner join ci.imovel i ")
+	          .append(" inner join fetch i.ligacaoAguaSituacao last ")
+	          .append(" inner join fetch i.ligacaoEsgotoSituacao lest ")
+	          .append(" inner join ci.cliente clie ")
+	          .append(" inner join clie.clienteTipo cltp ")
+	          .append(" inner join cltp.esferaPoder epod ")
+	          .append(" inner join ci.clienteRelacaoTipo crt ")
+	          .append(" inner join fetch i.quadra q ")
+	          .append(" inner join q.rota r ")
+	          .append(" inner join fetch i.setorComercial sc ")
+	          .append(" inner join fetch i.imovelPerfil ip ")
+	          .append(" left join  i.faturamentoSituacaoTipo fst ")
+	          .append(" WHERE q.rota.id = :idRota AND i.rotaAlternativa IS NULL ")
+	          .append(" AND i.indicadorImovelCondominio <> 1 ")
+	          .append(" AND i.imovelContaEnvio.id <> 4 ")
+	          .append(" AND i.indicadorExclusao <> 1 ")
+	          .append(" AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder ")
+	          .append(" AND crt.id = " + ClienteRelacaoTipo.RESPONSAVEL)
+	          .append(" AND (i.imovelContaEnvio.id = " + ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+	          .append(" OR i.imovelContaEnvio = " + ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+	          .append(" )");
 
-			retorno = session.createQuery(consulta).setInteger("idEsferaPoder",
-					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idEsferaPoder", EsferaPoder.PARTICULAR)
+					.setInteger("idRota", idRota)
+					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -43030,54 +43022,49 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(
-			Integer idRota) throws ErroRepositorioException {
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException {
 
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select i.localidade.id, i.setorComercial.codigo, q.numeroQuadra, "
-					+ "q.id , i.id ,i.lote, i.subLote, ip.id, last.id, last.indicadorFaturamentoSituacao, "
-					+ "last.consumoMinimoFaturamento, lest.id, lest.indicadorFaturamentoSituacao, "
-					+ "lest.volumeMinimoFaturamento, i.faturamentoSituacaoTipo.id, fst.indicadorParalisacaoFaturamento  "
-					+ "from ClienteImovel ci "
-					+ "inner join ci.imovel i "
-					+ "inner join i.rotaAlternativa rotaAlternativa "
-					+ "inner join i.ligacaoAguaSituacao last "
-					+ "inner join i.ligacaoEsgotoSituacao lest "
-					+ "inner join ci.cliente clie "
-					+ "inner join clie.clienteTipo cltp "
-					+ "inner join cltp.esferaPoder epod "
-					+ "inner join ci.clienteRelacaoTipo crt "
-					+ "inner join i.quadra q "
-					+ "inner join q.rota r "
-					+ "inner join i.setorComercial sc "
-					+ "inner join i.imovelPerfil ip "
-					+ "inner join i.faturamentoSituacaoTipo fst "
-					+ "WHERE rotaAlternativa.id = :idRota "
-					+ "AND i.indicadorImovelCondominio <> 1 "
-					+ "AND i.imovelContaEnvio.id <> 4 "
-					+ "AND i.indicadorExclusao <> 1 "
-					+ "AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder "
-					+ "AND crt.id = "
-					+ ClienteRelacaoTipo.RESPONSAVEL
-					+ " AND (i.imovelContaEnvio.id = "
-					+ ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL
-					+ " OR i.imovelContaEnvio = "
-					+ ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
-					+ " )";
+			consulta.append("select i")
+            .append(" from ClienteImovel ci ")
+            .append(" inner join ci.imovel i ")
+            .append(" inner join i.rotaAlternativa rotaAlternativa ")
+            .append(" inner join fetch i.ligacaoAguaSituacao last ")
+            .append(" inner join fetch i.ligacaoEsgotoSituacao lest ")
+            .append(" inner join ci.cliente clie ")
+            .append(" inner join clie.clienteTipo cltp ")
+            .append(" inner join cltp.esferaPoder epod ")
+            .append(" inner join ci.clienteRelacaoTipo crt ")
+            .append(" inner join fetch i.quadra q ")
+            .append(" inner join q.rota r ")
+            .append(" inner join fetch i.setorComercial sc ")
+            .append(" inner join fetch i.imovelPerfil ip ")
+            .append(" left  join i.faturamentoSituacaoTipo fst ")
+            .append(" WHERE rotaAlternativa.id = :idRota ")
+            .append(" AND i.indicadorImovelCondominio <> 1 ")
+            .append(" AND i.imovelContaEnvio.id <> 4 ")
+            .append(" AND i.indicadorExclusao <> 1 ")
+            .append(" AND ci.dataFimRelacao IS NULL AND epod.id = :idEsferaPoder ")
+            .append(" AND crt.id = ")
+            .append(ClienteRelacaoTipo.RESPONSAVEL)
+            .append(" AND (i.imovelContaEnvio.id = ")
+            .append(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+            .append(" OR i.imovelContaEnvio = ")
+            .append(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+            .append(" )");
 
-			retorno = session.createQuery(consulta).setInteger("idEsferaPoder",
-					EsferaPoder.PARTICULAR).setInteger("idRota", idRota).list();
-
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idEsferaPoder", EsferaPoder.PARTICULAR)
+					.setInteger("idRota", idRota)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -60245,34 +60232,40 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 		try {
-			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto FROM "
-				+ " (SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto "
-				+ " FROM faturamento.conta as conta, "
-				+ " cadastro.cliente_imovel cliente_imovel, " 
-				+ " cadastro.cliente cliente "
-				+ " WHERE cnta_amreferenciaconta = :anoMesReferencia "
-				+ " and dcst_idatual in (0, 1, 2, 5) "
-				+ " and ftgr_id = :idGrupo "
-				+ " and conta.imov_id = cliente_imovel.imov_id " 
-				+ " and cliente.clie_id = cliente_imovel.clie_id "
-				+ " and cliente_imovel.crtp_id = 2 " 
-				+ " and cliente_imovel.clim_dtrelacaofim is null "
-				+ " UNION  "
-				+ " SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto "
-				+ " FROM faturamento.conta_historico as conta_historico, "
-				+ " cadastro.cliente_imovel cliente_imovel, "
-				+ " cadastro.cliente cliente "
-				+ " WHERE cnhi_amreferenciaconta = :anoMesReferencia "
-				+ " and dcst_idatual in (0, 1, 2, 5) "
-				+ " and ftgr_id = :idGrupo "
-				+ " and conta_historico.imov_id = cliente_imovel.imov_id "
-				+ " and cliente.clie_id = cliente_imovel.clie_id "
-				+ " and cliente_imovel.crtp_id = 2 "
-				+ " and cliente_imovel.clim_dtrelacaofim is null) as conta ";
+			consulta = " SELECT sum(valorAgua) as valorAgua, sum(valorEsgoto) as valorEsgoto, categoria FROM "
+					+ "     (    "
+					+ "         SELECT sum (cnta_vlagua) as valorAgua, sum(cnta_vlesgoto) as valorEsgoto, categoria.catg_id as categoria "
+					+ "         FROM faturamento.conta as conta "
+					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta.imov_id = cliente_imovel.imov_id "
+					+ "           JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
+					+ "           JOIN faturamento.conta_categoria conta_categoria ON conta_categoria.cnta_id = conta.cnta_id "
+					+ "           JOIN cadastro.categoria categoria ON conta_categoria.catg_id = categoria.catg_id "
+					+ "         WHERE cnta_amreferenciaconta = :anoMesReferencia "
+					+ "         and dcst_idatual in (0, 1, 2, 5) "
+					+ "         and ftgr_id = :idGrupo "
+					+ "         and cliente_imovel.crtp_id = 2 "
+					+ "         and cliente_imovel.clim_dtrelacaofim is null "
+					+ "         GROUP BY categoria.catg_id "
+					+ "         UNION "
+					+ "         SELECT sum (cnhi_vlagua) as valorAgua, sum(cnhi_vlesgoto) as valorEsgoto, categoria.catg_id as categoria "
+					+ "         FROM faturamento.conta_historico as conta_historico "
+					+ "         JOIN cadastro.cliente_imovel cliente_imovel ON conta_historico.imov_id = cliente_imovel.imov_id "
+					+ "         JOIN cadastro.cliente cliente ON cliente.clie_id = cliente_imovel.clie_id "
+					+ "         JOIN faturamento.conta_catg_hist conta_categoria ON conta_categoria.cnta_id = conta_historico.cnta_id "
+					+ "         JOIN cadastro.categoria categoria ON conta_categoria.catg_id = categoria.catg_id "
+					+ "         WHERE cnhi_amreferenciaconta = :anoMesReferencia "
+					+ "         and dcst_idatual in (0, 1, 2, 5) "
+					+ "         and ftgr_id = :idGrupo "
+					+ "         and cliente_imovel.crtp_id = 2 "
+					+ "         and cliente_imovel.clim_dtrelacaofim is null "
+					+ "         GROUP BY categoria.catg_id "
+					+ " ) as conta "
+					+ " group by categoria ";
 
 			retorno = (Collection) session.createSQLQuery(consulta)
 				.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
 				.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+				.addScalar("categoria", Hibernate.INTEGER)
 				.setInteger("anoMesReferencia", anoMesReferencia)
 				.setInteger("idGrupo", idGrupo)
 				.list();
@@ -60979,5 +60972,51 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(Integer anoMes, Integer idCategoria) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append("select new ReceitasAFaturarResumo(resumo.idGrupo, resumo.dataLeituraAnterior, resumo.dataLeituraAtual, resumo.diferencaDias, ")
+					.append("resumo.diasNaoFaturados, resumo.valorAgua, resumo.valorAguaDiario, resumo.valorAguaAFaturar, resumo.valorEsgoto, resumo.valorEsgotoDiario, resumo.valorEsgotoAFaturar, categoria) ")
+					.append(" from ReceitasAFaturarResumo resumo ")
+					.append(" inner join fetch resumo.categoria categoria")
+					.append(" where resumo.anoMesReferencia = :anoMes")
+					.append(" and categoria.id = :idCategoria");
+			
+			return session.createQuery(consulta.toString())
+					.setInteger("anoMes", anoMes)
+					.setInteger("idCategoria", idCategoria).list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter dados para o relatorio sintetico de receitas a faturar");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append("select new ReceitasAFaturarResumo(resumo.idGrupo, resumo.dataLeituraAnterior, resumo.dataLeituraAtual, resumo.diferencaDias, ")
+					.append("resumo.diasNaoFaturados, resumo.valorAgua, resumo.valorAguaDiario, resumo.valorAguaAFaturar, resumo.valorEsgoto, resumo.valorEsgotoDiario, resumo.valorEsgotoAFaturar) ")
+					.append(" from ReceitasAFaturarResumo resumo ")
+					.append(" where resumo.anoMesReferencia = :anoMes");
+			
+			return session.createQuery(consulta.toString())
+					.setInteger("anoMes", anoMes).list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter dados para o relatorio sintetico de receitas a faturar");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 	
 }

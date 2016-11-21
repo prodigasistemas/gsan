@@ -20681,7 +20681,7 @@ public class ControladorArrecadacao implements SessionBean {
 						
 						ResumoArrecadacao resumo = obterResumoDescontosConcedidosParcelamento(
 								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-								LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("1000"), new Short("0"));
+								LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099

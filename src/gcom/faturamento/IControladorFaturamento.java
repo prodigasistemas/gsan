@@ -76,6 +76,7 @@ import gcom.relatorio.faturamento.RelatorioFaturasAgrupadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
 import gcom.relatorio.faturamento.RelatorioReceitasAFaturarHelper;
+import gcom.relatorio.faturamento.RelatorioReceitasAFaturarPorCategoriaHelper;
 import gcom.relatorio.faturamento.autoinfracao.RelatorioAutoInfracaoBean;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
@@ -983,26 +984,6 @@ public interface IControladorFaturamento {
 			Map<ConsumoTarifaVigencia, Map<ConsumoTarifaCategoria, BigDecimal>> mapReajuste)
 			throws ControladorException;
 
-	/**
-	 * 
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * <Breve descrição sobre o subfluxo>
-	 * 
-	 * <Identificador e nome do subfluxo>
-	 * 
-	 * <Breve descrição sobre o fluxo secundário>
-	 * 
-	 * <Identificador e nome do fluxo secundário>
-	 * 
-	 * @author Administrador
-	 * @date 03/04/2006
-	 * 
-	 * @param rotas
-	 * @throws ControladorException
-	 */
 	public void gerarTaxaEntregaDeContaEmOutroEndereco(Collection<Rota> rotas,
 			Integer anoMes, int idFuncionalidadeIniciada)
 			throws ControladorException;
@@ -5703,7 +5684,9 @@ public interface IControladorFaturamento {
 
 	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException;
 	
-	public Collection pesquisarDadosRelatorioReceitasAFaturar(Integer idGrupo, Integer anoMes) throws ControladorException;
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes) throws ControladorException;
+	
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes, Short indicadorCategoria) throws ControladorException;
 	
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
 	

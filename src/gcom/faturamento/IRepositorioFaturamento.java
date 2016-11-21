@@ -491,8 +491,7 @@ public interface IRepositorioFaturamento {
 
 	public Integer pesquisarFaturamentoAtividadeCronogramaComandadaNaoRealizadaCount() throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException;
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEndereco(Integer idRota) throws ErroRepositorioException;
 
 	public DebitoTipo getDebitoTipo(Integer id) throws ErroRepositorioException;
 
@@ -2054,8 +2053,7 @@ public interface IRepositorioFaturamento {
 			Integer idRota, int numeroPaginas, int quantidadeRegistros,
 			boolean preFaturar, boolean resumo) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;
+	public Collection<Imovel> obterImoveisPorRotasComContaEntregaEmOutroEnderecoPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisDasQuadrasPorRotaAlternativa(Integer idRota) throws ErroRepositorioException;
@@ -3043,4 +3041,8 @@ public interface IRepositorioFaturamento {
 	public BigDecimal calcularDiferencaValorEsgotoCanceladaRetificacao(int anoMesReferencia,int idLocalidade) throws ErroRepositorioException;
 	
 	public void excluirLancamentoAgenciaReguladoraPorAnoMesArrecadacaoPorLocalidade(int anoMesReferenciaFaturamento, Integer idLocalidade) throws ErroRepositorioException;
+	
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(Integer anoMes, Integer idCategoria) throws ErroRepositorioException;
+	
+	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException;
 }

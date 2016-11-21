@@ -705,13 +705,8 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(
-								ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-								colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-
-						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(
-								"anoMesReferenciaArrecadacao",
-								anoMesArrecadacaoSistemaParametro);
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao",anoMesArrecadacaoSistemaParametro);
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
 
@@ -719,7 +714,6 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 
-					/** Pedro Alexandre */
 					case Funcionalidade.GERAR_HISTORICO_CONTA:
 						TarefaBatchGerarHistoricoConta dadosGerarHistoricoConta = new TarefaBatchGerarHistoricoConta(
 								processoIniciado.getUsuario(),
@@ -2725,9 +2719,7 @@ public class ControladorBatchSEJB implements SessionBean {
 										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
 										colecaoIdsLocalidadesAtualizarPagamentos);
 
-						atualizarPagamentosContasCobranca.addParametro(
-								"anoMesArrecadacaoSistemaParametro",
-								sistemaParametros.getAnoMesArrecadacao());
+						atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
 
 						// Seta o objeto para ser serializado no banco, onde
 						// depois sera executado por uma thread

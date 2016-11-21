@@ -429,11 +429,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			valorTotalAcrescimoImpontualidade = retornoSoma;
 			valorAcrescimosImpontualidade = valorTotalAcrescimoImpontualidade;
 
-			
-			
-			
-			
-			
 			// Debitos A Cobrar
 			if( indicadorDebitosACobrar.equals("1") ){
 				//[FS0022]-Verificar existência de juros sobre imóvel

@@ -2530,4 +2530,9 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		this.setIndicadorConta(new Short("2"));
 		this.setIndicadorEmissaoExtratoFaturamento(new Short("2"));		
 	}
+
+	public boolean paralizadoSemRealizacaoLeitura() {
+		return this.getFaturamentoSituacaoTipo() != null && 
+			   this.getFaturamentoSituacaoTipo().getId().intValue() == FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA.intValue();
+	}
 }

@@ -4249,7 +4249,7 @@ public interface IRepositorioArrecadacao {
        * @return
        * @throws ErroRepositorioException
        */
-      public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, Integer numeroIndice, Integer quantidadeRegistros) throws ErroRepositorioException ;
+     // public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, Integer numeroIndice, Integer quantidadeRegistros) throws ErroRepositorioException ;
 
       /**
        * [UC0276] Encerrar Arrecadação do Mês
