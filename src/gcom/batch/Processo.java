@@ -179,6 +179,7 @@ public class Processo extends ObjetoGcom {
 	private short indicadorUso;
 	private short indicadorAutorizacao;
 	private Date ultimaAlteracao;
+	private String nomeArquivoBatch;
 
 	@SuppressWarnings("rawtypes")
 	private Set processosFuncionalidade;
@@ -299,7 +300,12 @@ public class Processo extends ObjetoGcom {
 	public void setIndicadorAutorizacao(short indicadorAutorizacao) {
 		this.indicadorAutorizacao = indicadorAutorizacao;
 	}
-	
-	
 
+	public String getNomeArquivoBatch() {
+		return nomeArquivoBatch;
+	}
+
+	public void setNomeArquivoBatch(String nomeArquivoBatch) {
+		this.nomeArquivoBatch = nomeArquivoBatch;
+	}
 }

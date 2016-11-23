@@ -28,6 +28,8 @@ public class FiltroProcessoIniciado extends Filtro implements Serializable {
 	public final static String ID_PROCESSO = "processo.id";
 	
 	public final static String PROCESSO = "processo";
+	
+	public final static String NOME_ARQUIVO_PROCESSO = "processo.nomeArquivoBatch";
 
 	public final static String PROCESSO_SITUACAO_ID = "processoSituacao.id";
 	
