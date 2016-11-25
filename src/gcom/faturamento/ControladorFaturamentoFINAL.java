@@ -5167,8 +5167,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// Calcula a faixa fim anterior = CSTC_NNCONSUMOMINIMO
 				if (consumoTarifaCategoria.getNumeroConsumoMinimo() != null) {
-					faixaFimAnterior = consumoTarifaCategoria
-							.getNumeroConsumoMinimo().intValue();
+					faixaFimAnterior = consumoTarifaCategoria.getNumeroConsumoMinimo().intValue();
 				}
 
 				/*
@@ -5182,18 +5181,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Collection colecaoConsumoTarifaFaixa = null;
 
 				try {
-
-					colecaoConsumoTarifaFaixa = repositorioFaturamento
-							.pesquisarConsumoTarifaFaixa(consumoTarifaCategoria);
-
+					colecaoConsumoTarifaFaixa = repositorioFaturamento.pesquisarConsumoTarifaFaixa(consumoTarifaCategoria);
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.sistema", ex);
 				}
 
-				if (colecaoConsumoTarifaFaixa == null
-						|| colecaoConsumoTarifaFaixa.isEmpty()) {
-					// Nenhuma faixa foi encontrada
+				if (colecaoConsumoTarifaFaixa == null || colecaoConsumoTarifaFaixa.isEmpty()) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("");
 				} else {
@@ -5203,15 +5197,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					vlFaturadoFaixa = new BigDecimal("0");
 					BigDecimal vlTarifaFaixa = new BigDecimal("0");
 
-					Iterator itConsumoTarifaFaixa = colecaoConsumoTarifaFaixa
-							.iterator();
+					Iterator itConsumoTarifaFaixa = colecaoConsumoTarifaFaixa.iterator();
 					ConsumoTarifaFaixa consumoTarifaFaixa;
 
-					while (itConsumoTarifaFaixa.hasNext()
-							&& consumoExcedenteCategoriaOuSubcategoria > 0) {
+					while (itConsumoTarifaFaixa.hasNext() && consumoExcedenteCategoriaOuSubcategoria > 0) {
 
-						consumoTarifaFaixa = (ConsumoTarifaFaixa) itConsumoTarifaFaixa
-								.next();
+						consumoTarifaFaixa = (ConsumoTarifaFaixa) itConsumoTarifaFaixa.next();
 
 						if (idTarifaTipoCalculo.intValue() == 2) {
 							/*
@@ -5219,33 +5210,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * enquadre, (consumoFaturado menor ou igual a faixa
 							 * fim)
 							 */
-							if (consumoTarifaFaixa.getNumeroConsumoFaixaFim() != null
-									&& consumoPorEconomia <= consumoTarifaFaixa
-											.getNumeroConsumoFaixaFim()) {
+							if (consumoTarifaFaixa.getNumeroConsumoFaixaFim() != null && consumoPorEconomia <= consumoTarifaFaixa.getNumeroConsumoFaixaFim()) {
 
 								consumoFaturadoFaixa = consumoFaturado;
 
-								vlFaturadoFaixa = this
-										.calcularValorFaturadoFaixaCAER(
+								vlFaturadoFaixa = this.calcularValorFaturadoFaixaCAER(
 												consumoPorEconomia,
 												vlTarifaMinimaCategoriaOuSubcategoria,
-												consumoTarifaFaixa
-														.getValorConsumoTarifa());
+												consumoTarifaFaixa.getValorConsumoTarifa());
 
-								limiteInicialConsumoFaixa = consumoTarifaFaixa
-										.getNumeroConsumoFaixaInicio();
-								limiteFinalConsumoFaixa = consumoTarifaFaixa
-										.getNumeroConsumoFaixaFim();
+								limiteInicialConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaInicio();
+								limiteFinalConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaFim();
 
 								CalcularValoresAguaEsgotoFaixaHelper calcularValoresAguaEsgotoFaixaHelper = getCalcularValoresAguaEsgotoFaixaHelper(
-										tipoCalculo, consumoTarifaFaixa,
-										consumoFaturadoFaixa,
-										limiteInicialConsumoFaixa,
-										limiteFinalConsumoFaixa,
-										vlFaturadoFaixa, vlTarifaFaixa);
+										tipoCalculo, consumoTarifaFaixa, consumoFaturadoFaixa,
+										limiteInicialConsumoFaixa, limiteFinalConsumoFaixa, vlFaturadoFaixa, vlTarifaFaixa);
 
-								colecaoCalcularValoresAguaEsgotoFaixaHelper
-										.add(calcularValoresAguaEsgotoFaixaHelper);
+								colecaoCalcularValoresAguaEsgotoFaixaHelper.add(calcularValoresAguaEsgotoFaixaHelper);
 
 								vlEconomiaCategoriaOuSubcategoria = vlFaturadoFaixa;
 								consumoEconomiaCategoriaOuSubcategoria = consumoFaturadoFaixa;
@@ -5258,9 +5239,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * Calcula o consumo faturado na faixa =
 							 * CSTF_NNCONSUMOFAIXAFIM - faixa fim anterior
 							 */
-							consumoFaturadoFaixa = consumoTarifaFaixa
-									.getNumeroConsumoFaixaFim().intValue()
-									- faixaFimAnterior;
+							consumoFaturadoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaFim().intValue() - faixaFimAnterior;
 
 							/*
 							 * Caso o consumo excedente da categoria seja menor
@@ -5275,50 +5254,40 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * Valor faturado na faixa = (consumo faturado na
 							 * faixa CSTF_VLCONSUMOTARIFA).
 							 */
-							vlFaturadoFaixa = (new BigDecimal(""
-									+ consumoFaturadoFaixa))
-									.multiply(consumoTarifaFaixa
-											.getValorConsumoTarifa());
+							vlFaturadoFaixa = (new BigDecimal("" + consumoFaturadoFaixa)).multiply(consumoTarifaFaixa.getValorConsumoTarifa());
 
 							/*
 							 * Valor por economia da categoria = valor por
 							 * economia da categoria + valor faturado na faixa
 							 */
-							vlEconomiaCategoriaOuSubcategoria = vlEconomiaCategoriaOuSubcategoria
-									.add(vlFaturadoFaixa);
+							vlEconomiaCategoriaOuSubcategoria = vlEconomiaCategoriaOuSubcategoria.add(vlFaturadoFaixa);
 
 							/*
 							 * Consumo por economia da categoria = consumo por
 							 * economia da categoria + consumo faturado na faixa
 							 */
-							consumoEconomiaCategoriaOuSubcategoria = consumoEconomiaCategoriaOuSubcategoria
-									+ consumoFaturadoFaixa;
+							consumoEconomiaCategoriaOuSubcategoria = consumoEconomiaCategoriaOuSubcategoria	+ consumoFaturadoFaixa;
 
 							// Limite inicial de consumo da faixa =
 							// CSTF_NNCONSUMOFAIXAINICIO
-							limiteInicialConsumoFaixa = consumoTarifaFaixa
-									.getNumeroConsumoFaixaInicio().intValue();
+							limiteInicialConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaInicio().intValue();
 
 							// Limite final de consumo da faixa =
 							// CSTF_NNCONSUMOFAIXAFIM
-							limiteFinalConsumoFaixa = consumoTarifaFaixa
-									.getNumeroConsumoFaixaFim().intValue();
+							limiteFinalConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaFim().intValue();
 
 							// Valor da tarifa na faixa = CSTF_VLCONSUMOTARIFA
-							vlTarifaFaixa = consumoTarifaFaixa
-									.getValorConsumoTarifa();
+							vlTarifaFaixa = consumoTarifaFaixa.getValorConsumoTarifa();
 
 							/*
 							 * Consumo excedente da categoria = consumo
 							 * excedente da categoria - consumo faturado na
 							 * faixa
 							 */
-							consumoExcedenteCategoriaOuSubcategoria = consumoExcedenteCategoriaOuSubcategoria
-									- consumoFaturadoFaixa;
+							consumoExcedenteCategoriaOuSubcategoria = consumoExcedenteCategoriaOuSubcategoria - consumoFaturadoFaixa;
 
 							// Faixa fim anterior = CSTI_NNCONSUMOFAIXAFIM
-							faixaFimAnterior = consumoTarifaFaixa
-									.getNumeroConsumoFaixaFim().intValue();
+							faixaFimAnterior = consumoTarifaFaixa.getNumeroConsumoFaixaFim().intValue();
 
 							CalcularValoresAguaEsgotoFaixaHelper calcularValoresAguaEsgotoFaixaHelper = getCalcularValoresAguaEsgotoFaixaHelper(
 									tipoCalculo, consumoTarifaFaixa,
@@ -5329,10 +5298,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// ------------------------------------------------------------------
 
-							colecaoCalcularValoresAguaEsgotoFaixaHelper
-									.add(calcularValoresAguaEsgotoFaixaHelper);
+							colecaoCalcularValoresAguaEsgotoFaixaHelper.add(calcularValoresAguaEsgotoFaixaHelper);
 						}
-
 					}
 				}
 			}
@@ -5345,8 +5312,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (vlFaturadoFaixa != null) {
 					vlFaturadoCategoriaOuSubcategoria = vlFaturadoFaixa;
 				} else {
-					vlFaturadoCategoriaOuSubcategoria = vlEconomiaCategoriaOuSubcategoria
-							.multiply(new BigDecimal("" + qtdEconomias));
+					vlFaturadoCategoriaOuSubcategoria = vlEconomiaCategoriaOuSubcategoria.multiply(new BigDecimal("" + qtdEconomias));
 				}
 
 			} else {
