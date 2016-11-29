@@ -4588,8 +4588,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @param rotas
 	 * @return Imoveis
 	 */
-	public Collection getImovelVinculadosImovelCondominio(
-			Integer idImovelCondominio) throws ErroRepositorioException {
+	public Collection getImovelVinculadosImovelCondominio(Integer idImovelCondominio) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
 
@@ -4622,9 +4621,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 			    "where " +
 			    "  imovelCondominio.id = :idImovelCondominio" ;
 			
-			retorno = session.createQuery(consulta).setInteger(
-					"idImovelCondominio", idImovelCondominio).list();
-
+			retorno = session.createQuery(consulta).setInteger("idImovelCondominio", idImovelCondominio).list();
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -6757,24 +6754,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 
-	/**
-	 * [UC0103] Efetuar Rateio de Consumo
-	 * 
-	 * atualiza o consumo de água/esgoto a ser rateado e o consumo de
-	 * água/esgoto dos imóveis vínculados do imóvel condomínio.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 17/01/2007
-	 * 
-	 * @param idConsumoHistoricoImovelCondominio
-	 * @param consumoRateio
-	 * @param consumoImovelVinculadosCondominio
-	 * @throws ErroRepositorioException
-	 */
-	public void atualizarConsumoHistoricoImovelCondominio(
-			Integer idConsumoHistoricoImovelCondominio, Integer consumoRateio,
-			Integer consumoImovelVinculadosCondominio)
-			throws ErroRepositorioException {
+	public void atualizarConsumoHistoricoImovelCondominio(Integer idConsumoHistoricoImovelCondominio, Integer consumoRateio, Integer consumoImovelVinculadosCondominio) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
@@ -6786,11 +6766,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "where id = :idConsumoHistoricoImovelCondominio";
 
 			session.createQuery(sql).setInteger("consumoRateio", consumoRateio)
-					.setInteger("consumoImovelVinculadosCondominio",
-							consumoImovelVinculadosCondominio).setTimestamp(
-							"data", new Date()).setInteger(
-							"idConsumoHistoricoImovelCondominio",
-							idConsumoHistoricoImovelCondominio).executeUpdate();
+					.setInteger("consumoImovelVinculadosCondominio", consumoImovelVinculadosCondominio)
+					.setTimestamp("data", new Date())
+					.setInteger("idConsumoHistoricoImovelCondominio", idConsumoHistoricoImovelCondominio)
+					.executeUpdate();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
