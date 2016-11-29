@@ -56179,8 +56179,8 @@ public class ControladorCobranca implements SessionBean {
 						nomeDocumentoTipoLoc = (String) dados[3];
 						idSituacaoLoc = (Integer) dados[4];
 						descricaoSituacaoLoc = (String) dados[5];
-						faixaLoc = (String) dados[6];
-						qtDocumentosLoc = (Integer) dados[7];
+						faixaLoc = String.valueOf(dados[6]);
+						qtDocumentosLoc = Integer.valueOf(String.valueOf(dados[7]));
 						valorDocumentosLoc = (BigDecimal) dados[8];
 						valorDocumentosSemParcAtualLoc = (BigDecimal) dados[9];
 						idGerenciaLoc = (Integer) dados[10];

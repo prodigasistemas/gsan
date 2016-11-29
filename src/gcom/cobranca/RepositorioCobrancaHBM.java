@@ -21223,7 +21223,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		String consulta = "";
 
-		Query query = null;
+		SQLQuery query = null;
 
 		Map parameters = new HashMap();
 
@@ -21252,7 +21252,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " INNER JOIN cadastro.gerencia_regional gr on gr.greg_id = dar.greg_id "
 					+ " INNER JOIN cadastro.unidade_negocio un on un.uneg_id = dar.uneg_id "
 					+ " INNER JOIN cadastro.localidade loc on loc.loca_id = dar.loca_id "
-					// +" LEFT JOIN cobranca.documentos_a_receber_faixa_dias_vencidos faixa on faixa.drfx_icuso = 1 "
 					+ " WHERE drrs_amreferenciarecebimentos = :anoMes and ";
 
 			/**
@@ -21369,31 +21368,31 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 			consulta = consulta + groupBy + orderBy;
 
+			query = session.createSQLQuery(consulta)
+					.addScalar("idCat", Hibernate.INTEGER)
+					.addScalar("dsCat", Hibernate.STRING)
+					.addScalar("idDt", Hibernate.INTEGER)
+					.addScalar("dsDt", Hibernate.STRING)
+					.addScalar("icSit", Hibernate.INTEGER)
+					.addScalar("dsSit", Hibernate.STRING)
+					.addScalar("faixa", Hibernate.STRING)
+					.addScalar("qtDoc", Hibernate.INTEGER)
+					.addScalar("vlDoc", Hibernate.BIG_DECIMAL)
+					.addScalar("vlDocSemParcAtual", Hibernate.BIG_DECIMAL);
+			
+			if (!tipoTotalizacao.equals("ESTADO")){
+				query.addScalar("idGer", Hibernate.INTEGER)
+				.addScalar("dsGer", Hibernate.STRING);
+			}
+			
 			if (tipoTotalizacao.equals("LOCALIDADE")) {
-				query = session.createSQLQuery(consulta).addScalar("idCat", Hibernate.INTEGER).addScalar("dsCat", Hibernate.STRING)
-						.addScalar("idGer", Hibernate.INTEGER).addScalar("dsGer", Hibernate.STRING).addScalar("idUn", Hibernate.INTEGER)
-						.addScalar("dsUn", Hibernate.STRING).addScalar("idLoca", Hibernate.INTEGER).addScalar("dsLoca", Hibernate.STRING)
-						.addScalar("idDt", Hibernate.INTEGER).addScalar("dsDt", Hibernate.STRING).addScalar("icSit", Hibernate.INTEGER)
-						.addScalar("dsSit", Hibernate.STRING).addScalar("faixa", Hibernate.STRING).addScalar("qtDoc", Hibernate.INTEGER)
-						.addScalar("vlDoc", Hibernate.BIG_DECIMAL).addScalar("vlDocSemParcAtual", Hibernate.BIG_DECIMAL);
+				query.addScalar("idUn", Hibernate.INTEGER)
+					.addScalar("dsUn", Hibernate.STRING)
+					.addScalar("idLoca", Hibernate.INTEGER)
+					.addScalar("dsLoca", Hibernate.STRING);
 			} else if (tipoTotalizacao.equals("UNIDADE")) {
-				query = session.createSQLQuery(consulta).addScalar("idCat", Hibernate.INTEGER).addScalar("dsCat", Hibernate.STRING)
-						.addScalar("idGer", Hibernate.INTEGER).addScalar("dsGer", Hibernate.STRING).addScalar("idUn", Hibernate.INTEGER)
-						.addScalar("dsUn", Hibernate.STRING).addScalar("idDt", Hibernate.INTEGER).addScalar("dsDt", Hibernate.STRING)
-						.addScalar("icSit", Hibernate.INTEGER).addScalar("dsSit", Hibernate.STRING).addScalar("faixa", Hibernate.STRING)
-						.addScalar("qtDoc", Hibernate.INTEGER).addScalar("vlDoc", Hibernate.BIG_DECIMAL)
-						.addScalar("vlDocSemParcAtual", Hibernate.BIG_DECIMAL);
-			} else if (tipoTotalizacao.equals("GERENCIA")) {
-				query = session.createSQLQuery(consulta).addScalar("idCat", Hibernate.INTEGER).addScalar("dsCat", Hibernate.STRING)
-						.addScalar("idGer", Hibernate.INTEGER).addScalar("dsGer", Hibernate.STRING).addScalar("idDt", Hibernate.INTEGER)
-						.addScalar("dsDt", Hibernate.STRING).addScalar("icSit", Hibernate.INTEGER).addScalar("dsSit", Hibernate.STRING)
-						.addScalar("faixa", Hibernate.STRING).addScalar("qtDoc", Hibernate.INTEGER)
-						.addScalar("vlDoc", Hibernate.BIG_DECIMAL).addScalar("vlDocSemParcAtual", Hibernate.BIG_DECIMAL);
-			} else if (tipoTotalizacao.equals("ESTADO")) {
-				query = session.createSQLQuery(consulta).addScalar("idCat", Hibernate.INTEGER).addScalar("dsCat", Hibernate.STRING)
-						.addScalar("idDt", Hibernate.INTEGER).addScalar("dsDt", Hibernate.STRING).addScalar("icSit", Hibernate.INTEGER)
-						.addScalar("dsSit", Hibernate.STRING).addScalar("faixa", Hibernate.STRING).addScalar("qtDoc", Hibernate.INTEGER)
-						.addScalar("vlDoc", Hibernate.BIG_DECIMAL).addScalar("vlDocSemParcAtual", Hibernate.BIG_DECIMAL);
+				query.addScalar("idUn", Hibernate.INTEGER)
+					.addScalar("dsUn", Hibernate.STRING);
 			}
 
 			// ITERA OS PARAMETROS E COLOCA
