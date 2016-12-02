@@ -14496,7 +14496,7 @@ public class ControladorMicromedicao extends ControladorComum {
 					idConsumoHistoricoLigacaoAgua, consumoAguaSerRateado,
 					consumoAguaImoveisVinculados, idPocoImovelCondominio,
 					consumoMinimoLigacao, consumoLigacaoAguaImovelCondominio,
-					imovelCondominio, existeImovelVinculadoRateioAreaComum);
+					existeImovelVinculadoRateioAreaComum);
 		}
 	}
 
@@ -14519,15 +14519,14 @@ public class ControladorMicromedicao extends ControladorComum {
 	 * @throws ErroRepositorioException
 	 * @throws ControladorException
 	 */
-	protected void determinarRateioAguaParaMedido(
+	private void determinarRateioAguaParaMedido(
 			Collection<Imovel> imoveisVinculados, Integer anoMesFaturamento,
 			SistemaParametro sistemaParametro,
 			int quantidadeEconomiasAguasMedidas,
 			Integer idConsumoHistoricoLigacaoAgua, int consumoAguaSerRateada,
 			int consumoAguaImoveisVinculados, Integer idPocoImovelCondominio,
 			Integer consumoMinimoLigacao,
-			Integer consumoLigacaoAguaImovelCondominio, Imovel imovelCondomio,
-			boolean existeImovelVinculadoRateioAreaComum)
+			Integer consumoLigacaoAguaImovelCondominio, boolean existeImovelVinculadoRateioAreaComum)
 			throws ErroRepositorioException, ControladorException {
 		/*
 		 * Item 4.1 O consumo de água a ser rateado por economia vai ser igual
