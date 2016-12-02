@@ -1,13 +1,12 @@
 package gcom.relatorio.arrecadacao.dto;
 
-import gcom.util.FormatoData;
-import gcom.util.Util;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
-import br.com.prodigasistemas.gsan.relatorio.ReportElementType;
-import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
+import gcom.relatorio.cliente.ReportElementType;
+import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.util.FormatoData;
+import gcom.util.Util;
 
 public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 

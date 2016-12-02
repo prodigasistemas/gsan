@@ -76,7 +76,6 @@
 		<pathelement location="${Axis2.home}/axis2-adb-1.5.1.jar" />
 		<pathelement location="${Axis2.home}/axis2-kernel-1.5.1.jar" />
 		<pathelement location="${BarCode.home}/codigo-barra.jar" />
-		<pathelement location="${GsanRelatorios.home}/gsan-relatorios-cliente.jar" />
 		<pathelement location="${Hibernate.home}/hibernate3.jar" />
 		<pathelement location="${JasperReports.home}/barbecue-1.1.jar" />
 		<pathelement location="${JasperReports.home}/ireport.jar" />

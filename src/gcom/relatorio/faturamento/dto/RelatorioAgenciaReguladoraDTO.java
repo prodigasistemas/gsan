@@ -1,11 +1,10 @@
 package gcom.relatorio.faturamento.dto;
 
-import gcom.util.Util;
-
 import java.math.BigDecimal;
 
-import br.com.prodigasistemas.gsan.relatorio.ReportElementType;
-import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
+import gcom.relatorio.cliente.ReportElementType;
+import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.util.Util;
 
 public class RelatorioAgenciaReguladoraDTO implements ReportItemDTO {
 

@@ -1,18 +1,17 @@
 package gcom.relatorio;
 
-import gcom.fachada.Fachada;
-import gcom.seguranca.SegurancaParametro;
-import gcom.util.Util;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
-import br.com.prodigasistemas.gsan.relatorio.FormatoRelatorio;
-import br.com.prodigasistemas.gsan.relatorio.ReportDTO;
-import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
-import br.com.prodigasistemas.gsan.relatorio.ReportUtil;
+import gcom.fachada.Fachada;
+import gcom.relatorio.cliente.FormatoRelatorio;
+import gcom.relatorio.cliente.ReportDTO;
+import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.relatorio.cliente.ReportUtil;
+import gcom.seguranca.SegurancaParametro;
+import gcom.util.Util;
 
 public class RelatorioUtil {
 

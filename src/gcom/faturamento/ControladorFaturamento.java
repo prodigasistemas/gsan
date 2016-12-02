@@ -14349,7 +14349,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public void atualizarConsumoMovimentoCelular(Conta conta,
 			Integer consumoAguaMovimentoCelular, Integer consumoAguaGSAN,
 			Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN)
-			throws ControladorException {
+					throws ControladorException {
 
 		if (conta != null && conta.getId() != null) {
 
@@ -14358,17 +14358,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					.pesquisarImovelCondominio(conta.getImovel().getId());
 
 			// ÁGUA
-			if (consumoAguaMovimentoCelular.intValue() != consumoAguaGSAN
-					.intValue()) {
+			if (consumoAguaMovimentoCelular.intValue() != consumoAguaGSAN.intValue()) {
 
 				MovimentoContaPrefaturada movimentoContaPrefaturadaAgua = null;
 
 				try {
-
-					movimentoContaPrefaturadaAgua = repositorioFaturamento
-							.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(),
-									MedicaoTipo.LIGACAO_AGUA);
-
+					movimentoContaPrefaturadaAgua = repositorioFaturamento.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(), MedicaoTipo.LIGACAO_AGUA);
 				} catch (ErroRepositorioException ex) {
 					ex.printStackTrace();
 					throw new ControladorException("erro.sistema", ex);
@@ -14381,48 +14376,34 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						Integer idConsumoHistoricoAguaMacro = null;
 						Integer consumoImovelVinculadosCondominioAgua = null;
 
-						if (movimentoContaPrefaturadaAgua
-								.getConsumoRateioAgua() != null) {
+						if (movimentoContaPrefaturadaAgua.getConsumoRateioAgua() != null) {
 
 							if (idImovelCondominio != null) {
 
-								Object[] dadosConsumoHistoricoAguaCondominio = this
-										.getControladorMicromedicao()
-										.obterConsumoLigacaoAguaOuEsgotoDoImovel(
-												idImovelCondominio,
-												conta.getReferencia(),
-												LigacaoTipo.LIGACAO_AGUA);
+								Object[] dadosConsumoHistoricoAguaCondominio = this.getControladorMicromedicao()
+										.obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, conta.getReferencia(), LigacaoTipo.LIGACAO_AGUA);
 
 								if (dadosConsumoHistoricoAguaCondominio != null) {
 
 									// id do consumo historico do imóvel macro
 									idConsumoHistoricoAguaMacro = (Integer) dadosConsumoHistoricoAguaCondominio[0];
 
-									consumoImovelVinculadosCondominioAgua = movimentoContaPrefaturadaAgua
-											.getConsumoMedido();
+									consumoImovelVinculadosCondominioAgua = movimentoContaPrefaturadaAgua.getConsumoMedido();
 
-									if (consumoImovelVinculadosCondominioAgua == null
-											&& movimentoContaPrefaturadaAgua
-													.getConsumoCobrado() != null) {
+									if (consumoImovelVinculadosCondominioAgua == null && movimentoContaPrefaturadaAgua.getConsumoCobrado() != null) {
 
-										consumoImovelVinculadosCondominioAgua = movimentoContaPrefaturadaAgua
-												.getConsumoCobrado()
-												- movimentoContaPrefaturadaAgua
-														.getConsumoRateioAgua();
+										consumoImovelVinculadosCondominioAgua = movimentoContaPrefaturadaAgua.getConsumoCobrado() 
+												- movimentoContaPrefaturadaAgua.getConsumoRateioAgua();
 									}
 								}
 							}
 						}
 
-						repositorioFaturamento
-								.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
+						repositorioFaturamento.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
 
-						repositorioFaturamento
-								.atualizarConsumoHistoricoMovimentoCelular(
-										movimentoContaPrefaturadaAgua,
-										consumoAguaMovimentoCelular,
-										idConsumoHistoricoAguaMacro,
-										consumoImovelVinculadosCondominioAgua);
+						repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua,
+								consumoAguaMovimentoCelular, idConsumoHistoricoAguaMacro,
+								consumoImovelVinculadosCondominioAgua);
 
 					} catch (ErroRepositorioException ex) {
 						ex.printStackTrace();
@@ -14432,16 +14413,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 
 			// ESGOTO
-			if (consumoEsgotoMovimentoCelular.intValue() != consumoEsgotoGSAN
-					.intValue()) {
+			if (consumoEsgotoMovimentoCelular.intValue() != consumoEsgotoGSAN.intValue()) {
 
 				MovimentoContaPrefaturada movimentoContaPrefaturadaEsgoto = null;
 
 				try {
 
 					movimentoContaPrefaturadaEsgoto = repositorioFaturamento
-							.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(),
-									MedicaoTipo.POCO);
+							.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(), MedicaoTipo.POCO);
 
 				} catch (ErroRepositorioException ex) {
 					ex.printStackTrace();
@@ -14455,17 +14434,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						Integer idConsumoHistoricoEsgotoMacro = null;
 						Integer consumoImovelVinculadosCondominioEsgoto = null;
 
-						if (movimentoContaPrefaturadaEsgoto
-								.getConsumoRateioEsgoto() != null) {
+						if (movimentoContaPrefaturadaEsgoto.getConsumoRateioEsgoto() != null) {
 
 							if (idImovelCondominio != null) {
 
-								Object[] dadosConsumoHistoricoEsgotoCondominio = this
-										.getControladorMicromedicao()
-										.obterConsumoLigacaoAguaOuEsgotoDoImovel(
-												idImovelCondominio,
-												conta.getReferencia(),
-												LigacaoTipo.LIGACAO_ESGOTO);
+								Object[] dadosConsumoHistoricoEsgotoCondominio = this.getControladorMicromedicao()
+										.obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio,
+												conta.getReferencia(), LigacaoTipo.LIGACAO_ESGOTO);
 
 								if (dadosConsumoHistoricoEsgotoCondominio != null) {
 
@@ -14476,13 +14451,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											.getConsumoMedido();
 
 									if (consumoImovelVinculadosCondominioEsgoto == null
-											&& movimentoContaPrefaturadaEsgoto
-													.getConsumoCobrado() != null) {
+											&& movimentoContaPrefaturadaEsgoto.getConsumoCobrado() != null) {
 
 										consumoImovelVinculadosCondominioEsgoto = movimentoContaPrefaturadaEsgoto
 												.getConsumoCobrado()
-												- movimentoContaPrefaturadaEsgoto
-														.getConsumoRateioEsgoto();
+												- movimentoContaPrefaturadaEsgoto.getConsumoRateioEsgoto();
 									}
 								}
 							}
@@ -14491,12 +14464,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						repositorioFaturamento
 								.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaEsgoto);
 
-						repositorioFaturamento
-								.atualizarConsumoHistoricoMovimentoCelular(
-										movimentoContaPrefaturadaEsgoto,
-										consumoEsgotoMovimentoCelular,
-										idConsumoHistoricoEsgotoMacro,
-										consumoImovelVinculadosCondominioEsgoto);
+						repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(
+								movimentoContaPrefaturadaEsgoto, consumoEsgotoMovimentoCelular,
+								idConsumoHistoricoEsgotoMacro, consumoImovelVinculadosCondominioEsgoto);
 
 					} catch (ErroRepositorioException ex) {
 						ex.printStackTrace();

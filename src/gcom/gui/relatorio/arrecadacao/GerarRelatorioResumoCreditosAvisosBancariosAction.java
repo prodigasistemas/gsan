@@ -1,14 +1,5 @@
 package gcom.gui.relatorio.arrecadacao;
 
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.relatorio.RelatorioUtil;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
-import gcom.seguranca.SegurancaParametro;
-import gcom.util.IoUtil;
-import gcom.util.Util;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,8 +14,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import br.com.prodigasistemas.gsan.relatorio.FormatoRelatorio;
-import br.com.prodigasistemas.gsan.relatorio.ReportItemDTO;
+import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.relatorio.RelatorioUtil;
+import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
+import gcom.relatorio.cliente.FormatoRelatorio;
+import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.util.IoUtil;
+import gcom.util.Util;
 
 public class GerarRelatorioResumoCreditosAvisosBancariosAction extends GcomAction {
 

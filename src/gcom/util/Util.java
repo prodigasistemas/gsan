@@ -9,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -55,7 +53,6 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import sun.management.ManagementFactory;
 
 public class Util {
 
@@ -5715,16 +5712,18 @@ public class Util {
 	 * @return string
 	 */
 	public static String retornaPercentualUsadoDeMemoriaJVM() {
+		Runtime runtime = Runtime.getRuntime();
+		
+		long max  = runtime.maxMemory();
+		long free = runtime.freeMemory();
+		long used = max - free;
 
-		MemoryMXBean memorymxbean = ManagementFactory.getMemoryMXBean();
-		MemoryUsage heap_usage = memorymxbean.getHeapMemoryUsage();
 		NumberFormat format = NumberFormat.getInstance();
 
 		// Retorna o percentual da memoria usada
-		String percentualMemoriaUsada = format.format(((heap_usage.getUsed() * 100) / heap_usage.getMax()));
+		String percentualMemoriaUsada = format.format(((used * 100) / max));
 
 		return percentualMemoriaUsada;
-
 	}
 
 	/**
