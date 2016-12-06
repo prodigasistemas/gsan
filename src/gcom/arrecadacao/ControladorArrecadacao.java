@@ -37835,19 +37835,18 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer digitoVerificadorRefContaModulo10, Integer idTipoDebito,
 			String anoEmissaoGuiaPagamento, String sequencialDocumentoCobranca,
 			Integer idTipoDocumento, Integer idCliente,
-			Integer seqFaturaClienteResponsavel,String idGuiaPagamento) throws ControladorException {
+			Integer seqFaturaClienteResponsavel, String idGuiaPagamento) throws ControladorException {
 
 		// Cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
-		
+
 		// Obtem parametros do sistema
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		
+
 		// [FS0001] Verificar compatibilidade dos campos informados com o tipo
 		// de pagamento
 		if (tipoPagamento == null) {
-			throw new ControladorException(
-					"atencao.parametros.incompletos.codigobarra");
+			throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 		}
 		// Caso o tipo de pagamento seja referente a conta
 		if (tipoPagamento.intValue() == 3) {
@@ -37858,11 +37857,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| mesAnoReferenciaConta == null
-					|| digitoVerificadorRefContaModulo10 == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idLocalidade == null || matriculaImovel == null || mesAnoReferenciaConta == null || digitoVerificadorRefContaModulo10 == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso o tipo de pagamento seja referente a guia de pagamento
@@ -37873,11 +37869,9 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| idTipoDebito == null
+			if (idLocalidade == null || matriculaImovel == null || idTipoDebito == null
 					|| anoEmissaoGuiaPagamento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a documento de
@@ -37889,11 +37883,9 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| sequencialDocumentoCobranca == null
+			if (idLocalidade == null || matriculaImovel == null || sequencialDocumentoCobranca == null
 					|| idTipoDocumento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso o tipo de pagamento seja referente a fatura do cliente
@@ -37904,10 +37896,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idCliente == null || mesAnoReferenciaConta == null
-					|| seqFaturaClienteResponsavel == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idCliente == null || mesAnoReferenciaConta == null || seqFaturaClienteResponsavel == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a guia de pagamento
@@ -37917,11 +37907,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || idCliente == null
-					|| idTipoDebito == null
-					|| anoEmissaoGuiaPagamento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idLocalidade == null || idCliente == null || idTipoDebito == null || anoEmissaoGuiaPagamento == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		} else if (tipoPagamento.intValue() == 8) {
 
@@ -37930,10 +37917,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idCliente == null || sequencialDocumentoCobranca == null
-					|| idTipoDocumento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idCliente == null || sequencialDocumentoCobranca == null || idTipoDocumento == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		}
 
@@ -37943,72 +37928,56 @@ public class ControladorArrecadacao implements SessionBean {
 
 		// G.05.1 - Identificação do produto
 		String identificacaoProduto = "8";
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoProduto;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoProduto;
 
 		// G.05.2 - Identificação do segmento
 		String identificacaoSegmento = "2";
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoSegmento;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoSegmento;
 
 		// G.05.3 - Identificação dovalor real ou referência
 
 		// MODULO 10
 		Short moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_10;
 		String identificacaoValorRealOuReferencia = "6";
-		
-		if(getSistemaParametro().getNumeroModuloDigitoVerificador()!=null
-				&& getSistemaParametro().getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
+
+		if (getSistemaParametro().getNumeroModuloDigitoVerificador() != null && getSistemaParametro()
+				.getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11) == 0) {
 			// MODULO 11
 			moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_11;
 			identificacaoValorRealOuReferencia = "8";
 		}
-		
 
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoValorRealOuReferencia;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoValorRealOuReferencia;
 
 		// G.05.5 - Valor do código de barras
 		String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(11,
 				valorCodigoBarra.setScale(2).toString().replace(".", ""));
 		valorCodigoBarraFormatado = valorCodigoBarraFormatado.replace("-", "");
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ valorCodigoBarraFormatado;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + valorCodigoBarraFormatado;
 
 		// G.05.6 - Identificação da empresa
-		String identificacaoEmpresa = getSistemaParametro()
-				.getCodigoEmpresaFebraban().toString();
-		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4,
-				identificacaoEmpresa);
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoEmpresa;
+		String identificacaoEmpresa = getSistemaParametro().getCodigoEmpresaFebraban().toString();
+		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4, identificacaoEmpresa);
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoEmpresa;
 
 		// G.05.7 Identificação do pagamento
 		// [SB0001] Obter Identificação do Pagamento
-		String identificacaoPagamento = obterIdentificacaoPagamento(
-				tipoPagamento, idLocalidade, matriculaImovel,
-				mesAnoReferenciaConta, digitoVerificadorRefContaModulo10,
-				idTipoDebito, anoEmissaoGuiaPagamento,
-				sequencialDocumentoCobranca, idTipoDocumento, idCliente,
-				seqFaturaClienteResponsavel,idGuiaPagamento);
+		String identificacaoPagamento = obterIdentificacaoPagamento(tipoPagamento, idLocalidade, matriculaImovel,
+				mesAnoReferenciaConta, digitoVerificadorRefContaModulo10, idTipoDebito, anoEmissaoGuiaPagamento,
+				sequencialDocumentoCobranca, idTipoDocumento, idCliente, seqFaturaClienteResponsavel, idGuiaPagamento);
 
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoPagamento + tipoPagamento.toString();
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoPagamento + tipoPagamento.toString();
 
 		// G.05.4 - Dígito verificador geral
 		// [SB0002] Obter Dígito verificador geral
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace(".", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace("-", "");
-		String digitoVerificadorGeral = (Util
-				.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra,moduloVerificador))
-				.toString();
+		String digitoVerificadorGeral = (Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra, moduloVerificador)).toString();
 
 		// Monta a representaçaõ númerica com todos os campos informados
-		representacaoNumericaCodigoBarra = identificacaoProduto
-				+ identificacaoSegmento + identificacaoValorRealOuReferencia
-				+ digitoVerificadorGeral + valorCodigoBarraFormatado
-				+ identificacaoEmpresa + identificacaoPagamento
-				+ tipoPagamento.toString();
+		representacaoNumericaCodigoBarra = identificacaoProduto + identificacaoSegmento
+				+ identificacaoValorRealOuReferencia + digitoVerificadorGeral + valorCodigoBarraFormatado
+				+ identificacaoEmpresa + identificacaoPagamento + tipoPagamento.toString();
 
 		// Cria as variáveis que vão armazenar o código de barra separado por
 		// campos
@@ -38027,32 +37996,22 @@ public class ControladorArrecadacao implements SessionBean {
 		// e para cada um dos grupos calcula o dígito verificador do módulo 11
 		codigoBarraCampo1 = representacaoNumericaCodigoBarra.substring(0, 11);
 
-		codigoBarraDigitoVerificadorCampo1 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo1),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo1 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo1), moduloVerificador)).toString();
 		codigoBarraCampo2 = representacaoNumericaCodigoBarra.substring(11, 22);
 
-		codigoBarraDigitoVerificadorCampo2 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo2),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo2 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo2), moduloVerificador)).toString();
 		codigoBarraCampo3 = representacaoNumericaCodigoBarra.substring(22, 33);
 
-		codigoBarraDigitoVerificadorCampo3 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo3),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo3 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo3), moduloVerificador)).toString();
 		codigoBarraCampo4 = representacaoNumericaCodigoBarra.substring(33, 44);
 
-		codigoBarraDigitoVerificadorCampo4 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo4),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo4 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo4), moduloVerificador)).toString();
 
 		// Monta a representação númerica do código de barras com os dígitos
 		// verificadores
-		representacaoNumericaCodigoBarra = codigoBarraCampo1
-				+ codigoBarraDigitoVerificadorCampo1 + codigoBarraCampo2
-				+ codigoBarraDigitoVerificadorCampo2 + codigoBarraCampo3
-				+ codigoBarraDigitoVerificadorCampo3 + codigoBarraCampo4
-				+ codigoBarraDigitoVerificadorCampo4;
+		representacaoNumericaCodigoBarra = codigoBarraCampo1 + codigoBarraDigitoVerificadorCampo1 + codigoBarraCampo2
+				+ codigoBarraDigitoVerificadorCampo2 + codigoBarraCampo3 + codigoBarraDigitoVerificadorCampo3
+				+ codigoBarraCampo4 + codigoBarraDigitoVerificadorCampo4;
 
 		// Retorna a representação númerica do código de barras
 		return representacaoNumericaCodigoBarra;
