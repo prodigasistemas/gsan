@@ -61,50 +61,6 @@ public class ConsumoHistorico extends ObjetoTransacao {
 	private FaturamentoSituacaoTipo faturamentoSituacaoTipo;
 	private Imovel imovel;
 
-	public ConsumoHistorico(
-			int referenciaFaturamento,
-			Short indicadorAlteracaoUltimosConsumos,
-			Short indicadorAjuste,
-			Integer numeroConsumoFaturadoMes,
-			Integer consumoRateio,
-			Short indicadorImovelCondominio,
-			Integer consumoMedio,
-			Integer consumoMinimo,
-			Short indicadorFaturamento,
-			BigDecimal percentualColeta,
-			Date ultimaAlteracao,
-			Integer consumoImovelCondominio,
-			Integer consumoImovelVinculadosCondominio,
-			gcom.micromedicao.consumo.ConsumoHistorico consumoHistoricoCondominio,
-			gcom.micromedicao.consumo.ConsumoTipo consumoTipo,
-			RateioTipo rateioTipo,
-			gcom.micromedicao.consumo.LigacaoTipo ligacaoTipo,
-			gcom.micromedicao.consumo.ConsumoAnormalidade consumoAnormalidade,
-			PocoTipo pocoTipo, FaturamentoSituacaoTipo faturamentoSituacaoTipo,
-			Imovel imovel) {
-		this.referenciaFaturamento = referenciaFaturamento;
-		this.indicadorAlteracaoUltimosConsumos = indicadorAlteracaoUltimosConsumos;
-		this.indicadorAjuste = indicadorAjuste;
-		this.numeroConsumoFaturadoMes = numeroConsumoFaturadoMes;
-		this.consumoRateio = consumoRateio;
-		this.indicadorImovelCondominio = indicadorImovelCondominio;
-		this.consumoMedio = consumoMedio;
-		this.consumoMinimo = consumoMinimo;
-		this.indicadorFaturamento = indicadorFaturamento;
-		this.percentualColeta = percentualColeta;
-		this.ultimaAlteracao = ultimaAlteracao;
-		this.consumoImovelCondominio = consumoImovelCondominio;
-		this.consumoImovelVinculadosCondominio = consumoImovelVinculadosCondominio;
-		this.consumoHistoricoCondominio = consumoHistoricoCondominio;
-		this.consumoTipo = consumoTipo;
-		this.rateioTipo = rateioTipo;
-		this.ligacaoTipo = ligacaoTipo;
-		this.consumoAnormalidade = consumoAnormalidade;
-		this.pocoTipo = pocoTipo;
-		this.faturamentoSituacaoTipo = faturamentoSituacaoTipo;
-		this.imovel = imovel;
-	}
-	
 	public ConsumoHistorico(ConsumoHistorico consumoHistorico) {
 		this.referenciaFaturamento = consumoHistorico.getReferenciaFaturamento();
 		this.indicadorAlteracaoUltimosConsumos = consumoHistorico.getIndicadorAlteracaoUltimosConsumos();
@@ -132,26 +88,6 @@ public class ConsumoHistorico extends ObjetoTransacao {
 	}
 
 	public ConsumoHistorico() {
-	}
-
-	public ConsumoHistorico(
-			int referenciaFaturamento,
-			gcom.micromedicao.consumo.ConsumoHistorico consumoHistoricoCondominio,
-			gcom.micromedicao.consumo.ConsumoTipo consumoTipo,
-			RateioTipo rateioTipo,
-			gcom.micromedicao.consumo.LigacaoTipo ligacaoTipo,
-			gcom.micromedicao.consumo.ConsumoAnormalidade consumoAnormalidade,
-			PocoTipo pocoTipo, FaturamentoSituacaoTipo faturamentoSituacaoTipo,
-			Imovel imovel) {
-		this.referenciaFaturamento = referenciaFaturamento;
-		this.consumoHistoricoCondominio = consumoHistoricoCondominio;
-		this.consumoTipo = consumoTipo;
-		this.rateioTipo = rateioTipo;
-		this.ligacaoTipo = ligacaoTipo;
-		this.consumoAnormalidade = consumoAnormalidade;
-		this.pocoTipo = pocoTipo;
-		this.faturamentoSituacaoTipo = faturamentoSituacaoTipo;
-		this.imovel = imovel;
 	}
 
 	public Integer getId() {
