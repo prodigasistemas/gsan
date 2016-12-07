@@ -8817,18 +8817,11 @@ public class ControladorArrecadacao implements SessionBean {
 		// instancia o objeto de código de barras, setando os valores que são iguais para todas as empresas
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarrasGeral(codigoBarras);
 		
-		registroHelperCodigoBarras.setTipoPagamento(codigoBarras.substring(43,
-				44).trim());
+		registroHelperCodigoBarras.setTipoPagamento(codigoBarras.substring(43, 44).trim());
 
 		// recupera o id pagamento da string
 		String idPagamento = codigoBarras.substring(19, 43);
 		
-		// recupera o tipo pagamento e passa para int
-		/*int tipoPagamento = Integer.parseInt(registroHelperCodigoBarras
-		.getTipoPagamento().trim());*/
-		
-		// chama o método distribuirDadosCodigoBarrasPorTipoPagamento para
-		// distribuir os dados de acordo com o tipo de pagamento
 		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = distribuirDadosCodigoBarrasPorTipoPagamento(
 		idPagamento, registroHelperCodigoBarras.getTipoPagamento().trim(), registroHelperCodigoBarras.getIdEmpresa());
 
@@ -8851,75 +8844,6 @@ public class ControladorArrecadacao implements SessionBean {
 			String idPagamento, String tipoPagamento, String idEmpresa) throws ControladorException {
 
 		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
-		
-		/*
-		int tipoPagamentoParaComparacao = Integer.parseInt(tipoPagamento.trim());
-
-		switch (tipoPagamentoParaComparacao) {
-		//GUIA DE PAGAMENTO COM IDENTIFICACAO
-		case 1:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_COM_IDENTIFICACAO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-		//CONTA	
-		case 3:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_CONTA(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-
-		//GUIA PAGAMENTO - IMOVEL
-		case 4:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_IMOVEL(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//DOCUMENTO COBRANCA - EXTRATO DE DEBITO
-		case 5:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_EXTRATO_DEBITO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//GUIA PAGAMENTO - CLIENTE
-		case 6:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_CLIENTE(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//FATURA CLIENTE RESPONSÁVEL
-		case 7:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_FATURA_CLIENTE_RESPONSAVEL(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-
-		//DOCUMENTO COBRANCA NOVO
-		case 8:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_DOCUMENTO_COBRANCA(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-		
-		//GUIA DE PAGAMENTO COM IDENTIFICACAO
-		case 9:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_COM_IDENTIFICACAO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-				
-			break;
-		}
-		*/
 		
 		if(tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_MATRICULA.toString()))
 			
@@ -38017,33 +37941,6 @@ public class ControladorArrecadacao implements SessionBean {
 		return representacaoNumericaCodigoBarra;
 	}
 
-	/**
-	 * Obtém a representação númerica do código de barras de um pagamento de
-	 * acordo com os parâmetros informados
-	 * 
-	 * [UC0229] Obter Representação Numérica do Código de Barras
-	 * 
-	 * Formata a identificação do pagamento de acordo com o tipo de pagamento
-	 * informado
-	 * 
-	 * [SB0001] Obter Identificação do Pagamento
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 20/04/2006
-	 * 
-	 * @param tipoPagamento
-	 * @param idLocalidade
-	 * @param matriculaImovel
-	 * @param anoMesReferenciaConta
-	 * @param digitoVerificadorRefContaModulo10
-	 * @param idTipoDebito
-	 * @param anoEmissaoGuiaPagamento
-	 * @param sequencialDocumentoCobranca
-	 * @param idTipoDocumento
-	 * @param idCliente
-	 * @param seqFaturaClienteResponsavel
-	 * @return
-	 */
 	public String obterIdentificacaoPagamento(Integer tipoPagamento,
 			Integer idLocalidade, Integer matriculaImovel,
 			String mesAnoReferenciaConta,
