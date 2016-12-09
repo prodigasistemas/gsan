@@ -7,59 +7,59 @@ public class CodigoBarras {
 
 	public static String obterEspecificacaoCodigoBarraFichaCompensacao(String codigoBanco, String codigoMoeda, BigDecimal valorCodigoBarra, String nossoNumeroSemDV, String carteira, String fatorVencimento) {
 		
-		StringBuilder representacaoNumericaCodigoBarra = new StringBuilder();
+        // Cria a variável que vai armazenar a representação númerica do código de barras
+        StringBuilder representacaoNumericaCodigoBarra = new StringBuilder();
 
+        // G.05.1 - Código do Banco
+        codigoBanco = Util.adicionarZerosEsquedaNumero(3,codigoBanco);
+        representacaoNumericaCodigoBarra.append(codigoBanco);
 
-		// G.05.1 - Código do Banco
-		codigoBanco = Util.adicionarZerosEsquedaNumero(3, codigoBanco);
-		
-		representacaoNumericaCodigoBarra.append(codigoBanco);
+        // G.05.2 - Código da Moeda
+        representacaoNumericaCodigoBarra.append(codigoMoeda);
+        
+        // G.05.4 - Fator de Vencimento
+        fatorVencimento = Util.adicionarZerosEsquedaNumero(4,fatorVencimento);
+        representacaoNumericaCodigoBarra.append(fatorVencimento);
 
-		// G.05.2 - Código da Moeda
-		representacaoNumericaCodigoBarra.append(codigoMoeda);
+        // G.05.5 - Valor do código de barras
+        String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(10, valorCodigoBarra.setScale(2).toString().replace(".", ""));
+        representacaoNumericaCodigoBarra.append(valorCodigoBarraFormatado);
 
-		// G.05.4 - Fator de Vencimento
-		fatorVencimento = Util.adicionarZerosEsquedaNumero(4, fatorVencimento);
-		representacaoNumericaCodigoBarra.append(fatorVencimento);
+        // G.05.6 - Zeros
+        String zeros = "";
+        zeros = Util.adicionarZerosEsquedaNumero(6,zeros);
+        representacaoNumericaCodigoBarra.append(zeros);
 
-		// G.05.5 - Valor do código de barras
-		String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(10, valorCodigoBarra.setScale(2).toString().replace(".", ""));
-		representacaoNumericaCodigoBarra.append(valorCodigoBarraFormatado);
+        // G.05.7 Nosso número sem o DV
+        nossoNumeroSemDV = Util.adicionarZerosEsquedaNumero(17,nossoNumeroSemDV);
+        representacaoNumericaCodigoBarra.append(nossoNumeroSemDV);
 
-		// G.05.6 - Zeros
-		String zeros = Util.adicionarZerosEsquedaNumero(6, "");
-		representacaoNumericaCodigoBarra.append(representacaoNumericaCodigoBarra);
+        // G.05.8 Tipo de Carteira
+        carteira = Util.adicionarZerosEsquedaNumero(2,carteira);
+        representacaoNumericaCodigoBarra.append(carteira);
+        
+        // G.05.3 - Dígito verificador geral
+        // [SB0001] Obter Dígito verificador geral
+        String digitoVerificadorGeral = (Util.obterDigitoVerificadorModulo11(representacaoNumericaCodigoBarra.toString())).toString();
 
-		// G.05.7 Nosso número sem o DV
-		nossoNumeroSemDV = Util.adicionarZerosEsquedaNumero(17, nossoNumeroSemDV);
-		representacaoNumericaCodigoBarra.append(nossoNumeroSemDV);
+        if(digitoVerificadorGeral.equalsIgnoreCase("0") ||
+                digitoVerificadorGeral.equalsIgnoreCase("10") ||
+                digitoVerificadorGeral.equalsIgnoreCase("11")){
+            digitoVerificadorGeral = "1";
+        }
+        
+        // Monta a representaçaõ númerica com todos os campos informados
+        representacaoNumericaCodigoBarra = new StringBuilder(codigoBanco)
+        		.append(codigoMoeda)
+        		.append(digitoVerificadorGeral)
+        		.append(fatorVencimento)
+        		.append(valorCodigoBarraFormatado)
+        		.append(zeros)
+        		.append(nossoNumeroSemDV)
+        		.append(carteira);
 
-		// G.05.8 Tipo de Carteira
-		carteira = Util.adicionarZerosEsquedaNumero(2, carteira);
-		representacaoNumericaCodigoBarra.append(carteira);
-
-		// G.05.3 - Dígito verificador geral
-		// [SB0001] Obter Dígito verificador geral
-		String digitoVerificadorGeral = (Util.obterDigitoVerificadorModulo11(representacaoNumericaCodigoBarra.toString())).toString();
-
-		if (digitoVerificadorGeral.equalsIgnoreCase("0") || digitoVerificadorGeral.equalsIgnoreCase("10") || digitoVerificadorGeral.equalsIgnoreCase("11")) {
-			digitoVerificadorGeral = "1";
-		}
-		
-		representacaoNumericaCodigoBarra = new StringBuilder();
-
-		// Monta a representaçaõ númerica com todos os campos informados
-		representacaoNumericaCodigoBarra.append(codigoBanco)
-		.append(codigoMoeda)
-		.append(digitoVerificadorGeral)
-		.append(fatorVencimento)
-		.append(valorCodigoBarraFormatado)
-		.append(zeros)
-		.append(nossoNumeroSemDV)
-		.append(carteira);
-
-		// Retorna a representação númerica do código de barras
-		return representacaoNumericaCodigoBarra.toString();
+        // Retorna a representação númerica do código de barras
+        return representacaoNumericaCodigoBarra.toString();
 	}
 	
 	public static final String obterFatorVencimento(Date dataVencimento){
