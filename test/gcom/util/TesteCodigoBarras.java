@@ -17,11 +17,14 @@ public class TesteCodigoBarras {
 	String carteira         = "18";
 	String fatorVencimento  = "";
 	String pos_20_24        = "00000";
+	String pos_20_24_number = "0.0000";
 	String pos_25_34        = "0250279207";
+	String pos_25_34_number = "02502.79207";
 	String pos_35_44        = "4323753518";
-	String dv_campo_01      = "7";
-	String dv_campo_02      = "0";
-	String dv_campo_03      = "1";
+	String pos_35_44_number = "43237.53518";
+	String dv_campo_01      = "9";
+	String dv_campo_02      = "6";
+	String dv_campo_03      = "2";
 	String dv_codigoBarras  = "1";
 	String valorBoleto      = "";
 	
@@ -45,6 +48,30 @@ public class TesteCodigoBarras {
 	
 	@Test
 	public void testaCodigoBarrasFichaCompensacao(){
+		String valor = buildCodigoBarras();
+				
+		assertEquals(44, valor.toString().length());
+		
+		String codigo = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(codigoBanco, codigoMoeda, valorCodigoBarra, nossoNumeroSemDV, carteira, fatorVencimento);
+		
+		assertEquals(valor.toString(), codigo);
+	}
+	
+	@Test
+	public void testRepresentacaoNumericaCodigoBarras(){
+		String codigoBarras  = buildCodigoBarras();
+		String representacao = buildRepresentacaoNumericaCodigoBarras(); 
+		
+		assertEquals(representacao, CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(codigoBarras));
+	}
+	
+	@Test
+	public void testeObterFatorVencimento(){
+		assertEquals("3", CodigoBarras.obterFatorVencimento(data_1997_10_10));
+		assertEquals("7004", CodigoBarras.obterFatorVencimento(data_2016_12_10));		
+	}
+	
+	private String buildCodigoBarras(){
 		fatorVencimento = CodigoBarras.obterFatorVencimento(data_2016_12_10);
 		
 		StringBuilder valor = new StringBuilder();
@@ -56,20 +83,31 @@ public class TesteCodigoBarras {
 		.append(pos_20_24)
 		.append(pos_25_34)
 		.append(pos_35_44);
-//		.append("000000")
-//		.append(nossoNumeroSemDV)
-//		.append(carteira);
-				
-		assertEquals(44, valor.toString().length());
 		
-		String codigo = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(codigoBanco, codigoMoeda, valorCodigoBarra, nossoNumeroSemDV, carteira, fatorVencimento);
-		
-		assertEquals(valor.toString(), codigo);
+		return valor.toString();
 	}
 	
-	@Test
-	public void testeObterFatorVencimento(){
-		assertEquals("3", CodigoBarras.obterFatorVencimento(data_1997_10_10));
-		assertEquals("7004", CodigoBarras.obterFatorVencimento(data_2016_12_10));		
+	private String buildRepresentacaoNumericaCodigoBarras(){
+		fatorVencimento = CodigoBarras.obterFatorVencimento(data_2016_12_10);
+		
+		StringBuilder valor = new StringBuilder();
+		valor.append(codigoBanco)
+		.append(codigoMoeda)
+		.append(pos_20_24_number)
+		.append(dv_campo_01)
+		.append(" ")
+		.append(pos_25_34_number)
+		.append(dv_campo_02)
+		.append(" ")
+		.append(pos_35_44_number)
+		.append(dv_campo_03)
+		.append(" ")
+		.append(dv_codigoBarras)
+		.append(" ")
+		.append(fatorVencimento)
+		.append(valorBoleto);
+		
+		return valor.toString();
 	}
+	
 }
