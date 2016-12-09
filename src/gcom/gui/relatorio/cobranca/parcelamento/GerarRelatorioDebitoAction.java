@@ -335,7 +335,6 @@ public class GerarRelatorioDebitoAction extends
 		
 		//Linha 3
 		 relatorioDebito.addParametro("enderecoImovel",enderecoImovel);
-		 //relatorioExtratoDebito.addParametro("seqDocCobranca",seqDocCobranca);
 		
 		//Linha 4
 		 relatorioDebito.addParametro("situacaoAgua",situacaoAgua);
@@ -346,7 +345,6 @@ public class GerarRelatorioDebitoAction extends
 		 relatorioDebito.addParametro("qtdPublico",qtdPublico);
 		 relatorioDebito.addParametro("descPerfilImovel",descPerfilImovel);
 		 relatorioDebito.addParametro("dataEmissao",dataEmissao);
-		 //relatorioExtratoDebito.addParametro("dataValidade",dataValidade);
 		
 		//linhas 7 , 8, 9 e 10
 		 relatorioDebito.addParametro("valorTotalContas",valorTotalContasString);
@@ -355,99 +353,14 @@ public class GerarRelatorioDebitoAction extends
 		 relatorioDebito.addParametro("valorTotalComDesconto",valorTotalComDescontoString);
 		 relatorioDebito.addParametro("imovel", imovel);
 
-		/*//Linha 11
-		//CRC0959 - Vivianne Sousa - 08/09/2010 - analista:Fatima Sampaio
-		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		if(extratoDebitoRelatorioHelper.getDocumentoCobranca().getValorDocumento()!= null 
-			&& sistemaParametro.getValorExtratoFichaComp() != null
-			&& !sistemaParametro.getValorExtratoFichaComp().equals(new BigDecimal("0.00"))
-			&& extratoDebitoRelatorioHelper.getDocumentoCobranca().getValorDocumento().
-				compareTo(sistemaParametro.getValorExtratoFichaComp()) >= 0){
-			 
-			 	//representação numérica do código de barras
-				//[SB0010] – Obter Representação numérica do Nosso Número da Ficha de Compensação
-				StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-						DocumentoTipo.EXTRATO_DE_DEBITO.toString(),documentoCobranca.getId().toString()) ;
-				String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
-				relatorioExtratoDebito.addParametro("nossoNumero",nossoNumero.toString());
-				
-				Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(),75);
-				String fatorVencimento = fachada.obterFatorVencimento(dataVencimentoMais75);
-				
-				String especificacaoCodigoBarra = fachada.
-					obterEspecificacaoCodigoBarraFichaCompensacao(
-				    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
-				    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
-				    documentoCobranca.getValorDocumento(), nossoNumeroSemDV.toString(),
-					ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
-				                                
-				String representacaoNumericaCodigoBarraFichaCompensacao = 
-				fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-				
-				relatorioExtratoDebito.addParametro("representacaoNumericaCodBarraSemDigito",especificacaoCodigoBarra);
-				relatorioExtratoDebito.addParametro("representacaoNumericaCodBarra",representacaoNumericaCodigoBarraFichaCompensacao);
-				
-		 }else{
-			 
-			 
-				String representacaoNumericaCodBarra = "";
-				//[UC0229] Obtém a representação numérica do código de barra
-				
-				representacaoNumericaCodBarra = fachada
-							.obterRepresentacaoNumericaCodigoBarra(
-									5,
-		                            valorDocumento,
-									documentoCobranca.getLocalidade().getId(),
-									imovel.getId(),
-									null,
-									null,
-									null,
-									null,
-									seqDocCobranca,
-									documentoCobranca.getDocumentoTipo().getId(),
-									null, null,null);
-				
-				
-				//Formata a representação númerica do código de barras
-				String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
-						.substring(0, 11)
-						+ "-"
-						+ representacaoNumericaCodBarra.substring(11, 12)
-						+ " "
-						+ representacaoNumericaCodBarra.substring(12, 23)
-						+ "-"
-						+ representacaoNumericaCodBarra.substring(23, 24)
-						+ " "
-						+ representacaoNumericaCodBarra.substring(24, 35)
-						+ "-"
-						+ representacaoNumericaCodBarra.substring(35, 36)
-						+ " "
-						+ representacaoNumericaCodBarra.substring(36, 47)
-						+ "-"
-						+ representacaoNumericaCodBarra.substring(47, 48);
-				
-				relatorioExtratoDebito.addParametro("representacaoNumericaCodBarra",representacaoNumericaCodBarraFormatada);
-				
-				String representacaoNumericaCodBarraSemDigito = 
-					representacaoNumericaCodBarra.substring(0, 11)
-					+ representacaoNumericaCodBarra.substring(12, 23)
-					+ representacaoNumericaCodBarra.substring(24, 35)
-					+ representacaoNumericaCodBarra.substring(36, 47);
-				
-				relatorioExtratoDebito.addParametro("representacaoNumericaCodBarraSemDigito",representacaoNumericaCodBarraSemDigito);
-			 
-		 }*/
-		
+
 		 relatorioDebito.addParametro("valorAcrescimosImpontualidade",valorAcrescimosImpontualidade);
 		 relatorioDebito.addParametro("relatorioDebitoHelper",relatorioDebitoHelper);
 		
 		String codigoRotaESequencialRota = fachada.obterRotaESequencialRotaDoImovel(imovel.getId());
 		relatorioDebito.addParametro("codigoRotaESequencialRota", codigoRotaESequencialRota);
 		
-		//String tipoRelatorio = httpServletRequest.getParameter("tipoRelatorio");
-		//if (tipoRelatorio == null) {
 		String tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
-		//}
 
 		relatorioDebito.addParametro("tipoFormatoRelatorio", Integer
 				.parseInt(tipoRelatorio));

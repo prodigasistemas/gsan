@@ -1,5 +1,44 @@
 package gcom.cobranca;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import org.hibernate.cache.HashtableCache;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
@@ -329,6 +368,7 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
 import gcom.spcserasa.ControladorSpcSerasaLocalHome;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -358,46 +398,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
-import org.hibernate.cache.HashtableCache;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 /**
  * @author Raphael Rossiter
@@ -2873,14 +2873,13 @@ public class ControladorCobranca implements SessionBean {
 						+ representacaoNumericaCodBarra.substring(36, 47);
 
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
-				String fatorVencimento = Fachada.getInstancia().obterFatorVencimento(dataVencimento);
-				String especificacaoCodigoBarra = Fachada.getInstancia().obterEspecificacaoCodigoBarraFichaCompensacao(
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimento);
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 						ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 						cobrancaDocumento.getValorDocumento(), nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
 						fatorVencimento);
 
-				String representacaoNumericaCodigoBarraFichaCompensacao = Fachada.getInstancia()
-						.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+				String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 				boolean registroAdicionado = false;
 
@@ -61987,14 +61986,13 @@ public class ControladorCobranca implements SessionBean {
 						+ representacaoNumericaCodBarra.substring(36, 47);
 
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
-				String fatorVencimento = Fachada.getInstancia().obterFatorVencimento(dataVencimento);
-				String especificacaoCodigoBarra = Fachada.getInstancia().obterEspecificacaoCodigoBarraFichaCompensacao(
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimento);
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 						ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 						cobrancaDocumento.getValorDocumento(), nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
 						fatorVencimento);
 
-				String representacaoNumericaCodigoBarraFichaCompensacao = Fachada.getInstancia()
-						.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+				String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 				boolean registroAdicionado = false;
 
@@ -62192,15 +62190,6 @@ public class ControladorCobranca implements SessionBean {
 		return retorno;
 	}
 
-	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
-	 * 
-	 * @author Mariana Victor
-	 * @date 25/01/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioDocumentoCobrancaOrdemFiscalizacaoBean> gerarRelatorioDocumentoCobrancaOrdemFiscalizacao(
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando, int tamanhoMaximoDebito, String quantidadeRelatorios)
 			throws ControladorException {
@@ -62362,16 +62351,12 @@ public class ControladorCobranca implements SessionBean {
 
 				if (registroAdicionado) {
 					RelatorioDataSource dataSourceAno = new RelatorioDataSource(arraySubBean);
-					// bean.setArrayJRSubrelatorioBean(new
-					// JRBeanCollectionDataSource(arraySubBean));
 					bean.setDataSource(dataSourceAno);
 					bean.setValorTotal(Util.formatarMoedaReal(valorTotal));
 					retorno.add(bean);
 					count++;
 				}
-
 			}
-
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -62379,28 +62364,14 @@ public class ControladorCobranca implements SessionBean {
 		return retorno;
 	}
 
-	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
-	 * 
-	 * @author Mariana Victor
-	 * @created 20/01/2011
-	 **/
 	public List<String> pesquisarTipoDeCorte() throws ControladorException {
-
 		try {
 			return this.repositorioCobranca.pesquisarTipoDeCorte();
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
-	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
-	 * 
-	 * @author Mariana Victor
-	 * @created 26/01/2011
-	 **/
 	public List<String> pesquisarOcorrenciasFiscalizacao() throws ControladorException {
 		try {
 			return this.repositorioCobranca.pesquisarOcorrenciasFiscalizacao();
@@ -62629,16 +62600,15 @@ public class ControladorCobranca implements SessionBean {
 
 		// [SB0006 – Obter Fator de Vencimento]
 		Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), 75);
-		String fatorVencimento = Fachada.getInstancia().obterFatorVencimento(dataVencimento);
+		String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimento);
 
-		String representacaoNumericaCodBarraSemDigito = Fachada.getInstancia().obterEspecificacaoCodigoBarraFichaCompensacao(
+		String representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 				ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 				cobrancaDocumento.getValorDocumento(), nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
 				fatorVencimento);
 
 		// 2 - Representação numérica do código de barras
-		String representacaoNumericaCodigoBarraFichaCompensacao = Fachada.getInstancia()
-				.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+		String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
 		cobrancaDocumentoTxt.append(Util.completaString(representacaoNumericaCodigoBarraFichaCompensacao, 54));
 
 		// 3 - Local de Pagamento

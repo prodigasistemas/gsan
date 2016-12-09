@@ -1,5 +1,36 @@
 package gcom.arrecadacao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.log4j.Logger;
+
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacao.GROUP_BY;
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacaoAuxiliar.GROUP_BY_AUX;
 import gcom.arrecadacao.aviso.AvisoAcerto;
@@ -248,6 +279,7 @@ import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.spcserasa.IRepositorioSpcSerasa;
 import gcom.spcserasa.RepositorioSpcSerasaHBM;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
@@ -271,37 +303,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesColecao;
 import gcom.util.filtro.ParametroSimplesColecaoDiferenteDe;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.log4j.Logger;
 
 
 /**
@@ -11515,130 +11516,78 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return DadosConteudoCodigoBarrasHelper
 	 */
 	public DadosConteudoCodigoBarrasHelper apresentarDadosConteudoCodigoBarras(
-			RegistroHelperCodigoG registroHelperCodigoG)
-			throws ControladorException {
+			RegistroHelperCodigoG registroHelperCodigoG) throws ControladorException {
 
 		DadosConteudoCodigoBarrasHelper retorno = new DadosConteudoCodigoBarrasHelper();
 
-		retorno.setIdentificacaoProduto(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdProduto());
-		retorno.setIdentificacaoSegmento(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdSegmento());
-		retorno.setIdentificacaoValorRealOUReferencia(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdValorReal());
-		retorno.setDigitoVerificadorGeral(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getDigitoVerificadorGeral());
-		retorno
-				.setValorPagamento(Util
-						.formatarMoedaReal(Util
-								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
-										.getRegistroHelperCodigoBarras()
-										.getValorPagamento())));
+		retorno.setIdentificacaoProduto(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdProduto());
+		retorno.setIdentificacaoSegmento(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdSegmento());
+		retorno.setIdentificacaoValorRealOUReferencia(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdValorReal());
+		retorno.setDigitoVerificadorGeral(registroHelperCodigoG.getRegistroHelperCodigoBarras().getDigitoVerificadorGeral());
+		retorno.setValorPagamento(Util.formatarMoedaReal(
+				Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
+				registroHelperCodigoG.getRegistroHelperCodigoBarras().getValorPagamento()))
+		);
 
-		String tipoPagamento = registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getTipoPagamento();
+		String tipoPagamento = registroHelperCodigoG.getRegistroHelperCodigoBarras().getTipoPagamento();
 
-
-		if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA
-								.toString())) {
+		if (tipoPagamento != null && tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA.toString())) {
 
 			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_CONTA);
 
-			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento1()).toString());
+			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1()).toString());
 
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
 
-			retorno
-					.setMesAnoReferenciaConta(Util
-							.formatarMesAnoSemBarraParaMesAnoComBarra(registroHelperCodigoG
-									.getRegistroHelperCodigoBarras()
-									.getRegistroHelperCodigoBarrasTipoPagamento()
-									.getIdPagamento4()));
+			retorno.setMesAnoReferenciaConta(Util.formatarMesAnoSemBarraParaMesAnoComBarra(registroHelperCodigoG
+					.getRegistroHelperCodigoBarras().getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4()));
 
-			retorno.setDigitoVerificadorContaModulo10(new Integer(
-					registroHelperCodigoG.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento5()).toString());
+			retorno.setDigitoVerificadorContaModulo10(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5()).toString());
 
 		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO
-								.toString())) {
+				&& tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
 
-			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento1()).toString());
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setCodigoTipoDebito(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento4()).toString());
-			retorno.setAnoEmissaoGuiaPagamento(new Integer(
-					registroHelperCodigoG.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento5()).toString());
+			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1()).toString());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setCodigoTipoDebito(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4()).toString());
+			retorno.setAnoEmissaoGuiaPagamento(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5()).toString());
 
 		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA
-								.toString())) {
+				&& tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
 
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setSequencialDocumentoCobranca(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento3());
-			retorno.setCodigoTipoDocumento(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento4());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setSequencialDocumentoCobranca(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
+			retorno.setCodigoTipoDocumento(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
-		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL
-								.toString())) {
+		} else if (tipoPagamento != null && tipoPagamento
+				.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL);
 
-			retorno.setCodigoCliente(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setMesAnoReferenciaConta(Util
-					.formatarAnoMesParaMesAno(new Integer(registroHelperCodigoG
-							.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento2()).intValue()));
-			retorno.setDigitoVerificadorContaModulo10(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento5());
-			retorno.setSequencialFaturaClienteResponsavel(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento6());
+			retorno.setCodigoCliente(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setMesAnoReferenciaConta(
+					Util.formatarAnoMesParaMesAno(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+							.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).intValue())
+			);
+			retorno.setDigitoVerificadorContaModulo10(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5());
+			retorno.setSequencialFaturaClienteResponsavel(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
 
 		}
 
@@ -29864,18 +29813,16 @@ public class ControladorArrecadacao implements SessionBean {
 					
 					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
 					
-//					Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(),75);
-					String fatorVencimento = fachada.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
+					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
 					
-					representacaoNumericaCodBarraSemDigito = fachada.
-						obterEspecificacaoCodigoBarraFichaCompensacao(
+					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
 					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
 						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 					                                
 					representacaoNumericaCodBarraFormatada = 
-					fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
 
 					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
 				} else {
@@ -38797,167 +38744,9 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterRepresentacaoNumericaCodigoBarraFichaCompensacao(String especificacaoCodigoBarra)
-                 throws ControladorException {
-        
-        String representacaoNumericaCodigoBarra = especificacaoCodigoBarra;
-
-        // Cria as variáveis que vão armazenar o código de barra separado por
-        // campos e seus respectivos dígitos verificadores se existirem
-        String codigoBarraCampo1 = null;
-        String codigoBarraDigitoVerificadorCampo1 = null;
-        String codigoBarraCampo2 = null;
-        String codigoBarraDigitoVerificadorCampo2 = null;
-        String codigoBarraCampo3 = null;
-        String codigoBarraDigitoVerificadorCampo3 = null;
-        String codigoBarraDigitoVerificadorCampo4 = null;
-        String codigoBarraCampo5 = null;
-
-        // Separa as 44 posições do código de barras em 5 partes, 
-        // sendo 3 primeiros constituidos por DV(módulo 10) e, entre cada campo, 
-        // espaço equivalente a uma posição.No quarto campo é indicado, isoladamente, 
-        // o DV(módulo 11) do código de barras.
-        codigoBarraCampo1 = representacaoNumericaCodigoBarra.substring(0, 4) + representacaoNumericaCodigoBarra.substring(20, 21);
-        codigoBarraCampo1 = codigoBarraCampo1 + "." +  representacaoNumericaCodigoBarra.substring(21, 25);
-        codigoBarraDigitoVerificadorCampo1 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo1.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo1 = codigoBarraDigitoVerificadorCampo1 + " ";
-        
-        codigoBarraCampo2 = representacaoNumericaCodigoBarra.substring(24, 29);
-        codigoBarraCampo2 = codigoBarraCampo2 + "." +  representacaoNumericaCodigoBarra.substring(29, 34);
-        codigoBarraDigitoVerificadorCampo2 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo2.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo2 = codigoBarraDigitoVerificadorCampo2 + " ";
-        
-        codigoBarraCampo3 = representacaoNumericaCodigoBarra.substring(34, 39);
-        codigoBarraCampo3 = codigoBarraCampo3 + "." +  representacaoNumericaCodigoBarra.substring(39, 44);
-        codigoBarraDigitoVerificadorCampo3 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo3.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo3 = codigoBarraDigitoVerificadorCampo3 + " ";
-        
-        codigoBarraDigitoVerificadorCampo4 = representacaoNumericaCodigoBarra.substring(4,5) + " ";
-        
-        codigoBarraCampo5 = representacaoNumericaCodigoBarra.substring(5, 19);
-        
-        // Monta a representação númerica do código de barras com os dígitos verificadores
-        representacaoNumericaCodigoBarra = codigoBarraCampo1
-                + codigoBarraDigitoVerificadorCampo1 
-                + codigoBarraCampo2
-                + codigoBarraDigitoVerificadorCampo2 
-                + codigoBarraCampo3
-                + codigoBarraDigitoVerificadorCampo3 
-                + codigoBarraDigitoVerificadorCampo4
-                + codigoBarraCampo5;
-        
-        // Retorna a representação númerica do código de barras
-        return representacaoNumericaCodigoBarra;
-    }
-
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterEspecificacaoCodigoBarraFichaCompensacao( String codigoBanco,
-                 String codigoMoeda, BigDecimal valorCodigoBarra, String nossoNumeroSemDV,
-                 String carteira, String fatorVencimento)
-                 throws ControladorException {
-        
-        // Cria a variável que vai armazenar a representação númerica do código de barras
-        String representacaoNumericaCodigoBarra = "";
-
-        // G.05.1 - Código do Banco
-        codigoBanco = Util.adicionarZerosEsquedaNumero(3,codigoBanco);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + codigoBanco;
-
-        // G.05.2 - Código da Moeda
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + codigoMoeda;
-        
-        // G.05.4 - Fator de Vencimento
-        fatorVencimento = Util.adicionarZerosEsquedaNumero(4,fatorVencimento);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + fatorVencimento;
-
-        // G.05.5 - Valor do código de barras
-        String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(10,
-                valorCodigoBarra.setScale(2).toString().replace(".", ""));
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-                + valorCodigoBarraFormatado;
-
-        // G.05.6 - Zeros
-        String zeros = "";
-        zeros = Util.adicionarZerosEsquedaNumero(6,zeros);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + zeros;
-
-        // G.05.7 Nosso número sem o DV
-        nossoNumeroSemDV = Util.adicionarZerosEsquedaNumero(17,nossoNumeroSemDV);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + nossoNumeroSemDV;
-
-        // G.05.8 Tipo de Carteira
-        carteira = Util.adicionarZerosEsquedaNumero(2,carteira);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + carteira;
-        
-        // G.05.3 - Dígito verificador geral
-        // [SB0001] Obter Dígito verificador geral
-        String digitoVerificadorGeral = (Util.obterDigitoVerificadorModulo11(representacaoNumericaCodigoBarra)).toString();
-            //(Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra)).toString();
-
-        if(digitoVerificadorGeral.equalsIgnoreCase("0") ||
-                digitoVerificadorGeral.equalsIgnoreCase("10") ||
-                digitoVerificadorGeral.equalsIgnoreCase("11")){
-            digitoVerificadorGeral = "1";
-        }
-        
-        // Monta a representaçaõ númerica com todos os campos informados
-        representacaoNumericaCodigoBarra = codigoBanco + codigoMoeda 
-                        + digitoVerificadorGeral +  fatorVencimento 
-                        + valorCodigoBarraFormatado + zeros 
-                        + nossoNumeroSemDV + carteira;
-        
-
-        // Retorna a representação númerica do código de barras
-        return representacaoNumericaCodigoBarra;
-    }
-    
-    /**
-	 * [UC0626] Gerar Resumo de Metas Acumulado no Mês (CAERN)
-	 * 
-	 * @author Sávio Luiz
-	 * @data 28/11/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection pesquisarPagamentoDeContas(Collection colecaoConta)
-			throws ControladorException{
+	public Collection pesquisarPagamentoDeContas(Collection colecaoConta) throws ControladorException{
 		try {
-			return repositorioArrecadacao
-					.pesquisarPagamentoDeContas(colecaoConta);
+			return repositorioArrecadacao.pesquisarPagamentoDeContas(colecaoConta);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -41267,18 +41056,15 @@ public class ControladorArrecadacao implements SessionBean {
         
         
         Date dataVencimentoMais15 = Util.adicionarNumeroDiasDeUmaData(new Date(),15);
-        String fatorVencimento = getControladorFaturamento().obterFatorVencimento(dataVencimentoMais15);
+        String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais15);
         
-        String especificacaoCodigoBarra = obterEspecificacaoCodigoBarraFichaCompensacao(
+        String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
                     ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                     valorPagamento, nossoNumeroSemDV.toString(),
                     ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
         
         String digitoVerificador = especificacaoCodigoBarra.substring(4,5);
-        
-//        String representacaoNumericaCodigoBarraFichaCompensacao = 
-//            obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
         
         //código do banco
         retorno.setCodigoBanco(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO);
@@ -51744,9 +51530,9 @@ public class ControladorArrecadacao implements SessionBean {
         
         
         Date dataVencimentoMais15 = Util.adicionarNumeroDiasDeUmaData(new Date(),15);
-        String fatorVencimento = getControladorFaturamento().obterFatorVencimento(dataVencimentoMais15);
+        String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais15);
         
-        String especificacaoCodigoBarra = obterEspecificacaoCodigoBarraFichaCompensacao(
+        String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
                     ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                     valorPagamento, nossoNumeroSemDV.toString(),

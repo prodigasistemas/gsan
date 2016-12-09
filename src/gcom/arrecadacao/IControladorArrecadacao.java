@@ -3070,88 +3070,12 @@ public interface IControladorArrecadacao {
 			Collection<Devolucao> colecaoDevolucoes, Usuario usuarioLogado, 
 			AvisoBancario avisoBancario) throws ControladorException ;
     
-
-    
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterRepresentacaoNumericaCodigoBarraFichaCompensacao(String especificacaoCodigoBarra)
-                 throws ControladorException;
-    
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterEspecificacaoCodigoBarraFichaCompensacao( String codigoBanco,
-                 String codigoMoeda, BigDecimal valorCodigoBarra, String nossoNumeroSemDV,
-                 String carteira, String fatorVencimento)
-                 throws ControladorException; 
-                 
-    
-    
-    /**
-	 * [UC0626] Gerar Resumo de Metas Acumulado no Mês (CAERN)
-	 * 
-	 * @author Sávio Luiz
-	 * @data 28/11/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection pesquisarPagamentoDeContas(Collection colecaoConta)
-			throws ControladorException;
+	public Collection pesquisarPagamentoDeContas(Collection colecaoConta) throws ControladorException;
 	
-	 /**
-     * [UC0739] - Informar Situação de Expurgo do Pagamento
-     * Autor: Sávio Luiz
-     * Data: 02/01/2008
-     */
     public Object[] gerarColecaoDadosPagamentoPelaData(String dataPagamento,Integer idCliente,Integer anoMesArrecadacao) throws ControladorException;
     
-    /**
-	 * [UC0739] - Informar Situação de Expurgo do Pagamento
-	 * Autor: Sávio Luiz
-	 * Data: 02/01/2008
-	 */
-	public void atualizarSituacaoExpurgoPagamento(Collection colecaoPagamento)
-			throws ControladorException;
+	public void atualizarSituacaoExpurgoPagamento(Collection colecaoPagamento) throws ControladorException;
 	
-	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
-	 * 
-	 * @author Sávio Luiz
-	 * @data 10/01/2008
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
 	public Collection<RelatorioComparativoFatArrecExpurgoBean> pesquisarDadosComparativosFaturamentoArrecadacaoExpurgo(Integer anoMesReferencia,
 			String idGerenciaRegional,String idUnidadeNegocio)
 			throws ControladorException;

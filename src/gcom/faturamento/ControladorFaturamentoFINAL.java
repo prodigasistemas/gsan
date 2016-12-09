@@ -320,6 +320,7 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.Calculos;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
@@ -36147,10 +36148,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(
 						new Date(), 90);
-				String fatorVencimento = obterFatorVencimento(dataVencimentoMais90);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
-				String especificacaoCodigoBarra = getControladorArrecadacao()
-						.obterEspecificacaoCodigoBarraFichaCompensacao(
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
 								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 								emitirContaHelper.getValorConta(),
@@ -36161,9 +36161,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				emitirContaHelper
 						.setRepresentacaoNumericaCodBarraSemDigito(especificacaoCodigoBarra);
 
-				String representacaoNumericaCodigoBarraFichaCompensacao = getControladorArrecadacao()
-						.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(
-								especificacaoCodigoBarra);
+				String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 				emitirContaHelper
 						.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodigoBarraFichaCompensacao);
@@ -59040,30 +59038,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0352] Emitir Contas e Cartas
-	 * 
-	 * [SB0032] Obter Fator de Vencimento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 13/11/2007
-	 * 
-	 * @param colecaoConta
-	 * @throws ControladorException
-	 */
-	public String obterFatorVencimento(Date dataVencimento)
-			throws ControladorException {
-
-		String fatorVencimento = "";
-		Date dataBase = Util.criarData(07, 10, 1997);
-
-		fatorVencimento = ""
-				+ Util.obterQuantidadeDiasEntreDuasDatas(dataBase,
-						dataVencimento);
-
-		return fatorVencimento;
-	}
-
-	/**
 	 * Metódo responsável por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
@@ -61754,10 +61728,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							Date dataVencimentoMais90 = Util
 									.adicionarNumeroDiasDeUmaData(new Date(),
 											90);
-							String fatorVencimento = obterFatorVencimento(dataVencimentoMais90);
+							String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
-							String especificacaoCodigoBarra = getControladorArrecadacao()
-									.obterEspecificacaoCodigoBarraFichaCompensacao(
+							String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 											ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
 											ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 											emitirContaHelper.getValorConta(),
@@ -61765,9 +61738,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
 											fatorVencimento);
 
-							String representacaoNumericaCodigoBarraFichaCompensacao = getControladorArrecadacao()
-									.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(
-											especificacaoCodigoBarra);
+							String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 							contaTxt.append(representacaoNumericaCodigoBarraFichaCompensacao);
 

@@ -1,5 +1,27 @@
 package gcom.faturamento;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
@@ -43,6 +65,7 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.relatorio.faturamento.conta.ContaLinhasDescricaoServicosTarifasTotalHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -50,29 +73,6 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 /**
  * Controlador Faturamento CAERN
@@ -618,7 +618,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
                 String fatorVencimento = null;
 
 				
-				String especificacaoCodigoBarra = getControladorArrecadacao().
+				String especificacaoCodigoBarra = CodigoBarras.
 					obterEspecificacaoCodigoBarraFichaCompensacao(
 				    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 				    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
@@ -627,9 +627,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 				                                
 				emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(especificacaoCodigoBarra);
 				
-				String representacaoNumericaCodigoBarraFichaCompensacao = 
-				getControladorArrecadacao().
-				obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+				String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 				                     
 				emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(
 						representacaoNumericaCodigoBarraFichaCompensacao);
@@ -9143,14 +9141,12 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
                                 String fatorVencimento = null;
                                 
                                 String especificacaoCodigoBarra = 
-                                    getControladorArrecadacao().obterEspecificacaoCodigoBarraFichaCompensacao(
+                                    CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                                     emitirContaHelper.getValorConta(), nossoNumeroSemDV.toString(),
                                     ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
                                 
-                                String representacaoNumericaCodigoBarraFichaCompensacao = 
-                                    getControladorArrecadacao().
-                                    obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+                                String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
                                 
                                 contaTxt.append(representacaoNumericaCodigoBarraFichaCompensacao); 
                                 
@@ -10851,14 +10847,12 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 
 
                                 String especificacaoCodigoBarra = 
-                                    getControladorArrecadacao().obterEspecificacaoCodigoBarraFichaCompensacao(
+                                    CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                                     emitirContaHelper.getValorConta(), nossoNumeroSemDV.toString(),
                                     ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
                                 
-                                String representacaoNumericaCodigoBarraFichaCompensacao = 
-                                    getControladorArrecadacao().
-                                    obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+                                String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
                                 
                                 contaTxt.append(representacaoNumericaCodigoBarraFichaCompensacao); 
                                 

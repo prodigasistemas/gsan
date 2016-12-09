@@ -1,5 +1,17 @@
 package gcom.cobranca.contratoparcelamento;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
@@ -57,8 +69,8 @@ import gcom.relatorio.cobranca.RelatorioEmitirContratoParcelamentoPorClienteSubC
 import gcom.relatorio.cobranca.RelatorioEmitirContratoParcelamentoPorClienteSubContaBean;
 import gcom.relatorio.cobranca.RelatorioEmitirContratoParcelamentoPorClienteSubDebitoACobrarBean;
 import gcom.relatorio.cobranca.RelatorioEmitirContratoParcelamentoPorClienteSubParcBean;
-import gcom.relatorio.cobranca.contratoparcelamento.FiltrarRelatorioEmitirContratoParcelamentoPorClienteHelper;
 import gcom.relatorio.cobranca.contratoparcelamento.EmitirExtratoContratoParcelamentoPorClienteHelper;
+import gcom.relatorio.cobranca.contratoparcelamento.FiltrarRelatorioEmitirContratoParcelamentoPorClienteHelper;
 import gcom.relatorio.cobranca.contratoparcelamento.RelatorioEmitirExtratoContratoParcelamentoPorClienteBean;
 import gcom.relatorio.cobranca.contratoparcelamento.RelatorioManterContratoParcelamentoPorClienteBean;
 import gcom.relatorio.cobranca.contratoparcelamento.RelatorioManterContratoParcelamentoRDBean;
@@ -72,6 +84,7 @@ import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
 import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.spcserasa.FiltroNegativadorMovimentoRegItem;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -85,19 +98,6 @@ import gcom.util.Util;
 import gcom.util.filtro.ComparacaoCampos;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 
@@ -4048,18 +4048,16 @@ public class ControladorContratoParcelamentoSEJB implements SessionBean {
 						
 						String nossoNumeroSemDV = nossoNumero.toString().substring(0,nossoNumero.length() - 2);
 
-						String fatorVencimento = Fachada.getInstancia().obterFatorVencimento(
-								Util.converteStringParaDate(prestacao.getDataVencimento()));
+						String fatorVencimento = CodigoBarras.obterFatorVencimento(Util.converteStringParaDate(prestacao.getDataVencimento()));
 						
-						String especificacaoCodigoBarra = Fachada.getInstancia().
+						String especificacaoCodigoBarra = CodigoBarras.
 							obterEspecificacaoCodigoBarraFichaCompensacao(
 						    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 						    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
 						    valorParcelaBigDec, nossoNumeroSemDV.toString(),
 							ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 					                                
-						String representacaoNumericaCodigoBarraFichaCompensacao = 
-							Fachada.getInstancia().obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+						String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 						
 						// 1.1.2. Representação numérica do código de barras
 						// 1.16.1. Código de Barras 

@@ -1,23 +1,5 @@
 package gcom.gui.relatorio.cobranca;
 
-import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.EsferaPoder;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.CobrancaDocumento;
-import gcom.cobranca.DocumentoTipo;
-import gcom.cobranca.bean.ContaValoresHelper;
-import gcom.fachada.Fachada;
-import gcom.faturamento.conta.Conta;
-import gcom.gui.cobranca.ConsultarDebitoClienteActionForm;
-import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
-import gcom.relatorio.RelatorioVazioException;
-import gcom.relatorio.cobranca.RelatorioExtratoDebitoCliente;
-import gcom.relatorio.cobranca.parcelamento.ExtratoDebitoRelatorioHelper;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.tarefa.TarefaRelatorio;
-import gcom.util.ConstantesSistema;
-import gcom.util.Util;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +15,24 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.DocumentoTipo;
+import gcom.cobranca.bean.ContaValoresHelper;
+import gcom.fachada.Fachada;
+import gcom.faturamento.conta.Conta;
+import gcom.gui.cobranca.ConsultarDebitoClienteActionForm;
+import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
+import gcom.relatorio.RelatorioVazioException;
+import gcom.relatorio.cobranca.RelatorioExtratoDebitoCliente;
+import gcom.relatorio.cobranca.parcelamento.ExtratoDebitoRelatorioHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.tarefa.TarefaRelatorio;
+import gcom.util.CodigoBarras;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 /**
  * Gerar e Emitir Extrato de Débito por Cliente
@@ -161,9 +161,9 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 				relatorioExtratoDebitoCliente.addParametro("nossoNumero",nossoNumero.toString());
 
 				Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(),75);
-				String fatorVencimento = fachada.obterFatorVencimento(dataVencimentoMais75);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais75);
 
-				String especificacaoCodigoBarra = fachada.
+				String especificacaoCodigoBarra = CodigoBarras.
 						obterEspecificacaoCodigoBarraFichaCompensacao(
 								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
@@ -171,7 +171,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 								ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 
 				String representacaoNumericaCodigoBarraFichaCompensacao = 
-						fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+						CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 				relatorioExtratoDebitoCliente.addParametro("representacaoNumericaCodBarraSemDigito",especificacaoCodigoBarra);
 				relatorioExtratoDebitoCliente.addParametro("representacaoNumericaCodBarra",representacaoNumericaCodigoBarraFichaCompensacao);
@@ -269,9 +269,9 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 			relatorioExtratoDebitoCliente.addParametro("nossoNumero",nossoNumero.toString());
 
 			Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(),75);
-			String fatorVencimento = fachada.obterFatorVencimento(dataVencimentoMais75);
+			String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais75);
 
-			String especificacaoCodigoBarra = fachada.
+			String especificacaoCodigoBarra = CodigoBarras.
 					obterEspecificacaoCodigoBarraFichaCompensacao(
 							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
@@ -279,7 +279,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 							ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 
 			String representacaoNumericaCodigoBarraFichaCompensacao = 
-					fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 			relatorioExtratoDebitoCliente.addParametro("representacaoNumericaCodBarraSemDigito",especificacaoCodigoBarra);
 			relatorioExtratoDebitoCliente.addParametro("representacaoNumericaCodBarra",representacaoNumericaCodigoBarraFichaCompensacao);
