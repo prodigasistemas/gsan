@@ -308,4 +308,8 @@ public class Processo extends ObjetoGcom {
 	public void setNomeArquivoBatch(String nomeArquivoBatch) {
 		this.nomeArquivoBatch = nomeArquivoBatch;
 	}
+	
+	public boolean isExcluido(){
+		return indicadorUso == 2;
+	}
 }
