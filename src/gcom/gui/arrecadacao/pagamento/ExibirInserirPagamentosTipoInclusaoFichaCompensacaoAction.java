@@ -1,16 +1,5 @@
 package gcom.gui.arrecadacao.pagamento;
 
-import gcom.arrecadacao.bean.PagamentoHelperCodigoBarras;
-import gcom.arrecadacao.bean.RegistroHelperFichaCompensacao;
-import gcom.arrecadacao.pagamento.bean.InserirPagamentoViaCanetaHelper;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ConstantesSistema;
-import gcom.util.Util;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +16,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorActionForm;
+
+import gcom.arrecadacao.bean.PagamentoHelperCodigoBarras;
+import gcom.arrecadacao.bean.RegistroHelperFichaCompensacao;
+import gcom.arrecadacao.pagamento.bean.InserirPagamentoViaCanetaHelper;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.CodigoBarras;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 /**
  * @author 	Raphael Rossiter
@@ -180,7 +181,7 @@ public class ExibirInserirPagamentosTipoInclusaoFichaCompensacaoAction extends G
         	//FATOR DE VENCIMENTO E VALOR DO TÍTULO
         	codigoBarraDigitadoCampo4							= codigoBarraLeituraOtica.substring(33,47);*/
         	
-        	codigoBarra = fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(codigoBarraLeituraOtica);
+        	codigoBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(codigoBarraLeituraOtica);
         	codigoBarra = codigoBarra.replace(".", "");
         	codigoBarra = codigoBarra.replace(" ", "");
 
@@ -422,7 +423,7 @@ public class ExibirInserirPagamentosTipoInclusaoFichaCompensacaoAction extends G
     	}
     	  
     	//DIGITO VERIFICADOR GERAL
-    	String especificacaoCodigoBarra = fachada.obterEspecificacaoCodigoBarraFichaCompensacao(
+    	String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
     			ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
     			codigoBarraFichaCompensacaoHelper.getValorDocumento(), nossoNumeroSemDV.toString(), 
     			ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, codigoBarraFichaCompensacaoHelper.getFatorVencimento());

@@ -1479,30 +1479,6 @@ public class Util {
 			dv = 11 - resto;
 		}
 		return dv;
-		/*
-		 * // converte o número recebido para uma string String entradaString =
-		 * numero; // inicia o sequêncial de multiplicação para 2(dois) int
-		 * sequencia = 2; // cria as variáveis que serão utilizadas no calculo
-		 * int digito, contAuxiliar; // variável que vai armazenar a soma da
-		 * múltiplicação de cada dígito int somaDigitosProduto = 0; // contador
-		 * auxiliar contAuxiliar = 1; // laço para calcular a soma da
-		 * múltiplicação de cada dígito for (int i = 0; i <
-		 * entradaString.length(); i++) { // recupera o dígito da string digito
-		 * = new Integer(entradaString.substring(entradaString.length() -
-		 * contAuxiliar, entradaString.length() - i)).intValue(); // multiplica
-		 * o digito pelo sequência e acumula o resultado somaDigitosProduto =
-		 * somaDigitosProduto + (digito * sequencia); // se osequência for igual
-		 * a 9(nove) if (sequencia == 9) { // a sequência volta para 2(dois)
-		 * sequencia = 2; } else { // incrementa a sequência mais 1 ++sequencia;
-		 * } // incrementa o contador auxiliar contAuxiliar++; } // calcula o
-		 * resto da divisão int resto = (somaDigitosProduto % 11); // variável
-		 * que vai armazenar o dígito verificador int dac; // se o resto for
-		 * 0(zero) ou 1(1) if (resto == 0 || resto == 1) { // o dígito
-		 * verificador vai ser 0(zero) dac = 0; } else if (resto == 10) { // o
-		 * dígito verificador vai ser 1(um) dac = 1; } else { // o dígito
-		 * verificador vai ser a diferença dac = 11 - resto; } // retorna o
-		 * dígito verificador calculado return new Integer(dac);
-		 */
 	}
 
 	/**

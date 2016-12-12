@@ -3046,170 +3046,37 @@ public interface IControladorFaturamento {
 	public boolean verificarDebitoMais3MesesFaturaEmAberto(
 			Integer anoMesReferencia, Integer idImovel) throws ControladorException;
 
-	public Boolean pesquisarExisteciaParcelamentoConta(Integer idConta)
-		throws ControladorException;
+	public Boolean pesquisarExisteciaParcelamentoConta(Integer idConta) throws ControladorException;
 	
-	/**
-	 * Monta uma coleção de contas categoria a partir de uma coleção de categoria recebida
-	 * @param colecaoCategoria
-	 * @param conta
-	 * @return
-	 */
 	public Collection montarColecaoContaCategoria(Collection colecaoSubcategoria, Conta conta);
     
-    
-    /**
-     * [UC0352] Emitir Contas e Cartas
-     * 
-     * [SB0032] Obter Fator de Vencimento
-     * 
-     * @author Vivianne Sousa
-     * @date 29/01/2008
-     * 
-     * @param colecaoConta
-     * @throws ControladorExceptions
-     */
-    public String obterFatorVencimento(Date dataVencimento)throws ControladorException;
-    
-	/**
-	 * [UC0532] Gerar Relatório de Faturamento das Ligações com Medição
-	 * Individualizada
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 02/06/2008
-	 * 
-	 * @param colecaoLigacoesMedicao
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarFaturamentoLigacoesMedicaoIndividualizadaRelatorio(
 			Collection<Imovel> colecaoImoveisGerarRelatorio,
 			String anoMesfaturamentoGrupo) throws ControladorException;
     
-    /**
-     * [UC0254] - Efetuar Análise do Movimento dos Arrecadadores
-     * 
-     * obtem imovel, localidade e conta atraves do id da conta
-     * 
-     * @author Vivianne Sousa
-     * @date 29/01/2008
-     * 
-     * @param idConta
-     * 
-     * @return Collection
-     * @throws ErroRepositorioException
-     */
-
-    public Conta obterImovelLocalidadeConta(Integer idConta)
-        throws ControladorException;
+    public Conta obterImovelLocalidadeConta(Integer idConta) throws ControladorException;
     
-    /**
-     * [UC0254] - Efetuar Análise do Movimento dos Arrecadadores
-     * 
-     * obtem imovel, localidade e contaHistorico atraves do id da conta historico
-     * 
-     * @author Vivianne Sousa
-     * @date 29/01/2008
-     * 
-     * @param idConta
-     * 
-     * @return Collection
-     * @throws ErroRepositorioException
-     */
-    public ContaHistorico obterImovelLocalidadeContaHistorico(Integer idConta)
-        throws ControladorException;
+    public ContaHistorico obterImovelLocalidadeContaHistorico(Integer idConta) throws ControladorException;
     
-    /**
-     * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela Bônus
-     * 
-     * Retorna dados dos parcelamentos com RD = 8 que estejam com situação normal 
-     * e que não exista outro parcelamento com data posterior  
-     * 
-     * @author Vivianne Sousa
-     * @date 27/12/2007
-     * 
-     * @return 
-     * @throws ErroRepositorioException
-     */
-    public void atualizaQtdeParcelaPagaConsecutivaEParcelaBonus(Integer idLocalidade, int idFuncionalidadeIniciada)
-        throws ControladorException;
+    public void atualizaQtdeParcelaPagaConsecutivaEParcelaBonus(Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException;
     
-    //*************************************************************************************************
-    //[UC0764] Gerar Relatorio Contas Canceladas ou Retificadas
-	//Flávio Leonardo
-	//09/05/2008
-    //Contas Canceladas
     public Collection gerarRelatorioContasCanceladas(RelatorioContasCanceladasRetificadasHelper helper)throws ControladorException;
     
-    //Contas Retificadas
     public Collection gerarRelatorioContasRetificadas(RelatorioContasCanceladasRetificadasHelper helper)throws ControladorException;
     
-    
-    /**
-     * @author Vivianne Sousa
-     * @date 15/05/2008
-     */
     public Integer pesquisarMaxIdConta()throws ControladorException;
     
-    /**
-     * @author Vivianne Sousa
-     * @date 15/05/2008
-     */
     public Integer pesquisarMaxIdContaHistorico()throws ControladorException;
     
-	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
-	 *
-	 * @author Rafael Corrêa
-	 * @date 10/07/2008
-	 *
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioFaturasAgrupadasBean> pesquisarDadosRelatorioFaturasAgrupadas(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes) 
 			throws ControladorException;
 	
-	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
-	 *
-	 * @author Rafael Corrêa
-	 * @date 10/07/2008
-	 *
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarDadosRelatorioFaturasAgrupadasCount(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes) throws ControladorException;
 	
-	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
-	 *
-	 * Pesquisa os clientes associados as faturas de uma determinada esfera de porder 
-	 *
-	 * @author Rafael Corrêa
-	 * @date 21/01/2009
-	 *
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarClientesFaturas(Integer idEsferaPoder) throws ControladorException;
 	
-	/**
-	 * [UC0352] - Emitir TXT de Fatura de Cliente Responsável
-	 * 
-	 * Pesquisa o percentual de retenção
-	 *
-	 * @author Rafael Corrêa
-	 * @date 12/07/2008
-	 *
-	 * @throws ErroRepositorioException
-	 */
-	public BigDecimal pesquisarPercentualAliquota()
-			throws ControladorException;
+	public BigDecimal pesquisarPercentualAliquota() throws ControladorException;
 	
-	/**
-	 * [UCXXXX] - Relatório de Protocolo de Entrega de Faturas
-	 *
-	 * @author Rafael Corrêa
-	 * @date 12/11/2008
-	 *
-	 * @throws ControladorException
-	 */
 	public Collection<RelatorioProtocoloEntregaFaturaBean> pesquisarDadosRelatorioProtocoloEntregaFatura(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes) 
 			throws ControladorException;
     
