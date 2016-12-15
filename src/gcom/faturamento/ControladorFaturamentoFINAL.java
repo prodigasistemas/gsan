@@ -652,51 +652,38 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param mesAno
 	 * @throws ControladorException
 	 */
-	public void validarFaturamentoCronogramaAtividadeMaiorQueMesAnoCronograma(
-			int anoMes, Collection faturamentoAtividadeCronogramas)
-			throws ControladorException {
-		Iterator iteratorFaturamentoAtividadeCronograma = faturamentoAtividadeCronogramas
-				.iterator();
+	public void validarFaturamentoCronogramaAtividadeMaiorQueMesAnoCronograma(int anoMes, Collection faturamentoAtividadeCronogramas) throws ControladorException {
+		Iterator iteratorFaturamentoAtividadeCronograma = faturamentoAtividadeCronogramas.iterator();
 
-		int anoMesMaisUm = (Util.somaUmMesAnoMesReferencia(new Integer(anoMes)))
-				.intValue();
+		int anoMesMaisUm = (Util.somaUmMesAnoMesReferencia(new Integer(anoMes))).intValue();
 
 		int anoMesMenosDois = (Util.subtrairMesDoAnoMes(anoMes, 2));
 
 		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = null;
-		// String mesAnoAtividade = null;
 		String mes = null;
 		String ano = null;
 		// Cria objeto
 		String dataAtividade = null;
 		int anoMesAtividade = 0;
 		while (iteratorFaturamentoAtividadeCronograma.hasNext()) {
-			faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) iteratorFaturamentoAtividadeCronograma
-					.next();
+			faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) iteratorFaturamentoAtividadeCronograma.next();
 
 			if (faturamentoAtividadeCronograma.getDataPrevista() != null) {
-				dataAtividade = Util
-						.formatarDataComHora(faturamentoAtividadeCronograma
-								.getDataPrevista());
+				dataAtividade = Util.formatarDataComHora(faturamentoAtividadeCronograma.getDataPrevista());
 
-				// mesAnoAtividade = dataAtividade.substring(3, 10);
-				// Concatena ano mes
 				mes = dataAtividade.substring(3, 5);
 				ano = dataAtividade.substring(6, 10);
 				anoMesAtividade = (new Integer(ano + mes)).intValue();
 				if (anoMesAtividade > anoMesMaisUm) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.faturamento.mes_ano_atividade_maior_mes_ano_cronograma",
+					throw new ControladorException("atencao.faturamento.mes_ano_atividade_maior_mes_ano_cronograma",
 							null, Util.formatarAnoMesParaMesAno(anoMesMaisUm));
 				}
 
 				if (anoMesAtividade < anoMesMenosDois) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.faturamento.mes_ano_atividade_menor_mes_ano_cronograma",
-							null, Util
-									.formatarAnoMesParaMesAno(anoMesMenosDois));
+					throw new ControladorException("atencao.faturamento.mes_ano_atividade_menor_mes_ano_cronograma",
+							null, Util.formatarAnoMesParaMesAno(anoMesMenosDois));
 				}
 			}
 		}

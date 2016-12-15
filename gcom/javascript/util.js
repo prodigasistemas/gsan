@@ -46,7 +46,7 @@ function validaDataSemMensagem(campo){
 			mes = barras[1];
 			ano = barras[2];
             
-			resultado = (!isNaN(dia) && (dia > 0) && (dia < 32)) && (!isNaN(mes) && (mes > 0) && (mes < 13)) && (!isNaN(ano) && (ano.length == 4) && (ano <= anoAtual && ano >= 1900));
+			resultado = (!isNaN(dia) && (dia > 0) && (dia < 32)) && (!isNaN(mes) && (mes > 0) && (mes < 13)) && (!isNaN(ano) && (ano.length == 4) && ano >= 1900);
             
 			if (!resultado){
 				

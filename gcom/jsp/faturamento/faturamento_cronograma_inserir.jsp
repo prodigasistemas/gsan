@@ -13,19 +13,19 @@
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="FaturamentoActionForm"/>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js" ></script>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js" ></script>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
-<script language="JavaScript"></script>
-<script language="JavaScript">
+<script type="text/javascript" language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="FaturamentoActionForm"/>
+<script type="text/javascript" language="JavaScript" src="<bean:message key="caminho.js"/>util.js" ></script>
+<script type="text/javascript" language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js" ></script>
+<script type="text/javascript" language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
+<script type="text/javascript" language="JavaScript"></script>
+<script type="text/javascript" language="JavaScript">
 function validaDataCompleta(data, event){
 		if(mascaraData(data, event)){
 			return false;
 		}
 }
 </script>
-<script language="JavaScript">
+<script type="text/javascript" language="JavaScript">
 function validaData(form){
   var form = document.FaturamentoActionForm;
   var mesAno = form.mesAno.value;
