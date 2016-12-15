@@ -1983,6 +1983,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 				} else {
 					imovel.setUsuarioParaHistorico(usuarioLogado);
 					imovel.setValidarSeImovelEmCampo(true);
+					imovel.setIndicadorExclusao(Imovel.IMOVEL_EXCLUIDO);
 					getControladorAtualizacaoCadastro().atualizar(imovel);
 					
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_IMOVEL_REMOVER,
@@ -2012,9 +2013,6 @@ public class ControladorImovelSEJB extends ControladorComum {
 					clienteImovel.setUltimaAlteracao(new Date());
 					getControladorUtil().inserirOuAtualizar(clienteImovel);
 				}
-
-				imovel.setIndicadorExclusao(Imovel.IMOVEL_EXCLUIDO);
-				imovel.setUltimaAlteracao(new Date());
 			}
 		}
 
