@@ -38,17 +38,6 @@ public class ExibirApresentarAnaliseAvisoBancarioAction extends GcomAction {
         
         String idAvisoBancario = httpServletRequest.getParameter("idAvisoBancario");
         
-//        String situacaoAbertoFechado = "";
-//        
-//        if(httpServletRequest.getParameter("situacaoAbertoFechado")!= null
-//        		&& !httpServletRequest.getParameter("situacaoAbertoFechado").equals("")){
-//        	situacaoAbertoFechado = httpServletRequest.getParameter("situacaoAbertoFechado");
-//        	sessao.setAttribute("situacaoAbertoFechado",situacaoAbertoFechado);
-//        }else{
-//        	situacaoAbertoFechado = (String)sessao.getAttribute("situacaoAbertoFechado");
-//        }
-        	
-        
         String botao = httpServletRequest.getParameter("botao");
         
         if(botao != null && !botao.equalsIgnoreCase("") && botao.equalsIgnoreCase("sim"))        {
@@ -151,15 +140,6 @@ public class ExibirApresentarAnaliseAvisoBancarioAction extends GcomAction {
         	apresentarAnaliseAvisoBancarioActionForm.setValorSomatorioDeducoes(
         			Util.formatarMoedaReal(avisoBancarioHelper.getValorSomatorioDeducoes()));
         }
-        
-//        if (avisoBancarioHelper.getAvisoBancario().getContaBancaria() != null && 
-//        	avisoBancarioHelper.getAvisoBancario().getContaBancaria().getAgencia() != null &&
-//        	avisoBancarioHelper.getAvisoBancario().getContaBancaria().getAgencia().getBanco() != null){
-//        	apresentarAnaliseAvisoBancarioActionForm.setContaBancaria(
-//        	
-//        	avisoBancarioHelper.getAvisoBancario().getContaBancaria().getAgencia().getBanco().getId().toString()
-//        	+ " - " + avisoBancarioHelper.getAvisoBancario().getContaBancaria().getAgencia().getCodigoAgencia().toString());
-//        }
         
         apresentarAnaliseAvisoBancarioActionForm.setBancoContaBancaria("" + avisoBancarioHelper.getIdBancoContaBancaria());
         apresentarAnaliseAvisoBancarioActionForm.setAgenciaContaBancaria("" + avisoBancarioHelper.getCodigoAgenciaContaBancaria());
