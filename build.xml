@@ -99,6 +99,9 @@
 		<pathelement location="${Mockito.home}/mockito-all-1.10.19.jar" />
 		<pathelement location="${Properties.home}/properties" />
 		<pathelement location="/reports" />
+		<pathelement location="${GsanRelatorios.home}/gson-2.2.4.jar" />
+		<pathelement location="${GsanRelatorios.home}/jersey-client-1.18.1.jar" />
+		<pathelement location="${GsanRelatorios.home}/jersey-core-1.18.1.jar" />
 	</path>
 
 	<target name="alterarDataVersao" depends="init">
