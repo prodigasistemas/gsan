@@ -122,10 +122,10 @@ public class InserirPagamentosAction extends GcomAction {
             
             //[FS0025] – Verificar valor do aviso bancário
             //Caso o valor calculado do aviso bancário seja maior que valor informado 
-            if (avisoBancario.getValorArrecadacaoCalculado()
-            		.compareTo(avisoBancario.getValorArrecadacaoInformado()) == 1 ){
-            	throw new ActionServletException("atencao.soma_dos_valores_maior_informado");
-            }
+//            if (avisoBancario.getValorArrecadacaoCalculado()
+//            		.compareTo(avisoBancario.getValorArrecadacaoInformado()) == 1 ){
+//            	throw new ActionServletException("atencao.soma_dos_valores_maior_informado");
+//            }
         	
         	for(InserirPagamentoViaCanetaHelper pagamentoViaCanetaHelper : colecaoInserirPagamentoViaCanetaHelper){
             	
