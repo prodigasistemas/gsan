@@ -1,7 +1,6 @@
 package gcom.financeiro;
 
 import gcom.arrecadacao.Arrecadador;
-import gcom.arrecadacao.ArrecadadorMovimentoItemDTO;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.FiltroArrecadador;
@@ -13,10 +12,6 @@ import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.arrecadacao.banco.Banco;
 import gcom.arrecadacao.banco.ContaBancaria;
 import gcom.arrecadacao.banco.FiltroBanco;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
-import gcom.arrecadacao.pagamento.GuiaPagamento;
-import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -24,8 +19,6 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
@@ -46,20 +39,15 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.CobrancaDocumento;
-import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
-import gcom.cobranca.FiltroCobrancaDocumento;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.conta.Conta;
-import gcom.faturamento.conta.Fatura;
-import gcom.faturamento.conta.FiltroFatura;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.financeiro.bean.AcumularValoresHelper;
 import gcom.financeiro.bean.GerarIntegracaoContabilidadeHelper;
@@ -120,6 +108,12 @@ import javax.ejb.SessionContext;
 
 import org.hibernate.Session;
 
+/**
+ * Controlador Financeiro PADRÃO
+ * 
+ * @author Raphael Rossiter
+ * @date 26/06/2007
+ */
 public class ControladorFinanceiro implements SessionBean {
 	
 	protected static final long serialVersionUID = 1L;
@@ -130,6 +124,12 @@ public class ControladorFinanceiro implements SessionBean {
 	protected IRepositorioFaturamento repositorioFaturamento = null;
 	protected IRepositorioArrecadacao repositorioArrecadacao = null;
 
+	/**
+	 * < <Descrição do método>>
+	 * 
+	 * @exception CreateException
+	 *                Descrição da exceção
+	 */
 	public void ejbCreate() throws CreateException {
 
 		repositorioFinanceiro = RepositorioFinanceiroHBM.getInstancia();
@@ -139,22 +139,44 @@ public class ControladorFinanceiro implements SessionBean {
 
 	}
 
+	/**
+	 * < <Descrição do método>>
+	 */
 	public void ejbRemove() {
 	}
 
+	/**
+	 * < <Descrição do método>>
+	 */
 	public void ejbActivate() {
 	}
 
+	/**
+	 * < <Descrição do método>>
+	 */
 	public void ejbPassivate() {
 	}
 
+	/**
+	 * Seta o valor de sessionContext
+	 * 
+	 * @param sessionContext
+	 *            O novo valor de sessionContext
+	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
+	/**
+	 * Retorna o valor de controladorArrecadacao
+	 * 
+	 * @return O valor de controladorCliente
+	 */
 	protected ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
+
+		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -163,6 +185,8 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorArrecadacaoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas
+			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -173,10 +197,17 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
+	/**
+	 * Retorna o valor de controladorUtil
+	 * 
+	 * @return O valor de controladorUtil
+	 */
 	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
+
+		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -185,6 +216,8 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorUtilLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -193,12 +226,20 @@ public class ControladorFinanceiro implements SessionBean {
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
+
 	}
 	
+    /**
+     * Retorna o valor de controladorEndereco
+     * 
+     * @return O valor de controladorEndereco
+     */
     private ControladorEnderecoLocal getControladorEndereco() {
 
         ControladorEnderecoLocalHome localHome = null;
         ControladorEnderecoLocal local = null;
+
+        // pega a instância do ServiceLocator.
 
         ServiceLocator locator = null;
 
@@ -207,6 +248,8 @@ public class ControladorFinanceiro implements SessionBean {
 
             localHome = (ControladorEnderecoLocalHome) locator
                     .getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
+            // guarda a referencia de um objeto capaz de fazer chamadas à
+            // objetos remotamente
             local = localHome.create();
 
             return local;
@@ -221,6 +264,8 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
 
+		// pega a instância do ServiceLocator.
+
 		ServiceLocator locator = null;
 
 		try {
@@ -228,6 +273,8 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorFaturamentoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -238,6 +285,13 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
+	/**
+	 * Retorna o controladorCadastro
+	 * 
+	 * @author Thiago Tenório
+	 * @date 18/08/2006
+	 * 
+	 */
 	private ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -258,6 +312,11 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
+	/**
+	 * Retorna o valor de controladorLocalidade
+	 * 
+	 * @return O valor de controladorLocalidade
+	 */
 	protected ControladorLocalidadeLocal getControladorLocalidade() {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
@@ -282,6 +341,11 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
+	/**
+	 * Retorna o valor de controladorImovel
+	 * 
+	 * @return O valor de controladorImovel
+	 */
 	protected ControladorImovelLocal getControladorImovel() {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
@@ -311,6 +375,8 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorBatchLocalHome localHome = null;
 		ControladorBatchLocal local = null;
 
+		// pega a instância do ServiceLocator.
+
 		ServiceLocator locator = null;
 
 		try {
@@ -318,6 +384,8 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorBatchLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -328,25 +396,6 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	private ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorClienteLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
 	/**
 	 * [UC0175] - Gerar Lançamentos Contábeis do Faturamento
 	 * Author: Raphael Rossiter, Pedro Alexandre 
@@ -359,7 +408,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void gerarLancamentosContabeisFaturamento(
 		Integer anoMesReferenciaFaturamento, 
 		Integer idLocalidade, 
@@ -539,7 +587,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void inserirLancamentoContabilItemFaturamento(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -5145,7 +5192,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param indicadorCreditoDebito
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItems(LancamentoContabil lancamentoContabil, 
 			Collection<AcumularValoresHelper> colecaoAcumularValoresPorLancamentoItemContabil, 
 			Short indicadorDebitoCredito) throws ControladorException {
@@ -5204,7 +5250,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param indicadorDebitoCredito
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItemsCategorias(LancamentoContabil lancamentoContabil, 
 			Short numeroRazao, Integer numeroConta, Collection<AcumularValoresHelper> 
 			colecaoAcumularValoresPorLancamentoItemContabilCategoria, 
@@ -5294,7 +5339,6 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	
-	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItemEspecifico(LancamentoContabil lancamentoContabil, 
 			Short numeroRazao, Integer numeroConta, Collection<AcumularValoresHelper> 
 			colecaoAcumularValoresPorLancamentoItemContabil, LancamentoItem lancamentoItem, 
@@ -5380,7 +5424,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param anoMesArrecadacao
 	 * @throws ControladorException 
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void gerarLancamentoContabeisArrecadacao(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 		
 		
@@ -5552,7 +5595,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection pesquisarGerarIntegracaoContabilidade(String idLancamentoOrigem, String anoMes) throws ControladorException{
 		
 		Collection colecaoObjetoGerar = null;
@@ -5669,7 +5711,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param data
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings("unchecked")
 	public void gerarIntegracaoContabilidade(
 			String idLancamentoOrigem, String anoMes, String data) throws ControladorException {
 	       
@@ -5928,7 +5969,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings("rawtypes")
 	public void apagarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada)	throws ControladorException {
 		
 		System.out.println("Localidade " + idLocalidade);
@@ -6003,7 +6043,6 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */		
-@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada)	throws ControladorException {
 		
 		int idUnidadeIniciada = 0;
@@ -6216,7 +6255,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Collection<GerarResumoDevedoresDuvidososHelper> acumularResumoDevedoresDuvidosos(int anoMesReferenciaContabil, 
 			Integer idLocalidade, Integer idQuadra, Integer idParametrosDevedoresDuvidosos)	throws ControladorException {
 	    
@@ -6594,7 +6632,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void inserirLancamentoContabilItemArrecadacao(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -6916,7 +6953,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		 * @param data
 		 * @throws ControladorException
 		 */
-		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public void gerarIntegracaoContabilidadeCaern(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
 			
 			/*
@@ -6941,7 +6977,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			 */
 			Collection<Object[]> colecaoDadosGerarIntegracao = null;
 
-			colecaoDadosGerarIntegracao = this.pesquisarGerarIntegracaoContabilidade(idLancamentoOrigem, anoMes);
+			colecaoDadosGerarIntegracao = this.pesquisarGerarIntegracaoContabilidade/*Caern*/(idLancamentoOrigem, anoMes);
 			
 			/** definição das variáveis */
 			StringBuilder gerarIntegracaoTxt = new StringBuilder();
@@ -7137,8 +7173,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @param idLocalidade
      * @throws ControladorException
      */
-    @SuppressWarnings("unchecked")
-	public void gerarContasAReceberContabil(Integer idLocalidade,
+    public void gerarContasAReceberContabil(Integer idLocalidade,
             int idFuncionalidadeIniciada) throws ControladorException {
 
         System.out.println("LOCALIDADE " + idLocalidade);
@@ -7644,8 +7679,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	private void adicionarContaAReceberContabilCreditosRealizados(
+    private void adicionarContaAReceberContabilCreditosRealizados(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -12707,10 +12741,13 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @param idFuncionalidadeIniciada
      * @throws ControladorException
      */
-    public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException {
+    public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, 
+    	int idFuncionalidadeIniciada) throws ControladorException {
 
-    	int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, 
-    			UnidadeProcessamento.FUNCIONALIDADE, 0);
+    	int idUnidadeIniciada = 0;
+
+    	idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+    	idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
     	  
     	try{
     		  
@@ -12721,100 +12758,69 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     		 * e com valor realizado maior que zero ordenando pelo arrecadador (ARRC_ID) e pela data 
     		 * de realização (AVBC_DTREALIZADA);
     		 */
-    		Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesArrecadacao);
+    		Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(
+    		anoMesArrecadacao);
+    		
     		
     		if (colecaoAvisosBancarios != null && !colecaoAvisosBancarios.isEmpty()){
+    			
     			/*
     			 * O sistema gera os lançamentos contábeis na tabela LANCAMENTO_CONTABIL para o mês e ano 
     			 * da arrecadação (LCNB_AMLANCAMENTO) e  origem com o valor correspondente a aviso 
     			 * bancário (LCOR_ID)
     			 */
+    			LancamentoContabil lancamentoContabil = 
+    			this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao);
     			
     			Iterator iterator = colecaoAvisosBancarios.iterator();
+    			
     			while (iterator.hasNext()){
     				
     				AvisoBancario avisoBancario = (AvisoBancario) iterator.next();
-    				System.out.println("---> aviso " + avisoBancario.getId());
-    				if (!isAvisoNovo(avisoBancario.getId())) {
-    					System.out.println("---> parou! ");
-    					continue;
-    				}
-    				System.out.println("---> continua... ");
+    				
     				/*
     				 * O sistema determina o valor a ser contabilizado, que será o valor realizado 
     				 * (AVBC_VLREALIZADO) menos o valor contabilizado (AVBC_VLCONTABILIZADO);
     				 */
-    				BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado().subtract(avisoBancario.getValorContabilizado());
-    				System.out.println("------> valorASerContabilizado: " + valorASerContabilizado);
+    				BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado()
+    				.subtract(avisoBancario.getValorContabilizado());
     				
+    				/*
+    				 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com o valor a ser 
+    				 * contabilizado positivo OU
+    				 * 
+    				 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com valor a ser 
+    				 * contabilizado negativo:
+    				 */
     				if ((avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) &&
     					valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0) ||
     					(avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) &&
             			valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0)){
     					
-        				List<ArrecadadorMovimentoItemDTO> itens = getControladorArrecadacao().obterItensPorAviso(avisoBancario.getId());        				
-        				Map<Integer, BigDecimal> totalLancamentos = new HashMap<Integer, BigDecimal>();
-        				
-        				BigDecimal totalItensAviso = BigDecimal.ZERO;
-        				
-        				for (ArrecadadorMovimentoItemDTO item : itens) {
-
-        					Localidade localidade = null;
-        					
-        					System.out.println("------------> totalItensAviso: " + totalItensAviso +  " + " + item.getValorDocumento() + " = " );
-        					totalItensAviso = totalItensAviso.add(item.getValorDocumento());
-        					System.out.println("------------> = " + totalItensAviso);
-        					if (item.getIdImovel() != null) {
-        						localidade = new Localidade(item.getIdLocalidade());
-        					} else {
-        						if (item.getIdGuia() != null) {
-        							localidade = obterLocalidadeGuia(item.getIdGuia());
-        						} else if (item.getIdDocumentoCobranca() != null ) {
-        							localidade = obterLocalidadeClienteDocumentoCobranca(item.getIdDocumentoCobranca());
-        						} else if (item.getIdFatura() != null) {
-        							localidade = obterLocalidadeClienteFatura(item.getIdFatura());
-        						}
-        					}
-        					
-        					if (localidade == null) {
-        						localidade = this.getControladorCobranca().pesquisarLocalidadeSede();
-        					}
-        					
-        					System.out.println("---------> localidade " + localidade.getId());
-        					LancamentoContabil lancamentoContabil = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao, localidade);
-        					
-    					    BigDecimal total = totalLancamentos.get(lancamentoContabil.getId());
-    					    System.out.println("---------> total localidade antes " + total);
-    					    if (total == null){
-    					    	total = item.getValorDocumento();
-    					    }else{
-    					    	total = total.add(item.getValorDocumento());
-    					    }
-    					    System.out.println("---------> total localidade depois" + total);
-    					    totalLancamentos.put(lancamentoContabil.getId(), total);
-        				}
-        				
-//        				LancamentoContabil lancamentoContabilDiferenca = this.gerarLancamentoContabilParaAvisoBancario(
-//        						anoMesArrecadacao, getControladorCobranca().pesquisarLocalidadeSede());
-//        				
-//        				BigDecimal diferenca = totalItensAviso.subtract(valorASerContabilizado).abs();
-//        				totalLancamentos.put(lancamentoContabilDiferenca, diferenca);
-        				
-        				System.out.println("------> qtd lancamentos: " + totalLancamentos.size());
-        				
-        				for (Integer idLancamentoContabil : totalLancamentos.keySet()) {
-        					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
-        					
-        					LancamentoContabilItem itemDebito = this.gerarLancamentoContabilItem(anoMesArrecadacao, idLancamentoContabil, 
-        							AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, totalLancamentos.get(idLancamentoContabil).abs(), 
-        							avisoBancario.getContaBancaria().getNumeroContaContabil());
-        					
-        					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
-        					
-        					LancamentoContabilItem itemCredito = this.gerarLancamentoContabilItem(anoMesArrecadacao, idLancamentoContabil, 
-        							AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, totalLancamentos.get(idLancamentoContabil).abs(), 
-        							null);        				
-						}
+    					/*
+    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
+    					 * (CNCT_NMCONTA) correspondente a BANCO
+    					 * 
+    					 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID 
+    					 * igual a CTBC_ID da tabela AVISO_BANCARIO)
+    					 */
+    					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
+    					
+    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
+    					AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(), 
+    					avisoBancario.getContaBancaria().getNumeroContaContabil());
+    					
+    					/*
+    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
+    					 * (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+    					 * 
+    					 * CÓDIGO TERCEIRO = NULL
+    					 */
+    					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
+    					
+    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
+    					AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(), 
+    					null);
     				}
     				
     				/*
@@ -12825,9 +12831,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     				 * contabilizado negativo
     				 */
     				else{
-    					Localidade localidadeSede = this.getControladorCobranca().pesquisarLocalidadeSede();
-    					LancamentoContabil lancamentoContabil =  this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao, localidadeSede);
-        				
+    					
     					/*
     					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
     					 * (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
@@ -12836,7 +12840,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     					 */
     					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
     					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil.getId(), 
+    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
     					AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(),
     					null);
     					
@@ -12849,155 +12853,39 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     					 */
     					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
     					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil.getId(), 
+    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
     					AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(), 
     					avisoBancario.getContaBancaria().getNumeroContaContabil());
     				}
     				
     				
-    				// O sistema atualiza a tabela AVISO_BANCARIO somando o valor a ser contabilizado 
-    				// (considerando o sinal) no valor contabilizado (AVBC_VLCONTABILIZADO);
-    				BigDecimal valorContabilizado = avisoBancario.getValorContabilizado().add(valorASerContabilizado);
+    				/*
+    				 * O sistema atualiza a tabela AVISO_BANCARIO somando o valor a ser contabilizado 
+    				 * (considerando o sinal) no valor contabilizado (AVBC_VLCONTABILIZADO);
+    				 */
+    				BigDecimal valorContabilizado = avisoBancario.getValorContabilizado()
+    				.add(valorASerContabilizado);
     				
     				this.atualizarValorContabilizado(avisoBancario.getId(), valorContabilizado);
     			}
     		}
     		
+    		
+    		//ENCERRANDO A UNIDADE INICIADA
     		getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
     	}
     	catch (Exception ex) {
+
+    		/*
+			 * Este catch serve para interceptar qualquer exceção que o processo batch venha a lançar e 
+			 * garantir que a unidade de processamento do batch será atualizada com o erro ocorrido.
+			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
     	}
     }
-
-	private Localidade obterLocalidadeClienteFatura(Integer idFatura) throws ControladorException {
-    	FiltroFatura filtro = new FiltroFatura();
-		filtro.adicionarParametro(new ParametroSimples(FiltroFatura.ID, idFatura));
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroFatura.CLIENTE_ID);
-		
-		Collection colecaoFaturas = getControladorUtil().pesquisar(filtro, Fatura.class.getName());
-		
-		Localidade localidade = null;
-		if (!colecaoFaturas.isEmpty()) {
-			Fatura fatura = (Fatura) Util.retonarObjetoDeColecao(colecaoFaturas);
-			
-			if (fatura.getCliente() != null) {
-				localidade = getControladorCliente().pesquisarLocalidadeCliente(fatura.getCliente().getId());
-			}
-		} 
-		
-    	return localidade;
-	}
-
-	private Localidade obterLocalidadeClienteDocumentoCobranca(Integer idDocumentoCobranca) throws ControladorException {
-		FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
-		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ID, idDocumentoCobranca));
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaDocumento.CLIENTE_ID);
-
-		Collection colecaoDocumento = getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
-
-		Localidade localidade = null;
-		if (!colecaoDocumento.isEmpty()) {
-			CobrancaDocumento documento = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoDocumento);
-
-			if (documento.getCliente() != null) {
-				localidade = getControladorCliente().pesquisarLocalidadeCliente(documento.getCliente().getId());
-			}
-		} else {
-			Collection colecaoDocumentoHistorico = getControladorUtil().pesquisar(filtro, CobrancaDocumentoHistorico.class.getName());
-
-			if (!colecaoDocumentoHistorico.isEmpty()) {
-				CobrancaDocumentoHistorico documentoHistorico = (CobrancaDocumentoHistorico) Util.retonarObjetoDeColecao(colecaoDocumentoHistorico);
-
-				if (documentoHistorico.getCliente() != null) {
-					localidade = getControladorCliente().pesquisarLocalidadeCliente(documentoHistorico.getCliente().getId());
-				}
-
-			}
-		}
-		
-		return localidade;
-	}
-
-	private Localidade obterLocalidadeGuia(Integer idGuia) throws ControladorException {
-		FiltroGuiaPagamento filtroGuia = new FiltroGuiaPagamento();
-		filtroGuia.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuia));
-		filtroGuia.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.LOCALIDADE);
-		
-		Collection colecaoGuia = getControladorUtil().pesquisar(filtroGuia, GuiaPagamento.class.getName());
-		
-		if (!colecaoGuia.isEmpty()) {
-			GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(colecaoGuia);
-			return guia.getLocalidade();
-		} else {
-			FiltroGuiaPagamentoHistorico filtroGuiaHistorico = new FiltroGuiaPagamentoHistorico();
-			filtroGuiaHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID, idGuia));
-			filtroGuiaHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamentoHistorico.LOCALIDADE);
-			
-			Collection colecaoGuiaHistorico = getControladorUtil().pesquisar(filtroGuiaHistorico, GuiaPagamentoHistorico.class.getName());
-			
-			if (!colecaoGuiaHistorico.isEmpty()) {
-				GuiaPagamentoHistorico guiaHistorico = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(colecaoGuiaHistorico);
-				return guiaHistorico.getLocalidade();
-			} else {
-				return this.getControladorCobranca().pesquisarLocalidadeSede();
-			}
-		}
-	}
-
-	private boolean isAvisoNovo(Integer idAviso) {
-    	List<Integer> avisos = new ArrayList<Integer>();
-    	
-    	avisos.add(83881);
-    	avisos.add(83882);
-    	avisos.add(83883);
-    	avisos.add(83884);
-    	avisos.add(83885);
-    	avisos.add(83886);
-    	avisos.add(83887);
-    	avisos.add(83888);
-    	avisos.add(83889);
-    	avisos.add(83890);
-    	avisos.add(83891);
-    	avisos.add(83892);
-    	avisos.add(83893);
-    	avisos.add(83894);
-    	avisos.add(83895);
-    	avisos.add(83896);
-    	avisos.add(83897);
-    	avisos.add(83898);
-    	avisos.add(83899);
-    	avisos.add(83900);
-    	avisos.add(83901);
-    	avisos.add(83902);
-    	avisos.add(83903);
-    	avisos.add(83904);
-    	avisos.add(83905);
-    	avisos.add(83906);
-    	avisos.add(83907);
-    	avisos.add(83908);
-    	avisos.add(83909);
-    	avisos.add(83910);
-    	avisos.add(83911);
-    	avisos.add(83912);
-    	avisos.add(83913);
-    	avisos.add(83914);
-    	avisos.add(83915);
-    	avisos.add(83916);
-    	avisos.add(83917);
-    	avisos.add(83918);
-    	avisos.add(83919);
-    	
-    	boolean continuaLaco = false;
-    	for (Integer id : avisos) {
-    		if (id.intValue() == idAviso.intValue()) {
-    			continuaLaco = true;
-    		}
-    	}
-    	
-    	return continuaLaco;
-    }
+    
+    
     /**
      * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários
      *
@@ -13038,35 +12926,35 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @return LancamentoContabil
      * @throws ControladorException
      */
-    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao, Localidade localidade) 
+    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao) 
 	throws ControladorException {
     	
     	LancamentoContabil lancamentoContabil = new LancamentoContabil();
-    	try {
-			Collection<Integer> lancamentos = repositorioFinanceiro.pesquisarIdsLancamentosContabeis(anoMesReferenciaArrecadacao, localidade.getId(), LancamentoOrigem.AVISO_BANCARIO);
-			
-			if (!lancamentos.isEmpty()) {
-				lancamentoContabil.setId(lancamentos.iterator().next());
-				
-				return lancamentoContabil;
-			}
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-
+    	
+    	//ANO MÊS LANÇAMENTO = Ano/mês de referência da arrecadação recebido
     	lancamentoContabil.setAnoMes(anoMesReferenciaArrecadacao.intValue());
     	
+    	//ORIGEM DO LANÇAMENTO = Valor correspondente a aviso bancário da tabela LANCAMENTO_ORIGEM
     	LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
     	lancamentoOrigem.setId(LancamentoOrigem.AVISO_BANCARIO);
     	lancamentoContabil.setLancamentoOrigem(lancamentoOrigem);
     	
+    	/*
+    	 * TIPO DO LANCAMENTO = Tipo de Lançamento (LCTP_ID da tabela LANCAMENTO_TIPO com o 
+    	 * valor correspondente a aviso bancário)
+    	 */
     	LancamentoTipo lancamentoTipo = new LancamentoTipo();
     	lancamentoTipo.setId(LancamentoTipo.AVISO_BANCARIO);
     	lancamentoContabil.setLancamentoTipo(lancamentoTipo);
     	
-		lancamentoContabil.setLocalidade(localidade);
+    	//LOCALIDADE = LOCA_ID da tabela LOCALIDADE com LOCA_ICSEDE = 1
+		Localidade localidadeSede = this.getControladorCobranca().pesquisarLocalidadeSede();
+		lancamentoContabil.setLocalidade(localidadeSede);
+    	
+    	//ÚLTIMA ALTERAÇÃO
     	lancamentoContabil.setUltimaAlteracao(new Date());
     	
+    	//INSERINDO O LANÇAMENTO CONTÁBIL
     	Integer idLancamentoContabil = (Integer) this.getControladorUtil().inserir(lancamentoContabil);
     	lancamentoContabil.setId(idLancamentoContabil);
     	
@@ -13091,15 +12979,22 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @throws ControladorException
      */
     protected LancamentoContabilItem gerarLancamentoContabilItem(Integer anoMesReferenciaArrecadacao,
-    		Integer idLancamentoContabil, Short indicadorCreditoDebito,
+    		LancamentoContabil lancamentoContabil, Short indicadorCreditoDebito,
     		AvisoBancario avisoBancario, ContaContabil contaContabil, 
     		BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
     	
     	LancamentoContabilItem lancamentoContabilItem = new LancamentoContabilItem();
     	
-    	lancamentoContabilItem.setLancamentoContabil(new LancamentoContabil(idLancamentoContabil));
+    	//LANCAMENTO CONTABIL
+    	lancamentoContabilItem.setLancamentoContabil(lancamentoContabil);
+    	
+    	//INDICADOR DEBITO/CREDITO = 2
     	lancamentoContabilItem.setIndicadorDebitoCredito(indicadorCreditoDebito);
+    	
+    	//VALOR DO LANÇAMENTO
     	lancamentoContabilItem.setValorLancamento(valorLancamento);
+    	
+    	//CONTA CONTABIL
     	lancamentoContabilItem.setContaContabil(contaContabil);
     	
     	/*
@@ -13127,6 +13022,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     	
     	
     	lancamentoContabilItem.setDescricaoHistorico(descricaoArrecadacaoForma);
+    	
+    	//CÓDIGO TERCEIRO = 
     	lancamentoContabilItem.setCodigoTerceiro(codigoTerceiro);
     	
     	/*
@@ -13148,13 +13045,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     		lancamentoContabilItem.setDataLancamento(dataLancamento);
     	}
     	
+    	//ÚLTIMA ALTERAÇÃO
     	lancamentoContabilItem.setUltimaAlteracao(new Date());
-
+    	
+    	//INSERINDO O LANÇAMENTO CONTÁBIL ÍTEM
     	Integer idLancamentoContabilItem = (Integer) this.getControladorUtil().inserir(lancamentoContabilItem);
     	lancamentoContabilItem.setId(idLancamentoContabilItem);
     	
     	return lancamentoContabilItem;
     }
+    
     
     /**
 	 * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
