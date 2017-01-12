@@ -1,5 +1,10 @@
 package gcom.util;
 
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -48,11 +53,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
-
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
 
 public class Util {
 
@@ -3356,8 +3356,8 @@ public class Util {
 	
 	public static BigDecimal calcularPercentual(BigDecimal valor, double percentual){
 	    valor = (valor == null) ? BigDecimal.ZERO : valor;
-	    
-	    return valor.multiply(new BigDecimal((percentual/100)));
+	    valor = valor.multiply(new BigDecimal((percentual/100)));
+	    return valor.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	/**
