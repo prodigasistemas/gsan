@@ -35,37 +35,17 @@ public class Logradouro extends ObjetoTransacao {
 	}
 
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private String nome;
-    
-    /** persistent field */
     private String nomePopular;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Municipio municipio;
-
-    /** persistent field */
     private gcom.cadastro.endereco.LogradouroTitulo logradouroTitulo;
-
-    /** persistent field */
     private gcom.cadastro.endereco.LogradouroTipo logradouroTipo;
-    
-    /** persistent field */
     private Set<LogradouroBairro> logradouroBairros;
-    
-    /** persistent field */
     private Set<LogradouroCep> logradouroCeps;
     
-    /** persistent field */
     @ControleAlteracao(value=FiltroLogradouro.OS_PROGRAMA_CALIBRAGEM,funcionalidade={ATUALIZAR_IMPORTANCIA_LOGRADOURO})
     private OSProgramacaoCalibragem programaCalibragem;
 

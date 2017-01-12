@@ -16,7 +16,7 @@
 					</logic:notPresent>
 				</td>
 				
-          		<td align="right">Vers&atilde;o: ${gsan.versao} (Batch) 01/09/2016 - 16:45:28 </td>
+          		<td align="right">Vers&atilde;o: ${gsan.versao} (Batch) 21/12/2016 - 16:17:45 </td>
 
         	</tr>
       	</table>

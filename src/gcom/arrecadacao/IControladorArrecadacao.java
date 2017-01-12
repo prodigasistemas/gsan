@@ -4302,4 +4302,6 @@ public interface IControladorArrecadacao {
 		 * @throws ControladorException
 		 */
 		public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException;
+		
+		public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException;
 }

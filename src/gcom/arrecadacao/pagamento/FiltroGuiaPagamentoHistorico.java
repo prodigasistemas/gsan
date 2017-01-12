@@ -46,4 +46,6 @@ public class FiltroGuiaPagamentoHistorico extends Filtro implements Serializable
 	public final static String DEBITO_CREDITO_SITUACAO_ATUAL_ID = "debitoCreditoSituacaoByDcstIdatual.id";
 	
 	public final static String EMISSAO_GUIA_PAGAMENTO = "dataEmissao";
+	
+	public final static String LOCALIDADE = "localidade";
 }

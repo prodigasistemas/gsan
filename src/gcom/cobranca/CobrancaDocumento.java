@@ -161,6 +161,10 @@ public class CobrancaDocumento implements Serializable {
 
 	public CobrancaDocumento() {
 	}
+	
+	public CobrancaDocumento(Integer id) {
+		this.id = id;
+	}
 
 	public CobrancaDocumento(
 			int numeroSequenciaDocumento,

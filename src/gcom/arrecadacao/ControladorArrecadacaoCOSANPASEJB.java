@@ -1800,7 +1800,7 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 			inserirItemMovimentoArrecadador(linhaRegistroC.toString(),
 					arrecadadorMovimento.getId(), registroHelperCodigoC
 							.getDescricaoOcorrenciaMovimento(),
-					indicadorAceitacaoRegistro, null);
+					indicadorAceitacaoRegistro, null, null, null, null);
 			registrosC.append(linhaRegistroC);
 			registrosC.append(System.getProperty("line.separator"));
 		}

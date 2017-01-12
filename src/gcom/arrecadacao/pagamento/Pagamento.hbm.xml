@@ -43,10 +43,6 @@
 		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
 			<column name="dotp_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Conta -->
-		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
-			<column name="cnta_id"/>
-		</many-to-one>
 		<!-- bi-directional many-to-one association to Localidade -->
 		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
 			<column name="loca_id"/>
@@ -63,9 +59,21 @@
 		<many-to-one name="arrecadadorMovimentoItem" class="gcom.arrecadacao.ArrecadadorMovimentoItem" not-null="false">
 			<column name="amit_id"/>
 		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+			<column name="cnta_id"/>
+		</many-to-one>
 		<!-- bi-directional many-to-one association to GuiaPagamento -->
 		<many-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento">
 			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Fatura -->
+		<many-to-one name="fatura" class="gcom.faturamento.conta.Fatura" not-null="false">
+			<column name="fatu_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDocumento -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
+			<column name="cbdo_id"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to AvisoBancario -->
 		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
@@ -78,14 +86,6 @@
 		<!-- bi-directional many-to-one association to DebitoTipo -->
 		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="false">
 			<column name="dbac_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to Fatura -->
-		<many-to-one name="fatura" class="gcom.faturamento.conta.Fatura" not-null="false">
-			<column name="fatu_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to CobrancaDocumento -->
-		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
-			<column name="cbdo_id"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to Documento tipo -->
 		<many-to-one name="documentoTipoAgregador" class="gcom.cobranca.DocumentoTipo" not-null="false">

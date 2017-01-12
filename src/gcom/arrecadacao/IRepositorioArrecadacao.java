@@ -6954,4 +6954,6 @@ public interface IRepositorioArrecadacao {
 	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ErroRepositorioException;
 	
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
+	
+	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
 }

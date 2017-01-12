@@ -6,57 +6,38 @@ import java.math.BigDecimal;
 import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class Fatura implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
-    
-    /** nullable persistent field */
+
+	private Integer id;
     private Date vencimento;
-
-    /** nullable persistent field */
     private Date emissao;
-
-    /** nullable persistent field */
     private Date validade;
-
-    /** nullable persistent field */
-    //private Integer indicadorUso;
-
-    /** nullable persistent field */
     private BigDecimal debito;
-
-    /** nullable persistent field */
     private BigDecimal taxa;
-
-    /** nullable persistent field */
     private Integer anoMesReferencia;
-
-    /** nullable persistent field */
     private Integer sequencial;
-
-    /** nullable persistent field */
     private Short flag;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Cliente cliente;
-    
-    /** persistent field */
     private Integer codigoQualifica;
-    
     private String numeroFatura;
 
-    /** full constructor */
+    public Fatura() {
+    }
+    
+    public Fatura(Integer id) {
+    	this.id = id;
+    }
+    
+    public Fatura(Cliente cliente) {
+    	this.cliente = cliente;
+    }
+    
     public Fatura(Date vencimento, Date emissao, Date validade, BigDecimal debito, BigDecimal taxa, Date ultimaAlteracao, Integer anoMesReferencia, Integer sequencial, Short flag, Cliente cliente) {
     	this.vencimento = vencimento;
         this.emissao = emissao;
         this.validade = validade;
-        //this.indicadorUso = indicadorUso;
         this.debito = debito;
         this.taxa = taxa;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -66,28 +47,13 @@ public class Fatura implements Serializable {
         this.cliente = cliente;
     }
 
-    /**
-	 * @return Retorna o campo vencimento.
-	 */
 	public Date getVencimento() {
 		return vencimento;
 	}
 
-	/**
-	 * @param vencimento O vencimento a ser setado.
-	 */
 	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
-
-	/** default constructor */
-    public Fatura() {
-    }
-
-    /** minimal constructor */
-    public Fatura(Cliente cliente) {
-        this.cliente = cliente;
-    }
 
     public Integer getId() {
         return this.id;
@@ -112,14 +78,6 @@ public class Fatura implements Serializable {
     public void setValidade(Date validade) {
         this.validade = validade;
     }
-
-//    public Integer getIndicadorUso() {
-//        return this.indicadorUso;
-//    }
-//
-//    public void setIndicadorUso(Integer indicadorUso) {
-//        this.indicadorUso = indicadorUso;
-//    }
 
     public BigDecimal getDebito() {
         return this.debito;

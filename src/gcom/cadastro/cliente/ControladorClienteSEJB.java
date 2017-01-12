@@ -1,20 +1,8 @@
 package gcom.cadastro.cliente;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionContext;
-
 import gcom.cadastro.cliente.bean.ClienteEmitirBoletimCadastroHelper;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.endereco.Cep;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.EnderecoReferencia;
 import gcom.cadastro.endereco.EnderecoTipo;
 import gcom.cadastro.endereco.Logradouro;
@@ -25,6 +13,7 @@ import gcom.cadastro.endereco.LogradouroTitulo;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.tarifasocial.FiltroTarifaSocialDadoEconomia;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
@@ -34,28 +23,23 @@ import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-/**
- * Definição da lógica de negócio do Session Bean de ControladorCliente
- * 
- * @author Sávio Luiz
- * @created 25 de Abril de 2005
- */
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+
 public class ControladorClienteSEJB extends ControladorComum {
 	
 	private static final long serialVersionUID = 1L;
@@ -2957,6 +2941,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ControladorException {
 		try {
 			return repositorioCliente.pesquisarDadosClienteParaNegativacao(idCliente, cnpjEmpresa);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public  Localidade pesquisarLocalidadeCliente(Integer idCliente) throws ControladorException {
+		try {
+			return repositorioClienteEndereco.pesquisarLocalidadeCliente(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

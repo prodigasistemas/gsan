@@ -18687,12 +18687,22 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			hql = "select pagamento "
 					+ "from gcom.arrecadacao.pagamento.Pagamento pagamento "
+					+ "left join fetch pagamento.imovel imovel "
+					+ "left join fetch imovel.localidade localidade "
+					+ "left join fetch pagamento.contaGeral contaGeral "
+					+ "left join fetch contaGeral.conta conta "
+					+ "left join fetch contaGeral.contaHistorico contaHistorico "
+					+ "left join fetch pagamento.guiaPagamento guiaPagamento "
+					+ "left join fetch guiaPagamento.localidade localidadeG "
+					+ "left join fetch pagamento.cobrancaDocumento cobrancaDocumento "
+					+ "left join fetch cobrancaDocumento.localidade localidadeC "
 					+ "where pagamento.avisoBancario.id = :idAvisoBancario ";
 
 			retorno = session.createQuery(hql).setInteger("idAvisoBancario",
 					idAvisoBancario).list();
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -31779,5 +31789,63 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 
 		return retorno;
+	}
+	
+	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException { 
+		
+		List<ArrecadadorMovimentoItemDTO> retorno = new ArrayList<ArrecadadorMovimentoItemDTO>();
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT item.imov_id as imovel, ")
+					.append("       imovel.loca_id as localidade, ")
+					.append("       item.amit_vldocumento as valor, ")
+    				.append("       item.cnta_id as conta, ")
+    				.append("       item.gpag_id as guia, ")
+    				.append("       item.cbdo_id as documento, ")
+    				.append("       item.fatu_id as fatura ")
+    				.append("FROM arrecadacao.aviso_bancario aviso ")
+					.append("INNER JOIN arrecadacao.arrecadador_movimento movimento on movimento.armv_id = aviso.armv_id ")
+					.append("INNER JOIN arrecadacao.arrecadador_mov_item item on item.armv_id = movimento.armv_id ")
+					.append("LEFT JOIN cadastro.imovel imovel on imovel.imov_id = item.imov_id ")
+					.append("WHERE aviso.avbc_id = :idAvisoBancario ")
+					.append("AND item.amit_vldocumento is not null");
+
+			Collection colecao = session.createSQLQuery(consulta.toString())
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("localidade", Hibernate.INTEGER)
+					.addScalar("valor", Hibernate.BIG_DECIMAL)
+					.addScalar("conta", Hibernate.INTEGER)
+					.addScalar("guia", Hibernate.INTEGER)
+					.addScalar("documento", Hibernate.INTEGER)
+					.addScalar("fatura", Hibernate.INTEGER)
+					.setInteger("idAvisoBancario", idAvisoBancario)
+					.list();
+			
+			for (Object dadosItem : colecao) {
+				Object[] arrayDadosItem = (Object[]) dadosItem;
+				
+				ArrecadadorMovimentoItemDTO dto = new ArrecadadorMovimentoItemDTO(
+						(Integer) arrayDadosItem[0],
+						(Integer) arrayDadosItem[1],
+						(BigDecimal) arrayDadosItem[2],
+						(Integer) arrayDadosItem[3],
+						(Integer) arrayDadosItem[4],
+						(Integer) arrayDadosItem[5],
+						(Integer) arrayDadosItem[6]);
+				
+				retorno.add(dto);
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+		
 	}
 }
