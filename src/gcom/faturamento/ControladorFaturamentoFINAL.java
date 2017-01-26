@@ -1,43 +1,5 @@
 package gcom.faturamento;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
@@ -344,6 +306,45 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -7712,306 +7713,196 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer idConsumoTarifaConta, Usuario usuarioLogado)
 			throws ControladorException {
 
-		Collection<CalcularValoresAguaEsgotoHelper> valoresCalculadosAguaEsgoto = new ArrayList();
+		Collection<CalcularValoresAguaEsgotoHelper> helper = new ArrayList();
 
-		// Validando as informações enviadas pelo usuário.
-
-		// [FS0002] - Validar ano e mês de referência
-		// ===========================================
 		if (Util.validarAnoMes(mesAnoConta)) {
-			throw new ControladorException(
-					"atencao.adicionar_debito_ano_mes_referencia_invalido");
+			throw new ControladorException("atencao.adicionar_debito_ano_mes_referencia_invalido");
 		}
 
-		/*
-		 * Quando o ano for menor que 1985 (ANO_LIMITE) exibir a mensagem, "Ano
-		 * de referência não deve ser menor que 1985"
-		 */
-		if (new Integer(mesAnoConta.substring(3, 7)).intValue() < ConstantesSistema.ANO_LIMITE
-				.intValue()) {
-			throw new ControladorException("atencao.ano_mes_referencia_menor",
-					null, String.valueOf(ConstantesSistema.ANO_LIMITE
-							.intValue()));
+		if (new Integer(mesAnoConta.substring(3, 7)).intValue() < ConstantesSistema.ANO_LIMITE.intValue()) {
+			throw new ControladorException("atencao.ano_mes_referencia_menor", null, String.valueOf(ConstantesSistema.ANO_LIMITE.intValue()));
 		}
 
-		// Invertendo o formato para yyyyMM (sem a barra)
 		mesAnoConta = Util.formatarMesAnoParaAnoMesSemBarra(mesAnoConta);
 
-		// [FS0004] - Verifica ano e mês do faturamento
-		// =============================================
 		FiltroImovel filtroImovel = new FiltroImovel();
-
-		filtroImovel
-				.adicionarCaminhoParaCarregamentoEntidade("quadra.rota.faturamentoGrupo");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra.rota.faturamentoGrupo");
 		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("consumoTarifa");
-		filtroImovel
-				.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-		filtroImovel
-				.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovelID));
 
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				imovelID));
-
-		Collection colecaoImovel = this.getControladorUtil().pesquisar(
-				filtroImovel, Imovel.class.getName());
+		Collection colecaoImovel = this.getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 
 		if (colecaoImovel == null || colecaoImovel.isEmpty()) {
-			throw new ControladorException(
-					"atencao.adicionar_debito_ano_mes_debito_invalido");
+			throw new ControladorException("atencao.adicionar_debito_ano_mes_debito_invalido");
 		}
 
-		Imovel objImovel = (Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
-		Integer mesAnoFaturamentoImovel = objImovel.getQuadra().getRota()
-				.getFaturamentoGrupo().getAnoMesReferencia();
+		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
+		Integer mesAnoFaturamentoImovel = imovel.getQuadra().getRota().getFaturamentoGrupo().getAnoMesReferencia();
 
 		/*
-		 * Colocado por Raphael Rossiter em 02/04/2007
-		 * 
-		 * [UC0157] - Simular Cálculo da Conta [FS0003] - Verificar Consumo
-		 * Mínimo
+		 * [UC0157] - Simular Cálculo da Conta
+		 * [FS0003] - Verificar Consumo Mínimo
 		 */
-		Integer consumoAguaInteger = null;
+		Integer idConsumoAgua = null;
 		if (consumoAgua != null && !consumoAgua.equalsIgnoreCase("")) {
-			consumoAguaInteger = new Integer(consumoAgua);
+			idConsumoAgua = new Integer(consumoAgua);
 		}
 
-		this.verificarConsumoFaturadoAgua(situacaoAguaConta, consumoAguaInteger);
+		this.verificarConsumoFaturadoAgua(situacaoAguaConta, idConsumoAgua);
 
-		// CONSUMO DE ÁGUA NÃO INFORMADO
-		if (consumoAguaInteger == null) {
-			consumoAguaInteger = new Integer("0");
+		if (idConsumoAgua == null) {
+			idConsumoAgua = new Integer("0");
 		}
 
 		/*
-		 * Colocado por Raphael Rossiter em 02/04/2007
-		 * 
-		 * [UC0157] - Simular Cálculo da Conta [FS0004] - Verificar Volume
-		 * Mínimo
+		 * [UC0157] - Simular Cálculo da Conta
+		 * [FS0004] - Verificar Volume Mínimo
 		 */
-		Integer consumoEsgotoInteger = null;
+		Integer idConsumoEsgoto = null;
 		if (consumoEsgoto != null && !consumoEsgoto.equalsIgnoreCase("")) {
-			consumoEsgotoInteger = new Integer(consumoEsgoto);
+			idConsumoEsgoto = new Integer(consumoEsgoto);
 		}
 
-		this.verificarConsumoFaturadoEsgoto(situacaoEsgotoConta,
-				consumoEsgotoInteger);
+		this.verificarConsumoFaturadoEsgoto(situacaoEsgotoConta, idConsumoEsgoto);
 
-		// CONSUMO DE ESGOTO NÃO INFORMADO
-		if (consumoEsgotoInteger == null) {
-			consumoEsgotoInteger = new Integer("0");
+		if (idConsumoEsgoto == null) {
+			idConsumoEsgoto = new Integer("0");
 		}
 
 		// PERCENTUAL DE ESGOTO
 		FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
-
-		filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(
-				FiltroLigacaoEsgotoSituacao.ID, situacaoEsgotoConta));
-
-		Collection colecaoLigacaoEsgotoSituacao = this.getControladorUtil()
-				.pesquisar(filtroLigacaoEsgotoSituacao,
-						LigacaoEsgotoSituacao.class.getName());
-
-		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util
-				.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
+		filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, situacaoEsgotoConta));
+		Collection colecaoLigacaoEsgotoSituacao = this.getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
+		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
 
 		BigDecimal objPercentualEsgoto = new BigDecimal("0.00");
 
-		if ((ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao() != null
-				&& ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao()
-						.equals(ConstantesSistema.INDICADOR_USO_ATIVO) && (percentualEsgoto == null || percentualEsgoto
-				.equalsIgnoreCase("")))) {
-
-			throw new ControladorException("atencao.informe.percentualEsgoto",
-					null);
-		} else if (percentualEsgoto != null
-				&& !percentualEsgoto.equalsIgnoreCase("")) {
-
-			objPercentualEsgoto = Util
-					.formatarMoedaRealparaBigDecimal(percentualEsgoto);
+		if (ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao() != null 
+				&& ligacaoEsgotoSituacao.getIndicadorFaturamentoSituacao().equals(ConstantesSistema.INDICADOR_USO_ATIVO)
+				&& (percentualEsgoto == null || percentualEsgoto.equalsIgnoreCase(""))) {
+			throw new ControladorException("atencao.informe.percentualEsgoto", null);
+		} else if (percentualEsgoto != null && !percentualEsgoto.equalsIgnoreCase("")) {
+			objPercentualEsgoto = Util.formatarMoedaRealparaBigDecimal(percentualEsgoto);
 		}
 
 		// [SF0001] - Determinar Valores para Faturamento de Água e/ou Esgoto.
-		if (colecaoCategoriaOUSubcategoria != null
-				&& !colecaoCategoriaOUSubcategoria.isEmpty()) {
+		if (colecaoCategoriaOUSubcategoria != null && !colecaoCategoriaOUSubcategoria.isEmpty()) {
 
-			// Indicador de faturamento de água com o valor igual a um (1)
 			Short indicadorFaturamentoAgua = new Short("1");
-
-			// Indicador de faturamento de esgoto com o valor igual a um (1)
 			Short indicadorFaturamentoEsgoto = new Short("1");
 
 			// [UC0105] - Obter Consumo Mínimo da Ligação por Subcategoria
-			int consumoMinimoLigacao = this.getControladorMicromedicao()
-					.obterConsumoMinimoLigacao(objImovel,
-							colecaoCategoriaOUSubcategoria);
+			int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, colecaoCategoriaOUSubcategoria);
 
-			/*
-			 * Colocado por Raphael Rossiter em 08/05/2007 Verificar permissão
-			 * especial - FATURAMENTO ANTECIPADO
-			 */
-			boolean temPermissaoFaturamentoAntecipado = this
-					.getControladorPermissaoEspecial()
-					.verificarPermissaoInserirContaFaturamentoAntecipado(
-							usuarioLogado);
+			boolean temPermissaoFaturamentoAntecipado = this.getControladorPermissaoEspecial().verificarPermissaoInserirContaFaturamentoAntecipado(usuarioLogado);
 
 			Date dataLeituraAtual = null;
 			Date dataLeituraAnterior = null;
 
-			/*
-			 * Caso o usuário tenha permissão especial (FATURAMENTO ANTECIPADO)
-			 * e o anoMes informado seja maior que o anoMes do faturamento do
-			 * imóvel.
-			 */
-			if (temPermissaoFaturamentoAntecipado
-					&& Util.compararAnoMesReferencia(new Integer(mesAnoConta),
-							mesAnoFaturamentoImovel, ">")) {
-
+			// Caso o usuário tenha permissão especial (FATURAMENTO ANTECIPADO) e o anoMes informado seja maior que o anoMes do faturamento do imóvel
+			if (temPermissaoFaturamentoAntecipado && Util.compararAnoMesReferencia(new Integer(mesAnoConta), mesAnoFaturamentoImovel, ">")) {
 				int mesConta = Util.obterMes(new Integer(mesAnoConta));
 				int anoConta = Util.obterAno(new Integer(mesAnoConta));
 
-				int ultimoDiaMes = new Integer(Util.obterUltimoDiaMes(mesConta,
-						anoConta));
+				int ultimoDiaMes = new Integer(Util.obterUltimoDiaMes(mesConta, anoConta));
 
-				dataLeituraAtual = Util.criarData(ultimoDiaMes, mesConta,
-						anoConta);
-
+				dataLeituraAtual = Util.criarData(ultimoDiaMes, mesConta, anoConta);
 				dataLeituraAnterior = Util.criarData(1, mesConta, anoConta);
+				
 			} else {
 
-				if (Util.compararAnoMesReferencia(new Integer(mesAnoConta),
-						mesAnoFaturamentoImovel, ">")) {
-					throw new ControladorException(
-							"atencao.adicionar_debito_ano_mes_debito_invalido");
+				if (Util.compararAnoMesReferencia(new Integer(mesAnoConta), mesAnoFaturamentoImovel, ">")) {
+					throw new ControladorException("atencao.adicionar_debito_ano_mes_debito_invalido");
 				}
 
-				/*
-				 * Caso existe cronograma para o anoMes informado
-				 */
+				// Caso existe cronograma para o anoMes informado
+				dataLeituraAnterior = this.buscarDataLeituraCronograma(imovel, true, new Integer(mesAnoConta));
+				dataLeituraAtual = this.buscarDataLeituraCronograma(imovel, false, new Integer(mesAnoConta));
 
-				// Data de leitura anterior
-				dataLeituraAnterior = this.buscarDataLeituraCronograma(
-						objImovel, true, new Integer(mesAnoConta));
-
-				// Data de leitura atual
-				dataLeituraAtual = this.buscarDataLeituraCronograma(objImovel,
-						false, new Integer(mesAnoConta));
-
-				/*
-				 * Caso NÃO existe cronograma para o anoMes informado
-				 */
-
+				// Caso NÃO existe cronograma para o anoMes informado
 				if (dataLeituraAnterior == null || dataLeituraAtual == null) {
 
 					int mesConta = Util.obterMes(new Integer(mesAnoConta));
 					int anoConta = Util.obterAno(new Integer(mesAnoConta));
 
-					int ultimoDiaMes = new Integer(Util.obterUltimoDiaMes(
-							mesConta, anoConta));
+					int ultimoDiaMes = new Integer(Util.obterUltimoDiaMes(mesConta, anoConta));
 
-					dataLeituraAtual = Util.criarData(ultimoDiaMes, mesConta,
-							anoConta);
-
+					dataLeituraAtual = Util.criarData(ultimoDiaMes, mesConta, anoConta);
 					dataLeituraAnterior = Util.criarData(1, mesConta, anoConta);
 				}
 
-				/*
-				 * Colocado por Ana Maria em 19/12/2008 - Analista: Adriano
-				 * Ajuste na Data de leitura anterior e atual.
-				 */
-
+				// Ajuste na Data de leitura anterior e atual.
 				Integer anoMesConta = new Integer(mesAnoConta);
 
 				// CASO O IMÓVEL SEJA PARA FATURAR ÁGUA
-				if (objImovel.getLigacaoAguaSituacao()
-						.getIndicadorFaturamentoSituacao()
-						.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)) {
-
-					// MEDICAO_HISTORICO_AGUA
-					MedicaoHistorico medicaoHistoricoAgua = this
-							.getControladorMicromedicao()
-							.pesquisarMedicaoHistoricoTipoAgua(
-									objImovel.getId(), anoMesConta);
+				if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)) {
+					MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(imovel.getId(), anoMesConta);
 
 					if (medicaoHistoricoAgua != null) {
-
-						// DATA_LEITURA_ANTERIOR
-						if (medicaoHistoricoAgua
-								.getDataLeituraAnteriorFaturamento() != null) {
-
-							dataLeituraAnterior = medicaoHistoricoAgua
-									.getDataLeituraAnteriorFaturamento();
+						if (medicaoHistoricoAgua.getDataLeituraAnteriorFaturamento() != null
+								&& existeMedicaoHistoricoReferenciaAnterior(MedicaoTipo.LIGACAO_AGUA, imovel.getId(), anoMesConta)) {
+							dataLeituraAnterior = medicaoHistoricoAgua.getDataLeituraAnteriorFaturamento();
 						}
 
-						// DATA_LEITURA_ATUAL
-						if (medicaoHistoricoAgua
-								.getDataLeituraAtualFaturamento() != null) {
-
-							dataLeituraAtual = medicaoHistoricoAgua
-									.getDataLeituraAtualFaturamento();
+						if (medicaoHistoricoAgua.getDataLeituraAtualFaturamento() != null) {
+							dataLeituraAtual = medicaoHistoricoAgua.getDataLeituraAtualFaturamento();
 						}
 					}
 				}
 
 				// CASO O IMÓVEL SEJA PARA FATURAR ESGOTO
-				if (objImovel.getLigacaoEsgotoSituacao()
-						.getIndicadorFaturamentoSituacao()
-						.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
-
-					// MEDICAO_HISTORICO_POCO
-					MedicaoHistorico medicaoHistoricoPoco = this
-							.getControladorMicromedicao()
-							.pesquisarMedicaoHistoricoTipoPoco(
-									objImovel.getId(), anoMesConta);
+				if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
+					MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPoco(imovel.getId(), anoMesConta);
 
 					if (medicaoHistoricoPoco != null) {
-
-						// DATA_LEITURA_ANTERIOR
-						if (medicaoHistoricoPoco
-								.getDataLeituraAnteriorFaturamento() != null) {
-
-							dataLeituraAnterior = medicaoHistoricoPoco
-									.getDataLeituraAnteriorFaturamento();
+						if (medicaoHistoricoPoco.getDataLeituraAnteriorFaturamento() != null
+								&& existeMedicaoHistoricoReferenciaAnterior(MedicaoTipo.POCO, imovel.getId(), anoMesConta)) {
+							dataLeituraAnterior = medicaoHistoricoPoco.getDataLeituraAnteriorFaturamento();
 						}
 
-						// DATA_LEITURA_ATUAL
-						if (medicaoHistoricoPoco
-								.getDataLeituraAtualFaturamento() != null) {
-
-							dataLeituraAtual = medicaoHistoricoPoco
-									.getDataLeituraAtualFaturamento();
+						if (medicaoHistoricoPoco.getDataLeituraAtualFaturamento() != null) {
+							dataLeituraAtual = medicaoHistoricoPoco.getDataLeituraAtualFaturamento();
 						}
 					}
 				}
 			}
 
 			if (idConsumoTarifaConta != null) {
-
-				valoresCalculadosAguaEsgoto = this.calcularValoresAguaEsgoto(
-						new Integer(mesAnoConta), situacaoAguaConta,
-						situacaoEsgotoConta, indicadorFaturamentoAgua,
-						indicadorFaturamentoEsgoto,
-						colecaoCategoriaOUSubcategoria, consumoAguaInteger,
-						consumoEsgotoInteger, consumoMinimoLigacao,
-						dataLeituraAnterior, dataLeituraAtual,
-						objPercentualEsgoto, idConsumoTarifaConta, null, null);
+				helper = this.calcularValoresAguaEsgoto(new Integer(mesAnoConta), situacaoAguaConta, situacaoEsgotoConta,
+						indicadorFaturamentoAgua, indicadorFaturamentoEsgoto, colecaoCategoriaOUSubcategoria, idConsumoAgua, 
+						idConsumoEsgoto, consumoMinimoLigacao, dataLeituraAnterior, dataLeituraAtual, objPercentualEsgoto,
+						idConsumoTarifaConta, null, null);
 
 			} else {
-
-				valoresCalculadosAguaEsgoto = this.calcularValoresAguaEsgoto(
-						new Integer(mesAnoConta), situacaoAguaConta,
-						situacaoEsgotoConta, indicadorFaturamentoAgua,
-						indicadorFaturamentoEsgoto,
-						colecaoCategoriaOUSubcategoria, consumoAguaInteger,
-						consumoEsgotoInteger, consumoMinimoLigacao,
-						dataLeituraAnterior, dataLeituraAtual,
-						objPercentualEsgoto, objImovel.getConsumoTarifa()
-								.getId(), null, null);
+				helper = this.calcularValoresAguaEsgoto(new Integer(mesAnoConta), situacaoAguaConta, situacaoEsgotoConta, 
+						indicadorFaturamentoAgua, indicadorFaturamentoEsgoto, colecaoCategoriaOUSubcategoria, idConsumoAgua, 
+						idConsumoEsgoto, consumoMinimoLigacao, dataLeituraAnterior, dataLeituraAtual, objPercentualEsgoto,
+						imovel.getConsumoTarifa().getId(), null, null);
 
 			}
-
 		}
 
-		return valoresCalculadosAguaEsgoto;
+		return helper;
+	}
+
+	private boolean existeMedicaoHistoricoReferenciaAnterior(Integer medicaoTipo, Integer idImovel, Integer anoMesConta) throws ControladorException {
+		Integer anoMesAnterior = Util.subtrairMesDoAnoMes(anoMesConta.intValue(), 1);
+		
+		if (medicaoTipo.equals(MedicaoTipo.LIGACAO_AGUA)) {
+			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(idImovel, anoMesAnterior);
+			if (medicaoHistoricoAgua != null) {
+				return true;
+			}
+		} else {
+			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPoco(idImovel, anoMesAnterior);
+			if (medicaoHistoricoPoco != null) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
