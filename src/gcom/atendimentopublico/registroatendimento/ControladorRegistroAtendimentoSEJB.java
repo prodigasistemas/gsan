@@ -15302,7 +15302,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 					null, 
 					usuarioLogado, 
 					contaParaRetificacao.getConsumoTarifa().getId().toString(),
-					false,null,null,false, null,null,null,null,null);
+					false,null,null,false, null,null,null,null,null, null);
 		
 
 		} catch (Exception e) {

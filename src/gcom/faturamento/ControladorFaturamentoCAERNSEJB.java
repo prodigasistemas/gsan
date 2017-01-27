@@ -7748,7 +7748,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 								null,
 								usuarioLogado, 
 								conta.getConsumoTarifa().getId()+"", false,
-								null,null,false , null,null,null,null,null);
+								null,null,false , null,null,null,null,null, null);
 						}
 
 					}
@@ -7865,7 +7865,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 										valoresConta, contaMotivoRetificacao,
 										null, usuarioLogado, 
 										conta.getConsumoTarifa().getId()+"",
-										false,null,null,false, null,null,null,null,null );
+										false,null,null,false, null,null,null,null,null, null);
 							}
 
 						}
@@ -7967,7 +7967,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 									conta.getDataVencimentoConta(),
 									valoresConta, contaMotivoRetificacao, null,
 									usuarioLogado, conta.getConsumoTarifa().getId()+"",
-									false,null,null,false, null,null,null,null,null );
+									false,null,null,false, null,null,null,null,null, null);
 						}
 
 					}

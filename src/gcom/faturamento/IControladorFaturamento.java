@@ -513,7 +513,8 @@ public interface IControladorFaturamento {
 			Map<String, String[]> requestMap, Usuario usuarioLogado, String consumoTarifa, 
             boolean atualizarMediaConsumoHistorico,Integer leituraAnterior,
             Integer leituraAtual,boolean atualizarLeituraAnteriorEAtualConta , String retorno,
-            Integer leituraAnteriorPoco,Integer leituraAtualPoco,Integer volumePoco,BigDecimal percentualColeta)
+            Integer leituraAnteriorPoco,Integer leituraAtualPoco,Integer volumePoco,
+            BigDecimal percentualColeta, Integer consumoMedidoProporcional)
 			throws ControladorException;
 
 	/**

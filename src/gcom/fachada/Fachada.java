@@ -3767,13 +3767,14 @@ public class Fachada {
 			String consumoEsgoto, String percentualEsgoto, Date dataVencimentoConta, Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,
 			ContaMotivoRetificacao contaMotivoRetificacao, Map<String, String[]> requestMap, Usuario usuarioLogado, String consumoTarifa,
 			boolean atualizarMediaConsumoHistorico, Integer leituraAnterior, Integer leituraAtual, boolean atualizarLeituraAnteriorEAtualConta, String retorno,
-			Integer leituraAnteriorPoco, Integer leituraAtualPoco, Integer volumePoco, BigDecimal percentualColeta) {
+			Integer leituraAnteriorPoco, Integer leituraAtualPoco, Integer volumePoco, BigDecimal percentualColeta, Integer consumoMedidoProporcional) {
 
 		try {
 			return this.getControladorFaturamento().retificarConta(mesAnoConta, contaAtual, imovel, colecaoDebitoCobrado, colecaoCreditoRealizado,
 					ligacaoAguaSituacao, ligacaoEsgotoSituacao, colecaoCategoria, consumoAgua, consumoEsgoto, percentualEsgoto, dataVencimentoConta,
 					calcularValoresConta, contaMotivoRetificacao, requestMap, usuarioLogado, consumoTarifa, atualizarMediaConsumoHistorico, leituraAnterior,
-					leituraAtual, atualizarLeituraAnteriorEAtualConta, retorno, leituraAnteriorPoco, leituraAtualPoco, volumePoco, percentualColeta);
+					leituraAtual, atualizarLeituraAnteriorEAtualConta, retorno, leituraAnteriorPoco, leituraAtualPoco, volumePoco, percentualColeta, 
+					consumoMedidoProporcional);
 
 		} catch (ControladorException ex) {
 			if (ex.getUrlBotaoVoltar() != null) {

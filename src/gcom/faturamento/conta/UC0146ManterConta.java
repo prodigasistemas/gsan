@@ -320,7 +320,7 @@ private static UC0146ManterConta instancia;
 				colecaoCategoriaOUSubcategoria, consumoAgua.toString(), consumoEsgoto.toString(),
 				contaParaRetificacao.getPercentualEsgoto().toString(), dataVencimento, valoresConta, 
 				contaMotivoRetificacao, null, usuarioLogado, contaParaRetificacao.getConsumoTarifa().getId().toString(),
-				false,null,null,false, null,null,null,null,null);
+				false,null,null,false, null,null,null,null,null, null);
 			}
 		}
 	}

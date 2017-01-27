@@ -461,7 +461,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									helper.getUsuarioLogado(), conta
 											.getConsumoTarifa().getId()
 											.toString(), false, null, null,
-									false, null, null, null, null, null);
+									false, null, null, null, null, null, null);
 						}
 					}
 
@@ -12999,7 +12999,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								usuarioLogado, contaParaRetificacao
 										.getConsumoTarifa().getId().toString(),
 								false, null, null, false, null, null, null,
-								null, null);
+								null, null, null);
 
 						// Inseri o débito a Cobrar e o Débito a Cobrar
 						// Categoria

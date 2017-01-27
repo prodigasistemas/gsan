@@ -2581,7 +2581,7 @@ public class ControladorArrecadacao implements SessionBean {
 												helper.getColecaoCategoriaOUSubcategoria(), consumoAgua.toString(), volumeEsgoto.toString(),
 												helper.getConta().getPercentualEsgoto().toString(), helper.getConta().getDataVencimentoConta(), helper.getValoresConta(),
 												helper.getContaMotivoRetificacao(), null, Usuario.USUARIO_BATCH, helper.getConta().getConsumoTarifa().getId().toString(), false,
-												null, null, false, null, null, null, null, null);
+												null, null, false, null, null, null, null, null, null);
 
 									}
 
