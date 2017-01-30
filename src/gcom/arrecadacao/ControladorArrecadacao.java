@@ -179,6 +179,8 @@ import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
@@ -674,6 +676,27 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
 
 	/**
 	 * Retorna o valor de controladorEndereco
@@ -2575,7 +2598,7 @@ public class ControladorArrecadacao implements SessionBean {
 										}
 
 										// [UC0150] - Retificar Conta
-										this.getControladorFaturamento().retificarConta(new Integer(helper.getConta().getReferencia()), helper.getConta(),
+										this.getControladorRetificarConta().retificarConta(new Integer(helper.getConta().getReferencia()), helper.getConta(),
 												helper.getConta().getImovel(), helper.getColecaoDebitoCobrado(), helper.getColecaoCreditoRealizado(),
 												helper.getConta().getLigacaoAguaSituacao(), helper.getConta().getLigacaoEsgotoSituacao(),
 												helper.getColecaoCategoriaOUSubcategoria(), consumoAgua.toString(), volumeEsgoto.toString(),

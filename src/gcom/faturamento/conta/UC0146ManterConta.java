@@ -9,6 +9,8 @@ import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
@@ -111,6 +113,28 @@ private static UC0146ManterConta instancia;
 
 			localHome = (ControladorFaturamentoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
 			// guarda a referencia de um objeto capaz de fazer chamadas à
 			// objetos remotamente
 			local = localHome.create();
@@ -312,9 +336,9 @@ private static UC0146ManterConta instancia;
 						.getConsumoTarifa().getId(), usuarioLogado);
 				
 				//[UC0150] - Retificar Conta
-				Conta contaParaRetificacao =  this.getControladorFaturamento().pesquisarContaRetificacao(conta.getId());
+				Conta contaParaRetificacao =  this.getControladorRetificarConta().pesquisarContaRetificacao(conta.getId());
 
-				this.getControladorFaturamento().retificarConta(
+				this.getControladorRetificarConta().retificarConta(
 				contaParaRetificacao.getReferencia(), contaParaRetificacao, contaParaRetificacao.getImovel(), colecaoDebitoCobrado,
 				colecaoCreditoRealizado, ligacaoAguaSituacao, ligacaoEsgotoSituacao,
 				colecaoCategoriaOUSubcategoria, consumoAgua.toString(), consumoEsgoto.toString(),

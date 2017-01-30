@@ -481,43 +481,6 @@ public interface IControladorFaturamento {
 			throws ControladorException;
 
 	/**
-	 * 
-	 * @param mesAnoConta
-	 * @param contaAtual
-	 * @param imovel
-	 * @param colecaoDebitoCobrado
-	 * @param colecaoCreditoRealizado
-	 * @param ligacaoAguaSituacao
-	 * @param ligacaoEsgotoSituacao
-	 * @param colecaoCategoria
-	 * @param consumoAgua
-	 * @param consumoEsgoto
-	 * @param percentualEsgoto
-	 * @param dataVencimentoConta
-	 * @param calcularValoresConta
-	 * @param contaMotivoRetificacao
-	 * @param requestMap
-	 * @param colecaoClientes 
-	 * @throws ControladorException
-	 */
-	public Integer retificarConta(Integer mesAnoConta, Conta contaAtual,
-			Imovel imovel, Collection colecaoDebitoCobrado,
-			Collection colecaoCreditoRealizado,
-			LigacaoAguaSituacao ligacaoAguaSituacao,
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Collection colecaoCategoria, String consumoAgua,
-			String consumoEsgoto, String percentualEsgoto,
-			Date dataVencimentoConta,
-			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,
-			ContaMotivoRetificacao contaMotivoRetificacao,
-			Map<String, String[]> requestMap, Usuario usuarioLogado, String consumoTarifa, 
-            boolean atualizarMediaConsumoHistorico,Integer leituraAnterior,
-            Integer leituraAtual,boolean atualizarLeituraAnteriorEAtualConta , String retorno,
-            Integer leituraAnteriorPoco,Integer leituraAtualPoco,Integer volumePoco,
-            BigDecimal percentualColeta, Integer consumoMedidoProporcional)
-			throws ControladorException;
-
-	/**
 	 * [UC0183 - Inserir Débito A Cobrar]
 	 * 
 	 * @author Rafael Santos, Pedro Alexandre, Raphael Rossiter
@@ -1653,17 +1616,6 @@ public interface IControladorFaturamento {
 
 	/**
 	 * 
-	 * @author Raphael Rossiter
-	 * @date 30/10/2006
-	 * 
-	 * @return Object[]
-	 * @throws ErroRepositorioException
-	 */
-	public Conta pesquisarContaRetificacao(Integer idConta)
-			throws ControladorException;
-
-	/**
-	 * 
 	 * Este método se destina a validar todas as situações e particularidades da
 	 * inserir guia de pagamento no momento da exibição.
 	 * 
@@ -2126,21 +2078,6 @@ public interface IControladorFaturamento {
 			throws ControladorException;
 	
 	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Ana Maria
-	 * @date 24/01/2007
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoConta(Collection colecaoImovel,
-			Integer anoMes, ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, 
-			Integer anoMesFim, String indicadorContaPaga)
-			throws ControladorException;	
-
-	/**
 	 * Informar Tarifa de Consumo por Subcategoria
 	 * 
 	 * @autor Tiago Moreno
@@ -2394,21 +2331,6 @@ public interface IControladorFaturamento {
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoInformada, Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior, boolean isDebitoAutomatico)
-			throws ControladorException;
-
-	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Ana Maria
-	 * @date 24/01/2007
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Integer anoMes,
-			ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim)
 			throws ControladorException;
 
 	/**
@@ -2809,21 +2731,6 @@ public interface IControladorFaturamento {
 			Usuario usuarioLogado, boolean somenteDebitoAutomatico)
 			throws ControladorException ;
 	
-	
-	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2007
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoConta(Integer idGrupoFaturamento,
-			Integer anoMes, ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim)
-			throws ControladorException ;
-	
 	/**
 	 * Pesquisar conjunto de contas p/ emissão da 2°Via
 	 * 
@@ -3218,28 +3125,6 @@ public interface IControladorFaturamento {
 			throws ControladorException;
 	
 	/**
-	 * [UC0000] - Retificar Conjunto de Conta a partir do [UC0146] Manter Conta
-	 *
-	 * @author Raphael Rossiter
-	 * @date 04/11/2008
-	 *
-	 * @param colecaoContas
-	 * @param identificadores
-	 * @param ligacaoAguaSituacao
-	 * @param consumoAgua
-	 * @param ligacaoEsgotoSituacao
-	 * @param consumoEsgoto
-	 * @param dataVencimento
-	 * @param contaMotivoRetificacao
-	 * @param usuarioLogado
-	 */
-	public void retificarConjuntoConta(Collection<Conta> colecaoContas,
-			String identificadores, LigacaoAguaSituacao ligacaoAguaSituacao, Integer consumoAgua,
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Integer consumoEsgoto, Date dataVencimento, 
-			ContaMotivoRetificacao contaMotivoRetificacao, Short indicadorCategoriaEconomiaConta, Usuario usuarioLogado) throws ControladorException;
-	
-	
-	/**
 	 * [UC0193] - Consultar Histórico de Faturamento
 	 *
 	 * @author Vivianne Sousa
@@ -3618,22 +3503,6 @@ public interface IControladorFaturamento {
 	 */
 	public void atualizarSituacaoEspecialFaturamento(FaturamentoSituacaoComando comandoOriginal,FaturamentoSituacaoComando comandoInserir, ArrayList<FaturamentoSituacaoHistorico> colecaoHistoricoInserir,FaturamentoSituacaoComando comandoRetirar, ArrayList<FaturamentoSituacaoHistorico> colecaoHistoricoRetirar) throws ControladorException;
 
-	/**
-	 * [UC0146] Manter Conta
-	 *
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * [FS0033] Verificar permissão especial para informar apenas volume de esgoto
-	 *
-	 * @author Raphael Rossiter
-	 * @date 02/07/2009
-	 *
-	 * @param helper
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoContaConsumos(Integer idFuncionalidadeIniciada,Map parametros) 
-		throws ControladorException;
-	
 	/**
 	 * [UC0927] – Confirmar Cartão de Crédito/Débito 
 	 *
@@ -4772,17 +4641,6 @@ public interface IControladorFaturamento {
 	public Collection pesquisarContasPagasSemDebitoCreditoPago(Integer amreferencia,Integer idGrupo) throws ControladorException;
 	
 	/**
-	 * 
-	 * Retificação de um conjunto de contas que foram pagas e que o pagamento não estava o débito e/ou crédito (Conta paga via Impressão Simultânea) 
-	 *
-	 * @author Sávio Luiz
-	 * @date 27/12/2010
-	 * 
-	 * @throws ErroRepositorioException
-	 */
-	public Collection retificarContasPagasSemDebitoCredito(Collection colecaoContasRetificar,Usuario usuarioLogado) throws ControladorException;
-	
-	/**
 	 * Inserir Débitos para as contas impressas via Impressão Simultânea de Contas que sairam com o valor da conta errada (Alguns grupos com tarifa proporcional
 	 *  que não estava levando em consideração a quantidade de economias)
 	 *
@@ -5245,42 +5103,6 @@ public interface IControladorFaturamento {
 		throws ControladorException;
 	
 	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas 
-	 *  as que não estão ligadas a algum Contrato de Parcelamento por Cliente 
-	 * 
-	 * @author Mariana Victor
-	 * @date 15/07/2011
-	 * 
-	 * @param colecaoContas
-	 * 
-	 * @return Collection<Integer>
-	 */
-	public Collection<Object[]> obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContas(Collection<Object[]> colecaoContasManutencao) 
-		throws ControladorException;
-	
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas 
-	 *  as que não estão ligadas a algum Contrato de Parcelamento por Cliente 
-	 * 
-	 * @author Mariana Victor
-	 * @date 15/07/2011
-	 * 
-	 * @param colecaoContas
-	 * 
-	 * @return Collection<Integer>
-	 */
-	public Collection<Object[]> obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(Collection<Object[]> colecaoContasManutencao) 
-		throws ControladorException;
-
-	/**
 	 * [UC1187] Colocar Débito a Cobrar em Revisão
 	 * 
 	 * @author Mariana Victor
@@ -5568,4 +5390,23 @@ public interface IControladorFaturamento {
 	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia);
 	
+	public void verificarValoresLeituraAnteriorEAtual(Integer leituraAnterior, Integer leituraAtual, String retorno, Integer contaID, Integer idImovel,
+			Integer consumoAguaCalculado, Integer consumoAguaMedido) throws ControladorException;
+	
+	public void verificarValoresLeituraAnteriorEAtual(Integer leituraAnterior, Integer leituraAtual, Integer consumoAgua) throws ControladorException;
+
+	public BigDecimal calcularValorTotalDebitoConta(Collection<DebitoCobrado> colecaoDebitoCobrado) throws ControladorException;
+	
+	public BigDecimal calcularValorTotalCreditoConta(Collection<CreditoRealizado> colecaoCreditoRealizado)throws ControladorException;
+	
+	public Date retornaDataValidadeConta(Date dataVencimento) throws ControladorException;
+	
+	public Integer verificarGeracaoBoleto(SistemaParametro sistemaParametro, Conta conta) throws ControladorException;
+	
+	public void inserirContaCategoria(Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,Collection colecaoCategoriaOuSubcategoria, Conta conta) 
+			throws ControladorException;
+	
+	public void inserirDebitoCobrado(Conta conta, Collection colecaoDebitoCobrado, Imovel imovel, Collection colecaoCategoria) throws ControladorException;
+	
+	public Integer obterReferenciaContabilConta(SistemaParametro sistemaParametro, Integer anoMesReferenciaConta) throws ControladorException;
 }

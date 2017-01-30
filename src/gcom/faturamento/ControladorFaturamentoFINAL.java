@@ -1,4 +1,4 @@
-package gcom.faturamento;
+	package gcom.faturamento;
 
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.Devolucao;
@@ -177,6 +177,8 @@ import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.conta.ImpostoDeduzidoHelper;
 import gcom.faturamento.conta.MotivoNaoEntregaDocumento;
 import gcom.faturamento.conta.UC0146ManterConta;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoARealizarCategoria;
 import gcom.faturamento.credito.CreditoARealizarCategoriaHistorico;
@@ -7089,26 +7091,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return retorno;
 	}
 
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
 	protected ControladorImovelLocal getControladorImovel() {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -7119,26 +7111,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	protected ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -7149,27 +7131,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -7178,7 +7148,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
+	}
+	
+	protected ControladorRetificarContaLocal getControladorRetificarConta() {
 
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
 	}
 
 	/**
@@ -9189,616 +9177,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	public Integer retificarConta(Integer mesAnoConta, Conta contaAtual,
-			Imovel imovel, Collection colecaoDebitoCobrado,
-			Collection colecaoCreditoRealizado,
-			LigacaoAguaSituacao ligacaoAguaSituacao,
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Collection colecaoCategoria, String consumoAgua,
-			String consumoEsgoto, String percentualEsgoto,
-			Date dataVencimentoConta,
-			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,
-			ContaMotivoRetificacao contaMotivoRetificacao,
-			Map<String, String[]> requestMap, Usuario usuarioLogado,
-			String consumoTarifa, boolean atualizarMediaConsumoHistorico,
-			Integer leituraAnterior, Integer leituraAtual,
-			boolean atualizarLeituraAnteriorEAtualConta,
-			String retornoBotaoVoltar, Integer leituraAnteriorPoco,
-			Integer leituraAtualPoco, Integer volumePoco,
-			BigDecimal percentualColeta, Integer consumoMedidoProporcional) throws ControladorException {
-
-		try {
-			logger.info("Retificacao da conta do imovel: " + imovel.getId());
-			
-			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
-
-			// Detalhe: Essa alteração só irá ser realizada quando chamada da tela de retificar conta.
-			// Caso o consumo de agua tenha sido alterado e a situação da ligação de água do imovel 
-			// ( a nova, caso tenha sido alterada) determine faturamento
-			atualizarMediaConsumoHistoricoAoRetificarConta(mesAnoConta, contaAtual, consumoAgua, atualizarMediaConsumoHistorico);
-			
-			// Atualização da leitura atual faturada, se o motivo da retificação for ALTERAÇÃO DA LEITURA FATURADA
-			if(contaMotivoRetificacao != null && contaMotivoRetificacao.getId().equals(ContaMotivoRetificacao.ALTERACAO_DE_LEITURA_FATURADA)) {
-
-				boolean imovelHidrometrado = repositorioMicromedicao.verificaExistenciaHidrometro(contaAtual.getImovel().getId());
-
-				logger.info("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
-				logger.info("Imóvel: " + imovel.getId());
-				
-				if (imovelHidrometrado) {
-
-					if (leituraAtual == null || leituraAnterior == null) {
-						throw new ControladorException("atencao.leitura_atual_nao_pode_ser_nula", "exibirRetificarContaAction.do?contaID="+ contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
-					} else {
-						if (!leituraAtual.equals(contaAtual.getNumeroLeituraAtual())) {
-
-							validarLeiturasRetificarConta(contaAtual, imovel, leituraAtual);
-
-						}
-					}
-
-				}
-			}
-
-			validarRetificarContasPrescritas(contaAtual, imovel);
-
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, contaAtual.getImovel()
-							.getId(), contaAtual.getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-			registradorOperacao.registrarOperacao(contaAtual);
-
-			DebitoCreditoSituacao debitoCreditoSituacaoAnteriorNaoAlterado = contaAtual.getDebitoCreditoSituacaoAnterior();
-			DebitoCreditoSituacao debitoCreditoSituacaoAtualNaoAlterado = contaAtual.getDebitoCreditoSituacaoAtual();
-			Integer referenciaContabilNaoAlterado = contaAtual.getReferenciaContabil();
-			Usuario usuarioNaoAlterado = contaAtual.getUsuario();
-
-			
-			// [SF002] - Gerar dados da conta
-			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
-
-			Integer idContaGerada = null;
-
-			if (isRetificarContaReferenciaContabilMenor(contaAtual, sistemaParametro)) {
-
-				idContaGerada = retificarContasReferenciaContabilMenor(mesAnoConta, contaAtual, imovel, colecaoDebitoCobrado, colecaoCreditoRealizado,
-						ligacaoAguaSituacao, ligacaoEsgotoSituacao, colecaoCategoria, consumoAgua, consumoEsgoto, percentualEsgoto, dataVencimentoConta,
-						calcularValoresConta, contaMotivoRetificacao, requestMap, usuarioLogado, consumoTarifa, leituraAnterior, leituraAtual,
-						atualizarLeituraAnteriorEAtualConta, retornoBotaoVoltar, leituraAnteriorPoco, leituraAtualPoco, volumePoco, percentualColeta,
-						consumoMedidoProporcional, registradorOperacao, debitoCreditoSituacaoAnteriorNaoAlterado, debitoCreditoSituacaoAtualNaoAlterado,
-						referenciaContabilNaoAlterado, usuarioNaoAlterado, sistemaParametro);
-
-			} else if (isRetificarContaReferenciaContabilMaiorOuIgual(contaAtual, sistemaParametro)) {
-
-				idContaGerada = retificarContasReferenciaContabilMaiorOuIgual(mesAnoConta, contaAtual, imovel, colecaoDebitoCobrado, colecaoCreditoRealizado,
-						ligacaoAguaSituacao, ligacaoEsgotoSituacao, colecaoCategoria, consumoAgua, consumoEsgoto, percentualEsgoto, dataVencimentoConta,
-						calcularValoresConta, contaMotivoRetificacao, requestMap, usuarioLogado, leituraAnterior, leituraAtual,
-						atualizarLeituraAnteriorEAtualConta, retornoBotaoVoltar, leituraAnteriorPoco, leituraAtualPoco, volumePoco, percentualColeta,
-						consumoMedidoProporcional, debitoCreditoSituacaoAnteriorNaoAlterado, debitoCreditoSituacaoAtualNaoAlterado,
-						referenciaContabilNaoAlterado, usuarioNaoAlterado, sistemaParametro);
-			} else {
-
-				if (atualizarLeituraAnteriorEAtualConta) {
-					verificarValoresLeituraAnteriorEAtual(leituraAnterior, leituraAtual, contaAtual.getConsumoAgua());
-				}
-				idContaGerada = contaAtual.getId();
-			}
-
-			return idContaGerada;
-
-		} catch (ControladorException e) {
-			sessionContext.setRollbackOnly();
-			throw e;
-		} catch (Exception e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
-
-	}
-
-	private void validarLeiturasRetificarConta(Conta contaAtual, Imovel imovel, Integer leituraAtual) throws ControladorException, ErroRepositorioException {
-		// Essa verificação será válida ate que seja analisado o motivo dessa diferença entre as leituras faturadas e as leituras nas contas
-		Object[] leiturasMedicao = getControladorMicromedicao().obterLeituraAnteriorEAtualFaturamentoMedicaoHistorico(imovel.getId(), contaAtual.getReferencia());
-		
-		Integer leituraAnteriorMedicao, leituraAtualMedicao;
-		leituraAtualMedicao = (Integer) leiturasMedicao[1];
-
-		if ((leituraAtualMedicao != null && !leituraAtualMedicao.equals(contaAtual.getNumeroLeituraAtual()) 
-				|| (leituraAtualMedicao == null && contaAtual.getNumeroLeituraAtual() == null))) {
-
-			//Verifica se houve alteração nas leituras, se sim verifica se já tem rota gerada para próxima referência, se tiver não deixa fazer a alteração
-			boolean leituraAlterada = false;
-			
-			leituraAlterada = getControladorMicromedicao().verificarLeituraAtualFaturadaImovel(leituraAtual, contaAtual.getReferencia(),imovel.getId());
-
-			if (leituraAlterada) {
-				FaturamentoGrupo grupo = repositorioImovel.pesquisarGrupoImovel(imovel.getId());
-				
-				boolean arquivoProximaReferenciaGerado = getControladorMicromedicao().pesquisaArquivoRotaPorGrupoEReferencia(grupo.getId(), contaAtual.getReferencia());
-
-				if (!arquivoProximaReferenciaGerado)
-					getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, contaAtual.getReferencia(), imovel.getId());
-				else {
-					throw new ControladorException("atencao.rota_proxima_referencia_gerada", "exibirRetificarContaAction.do?contaID="
-							+ contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
-				}
-			}
-		} else {
-			throw new ControladorException("atencao.diferenca_entre_leituras_faturadas_e_leituras_conta", "exibirRetificarContaAction.do?contaID="
-					+ contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
-		}
-	}
-
-	private boolean isRetificarContaReferenciaContabilMaiorOuIgual(Conta contaAtual, SistemaParametro sistemaParametro) {
-		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) 
-						|| contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA))
-					&& (Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(), ">") 
-						|| Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"="));
-	}
-
-	private boolean isRetificarContaReferenciaContabilMenor(Conta contaAtual, SistemaParametro sistemaParametro) {
-		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL))
-				|| ((contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) || 
-						contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA)) 
-				&& Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"<"));
-	}
-
-	private Integer retificarContasReferenciaContabilMaiorOuIgual(Integer mesAnoConta, Conta contaAtual, Imovel imovel, Collection colecaoDebitoCobrado,
-			Collection colecaoCreditoRealizado, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Collection colecaoCategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto, Date dataVencimentoConta,
-			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta, ContaMotivoRetificacao contaMotivoRetificacao, Map<String, String[]> requestMap,
-			Usuario usuarioLogado, Integer leituraAnterior, Integer leituraAtual, boolean atualizarLeituraAnteriorEAtualConta, String retornoBotaoVoltar,
-			Integer leituraAnteriorPoco, Integer leituraAtualPoco, Integer volumePoco, BigDecimal percentualColeta, Integer consumoMedidoProporcional,
-			DebitoCreditoSituacao debitoCreditoSituacaoAnteriorNaoAlterado, DebitoCreditoSituacao debitoCreditoSituacaoAtualNaoAlterado,
-			Integer referenciaContabilNaoAlterado, Usuario usuarioNaoAlterado, SistemaParametro sistemaParametro) throws ControladorException {
-		Integer idContaGerada;
-		contaAtual.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-		contaAtual.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
-
-		if (!contaMotivoRetificacao.getId().equals(ContaMotivoRetificacao.DEVOLUCAO_PAGAMENTO_CREDITADO_EM_CONTA)
-				&& Util.getAno(dataVencimentoConta) < Util.obterAno(sistemaParametro.getAnoMesFaturamento())) {
-			
-			sessionContext.setRollbackOnly();
-			
-			contaAtual.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnteriorNaoAlterado);
-			contaAtual.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtualNaoAlterado);
-			contaAtual.setReferenciaContabil(referenciaContabilNaoAlterado);
-			contaAtual.setUsuario(usuarioNaoAlterado);
-
-			throw new ControladorException("atencao.data_vencimento_conta_inferior_ano_faturamento");
-		}
-
-		contaAtual.setDataVencimentoConta(dataVencimentoConta);
-
-		Integer consumoTotalAgua = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_AGUA);
-
-		if (consumoTotalAgua.equals(new Integer("0"))) {
-		    contaAtual.atribuirConsumoAgua(consumoAgua);
-		} else {
-			contaAtual.setConsumoAgua(consumoTotalAgua);
-		}
-
-		// CRC4202 - adicionado por Vivianne Sousa - 21/09/2010 -
-		if (atualizarLeituraAnteriorEAtualConta) {
-			this.verificarValoresLeituraAnteriorEAtual(leituraAnterior, leituraAtual, retornoBotaoVoltar, 
-					contaAtual.getId(),imovel.getId(), contaAtual.getConsumoAgua(), consumoMedidoProporcional);
-
-			contaAtual.setNumeroLeituraAnterior(leituraAnterior);
-			contaAtual.setNumeroLeituraAtual(leituraAtual);
-		}
-
-		Integer consumoTotalEsgoto = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
-
-		if (consumoTotalEsgoto.equals(new Integer("0"))) {
-		    contaAtual.atribuirConsumoEsgoto(consumoEsgoto);
-		} else {
-			contaAtual.setConsumoEsgoto(consumoTotalEsgoto);
-		}
-
-		BigDecimal valorTotalAgua = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_AGUA);
-		contaAtual.setValorAgua(valorTotalAgua);
-
-		BigDecimal valorTotalEsgoto = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
-		contaAtual.setValorEsgoto(valorTotalEsgoto);
-
-		BigDecimal valorTotalDebito = null;
-		BigDecimal valorTotalCredito = null;
-
-		if (requestMap != null) {
-			valorTotalDebito = this.calcularValorTotalDebitoConta(colecaoDebitoCobrado, requestMap);
-			valorTotalCredito = this.calcularValorTotalCreditoConta(colecaoCreditoRealizado, requestMap);
-		} else {
-			valorTotalDebito = this.calcularValorTotalDebitoConta(colecaoDebitoCobrado);
-			valorTotalCredito = this.calcularValorTotalCreditoConta(colecaoCreditoRealizado);
-		}
-
-		contaAtual.setDebitos(valorTotalDebito);
-		contaAtual.setValorCreditos(valorTotalCredito);
-		contaAtual.atribuiPercentualEsgoto(percentualEsgoto);
-
-		GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = this.gerarImpostosDeduzidosConta(contaAtual.getImovel().getId(), mesAnoConta, 
-				valorTotalAgua, valorTotalEsgoto, valorTotalDebito, valorTotalCredito, false);
-
-		contaAtual.setValorImposto(impostosDeduzidosConta.getValorTotalImposto());
-
-		Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimentoConta);
-		contaAtual.setDataValidadeConta(dataValidadeConta);
-
-		Calendar dataRetificacaoConta = new GregorianCalendar();
-		contaAtual.setDataRetificacao(dataRetificacaoConta.getTime());
-		contaAtual.setContaMotivoRetificacao(contaMotivoRetificacao);
-		contaAtual.setUsuario(usuarioLogado);
-		contaAtual.setUltimaAlteracao(new Date());
-		contaAtual.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
-		contaAtual.setNumeroLeituraAtualPoco(leituraAtualPoco);
-		contaAtual.setNumeroVolumePoco(volumePoco);
-		contaAtual.setPercentualColeta(percentualColeta);
-		contaAtual.incrementaNumeroRetificacoes();
-
-		try {
-			Collection colecaoContaCategoria = montarColecaoContaCategoria(colecaoCategoria, contaAtual);
-
-			contaAtual.setContaCategorias(new HashSet(colecaoContaCategoria));
-			contaAtual.setDebitoCobrados(new HashSet(colecaoDebitoCobrado));
-			contaAtual.setCreditoRealizados(new HashSet(colecaoCreditoRealizado));
-
-			getControladorTransacao().registrarTransacao(contaAtual);
-			contaAtual.setIdAntigo(contaAtual.getId());
-
-			contaAtual.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, contaAtual));
-
-			repositorioFaturamento.retificarContaAtualizarValores(contaAtual);
-			repositorioFaturamento.removerContaCategoria(contaAtual);
-			repositorioFaturamento.removerDebitoCobrado(contaAtual);
-			repositorioFaturamento.removerCreditoRealizado(contaAtual);
-			repositorioFaturamento.removerClientesConta(contaAtual.getId());
-			repositorioFaturamento.removerImpostosDeduzidosConta(contaAtual.getId());
-
-			boolean temPermissaoRetificarContaSemRA = this.getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
-
-			if (!temPermissaoRetificarContaSemRA) {
-				RegistroAtendimento raParaRetificacao = this.getControladorRegistroAtendimento()
-						.verificarExistenciaRegistroAtendimento(new Integer(imovel.getId()),"atencao.conta_existencia_registro_atendimento",EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-
-				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
-			}
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			contaAtual.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnteriorNaoAlterado);
-			contaAtual.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtualNaoAlterado);
-			contaAtual.setReferenciaContabil(referenciaContabilNaoAlterado);
-			contaAtual.setUsuario(usuarioNaoAlterado);
-
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (calcularValoresConta != null && !calcularValoresConta.isEmpty()){
-		    CalcularValoresAguaEsgotoHelper valorConta = calcularValoresConta.iterator().next();
-		    valorConta.adicionaRateioAgua(contaAtual.getValorRateioAgua());
-		    valorConta.adicionaRateioEsgoto(contaAtual.getValorRateioEsgoto());
-		}
-
-		this.inserirContaCategoria(calcularValoresConta, colecaoCategoria, contaAtual);
-		this.inserirDebitoCobrado(contaAtual, colecaoDebitoCobrado, imovel, colecaoCategoria);
-		this.inserirCreditoRealizado(contaAtual, colecaoCreditoRealizado, imovel, colecaoCategoria);
-		this.inserirClienteImovel(imovel, contaAtual);
-		this.inserirImpostosDeduzidosConta(impostosDeduzidosConta, contaAtual);
-
-		this.atualizarFaturaItemContaRetificada(contaAtual.getId(),contaAtual);
-
-		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaAtual);
-
-		idContaGerada = contaAtual.getId();
-		return idContaGerada;
-	}
-
-	private Integer retificarContasReferenciaContabilMenor(Integer mesAnoConta, Conta contaAtual, Imovel imovel, Collection colecaoDebitoCobrado,
-			Collection colecaoCreditoRealizado, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Collection colecaoCategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto, Date dataVencimentoConta,
-			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta, ContaMotivoRetificacao contaMotivoRetificacao, Map<String, String[]> requestMap,
-			Usuario usuarioLogado, String consumoTarifa, Integer leituraAnterior, Integer leituraAtual, boolean atualizarLeituraAnteriorEAtualConta,
-			String retornoBotaoVoltar, Integer leituraAnteriorPoco, Integer leituraAtualPoco, Integer volumePoco, BigDecimal percentualColeta,
-			Integer consumoMedidoProporcional, RegistradorOperacao registradorOperacao, DebitoCreditoSituacao debitoCreditoSituacaoAnteriorNaoAlterado,
-			DebitoCreditoSituacao debitoCreditoSituacaoAtualNaoAlterado, Integer referenciaContabilNaoAlterado, Usuario usuarioNaoAlterado,
-			SistemaParametro sistemaParametro) throws ControladorException {
-		Integer idContaGerada;
-		if (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL)
-				&& (Util.compararAnoMesReferencia(contaAtual.getReferencia(),sistemaParametro.getAnoMesFaturamento(), "=") 
-						|| (Util.compararAnoMesReferencia(contaAtual.getReferencia(),sistemaParametro.getAnoMesFaturamento(),">")))) {
-
-			contaAtual.setDebitoCreditoSituacaoAnterior(contaAtual.getDebitoCreditoSituacaoAtual());
-		} else {
-			contaAtual.setDebitoCreditoSituacaoAnterior(null);
-		}
-
-		DebitoCreditoSituacao debitoCreditoSituacaoAtualAtualizacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO);
-		contaAtual.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtualAtualizacao);
-
-		Integer referenciaContabil = obterReferenciaContabilConta(sistemaParametro, contaAtual.getReferencia());
-		contaAtual.setReferenciaContabil(referenciaContabil);
-
-		contaAtual.setUsuario(usuarioLogado);
-		contaAtual.setUltimaAlteracao(new Date());
-
-		try {
-
-			boolean temPermissaoRetificarContaSemRA = this.getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
-
-			if (!temPermissaoRetificarContaSemRA) {
-				RegistroAtendimento raParaRetificacao = this.getControladorRegistroAtendimento()
-					.verificarExistenciaRegistroAtendimento(new Integer(imovel.getId()),"atencao.conta_existencia_registro_atendimento",EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-
-				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
-			}
-
-			logger.info("Antes da Atualização no banco ");
-			logger.info("Imóvel: " + imovel.getId());
-			logger.info("Referência da conta: " + contaAtual.getReferencia());
-			logger.info("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
-			logger.info("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
-
-			if (contaAtual.getDebitoCreditoSituacaoAnterior() == null) {
-				repositorioFaturamento.retificarContaAtualizarSituacao(contaAtual, null);
-			} else {
-				repositorioFaturamento.retificarContaAtualizarSituacao(contaAtual, contaAtual.getDebitoCreditoSituacaoAnterior().getId());
-			}
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-
-			contaAtual.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnteriorNaoAlterado);
-			contaAtual.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtualNaoAlterado);
-			contaAtual.setReferenciaContabil(referenciaContabilNaoAlterado);
-			contaAtual.setUsuario(usuarioNaoAlterado);
-
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		ContaGeral contaGeralInserir = new ContaGeral();
-
-		Short indicadorHistorico = 2;
-
-		contaGeralInserir.setIndicadorHistorico(indicadorHistorico);
-		contaGeralInserir.setUltimaAlteracao(new Date());
-
-		Integer idGerado = (Integer) this.getControladorUtil().inserir(contaGeralInserir);
-
-		contaGeralInserir.setId(idGerado);
-
-		Conta contaInserir = new Conta();
-
-		contaInserir.setIdAntigo(contaAtual.getId());
-		registradorOperacao.registrarOperacao(contaInserir);
-
-		contaInserir.setImovel(contaAtual.getImovel());
-		contaInserir.setContaGeral(contaGeralInserir);
-		contaInserir.setId(idGerado);
-		contaInserir.setReferencia(mesAnoConta.intValue());
-		contaInserir.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA));
-		contaInserir.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-		contaInserir.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
-		contaInserir.setLocalidade(contaAtual.getLocalidade());
-		contaInserir.setQuadraConta(contaAtual.getQuadraConta());
-		contaInserir.setLote(contaAtual.getLote());
-		contaInserir.setSubLote(contaAtual.getSubLote());
-		contaInserir.setCodigoSetorComercial(contaAtual.getQuadraConta().getSetorComercial().getCodigo());
-		contaInserir.setQuadra(new Integer(contaAtual.getQuadraConta().getNumeroQuadra()));
-		contaInserir.setDigitoVerificadorConta(new Short(String.valueOf(Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(mesAnoConta))));
-		contaInserir.setIndicadorCobrancaMulta(contaAtual.getIndicadorCobrancaMulta());
-		contaInserir.setDataVencimentoConta(dataVencimentoConta);
-		contaInserir.setDataVencimentoOriginal(contaAtual.getDataVencimentoOriginal());
-		contaInserir.setIndicadorAlteracaoVencimento(new Short("2"));
-
-		Integer consumoTotalAgua = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_AGUA);
-
-		if (consumoTotalAgua.equals(new Integer("0"))) {
-			contaInserir.atribuirConsumoAgua(consumoAgua);
-		} else {
-			contaInserir.setConsumoAgua(consumoTotalAgua);
-		}
-						
-		contaInserir.atribuirConsumoRateioAgua(contaAtual.getConsumoRateioAgua());
-		
-		contaInserir.atribuirConsumoRateioEsgoto(contaAtual.getConsumoRateioEsgoto());
-
-		// CRC4202 - adicionado por Vivianne Sousa - 21/09/2010 -
-		if (atualizarLeituraAnteriorEAtualConta) {
-			this.verificarValoresLeituraAnteriorEAtual(leituraAnterior, leituraAtual, retornoBotaoVoltar, 
-					contaAtual.getId(), imovel.getId(), contaInserir.getConsumoAgua(), consumoMedidoProporcional);
-
-			contaInserir.setNumeroLeituraAnterior(leituraAnterior);
-			contaInserir.setNumeroLeituraAtual(leituraAtual);
-
-		} else {
-			contaInserir.setNumeroLeituraAnterior(contaAtual.getNumeroLeituraAnterior());
-			contaInserir.setNumeroLeituraAtual(contaAtual.getNumeroLeituraAtual());
-		}
-
-		Integer consumoTotalEsgoto = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
-
-		if (consumoTotalEsgoto.equals(new Integer("0"))) {
-		    contaInserir.atribuirConsumoEsgoto(consumoEsgoto);
-		} else {
-			contaInserir.setConsumoEsgoto(consumoTotalEsgoto);
-		}
-
-		BigDecimal valorTotalAgua = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
-		contaInserir.setValorAgua(valorTotalAgua);
-
-		BigDecimal valorTotalEsgoto = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta,ConstantesSistema.CALCULAR_ESGOTO);
-		contaInserir.setValorEsgoto(valorTotalEsgoto);
-		
-		contaInserir.atribuiValorRateioAgua(contaAtual.getValorRateioAgua());
-		
-		contaInserir.atribuiValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
-
-		BigDecimal valorTotalDebito = null;
-		BigDecimal valorTotalCredito = null;
-
-		if (requestMap != null) {
-			valorTotalDebito = this.calcularValorTotalDebitoConta(colecaoDebitoCobrado, requestMap);
-			valorTotalCredito = this.calcularValorTotalCreditoConta(colecaoCreditoRealizado, requestMap);
-		} else {
-			valorTotalDebito = this.calcularValorTotalDebitoConta(colecaoDebitoCobrado);
-			valorTotalCredito = this.calcularValorTotalCreditoConta(colecaoCreditoRealizado);
-		}
-
-		contaInserir.setDebitos(valorTotalDebito);
-		contaInserir.setValorCreditos(valorTotalCredito);
-		contaInserir.atribuiPercentualEsgoto(percentualEsgoto);
-		GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = gerarImpostosDeduzidosConta(contaAtual.getImovel().getId(), mesAnoConta,
-				valorTotalAgua, valorTotalEsgoto, valorTotalDebito, valorTotalCredito, false);
-
-		contaInserir.setValorImposto(impostosDeduzidosConta.getValorTotalImposto());
-		contaInserir.setDataValidadeConta(this.retornaDataValidadeConta(dataVencimentoConta));
-		contaInserir.setDataRetificacao((new GregorianCalendar()).getTime());
-		contaInserir.setDataEmissao((new GregorianCalendar()).getTime());
-		contaInserir.setReferenciaContabil(referenciaContabil);
-		contaInserir.setContaMotivoRetificacao(contaMotivoRetificacao);
-		contaInserir.setConsumoTarifa(new ConsumoTarifa(Integer.parseInt(consumoTarifa)));
-		contaInserir.setImovelPerfil(contaAtual.getImovelPerfil());
-		contaInserir.setIndicadorDebitoConta(contaAtual.getIndicadorDebitoConta());
-
-		FiltroEmpresaCobrancaConta filtroEmpresaCobrancaConta = new FiltroEmpresaCobrancaConta();
-		filtroEmpresaCobrancaConta.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaConta.CONTA_ID, contaAtual.getId()));
-
-		Collection colecaoEmpresaConta = getControladorUtil().pesquisar(filtroEmpresaCobrancaConta,EmpresaCobrancaConta.class.getName());
-
-		if (colecaoEmpresaConta != null && !colecaoEmpresaConta.isEmpty()) {
-			EmpresaCobrancaConta empresaCobrancaConta = (EmpresaCobrancaConta) Util.retonarObjetoDeColecao(colecaoEmpresaConta);
-			empresaCobrancaConta.setContaGeral(contaGeralInserir);
-
-			getControladorUtil().atualizar(empresaCobrancaConta);
-		}
-
-		contaInserir.setUsuario(usuarioLogado);
-
-
-		contaInserir.incrementaNumeroRetificacoes();
-		contaInserir.setFaturamentoGrupo(contaAtual.getFaturamentoGrupo());
-		contaInserir.setRota(contaAtual.getRota());
-		contaInserir.setNumeroFatura(null);
-		contaInserir.setAnoMesReferenciaBaixaSocial(null);
-		contaInserir.setNumeroAlteracoesVencimento(new Integer(0));
-		contaInserir.setUltimaAlteracao(new Date());
-		contaInserir.setNumeroLeituraAnteriorPoco(leituraAnteriorPoco);
-		contaInserir.setNumeroLeituraAtualPoco(leituraAtualPoco);
-		contaInserir.setNumeroVolumePoco(volumePoco);
-		contaInserir.setPercentualColeta(percentualColeta);
-
-		Collection colecaoContaCategoria = montarColecaoContaCategoria(colecaoCategoria, contaInserir);
-
-		contaInserir.setContaCategorias(new HashSet(colecaoContaCategoria));
-		contaInserir.setDebitoCobrados(new HashSet(colecaoDebitoCobrado));
-		contaInserir.setCreditoRealizados(new HashSet(colecaoCreditoRealizado));
-		contaInserir.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, contaInserir));
-
-		Integer idContaGerado = (Integer) this.getControladorUtil().inserir(contaInserir);
-
-		idContaGerada = idContaGerado;
-
-		this.inserirClienteContaRetificacao(contaInserir, contaAtual.getId());
-		
-		if (calcularValoresConta != null && !calcularValoresConta.isEmpty()){
-		    CalcularValoresAguaEsgotoHelper valorConta = calcularValoresConta.iterator().next();
-		    valorConta.adicionaRateioAgua(contaAtual.getValorRateioAgua());
-		    valorConta.adicionaRateioEsgoto(contaAtual.getValorRateioEsgoto());
-		}
-		
-		this.inserirContaCategoria(calcularValoresConta,colecaoCategoria, contaInserir);
-		this.inserirDebitoCobrado(contaInserir, colecaoDebitoCobrado, imovel, colecaoCategoria);
-		this.inserirCreditoRealizado(contaInserir,colecaoCreditoRealizado, imovel, colecaoCategoria);
-		this.inserirImpostosDeduzidosConta(impostosDeduzidosConta,contaInserir);
-		
-		this.atualizarPagamentoContaRetificada(contaAtual.getId(),idContaGerado);
-		this.atualizarDebitoAutomaticoMovimentoContaRetificada(contaAtual.getId(), idContaGerado, imovel);
-		this.atualizarFaturaItemContaRetificada(contaAtual.getId(),contaInserir);
-
-		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaInserir);
-		return idContaGerada;
-	}
-
-	private void validarRetificarContasPrescritas(Conta contaAtual, Imovel imovel) throws ControladorException {
-		if (contaAtual.getDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)
-				|| contaAtual.getDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)) {
-			throw new ControladorException("atencao.contas_prescritas_nao_podem_ser_retificadas", 
-					"exibirRetificarContaAction.do?contaID=" + contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
-		}
-	}
-
-	private void atualizarMediaConsumoHistoricoAoRetificarConta(Integer mesAnoConta, Conta contaAtual, String consumoAgua, boolean atualizarMediaConsumoHistorico)
-			throws ControladorException {
-		
-		if (atualizarMediaConsumoHistorico) {
-			
-			Collection colConsumos = getControladorMicromedicao().pesquisaConsumoHistoricoSubstituirConsumo(contaAtual.getImovel().getId());
-			
-			if (colConsumos != null) {
-				Iterator iteConsumos = colConsumos.iterator();
-				
-				while (iteConsumos.hasNext()) {
-					ImovelMicromedicao imovelMicromedicao = (ImovelMicromedicao) iteConsumos.next();
-					
-					if (imovelMicromedicao.getConsumoHistorico().getReferenciaFaturamento() == contaAtual.getReferencia()) {
-						imovelMicromedicao.getConsumoHistorico().setNumeroConsumoCalculoMedia(Integer.parseInt(consumoAgua));
-						getControladorMicromedicao().atualizarConsumosAnteriores(imovelMicromedicao.getConsumoHistorico());
-						
-						SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-						sistemaParametro.setAnoMesFaturamento(imovelMicromedicao.getAnoMesGrupoFaturamento());
-						
-						MedicaoTipo medicaoTipo = new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA);
-						
-						boolean houveIntslacaoHidrometro = this.getControladorMicromedicao().verificarInstalacaoSubstituicaoHidrometro(contaAtual.getImovel().getId(), medicaoTipo);
-						
-						int[] consumoMedioHidrometroAgua = getControladorMicromedicao()
-								.obterVolumeMedioAguaEsgoto(contaAtual.getImovel().getId(),	sistemaParametro.getAnoMesFaturamento(),medicaoTipo.getId(), houveIntslacaoHidrometro);
-						
-						medicaoTipo.setId(MedicaoTipo.POCO);
-						int[] consumoMedioHidrometroEsgoto = getControladorMicromedicao()
-								.obterVolumeMedioAguaEsgoto(contaAtual.getImovel().getId(),sistemaParametro.getAnoMesFaturamento(), medicaoTipo.getId(), houveIntslacaoHidrometro);
-						
-						getControladorMicromedicao().atualizarConsumosMedio(contaAtual.getImovel().getId(), mesAnoConta, consumoMedioHidrometroAgua[0], consumoMedioHidrometroEsgoto[0]);
-						
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	private void validarContaParaRetificacao(Conta contaAtual, Imovel imovel,
-			Date dataVencimentoConta) throws ControladorException {
-		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-		String dtVencimentoConta= df.format(dataVencimentoConta);
-		String dtAtual = df.format(new Date());
-		if(dataVencimentoConta != null 
-				&& !dataVencimentoConta.equals(contaAtual.getDataVencimentoConta())
-				&& !dtVencimentoConta.equals(dtAtual)
-				&& dataVencimentoConta.before(new Date())) {
-			throw new ControladorException("atencao.data_menor_atual", "exibirRetificarContaAction.do?contaID="
-					+ contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
-		}
-		
-		validarRetificarContasPrescritas(contaAtual, imovel);
-		
-		ContaMotivoRevisao contaMotivoRevisaoAtual = null;
-		
-		try {
-			contaMotivoRevisaoAtual = this.repositorioFaturamento.pesquisarContaMotivoRevisao(contaAtual.getId());
-		} catch (ErroRepositorioException ex) {
-			
-			throw new ControladorException("erro.sistema", ex);
-		}
-		
-		if (contaMotivoRevisaoAtual != null && contaMotivoRevisaoAtual.getId().equals(ContaMotivoRevisao.REVISAO_POR_ANTIGUIDADE)) {
-			throw new ControladorException("atencao.conta_revisao_antiguidade");
-		}
-
-		if (!this.verificarContaParaRetificacao(contaAtual)) {
-			throw new ControladorException("atencao.conta_impressao_simultanea");
-		}
-		
-		validarRetificarContasPrescritas(contaAtual, imovel);
-	}
-
+	
 	/**
 	 * Monta uma coleção de contas categoria a partir de uma coleção de
 	 * categoria recebida
@@ -9844,59 +9223,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			colecaoContaCategoria.add(contaCategoriaInsert);
 		}
 		return colecaoContaCategoria;
-	}
-
-	/**
-	 * [UC0150] - Retificar Conta
-	 * 
-	 * Author: Raphael Rossiter Data: 03/07/2007
-	 * 
-	 * Atualizar o id da conta na tabela DEBITO_AUTOMATICO_MOVIMENTO
-	 * 
-	 * @param idContaRetificada
-	 * @param idContaInserida
-	 * @param imovel
-	 * @throws ControladorException
-	 */
-	private void atualizarDebitoAutomaticoMovimentoContaRetificada(
-			Integer idContaRetificada, Integer idContaInserida, Imovel imovel)
-			throws ControladorException {
-
-		/*
-		 * Atualizar, caso o imóvel seja optante de débito automatico
-		 * (IMOV_ICDEBITOCONTA = 1 da TABELA IMOVEL)
-		 */
-		if (imovel != null
-				&& imovel.getIndicadorDebitoConta().equals(
-						ConstantesSistema.SIM)) {
-
-			/*
-			 * Caso a conta tenha sido gerada como movimento de débito
-			 * automático e o movimento não tenha sido enviado para o banco
-			 * (CNTA_ID da conta a ser retificada existente na tabela
-			 * DEBITO_AUTOMATICO_MOVIMENTO com DAMV_NNNSAENVIO igual a nulo)
-			 */
-			try {
-
-				Collection colecaoDebitoAutomaticoMovimentoParaAtualizacao = this.repositorioFaturamento
-						.pesquisarDebitoAutomaticoMovimentoContaRetificada(idContaRetificada);
-
-				if (colecaoDebitoAutomaticoMovimentoParaAtualizacao != null
-						&& !colecaoDebitoAutomaticoMovimentoParaAtualizacao
-								.isEmpty()) {
-
-					this.repositorioFaturamento
-							.atualizarDebitoAutomaticoMovimentoContaRetificada(
-									colecaoDebitoAutomaticoMovimentoParaAtualizacao,
-									idContaInserida);
-				}
-
-			} catch (ErroRepositorioException ex) {
-
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("erro.sistema", ex);
-			}
-		}
 	}
 
 	/**
@@ -9980,7 +9306,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getControladorUtil()
 							.pesquisarParametrosDoSistema();
 
-					if (isRetificarContaReferenciaContabilMenor(contaColecao, sistemaParametro)) {
+					if (isContaNormalIncluidaOuRetificadaEReferenciaContabilMenor(contaColecao, sistemaParametro)) {
 
 						// Data do cancelamento
 						contaColecao.setDataCancelamento(new Date());
@@ -10166,7 +9492,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 						}
 
-					} else if (isRetificarContaReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
+					} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
 						// Remoção da conta no BD
 						contaColecao
@@ -11040,8 +10366,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *         recebida
 	 * @throws ControladorException
 	 */
-	protected Date retornaDataValidadeConta(Date dataVencimento)
-			throws ControladorException {
+	public Date retornaDataValidadeConta(Date dataVencimento) throws ControladorException {
 		Date retorno = null;
 
 		SistemaParametro sistemaParametro = this.getControladorUtil()
@@ -11229,15 +10554,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return retorno;
 	}
 
-	/**
-	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 28/12/2005
-	 * 
-	 * @param conta
-	 * @return uma coleção com os créditoa realizados de uma conta
-	 * @throws ControladorException
-	 */
-	public Collection<CreditoRealizado> obterCreditosRealizadosConta(Conta conta)
-			throws ControladorException {
+	public Collection<CreditoRealizado> obterCreditosRealizadosConta(Conta conta) throws ControladorException {
 		Collection retorno = new ArrayList();
 
 		// Criação das coleções
@@ -37521,238 +36838,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * @author Raphael Rossiter
-	 * @date 30/10/2006
-	 * 
-	 * @return Object[]
-	 * @throws ErroRepositorioException
-	 */
-	public Conta pesquisarContaRetificacao(Integer idConta)
-			throws ControladorException {
-
-		Conta retorno = null;
-		Object[] arrayConta = null;
-
-		try {
-
-			arrayConta = repositorioFaturamento
-					.pesquisarContaRetificacao(idConta);
-
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			new ControladorException("erro.sistema", ex);
-		}
-
-		if (arrayConta != null) {
-
-			retorno = new Conta();
-
-			retorno.setId((Integer) arrayConta[0]);
-			retorno.setDataVencimentoConta((Date) arrayConta[1]);
-			retorno.setReferencia((Integer) arrayConta[2]);
-
-			if (arrayConta[3] != null) {
-				retorno.setReferenciaContabil((Integer) arrayConta[3]);
-			}
-
-			if (arrayConta[4] != null) {
-				retorno.setConsumoAgua((Integer) arrayConta[4]);
-			}
-
-			if (arrayConta[5] != null) {
-				retorno.setConsumoEsgoto((Integer) arrayConta[5]);
-			}
-
-			retorno.setValorAgua((BigDecimal) arrayConta[6]);
-			retorno.setValorEsgoto((BigDecimal) arrayConta[7]);
-			retorno.setDebitos((BigDecimal) arrayConta[8]);
-			retorno.setValorCreditos((BigDecimal) arrayConta[9]);
-
-			if (arrayConta[10] != null) {
-				retorno.setValorImposto((BigDecimal) arrayConta[10]);
-			}
-
-			if (arrayConta[11] != null) {
-				retorno.setDataValidadeConta((Date) arrayConta[11]);
-			}
-
-			if (arrayConta[12] != null) {
-				retorno.setLote((Short) arrayConta[12]);
-			}
-
-			if (arrayConta[13] != null) {
-				retorno.setSubLote((Short) arrayConta[13]);
-			}
-
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-			debitoCreditoSituacaoAtual.setId((Integer) arrayConta[14]);
-			retorno.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
-
-			Localidade localidadeConta = new Localidade();
-			localidadeConta.setId((Integer) arrayConta[15]);
-			retorno.setLocalidade(localidadeConta);
-
-			SetorComercial setorComercialConta = new SetorComercial();
-			setorComercialConta.setId((Integer) arrayConta[18]);
-			setorComercialConta.setCodigo((Integer) arrayConta[19]);
-
-			Quadra quadraConta = new Quadra();
-			quadraConta.setId((Integer) arrayConta[16]);
-			quadraConta.setNumeroQuadra((Integer) arrayConta[17]);
-			quadraConta.setSetorComercial(setorComercialConta);
-
-			retorno.setQuadraConta(quadraConta);
-
-			retorno.setIndicadorCobrancaMulta((Short) arrayConta[20]);
-
-			ConsumoTarifa consumoTarifa = new ConsumoTarifa();
-			consumoTarifa.setId((Integer) arrayConta[21]);
-
-			retorno.setConsumoTarifa(consumoTarifa);
-
-			if (arrayConta[22] != null) {
-				ImovelPerfil imovelPerfilConta = new ImovelPerfil();
-				imovelPerfilConta.setId((Integer) arrayConta[22]);
-				retorno.setImovelPerfil(imovelPerfilConta);
-			}
-
-			LigacaoAguaSituacao ligacaoAguaSituacaoConta = new LigacaoAguaSituacao();
-			ligacaoAguaSituacaoConta.setId((Integer) arrayConta[23]);
-			ligacaoAguaSituacaoConta
-					.setIndicadorFaturamentoSituacao((Short) arrayConta[49]);
-			retorno.setLigacaoAguaSituacao(ligacaoAguaSituacaoConta);
-
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacaoConta = new LigacaoEsgotoSituacao();
-			ligacaoEsgotoSituacaoConta.setId((Integer) arrayConta[24]);
-			ligacaoEsgotoSituacaoConta
-					.setIndicadorFaturamentoSituacao((Short) arrayConta[50]);
-			retorno.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacaoConta);
-
-			Imovel imovelConta = new Imovel();
-			imovelConta.setId((Integer) arrayConta[25]);
-
-			ImovelPerfil imovelPerfilImovel = new ImovelPerfil();
-			imovelPerfilImovel.setId((Integer) arrayConta[26]);
-			imovelConta.setImovelPerfil(imovelPerfilImovel);
-
-			if (arrayConta[38] != null) {
-				retorno.setPercentualEsgoto((BigDecimal) arrayConta[38]);
-			}
-
-			if (arrayConta[39] != null) {
-				imovelConta.setIndicadorDebitoConta((Short) arrayConta[39]);
-			}
-
-			if (arrayConta[40] != null) {
-				Imovel imovelCondominio = new Imovel();
-				imovelCondominio.setId((Integer) arrayConta[40]);
-				imovelConta.setImovelCondominio(imovelCondominio);
-			}
-
-			if (arrayConta[41] != null) {
-				retorno.setNumeroRetificacoes((Integer) arrayConta[41]);
-			}
-
-			if (arrayConta[42] != null) {
-				retorno.setIndicadorDebitoConta((Short) arrayConta[42]);
-			}
-
-			if (arrayConta[43] != null) {
-				FaturamentoGrupo faturamentoGrupo = new FaturamentoGrupo();
-				faturamentoGrupo.setId((Integer) arrayConta[43]);
-
-				retorno.setFaturamentoGrupo(faturamentoGrupo);
-			}
-
-			if (arrayConta[44] != null) {
-				Rota rota = new Rota();
-				rota.setId((Integer) arrayConta[44]);
-
-				retorno.setRota(rota);
-			}
-
-			Localidade localidadeImovel = new Localidade();
-			localidadeImovel.setId((Integer) arrayConta[27]);
-			imovelConta.setLocalidade(localidadeImovel);
-
-			SetorComercial setorComercialImovel = new SetorComercial();
-			setorComercialImovel.setId((Integer) arrayConta[30]);
-			setorComercialImovel.setCodigo((Integer) arrayConta[31]);
-			imovelConta.setSetorComercial(setorComercialImovel);
-
-			Quadra quadraImovel = new Quadra();
-			quadraImovel.setId((Integer) arrayConta[28]);
-			quadraImovel.setNumeroQuadra((Integer) arrayConta[29]);
-			imovelConta.setQuadra(quadraImovel);
-
-			LigacaoAguaSituacao ligacaoAguaSituacaoImovel = new LigacaoAguaSituacao();
-			ligacaoAguaSituacaoImovel.setId((Integer) arrayConta[32]);
-			ligacaoAguaSituacaoImovel.setDescricao((String) arrayConta[33]);
-			imovelConta.setLigacaoAguaSituacao(ligacaoAguaSituacaoImovel);
-
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacaoImovel = new LigacaoEsgotoSituacao();
-			ligacaoEsgotoSituacaoImovel.setId((Integer) arrayConta[34]);
-			ligacaoEsgotoSituacaoImovel.setDescricao((String) arrayConta[35]);
-			imovelConta.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacaoImovel);
-
-			ConsumoTarifa consumoTarifaImovel = new ConsumoTarifa();
-			consumoTarifaImovel.setId((Integer) arrayConta[36]);
-			imovelConta.setConsumoTarifa(consumoTarifaImovel);
-
-			retorno.setDataVencimentoOriginal((Date) arrayConta[37]);
-
-			BigDecimal percentualLigacaoEsgoto = null;
-
-			try {
-
-				percentualLigacaoEsgoto = repositorioFaturamento
-						.obterPercentualLigacaoEsgotoImovel(imovelConta.getId());
-
-			} catch (ErroRepositorioException ex) {
-				sessionContext.setRollbackOnly();
-				new ControladorException("erro.sistema", ex);
-			}
-
-			if (percentualLigacaoEsgoto != null) {
-				LigacaoEsgoto ligacaoEsgoto = new LigacaoEsgoto();
-				ligacaoEsgoto.setPercentual(percentualLigacaoEsgoto);
-				imovelConta.setLigacaoEsgoto(ligacaoEsgoto);
-				// retorno.setPercentualEsgoto(percentualLigacaoEsgoto);
-			}
-
-			retorno.setImovel(imovelConta);
-
-			if (arrayConta[45] != null) {
-				retorno.setNumeroLeituraAnterior((Integer) arrayConta[45]);
-			}
-			if (arrayConta[46] != null) {
-				retorno.setNumeroLeituraAtual((Integer) arrayConta[46]);
-			}
-			if (arrayConta[47] != null) {
-				retorno.setPercentualColeta((BigDecimal) (arrayConta[47]));
-			}
-			if (arrayConta[48] != null) {
-				retorno.setNumeroVolumePoco((Integer) (arrayConta[48]));
-			}
-			if (arrayConta[51] != null) {
-				retorno.setValorRateioAgua((BigDecimal) (arrayConta[51]));
-			}
-			if (arrayConta[52] != null) {
-				retorno.setConsumoRateioAgua((Integer) (arrayConta[52]));
-			}
-			if (arrayConta[53] != null) {
-				retorno.setValorRateioEsgoto((BigDecimal) (arrayConta[53]));
-			}
-			if (arrayConta[54] != null) {
-			    retorno.setConsumoRateioEsgoto((Integer) (arrayConta[54]));
-			}
-		}
-
-		return retorno;
-	}
-
-	/**
-	 * 
 	 * Este método se destina a validar todas as situações e particularidades da
 	 * inserir guia de pagamento no momento da exibição.
 	 * 
@@ -42937,7 +42022,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						&& sistemaParametro
 								.getIndicadorBloqueioContasContratoParcelManterConta()
 								.equals(ConstantesSistema.SIM)) {
-					colecaoContasManutencao = this
+					colecaoContasManutencao = getControladorRetificarConta()
 							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 				}
 				/**
@@ -43005,7 +42090,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				 * atualizar os seguintes atributos da conta.
 				 */
 
-				if (isRetificarContaReferenciaContabilMenor(contaColecao, sistemaParametro)) {
+				if (isContaNormalIncluidaOuRetificadaEReferenciaContabilMenor(contaColecao, sistemaParametro)) {
 
 					// Data do cancelamento
 					contaColecao.setDataCancelamento(new Date());
@@ -43178,7 +42263,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 					}
-				} else if (isRetificarContaReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
+				} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
 					// Remoção da conta no BD
 					contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
@@ -43465,7 +42550,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					 * */
 					if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
 							&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
-						colecaoContasManutencao = this.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
+						colecaoContasManutencao = getControladorRetificarConta().obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
 					 * FIM DA ALTERAÇÂO
@@ -43594,7 +42679,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						&& sistemaParametro
 								.getIndicadorBloqueioContasContratoParcelManterConta()
 								.equals(ConstantesSistema.SIM)) {
-					colecaoContasManutencao = this
+					colecaoContasManutencao = getControladorRetificarConta()
 							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 				}
 				/**
@@ -43664,173 +42749,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Ana Maria
-	 * @date 24/01/2007
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoConta(Collection colecaoImovel,
-			Integer anoMes, ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, String indicadorContaPaga)
-			throws ControladorException {
-
-		Collection colecaoContasManutencao = new ArrayList();
-		List colecaoAuxiliar = new ArrayList();
-
-		colecaoAuxiliar.addAll(colecaoImovel);
-
-		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		int i = 0;
-		int cont = 500;
-
-		Collection colecao = new ArrayList();
-		while (i <= colecaoImovel.size()) {
-
-			if (colecaoImovel.size() - i >= cont) {
-				colecao = colecaoAuxiliar.subList(i, i + cont);
-			} else {
-				colecao = colecaoAuxiliar.subList(i, colecaoImovel.size());
-			}
-			i = i + cont;
-			try {
-				colecaoContasManutencao = repositorioFaturamento
-						.obterContasImoveis(anoMes, colecao,
-								dataVencimentoContaInicio,
-								dataVencimentoContaFim, anoMesFim,
-								indicadorContaPaga);
-
-				/**
-				 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso
-				 * o indicador de bloqueio de contas vinculadas a contrato de
-				 * parcelamento no manter contas esteja ativo retirar da lista
-				 * de contas selecionadas as contas vinculadas a algum contrato
-				 * de parcelamento ativo
-				 * 
-				 * RM 1887 - Contrato Parcelamento por Cliente Adicionado por:
-				 * Mariana Victor Data: 15/07/2011
-				 * 
-				 * */
-				if (sistemaParametro
-						.getIndicadorBloqueioContasContratoParcelManterConta() != null
-						&& sistemaParametro
-								.getIndicadorBloqueioContasContratoParcelManterConta()
-								.equals(ConstantesSistema.SIM)) {
-					colecaoContasManutencao = this
-							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContas(colecaoContasManutencao);
-				}
-				/**
-				 * FIM DA ALTERAÇÂO
-				 * */
-
-				if (colecaoContasManutencao != null
-						&& !colecaoContasManutencao.isEmpty()) {
-
-					Iterator colecaoContasManutencaoIterator = colecaoContasManutencao
-							.iterator();
-
-					while (colecaoContasManutencaoIterator.hasNext()) {
-
-						// Obtém os dados do crédito realizado
-						Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
-								.next();
-
-						Conta conta = (Conta) contaArray[0];
-
-						conta.setUltimaAlteracao(new Date());
-
-						Imovel imovel = (Imovel) contaArray[1];
-
-						Collection colecaoCategoriaOUSubcategoria = null;
-
-						/*
-						 * Collection colecaoCategoria = getControladorImovel()
-						 * .obterQuantidadeEconomiasContaCategoria(conta);
-						 */
-						if (sistemaParametro
-								.getIndicadorTarifaCategoria()
-								.equals(SistemaParametro.INDICADOR_TARIFA_SUBCATEGORIA)) {
-
-							colecaoCategoriaOUSubcategoria = this
-									.getControladorImovel()
-									.obterQuantidadeEconomiasContaCategoriaPorSubcategoria(
-											conta);
-
-						} else {
-
-							colecaoCategoriaOUSubcategoria = this
-									.getControladorImovel()
-									.obterQuantidadeEconomiasContaCategoria(
-											conta);
-
-						}
-
-						Collection colecaoCreditoRealizado = obterCreditosRealizadosConta(conta);
-
-						Collection colecaoDebitoCobrado = obterDebitosCobradosConta(conta);
-
-						Collection<CalcularValoresAguaEsgotoHelper> valoresConta = calcularValoresConta(
-								Util.formatarAnoMesParaMesAno(conta
-										.getReferencia()), imovel.getId()
-										.toString(), conta
-										.getLigacaoAguaSituacao().getId(),
-								conta.getLigacaoEsgotoSituacao().getId(),
-								colecaoCategoriaOUSubcategoria, conta
-										.getConsumoAgua().toString(), conta
-										.getConsumoEsgoto().toString(), conta
-										.getPercentualEsgoto().toString(),
-								conta.getConsumoTarifa().getId(), usuarioLogado);
-
-						boolean achouDebitoRetirar = false;
-						if (colecaoDebitoCobrado != null
-								&& !colecaoDebitoCobrado.isEmpty()) {
-							Iterator colecaoDebitoCobradoIterator = colecaoDebitoCobrado
-									.iterator();
-							while (colecaoDebitoCobradoIterator.hasNext()) {
-								DebitoCobrado debitoCobrado = (DebitoCobrado) colecaoDebitoCobradoIterator
-										.next();
-								DebitoTipo debitoTipo = debitoCobrado
-										.getDebitoTipo();
-								if (debitosTipoRetirar.contains(debitoTipo)) {
-									achouDebitoRetirar = true;
-									colecaoDebitoCobradoIterator.remove();
-								}
-							}
-							if (achouDebitoRetirar) {
-								retificarConta(new Integer(conta.getReferencia()),
-										conta, imovel, colecaoDebitoCobrado,
-										colecaoCreditoRealizado,
-										conta.getLigacaoAguaSituacao(),
-										conta.getLigacaoEsgotoSituacao(),
-										colecaoCategoriaOUSubcategoria, 
-										conta.getConsumoAgua().toString(),
-										conta.getConsumoEsgoto().toString(),
-										conta.getPercentualEsgoto().toString(),
-										conta.getDataVencimentoConta(),
-										valoresConta, contaMotivoRetificacao,
-										null, usuarioLogado, conta
-												.getConsumoTarifa().getId()
-												+ "", false, null, null, false,
-										null, null, null, null, null, null);
-							}
-
-						}
-					}
-				}
-			} catch (ErroRepositorioException ex) {
-				sessionContext.setRollbackOnly();
-				new ControladorException("erro.sistema", ex);
-			}
-		}
-	}
-
+	
 	/**
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
@@ -45861,106 +44780,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0150] - Retificar Conta Author: Vivianne Sousa Data: 25/04/2007
-	 * 
-	 * atualizar na tabela PAGAMENTO a coluna CNTA_ID com id da nova conta
-	 * gerada onde CNTA_ID = id da conta a ser retificada
-	 * 
-	 * @param conta
-	 * @param colecaoCreditoRealizado
-	 * @param imovel
-	 * @param colecaoCategoria
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
-	private void atualizarPagamentoContaRetificada(Integer idContaRetificada,
-			Integer idContaInserida) throws ControladorException {
-
-		// Atualizar, caso existam, os pagamentos referentes a
-		// conta que foi retificada com o id da nova conta gerada
-
-		Pagamento pagamento = null;
-
-		pagamento = getControladorArrecadacao().pesquisarPagamentoDeConta(
-				idContaRetificada);
-
-		if (pagamento != null) {
-			try {
-				repositorioArrecadacao.atualizarContaEmPagamento(
-						pagamento.getId(), idContaInserida);
-			} catch (ErroRepositorioException e) {
-				sessionContext.setRollbackOnly();
-				throw new ControladorException("erro.sistema", e);
-			}
-		}
-
-	}
-
-	/**
-	 * [UC0150] - Retificar Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 17/11/2008
-	 * 
-	 * @param idContaRetificada
-	 * @param contaInserida
-	 * @throws ControladorException
-	 */
-	private void atualizarFaturaItemContaRetificada(Integer idContaRetificada,
-			Conta contaInserida) throws ControladorException {
-
-		Object[] faturaItem = null;
-
-		try {
-
-			faturaItem = repositorioFaturamento
-					.pesquisarFaturaItemDeConta(idContaRetificada);
-
-			if (faturaItem != null) {
-
-				Integer idFaturaItem = (Integer) faturaItem[0];
-				BigDecimal valorContaFaturaItem = (BigDecimal) faturaItem[1];
-
-				Integer consumoFatura = null;
-
-				if (contaInserida.getLigacaoAguaSituacao()
-						.getIndicadorFaturamentoSituacao()
-						.equals(ConstantesSistema.SIM)) {
-					consumoFatura = contaInserida.getConsumoAgua();
-				} else if (contaInserida.getLigacaoEsgotoSituacao()
-						.getIndicadorFaturamentoSituacao()
-						.equals(ConstantesSistema.SIM)) {
-					consumoFatura = contaInserida.getConsumoEsgoto();
-				}
-
-				// ATUALIZANDO FATURA_ITEM
-				repositorioFaturamento.atualizarContaEmFaturaItem(idFaturaItem,
-						contaInserida, consumoFatura);
-
-				Integer idFatura = (Integer) faturaItem[3];
-				BigDecimal valorDebitoFaturaLiquido = (BigDecimal) faturaItem[4];
-
-				// ATUALIZA O VALOR TOTAL DA FATURA COM O VALOR DA CONTA GERADA
-				// NA RETIFICAÇÃO
-				BigDecimal valorDebitoFaturaRetificado = valorDebitoFaturaLiquido
-						.subtract(valorContaFaturaItem);
-				valorDebitoFaturaRetificado = valorDebitoFaturaRetificado
-						.add(contaInserida.getValorTotal());
-
-				// ATUALIZANDO FATURA
-				repositorioFaturamento.atualizarValorDebitoFatura(idFatura,
-						valorDebitoFaturaRetificado);
-
-			}
-
-		} catch (ErroRepositorioException e) {
-			sessionContext.setRollbackOnly();
-			new ControladorException("erro.sistema", e);
-		}
-
-	}
-
-	/**
 	 * [UC0144] Inserir Comando Atividade Faturamento
 	 * 
 	 * A data de vencimento do grupo será formatada com o mês seguinte ao de
@@ -46325,7 +45144,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			SistemaParametro sistemaParametro = this.getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
-			if (isRetificarContaReferenciaContabilMenor(contaColecao, sistemaParametro)) {
+			if (isContaNormalIncluidaOuRetificadaEReferenciaContabilMenor(contaColecao, sistemaParametro)) {
 
 				// Data do cancelamento
 				contaColecao.setDataCancelamento(new Date());
@@ -46469,7 +45288,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-			} else if (isRetificarContaReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
+			} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
 				// Remoção da conta no BD
 				contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
@@ -46684,7 +45503,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& sistemaParametro
 							.getIndicadorBloqueioContasContratoParcelManterConta()
 							.equals(ConstantesSistema.SIM)) {
-				colecaoContasManutencao = this
+				colecaoContasManutencao = getControladorRetificarConta()
 						.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 			}
 			/**
@@ -46763,106 +45582,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				dataVencimentoContaFim, anoMesFim, codigoClienteSuperior);
 	}
 
-	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @author Ana Maria
-	 * @date 24/01/2007
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Integer anoMes,
-			ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim) throws ControladorException {
-
-		Collection colecaoContasManutencao = new ArrayList();
-
-		try {
-			colecaoContasManutencao = repositorioFaturamento
-					.obterContasCliente(codigoCliente, relacaoTipo, anoMes,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim);
-
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
-
-				Iterator colecaoContasManutencaoIterator = colecaoContasManutencao
-						.iterator();
-
-				while (colecaoContasManutencaoIterator.hasNext()) {
-
-					// Obtém os dados do crédito realizado
-					Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
-							.next();
-
-					Conta conta = (Conta) contaArray[0];
-
-					conta.setUltimaAlteracao(new Date());
-
-					Imovel imovel = (Imovel) contaArray[1];
-
-					Collection colecaoCategoria = getControladorImovel()
-							.obterQuantidadeEconomiasContaCategoria(conta);
-
-					Collection colecaoCreditoRealizado = obterCreditosRealizadosConta(conta);
-
-					Collection colecaoDebitoCobrado = obterDebitosCobradosConta(conta);
-
-					Collection<CalcularValoresAguaEsgotoHelper> valoresConta = calcularValoresConta(
-							Util.formatarAnoMesParaMesAno(conta.getReferencia()),
-							imovel.getId().toString(), conta
-									.getLigacaoAguaSituacao().getId(), conta
-									.getLigacaoEsgotoSituacao().getId(),
-							colecaoCategoria,
-							conta.getConsumoAgua().toString(), conta
-									.getConsumoEsgoto().toString(), conta
-									.getPercentualEsgoto().toString(), conta
-									.getConsumoTarifa().getId(), usuarioLogado);
-
-					boolean achouDebitoRetirar = false;
-					if (colecaoDebitoCobrado != null
-							&& !colecaoDebitoCobrado.isEmpty()) {
-						Iterator colecaoDebitoCobradoIterator = colecaoDebitoCobrado
-								.iterator();
-						while (colecaoDebitoCobradoIterator.hasNext()) {
-							DebitoCobrado debitoCobrado = (DebitoCobrado) colecaoDebitoCobradoIterator
-									.next();
-							DebitoTipo debitoTipo = debitoCobrado
-									.getDebitoTipo();
-							if (debitosTipoRetirar.contains(debitoTipo)) {
-								achouDebitoRetirar = true;
-								colecaoDebitoCobradoIterator.remove();
-							}
-						}
-						if (achouDebitoRetirar) {
-							retificarConta(new Integer(conta.getReferencia()),
-									conta, imovel, colecaoDebitoCobrado,
-									colecaoCreditoRealizado,
-									conta.getLigacaoAguaSituacao(),
-									conta.getLigacaoEsgotoSituacao(),
-									colecaoCategoria, conta.getConsumoAgua()
-											.toString(), conta
-											.getConsumoEsgoto().toString(),
-									conta.getPercentualEsgoto().toString(),
-									conta.getDataVencimentoConta(),
-									valoresConta, contaMotivoRetificacao, null,
-									usuarioLogado, conta.getConsumoTarifa()
-											.getId() + "", false, null, null,
-									false, null, null, null, null, null, null);
-						}
-
-					}
-				}
-			}
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			new ControladorException("erro.sistema", ex);
-		}
-	}
-
+	
 	/**
 	 * Pesquisar conjunto de contas p/ emissão da 2°Via
 	 * 
@@ -56337,7 +55057,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& sistemaParametro
 							.getIndicadorBloqueioContasContratoParcelManterConta()
 							.equals(ConstantesSistema.SIM)) {
-				colecaoContasManutencao = this
+				colecaoContasManutencao = getControladorRetificarConta()
 						.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 			}
 			/**
@@ -56404,7 +55124,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			 * SISTEMA_PARAMETROS), atualizar os seguintes atributos da conta.
 			 */
 
-			if (isRetificarContaReferenciaContabilMenor(contaColecao, sistemaParametro)) {
+			if (isContaNormalIncluidaOuRetificadaEReferenciaContabilMenor(contaColecao, sistemaParametro)) {
 
 				// Data do cancelamento
 				contaColecao.setDataCancelamento(new Date());
@@ -56570,7 +55290,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-			} else if (isRetificarContaReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
+			} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
 				// Remoção da conta no BD
 				contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
@@ -56812,132 +55532,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	/**
-	 * Retificar Conjunto de Conta
-	 * 
-	 * @throws ControladorException
-	 */
-	public void retificarConjuntoConta(Integer idGrupoFaturamento,
-			Integer anoMes, ContaMotivoRetificacao contaMotivoRetificacao,
-			Collection debitosTipoRetirar, Usuario usuarioLogado,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim) throws ControladorException {
-
-		Collection colecaoContasManutencao = new ArrayList();
-
-		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		try {
-
-			colecaoContasManutencao = repositorioFaturamento
-					.obterContasGrupoFaturamento(anoMes, idGrupoFaturamento,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim);
-
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
-
-				/**
-				 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso
-				 * o indicador de bloqueio de contas vinculadas a contrato de
-				 * parcelamento no manter contas esteja ativo retirar da lista
-				 * de contas selecionadas as contas vinculadas a algum contrato
-				 * de parcelamento ativo
-				 * 
-				 * RM 1887 - Contrato Parcelamento por Cliente Adicionado por:
-				 * Mariana Victor Data: 21/07/2011
-				 * 
-				 * */
-				if (sistemaParametro
-						.getIndicadorBloqueioContasContratoParcelManterConta() != null
-						&& sistemaParametro
-								.getIndicadorBloqueioContasContratoParcelManterConta()
-								.equals(ConstantesSistema.SIM)) {
-					colecaoContasManutencao = this
-							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContas(colecaoContasManutencao);
-				}
-				/**
-				 * FIM DA ALTERAÇÂO
-				 * */
-
-				Iterator colecaoContasManutencaoIterator = colecaoContasManutencao
-						.iterator();
-
-				while (colecaoContasManutencaoIterator.hasNext()) {
-
-					// Obtém os dados do crédito realizado
-					Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
-							.next();
-
-					Conta conta = (Conta) contaArray[0];
-
-					conta.setUltimaAlteracao(new Date());
-
-					Imovel imovel = (Imovel) contaArray[1];
-
-					Collection colecaoCategoria = getControladorImovel()
-							.obterQuantidadeEconomiasContaCategoria(conta);
-
-					Collection colecaoCreditoRealizado = obterCreditosRealizadosConta(conta);
-
-					Collection colecaoDebitoCobrado = obterDebitosCobradosConta(conta);
-
-					Collection<CalcularValoresAguaEsgotoHelper> valoresConta = calcularValoresConta(
-							Util.formatarAnoMesParaMesAno(conta.getReferencia()),
-							imovel.getId().toString(), conta
-									.getLigacaoAguaSituacao().getId(), conta
-									.getLigacaoEsgotoSituacao().getId(),
-							colecaoCategoria,
-							conta.getConsumoAgua().toString(), conta
-									.getConsumoEsgoto().toString(), conta
-									.getPercentualEsgoto().toString(), conta
-									.getConsumoTarifa().getId(), usuarioLogado);
-
-					boolean achouDebitoRetirar = false;
-					if (colecaoDebitoCobrado != null
-							&& !colecaoDebitoCobrado.isEmpty()) {
-						Iterator colecaoDebitoCobradoIterator = colecaoDebitoCobrado
-								.iterator();
-						while (colecaoDebitoCobradoIterator.hasNext()) {
-							DebitoCobrado debitoCobrado = (DebitoCobrado) colecaoDebitoCobradoIterator
-									.next();
-							DebitoTipo debitoTipo = debitoCobrado
-									.getDebitoTipo();
-							if (debitosTipoRetirar.contains(debitoTipo)) {
-								achouDebitoRetirar = true;
-								colecaoDebitoCobradoIterator.remove();
-							}
-						}
-						if (achouDebitoRetirar) {
-							retificarConta(new Integer(conta.getReferencia()),
-									conta, imovel, colecaoDebitoCobrado,
-									colecaoCreditoRealizado,
-									conta.getLigacaoAguaSituacao(),
-									conta.getLigacaoEsgotoSituacao(),
-									colecaoCategoria, conta.getConsumoAgua()
-											.toString(), conta
-											.getConsumoEsgoto().toString(),
-									conta.getPercentualEsgoto().toString(),
-									conta.getDataVencimentoConta(),
-									valoresConta, contaMotivoRetificacao, null,
-									usuarioLogado, conta.getConsumoTarifa()
-											.getId() + "", false, null, null,
-									false, null, null, null, null, null, null);
-						}
-
-					}
-				}
-			}
-
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			new ControladorException("erro.sistema", ex);
-		}
-
-	}
-
+	
 	/**
 	 * Pesquisar conjunto de contas p/ emissão da 2°Via
 	 * 
@@ -66689,22 +65284,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param conta
 	 * @return
 	 */
-	public Collection montarColecaoContaCategoria(
-			Collection colecaoCategoriaOuSubcategoria, Conta conta)
-			throws ControladorException {
+	public Collection montarColecaoContaCategoria(Collection colecaoCategoriaOuSubcategoria, Conta conta) throws ControladorException {
 
 		Collection retorno = null;
 
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		if (sistemaParametro.getIndicadorTarifaCategoria().equals(
-				SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-			retorno = montarColecaoObjetoContaCategoria(
-					colecaoCategoriaOuSubcategoria, conta);
+		if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+			retorno = montarColecaoObjetoContaCategoria(colecaoCategoriaOuSubcategoria, conta);
 		} else {
-			retorno = montarColecaoObjetoContaSubcategoria(
-					colecaoCategoriaOuSubcategoria, conta);
+			retorno = montarColecaoObjetoContaSubcategoria(colecaoCategoriaOuSubcategoria, conta);
 		}
 
 		return retorno;
@@ -68194,8 +66783,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Vivianne Sousa
 	 * @date 16/06/2008
 	 */
-	public Integer obterReferenciaContabilConta(
-			SistemaParametro sistemaParametro, Integer anoMesReferenciaConta) {
+	public Integer obterReferenciaContabilConta(SistemaParametro sistemaParametro, Integer anoMesReferenciaConta) throws ControladorException {
 
 		Integer anoMesCorrente = Util.getAnoMesComoInteger(new Date());
 		Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
@@ -68328,47 +66916,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-	}
-
-	/**
-	 * [UC0000] - Retificar Conjunto de Conta a partir do [UC0146] Manter Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 04/11/2008
-	 * 
-	 * @param colecaoContas
-	 * @param identificadores
-	 * @param ligacaoAguaSituacao
-	 * @param consumoAgua
-	 * @param ligacaoEsgotoSituacao
-	 * @param consumoEsgoto
-	 * @param dataVencimento
-	 * @param contaMotivoRetificacao
-	 * @param usuarioLogado
-	 */
-	public void retificarConjuntoConta(Collection<Conta> colecaoContas,
-			String identificadores, LigacaoAguaSituacao ligacaoAguaSituacao,
-			Integer consumoAgua, LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Integer consumoEsgoto, Date dataVencimento,
-			ContaMotivoRetificacao contaMotivoRetificacao,
-			Short indicadorCategoriaEconomiaConta, Usuario usuarioLogado)
-			throws ControladorException {
-
-		UC0146ManterConta manterConta = UC0146ManterConta.getInstancia(
-				repositorioFaturamento, sessionContext);
-
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		Collection colecaoContaSelecionadas = manterConta
-				.gerarColecaoContaSelecaoParaRetificacao(colecaoContas,
-						identificadores, sistemaParametro, usuarioLogado);
-
-		manterConta.retificarConjuntoConta(colecaoContaSelecionadas,
-				ligacaoAguaSituacao, consumoAgua, ligacaoEsgotoSituacao,
-				consumoEsgoto, dataVencimento, contaMotivoRetificacao,
-				indicadorCategoriaEconomiaConta, sistemaParametro,
-				usuarioLogado);
 	}
 
 	/**
@@ -70998,60 +69545,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * [FS0009] – Verificar se conta pode ser retificada
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 20/01/2011
-	 * 
-	 * @param conta
-	 * @return boolean
-	 * @throws ControladorException
-	 */
-	public boolean verificarContaParaRetificacao(Conta conta)
-			throws ControladorException {
-
-		boolean contaDisponivel = true;
-
-		try {
-
-			Rota rotaRetificacao = repositorioFaturamento
-					.pesquisarRotaParaRetificacao(conta.getId());
-
-			if (rotaRetificacao != null
-					&& conta.getReferencia() == rotaRetificacao
-							.getFaturamentoGrupo().getAnoMesReferencia()
-							.intValue()) {
-
-				/*
-				 * Caso o arquivo texto da rota do imóvel não esteja finalizado
-				 * e seja de impressão simultânea (SITL_ID =1, 2, 3 ou 5 e
-				 * STCE_ID=2, onde ROTA_ID da tabela ARQUIVO_TEXTO_ROT_EMP seja
-				 * igual a ROTA_ID da tabela CONTA e CNTA_AMREFERENCIACONTA da
-				 * tabela conta seja igual a TXRE_AMREFERENCIA da tabela
-				 * ARQUIVO_TEXTO_ROT_EMP) não habilitar esta conta para
-				 * retificação.
-				 */
-				Integer idArquivoTextoRoteiroEmpresa = repositorioFaturamento
-						.pesquisarArquivoTextoRoteiroEmpresaNaoFinalizado(
-								conta, rotaRetificacao);
-
-				if (idArquivoTextoRoteiroEmpresa != null) {
-
-					contaDisponivel = false;
-				}
-			}
-
-		} catch (ErroRepositorioException ex) {
-
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		return contaDisponivel;
-	}
-
-	/**
 	 * [UC0204] Consultar Conta
 	 * 
 	 * Pesquisa o consumo faturado do imóvel
@@ -71642,92 +70135,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return retorno;
 	}
 
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas as
-	 * que não estão ligadas a algum Contrato de Parcelamento por Cliente
-	 * 
-	 * @author Mariana Victor
-	 * @date 15/07/2011
-	 * 
-	 * @param colecaoContas
-	 * 
-	 * @return Collection<Integer>
-	 */
-	public Collection<Object[]> obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContas(
-			Collection<Object[]> colecaoContasManutencao)
-			throws ControladorException {
-		Collection<Object[]> retorno = new ArrayList<Object[]>();
-
-		try {
-
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
-				Iterator iterator = colecaoContasManutencao.iterator();
-
-				while (iterator.hasNext()) {
-					Object[] contaArray = (Object[]) iterator.next();
-
-					if (!repositorioCobranca
-							.verificaContaVinculadaAContratoParcelAtivo(((Conta) contaArray[0])
-									.getId())) {
-						retorno.add(contaArray);
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return retorno;
-	}
-
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas as
-	 * que não estão ligadas a algum Contrato de Parcelamento por Cliente
-	 * 
-	 * @author Mariana Victor
-	 * @date 15/07/2011
-	 * 
-	 * @param colecaoContas
-	 * 
-	 * @return Collection<Integer>
-	 */
-	public Collection<Object[]> obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(
-			Collection<Object[]> colecaoContasManutencao)
-			throws ControladorException {
-		Collection<Object[]> retorno = new ArrayList<Object[]>();
-
-		try {
-
-			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
-				Iterator iterator = colecaoContasManutencao.iterator();
-
-				while (iterator.hasNext()) {
-					Object[] contaArray = (Object[]) iterator.next();
-
-					if (!repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
-						retorno.add(contaArray);
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return retorno;
-	}
+	
 
 	/**
 	 * [UC1187] Colocar Débito a Cobrar em Revisão
@@ -73695,26 +72103,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	private void inserirClienteContaRetificacao(Conta contaRetificada, Integer idContaCanceladaPorRetificacao) throws ControladorException {
-		Collection<IClienteConta> listaClienteConta = null;
-		try {
-			listaClienteConta = repositorioFaturamento.pesquisarClienteConta(idContaCanceladaPorRetificacao);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-		
-		for (IClienteConta clienteConta : listaClienteConta) {
-			ClienteConta clienteContaRetificada = new ClienteConta();
-			clienteContaRetificada.setCliente(clienteConta.getCliente());
-			clienteContaRetificada.setClienteRelacaoTipo(clienteConta.getClienteRelacaoTipo());
-			clienteContaRetificada.setConta(contaRetificada);
-			clienteContaRetificada.setIndicadorNomeConta(clienteConta.getIndicadorNomeConta());
-			clienteContaRetificada.setUltimaAlteracao(new Date());
-			
-			getControladorUtil().inserir(clienteContaRetificada);
-		}
-	}
-	
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia) throws ControladorException {
 		try {
 			List<RelatorioAgenciaReguladoraDTO> retorno = new ArrayList<RelatorioAgenciaReguladoraDTO>();
@@ -73841,5 +72229,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				valorEsgotoLancamentoAgenciaReguladora, tipoLancamento);
 
 		return lar;
+	}
+	
+	private boolean isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(Conta contaAtual, SistemaParametro sistemaParametro) {
+		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) 
+						|| contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA))
+					&& (Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(), ">") 
+						|| Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"="));
+	}
+
+	private boolean isContaNormalIncluidaOuRetificadaEReferenciaContabilMenor(Conta contaAtual, SistemaParametro sistemaParametro) {
+		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL))
+				|| ((contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) || 
+						contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA)) 
+				&& Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"<"));
 	}
 }

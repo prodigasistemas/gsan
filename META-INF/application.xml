@@ -880,6 +880,10 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorRetificarContaGCOM.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

@@ -1,7 +1,7 @@
 package gcom.batch.faturamento;
 
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -19,12 +19,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-/**
- * [UC0925] Emitir Boletos
- * 
- * @author Vivianne Sousa
- * @created 10/07/2009
- */
 public class BatchRetificarConjuntoContaConsumosMDB implements MessageDrivenBean,
 		MessageListener {
 	
@@ -43,12 +37,13 @@ public class BatchRetificarConjuntoContaConsumosMDB implements MessageDrivenBean
 
 	}
 
-    public void onMessage(Message message) {
+    @SuppressWarnings("rawtypes")
+	public void onMessage(Message message) {
         if (message instanceof ObjectMessage) {
 
             ObjectMessage objectMessage = (ObjectMessage) message;
             try {
-            	this.getControladorFaturamento().retificarConjuntoContaConsumos(
+            	this.getControladorRetificarConta().retificarConjuntoContaConsumos(
             			(Integer) ((Object[]) objectMessage.getObject())[0],
             			(Map) ((Object[]) objectMessage.getObject())[1]);
 
@@ -64,26 +59,17 @@ public class BatchRetificarConjuntoContaConsumosMDB implements MessageDrivenBean
     }
 
     
-    /**
-	 * Retorna o valor de controladorFaturamento
-	 * 
-	 * @return O valor de controladorFaturamento
-	 */
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
+    private ControladorRetificarContaLocal getControladorRetificarConta() {
 
-		// pega a instância do ServiceLocator.
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
 			local = localHome.create();
 
 			return local;
@@ -92,14 +78,9 @@ public class BatchRetificarConjuntoContaConsumosMDB implements MessageDrivenBean
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
+
 	}
 
-    /**
-     * Default create method
-     * 
-     * @throws CreateException
-     */
     public void ejbCreate() {
-
     }
 }

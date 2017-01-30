@@ -7730,7 +7730,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 							}
 						}
 						if (achouDebitoRetirar) {
-							retificarConta(
+							getControladorRetificarConta().retificarConta(
 								new Integer(conta.getReferencia()),
 								conta, 
 								imovel, 
@@ -7851,7 +7851,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 								}
 							}
 							if (achouDebitoRetirar) {
-								retificarConta(new Integer(conta
+								getControladorRetificarConta().retificarConta(new Integer(conta
 										.getReferencia()), conta, imovel,
 										colecaoDebitoCobrado,
 										colecaoCreditoRealizado, conta
@@ -7955,7 +7955,7 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 							}
 						}
 						if (achouDebitoRetirar) {
-							retificarConta(new Integer(conta.getReferencia()),
+							getControladorRetificarConta().retificarConta(new Integer(conta.getReferencia()),
 									conta, imovel, colecaoDebitoCobrado,
 									colecaoCreditoRealizado, conta
 											.getLigacaoAguaSituacao(), conta

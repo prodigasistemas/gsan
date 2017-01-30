@@ -7,6 +7,7 @@ public class ConstantesJNDI {
 
 	public final static String NOME_ARQUIVO_PROPRIEDADES = "constantes_jndi.properties";
 
+	public static String CONTROLADOR_RETIFICAR_CONTA = "";
 	public static String CONTROLADOR_DEBITO_A_COBRAR = "";
 	public static String CONTROLADOR_ANALISE_GERACAO_CONTA = "";
 	public static String CONTROLADOR_ATUALIZACAO_CADASTRO = "";
@@ -293,6 +294,7 @@ public class ConstantesJNDI {
 
 			propriedades.load(stream);
 			
+			CONTROLADOR_RETIFICAR_CONTA = propriedades.getProperty("ControladorRetificarConta");
             CONTROLADOR_DEBITO_A_COBRAR = propriedades.getProperty("ControladorDebitoACobrar");
             CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
             CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");

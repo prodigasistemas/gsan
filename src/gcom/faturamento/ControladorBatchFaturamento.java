@@ -9,6 +9,8 @@ import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
@@ -181,7 +183,7 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 					break;
 				}
 				case (MetodosBatch.RETIFICAR_CONJUNTO_CONTA_POR_GRUPO_FATURAMENTO):{
-					this.getControladorFaturamento().retificarConjuntoConta(
+					this.getControladorRetificarConta().retificarConjuntoConta(
 							(Integer) ((Object[]) objectMessage.getObject())[0],
 							(Integer) ((Object[]) objectMessage.getObject())[1],
 							(ContaMotivoRetificacao) ((Object[]) objectMessage.getObject())[2],
@@ -195,7 +197,7 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 					break;
 				}
 				case (MetodosBatch.RETIFICAR_CONJUNTO_CONTA_COLECAO):{
-					this.getControladorFaturamento().retificarConjuntoConta(
+					this.getControladorRetificarConta().retificarConjuntoConta(
 							(Collection) ((Object[]) objectMessage.getObject())[0],
 							(Integer) ((Object[]) objectMessage.getObject())[1],
 							(ContaMotivoRetificacao) ((Object[]) objectMessage.getObject())[2],
@@ -254,11 +256,6 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 
 	}
 
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
 	private ControladorEnderecoLocal getControladorEndereco() {
 		ControladorEnderecoLocalHome localHome = null;
 		ControladorEnderecoLocal local = null;
@@ -285,11 +282,6 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 
 	}
 	
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
@@ -315,11 +307,6 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 		}
 	}
 
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
 	public void ejbCreate() {
 	}
 	
@@ -343,13 +330,6 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 		}
 	}
 	
-	/**
-	 * Author: Rafael Santos Data: 04/01/2006
-	 * 
-	 * Retorna o valor do Controlador de Cobranca
-	 * 
-	 * @return O valor de controladorCobrancaLocal
-	 */
 	private ControladorCobrancaLocal getControladorCobranca() {
 
 		ControladorCobrancaLocalHome localHome = null;
@@ -366,6 +346,28 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
 			// guarda a referencia de um objeto capaz de fazer chamadas
 			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
 			local = localHome.create();
 
 			return local;

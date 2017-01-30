@@ -380,6 +380,8 @@ import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.ImpostoDeduzidoHelper;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -1130,6 +1132,28 @@ public class Fachada {
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -3770,7 +3794,7 @@ public class Fachada {
 			Integer leituraAnteriorPoco, Integer leituraAtualPoco, Integer volumePoco, BigDecimal percentualColeta, Integer consumoMedidoProporcional) {
 
 		try {
-			return this.getControladorFaturamento().retificarConta(mesAnoConta, contaAtual, imovel, colecaoDebitoCobrado, colecaoCreditoRealizado,
+			return this.getControladorRetificarConta().retificarConta(mesAnoConta, contaAtual, imovel, colecaoDebitoCobrado, colecaoCreditoRealizado,
 					ligacaoAguaSituacao, ligacaoEsgotoSituacao, colecaoCategoria, consumoAgua, consumoEsgoto, percentualEsgoto, dataVencimentoConta,
 					calcularValoresConta, contaMotivoRetificacao, requestMap, usuarioLogado, consumoTarifa, atualizarMediaConsumoHistorico, leituraAnterior,
 					leituraAtual, atualizarLeituraAnteriorEAtualConta, retorno, leituraAnteriorPoco, leituraAtualPoco, volumePoco, percentualColeta, 
@@ -17454,7 +17478,7 @@ public class Fachada {
 
 		try {
 
-			return this.getControladorFaturamento().pesquisarContaRetificacao(idConta);
+			return this.getControladorRetificarConta().pesquisarContaRetificacao(idConta);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
@@ -22190,7 +22214,7 @@ public class Fachada {
 	public void retificarConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Integer anoMes, ContaMotivoRetificacao contaMotivoRetificacao,
 			Collection debitosTipoRetirar, Usuario usuarioLogado, Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim) {
 		try {
-			this.getControladorFaturamento().retificarConjuntoContaCliente(codigoCliente, relacaoTipo, anoMes, contaMotivoRetificacao, debitosTipoRetirar,
+			this.getControladorRetificarConta().retificarConjuntoContaCliente(codigoCliente, relacaoTipo, anoMes, contaMotivoRetificacao, debitosTipoRetirar,
 					usuarioLogado, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
@@ -30034,7 +30058,7 @@ public class Fachada {
 
 		try {
 
-			this.getControladorFaturamento().retificarConjuntoConta(colecaoContas, identificadores, ligacaoAguaSituacao, consumoAgua, ligacaoEsgotoSituacao,
+			this.getControladorRetificarConta().retificarConjuntoConta(colecaoContas, identificadores, ligacaoAguaSituacao, consumoAgua, ligacaoEsgotoSituacao,
 					consumoEsgoto, dataVencimento, contaMotivoRetificacao, indicadorCategoriaEconomiaConta, usuarioLogado);
 
 		} catch (ControladorException ex) {
@@ -37781,7 +37805,7 @@ public class Fachada {
 
 		try {
 
-			return this.getControladorFaturamento().retificarContasPagasSemDebitoCredito(colecaoContasRetificar, usuarioLogado);
+			return this.getControladorRetificarConta().retificarContasPagasSemDebitoCredito(colecaoContasRetificar, usuarioLogado);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
