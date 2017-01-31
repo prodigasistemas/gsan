@@ -205,7 +205,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 		Integer leituraAtualMedicao = (Integer) leiturasMedicao[1];
 
-		if ((leituraAtualMedicao != null && !leituraAtualMedicao.equals(contaAtual.getNumeroLeituraAtual()) || (leituraAtualMedicao == null && contaAtual
+		if ((leituraAtualMedicao != null && leituraAtualMedicao.equals(contaAtual.getNumeroLeituraAtual()) || (leituraAtualMedicao == null && contaAtual
 				.getNumeroLeituraAtual() == null))) {
 
 			// Verifica se houve alteração nas leituras, se sim verifica se já
