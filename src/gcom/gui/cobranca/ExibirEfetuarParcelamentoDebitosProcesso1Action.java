@@ -77,14 +77,14 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		verificarPermissoes(httpServletRequest, fachada, usuario);
 		// -----------------------------------------------------------
 
-		DynaActionForm efetuarParcelamentoDebitosActionForm = (DynaActionForm) actionForm;
+		DynaActionForm form = (DynaActionForm) actionForm;
 
 		// Pega o codigo que o usuario digitou para a pesquisa direta de imovel
 		String codigoImovel = (String) httpServletRequest.getParameter("matriculaImovel");
-		String codigoImovelAntes = (String) efetuarParcelamentoDebitosActionForm.get("codigoImovelAntes");
+		String codigoImovelAntes = (String) form.get("codigoImovelAntes");
 
 		// Testa o CPF digitado
-		String cpf = (String) efetuarParcelamentoDebitosActionForm.get("cpfClienteParcelamentoDigitado");
+		String cpf = (String) form.get("cpfClienteParcelamentoDigitado");
 
 		// O usuário é pessoa física
 		if (cpf != null && !cpf.trim().equalsIgnoreCase("")) {
@@ -109,8 +109,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		}
 
 		// Pesquisa de Cliente
-		String idClienteParcelamento = (String) efetuarParcelamentoDebitosActionForm.get("idClienteParcelamento");
-		String cpfClienteParcelamento = (String) efetuarParcelamentoDebitosActionForm.get("cpfClienteParcelamento");
+		String idClienteParcelamento = (String) form.get("idClienteParcelamento");
+		String cpfClienteParcelamento = (String) form.get("cpfClienteParcelamento");
 		if (idClienteParcelamento != null && !idClienteParcelamento.equals("")) {
 			FiltroCliente filtroCliente = new FiltroCliente();
 			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idClienteParcelamento));
@@ -120,10 +120,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 			if (clientes != null && !clientes.isEmpty()) {
 				Cliente cliente = (Cliente) ((List) clientes).get(0);
 
-				efetuarParcelamentoDebitosActionForm.set("nomeClienteParcelamento", cliente.getNome());
-				efetuarParcelamentoDebitosActionForm.set("foneClienteParcelamento", fachada.pesquisarClienteFonePrincipal(cliente.getId()));
-				efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamento", cliente.getCpfFormatado());
-				efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamentoDigitado", "");
+				form.set("nomeClienteParcelamento", cliente.getNome());
+				form.set("foneClienteParcelamento", fachada.pesquisarClienteFonePrincipal(cliente.getId()));
+				form.set("cpfClienteParcelamento", cliente.getCpfFormatado());
+				form.set("cpfClienteParcelamentoDigitado", "");
 
 				if (cliente.getCpf() != null && !cliente.getCpf().equals("")) {
 
@@ -132,27 +132,27 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 			} else {
 				httpServletRequest.setAttribute("clienteInexistente", "true");
-				efetuarParcelamentoDebitosActionForm.set("idClienteParcelamento", "");
-				efetuarParcelamentoDebitosActionForm.set("nomeClienteParcelamento", "CLIENTE INEXISTENTE");
-				efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamento", "");
-				efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamentoDigitado", "");
+				form.set("idClienteParcelamento", "");
+				form.set("nomeClienteParcelamento", "CLIENTE INEXISTENTE");
+				form.set("cpfClienteParcelamento", "");
+				form.set("cpfClienteParcelamentoDigitado", "");
 
 			}
 		} else {
-			efetuarParcelamentoDebitosActionForm.set("nomeClienteParcelamento", "");
+			form.set("nomeClienteParcelamento", "");
 
 			if (cpfClienteParcelamento != null && !cpfClienteParcelamento.equals("")) {
-				efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamento", Util.formatarCPFApresentacao(cpfClienteParcelamento));
+				form.set("cpfClienteParcelamento", Util.formatarCPFApresentacao(cpfClienteParcelamento));
 				Cliente clienteParcelamento = fachada.obterIdENomeCliente(cpfClienteParcelamento);
 
 				if (clienteParcelamento != null) {
 					httpServletRequest.setAttribute("cpfCliente", "true");
-					efetuarParcelamentoDebitosActionForm.set("idClienteParcelamento", clienteParcelamento.getId().toString());
-					efetuarParcelamentoDebitosActionForm.set("nomeClienteParcelamento", clienteParcelamento.getNome());
-					efetuarParcelamentoDebitosActionForm.set("foneClienteParcelamento", fachada.pesquisarClienteFonePrincipal(clienteParcelamento.getId()));
+					form.set("idClienteParcelamento", clienteParcelamento.getId().toString());
+					form.set("nomeClienteParcelamento", clienteParcelamento.getNome());
+					form.set("foneClienteParcelamento", fachada.pesquisarClienteFonePrincipal(clienteParcelamento.getId()));
 				} else {
-					efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamento", "");
-					efetuarParcelamentoDebitosActionForm.set("cpfClienteParcelamentoDigitado", "");
+					form.set("cpfClienteParcelamento", "");
+					form.set("cpfClienteParcelamentoDigitado", "");
 					httpServletRequest.setAttribute("cpfInexistente", "CPF INEXISTENTE");
 				}
 			}
@@ -218,8 +218,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
 						&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)) {
 					sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
-					efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", "");
-					efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", "");
+					form.set("inicioIntervaloParcelamento", "");
+					form.set("fimIntervaloParcelamento", "");
 
 				}
 
@@ -291,10 +291,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 					sessao.setAttribute("colecaoContaValoresImovel", contaRemovida != null ? colecaoContasImovel.remove(contaRemovida) : colecaoContasImovel);
 
-					efetuarParcelamentoDebitosActionForm.set("valorTotalContasImovel", Util.formatarMoedaReal(valorTotalContas));
+					form.set("valorTotalContasImovel", Util.formatarMoedaReal(valorTotalContas));
 				} else {
 
-					efetuarParcelamentoDebitosActionForm.set("valorTotalContasImovel", "0,00");
+					form.set("valorTotalContasImovel", "0,00");
 				}
 
 				// Guias de Pagamento
@@ -348,9 +348,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 					sessao.setAttribute("colecaoGuiaPagamentoValoresImovel", colecaoGuiaPagamentoValoresImovel);
 
-					efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamentoImovel", Util.formatarMoedaReal(valorTotalGuiasPagamento));
+					form.set("valorGuiasPagamentoImovel", Util.formatarMoedaReal(valorTotalGuiasPagamento));
 				} else {
-					efetuarParcelamentoDebitosActionForm.set("valorGuiasPagamentoImovel", "0,00");
+					form.set("valorGuiasPagamentoImovel", "0,00");
 				}
 
 				// Acrescimos por Impotualidade
@@ -360,7 +360,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
 
 				sessao.setAttribute("valorAcrescimosImpontualidadeImovel", retornoSoma);
-				efetuarParcelamentoDebitosActionForm.set("valorAcrescimosImpontualidadeImovel", Util.formatarMoedaReal(retornoSoma));
+				form.set("valorAcrescimosImpontualidadeImovel", Util.formatarMoedaReal(retornoSoma));
 
 				// Para o cálculo do Débito Total Atualizado
 				valorTotalAcrescimoImpontualidade = retornoSoma;
@@ -431,28 +431,28 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 					valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo.add(valorTotalRestanteServicosACobrarLongoPrazo);
 					// Está no hidden no formulário
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoLongoPrazo",
+					form.set("valorDebitoACobrarServicoLongoPrazo",
 							Util.formatarMoedaReal(valorTotalRestanteServicosACobrarLongoPrazo));
 					// Está no hidden no formulário
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoCurtoPrazo",
+					form.set("valorDebitoACobrarServicoCurtoPrazo",
 							Util.formatarMoedaReal(valorTotalRestanteServicosACobrarCurtoPrazo));
 					// Está no TEXT
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoImovel", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
+					form.set("valorDebitoACobrarServicoImovel", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
 					// Parcelamentos
 					valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo
 							.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
 					// Está no hidden no formulário
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoLongoPrazo",
+					form.set("valorDebitoACobrarParcelamentoLongoPrazo",
 							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarLongoPrazo));
 					// Está no hidden no formulário
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoCurtoPrazo",
+					form.set("valorDebitoACobrarParcelamentoCurtoPrazo",
 							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarCurtoPrazo));
 					// Está no TEXT
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoImovel",
+					form.set("valorDebitoACobrarParcelamentoImovel",
 							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
 				} else {
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarServicoImovel", "0,00");
-					efetuarParcelamentoDebitosActionForm.set("valorDebitoACobrarParcelamentoImovel", "0,00");
+					form.set("valorDebitoACobrarServicoImovel", "0,00");
+					form.set("valorDebitoACobrarParcelamentoImovel", "0,00");
 				}
 
 				// Crédito A Realizar
@@ -474,9 +474,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						colecaoCreditoARealizar.removeAll(creditosRemovidos);
 					sessao.setAttribute("colecaoCreditoARealizarImovel", colecaoCreditoARealizar);
 
-					efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizarImovel", Util.formatarMoedaReal(valorCreditoARealizar));
+					form.set("valorCreditoARealizarImovel", Util.formatarMoedaReal(valorCreditoARealizar));
 				} else {
-					efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizarImovel", "0,00");
+					form.set("valorCreditoARealizarImovel", "0,00");
 				}
 
 				// Débito Total Atualizado
@@ -491,7 +491,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				debitoTotalAtualizado = debitoTotalAtualizado.subtract(valorCreditoARealizar);
 
 				sessao.setAttribute("valorDebitoTotalAtualizadoImovel", debitoTotalAtualizado);
-				efetuarParcelamentoDebitosActionForm.set("valorDebitoTotalAtualizadoImovel", Util.formatarMoedaReal(debitoTotalAtualizado));
+				form.set("valorDebitoTotalAtualizadoImovel", Util.formatarMoedaReal(debitoTotalAtualizado));
 
 				// Quando mudar de imóvel iniciar a data do parcelamento com a
 				// data atual, limpar
@@ -501,23 +501,23 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 					Calendar dataCorrente = new GregorianCalendar();
 
-					efetuarParcelamentoDebitosActionForm.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
+					form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
 
 					// Limpa Resolução de Diretoria
-					efetuarParcelamentoDebitosActionForm.set("resolucaoDiretoria", "");
+					form.set("resolucaoDiretoria", "");
 
-					efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", "");
+					form.set("inicioIntervaloParcelamento", "");
 					// Limpa fim do Intervalo do Parcelamento
-					efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", "");
+					form.set("fimIntervaloParcelamento", "");
 
 					sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
 
 					// Limpa as perguntas
-					efetuarParcelamentoDebitosActionForm.set("indicadorContasRevisao", "");
-					efetuarParcelamentoDebitosActionForm.set("indicadorGuiasPagamento", "");
-					efetuarParcelamentoDebitosActionForm.set("indicadorAcrescimosImpotualidade", "");
-					efetuarParcelamentoDebitosActionForm.set("indicadorDebitosACobrar", "");
-					efetuarParcelamentoDebitosActionForm.set("indicadorCreditoARealizar", "");
+					form.set("indicadorContasRevisao", "");
+					form.set("indicadorGuiasPagamento", "");
+					form.set("indicadorAcrescimosImpotualidade", "");
+					form.set("indicadorDebitosACobrar", "");
+					form.set("indicadorCreditoARealizar", "");
 				}
 
 				// Intervalo do Parcelamento
@@ -541,49 +541,49 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					// Quando não houver intervalo de parcelamento inicial e
 					// final
 					if (menorAnoMesReferencia != 0) {
-						if ((efetuarParcelamentoDebitosActionForm.get("inicioIntervaloParcelamento") == null || efetuarParcelamentoDebitosActionForm.get(
+						if ((form.get("inicioIntervaloParcelamento") == null || form.get(
 								"inicioIntervaloParcelamento").equals(""))) {
 							sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
-							efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
+							form.set("inicioIntervaloParcelamento", Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
 						}
 					}
 
 					if (maiorAnoMesReferencia != 0) {
-						if ((efetuarParcelamentoDebitosActionForm.get("fimIntervaloParcelamento") == null || efetuarParcelamentoDebitosActionForm.get(
+						if ((form.get("fimIntervaloParcelamento") == null || form.get(
 								"fimIntervaloParcelamento").equals(""))) {
-							efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
+							form.set("fimIntervaloParcelamento", Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
 							sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
 						}
 					} else {
-						efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", "00/0000");
+						form.set("fimIntervaloParcelamento", "00/0000");
 					}
 				} else {
 					// [FS0015] Verificar existência de contas
 					// Caso não existam contas para o imóvel deixar indisponível
 					// o campo mês/ano
 					// de referência inicial e mês/ano de referência final
-					efetuarParcelamentoDebitosActionForm.set("inicioIntervaloParcelamento", "");
-					efetuarParcelamentoDebitosActionForm.set("fimIntervaloParcelamento", "");
+					form.set("inicioIntervaloParcelamento", "");
+					form.set("fimIntervaloParcelamento", "");
 					sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
 				}
 
-				efetuarParcelamentoDebitosActionForm.set("valorAtualizacaoMonetariaImovel", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
-				efetuarParcelamentoDebitosActionForm.set("valorJurosMoraImovel", Util.formatarMoedaReal(valorJurosMora));
-				efetuarParcelamentoDebitosActionForm.set("valorMultaImovel", Util.formatarMoedaReal(valorMulta));
-				efetuarParcelamentoDebitosActionForm.set("matriculaImovel", codigoImovel);
+				form.set("valorAtualizacaoMonetariaImovel", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
+				form.set("valorJurosMoraImovel", Util.formatarMoedaReal(valorJurosMora));
+				form.set("valorMultaImovel", Util.formatarMoedaReal(valorMulta));
+				form.set("matriculaImovel", codigoImovel);
 			}
 
 			// Atualizando o código do imóvel na varíavel hidden do formulário
 			codigoImovelAntes = codigoImovel;
-			efetuarParcelamentoDebitosActionForm.set("codigoImovelAntes", codigoImovelAntes);
+			form.set("codigoImovelAntes", codigoImovelAntes);
 		}
 
 		// Coloca a data Atual na data de Parecelamento
-		if (efetuarParcelamentoDebitosActionForm.get("dataParcelamento").equals("") || efetuarParcelamentoDebitosActionForm.get("dataParcelamento") == null) {
+		if (form.get("dataParcelamento").equals("") || form.get("dataParcelamento") == null) {
 			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 			Calendar dataCorrente = new GregorianCalendar();
 
-			efetuarParcelamentoDebitosActionForm.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
+			form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
 		}
 
 		// Pesquisa a Resolução de Diretoria
