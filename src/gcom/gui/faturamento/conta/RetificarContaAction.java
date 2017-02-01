@@ -635,30 +635,32 @@ public class RetificarContaAction extends GcomAction {
     private Integer obterConsumoMedidoProporcional(Integer leituraAtual,Integer leituraAnterior, RetificarContaActionForm form, 
     		Collection colecaoCategoriaOUSubcategoria, Integer idConsumoTarifa, Usuario usuarioLogado) {
     	Integer consumoMedidoProporcional = new Integer("0");
-    	
-    	Integer consumoAguaMedido = leituraAtual - leituraAnterior;
-    	
-    	Collection<CalcularValoresAguaEsgotoHelper> valoresConta = 
-                this.getFachada().calcularValoresConta(
-                		form.getMesAnoConta(), 
-                		form.getIdImovel(),
-                		new Integer(form.getSituacaoAguaConta()), 
-                		new Integer(form.getSituacaoEsgotoConta()),
-                        colecaoCategoriaOUSubcategoria, 
-                        consumoAguaMedido.toString(), 
-                        form.getConsumoEsgoto(),
-                        form.getPercentualEsgoto(), 
-                        idConsumoTarifa, 
-                        usuarioLogado);
-    	
-		if (valoresConta != null && !valoresConta.isEmpty()) {
 
-			for (CalcularValoresAguaEsgotoHelper item : valoresConta) {
-				if (item.getConsumoFaturadoAguaCategoria() != null) {
-					consumoMedidoProporcional = consumoMedidoProporcional + item.getConsumoFaturadoAguaCategoria();
-				}
-			}
-		}
+    	if (leituraAtual != null && leituraAnterior != null) {
+    		Integer consumoAguaMedido = leituraAtual - leituraAnterior;
+    		
+    		Collection<CalcularValoresAguaEsgotoHelper> valoresConta = 
+    				this.getFachada().calcularValoresConta(
+    						form.getMesAnoConta(), 
+    						form.getIdImovel(),
+    						new Integer(form.getSituacaoAguaConta()), 
+    						new Integer(form.getSituacaoEsgotoConta()),
+    						colecaoCategoriaOUSubcategoria, 
+    						consumoAguaMedido.toString(), 
+    						form.getConsumoEsgoto(),
+    						form.getPercentualEsgoto(), 
+    						idConsumoTarifa, 
+    						usuarioLogado);
+    		
+    		if (valoresConta != null && !valoresConta.isEmpty()) {
+    			
+    			for (CalcularValoresAguaEsgotoHelper item : valoresConta) {
+    				if (item.getConsumoFaturadoAguaCategoria() != null) {
+    					consumoMedidoProporcional = consumoMedidoProporcional + item.getConsumoFaturadoAguaCategoria();
+    				}
+    			}
+    		}
+    	}
 		
     	return consumoMedidoProporcional; 
     }

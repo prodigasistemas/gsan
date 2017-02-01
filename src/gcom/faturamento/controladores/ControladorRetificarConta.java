@@ -1565,6 +1565,8 @@ public class ControladorRetificarConta extends ControladorComum {
 
 			retorno.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) arrayConta[14]));
 
+			retorno.setLocalidade(new Localidade((Integer) arrayConta[15]));
+			
 			SetorComercial setorComercialConta = new SetorComercial((Integer) arrayConta[18]);
 			setorComercialConta.setCodigo((Integer) arrayConta[19]);
 
