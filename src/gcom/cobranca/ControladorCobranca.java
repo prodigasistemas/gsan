@@ -11887,7 +11887,7 @@ public class ControladorCobranca implements SessionBean {
 
 			// 4. Inclui o crédito a realizar para Créditos Anteriores
 			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES);
 		}
 
 		// 5. Desconto por Sanções

@@ -49,16 +49,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-/**
- * Permite efetuar o parcelamento dos débitos de um imóvel
- * 
- * [UC0214] Efetuar Parcelamento de Débitos
- * 
- * Pré-processamento da primeira página
- * 
- * @author Rodrigo Avellar/Roberta Costa
- * @date 11/02/2006
- */
 public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
@@ -72,10 +62,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 
-		// -----------------------------------------------------------
-		// Verificar as permissões especiais da página
 		verificarPermissoes(httpServletRequest, fachada, usuario);
-		// -----------------------------------------------------------
 
 		DynaActionForm form = (DynaActionForm) actionForm;
 
@@ -83,32 +70,492 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		String codigoImovel = (String) httpServletRequest.getParameter("matriculaImovel");
 		String codigoImovelAntes = (String) form.get("codigoImovelAntes");
 
-		// Testa o CPF digitado
-		String cpf = (String) form.get("cpfClienteParcelamentoDigitado");
+		validarCPF(form);
 
-		// O usuário é pessoa física
-		if (cpf != null && !cpf.trim().equalsIgnoreCase("")) {
+		pesquisarClienteParcelamento(httpServletRequest, fachada, form);
 
-			boolean igual = true;
-			Integer i = 0;
+		String inscricaoImovel = null;
+		if (httpServletRequest.getParameter("inscricaoImovel") != null && !httpServletRequest.getParameter("inscricaoImovel").equals("")) {
+			inscricaoImovel = (String) httpServletRequest.getParameter("inscricaoImovel");
+		}
+		
+		if (codigoImovel != null && !codigoImovel.trim().equals("") && inscricaoImovel == null) {
 
-			Integer tam = cpf.length() - 1;
+			boolean existeImovel = pesquisarImovel(codigoImovel, actionForm, httpServletRequest, sessao, usuario);
 
-			while (i < tam) {
-				if ((cpf.charAt(i)) != (cpf.charAt(i + 1))) {
-					igual = false;
-					break;
+			if (existeImovel) {
+				Collection<Parcelamento> colecaoParcelamento = fachada.verificarParcelamentoMesImovel(new Integer(codigoImovel));
+
+				if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
+					throw new ActionServletException("atencao.debito.ja.parcelado.mes.faturamento.corrente");
+				}
+
+				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = obterDebitosImovelOuCliente(fachada, codigoImovel);
+
+				validarExistenciaDebitosImovel(codigoImovel, colecaoDebitoImovel);
+
+				// [FS0015] Verificar existência de contas. 
+				// Caso não existam contas para o imóvel deixar indisponível o campo mês/ano de referência inicial e mês/ano de referência final
+				if (isImovelSemContas(colecaoDebitoImovel)) {
+					sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
+					form.set("inicioIntervaloParcelamento", "");
+					form.set("fimIntervaloParcelamento", "");
+				}
+
+				// Para o cálculo do Débito Total Atualizado
+				BigDecimal valorTotalContas = new BigDecimal("0.00");
+				BigDecimal valorTotalAcrescimoImpontualidade = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteServicosACobrar = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteServicosACobrarCurtoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteServicosACobrarLongoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteParcelamentosACobrar = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteParcelamentosACobrarCurtoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalRestanteParcelamentosACobrarLongoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalGuiasPagamento = new BigDecimal("0.00");
+				BigDecimal valorTotalAcrescimoImpontualidadeContas = new BigDecimal("0.00");
+				BigDecimal valorTotalAcrescimoImpontualidadeGuias = new BigDecimal("0.00");
+				BigDecimal valorCreditoARealizar = new BigDecimal("0.00");
+				BigDecimal valorRestanteACobrar = new BigDecimal("0.00");
+				BigDecimal valorAtualizacaoMonetaria = new BigDecimal("0.00");
+				BigDecimal valorJurosMora = new BigDecimal("0.00");
+				BigDecimal valorMulta = new BigDecimal("0.00");
+
+				// Dados do Débito do Imóvel - Contas
+				Collection<ContaValoresHelper> colecaoContasImovel = new ArrayList<ContaValoresHelper>();
+
+				ContaValoresHelper contaRemovida = null;
+
+				if (isImovelComContas(colecaoDebitoImovel)) {
+
+					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresImovel());
+					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
+
+					Iterator<ContaValoresHelper> contaValores = colecaoContasImovel.iterator();
+
+					while (contaValores.hasNext()) {
+
+						ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
+
+						if (verificaReferenciaIgualReferencialFaturamento(contaValoresHelper.getConta().getAnoMesReferenciaConta())) {
+							contaRemovida = contaValoresHelper;
+							continue;
+						}
+
+						valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+						valorTotalContas = valorTotalContas.add(contaValoresHelper.getValorTotalConta());
+						if (contaPossuiAtualizacaoMonetaria(contaValoresHelper)) {
+							valorAtualizacaoMonetaria.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorAtualizacaoMonetaria = valorAtualizacaoMonetaria.add(contaValoresHelper.getValorAtualizacaoMonetaria().setScale(
+									Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+						if (contaPossuiJurosMora(contaValoresHelper)) {
+							valorJurosMora.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorJurosMora = valorJurosMora.add(contaValoresHelper.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS,
+									Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+						if (contaPossuiMulta(contaValoresHelper)) {
+							valorMulta.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorMulta = valorMulta.add(contaValoresHelper.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS,
+									Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+
+						valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+						valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper
+								.getValorTotalContaValoresParcelamento());
+
+					}
+
+					sessao.setAttribute("colecaoContaValoresImovel", contaRemovida != null ? colecaoContasImovel.remove(contaRemovida) : colecaoContasImovel);
+
+					form.set("valorTotalContasImovel", Util.formatarMoedaReal(valorTotalContas));
 				} else {
-					i++;
+					form.set("valorTotalContasImovel", "0,00");
+				}
+
+				// Guias de Pagamento
+				Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValoresImovel = colecaoDebitoImovel.getColecaoGuiasPagamentoValores();
+				Collection<GuiaPagamentoValoresHelper> guiasRemovidas = new ArrayList<GuiaPagamentoValoresHelper>();
+
+				if (colecaoGuiaPagamentoValoresImovel != null && !colecaoGuiaPagamentoValoresImovel.isEmpty()) {
+					Iterator<GuiaPagamentoValoresHelper> guiaPagamentoValores = colecaoGuiaPagamentoValoresImovel.iterator();
+					while (guiaPagamentoValores.hasNext()) {
+
+						GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
+
+						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(guiaPagamentoValoresHelper.getGuiaPagamento().getDataEmissao()))) {
+							guiasRemovidas.add(guiaPagamentoValoresHelper);
+							continue;
+						}
+
+						if (guiaPagamentoValoresHelper.getGuiaPagamento() != null && !guiaPagamentoValoresHelper.getGuiaPagamento().equals("")) {
+							valorTotalGuiasPagamento.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorTotalGuiasPagamento = valorTotalGuiasPagamento.add(guiaPagamentoValoresHelper.getGuiaPagamento().getValorDebito()
+									.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+						if (guiaPossuiAtualizacaoMonetaria(guiaPagamentoValoresHelper)) {
+							valorAtualizacaoMonetaria.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorAtualizacaoMonetaria = valorAtualizacaoMonetaria.add(guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria().setScale(
+									Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+						if (guiaPossuiJurosMora(guiaPagamentoValoresHelper)) {
+							valorJurosMora.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorJurosMora = valorJurosMora.add(guiaPagamentoValoresHelper.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS,
+									Parcelamento.TIPO_ARREDONDAMENTO));
+						}
+						if (guiaPossuiMulta(guiaPagamentoValoresHelper)) {
+							valorMulta.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorMulta = valorMulta.add(guiaPagamentoValoresHelper.getValorMulta());
+						}
+
+						if (guiaPossuiAcrescimosImpontualidade(guiaPagamentoValoresHelper)) {
+							valorTotalAcrescimoImpontualidadeGuias.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorTotalAcrescimoImpontualidadeGuias = valorTotalAcrescimoImpontualidadeGuias.add(guiaPagamentoValoresHelper
+									.getValorAcrescimosImpontualidade());
+						}
+					}
+
+					if (!guiasRemovidas.isEmpty())
+						colecaoGuiaPagamentoValoresImovel.removeAll(guiasRemovidas);
+
+					sessao.setAttribute("colecaoGuiaPagamentoValoresImovel", colecaoGuiaPagamentoValoresImovel);
+
+					form.set("valorGuiasPagamentoImovel", Util.formatarMoedaReal(valorTotalGuiasPagamento));
+				} else {
+					form.set("valorGuiasPagamentoImovel", "0,00");
+				}
+
+				// Acrescimos por Impotualidade
+				BigDecimal retornoSoma = new BigDecimal("0.00");
+				retornoSoma.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
+				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
+
+				sessao.setAttribute("valorAcrescimosImpontualidadeImovel", retornoSoma);
+				form.set("valorAcrescimosImpontualidadeImovel", Util.formatarMoedaReal(retornoSoma));
+
+				// Para o cálculo do Débito Total Atualizado
+				valorTotalAcrescimoImpontualidade = retornoSoma;
+
+				// Debitos A Cobrar
+				Collection<DebitoACobrar> colecaoDebitoACobrar = colecaoDebitoImovel.getColecaoDebitoACobrar();
+				Collection<DebitoACobrar> debitosRemovidos = new ArrayList<DebitoACobrar>();
+
+				if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
+					Iterator<DebitoACobrar> debitoACobrarValores = colecaoDebitoACobrar.iterator();
+
+					final int indiceCurtoPrazo = 0;
+					final int indiceLongoPrazo = 1;
+
+					while (debitoACobrarValores.hasNext()) {
+						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
+
+						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(debitoACobrar.getGeracaoDebito()))) {
+							debitosRemovidos.add(debitoACobrar);
+							continue;
+						}
+
+						// [FS0022]-Verificar existência de juros sobre imóvel
+						if (debitoACobrarNaoPossuiJurosParcelamento(debitoACobrar)) {
+
+							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
+
+							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(debitoACobrar.getNumeroPrestacaoDebito(), 
+									debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), valorRestanteACobrar);
+							
+							if (isDebitoACobrarServicoNormal(debitoACobrar)) {
+								valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalRestanteServicosACobrarCurtoPrazo = valorTotalRestanteServicosACobrarCurtoPrazo.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
+								
+								valorTotalRestanteServicosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalRestanteServicosACobrarLongoPrazo = valorTotalRestanteServicosACobrarLongoPrazo.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
+							}
+
+							if (isDebitoACobrarParcelamento(debitoACobrar)) {
+								valorTotalRestanteParcelamentosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalRestanteParcelamentosACobrarCurtoPrazo = valorTotalRestanteParcelamentosACobrarCurtoPrazo.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
+								
+								valorTotalRestanteParcelamentosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalRestanteParcelamentosACobrarLongoPrazo = valorTotalRestanteParcelamentosACobrarLongoPrazo.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
+							}
+						}
+					}
+
+					if (!debitosRemovidos.isEmpty())
+						colecaoDebitoACobrar.removeAll(debitosRemovidos);
+
+					sessao.setAttribute("colecaoDebitoACobrarImovel", colecaoDebitoACobrar);
+
+					// Serviços
+					valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+					valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo.add(valorTotalRestanteServicosACobrarLongoPrazo);
+					
+					form.set("valorDebitoACobrarServicoLongoPrazo",Util.formatarMoedaReal(valorTotalRestanteServicosACobrarLongoPrazo));
+					form.set("valorDebitoACobrarServicoCurtoPrazo",Util.formatarMoedaReal(valorTotalRestanteServicosACobrarCurtoPrazo));
+					form.set("valorDebitoACobrarServicoImovel", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
+					
+					valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
+					
+					form.set("valorDebitoACobrarParcelamentoLongoPrazo",Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarLongoPrazo));
+					form.set("valorDebitoACobrarParcelamentoCurtoPrazo",Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarCurtoPrazo));
+					form.set("valorDebitoACobrarParcelamentoImovel",Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
+				} else {
+					form.set("valorDebitoACobrarServicoImovel", "0,00");
+					form.set("valorDebitoACobrarParcelamentoImovel", "0,00");
+				}
+
+				// Crédito A Realizar
+				Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoImovel.getColecaoCreditoARealizar();
+				Collection<CreditoARealizar> creditosRemovidos = new ArrayList<CreditoARealizar>();
+				
+				if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
+					
+					Iterator<CreditoARealizar> creditoARealizarValores = colecaoCreditoARealizar.iterator();
+					
+					while (creditoARealizarValores.hasNext()) {
+						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
+							creditosRemovidos.add(creditoARealizar);
+							continue;
+						}
+						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
+					}
+
+					if (!creditosRemovidos.isEmpty())
+						colecaoCreditoARealizar.removeAll(creditosRemovidos);
+					
+					sessao.setAttribute("colecaoCreditoARealizarImovel", colecaoCreditoARealizar);
+
+					form.set("valorCreditoARealizarImovel", Util.formatarMoedaReal(valorCreditoARealizar));
+				} else {
+					form.set("valorCreditoARealizarImovel", "0,00");
+				}
+
+				// Débito Total Atualizado
+				BigDecimal debitoTotalAtualizado = new BigDecimal("0.00");
+
+				debitoTotalAtualizado.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalContas);
+				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalGuiasPagamento);
+				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalAcrescimoImpontualidade);
+				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalRestanteServicosACobrar);
+				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalRestanteParcelamentosACobrar);
+				debitoTotalAtualizado = debitoTotalAtualizado.subtract(valorCreditoARealizar);
+
+				sessao.setAttribute("valorDebitoTotalAtualizadoImovel", debitoTotalAtualizado);
+				form.set("valorDebitoTotalAtualizadoImovel", Util.formatarMoedaReal(debitoTotalAtualizado));
+
+				validarMudancaImovel(sessao, form, codigoImovelAntes, codigoImovel);
+
+				calcularIntervaloParcelamento(sessao, form, colecaoContasImovel);
+
+				form.set("valorAtualizacaoMonetariaImovel", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
+				form.set("valorJurosMoraImovel", Util.formatarMoedaReal(valorJurosMora));
+				form.set("valorMultaImovel", Util.formatarMoedaReal(valorMulta));
+				form.set("matriculaImovel", codigoImovel);
+			}
+
+			// Atualizando o código do imóvel na varíavel hidden do formulário
+			codigoImovelAntes = codigoImovel;
+			form.set("codigoImovelAntes", codigoImovelAntes);
+		}
+
+		// Coloca a data Atual na data de Parecelamento
+		if (form.get("dataParcelamento").equals("") || form.get("dataParcelamento") == null) {
+			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar dataCorrente = new GregorianCalendar();
+
+			form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
+		}
+
+		validarPermissaoRD(httpServletRequest, fachada);
+
+		return retorno;
+	}
+
+	private void validarPermissaoRD(HttpServletRequest httpServletRequest, Fachada fachada) {
+		Collection<ResolucaoDiretoria> colecaoResolucaoDiretoria = new ArrayList<ResolucaoDiretoria>();
+
+		if ((Boolean) httpServletRequest.getAttribute("temPermissaoResolucaoDiretoria")) {
+			colecaoResolucaoDiretoria = fachada.pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial();
+		} else {
+			colecaoResolucaoDiretoria = fachada.pesquisarResolucaoDiretoriaMaiorDataVigenciaInicio();
+		}
+
+		if (colecaoResolucaoDiretoria != null && colecaoResolucaoDiretoria.isEmpty()) {
+			throw new ActionServletException("atencao.resolucao_diretoria.inexistente");
+		} else {
+			httpServletRequest.setAttribute("colecaoResolucaoDiretoria", colecaoResolucaoDiretoria);
+		}
+	}
+
+	private void calcularIntervaloParcelamento(HttpSession sessao, DynaActionForm form, Collection<ContaValoresHelper> colecaoContasImovel) {
+		// Intervalo do Parcelamento
+		if (colecaoContasImovel != null && colecaoContasImovel.size() != 0) {
+			Iterator contaValores = colecaoContasImovel.iterator();
+			int anoMesReferenciaColecao = 0;
+			int menorAnoMesReferencia = 999999;
+			int maiorAnoMesReferencia = 0;
+
+			while (contaValores.hasNext()) {
+				ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
+				anoMesReferenciaColecao = contaValoresHelper.getConta().getReferencia();
+				if (anoMesReferenciaColecao < menorAnoMesReferencia) {
+					menorAnoMesReferencia = anoMesReferenciaColecao;
+				}
+				if (anoMesReferenciaColecao > maiorAnoMesReferencia) {
+					maiorAnoMesReferencia = anoMesReferenciaColecao;
 				}
 			}
 
-			if (igual) {
-				throw new ActionServletException("atencao.cpf_invalido");
+			// Quando não houver intervalo de parcelamento inicial e final
+			if (menorAnoMesReferencia != 0) {
+				if ((form.get("inicioIntervaloParcelamento") == null || form.get("inicioIntervaloParcelamento").equals(""))) {
+					sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
+					form.set("inicioIntervaloParcelamento", Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
+				}
 			}
-		}
 
-		// Pesquisa de Cliente
+			if (maiorAnoMesReferencia != 0) {
+				if ((form.get("fimIntervaloParcelamento") == null || form.get(
+						"fimIntervaloParcelamento").equals(""))) {
+					form.set("fimIntervaloParcelamento", Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
+					sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
+				}
+			} else {
+				form.set("fimIntervaloParcelamento", "00/0000");
+			}
+		} else {
+			// [FS0015] Verificar existência de contas
+			// Caso não existam contas para o imóvel deixar indisponível o campo mês/ano
+			// de referência inicial e mês/ano de referência final
+			form.set("inicioIntervaloParcelamento", "");
+			form.set("fimIntervaloParcelamento", "");
+			sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
+		}
+	}
+
+	private void validarMudancaImovel(HttpSession sessao, DynaActionForm form, String codigoImovelAntes, String codigoImovel) {
+		
+		if (!codigoImovelAntes.equals(codigoImovel)) {
+			// Reinicia a Data do Parcelamento
+			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar dataCorrente = new GregorianCalendar();
+			
+			form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
+			
+			// Limpa Resolução de Diretoria
+			form.set("resolucaoDiretoria", "");
+			
+			form.set("inicioIntervaloParcelamento", "");
+			// Limpa fim do Intervalo do Parcelamento
+			form.set("fimIntervaloParcelamento", "");
+			
+			sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
+			
+			// Limpa as perguntas
+			form.set("indicadorContasRevisao", "");
+			form.set("indicadorGuiasPagamento", "");
+			form.set("indicadorAcrescimosImpotualidade", "");
+			form.set("indicadorDebitosACobrar", "");
+			form.set("indicadorCreditoARealizar", "");
+		}
+	}
+
+	private boolean debitoACobrarNaoPossuiJurosParcelamento(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getDebitoTipo().getId() != null && !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO);
+	}
+
+	private boolean isDebitoACobrarServicoNormal(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.SERVICO_NORMAL);
+	}
+
+	private boolean isDebitoACobrarParcelamento(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_AGUA)
+				|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+				|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+	}
+
+	private boolean guiaPossuiAcrescimosImpontualidade(GuiaPagamentoValoresHelper guiaPagamentoValoresHelper) {
+		return guiaPagamentoValoresHelper.getValorAcrescimosImpontualidade() != null
+				&& !guiaPagamentoValoresHelper.getValorAcrescimosImpontualidade().equals("");
+	}
+
+	private boolean guiaPossuiMulta(GuiaPagamentoValoresHelper guiaPagamentoValoresHelper) {
+		return guiaPagamentoValoresHelper.getValorMulta() != null && !guiaPagamentoValoresHelper.getValorMulta().equals("");
+	}
+
+	private boolean guiaPossuiJurosMora(GuiaPagamentoValoresHelper guiaPagamentoValoresHelper) {
+		return guiaPagamentoValoresHelper.getValorJurosMora() != null && !guiaPagamentoValoresHelper.getValorJurosMora().equals("");
+	}
+
+	private boolean guiaPossuiAtualizacaoMonetaria(GuiaPagamentoValoresHelper guiaPagamentoValoresHelper) {
+		return guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria() != null
+				&& !guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria().equals("");
+	}
+
+	private boolean contaPossuiMulta(ContaValoresHelper contaValoresHelper) {
+		return contaValoresHelper.getValorMulta() != null && !contaValoresHelper.getValorMulta().equals("");
+	}
+
+	private boolean contaPossuiJurosMora(ContaValoresHelper contaValoresHelper) {
+		return contaValoresHelper.getValorJurosMora() != null && !contaValoresHelper.getValorJurosMora().equals("");
+	}
+
+	private boolean contaPossuiAtualizacaoMonetaria(ContaValoresHelper contaValoresHelper) {
+		return contaValoresHelper.getValorAtualizacaoMonetaria() != null && !contaValoresHelper.getValorAtualizacaoMonetaria().equals("");
+	}
+
+	private boolean isImovelComContas(ObterDebitoImovelOuClienteHelper colecaoDebitoImovel) {
+		return (colecaoDebitoImovel.getColecaoContasValoresImovel() != null && !colecaoDebitoImovel.getColecaoContasValoresImovel().isEmpty())
+				|| (colecaoDebitoImovel.getColecaoContasValoresPreteritos() != null && !colecaoDebitoImovel.getColecaoContasValoresPreteritos()
+						.isEmpty());
+	}
+
+	private boolean isImovelSemContas(ObterDebitoImovelOuClienteHelper colecaoDebitoImovel) {
+		return (colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
+				&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0);
+	}
+
+	private void validarExistenciaDebitosImovel(String codigoImovel, ObterDebitoImovelOuClienteHelper colecaoDebitoImovel) {
+		if (imovelSemDebitos(colecaoDebitoImovel)) {
+			throw new ActionServletException("atencao.imovel.sem.debitos", null, codigoImovel);
+		}
+	}
+
+	private boolean imovelSemDebitos(ObterDebitoImovelOuClienteHelper colecaoDebitoImovel) {
+		return (colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
+				&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)
+				&& (colecaoDebitoImovel.getColecaoGuiasPagamentoValores() == null || colecaoDebitoImovel.getColecaoGuiasPagamentoValores().size() == 0)
+				&& (colecaoDebitoImovel.getColecaoDebitoACobrar() == null || colecaoDebitoImovel.getColecaoDebitoACobrar().size() == 0);
+	}
+
+	private ObterDebitoImovelOuClienteHelper obterDebitosImovelOuCliente(Fachada fachada, String codigoImovel) {
+		FaturamentoGrupo grupo = fachada.pesquisarGrupoImovel(Integer.valueOf(codigoImovel));
+		
+		int referenciaCronograma = fachada.pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(grupo.getId());
+
+		// [UC0067] Obter Débito do Imóvel ou Cliente
+		ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada.obterDebitoImovelOuCliente(1, // Indicador débito imóvel
+				codigoImovel, // Matrícula do imóvel
+				null, // Código do cliente
+				null, // Tipo de relação do cliento com o imóvel
+				"000101", // Referência inicial do débito
+				String.valueOf(referenciaCronograma), // Referência final do débito
+				Util.converteStringParaDate("01/01/0001"), // Inicio Vencimento
+				Util.converteStringParaDate("31/12/9999"), // Final Vencimento
+				1, // Indicador pagamento
+				1, // Indicador conta em revisão
+				1, // Indicador débito a cobrar
+				1, // Indicador crédito a realizar
+				1, // Indicador notas promissórias
+				1, // Indicador guias de pagamento
+				1, // Indicador acréscimos por impontualidade
+				null); // Indicador Contas
+		return colecaoDebitoImovel;
+	}
+
+	private void pesquisarClienteParcelamento(HttpServletRequest httpServletRequest, Fachada fachada, DynaActionForm form) {
 		String idClienteParcelamento = (String) form.get("idClienteParcelamento");
 		String cpfClienteParcelamento = (String) form.get("cpfClienteParcelamento");
 		if (idClienteParcelamento != null && !idClienteParcelamento.equals("")) {
@@ -157,458 +604,31 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				}
 			}
 		}
+	}
 
-		String inscricaoImovel = null;
-		if (httpServletRequest.getParameter("inscricaoImovel") != null && !httpServletRequest.getParameter("inscricaoImovel").equals("")) {
-			inscricaoImovel = (String) httpServletRequest.getParameter("inscricaoImovel");
-		}
-		if (codigoImovel != null && !codigoImovel.trim().equals("") && inscricaoImovel == null) {
-			// Pesquisa os dados do cliente e do imóvel
-			boolean existeImovel = pesquisarImovel(codigoImovel, actionForm, httpServletRequest, sessao, usuario);
+	private void validarCPF(DynaActionForm form) {
+		String cpf = (String) form.get("cpfClienteParcelamentoDigitado");
 
-			if (existeImovel) {
-				// [FS0012] Verificar existência de parcelamento no mês
-				Collection<Parcelamento> colecaoParcelamento = fachada.verificarParcelamentoMesImovel(new Integer(codigoImovel));
+		if (cpf != null && !cpf.trim().equalsIgnoreCase("")) {
 
-				if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
-					throw new ActionServletException("atencao.debito.ja.parcelado.mes.faturamento.corrente");
-				}
+			boolean igual = true;
+			Integer i = 0;
 
-				FaturamentoGrupo grupo = fachada.pesquisarGrupoImovel(Integer.valueOf(codigoImovel));
-				int referenciaCronograma = fachada.pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(grupo.getId());
+			Integer tam = cpf.length() - 1;
 
-				// [UC0067] Obter Débito do Imóvel ou Cliente
-				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = fachada.obterDebitoImovelOuCliente(1, // Indicador
-																												// débito
-																												// imóvel
-						codigoImovel, // Matrícula do imóvel
-						null, // Código do cliente
-						null, // Tipo de relação do cliento com o
-						// imóvel
-						"000101", // Referência inicial do débito
-						String.valueOf(referenciaCronograma), // Referência
-																// final do
-																// débito
-						Util.converteStringParaDate("01/01/0001"), // Inicio
-						// Vencimento
-						Util.converteStringParaDate("31/12/9999"), // Final
-						// Vencimento
-						1, // Indicador pagamento
-						1, // Indicador conta em revisão
-						1, // Indicador débito a cobrar
-						1, // Indicador crédito a realizar
-						1, // Indicador notas promissórias
-						1, // Indicador guias de pagamento
-						1, // Indicador acréscimos por impontualidade
-						null); // Indicador Contas
-
-				// [FS0014] Verificar existência de débitos para o imóvel
-				// Caso não exista débito
-				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
-						&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)
-						&& (colecaoDebitoImovel.getColecaoGuiasPagamentoValores() == null || colecaoDebitoImovel.getColecaoGuiasPagamentoValores().size() == 0)
-						&& (colecaoDebitoImovel.getColecaoDebitoACobrar() == null || colecaoDebitoImovel.getColecaoDebitoACobrar().size() == 0)) {
-					throw new ActionServletException("atencao.imovel.sem.debitos", null, codigoImovel);
-				}
-
-				// [FS0015] Verificar existência de contas
-				// Caso não existam contas para o imóvel deixar indisponível
-				// o campo mês/ano
-				// de referência inicial e mês/ano de referência final
-				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() == null || colecaoDebitoImovel.getColecaoContasValoresImovel().size() == 0)
-						&& (colecaoDebitoImovel.getColecaoContasValoresPreteritos() == null || colecaoDebitoImovel.getColecaoContasValoresPreteritos().size() == 0)) {
-					sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
-					form.set("inicioIntervaloParcelamento", "");
-					form.set("fimIntervaloParcelamento", "");
-
-				}
-
-				// Para o cálculo do Débito Total Atualizado
-				BigDecimal valorTotalContas = new BigDecimal("0.00");
-				BigDecimal valorTotalAcrescimoImpontualidade = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteServicosACobrar = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteServicosACobrarCurtoPrazo = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteServicosACobrarLongoPrazo = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteParcelamentosACobrar = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteParcelamentosACobrarCurtoPrazo = new BigDecimal("0.00");
-				BigDecimal valorTotalRestanteParcelamentosACobrarLongoPrazo = new BigDecimal("0.00");
-				BigDecimal valorTotalGuiasPagamento = new BigDecimal("0.00");
-				BigDecimal valorTotalAcrescimoImpontualidadeContas = new BigDecimal("0.00");
-				BigDecimal valorTotalAcrescimoImpontualidadeGuias = new BigDecimal("0.00");
-				BigDecimal valorCreditoARealizar = new BigDecimal("0.00");
-				BigDecimal valorRestanteACobrar = new BigDecimal("0.00");
-				BigDecimal valorAtualizacaoMonetaria = new BigDecimal("0.00");
-				BigDecimal valorJurosMora = new BigDecimal("0.00");
-				BigDecimal valorMulta = new BigDecimal("0.00");
-
-				// Dados do Débito do Imóvel - Contas
-				Collection<ContaValoresHelper> colecaoContasImovel = new ArrayList<ContaValoresHelper>();
-
-				ContaValoresHelper contaRemovida = null;
-
-				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() != null && !colecaoDebitoImovel.getColecaoContasValoresImovel().isEmpty())
-						|| (colecaoDebitoImovel.getColecaoContasValoresPreteritos() != null && !colecaoDebitoImovel.getColecaoContasValoresPreteritos()
-								.isEmpty())) {
-
-					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresImovel());
-					colecaoContasImovel.addAll(colecaoDebitoImovel.getColecaoContasValoresPreteritos());
-
-					Iterator contaValores = colecaoContasImovel.iterator();
-
-					while (contaValores.hasNext()) {
-
-						ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
-
-						if (verificaReferenciaIgualReferencialFaturamento(contaValoresHelper.getConta().getAnoMesReferenciaConta())) {
-							contaRemovida = contaValoresHelper;
-							continue;
-						}
-
-						valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorTotalContas = valorTotalContas.add(contaValoresHelper.getValorTotalConta());
-						if (contaValoresHelper.getValorAtualizacaoMonetaria() != null && !contaValoresHelper.getValorAtualizacaoMonetaria().equals("")) {
-							valorAtualizacaoMonetaria.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorAtualizacaoMonetaria = valorAtualizacaoMonetaria.add(contaValoresHelper.getValorAtualizacaoMonetaria().setScale(
-									Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-						if (contaValoresHelper.getValorJurosMora() != null && !contaValoresHelper.getValorJurosMora().equals("")) {
-							valorJurosMora.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorJurosMora = valorJurosMora.add(contaValoresHelper.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS,
-									Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-						if (contaValoresHelper.getValorMulta() != null && !contaValoresHelper.getValorMulta().equals("")) {
-							valorMulta.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorMulta = valorMulta.add(contaValoresHelper.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS,
-									Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-
-						// Para cálculo do Acrescimo de Impontualidade
-						valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper
-								.getValorTotalContaValoresParcelamento());
-
-					}
-
-					sessao.setAttribute("colecaoContaValoresImovel", contaRemovida != null ? colecaoContasImovel.remove(contaRemovida) : colecaoContasImovel);
-
-					form.set("valorTotalContasImovel", Util.formatarMoedaReal(valorTotalContas));
+			while (i < tam) {
+				if ((cpf.charAt(i)) != (cpf.charAt(i + 1))) {
+					igual = false;
+					break;
 				} else {
-
-					form.set("valorTotalContasImovel", "0,00");
+					i++;
 				}
-
-				// Guias de Pagamento
-				Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValoresImovel = colecaoDebitoImovel.getColecaoGuiasPagamentoValores();
-				Collection<GuiaPagamentoValoresHelper> guiasRemovidas = new ArrayList<GuiaPagamentoValoresHelper>();
-
-				if (colecaoGuiaPagamentoValoresImovel != null && !colecaoGuiaPagamentoValoresImovel.isEmpty()) {
-					Iterator guiaPagamentoValores = colecaoGuiaPagamentoValoresImovel.iterator();
-					while (guiaPagamentoValores.hasNext()) {
-
-						GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
-
-						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(guiaPagamentoValoresHelper.getGuiaPagamento()
-								.getDataEmissao()))) {
-							guiasRemovidas.add(guiaPagamentoValoresHelper);
-							continue;
-						}
-
-						if (guiaPagamentoValoresHelper.getGuiaPagamento() != null && !guiaPagamentoValoresHelper.getGuiaPagamento().equals("")) {
-							valorTotalGuiasPagamento.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorTotalGuiasPagamento = valorTotalGuiasPagamento.add(guiaPagamentoValoresHelper.getGuiaPagamento().getValorDebito()
-									.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-						if (guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria() != null
-								&& !guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria().equals("")) {
-							valorAtualizacaoMonetaria.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorAtualizacaoMonetaria = valorAtualizacaoMonetaria.add(guiaPagamentoValoresHelper.getValorAtualizacaoMonetaria().setScale(
-									Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-						if (guiaPagamentoValoresHelper.getValorJurosMora() != null && !guiaPagamentoValoresHelper.getValorJurosMora().equals("")) {
-							valorJurosMora.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorJurosMora = valorJurosMora.add(guiaPagamentoValoresHelper.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS,
-									Parcelamento.TIPO_ARREDONDAMENTO));
-						}
-						if (guiaPagamentoValoresHelper.getValorMulta() != null && !guiaPagamentoValoresHelper.getValorMulta().equals("")) {
-							valorMulta.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorMulta = valorMulta.add(guiaPagamentoValoresHelper.getValorMulta());
-						}
-
-						// Para cálculo do Acrescimo de Impontualidade
-						if (guiaPagamentoValoresHelper.getValorAcrescimosImpontualidade() != null
-								&& !guiaPagamentoValoresHelper.getValorAcrescimosImpontualidade().equals("")) {
-							valorTotalAcrescimoImpontualidadeGuias.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorTotalAcrescimoImpontualidadeGuias = valorTotalAcrescimoImpontualidadeGuias.add(guiaPagamentoValoresHelper
-									.getValorAcrescimosImpontualidade());
-						}
-					}
-
-					if (!guiasRemovidas.isEmpty())
-						colecaoGuiaPagamentoValoresImovel.removeAll(guiasRemovidas);
-
-					sessao.setAttribute("colecaoGuiaPagamentoValoresImovel", colecaoGuiaPagamentoValoresImovel);
-
-					form.set("valorGuiasPagamentoImovel", Util.formatarMoedaReal(valorTotalGuiasPagamento));
-				} else {
-					form.set("valorGuiasPagamentoImovel", "0,00");
-				}
-
-				// Acrescimos por Impotualidade
-				BigDecimal retornoSoma = new BigDecimal("0.00");
-				retornoSoma.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
-				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
-
-				sessao.setAttribute("valorAcrescimosImpontualidadeImovel", retornoSoma);
-				form.set("valorAcrescimosImpontualidadeImovel", Util.formatarMoedaReal(retornoSoma));
-
-				// Para o cálculo do Débito Total Atualizado
-				valorTotalAcrescimoImpontualidade = retornoSoma;
-
-				// Debitos A Cobrar
-				Collection colecaoDebitoACobrar = colecaoDebitoImovel.getColecaoDebitoACobrar();
-				Collection<DebitoACobrar> debitosRemovidos = new ArrayList<DebitoACobrar>();
-
-				if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
-					Iterator debitoACobrarValores = colecaoDebitoACobrar.iterator();
-
-					final int indiceCurtoPrazo = 0;
-					final int indiceLongoPrazo = 1;
-
-					while (debitoACobrarValores.hasNext()) {
-						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
-
-						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(debitoACobrar.getGeracaoDebito()))) {
-							debitosRemovidos.add(debitoACobrar);
-							continue;
-						}
-
-						// [FS0022]-Verificar existência de juros sobre imóvel
-						if (debitoACobrar.getDebitoTipo().getId() != null && !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)) {
-
-							// Debitos A Cobrar - Serviço
-							if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.SERVICO_NORMAL)) {
-								// [SB0001] Obter Valores de Curto e Longo Prazo
-								valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
-
-								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(debitoACobrar.getNumeroPrestacaoDebito(),
-										debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), valorRestanteACobrar);
-								valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorTotalRestanteServicosACobrarCurtoPrazo = valorTotalRestanteServicosACobrarCurtoPrazo
-										.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
-								valorTotalRestanteServicosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorTotalRestanteServicosACobrarLongoPrazo = valorTotalRestanteServicosACobrarLongoPrazo
-										.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
-							}
-
-							// Debitos A Cobrar - Parcelamento
-							if (debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_AGUA)
-									|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
-									|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO)) {
-								// [SB0001] Obter Valores de Curto e Longo Prazo
-								valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
-
-								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(debitoACobrar.getNumeroPrestacaoDebito(),
-										debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), valorRestanteACobrar);
-								valorTotalRestanteParcelamentosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorTotalRestanteParcelamentosACobrarCurtoPrazo = valorTotalRestanteParcelamentosACobrarCurtoPrazo
-										.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
-								valorTotalRestanteParcelamentosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorTotalRestanteParcelamentosACobrarLongoPrazo = valorTotalRestanteParcelamentosACobrarLongoPrazo
-										.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
-							}
-
-						}
-
-					}
-
-					if (!debitosRemovidos.isEmpty())
-						colecaoDebitoACobrar.removeAll(debitosRemovidos);
-
-					sessao.setAttribute("colecaoDebitoACobrarImovel", colecaoDebitoACobrar);
-
-					// Serviços
-					valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-					valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo.add(valorTotalRestanteServicosACobrarLongoPrazo);
-					// Está no hidden no formulário
-					form.set("valorDebitoACobrarServicoLongoPrazo",
-							Util.formatarMoedaReal(valorTotalRestanteServicosACobrarLongoPrazo));
-					// Está no hidden no formulário
-					form.set("valorDebitoACobrarServicoCurtoPrazo",
-							Util.formatarMoedaReal(valorTotalRestanteServicosACobrarCurtoPrazo));
-					// Está no TEXT
-					form.set("valorDebitoACobrarServicoImovel", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
-					// Parcelamentos
-					valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo
-							.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
-					// Está no hidden no formulário
-					form.set("valorDebitoACobrarParcelamentoLongoPrazo",
-							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarLongoPrazo));
-					// Está no hidden no formulário
-					form.set("valorDebitoACobrarParcelamentoCurtoPrazo",
-							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrarCurtoPrazo));
-					// Está no TEXT
-					form.set("valorDebitoACobrarParcelamentoImovel",
-							Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
-				} else {
-					form.set("valorDebitoACobrarServicoImovel", "0,00");
-					form.set("valorDebitoACobrarParcelamentoImovel", "0,00");
-				}
-
-				// Crédito A Realizar
-				Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoImovel.getColecaoCreditoARealizar();
-				Collection<CreditoARealizar> creditosRemovidos = new ArrayList<CreditoARealizar>();
-				if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
-					Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
-					while (creditoARealizarValores.hasNext()) {
-						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
-						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
-							creditosRemovidos.add(creditoARealizar);
-							continue;
-						}
-						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
-					}
-
-					if (!creditosRemovidos.isEmpty())
-						colecaoCreditoARealizar.removeAll(creditosRemovidos);
-					sessao.setAttribute("colecaoCreditoARealizarImovel", colecaoCreditoARealizar);
-
-					form.set("valorCreditoARealizarImovel", Util.formatarMoedaReal(valorCreditoARealizar));
-				} else {
-					form.set("valorCreditoARealizarImovel", "0,00");
-				}
-
-				// Débito Total Atualizado
-				BigDecimal debitoTotalAtualizado = new BigDecimal("0.00");
-
-				debitoTotalAtualizado.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalContas);
-				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalGuiasPagamento);
-				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalAcrescimoImpontualidade);
-				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalRestanteServicosACobrar);
-				debitoTotalAtualizado = debitoTotalAtualizado.add(valorTotalRestanteParcelamentosACobrar);
-				debitoTotalAtualizado = debitoTotalAtualizado.subtract(valorCreditoARealizar);
-
-				sessao.setAttribute("valorDebitoTotalAtualizadoImovel", debitoTotalAtualizado);
-				form.set("valorDebitoTotalAtualizadoImovel", Util.formatarMoedaReal(debitoTotalAtualizado));
-
-				// Quando mudar de imóvel iniciar a data do parcelamento com a
-				// data atual, limpar
-				// a resolução de diretoria
-				if (!codigoImovelAntes.equals(codigoImovel)) {
-					// Reinicia a Data do Parcelamento
-					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-					Calendar dataCorrente = new GregorianCalendar();
-
-					form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
-
-					// Limpa Resolução de Diretoria
-					form.set("resolucaoDiretoria", "");
-
-					form.set("inicioIntervaloParcelamento", "");
-					// Limpa fim do Intervalo do Parcelamento
-					form.set("fimIntervaloParcelamento", "");
-
-					sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
-
-					// Limpa as perguntas
-					form.set("indicadorContasRevisao", "");
-					form.set("indicadorGuiasPagamento", "");
-					form.set("indicadorAcrescimosImpotualidade", "");
-					form.set("indicadorDebitosACobrar", "");
-					form.set("indicadorCreditoARealizar", "");
-				}
-
-				// Intervalo do Parcelamento
-				if (colecaoContasImovel != null && colecaoContasImovel.size() != 0) {
-					Iterator contaValores = colecaoContasImovel.iterator();
-					int anoMesReferenciaColecao = 0;
-					int menorAnoMesReferencia = 999999;
-					int maiorAnoMesReferencia = 0;
-
-					while (contaValores.hasNext()) {
-						ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
-						anoMesReferenciaColecao = contaValoresHelper.getConta().getReferencia();
-						if (anoMesReferenciaColecao < menorAnoMesReferencia) {
-							menorAnoMesReferencia = anoMesReferenciaColecao;
-						}
-						if (anoMesReferenciaColecao > maiorAnoMesReferencia) {
-							maiorAnoMesReferencia = anoMesReferenciaColecao;
-						}
-					}
-
-					// Quando não houver intervalo de parcelamento inicial e
-					// final
-					if (menorAnoMesReferencia != 0) {
-						if ((form.get("inicioIntervaloParcelamento") == null || form.get(
-								"inicioIntervaloParcelamento").equals(""))) {
-							sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
-							form.set("inicioIntervaloParcelamento", Util.formatarAnoMesParaMesAno(menorAnoMesReferencia));
-						}
-					}
-
-					if (maiorAnoMesReferencia != 0) {
-						if ((form.get("fimIntervaloParcelamento") == null || form.get(
-								"fimIntervaloParcelamento").equals(""))) {
-							form.set("fimIntervaloParcelamento", Util.formatarAnoMesParaMesAno(maiorAnoMesReferencia));
-							sessao.setAttribute("bloqueiaIntervaloParcelamento", "nao");
-						}
-					} else {
-						form.set("fimIntervaloParcelamento", "00/0000");
-					}
-				} else {
-					// [FS0015] Verificar existência de contas
-					// Caso não existam contas para o imóvel deixar indisponível
-					// o campo mês/ano
-					// de referência inicial e mês/ano de referência final
-					form.set("inicioIntervaloParcelamento", "");
-					form.set("fimIntervaloParcelamento", "");
-					sessao.setAttribute("bloqueiaIntervaloParcelamento", "sim");
-				}
-
-				form.set("valorAtualizacaoMonetariaImovel", Util.formatarMoedaReal(valorAtualizacaoMonetaria));
-				form.set("valorJurosMoraImovel", Util.formatarMoedaReal(valorJurosMora));
-				form.set("valorMultaImovel", Util.formatarMoedaReal(valorMulta));
-				form.set("matriculaImovel", codigoImovel);
 			}
 
-			// Atualizando o código do imóvel na varíavel hidden do formulário
-			codigoImovelAntes = codigoImovel;
-			form.set("codigoImovelAntes", codigoImovelAntes);
+			if (igual) {
+				throw new ActionServletException("atencao.cpf_invalido");
+			}
 		}
-
-		// Coloca a data Atual na data de Parecelamento
-		if (form.get("dataParcelamento").equals("") || form.get("dataParcelamento") == null) {
-			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar dataCorrente = new GregorianCalendar();
-
-			form.set("dataParcelamento", "" + formatoData.format(dataCorrente.getTime()));
-		}
-
-		// Pesquisa a Resolução de Diretoria
-		Collection<ResolucaoDiretoria> colecaoResolucaoDiretoria = new ArrayList<ResolucaoDiretoria>();
-
-		// [FS0016] - Verificar se o usuário possui autorização para utilizar a
-		// RD
-		if ((Boolean) httpServletRequest.getAttribute("temPermissaoResolucaoDiretoria")) {
-
-			// Colocado por Raphael Rossiter em 12/11/2008 - Analista: Eduardo
-			// Borges
-			colecaoResolucaoDiretoria = fachada.pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial();
-
-		} else {
-			colecaoResolucaoDiretoria = fachada.pesquisarResolucaoDiretoriaMaiorDataVigenciaInicio();
-		}
-
-		// Verifica se existe Resolução de Diretoria
-		if (colecaoResolucaoDiretoria != null && colecaoResolucaoDiretoria.isEmpty()) {
-			throw new ActionServletException("atencao.resolucao_diretoria.inexistente");
-		} else {
-			httpServletRequest.setAttribute("colecaoResolucaoDiretoria", colecaoResolucaoDiretoria);
-		}
-
-		return retorno;
 	}
 
 	/**

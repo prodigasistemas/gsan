@@ -2,6 +2,7 @@ package gcom.financeiro.lancamento;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
@@ -158,6 +159,11 @@ public class LancamentoTipo implements Serializable {
 	public final static Integer OUTROS_CREDITOS_A_REALIZAR_POR_RECUPERACAO_CREDITO_CANCELADOS = new Integer(104);
 	
 	public final static Integer RECUPERACAO_CREDITO = new Integer(105);
+	
+	public final static Integer OUTROS_CREDITOS_CANCELADOS_POR_PARCELAMENTO = new Integer(106);
+					// CURTO
+					// LONGO
+	
 	
 	public final static Short INDICADOR_RESUMIDO_ATIVO = new Short("1");
 	public final static Short INDICADOR_RESUMIDO_DESATIVO = new Short("2");
