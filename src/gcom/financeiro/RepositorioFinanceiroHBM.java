@@ -1,5 +1,6 @@
 package gcom.financeiro;
 
+import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
@@ -9173,10 +9174,10 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) 
+	public List<AvisoBancario> pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) 
 	throws ErroRepositorioException{
 	
-		Collection retorno;
+		List<AvisoBancario> retorno;
 		
 		Session session = HibernateUtil.getSession();
 		String consulta;

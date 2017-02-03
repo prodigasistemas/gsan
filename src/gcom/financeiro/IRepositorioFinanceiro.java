@@ -1,5 +1,6 @@
 package gcom.financeiro;
 
+import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.cadastro.localidade.Localidade;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.relatorio.financeiro.RelatorioVolumesConsumidosNaoFaturadosBean;
@@ -335,8 +336,7 @@ public interface IRepositorioFinanceiro {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGerarIntegracaoContabilidadeCOSANPA(String idLancamentoOrigem, String anoMes) throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	public List<AvisoBancario> pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
 	
 	public ContaContabil pesquisarContaContabilPorNomeConta(String nomeConta)  throws ErroRepositorioException;
 	
