@@ -8575,6 +8575,40 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			colecaoContasAReceberContabil.addAll(contasCreditosARealizarDescontoParcelamentoFaixaConta);
 		}
 
+    	Collection contasContabeisDevolucaoJuros = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	        CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO, 
+    	        400, LancamentoItem.DEVOLUCAO_JUROS_PARCELAMENTO, 80, null);
+    	    
+    	    if (contasContabeisDevolucaoJuros != null && !contasContabeisDevolucaoJuros.isEmpty()) {
+    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoJuros);
+    	    }
+    	    
+    	    
+    	    Collection contasContabeisDevolucaoAgua = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	        CreditoOrigem.DEVOLUCAO_TARIFA_AGUA, 
+    	        400, LancamentoItem.DEVOLUCAO_TARIFA_AGUA, 90, null);
+    	    
+    	    if (contasContabeisDevolucaoAgua != null && !contasContabeisDevolucaoAgua.isEmpty()) {
+    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoAgua);
+    	    }
+    	    
+    	    
+    	    Collection contasContabeisDevolucaoEsgoto = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	        CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO, 
+    	        400, LancamentoItem.DEVOLUCAO_TARIFA_ESGOTO, 100, null);
+    	    
+    	    if (contasContabeisDevolucaoEsgoto != null && !contasContabeisDevolucaoEsgoto.isEmpty()) {
+    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoEsgoto);
+    	    }
+    	    
+    	    
+    	    Collection contasContabeisServicosIndiretos = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	        CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 
+    	        400, LancamentoItem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 110, null);
+    	    
+    	    if (contasContabeisServicosIndiretos != null && !contasContabeisServicosIndiretos.isEmpty()) {
+    	      colecaoContasAReceberContabil.addAll(contasContabeisServicosIndiretos);
+    	    }
 		
 	}
 
@@ -8875,14 +8909,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     		throws ErroRepositorioException {
     	Collection colecaoContasAReceberContabil = new ArrayList();
     	Collection colecaotemporaria = null;
-    	
-    	colecaotemporaria = obterContaContabilCreditoARealizarPorOrigemCredito(anoMesAnteriorFaturamento, idLocalidade, 
-    			creditoOrigem, sequenciaLancamentoTipo, idLancamentoItem, sequenciaLancamentoItem, idLancamentoItemContabil);
-    	
-    	if (colecaotemporaria != null & !colecaotemporaria.isEmpty()) {
-    		colecaoContasAReceberContabil.addAll(colecaotemporaria);
-    	}
-    	colecaotemporaria.clear();
     	
     	colecaotemporaria = obterContaContabilCreditoARealizarPorOrigemCredito(anoMesAnteriorFaturamento, idLocalidade, 
     			creditoOrigem, sequenciaLancamentoTipo, idLancamentoItem, sequenciaLancamentoItem, idLancamentoItemContabil);
