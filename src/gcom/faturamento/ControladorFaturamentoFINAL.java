@@ -17026,9 +17026,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					
 					
-					arrayValoresCurtoLongoPrazo = obterValorLongoECurtoPrazoCreditoARealizarPorOrigemCredito(
-							CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES, anoMesFaturamento, idLocalidade, idCategoria, DebitoCreditoSituacao.CANCELADA,
-							DebitoCreditoSituacao.CANCELADA);
+					arrayValoresCurtoLongoPrazo = obterValorLongoECurtoPrazoCreditoARealizarConcedidosPorOrigemCredito(
+							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, anoMesFaturamento, idLocalidade, idCategoria, DebitoCreditoSituacao.PARCELADA,
+							DebitoCreditoSituacao.PARCELADA);
 					
 					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
 					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
@@ -17040,7 +17040,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								anoMesFaturamento,
 								categoria,
 								localidade,
-								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_PARCELAMENTO),
+								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REPARCELAMENTO),
 								new LancamentoItem(LancamentoItem.PARCELAMENTOS_A_COBRAR_CURTO_PRAZO),
 								new LancamentoItemContabil(null),
 								new Short("1650"),
@@ -17057,7 +17057,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								anoMesFaturamento,
 								categoria,
 								localidade,
-								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_PARCELAMENTO),
+								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REPARCELAMENTO),
 								new LancamentoItem(LancamentoItem.PARCELAMENTOS_A_COBRAR_LONGO_PRAZO),
 								new LancamentoItemContabil(null),
 								new Short("1650"),
@@ -21347,6 +21347,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		arrayValoresCurtoLongoPrazo = null;
 		arrayValoresCurtoLongoPrazo = repositorioFaturamento
 				.pesquisarValorLongoECurtoPrazoCreditoARealizarPorOrigemCredito(
+						anoMesFaturamento, idLocalidade,
+						idCategoria, idsCreditosOrigem,
+						idSituacaoAtual, idSituacaoAnterior);
+		return arrayValoresCurtoLongoPrazo;
+	}
+	
+	private Object[] obterValorLongoECurtoPrazoCreditoARealizarConcedidosPorOrigemCredito(Integer idCreditoOrigem, int anoMesFaturamento, Integer idLocalidade, Integer idCategoria,
+			Integer idSituacaoAnterior, Integer idSituacaoAtual)
+			throws ErroRepositorioException {
+		Object[] arrayValoresCurtoLongoPrazo;
+		
+		Integer[] idsCreditosOrigem = new Integer[] { idCreditoOrigem };
+		
+		arrayValoresCurtoLongoPrazo = null;
+		arrayValoresCurtoLongoPrazo = repositorioFaturamento
+				.pesquisarValorLongoECurtoPrazoCreditoARealizarConcedidoPorOrigemCredito(
 						anoMesFaturamento, idLocalidade,
 						idCategoria, idsCreditosOrigem,
 						idSituacaoAtual, idSituacaoAnterior);

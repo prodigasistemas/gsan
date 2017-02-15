@@ -3045,4 +3045,9 @@ public interface IRepositorioFaturamento {
 	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(Integer anoMes, Integer idCategoria) throws ErroRepositorioException;
 	
 	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException;
+	
+	public Object[] pesquisarValorLongoECurtoPrazoCreditoARealizarConcedidoPorOrigemCredito(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditosOrigem, int idSituacaoAtual,
+			int idSituacaoAnterior) throws ErroRepositorioException;
 }

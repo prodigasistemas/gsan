@@ -160,10 +160,7 @@ public class LancamentoTipo implements Serializable {
 	
 	public final static Integer RECUPERACAO_CREDITO = new Integer(105);
 	
-	public final static Integer OUTROS_CREDITOS_CANCELADOS_POR_PARCELAMENTO = new Integer(106);
-					// CURTO
-					// LONGO
-	
+	public final static Integer OUTROS_CREDITOS_CANCELADOS_POR_REPARCELAMENTO = new Integer(107);
 	
 	public final static Short INDICADOR_RESUMIDO_ATIVO = new Short("1");
 	public final static Short INDICADOR_RESUMIDO_DESATIVO = new Short("2");

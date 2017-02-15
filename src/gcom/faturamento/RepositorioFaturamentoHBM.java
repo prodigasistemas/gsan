@@ -61018,5 +61018,62 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 	}
-	
+
+	public Object[] pesquisarValorLongoECurtoPrazoCreditoARealizarConcedidoPorOrigemCredito(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditosOrigem, int idSituacaoAtual,
+			int idSituacaoAnterior) throws ErroRepositorioException {
+
+		Object[] retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT SUM(")
+					.append(" CASE WHEN ( (crar.crar_nnprestacaocredito - crar_nnprestacaorealizadas)  < 13 )")
+					.append("  THEN round( (crarCat.cacg_vlcategoria ")
+					.append(" - ( (crarCat.cacg_vlcategoria / coalesce(crar.crar_nnprestacaocredito,1) ) * coalesce(crar.crar_nnprestacaorealizadas,1) ) ), 2) ")
+					.append("  ELSE  ")
+					.append("  round( ((crarCat.cacg_vlcategoria ")
+					.append(" - ( (crarCat.cacg_vlcategoria / coalesce(crar.crar_nnprestacaocredito,1) ) * coalesce(crar.crar_nnprestacaorealizadas,1) ) ) ") 
+					.append(" / (crar.crar_nnprestacaocredito - crar.crar_nnprestacaorealizadas))  ,2 ) * 12")
+					.append("  END  ")
+					.append("  ) as valorCurtoPrazo, ")
+					.append("  SUM(  ")
+					.append("  CASE WHEN ( (crar.crar_nnprestacaocredito - crar_nnprestacaorealizadas) < 13 )  ")
+					.append("  THEN 0.00 ")
+					.append("  ELSE  ")
+					.append("  round((crarCat.cacg_vlcategoria - ( (crarCat.cacg_vlcategoria / coalesce(crar.crar_nnprestacaocredito,1) ) ")
+					.append(" * coalesce(crar.crar_nnprestacaorealizadas,1) ) ) ")
+					.append(" -  (round( ((crarCat.cacg_vlcategoria ") 
+					.append(" - ( (crarCat.cacg_vlcategoria / coalesce(crar.crar_nnprestacaocredito,1) ) * coalesce(crar.crar_nnprestacaorealizadas,1) ) ) ") 
+					.append(" / (crar.crar_nnprestacaocredito - crar.crar_nnprestacaorealizadas))  ,2 ) * 12), 2)")
+					.append("  END  ")
+					.append("  ) as valorLongoPrazo  ")
+					.append("  FROM cadastro.localidade loca  ")
+					.append("  INNER JOIN faturamento.credito_a_realizar crar on crar.loca_id = loca.loca_id  ")
+					.append("  INNER JOIN faturamento.cred_a_realiz_catg crarCat on crarCat.crar_id = crar.crar_id ")
+					.append("  WHERE loca.loca_id = :idLocalidade ")
+					.append("  and crar_amreferenciacontabil = :anoMesReferencia ")
+					.append("  and (crar.dcst_idatual = :idSituacaoAtual or crar.dcst_idanterior = :idSituacaoAnterior) ")
+					.append("  and crarCat.catg_id = :idCategoria ")
+					.append("  and crar.crog_id in(:idsCreditosOrigem) ");
+
+			retorno = (Object[]) session.createSQLQuery(consulta.toString()).addScalar(
+					"valorCurtoPrazo", Hibernate.BIG_DECIMAL).addScalar(
+					"valorLongoPrazo", Hibernate.BIG_DECIMAL).setInteger(
+					"idLocalidade", idLocalidade).setInteger(
+					"anoMesReferencia", anoMesReferencia).setInteger(
+					"idSituacaoAtual", idSituacaoAtual).setInteger(
+					"idSituacaoAnterior", idSituacaoAnterior).setInteger(
+					"idCategoria", idCategoria).setParameterList(
+					"idsCreditosOrigem", idsCreditosOrigem).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }
