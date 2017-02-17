@@ -176,7 +176,7 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				}
 				
 				// 1 - CÓDIGO COMPANHIA
-				gerarIntegracaoTxt.append("130");
+				gerarIntegracaoTxt.append("140");
 
 				// 2 - PLANO DE CONTAS
 				gerarIntegracaoTxt.append(" ");
