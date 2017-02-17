@@ -318,6 +318,8 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 		sessao.removeAttribute("colecaoImovelRamosAtividade");
 		sessao.removeAttribute("contratoDemandaHelper");
 		sessao.removeAttribute("colecaoMatriculasAssociadas");
+		sessao.removeAttribute("colecaoDadosImovelCobrancaSituacao");
+		sessao.removeAttribute("colecaoDadosNegativadorMovimentoReg");
 
 		consultarImovelActionForm.setIdImovelDadosComplementares(null);
 		consultarImovelActionForm.setIdImovelDadosCadastrais(null);
@@ -339,7 +341,6 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 		consultarImovelActionForm.setQuantidadeParcelamentosDadosComplementares(null);
 		consultarImovelActionForm.setQuantidadeReparcelamentoDadosComplementares(null);
 		consultarImovelActionForm.setQuantidadeReparcelamentoConsecutivosDadosComplementares(null);
-//		consultarImovelActionForm.setSituacaoCobrancaDadosComplementares(null);
 		consultarImovelActionForm.setDescricaoOcorrenciaDadosComplementares(null);
 		consultarImovelActionForm.setIdFuncionario(null);
 		consultarImovelActionForm.setNomeFuncionario(null);
