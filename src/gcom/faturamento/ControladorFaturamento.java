@@ -14975,13 +14975,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     			arquivoRetornoIS.setLocalidade(localidade);
     			arquivoRetornoIS.setArquivoTexto(arquivoRetorno.toString());
 
-    			System.out.println("Salvando arquivo retorno " + arquivoRetornoIS.getNomeArquivo() + ", conteudo vazio? " + arquivoRetorno.equals(null));
+    			logger.info("Salvando arquivo retorno " + arquivoRetornoIS.getNomeArquivo() + ", conteudo vazio? " + arquivoRetorno.equals(null));
     			
     			Integer idArquivoTextoRetornoIS = (Integer) repositorioUtil.inserir(arquivoRetornoIS);
     			arquivoRetornoIS.setId(idArquivoTextoRetornoIS);
     			
     		} else {
     			
+    			logger.info("Arquivo de retorno NULO...");
     			arquivoRetornoIS = new ArquivoTextoRetornoIS();
     			
     			arquivoRetornoIS.setLocalidade(localidade);
@@ -15017,10 +15018,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     			
     			if (arquivoTextoRetornoIS != null && arquivoTextoRetornoIS.getId() != null) {
     				movimento.setArquivoTextoRetornoIS(arquivoTextoRetornoIS);
-					movimento.setArquivoTexto(helper.getArquivoImovel().toString());
-					movimento.setNomeArquivo(this.obterNomeArquivoRetorno(arquivoTextoRetornoIS).toString());
     			}
     			
+    			if (helper.getArquivoImovel().toString() != null) {
+    				movimento.setNomeArquivo(this.obterNomeArquivoRetorno(arquivoTextoRetornoIS).toString());
+    				movimento.setArquivoTexto(helper.getArquivoImovel().toString());
+    			}
+
     			if (helper.getAnormalidadeConsumo() != null) {
     				movimento.setConsumoAnormalidade(new ConsumoAnormalidade(helper.getAnormalidadeConsumo()));
     			}
