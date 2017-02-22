@@ -39226,6 +39226,9 @@ public class ControladorArrecadacao implements SessionBean {
 			} else {
 				indicadorAceitacaoRegistro = "2";
 				descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
+				
+				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 			}
 		}
 
