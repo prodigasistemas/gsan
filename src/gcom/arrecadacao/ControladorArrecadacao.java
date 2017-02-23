@@ -2791,7 +2791,7 @@ public class ControladorArrecadacao implements SessionBean {
 									Integer anoMesReferenciaArrecadacao = Integer.parseInt(new SimpleDateFormat("yyyyMM").format(dataLiquidacao));
 
 									if (descricaoOcorrenciaMovimento.equals("OK")) {
-										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
+ 										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
 												registroTipo7, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
 
 										descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
@@ -39190,6 +39190,9 @@ public class ControladorArrecadacao implements SessionBean {
 				if (guiaPagamento == null) {
 					descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
 					indicadorAceitacaoRegistro = "2";
+					
+					pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+					pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 				}
 
 				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
