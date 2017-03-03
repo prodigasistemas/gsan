@@ -227,7 +227,7 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				gerarIntegracaoTxt.append(Util.adicionarZerosEsquedaNumero(2, "" + mesLancamento));
 
 				// 9 - CÓDIGO DA COMPANHIA DA TRANSAÇÃO
-				gerarIntegracaoTxt.append("130");
+				gerarIntegracaoTxt.append("140");
 
 				// 10 - PLANO DE CONTAS DA TRANSAÇÃO
 				gerarIntegracaoTxt.append(" ");

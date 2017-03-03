@@ -47,6 +47,8 @@ import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.consumo.ConsumoHistorico;
+import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.PermissaoEspecial;
@@ -222,7 +224,7 @@ public class ControladorRetificarConta extends ControladorComum {
 						contaAtual.getReferencia());
 
 				if (!arquivoProximaReferenciaGerado)
-					getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, contaAtual.getReferencia(), imovel.getId());
+					corrigirLeiturasEConsumos(leituraAtual, contaAtual);
 				else {
 					throw new ControladorException("atencao.rota_proxima_referencia_gerada", "exibirRetificarContaAction.do?contaID=" + contaAtual.getId()
 							+ "&idImovel=" + imovel.getId(), null);
@@ -234,6 +236,21 @@ public class ControladorRetificarConta extends ControladorComum {
 		}
 	}
 
+	private void corrigirLeiturasEConsumos(Integer leituraAtual, Conta conta) throws ControladorException {
+		getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, conta.getReferencia(), conta.getImovel().getId());
+		//this.corrigirConsumos(leituraAtual, conta);
+	}
+	
+	private void corrigirConsumos(Integer leituraAtual, Conta conta) throws ControladorException {
+		getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, conta.getReferencia(), conta.getImovel().getId());
+		
+		ConsumoHistorico consumo = getControladorMicromedicao().obterConsumoHistorico(conta.getImovel(), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), conta.getAnoMesReferenciaConta().intValue());
+		consumo.setNumeroConsumoFaturadoMes(conta.getConsumoAgua());
+		consumo.setUltimaAlteracao(new Date());
+		
+		getControladorUtil().atualizar(consumo);
+	}
+	
 	private boolean isRetificarContaReferenciaContabilMaiorOuIgual(Conta contaAtual, SistemaParametro sistemaParametro) {
 		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) || contaAtual.getDebitoCreditoSituacaoAtual().getId()
 				.equals(DebitoCreditoSituacao.RETIFICADA))
