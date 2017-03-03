@@ -68,7 +68,7 @@ public class Relatorio2ViaContaBoletoBancarioBean implements RelatorioBean {
 			String cedente) {
 	    	
 		this.indicadorPrimeiraPaginaBoleto = "" + indicadorPrimeiraPaginaBoleto;
-		this.matriculaImovelFormatadaBoleto = emitirContaHelper.getMatriculaImovelFormatada() ;
+		this.matriculaImovelFormatadaBoleto = emitirContaHelper.getIdImovel() + "";
 		this.nomeClienteBoleto = emitirContaHelper.getNomeCliente() ;
 		this.enderecoImovelBoleto = emitirContaHelper.getEnderecoImovel() ;
 		this.faturaBoleto = emitirContaHelper.getFatura() ;

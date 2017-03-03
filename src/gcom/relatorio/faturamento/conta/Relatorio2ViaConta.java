@@ -290,7 +290,7 @@ public class Relatorio2ViaConta extends TarefaRelatorio {
 				if(emitirContaHelper.getCodigoDebitoAutomatico()!=null &&
 						!emitirContaHelper.getCodigoDebitoAutomatico().equals("")){
 					
-					relatorio2ViaContaBean.setCodigoDebitoAutomatico(emitirContaHelper.getCodigoDebitoAutomaticoFormatado());
+					relatorio2ViaContaBean.setCodigoDebitoAutomatico(emitirContaHelper.getCodigoDebitoAutomatico() + "");
 						
 				}
 				relatorio2ViaContaBean.setEnderecoEmpresa(enderecoEmpresa);

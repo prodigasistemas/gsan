@@ -127,7 +127,7 @@ public class Relatorio2ViaContaTipo2 extends TarefaRelatorio {
 					Relatorio2ViaContaTipo2Bean relatorio2ViaContaTipo2Bean = new Relatorio2ViaContaTipo2Bean(
 							indicadorPrimeiraPagina, colecaoDetail,
 							emitirContaHelper.getDescricaoLocalidade(),
-							emitirContaHelper.getMatriculaImovelFormatada(),
+							emitirContaHelper.getIdImovel() + "",
 							dataVencimentoFormatada,
 							emitirContaHelper.getNomeCliente(),
 							emitirContaHelper.getEnderecoImovel(),
@@ -217,7 +217,7 @@ public class Relatorio2ViaContaTipo2 extends TarefaRelatorio {
 						indicadorPrimeiraPagina, 
 						colecaoDetail,
 						emitirContaHelper.getDescricaoLocalidade(),
-						emitirContaHelper.getMatriculaImovelFormatada(),
+						emitirContaHelper.getIdImovel() + "",
 						dataVencimentoFormatada,
 						emitirContaHelper.getNomeCliente(),
 						emitirContaHelper.getEnderecoImovel(),
