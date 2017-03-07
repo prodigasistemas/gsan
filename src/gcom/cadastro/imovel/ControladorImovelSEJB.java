@@ -5317,7 +5317,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 					
 					filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
 					
-					filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO);
+					filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
 					
 					Collection colecaoDebitos = 
 						this.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());

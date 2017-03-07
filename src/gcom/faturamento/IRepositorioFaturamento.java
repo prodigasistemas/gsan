@@ -33,11 +33,9 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
-import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
-import gcom.faturamento.conta.IConta;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -63,7 +61,6 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
@@ -1129,8 +1126,6 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	public Integer pesquisarImovelDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException;
-
-	public void atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(Integer idImovel) throws ErroRepositorioException;
 
 	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(Conta conta) throws ErroRepositorioException;
 
@@ -3003,22 +2998,29 @@ public interface IRepositorioFaturamento {
 	
 	public Collection<IClienteConta> pesquisarClienteContaHistorico(Integer idConta) throws ErroRepositorioException;
 	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 	
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException;
@@ -3027,7 +3029,8 @@ public interface IRepositorioFaturamento {
 	
 	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
 			Integer anoMesReferencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
 	
 	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
