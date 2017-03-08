@@ -11886,8 +11886,8 @@ public class ControladorCobranca implements SessionBean {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
 
 			// 4. Inclui o crédito a realizar para Créditos Anteriores
-			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES);
+			gerarCreditosReparcelamento(creditoTipo, imovel, valorCreditoAnteriores, numeroPrestacao, 
+					parcelamentoId, colecaoCategoria, isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta);
 		}
 
 		// 5. Desconto por Sanções
@@ -11916,6 +11916,13 @@ public class ControladorCobranca implements SessionBean {
 			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorDescontoFaixaReferenciaConta, numeroPrestacao, parcelamentoId, colecaoCategoria,
 					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
 		}
+	}
+	
+	private void gerarCreditosReparcelamento(CreditoTipo creditoTipo, Imovel imovel, BigDecimal valorCredito, Short numeroPrestacao,
+			Integer parcelamentoId, Collection<Categoria> colecaoCategoria, boolean isContaEntradaParcelamento, 
+			Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
+		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCredito, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES);
 	}
 
 	/**
