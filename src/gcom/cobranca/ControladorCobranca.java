@@ -11918,11 +11918,17 @@ public class ControladorCobranca implements SessionBean {
 		}
 	}
 	
-	private void gerarCreditosReparcelamento(CreditoTipo creditoTipo, Imovel imovel, BigDecimal valorCredito, Short numeroPrestacao,
+	private void gerarCreditosReparcelamento(CreditoTipo creditoTipo, Imovel imovel, BigDecimal valorCredito, Short numeroPrestacoes,
 			Integer parcelamentoId, Collection<Categoria> colecaoCategoria, boolean isContaEntradaParcelamento, 
 			Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
-		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCredito, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES);
+		
+		BigDecimal[] valoresCurtoLongoPrazo = getControladorFaturamento().obterValorCreditoReparcelamentoDeCurtoELongoPrazo(numeroPrestacoes, valorCredito);
+		
+		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[0], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+		
+		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[1], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
 	}
 
 	/**

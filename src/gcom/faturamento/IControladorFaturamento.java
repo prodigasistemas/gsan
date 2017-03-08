@@ -1257,6 +1257,6 @@ public interface IControladorFaturamento {
 
 	public Integer obterReferenciaContabilConta(SistemaParametro sistemaParametro, Integer anoMesReferenciaConta) throws ControladorException;
 
-	public BigDecimal[] obterValorCreditoReparcelamentoDeCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCredito)
+	public BigDecimal[] obterValorCreditoReparcelamentoDeCurtoELongoPrazo(short numeroPrestacoes, BigDecimal valorCredito)
 			throws ControladorException;
 }
