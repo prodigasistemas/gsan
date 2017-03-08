@@ -1659,7 +1659,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			
 			boolean gerarConta = false;
 			
-			if (imovel.useNovaChecagemGerarConta()){
+			if (imovel.useNovaChecagemGerarConta() || imovel.getImovelCondominio() != null){
 			    boolean imovelSemConsumo = helperValoresAguaEsgoto.imovelSemConsumo();
 			    
 			    gerarConta = getControladorAnaliseGeracaoConta().verificarGeracaoConta(imovelSemConsumo, anoMesFaturamentoGrupo, imovel);
@@ -10732,7 +10732,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			filtroDebitoACobrar.setInitializeLazy(true);
 			filtroDebitoACobrar
-					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO);
+					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
 			filtroDebitoACobrar
 					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.FINANCIAMENTO_TIPO);
 

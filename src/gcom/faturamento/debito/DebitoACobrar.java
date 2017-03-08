@@ -126,7 +126,7 @@ public class DebitoACobrar extends ObjetoTransacao {
     private gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
 
     /** persistent field */
-    @ControleAlteracao(value=FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO,
+    @ControleAlteracao(value=FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL,
     		funcionalidade={ATRIBUTOS_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual;
 

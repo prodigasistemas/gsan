@@ -6,35 +6,20 @@ import java.math.BigDecimal;
 import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class LancamentoContabilItem implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
 
-    /** nullable persistent field */
+	private Integer id;
     private Short indicadorDebitoCredito;
-
-    /** nullable persistent field */
     private BigDecimal valorLancamento;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private String descricaoHistorico;
-
-    /** persistent field */
-    private gcom.financeiro.lancamento.LancamentoContabil lancamentoContabil;
-
-    /** persistent field */
-    private ContaContabil contaContabil;
-    
     private Integer codigoTerceiro;
-    
     private Date dataLancamento;
 
-    /** full constructor */
+    private LancamentoContabil lancamentoContabil;
+    private ContaContabil contaContabil;
+
     public LancamentoContabilItem(Short indicadorDebitoCredito, BigDecimal valorLancamento, Date ultimaAlteracao, gcom.financeiro.lancamento.LancamentoContabil lancamentoContabil, ContaContabil contaContabil) {
         this.indicadorDebitoCredito = indicadorDebitoCredito;
         this.valorLancamento = valorLancamento;
@@ -43,7 +28,6 @@ public class LancamentoContabilItem implements Serializable {
         this.contaContabil = contaContabil;
     }
 
-    /** full constructor */
     public LancamentoContabilItem(Short indicadorDebitoCredito, BigDecimal valorLancamento, String descricaoHistorico, Date ultimaAlteracao, gcom.financeiro.lancamento.LancamentoContabil lancamentoContabil, ContaContabil contaContabil) {
         this.indicadorDebitoCredito = indicadorDebitoCredito;
         this.valorLancamento = valorLancamento;
@@ -53,25 +37,17 @@ public class LancamentoContabilItem implements Serializable {
         this.descricaoHistorico = descricaoHistorico;
     }
 
-    /**
-	 * @return Retorna o campo descricaoHistorico.
-	 */
 	public String getDescricaoHistorico() {
 		return descricaoHistorico;
 	}
 
-	/**
-	 * @param descricaoHistorico O descricaoHistorico a ser setado.
-	 */
 	public void setDescricaoHistorico(String descricaoHistorico) {
 		this.descricaoHistorico = descricaoHistorico;
 	}
 
-	/** default constructor */
     public LancamentoContabilItem() {
     }
 
-    /** minimal constructor */
     public LancamentoContabilItem(gcom.financeiro.lancamento.LancamentoContabil lancamentoContabil, ContaContabil contaContabil) {
         this.lancamentoContabil = lancamentoContabil;
         this.contaContabil = contaContabil;

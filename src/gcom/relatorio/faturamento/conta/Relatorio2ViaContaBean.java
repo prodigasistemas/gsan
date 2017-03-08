@@ -743,7 +743,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		this.arrayJRDetail = new JRBeanCollectionDataSource(
 				this.arrayRelatorio2ViaContaDetailBean);
 		this.descricaoLocalidade = emitirContaHelper.getDescricaoLocalidade();
-		this.matriculaImovelFormatada = emitirContaHelper.getMatriculaImovelFormatada();
+		this.matriculaImovelFormatada = emitirContaHelper.getIdImovel() + "";
 		this.dataVencimento = dataVencimentoFormatada;
 		this.nomeCliente = emitirContaHelper.getNomeCliente();
 		this.enderecoImovel = emitirContaHelper.getEnderecoImovel();

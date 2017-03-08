@@ -47,6 +47,9 @@ import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.consumo.ConsumoHistorico;
+import gcom.micromedicao.consumo.FiltroConsumoHistorico;
+import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.PermissaoEspecial;
@@ -135,7 +138,7 @@ public class ControladorRetificarConta extends ControladorComum {
 					} else {
 						if (!leituraAtual.equals(contaAtual.getNumeroLeituraAtual())) {
 
-							validarLeiturasRetificarConta(contaAtual, imovel, leituraAtual);
+							validarLeiturasRetificarConta(contaAtual, imovel, leituraAtual, consumoMedidoProporcional);
 
 						}
 					}
@@ -197,7 +200,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 	}
 
-	private void validarLeiturasRetificarConta(Conta contaAtual, Imovel imovel, Integer leituraAtual) throws ControladorException, ErroRepositorioException {
+	private void validarLeiturasRetificarConta(Conta contaAtual, Imovel imovel, Integer leituraAtual, Integer consumoMedido) throws ControladorException, ErroRepositorioException {
 		// Essa verificação será válida ate que seja analisado o motivo dessa
 		// diferença entre as leituras faturadas e as leituras nas contas
 		Object[] leiturasMedicao = getControladorMicromedicao().obterLeituraAnteriorEAtualFaturamentoMedicaoHistorico(imovel.getId(),
@@ -222,7 +225,7 @@ public class ControladorRetificarConta extends ControladorComum {
 						contaAtual.getReferencia());
 
 				if (!arquivoProximaReferenciaGerado)
-					getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, contaAtual.getReferencia(), imovel.getId());
+					corrigirLeiturasEConsumos(leituraAtual, contaAtual, consumoMedido);
 				else {
 					throw new ControladorException("atencao.rota_proxima_referencia_gerada", "exibirRetificarContaAction.do?contaID=" + contaAtual.getId()
 							+ "&idImovel=" + imovel.getId(), null);
@@ -234,6 +237,38 @@ public class ControladorRetificarConta extends ControladorComum {
 		}
 	}
 
+	private void corrigirLeiturasEConsumos(Integer leituraAtual, Conta conta, Integer consumo) throws ControladorException {
+		getControladorMicromedicao().atualizarLeituraRetificarConta(leituraAtual, conta.getReferencia(), conta.getImovel().getId());
+		this.corrigirConsumos(conta, consumo);
+	}
+	
+	private void corrigirConsumos(Conta conta, Integer consumo) throws ControladorException {
+		
+		ConsumoHistorico consumoHistorico = obterConsumoHistorico(conta);
+		consumoHistorico.setNumeroConsumoFaturadoMes(consumo);
+		consumoHistorico.setUltimaAlteracao(new Date());
+		
+		getControladorUtil().atualizar(consumoHistorico);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private ConsumoHistorico obterConsumoHistorico(Conta conta) throws ControladorException {
+		FiltroConsumoHistorico filtro = new FiltroConsumoHistorico();
+				
+		filtro.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.IMOVEL_ID, conta.getImovel().getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.LIGACAO_TIPO_ID,LigacaoTipo.LIGACAO_AGUA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.ANO_MES_FATURAMENTO,conta.getAnoMesReferenciaConta()));
+
+		Collection pesquisaConsumo = new ArrayList();
+		pesquisaConsumo = getControladorUtil().pesquisar(filtro, ConsumoHistorico.class.getName());
+
+		if (!pesquisaConsumo.isEmpty()) {
+			return (ConsumoHistorico) pesquisaConsumo.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
 	private boolean isRetificarContaReferenciaContabilMaiorOuIgual(Conta contaAtual, SistemaParametro sistemaParametro) {
 		return (contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) || contaAtual.getDebitoCreditoSituacaoAtual().getId()
 				.equals(DebitoCreditoSituacao.RETIFICADA))

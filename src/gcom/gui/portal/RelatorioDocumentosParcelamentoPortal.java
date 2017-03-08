@@ -1063,7 +1063,7 @@ public class RelatorioDocumentosParcelamentoPortal extends TarefaRelatorio {
 
 			String valorTotal = Util.formatarMoedaReal(guiaPagamentoRelatorioHelper.getValorDebito());
 
-			String matricula = guiaPagamentoRelatorioHelper.getMatriculaFormatada();
+			String matricula = guiaPagamentoRelatorioHelper.getMatricula();
 			String nomeCliente = "";
 			if (guiaPagamentoRelatorioHelper.getNomeCliente() != null){
 				nomeCliente = guiaPagamentoRelatorioHelper.getNomeCliente();

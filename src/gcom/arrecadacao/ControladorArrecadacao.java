@@ -2791,7 +2791,7 @@ public class ControladorArrecadacao implements SessionBean {
 									Integer anoMesReferenciaArrecadacao = Integer.parseInt(new SimpleDateFormat("yyyyMM").format(dataLiquidacao));
 
 									if (descricaoOcorrenciaMovimento.equals("OK")) {
-										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
+ 										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
 												registroTipo7, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
 
 										descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
@@ -37191,39 +37191,32 @@ public class ControladorArrecadacao implements SessionBean {
 	 * [UC0259] - Processar Pagamento com código de Barras
 	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento 
-	 *
-	 * @author Vivianne Sousa, Raphael Rossiter
-	 * @date 19/07/2007, 12/04/2010
-	 *
-	 * @param idDebitoACobrar
-	 * @param numeroParcelasAntecipadas
-	 * @throws ControladorException
 	 */
-	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) 
-		throws ControladorException {
+	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		Integer idImovel = null;
+		FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.IMOVEL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.FINANCIAMENTO_TIPO);
 
-		try {
+		Collection colecao = getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
-			//Pesquisando o imóvel a partir do débito a cobrar
-			idImovel = repositorioFaturamento.pesquisarImovelDebitoACobrar(idDebitoACobrar);
+		if (colecao != null && !colecao.isEmpty() && numeroParcelasAntecipadas == null) {
+			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);
 
-			if (idImovel != null && numeroParcelasAntecipadas == null) {
+			if (debito.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL)
+					&& debito.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.JUROS_PARCELAMENTO)) {
+
+				if (debito.getAnoMesReferenciaContabil() >= sistemaParametro.getAnoMesFaturamento()) {
+					debito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+				}
 				
-				/*
-				 * Atualiza DSCT_IDATUAL com o valor correspondente a cancelado(3),
-				 * na tabela DEBITO_A_COBRAR com IMOV_ID do debito a cobrar que foi pago,
-				 * DCST_IDATUAL com o valor correspondente a normal (0) e FNTP_ID com o valor 
-				 * correspondente a juros de parcelamento (8)
-				 */
-				repositorioFaturamento.atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(idImovel);
-			}
+				debito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
 
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			ex.printStackTrace();
-			throw new ControladorException("erro.sistema", ex);
+				getControladorUtil().atualizar(debito);
+			}
 		}
 	}
 
@@ -39190,6 +39183,9 @@ public class ControladorArrecadacao implements SessionBean {
 				if (guiaPagamento == null) {
 					descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
 					indicadorAceitacaoRegistro = "2";
+					
+					pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+					pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 				}
 
 				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
@@ -39226,6 +39222,9 @@ public class ControladorArrecadacao implements SessionBean {
 			} else {
 				indicadorAceitacaoRegistro = "2";
 				descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
+				
+				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 			}
 		}
 

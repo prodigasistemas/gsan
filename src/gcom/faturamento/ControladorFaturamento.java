@@ -58,7 +58,6 @@ import gcom.faturamento.bean.GerarResumoSimulacaoFaturamentoHelper;
 import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper.DadosImovelRemoverImovesJaProcessadorImpressaoSimultanea;
-import gcom.faturamento.bean.RetificarConjuntoContaConsumosHelper;
 import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
@@ -73,7 +72,6 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpressao;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoInclusao;
-import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
@@ -105,7 +103,6 @@ import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.credito.ICreditoRealizadoCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
-import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoCobradoCategoria;
 import gcom.faturamento.debito.DebitoCobradoHistorico;
@@ -113,7 +110,6 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
-import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
@@ -176,10 +172,7 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.seguranca.FiltroSegurancaParametro;
-import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
-import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
@@ -14975,13 +14968,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     			arquivoRetornoIS.setLocalidade(localidade);
     			arquivoRetornoIS.setArquivoTexto(arquivoRetorno.toString());
 
-    			System.out.println("Salvando arquivo retorno " + arquivoRetornoIS.getNomeArquivo() + ", conteudo vazio? " + arquivoRetorno.equals(null));
+    			logger.info("Salvando arquivo retorno " + arquivoRetornoIS.getNomeArquivo() + ", conteudo vazio? " + arquivoRetorno.equals(null));
     			
     			Integer idArquivoTextoRetornoIS = (Integer) repositorioUtil.inserir(arquivoRetornoIS);
     			arquivoRetornoIS.setId(idArquivoTextoRetornoIS);
     			
     		} else {
     			
+    			logger.info("Arquivo de retorno NULO...");
     			arquivoRetornoIS = new ArquivoTextoRetornoIS();
     			
     			arquivoRetornoIS.setLocalidade(localidade);
@@ -15017,10 +15011,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     			
     			if (arquivoTextoRetornoIS != null && arquivoTextoRetornoIS.getId() != null) {
     				movimento.setArquivoTextoRetornoIS(arquivoTextoRetornoIS);
-					movimento.setArquivoTexto(helper.getArquivoImovel().toString());
-					movimento.setNomeArquivo(this.obterNomeArquivoRetorno(arquivoTextoRetornoIS).toString());
     			}
     			
+    			if (helper.getArquivoImovel().toString() != null) {
+    				movimento.setNomeArquivo(this.obterNomeArquivoRetorno(arquivoTextoRetornoIS).toString());
+    				movimento.setArquivoTexto(helper.getArquivoImovel().toString());
+    			}
+
     			if (helper.getAnormalidadeConsumo() != null) {
     				movimento.setConsumoAnormalidade(new ConsumoAnormalidade(helper.getAnormalidadeConsumo()));
     			}

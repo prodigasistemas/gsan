@@ -34131,7 +34131,7 @@ public class ControladorCobranca implements SessionBean {
 
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 
-		filtroDebitoACobrar.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO);
+		filtroDebitoACobrar.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
 		filtroDebitoACobrar.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.IMOVEL);
 
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoAcobrar));

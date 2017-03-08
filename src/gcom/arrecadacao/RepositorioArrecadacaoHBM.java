@@ -31802,19 +31802,19 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 
 			consulta.append("SELECT item.imov_id as imovel, ")
-					.append("       imovel.loca_id as localidade, ")
-					.append("       item.amit_vldocumento as valor, ")
-    				.append("       item.cnta_id as conta, ")
-    				.append("       item.gpag_id as guia, ")
-    				.append("       item.cbdo_id as documento, ")
-    				.append("       item.fatu_id as fatura ")
-    				.append("FROM arrecadacao.aviso_bancario aviso ")
-					.append("INNER JOIN arrecadacao.arrecadador_movimento movimento on movimento.armv_id = aviso.armv_id ")
-					.append("INNER JOIN arrecadacao.arrecadador_mov_item item on item.armv_id = movimento.armv_id ")
-					.append("LEFT JOIN cadastro.imovel imovel on imovel.imov_id = item.imov_id ")
-					.append("WHERE aviso.avbc_id = :idAvisoBancario ")
-					.append("AND item.amit_vldocumento is not null");
-
+			.append("       imovel.loca_id as localidade, ")
+			.append("       item.amit_vldocumento as valor, ")
+			.append("       item.cnta_id as conta, ")
+			.append("       item.gpag_id as guia, ")
+			.append("       item.cbdo_id as documento, ")
+			.append("       item.fatu_id as fatura ")
+			.append("FROM arrecadacao.arrecadador_mov_item as item ")
+			.append("left join cadastro.imovel imovel on imovel.imov_id = item.imov_id ")
+			.append("where item.amit_id in ")
+			.append("	( select pag.amit_id from arrecadacao.pagamento as pag ")
+			.append("     where pag.avbc_id = :idAvisoBancario) ")
+			.append("AND item.amit_vldocumento is not null");
+			
 			Collection colecao = session.createSQLQuery(consulta.toString())
 					.addScalar("imovel", Hibernate.INTEGER)
 					.addScalar("localidade", Hibernate.INTEGER)

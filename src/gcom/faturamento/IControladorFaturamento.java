@@ -46,7 +46,6 @@ import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMensagem;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.ContaMotivoInclusao;
-import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
@@ -96,28 +95,25 @@ import java.util.Map;
 public interface IControladorFaturamento {
 
 	@SuppressWarnings("rawtypes")
-	public void inserirFaturamentoCronograma(Collection faturamentoAtividadeCronogramas, FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
-			RegistradorOperacao registradorOperacao, Usuario usuarioLogado, Integer anoMesInformado) throws ControladorException;
+	public void inserirFaturamentoCronograma(Collection faturamentoAtividadeCronogramas, FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal, RegistradorOperacao registradorOperacao,
+			Usuario usuarioLogado, Integer anoMesInformado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void inserirFaturamentoGrupoCronogramaMensal(FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
-			Collection faturamentoAtividadeCronogramas, Usuario usuarioLogado, Integer anoMesInformado) throws ControladorException;
+	public void inserirFaturamentoGrupoCronogramaMensal(FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal, Collection faturamentoAtividadeCronogramas, Usuario usuarioLogado,
+			Integer anoMesInformado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void faturarGrupoFaturamento(Collection colecaoRotas, FaturamentoGrupo faturamentoGrupo, int atividade, int idFuncionalidadeIniciada)
-			throws ControladorException;
+	public void faturarGrupoFaturamento(Collection colecaoRotas, FaturamentoGrupo faturamentoGrupo, int atividade, int idFuncionalidadeIniciada) throws ControladorException;
 
-	public void preFaturarGrupoFaturamento(Rota rota, Integer anoMesFaturamento, Integer idFaturamentoGrupo, int idFuncionalidadeIniciada)
-			throws ControladorException;
+	public void preFaturarGrupoFaturamento(Rota rota, Integer anoMesFaturamento, Integer idFaturamentoGrupo, int idFuncionalidadeIniciada) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void atualizarFaturamentoGrupoCronogramaMensal(FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
-			Collection faturamentoAtividadeCronogramas, Collection colecaoTodasAtividades, Usuario usuarioLogado) throws ControladorException;
+	public void atualizarFaturamentoGrupoCronogramaMensal(FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal, Collection faturamentoAtividadeCronogramas,
+			Collection colecaoTodasAtividades, Usuario usuarioLogado) throws ControladorException;
 
 	public void verificarExistenciaCronogramaGrupo(FaturamentoGrupo faturamentoGrupo) throws ControladorException;
 
-	public boolean verificarExistenciaCronogramaAtividadeGrupo(FaturamentoAtividade faturamentoAtividade, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException;
+	public boolean verificarExistenciaCronogramaAtividadeGrupo(FaturamentoAtividade faturamentoAtividade, FaturamentoGrupo faturamentoGrupo) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection selecionarAtividadeFaturamentoQuePodeSerComandada(FaturamentoGrupo faturamentoGrupo) throws ControladorException;
@@ -126,12 +122,12 @@ public interface IControladorFaturamento {
 	public Collection verificarExistenciaRotaGrupo(FaturamentoGrupo faturamentoGrupo) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection verificarSituacaoAtividadeRota(Collection colecaoRotasGrupo, FaturamentoAtividade faturamentoAtividade,
-			FaturamentoGrupo faturamentoGrupo, boolean habilitada) throws ControladorException;
+	public Collection verificarSituacaoAtividadeRota(Collection colecaoRotasGrupo, FaturamentoAtividade faturamentoAtividade, FaturamentoGrupo faturamentoGrupo, boolean habilitada)
+			throws ControladorException;
 
-	public Integer inserirComandoAtividadeFaturamento(FaturamentoGrupo faturamentoGrupo, FaturamentoAtividade faturamentoAtividade, Collection colecaoRotas,
-			Date dataVencimentoGrupo, Usuario usuarioLogado
-	) throws ControladorException;
+	@SuppressWarnings("rawtypes")
+	public Integer inserirComandoAtividadeFaturamento(FaturamentoGrupo faturamentoGrupo, FaturamentoAtividade faturamentoAtividade, Collection colecaoRotas, Date dataVencimentoGrupo,
+			Usuario usuarioLogado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection buscarAtividadeComandadaNaoRealizada(Integer numeroPagina) throws ControladorException;
@@ -141,56 +137,48 @@ public interface IControladorFaturamento {
 	public void removerComandoAtividadeFaturamento(String[] ids) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void atualizarComandoAtividadeFaturamento(FaturamentoAtividadeCronograma faturamentoAtividadeCronograma,
-			Collection colecaoFaturamentoAtividadeCronogramaRota) throws ControladorException;
+	public void atualizarComandoAtividadeFaturamento(FaturamentoAtividadeCronograma faturamentoAtividadeCronograma, Collection colecaoFaturamentoAtividadeCronogramaRota) throws ControladorException;
 
-	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgoto(Integer anoMesReferencia, Integer ligacaoSituacaoAguaId,
-			Integer ligacaoSituacaoEsgotoId, Short indicadorFaturamentoAgua, Short indicadorFaturamentoEsgoto, Collection categoriasImovel,
-			Integer consumoFaturadoAguaMes, Integer consumoFaturadoEsgotoMes, int consumoMinimoLigacao, Date dataLeituraAnterior, Date dataLeituraAtual,
-			BigDecimal percentualEsgoto, Integer tarifaImovel, ConsumoTipo consumoTipoAgua, ConsumoTipo consumoTipoEsgoto) throws ControladorException;
+	@SuppressWarnings("rawtypes")
+	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgoto(Integer anoMesReferencia, Integer ligacaoSituacaoAguaId, Integer ligacaoSituacaoEsgotoId,
+			Short indicadorFaturamentoAgua, Short indicadorFaturamentoEsgoto, Collection categoriasImovel, Integer consumoFaturadoAguaMes, Integer consumoFaturadoEsgotoMes, int consumoMinimoLigacao,
+			Date dataLeituraAnterior, Date dataLeituraAtual, BigDecimal percentualEsgoto, Integer tarifaImovel, ConsumoTipo consumoTipoAgua, ConsumoTipo consumoTipoEsgoto) throws ControladorException;
 
 	public Date buscarDataLeituraCronograma(Imovel imovel, boolean situacao, Integer anoMesReferencia) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta(String mesAnoConta, String imovelID, Integer situacaoAguaConta,
-			Integer situacaoEsgotoConta, Collection colecaoCategoriaOUSubcategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto,
-			Integer idConsumoTarifaConta, Usuario usuarioLogado) throws ControladorException;
-
-	public BigDecimal calcularValorTotalDebitoConta(Collection<DebitoCobrado> colecaoDebitoCobrado, Map<String, String[]> requestMap)
+	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta(String mesAnoConta, String imovelID, Integer situacaoAguaConta, Integer situacaoEsgotoConta,
+			Collection colecaoCategoriaOUSubcategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto, Integer idConsumoTarifaConta, Usuario usuarioLogado)
 			throws ControladorException;
 
-	public BigDecimal calcularValorTotalCreditoConta(Collection<CreditoRealizado> colecaoCreditoRealizado, Map<String, String[]> requestMap)
-			throws ControladorException;
+	public BigDecimal calcularValorTotalDebitoConta(Collection<DebitoCobrado> colecaoDebitoCobrado, Map<String, String[]> requestMap) throws ControladorException;
 
+	public BigDecimal calcularValorTotalCreditoConta(Collection<CreditoRealizado> colecaoCreditoRealizado, Map<String, String[]> requestMap) throws ControladorException;
+	
 	@SuppressWarnings("rawtypes")
-	public Integer inserirConta(Integer mesAnoConta, Imovel imovel, Collection colecaoDebitoCobrado, LigacaoAguaSituacao ligacaoAguaSituacao,
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Collection colecaoCategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto,
-			Date dataVencimentoConta, Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta, ContaMotivoInclusao contaMotivoInclusao,
-			Map<String, String[]> requestMap, Usuario usuarioLogado, Integer leituraAnterior, Integer leituraAtual) throws ControladorException;
+	public Integer inserirConta(Integer mesAnoConta, Imovel imovel, Collection colecaoDebitoCobrado, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
+			Collection colecaoCategoria, String consumoAgua, String consumoEsgoto, String percentualEsgoto, Date dataVencimentoConta, Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,
+			ContaMotivoInclusao contaMotivoInclusao, Map<String, String[]> requestMap, Usuario usuarioLogado, Integer leituraAnterior, Integer leituraAtual) throws ControladorException;
 
-	public void cancelarConta(Collection<Conta> colecaoContas, String identificadores, ContaMotivoCancelamento contaMotivoCancelamento, Usuario usuarioLogado,
-			boolean removerIdContaPagamento) throws ControladorException;
-
-	public void colocarRevisaoConta(Collection<Conta> colecaoContas, String identificadores, ContaMotivoRevisao contaMotivoRevisao, Usuario usuarioLogado)
+	public void cancelarConta(Collection<Conta> colecaoContas, String identificadores, ContaMotivoCancelamento contaMotivoCancelamento, Usuario usuarioLogado, boolean removerIdContaPagamento)
 			throws ControladorException;
 
-	public void retirarRevisaoConta(Collection<Conta> colecaoContas, String identificadores, Usuario usuario, boolean verificarPermissaoEspecial,
-			Integer funcionalidade) throws ControladorException;
+	public void colocarRevisaoConta(Collection<Conta> colecaoContas, String identificadores, ContaMotivoRevisao contaMotivoRevisao, Usuario usuarioLogado) throws ControladorException;
 
-	public void alterarVencimentoConta(Collection<Conta> colecaoContas, String identificadores, Date dataVencimento, Usuario usuario)
-			throws ControladorException;
+	public void retirarRevisaoConta(Collection<Conta> colecaoContas, String identificadores, Usuario usuario, boolean verificarPermissaoEspecial, Integer funcionalidade) throws ControladorException;
+
+	public void alterarVencimentoConta(Collection<Conta> colecaoContas, String identificadores, Date dataVencimento, Usuario usuario) throws ControladorException;
 
 	public Collection<DebitoCobrado> obterDebitosCobradosConta(Conta conta) throws ControladorException;
 
 	public Collection<CreditoRealizado> obterCreditosRealizadosConta(Conta conta) throws ControladorException;
 
-	public Integer inserirDebitoACobrar(Integer numeroPrestacoes, DebitoACobrar debitoACobrar, BigDecimal valorTotalServico, Imovel imovel,
-			BigDecimal percentualAbatimento, BigDecimal valorEntrada, Usuario usuarioLogado, boolean debitoParaPagamentoAntecipado) throws ControladorException;
+	public Integer inserirDebitoACobrar(Integer numeroPrestacoes, DebitoACobrar debitoACobrar, BigDecimal valorTotalServico, Imovel imovel, BigDecimal percentualAbatimento, BigDecimal valorEntrada,
+			Usuario usuarioLogado, boolean debitoParaPagamentoAntecipado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public ArrayList calcularValorPrestacao(BigDecimal taxaJurosFinanciamento, Integer numeroPrestacoes, BigDecimal valorTotalServico, BigDecimal valorEntrada,
-			BigDecimal percentualAbatimento, String idTipoDebito, BigDecimal valorTotalServicoAParcelar, Imovel imovel, Usuario usuario)
-			throws ControladorException;
+	public ArrayList calcularValorPrestacao(BigDecimal taxaJurosFinanciamento, Integer numeroPrestacoes, BigDecimal valorTotalServico, BigDecimal valorEntrada, BigDecimal percentualAbatimento,
+			String idTipoDebito, BigDecimal valorTotalServicoAParcelar, Imovel imovel, Usuario usuario) throws ControladorException;
 
 	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar, Imovel imovel) throws ControladorException;
 
@@ -198,22 +186,21 @@ public interface IControladorFaturamento {
 
 	public void removerTarifaConsumo(String[] ids) throws ControladorException;
 
-	public void inserirConsumoTarifa(ConsumoTarifa consumoTarifa, ConsumoTarifaVigencia consumoTarifaVigencia,
-			Collection<ConsumoTarifaCategoria> colecaoConsumoTarifaCategoria) throws ControladorException;
-
-	public void atualizarConsumoTarifa(ConsumoTarifaVigencia consumoTarifaVigencia,
-			Collection<CategoriaFaixaConsumoTarifaHelper> colecaoCategoriaFaixaConsumoTarifaHelper, String func) throws ControladorException;
-
-	public BigDecimal calcularValorTotalAguaOuEsgotoPorCategoria(Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoHelper, String tipoRetorno)
+	public void inserirConsumoTarifa(ConsumoTarifa consumoTarifa, ConsumoTarifaVigencia consumoTarifaVigencia, Collection<ConsumoTarifaCategoria> colecaoConsumoTarifaCategoria)
 			throws ControladorException;
 
-	@SuppressWarnings("rawtypes")
-	public String[] inserirGuiaPagamento(GuiaPagamento guiaPagamento, Usuario usuarioLogado, Integer qtdeDiasVencimento, Collection colecaoGuiaPagamentoItem,
-			Localidade localidadeParaCliente, boolean verificarPermissaoEspecial) throws ControladorException;
+	public void atualizarConsumoTarifa(ConsumoTarifaVigencia consumoTarifaVigencia, Collection<CategoriaFaixaConsumoTarifaHelper> colecaoCategoriaFaixaConsumoTarifaHelper, String func)
+			throws ControladorException;
+
+	public BigDecimal calcularValorTotalAguaOuEsgotoPorCategoria(Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoHelper, String tipoRetorno) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void manterGuiaPagamento(GuiaPagamento guiaPagamento, Collection guiasPagamento, String[] registrosRemocao,
-			ImovelCobrancaSituacao imovelCobrancaSituacao, Usuario usarioLogado) throws ControladorException;
+	public String[] inserirGuiaPagamento(GuiaPagamento guiaPagamento, Usuario usuarioLogado, Integer qtdeDiasVencimento, Collection colecaoGuiaPagamentoItem, Localidade localidadeParaCliente,
+			boolean verificarPermissaoEspecial) throws ControladorException;
+
+	@SuppressWarnings("rawtypes")
+	public void manterGuiaPagamento(GuiaPagamento guiaPagamento, Collection guiasPagamento, String[] registrosRemocao, ImovelCobrancaSituacao imovelCobrancaSituacao, Usuario usarioLogado)
+			throws ControladorException;
 
 	public boolean verificarReferenciaFaturamentoCorrente(String anoMesFaturamento) throws ControladorException;
 
@@ -221,32 +208,29 @@ public interface IControladorFaturamento {
 	public void inserirFaturamentoSituacaoHistorico(Collection collectionFaturamentoSituacaoHistorico) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection consultarResumoFaturamentoRelatorio(String opcaoTotalizacao, int anoMesReferencia, Integer gerenciaRegional, Integer localidade,
-			Integer municipio, Integer unidadeNegocio, String opcaoRelatorio) throws ControladorException;
+	public Collection consultarResumoFaturamentoRelatorio(String opcaoTotalizacao, int anoMesReferencia, Integer gerenciaRegional, Integer localidade, Integer municipio, Integer unidadeNegocio,
+			String opcaoRelatorio) throws ControladorException;
 
 	public void inserirCreditoARealizar(Imovel imovel, CreditoARealizar creditoARealizaro, Usuario usuarioLogado) throws ControladorException;
 
 	public void cancelarCreditoARealizar(String[] ids, Imovel imovel, Usuario usuarioLogado) throws ControladorException;
-	
+
 	@SuppressWarnings("rawtypes")
-	public Collection obterContasImovelManter(Imovel imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada)
+	public Collection obterContasImovelManter(Imovel imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada) throws ControladorException;
+
+	@SuppressWarnings("rawtypes")
+	public Collection obterContasImovel(Integer imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada, Integer anoMesReferenciaArrecadacao) throws ControladorException;
+
+	@SuppressWarnings("rawtypes")
+	public Collection obterGuiasPagamentoImovel(Integer imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada, Integer anoMesReferenciaArrecadacao)
 			throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public Collection obterContasImovel(Integer imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada,
-			Integer anoMesReferenciaArrecadacao) throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public Collection obterGuiasPagamentoImovel(Integer imovel, Integer situacaoNormal, Integer situacaoIncluida, Integer situacaoRetificada,
-			Integer anoMesReferenciaArrecadacao) throws ControladorException;
 
 	public void encerrarFaturamentoMes(Collection<Integer> colecaoIdsLocalidades, int idFuncionalidadeIniciada) throws ControladorException;
 
-	public BigDecimal[] obterValorACobrarDeCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria)
-			throws ControladorException;
+	public BigDecimal[] obterValorACobrarDeCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) throws ControladorException;
 
-	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoTotalizando(Collection colecaoCalcularValoresAguaEsgotoHelper)
-			throws ControladorException;
+	@SuppressWarnings("rawtypes")
+	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoTotalizando(Collection colecaoCalcularValoresAguaEsgotoHelper) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterDebitoACobrarCategoria(Integer debitoACobrarID) throws ControladorException;
@@ -255,8 +239,7 @@ public interface IControladorFaturamento {
 	public Collection obterDebitoACobrarImovel(Integer imovelID, Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID, Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento,
-			boolean prefaturamento) throws ControladorException;
+	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID, Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento, boolean prefaturamento) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterCreditoRealizarCategoria(Integer creditoARealizarID) throws ControladorException;
@@ -271,8 +254,7 @@ public interface IControladorFaturamento {
 
 	public DebitoTipo pesquisarDebitoTipo(String idDebitoTipo) throws ControladorException;
 
-	public BigDecimal calcularPrestacao(BigDecimal taxaJurosFinanciamento, Integer numeroPrestacoes, BigDecimal valorTotalServico, BigDecimal valorEntrada)
-			throws ControladorException;
+	public BigDecimal calcularPrestacao(BigDecimal taxaJurosFinanciamento, Integer numeroPrestacoes, BigDecimal valorTotalServico, BigDecimal valorEntrada) throws ControladorException;
 
 	public void reajustarTarifaConsumo(Map<ConsumoTarifaVigencia, Map<ConsumoTarifaCategoria, BigDecimal>> mapReajuste) throws ControladorException;
 
@@ -280,12 +262,11 @@ public interface IControladorFaturamento {
 
 	public Collection<FaturamentoGrupo> pesquisarFaturamentoGrupoComCronogramaMensalParaMesCorrente() throws ControladorException;
 
-	public Collection<FaturamentoGrupo> pesquisarFaturamentoGrupoComCronogramaMensalParaMesCorrenteSemGupoSelecionado(Integer grupoSelecionado)
-			throws ControladorException;
+	public Collection<FaturamentoGrupo> pesquisarFaturamentoGrupoComCronogramaMensalParaMesCorrenteSemGupoSelecionado(Integer grupoSelecionado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(Collection rotas, Short indicadorGeracaoMulta, Short indicadorGeracaoJuros,
-			Short indicadorGeracaoAtualizacao, int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao) throws ControladorException;
+	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(Collection rotas, Short indicadorGeracaoMulta, Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
+			int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao) throws ControladorException;
 
 	public void gerarFaturaClienteResponsavel(int idFuncionalidadeIniciada) throws ControladorException;
 
@@ -300,11 +281,11 @@ public interface IControladorFaturamento {
 
 	public Integer pesquisarFaturamentoAtividadeCronogramaComandadaNaoRealizadaCount() throws ControladorException;
 
-	public void emitirContas(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta,
-			Integer idEmpresa, Short indicadorEmissaoExtratoFaturamento) throws ControladorException;
+	public void emitirContas(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta, Integer idEmpresa,
+			Short indicadorEmissaoExtratoFaturamento) throws ControladorException;
 
-	public void emitirContasOrgaoPublico(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta,
-			Integer idEmpresa, Short indicadorEmissaoExtratoFaturamento) throws ControladorException;
+	public void emitirContasOrgaoPublico(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta, Integer idEmpresa,
+			Short indicadorEmissaoExtratoFaturamento) throws ControladorException;
 
 	public void atualizarMensagemConta(ContaMensagem contaMensagem) throws ControladorException;
 
@@ -312,23 +293,18 @@ public interface IControladorFaturamento {
 	public Collection pesquisarIdsTodasConta() throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection gerarRelacaoAcompanhamentoFaturamento(String idImovelCondominio, String idImovelPrincipal, String idNomeConta,
-			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua, String consumoMinimoFinalAgua, String idSituacaoLigacaoEsgoto,
-			String consumoMinimoInicialEsgoto, String consumoMinimoFinalEsgoto, String intervaloValorPercentualEsgotoInicial,
+	public Collection gerarRelacaoAcompanhamentoFaturamento(String idImovelCondominio, String idImovelPrincipal, String idNomeConta, String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua,
+			String consumoMinimoFinalAgua, String idSituacaoLigacaoEsgoto, String consumoMinimoInicialEsgoto, String consumoMinimoFinalEsgoto, String intervaloValorPercentualEsgotoInicial,
 			String intervaloValorPercentualEsgotoFinal,
 
-			String intervaloMediaMinimaImovelInicial, String intervaloMediaMinimaImovelFinal, String intervaloMediaMinimaHidrometroInicial,
-			String intervaloMediaMinimaHidrometroFinal,
+			String intervaloMediaMinimaImovelInicial, String intervaloMediaMinimaImovelFinal, String intervaloMediaMinimaHidrometroInicial, String intervaloMediaMinimaHidrometroFinal,
 
-			String idImovelPerfil, String idPocoTipo, String idFaturamentoSituacaoTipo, String idCobrancaSituacaoTipo, String idSituacaoEspecialCobranca,
-			String idEloAnormalidade, String areaConstruidaInicial, String areaConstruidaFinal, String idCadastroOcorrencia, String idConsumoTarifa,
-			String idGerenciaRegional, String idLocalidadeInicial, String idLocalidadeFinal, String setorComercialInicial, String setorComercialFinal,
-			String quadraInicial, String quadraFinal, String loteOrigem, String loteDestno, String cep, String logradouro, String bairro, String municipio,
-			String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
-			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo,
-			String numeroPontosInicial, String numeroPontosFinal, String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa,
-			int anoMesReferencia
-
+			String idImovelPerfil, String idPocoTipo, String idFaturamentoSituacaoTipo, String idCobrancaSituacaoTipo, String idSituacaoEspecialCobranca, String idEloAnormalidade,
+			String areaConstruidaInicial, String areaConstruidaFinal, String idCadastroOcorrencia, String idConsumoTarifa, String idGerenciaRegional, String idLocalidadeInicial,
+			String idLocalidadeFinal, String setorComercialInicial, String setorComercialFinal, String quadraInicial, String quadraFinal, String loteOrigem, String loteDestno, String cep,
+			String logradouro, String bairro, String municipio, String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
+			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo, String numeroPontosInicial, String numeroPontosFinal,
+			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, int anoMesReferencia
 	) throws ControladorException;
 
 	public Collection<FaturamentoAtividadeCronograma> pesquisarRelacaoAtividadesGrupo(Integer faturamentoGrupoId) throws ControladorException;
@@ -686,13 +662,12 @@ public interface IControladorFaturamento {
 	public boolean verificarDebitoMais3MesesFaturaEmAberto(Integer anoMesReferencia, Integer idImovel) throws ControladorException;
 
 	public Boolean pesquisarExisteciaParcelamentoConta(Integer idConta) throws ControladorException;
-	
+
 	@SuppressWarnings("rawtypes")
 	public Collection montarColecaoContaCategoria(Collection colecaoSubcategoria, Conta conta);
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarFaturamentoLigacoesMedicaoIndividualizadaRelatorio(Collection<Imovel> colecaoImoveisGerarRelatorio, String anoMesfaturamentoGrupo)
-			throws ControladorException;
+	public Collection pesquisarFaturamentoLigacoesMedicaoIndividualizadaRelatorio(Collection<Imovel> colecaoImoveisGerarRelatorio, String anoMesfaturamentoGrupo) throws ControladorException;
 
 	public Conta obterImovelLocalidadeConta(Integer idConta) throws ControladorException;
 
@@ -710,11 +685,9 @@ public interface IControladorFaturamento {
 
 	public Integer pesquisarMaxIdContaHistorico() throws ControladorException;
 
-	public Collection<RelatorioFaturasAgrupadasBean> pesquisarDadosRelatorioFaturasAgrupadas(Integer anoMesReferencia, Cliente cliente,
-			Collection<Integer> idsClientes) throws ControladorException;
+	public Collection<RelatorioFaturasAgrupadasBean> pesquisarDadosRelatorioFaturasAgrupadas(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes) throws ControladorException;
 
-	public Integer pesquisarDadosRelatorioFaturasAgrupadasCount(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes)
-			throws ControladorException;
+	public Integer pesquisarDadosRelatorioFaturasAgrupadasCount(Integer anoMesReferencia, Cliente cliente, Collection<Integer> idsClientes) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClientesFaturas(Integer idEsferaPoder) throws ControladorException;
@@ -1201,12 +1174,10 @@ public interface IControladorFaturamento {
 
 	public List<Integer> obterImoveisFaltandoTransmitir(Integer idRota, Integer anoMesFaturamento) throws ControladorException;
 
-	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(int anoMesReferencia, Integer idFaturamentoGrupo)
-			throws ControladorException;
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(int anoMesReferencia, Integer idFaturamentoGrupo) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosRelatorioMedicaoFaturamento(int anoMesReferencia, Integer idFaturamentoGrupo, Integer idEmpresa)
-			throws ControladorException;
+	public Collection pesquisarDadosRelatorioMedicaoFaturamento(int anoMesReferencia, Integer idFaturamentoGrupo, Integer idEmpresa) throws ControladorException;
 
 	public void atualizarConta(Conta conta) throws ControladorException;
 
@@ -1224,15 +1195,12 @@ public interface IControladorFaturamento {
 
 	public long obterDiferencaDiasCronogramas(Integer anoMesAtual, Rota rota, Integer idFaturamentoAtividade) throws ControladorException;
 
-	public Integer inserirGuiaPagamentoCodigoBarrasPorCliente(GuiaPagamento guiaPagamento, Integer idDebitoTipo, Integer idLocalidade)
-			throws ControladorException;
+	public Integer inserirGuiaPagamentoCodigoBarrasPorCliente(GuiaPagamento guiaPagamento, Integer idDebitoTipo, Integer idLocalidade) throws ControladorException;
 
-	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel,
-			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, DebitoTipo debitoTipo,
-			Usuario usuario) throws ControladorException;
+	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
+			Integer anoMesReferenciaDebito, BigDecimal valorDebito, DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
 
-	public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) throws ControladorException,
-			ErroRepositorioException;
+	public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) throws ControladorException, ErroRepositorioException;
 
 	public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
 
@@ -1251,17 +1219,15 @@ public interface IControladorFaturamento {
 
 	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException;
 
-	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes)
-			throws ControladorException;
+	public Collection<RelatorioReceitasAFaturarHelper> pesquisarDadosRelatorioReceitasAFaturarAnalitico(Integer idGrupo, Integer anoMes) throws ControladorException;
 
-	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes, Short indicadorCategoria)
-			throws ControladorException;
+	public Collection<RelatorioReceitasAFaturarPorCategoriaHelper> pesquisarDadosRelatorioReceitasAFaturarSintetico(Integer anoMes, Short indicadorCategoria) throws ControladorException;
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ControladorException;
 
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ControladorException;
 
-	public Collection<RelatorioReceitasAFaturarHelper> gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada)
+	public Collection<RelatorioReceitasAFaturarHelper> gerarDadosReceitasAFaturarResumo(Integer anoMes, Integer idGrupo, Integer idFuncionalidadeIniciada) 
 			throws ControladorException, ErroRepositorioException;
 
 	public Collection<ContaImpressaoTermicaQtde> pesquisarQtdeContaImpressaoTermica(Integer idGrupoFaturamento, Integer referencia) throws ControladorException;
@@ -1270,8 +1236,8 @@ public interface IControladorFaturamento {
 
 	public List<RelatorioAgenciaReguladoraDTO> pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idAgencia);
 
-	public void verificarValoresLeituraAnteriorEAtual(Integer leituraAnterior, Integer leituraAtual, String retorno, Integer contaID, Integer idImovel,
-			Integer consumoAguaCalculado, Integer consumoAguaMedido) throws ControladorException;
+	public void verificarValoresLeituraAnteriorEAtual(Integer leituraAnterior, Integer leituraAtual, String retorno, Integer contaID, Integer idImovel, Integer consumoAguaCalculado,
+			Integer consumoAguaMedido) throws ControladorException;
 
 	public void verificarValoresLeituraAnteriorEAtual(Integer leituraAnterior, Integer leituraAtual, Integer consumoAgua) throws ControladorException;
 
@@ -1284,8 +1250,7 @@ public interface IControladorFaturamento {
 	public Integer verificarGeracaoBoleto(SistemaParametro sistemaParametro, Conta conta) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void inserirContaCategoria(Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta, Collection colecaoCategoriaOuSubcategoria, Conta conta)
-			throws ControladorException;
+	public void inserirContaCategoria(Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta, Collection colecaoCategoriaOuSubcategoria, Conta conta) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public void inserirDebitoCobrado(Conta conta, Collection colecaoDebitoCobrado, Imovel imovel, Collection colecaoCategoria) throws ControladorException;
