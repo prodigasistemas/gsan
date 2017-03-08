@@ -1,30 +1,5 @@
 package gcom.faturamento;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
-
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
@@ -131,6 +106,31 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
@@ -22970,54 +22970,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		// retorna a coleção de débitos a cobrar
 		return retorno;
-	}
-
-	/**
-	 * atualiza DSCT_IDATUAL com o valor correspondente a cancelado (3), na
-	 * tabela DEBITO_A_COBRAR com IMOV_ID do debito a cobrar que foi pago,
-	 * DCST_IDATUAL com o valor correspondente a normal (0) e FNTP_ID com o
-	 * valor correspondente a juros de parcelamento (8)
-	 * 
-	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
-	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 30/05/2007
-	 * 
-	 * @param idimovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 *             Erro no hibernate
-	 */
-	public void atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(
-			Integer idImovel) throws ErroRepositorioException {
-
-		String update;
-		Session session = HibernateUtil.getSession();
-
-		try {
-			update = "UPDATE gcom.faturamento.debito.DebitoACobrar SET "
-					+ "dcst_idatual = :situacaoAtual "
-					+ "WHERE imov_id = :idImovel and "
-					+ "fntp_id = :financiamentoTipo and "
-					+ "dcst_idatual = :debitoCreditoSituacaoNormal ";
-
-			session.createQuery(update).setInteger("situacaoAtual",
-					DebitoCreditoSituacao.CANCELADA).setInteger("idImovel",
-					idImovel).setInteger("debitoCreditoSituacaoNormal",
-					DebitoCreditoSituacao.NORMAL).setInteger(
-					"financiamentoTipo", FinanciamentoTipo.JUROS_PARCELAMENTO)
-					.executeUpdate();
-
-			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
 	}
 
 	/**

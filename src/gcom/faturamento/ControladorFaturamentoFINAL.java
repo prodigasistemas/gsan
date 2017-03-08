@@ -10732,7 +10732,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			filtroDebitoACobrar.setInitializeLazy(true);
 			filtroDebitoACobrar
-					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO);
+					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
 			filtroDebitoACobrar
 					.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.FINANCIAMENTO_TIPO);
 
