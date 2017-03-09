@@ -115,11 +115,11 @@ public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction 
 					throw new ActionServletException("atencao.faturamento.posterior.faturamento.grupo");
 				}
 				
-				boolean grupoFaturado = Fachada.getInstancia().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(
-						idFaturamentoGrupo, anoMesReferencia);
-				if (!grupoFaturado) {
-					throw new ActionServletException("atencao.grupo_nao_faturado", idFaturamentoGrupo.toString());
-				}
+//				boolean grupoFaturado = Fachada.getInstancia().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(
+//						idFaturamentoGrupo, anoMesReferencia);
+//				if (!grupoFaturado) {
+//					throw new ActionServletException("atencao.grupo_nao_faturado", idFaturamentoGrupo.toString());
+//				}
 				
 				retorno.add(idFaturamentoGrupo);
 			}

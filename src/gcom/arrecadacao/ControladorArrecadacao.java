@@ -15310,23 +15310,18 @@ public class ControladorArrecadacao implements SessionBean {
 		Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap = null;
 		try {
 
-			Collection colecaoidsBancos = repositorioArrecadacao
-					.pesquisaBancosDebitoAutomatico();
+			Collection colecaoidsBancos = repositorioArrecadacao.pesquisaBancosDebitoAutomatico();
 
 			if (colecaoidsBancos != null && !colecaoidsBancos.isEmpty()) {
 
-				Collection colecaoBancoDebitoAutomaticoMovimento = repositorioArrecadacao
-						.pesquisaDebitoAutomaticoMovimento(
-								colecaoIdsFaturamentoGrupo,
-								anoMesReferenciaFaturamento, colecaoidsBancos);
+				Collection colecaoBancoDebitoAutomaticoMovimento = repositorioArrecadacao.pesquisaDebitoAutomaticoMovimento(colecaoIdsFaturamentoGrupo,
+						anoMesReferenciaFaturamento, colecaoidsBancos);
 
-				if (colecaoBancoDebitoAutomaticoMovimento != null
-						&& !colecaoBancoDebitoAutomaticoMovimento.isEmpty()) {
+				if (colecaoBancoDebitoAutomaticoMovimento != null && !colecaoBancoDebitoAutomaticoMovimento.isEmpty()) {
 
 					debitosAutomaticoBancosMap = new HashMap();
 
-					Iterator iteCollBancoDebitoAutomaticoMovimento = colecaoBancoDebitoAutomaticoMovimento
-							.iterator();
+					Iterator iteCollBancoDebitoAutomaticoMovimento = colecaoBancoDebitoAutomaticoMovimento.iterator();
 
 					boolean primeiraVez = true;
 					Integer idBancoUltimo = null;
@@ -15334,8 +15329,7 @@ public class ControladorArrecadacao implements SessionBean {
 					Collection colecaoDebitoAutomaticoMovimento = new ArrayList();
 
 					while (iteCollBancoDebitoAutomaticoMovimento.hasNext()) {
-						Object[] bancoDebitoAutomaticoMovimento = (Object[]) iteCollBancoDebitoAutomaticoMovimento
-								.next();
+						Object[] bancoDebitoAutomaticoMovimento = (Object[]) iteCollBancoDebitoAutomaticoMovimento.next();
 						if (bancoDebitoAutomaticoMovimento != null) {
 
 							Banco banco = null;
@@ -15350,41 +15344,37 @@ public class ControladorArrecadacao implements SessionBean {
 							}
 
 							if (primeiraVez) {
-								
-								//VERIFICANDO SE HOUVE MUDANÇA DE BANCO
-								if (idBancoUltimo != null &&
-									!idBancoUltimo.equals(banco.getId())) {
-									
-									//FINALIZANDO O MOVIMENTO DO BANCO
-									debitosAutomaticoBancosMap.put(bancoInserir,
-									colecaoDebitoAutomaticoMovimento);
-									
-									//INICIANDO O MOVIMENTO DO PROXIMO BANCO
+
+								// VERIFICANDO SE HOUVE MUDANÇA DE BANCO
+								if (idBancoUltimo != null && !idBancoUltimo.equals(banco.getId())) {
+
+									// FINALIZANDO O MOVIMENTO DO BANCO
+									debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
+
+									// INICIANDO O MOVIMENTO DO PROXIMO BANCO
 									colecaoDebitoAutomaticoMovimento = new ArrayList();
 								}
-								
+
 								idBancoUltimo = banco.getId();
 								bancoInserir = banco;
 								primeiraVez = false;
 							}
-							
+
 							if (idBancoUltimo.equals(banco.getId())) {
-								
-								//ACUMULNADO OS MOVIMENTOS
+
+								// ACUMULNADO OS MOVIMENTOS
 								colecaoDebitoAutomaticoMovimento.add(debitoAutomaticoMovimento);
-							} 
-							else {
-								
-								//FINALIZANDO O MOVIMENTO DO BANCO
-								debitosAutomaticoBancosMap.put(bancoInserir,
-								colecaoDebitoAutomaticoMovimento);
-								
-								//INICIANDO O MOVIMENTO DO PROXIMO BANCO
+							} else {
+
+								// FINALIZANDO O MOVIMENTO DO BANCO
+								debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
+
+								// INICIANDO O MOVIMENTO DO PROXIMO BANCO
 								colecaoDebitoAutomaticoMovimento = new ArrayList();
-								
+
 								idBancoUltimo = banco.getId();
 								bancoInserir = banco;
-								
+
 								colecaoDebitoAutomaticoMovimento.add(debitoAutomaticoMovimento);
 								primeiraVez = true;
 
@@ -15392,7 +15382,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						}
 					}
-					
+
 					debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
 
 				}
@@ -15774,36 +15764,36 @@ public class ControladorArrecadacao implements SessionBean {
 				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
 				try {
 
-
-					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
+					File leitura = new File("/Users/pamelagatinho/developer/Java/jboss-4.0.1sp1/server/"+ nomeZip + ".rem");
+					//File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
 					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 					out.write(arquivoTXTEnvio.toString());
 					out.flush();
 
 					// se o email do arrecadador movimento for preenchido
-					if (descricaoEmail != null) {
+//					if (descricaoEmail != null) {
+//
+//						ServicosEmail.enviarMensagemArquivoAnexado(
+//								descricaoEmail, emailRemetente, tituloMensagem,
+//								"", leitura);
+//						mandouEmailBanco = true;
+//						ServicosEmail.enviarMensagemArquivoAnexado(
+//								emailReceptor, emailRemetente, tituloMensagem,
+//								"", leitura);
+//						situacaoEmail = "Enviado";
+//					} else {
+//						ServicosEmail.enviarMensagemArquivoAnexado(
+//								emailReceptor, emailRemetente, tituloMensagem,
+//								"", leitura);
+//						situacaoEmail = "Não Enviado";
+//					}
 
-						ServicosEmail.enviarMensagemArquivoAnexado(
-								descricaoEmail, emailRemetente, tituloMensagem,
-								"", leitura);
-						mandouEmailBanco = true;
-						ServicosEmail.enviarMensagemArquivoAnexado(
-								emailReceptor, emailRemetente, tituloMensagem,
-								"", leitura);
-						situacaoEmail = "Enviado";
-					} else {
-						ServicosEmail.enviarMensagemArquivoAnexado(
-								emailReceptor, emailRemetente, tituloMensagem,
-								"", leitura);
-						situacaoEmail = "Não Enviado";
-					}
-
-				} catch (SendFailedException e) {
-					if (mandouEmailBanco) {
-						situacaoEmail = "Enviado";
-					} else {
-						situacaoEmail = "Não Enviado";
-					}
+//				} catch (SendFailedException e) {
+//					if (mandouEmailBanco) {
+//						situacaoEmail = "Enviado";
+//					} else {
+//						situacaoEmail = "Não Enviado";
+//					}
 
 				} catch (IOException e) {
 					sessionContext.setRollbackOnly();

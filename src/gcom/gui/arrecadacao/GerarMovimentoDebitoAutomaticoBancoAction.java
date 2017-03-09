@@ -49,93 +49,62 @@ public class GerarMovimentoDebitoAutomaticoBancoAction extends GcomAction {
 
 		// caso a opção do movimento de debito automatico seja diferente de
 		// nulo
-		if (gerarMovimentoDebitoAutomaticoBancoActionForm
-				.getOpcaoMovimentoDebitoAutomatico() != null
-				&& !gerarMovimentoDebitoAutomaticoBancoActionForm
-						.getOpcaoMovimentoDebitoAutomatico().equals("")) {
+		if (gerarMovimentoDebitoAutomaticoBancoActionForm.getOpcaoMovimentoDebitoAutomatico() != null
+				&& !gerarMovimentoDebitoAutomaticoBancoActionForm.getOpcaoMovimentoDebitoAutomatico().equals("")) {
 			// Se a opção seja Gerar Movimento de Débito Automático
-			if (gerarMovimentoDebitoAutomaticoBancoActionForm
-					.getOpcaoMovimentoDebitoAutomatico().equals("1")) {
+			if (gerarMovimentoDebitoAutomaticoBancoActionForm.getOpcaoMovimentoDebitoAutomatico().equals("1")) {
 				// recupera o Map<Banco, Collection<DebitoAutomaticoMovimento>>
 				// da sessao
 				Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap = (Map<Banco, Collection<DebitoAutomaticoMovimento>>) sessao
 						.getAttribute("debitosAutomaticoBancosMap");
-				String[] idsBancos = gerarMovimentoDebitoAutomaticoBancoActionForm
-						.getIdsCodigosBancos();
+				String[] idsBancos = gerarMovimentoDebitoAutomaticoBancoActionForm.getIdsCodigosBancos();
 				// cria um Map<Banco, Collection<DebitoAutomaticoMovimento>>
 				// novo para inserir só os que foram escolhidos
-				if (debitosAutomaticoBancosMap != null
-						&& debitosAutomaticoBancosMap.size() != idsBancos.length) {
+				if (debitosAutomaticoBancosMap != null && debitosAutomaticoBancosMap.size() != idsBancos.length) {
 					Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMapNovo = new HashMap();
 
 					for (int i = 0; i < idsBancos.length; i++) {
 						Integer idBanco = new Integer(idsBancos[i]);
-						Iterator debitosAutomaticoBancosIterator = debitosAutomaticoBancosMap
-								.keySet().iterator();
+						Iterator debitosAutomaticoBancosIterator = debitosAutomaticoBancosMap.keySet().iterator();
 						while (debitosAutomaticoBancosIterator.hasNext()) {
-							Banco banco = (Banco) debitosAutomaticoBancosIterator
-									.next();
+							Banco banco = (Banco) debitosAutomaticoBancosIterator.next();
 							if (banco.getId().equals(idBanco)) {
-								Collection<DebitoAutomaticoMovimento> debitoAutomaticoMovimento = debitosAutomaticoBancosMap
-										.get(banco);
-								debitosAutomaticoBancosMapNovo.put(banco,
-										debitoAutomaticoMovimento);
+								Collection<DebitoAutomaticoMovimento> debitoAutomaticoMovimento = debitosAutomaticoBancosMap.get(banco);
+								debitosAutomaticoBancosMapNovo.put(banco, debitoAutomaticoMovimento);
 							}
 
 						}
 					}
 					// manda os debitos automáticos selecionados
-					fachada.gerarMovimentoDebitoAutomaticoBanco(
-							debitosAutomaticoBancosMapNovo,
-							(Usuario) (httpServletRequest.getSession(false))
-									.getAttribute("usuarioLogado"));
+					fachada.gerarMovimentoDebitoAutomaticoBanco(debitosAutomaticoBancosMapNovo,
+							(Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 
 				} else {
 					// caso todos os debitos automáticos forem selecionados
-					fachada.gerarMovimentoDebitoAutomaticoBanco(
-							debitosAutomaticoBancosMap,
-							(Usuario) (httpServletRequest.getSession(false))
-									.getAttribute("usuarioLogado"));
+					fachada.gerarMovimentoDebitoAutomaticoBanco(debitosAutomaticoBancosMap,
+							(Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 				}
 			} else {
 				// no caso da opção ser Regerar Arquivo TXT do Movimento de
 				// Débito Automático
-				String codigoRemessa = gerarMovimentoDebitoAutomaticoBancoActionForm
-						.getCodigoRemessaMovimento();
-				String identificacaoServicoMovimento = gerarMovimentoDebitoAutomaticoBancoActionForm
-						.getIdentificacaoServicoMovimento();
-				if (codigoRemessa.equals("1")
-						&& identificacaoServicoMovimento
-								.equals(ConstantesSistema.DEBITO_AUTOMATICO)) {
-					Integer idArrecadadorMovimento = new Integer(
-							gerarMovimentoDebitoAutomaticoBancoActionForm
-									.getIdArrecadadorMovimento());
+				String codigoRemessa = gerarMovimentoDebitoAutomaticoBancoActionForm.getCodigoRemessaMovimento();
+				String identificacaoServicoMovimento = gerarMovimentoDebitoAutomaticoBancoActionForm.getIdentificacaoServicoMovimento();
+				if (codigoRemessa.equals("1") && identificacaoServicoMovimento.equals(ConstantesSistema.DEBITO_AUTOMATICO)) {
+					Integer idArrecadadorMovimento = new Integer(gerarMovimentoDebitoAutomaticoBancoActionForm.getIdArrecadadorMovimento());
 					FiltroArrecadadorMovimento filtroArrecadadorMovimento = new FiltroArrecadadorMovimento();
-					filtroArrecadadorMovimento
-							.adicionarParametro(new ParametroSimples(
-									FiltroArrecadadorMovimento.ID,
-									idArrecadadorMovimento));
-					Collection colecaoArrecadadorMovimento = fachada.pesquisar(
-							filtroArrecadadorMovimento,
-							ArrecadadorMovimento.class.getName());
-					if (colecaoArrecadadorMovimento != null
-							&& !colecaoArrecadadorMovimento.isEmpty()) {
-						ArrecadadorMovimento arrecadadorMovimento = (ArrecadadorMovimento) Util
-								.retonarObjetoDeColecao(colecaoArrecadadorMovimento);
+					filtroArrecadadorMovimento.adicionarParametro(new ParametroSimples(FiltroArrecadadorMovimento.ID, idArrecadadorMovimento));
+					Collection colecaoArrecadadorMovimento = fachada.pesquisar(filtroArrecadadorMovimento, ArrecadadorMovimento.class.getName());
+					if (colecaoArrecadadorMovimento != null && !colecaoArrecadadorMovimento.isEmpty()) {
+						ArrecadadorMovimento arrecadadorMovimento = (ArrecadadorMovimento) Util.retonarObjetoDeColecao(colecaoArrecadadorMovimento);
 
-						String enviarBanco = gerarMovimentoDebitoAutomaticoBancoActionForm
-								.getOpcaoEnvioParaBanco();
+						String enviarBanco = gerarMovimentoDebitoAutomaticoBancoActionForm.getOpcaoEnvioParaBanco();
 
-						fachada
-								.regerarArquivoTxtMovimentoDebitoAutomatico(
-										arrecadadorMovimento, enviarBanco,
-										(Usuario) (httpServletRequest.getSession(false))
-										.getAttribute("usuarioLogado"));
-						
+						fachada.regerarArquivoTxtMovimentoDebitoAutomatico(arrecadadorMovimento, enviarBanco,
+								(Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
+
 					}
 				} else {
-					throw new ActionServletException(
-							"atencao.movimento.nao.envio");
+					throw new ActionServletException("atencao.movimento.nao.envio");
 				}
 			}
 
@@ -144,8 +113,7 @@ public class GerarMovimentoDebitoAutomaticoBancoAction extends GcomAction {
 		sessao.removeAttribute("colecaogerarMovimentoDebitoAutomatico");
 
 		// montando página de sucesso
-		montarPaginaSucesso(httpServletRequest,
-				"Movimento Débito Automatico Enviado para Processamento", "Voltar",
+		montarPaginaSucesso(httpServletRequest, "Movimento Débito Automatico Enviado para Processamento", "Voltar",
 				"/exibirGerarMovimentoDebitoAutomaticoBancoAction.do");
 
 		return retorno;

@@ -1727,7 +1727,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					this.gerarContaImpressao(conta, faturamentoGrupo, imovel,faturamentoAtivCronRota.getRota());
 
 					if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
-						this.gerarMovimentoDebitoAutomatico(imovel, conta, faturamentoGrupo);
+						conta.setImovel(imovel);
+						conta.setFaturamentoGrupo(faturamentoGrupo);
+						
+						this.gerarMovimentoDebitoAutomatico(conta);
 					}
 					
 					try {
@@ -3630,8 +3633,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param faturamentoAtivCronRota
 	 * @throws ControladorException
 	 */
-	public void gerarMovimentoDebitoAutomatico(Imovel imovel, Conta conta,
-			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
+	public void gerarMovimentoDebitoAutomatico(Conta conta) throws ControladorException {
 
 		DebitoAutomaticoMovimento debitoAutomaticoMovimento = new DebitoAutomaticoMovimento();
 
@@ -3640,8 +3642,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Integer idDebitoAutomatico = null;
 		try {
 			DebitoAutomatico debitoAutomatico = new DebitoAutomatico();
-			idDebitoAutomatico = repositorioFaturamento
-					.obterDebitoAutomatico(imovel.getId());
+			idDebitoAutomatico = repositorioFaturamento.obterDebitoAutomatico(conta.getImovel().getId());
 			debitoAutomatico.setId(idDebitoAutomatico);
 			debitoAutomaticoMovimento.setDebitoAutomatico(debitoAutomatico);
 
@@ -3652,7 +3653,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		debitoAutomaticoMovimento.setContaGeral(conta.getContaGeral());
 		debitoAutomaticoMovimento.setDebitoAutomaticoRetornoCodigo(null);
-		debitoAutomaticoMovimento.setFaturamentoGrupo(faturamentoGrupo);
+		debitoAutomaticoMovimento.setFaturamentoGrupo(conta.getFaturamentoGrupo());
 		debitoAutomaticoMovimento.setProcessamento(new Date());
 		debitoAutomaticoMovimento.setEnvioBanco(null);
 		debitoAutomaticoMovimento.setRetornoBanco(null);
@@ -3661,14 +3662,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		debitoAutomaticoMovimento.setNumeroSequenciaArquivoRecebido(null);
 
 		try {
-			this.repositorioFaturamento
-					.inserirDebitoAutomaticoMovimento(debitoAutomaticoMovimento);
+			this.repositorioFaturamento.inserirDebitoAutomaticoMovimento(debitoAutomaticoMovimento);
 		} catch (ErroRepositorioException e) {
-
 			e.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
-
 		}
 	}
 
@@ -62383,8 +62381,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// [SF0008] - Gerar Movimento De Débito Automático
 				if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
-
-					this.gerarMovimentoDebitoAutomatico(imovel, conta, faturamentoGrupo);
+					conta.setImovel(imovel);
+					conta.setFaturamentoGrupo(faturamentoGrupo);
+					
+					this.gerarMovimentoDebitoAutomatico(conta);
 				}
 			}
 
@@ -72243,5 +72243,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				|| ((contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.INCLUIDA) || 
 						contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA)) 
 				&& Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"<"));
+	}
+	
+	private List<Conta> obterContasParaGerarMovimentoDebitoAutomatico() throws ControladorException {
+		try {
+			return (List<Conta>) repositorioFaturamento.obterContasParaGerarMovimentoDebitoAutomatico();
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public void gerarMovimentoDebitoAutomatico() throws ControladorException {
+		
+		List<Conta> contas = this.obterContasParaGerarMovimentoDebitoAutomatico();
+		
+		for (Conta conta : contas) {
+			this.gerarMovimentoDebitoAutomatico(conta);
+		}
 	}
 }

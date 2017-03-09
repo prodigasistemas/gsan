@@ -60971,4 +60971,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
+	public List<Conta> obterContasParaGerarMovimentoDebitoAutomatico() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append("");
+			
+			return session.createQuery(consulta.toString()).list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter dados para o relatorio sintetico de receitas a faturar");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
 }
