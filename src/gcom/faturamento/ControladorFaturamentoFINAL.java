@@ -17011,46 +17011,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 					}
 					
-					arrayValoresCurtoLongoPrazo = obterValorLongoECurtoPrazoCreditoARealizarConcedidosPorOrigemCredito(
-							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, anoMesFaturamento, idLocalidade, idCategoria, DebitoCreditoSituacao.PARCELADA,
-							DebitoCreditoSituacao.PARCELADA);
-					
-					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
-					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
-					
-					if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
-						
-						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
-								somaValorCurtoPrazo,
-								anoMesFaturamento,
-								categoria,
-								localidade,
-								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REPARCELAMENTO),
-								new LancamentoItem(LancamentoItem.PARCELAMENTOS_A_COBRAR_CURTO_PRAZO),
-								new LancamentoItemContabil(null),
-								new Short("1650"),
-								new Short("100"));
-						
-						colecaoResumoFaturamento.add(resumoFaturamento);
-					}
-					
-					
-					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
-						
-						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
-								somaValorLongoPrazo,
-								anoMesFaturamento,
-								categoria,
-								localidade,
-								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REPARCELAMENTO),
-								new LancamentoItem(LancamentoItem.PARCELAMENTOS_A_COBRAR_LONGO_PRAZO),
-								new LancamentoItemContabil(null),
-								new Short("1650"),
-								new Short("200"));
-						
-						colecaoResumoFaturamento.add(resumoFaturamento);
-					}
-					
 					// fim Linha 54 e 55
 					// System.out.println("Linha 62 antigo");
 					// Linha 62

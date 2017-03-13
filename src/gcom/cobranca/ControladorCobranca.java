@@ -11927,8 +11927,9 @@ public class ControladorCobranca implements SessionBean {
 		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[0], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
 				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
 		
-		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[1], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
+		if (valoresCurtoLongoPrazo[1] != null && !valoresCurtoLongoPrazo[1].equals(BigDecimal.ZERO) )
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[1], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
 	}
 
 	/**

@@ -165,7 +165,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 					}
 
-					sessao.setAttribute("colecaoContaValoresImovel", contaRemovida != null ? colecaoContasImovel.remove(contaRemovida) : colecaoContasImovel);
+					if (contaRemovida != null) {
+						colecaoContasImovel.remove(contaRemovida);
+					}
+					
+					sessao.setAttribute("colecaoContaValoresImovel", colecaoContasImovel);
 
 					form.set("valorTotalContasImovel", Util.formatarMoedaReal(valorTotalContas));
 				} else {
