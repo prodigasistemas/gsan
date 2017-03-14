@@ -8,6 +8,7 @@ import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
@@ -53,20 +54,13 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		DynaActionForm efetuarParcelamentoDebitosActionForm = (DynaActionForm) actionForm;
 		
 		// Pega dados do formulário
-		String codigoImovel = (String)(efetuarParcelamentoDebitosActionForm
-			.get("matriculaImovel"));
-		String dataParcelamento = (String)(efetuarParcelamentoDebitosActionForm
-			.get("dataParcelamento"));
-		String resolucaoDiretoria = (String)(efetuarParcelamentoDebitosActionForm
-			.get("resolucaoDiretoria"));
-		String fimIntervaloParcelamento = (String)efetuarParcelamentoDebitosActionForm
-			.get("fimIntervaloParcelamento");
-		String inicioIntervaloParcelamento = (String)efetuarParcelamentoDebitosActionForm
-			.get("inicioIntervaloParcelamento");
-		String indicadorContasRevisao = (String) efetuarParcelamentoDebitosActionForm
-			.get("indicadorContasRevisao");
-		String indicadorGuiasPagamento = (String) efetuarParcelamentoDebitosActionForm
-			.get("indicadorGuiasPagamento");
+		String codigoImovel = (String)(efetuarParcelamentoDebitosActionForm.get("matriculaImovel"));
+		String dataParcelamento = (String)(efetuarParcelamentoDebitosActionForm.get("dataParcelamento"));
+		String resolucaoDiretoria = (String)(efetuarParcelamentoDebitosActionForm.get("resolucaoDiretoria"));
+		String fimIntervaloParcelamento = (String)efetuarParcelamentoDebitosActionForm.get("fimIntervaloParcelamento");
+		String inicioIntervaloParcelamento = (String)efetuarParcelamentoDebitosActionForm.get("inicioIntervaloParcelamento");
+		String indicadorContasRevisao = (String) efetuarParcelamentoDebitosActionForm.get("indicadorContasRevisao");
+		String indicadorGuiasPagamento = (String) efetuarParcelamentoDebitosActionForm.get("indicadorGuiasPagamento");
 		String indicadorAcrescimosImpotualidade = (String) efetuarParcelamentoDebitosActionForm
 			.get("indicadorAcrescimosImpotualidade");
 		String indicadorDebitosACobrar = (String) efetuarParcelamentoDebitosActionForm
@@ -244,6 +238,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				BigDecimal valorAtualizacaoMonetaria = new BigDecimal("0.00");
 				BigDecimal valorJurosMora = new BigDecimal("0.00");
 				BigDecimal valorMulta = new BigDecimal("0.00");
+				
+				BigDecimal valorTotalCreditosAnterioresCurtoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalCreditosAnterioresLongoPrazo = new BigDecimal("0.00");
+				BigDecimal valorTotalCreditosAnteriores = new BigDecimal("0.00");
 				
 				// Dados do Débito do Imóvel - Contas
 				Collection<ContaValoresHelper> colecaoContaValores = new ArrayList<ContaValoresHelper>();
@@ -467,6 +465,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				// Para o cálculo do Débito Total Atualizado
 				valorTotalAcrescimoImpontualidade = retornoSoma;
 	
+				final int indiceCurtoPrazo = 0;
+				final int indiceLongoPrazo = 1;
+				
 				// Debitos A Cobrar
 				if( indicadorDebitosACobrar.equals("1") ){
 					//[FS0022]-Verificar existência de juros sobre imóvel
@@ -475,9 +476,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 					if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 						Iterator debitoACobrarValores = colecaoDebitoACobrar.iterator();
 						Collection<DebitoACobrar> debitosRemovidos = new ArrayList<DebitoACobrar>();
-		
-						final int indiceCurtoPrazo = 0;
-						final int indiceLongoPrazo = 1;
 		
 						while (debitoACobrarValores.hasNext()) {
 							DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores
@@ -499,7 +497,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 									valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 			
 									BigDecimal[] valoresDeCurtoELongoPrazo = fachada
-											.obterValorACobrarDeCurtoELongoPrazo(
+											.obterValorCurtoELongoPrazo(
 													debitoACobrar
 															.getNumeroPrestacaoDebito(),
 													debitoACobrar
@@ -525,7 +523,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 									valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 			
 									BigDecimal[] valoresDeCurtoELongoPrazo = fachada
-											.obterValorACobrarDeCurtoELongoPrazo(
+											.obterValorCurtoELongoPrazo(
 													debitoACobrar
 															.getNumeroPrestacaoDebito(),
 													debitoACobrar
@@ -589,33 +587,43 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				}
 				
 				// Crédito A Realizar
-				if( indicadorCreditoARealizar.equals("1") ){
-					Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoCliente
-							.getColecaoCreditoARealizar();
-					if (colecaoCreditoARealizar != null
-							&& !colecaoCreditoARealizar.isEmpty() ) {
+				if (indicadorCreditoARealizar.equals("1")) {
+					Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoCliente.getColecaoCreditoARealizar();
+					if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
 						Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
 						Collection<CreditoARealizar> creditosRemovidos = new ArrayList<CreditoARealizar>();
-						
+
 						while (creditoARealizarValores.hasNext()) {
-							CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores
-									.next();
-							
-							if(verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
+							CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+
+							if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
 								creditosRemovidos.add(creditoARealizar);
 								continue;
 							}
-							
-							valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorCreditoARealizar = valorCreditoARealizar
-									.add(creditoARealizar.getValorTotalComBonus());
+
+							if (isCreditoDeParcelamento(creditoARealizar)) {
+								BigDecimal valorCreditoAnterior = creditoARealizar.getValorNaoConcedido();
+
+								BigDecimal[] valores = fachada.obterValorCurtoELongoPrazo(creditoARealizar.getNumeroPrestacaoCredito(), 
+										creditoARealizar.getNumeroPrestacaoRealizada(), valorCreditoAnterior);
+								
+								valorTotalCreditosAnterioresCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalCreditosAnterioresCurtoPrazo = valorTotalCreditosAnterioresCurtoPrazo.add(valores[indiceCurtoPrazo]);
+								
+								valorTotalCreditosAnterioresLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorTotalCreditosAnterioresLongoPrazo = valorTotalCreditosAnterioresLongoPrazo.add(valores[indiceLongoPrazo]);
+								
+							} else {
+								valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
+							}
 						}
-						
-						if(!creditosRemovidos.isEmpty())
+
+						if (!creditosRemovidos.isEmpty())
 							colecaoCreditoARealizar.removeAll(creditosRemovidos);
 						sessao.setAttribute("colecaoCreditoARealizar", colecaoCreditoARealizar);
 						efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizar", Util.formatarMoedaReal(valorCreditoARealizar));
-					}else{
+					} else {
 						efetuarParcelamentoDebitosActionForm.set("valorCreditoARealizar", "0,00");
 					}
 				}else{
@@ -791,5 +799,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		}
 		
 		return retorno;
+	}
+	
+	private boolean isCreditoDeParcelamento(CreditoARealizar creditoARealizar) {
+		return creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+			&& creditoARealizar.getParcelamento() != null;
 	}
 }
