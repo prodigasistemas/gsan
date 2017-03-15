@@ -16815,7 +16815,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
 
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
-								somaValorCurtoPrazo,
+								somaValorLongoPrazo,
 								anoMesFaturamento,
 								categoria,
 								localidade,
