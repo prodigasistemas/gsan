@@ -25482,54 +25482,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * atualiza DSCT_IDATUAL com o valor correspondente a cancelado (3), na
-	 * tabela CREDITO_A_REALIZAR com IMOV_ID do debito a cobrar que foi pago,
-	 * DCST_IDATUAL com o valor correspondente a normal (0) e CROG_ID com o
-	 * valor correspondente a descontos concedidos no parcelamento (6)
-	 * 
-	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
-	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 18/07/2007
-	 * 
-	 * @param idimovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 *             Erro no hibernate
-	 */
-	public void atualizarDebitoCreditoSituacaoAtualDoCreditoARealizar(
-			Integer idImovel) throws ErroRepositorioException {
-
-		String update;
-		Session session = HibernateUtil.getSession();
-
-		try {
-			update = "UPDATE gcom.faturamento.credito.CreditoARealizar SET "
-					+ "dcst_idatual = :situacaoAtual "
-					+ "WHERE imov_id = :idImovel and "
-					+ "crog_id = :creditoOrigem and "
-					+ "dcst_idatual = :debitoCreditoSituacaoNormal ";
-
-			session.createQuery(update).setInteger("situacaoAtual",
-					DebitoCreditoSituacao.CANCELADA).setInteger("idImovel",
-					idImovel).setInteger("debitoCreditoSituacaoNormal",
-					DebitoCreditoSituacao.NORMAL).setInteger("creditoOrigem",
-					CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO)
-					.executeUpdate();
-
-			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-	}
-
-	/**
 	 * [UC0623] - Gerar Resumo de Metas CAERN Author: Sávio Luiz Data:
 	 * 20/07/2007
 	 * 
