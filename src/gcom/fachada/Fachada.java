@@ -4134,9 +4134,9 @@ public class Fachada {
 	 *            valor da categoria
 	 * @throws ControladorException
 	 */
-	public BigDecimal[] obterValorACobrarDeCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) {
+	public BigDecimal[] obterValorCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) {
 		try {
-			return this.getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(numeroPrestacoes, numeroPrestacoesCobradas, valorCategoria);
+			return this.getControladorFaturamento().obterValorCurtoELongoPrazo(numeroPrestacoes, numeroPrestacoesCobradas, valorCategoria);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

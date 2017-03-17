@@ -46,6 +46,9 @@
 			<form-property name="valorDebitoACobrarParcelamentoLongoPrazo" type="java.lang.String" />
 			<form-property name="valorCreditoARealizar" type="java.lang.String" />
 			<form-property name="valorDebitoTotalAtualizado" type="java.lang.String" />
+			<form-property name="valorCreditosAnterioresCurtoPrazo" type="java.lang.String" />
+			<form-property name="valorCreditosAnterioresLongoPrazo" type="java.lang.String" />
+			<form-property name="valorTotalCreditosAnteriores" type="java.lang.String" />
 
 			<!-- Informações para o Parcelamento - Processo: 1 -->
 			<form-property name="dataParcelamento" type="java.lang.String" />

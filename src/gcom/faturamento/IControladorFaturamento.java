@@ -227,7 +227,7 @@ public interface IControladorFaturamento {
 
 	public void encerrarFaturamentoMes(Collection<Integer> colecaoIdsLocalidades, int idFuncionalidadeIniciada) throws ControladorException;
 
-	public BigDecimal[] obterValorACobrarDeCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) throws ControladorException;
+	public BigDecimal[] obterValorCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoTotalizando(Collection colecaoCalcularValoresAguaEsgotoHelper) throws ControladorException;

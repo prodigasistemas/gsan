@@ -22086,84 +22086,41 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 
-	/**
-	 * [UC0167] - Obter Valor a Cobrar de Curto e Longo Prazo Author: Pedro
-	 * Alexandre Data: 10/01/2006
-	 * 
-	 * @param numeroPrestacoes
-	 *            nº de prestações
-	 * @param numeroPrestacoesCobradas
-	 *            nº de prestações cobradas
-	 * @param valorCategoria
-	 *            valor da categoria
-	 * @throws ControladorException
-	 */
-	public BigDecimal[] obterValorACobrarDeCurtoELongoPrazo(
-			short numeroPrestacoes, short numeroPrestacoesCobradas,
-			BigDecimal valorCategoria) throws ControladorException {
+	public BigDecimal[] obterValorCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorCategoria) throws ControladorException {
 
-		// cria as constantes que vai indicar os índices do array com os valores
-		// de curto e longo prazo
-		final int indiceCurtoPrazo = 0;
-		final int indiceLongoPrazo = 1;
+		final int curtoPrazo = 0;
+		final int longoPrazo = 1;
 
-		// variável que vai armazenar o valor da prestação
 		BigDecimal valorPrestacao = null;
 
-		// cria o array que vai armazenar os valores de curto e longo prazo
-		BigDecimal[] valoresCurtoPrazoLongoPrazo = new BigDecimal[2];
+		BigDecimal[] valores = new BigDecimal[2];
 
-		// se o nº de prestações for menor que o nº de prestações cobradas
 		if (numeroPrestacoes < numeroPrestacoesCobradas) {
-			// retorna nulo
 			return null;
 		} else {
-			// se o nº de prestações for igual a 0(zero)
 			if (numeroPrestacoes == 0) {
-				// retorna nulo
 				return null;
 			} else {
-				// se o nº de prestações menos o nº de prestações cobradas for
-				// menor que 13(treze)
 				if ((numeroPrestacoes - numeroPrestacoesCobradas) < 13) {
-					// atribui o valor da categoria ao valor de curto prazo
-					valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo] = valorCategoria;
-
-					// atribui 0(zero) ao valor de longo prazo
-					valoresCurtoPrazoLongoPrazo[indiceLongoPrazo] = new BigDecimal(
-							0.0);
+					valores[curtoPrazo] = valorCategoria;
+					valores[longoPrazo] = new BigDecimal(0.0);
 				} else {
-					// calcula o valor da prestação
+					valorPrestacao = valorCategoria.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 
-					// alterado por Vivianne Sousa data:14/04/2008
-					// analista :Aryed
-					valorPrestacao = valorCategoria.divide(new BigDecimal(
-							numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
+					valores[curtoPrazo] = valorPrestacao.multiply(new BigDecimal("12"));
 
-					// valorPrestacao =
-					// Util.dividirArredondando(valorCategoria,new
-					// BigDecimal(numeroPrestacoes));
-					// atribui o valor da prestação multiplicado por 12(doze) ao
-					// valor de curto prazo
-					valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo] = valorPrestacao
-							.multiply(new BigDecimal("12"));
-
-					// atribui o valor da categoria subtraido do valor de curto
-					// prazo ao valor de longo prazo
-					valoresCurtoPrazoLongoPrazo[indiceLongoPrazo] = valorCategoria
-							.subtract(valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo]);
+					valores[longoPrazo] = valorCategoria.subtract(valores[curtoPrazo]);
 				}
 
-				if (valoresCurtoPrazoLongoPrazo[0] == null) {
-					valoresCurtoPrazoLongoPrazo[0] = BigDecimal.ZERO;
+				if (valores[0] == null) {
+					valores[0] = BigDecimal.ZERO;
 				}
 
-				if (valoresCurtoPrazoLongoPrazo[1] == null) {
-					valoresCurtoPrazoLongoPrazo[1] = BigDecimal.ZERO;
+				if (valores[1] == null) {
+					valores[1] = BigDecimal.ZERO;
 				}
 
-				// retorna um array com os valores de curto e longo prazo
-				return valoresCurtoPrazoLongoPrazo;
+				return valores;
 			}
 		}
 	}

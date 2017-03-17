@@ -277,7 +277,7 @@ public class RelatorioDocumentoVisitaCobranca extends TarefaRelatorio {
 							// [SB0001] Obter Valores de Curto e Longo Prazo
 							valorRestanteACobrar = dadosDebito.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = Fachada.getInstancia().obterValorACobrarDeCurtoELongoPrazo(
+							BigDecimal[] valoresDeCurtoELongoPrazo = Fachada.getInstancia().obterValorCurtoELongoPrazo(
 									dadosDebito.getNumeroPrestacaoDebito(),	
 									dadosDebito.getNumeroPrestacaoCobradasMaisBonus(),
 									valorRestanteACobrar);
