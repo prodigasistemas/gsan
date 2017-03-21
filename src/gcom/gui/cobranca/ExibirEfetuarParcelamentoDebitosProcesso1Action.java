@@ -328,10 +328,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						}
 						
 						if (isCreditoDeParcelamento(creditoARealizar)) {
-							BigDecimal valorCreditoAnterior = creditoARealizar.getValorNaoConcedido();
 
-							BigDecimal[] valores = fachada.obterValorCurtoELongoPrazo(creditoARealizar.getNumeroPrestacaoCredito(), 
-									creditoARealizar.getNumeroPrestacaoRealizada(), valorCreditoAnterior);
+							BigDecimal[] valores = fachada.obterValorCreditoCurtoELongoPrazo(
+									creditoARealizar.getNumeroPrestacaoCredito(), 
+									creditoARealizar.getNumeroPrestacaoRealizada(), 
+									creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
 							
 							valorTotalCreditosAnterioresCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 							valorTotalCreditosAnterioresCurtoPrazo = valorTotalCreditosAnterioresCurtoPrazo.add(valores[indiceCurtoPrazo]);

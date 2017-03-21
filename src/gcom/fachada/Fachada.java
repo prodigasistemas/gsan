@@ -44136,4 +44136,12 @@ public class Fachada {
 		}
 		
 	}
+	
+	public BigDecimal[] obterValorCreditoCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) {
+		try {
+			return this.getControladorFaturamento().obterValorCreditoCurtoELongoPrazo(numeroPrestacoes, numeroPrestacoesCobradas, valorTotal, valorRestante);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

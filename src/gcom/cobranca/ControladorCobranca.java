@@ -11885,7 +11885,7 @@ public class ControladorCobranca implements SessionBean {
 
 		// 4. Créditos Anteriores - CURTO PRAZO
 		if (valorCreditosAnterioresCurtoPrazo != null && !valorCreditosAnterioresCurtoPrazo.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES_CURTO_PRAZO);
 
 			Short prestacoesCurtoPrazo = 0;
 			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditosAnterioresCurtoPrazo, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
@@ -11895,7 +11895,7 @@ public class ControladorCobranca implements SessionBean {
 		
 		// 4.1 Créditos Anteriores - LONGO PRAZO
 		if (valorCreditosAnterioresLongoPrazo != null && !valorCreditosAnterioresLongoPrazo.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES_LONGO_PRAZO);
 			
 			Short prestacoesLongoPrazo = 0;
 			
@@ -11949,20 +11949,6 @@ public class ControladorCobranca implements SessionBean {
 		}
 	}
 	
-	private void gerarCreditosReparcelamento(CreditoTipo creditoTipo, Imovel imovel, BigDecimal valorCredito, Short numeroPrestacoes,
-			Integer parcelamentoId, Collection<Categoria> colecaoCategoria, boolean isContaEntradaParcelamento, 
-			Integer anoMesEntradaGuia, Integer maiorAnoMesConta) throws ControladorException {
-		
-		BigDecimal[] valoresCurtoLongoPrazo = getControladorFaturamento().obterValorCreditoReparcelamentoDeCurtoELongoPrazo(numeroPrestacoes, valorCredito);
-		
-		inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[0], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-				anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
-		
-		if (valoresCurtoLongoPrazo[1] != null && !valoresCurtoLongoPrazo[1].equals(BigDecimal.ZERO) )
-			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valoresCurtoLongoPrazo[1], numeroPrestacoes, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
-	}
-
 	/**
 	 * Permite efetuar o parcelamento dos débitos de um imóvel
 	 * 

@@ -16985,31 +16985,82 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// fim Linha bbb
 					
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
-							anoMesFaturamento, localidade, categoria,
-							CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO,
-							DebitoCreditoSituacao.NORMAL,
-							DebitoCreditoSituacao.NORMAL,
-							LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO,
-							LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES,
-							new Short("1500"), new Short("110"));
+					
+					arrayValoresCurtoLongoPrazo = obterValorLongoECurtoPrazoCreditoARealizarConcedidosPorOrigemCredito(
+							CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO, anoMesFaturamento, idLocalidade, idCategoria, DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL);
+					
+					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
+					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
+					
+					if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+			            ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+			                somaValorCurtoPrazo,
+			                anoMesFaturamento,
+			                categoria,
+			                localidade,
+			                new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO),
+			                new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_CURTO_PRAZO),
+			                new LancamentoItemContabil(null),
+			                new Short("1500"),
+			                new Short("110"));
+			            
+			            colecaoResumoFaturamento.add(resumoFaturamento);
+			          }
+					
+					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+			            ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+			            	somaValorLongoPrazo,
+			                anoMesFaturamento,
+			                categoria,
+			                localidade,
+			                new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO),
+			                new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_CURTO_PRAZO),
+			                new LancamentoItemContabil(null),
+			                new Short("1600"),
+			                new Short("110"));
+			            
+			            colecaoResumoFaturamento.add(resumoFaturamento);
+			          }
 
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
 
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
-							anoMesFaturamento, localidade, categoria,
-							CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO,
-							DebitoCreditoSituacao.NORMAL,
-							DebitoCreditoSituacao.NORMAL,
-							LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO,
-							LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES,
-							new Short("1600"), new Short("110"));
+					arrayValoresCurtoLongoPrazo = obterValorLongoECurtoPrazoCreditoARealizarConcedidosPorOrigemCredito(
+							CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO, anoMesFaturamento, idLocalidade, idCategoria, DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL);
+					
+					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
+					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
+					
+					if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+			            ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+			                somaValorCurtoPrazo,
+			                anoMesFaturamento,
+			                categoria,
+			                localidade,
+			                new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO),
+			                new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO),
+			                new LancamentoItemContabil(null),
+			                new Short("1500"),
+			                new Short("115"));
+			            
+			            colecaoResumoFaturamento.add(resumoFaturamento);
+			          }
+					
+					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+			            ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+			            	somaValorLongoPrazo,
+			                anoMesFaturamento,
+			                categoria,
+			                localidade,
+			                new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO),
+			                new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO),
+			                new LancamentoItemContabil(null),
+			                new Short("1600"),
+			                new Short("115"));
+			            
+			            colecaoResumoFaturamento.add(resumoFaturamento);
+			          }
 
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
 					
 					// fim Linha 54 e 55
 					// System.out.println("Linha 62 antigo");
