@@ -44136,4 +44136,12 @@ public class Fachada {
 		}
 		
 	}
+	
+	public boolean verificarExistenciaEmpresa(Integer idEmpresa) {
+		try {
+			return this.getControladorCadastro().verificarExistenciaEmpresa(idEmpresa);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
