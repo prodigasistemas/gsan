@@ -1,44 +1,5 @@
 package gcom.cobranca;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
-import org.hibernate.cache.HashtableCache;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
@@ -398,6 +359,46 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import org.hibernate.cache.HashtableCache;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 
 /**
  * @author Raphael Rossiter
@@ -34339,70 +34340,50 @@ public class ControladorCobranca implements SessionBean {
 	 * @param usuarioLogado
 	 * @throws ControladorException
 	 */
-	public void cancelarCreditoARealizarTransferencia(Integer idCreditoARealizar, Imovel imovelDestino, Usuario usuarioLogado)
-			throws ControladorException {
+	public void cancelarCreditoARealizarTransferencia(Integer idCreditoARealizar, Imovel imovelDestino, Usuario usuarioLogado) throws ControladorException {
+		FiltroCreditoARealizar filtroCredito = new FiltroCreditoARealizar();
+		filtroCredito.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+		filtroCredito.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCreditoARealizar));
 
-		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		Collection colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCredito, CreditoARealizar.class.getName());
+		CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
 
-		filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-
-		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCreditoARealizar));
-
-		Collection colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
-
-		CreditoARealizar creditoARealizar = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
-
-		// [FS0003] - Verifica usuário com débito em cobrança
-		// administrativa
 		FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
-
 		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacao");
+		filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovelDestino.getId()));
 
-		filtroImovelCobrancaSituacao
-				.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovelDestino.getId()));
-
-		Collection imovelCobrancaSituacaoEncontrada = getControladorUtil().pesquisar(filtroImovelCobrancaSituacao,
-				ImovelCobrancaSituacao.class.getName());
+		Collection imovelCobrancaSituacaoEncontrada = getControladorUtil().pesquisar(filtroImovelCobrancaSituacao, ImovelCobrancaSituacao.class.getName());
 
 		if (imovelCobrancaSituacaoEncontrada != null && !imovelCobrancaSituacaoEncontrada.isEmpty()) {
-
 			if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao() != null) {
 
-				if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao().getId()
-						.equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
+				if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao().getId().equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
 						&& ((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getDataRetiradaCobranca() == null) {
-
 					sessionContext.setRollbackOnly();
 					throw new ActionServletException("atencao.pesquisa.imovel.cobranca_administrativa");
 				}
 			}
 		}
 
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		
 		// Debito Credito Situacao Anterior
-		DebitoCreditoSituacao debitoCreditoSituacaoAnterior = new DebitoCreditoSituacao();
-		debitoCreditoSituacaoAnterior.setId(creditoARealizar.getDebitoCreditoSituacaoAtual().getId());
-
-		creditoARealizar.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnterior);
+		if (credito.getAnoMesReferenciaContabil() >= sistemaParametro.getAnoMesFaturamento()) {
+			credito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(credito.getDebitoCreditoSituacaoAtual().getId()));
+		}
 
 		// Debito Credito Situacao Atual
-		DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-		debitoCreditoSituacaoAtual.setId(DebitoCreditoSituacao.CANCELADA);
-
-		creditoARealizar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
-		creditoARealizar.setUsuario(usuarioLogado);
-
-		creditoARealizar.setUltimaAlteracao(new Date());
+		credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
+		credito.setUsuario(usuarioLogado);
+		credito.setUltimaAlteracao(new Date());
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, creditoARealizar
-				.getImovel().getId(), creditoARealizar.getImovel().getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		registradorOperacao.registrarOperacao(creditoARealizar);
-
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, credito.getImovel().getId(), credito.getImovel().getId(),
+				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		registradorOperacao.registrarOperacao(credito);
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-		getControladorUtil().atualizar(creditoARealizar);
+		getControladorUtil().atualizar(credito);
 	}
 
 	/**

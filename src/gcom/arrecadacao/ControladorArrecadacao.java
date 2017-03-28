@@ -37159,15 +37159,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por
-	 * NSA
-	 * 
-	 * @author Ana Maria
-	 * @date 12/07/2007
-	 * 
-	 * @param idMovimentoArrecadador
-	 * @return
+	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por NSA
 	 */
 	public Collection<MovimentoArrecadadoresPorNSAHelper> gerarMovimentoArrecadadoresNSA(
 			Collection<Integer> idsArrecadadorMovimento,
@@ -37189,11 +37181,11 @@ public class ControladorArrecadacao implements SessionBean {
 
 	/**
 	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento 
 	 */
 	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) throws ControladorException {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
 
 		FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
 		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
@@ -37209,11 +37201,19 @@ public class ControladorArrecadacao implements SessionBean {
 			if (debito.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL)
 					&& debito.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.JUROS_PARCELAMENTO)) {
 
-				if (debito.getAnoMesReferenciaContabil() >= sistemaParametro.getAnoMesFaturamento()) {
+				if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
 					debito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 				}
 				
 				debito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
+				
+				int anoMesReferenciaContabil = anoMesFaturamento;
+				int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+				if (anoMesFaturamento < anoMesCorrente) {
+					anoMesReferenciaContabil = anoMesCorrente;
+				}
+				
+				debito.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
 
 				getControladorUtil().atualizar(debito);
 			}
@@ -37225,25 +37225,6 @@ public class ControladorArrecadacao implements SessionBean {
 	 * acordo com os parâmetros informados
 	 * 
 	 * [UC0229] Obter Representação Numérica do Código de Barras
-	 * 
-	 * @author Pedro Alexandre,Hugo Amorim,Hugo Amorim
-	 * @date 20/04/2006,12/01/2010,10/03/2010
-	 * 
-	 * @param tipoPagamento
-	 * @param valorCodigoBarra
-	 * @param idLocalidade
-	 * @param matriculaImovel
-	 * @param anoMesReferenciaConta
-	 * @param digitoVerificadorRefContaModulo10
-	 * @param idTipoDebito
-	 * @param anoEmissaoGuiaPagamento
-	 * @param sequencialDocumentoCobranca
-	 * @param idTipoDocumento
-	 * @param idCliente
-	 * @param seqFaturaClienteResponsavel
-	 * @param idGuiaPagamento
-	 * @return
-	 * @throws ParametroNaoInformadoException
 	 */
 	public String obterRepresentacaoNumericaCodigoBarra(Integer tipoPagamento,
 			BigDecimal valorCodigoBarra, Integer idLocalidade,
@@ -37253,10 +37234,8 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idTipoDocumento, Integer idCliente,
 			Integer seqFaturaClienteResponsavel, String idGuiaPagamento) throws ControladorException {
 
-		// Cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
 
-		// Obtem parametros do sistema
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 
 		// [FS0001] Verificar compatibilidade dos campos informados com o tipo

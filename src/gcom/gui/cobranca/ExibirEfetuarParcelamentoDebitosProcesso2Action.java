@@ -14,6 +14,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.micromedicao.ControladorMicromedicao;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 /**
  * Permite efetuar o parcelamento dos débitos de um imóvel
@@ -41,6 +43,9 @@ import org.apache.struts.action.DynaActionForm;
  * @date 11/02/2006
  */
 public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction {
+	
+	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso2Action.class);
+
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -66,6 +71,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		String indicadorCreditoARealizar = (String) form.get("indicadorCreditoARealizar");
 		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
 		
+		logger.info("Parcelamento do imóvel " + codigoImovel);
+
 		Boolean indicadorContas = true;
 
 		if (semIntervaloParcelamento(fimIntervaloParcelamento, inicioIntervaloParcelamento)){

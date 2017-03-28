@@ -21,9 +21,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 public class ExibirEfetuarParcelamentoDebitosProcesso4Action extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso4Action.class);
+	
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
 		ActionForward retorno = actionMapping.findForward("processo4");
@@ -34,6 +37,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso4Action extends GcomAction 
 
 		DynaActionForm form = (DynaActionForm) actionForm;
 
+		String codigoImovel = (String) form.get("matriculaImovel");
+		logger.info("Parcelamento do imóvel " + codigoImovel);
+		
 		// Verifica se entrou na aba de Negociação
 		Collection<OpcoesParcelamentoHelper> colecaoOpcoesParcelamento = (Collection<OpcoesParcelamentoHelper>) sessao.getAttribute("colecaoOpcoesParcelamento");
 		if (colecaoOpcoesParcelamento == null || colecaoOpcoesParcelamento.isEmpty()) {

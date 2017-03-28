@@ -25482,54 +25482,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * atualiza DSCT_IDATUAL com o valor correspondente a cancelado (3), na
-	 * tabela CREDITO_A_REALIZAR com IMOV_ID do debito a cobrar que foi pago,
-	 * DCST_IDATUAL com o valor correspondente a normal (0) e CROG_ID com o
-	 * valor correspondente a descontos concedidos no parcelamento (6)
-	 * 
-	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
-	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 18/07/2007
-	 * 
-	 * @param idimovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 *             Erro no hibernate
-	 */
-	public void atualizarDebitoCreditoSituacaoAtualDoCreditoARealizar(
-			Integer idImovel) throws ErroRepositorioException {
-
-		String update;
-		Session session = HibernateUtil.getSession();
-
-		try {
-			update = "UPDATE gcom.faturamento.credito.CreditoARealizar SET "
-					+ "dcst_idatual = :situacaoAtual "
-					+ "WHERE imov_id = :idImovel and "
-					+ "crog_id = :creditoOrigem and "
-					+ "dcst_idatual = :debitoCreditoSituacaoNormal ";
-
-			session.createQuery(update).setInteger("situacaoAtual",
-					DebitoCreditoSituacao.CANCELADA).setInteger("idImovel",
-					idImovel).setInteger("debitoCreditoSituacaoNormal",
-					DebitoCreditoSituacao.NORMAL).setInteger("creditoOrigem",
-					CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO)
-					.executeUpdate();
-
-			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-	}
-
-	/**
 	 * [UC0623] - Gerar Resumo de Metas CAERN Author: Sávio Luiz Data:
 	 * 20/07/2007
 	 * 
@@ -34387,14 +34339,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "	CASE WHEN ( crar.crar_nnprestacaocredito < 13 ) "
 					+ "	THEN crarCat.cacg_vlcategoria "
 					+ "	ELSE  "
-					+ "	round( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * 12 "
+					+ "	trunc( ( crarCat.cacg_vlcategoria / crar.crar_nnprestacaocredito), 2 ) * 12 "
 					+ "	END  "
 					+ "	) as valorCurtoPrazo, "
 					+ "	SUM(  "
 					+ "	CASE WHEN ( crar.crar_nnprestacaocredito < 13 ) "
 					+ "	THEN 0.00 "
 					+ "	ELSE  "
-					+ "	cacg_vlcategoria - ( round( ( cacg_vlcategoria / crar.crar_nnprestacaocredito ), 2 ) * ( 12 ) ) "
+					+ "	cacg_vlcategoria - ( trunc( ( cacg_vlcategoria / crar.crar_nnprestacaocredito ), 2 ) * ( 12 ) ) "
 					+ "	END  "
 					+ "	) as valorLongoPrazo  "
 					+ "	FROM cadastro.localidade loca  "
@@ -39909,6 +39861,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id "
 					+ " INNER JOIN cadastro.localidade loca on loca.loca_id = imov.loca_id "
+					+ " INNER JOIN cadastro.vw_imovel_principal_categoria categoriaPrincipal on categoriaPrincipal.imov_id = imov.imov_id "
 					+ " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = conta.imov_id "
 					+ " LEFT OUTER JOIN cobranca.cmd_empr_cobr_conta cecc on emprCobConta.cecc_id = cecc.cecc_id ";
 			
@@ -39924,7 +39877,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			
 			consulta = consulta + " NOT EXISTS (select pagto.pgmt_id FROM arrecadacao.pagamento pagto WHERE pagto.cnta_id = conta.cnta_id) AND ";
-			consulta = consulta + " imov.imov_idcategoriaprincipal in (:idsCategoria) AND ";
+			consulta = consulta + " categoriaPrincipal.catg_id in (:idsCategoria) AND ";
 			
 			
 			consulta = consulta
@@ -52830,12 +52783,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.getCodigoSetorComercialFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
+		if (comandoEmpresaCobrancaConta.getNumeroQuadraInicial() != null) {
 			retorno = retorno
 					+ " and conta.cnta_nnquadra between "
-					+ comandoEmpresaCobrancaConta.getQuadraInicial()
-							.getNumeroQuadra() + " and "
-					+ comandoEmpresaCobrancaConta.getQuadraFinal().getNumeroQuadra();
+					+ comandoEmpresaCobrancaConta.getNumeroQuadraInicial() + " and "
+					+ comandoEmpresaCobrancaConta.getNumeroQuadraFinal();
 		}
 
 		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {

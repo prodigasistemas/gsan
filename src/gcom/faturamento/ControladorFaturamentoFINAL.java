@@ -72,7 +72,6 @@ import gcom.cadastro.imovel.PocoTipo;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.EmitirConsumoImovelCondominimoHelper;
-import gcom.cadastro.imovel.bean.ImovelMicromedicao;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
@@ -176,7 +175,6 @@ import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.conta.ImpostoDeduzidoHelper;
 import gcom.faturamento.conta.MotivoNaoEntregaDocumento;
-import gcom.faturamento.conta.UC0146ManterConta;
 import gcom.faturamento.controladores.ControladorRetificarContaLocal;
 import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -318,7 +316,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13865,208 +13862,105 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0195] - Manter Crédito a Realizar
-	 * 
-	 * @author Roberta Costa
-	 * @since 18/01/2006
-	 * @param ids
-	 *            Lista de Id de Crédito a Realizar
-	 * @throws ControladorException
 	 */
-	public void cancelarCreditoARealizar(String[] ids, Imovel imovel,
-			Usuario usuarioLogado) throws ControladorException {
+	public void cancelarCreditoARealizar(String[] ids, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 
-		// [FS0001] - Verifica Existência da Matrícula
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.INDICADOR_IMOVEL_EXCLUIDO, Imovel.IMOVEL_EXCLUIDO));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, imovel.getId()));
 
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.INDICADOR_IMOVEL_EXCLUIDO,
-				Imovel.IMOVEL_EXCLUIDO));
-
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(
-				FiltroClienteImovel.IMOVEL_ID, imovel.getId()));
-
-		Collection imovelExcluido = getControladorUtil().pesquisar(
-				filtroClienteImovel, ClienteImovel.class.getName());
+		Collection imovelExcluido = getControladorUtil().pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
 
 		if (imovelExcluido != null && !(imovelExcluido.isEmpty())) {
 			throw new ControladorException("atencao.imovel.excluido");
 		}
 
-		// Para cada credito a realizar
 		for (int i = 0; i < ids.length; i++) {
 			String id = ids[i];
 
-			FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+			FiltroCreditoARealizar filtroCredito = new FiltroCreditoARealizar();
+			filtroCredito.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, id));
+			filtroCredito.setInitializeLazy(true);
+			filtroCredito.adicionarCaminhoParaCarregamentoEntidade(FiltroCreditoARealizar.CREDITO_TIPO);
 
-			filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
-					FiltroCreditoARealizar.ID, id));
-			// este parametro provoca a chamada do metodo initializeLazy durante
-			// a pesquisa do objeto
-			filtroCreditoARealizar.setInitializeLazy(true);
+			Collection colecaoCredito = getControladorUtil().pesquisar(filtroCredito, CreditoARealizar.class.getName());
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade(FiltroCreditoARealizar.CREDITO_TIPO);
-
-			Collection colecaoCreditoARealizar = getControladorUtil()
-					.pesquisar(filtroCreditoARealizar,
-							CreditoARealizar.class.getName());
-
-			CreditoARealizar creditoARealizar = (CreditoARealizar) colecaoCreditoARealizar
-					.iterator().next();
-
-			creditoARealizar.setUsuario(usuarioLogado);
+			CreditoARealizar credito = (CreditoARealizar) colecaoCredito.iterator().next();
+			credito.setUsuario(usuarioLogado);
 
 			// ------------ REGISTRAR TRANSAÇÃO ----------------
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR,
-					imovel.getId(), Integer.parseInt(id),
-					new UsuarioAcaoUsuarioHelper(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-			registradorOperacao.registrarOperacao(creditoARealizar);
+			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, imovel.getId(), Integer.parseInt(id), 
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			registradorOperacao.registrarOperacao(credito);
 			// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-			if ((creditoARealizar.getNumeroPrestacaoRealizada() == 0)
-					&& (creditoARealizar.getAnoMesReferenciaContabil() >= getControladorUtil()
-							.pesquisarParametrosDoSistema()
-							.getAnoMesFaturamento())) {
+			if ((credito.getNumeroPrestacaoRealizada() == 0) && (credito.getAnoMesReferenciaContabil() >= getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento())) {
 
 				FiltroCreditoARealizarGeral filtroCreditoARealizarGeral = new FiltroCreditoARealizarGeral();
+				filtroCreditoARealizarGeral.adicionarParametro(new ParametroSimples(FiltroCreditoARealizarGeral.ID, id));
 
-				filtroCreditoARealizarGeral
-						.adicionarParametro(new ParametroSimples(
-								FiltroCreditoARealizarGeral.ID, id));
+				Collection colecaoCreditoARealizarGeral = getControladorUtil().pesquisar(filtroCreditoARealizarGeral, CreditoARealizarGeral.class.getName());
 
-				Collection colecaoCreditoARealizarGeral = getControladorUtil()
-						.pesquisar(filtroCreditoARealizarGeral,
-								CreditoARealizarGeral.class.getName());
+				CreditoARealizarGeral creditoARealizarGeral = (CreditoARealizarGeral) colecaoCreditoARealizarGeral.iterator().next();
 
-				CreditoARealizarGeral creditoARealizarGeral = (CreditoARealizarGeral) colecaoCreditoARealizarGeral
-						.iterator().next();
-
-				// Remove da Tabela CREDITO_A_REALIZAR em cascata
-				getControladorUtil().remover(creditoARealizar);
-
-				// Remove da Tabela CREDITO_A_REALIZAR_GERAL
+				getControladorUtil().remover(credito);
 				getControladorUtil().remover(creditoARealizarGeral);
 			} else {
-
-				// [FS0003] - Verifica usuário com débito em cobrança
-				// administrativa
+				// [FS0003] - Verifica usuário com débito em cobrança administrativa
 				FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
 
-				filtroImovelCobrancaSituacao
-						.adicionarParametro(new ParametroSimples(
-								FiltroImovelCobrancaSituacao.IMOVEL_ID, imovel
-										.getId()));
+				filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovel.getId()));
 
-				Collection imovelCobrancaSituacaoEncontrada = getControladorUtil()
-						.pesquisar(filtroImovelCobrancaSituacao,
-								ImovelCobrancaSituacao.class.getName());
+				Collection imovelCobrancaSituacaoEncontrada = getControladorUtil().pesquisar(filtroImovelCobrancaSituacao, ImovelCobrancaSituacao.class.getName());
 
-				if (imovelCobrancaSituacaoEncontrada != null
-						&& !imovelCobrancaSituacaoEncontrada.isEmpty()) {
+				if (imovelCobrancaSituacaoEncontrada != null && !imovelCobrancaSituacaoEncontrada.isEmpty()) {
 
-					if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada)
-							.get(0)).getCobrancaSituacao() != null) {
+					if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao() != null) {
 
-						if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada)
-								.get(0))
-								.getCobrancaSituacao()
-								.getId()
-								.equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
-								&& ((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada)
-										.get(0)).getDataRetiradaCobranca() == null) {
-
-							throw new ActionServletException(
-									"atencao.pesquisa.imovel.cobranca_administrativa");
+						if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao().getId().equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
+								&& ((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getDataRetiradaCobranca() == null) {
+							throw new ActionServletException("atencao.pesquisa.imovel.cobranca_administrativa");
 						}
 					}
 				}
 
 				// [FS0004] - Validar valor do crédito
-				CreditoARealizar creditoARealizarPesquisado = (CreditoARealizar) colecaoCreditoARealizar
-						.iterator().next();
+				CreditoARealizar creditoARealizarPesquisado = (CreditoARealizar) colecaoCredito.iterator().next();
 
 				FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
+				filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, creditoARealizarPesquisado.getCreditoTipo()));
 
-				filtroCreditoTipo.adicionarParametro(new ParametroSimples(
-						FiltroCreditoTipo.ID, creditoARealizarPesquisado
-								.getCreditoTipo()));
-
-				Collection creditoTiposValor = getControladorUtil().pesquisar(
-						filtroCreditoTipo, CreditoTipo.class.getName());
+				Collection creditoTiposValor = getControladorUtil().pesquisar(filtroCreditoTipo, CreditoTipo.class.getName());
 
 				if (creditoTiposValor != null && !(creditoTiposValor.isEmpty())) {
-					CreditoTipo creditoTipoValorNaBase = (CreditoTipo) ((List) creditoTiposValor)
-							.get(0);
+					CreditoTipo creditoTipoValorNaBase = (CreditoTipo) ((List) creditoTiposValor).get(0);
 					if (creditoTipoValorNaBase.getValorLimite() != null) {
-						// Verifica se o valor do crédito é mairo que o valor
-						// limite da tabela crédito tipo
-						if (creditoARealizarPesquisado
-								.getValorCredito()
-								.compareTo(
-										creditoTipoValorNaBase.getValorLimite()) == 1) {
-							throw new ControladorException(
-									"atencao.credito_a_realizar.valor_limite",
-									null,
-									""
-											+ creditoTipoValorNaBase
-													.getValorLimite());
+						// Verifica se o valor do crédito é mairo que o valor limite da tabela crédito tipo
+						if (creditoARealizarPesquisado.getValorCredito().compareTo(creditoTipoValorNaBase.getValorLimite()) == 1) {
+							throw new ControladorException("atencao.credito_a_realizar.valor_limite", null, "" + creditoTipoValorNaBase.getValorLimite());
 						}
 					} else {
-						throw new ControladorException(
-								"atencao.credito_tipo.valor_limite_inexistente");
+						throw new ControladorException("atencao.credito_tipo.valor_limite_inexistente");
 					}
 				}
+				
+				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+				Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
 
-				// Debito Credito Situacao Anterior
-				DebitoCreditoSituacao debitoCreditoSituacaoAnterior = new DebitoCreditoSituacao();
-				debitoCreditoSituacaoAnterior.setId(creditoARealizar
-						.getDebitoCreditoSituacaoAtual().getId());
+				if (credito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					credito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(credito.getDebitoCreditoSituacaoAtual().getId()));
+				}
+				
+				credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
 
-				creditoARealizar
-						.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnterior);
+				Integer anoMesReferenciaAtual = Util.recuperaAnoMesDaData(new Date());
 
-				// Debito Credito Situacao Atual
-				DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-				debitoCreditoSituacaoAtual
-						.setId(DebitoCreditoSituacao.CANCELADA);
+				credito.setAnoMesReferenciaContabil(anoMesReferenciaAtual > anoMesFaturamento ? anoMesReferenciaAtual : anoMesFaturamento);
 
-				creditoARealizar
-						.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
+				Interceptador.getInstancia().registrarExclusao(credito);
+				credito.setOperacaoEfetuada(null);
 
-				// Autor: Bruno Barros
-				// Data : 12/05/2009
-				// Analista Responsável: Rosana Cavalho
-				// Descrição da alteração: Gravar na coluna
-				// DBAC_AMREFERENCIACONTABIL o maior valor entre o ano/mes
-				// da data corrente e o ano/mês da referência do faturamento (
-				// PARM_AMREFERENCIAFATURAMENTO )
-				Date dataAtual = new Date();
-				Integer anoMesReferenciaAtual = Util
-						.recuperaAnoMesDaData(dataAtual);
-
-				SistemaParametro sistemaParametro = this.getControladorUtil()
-						.pesquisarParametrosDoSistema();
-
-				creditoARealizar.setAnoMesReferenciaContabil(
-
-				(anoMesReferenciaAtual > sistemaParametro
-						.getAnoMesFaturamento() ? anoMesReferenciaAtual
-						: sistemaParametro.getAnoMesFaturamento())
-
-				);
-				// FIM ALTERAÇÃO BRUNO BARROS
-
-				// Esta alteracao será registrada como exclusao
-				Interceptador.getInstancia()
-						.registrarExclusao(creditoARealizar);
-				// Para nao registrar a alteracao também, setamos a operacao
-				// efetuada para nula.
-				creditoARealizar.setOperacaoEfetuada(null);
-
-				getControladorUtil().atualizar(creditoARealizar);
+				getControladorUtil().atualizar(credito);
 			}
 		}
 	}
@@ -14075,13 +13969,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0146] - Manter Conta Author: Raphael Rossiter Data: 21/01/2006
 	 * 
 	 * Obtém as contas de um imóvel que poderão ser mantidas
-	 * 
-	 * @param imovel
-	 * @param situacaoNormal
-	 * @param situacaoIncluida
-	 * @param situacaoRetificada
-	 * @return
-	 * @throws ControladorException
 	 */
 	public Collection obterContasImovelManter(Imovel imovel,
 			Integer situacaoNormal, Integer situacaoIncluida,
@@ -14089,7 +13976,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection retorno = new ArrayList();
 
-		// Criação das coleções
 		Collection colecaoContasManutencaoArray = null;
 
 		try {
@@ -16927,7 +16813,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
 
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
-								somaValorCurtoPrazo,
+								somaValorLongoPrazo,
 								anoMesFaturamento,
 								categoria,
 								localidade,

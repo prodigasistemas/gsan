@@ -13795,9 +13795,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " and " + comandoEmpresaCobrancaConta.getCodigoSetorComercialFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
-			retorno = retorno + " and conta.cnta_nnquadra between " + comandoEmpresaCobrancaConta.getQuadraInicial().getNumeroQuadra()
-					+ " and " + comandoEmpresaCobrancaConta.getQuadraFinal().getNumeroQuadra();
+		if (comandoEmpresaCobrancaConta.getNumeroQuadraInicial() != null) {
+			retorno = retorno + " and conta.cnta_nnquadra between " + comandoEmpresaCobrancaConta.getNumeroQuadraInicial()
+					+ " and " + comandoEmpresaCobrancaConta.getNumeroQuadraFinal();
 		}
 
 		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {

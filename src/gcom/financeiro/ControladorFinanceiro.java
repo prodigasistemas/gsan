@@ -1,7 +1,6 @@
 package gcom.financeiro;
 
 import gcom.arrecadacao.Arrecadador;
-import gcom.arrecadacao.ArrecadadorMovimentoItemDTO;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.FiltroArrecadador;
@@ -13,10 +12,6 @@ import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.arrecadacao.banco.Banco;
 import gcom.arrecadacao.banco.ContaBancaria;
 import gcom.arrecadacao.banco.FiltroBanco;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
-import gcom.arrecadacao.pagamento.GuiaPagamento;
-import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -46,20 +41,15 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.CobrancaDocumento;
-import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
-import gcom.cobranca.FiltroCobrancaDocumento;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.conta.Conta;
-import gcom.faturamento.conta.Fatura;
-import gcom.faturamento.conta.FiltroFatura;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.financeiro.bean.AcumularValoresHelper;
 import gcom.financeiro.bean.GerarIntegracaoContabilidadeHelper;
@@ -68,7 +58,6 @@ import gcom.financeiro.bean.ResumoDevedoresDuvidososRelatorioHelper;
 import gcom.financeiro.lancamento.IRepositorioLancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoContabil;
 import gcom.financeiro.lancamento.LancamentoContabilItem;
-import gcom.financeiro.lancamento.LancamentoContabilItemDTO;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoOrigem;
@@ -12723,242 +12712,92 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
           
       }
       
-    public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException {
+	public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-    	int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
-    	  
-    	try{
-    		List<AvisoBancario> avisos = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesArrecadacao);
-    		
-    		if (avisos != null && !avisos.isEmpty()){
-    			
-    			Map<LancamentoContabilItemDTO, BigDecimal> totalLancamentos = new HashMap<LancamentoContabilItemDTO, BigDecimal>();
-    			
-    			for (AvisoBancario aviso : avisos) {
-    				
-    				BigDecimal valorASerContabilizado = aviso.getValorRealizado().subtract(aviso.getValorContabilizado());
-    				
-    				if (avisoPossuiValorAContabilizar(aviso, valorASerContabilizado)){
-    					
-        				List<ArrecadadorMovimentoItemDTO> itens = getControladorArrecadacao().obterItensPorAviso(aviso.getId());        				
-        				
-        				BigDecimal totalItensAviso = BigDecimal.ZERO;
-        				
-        				LancamentoContabilItemDTO itemDto;
-        				
-        				for (ArrecadadorMovimentoItemDTO item : itens) {
-        					totalItensAviso = totalItensAviso.add(item.getValorDocumento());
-        					
-        					Localidade localidade = obterLocalidadeItemAviso(item);
+		try {
 
-        					LancamentoContabil lancamentoContabil = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao, localidade);
-        					
-        					itemDto = new LancamentoContabilItemDTO(lancamentoContabil.getId(), aviso);
-        					
-    					    BigDecimal total = totalLancamentos.get(itemDto);
+			/*
+			 * Seleciona, a partir da tabela AVISO_BANCARIO com ano/mês de referência da arrecadação (AVBC_AMREFERENCIAARRECADACAO) menor ou igual ao ano/mês da
+			 * arrecadação recebido e com valor contabilizado (AVBC_VLCONTABILIZADO) diferente do valor realizado (AVBC_VLREALIZADO) e com valor realizado maior
+			 * que zero ordenando pelo arrecadador (ARRC_ID) e pela data de realização (AVBC_DTREALIZADA)
+			 */
+			Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesArrecadacao);
 
-    					    if (total == null){
-    					    	total = item.getValorDocumento();
-    					    }else{
-    					    	total = total.add(item.getValorDocumento());
-    					    }
+			if (colecaoAvisosBancarios != null && !colecaoAvisosBancarios.isEmpty()) {
 
-    					    totalLancamentos.put(itemDto, total);
-        				}
-        				
-        				lancarDiferencaAvisos(anoMesArrecadacao, totalLancamentos, aviso, valorASerContabilizado, totalItensAviso);
-    			
-    				} else{
-    					Localidade localidadeSede = this.getControladorCobranca().pesquisarLocalidadeSede();
-    					LancamentoContabil lancamentoContabil =  this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao, localidadeSede);
-        				
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta  (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
-    					 * CÓDIGO TERCEIRO = NULL
-    					 */
-    					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil.getId(), 
-    					AvisoBancario.INDICADOR_DEBITO, aviso, contaContabilDebito, valorASerContabilizado.abs(),
-    					null);
-    					
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta  (CNCT_NMCONTA) correspondente a BANCO
-    					 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID  igual a CTBC_ID da tabela AVISO_BANCARIO)
-    					 */
-    					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil.getId(), 
-    					AvisoBancario.INDICADOR_CREDITO, aviso, contaContabilCredito, valorASerContabilizado.abs(), 
-    					aviso.getContaBancaria().getNumeroContaContabil());
-    				}
-    				
-    				BigDecimal valorContabilizado = aviso.getValorContabilizado().add(valorASerContabilizado);
-    				
-    				this.atualizarValorContabilizado(aviso.getId(), valorContabilizado);
-    			}
-    			
-    			inserirLancamentosAvisosPorLocalidade(anoMesArrecadacao, totalLancamentos);
-    		}
-    		getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
-    	}
-    	catch (Exception ex) {
-    		ex.printStackTrace();
+				// Gera os lançamentos contábeis na tabela LANCAMENTO_CONTABIL para o mês e ano da arrecadação (LCNB_AMLANCAMENTO) e origem com o valor correspondente a aviso bancário (LCOR_ID)
+				LancamentoContabil lancamentoContabil = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao);
+
+				Iterator iterator = colecaoAvisosBancarios.iterator();
+
+				while (iterator.hasNext()) {
+
+					AvisoBancario avisoBancario = (AvisoBancario) iterator.next();
+
+					BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado().subtract(avisoBancario.getValorContabilizado());
+
+					/*
+					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com o valor a ser contabilizado positivo
+					 * OU
+					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com valor a ser contabilizado negativo:
+					 */
+					if ((avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0)
+							|| (avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0)) {
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela AVISO_BANCARIO)
+						 */
+						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(),
+								avisoBancario.getContaBancaria().getNumeroContaContabil());
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * CÓDIGO TERCEIRO = NULL
+						 */
+						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(),
+								null);
+					}
+
+					/*
+					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com o valor a ser contabilizado positivo
+					 * OU
+					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com valor a ser contabilizado negativo
+					 */
+					else {
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * CÓDIGO TERCEIRO = NULL
+						 */
+						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(), null);
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela  AVISO_BANCARIO)
+						 */
+						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(),
+								avisoBancario.getContaBancaria().getNumeroContaContabil());
+					}
+
+					BigDecimal valorContabilizado = avisoBancario.getValorContabilizado().add(valorASerContabilizado);
+					this.atualizarValorContabilizado(avisoBancario.getId(), valorContabilizado);
+				}
+			}
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
-    	}
-    }
-
-	private void lancarDiferencaAvisos(Integer anoMesArrecadacao, Map<LancamentoContabilItemDTO, BigDecimal> totalLancamentos, AvisoBancario aviso,
-			BigDecimal valorASerContabilizado, BigDecimal totalItensAviso) throws ControladorException {
-
-		LancamentoContabil lancamentoContabilDiferenca = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao, getControladorCobranca().pesquisarLocalidadeSede());
-		LancamentoContabilItemDTO itemDto = new LancamentoContabilItemDTO(lancamentoContabilDiferenca.getId(), aviso);
-		
-		BigDecimal diferenca = totalItensAviso.subtract(valorASerContabilizado).abs();
-		
-		if (diferenca.compareTo(BigDecimal.ZERO) == 1) {
-			BigDecimal total = totalLancamentos.get(itemDto);
-
-			if (total == null){
-				total = diferenca;
-			}else{
-				total = total.add(diferenca);
-			}
-			
-			totalLancamentos.put(itemDto, total);
-		}
-	}
-
-	private void inserirLancamentosAvisosPorLocalidade(Integer anoMesArrecadacao, Map<LancamentoContabilItemDTO, BigDecimal> totalLancamentos)
-			throws ControladorException {
-		ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
-		ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
-		
-		System.out.println("Qtd itens" + totalLancamentos.keySet().size());
-		for (LancamentoContabilItemDTO lancamentoItemDTO : totalLancamentos.keySet()) {
-			Integer idLancamentoContabil = lancamentoItemDTO.getIdLancamentoContabil();
-			AvisoBancario aviso = lancamentoItemDTO.getAviso();
-			LancamentoContabilItem itemDebito = this.gerarLancamentoContabilItem(anoMesArrecadacao, idLancamentoContabil, 
-					AvisoBancario.INDICADOR_DEBITO, aviso, contaContabilDebito, totalLancamentos.get(lancamentoItemDTO).abs(), 
-					aviso.getContaBancaria().getNumeroContaContabil());
-			
-			LancamentoContabilItem itemCredito = this.gerarLancamentoContabilItem(anoMesArrecadacao, idLancamentoContabil, 
-					AvisoBancario.INDICADOR_CREDITO, aviso, contaContabilCredito, totalLancamentos.get(lancamentoItemDTO).abs(), 
-					null);
-		}
-	}
-
-    public static void main (String [] args) {
-    	Localidade localidade = new Localidade(3);
-    	
-    	if (localidade.getId().intValue() != 1 && localidade.getId().intValue() != 2) {
-			System.out.println("break");
-		} else {
-			System.out.println("continue");
-		}
-    	
-    }
-	private boolean avisoPossuiValorAContabilizar(AvisoBancario aviso, BigDecimal valorASerContabilizado) {
-		return (aviso.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) &&
-			valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0) ||
-			(aviso.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) &&
-			valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0);
-	}
-    
-	private Localidade obterLocalidadeItemAviso(ArrecadadorMovimentoItemDTO item) throws ControladorException {
-		Localidade localidade = null;
-		
-		if (item.getIdImovel() != null) {
-			localidade = new Localidade(item.getIdLocalidade());
-		} else {
-			if (item.getIdGuia() != null) {
-				localidade = obterLocalidadeGuia(item.getIdGuia());
-			} else if (item.getIdDocumentoCobranca() != null ) {
-				localidade = obterLocalidadeClienteDocumentoCobranca(item.getIdDocumentoCobranca());
-			} else if (item.getIdFatura() != null) {
-				localidade = obterLocalidadeClienteFatura(item.getIdFatura());
-			}
-		}
-		
-		if (localidade == null) {
-			localidade = this.getControladorCobranca().pesquisarLocalidadeSede();
-		}
-		return localidade;
-	}
-
-	private Localidade obterLocalidadeClienteFatura(Integer idFatura) throws ControladorException {
-    	FiltroFatura filtro = new FiltroFatura();
-		filtro.adicionarParametro(new ParametroSimples(FiltroFatura.ID, idFatura));
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroFatura.CLIENTE_ID);
-		
-		Collection colecaoFaturas = getControladorUtil().pesquisar(filtro, Fatura.class.getName());
-		
-		Localidade localidade = null;
-		if (!colecaoFaturas.isEmpty()) {
-			Fatura fatura = (Fatura) Util.retonarObjetoDeColecao(colecaoFaturas);
-			
-			if (fatura.getCliente() != null) {
-				localidade = getControladorCliente().pesquisarLocalidadeCliente(fatura.getCliente().getId());
-			}
-		} 
-		
-    	return localidade;
-	}
-
-	private Localidade obterLocalidadeClienteDocumentoCobranca(Integer idDocumentoCobranca) throws ControladorException {
-		FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
-		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ID, idDocumentoCobranca));
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaDocumento.CLIENTE_ID);
-
-		Collection colecaoDocumento = getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
-
-		Localidade localidade = null;
-		if (!colecaoDocumento.isEmpty()) {
-			CobrancaDocumento documento = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoDocumento);
-
-			if (documento.getCliente() != null) {
-				localidade = getControladorCliente().pesquisarLocalidadeCliente(documento.getCliente().getId());
-			}
-		} else {
-			Collection colecaoDocumentoHistorico = getControladorUtil().pesquisar(filtro, CobrancaDocumentoHistorico.class.getName());
-
-			if (!colecaoDocumentoHistorico.isEmpty()) {
-				CobrancaDocumentoHistorico documentoHistorico = (CobrancaDocumentoHistorico) Util.retonarObjetoDeColecao(colecaoDocumentoHistorico);
-
-				if (documentoHistorico.getCliente() != null) {
-					localidade = getControladorCliente().pesquisarLocalidadeCliente(documentoHistorico.getCliente().getId());
-				}
-
-			}
-		}
-		
-		return localidade;
-	}
-
-	private Localidade obterLocalidadeGuia(Integer idGuia) throws ControladorException {
-		FiltroGuiaPagamento filtroGuia = new FiltroGuiaPagamento();
-		filtroGuia.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuia));
-		filtroGuia.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.LOCALIDADE);
-		
-		Collection colecaoGuia = getControladorUtil().pesquisar(filtroGuia, GuiaPagamento.class.getName());
-		
-		if (!colecaoGuia.isEmpty()) {
-			GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(colecaoGuia);
-			return guia.getLocalidade();
-		} else {
-			FiltroGuiaPagamentoHistorico filtroGuiaHistorico = new FiltroGuiaPagamentoHistorico();
-			filtroGuiaHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID, idGuia));
-			filtroGuiaHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamentoHistorico.LOCALIDADE);
-			
-			Collection colecaoGuiaHistorico = getControladorUtil().pesquisar(filtroGuiaHistorico, GuiaPagamentoHistorico.class.getName());
-			
-			if (!colecaoGuiaHistorico.isEmpty()) {
-				GuiaPagamentoHistorico guiaHistorico = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(colecaoGuiaHistorico);
-				return guiaHistorico.getLocalidade();
-			} else {
-				return this.getControladorCobranca().pesquisarLocalidadeSede();
-			}
 		}
 	}
 
@@ -12988,35 +12827,34 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @return LancamentoContabil
      * @throws ControladorException
      */
-    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao, Localidade localidade) 
-	throws ControladorException {
+    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao) throws ControladorException {
     	
     	LancamentoContabil lancamentoContabil = new LancamentoContabil();
-    	try {
-			Collection<Integer> lancamentos = repositorioFinanceiro.pesquisarIdsLancamentosContabeis(anoMesReferenciaArrecadacao, localidade.getId(), LancamentoOrigem.AVISO_BANCARIO);
-			
-			if (!lancamentos.isEmpty()) {
-				lancamentoContabil.setId(lancamentos.iterator().next());
-				
-				return lancamentoContabil;
-			}
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-
+    	
+    	//ANO MÊS LANÇAMENTO = Ano/mês de referência da arrecadação recebido
     	lancamentoContabil.setAnoMes(anoMesReferenciaArrecadacao.intValue());
     	
+    	//ORIGEM DO LANÇAMENTO = Valor correspondente a aviso bancário da tabela LANCAMENTO_ORIGEM
     	LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
     	lancamentoOrigem.setId(LancamentoOrigem.AVISO_BANCARIO);
     	lancamentoContabil.setLancamentoOrigem(lancamentoOrigem);
     	
+    	/*
+    	 * TIPO DO LANCAMENTO = Tipo de Lançamento (LCTP_ID da tabela LANCAMENTO_TIPO com o 
+    	 * valor correspondente a aviso bancário)
+    	 */
     	LancamentoTipo lancamentoTipo = new LancamentoTipo();
     	lancamentoTipo.setId(LancamentoTipo.AVISO_BANCARIO);
     	lancamentoContabil.setLancamentoTipo(lancamentoTipo);
     	
-		lancamentoContabil.setLocalidade(localidade);
+    	//LOCALIDADE = LOCA_ID da tabela LOCALIDADE com LOCA_ICSEDE = 1
+		Localidade localidadeSede = this.getControladorCobranca().pesquisarLocalidadeSede();
+		lancamentoContabil.setLocalidade(localidadeSede);
+    	
+    	//ÚLTIMA ALTERAÇÃO
     	lancamentoContabil.setUltimaAlteracao(new Date());
     	
+    	//INSERINDO O LANÇAMENTO CONTÁBIL
     	Integer idLancamentoContabil = (Integer) this.getControladorUtil().inserir(lancamentoContabil);
     	lancamentoContabil.setId(idLancamentoContabil);
     	
@@ -13027,27 +12865,32 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     /**
      * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
      */
-    protected LancamentoContabilItem gerarLancamentoContabilItem(
-    		Integer anoMesReferenciaArrecadacao,
-    		Integer idLancamentoContabil, Short indicadorCreditoDebito,
-    		AvisoBancario avisoBancario, ContaContabil contaContabil, 
-    		BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
+    protected LancamentoContabilItem gerarLancamentoContabilItem(Integer anoMesReferenciaArrecadacao, LancamentoContabil lancamentoContabil, Short indicadorCreditoDebito,
+    		AvisoBancario avisoBancario, ContaContabil contaContabil, BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
 
 		LancamentoContabilItem lancamentoContabilItem = new LancamentoContabilItem();
-		lancamentoContabilItem.setLancamentoContabil(new LancamentoContabil(idLancamentoContabil));
+		lancamentoContabilItem.setLancamentoContabil(lancamentoContabil);
 		lancamentoContabilItem.setIndicadorDebitoCredito(indicadorCreditoDebito);
 		lancamentoContabilItem.setValorLancamento(valorLancamento);
 		lancamentoContabilItem.setContaContabil(contaContabil);
 
+		/*
+		 * DESCRIÇÃO HISTÓRICO = Descrição da forma de arrecadação
+		 * (ARFM_DSARRECADACAOFORMA da tabela ARRECADACAO_FORMA com ARFM_ID da
+		 * tabela AVISO_BANCARIO) concatenado com a data de realização do aviso
+		 * bancário (AVBC_DTREALIZADA) no formato DD/MM/AAAA e com a data de
+		 * lançamento do aviso bancário (AVBC_DTLANCAMENTO) no formato
+		 * DD/MM/AAAA. Separar os campos com ponto e vírgula.
+		 */
 		String descricaoArrecadacaoForma = "";
 		if (avisoBancario.getDataRealizada() != null) {
-			descricaoArrecadacaoForma += Util.formatarData(avisoBancario.getDataRealizada()) + ";";
+			descricaoArrecadacaoForma = descricaoArrecadacaoForma + Util.formatarData(avisoBancario.getDataRealizada()) + ";";
 		}
 
-		descricaoArrecadacaoForma += Util.formatarData(avisoBancario.getDataLancamento());
+		descricaoArrecadacaoForma = descricaoArrecadacaoForma + Util.formatarData(avisoBancario.getDataLancamento());
 
 		if (avisoBancario.getArrecadacaoForma() != null) {
-			descricaoArrecadacaoForma += ";" + Util.completaString(avisoBancario.getArrecadacaoForma().getDescricao(), 38);
+			descricaoArrecadacaoForma = descricaoArrecadacaoForma + ";" + Util.completaString(avisoBancario.getArrecadacaoForma().getDescricao(), 38);
 		}
 
 		lancamentoContabilItem.setDescricaoHistorico(descricaoArrecadacaoForma);
@@ -13064,7 +12907,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		if (avisoBancario.getDataRealizada() != null && anoMesReferenciaArrecadacao.equals(Util.getAnoMesComoInteger(avisoBancario.getDataRealizada()))) {
 			lancamentoContabilItem.setDataLancamento(avisoBancario.getDataRealizada());
 		} else {
+
 			Date dataLancamento = Util.obterUltimaDataMes(Util.obterMes(anoMesReferenciaArrecadacao), Util.obterAno(anoMesReferenciaArrecadacao));
+
 			lancamentoContabilItem.setDataLancamento(dataLancamento);
 		}
 

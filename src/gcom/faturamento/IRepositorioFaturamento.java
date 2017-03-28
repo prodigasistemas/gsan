@@ -1183,8 +1183,6 @@ public interface IRepositorioFaturamento {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDataRevisaoConta(Collection idsConta) throws ErroRepositorioException;
 
-	public void atualizarDebitoCreditoSituacaoAtualDoCreditoARealizar(Integer idImovel) throws ErroRepositorioException;
-
 	@SuppressWarnings("rawtypes")
 	public Collection obterIdsContasImovel(Integer idImovel) throws ErroRepositorioException;
 

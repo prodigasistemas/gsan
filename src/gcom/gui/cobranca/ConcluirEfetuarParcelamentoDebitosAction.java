@@ -38,9 +38,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ConcluirEfetuarParcelamentoDebitosAction.class);
+	
 	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse httpServletResponse) {
 
@@ -108,6 +111,8 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "'Considerar Créditos a Realizar?'");
 		}
 
+		logger.info("Concluir parcelamento do imóvel " + codigoImovel);
+		
 		// ABA 3 - Verifica se foi escolhido alguma opção de parcelamento
 		Collection<OpcoesParcelamentoHelper> colecaoOpcoesParcelamento = (Collection<OpcoesParcelamentoHelper>) sessao.getAttribute("colecaoOpcoesParcelamento");
 
