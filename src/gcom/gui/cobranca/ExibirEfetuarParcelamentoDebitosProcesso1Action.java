@@ -353,6 +353,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 					valorTotalCreditosAnteriores = valorTotalCreditosAnterioresCurtoPrazo.add(valorTotalCreditosAnterioresLongoPrazo);
 					
+					valorCreditoARealizar = valorCreditoARealizar.add(valorTotalCreditosAnteriores);
+					
 					form.set("valorCreditosAnterioresCurtoPrazo",Util.formatarMoedaReal(valorTotalCreditosAnterioresCurtoPrazo));
 					form.set("valorCreditosAnterioresLongoPrazo",Util.formatarMoedaReal(valorTotalCreditosAnterioresLongoPrazo));
 					form.set("valorTotalCreditosAnteriores",Util.formatarMoedaReal(valorTotalCreditosAnteriores));

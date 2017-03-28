@@ -504,6 +504,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 							colecaoCreditoARealizar.removeAll(creditosRemovidos);
 						sessao.setAttribute("colecaoCreditoARealizar", colecaoCreditoARealizar);
 						
+						valorCreditoARealizar = valorCreditoARealizar.add(valorTotalCreditosAnteriores);
+						
 						form.set("valorCreditoARealizar", Util.formatarMoedaReal(valorCreditoARealizar));
 						form.set("valorCreditosAnterioresCurtoPrazo", Util.formatarMoedaReal(valorCreditosAnterioresCurtoPrazo));
 						form.set("valorCreditosAnterioresLongoPrazo", Util.formatarMoedaReal(valorCreditosAnterioresLongoPrazo));
