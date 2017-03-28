@@ -39909,6 +39909,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id "
 					+ " INNER JOIN cadastro.localidade loca on loca.loca_id = imov.loca_id "
+					+ " INNER JOIN cadastro.vw_imovel_principal_categoria categoriaPrincipal on categoriaPrincipal.imov_id = imov.imov_id "
 					+ " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = conta.imov_id "
 					+ " LEFT OUTER JOIN cobranca.cmd_empr_cobr_conta cecc on emprCobConta.cecc_id = cecc.cecc_id ";
 			
@@ -39924,7 +39925,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 			
 			consulta = consulta + " NOT EXISTS (select pagto.pgmt_id FROM arrecadacao.pagamento pagto WHERE pagto.cnta_id = conta.cnta_id) AND ";
-			consulta = consulta + " imov.imov_idcategoriaprincipal in (:idsCategoria) AND ";
+			consulta = consulta + " categoriaPrincipal.catg_id in (:idsCategoria) AND ";
 			
 			
 			consulta = consulta
@@ -52830,12 +52831,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.getCodigoSetorComercialFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
+		if (comandoEmpresaCobrancaConta.getNumeroQuadraInicial() != null) {
 			retorno = retorno
 					+ " and conta.cnta_nnquadra between "
-					+ comandoEmpresaCobrancaConta.getQuadraInicial()
-							.getNumeroQuadra() + " and "
-					+ comandoEmpresaCobrancaConta.getQuadraFinal().getNumeroQuadra();
+					+ comandoEmpresaCobrancaConta.getNumeroQuadraInicial() + " and "
+					+ comandoEmpresaCobrancaConta.getNumeroQuadraFinal();
 		}
 
 		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {
