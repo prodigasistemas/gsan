@@ -34,9 +34,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso3Action.class);
+	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -77,6 +80,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		String indicadorCreditoARealizar = (String) form.get("indicadorCreditoARealizar");
 		String valorDebitoACobrarParcelamentoImovel =( (String)form.get("valorDebitoACobrarParcelamentoImovel"));
 		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
+		
+		logger.info("Parcelamento do imóvel " + codigoImovel);
 		
 		BigDecimal valorDebitoACobrarParcelamentoImovelBigDecimal = new BigDecimal("0.00");
 		

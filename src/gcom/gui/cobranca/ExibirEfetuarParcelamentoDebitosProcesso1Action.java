@@ -48,6 +48,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 /**
  * Permite efetuar o parcelamento dos débitos de um imóvel
@@ -61,6 +62,8 @@ import org.apache.struts.action.DynaActionForm;
  */
 public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso1Action.class);
+	
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
@@ -163,6 +166,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 			inscricaoImovel = (String) httpServletRequest.getParameter("inscricaoImovel");
 		}
 		if (codigoImovel != null && !codigoImovel.trim().equals("") && inscricaoImovel == null) {
+			logger.info("Parcelamento do imóvel " + codigoImovel);
+			
 			// Pesquisa os dados do cliente e do imóvel
 			boolean existeImovel = pesquisarImovel(codigoImovel, actionForm, httpServletRequest, sessao, usuario);
 
