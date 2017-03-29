@@ -15926,7 +15926,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return valoresCurtoPrazoLongoPrazo;
 	}
 	
-	public BigDecimal[] obterValorCreditoCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) throws ControladorException {
+	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) throws ControladorException {
 
 		final int curtoPrazo = 0;
 		final int longoPrazo = 1;

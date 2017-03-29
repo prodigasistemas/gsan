@@ -41128,9 +41128,9 @@ public class Fachada {
 		}
 	}
 	
-	public BigDecimal[] obterValorCreditoCurtoELongoPrazo(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) {
+	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) {
 		try {
-			return this.getControladorFaturamento().obterValorCreditoCurtoELongoPrazo(numeroPrestacoes, numeroPrestacoesCobradas, valorTotal, valorRestante);
+			return this.getControladorFaturamento().obterValorCurtoELongoPrazoParaParcelamento(numeroPrestacoes, numeroPrestacoesCobradas, valorTotal, valorRestante);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

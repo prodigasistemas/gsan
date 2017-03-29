@@ -540,7 +540,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 						}
 						
 						if (isCreditoDeParcelamento(creditoARealizar)) {
-							BigDecimal[] valores = fachada.obterValorCreditoCurtoELongoPrazo(
+							BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
 									creditoARealizar.getNumeroPrestacaoCredito(), 
 									creditoARealizar.getNumeroPrestacaoRealizada(), 
 									creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());

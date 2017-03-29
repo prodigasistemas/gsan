@@ -46,6 +46,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 	
 	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso2Action.class);
 
+	@SuppressWarnings("rawtypes")
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -362,7 +363,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 				
 				// Debitos A Cobrar
 				if( indicadorDebitosACobrar.equals("1") ){
-					//[FS0022]-Verificar existência de juros sobre imóvel
 					Collection colecaoDebitoACobrar = colecaoDebitoCliente.getColecaoDebitoACobrar();
 
 					if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
@@ -378,84 +378,51 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 								continue;
 							}
 							
-							//[FS0022]-Verificar existência de juros sobre imóvel
-							if(debitoACobrar.getDebitoTipo().getId() != null && 
-									!debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO)){
+							if(debitoACobrarNaoEhJurosSobreParcelamento(debitoACobrar)){
 								
-								// Debitos A Cobrar - Serviço
-								if (debitoACobrar.getFinanciamentoTipo().getId()
-										.equals(FinanciamentoTipo.SERVICO_NORMAL)) {
-									// [SB0001] Obter Valores de Curto e Longo Prazo
-									valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
-			
-									BigDecimal[] valoresDeCurtoELongoPrazo = fachada
-											.obterValorCurtoELongoPrazo(
-													debitoACobrar
-															.getNumeroPrestacaoDebito(),
-													debitoACobrar
-															.getNumeroPrestacaoCobradasMaisBonus(),
-													valorRestanteACobrar);
+								valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
+
+								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazoParaParcelamento(
+										debitoACobrar.getNumeroPrestacaoDebito(), 
+										debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), 
+										debitoACobrar.getValorDebito(), 
+										valorRestanteACobrar);
+
+								if (isDebitoServicoNormal(debitoACobrar)) {
 									valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-									valorTotalRestanteServicosACobrarCurtoPrazo = valorTotalRestanteServicosACobrarCurtoPrazo
-											.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
+									valorTotalRestanteServicosACobrarCurtoPrazo = valorTotalRestanteServicosACobrarCurtoPrazo.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
 									
 									valorTotalRestanteServicosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-									valorTotalRestanteServicosACobrarLongoPrazo = valorTotalRestanteServicosACobrarLongoPrazo
-											.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
+									valorTotalRestanteServicosACobrarLongoPrazo = valorTotalRestanteServicosACobrarLongoPrazo.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
 								}
 			
-								// Debitos A Cobrar - Parcelamento
-								if (debitoACobrar.getFinanciamentoTipo().getId().equals(
-										FinanciamentoTipo.PARCELAMENTO_AGUA)
-										|| debitoACobrar.getFinanciamentoTipo()
-												.getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
-										|| debitoACobrar.getFinanciamentoTipo()
-												.getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO)) {
-									// [SB0001] Obter Valores de Curto e Longo Prazo
-									valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
-			
-									BigDecimal[] valoresDeCurtoELongoPrazo = fachada
-											.obterValorCurtoELongoPrazo(
-													debitoACobrar
-															.getNumeroPrestacaoDebito(),
-													debitoACobrar
-															.getNumeroPrestacaoCobradasMaisBonus(),
-													valorRestanteACobrar);
+								if (isDebitoParcelamento(debitoACobrar)) {
 									valorTotalRestanteParcelamentosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-									valorTotalRestanteParcelamentosACobrarCurtoPrazo = 
-										valorTotalRestanteParcelamentosACobrarCurtoPrazo
-											.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
+									valorTotalRestanteParcelamentosACobrarCurtoPrazo = valorTotalRestanteParcelamentosACobrarCurtoPrazo.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
+									
 									valorTotalRestanteParcelamentosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-									valorTotalRestanteParcelamentosACobrarLongoPrazo = 
-										valorTotalRestanteParcelamentosACobrarLongoPrazo
-											.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
+									valorTotalRestanteParcelamentosACobrarLongoPrazo =valorTotalRestanteParcelamentosACobrarLongoPrazo.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
 								}
 							}
 						}
 						
 						if(!debitosRemovidos.isEmpty())
 							colecaoDebitoACobrar.removeAll(debitosRemovidos);
+						
 						sessao.setAttribute("colecaoDebitoACobrar", colecaoDebitoACobrar);
 		
 						// Serviços
 						valorTotalRestanteServicosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo
-							.add(valorTotalRestanteServicosACobrarLongoPrazo);
-						form
-							.set("valorDebitoACobrarServico", Util
-									.formatarMoedaReal(valorTotalRestanteServicosACobrar));
+						valorTotalRestanteServicosACobrar = valorTotalRestanteServicosACobrarCurtoPrazo.add(valorTotalRestanteServicosACobrarLongoPrazo);
+						form.set("valorDebitoACobrarServico", Util.formatarMoedaReal(valorTotalRestanteServicosACobrar));
+
 						// Parcelamentos
 						valorTotalRestanteParcelamentosACobrar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo
-							.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
-						form
-							.set("valorDebitoACobrarParcelamento", Util
-								.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
+						valorTotalRestanteParcelamentosACobrar = valorTotalRestanteParcelamentosACobrarCurtoPrazo.add(valorTotalRestanteParcelamentosACobrarLongoPrazo);
+						form.set("valorDebitoACobrarParcelamento", Util.formatarMoedaReal(valorTotalRestanteParcelamentosACobrar));
 					}else{
-						form.set(
-								"valorDebitoACobrarServico", "0,00");
-						form.set(
-								"valorDebitoACobrarParcelamento", "0,00");
+						form.set("valorDebitoACobrarServico", "0,00");
+						form.set("valorDebitoACobrarParcelamento", "0,00");
 						
 						form.set("valorDebitoACobrarServicoLongoPrazo", "0,00");
 						form.set("valorDebitoACobrarServicoCurtoPrazo", "0,00");
@@ -487,9 +454,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 							}
 
 							if (isCreditoDeParcelamento(creditoARealizar)) {
-								BigDecimal valorCreditoAnterior = creditoARealizar.getValorNaoConcedido();
-
-								BigDecimal[] valores = fachada.obterValorCreditoCurtoELongoPrazo(
+								BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
 										creditoARealizar.getNumeroPrestacaoCredito(), 
 										creditoARealizar.getNumeroPrestacaoRealizada(), 
 										creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
@@ -696,6 +661,21 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		}
 		
 		return retorno;
+	}
+
+	private boolean isDebitoParcelamento(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_AGUA)
+				|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+				|| debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+	}
+
+	private boolean isDebitoServicoNormal(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.SERVICO_NORMAL);
+	}
+
+	private boolean debitoACobrarNaoEhJurosSobreParcelamento(DebitoACobrar debitoACobrar) {
+		return debitoACobrar.getDebitoTipo().getId() != null && 
+				!debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO);
 	}
 
 	private boolean clientePossuiDebitos(ObterDebitoImovelOuClienteHelper colecaoDebitoCliente) {

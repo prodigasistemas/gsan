@@ -269,12 +269,15 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						}
 
 						// [FS0022]-Verificar existência de juros sobre imóvel
-						if (debitoACobrarNaoPossuiJurosParcelamento(debitoACobrar)) {
+						if (debitoACobrarNaoEhJurosParcelamento(debitoACobrar)) {
 
 							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(debitoACobrar.getNumeroPrestacaoDebito(), 
-									debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), valorRestanteACobrar);
+							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazoParaParcelamento(
+									debitoACobrar.getNumeroPrestacaoDebito(), 
+									debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), 
+									debitoACobrar.getValorDebito(), 
+									valorRestanteACobrar);
 							
 							if (isDebitoACobrarServicoNormal(debitoACobrar)) {
 								valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
@@ -334,7 +337,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 						
 						if (isCreditoDeParcelamento(creditoARealizar)) {
 
-							BigDecimal[] valores = fachada.obterValorCreditoCurtoELongoPrazo(
+							BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
 									creditoARealizar.getNumeroPrestacaoCredito(), 
 									creditoARealizar.getNumeroPrestacaoRealizada(), 
 									creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
@@ -504,7 +507,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 		}
 	}
 
-	private boolean debitoACobrarNaoPossuiJurosParcelamento(DebitoACobrar debitoACobrar) {
+	private boolean debitoACobrarNaoEhJurosParcelamento(DebitoACobrar debitoACobrar) {
 		return debitoACobrar.getDebitoTipo().getId() != null && !debitoACobrar.getDebitoTipo().getId().equals(DebitoTipo.JUROS_SOBRE_PARCELAMENTO);
 	}
 
