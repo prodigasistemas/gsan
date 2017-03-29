@@ -13,52 +13,24 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ContaAReceberContabil implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private int anoMesReferencia;
-
-    /** persistent field */
     private int numeroSequenciaTipoLancamento;
-
-    /** persistent field */
     private int numeroSequenciaItemTipoLancamento;
-
-    /** persistent field */
     private BigDecimal valorItemLancamento;
-
-    /** persistent field */
     private LancamentoItem lancamentoItem;
-
-    /** persistent field */
     private GerenciaRegional gerenciaRegional;
-
-    /** persistent field */
     private Localidade localidade;
-
-    /** persistent field */
     private LancamentoTipo lancamentoTipo;
-
-    /** persistent field */
     private UnidadeNegocio unidadeNegocio;
-
-    /** persistent field */
     private Categoria categoria;
-
-    /** persistent field */
     private LancamentoItemContabil lancamentoItemContabil;
-    
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
-    /** full constructor */
     public ContaAReceberContabil(Integer id, int anoMesReferencia, int numeroSequenciaTipoLancamento, int numeroSequenciaItemTipoLancamento, BigDecimal valorItemLancamento, LancamentoItem lancamentoItem, GerenciaRegional gerenciaRegional, Localidade localidade, LancamentoTipo lancamentoTipo, UnidadeNegocio unidadeNegocio, Categoria categoria, LancamentoItemContabil lancamentoItemContabil) {
         this.id = id;
         this.anoMesReferencia = anoMesReferencia;
@@ -74,7 +46,6 @@ public class ContaAReceberContabil implements Serializable {
         this.lancamentoItemContabil = lancamentoItemContabil;
     }
 
-    /** default constructor */
     public ContaAReceberContabil() {
     }
 
