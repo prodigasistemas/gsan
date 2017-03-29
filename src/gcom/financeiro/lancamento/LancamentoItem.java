@@ -95,12 +95,12 @@ public class LancamentoItem implements Serializable {
 	public final static Integer BONUS_SOCIAL = new Integer(87);
 	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA = new Integer(88);
 	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_CURTO_PRAZO = new Integer(123);
-	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(128);
-	
 	public final static Integer DEVOLUCAO_JUROS_PARCELAMENTO = new Integer(124);
 	public final static Integer DEVOLUCAO_TARIFA_AGUA = new Integer(125);
 	public final static Integer DEVOLUCAO_TARIFA_ESGOTO = new Integer(126);
 	public final static Integer SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE = new Integer(127);
+	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(128);
+	public static final Integer CREDITOS_DE_PARCELAMENTOS_TRANSFERIDOS_PARA_CURTO_PRAZO = new Integer(129);
 
     private Integer id;
     private String descricao;
