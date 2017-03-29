@@ -19,8 +19,6 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
@@ -109,8 +107,11 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
 public class ControladorFinanceiro implements SessionBean {
+	
+	private static Logger logger = Logger.getLogger(ControladorFinanceiro.class);
 	
 	protected static final long serialVersionUID = 1L;
 	SessionContext sessionContext;
@@ -318,25 +319,6 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	private ControladorClienteLocal getControladorCliente() {
-		ControladorClienteLocalHome localHome = null;
-		ControladorClienteLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorClienteLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
 	/**
 	 * [UC0175] - Gerar Lançamentos Contábeis do Faturamento
 	 * Author: Raphael Rossiter, Pedro Alexandre 
@@ -7127,95 +7109,70 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @param idLocalidade
      * @throws ControladorException
      */
-    @SuppressWarnings("unchecked")
-	public void gerarContasAReceberContabil(Integer idLocalidade,
-            int idFuncionalidadeIniciada) throws ControladorException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void gerarContasAReceberContabil(Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 
-        System.out.println("LOCALIDADE " + idLocalidade);
-        int idUnidadeIniciada = 0;
+    	logger.info("LOCALIDADE " + idLocalidade);
 
-        // -------------------------
-        //
-        // Registrar o início do processamento da Unidade de
-        // Processamento
-        // do Batch
-        //
-        // -------------------------
-        idUnidadeIniciada = getControladorBatch()
-                .iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-                        UnidadeProcessamento.LOCALIDADE, idLocalidade);
+    	int idUnidadeIniciada = 0;
 
-        try {
-        
-        	SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
-        	if (!sistemaParametro.getAnoMesArrecadacao().equals(sistemaParametro.getAnoMesFaturamento())) {
-            	throw new ControladorException("atencao.arrecadacao_ou_faturamento_nao_encerrados");
-        	}
+		try {
 
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-            int anoMesAnteriorFaturamento = Util.subtrairMesDoAnoMes(sistemaParametro.getAnoMesFaturamento(), 1);
-            int anoMesArrecadacao = sistemaParametro.getAnoMesArrecadacao(); 
-            	
-            Collection colecaoContasAReceberContabil = new ArrayList();
+			if (!sistemaParametro.getAnoMesArrecadacao().equals(sistemaParametro.getAnoMesFaturamento())) {
+				throw new ControladorException("atencao.arrecadacao_ou_faturamento_nao_encerrados");
+			}
 
-            // item 2
-            // exclui os dados do saldo de contas a receber contábil do mês de
-            // referência do faturamento já encerrado
-            repositorioFinanceiro.removerContasAReceberContabil(anoMesAnteriorFaturamento, idLocalidade);
+			int anoMesAnteriorFaturamento = Util.subtrairMesDoAnoMes(sistemaParametro.getAnoMesFaturamento(), 1);
+			int anoMesArrecadacao = sistemaParametro.getAnoMesArrecadacao();
 
-            // Valores de Água e Esgoto
-            adicionarContaAReceberContabilAguaEsgotoImpostos(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			Collection colecaoContasAReceberContabil = new ArrayList();
 
-            // Débitos Cobrados
-            adicionarContaAReceberContabilDebitosCobrados(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// exclui os dados do saldo de contas a receber contábil do mês de referência do faturamento já encerrado
+			repositorioFinanceiro.removerContasAReceberContabil(anoMesAnteriorFaturamento, idLocalidade);
 
-            // Guias de Pagamento
-            adicionarContaAReceberContabilGuiasPagamento(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Valores de Água e Esgoto
+			adicionarContaAReceberContabilAguaEsgotoImpostos(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Créditos Realizados
-            adicionarContaAReceberContabilCreditosRealizados(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Débitos Cobrados
+			adicionarContaAReceberContabilDebitosCobrados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Débitos a Cobrar
-            adicionarContaAReceberContabilDebitosACobrar(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Guias de Pagamento
+			adicionarContaAReceberContabilGuiasPagamento(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Créditos a Realizar
-            adicionarContaAReceberContabilCreditosARealizar(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Créditos Realizados
+			adicionarContaAReceberContabilCreditosRealizados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            //adicionado por Vivianne Sousa 14/08/2009 - Aryed Lins
-            adicionarContaAReceberContabilValoresContabilizadosComoPerdas(
-                    idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
-            
-            //adicionado por Vivianne Sousa 17/08/2009 - Aryed Lins
-            adicionarContaAReceberContabilRecebimentosNaoIdentificados(
-                    idLocalidade, anoMesAnteriorFaturamento,
-                    anoMesArrecadacao, colecaoContasAReceberContabil);
+			// Débitos a Cobrar
+			adicionarContaAReceberContabilDebitosACobrar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            if (colecaoContasAReceberContabil != null
-                    && !colecaoContasAReceberContabil.isEmpty()) {
-                getControladorBatch().inserirColecaoObjetoParaBatch(
-                        colecaoContasAReceberContabil);
-            }
+			// Créditos a Realizar
+			adicionarContaAReceberContabilCreditosARealizar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-                    idUnidadeIniciada, false);
+			// adicionado por Vivianne Sousa 14/08/2009 - Aryed Lins
+			adicionarContaAReceberContabilValoresContabilizadosComoPerdas(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            System.out
-                    .println("fim da geração " + "Localidade " + idLocalidade);
+			// adicionado por Vivianne Sousa 17/08/2009 - Aryed Lins
+			adicionarContaAReceberContabilRecebimentosNaoIdentificados(idLocalidade, anoMesAnteriorFaturamento, anoMesArrecadacao,
+					colecaoContasAReceberContabil);
 
-        } catch (Exception e) {
+			if (colecaoContasAReceberContabil != null && !colecaoContasAReceberContabil.isEmpty()) {
+				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoContasAReceberContabil);
+			}
 
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-                    idUnidadeIniciada, true);
-            throw new EJBException(e);
-        }
-    }
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+			System.out.println("fim da geração " + "Localidade " + idLocalidade);
+
+		} catch (Exception e) {
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+	}
 
     /**
      * [UC0714] Gerar Contas a Receber Contábil
@@ -7302,7 +7259,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilAguaEsgotoImpostos(Integer idLocalidade,
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void adicionarContaAReceberContabilAguaEsgotoImpostos(Integer idLocalidade,
             int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7426,7 +7384,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @date 08/11/2007
 	 * 
 	 */
-    private void adicionarContaAReceberContabilDebitosCobrados(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilDebitosCobrados(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7530,7 +7489,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilGuiasPagamento(
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void adicionarContaAReceberContabilGuiasPagamento(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7967,7 +7927,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilDebitosACobrar(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilDebitosACobrar(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -8494,114 +8455,128 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007, 30/12/2010
      *
      */
-    private void adicionarContaAReceberContabilCreditosARealizar(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilCreditosARealizar(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
 
-    	Collection contasCreditosARealizarDescontoParcelamento = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-				LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-				500, 70, 600, 60);
-
-    	if (contasCreditosARealizarDescontoParcelamento != null && !contasCreditosARealizarDescontoParcelamento.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasCreditosARealizarDescontoParcelamento);
-		}
+    	Collection contasDescontoParcelamento = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+    			CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+    			LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+    			500, 70, 600, 60);
     	
-        //DESCONTOS INCONDICIONAIS
-		Collection contasContabeisDescontosIncondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.DESCONTOS_INCONDICIONAIS, 
-				400,LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null); 
-				//obterContaContabilCreditoARealizarDescontosIncondicionais(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisDescontosIncondicionais != null && !contasContabeisDescontosIncondicionais.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisDescontosIncondicionais);
-		}
-		
-		//CONTAS PAGAS EM DUPLICIDADE EXCESSO
-		Collection contasContabeisContasDuplicidade = obterContaContabilCreditoARealizarDuplicidade(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisContasDuplicidade != null && !contasContabeisContasDuplicidade.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisContasDuplicidade);
-		}
-		
-		
-		//DESCONTOS CONDICIONAIS
-		Collection contasContabeisDescontosCondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE, 
-				400,LancamentoItem.DESCONTOS_CONDICIONAIS, 35, null);
-		//obterContaContabilCreditoARealizarDescontosCondicionais(idLocalidade, anoMesAnteriorFaturamento);
-		
-		
-		if (contasContabeisDescontosCondicionais != null && !contasContabeisDescontosCondicionais.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisDescontosCondicionais);
-		}
-		
-		//AJUSTES PARA ZERAR CONTA
-		Collection contasContabeisAjustesParaZerarConta = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, 
-				400, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
-		//obterContaContabilCreditoARealizarAjustesParaZerarConta(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisAjustesParaZerarConta != null && !contasContabeisAjustesParaZerarConta.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisAjustesParaZerarConta);
-		}
-		
-		// RECUPERACAO DE CRÉDITO 
-		Collection contasContabeisRecuperacoCredito = obterContaContabilCreditoARealizarRecperacaoCredito(anoMesAnteriorFaturamento, idLocalidade);
-		
-		if (contasContabeisRecuperacoCredito != null && !contasContabeisRecuperacoCredito.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisRecuperacoCredito);
-		}
-		
-		//PARCELAMENTO CONTA FAIXA
-		Collection contasCreditosARealizarDescontoParcelamentoFaixaConta = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+    	if (contasDescontoParcelamento != null && !contasDescontoParcelamento.isEmpty()) {
+    		colecaoContasAReceberContabil.addAll(contasDescontoParcelamento);
+    	}
+    	
+		Collection contasDescontoParcelamentoFaixaConta = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
 				CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
 				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
 				700, 10, 800, 20);
 
-    	if (contasCreditosARealizarDescontoParcelamentoFaixaConta != null && !contasCreditosARealizarDescontoParcelamentoFaixaConta.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasCreditosARealizarDescontoParcelamentoFaixaConta);
+    	if (contasDescontoParcelamentoFaixaConta != null && !contasDescontoParcelamentoFaixaConta.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoParcelamentoFaixaConta);
 		}
 
-    	Collection contasContabeisDevolucaoJuros = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	Collection contasDescontoCreditosAnterioresCurtoPrazo = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO,
+				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_CURTO_PRAZO,
+				900, 10,1000, 20);
+
+    	if (contasDescontoCreditosAnterioresCurtoPrazo != null && !contasDescontoCreditosAnterioresCurtoPrazo.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoCreditosAnterioresCurtoPrazo);
+		}
+
+    	Collection contasDescontoCreditosAnterioresLongoPrazo = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO,
+				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO,
+				1100, 10,1200, 20);
+
+    	if (contasDescontoCreditosAnterioresLongoPrazo != null && !contasDescontoCreditosAnterioresLongoPrazo.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoCreditosAnterioresLongoPrazo);
+		}
+    	
+    	//CONTAS PAGAS EM DUPLICIDADE EXCESSO
+    	Collection contasDuplicidade = obterContaContabilCreditoARealizarDuplicidade(idLocalidade, anoMesAnteriorFaturamento);
+    	
+    	if (contasDuplicidade != null && !contasDuplicidade.isEmpty()) {
+    		colecaoContasAReceberContabil.addAll(contasDuplicidade);
+    	}
+    	    	
+        //DESCONTOS INCONDICIONAIS
+		Collection contasDescontosIncondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_INCONDICIONAIS, 
+				400,LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null); 
+		
+		if (contasDescontosIncondicionais != null && !contasDescontosIncondicionais.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontosIncondicionais);
+		}
+		
+		//DESCONTOS CONDICIONAIS
+		Collection contasDescontosCondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE, 
+				400,LancamentoItem.DESCONTOS_CONDICIONAIS, 35, null);
+		
+		if (contasDescontosCondicionais != null && !contasDescontosCondicionais.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontosCondicionais);
+		}
+		
+		//AJUSTES PARA ZERAR CONTA
+		Collection contasAjustesParaZerarConta = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, 
+				400, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
+		
+		if (contasAjustesParaZerarConta != null && !contasAjustesParaZerarConta.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasAjustesParaZerarConta);
+		}
+		
+    	Collection contasDevolucaoJuros = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
     	        CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO, 
     	        400, LancamentoItem.DEVOLUCAO_JUROS_PARCELAMENTO, 80, null);
     	    
-    	    if (contasContabeisDevolucaoJuros != null && !contasContabeisDevolucaoJuros.isEmpty()) {
-    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoJuros);
-    	    }
-    	    
-    	    
-    	    Collection contasContabeisDevolucaoAgua = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-    	        CreditoOrigem.DEVOLUCAO_TARIFA_AGUA, 
-    	        400, LancamentoItem.DEVOLUCAO_TARIFA_AGUA, 90, null);
-    	    
-    	    if (contasContabeisDevolucaoAgua != null && !contasContabeisDevolucaoAgua.isEmpty()) {
-    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoAgua);
-    	    }
-    	    
-    	    
-    	    Collection contasContabeisDevolucaoEsgoto = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-    	        CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO, 
-    	        400, LancamentoItem.DEVOLUCAO_TARIFA_ESGOTO, 100, null);
-    	    
-    	    if (contasContabeisDevolucaoEsgoto != null && !contasContabeisDevolucaoEsgoto.isEmpty()) {
-    	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoEsgoto);
-    	    }
-    	    
-    	    
-    	    Collection contasContabeisServicosIndiretos = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-    	        CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 
-    	        400, LancamentoItem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 110, null);
-    	    
-    	    if (contasContabeisServicosIndiretos != null && !contasContabeisServicosIndiretos.isEmpty()) {
-    	      colecaoContasAReceberContabil.addAll(contasContabeisServicosIndiretos);
-    	    }
+	    if (contasDevolucaoJuros != null && !contasDevolucaoJuros.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasDevolucaoJuros);
+	    }
+	    
+	    
+	    Collection contasContabeisDevolucaoAgua = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.DEVOLUCAO_TARIFA_AGUA, 
+	        400, LancamentoItem.DEVOLUCAO_TARIFA_AGUA, 90, null);
+	    
+	    if (contasContabeisDevolucaoAgua != null && !contasContabeisDevolucaoAgua.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoAgua);
+	    }
+	    
+	    
+	    Collection contasContabeisDevolucaoEsgoto = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO, 
+	        400, LancamentoItem.DEVOLUCAO_TARIFA_ESGOTO, 100, null);
+	    
+	    if (contasContabeisDevolucaoEsgoto != null && !contasContabeisDevolucaoEsgoto.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoEsgoto);
+	    }
+	    
+	    
+	    Collection contasContabeisServicosIndiretos = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 
+	        400, LancamentoItem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 110, null);
+	    
+	    if (contasContabeisServicosIndiretos != null && !contasContabeisServicosIndiretos.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisServicosIndiretos);
+	    }
+	    
+	    // RECUPERACAO DE CRÉDITO 
+ 		Collection contasRecuperacoCredito = obterContaContabilCreditoARealizarRecperacaoCredito(anoMesAnteriorFaturamento, idLocalidade);
+ 		
+ 		if (contasRecuperacoCredito != null && !contasRecuperacoCredito.isEmpty()) {
+ 			colecaoContasAReceberContabil.addAll(contasRecuperacoCredito);
+ 		}
 		
 	}
 
-    private Collection obterContaContabilCreditoARealizarCurtoELongoPrazo(Integer anoMesAnteriorFaturamento, Integer idLocalidade,
+    @SuppressWarnings("rawtypes")
+	private Collection obterContaContabilCreditoARealizarCurtoELongoPrazo(Integer anoMesAnteriorFaturamento, Integer idLocalidade,
     		Integer idCreditoOrigem, Integer idLancamentoItem, 
     		int sequenciaLancamentoTipoCurtoPrazo, int sequenciaLancamentoItemCurtoPrazo,
             int sequenciaLancamentoTipoLongoPrazo, int sequenciaLancamentoItemLongoPrazo) throws ErroRepositorioException {
