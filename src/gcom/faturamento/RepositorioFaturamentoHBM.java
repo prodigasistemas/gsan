@@ -60962,9 +60962,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" inner join faturamento.credito_origem origem on origem.crog_id=realizado.crog_id ")
 					.append(" inner join faturamento.conta cnta on realizado.cnta_id=cnta.cnta_id ")
 					.append(" where cnta.cnta_amreferenciaconta= :anoMesReferencia ")
-					.append(" and dbcb.loca_id= :idLocalidade ")
-					.append(" and dccg.catg_id= :idCategoria ")
-					.append(" and (cnta.dcst_idatual= 0 or cnta.dcst_idanterior= 0) ")
+					.append(" and realizado.loca_id= :idLocalidade ")
+					.append(" and realizadoCatg.catg_id= :idCategoria ")
+					.append(" and (cnta.dcst_idatual= :idSituacao or cnta.dcst_idanterior= :idSituacao) ")
 					.append(" and origem.crog_id in (:descontosConcedidosParcelamento, :descontosCreditosAnterioresCurtoPrazo, :descontosCreditosAnterioresLongoPrazo) ")
 					.append(" and (realizado.crrz_nnprestacao - realizado.crrz_nnprestacaocredito) > 11");
 
@@ -60973,8 +60973,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("anoMesReferencia", anoMesReferencia)
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("idCategoria", idCategoria)
-					.setInteger("idSituacaoAtual", idSituacao)
-					.setInteger("idSituacaoAnterior", idSituacao)
+					.setInteger("idSituacao", idSituacao)
 					.setInteger("descontosConcedidosParcelamento", CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO)
 					.setInteger("descontosCreditosAnterioresCurtoPrazo",CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO)
 					.setInteger("descontosCreditosAnterioresLongoPrazo",CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO)

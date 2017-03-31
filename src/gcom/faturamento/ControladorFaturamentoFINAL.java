@@ -14301,27 +14301,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					lancamentoTipo = new LancamentoTipo(LancamentoTipo.RECEITA_BRUTA);
 					lancamentoItem = new LancamentoItem(LancamentoItem.RECEITA_BRUTA);
 					ResumoFaturamento resumoFaturamentoReceitaBruta = this.buildResumoFaturamento(BigDecimal.ZERO,
-									anoMesFaturamento, null, null,lancamentoTipo, lancamentoItem, null,new Short("600"), ZERO);
+									anoMesFaturamento, categoria, localidade,lancamentoTipo, lancamentoItem, null,new Short("600"), ZERO);
 
 					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_RECEITA_CANCELADA);
 					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_RECEITA_CANCELADA);
 					ResumoFaturamento resumoFaturamentoReceitaCancelada = this.buildResumoFaturamento(BigDecimal.ZERO,
-									anoMesFaturamento, null, null,lancamentoTipo, lancamentoItem, null,new Short("1100"), ZERO);
+									anoMesFaturamento, categoria, localidade,lancamentoTipo, lancamentoItem, null,new Short("1100"), ZERO);
 
 					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_COBRADO_NAS_CONTAS);
 					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_COBRADO_CONTAS);
 					ResumoFaturamento resumoTotalCobradoNasContas = this.buildResumoFaturamento(BigDecimal.ZERO,
-									anoMesFaturamento, null, null,lancamentoTipo, lancamentoItem, null,new Short("2700"), ZERO);
+									anoMesFaturamento, categoria, localidade,lancamentoTipo, lancamentoItem, null,new Short("2700"), ZERO);
 
 					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
 					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
 					ResumoFaturamento resumoValoresDevolvidosNasContas = this.buildResumoFaturamento(BigDecimal.ZERO,
-									anoMesFaturamento, null, null,lancamentoTipo, lancamentoItem, null,new Short("2400"), ZERO);
+									anoMesFaturamento, categoria, localidade,lancamentoTipo, lancamentoItem, null,new Short("2400"), ZERO);
 
 					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
 					ResumoFaturamento resumoTotalDebitosCanceladosPrescricao = this.buildResumoFaturamento(BigDecimal.ZERO,
-									anoMesFaturamento, null, null,lancamentoTipo, lancamentoItem, null,new Short("4200"), ZERO);
+									anoMesFaturamento, categoria, localidade,lancamentoTipo, lancamentoItem, null,new Short("4200"), ZERO);
 
 					Integer idCategoria = categoria.getId();
 					arrayValoresAguaEsgoto = null;
@@ -18554,6 +18554,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
+				//for 
+				Iterator itt = colecaoResumoFaturamento.iterator();
+				
+				while (itt.hasNext()) {
+					ResumoFaturamento resumo = (ResumoFaturamento) itt.next();
+					
+					if (resumo.getLocalidade() == null) {
+						System.out.println("idLancamentoTipo: " + resumo.getLancamentoTipo().getId());
+						System.out.println("idLancamentoItem: " + resumo.getLancamentoItem().getId());
+						System.out.println("seqTipoLancamento: " + resumo.getSequenciaTipoLancamento());
+						System.out.println("seqItemTipoLancamento: " + resumo.getSequenciaItemTipoLancamento());
+					}
+				}
 				if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
 					getControladorBatch().inserirColecaoObjetoParaBatch(colecaoResumoFaturamento);
 				}
