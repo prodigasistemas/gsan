@@ -1615,7 +1615,7 @@ public interface IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idFinanciamentoTipo)
 			throws ErroRepositorioException;
 
-	public ResumoFaturamento acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
+	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException;
@@ -3051,4 +3051,7 @@ public interface IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsCreditosOrigem, int idSituacaoAtual,
 			int idSituacaoAnterior) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorTransferenciaCreditoParcelamentoLongoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacao) throws ErroRepositorioException;
 }

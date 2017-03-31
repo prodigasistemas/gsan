@@ -34110,33 +34110,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * categoria de débito cobrado acumulado, de acordo com o ano/mês de
 	 * referência, a situação igual a normal e o tipo de financiamento igual a
 	 * juros de parcelamento e a diferença de prestações maior que 11(onze)
-	 * 
-	 * @param anoMesReferencia
-	 *            Ano e mês de referência do faturamento
-	 * @param idLocalidade
-	 *            Código da localidade
-	 * @param idCategoria
-	 *            Código da categoria
-	 * @return retorna o valor acumulado de acordo com os parâmetros informados
-	 * @throws ErroRepositorioException
-	 *             Erro no hibernate
 	 */
-	public ResumoFaturamento acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
+	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException {
 
-		// cria o objeto de resumo de faturamento
-		ResumoFaturamento retorno = null;
-
-		// cria uma sessão com o hibernate
+		BigDecimal retorno = null;
 		Session session = HibernateUtil.getSession();
-
-		// cria a variável que vai conter o hql
 		String consulta;
 
 		try {
-
 			consulta = "select "
 					+ "  sum(dccg.dccg_vlcategoria) as col_1 "
 					+ " from "
@@ -34152,44 +34136,27 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) "
 					+ "  and dccg.catg_id= :idCategoria  "
-					+
-					// " and dbcb.fntp_id= :idFinanciamentoTipo " +
-					" and dbcb.fntp_id in ( :idFinanciamentoTipo, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
+					+ " and dbcb.fntp_id in ( :idFinanciamentoTipo, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
 					+ "  and (dbcb.dbcb_nnprestacao - dbcb.dbcb_nnprestacaodebito) > 11 ";
 
-			BigDecimal valor = (BigDecimal) session.createSQLQuery(consulta)
-					.addScalar("col_1", Hibernate.BIG_DECIMAL).setInteger(
-							"anoMesReferencia", anoMesReferencia).setInteger(
-							"idLocalidade", idLocalidade).setInteger(
-							"idCategoria", idCategoria).setInteger(
-							"idSituacaoAtual", idSituacaoAtual).setInteger(
-							"idSituacaoAnterior", idSituacaoAnterior)
+			 retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_1", Hibernate.BIG_DECIMAL)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idSituacaoAtual", idSituacaoAtual)
+					.setInteger("idSituacaoAnterior", idSituacaoAnterior)
 					.setInteger("idFinanciamentoTipo", idFinanciamentoTipo)
-					.setInteger("parcelamentoAgua",
-							FinanciamentoTipo.PARCELAMENTO_AGUA).setInteger(
-							"parcelamentoEsgoto",
-							FinanciamentoTipo.PARCELAMENTO_ESGOTO).setInteger(
-							"parcelamentoServico",
-							FinanciamentoTipo.PARCELAMENTO_SERVICO)
+					.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
+					.setInteger("parcelamentoEsgoto",FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+					.setInteger("parcelamentoServico",FinanciamentoTipo.PARCELAMENTO_SERVICO)
 					.uniqueResult();
-
-			if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
-				retorno = new ResumoFaturamento();
-				retorno.setValorItemFaturamento(valor);
-			}
-
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-
-		// retorna o resumo de faturamento criado
 		return retorno;
-
 	}
 
 	/**
@@ -60973,6 +60940,46 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"idCategoria", idCategoria).setParameterList(
 					"idsCreditosOrigem", idsCreditosOrigem).uniqueResult();
 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public BigDecimal acumularValorTransferenciaCreditoParcelamentoLongoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacao) throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select sum(realizadoCatg.crcg_vlcategoria) as col_1 ")
+					.append(" from faturamento.cred_realizado_catg realizadoCatg  ")
+					.append(" inner join faturamento.credito_realizado realizado on realizado.crrz_id = realizadoCatg.crrz_id  ")
+					.append(" inner join faturamento.credito_origem origem on origem.crog_id=realizado.crog_id ")
+					.append(" inner join faturamento.conta cnta on realizado.cnta_id=cnta.cnta_id ")
+					.append(" where cnta.cnta_amreferenciaconta= :anoMesReferencia ")
+					.append(" and dbcb.loca_id= :idLocalidade ")
+					.append(" and dccg.catg_id= :idCategoria ")
+					.append(" and (cnta.dcst_idatual= 0 or cnta.dcst_idanterior= 0) ")
+					.append(" and origem.crog_id in (:descontosConcedidosParcelamento, :descontosCreditosAnterioresCurtoPrazo, :descontosCreditosAnterioresLongoPrazo) ")
+					.append(" and (realizado.crrz_nnprestacao - realizado.crrz_nnprestacaocredito) > 11");
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
+					.addScalar("col_1", Hibernate.BIG_DECIMAL)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idSituacaoAtual", idSituacao)
+					.setInteger("idSituacaoAnterior", idSituacao)
+					.setInteger("descontosConcedidosParcelamento", CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO)
+					.setInteger("descontosCreditosAnterioresCurtoPrazo",CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO)
+					.setInteger("descontosCreditosAnterioresLongoPrazo",CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO)
+					//.setInteger("descontosParcelamentoFaixaConta",CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA)
+					.uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
