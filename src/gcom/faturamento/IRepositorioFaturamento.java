@@ -3054,4 +3054,9 @@ public interface IRepositorioFaturamento {
 	
 	public BigDecimal acumularValorTransferenciaCreditoParcelamentoLongoPrazo(
 			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacao) throws ErroRepositorioException;
+	
+	public ResumoFaturamento acumularValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
+			throws ErroRepositorioException;
 }

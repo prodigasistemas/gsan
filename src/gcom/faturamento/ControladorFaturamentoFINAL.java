@@ -14419,8 +14419,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								categoria, localidade, lancamentoTipo,
 								lancamentoItem, lancamentoItemContabilTemp,
 								new Short("510"),
-								lancamentoItemContabilTemp
-										.getSequenciaImpressao());
+								lancamentoItemContabilTemp.getSequenciaImpressao());
 
 						Collection<Integer> colecaoFinanciamentoTipos = new ArrayList<Integer>();
 
@@ -14493,13 +14492,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									new Short("520"),
 									lancamentoItemContabilTemp.getSequenciaImpressao());
 
-							resumoFaturamentoReceitaBruta = this
-									.acumularValorResumoFaturamento(
-											resumoFaturamentoReceitaBruta,
-											resumoFaturamentoTemporario
-													.getValorItemFaturamento());
-							colecaoResumoFaturamento
-									.add(resumoFaturamentoTemporario);
+							resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(
+											resumoFaturamentoReceitaBruta,resumoFaturamentoTemporario.getValorItemFaturamento());
+							
+							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 						}
 
 						// acumula o valor por categoria do credito realizado
@@ -15128,16 +15124,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					valorItemFaturamento = repositorioFaturamento.acumularValorAguaPorSituacaoConta(
 									anoMesFaturamento, idLocalidade,idCategoria,DebitoCreditoSituacao.CANCELADA);
 
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
-					lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
-					
 					resumoFaturamentoTemporario = buildResumoFaturamento(
 							valorItemFaturamento, 
 							anoMesFaturamento, 
 							categoria,
 							localidade, 
-							new LancamentoTipo(LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA), 
-							new LancamentoItem(LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA),
+							new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO), 
+							new LancamentoItem(LancamentoItem.AGUA),
 							null, 
 							new Short("900"), 
 							new Short("10"));
@@ -15177,15 +15170,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							new Short("510"), 
 							new Short("10"));
 					
-					// acumula o valor do sequencial 510 a receita bruta
-					resumoFaturamentoReceitaBruta.setValorItemFaturamento(resumoFaturamentoReceitaBruta.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
+					resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, somaValorAguaSituacaoRetificada);
 
+					resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, resumoFaturamentoTemporario.getValorItemFaturamento());
+					
 					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 					}
 					
-					resumoFaturamentoTemporario.setValorItemFaturamento(
-							resumoFaturamentoTemporario.getValorItemFaturamento().add(somaValorAguaSituacaoRetificada));
 					
 					// acumula os valores de esgoto para situação cancelada
 					valorItemFaturamento = repositorioFaturamento.acumularValorEsgotoPorSituacaoConta(
@@ -15194,9 +15186,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									DebitoCreditoSituacao.CANCELADA);
 
 					// cria o resumo de faturamento
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
-					lancamentoItem = new LancamentoItem(LancamentoItem.ESGOTO);
-					
 					BigDecimal somaValorEsgotoSituacaoCanceladaPorRetificacao = repositorioFaturamento.diferencaValorEsgotoCanceladaRetificacao(
 							anoMesFaturamento, idLocalidade,idCategoria);
 					
@@ -15243,7 +15232,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							new Short("510"), 
 							new Short("20"));
 					
-					resumoFaturamentoTemporario.getValorItemFaturamento().add(somaValorEsgotoSituacaoRetificada);
+					resumoFaturamentoTemporario.setValorItemFaturamento(resumoFaturamentoTemporario.getValorItemFaturamento().add(somaValorEsgotoSituacaoRetificada));
 					
 					// acumula o valor do sequencial 510 a receita bruta
 					resumoFaturamentoReceitaBruta.setValorItemFaturamento(
@@ -15371,7 +15360,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
-
+/* eduardo*/ 
 					// caso o valor de longo prazo seja diferente de zero.
 					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
@@ -15520,11 +15509,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							new Short("1000"), 
 							new Short("10"));
 					
+					resumoFaturamentoTemporario.setValorItemFaturamento(resumoFaturamentoTemporario.getValorItemFaturamento().add(valorDebitoAcumuladoCanceladoEIncluido[0]));
+
 					// adiciona o sequencial 1000 a receita cancelada
 					resumoFaturamentoReceitaCancelada.setValorItemFaturamento(
 							resumoFaturamentoReceitaCancelada.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
-					
-					resumoFaturamentoTemporario.setValorItemFaturamento(resumoFaturamentoTemporario.getValorItemFaturamento().add(valorDebitoAcumuladoCanceladoEIncluido[0]));
 					
 					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
@@ -16536,8 +16525,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// fim Linha 75
 					
 					// Linha 76
-					valorItemFaturamento = obterValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, anoMesFaturamento, idLocalidade, idCategoria);
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[3];
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO;
+					idsCreditosOrigem[1] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+					idsCreditosOrigem[2] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+					
+					valorItemFaturamento = obterValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoPorReferenciaConta(
+							idsCreditosOrigem, anoMesFaturamento, idLocalidade, idCategoria);
 
 					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
 
@@ -17271,6 +17266,41 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// fim Linha xx
 
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+
+					BigDecimal valorCreditosRealizadosCreditosAnterioresCurtoPrazo = repositorioFaturamento.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
+									anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem,DebitoCreditoSituacao.CANCELADA);
+
+					BigDecimal[] diferencaRetificacaoCreditosRealizadosCreditosAnterioresCurtoPrazo = this.obterDiferencaValoresCreditosRealizadosContaRetificada(
+										anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem);
+
+					valorCreditosRealizadosCreditosAnterioresCurtoPrazo = valorCreditosRealizadosCreditosAnterioresCurtoPrazo.add(diferencaRetificacaoCreditosRealizadosCreditosAnterioresCurtoPrazo[0]);
+
+					
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+
+					BigDecimal valorCreditosRealizadosCreditosAnterioresLongoPrazo = repositorioFaturamento.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
+									anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem,DebitoCreditoSituacao.CANCELADA);
+
+					BigDecimal[] diferencaRetificacaoCreditosRealizadosCreditosAnterioresLongoPrazo = this.obterDiferencaValoresCreditosRealizadosContaRetificada(
+										anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem);
+
+					valorCreditosRealizadosCreditosAnterioresLongoPrazo = valorCreditosRealizadosCreditosAnterioresLongoPrazo.add(diferencaRetificacaoCreditosRealizadosCreditosAnterioresLongoPrazo[0]);
+
+					BigDecimal valorCreditosAnteriores = valorCreditosRealizadosCreditosAnterioresCurtoPrazo.add(valorCreditosRealizadosCreditosAnterioresLongoPrazo);
+					
+					if (valorCreditosAnteriores.compareTo(BigDecimal.ZERO) != 0) {
+
+						resumoFaturamentoTemporario = buildResumoFaturamento(valorCreditosAnteriores, 
+								anoMesFaturamento, categoria, localidade, 
+								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO), 
+								new LancamentoItem(LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES), 
+								null, new Short("3000"), new Short("60"));
+						
+						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					}
 					
 					// Linha 98
 					idsCreditosOrigem = null;
@@ -17422,6 +17452,39 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoResumoFaturamento.add(resumo);
 					} 
 					// fim Linha yy
+					
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+
+					BigDecimal valorCreditosRealizadosRefaturamentoCreditosAnterioresCurtoPrazo = repositorioFaturamento.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
+									anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem,DebitoCreditoSituacao.INCLUIDA);
+
+					valorCreditosRealizadosRefaturamentoCreditosAnterioresCurtoPrazo = valorCreditosRealizadosRefaturamentoCreditosAnterioresCurtoPrazo
+							.add(diferencaRetificacaoCreditosRealizadosCreditosAnterioresCurtoPrazo[1]);
+
+					
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+
+					BigDecimal valorCreditosRealizadosRefaturamentoCreditosAnterioresLongoPrazo = repositorioFaturamento.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
+									anoMesFaturamento, idLocalidade,idCategoria, idsCreditosOrigem,DebitoCreditoSituacao.INCLUIDA);
+
+					valorCreditosRealizadosRefaturamentoCreditosAnterioresLongoPrazo = valorCreditosRealizadosRefaturamentoCreditosAnterioresLongoPrazo
+							.add(diferencaRetificacaoCreditosRealizadosCreditosAnterioresLongoPrazo[1]);
+
+					BigDecimal valorOutrosCreditosConcedidosCreditosAnteriores = valorCreditosRealizadosRefaturamentoCreditosAnterioresCurtoPrazo
+							.add(valorCreditosRealizadosRefaturamentoCreditosAnterioresLongoPrazo);
+
+					if (valorOutrosCreditosConcedidosCreditosAnteriores.compareTo(BigDecimal.ZERO) != 0) {
+
+						resumoFaturamentoTemporario = buildResumoFaturamento(valorOutrosCreditosConcedidosCreditosAnteriores, 
+								anoMesFaturamento, categoria, localidade, 
+								new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO), 
+								new LancamentoItem(LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES), 
+								null, new Short("3100"), new Short("20"));
+						
+						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					}
 					
 					BigDecimal valorParcelamentoConcedidoBonus = this.obterValorParcelamentoConcedidoBonus(idLocalidade,idCategoria);
 
@@ -17577,14 +17640,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						
 						// acumula o valor do sequencial 3400 ao total de débitos cancelados por prescrição
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
-								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
+								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
 
-					/**
-					 * TODO Verificar com o Eduardo
-					 */
 					if (valorEsgoto.compareTo(BigDecimal.ZERO) != 0) {
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
 								valorEsgoto,
@@ -17595,7 +17655,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new LancamentoItem(LancamentoItem.ESGOTO), 
 								null, 
 								new Short("3400"), 
-								new Short("10"));
+								new Short("20"));
 						
 						// acumula o valor do sequencial 3400 ao total de débitos cancelados por prescrição
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
@@ -17656,7 +17716,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new LancamentoItem(LancamentoItem.ESGOTO), 
 								null, 
 								new Short("3800"), 
-								new Short("10"));
+								new Short("20"));
 						
 						// acumula o valor do sequencial 3800 ao total de débitos cancelados por prescrição
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
@@ -18090,11 +18150,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 					}
 
-					resumoFaturamentoTemporario = obterResumoCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[3];
+					idsCreditosOrigem[0] = CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO;
+					idsCreditosOrigem[1] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+					idsCreditosOrigem[2] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+					
+					resumoFaturamentoTemporario = obterResumoCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
 							anoMesFaturamento,
 							localidade,
 							categoria,
-							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+							idsCreditosOrigem,
 							DebitoCreditoSituacao.DEBITO_PRESCRITO,
 							LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA,
 							LancamentoItem.DESCONTOS_CONCEDIDOS,
@@ -18684,11 +18750,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			colecaoResumos.add(resumo);
 		}
 
-		resumo = obterResumoValorCreditoARealizarPorOrigemCredito(
+		resumo = obterResumoValorCreditoARealizarDescontosParcelamento(
 				anoMesFaturamento,
 				localidade,
 				categoria,
-				CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
 				DebitoCreditoSituacao.CANCELADA,
 				LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
 				LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
@@ -18713,7 +18778,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		
 		return colecaoResumos;
-
 	}
 
 	private BigDecimal obterTotalIRSituacaoCanceladaDiferencaPositiva(int anoMesFaturamento, Integer idLocalidade, Integer idCategoria) throws ErroRepositorioException {
@@ -18823,6 +18887,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						DebitoCreditoSituacao.NORMAL);
 		return valorItemFaturamento;
 	}
+	
+	private BigDecimal obterValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoPorReferenciaConta(Integer[] idsCreditoOrigem, int anoMesFaturamento, Integer idLocalidade,
+			Integer idCategoria) throws ErroRepositorioException {
+		BigDecimal valorItemFaturamento;
+		
+		valorItemFaturamento = null;
+		valorItemFaturamento = repositorioFaturamento
+				.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
+						anoMesFaturamento, idLocalidade,
+						idCategoria, idsCreditoOrigem,
+						DebitoCreditoSituacao.NORMAL,
+						DebitoCreditoSituacao.NORMAL);
+		return valorItemFaturamento;
+	}
+	
 
 	private Object[] obterValorLongoECurtoPrazoCreditoARealizarPorOrigemCredito(Integer idCreditoOrigem, int anoMesFaturamento, Integer idLocalidade, Integer idCategoria,
 			Integer idSituacaoAnterior, Integer idSituacaoAtual)
@@ -19111,6 +19190,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			return null;
 		}
 	}
+	
+	private ResumoFaturamento obterResumoValorCreditoARealizarDescontosParcelamento(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idSituacaoConta,
+			Integer idLancamentoTipo, Integer idLancamentoItem,
+			Short seqTipoLancamento, Short seqItemTipoLancamento)
+			throws ErroRepositorioException {
+
+		BigDecimal valor = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(
+				anoMesFaturamento, localidade.getId(),categoria.getId(), CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, idSituacaoConta);
+		
+		BigDecimal valorCurtoPrazo = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(
+						anoMesFaturamento, localidade.getId(),categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO, idSituacaoConta);
+		
+		BigDecimal valorLongoPrazo = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(
+				anoMesFaturamento, localidade.getId(),categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO, idSituacaoConta);
+		
+		BigDecimal valorTotal = valor.add(valorCurtoPrazo).add(valorLongoPrazo);
+		
+		if (valorTotal.compareTo(BigDecimal.ZERO) != 0) {
+			ResumoFaturamento resumo = buildResumoFaturamento(valorTotal, anoMesFaturamento, categoria,
+					localidade, new LancamentoTipo(idLancamentoTipo),new LancamentoItem(idLancamentoItem), 
+					null, seqTipoLancamento, seqItemTipoLancamento);
+			return resumo;
+		} else {
+			return null;
+		}
+	}
+	
 
 	private ResumoFaturamento obterResumoCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchida(
 			int anoMesFaturamento, Localidade localidade, Categoria categoria,
@@ -19158,6 +19266,31 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			return null;
 		}
 	}
+	
+	private ResumoFaturamento obterResumoCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer[] idsCreditoOrigem, Integer idSituacaoConta,
+			Integer idLancamentoTipo, Integer idLancamentoItem,
+			Short seqTipoLancamento, Short seqItemTipoLancamento) 
+					throws ErroRepositorioException{
+
+		ResumoFaturamento resumoFaturamentoTemporario = repositorioFaturamento
+				.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(),idsCreditoOrigem, idSituacaoConta);
+		
+		if (resumoFaturamentoTemporario != null) {
+
+			resumoFaturamentoTemporario = buildResumoFaturamento(resumoFaturamentoTemporario.getValorItemFaturamento(), 
+					anoMesFaturamento, categoria, localidade, new LancamentoTipo(idLancamentoTipo),
+					new LancamentoItem(idLancamentoItem), null, seqTipoLancamento, seqItemTipoLancamento);
+			
+			return resumoFaturamentoTemporario;
+		} else {
+			return null;
+		}
+	}
+	
 	
 	private ResumoFaturamento buildResumoFaturamento(BigDecimal valorFaturamento, Integer anoMesFaturamento, Categoria categoria,
 			Localidade localidade, LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem, 

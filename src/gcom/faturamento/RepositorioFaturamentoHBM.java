@@ -33600,7 +33600,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
 			throws ErroRepositorioException {
 
-		BigDecimal retorno = null;
+		BigDecimal retorno = BigDecimal.ZERO;
 
 		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
@@ -35456,6 +35456,55 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// retorna o resumo de faturamento criado
 		return retorno;
 	}
+	
+	public ResumoFaturamento acumularValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
+			throws ErroRepositorioException {
+
+		ResumoFaturamento retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("select sum(crcg.crcg_vlcategoria) as col_1 ")
+					.append("  from faturamento.cred_realizado_catg crcg  ")
+					.append("  inner join  faturamento.credito_realizado crrz on crcg.crrz_id=crrz.crrz_id ")
+					.append("  inner join  faturamento.conta cnta on crrz.cnta_id=cnta.cnta_id ")
+					.append("  where cnta.cnta_amreferenciacontabil=:anoMesReferencia ")
+					.append("   and crrz.loca_id=:idLocalidade  ")
+					.append("   and crcg.catg_id=:idCategoria  ")
+					.append("   and crrz.crog_id in (:idsCreditoOrigem) ")
+					.append("   and cnta.cnta_amreferenciabaixacontabil is null ");
+			
+			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
+				consulta.append(" and (cnta.dcst_idatual= :idSituacaoAtual OR cnta.dcst_idatual= :debitoPrescritoContasIncluidas )");
+			}else{
+				consulta.append("  and cnta.dcst_idatual= :idSituacaoAtual ");
+			}
+
+			BigDecimal valor = (BigDecimal) session.createSQLQuery(consulta.toString())
+					.addScalar("col_1", Hibernate.BIG_DECIMAL)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idSituacaoAtual", idSituacaoAtual)
+					.setInteger("debitoPrescritoContasIncluidas", DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setParameterList("idsCreditoOrigem", idsCreditoOrigem).uniqueResult();
+
+			if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
+				retorno = new ResumoFaturamento();
+				retorno.setValorItemFaturamento(valor);
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
 
 	/**
 	 * [UC0155] - Encerrar Faturamento do Mês Retorna o valor do imposto
@@ -36029,7 +36078,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSituacaoAtual) throws ErroRepositorioException {
 
 		// cria a coleção de retorno da pesquisa
-		BigDecimal retorno = null;
+		BigDecimal retorno = BigDecimal.ZERO;
 
 		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
