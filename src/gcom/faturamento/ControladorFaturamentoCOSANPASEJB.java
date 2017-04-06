@@ -151,8 +151,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice, faturamentoGrupo);
 				
-				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
-						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
+				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 				
 				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
@@ -1474,7 +1473,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
 			
-			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(contaTipo, idEmpresa, numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
+			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
 			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 
 			Date novaDataVencimento = repositorioFaturamento.obterDataVencimentoContasFaturarGrupo(faturamentoGrupo);

@@ -9631,9 +9631,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
-	public Collection pesquisarContasEmitirCOSANPA(Integer idTipoConta,
-			Integer idEmpresa, Integer numeroPaginas, Integer anoMesReferencia,
-			Integer idFaturamentoGrupo) throws ErroRepositorioException {
+	public Collection pesquisarContasEmitirCOSANPA(Integer numeroPaginas, Integer anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();

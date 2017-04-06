@@ -36903,7 +36903,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	public Collection<EmitirContaHelper> formatarEmitirContasHelper(
-			Collection colecaoPamsContas, int i) throws ControladorException {
+			Collection colecaoPamsContas, int tipoConta) throws ControladorException {
 		Collection<EmitirContaHelper> colecaoContas = new ArrayList();
 
 		if (colecaoPamsContas != null) {
@@ -36918,7 +36918,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						emitirContaHelper.setIdConta((Integer) parmsConta[0]);
 					}
 
-					if (i == 3 || i == 4 || i == 7 || i == 8) {
+					if (tipoConta == 3 || tipoConta == 4 || tipoConta == 7 || tipoConta == 8) {
 						if (parmsConta[1] != null) {
 							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);

@@ -2141,13 +2141,9 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarContasEmitirCOSANPA(Integer idTipoConta,
-			Integer idEmpresa, Integer numeroPaginas, Integer anoMesReferencia,
-			Integer idFaturamentoGrupo) throws ErroRepositorioException;
+	public Collection pesquisarContasEmitirCOSANPA(Integer numeroPaginas, Integer anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 
-	public Collection<Object[]> pesquisarRelatorioJurosMultasDebitosCancelados(
-			FiltrarRelatorioJurosMultasDebitosCanceladosHelper filtro)
-			throws ErroRepositorioException;
+	public Collection<Object[]> pesquisarRelatorioJurosMultasDebitosCancelados( FiltrarRelatorioJurosMultasDebitosCanceladosHelper filtro) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizado(
