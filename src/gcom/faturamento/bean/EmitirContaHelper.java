@@ -151,6 +151,10 @@ public class EmitirContaHelper implements Serializable {
 	private String dataPagamentoConta;
 	private Short clienteComFaturaAgrupada;
 
+	private Integer quantidadeImoveisMicro;
+	private Integer somaConsumosImoveisMicro;
+	private BigDecimal valorTotalASerrateado;
+	
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
 	}
@@ -1762,4 +1766,30 @@ public class EmitirContaHelper implements Serializable {
 
 		return valorTotalConta.toString();
 	}
+
+	public Integer getQuantidadeImoveisMicro() {
+		return quantidadeImoveisMicro;
+	}
+
+	public void setQuantidadeImoveisMicro(Integer quantidadeImoveisMicro) {
+		this.quantidadeImoveisMicro = quantidadeImoveisMicro;
+	}
+
+	public Integer getSomaConsumosImoveisMicro() {
+		return somaConsumosImoveisMicro;
+	}
+
+	public void setSomaConsumosImoveisMicro(Integer somaConsumosImoveisMicro) {
+		this.somaConsumosImoveisMicro = somaConsumosImoveisMicro;
+	}
+
+	public BigDecimal getValorTotalASerrateado() {
+		return valorTotalASerrateado;
+	}
+
+	public void setValorTotalASerrateado(BigDecimal valorTotalASerrateado) {
+		this.valorTotalASerrateado = valorTotalASerrateado;
+	}
+	
+	
 }

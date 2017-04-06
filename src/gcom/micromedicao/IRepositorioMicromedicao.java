@@ -492,8 +492,7 @@ public interface IRepositorioMicromedicao {
 	 * @param rotas
 	 * @return Imoveis
 	 */
-	public Collection<Imovel> getImovelVinculadosImovelCondominio(Integer id)
-			throws ErroRepositorioException;
+	public Collection<Imovel> getImovelVinculadosImovelCondominio(Integer id) throws ErroRepositorioException;
 
 	/**
 	 * 

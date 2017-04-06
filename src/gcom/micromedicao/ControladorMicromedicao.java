@@ -32133,7 +32133,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				 */
 
 				Collection imoveisVinculados = new ArrayList();
-				Collection imoveisVinculadosArrayObject = this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+				Collection imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 
 				/*
 				 * Item 2.4 Caso o tipo de rateio corresponda a rateio não
@@ -39573,61 +39573,55 @@ public class ControladorMicromedicao extends ControladorComum {
             }
 
             consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
-        } catch (ErroRepositorioException e) {
-            e.printStackTrace();
-        }
+        } catch (ControladorException e) {
+			e.printStackTrace();
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
 
         System.out.println("Consumo a ser rateado: " + consumoASerRateado);
         return consumoASerRateado;
     }
 	
-	/**
-	 * 
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que calcula a soma do consumo de todos os micros, de acordo
-	 * com o tipo de ligacao informada
-	 * 
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @param ligacaoTipo
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	private int obterConsumoLigacaoImoveisVinculados(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) 
-		throws ErroRepositorioException {
+	public int obterConsumoLigacaoImoveisVinculados(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) throws ControladorException {
 		
 		int consumoImoveisVinculados = 0;
 		
-		Collection imoveisVinculadosArrayObject = this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+		Collection imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 		
 		Iterator imoveisVinculadosIterator = imoveisVinculadosArrayObject.iterator();
 		
 		while (imoveisVinculadosIterator.hasNext()) {
 			
-			Object[] dadosImovelVinculado = (Object[]) imoveisVinculadosIterator.next();
-			
-			// Obtem o objeto imovel
-			Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
-			
-			Integer consumoLigacaoImovel = null;
-			
-			Object[] dadosConsumoLigacaoImovel = (Object[]) this.repositorioMicromedicao
-				.obterConsumoLigacaoAguaOuEsgotoDoImovel(imovelVinculado.getId(), anoMesFaturamento, ligacaoTipo);
-			
-			// Verifica se possui faturamento ativo para agua ou esgoto
-			if ( (ligacaoTipo.equals(LigacaoTipo.LIGACAO_AGUA) && getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado))
-				|| (ligacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)&& getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado))) {
-
-				// Recupera o consumo do imovel
-				if (dadosConsumoLigacaoImovel != null && dadosConsumoLigacaoImovel[1] != null) {
-					consumoLigacaoImovel = (Integer) dadosConsumoLigacaoImovel[1];
-				}
-				// Soma o consumo de todos os imóveis
-				if (consumoLigacaoImovel != null) {
-					consumoImoveisVinculados = consumoImoveisVinculados + consumoLigacaoImovel.intValue();
-				}
-			} 
+			try {
+				Object[] dadosImovelVinculado = (Object[]) imoveisVinculadosIterator.next();
+				
+				// Obtem o objeto imovel
+				Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
+				
+				Integer consumoLigacaoImovel = null;
+				
+				Object[] dadosConsumoLigacaoImovel;
+					dadosConsumoLigacaoImovel = (Object[]) this.repositorioMicromedicao
+						.obterConsumoLigacaoAguaOuEsgotoDoImovel(imovelVinculado.getId(), anoMesFaturamento, ligacaoTipo);
+				
+				
+				// Verifica se possui faturamento ativo para agua ou esgoto
+				if ( (ligacaoTipo.equals(LigacaoTipo.LIGACAO_AGUA) && getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado))
+					|| (ligacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)&& getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado))) {
+	
+					// Recupera o consumo do imovel
+					if (dadosConsumoLigacaoImovel != null && dadosConsumoLigacaoImovel[1] != null) {
+						consumoLigacaoImovel = (Integer) dadosConsumoLigacaoImovel[1];
+					}
+					// Soma o consumo de todos os imóveis
+					if (consumoLigacaoImovel != null) {
+						consumoImoveisVinculados = consumoImoveisVinculados + consumoLigacaoImovel.intValue();
+					}
+				} 
+			} catch (ErroRepositorioException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return consumoImoveisVinculados;
@@ -39693,7 +39687,7 @@ public class ControladorMicromedicao extends ControladorComum {
 			
 			
 			Collection imoveisVinculadosArrayObject;
-			imoveisVinculadosArrayObject = this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+			imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 		
 			Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject.iterator();
 			
@@ -39705,7 +39699,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
 			}
 		
-		} catch (ErroRepositorioException e) {
+		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
 		
@@ -40099,14 +40093,14 @@ public class ControladorMicromedicao extends ControladorComum {
 		Integer id = (Integer) getControladorUtil().inserir(movimento);
 		movimento.setId(id);
 		
-		//FiltroMovimentoContaPrefaturada filtro = new FiltroMovimentoContaPrefaturada();
-		//filtro.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ID, id));
-		
-		//colecaoMovimentos = getControladorUtil().pesquisar(filtro, MovimentoContaPrefaturada.class.getName());
-	
-//		movimento = getControladorFaturamento().obterMovimentoImovel(imovel.getId(), rota.getFaturamentoGrupo().getAnoMesReferencia(), movimento.getMedicaoTipo().getId());
-//		colecaoMovimentos.add(movimento);
-//		
-//		getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colecaoMovimentos, true, true);
 	}
+	
+	public Collection<Imovel> obterImoveisVinculadosDoCondominio(Integer idImovelCondominio) throws ControladorException{
+		try {
+			return this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 }

@@ -36920,59 +36920,46 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					if (i == 3 || i == 4 || i == 7 || i == 8) {
 						if (parmsConta[1] != null) {
-							String nomeCliente = this
-									.obterNomeCliente(emitirContaHelper
-											.getIdConta());
+							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);
 						}
 
 						if (parmsConta[32] != null) {
-							emitirContaHelper
-									.setNomeImovel((String) parmsConta[32]);
+							emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 						}
 					} else {
 						if (parmsConta[1] != null) {
-							String nomeCliente = this
-									.obterNomeCliente(emitirContaHelper
-											.getIdConta());
+							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);
 						}
 					}
 
 					if (parmsConta[2] != null) {
-						emitirContaHelper
-								.setDataVencimentoConta((Date) parmsConta[2]);
+						emitirContaHelper.setDataVencimentoConta((Date) parmsConta[2]);
 					}
 					if (parmsConta[3] != null) {
-						emitirContaHelper
-								.setAmReferencia((Integer) parmsConta[3]);
+						emitirContaHelper.setAmReferencia((Integer) parmsConta[3]);
 					}
 					if (parmsConta[4] != null) {
-						emitirContaHelper
-								.setDigitoVerificadorConta((Short) parmsConta[4]);
+						emitirContaHelper.setDigitoVerificadorConta((Short) parmsConta[4]);
 					}
 					if (parmsConta[5] != null) {
-						emitirContaHelper
-								.setCodigoSetorComercialConta((Integer) parmsConta[5]);
+						emitirContaHelper.setCodigoSetorComercialConta((Integer) parmsConta[5]);
 					}
 					if (parmsConta[6] != null) {
-						emitirContaHelper
-								.setIdQuadraConta((Integer) parmsConta[6]);
+						emitirContaHelper.setIdQuadraConta((Integer) parmsConta[6]);
 					}
 					if (parmsConta[7] != null) {
 						emitirContaHelper.setLoteConta((Short) parmsConta[7]);
 					}
 					if (parmsConta[8] != null) {
-						emitirContaHelper
-								.setSubLoteConta((Short) parmsConta[8]);
+						emitirContaHelper.setSubLoteConta((Short) parmsConta[8]);
 					}
 					if (parmsConta[9] != null) {
-						emitirContaHelper
-								.setConsumoAgua((Integer) parmsConta[9]);
+						emitirContaHelper.setConsumoAgua((Integer) parmsConta[9]);
 					}
 					if (parmsConta[10] != null) {
-						emitirContaHelper
-								.setConsumoEsgoto((Integer) parmsConta[10]);
+						emitirContaHelper.setConsumoEsgoto((Integer) parmsConta[10]);
 					}
 
 					int tam = parmsConta.length;
@@ -37002,140 +36989,111 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						emitirContaHelper.setValorEsgoto(valorEsgoto);
 					}
 					if (parmsConta[13] != null) {
-						emitirContaHelper
-								.setDebitos((BigDecimal) parmsConta[13]);
+						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
 					}
 					if (parmsConta[14] != null) {
-						emitirContaHelper
-								.setValorCreditos((BigDecimal) parmsConta[14]);
+						emitirContaHelper.setValorCreditos((BigDecimal) parmsConta[14]);
 					}
 					if (parmsConta[15] != null) {
-						emitirContaHelper
-								.setValorImpostos((BigDecimal) parmsConta[15]);
+						emitirContaHelper.setValorImpostos((BigDecimal) parmsConta[15]);
 					}
 					if (parmsConta[16] != null) {
-						emitirContaHelper
-								.setDataValidadeConta((Date) parmsConta[16]);
+						emitirContaHelper.setDataValidadeConta((Date) parmsConta[16]);
 					}
 					if (parmsConta[17] != null) {
 						emitirContaHelper.setIdImovel((Integer) parmsConta[17]);
 					}
 					if (parmsConta[18] != null) {
-						emitirContaHelper
-								.setIdLocalidade((Integer) parmsConta[18]);
+						emitirContaHelper.setIdLocalidade((Integer) parmsConta[18]);
 					}
 					if (parmsConta[19] != null) {
-						emitirContaHelper
-								.setIdGerenciaRegional((Integer) parmsConta[19]);
+						emitirContaHelper.setIdGerenciaRegional((Integer) parmsConta[19]);
 					}
 					if (parmsConta[20] != null) {
-						emitirContaHelper
-								.setNomeGerenciaRegional((String) parmsConta[20]);
+						emitirContaHelper.setNomeGerenciaRegional((String) parmsConta[20]);
 					}
 					if (parmsConta[21] != null) {
-						emitirContaHelper
-								.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
+						emitirContaHelper.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
 					}
 					if (parmsConta[22] != null) {
-						emitirContaHelper
-								.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
+						emitirContaHelper.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
 					}
 					if (parmsConta[23] != null) {
-						emitirContaHelper
-								.setIdImovelPerfil((Integer) parmsConta[23]);
+						emitirContaHelper.setIdImovelPerfil((Integer) parmsConta[23]);
 					}
 					if (parmsConta[24] != null) {
-						emitirContaHelper
-								.setIdSetorComercial((Integer) parmsConta[24]);
+						emitirContaHelper.setIdSetorComercial((Integer) parmsConta[24]);
 					}
 					if (parmsConta[25] != null) {
-						emitirContaHelper
-								.setIdFaturamentoGrupo((Integer) parmsConta[25]);
+						emitirContaHelper.setIdFaturamentoGrupo((Integer) parmsConta[25]);
 					}
 					if (parmsConta[26] != null) {
-						emitirContaHelper
-								.setIdEmpresa((Integer) parmsConta[26]);
+						emitirContaHelper.setIdEmpresa((Integer) parmsConta[26]);
 					}
 					if (parmsConta[27] != null) {
-						emitirContaHelper
-								.setDescricaoLocalidade((String) parmsConta[27]);
+						emitirContaHelper.setDescricaoLocalidade((String) parmsConta[27]);
 					}
 					if (parmsConta[28] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
+						emitirContaHelper.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
 					}
 					if (parmsConta[29] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
+						emitirContaHelper.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
 					}
 					if (parmsConta[30] != null) {
-						emitirContaHelper
-								.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
+						emitirContaHelper.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
 					}
 					if (parmsConta[31] != null) {
-						emitirContaHelper.setIdClienteResponsavel(""
-								+ (Integer) parmsConta[31]);
+						emitirContaHelper.setIdClienteResponsavel(""+ (Integer) parmsConta[31]);
 					}
 					if (parmsConta[32] != null) {
-						emitirContaHelper
-								.setNomeImovel((String) parmsConta[32]);
+						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 					}
 
 					if (tam > 34) {
 						if (parmsConta[33] != null) {
-							emitirContaHelper
-									.setCodigoRota((Short) parmsConta[33]);
+							emitirContaHelper.setCodigoRota((Short) parmsConta[33]);
 						}
 						if (parmsConta[34] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRota((Integer) parmsConta[34]);
+							emitirContaHelper.setNumeroSequencialRota((Integer) parmsConta[34]);
 						}
 						if (parmsConta[35] != null) {
-							emitirContaHelper
-									.setIdOrigem((Integer) parmsConta[35]);
+							emitirContaHelper.setIdOrigem((Integer) parmsConta[35]);
 						}
 						if (parmsConta[36] != null) {
-							emitirContaHelper
-									.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
+							emitirContaHelper.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
 						}
 						if (parmsConta[37] != null) {
-							emitirContaHelper
-									.setIdFuncionario((Integer) parmsConta[37]);
+							emitirContaHelper.setIdFuncionario((Integer) parmsConta[37]);
 						}
 						if (parmsConta[38] != null) {
-							emitirContaHelper
-									.setNomeFuncionario((String) parmsConta[38]);
+							emitirContaHelper.setNomeFuncionario((String) parmsConta[38]);
 						}
 						if (parmsConta[39] != null) {
-							emitirContaHelper
-									.setContaTipo((Integer) parmsConta[39]);
+							emitirContaHelper.setContaTipo((Integer) parmsConta[39]);
 						}
 						if (parmsConta[40] != null) {
-							emitirContaHelper
-									.setIdRotaEntrega((Integer) parmsConta[40]);
+							emitirContaHelper.setIdRotaEntrega((Integer) parmsConta[40]);
 						}
 						if (parmsConta[41] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
+							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
 
 						if (tam > 42) {
 							if (parmsConta[42] != null) {
-								emitirContaHelper
-										.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
 							}
 							if (parmsConta[43] != null) {
-								emitirContaHelper
-										.setValorRateioAgua((BigDecimal) parmsConta[43]);
+								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
 							}
 							if (parmsConta[44] != null) {
-								emitirContaHelper
-										.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
+								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
 							}
 						}
 
 					}
 
+					this.preencherInformacoesMacro(emitirContaHelper);
+					
 					colecaoContas.add(emitirContaHelper);
 					emitirContaHelper = null;
 				}
@@ -37143,6 +37101,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 		return colecaoContas;
+	}
+	
+	private void preencherInformacoesMacro(EmitirContaHelper helper) throws ControladorException {
+		Imovel imovel = getControladorImovel().pesquisarImovel(helper.getIdImovel());
+		
+		if (imovel.isCondominio()) {
+			Collection<Imovel> imoveisVinculados = getControladorMicromedicao().obterImoveisVinculadosDoCondominio(helper.getIdImovel());
+			
+			FaturamentoGrupo grupo = new FaturamentoGrupo(helper.getIdFaturamentoGrupo());
+			grupo.setAnoMesReferencia(helper.getAnoMesFaturamentoGrupo());
+			
+			BigDecimal[] valoresASeremRateados = this.obterValorConsumoASerRateado(imovel, grupo);
+			
+			Integer somaConsumosImoveisMicro = getControladorMicromedicao().obterConsumoLigacaoImoveisVinculados(
+					helper.getIdImovel(), helper.getAnoMesFaturamentoGrupo(), LigacaoTipo.LIGACAO_AGUA);
+			
+			helper.setQuantidadeImoveisMicro(imoveisVinculados.size());
+			helper.setSomaConsumosImoveisMicro(somaConsumosImoveisMicro);
+			helper.setValorTotalASerrateado(valoresASeremRateados[0]);
+		}
 	}
 
 	/**
@@ -68958,29 +68936,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		System.out.println("Qtd economias: " + qtdEconomiasCondominio);
 		Imovel imovelCondominio = (Imovel) getControladorImovel().pesquisarImovel(idImovelCondominio);
 
-		int consumoAguaASerRateado = 0;
-		int consumoEsgotoASerRateado = 0;
-
-		if (imovelCondominio.getLigacaoAgua() != null) {
-			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
-					LigacaoTipo.LIGACAO_AGUA);
-		}
-
-		if (imovelCondominio.getLigacaoEsgoto() != null) {
-			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
-					LigacaoTipo.LIGACAO_ESGOTO);
-		}
-
-		if (consumoAguaASerRateado < 0) {
-			consumoAguaASerRateado = 0;
-		}
-		if (consumoEsgotoASerRateado < 0) {
-			consumoEsgotoASerRateado = 0;
-		}
-
-		BigDecimal[] valoresAguaEsgotoContaRateio = this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado,
-				faturamentoGrupo);
-
+		BigDecimal[] valoresAguaEsgotoContaRateio = this.obterValorConsumoASerRateado(imovelCondominio, faturamentoGrupo);
+		
 		if (valoresAguaEsgotoContaRateio[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
 			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0].add(new BigDecimal(0.005));
 
@@ -69000,6 +68957,30 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		valoresAguaEsgotoRateioPorEconomia[1] = valorEsgotoRateioPorEconomia;
 
 		return valoresAguaEsgotoRateioPorEconomia;
+	}
+	
+	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
+		int consumoAguaASerRateado = 0;
+		int consumoEsgotoASerRateado = 0;
+
+		if (imovelCondominio.getLigacaoAgua() != null) {
+			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_AGUA);
+		}
+
+		if (imovelCondominio.getLigacaoEsgoto() != null) {
+			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_ESGOTO);
+		}
+
+		if (consumoAguaASerRateado < 0) {
+			consumoAguaASerRateado = 0;
+		}
+		if (consumoEsgotoASerRateado < 0) {
+			consumoEsgotoASerRateado = 0;
+		}
+
+		return this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado, faturamentoGrupo);
 	}
 
 	/**

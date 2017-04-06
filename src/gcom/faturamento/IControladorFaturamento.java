@@ -1261,4 +1261,6 @@ public interface IControladorFaturamento {
 			throws ControladorException;
 	
 	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) throws ControladorException;
+	
+	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException;
 }

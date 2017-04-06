@@ -9637,83 +9637,83 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Collection retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select "
-					+ "cnt.cnta_id as idConta, "// 0
-					+ "cli.clie_nmcliente as nomeCliente, "// 1
-					+ "cnt.cnta_dtvencimentoconta as dataVencimentoConta, "// 2
-					+ "cnt.cnta_amreferenciaconta as amReferencia, "// 3
-					+ "cnt.cnta_dgverificadorconta as digitoVerificador, "// 4
-					+ "cnt.cnta_cdsetorcomercial as codigoSetorComercial, "// 5
-					+ "cnt.cnta_nnquadra as numeroQuadra, "// 6
-					+ "cnt.cnta_nnlote as lote, "// 7
-					+ "cnt.cnta_nnsublote as sublote, "// 8
-					+ "cnt.cnta_nnconsumoagua as consumoAgua, "// 9
-					+ "cnt.cnta_nnconsumoesgoto as consumoEsgoto, "// 10
-					+ "cnt.cnta_vlagua as valorAgua, "// 11
-					+ "cnt.cnta_vlesgoto as valorEsgoto, "// 12
-					+ "cnt.cnta_vldebitos as debitos, "// 13
-					+ "cnt.cnta_vlcreditos as valorCreditos, "// 14
-					+ "cnt.cnta_vlimpostos as valorImpostos, "// 15
-					+ "cnt.cnta_dtvalidadeconta as dataValidade, "// 16
-					+ "imovel.imov_id as idImovel, "// 17
-					+ "loc.loca_id as idLocalidade, "// 18
-					+ "gerenciaRegional.greg_id as idGerenciaRegional, "// 19
-					+ "gerenciaRegional.greg_nmregional as nomeGerencia, "// 20
-					+ "ligacaoAguaSituacao.last_id as idLigacaoAguaSituacao, "// 21
-					+ "ligacaoEsgotoSituacao.lest_id as idLigacaoEsgotoSituacao, "// 22
-					+ "imovelPerfil.iper_id as idImovelPrefil, "// 23
-					+ "setorComercial.stcm_id as idSetorComercial, "// 24
-					+ "contaImpressao.ftgr_id as idFaturamentoGrupo, "// 25
-					+ "contaImpressao.empr_id as idEmpresa, "// 26
-					+ "loc.loca_nmlocalidade as descricaoLocalidade, "// 27
-					+ "ligacaoAguaSituacao.last_dsligacaoaguasituacao as descricaoLigAguaSit, "// 28
-					+ "ligacaoEsgotoSituacao.lest_dsligacaoesgotosituacao as descricaoLigEsgotoSit, "// 29
-					+ "cnt.cnta_pcesgoto as percentualEsgoto, "// 30
-					+ "contaImpressao.clie_idresponsavel as idClienteResponsavel, "// 31
-					+ "imovel.imov_nmimovel as nomeImovel, "// 32
-					+ "rota.rota_cdrota as codigoRota, "// 33
-					+ "imovel.imov_nnsequencialrota as sequencialRota, "// 34
-					+ "cnt.cnta_idorigem as origem, "// 35
-					+ "cnt.dcst_idatual as debitoCreditoSituacaoAtual, "// 36
-					+ "func.func_id as idFuncionario, "// 37
-					+ "func.func_nmfuncionario as nomeFuncionario, "// 38
-					+ "contaImpressao.cttp_id as tipoConta, "// 39
-					+ "imovel.rota_identrega as rotaEntrega, "// 40
-					+ "imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, "// 41
-					+ "imovel.imov_nnquadraentrega as numeroQuadraEntrega, "// 42
-					+ "cnt.cnta_vlrateioagua as valorRateioAgua, " //43
-					+ "cnt.cnta_vlrateioesgoto as valorRateioEsgoto " //44
-					+ "from cadastro.cliente_conta cliCnt "
-					+ "inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id "
-					+ "inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id "
-					+ "inner join cadastro.quadra quadraConta on cnt.qdra_id=quadraConta.qdra_id "
-					+ "inner join micromedicao.rota rota on quadraConta.rota_id=rota.rota_id "
-					+ "inner join cadastro.setor_comercial setorComercial on quadraConta.stcm_id=setorComercial.stcm_id "
-					+ "inner join cadastro.localidade loc on cnt.loca_id=loc.loca_id "
-					+ "inner join cadastro.gerencia_regional gerenciaRegional on loc.greg_id=gerenciaRegional.greg_id "
-					+ "inner join atendimentopublico.ligacao_agua_situacao ligacaoAguaSituacao "
-					+ "on cnt.last_id=ligacaoAguaSituacao.last_id "
-					+ "inner join atendimentopublico.ligacao_esgoto_situacao ligacaoEsgotoSituacao "
-					+ "on cnt.lest_id=ligacaoEsgotoSituacao.lest_id "
-					+ "inner join cadastro.imovel_perfil imovelPerfil on cnt.iper_id=imovelPerfil.iper_id "
-					+ "inner join cadastro.imovel imovel on cnt.imov_id=imovel.imov_id "
-					+ "inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id "
-					+ "inner join cadastro.quadra_face quadraFace on imovel.qdfa_id=quadraFace.qdfa_id "
-					+ "left join cadastro.funcionario func on imovel.func_id=func.func_id "
-					+ "where "
-					+ "contaImpressao.cnti_amreferenciaconta = :referencia AND "
-					+ "cnt.cnta_tmultimaalteracao > :data AND "
-					+ "contaImpressao.ftgr_id = :idFaturamentoGrupoParms AND "
-					+ "cliCnt.clct_icnomeconta = :indicadorNomeConta AND "
-					+ "imovel.icte_id not in (4,9) "
-					+ " AND cnt.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + ") "
-					+ "order by  loc.loca_id,cnt.cnta_cdsetorcomercial,"
-					+ "rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote";
-
-			retorno = session.createSQLQuery(consulta)
+			consulta.append("select ")
+				     .append("cnt.cnta_id as idConta, ")// 0
+				     .append("cli.clie_nmcliente as nomeCliente, ")// 1
+				     .append("cnt.cnta_dtvencimentoconta as dataVencimentoConta, ")// 2
+				     .append("cnt.cnta_amreferenciaconta as amReferencia, ")// 3
+				     .append("cnt.cnta_dgverificadorconta as digitoVerificador, ")// 4
+				     .append("cnt.cnta_cdsetorcomercial as codigoSetorComercial, ")// 5
+				     .append("cnt.cnta_nnquadra as numeroQuadra, ")// 6
+				     .append("cnt.cnta_nnlote as lote, ")// 7
+				     .append("cnt.cnta_nnsublote as sublote, ")// 8
+				     .append("cnt.cnta_nnconsumoagua as consumoAgua, ")// 9
+				     .append("cnt.cnta_nnconsumoesgoto as consumoEsgoto, ")// 10
+				     .append("cnt.cnta_vlagua as valorAgua, ")// 11
+				     .append("cnt.cnta_vlesgoto as valorEsgoto, ")// 12
+				     .append("cnt.cnta_vldebitos as debitos, ")// 13
+				     .append("cnt.cnta_vlcreditos as valorCreditos, ")// 14
+				     .append("cnt.cnta_vlimpostos as valorImpostos, ")// 15
+				     .append("cnt.cnta_dtvalidadeconta as dataValidade, ")// 16
+				     .append("imovel.imov_id as idImovel, ")// 17
+				     .append("loc.loca_id as idLocalidade, ")// 18
+				     .append("gerenciaRegional.greg_id as idGerenciaRegional, ")// 19
+				     .append("gerenciaRegional.greg_nmregional as nomeGerencia, ")// 20
+				     .append("ligacaoAguaSituacao.last_id as idLigacaoAguaSituacao, ")// 21
+				     .append("ligacaoEsgotoSituacao.lest_id as idLigacaoEsgotoSituacao, ")// 22
+				     .append("imovelPerfil.iper_id as idImovelPrefil, ")// 23
+				     .append("setorComercial.stcm_id as idSetorComercial, ")// 24
+				     .append("contaImpressao.ftgr_id as idFaturamentoGrupo, ")// 25
+				     .append("contaImpressao.empr_id as idEmpresa, ")// 26
+				     .append("loc.loca_nmlocalidade as descricaoLocalidade, ")// 27
+				     .append("ligacaoAguaSituacao.last_dsligacaoaguasituacao as descricaoLigAguaSit, ")// 28
+				     .append("ligacaoEsgotoSituacao.lest_dsligacaoesgotosituacao as descricaoLigEsgotoSit, ")// 29
+				     .append("cnt.cnta_pcesgoto as percentualEsgoto, ")// 30
+				     .append("contaImpressao.clie_idresponsavel as idClienteResponsavel, ")// 31
+				     .append("imovel.imov_nmimovel as nomeImovel, ")// 32
+				     .append("rota.rota_cdrota as codigoRota, ")// 33
+				     .append("imovel.imov_nnsequencialrota as sequencialRota, ")// 34
+				     .append("cnt.cnta_idorigem as origem, ")// 35
+				     .append("cnt.dcst_idatual as debitoCreditoSituacaoAtual, ")// 36
+				     .append("func.func_id as idFuncionario, ")// 37
+				     .append("func.func_nmfuncionario as nomeFuncionario, ")// 38
+				     .append("contaImpressao.cttp_id as tipoConta, ")// 39
+				     .append("imovel.rota_identrega as rotaEntrega, ")// 40
+				     .append("imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, ")// 41
+				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 42
+				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
+				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto ") //44
+				     .append("from cadastro.cliente_conta cliCnt ")
+				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
+				     .append("inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id ")
+				     .append("inner join cadastro.quadra quadraConta on cnt.qdra_id=quadraConta.qdra_id ")
+				     .append("inner join micromedicao.rota rota on quadraConta.rota_id=rota.rota_id ")
+				     .append("inner join cadastro.setor_comercial setorComercial on quadraConta.stcm_id=setorComercial.stcm_id ")
+				     .append("inner join cadastro.localidade loc on cnt.loca_id=loc.loca_id ")
+				     .append("inner join cadastro.gerencia_regional gerenciaRegional on loc.greg_id=gerenciaRegional.greg_id ")
+				     .append("inner join atendimentopublico.ligacao_agua_situacao ligacaoAguaSituacao ")
+				     .append("on cnt.last_id=ligacaoAguaSituacao.last_id ")
+				     .append("inner join atendimentopublico.ligacao_esgoto_situacao ligacaoEsgotoSituacao ")
+				     .append("on cnt.lest_id=ligacaoEsgotoSituacao.lest_id ")
+				     .append("inner join cadastro.imovel_perfil imovelPerfil on cnt.iper_id=imovelPerfil.iper_id ")
+				     .append("inner join cadastro.imovel imovel on cnt.imov_id=imovel.imov_id ")
+				     .append("inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id ")
+				     .append("inner join cadastro.quadra_face quadraFace on imovel.qdfa_id=quadraFace.qdfa_id ")
+				     .append("left join cadastro.funcionario func on imovel.func_id=func.func_id ")
+				     .append("where ")
+				     .append("contaImpressao.cnti_amreferenciaconta = :referencia AND ")
+				     .append("cnt.cnta_tmultimaalteracao > :data AND ")
+				     .append("contaImpressao.ftgr_id = :idFaturamentoGrupoParms AND ")
+				     .append("cliCnt.clct_icnomeconta = :indicadorNomeConta AND ")
+				     .append("imovel.icte_id not in (4,9) ")
+				     .append(" AND cnt.dcst_idatual in ( :normal, :retificada ) ")
+				     .append("order by  loc.loca_id,cnt.cnta_cdsetorcomercial, ")
+				     .append("rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote ");
+			
+			retorno = session.createSQLQuery(consulta.toString())
 					.addScalar("idConta", Hibernate.INTEGER)
 					.addScalar("nomeCliente",Hibernate.STRING)
 					.addScalar("dataVencimentoConta",Hibernate.DATE)
@@ -9763,6 +9763,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
 					.setInteger("referencia", anoMesReferencia)
 					.setInteger("idFaturamentoGrupoParms", idFaturamentoGrupo)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
