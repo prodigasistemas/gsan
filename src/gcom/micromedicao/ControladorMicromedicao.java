@@ -39579,7 +39579,6 @@ public class ControladorMicromedicao extends ControladorComum {
 			e.printStackTrace();
 		}
 
-        System.out.println("Consumo a ser rateado: " + consumoASerRateado);
         return consumoASerRateado;
     }
 	

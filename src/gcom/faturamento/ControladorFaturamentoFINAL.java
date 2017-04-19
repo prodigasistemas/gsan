@@ -37106,19 +37106,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	private void preencherInformacoesMacro(EmitirContaHelper helper) throws ControladorException {
 		Imovel imovel = getControladorImovel().pesquisarImovel(helper.getIdImovel());
 		
-		if (imovel.isCondominio()) {
-			Collection<Imovel> imoveisVinculados = getControladorMicromedicao().obterImoveisVinculadosDoCondominio(helper.getIdImovel());
+		if (imovel.pertenceACondominio()) {
+			
+			logger.info("	macro: " + imovel.getImovelCondominio().getId());
+			Imovel imovelMacro = getControladorImovel().pesquisarImovel(imovel.getImovelCondominio().getId());
+			
+			Collection<Imovel> imoveisVinculados = getControladorMicromedicao().obterImoveisVinculadosDoCondominio(imovelMacro.getId());
 			
 			FaturamentoGrupo grupo = new FaturamentoGrupo(helper.getIdFaturamentoGrupo());
-			grupo.setAnoMesReferencia(helper.getAnoMesFaturamentoGrupo());
+			grupo.setAnoMesReferencia(helper.getAmReferencia());
 			
-			BigDecimal[] valoresASeremRateados = this.obterValorConsumoASerRateado(imovel, grupo);
+			BigDecimal[] valoresASeremRateados = this.obterValorConsumoASerRateado(imovelMacro, grupo);
+			
+			ConsumoHistorico historico = this.getControladorMicromedicao().obterConsumoHistorico(
+					imovelMacro, new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), grupo.getAnoMesReferencia());
 			
 			Integer somaConsumosImoveisMicro = getControladorMicromedicao().obterConsumoLigacaoImoveisVinculados(
-					helper.getIdImovel(), helper.getAnoMesFaturamentoGrupo(), LigacaoTipo.LIGACAO_AGUA);
+					imovelMacro.getId(), grupo.getAnoMesReferencia(), LigacaoTipo.LIGACAO_AGUA);
 			
 			helper.setQuantidadeImoveisMicro(imoveisVinculados.size());
 			helper.setSomaConsumosImoveisMicro(somaConsumosImoveisMicro);
+			helper.setConsumoMacro(historico.getNumeroConsumoFaturadoMes());
 			helper.setValorTotalASerrateado(valoresASeremRateados[0]);
 		}
 	}
@@ -68962,12 +68970,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
-
+		logger.info("		obterValorConsumoASerRateado");
+		logger.info("Ligacao agua: " );
 		if (imovelCondominio.getLigacaoAgua() != null) {
+			logger.info("Ligacao agua: " );
 			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_AGUA);
 		}
 
+		logger.info("Ligacao esgoto: " + imovelCondominio.getLigacaoEsgoto() != null);
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
 			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_ESGOTO);

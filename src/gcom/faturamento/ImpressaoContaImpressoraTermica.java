@@ -6,6 +6,8 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
@@ -36,7 +38,6 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -70,6 +71,24 @@ public class ImpressaoContaImpressoraTermica {
 		return instancia;
 	}
 
+	protected ControladorClienteLocal getControladorCliente() {
+		ControladorClienteLocalHome localHome = null;
+		ControladorClienteLocal local = null;
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
@@ -93,9 +112,6 @@ public class ImpressaoContaImpressoraTermica {
 	protected ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -524,14 +540,18 @@ public class ImpressaoContaImpressoraTermica {
 		String[] dados = new String[2];
 		
 		// Valor do rateio de Água
-		if (emitirContaHelper.getConsumoAgua() != null && emitirContaHelper.getValorRateioAgua().compareTo(BigDecimal.ZERO) > 0) {
+		if (emitirContaHelper.getConsumoAgua() != null 
+				&& emitirContaHelper.getValorRateioAgua() != null
+				&& emitirContaHelper.getValorRateioAgua().compareTo(BigDecimal.ZERO) > 0) {
 		    dados = new String[2];
 		    dados[0] = "RATEIO DE AGUA DO CONDOMINIO";
 		    dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua());
 		    retorno.add(dados);
 		}
 		// Valor do rateio de Esgoto
-		if (emitirContaHelper.getConsumoEsgoto() != null && emitirContaHelper.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) > 0) {
+		if (emitirContaHelper.getConsumoEsgoto() != null 
+				&& emitirContaHelper.getValorRateioEsgoto() != null
+				&& emitirContaHelper.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) > 0) {
 		    dados = new String[2];
 		    dados[0] = "RATEIO DE ESGOTO DO CONDOMINIO";
 		    dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto());
@@ -619,23 +639,33 @@ public class ImpressaoContaImpressoraTermica {
 		Imovel imovelEmitido;
 		try {
 			imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-
+			
+			if (!imovelEmitido.pertenceACondominio()) {
+				return retorno.toString();
+			}
 			LigacaoTipo lta = new LigacaoTipo();
 			lta.setId(LigacaoTipo.LIGACAO_AGUA);
 			LigacaoTipo lte = new LigacaoTipo();
 			lte.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
 			try {
-				ConsumoHistorico consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lta, emitirContaHelper.getAmReferencia());
-				ConsumoHistorico consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lte, emitirContaHelper.getAmReferencia());
-
+				ConsumoHistorico consumoAgua;
+				ConsumoHistorico consumoEsgoto;
+				
 				if (imovelEmitido.pertenceACondominio() && !idsCondominios.contains(imovelEmitido.getImovelCondominio().getId())) {
-					Imovel imovelCondominio = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
+					Imovel imovelCondominio = getControladorImovel().pesquisarImovel(imovelEmitido.getImovelCondominio().getId());
 					
+					consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lta, emitirContaHelper.getAmReferencia());
+					consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lte, emitirContaHelper.getAmReferencia());
+					System.out.println("Imovel condominio: " + imovelCondominio.getId());
 					gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelCondominio, consumoAgua, consumoEsgoto);
-					gerarInformativoMacroCondominio(emitirContaHelper, retorno, imovelCondominio);
+					gerarDadosQualidadeAgua(emitirContaHelper, qualidadeAgua, retorno);
+					gerarInformativoMacroCondominio(emitirContaHelper, retorno, imovelEmitido);
 					idsCondominios.add(imovelEmitido.getImovelCondominio().getId());
-				}
+				} 
+				
+				consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lta, emitirContaHelper.getAmReferencia());
+				consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lte, emitirContaHelper.getAmReferencia());
 				
 				gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, consumoAgua, consumoEsgoto);
 				
@@ -682,13 +712,13 @@ public class ImpressaoContaImpressoraTermica {
 			    int ultimaLinhaRateio = ultimaLinhaPoco;
 			    for (int i = 0; i < rateios.size(); i++) {
 					String[] debito = (String[]) rateios.get(i);
-					ultimaLinhaRateio = ultimaLinhaPoco + ((i + 1) * 25);
+					ultimaLinhaRateio = ultimaLinhaPoco + ((i + 1) * 34);
 					quantidadeLinhasAtual++;
 					if (debito[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 710, debito[0], 0, (i + 1) * 25 + ultimaLinhaPoco));
+						retorno.append(formarLinha(7, 0, 53, 733, debito[0], 0, (i + 1) * 34 + ultimaLinhaPoco));
 					}
 					if (debito[1] != null) {
-						retorno.append(formarLinha(7, 0, 697, 710, debito[1], 0, (i + 1) * 25 + ultimaLinhaPoco));
+						retorno.append(formarLinha(7, 0, 697, 733, debito[1], 0, (i + 1) * 34 + ultimaLinhaPoco));
 					}
 			    }
 			    
@@ -796,7 +826,7 @@ public class ImpressaoContaImpressoraTermica {
 
 		Collection colecaoClienteImovel;
 		try {
-			colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(emitirContaHelper.getIdImovel());
+			colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(imovelEmitido.getId());
 			if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
 				ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
 				
@@ -827,7 +857,7 @@ public class ImpressaoContaImpressoraTermica {
 				}
 			}
 			
-			String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(emitirContaHelper.getIdImovel());
+			String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(imovelEmitido.getId());
 			
 			String municipioImovel = enderecoImovel2[1];
 			String logCepImovel = "";
@@ -852,9 +882,7 @@ public class ImpressaoContaImpressoraTermica {
 				endereco = getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
 			}
 			
-			
 			gerarInformacoesBasicas(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, endereco, cpfCnpjFormatado);
-//					int tipoConsumo = obterTipoConsumo(medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto);
 			
 			String diasConsumo = obterDiasConsumo(emitirContaHelper, medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto);
 			
@@ -1375,13 +1403,14 @@ public class ImpressaoContaImpressoraTermica {
 		return consumo;
 	}
 	
+	@SuppressWarnings("unused")
 	private String obterDataLeituraAnteriorInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, 
 			EmitirContaHelper helper) throws ControladorException {
 		String dataLeituraAnteriorInformada = "";
 
 		int mesAnterior = Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1);
-		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(helper.getIdImovel(), mesAnterior);
-		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(helper.getIdImovel(), mesAnterior);
+		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(medicaoAgua.getLigacaoAgua().getId(), mesAnterior);
+		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(medicaoAgua.getLigacaoAgua().getId(), mesAnterior);
 		
 		if (medicaoAgua != null) {
 			if (medicaoAguaAnterior != null) {
@@ -1407,17 +1436,33 @@ public class ImpressaoContaImpressoraTermica {
 				+ "LINE 425 518 425 692 1\n" + "LINE 535 518 535 692 1\n");
 
 		retorno.append("T 0 2 138 121 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
-		retorno.append("T 7 1 464 90 " + emitirContaHelper.getIdImovel() + "\n");
+		retorno.append("T 7 1 464 90 " + imovelEmitido.getId() + "\n");
 		retorno.append("T 7 1 669 90 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "") + "\n");
 		retorno.append("T 0 0 201 47 " + Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
 		retorno.append("T 0 0 285 64 " + sistemaParametro.getInscricaoEstadual().trim() + "\n");
 		retorno.append(formarLinha(0, 0, 222, 81, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-		retorno.append(formarLinha(0, 2, 52, 172, emitirContaHelper.getNomeCliente().trim(), 0, 0) + formarLinha(0, 2, 52, 199, cpfCnpjFormatado, 0, 0) + dividirLinha(0, 2, 434, 169, endereco.trim(), 40, 27));
+		retorno.append(formarLinha(0, 2, 52, 172, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0) + formarLinha(0, 2, 52, 199, cpfCnpjFormatado, 0, 0) + dividirLinha(0, 2, 434, 169, endereco.trim(), 40, 27));
 		retorno.append(formarLinha(7, 0, 15, 250, imovelEmitido.getInscricaoFormatada(), 0, 0));
 		retorno.append(formarLinha(7, 0, 315, 250, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
 		retorno.append(formarLinha(7, 0, 415, 250, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
 		
 		gerarDadosQtdEconomias(retorno, imovelEmitido);
+	}
+	
+	private String obterNomeCliente(EmitirContaHelper emitirContaHelper, Imovel imovel) {
+		String nome = "";
+		try {
+			System.out.println("Imóvel " + imovel.getId() + " isCondominio? " + imovel.isCondominio());
+			if (imovel.isCondominio()) {
+					nome =  getControladorCliente().obterNomeCliente(imovel.getId()).trim();
+			} else {
+				nome = emitirContaHelper.getNomeCliente().trim();
+			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		} 
+		
+		return nome;
 	}
 
 	private void gerarDadosQtdEconomias(StringBuilder retorno, Imovel imovelEmitido) {
@@ -1433,7 +1478,7 @@ public class ImpressaoContaImpressoraTermica {
 	private void gerarInformativoMacroCondominio(EmitirContaHelper emitirContaHelper, StringBuilder retorno, Imovel imovelEmitido) {
 		retorno.append("T 7 0 200 700 EXTRATO DE CONSUMO DO MACROMEDIDOR \n");
 		retorno.append("T 7 0 53 725 CONSUMO DO IMOVEL CONDOMINIO \n");
-		retorno.append("T 7 0 571 725 "+ emitirContaHelper.getConsumoFaturamento() + "\n");
+		retorno.append("T 7 0 571 725 "+ emitirContaHelper.getConsumoMacro() + "\n");
 		retorno.append("T 7 0 53 750 SOMA DOS CONSUMOS DOS IMOVEIS VINCULADOS \n");
 		retorno.append("T 7 0 571 750 "+ emitirContaHelper.getSomaConsumosImoveisMicro() + "\n");
 		retorno.append("T 7 0 53 775 QUANTIDADE IMOVEIS VINCULADOS \n");

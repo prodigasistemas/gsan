@@ -153,6 +153,7 @@ public class EmitirContaHelper implements Serializable {
 
 	private Integer quantidadeImoveisMicro;
 	private Integer somaConsumosImoveisMicro;
+	private Integer consumoMacro;
 	private BigDecimal valorTotalASerrateado;
 	
 	public Short getClienteComFaturaAgrupada() {
@@ -1790,6 +1791,12 @@ public class EmitirContaHelper implements Serializable {
 	public void setValorTotalASerrateado(BigDecimal valorTotalASerrateado) {
 		this.valorTotalASerrateado = valorTotalASerrateado;
 	}
-	
-	
+
+	public Integer getConsumoMacro() {
+		return consumoMacro;
+	}
+
+	public void setConsumoMacro(Integer consumoMacro) {
+		this.consumoMacro = consumoMacro;
+	}
 }

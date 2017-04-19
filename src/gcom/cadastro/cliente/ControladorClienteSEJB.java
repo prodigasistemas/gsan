@@ -41,49 +41,41 @@ import java.util.List;
 import javax.ejb.CreateException;
 
 public class ControladorClienteSEJB extends ControladorComum {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	private IRepositorioCliente repositorioCliente                 = null;
+	private IRepositorioCliente repositorioCliente = null;
 
-	private IRepositorioClienteImovel repositorioClienteImovel     = null;
+	private IRepositorioClienteImovel repositorioClienteImovel = null;
 
 	private IRepositorioClienteEndereco repositorioClienteEndereco = null;
 
 	public void ejbCreate() throws CreateException {
-		repositorioCliente         = RepositorioClienteHBM.getInstancia();
-		repositorioClienteImovel   = RepositorioClienteImovelHBM.getInstancia();
+		repositorioCliente = RepositorioClienteHBM.getInstancia();
+		repositorioClienteImovel = RepositorioClienteImovelHBM.getInstancia();
 		repositorioClienteEndereco = RepositorioClienteEnderecoHBM.getInstancia();
 
 	}
 
-	public Integer inserirCliente(Cliente cliente, Collection telefones,
-			Collection enderecos, Usuario usuario) throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public Integer inserirCliente(Cliente cliente, Collection telefones, Collection enderecos, Usuario usuario) throws ControladorException {
 		FiltroCliente filtroCliente = new FiltroCliente();
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CLIENTE_INSERIR, cliente.getId(), cliente.getId(), 
-				new UsuarioAcaoUsuarioHelper(usuario,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CLIENTE_INSERIR, cliente.getId(), cliente.getId(),
+				new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-
 
 		// Validar CPF de cliente
 		if (cliente.getCpf() != null && !cliente.getCpf().equals("")) {
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.CPF, cliente.getCpf()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.CPF, cliente.getCpf()));
 
-			Collection clienteComCpfExistente = getControladorUtil().pesquisar(
-					filtroCliente, Cliente.class.getName());
+			Collection clienteComCpfExistente = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
 
 			if (!clienteComCpfExistente.isEmpty()) {
-				Cliente clienteComCpf = (Cliente) clienteComCpfExistente
-						.iterator().next();
+				Cliente clienteComCpf = (Cliente) clienteComCpfExistente.iterator().next();
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.cpf.cliente.ja_cadastrado", null, ""
-								+ clienteComCpf.getId());
+				throw new ControladorException("atencao.cpf.cliente.ja_cadastrado", null, "" + clienteComCpf.getId());
 
 			}
 		}
@@ -91,57 +83,43 @@ public class ControladorClienteSEJB extends ControladorComum {
 		// Validar CNPJ de cliente
 		if (cliente.getCnpj() != null && !cliente.getCnpj().equals("")) {
 			filtroCliente.limparListaParametros();
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.CNPJ, cliente.getCnpj()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.CNPJ, cliente.getCnpj()));
 
-			Collection clienteComCnpjExistente = getControladorUtil()
-					.pesquisar(filtroCliente, Cliente.class.getName());
+			Collection clienteComCnpjExistente = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
 
 			if (!clienteComCnpjExistente.isEmpty()) {
-				Cliente clienteComCnpj = (Cliente) clienteComCnpjExistente
-						.iterator().next();
+				Cliente clienteComCnpj = (Cliente) clienteComCnpjExistente.iterator().next();
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.cnpj.cliente.ja_cadastrado", null, ""
-								+ clienteComCnpj.getId());
+				throw new ControladorException("atencao.cnpj.cliente.ja_cadastrado", null, "" + clienteComCnpj.getId());
 			}
 		}
 
 		// Validar RG de cliente
 		if (cliente.getRg() != null && !cliente.getRg().equals("")) {
 			filtroCliente.limparListaParametros();
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.RG, cliente.getRg()));
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.ORGAO_EXPEDIDOR_RG, cliente
-							.getOrgaoExpedidorRg()));
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.UNIDADE_FEDERACAO, cliente
-							.getUnidadeFederacao()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.RG, cliente.getRg()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ORGAO_EXPEDIDOR_RG, cliente.getOrgaoExpedidorRg()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.UNIDADE_FEDERACAO, cliente.getUnidadeFederacao()));
 
-			Collection clienteComRgExistente = getControladorUtil().pesquisar(
-					filtroCliente, Cliente.class.getName());
+			Collection clienteComRgExistente = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
 
 			if (!clienteComRgExistente.isEmpty()) {
-				Cliente clienteComRg = (Cliente) clienteComRgExistente
-						.iterator().next();
+				Cliente clienteComRg = (Cliente) clienteComRgExistente.iterator().next();
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.rg.cliente.ja_cadastrado", null, ""
-								+ clienteComRg.getId());
+				throw new ControladorException("atencao.rg.cliente.ja_cadastrado", null, "" + clienteComRg.getId());
 			}
 		}
 
 		// -------------Parte que insere um cliente na
 		// base----------------------
 		cliente.setIndicadorGeraArquivoTexto(new Short("2"));
-		
-		//*************************************************************************
+
+		// *************************************************************************
 		// Autor: Ivan Sergio
 		// Data: 06/08/2009
 		// CRC2103
-		// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter Imovel 
-		//*************************************************************************
+		// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter Imovel
+		// *************************************************************************
 		AtributoGrupo atributoGrupo = null;
 		if (cliente.getOperacaoEfetuada() != null) {
 			if (cliente.getOperacaoEfetuada().getAtributoGrupo() != null) {
@@ -150,14 +128,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 
 		registradorOperacao.registrarOperacao(cliente);
-		
+
 		if (atributoGrupo != null) {
 			cliente.getOperacaoEfetuada().setAtributoGrupo(atributoGrupo);
 		}
-		//*************************************************************************
-		
+		// *************************************************************************
+
 		cliente.setIndicadorAcaoCobranca(ConstantesSistema.INDICADOR_USO_ATIVO);
-		
+
 		Integer chaveClienteGerada = (Integer) getControladorUtil().inserir(cliente);
 
 		cliente.setId(chaveClienteGerada);
@@ -189,15 +167,16 @@ public class ControladorClienteSEJB extends ControladorComum {
 		return chaveClienteGerada;
 	}
 
-	public void atualizarCliente(Cliente cliente, Collection telefones, Collection enderecos, Usuario usuario)	throws ControladorException {
-		if (telefones == null){
+	@SuppressWarnings("rawtypes")
+	public void atualizarCliente(Cliente cliente, Collection telefones, Collection enderecos, Usuario usuario) throws ControladorException {
+		if (telefones == null) {
 			telefones = new ArrayList<ClienteFone>();
 		}
 
-		if (enderecos == null){
+		if (enderecos == null) {
 			enderecos = new ArrayList<ClienteEndereco>();
 		}
-		
+
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CLIENTE_ATUALIZAR, cliente.getId(), cliente.getId(),
 				new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
@@ -236,7 +215,8 @@ public class ControladorClienteSEJB extends ControladorComum {
 			// Procura o cliente na base
 			Cliente clienteNaBase = (Cliente) ((List) colecaoCliente).get(0);
 
-			// Verificar se o cliente já foi atualizado por outro usuário durante esta atualização
+			// Verificar se o cliente já foi atualizado por outro usuário
+			// durante esta atualização
 			if (clienteNaBase.getUltimaAlteracao().after(cliente.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
@@ -251,7 +231,8 @@ public class ControladorClienteSEJB extends ControladorComum {
 			// Autor: Ivan Sergio
 			// Data: 06/08/2009
 			// CRC2103
-			// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter Imovel
+			// Caso em que o Inserir Cliente eh chamdo como PopUp pelo Manter
+			// Imovel
 			// *************************************************************************
 			AtributoGrupo atributoGrupo = null;
 			if (cliente.getOperacaoEfetuada() != null) {
@@ -277,7 +258,8 @@ public class ControladorClienteSEJB extends ControladorComum {
 			// Atualizar os fones do cliente
 			Iterator iteratorTelefones = telefones.iterator();
 
-			// Remover a lista dos telefones do cliente para adicionar a nova lista depois
+			// Remover a lista dos telefones do cliente para adicionar a nova
+			// lista depois
 			repositorioCliente.removerTodosTelefonesPorCliente(cliente.getId());
 
 			// Adicionar os telefones novos informados para o cliente
@@ -292,7 +274,8 @@ public class ControladorClienteSEJB extends ControladorComum {
 			// Inserir os endereços do cliente
 			Iterator iteratorEnderecos = enderecos.iterator();
 
-			// Remover a lista dos endereços do cliente para adicionar a nova lista depois
+			// Remover a lista dos endereços do cliente para adicionar a nova
+			// lista depois
 			repositorioCliente.removerTodosEnderecosPorCliente(cliente.getId());
 
 			// Adicionar os endereços novos informados para o cliente
@@ -317,8 +300,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 *            Descrição do parâmetro
 	 * @throws ControladorException
 	 */
-	public void inserirClienteImovel(ClienteImovel clienteImovel)
-			throws ControladorException {
+	public void inserirClienteImovel(ClienteImovel clienteImovel) throws ControladorException {
 
 		clienteImovel.setDataInicioRelacao(new Date());
 
@@ -333,12 +315,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Description of the Return Value
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarClienteImovel(
-			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina)
-			throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarClienteImovel(FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) throws ControladorException {
 		try {
-			return repositorioClienteImovel.pesquisarClienteImovel(
-					filtroClienteImovel, numeroPagina);
+			return repositorioClienteImovel.pesquisarClienteImovel(filtroClienteImovel, numeroPagina);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -358,12 +338,9 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Description of the Return Value
 	 * @throws ControladorException
 	 */
-	public int pesquisarQuantidadeClienteImovel(
-			FiltroClienteImovel filtroClienteImovel)
-			throws ControladorException {
+	public int pesquisarQuantidadeClienteImovel(FiltroClienteImovel filtroClienteImovel) throws ControladorException {
 		try {
-			return repositorioClienteImovel
-					.pesquisarQuantidadeClienteImovel(filtroClienteImovel);
+			return repositorioClienteImovel.pesquisarQuantidadeClienteImovel(filtroClienteImovel);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -379,12 +356,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Description of the Return Value
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarClienteImovelTarifaSocial(
-			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina)
-			throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarClienteImovelTarifaSocial(FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) throws ControladorException {
 		try {
-			return repositorioClienteImovel.pesquisarClienteImovel(
-					filtroClienteImovel, numeroPagina);
+			return repositorioClienteImovel.pesquisarClienteImovel(filtroClienteImovel, numeroPagina);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -392,12 +367,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCliente(FiltroCliente filtroCliente) throws ControladorException {
 		Collection coll = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getSimpleName());
 		return coll;
 	}
 
-	public Collection pesquisarClienteEndereco(FiltroClienteEndereco filtroClienteEndereco)	throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarClienteEndereco(FiltroClienteEndereco filtroClienteEndereco) throws ControladorException {
 		try {
 			return repositorioClienteEndereco.pesquisarClienteEndereco(filtroClienteEndereco);
 		} catch (ErroRepositorioException ex) {
@@ -414,39 +391,31 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 *            Description of the Parameter
 	 * @throws ControladorException
 	 */
-	public void atualizarClienteImovelEconomia(
-			Collection clientesImoveisEconomia) throws ControladorException {
+	public void atualizarClienteImovelEconomia(Collection clientesImoveisEconomia) throws ControladorException {
 
 		// try {
 		// -------------Parte que atualiza um cliente imovel economia na
 		// base---------------------
 
-		Iterator clienteImovelEconomiaIterator = clientesImoveisEconomia
-				.iterator();
+		Iterator clienteImovelEconomiaIterator = clientesImoveisEconomia.iterator();
 
 		while (clienteImovelEconomiaIterator.hasNext()) {
-			ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaIterator
-					.next();
+			ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaIterator.next();
 
 			// Parte de Validacao com Timestamp
 			FiltroClienteImovelEconomia filtroClienteImovelEconomia = new FiltroClienteImovelEconomia();
 
 			// Seta o filtro para buscar o cliente imovel economia na base
-			filtroClienteImovelEconomia
-					.adicionarParametro(new ParametroSimples(
-							FiltroClienteImovelEconomia.ID,
-							clienteImovelEconomia.getId()));
+			filtroClienteImovelEconomia.adicionarParametro(new ParametroSimples(FiltroClienteImovelEconomia.ID, clienteImovelEconomia.getId()));
 
 			// Procura o cliente na base
-			ClienteImovelEconomia clienteImovelEconomiaNaBase = (ClienteImovelEconomia) ((List) (getControladorUtil()
-					.pesquisar(filtroClienteImovelEconomia,
-							ClienteImovelEconomia.class.getName()))).get(0);
+			ClienteImovelEconomia clienteImovelEconomiaNaBase = (ClienteImovelEconomia) ((List) (getControladorUtil().pesquisar(filtroClienteImovelEconomia,
+					ClienteImovelEconomia.class.getName()))).get(0);
 
 			// Verificar se o cliente já foi atualizado por outro usuário
 			// durante
 			// esta atualização
-			if (clienteImovelEconomiaNaBase.getUltimaAlteracao().after(
-					clienteImovelEconomia.getUltimaAlteracao())) {
+			if (clienteImovelEconomiaNaBase.getUltimaAlteracao().after(clienteImovelEconomia.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
@@ -472,12 +441,9 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(
-			FiltroClienteEndereco filtroClienteEndereco)
-			throws ControladorException {
+	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(FiltroClienteEndereco filtroClienteEndereco) throws ControladorException {
 		try {
-			return repositorioClienteEndereco
-					.pesquisarClienteEnderecoClienteImovel(filtroClienteEndereco);
+			return repositorioClienteEndereco.pesquisarClienteEnderecoClienteImovel(filtroClienteEndereco);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -486,13 +452,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 	}
 
-	public Collection<Cliente> pesquisarClienteDadosClienteEndereco(
-			FiltroCliente filtroCliente, Integer numeroPagina)
-			throws ControladorException {
+	public Collection<Cliente> pesquisarClienteDadosClienteEndereco(FiltroCliente filtroCliente, Integer numeroPagina) throws ControladorException {
 
 		try {
-			return repositorioCliente.pesquisarClienteDadosClienteEndereco(
-					filtroCliente, numeroPagina);
+			return repositorioCliente.pesquisarClienteDadosClienteEndereco(filtroCliente, numeroPagina);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -501,12 +464,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 	}
 
-	public Collection<Cliente> pesquisarClienteDadosClienteEnderecoRelatorio(
-			FiltroCliente filtroCliente) throws ControladorException {
+	public Collection<Cliente> pesquisarClienteDadosClienteEnderecoRelatorio(FiltroCliente filtroCliente) throws ControladorException {
 
 		try {
-			return repositorioCliente
-					.pesquisarClienteDadosClienteEnderecoRelatorio(filtroCliente);
+			return repositorioCliente.pesquisarClienteDadosClienteEnderecoRelatorio(filtroCliente);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -531,12 +492,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Integer pesquisarClienteDadosClienteEnderecoCount(
-			FiltroCliente filtroCliente) throws ControladorException {
+	public Integer pesquisarClienteDadosClienteEnderecoCount(FiltroCliente filtroCliente) throws ControladorException {
 
 		try {
-			return repositorioCliente
-					.pesquisarClienteDadosClienteEnderecoCount(filtroCliente);
+			return repositorioCliente.pesquisarClienteDadosClienteEnderecoCount(filtroCliente);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -545,12 +504,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 	}
 
-	public Collection<Cliente> pesquisarClienteOutrosCriterios(
-			FiltroCliente filtroCliente) throws ControladorException {
+	public Collection<Cliente> pesquisarClienteOutrosCriterios(FiltroCliente filtroCliente) throws ControladorException {
 
 		try {
-			return repositorioCliente
-					.pesquisarClienteOutrosCriterios(filtroCliente);
+			return repositorioCliente.pesquisarClienteOutrosCriterios(filtroCliente);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -576,29 +533,25 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Cliente pesquisarClienteDigitado(Integer idClienteDigitado)
-			throws ControladorException {
+	public Cliente pesquisarClienteDigitado(Integer idClienteDigitado) throws ControladorException {
 
 		// Cria a variável que vai armazenar o cliente pesquisado
 		Cliente clienteDigitado = null;
 
 		// Pesquisa o cliente informado pelo usuário no sistema
 		FiltroCliente filtroCliente = new FiltroCliente();
-		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID,
-				idClienteDigitado));
-		
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idClienteDigitado));
+
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade(FiltroCliente.CLIENTE_TIPO);
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade(FiltroCliente.ESFERA_PODER);
-			
-		Collection<Cliente> colecaoCliente = getControladorUtil().pesquisar(
-				filtroCliente, Cliente.class.getName());
+
+		Collection<Cliente> colecaoCliente = getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
 
 		// Caso exista o cliente no sistema
 		// Retorna para o usuário o cliente retornado pela pesquisa
 		// Caso contrário retorna um objeto nulo
 		if (colecaoCliente != null && !colecaoCliente.isEmpty()) {
-			clienteDigitado = (Cliente) Util
-					.retonarObjetoDeColecao(colecaoCliente);
+			clienteDigitado = (Cliente) Util.retonarObjetoDeColecao(colecaoCliente);
 		}
 
 		// Retorna o cliente encontrado ou nulo se não existir
@@ -623,13 +576,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 *                Description of the Exception
 	 */
 
-	public Collection pesquisarClienteImovel(
-			FiltroClienteImovel filtroClienteImovel)
-			throws ControladorException {
+	public Collection pesquisarClienteImovel(FiltroClienteImovel filtroClienteImovel) throws ControladorException {
 		// Retorna o cliente encontrado ou vazio se não existir
 		try {
-			return repositorioClienteImovel
-					.pesquisarClienteImovel(filtroClienteImovel);
+			return repositorioClienteImovel.pesquisarClienteImovel(filtroClienteImovel);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -646,13 +596,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 *                Description of the Exception
 	 */
 
-	public Collection pesquisarClienteImovelRelatorio(
-			FiltroClienteImovel filtroClienteImovel)
-			throws ControladorException {
+	public Collection pesquisarClienteImovelRelatorio(FiltroClienteImovel filtroClienteImovel) throws ControladorException {
 		// Retorna o cliente encontrado ou vazio se não existir
 		try {
-			return repositorioClienteImovel
-					.pesquisarClienteImovelRelatorio(filtroClienteImovel);
+			return repositorioClienteImovel.pesquisarClienteImovelRelatorio(filtroClienteImovel);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -669,13 +616,11 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @exception ErroRepositorioException
 	 *                Erro no hibernate
 	 */
-	public Cliente pesquisarObjetoClienteRelatorio(Integer idCliente)
-			throws ControladorException {
+	public Cliente pesquisarObjetoClienteRelatorio(Integer idCliente) throws ControladorException {
 
 		try {
 			// pesquisa as gerencias regionais existentes no sisitema
-			Object[] objetoCliente = repositorioCliente
-					.pesquisarObjetoClienteRelatorio(idCliente);
+			Object[] objetoCliente = repositorioCliente.pesquisarObjetoClienteRelatorio(idCliente);
 
 			Cliente cliente = new Cliente();
 
@@ -691,7 +636,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+
 	/**
 	 * Pesquisa as quantidades de imóveis e as quantidades de economias
 	 * associadas a um cliente
@@ -703,13 +648,11 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @exception ControladorException
 	 *                Erro no hibernate
 	 */
-	public Object[] pesquisarQtdeImoveisEEconomiasCliente(Integer idCliente)
-			throws ControladorException {
+	public Object[] pesquisarQtdeImoveisEEconomiasCliente(Integer idCliente) throws ControladorException {
 
 		try {
 			// pesquisa as gerencias regionais existentes no sisitema
-			return repositorioCliente
-					.pesquisarQtdeImoveisEEconomiasCliente(idCliente);
+			return repositorioCliente.pesquisarQtdeImoveisEEconomiasCliente(idCliente);
 
 			// erro no hibernate
 		} catch (ErroRepositorioException ex) {
@@ -723,8 +666,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * O método abaixo realiza uma pesquisa em cliente e verifica se ele existe
 	 * 
 	 */
-	public Integer verificarExistenciaCliente(Integer codigoCliente)
-			throws ControladorException {
+	public Integer verificarExistenciaCliente(Integer codigoCliente) throws ControladorException {
 
 		// Retorna o cliente encontrado ou vazio se não existir
 		try {
@@ -744,21 +686,19 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @date 21/08/2006
 	 * 
 	 * 
-	 * @param idCliente,
-	 *            idImovel
+	 * @param idCliente
+	 *            , idImovel
 	 * @return Colletion
 	 * @throws ControladorException
 	 */
-	public ClienteImovel pesquisarClienteImovel(Integer idCliente,
-			Integer idImovel) throws ControladorException {
+	public ClienteImovel pesquisarClienteImovel(Integer idCliente, Integer idImovel) throws ControladorException {
 
 		Collection colecaoClienteImovel = null;
 
 		ClienteImovel retorno = null;
 
 		try {
-			colecaoClienteImovel = this.repositorioClienteImovel
-					.pesquisarClienteImovel(idCliente, idImovel);
+			colecaoClienteImovel = this.repositorioClienteImovel.pesquisarClienteImovel(idCliente, idImovel);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -785,8 +725,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<ClienteFone> pesquisarClienteFone(Integer idCliente)
-			throws ControladorException {
+	public Collection<ClienteFone> pesquisarClienteFone(Integer idCliente) throws ControladorException {
 
 		try {
 			return this.repositorioCliente.pesquisarClienteFone(idCliente);
@@ -795,7 +734,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException {
 
@@ -817,15 +756,13 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarEnderecosClienteAbreviado(Integer idCliente)
-			throws ControladorException {
+	public Collection pesquisarEnderecosClienteAbreviado(Integer idCliente) throws ControladorException {
 
 		Collection colecaoEndereco = null;
 		Collection colecaoRetorno = null;
 
 		try {
-			colecaoEndereco = this.repositorioClienteEndereco
-					.pesquisarEnderecosClienteAbreviado(idCliente);
+			colecaoEndereco = this.repositorioClienteEndereco.pesquisarEnderecosClienteAbreviado(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
@@ -862,16 +799,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 					// Descrição logradouro tipo
 					if (arrayEndereco[22] != null) {
 						logradouroTipo = new LogradouroTipo();
-						logradouroTipo.setDescricaoAbreviada(""
-								+ arrayEndereco[22]);
+						logradouroTipo.setDescricaoAbreviada("" + arrayEndereco[22]);
 						logradouro.setLogradouroTipo(logradouroTipo);
 					}
 					LogradouroTitulo logradouroTitulo = null;
 					// Descrição logradouro titulo
 					if (arrayEndereco[23] != null) {
 						logradouroTitulo = new LogradouroTitulo();
-						logradouroTitulo.setDescricaoAbreviada(""
-								+ arrayEndereco[23]);
+						logradouroTitulo.setDescricaoAbreviada("" + arrayEndereco[23]);
 						logradouro.setLogradouroTitulo(logradouroTitulo);
 					}
 					// id do CEP
@@ -944,58 +879,57 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 				// indicador endereço correspondencia
 				if (arrayEndereco[25] != null) {
-					clienteEndereco
-							.setIndicadorEnderecoCorrespondencia((Short) arrayEndereco[25]);
+					clienteEndereco.setIndicadorEnderecoCorrespondencia((Short) arrayEndereco[25]);
 				}
 
 				clienteEndereco.setId((Integer) arrayEndereco[26]);
 
 				clienteEndereco.setUltimaAlteracao((Date) arrayEndereco[27]);
-				
+
 				// Perímetro
 				if (arrayEndereco[28] != null) {
 					Logradouro perimetroInicial = new Logradouro();
 					perimetroInicial.setId((Integer) arrayEndereco[28]);
-					
+
 					if (arrayEndereco[29] != null) {
 						perimetroInicial.setNome((String) arrayEndereco[29]);
 					}
-					
+
 					if (arrayEndereco[30] != null) {
 						LogradouroTipo logradouroTipo = new LogradouroTipo();
 						logradouroTipo.setDescricaoAbreviada((String) arrayEndereco[30]);
 						perimetroInicial.setLogradouroTipo(logradouroTipo);
 					}
-					
+
 					if (arrayEndereco[31] != null) {
 						LogradouroTitulo logradouroTitulo = new LogradouroTitulo();
 						logradouroTitulo.setDescricaoAbreviada((String) arrayEndereco[31]);
 						perimetroInicial.setLogradouroTitulo(logradouroTitulo);
 					}
-					
+
 					clienteEndereco.setPerimetroInicial(perimetroInicial);
 				}
-				
+
 				if (arrayEndereco[32] != null) {
 					Logradouro perimetroFinal = new Logradouro();
 					perimetroFinal.setId((Integer) arrayEndereco[32]);
-					
+
 					if (arrayEndereco[33] != null) {
 						perimetroFinal.setNome((String) arrayEndereco[33]);
 					}
-					
+
 					if (arrayEndereco[34] != null) {
 						LogradouroTipo logradouroTipo = new LogradouroTipo();
 						logradouroTipo.setDescricaoAbreviada((String) arrayEndereco[34]);
 						perimetroFinal.setLogradouroTipo(logradouroTipo);
 					}
-					
+
 					if (arrayEndereco[35] != null) {
 						LogradouroTitulo logradouroTitulo = new LogradouroTitulo();
 						logradouroTitulo.setDescricaoAbreviada((String) arrayEndereco[35]);
 						perimetroFinal.setLogradouroTitulo(logradouroTitulo);
 					}
-					
+
 					clienteEndereco.setPerimetroFinal(perimetroFinal);
 				}
 
@@ -1013,16 +947,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 		Cliente cliente = null;
 
 		try {
-			colecaoClientes = this.repositorioCliente
-					.consultarCliente(idCliente);
+			colecaoClientes = this.repositorioCliente.consultarCliente(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
 		if (colecaoClientes != null && !colecaoClientes.isEmpty()) {
 
-			Object[] objetoCliente = (Object[]) colecaoClientes.iterator()
-					.next();
+			Object[] objetoCliente = (Object[]) colecaoClientes.iterator().next();
 
 			cliente = new Cliente();
 
@@ -1054,24 +986,21 @@ public class ControladorClienteSEJB extends ControladorComum {
 				if (clienteTipo == null) {
 					clienteTipo = new ClienteTipo();
 				}
-				clienteTipo
-						.setIndicadorPessoaFisicaJuridica((Short) objetoCliente[4]);
+				clienteTipo.setIndicadorPessoaFisicaJuridica((Short) objetoCliente[4]);
 				cliente.setClienteTipo(clienteTipo);
 			}
 			/**
 			 * @Data 23/10/2013
-			 * @author adriana Muniz e Wellington Rocha
-			 * Adição do id do cliente tipo no objeto
+			 * @author adriana Muniz e Wellington Rocha Adição do id do cliente
+			 *         tipo no objeto
 			 * */
-			if(objetoCliente[19] != null){
+			if (objetoCliente[19] != null) {
 				if (clienteTipo == null) {
 					clienteTipo = new ClienteTipo();
 				}
-				clienteTipo
-						.setId((Integer) objetoCliente[19]);
+				clienteTipo.setId((Integer) objetoCliente[19]);
 				cliente.setClienteTipo(clienteTipo);
 			}
-				
 
 			// 5 - E-mail
 			if (objetoCliente[5] != null) {
@@ -1102,8 +1031,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 			OrgaoExpedidorRg orgaoExpedidorRg = null;
 			if (objetoCliente[10] != null) {
 				orgaoExpedidorRg = new OrgaoExpedidorRg();
-				orgaoExpedidorRg
-						.setDescricaoAbreviada((String) objetoCliente[10]);
+				orgaoExpedidorRg.setDescricaoAbreviada((String) objetoCliente[10]);
 				cliente.setOrgaoExpedidorRg(orgaoExpedidorRg);
 			}
 
@@ -1165,7 +1093,6 @@ public class ControladorClienteSEJB extends ControladorComum {
 				clienteResponsavel.setNome((String) objetoCliente[18]);
 				cliente.setCliente(cliente);
 			}
-			
 
 		}
 
@@ -1182,23 +1109,20 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarEnderecoCliente(Integer idCliente)
-			throws ControladorException {
+	public Collection pesquisarEnderecoCliente(Integer idCliente) throws ControladorException {
 
 		Collection colecaoClienteEndereco = null;
 		Collection colecaoRetorno = null;
 
 		try {
-			colecaoClienteEndereco = this.repositorioCliente
-					.pesquisarEnderecosCliente(idCliente);
+			colecaoClienteEndereco = this.repositorioCliente.pesquisarEnderecosCliente(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
 		if (colecaoClienteEndereco != null && !colecaoClienteEndereco.isEmpty()) {
 
-			Iterator clienteEnderecoIterator = colecaoClienteEndereco
-					.iterator();
+			Iterator clienteEnderecoIterator = colecaoClienteEndereco.iterator();
 			ClienteEndereco clienteEndereco = null;
 			colecaoRetorno = new ArrayList();
 
@@ -1218,8 +1142,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 				// 1- Indicador Endereco Correspondencia
 				if (array[0] != null) {
-					clienteEndereco
-							.setIndicadorEnderecoCorrespondencia((Short) array[1]);
+					clienteEndereco.setIndicadorEnderecoCorrespondencia((Short) array[1]);
 				}
 				colecaoRetorno.add(clienteEndereco);
 			}
@@ -1233,14 +1156,12 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * Pesquisa o nome do cliente a partir do imóvel Autor: Sávio Luiz Data:
 	 * 21/12/2005
 	 */
-	public String pesquisarNomeClientePorImovel(Integer idImovel)
-			throws ControladorException {
+	public String pesquisarNomeClientePorImovel(Integer idImovel) throws ControladorException {
 
 		String nomeCliente = "";
 
 		try {
-			nomeCliente = this.repositorioClienteImovel
-					.pesquisarNomeClientePorImovel(idImovel);
+			nomeCliente = this.repositorioClienteImovel.pesquisarNomeClientePorImovel(idImovel);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
@@ -1249,77 +1170,74 @@ public class ControladorClienteSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o nome, cnpj e id do cliente a partir do imóvel Autor: Rafael Corrêa Data:
-	 * 25/09/2006
+	 * Pesquisa o nome, cnpj e id do cliente a partir do imóvel Autor: Rafael
+	 * Corrêa Data: 25/09/2006
 	 */
-	public Cliente pesquisarDadosClienteRelatorioParcelamentoPorImovel(Integer idImovel)
-			throws ControladorException {
+	public Cliente pesquisarDadosClienteRelatorioParcelamentoPorImovel(Integer idImovel) throws ControladorException {
 
 		Cliente cliente = null;
 		Object[] dadosCliente = null;
 
 		try {
-			dadosCliente = this.repositorioClienteImovel
-					.pesquisarDadosClienteRelatorioParcelamentoPorImovel(idImovel);
+			dadosCliente = this.repositorioClienteImovel.pesquisarDadosClienteRelatorioParcelamentoPorImovel(idImovel);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		if (dadosCliente != null) {
-			
+
 			cliente = new Cliente();
-			
+
 			if (dadosCliente[0] != null) {
-				//Id
+				// Id
 				cliente.setId((Integer) dadosCliente[0]);
 			}
-			
+
 			if (dadosCliente[1] != null) {
 				// Nome
 				cliente.setNome((String) dadosCliente[1]);
 			} else {
 				cliente.setNome("");
 			}
-			
+
 			if (dadosCliente[2] != null) {
 				// CPF
 				cliente.setCpf((String) dadosCliente[2]);
 			}
-			
+
 			if (dadosCliente[3] != null) {
 				// CNPJ
 				cliente.setCnpj((String) dadosCliente[3]);
 			}
-			
+
 			if (dadosCliente[4] != null) {
 				// orgão expedidor
 				OrgaoExpedidorRg orgaoExpedidorRg = new OrgaoExpedidorRg();
-				orgaoExpedidorRg.setDescricao((String)dadosCliente[4]);
+				orgaoExpedidorRg.setDescricao((String) dadosCliente[4]);
 				cliente.setOrgaoExpedidorRg(orgaoExpedidorRg);
 			}
-			
+
 			if (dadosCliente[5] != null) {
 				// unidade federativa
 				UnidadeFederacao unidadeFederacao = new UnidadeFederacao();
 				unidadeFederacao.setSigla((String) dadosCliente[5]);
 				cliente.setUnidadeFederacao(unidadeFederacao);
 			}
-			
+
 			if (dadosCliente[6] != null) {
 				// rg
-				cliente.setRg((String)dadosCliente[6]);
+				cliente.setRg((String) dadosCliente[6]);
 			}
-			
+
 		}
 
 		return cliente;
 	}
-	
+
 	/**
 	 * [UC0458] - Imprimir Ordem de Serviço
 	 * 
-	 * Pesquisa o telefone principal do Cliente para o
-	 * Relatório de OS
+	 * Pesquisa o telefone principal do Cliente para o Relatório de OS
 	 * 
 	 * @author Rafael Corrêa
 	 * @date 17/10/2006
@@ -1328,46 +1246,44 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @param idRegistroAtendimento
 	 * @throws ErroRepositorioException
 	 */
-	
-	public String pesquisarClienteFonePrincipal(
-			Integer idCliente) throws ControladorException {
+
+	public String pesquisarClienteFonePrincipal(Integer idCliente) throws ControladorException {
 
 		Object[] dadosClienteFone = null;
 		String telefoneFormatado = "";
 
 		try {
 
-			dadosClienteFone = this.repositorioCliente
-					.pesquisarClienteFonePrincipal(idCliente);
+			dadosClienteFone = this.repositorioCliente.pesquisarClienteFonePrincipal(idCliente);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		if (dadosClienteFone != null) {
-			
+
 			// DDD
 			if (dadosClienteFone[0] != null) {
 				telefoneFormatado = telefoneFormatado + "(" + dadosClienteFone[0].toString() + ")";
 			}
-			
+
 			// Número do Telefone
 			if (dadosClienteFone[1] != null) {
 				telefoneFormatado = telefoneFormatado + dadosClienteFone[1];
 			}
-			
+
 			// Ramal
 			if (dadosClienteFone[2] != null) {
 				telefoneFormatado = telefoneFormatado + "/" + dadosClienteFone[2];
 			}
-			
+
 		}
 
 		return telefoneFormatado;
 
 	}
-	
+
 	/**
 	 * [UC0582] - Emitir Boletim de Cadastro
 	 * 
@@ -1376,21 +1292,18 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @author Rafael Corrêa
 	 * @date 16/05/2007
 	 * 
-	 * @param idImovel, clienteRelacaoTipo
+	 * @param idImovel
+	 *            , clienteRelacaoTipo
 	 * @throws ControladorException
 	 */
-	public ClienteEmitirBoletimCadastroHelper pesquisarClienteEmitirBoletimCadastro(
-			Integer idImovel, Short clienteRelacaoTipo)
-			throws ControladorException {
+	public ClienteEmitirBoletimCadastroHelper pesquisarClienteEmitirBoletimCadastro(Integer idImovel, Short clienteRelacaoTipo) throws ControladorException {
 
 		Collection colecaoDadosCliente = null;
 		ClienteEmitirBoletimCadastroHelper clienteEmitirBoletimCadastroHelper = null;
 
 		try {
 
-			colecaoDadosCliente = this.repositorioCliente
-					.pesquisarClienteEmitirBoletimCadastro(idImovel,
-							clienteRelacaoTipo);
+			colecaoDadosCliente = this.repositorioCliente.pesquisarClienteEmitirBoletimCadastro(idImovel, clienteRelacaoTipo);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -1399,8 +1312,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 		if (colecaoDadosCliente != null && !colecaoDadosCliente.isEmpty()) {
 
-			Iterator colecaoDadosClienteIterator = colecaoDadosCliente
-					.iterator();
+			Iterator colecaoDadosClienteIterator = colecaoDadosCliente.iterator();
 
 			boolean primeiroRegistro = true;
 
@@ -1408,8 +1320,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 			while (colecaoDadosClienteIterator.hasNext()) {
 
-				Object[] dadosCliente = (Object[]) colecaoDadosClienteIterator
-						.next();
+				Object[] dadosCliente = (Object[]) colecaoDadosClienteIterator.next();
 
 				if (primeiroRegistro) {
 
@@ -1520,42 +1431,29 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 					// Endereço do Cliente
 					FiltroClienteEndereco filtroClienteEndereco = new FiltroClienteEndereco();
-					filtroClienteEndereco.adicionarParametro(new ParametroSimples(
-							FiltroClienteEndereco.CLIENTE_ID, cliente.getId()));
-					filtroClienteEndereco.adicionarParametro(new ParametroSimples(
-							FiltroClienteEndereco.INDICADOR_CORRESPONDENCIA, ClienteEndereco.INDICADOR_ENDERECO_CORRESPONDENCIA));
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
-					filtroClienteEndereco
-							.adicionarCaminhoParaCarregamentoEntidade("enderecoTipo");
-					
-					Collection colecaoEnderecos = getControladorUtil()
-							.pesquisar(filtroClienteEndereco,
-									ClienteEndereco.class.getName());
-					
-					if (colecaoEnderecos != null && !colecaoEnderecos.isEmpty()) {
-						ClienteEndereco clienteEnderecoCorrespondencia = (ClienteEndereco) Util
-								.retonarObjetoDeColecao(colecaoEnderecos);
+					filtroClienteEndereco.adicionarParametro(new ParametroSimples(FiltroClienteEndereco.CLIENTE_ID, cliente.getId()));
+					filtroClienteEndereco.adicionarParametro(new ParametroSimples(FiltroClienteEndereco.INDICADOR_CORRESPONDENCIA,
+							ClienteEndereco.INDICADOR_ENDERECO_CORRESPONDENCIA));
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
+					filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade("enderecoTipo");
 
-						String endereco = clienteEnderecoCorrespondencia
-								.getEnderecoFormatado();
+					Collection colecaoEnderecos = getControladorUtil().pesquisar(filtroClienteEndereco, ClienteEndereco.class.getName());
+
+					if (colecaoEnderecos != null && !colecaoEnderecos.isEmpty()) {
+						ClienteEndereco clienteEnderecoCorrespondencia = (ClienteEndereco) Util.retonarObjetoDeColecao(colecaoEnderecos);
+
+						String endereco = clienteEnderecoCorrespondencia.getEnderecoFormatado();
 
 						if (endereco != null && !endereco.trim().equals("")) {
-							clienteEmitirBoletimCadastroHelper
-									.setEnderecoFormatado(endereco);
+							clienteEmitirBoletimCadastroHelper.setEnderecoFormatado(endereco);
 						}
 					}
-					
+
 					// CEP
 					if (dadosCliente[16] != null) { // 16
 						Cep cep = new Cep();
@@ -1567,12 +1465,12 @@ public class ControladorClienteSEJB extends ControladorComum {
 					if (dadosCliente[17] != null) { // 17
 						Bairro bairro = new Bairro();
 						bairro.setCodigo((Integer) dadosCliente[17]);
-						
+
 						Municipio municipio = new Municipio();
 						municipio.setId((Integer) dadosCliente[25]);
-						
+
 						bairro.setMunicipio(municipio);
-						
+
 						logradouroBairro.setBairro(bairro);
 					}
 
@@ -1580,8 +1478,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 					if (dadosCliente[18] != null) { // 18
 						EnderecoReferencia enderecoReferencia = new EnderecoReferencia();
 						enderecoReferencia.setId((Integer) dadosCliente[18]);
-						clienteEndereco
-								.setEnderecoReferencia(enderecoReferencia);
+						clienteEndereco.setEnderecoReferencia(enderecoReferencia);
 					}
 
 					// Número do Imóvel
@@ -1591,53 +1488,40 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 					// Complemento
 					if (dadosCliente[20] != null) { // 20
-						clienteEndereco
-								.setComplemento((String) dadosCliente[20]);
+						clienteEndereco.setComplemento((String) dadosCliente[20]);
 					}
 
 					clienteEndereco.setLogradouroCep(logradouroCep);
 					clienteEndereco.setLogradouroBairro(logradouroBairro);
-					clienteEmitirBoletimCadastroHelper
-							.setClienteEndereco(clienteEndereco);
+					clienteEmitirBoletimCadastroHelper.setClienteEndereco(clienteEndereco);
 
 					primeiroRegistro = false;
-					
+
 					// Tarifa Social Dado Economia
 					FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-					filtroClienteImovel.adicionarParametro(
-							new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, cliente.getId()));
-					filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(
-							FiltroClienteImovel.IMOVEL);
-					
-					Collection colecaoClienteImovel = getControladorUtil()
-							.pesquisar(filtroClienteImovel,
-									ClienteImovel.class.getName());
-					
+					filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, cliente.getId()));
+					filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
+
+					Collection colecaoClienteImovel = getControladorUtil().pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
+
 					if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
-						ClienteImovel clienteImovel = (ClienteImovel) Util
-						.retonarObjetoDeColecao(colecaoClienteImovel);
-						
-						FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia = 
-								new FiltroTarifaSocialDadoEconomia();
-						filtroTarifaSocialDadoEconomia.adicionarParametro(
-								new ParametroSimples(FiltroTarifaSocialDadoEconomia.IMOVEL_ID, clienteImovel.getImovel().getId()));
-						filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade(
-								FiltroTarifaSocialDadoEconomia.TARIFA_SOCIAL_CARTAO_TIPO);
-						filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade(
-								FiltroTarifaSocialDadoEconomia.RENDA_TIPO);
-						
-						Collection colecaoTarifaSocial = getControladorUtil()
-								.pesquisar(filtroTarifaSocialDadoEconomia,
-										TarifaSocialDadoEconomia.class.getName());
+						ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(colecaoClienteImovel);
+
+						FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia = new FiltroTarifaSocialDadoEconomia();
+						filtroTarifaSocialDadoEconomia.adicionarParametro(new ParametroSimples(FiltroTarifaSocialDadoEconomia.IMOVEL_ID, clienteImovel
+								.getImovel().getId()));
+						filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade(FiltroTarifaSocialDadoEconomia.TARIFA_SOCIAL_CARTAO_TIPO);
+						filtroTarifaSocialDadoEconomia.adicionarCaminhoParaCarregamentoEntidade(FiltroTarifaSocialDadoEconomia.RENDA_TIPO);
+
+						Collection colecaoTarifaSocial = getControladorUtil().pesquisar(filtroTarifaSocialDadoEconomia,
+								TarifaSocialDadoEconomia.class.getName());
 
 						if (colecaoTarifaSocial != null && !colecaoTarifaSocial.isEmpty()) {
-							TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) Util
-									.retonarObjetoDeColecao(colecaoTarifaSocial);
+							TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) Util.retonarObjetoDeColecao(colecaoTarifaSocial);
 							clienteEmitirBoletimCadastroHelper.setTarifaSocialDadoEconomia(tarifaSocialDadoEconomia);
 						}
-						
+
 					}
-					
 
 				}
 
@@ -1667,8 +1551,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 				}
 
 				clientesFone.add(clienteFone);
-				
-				
+
 			}
 
 			clienteEmitirBoletimCadastroHelper.setClienteFone(clientesFone);
@@ -1678,11 +1561,11 @@ public class ControladorClienteSEJB extends ControladorComum {
 		return clienteEmitirBoletimCadastroHelper;
 
 	}
-	
+
 	/**
 	 * 
-	 * Usado pelo Filtrar Cliente
-	 * Filtra o Cliente usando os paramentos informados
+	 * Usado pelo Filtrar Cliente Filtra o Cliente usando os paramentos
+	 * informados
 	 *
 	 * @author Rafael Santos
 	 * @date 27/11/2006
@@ -1690,73 +1573,45 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Collection filtrarCliente(
-			String codigo,
-			String cpf,
-			String rg,
-			String cnpj,
-			String nome,
-			String nomeMae,		
-			String cep,
-			String idMunicipio,
-			String idBairro,
-			String idLogradouro,
-			String indicadorUso,
-			String tipoPesquisa,
-			String tipoPesquisaNomeMae,
-			String clienteTipo, String idEsferaPoder,
-		    Integer numeroPagina) throws ControladorException {
-		
-		
+	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
+			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo,
+			String idEsferaPoder, Integer numeroPagina) throws ControladorException {
+
 		Collection colecaoDadosCliente = null;
 		Collection colecaoClientes = null;
 
 		try {
 
-			colecaoDadosCliente = this.repositorioCliente
-					.filtrarCliente(codigo,
-							cpf,
-							rg,
-							cnpj,
-							nome,
-							nomeMae,		
-							cep,
-							idMunicipio,
-							idBairro,
-							idLogradouro,
-							indicadorUso,
-							tipoPesquisa,
-							tipoPesquisaNomeMae,
-							clienteTipo, idEsferaPoder,
-						    numeroPagina);
+			colecaoDadosCliente = this.repositorioCliente.filtrarCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro,
+					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder, numeroPagina);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		if (colecaoDadosCliente != null && !colecaoDadosCliente.isEmpty()) {
-			
+
 			Iterator iteratorColecaoDadosCliente = colecaoDadosCliente.iterator();
-			Cliente cliente =  null;
+			Cliente cliente = null;
 			colecaoClientes = new ArrayList();
-			
-			while(iteratorColecaoDadosCliente.hasNext()){
-				
+
+			while (iteratorColecaoDadosCliente.hasNext()) {
+
 				cliente = new Cliente();
-				
+
 				Object[] array = (Object[]) iteratorColecaoDadosCliente.next();
-				
+
 				// codigo
 				if (array[0] != null) {
 					cliente.setId((Integer) array[0]);
 				}
-				
+
 				// nome
 				if (array[1] != null) {
 					cliente.setNome((String) array[1]);
 				}
-				
+
 				// rg
 				if (array[2] != null) {
 					cliente.setRg((String) array[2]);
@@ -1771,57 +1626,55 @@ public class ControladorClienteSEJB extends ControladorComum {
 				if (array[4] != null) {
 					cliente.setCnpj((String) array[4]);
 				}
-				
+
 				ClienteTipo tipoCliente = null;
 				// indicadorPessoaFisicaJuridica
 				if (array[5] != null) {
 					tipoCliente = new ClienteTipo();
-					tipoCliente.setIndicadorPessoaFisicaJuridica((Short)array[5]);
+					tipoCliente.setIndicadorPessoaFisicaJuridica((Short) array[5]);
 					cliente.setClienteTipo(tipoCliente);
 				}
-				
+
 				// descricao orgaoExpedidorRg
 				if (array[6] != null) {
 					OrgaoExpedidorRg orgaoExpedidorRg = new OrgaoExpedidorRg();
 					orgaoExpedidorRg.setDescricao((String) array[6]);
 					cliente.setOrgaoExpedidorRg(orgaoExpedidorRg);
 				}
-				
+
 				// silga orgaoExpedidorRg
 				if (array[7] != null) {
-					UnidadeFederacao unidadeFederacao  = new UnidadeFederacao();
-					
+					UnidadeFederacao unidadeFederacao = new UnidadeFederacao();
+
 					unidadeFederacao.setSigla((String) array[7]);
 					cliente.setUnidadeFederacao(unidadeFederacao);
 				}
 				// descricao tipo cliente
 				if (array[8] != null) {
-					if(tipoCliente == null){
+					if (tipoCliente == null) {
 						tipoCliente = new ClienteTipo();
 					}
-					tipoCliente.setDescricao((String)array[8]);
+					tipoCliente.setDescricao((String) array[8]);
 					cliente.setClienteTipo(tipoCliente);
 				}
-				
+
 				// indicador uso
 				if (array[9] != null) {
 					cliente.setIndicadorUso((Short) array[9]);
 				}
-								
-				
+
 				colecaoClientes.add(cliente);
 			}
-			
+
 		}
 
 		return colecaoClientes;
 	}
-	
-	
+
 	/**
 	 * 
-	 * Usado pelo Filtrar Cliente
-	 * Filtra a quantidade de Clientes usando os paramentos informados
+	 * Usado pelo Filtrar Cliente Filtra a quantidade de Clientes usando os
+	 * paramentos informados
 	 *
 	 * @author Rafael Santos
 	 * @date 27/11/2006
@@ -1829,66 +1682,41 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Object filtrarQuantidadeCliente(
-			String codigo,
-			String cpf,
-			String rg,
-			String cnpj,
-			String nome,
-			String nomeMae,		
-			String cep,
-			String idMunicipio,
-			String idBairro,
-			String idLogradouro,
-			String indicadorUso,
-			String tipoPesquisa,
-			String tipoPesquisaNomeMae,
-			String clienteTipo, String idEsferaPoder) throws ControladorException{ 	
-		
+	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
+			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder)
+			throws ControladorException {
+
 		Object quantidade = null;
 		Integer retorno = null;
-		
+
 		try {
-			quantidade = repositorioCliente.filtrarQuantidadeCliente(
-					 codigo,
-					 cpf,
-					 rg,
-					 cnpj,
-					 nome,
-					 nomeMae,		
-					 cep,
-					 idMunicipio,
-					 idBairro,
-					 idLogradouro,
-					 indicadorUso,
-					 tipoPesquisa,
-					 tipoPesquisaNomeMae,
-					 clienteTipo, idEsferaPoder);  
-			
+			quantidade = repositorioCliente.filtrarQuantidadeCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro,
+					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder);
+
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
-		if(quantidade != null){
+
+		if (quantidade != null) {
 			retorno = (Integer) quantidade;
-			
+
 		}
 
 		return retorno;
 	}
-	
+
 	/**
-	 * [UC0054] - Inserir Dados Tarifa Social 
+	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
 	 * Pesquisa os Clientes Imóveis pelo id do Cliente, indicador de uso, motivo
-	 * do fim da relação, pelo perfil do imóvel e pelo tipo da relação do cliente carregando o imóvel
+	 * do fim da relação, pelo perfil do imóvel e pelo tipo da relação do
+	 * cliente carregando o imóvel
 	 * 
-	 * Autor: Rafael Corrêa 
+	 * Autor: Rafael Corrêa
 	 * 
 	 * Data: 27/12/2006
 	 */
-	public Collection pesquisarClienteImovelPeloClienteTarifaSocial(Integer idCliente)
-			throws ControladorException {
+	public Collection pesquisarClienteImovelPeloClienteTarifaSocial(Integer idCliente) throws ControladorException {
 
 		try {
 			return repositorioClienteImovel.pesquisarClienteImovelPeloClienteTarifaSocial(idCliente);
@@ -1897,19 +1725,19 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 
 	}
-	
+
 	/**
-	 * [UC0054] - Inserir Dados Tarifa Social 
+	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa os Clientes Imóveis pelo id do Imóvel carregando o imóvel, o cliente, o perfil do imóvel, 
-	 * o orgão expedidor do RG e a unidade da federação
+	 * Pesquisa os Clientes Imóveis pelo id do Imóvel carregando o imóvel, o
+	 * cliente, o perfil do imóvel, o orgão expedidor do RG e a unidade da
+	 * federação
 	 * 
-	 * Autor: Rafael Corrêa 
+	 * Autor: Rafael Corrêa
 	 * 
 	 * Data: 27/12/2006
 	 */
-	public Collection pesquisarClienteImovelPeloImovelTarifaSocial(Integer idImovel) 
-			throws ControladorException {
+	public Collection pesquisarClienteImovelPeloImovelTarifaSocial(Integer idImovel) throws ControladorException {
 
 		try {
 			return repositorioClienteImovel.pesquisarClienteImovelPeloImovelTarifaSocial(idImovel);
@@ -1918,18 +1746,18 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 
 	}
-	
+
 	/**
-	 * [UC0054] - Inserir Dados Tarifa Social 
+	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa os Clientes Imóveis pelo id do Imóvel carregando os dados necessários para retornar o seu endereço 
+	 * Pesquisa os Clientes Imóveis pelo id do Imóvel carregando os dados
+	 * necessários para retornar o seu endereço
 	 * 
-	 * Autor: Rafael Corrêa 
+	 * Autor: Rafael Corrêa
 	 * 
 	 * Data: 27/12/2006
 	 */
-	public Collection pesquisarClienteImovelPeloImovelParaEndereco(Integer idImovel) 
-			throws ControladorException {
+	public Collection pesquisarClienteImovelPeloImovelParaEndereco(Integer idImovel) throws ControladorException {
 
 		try {
 			return repositorioClienteImovel.pesquisarClienteImovelPeloImovelParaEndereco(idImovel);
@@ -1938,7 +1766,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 
 	}
-	
+
 	/**
 	 * 
 	 * Verifica se é usuario iquilino ou não
@@ -1948,9 +1776,9 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 *
 	 * @param idImovel
 	 * @return
-	 * @throws ErroRepositorioException 
+	 * @throws ErroRepositorioException
 	 */
-	public boolean verificaUsuarioinquilino(Integer idImovel) throws ControladorException{
+	public boolean verificaUsuarioinquilino(Integer idImovel) throws ControladorException {
 		Collection colecao = null;
 		Integer idClienteUsuario = null;
 		boolean naoInquilino = false;
@@ -1960,76 +1788,70 @@ public class ControladorClienteSEJB extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-		if(colecao != null && !colecao.isEmpty()){
+		if (colecao != null && !colecao.isEmpty()) {
 			Iterator iteParmsCliente = colecao.iterator();
-			while(iteParmsCliente.hasNext()){
-				Integer idClienteBase = (Integer)iteParmsCliente.next();
-				if(idClienteBase.equals(idClienteUsuario)){
+			while (iteParmsCliente.hasNext()) {
+				Integer idClienteBase = (Integer) iteParmsCliente.next();
+				if (idClienteBase.equals(idClienteUsuario)) {
 					naoInquilino = true;
 					break;
 				}
-				
+
 			}
-		}else{
+		} else {
 			naoInquilino = true;
 		}
 		return naoInquilino;
 	}
-	
-	
+
 	/**
-	 * Atualiza logradouroCep de um ou mais imóveis  
+	 * Atualiza logradouroCep de um ou mais imóveis
 	 * 
 	 * [UC0] Atualizar Logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/02/2007
 	 * 
-	 * @param 
+	 * @param
 	 * @return void
 	 */
-	public void atualizarLogradouroCep(LogradouroCep logradouroCepAntigo, 
-			LogradouroCep logradouroCepNovo) throws ControladorException {
-		
+	public void atualizarLogradouroCep(LogradouroCep logradouroCepAntigo, LogradouroCep logradouroCepNovo) throws ControladorException {
+
 		try {
-		
-			this.repositorioClienteEndereco
-					.atualizarLogradouroCep(logradouroCepAntigo, logradouroCepNovo);
-		
+
+			this.repositorioClienteEndereco.atualizarLogradouroCep(logradouroCepAntigo, logradouroCepNovo);
+
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 	}
-	
-	
+
 	/**
-	 * Atualiza logradouroBairro de um ou mais imóveis  
+	 * Atualiza logradouroBairro de um ou mais imóveis
 	 * 
 	 * [UC0] Atualizar Logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/02/2007
 	 * 
-	 * @param 
+	 * @param
 	 * @return void
 	 */
-	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, 
-			LogradouroBairro logradouroBairroNovo) throws ControladorException {
-		
+	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, LogradouroBairro logradouroBairroNovo) throws ControladorException {
+
 		try {
-		
-			this.repositorioClienteEndereco
-					.atualizarLogradouroBairro(logradouroBairroAntigo, logradouroBairroNovo);
-		
+
+			this.repositorioClienteEndereco.atualizarLogradouroBairro(logradouroBairroAntigo, logradouroBairroNovo);
+
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 	}
-	
+
 	/**
 	 * [UC0544] Gerar Arwuivo Texto do Faturamento
 	 * 
@@ -2042,39 +1864,37 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return Colletion
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarClienteImovelGerarArquivoFaturamento()
-		throws ControladorException {
-		
+	public Collection pesquisarClienteImovelGerarArquivoFaturamento() throws ControladorException {
+
 		try {
-		
+
 			Collection clientes = new HashSet();
-			
-			Collection colecaoObjetos = this.repositorioClienteImovel
-					.pesquisarClienteImovelGerarArquivoFaturamento();
-			if(!colecaoObjetos.isEmpty()){
+
+			Collection colecaoObjetos = this.repositorioClienteImovel.pesquisarClienteImovelGerarArquivoFaturamento();
+			if (!colecaoObjetos.isEmpty()) {
 				Iterator iterator = colecaoObjetos.iterator();
-				while(iterator.hasNext()){
-					Object[] objeto = (Object[])iterator.next();
-					
+				while (iterator.hasNext()) {
+					Object[] objeto = (Object[]) iterator.next();
+
 					Cliente cliente = new Cliente();
-					if(objeto[0] != null){
-						cliente.setId((Integer)objeto[0]);
+					if (objeto[0] != null) {
+						cliente.setId((Integer) objeto[0]);
 					}
-					if(objeto[1] != null){
-						cliente.setNome((String)objeto[1]);
+					if (objeto[1] != null) {
+						cliente.setNome((String) objeto[1]);
 					}
 					clientes.add(cliente);
 				}
 			}
 			return clientes;
-		
+
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 	}
-	
+
 	/**
 	 * [UC0864] Gerar Certidão Negativa por Cliente
 	 * 
@@ -2085,7 +1905,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @throws ControladorException
 	 */
 	public Collection<Integer> pesquisarClientesAssociadosResponsavel(Integer idCliente) throws ControladorException {
-	
+
 		try {
 
 			return this.repositorioCliente.pesquisarClientesAssociadosResponsavel(idCliente);
@@ -2094,57 +1914,52 @@ public class ControladorClienteSEJB extends ControladorComum {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Pesquisa o rg do cliente do parcelamento a partir do idParcelamento
-	 * Autor: Vivianne Sousa 
-	 * Data: 20/06/2007
+	 * Autor: Vivianne Sousa Data: 20/06/2007
 	 */
-	public Cliente pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(Integer idParcelamento)
-			throws ControladorException {
+	public Cliente pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(Integer idParcelamento) throws ControladorException {
 
 		Cliente cliente = null;
 		Object[] dadosCliente = null;
 
 		try {
-			dadosCliente = this.repositorioClienteImovel
-					.pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(idParcelamento);
+			dadosCliente = this.repositorioClienteImovel.pesquisarDadosClienteDoParcelamentoRelatorioParcelamento(idParcelamento);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		if (dadosCliente != null) {
-			
+
 			cliente = new Cliente();
-			
-					
+
 			if (dadosCliente[0] != null) {
 				// orgão expedidor
 				OrgaoExpedidorRg orgaoExpedidorRg = new OrgaoExpedidorRg();
-				orgaoExpedidorRg.setDescricao((String)dadosCliente[0]);
+				orgaoExpedidorRg.setDescricao((String) dadosCliente[0]);
 				cliente.setOrgaoExpedidorRg(orgaoExpedidorRg);
 			}
-			
+
 			if (dadosCliente[1] != null) {
 				// unidade federativa
 				UnidadeFederacao unidadeFederacao = new UnidadeFederacao();
 				unidadeFederacao.setSigla((String) dadosCliente[1]);
 				cliente.setUnidadeFederacao(unidadeFederacao);
 			}
-			
+
 			if (dadosCliente[2] != null) {
 				// rg
-				cliente.setRg((String)dadosCliente[2]);
+				cliente.setRg((String) dadosCliente[2]);
 			}
-			
+
 		}
 
 		return cliente;
 	}
-	
-	
+
 	/**
 	 * [UC0214] Efetuar Parcelamento de Débitos
 	 *
@@ -2154,7 +1969,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Cliente obterIdENomeCliente(String cpf) throws ControladorException{
+	public Cliente obterIdENomeCliente(String cpf) throws ControladorException {
 		Object[] dadosCliente = null;
 		Cliente cliente = null;
 
@@ -2166,30 +1981,28 @@ public class ControladorClienteSEJB extends ControladorComum {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		if (dadosCliente != null) {
 			cliente = new Cliente();
 			// id do Cliente
 			if (dadosCliente[0] != null) {
-				cliente.setId((Integer)dadosCliente[0]);
+				cliente.setId((Integer) dadosCliente[0]);
 			}
-			
+
 			// nome de Cliente
 			if (dadosCliente[1] != null) {
-				cliente.setNome((String)dadosCliente[1]);
+				cliente.setNome((String) dadosCliente[1]);
 			}
-			
+
 		}
 
 		return cliente;
 	}
-	
-	
+
 	/**
 	 * [UC0214] Efetuar Parcelamento de Débitos
 	 *
-	 *Alterado para registrar a transação na atualização
-	 *do CPF do cliente.
+	 * Alterado para registrar a transação na atualização do CPF do cliente.
 	 *
 	 * @author Anderson Italo, Vivianne Sousa
 	 * @date 11/08/2009, 30/07/2007
@@ -2197,53 +2010,43 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarCPFCliente(String cpf,Integer idCliente, Usuario usuarioLogado) throws ControladorException{
-	
+	public void atualizarCPFCliente(String cpf, Integer idCliente, Usuario usuarioLogado) throws ControladorException {
+
 		try {
-			
+
 			String zeros = "";
 			for (int a = 0; a < (11 - cpf.length()); a++) {
 				zeros = zeros.concat("0");
 			}
-			// concatena os zeros ao numero
-			// caso o numero seja diferente de nulo
 			cpf = zeros.concat(cpf);
-			
+
 			FiltroCliente filtroCliente = new FiltroCliente();
 			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
-			
-			Collection colecaoClientes = this.getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
-			
-			Cliente cliente = (Cliente)Util.retonarObjetoDeColecao(colecaoClientes);
-			
-			cliente.setCpf(cpf);
-			
-			//------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_CLIENTE_ATUALIZAR, cliente.getId(),
-					cliente.getId(),
-					new UsuarioAcaoUsuarioHelper(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			Collection colecaoClientes = this.getControladorUtil().pesquisar(filtroCliente, Cliente.class.getName());
+
+			Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(colecaoClientes);
+
+			cliente.setCpf(cpf);
+
+			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CLIENTE_ATUALIZAR, cliente.getId(), cliente.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 			registradorOperacao.registrarOperacao(cliente);
 			String[] atributos = new String[1];
 			atributos[0] = "cpf";
-			//Registra a transação apenas para os atributos que quer-se registrar
 			getControladorTransacao().registrarTransacao(cliente, atributos);
-			
-			// ------------ </REGISTRAR TRANSAÇÃO>----------------------------
 
-			this.repositorioCliente.atualizarCPFCliente(cpf,idCliente);
+			this.repositorioCliente.atualizarCPFCliente(cpf, idCliente);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 	}
-	
-	public Cliente retornaClienteUsuario(Integer idImovel)throws ControladorException{
+
+	public Cliente retornaClienteUsuario(Integer idImovel) throws ControladorException {
 		try {
 			return this.repositorioClienteImovel.retornaClienteUsuario(idImovel);
 		} catch (ErroRepositorioException ex) {
@@ -2251,9 +2054,8 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	
-	public Cliente retornaClienteProprietario(Integer idImovel) throws ControladorException{
+
+	public Cliente retornaClienteProprietario(Integer idImovel) throws ControladorException {
 		try {
 			return this.repositorioClienteImovel.retornaClienteProprietario(idImovel);
 		} catch (ErroRepositorioException ex) {
@@ -2262,244 +2064,206 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, 
-			Short idClienteRelacaoTipo) throws ControladorException{
-	
+
+	@SuppressWarnings("rawtypes")
+	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, Short idClienteRelacaoTipo) throws ControladorException {
+
 		try {
-			IClienteAtualizacaoCadastral cliente = null;	
-			
-			Object[] element =  this.repositorioCliente.obterDadosCliente(idImovel, idClienteRelacaoTipo);
-			
-			if (element != null) {				
+			IClienteAtualizacaoCadastral cliente = null;
+
+			Object[] element = this.repositorioCliente.obterDadosCliente(idImovel, idClienteRelacaoTipo);
+
+			if (element != null) {
 
 				cliente = new ClienteAtualizacaoCadastral();
-			
-				cliente.setIdCliente((Integer) element[0]);					
-				
+
+				cliente.setIdCliente((Integer) element[0]);
+
 				cliente.setIdImovel(idImovel);
-					
-				if (element[1] != null){
+
+				if (element[1] != null) {
 					cliente.setNome((String) element[1]);
 				}
-				
-				if (element[2] != null){
+
+				if (element[2] != null) {
 					cliente.setIdClienteTipo((Integer) element[2]);
 				}
-				
-				if (element[3] != null){
+
+				if (element[3] != null) {
 					cliente.setCpf((String) element[3]);
-				}else if(element[4] != null){
+				} else if (element[4] != null) {
 					cliente.setCpf((String) element[4]);
 				}
-				
-				if (element[5] != null){
+
+				if (element[5] != null) {
 					cliente.setRg((String) element[5]);
 				}
-				
-				if (element[6] != null){
+
+				if (element[6] != null) {
 					cliente.setDataEmissaoRg((Date) element[6]);
 				}
-				
-				if (element[7] != null){
-					cliente.setDsAbreviadaOrgaoExpedidorRg((String)element[7]);
+
+				if (element[7] != null) {
+					cliente.setDsAbreviadaOrgaoExpedidorRg((String) element[7]);
 				}
-				
-				if (element[8] != null){
-					cliente.setDsUFSiglaOrgaoExpedidorRg((String)element[8]);
+
+				if (element[8] != null) {
+					cliente.setDsUFSiglaOrgaoExpedidorRg((String) element[8]);
 				}
-				
-				if (element[9] != null){
+
+				if (element[9] != null) {
 					cliente.setDataNascimento((Date) element[9]);
 				}
-				
-				//Profissão ou Ramo de Atividade
-				if(element[25] != null){
-					if(((Short)element[25]).equals(ClienteTipo.INDICADOR_PESSOA_FISICA)){
-						if (element[10] != null){
-							cliente.setIdProfissao((Integer)element[10]);
-						}	
-					}else{
-						if(element[24] != null){
-							cliente.setIdRamoAtividade((Integer)element[24]);
-						}	
+
+				// Profissão ou Ramo de Atividade
+				if (element[25] != null) {
+					if (((Short) element[25]).equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
+						if (element[10] != null) {
+							cliente.setIdProfissao((Integer) element[10]);
+						}
+					} else {
+						if (element[24] != null) {
+							cliente.setIdRamoAtividade((Integer) element[24]);
+						}
 					}
 				}
-				
-				if (element[11] != null){
-					cliente.getPessoaSexo().setId(((Integer)element[11]));
+
+				if (element[11] != null) {
+					cliente.getPessoaSexo().setId(((Integer) element[11]));
 				}
-				
-				if (element[12] != null){
+
+				if (element[12] != null) {
 					cliente.setNomeMae((String) element[12]);
 				}
-				
-				if (element[13] != null){
+
+				if (element[13] != null) {
 					cliente.setIndicadorUso((Short) element[13]);
 				}
-				
-				if (element[14] != null){
+
+				if (element[14] != null) {
 					cliente.setEmail((String) element[14]);
 				}
-				
-				if (element[15] != null){
-					cliente.setIdEnderecoTipo((Integer)element[15]);
+
+				if (element[15] != null) {
+					cliente.setIdEnderecoTipo((Integer) element[15]);
 				}
-				
-				if(element[16] != null){
+
+				if (element[16] != null) {
 					cliente.setIdLogradouro((Integer) element[16]);
-				}else if(element[17] != null){
+				} else if (element[17] != null) {
 					cliente.setIdLogradouro((Integer) element[17]);
 				}
-				
-				//Logradouro
+
+				// Logradouro
 				Collection colecaoEndereco = getControladorEndereco().pesquisarLogradouroCliente((Integer) element[0]);
-				if(colecaoEndereco != null && !colecaoEndereco.isEmpty()){
-					
+				if (colecaoEndereco != null && !colecaoEndereco.isEmpty()) {
+
 					Iterator enderecoIterator = colecaoEndereco.iterator();
-					
+
 					Object[] arrayEndereco = (Object[]) enderecoIterator.next();
-					
-					String nome = (String)arrayEndereco[0];				
+
+					String nome = (String) arrayEndereco[0];
 					cliente.setDescricaoLogradouro(nome);
-										
-					if(arrayEndereco[3] != null){
-						Integer idTipo = (Integer)arrayEndereco[3];
+
+					if (arrayEndereco[3] != null) {
+						Integer idTipo = (Integer) arrayEndereco[3];
 						cliente.setIdLogradouroTipo(idTipo);
-						String tipo = (String)arrayEndereco[1];
+						String tipo = (String) arrayEndereco[1];
 						cliente.setDsLogradouroTipo(tipo);
 					}
-					
-					if(arrayEndereco[4] != null){
-						Integer idTitulo = (Integer)arrayEndereco[4];
+
+					if (arrayEndereco[4] != null) {
+						Integer idTitulo = (Integer) arrayEndereco[4];
 						cliente.setIdLogradouroTitulo(idTitulo);
-						String titulo = (String)arrayEndereco[2];
+						String titulo = (String) arrayEndereco[2];
 						cliente.setDsLogradouroTitulo(titulo);
-					}	
-					
-					if(arrayEndereco[5] != null){
-						Integer idMunicipio = (Integer)arrayEndereco[5];
+					}
+
+					if (arrayEndereco[5] != null) {
+						Integer idMunicipio = (Integer) arrayEndereco[5];
 						cliente.setIdMunicipio(idMunicipio);
-						String nomeMunicipio = (String)arrayEndereco[6];
+						String nomeMunicipio = (String) arrayEndereco[6];
 						cliente.setNomeMunicipio(nomeMunicipio);
 					}
-					
-					if(arrayEndereco[7] != null){
-						Integer idUnidadeFederacao = (Integer)arrayEndereco[7];
+
+					if (arrayEndereco[7] != null) {
+						Integer idUnidadeFederacao = (Integer) arrayEndereco[7];
 						cliente.setIdUinidadeFederacao(idUnidadeFederacao);
-						String dsUnidadeFederacao = (String)arrayEndereco[8];
+						String dsUnidadeFederacao = (String) arrayEndereco[8];
 						cliente.setDsUFSiglaMunicipio(dsUnidadeFederacao);
 					}
 				}
-				
-				//Cep
-				if(element[18] != null){
+
+				// Cep
+				if (element[18] != null) {
 					cliente.setCodigoCep((Integer) element[18]);
 				}
-				
-				//Bairro
-				if(element[19] != null){
+
+				// Bairro
+				if (element[19] != null) {
 					cliente.setIdBairro((Integer) element[19]);
 				}
-				
-				//Descrição do bairro
-				if(element[20] != null){
+
+				// Descrição do bairro
+				if (element[20] != null) {
 					cliente.setNomeBairro((String) element[20]);
 				}
-				
-				//Código de referência
-				if (element[21] != null){
+
+				// Código de referência
+				if (element[21] != null) {
 					cliente.setIdEnderecoReferencia((Integer) element[21]);
 				}
-				
-				//Número do imóvel
-				String numeroImovel = (String)element[22];
-				if(numeroImovel != null && !numeroImovel.trim().equals("")){
+
+				// Número do imóvel
+				String numeroImovel = (String) element[22];
+				if (numeroImovel != null && !numeroImovel.trim().equals("")) {
 					cliente.setNumeroImovel(numeroImovel);
 				}
-				
-				//Complemento do Imóvel
+
+				// Complemento do Imóvel
 				String trunk = ((String) element[23]);
-				
-				if ( trunk != null && trunk.length() > 25 ){
-					trunk = trunk.substring( 0, 24 );
-				}				
-								
-				if(element[23] != null){
+
+				if (trunk != null && trunk.length() > 25) {
+					trunk = trunk.substring(0, 24);
+				}
+
+				if (element[23] != null) {
 					cliente.setComplementoEndereco(trunk);
 				}
-				
+
 				cliente.setIdClienteRelacaoTipo(new Integer(idClienteRelacaoTipo));
-				
 			}
-			
 			return cliente;
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
-	
-	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 25/08/2008
-	 * 
-	 * @return Cliente Fone
-	 * @throws ControladorException
-	 */
 
-	public Collection obterDadosClienteFone(Integer idCliente)
-			throws ControladorException {
-	
+	@SuppressWarnings("rawtypes")
+	public Collection obterDadosClienteFone(Integer idCliente) throws ControladorException {
 		try {
-
 			return this.repositorioCliente.obterDadosClienteFone(idCliente);
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
-	
-    /**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 25/09/2008
-	 */
-	public Integer verificaExistenciaClienteAtualizacaoCadastral(Integer idCliente) throws ControladorException{
-		
+
+	public Integer verificaExistenciaClienteAtualizacaoCadastral(Integer idCliente) throws ControladorException {
 		try {
-
 			return this.repositorioCliente.verificaExistenciaClienteAtualizacaoCadastral(idCliente);
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
-	
-	/**
-	 * [UC0014] Manter Imóvel
-	 * [FS0017] Registra Fim de Relação do(s) Cliente(s) com Imóvel
-	 *
-	 * @author Ana Maria
-	 * @date 13/10/2008
-	 *
-	 * @return Collection
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarClienteImovel(Integer idImovel)
-		throws ControladorException{
+
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarClienteImovel(Integer idImovel) throws ControladorException {
 		try {
 
 			return repositorioClienteImovel.pesquisarClienteImovel(idImovel);
@@ -2507,15 +2271,9 @@ public class ControladorClienteSEJB extends ControladorComum {
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
-		}	
+		}
 	}
-	
-	/**
-	 * Pesquisa a quantidade de clientes responsáveis superiores com os condicionais informados
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 18/11/08
-	 */
+
 	public Integer pesquisarClienteResponsavelSuperiorParaPaginacaoCount(PesquisarClienteResponsavelSuperiorHelper helper) throws ControladorException {
 		try {
 			return this.repositorioCliente.pesquisarClienteResponsavelSuperiorParaPaginacaoCount(helper);
@@ -2525,15 +2283,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	/**
-	 * Pesquisa os clientes responsáveis superiores com os condicionais informados
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 18/11/08
-	 */
-	public Collection<Cliente> pesquisarClienteResponsavelSuperiorParaPaginacao(PesquisarClienteResponsavelSuperiorHelper helper, Integer numeroPagina) throws ControladorException {
-		
+
+	public Collection<Cliente> pesquisarClienteResponsavelSuperiorParaPaginacao(PesquisarClienteResponsavelSuperiorHelper helper, Integer numeroPagina)
+			throws ControladorException {
+
 		try {
 			return this.repositorioCliente.pesquisarClienteResponsavelSuperiorParaPaginacao(helper, numeroPagina);
 		} catch (ErroRepositorioException ex) {
@@ -2541,390 +2294,207 @@ public class ControladorClienteSEJB extends ControladorComum {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
-	}
-	
-	/**
-	 * Pesquisar dados do Cliente Atualização Cadastral
-	 * 
-	 * @param idCliente, idImovel
-	 * @return ClienteAtualizacaoCadastral
-	 * 
-	 * @author Ana Maria
-     * @date 15/05/2009
-	 * @exception ErroRepositorioException
-	 */
-	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
-		throws ControladorException {
-	    try {
-	        return repositorioCliente.pesquisarClienteAtualizacaoCadastral(idCliente, idImovel, idClienteRelacaoTipo);
-	    } catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+
 	}
 
-	/**
-	 * 
-	 * Pesquisar Cliente Fone Atualização Cadastral
-	 *
-	 * @author Ana Maria
-	 * @date 24/10/2008
-	 *
-	 * @param idCliente
-	 * @throws ErroRepositorioException 
-	 */
-	public Collection<ClienteFoneAtualizacaoCadastral> pesquisarClienteFoneAtualizacaoCadastral(Integer idCliente, Integer idMatricula, 
-			Integer idTipoFone, Integer idClienteRelacaoTipo, String numeroFone)
-		throws ControladorException {
-	    try {
-	        return repositorioCliente.pesquisarClienteFoneAtualizacaoCadastral(idCliente, idMatricula, idTipoFone, idClienteRelacaoTipo, numeroFone);
-	    } catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+			throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarClienteAtualizacaoCadastral(idCliente, idImovel, idClienteRelacaoTipo);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	/**
-	 * @author Daniel Alves
-	 * @date 02/09/2010
-	 * @param idClienteImovel
-	 * @throws ErroRepositorioException
-	 */
-	public void atualizarIndicadorNomeContaClienteImovel(int idClienteImovel) throws ControladorException{
-		
-		try{
+
+	public Collection<ClienteFoneAtualizacaoCadastral> pesquisarClienteFoneAtualizacaoCadastral(Integer idCliente, Integer idMatricula, Integer idTipoFone,
+			Integer idClienteRelacaoTipo, String numeroFone) throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarClienteFoneAtualizacaoCadastral(idCliente, idMatricula, idTipoFone, idClienteRelacaoTipo, numeroFone);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	public void atualizarIndicadorNomeContaClienteImovel(int idClienteImovel) throws ControladorException {
+
+		try {
 			repositorioClienteImovel.atualizarIndicadorNomeContaClienteImovel(idClienteImovel);
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-		
-	}
-	
-	
-	/**
-	 * 
-	 * Atualiza telefone padrão
-	 *
-	 * @author Daniel Alves
-	 * @date 06/09/2010
-	 *
-	 * @param idCliente
-	 * @param idClienteFonePadrao  (novo telefone padrão do cliente).
-	 * @throws ControladorException 
-	 */
-	public void atualizarTelefonePadrao(String idCliente, String idClienteFonePadrao) throws ControladorException{
-		
-		try{			
-			repositorioCliente.atualizarTelefonePadrao(idCliente, idClienteFonePadrao);
-			
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-		
-	}
-	
-	/**
-	 * Remove todos os telefones de um determinado cliente
-	 * 
-	 * @param idCliente
-	 *            Código do cliente que terá seus telefones apagados
-	 * @exception ErroRepositorioException
-	 *                Erro no BD
-	 */
-	public void removerTodosTelefonesPorCliente(Integer idCliente) throws ControladorException{			
-		try{			
-			repositorioCliente.removerTodosTelefonesPorCliente(idCliente);
-			
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-	}
-	
-	
-	/**
-	 * 
-	 * Retorna o cliente usuario apartir do id do imovel
-	 *
-	 * @author Mariana Victor
-	 * @date 17/01/2011
-	 *
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException 
-	 */
-	public Cliente retornaDadosClienteUsuario(Integer idImovel) throws ControladorException {
-		try{			
-			return repositorioClienteImovel.retornaDadosClienteUsuario(idImovel);
-			
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-	}
-	
+			throw new ControladorException("erro.sistema", ex);
+		}
 
-	/**
-	 * [UC0541] Emitir 2a Via Conta Internet
-	 * 
-	 * [SB0003] – Obter Nome do Cliente
-	 * @author Mariana Victor
-	 * @date 11/03/2011
-	 * 
-	 * */
+	}
+
+	public void atualizarTelefonePadrao(String idCliente, String idClienteFonePadrao) throws ControladorException {
+
+		try {
+			repositorioCliente.atualizarTelefonePadrao(idCliente, idClienteFonePadrao);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+	}
+
+	public void removerTodosTelefonesPorCliente(Integer idCliente) throws ControladorException {
+		try {
+			repositorioCliente.removerTodosTelefonesPorCliente(idCliente);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	public Cliente retornaDadosClienteUsuario(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioClienteImovel.retornaDadosClienteUsuario(idImovel);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
 	public String obterNomeCliente(Integer idImovel) throws ControladorException {
-		
-		try{
-			
+		try {
 			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
-			
-			Cliente cliente  = this.repositorioClienteImovel.retornaDadosClienteUsuario(idImovel);
-			
+
+			Cliente cliente = this.repositorioClienteImovel.retornaDadosClienteUsuario(idImovel);
+
 			if (sistemaParametro.getIndicadorUsoNMCliReceitaFantasia().equals(ConstantesSistema.SIM)
-				&& cliente.getIndicadorUsoNomeFantasiaConta().equals(ConstantesSistema.SIM)
-				&& cliente.getNomeAbreviado() != null) {
-				
+					&& cliente.getIndicadorUsoNomeFantasiaConta().equals(ConstantesSistema.SIM) && cliente.getNomeAbreviado() != null) {
+
 				return cliente.getNomeAbreviado();
-					
+
 			} else {
 				return cliente.getNome();
 			}
-			
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-		
-	}
-	
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social  
-	 * [SB0002]–Verifica Critério Recadastramento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 25/03/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Cliente pesquisarClienteUsuarioDoImovel(Integer idImovel) throws ControladorException {
-		try{			
-			return repositorioCliente.pesquisarClienteUsuarioDoImovel(idImovel);
-			
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
+
 	}
 
-	/**
-	 * [UC1136] Inserir Contrato de Parcelamento por Cliente
-	 * Filtra os Clientes por Id ou Nome para ser utilizado no Autocomplete
-	 *
-	 * @author Paulo Diniz
-	 * @date 04/04/2011
-	 *
-	 * @param valor
-	 * @throws ControladorException 
-	 */
-	public Collection filtrarAutocompleteCliente(String valor) throws ControladorException{
-		try{			
-			return repositorioCliente.filtrarAutocompleteCliente(valor);
-			
+	public Cliente pesquisarClienteUsuarioDoImovel(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarClienteUsuarioDoImovel(idImovel);
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	/**
-	 * [UC1136] Inserir Contrato de Parcelamento por Cliente
-	 * Filtra os Clientes Responsavel por Id ou Nome para ser utilizado no Autocomplete
-	 *
-	 * @author Paulo Diniz
-	 * @date 04/04/2011
-	 *
-	 * @param valor
-	 * @throws ControladorException 
-	 */
-	public Collection filtrarAutocompleteClienteResponsavel(String valor) throws ControladorException{
-		try{			
+
+	@SuppressWarnings("rawtypes")
+	public Collection filtrarAutocompleteCliente(String valor) throws ControladorException {
+		try {
 			return repositorioCliente.filtrarAutocompleteCliente(valor);
-			
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	
-	/**
-	 * Verifica Clientes Associados a um Cliente sem CNPJ ou ICPESSOAFISICAJURIDICA diferente de 2
-	 * 
-	 * @author Paulo Diniz
-	 * @date 10/04/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Integer pesquisarQtdClientesAssociadosResponsavelNaoJuridica(Integer idCliente)
-			throws ControladorException{
-		try{			
+
+	@SuppressWarnings("rawtypes")
+	public Collection filtrarAutocompleteClienteResponsavel(String valor) throws ControladorException {
+		try {
+			return repositorioCliente.filtrarAutocompleteCliente(valor);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	public Integer pesquisarQtdClientesAssociadosResponsavelNaoJuridica(Integer idCliente) throws ControladorException {
+		try {
 			return repositorioCliente.pesquisarQtdClientesAssociadosResponsavelNaoJuridica(idCliente);
-			
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	/**
-	 * Retorna Lista de Imóveis associados ao cliente
-	 * 
-	 * @author Paulo Diniz
-	 * @date 10/04/2011
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarImoveisAssociadosCliente(Integer idCliente, Short relacaoTipo )throws ControladorException{
-		try{			
+
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarImoveisAssociadosCliente(Integer idCliente, Short relacaoTipo) throws ControladorException {
+		try {
 			return repositorioCliente.pesquisarImoveisAssociadosCliente(idCliente, relacaoTipo);
-			
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	/**
-	 * [UC0214] Efetuar Parcelamento de Débitos Através da Loja Virtual
-	 * 
-	 * Caso o CPF do cliente passado no parâmetro seja do cliente proprietário
-	 * ou do cliente usuário do imóvel o método retorna o nome do cliente, caso
-	 * contrário o método retorna null.
-	 * 
-	 * @author Diogo Peixoto
-	 * @date 28/06/2011
-	 * 
-	 * @param CPFCliente
-	 * @param Matricula
-	 * 
-	 * @throws ControladorException
-	 * @return String
-	 */
-	public String validarCliente(String cpfCliente, Integer matricula) throws ControladorException{
-		try{			
+
+	public String validarCliente(String cpfCliente, Integer matricula) throws ControladorException {
+		try {
 			return repositorioCliente.validarCliente(cpfCliente, matricula);
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-	}
-	/**
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
-	 * 
-	 * Pesquisar os clientes a partir do imóvel e o tipo de relação com o cliente
-	 * 
-	 * @author Hugo Azevedo
-	 * @data 02/07/2011
-	 */
-	
-	public Collection obterClienteImovelporRelacaoTipo(Integer idImovel, Integer idRelacaoTipo) throws ControladorException{
-		try{
-			
-			return repositorioCliente.obterClienteImovelporRelacaoTipo(idImovel,idRelacaoTipo);
-				
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-		
-	}
-	
-	/**
-	 * 
-	 * Retorna o cliente responsável
-	 *
-	 * @author Sávio Luiz
-	 * @date 04/04/2007
-	 *
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException 
-	 */
-	public Integer retornaIdClienteResponsavelIndicadorEnvioConta(Integer idImovel)
-			throws ControladorException{
-		try{
-					
-		  return repositorioClienteImovel.retornaIdClienteResponsavelIndicadorEnvioConta(idImovel);
-					
-		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-				
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
 
-	/**
-	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
-	 * 
-	 * @author Mariana Victor
-	 * @data 05/08/2011
-	 */
-	public Cliente pesquisarDadosCliente(Integer idCliente)
-			throws ControladorException {
-		try{
-					
-		  return repositorioCliente.pesquisarDadosCliente(idCliente);
-					
+	@SuppressWarnings("rawtypes")
+	public Collection obterClienteImovelporRelacaoTipo(Integer idImovel, Integer idRelacaoTipo) throws ControladorException {
+		try {
+
+			return repositorioCliente.obterClienteImovelporRelacaoTipo(idImovel, idRelacaoTipo);
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
-				
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	/**
-	 * [UC1213] Emitir Relatorio de Ordem de Servico de Fiscalizacao
-	 * 
-	 * 
-	 * @author Paulo Diniz
-	 * @date 06/08/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */	
-	public ClienteImovel pesquisarClienteImovelOSFiscalizada(
-			Integer idImovel) throws ControladorException{
-		try{
-			
-			  return repositorioClienteImovel.pesquisarClienteImovelOSFiscalizada(idImovel);
-						
-			} catch (ErroRepositorioException ex) {
-		        throw new ControladorException("erro.sistema", ex);
-		    }
+
+	public Integer retornaIdClienteResponsavelIndicadorEnvioConta(Integer idImovel) throws ControladorException {
+		try {
+
+			return repositorioClienteImovel.retornaIdClienteResponsavelIndicadorEnvioConta(idImovel);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+
 	}
-	
-	/**
-	 * @param idClienteTipo
-	 *            
-	 * @exception ErroRepositorioException
-	 *                Erro no BD
-	 * @author Wellington Rocha               
-	 */
-	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException{			
-		try{			
+
+	public Cliente pesquisarDadosCliente(Integer idCliente) throws ControladorException {
+		try {
+
+			return repositorioCliente.pesquisarDadosCliente(idCliente);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+	}
+
+	public ClienteImovel pesquisarClienteImovelOSFiscalizada(Integer idImovel) throws ControladorException {
+		try {
+
+			return repositorioClienteImovel.pesquisarClienteImovelOSFiscalizada(idImovel);
+
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException {
+		try {
 			return repositorioCliente.pesquisarClienteTipo(idClienteTipo);
-			
+
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
-	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception{
+
+	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception {
 		return repositorioCliente.pesquisarClientePorCpfCnpj(cpfCnpj);
 	}
-	
-	/**
-	 * [UC0671] Gerar Movimento de Inclusão de Negativação
-	 * [SB0005] - Gerar Negativação para o Imóvel
-	 */
-	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(
-			Integer idImovel, Integer idClienteRelacaoTipo) throws ControladorException {
-		try{
-		  return repositorioClienteImovel.pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(idImovel, idClienteRelacaoTipo);
+
+	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(Integer idImovel, Integer idClienteRelacaoTipo) throws ControladorException {
+		try {
+			return repositorioClienteImovel.pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(idImovel, idClienteRelacaoTipo);
 		} catch (ErroRepositorioException ex) {
-	        throw new ControladorException("erro.sistema", ex);
-	    }
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
-	
+
 	public boolean existeEnderecoParaCliente(Integer idCliente) throws ControladorException {
 		try {
 			boolean retorno = false;
@@ -2937,7 +2507,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+
 	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ControladorException {
 		try {
 			return repositorioCliente.pesquisarDadosClienteParaNegativacao(idCliente, cnpjEmpresa);
@@ -2945,10 +2515,18 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	public  Localidade pesquisarLocalidadeCliente(Integer idCliente) throws ControladorException {
+
+	public Localidade pesquisarLocalidadeCliente(Integer idCliente) throws ControladorException {
 		try {
 			return repositorioClienteEndereco.pesquisarLocalidadeCliente(idCliente);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	public String obterNomeClienteConta(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioCliente.obterNomeClienteConta(idImovel);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
