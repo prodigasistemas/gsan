@@ -178,9 +178,13 @@ public class CalcularValoresRetificarContaAction extends GcomAction {
         }
         
         // Inclui valor do Rateio na conta de agua
-        if(contaAtual.getValorRateioAgua()!=null){
-           valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
-        }
+		if (contaAtual.getValorRateioAgua() != null) {
+			valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
+		}
+
+		if (contaAtual.getValorRateioEsgoto() != null) {
+			valorTotalEsgoto = valorTotalEsgoto.add(contaAtual.getValorRateioEsgoto());
+		}
         
         BigDecimal valorTotalConta = new BigDecimal("0.00");
         
