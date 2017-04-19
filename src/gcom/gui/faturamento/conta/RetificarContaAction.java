@@ -404,9 +404,13 @@ public class RetificarContaAction extends GcomAction {
         BigDecimal valorTotalConta = new BigDecimal("0");
         
         //Setar valor do rateio  atualizado
-        if(contaAtual.getValorRateioAgua()!=null){
-           valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
-        }
+		if (contaAtual.getValorRateioAgua() != null) {
+			valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
+		}
+
+		if (contaAtual.getValorRateioEsgoto() != null) {
+			valorTotalEsgoto = valorTotalEsgoto.add(contaAtual.getValorRateioEsgoto());
+		}
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
         valorTotalConta = valorTotalConta.add(valorTotalDebitosConta);

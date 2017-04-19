@@ -345,6 +345,9 @@ public class ControladorRetificarConta extends ControladorComum {
 				ConstantesSistema.CALCULAR_ESGOTO);
 		contaAtual.setValorEsgoto(valorTotalEsgoto);
 
+		contaAtual.atribuiValorRateioAgua(contaAtual.getValorRateioAgua());
+		contaAtual.atribuiValorRateioEsgoto(contaAtual.getValorRateioEsgoto());
+		
 		BigDecimal valorTotalDebito = null;
 		BigDecimal valorTotalCredito = null;
 
