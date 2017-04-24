@@ -15764,36 +15764,35 @@ public class ControladorArrecadacao implements SessionBean {
 				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
 				try {
 
-					File leitura = new File("/Users/pamelagatinho/developer/Java/jboss-4.0.1sp1/server/"+ nomeZip + ".rem");
-					//File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
+					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
 					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 					out.write(arquivoTXTEnvio.toString());
 					out.flush();
 
 					// se o email do arrecadador movimento for preenchido
-//					if (descricaoEmail != null) {
-//
-//						ServicosEmail.enviarMensagemArquivoAnexado(
-//								descricaoEmail, emailRemetente, tituloMensagem,
-//								"", leitura);
-//						mandouEmailBanco = true;
-//						ServicosEmail.enviarMensagemArquivoAnexado(
-//								emailReceptor, emailRemetente, tituloMensagem,
-//								"", leitura);
-//						situacaoEmail = "Enviado";
-//					} else {
-//						ServicosEmail.enviarMensagemArquivoAnexado(
-//								emailReceptor, emailRemetente, tituloMensagem,
-//								"", leitura);
-//						situacaoEmail = "Não Enviado";
-//					}
+					if (descricaoEmail != null) {
 
-//				} catch (SendFailedException e) {
-//					if (mandouEmailBanco) {
-//						situacaoEmail = "Enviado";
-//					} else {
-//						situacaoEmail = "Não Enviado";
-//					}
+						ServicosEmail.enviarMensagemArquivoAnexado(
+								descricaoEmail, emailRemetente, tituloMensagem,
+								"", leitura);
+						mandouEmailBanco = true;
+						ServicosEmail.enviarMensagemArquivoAnexado(
+								emailReceptor, emailRemetente, tituloMensagem,
+								"", leitura);
+						situacaoEmail = "Enviado";
+					} else {
+						ServicosEmail.enviarMensagemArquivoAnexado(
+								emailReceptor, emailRemetente, tituloMensagem,
+								"", leitura);
+						situacaoEmail = "Não Enviado";
+					}
+
+				} catch (SendFailedException e) {
+					if (mandouEmailBanco) {
+						situacaoEmail = "Enviado";
+					} else {
+						situacaoEmail = "Não Enviado";
+					}
 
 				} catch (IOException e) {
 					sessionContext.setRollbackOnly();
