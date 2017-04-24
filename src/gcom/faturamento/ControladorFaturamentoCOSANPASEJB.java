@@ -3,7 +3,6 @@ package gcom.faturamento;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
-import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -69,6 +68,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
@@ -103,6 +103,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		int qtdImovelArquivoImpressaoTermica = 0;
 		int qtdContasLocalidade = 0;
 
+		List<Integer> idsCondominios = new ArrayList<Integer>();
+		
 		try {
 			SistemaParametro sistemaParametro = null;
 
@@ -149,8 +151,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice, faturamentoGrupo);
 				
-				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
-						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
+				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 				
 				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
@@ -176,9 +177,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							StringBuilder contaTxt = new StringBuilder();
 
 							if (emitirContaHelper != null) {
+								
 								Localidade localidade = obterLocalidade(emitirContaHelper);
 								Imovel imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-
+								
 								contaTxt.append(Util.completaString(obterNumeroNota(emitirContaHelper), 16));
 								contaTxt.append(Util.completaString(Util.formatarData(new Date()), 10));
 								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(), 120));
@@ -534,7 +536,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}
 									qtdContasLocalidade++;
 									stringFormatadaImpressaoTermica.add(obterDadosImpressaoTermica(qtdContasLocalidade, sistemaParametro, 
-											emitirContaHelper, qualidade, localidadeArquivo));
+											emitirContaHelper, qualidade, localidadeArquivo, idsCondominios));
 
 								} else {
 									contasTxtLista.append(contaTxt.toString());
@@ -613,16 +615,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
-	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade,
-			SistemaParametro sistemaParametro,
-			EmitirContaHelper emitirContaHelper, String[] qualidade,
-			String localidadeArquivo) {
+	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade, SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, 
+			String[] qualidade, String localidadeArquivo, List<Integer> idsCondominios) {
+		
 		ImpressaoContaImpressoraTermica impressaoContaImpressoraTermica;
 		Object[] impressaoTermica = new Object[2];
-		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento,
-				repositorioClienteImovel, sessionContext);
-		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper,
-				sistemaParametro, qualidade, qtdContasLocalidade);
+		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento, repositorioClienteImovel, sessionContext);
+		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper, sistemaParametro, qualidade,
+												qtdContasLocalidade, idsCondominios);
 		impressaoTermica[1] = localidadeArquivo;
 		return impressaoTermica;
 	}
@@ -1473,7 +1473,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
 			
-			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(contaTipo, idEmpresa, numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
+			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
 			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 
 			Date novaDataVencimento = repositorioFaturamento.obterDataVencimentoContasFaturarGrupo(faturamentoGrupo);

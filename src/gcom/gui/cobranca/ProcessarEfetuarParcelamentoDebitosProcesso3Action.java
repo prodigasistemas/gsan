@@ -179,7 +179,7 @@ public class ProcessarEfetuarParcelamentoDebitosProcesso3Action extends GcomActi
 		Collection<ContaValoresHelper> colecaoContaValoresNegociacao = null;
 		if (sessao.getAttribute("colecaoContaValores") != null) {
 			colecaoContaValoresNegociacao = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValores");
-		} else {
+		} else if (sessao.getAttribute("colecaoContaValoresImovel") != null){
 			colecaoContaValoresNegociacao = (Collection<ContaValoresHelper>) sessao.getAttribute("colecaoContaValoresImovel");
 		}
 

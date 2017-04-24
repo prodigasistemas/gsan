@@ -15894,4 +15894,76 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public BigDecimal[] obterValorCreditoReparcelamentoDeCurtoELongoPrazo(short numeroPrestacoes, BigDecimal valorCredito) throws ControladorException {
+
+		final int indiceCurtoPrazo = 0;
+		final int indiceLongoPrazo = 1;
+
+		BigDecimal valorPrestacao = null;
+		BigDecimal[] valoresCurtoPrazoLongoPrazo = new BigDecimal[2];
+
+		if (numeroPrestacoes > 0) {
+			if (numeroPrestacoes < 13) {
+				valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo] = valorCredito;
+				valoresCurtoPrazoLongoPrazo[indiceLongoPrazo] = new BigDecimal(0.0);
+			} else {
+				valorPrestacao = valorCredito.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
+	
+				valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo] = valorPrestacao.multiply(new BigDecimal("12"));
+				valoresCurtoPrazoLongoPrazo[indiceLongoPrazo] = valorCredito.subtract(valoresCurtoPrazoLongoPrazo[indiceCurtoPrazo]);
+			}
+	
+			if (valoresCurtoPrazoLongoPrazo[0] == null) {
+				valoresCurtoPrazoLongoPrazo[0] = BigDecimal.ZERO;
+			}
+	
+			if (valoresCurtoPrazoLongoPrazo[1] == null) {
+				valoresCurtoPrazoLongoPrazo[1] = BigDecimal.ZERO;
+			}
+		}
+
+		return valoresCurtoPrazoLongoPrazo;
+	}
+	
+	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) throws ControladorException {
+
+		final int curtoPrazo = 0;
+		final int longoPrazo = 1;
+
+		BigDecimal valorPrestacao = null;
+
+		BigDecimal[] valores = new BigDecimal[2];
+
+		if (numeroPrestacoes < numeroPrestacoesCobradas) {
+			return null;
+		} else {
+			if (numeroPrestacoes == 0) {
+				return null;
+			} else {
+				if ((numeroPrestacoes - numeroPrestacoesCobradas) < 13) {
+					valores[curtoPrazo] = valorRestante;
+					valores[longoPrazo] = new BigDecimal(0.0);
+				} else {
+					valorPrestacao = valorTotal.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
+
+					valores[curtoPrazo] = valorPrestacao.multiply(new BigDecimal("12"));
+
+					valores[longoPrazo] = valorRestante.subtract(valores[curtoPrazo]);
+				}
+
+				if (valores[0] == null) {
+					valores[0] = BigDecimal.ZERO;
+				}
+
+				if (valores[1] == null) {
+					valores[1] = BigDecimal.ZERO;
+				}
+
+				return valores;
+			}
+		}
+	}
+	
+
 }

@@ -81,12 +81,16 @@ public class CreditoARealizar extends ObjetoTransacao {
 	private Parcelamento parcelamento;
 	private DocumentoTipo documentoTipo;
 	private Usuario usuario;
+	
+	@SuppressWarnings("rawtypes")
 	private Set creditoARealizarCategoria;
+	
 	private CreditoARealizarGeral origem;
 	private CreditoARealizarGeral creditoARealizarGeral;
 	private Integer anoMesReferenciaPrestacao;
 	private Integer numeroParcelasAntecipadas;
 	
+	@SuppressWarnings("rawtypes")
 	public CreditoARealizar(Date geracaoCredito,
 			Integer anoMesReferenciaCredito, Integer anoMesReferenciaContabil,
 			Integer anoMesCobrancaCredito, BigDecimal valorResidualMesAnterior,
@@ -135,6 +139,7 @@ public class CreditoARealizar extends ObjetoTransacao {
 	public CreditoARealizar() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	public CreditoARealizar(Date geracaoCredito,
 			RegistroAtendimento registroAtendimento, Imovel imovel,
 			OrdemServico ordemServico, Quadra quadra, Localidade localidade,
@@ -371,10 +376,12 @@ public class CreditoARealizar extends ObjetoTransacao {
 		this.documentoTipo = documentoTipo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getCreditoARealizarCategoria() {
 		return this.creditoARealizarCategoria;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setCreditoARealizarCategoria(Set creditoARealizarCategoria) {
 		this.creditoARealizarCategoria = creditoARealizarCategoria;
 	}
@@ -698,5 +705,11 @@ public class CreditoARealizar extends ObjetoTransacao {
 
 	public BigDecimal calculaCreditoOuResiduo() {
 		return possuiResiduo() ? valorResidualMesAnterior : calculaValorUltimaParcela();
+	}
+	
+	public BigDecimal getValorNaoConcedido() {
+		BigDecimal valorConcedido =  getValorPrestacao().multiply(new BigDecimal(numeroPrestacaoRealizada()));
+		
+		return valorCredito.subtract(valorConcedido).add(valorResidualMesAnterior);
 	}
 }

@@ -59,7 +59,7 @@ public class FiltrarEmpresaAction extends GcomAction {
 		
 		// ID
 		if (id != null && !id.trim().equals("")) {
-			boolean achou = fachada.verificarExistenciaAgente(new Integer(id));
+			boolean achou = fachada.verificarExistenciaEmpresa(new Integer(id));
 			if (achou) {
 				peloMenosUmParametroInformado = true;
 				filtroEmpresa.adicionarParametro(new ParametroSimples(

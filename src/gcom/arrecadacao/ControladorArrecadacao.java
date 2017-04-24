@@ -20106,9 +20106,12 @@ public class ControladorArrecadacao implements SessionBean {
 						 * gera o resumo da arrecadação caso o valor acumulado
 						 * seja maior que 0(zero)
 						 */
+						Integer[] idsCreditos = new Integer[1];
+						idsCreditos[0] = CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO;
+						
 						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+										idsCreditos);
 
 						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso != null
 								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso.doubleValue() > 0.00) {
@@ -20118,9 +20121,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 							lancamentoItemTemp = new LancamentoItem(LancamentoItem.DOCUMENTOS_PAGOS_EM_DUPLICIDADE_EXCESSO);
 
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
 							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
 									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso,
 									lancamentoItemTemp, null, new Short("800"), new Short("0"));
@@ -20129,16 +20129,12 @@ public class ControladorArrecadacao implements SessionBean {
 							
 						}
 
-						/**
-						 * Contabilizar créditos com crédito origem
-						 * correspondente a Contas Pagas em Excesso
-						 * 
-						 * @author Wellington Rocha
-						 * @date
-						 */
+						idsCreditos = new Integer[1];
+						idsCreditos[0] = CreditoOrigem.CONTAS_PAGAS_EM_EXCESSO;
+						
 						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.CONTAS_PAGAS_EM_EXCESSO);
+										idsCreditos);
 
 						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso != null
 								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso.doubleValue() > 0.00) {
@@ -20147,9 +20143,6 @@ public class ControladorArrecadacao implements SessionBean {
 									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso);
 
 							lancamentoItemTemp = new LancamentoItem(LancamentoItem.CONTAS_PAGAS_EM_EXCESSO);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
 
 							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
 									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso,
@@ -20202,19 +20195,16 @@ public class ControladorArrecadacao implements SessionBean {
 						
 						
 						ResumoArrecadacao resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-								LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
+								anoMesReferenciaArrecadacao, localidade, categoria, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(resumo.getValorItemArrecadacao());
+							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
 							colecaoResumoArrecadacao.add(resumo);
 						}
 						
-						
-						resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
-								LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, new Short("1000"), new Short("10"));
+						resumo = obterResumoDescontosConcedidos(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS,
+								LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1010"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
@@ -20222,18 +20212,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 						
 
-						resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS,
-								LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1010"), new Short("0"));
-						
-						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(resumo.getValorItemArrecadacao());
-							colecaoResumoArrecadacao.add(resumo);
-						}
-						
-
-						resumo = obterResumoDescontosConcedidosParcelamento(
+						resumo = obterResumoDescontosConcedidos(
 								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_INCONDICIONAIS,
 								LancamentoItem.DESCONTOS_INCONDICIONAIS, new Short("1020"), new Short("0"));
 						
@@ -20243,7 +20222,7 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumo);
 						}
 						
-						resumo = obterResumoDescontosConcedidosParcelamento(
+						resumo = obterResumoDescontosConcedidos(
 								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
 								LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short("1030"), new Short("0"));
 						
@@ -20699,15 +20678,14 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
-						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
-								CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
+						resumo = obterResumoDescontosConcedidosParcelamentoRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								 LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							
 							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
 							colecaoResumoArrecadacao.add(resumo);
 						}
-
 						
 						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
 								CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 
@@ -21004,12 +20982,26 @@ public class ControladorArrecadacao implements SessionBean {
 						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
 										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+						
+						BigDecimal valorCreditosAnterioresCurto = repositorioArrecadacao
+								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
+										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
 
+						BigDecimal valorCreditosAnterioresLongo = repositorioArrecadacao
+								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
+										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
+
+						BigDecimal valorTotal = BigDecimal.ZERO;
+						
+						if (somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos != null)
+							valorTotal = somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos;
+						
+						if (valorCreditosAnterioresCurto != null) valorTotal.add(valorCreditosAnterioresCurto);
+						if (valorCreditosAnterioresLongo != null) valorTotal.add(valorCreditosAnterioresLongo);
+						
 						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos.doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4210e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+						if (valorTotal != null && valorTotal.doubleValue() > 0.00) {
+							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4210e4499.add(valorTotal);
 							recebimentoTipoTemp = new RecebimentoTipo();
 							lancamentoTipoTemp = new LancamentoTipo();
 							lancamentoItemTemp = new LancamentoItem();
@@ -21029,8 +21021,7 @@ public class ControladorArrecadacao implements SessionBean {
 							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4440"));
 							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
 							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+							resumoArrecadacaoTemp.setValorItemArrecadacao(valorTotal);
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
@@ -24447,11 +24438,18 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	private ResumoArrecadacao obterResumoDescontosConcedidosParcelamento(Integer anoMesReferenciaArrecadacao, Localidade localidade,
-			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+			Categoria categoria, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
 
 		ResumoArrecadacao resumo = null;
+		
+		Integer[] idsOrigensCredito = new Integer[4];
+		idsOrigensCredito[0] = CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO;
+		idsOrigensCredito[1] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+		idsOrigensCredito[2] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+		idsOrigensCredito[3] = CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA;
+		
 		BigDecimal valor = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
-				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idsOrigensCredito);
 
 		if (valor != null && valor.doubleValue() > 0.00) {
 
@@ -24462,6 +24460,29 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		return resumo;
 	}
+	
+	private ResumoArrecadacao obterResumoDescontosConcedidos(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		
+		Integer[] idsOrigensCredito = new Integer[1];
+		idsOrigensCredito[0] = idCreditoOrigem;
+		
+		BigDecimal valor = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
+				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idsOrigensCredito);
+
+		if (valor != null && valor.doubleValue() > 0.00) {
+
+			LancamentoItem lancamentoItem = new LancamentoItem(idLancamentoItem);
+
+			resumo = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
+					anoMesReferenciaArrecadacao, valor, lancamentoItem, null, seqTipoLancamento, seqItemTipoLancamento);
+		}
+		return resumo;
+	}
+	
+	
 
 	private ResumoArrecadacao obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(Integer anoMesReferenciaArrecadacao, Localidade localidade,
 			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
@@ -24482,6 +24503,50 @@ public class ControladorArrecadacao implements SessionBean {
 			resumo.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
 			resumo.setLancamentoItem(new LancamentoItem(idLancamentoItem));
 			resumo.setLancamentoItemContabil(null);
+			resumo.setSequenciaTipoLancamento(seqTipoLancamento);
+			resumo.setSequenciaItemTipoLancamento(seqItemTipoLancamento);
+			resumo.setUltimaAlteracao(new Date());
+			resumo.setValorItemArrecadacao(soma);
+		}
+		
+		return resumo;
+
+	}
+	
+	private ResumoArrecadacao obterResumoDescontosConcedidosParcelamentoRecebimentoMesesAnterioresClassificados(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		
+		BigDecimal somaDescontos = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+				anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+		
+		BigDecimal somaCurtoPrazo = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+						anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+		
+		BigDecimal somaLongoPrazo = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+						anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
+		
+		BigDecimal soma = BigDecimal.ZERO;
+		
+		if (somaDescontos != null) soma = somaDescontos;
+		if (somaCurtoPrazo != null) soma = soma.add(somaCurtoPrazo);
+		if (somaLongoPrazo != null) soma = soma.add(somaLongoPrazo);
+		
+		if (soma != null && soma.doubleValue() > 0.00) {
+			
+			resumo = new ResumoArrecadacao();
+			resumo.setGerenciaRegional(localidade.getGerenciaRegional());
+			resumo.setLocalidade(localidade);
+			resumo.setCategoria(categoria);
+			resumo.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+			resumo.setRecebimentoTipo(new RecebimentoTipo(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES));
+			resumo.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
+			resumo.setLancamentoItem(new LancamentoItem(idLancamentoItem));
+			resumo.setLancamentoItemContabil(null);
 			resumo.setSequenciaTipoLancamento(new Short("4400"));
 			resumo.setSequenciaItemTipoLancamento(new Short("0"));
 			resumo.setUltimaAlteracao(new Date());
@@ -24491,6 +24556,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return resumo;
 
 	}
+	
 	private Map<Integer, BigDecimal> obterValorImpostoPagamentosClassificadosConta(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, Integer tipoImposto) 
 			throws ErroRepositorioException, ControladorException {
 		
@@ -24693,8 +24759,11 @@ public class ControladorArrecadacao implements SessionBean {
 	private ResumoArrecadacao contabilizarCreditosRealizadosRecuperacaoCredito(Integer referenciaArrecadacao, Localidade localidade, Categoria categoria, 
 			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException {
 		
+		Integer[] idsCreditosOrigem = new Integer[1];
+		idsCreditosOrigem[0] = idCreditoOrigem;
+		
 		BigDecimal valorCreditos = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
-						localidade.getId(), referenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+						localidade.getId(), referenciaArrecadacao, categoria.getId(), idsCreditosOrigem);
 		
 		ResumoArrecadacao resumoArrecadacao = null;
 		if (valorCreditos != null && valorCreditos.doubleValue() > 0.00) {
@@ -37148,15 +37217,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por
-	 * NSA
-	 * 
-	 * @author Ana Maria
-	 * @date 12/07/2007
-	 * 
-	 * @param idMovimentoArrecadador
-	 * @return
+	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por NSA
 	 */
 	public Collection<MovimentoArrecadadoresPorNSAHelper> gerarMovimentoArrecadadoresNSA(
 			Collection<Integer> idsArrecadadorMovimento,
@@ -37178,11 +37239,11 @@ public class ControladorArrecadacao implements SessionBean {
 
 	/**
 	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento 
 	 */
 	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) throws ControladorException {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
 
 		FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
 		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
@@ -37198,11 +37259,19 @@ public class ControladorArrecadacao implements SessionBean {
 			if (debito.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL)
 					&& debito.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.JUROS_PARCELAMENTO)) {
 
-				if (debito.getAnoMesReferenciaContabil() >= sistemaParametro.getAnoMesFaturamento()) {
+				if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
 					debito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 				}
 				
 				debito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
+				
+				int anoMesReferenciaContabil = anoMesFaturamento;
+				int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+				if (anoMesFaturamento < anoMesCorrente) {
+					anoMesReferenciaContabil = anoMesCorrente;
+				}
+				
+				debito.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
 
 				getControladorUtil().atualizar(debito);
 			}
@@ -37214,25 +37283,6 @@ public class ControladorArrecadacao implements SessionBean {
 	 * acordo com os parâmetros informados
 	 * 
 	 * [UC0229] Obter Representação Numérica do Código de Barras
-	 * 
-	 * @author Pedro Alexandre,Hugo Amorim,Hugo Amorim
-	 * @date 20/04/2006,12/01/2010,10/03/2010
-	 * 
-	 * @param tipoPagamento
-	 * @param valorCodigoBarra
-	 * @param idLocalidade
-	 * @param matriculaImovel
-	 * @param anoMesReferenciaConta
-	 * @param digitoVerificadorRefContaModulo10
-	 * @param idTipoDebito
-	 * @param anoEmissaoGuiaPagamento
-	 * @param sequencialDocumentoCobranca
-	 * @param idTipoDocumento
-	 * @param idCliente
-	 * @param seqFaturaClienteResponsavel
-	 * @param idGuiaPagamento
-	 * @return
-	 * @throws ParametroNaoInformadoException
 	 */
 	public String obterRepresentacaoNumericaCodigoBarra(Integer tipoPagamento,
 			BigDecimal valorCodigoBarra, Integer idLocalidade,
@@ -37242,10 +37292,8 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idTipoDocumento, Integer idCliente,
 			Integer seqFaturaClienteResponsavel, String idGuiaPagamento) throws ControladorException {
 
-		// Cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
 
-		// Obtem parametros do sistema
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 
 		// [FS0001] Verificar compatibilidade dos campos informados com o tipo

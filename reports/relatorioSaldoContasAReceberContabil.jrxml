@@ -805,7 +805,7 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 				</textField>
 				<staticText>
 					<reportElement
-						x="3"
+						x="4"
 						y="3"
 						width="203"
 						height="18"

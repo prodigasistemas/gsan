@@ -1311,14 +1311,8 @@ public interface IRepositorioArrecadacao {
 	 */
 	public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
 			Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
-			Integer idCategoria,Integer idCreditoOrigem) throws ErroRepositorioException;
+			Integer idCategoria,Integer[] idsCreditosOrigem) throws ErroRepositorioException;
 
-	
-
-	
-
-	
-	
 	/**
 	 * Sequencial do tipo lançamento igual a 1700
 	 * 

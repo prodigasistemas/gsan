@@ -1,44 +1,5 @@
 package gcom.cobranca;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
-import org.hibernate.cache.HashtableCache;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
@@ -398,6 +359,46 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import org.hibernate.cache.HashtableCache;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 
 /**
  * @author Raphael Rossiter
@@ -10992,7 +10993,7 @@ public class ControladorCobranca implements SessionBean {
 			throws ControladorException {
 
 		// Atualização Monetária
-		if (valorAtualizacaoMonetaria != null && !valorAtualizacaoMonetaria.equals(new BigDecimal("0.00"))) {
+		if (valorAtualizacaoMonetaria != null && valorAtualizacaoMonetaria.doubleValue() > 0) {
 			DebitoTipo debitoTipoAtualizacaMonetaria = filtrarDebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
 
 			// Inclui o débito a cobrar para Atualização Monetária
@@ -11002,7 +11003,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// Juros Mora
-		if (valorJurosMora != null && !valorJurosMora.equals(new BigDecimal("0.00"))) {
+		if (valorJurosMora != null && valorJurosMora.doubleValue() > 0) {
 			DebitoTipo debitoTipoJurosMora = filtrarDebitoTipo(DebitoTipo.JUROS_MORA);
 
 			// Inclui o débito a cobrar para Juros Mora
@@ -11012,7 +11013,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// Multa por Impontualidade
-		if (valorMulta != null && !valorMulta.equals(new BigDecimal("0.00"))) {
+		if (valorMulta != null && valorMulta.doubleValue() > 0) {
 			DebitoTipo debitoTipoMultaImpontualidade = filtrarDebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 
 			// Inclui o débito a cobrar para Multa
@@ -11482,7 +11483,7 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorZero = new BigDecimal("0.00");
 
 		// 1. Parcelamento de Contas
-		if (valorTotalContas != null && !valorTotalContas.equals(new BigDecimal("0.00"))) {
+		if (valorTotalContas != null && valorTotalContas.doubleValue() > 0) {
 
 			DebitoTipo debitoTipoParcelamentoContas = null;
 
@@ -11525,7 +11526,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 2. Parcelamento de Guias de Pagamento
-		if (valorTotalGuiasPagamento != null && !valorTotalGuiasPagamento.equals(new BigDecimal("0.00"))) {
+		if (valorTotalGuiasPagamento != null && valorTotalGuiasPagamento.doubleValue() > 0) {
 			DebitoTipo debitoTipoParcelamentoGuiasPagamento = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_GUIAS_PAGAMENTO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalGuiasPagamento) < 0) {
@@ -11562,7 +11563,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 3. Parcelamento de Acrescimos por Impontualidade
-		if (valorTotalAcrescimosImpontualidade != null && !valorTotalAcrescimosImpontualidade.equals(new BigDecimal("0.00"))) {
+		if (valorTotalAcrescimosImpontualidade != null && valorTotalAcrescimosImpontualidade.doubleValue() > 0) {
 
 			DebitoTipo debitoTipoParcelamentoAcrescimosImpontualidade = null;
 
@@ -11613,8 +11614,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 4. Parcelamento de Debitos A Cobrar de Curto Prazo
-		if (valorTotalServicosDebitosACobrarCurtoPrazo != null
-				&& !valorTotalServicosDebitosACobrarCurtoPrazo.equals(new BigDecimal("0.00"))) {
+		if (valorTotalServicosDebitosACobrarCurtoPrazo != null && valorTotalServicosDebitosACobrarCurtoPrazo.doubleValue() > 0) {
 			DebitoTipo debitoTipoParcelamentoDebitosACobrarCurtoPrazo = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_DEBITO_A_COBRAR_CURTO_PRAZO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarCurtoPrazo) < 0) {
@@ -11654,8 +11654,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 5. Parcelamento de Debitos A Cobrar de Longo Prazo
-		if (valorTotalServicosDebitosACobrarLongoPrazo != null
-				&& !valorTotalServicosDebitosACobrarLongoPrazo.equals(new BigDecimal("0.00"))) {
+		if (valorTotalServicosDebitosACobrarLongoPrazo != null && valorTotalServicosDebitosACobrarLongoPrazo.doubleValue() > 0) {
 			DebitoTipo debitoTipoParcelamentoDebitosACobrarLongoPrazo = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_DEBITO_A_COBRAR_LONGO_PRAZO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarLongoPrazo) < 0) {
@@ -11696,7 +11695,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 6. Reparcelamentos Curto Prazo
-		if (valorTotalReparcelamentosCurtoPrazo != null && !valorTotalReparcelamentosCurtoPrazo.equals(new BigDecimal("0.00"))) {
+		if (valorTotalReparcelamentosCurtoPrazo != null && valorTotalReparcelamentosCurtoPrazo.doubleValue() > 0) {
 			DebitoTipo debitoTipoReparcelamentosCurtoPrazo = null;
 
 			if (indicadorDividaAtiva.intValue() == 1) {
@@ -11740,7 +11739,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 7. Reparcelamentos Longo Prazo
-		if (valorTotalReparcelamentosLongoPrazo != null && !valorTotalReparcelamentosLongoPrazo.equals(new BigDecimal("0.00"))) {
+		if (valorTotalReparcelamentosLongoPrazo != null && valorTotalReparcelamentosLongoPrazo.doubleValue() > 0) {
 
 			DebitoTipo debitoTipoReparcelamentosLongoPrazo = null;
 
@@ -11786,7 +11785,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 8. Juros sobre Parcelamento
-		if (valorTotalJurosParcelamento != null && !valorTotalJurosParcelamento.equals(new BigDecimal("0.00"))) {
+		if (valorTotalJurosParcelamento != null && valorTotalJurosParcelamento.doubleValue() > 0) {
 
 			DebitoTipo debitoTipoJurosParcelamento = null;
 
@@ -11852,10 +11851,12 @@ public class ControladorCobranca implements SessionBean {
 			BigDecimal descontoTarifaSocialRDEspecial, 
 			boolean isContaEntradaParcelamento,
 			Integer anoMesEntradaGuia,
-			Integer maiorAnoMesConta) throws ControladorException {
+			Integer maiorAnoMesConta,
+			BigDecimal valorCreditosAnterioresCurtoPrazo,
+			BigDecimal valorCreditosAnterioresLongoPrazo) throws ControladorException {
 
 		// 1. Desconto por Acréscimo por Impontualidade
-		if (valorDescontoAcresimosImpontualidade != null && !valorDescontoAcresimosImpontualidade.equals(new BigDecimal("0.00"))) {
+		if (valorDescontoAcresimosImpontualidade != null && valorDescontoAcresimosImpontualidade.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_ACRESCIMOS_IMPONTUALIDADE);
 
 			// 1. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
@@ -11864,7 +11865,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 2. Desconto por Antiguidade do Débito
-		if (valorDescontoAntiguidadeDebito != null && !valorDescontoAntiguidadeDebito.equals(new BigDecimal("0.00"))) {
+		if (valorDescontoAntiguidadeDebito != null && valorDescontoAntiguidadeDebito.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_ANTIGUIDADE_DEBITO);
 
 			// 2. Inclui o crédito a realizar para Desconto por Antiguidade do Débito
@@ -11873,7 +11874,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 3. Desconto por Inatividade dea Ligação da Água
-		if (valorDescontoInatividadeLigacaoAgua != null && !valorDescontoInatividadeLigacaoAgua.equals(new BigDecimal("0.00"))) {
+		if (valorDescontoInatividadeLigacaoAgua != null && valorDescontoInatividadeLigacaoAgua.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_INATIVIDADE_LIGACAO_AGUA);
 
 			// 3. Inclui o crédito a realizar para Desconto por Inatividade de Ligação da Água
@@ -11881,17 +11882,28 @@ public class ControladorCobranca implements SessionBean {
 					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		}
 
-		// 4. Créditos Anteriores
-		if (valorCreditoAnteriores != null && !valorCreditoAnteriores.equals(new BigDecimal("0.00"))) {
-			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES);
+		// 4. Créditos Anteriores - CURTO PRAZO
+		if (valorCreditosAnterioresCurtoPrazo != null && valorCreditosAnterioresCurtoPrazo.doubleValue() > 0) {
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES_CURTO_PRAZO);
 
-			// 4. Inclui o crédito a realizar para Créditos Anteriores
-			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditoAnteriores, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
-					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+			Short prestacoesCurtoPrazo = 0;
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditosAnterioresCurtoPrazo, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+			
+		}
+		
+		// 4.1 Créditos Anteriores - LONGO PRAZO
+		if (valorCreditosAnterioresLongoPrazo != null && valorCreditosAnterioresLongoPrazo.doubleValue() > 0) {
+			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES_LONGO_PRAZO);
+			
+			Short prestacoesLongoPrazo = 0;
+			
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditosAnterioresLongoPrazo, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
 		}
 
 		// 5. Desconto por Sanções
-		if (valorDescontoSancoesRDEspecial != null && !valorDescontoSancoesRDEspecial.equals(new BigDecimal("0.00"))) {
+		if (valorDescontoSancoesRDEspecial != null && valorDescontoSancoesRDEspecial.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_SANCOES);
 
 			// 5. Inclui o crédito a realizar para Desconto por Sanções
@@ -11900,7 +11912,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 6. Desconto por Tarifa Social
-		if (descontoTarifaSocialRDEspecial != null && !descontoTarifaSocialRDEspecial.equals(new BigDecimal("0.00"))) {
+		if (descontoTarifaSocialRDEspecial != null && descontoTarifaSocialRDEspecial.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_TARIFA_SOCIAL);
 
 			// 5. Inclui o crédito a realizar para Desconto por Tarifa Social
@@ -11909,7 +11921,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 7. Desconto por Acréscimo por Impontualidade
-		if (valorDescontoFaixaReferenciaConta != null && !valorDescontoFaixaReferenciaConta.equals(new BigDecimal("0.00"))) {
+		if (valorDescontoFaixaReferenciaConta != null && valorDescontoFaixaReferenciaConta.doubleValue() > 0) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.DESCONTO_FAIXA_REFERENCIA_CONTA);
 
 			// 7. Inclui o crédito a realizar para Desconto Acréscimo por Impontualidade
@@ -11917,7 +11929,25 @@ public class ControladorCobranca implements SessionBean {
 					isContaEntradaParcelamento, anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
 		}
 	}
-
+	
+	private Short obterNumeroParcelas(Short indicador, Short totalParcelas) {
+		if (indicador.shortValue() == ConstantesSistema.INDICADOR_CURTO_PRAZO) {
+			if (totalParcelas <= 12)
+				return totalParcelas;
+			else
+				return new Short("12");
+		} else if (indicador.shortValue() == ConstantesSistema.INDICADOR_LONGO_PRAZO) {
+			if (totalParcelas <= 12)
+				return new Short("0");
+			else {
+				Integer total = totalParcelas.intValue() - 12;
+				return total.shortValue();
+			}
+		} else {
+			return 0;
+		}
+	}
+	
 	/**
 	 * Permite efetuar o parcelamento dos débitos de um imóvel
 	 * 
@@ -12114,7 +12144,7 @@ public class ControladorCobranca implements SessionBean {
 
 		} else {
 			// 2.
-			if (!valorEntrada.equals(new BigDecimal("0.00"))) {
+			if (valorEntrada.doubleValue() > 0) {
 
 				// Insere a guia de pagamento na tabela GUIA_PAGAMENTO_GERAL
 				GuiaPagamentoGeral guiaPagamentoGeral = new GuiaPagamentoGeral();
@@ -12264,54 +12294,56 @@ public class ControladorCobranca implements SessionBean {
 	 * 
 	 * [SB0009] - Gerar Dados do Parcelamento
 	 */
-	private Integer gerarDadosParcelamento(
-			Date dataParcelamento, 
-			BigDecimal valorConta, 
-			BigDecimal valorGuiaPapagamento,
-			BigDecimal valorServicosACobrar, 
-			BigDecimal valorParcelamentosACobrar, 
-			BigDecimal valorCreditoARealizar,
-			BigDecimal valorAtualizacaoMonetaria, 
-			BigDecimal valorJurosMora, 
-			BigDecimal valorMulta, 
-			BigDecimal valorDebitoAtualizado,
-			BigDecimal valorDescontoFaixaReferenciaConta,
-			BigDecimal valorDescontoAcrescimos, 
-			BigDecimal valorDescontoAntiguidade, 
-			BigDecimal valorDescontoInatividade,
-			BigDecimal valorEntrada, 
-			BigDecimal valorJurosParcelamento, 
-			Short numeroPrestacoes, 
-			BigDecimal valorPrestacao,
-			Short indicadorRestabelecimento, 
-			Short indicadorContasRevisao, 
-			Short indicadorGuiasPagamento,
-			Short indicadorAcrescimosImpotualidade,
-			Short indicadorDebitosACobrar,
-			Short indicadorCreditoARealizar,
-			BigDecimal percentualDescontoAcrescimos,
-			BigDecimal percentualDescontoAntiguidade,
-			BigDecimal percentualDescontoInatividadeLigacaoAgua, 
-			Imovel imovel, 
-			Usuario usuario,
-			Integer parcelamentoPerfilId,
-			Collection<ContaValoresHelper> colecaoContaValores, 
-			Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores,
-			Collection<DebitoACobrar> colecaoDebitoACobrar, 
-			Collection<CreditoARealizar> colecaoCreditoARealizar, 
-			BigDecimal taxaJuros,
-			Short indicadorConfirmacaoParcelamento, 
-			Cliente cliente,
-			BigDecimal descontoSancoesRDEspecial,
-			BigDecimal descontoTarifaSocialRDEspecial,
-			Integer anoMesReferenciaContabil) throws ControladorException {
+	private Integer gerarDadosParcelamento(ConcluirParcelamentoDebitosHelper helper, Collection colecaoContasParaParcelamento, 
+			BigDecimal valorJurosParcelamento, Integer anoMesReferenciaContabil) throws ControladorException {
+			
+			Short indicadorRestabelecimento = helper.getIndicadorRestabelecimento().equals("") ? null : new Short(helper.getIndicadorRestabelecimento());
+			Short indicadorContasRevisao = helper.getIndicadorContasRevisao().equals("") ? null : new Short(helper.getIndicadorContasRevisao());
+			Short indicadorGuiasPagamento = helper.getIndicadorGuiasPagamento().equals("") ? null : new Short(helper.getIndicadorGuiasPagamento());
+			Short indicadorAcrescimosImpotualidade = helper.getIndicadorAcrescimosImpotualidade().equals("") ? null : new Short(helper.getIndicadorAcrescimosImpotualidade());
+			Short indicadorDebitosACobrar = helper.getIndicadorDebitosACobrar().equals("") ? null : new Short(helper.getIndicadorDebitosACobrar());
+			Short indicadorCreditoARealizar = helper.getIndicadorCreditoARealizar().equals("") ? null : new Short(helper.getIndicadorCreditoARealizar());
+			Short indicadorConfirmacaoParcelamento = helper.getIndicadorConfirmacaoParcelamento().equals("") ? ConstantesSistema.SIM : new Short(helper.getIndicadorConfirmacaoParcelamento());
+		
+/*		helper.getValorGuiasPagamento(),  valorGuiaPapagamento
+		helper.getValorDebitoACobrarServico(), valorServicosACobrar
+		helper.getValorDebitoACobrarParcelamento(), valorParcelamentosACobrar
+		helper.getValorCreditoARealizar(), valorCreditoARealizar
+		helper.getValorAtualizacaoMonetaria(), valorAtualizacaoMonetaria
+		helper.getValorJurosMora(), valorJurosMora
+		helper.getValorMulta(), valorMulta
+		helper.getValorDebitoTotalAtualizado(), valorDebitoAtualizado
+		helper.getDescontoFaixaReferenciaConta(), valorDescontoFaixaReferenciaConta
+		helper.getDescontoAcrescimosImpontualidade(),  valorDescontoAcrescimos
+		helper.getDescontoAntiguidadeDebito(), 		 valorDescontoAntiguidade, 
+		helper.getDescontoInatividadeLigacaoAgua(), valorDescontoInatividade
+		helper.getValorEntradaInformado(), valorEntrada
+		valorJurosParcelamento,
+		helper.getNumeroPrestacoes(),  numeroPrestacoes
+		helper.getValorPrestacao(), valorPrestacao 
+		helper.getPercentualDescontoAcrescimosImpontualidade(), percentualDescontoAcrescimos
+		helper.getPercentualDescontoAntiguidadeDebito(), percentualDescontoAntiguidade 
+		helper.getPercentualDescontoInatividadeLigacaoAgua(), percentualDescontoInatividadeLigacaoAgua 
+		, helper.getUsuarioLogado(), usuario
+		helper.getParcelamentoPerfilId(), parcelamentoPerfilId
+		colecaoContasParaParcelamento,
+		helper.getColecaoGuiaPagamentoValores(), colecaoGuiaPagamentoValores
+		helper.getColecaoDebitoACobrar(), colecaoDebitoACobrar
+		helper.getColecaoCreditoARealizar(), colecaoCreditoARealizar
+		helper.getTaxaJuros(),  taxaJuros
+		
+		helper.getCliente(), cliente
+		helper.getDescontoSancoesRDEspecial(), descontoSancoesRDEspecial
+		helper.getDescontoTarifaSocialRDEspecial(), descontoTarifaSocialRDEspecial
+		referenciaContabil);*/
 
+		
 		try {
 			// 1. Gera os dados relativos a parcelamento
 
-			String dia = Util.formatarData(dataParcelamento).substring(0, 2);
-			String mes = Util.formatarData(dataParcelamento).substring(3, 5);
-			String ano = Util.formatarData(dataParcelamento).substring(6, 10);
+			String dia = Util.formatarData(helper.getDataParcelamento()).substring(0, 2);
+			String mes = Util.formatarData(helper.getDataParcelamento()).substring(3, 5);
+			String ano = Util.formatarData(helper.getDataParcelamento()).substring(6, 10);
 
 			Calendar dataHoraParcelamento = GregorianCalendar.getInstance();
 			dataHoraParcelamento.set(Calendar.DATE, new Integer(dia).intValue());
@@ -12327,72 +12359,72 @@ public class ControladorCobranca implements SessionBean {
 
 			parcelamento.setAnoMesReferenciaFaturamento(anoMesReferenciaContabil);
 
-			parcelamento.setValorConta(valorConta);
-			parcelamento.setValorGuiaPapagamento(valorGuiaPapagamento);
-			parcelamento.setValorServicosACobrar(valorServicosACobrar);
-			parcelamento.setValorParcelamentosACobrar(valorParcelamentosACobrar);
-			parcelamento.setValorCreditoARealizar(valorCreditoARealizar);
-			parcelamento.setValorAtualizacaoMonetaria(valorAtualizacaoMonetaria);
-			parcelamento.setValorJurosMora(valorJurosMora);
-			parcelamento.setValorMulta(valorMulta);
-			parcelamento.setValorDebitoAtualizado(valorDebitoAtualizado);
-			parcelamento.setValorDescontoFaixaReferenciaConta(valorDescontoFaixaReferenciaConta);
-			parcelamento.setValorDescontoAcrescimos(valorDescontoAcrescimos);
-			parcelamento.setValorDescontoAntiguidade(valorDescontoAntiguidade);
-			parcelamento.setValorDescontoInatividade(valorDescontoInatividade);
-			parcelamento.setValorDescontoSancao(descontoSancoesRDEspecial);
-			parcelamento.setValorDescontoTarifaSocial(descontoTarifaSocialRDEspecial);
-			parcelamento.setValorEntrada(valorEntrada);
+			parcelamento.setValorConta(helper.getValorTotalContaValores());
+			parcelamento.setValorGuiaPapagamento(helper.getValorGuiasPagamento());
+			parcelamento.setValorServicosACobrar(helper.getValorDebitoACobrarServico());
+			parcelamento.setValorParcelamentosACobrar(helper.getValorDebitoACobrarParcelamento());
+			parcelamento.setValorCreditoARealizar(helper.getValorCreditoARealizar());
+			parcelamento.setValorAtualizacaoMonetaria(helper.getValorAtualizacaoMonetaria());
+			parcelamento.setValorJurosMora(helper.getValorJurosMora());
+			parcelamento.setValorMulta(helper.getValorMulta());
+			parcelamento.setValorDebitoAtualizado(helper.getValorDebitoTotalAtualizado());
+			parcelamento.setValorDescontoFaixaReferenciaConta(helper.getDescontoFaixaReferenciaConta());
+			parcelamento.setValorDescontoAcrescimos(helper.getDescontoAcrescimosImpontualidade());
+			parcelamento.setValorDescontoAntiguidade(helper.getDescontoAntiguidadeDebito());
+			parcelamento.setValorDescontoInatividade(helper.getDescontoInatividadeLigacaoAgua());
+			parcelamento.setValorDescontoSancao(helper.getDescontoSancoesRDEspecial());
+			parcelamento.setValorDescontoTarifaSocial(helper.getDescontoTarifaSocialRDEspecial());
+			parcelamento.setValorEntrada(helper.getValorEntradaInformado());
 			parcelamento.setValorJurosParcelamento(valorJurosParcelamento);
-			parcelamento.setNumeroPrestacoes(numeroPrestacoes);
-			parcelamento.setValorPrestacao(valorPrestacao);
+			parcelamento.setNumeroPrestacoes(helper.getNumeroPrestacoes());
+			parcelamento.setValorPrestacao(helper.getValorPrestacao());
 			parcelamento.setIndicadorRestabelecimento(indicadorRestabelecimento);
 			parcelamento.setIndicadorContasRevisao(indicadorContasRevisao);
 			parcelamento.setIndicadorGuiasPagamento(indicadorGuiasPagamento);
 			parcelamento.setIndicadorAcrescimosImpontualdade(indicadorAcrescimosImpotualidade);
 			parcelamento.setIndicadorDebitoACobrar(indicadorDebitosACobrar);
 			parcelamento.setIndicadorCreditoARealizar(indicadorCreditoARealizar);
-			parcelamento.setPercentualDescontoAcrescimos(percentualDescontoAcrescimos);
-			parcelamento.setPercentualDescontoAntiguidade(percentualDescontoAntiguidade);
-			parcelamento.setPercentualDescontoInatividade(percentualDescontoInatividadeLigacaoAgua);
+			parcelamento.setPercentualDescontoAcrescimos(helper.getPercentualDescontoAcrescimosImpontualidade());
+			parcelamento.setPercentualDescontoAntiguidade(helper.getPercentualDescontoAntiguidadeDebito());
+			parcelamento.setPercentualDescontoInatividade(helper.getPercentualDescontoInatividadeLigacaoAgua());
 			parcelamento.setUltimaAlteracao(new Date());
 
-			parcelamento.setImovel(imovel);
+			parcelamento.setImovel(helper.getImovel());
 
 			ImovelPerfil imovelPerfil = new ImovelPerfil();
-			imovelPerfil.setId(imovel.getImovelPerfil().getId());
+			imovelPerfil.setId(helper.getImovel().getImovelPerfil().getId());
 			parcelamento.setImovelPerfil(imovelPerfil);
 
 			parcelamento.setRegistroAtendimento(null);
 
-			parcelamento.setUsuario(usuario);
+			parcelamento.setUsuario(helper.getUsuarioLogado());
 			parcelamento.setFuncionario(null);
 
 			LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
-			ligacaoAguaSituacao.setId(imovel.getLigacaoAguaSituacao().getId());
+			ligacaoAguaSituacao.setId(helper.getImovel().getLigacaoAguaSituacao().getId());
 			parcelamento.setLigacaoAguaSituacao(ligacaoAguaSituacao);
 
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
-			ligacaoEsgotoSituacao.setId(imovel.getLigacaoEsgotoSituacao().getId());
+			ligacaoEsgotoSituacao.setId(helper.getImovel().getLigacaoEsgotoSituacao().getId());
 			parcelamento.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 
 			Localidade localidade = new Localidade();
-			localidade.setId(imovel.getLocalidade().getId());
+			localidade.setId(helper.getImovel().getLocalidade().getId());
 			parcelamento.setLocalidade(localidade);
 
 			Quadra quadra = new Quadra();
-			quadra.setId(imovel.getQuadra().getId());
+			quadra.setId(helper.getImovel().getQuadra().getId());
 			parcelamento.setQuadra(quadra);
 
-			parcelamento.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
-			parcelamento.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			parcelamento.setCodigoSetorComercial(helper.getImovel().getSetorComercial().getCodigo());
+			parcelamento.setNumeroQuadra(helper.getImovel().getQuadra().getNumeroQuadra());
 
 			CobrancaForma cobrancaForma = new CobrancaForma();
 			cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
 			parcelamento.setCobrancaForma(cobrancaForma);
 
 			FiltroParcelamentoPerfil filtroParcelamentoPerfil = new FiltroParcelamentoPerfil();
-			filtroParcelamentoPerfil.adicionarParametro(new ParametroSimples(FiltroParcelamentoPerfil.ID, parcelamentoPerfilId));
+			filtroParcelamentoPerfil.adicionarParametro(new ParametroSimples(FiltroParcelamentoPerfil.ID, helper.getParcelamentoPerfilId()));
 
 			filtroParcelamentoPerfil.adicionarCaminhoParaCarregamentoEntidade("resolucaoDiretoria");
 
@@ -12407,14 +12439,14 @@ public class ControladorCobranca implements SessionBean {
 			parcelamento.setParcelamentoTipo(parcelamentoTipo);
 
 			// Taxa de Juros do Parcelamento
-			parcelamento.setTaxaJuros(taxaJuros);
+			parcelamento.setTaxaJuros(helper.getTaxaJuros());
 
 			parcelamento.setIndicadorConfirmacaoParcelamento(indicadorConfirmacaoParcelamento);
 
-			parcelamento.setCliente(cliente);
+			parcelamento.setCliente(helper.getCliente());
 
 			// [FS0012] Verificar existência de parcelamento no mês
-			Collection<Parcelamento> colecaoParcelamento = verificarParcelamentoMesImovel(imovel.getId());
+			Collection<Parcelamento> colecaoParcelamento = verificarParcelamentoMesImovel(helper.getImovel().getId());
 
 			if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
 				sessionContext.setRollbackOnly();
@@ -12428,9 +12460,9 @@ public class ControladorCobranca implements SessionBean {
 			ParcelamentoItem parcelamentoItem = new ParcelamentoItem();
 			parcelamentoItem.setUltimaAlteracao(new Date());
 
-			if (colecaoContaValores != null && !colecaoContaValores.isEmpty()) {
+			if (colecaoContasParaParcelamento != null && !colecaoContasParaParcelamento.isEmpty()) {
 
-				Iterator contaValores = colecaoContaValores.iterator();
+				Iterator contaValores = colecaoContasParaParcelamento.iterator();
 				while (contaValores.hasNext()) {
 
 					ContaValoresHelper contaValoresHelper = (ContaValoresHelper) contaValores.next();
@@ -12468,8 +12500,8 @@ public class ControladorCobranca implements SessionBean {
 			}
 
 			// Inserindo itens para as Guias de Pagamento
-			if (colecaoGuiaPagamentoValores != null && !colecaoGuiaPagamentoValores.isEmpty()) {
-				Iterator guiaPagamentoValores = colecaoGuiaPagamentoValores.iterator();
+			if (helper.getColecaoGuiaPagamentoValores() != null && !helper.getColecaoGuiaPagamentoValores().isEmpty()) {
+				Iterator guiaPagamentoValores = helper.getColecaoGuiaPagamentoValores().iterator();
 
 				while (guiaPagamentoValores.hasNext()) {
 					GuiaPagamentoValoresHelper guiaPagamentoValoresHelper = (GuiaPagamentoValoresHelper) guiaPagamentoValores.next();
@@ -12499,8 +12531,8 @@ public class ControladorCobranca implements SessionBean {
 			}
 
 			// Inserindo itens para Débitos a Cobrar
-			if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
-				Iterator debitoACobrarValores = colecaoDebitoACobrar.iterator();
+			if (helper.getColecaoDebitoACobrar() != null && !helper.getColecaoDebitoACobrar().isEmpty()) {
+				Iterator debitoACobrarValores = helper.getColecaoDebitoACobrar().iterator();
 
 				while (debitoACobrarValores.hasNext()) {
 					DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
@@ -12527,8 +12559,8 @@ public class ControladorCobranca implements SessionBean {
 			}
 
 			// Inserindo itens para Crédito a Realizar
-			if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
-				Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
+			if (helper.getColecaoCreditoARealizar() != null && !helper.getColecaoCreditoARealizar().isEmpty()) {
+				Iterator creditoARealizarValores = helper.getColecaoCreditoARealizar().iterator();
 
 				while (creditoARealizarValores.hasNext()) {
 					CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
@@ -16184,45 +16216,7 @@ public class ControladorCobranca implements SessionBean {
 
 			Integer referenciaContabil = obterReferenciaContabilParcelamentoOUConta(isContaEntradaParcelamento, anoMesVencimentoGuia, maiorAnoMesContas);
 
-			parcelamentoId = gerarDadosParcelamento(
-					helper.getDataParcelamento(), 
-					helper.getValorTotalContaValores(), 
-					helper.getValorGuiasPagamento(), 
-					helper.getValorDebitoACobrarServico(),
-					helper.getValorDebitoACobrarParcelamento(),
-					helper.getValorCreditoARealizar(), 
-					helper.getValorAtualizacaoMonetaria(),
-					helper.getValorJurosMora(), 
-					helper.getValorMulta(),
-					helper.getValorDebitoTotalAtualizado(),
-					helper.getDescontoFaixaReferenciaConta(),
-					helper.getDescontoAcrescimosImpontualidade(), 
-					helper.getDescontoAntiguidadeDebito(),
-					helper.getDescontoInatividadeLigacaoAgua(),
-					helper.getValorEntradaInformado(), valorJurosParcelamento,
-					helper.getNumeroPrestacoes(), 
-					helper.getValorPrestacao(),
-					helper.getIndicadorRestabelecimento().equals("") ? null : new Short(helper.getIndicadorRestabelecimento()), 
-					helper.getIndicadorContasRevisao().equals("") ? null : new Short(helper.getIndicadorContasRevisao()), 
-					helper.getIndicadorGuiasPagamento().equals("") ? null : new Short(helper.getIndicadorGuiasPagamento()),
-					helper.getIndicadorAcrescimosImpotualidade().equals("") ? null : new Short(helper.getIndicadorAcrescimosImpotualidade()),
-					helper.getIndicadorDebitosACobrar().equals("") ? null : new Short(helper.getIndicadorDebitosACobrar()),
-					helper.getIndicadorCreditoARealizar().equals("") ? null : new Short(helper.getIndicadorCreditoARealizar()),
-					helper.getPercentualDescontoAcrescimosImpontualidade(),
-					helper.getPercentualDescontoAntiguidadeDebito(),
-					helper.getPercentualDescontoInatividadeLigacaoAgua(), 
-					helper.getImovel(), helper.getUsuarioLogado(),
-					helper.getParcelamentoPerfilId(), 
-					colecaoContasParaParcelamento,
-					helper.getColecaoGuiaPagamentoValores(), 
-					helper.getColecaoDebitoACobrar(),
-					helper.getColecaoCreditoARealizar(),
-					helper.getTaxaJuros(), 
-					helper.getIndicadorConfirmacaoParcelamento().equals("") ? ConstantesSistema.SIM : new Short(helper.getIndicadorConfirmacaoParcelamento()),
-					helper.getCliente(),
-					helper.getDescontoSancoesRDEspecial(),
-					helper.getDescontoTarifaSocialRDEspecial(), 
-					referenciaContabil);
+			parcelamentoId = gerarDadosParcelamento(helper, colecaoContasParaParcelamento, valorJurosParcelamento, referenciaContabil);
 
 			// 6.1.8 [UC0108] Determinar a quantidade de economias por categoria
 			Collection<Categoria> colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(helper.getImovel());
@@ -16286,7 +16280,9 @@ public class ControladorCobranca implements SessionBean {
 					helper.getDescontoTarifaSocialRDEspecial(), 
 					isContaEntradaParcelamento, 
 					anoMesVencimentoGuia, 
-					maiorAnoMesContas);
+					maiorAnoMesContas,
+					helper.getValorCreditosAnterioresCurtoPrazo(),
+					helper.getValorCreditosAnterioresLongoPrazo());
 
 			// 6.1.13.1 [SB0007] Gera a entrada do parcelamento
 			gerarEntradaParcelamento(
@@ -23511,7 +23507,7 @@ public class ControladorCobranca implements SessionBean {
 					// [SB0001] Obter Valores de Curto e Longo Prazo
 					valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-					BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+					BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 							debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),
 							valorRestanteACobrar);
 
@@ -23528,7 +23524,7 @@ public class ControladorCobranca implements SessionBean {
 					// [SB0001] Obter Valores de Curto e Longo Prazo
 					valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-					BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+					BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 							debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),
 							valorRestanteACobrar);
 
@@ -34303,70 +34299,50 @@ public class ControladorCobranca implements SessionBean {
 	 * @param usuarioLogado
 	 * @throws ControladorException
 	 */
-	public void cancelarCreditoARealizarTransferencia(Integer idCreditoARealizar, Imovel imovelDestino, Usuario usuarioLogado)
-			throws ControladorException {
+	public void cancelarCreditoARealizarTransferencia(Integer idCreditoARealizar, Imovel imovelDestino, Usuario usuarioLogado) throws ControladorException {
+		FiltroCreditoARealizar filtroCredito = new FiltroCreditoARealizar();
+		filtroCredito.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+		filtroCredito.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCreditoARealizar));
 
-		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		Collection colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCredito, CreditoARealizar.class.getName());
+		CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
 
-		filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-
-		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCreditoARealizar));
-
-		Collection colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
-
-		CreditoARealizar creditoARealizar = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
-
-		// [FS0003] - Verifica usuário com débito em cobrança
-		// administrativa
 		FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
-
 		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacao");
+		filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovelDestino.getId()));
 
-		filtroImovelCobrancaSituacao
-				.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovelDestino.getId()));
-
-		Collection imovelCobrancaSituacaoEncontrada = getControladorUtil().pesquisar(filtroImovelCobrancaSituacao,
-				ImovelCobrancaSituacao.class.getName());
+		Collection imovelCobrancaSituacaoEncontrada = getControladorUtil().pesquisar(filtroImovelCobrancaSituacao, ImovelCobrancaSituacao.class.getName());
 
 		if (imovelCobrancaSituacaoEncontrada != null && !imovelCobrancaSituacaoEncontrada.isEmpty()) {
-
 			if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao() != null) {
 
-				if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao().getId()
-						.equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
+				if (((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getCobrancaSituacao().getId().equals(CobrancaSituacao.COBRANCA_ADMINISTRATIVA)
 						&& ((ImovelCobrancaSituacao) ((List) imovelCobrancaSituacaoEncontrada).get(0)).getDataRetiradaCobranca() == null) {
-
 					sessionContext.setRollbackOnly();
 					throw new ActionServletException("atencao.pesquisa.imovel.cobranca_administrativa");
 				}
 			}
 		}
 
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		
 		// Debito Credito Situacao Anterior
-		DebitoCreditoSituacao debitoCreditoSituacaoAnterior = new DebitoCreditoSituacao();
-		debitoCreditoSituacaoAnterior.setId(creditoARealizar.getDebitoCreditoSituacaoAtual().getId());
-
-		creditoARealizar.setDebitoCreditoSituacaoAnterior(debitoCreditoSituacaoAnterior);
+		if (credito.getAnoMesReferenciaContabil() >= sistemaParametro.getAnoMesFaturamento()) {
+			credito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(credito.getDebitoCreditoSituacaoAtual().getId()));
+		}
 
 		// Debito Credito Situacao Atual
-		DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-		debitoCreditoSituacaoAtual.setId(DebitoCreditoSituacao.CANCELADA);
-
-		creditoARealizar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
-		creditoARealizar.setUsuario(usuarioLogado);
-
-		creditoARealizar.setUltimaAlteracao(new Date());
+		credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
+		credito.setUsuario(usuarioLogado);
+		credito.setUltimaAlteracao(new Date());
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, creditoARealizar
-				.getImovel().getId(), creditoARealizar.getImovel().getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		registradorOperacao.registrarOperacao(creditoARealizar);
-
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, credito.getImovel().getId(), credito.getImovel().getId(),
+				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		registradorOperacao.registrarOperacao(credito);
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-		getControladorUtil().atualizar(creditoARealizar);
+		getControladorUtil().atualizar(credito);
 	}
 
 	/**
@@ -42851,7 +42827,7 @@ public class ControladorCobranca implements SessionBean {
 								// [SB0001] Obter Valores de Curto e Longo Prazo
 								valorRestanteACobrar = debitoACobrar.getValorTotal();
 
-								BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+								BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 										debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradas(),
 										valorRestanteACobrar);
 								valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS,
@@ -42872,7 +42848,7 @@ public class ControladorCobranca implements SessionBean {
 								// [SB0001] Obter Valores de Curto e Longo Prazo
 								valorRestanteACobrar = debitoACobrar.getValorTotal();
 
-								BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+								BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 										debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradas(),
 										valorRestanteACobrar);
 
@@ -43223,7 +43199,7 @@ public class ControladorCobranca implements SessionBean {
 							// [SB0001] Obter Valores de Curto e Longo Prazo
 							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+							BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 									debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),
 									valorRestanteACobrar);
 							valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS,
@@ -43244,7 +43220,7 @@ public class ControladorCobranca implements SessionBean {
 							// [SB0001] Obter Valores de Curto e Longo Prazo
 							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorACobrarDeCurtoELongoPrazo(
+							BigDecimal[] valoresDeCurtoELongoPrazo = getControladorFaturamento().obterValorCurtoELongoPrazo(
 									debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),
 									valorRestanteACobrar);
 

@@ -34,6 +34,8 @@ import javax.ejb.EJBException;
 import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
+import gcom.arrecadacao.Arrecadador;
+import gcom.arrecadacao.FiltroArrecadador;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.bean.DadosLigacoesBoletimCadastroHelper;
@@ -14462,5 +14464,22 @@ public class ControladorCadastro extends ControladorComum {
 	
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws Exception {
 		return repositorioCadastro.pesquisarQtdeDebitosPreteritos(idImovel);
+	}
+	
+	public boolean verificarExistenciaEmpresa(Integer idEmpresa) throws ControladorException {
+
+		boolean retorno = true;
+
+		FiltroEmpresa filtro = new FiltroEmpresa();
+
+		filtro.adicionarParametro(new ParametroSimples(FiltroArrecadador.ID, idEmpresa));
+
+		Collection empresas = getControladorUtil().pesquisar(filtro, Empresa.class.getName());
+
+		if (empresas == null || empresas.isEmpty()) {
+			throw new ControladorException("atencao.empresa_inexistente");
+		}
+		return retorno;
+
 	}
 }

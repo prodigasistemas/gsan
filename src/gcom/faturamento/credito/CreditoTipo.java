@@ -17,7 +17,7 @@ public class CreditoTipo extends ObjetoTransacao {
 	public final static Integer DESCONTO_ACRESCIMOS_IMPONTUALIDADE = new Integer(1);
 	public final static Integer DESCONTO_ANTIGUIDADE_DEBITO = new Integer(2);
 	public final static Integer DESCONTO_INATIVIDADE_LIGACAO_AGUA = new Integer(3);
-	public final static Integer CREDITOS_ANTERIORES = new Integer(4);
+	public final static Integer CREDITOS_ANTERIORES_CURTO_PRAZO = new Integer(4);
 	public final static Integer DEVOLUCAO_PAGAMENTOS_DUPLICIDADE = new Integer(5);
 	public final static Integer DEVOLUCAO_OUTROS_VALORES = new Integer(7);
 	public final static Integer DESCONTOS_CONCEDIDOS = new Integer(8);
@@ -27,6 +27,7 @@ public class CreditoTipo extends ObjetoTransacao {
 	public final static Integer PAGAMENTO_PARCIAL = new Integer(856);
 	public final static Integer PAGAMENTO_NAO_CONFERE = new Integer(860);
 	public final static Integer DESCONTO_FAIXA_REFERENCIA_CONTA = new Integer(863);
+	public final static Integer CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(864);
 	
 	private Integer id;
 	private String descricao;

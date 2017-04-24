@@ -2,6 +2,7 @@ package gcom.financeiro.lancamento;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */

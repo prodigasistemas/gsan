@@ -5722,29 +5722,17 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * Acumula o valor dos créditos realizados por localidade e categoria para
 	 * os pagamentos classificados de contas, para origem de crédito igual a
 	 * descontos concedidos.
-	 * 
-	 * @author Pedro Alexandre, Pedro Alexandre
-	 * @date 22/05/2006, 22/05/2008
-	 * 
-	 * @param idLocalidade
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idCategoria
-	 * @return
-	 * @throws ErroRepositorioException
 	 */
 	public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
 			Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao,
 			Integer idCategoria, 
-			Integer idCreditoOrigem)
+			Integer[] idsCreditosOrigem)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
-
-		// cria a variável que vai conter o hql
 		String consulta = "";
 
 		try {
@@ -5761,7 +5749,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					 				"from " +
 					 				"faturamento.credito_realizado crrz " + 
 					 				"where " +
-					 				"crrz.crog_id=:idCreditoOrigem  " +
+					 				"crrz.crog_id in (:idsCreditosOrigem)  " +
 					 				"and (crrz.cnta_id in (" +
 											 				"select " +
 											 				"distinct pgmt.cnta_id " + 
@@ -5780,7 +5768,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			retorno = (BigDecimal) session.createSQLQuery(consulta)
 					.addScalar("col_0",Hibernate.BIG_DECIMAL)
 					.setInteger("idCategoria", idCategoria)
-					.setInteger("idCreditoOrigem",idCreditoOrigem)
+					.setParameterList("idsCreditosOrigem",idsCreditosOrigem)
 					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
 					.setInteger("idLocalidade",idLocalidade)
 					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
@@ -20125,7 +20113,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			Integer idOrigemCredito)
 			throws ErroRepositorioException {
 
-		BigDecimal retorno = null;
+		BigDecimal retorno = BigDecimal.ZERO;
 
 		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();

@@ -419,7 +419,7 @@ public class ExibirEfetuarParcelamentoDebitosPortalAction extends GcomAction {
 							// [SB0001] Obter Valores de Curto e Longo Prazo
 							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(
+							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(
 									debitoACobrar.getNumeroPrestacaoDebito(), debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),
 									valorRestanteACobrar);
 							valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
@@ -440,7 +440,7 @@ public class ExibirEfetuarParcelamentoDebitosPortalAction extends GcomAction {
 							// [SB0001] Obter Valores de Curto e Longo Prazo
 							valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 
-							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(
+							BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(
 									debitoACobrar.getNumeroPrestacaoDebito(),
 									debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(), valorRestanteACobrar);
 							valorTotalRestanteParcelamentosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);

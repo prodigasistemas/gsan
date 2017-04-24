@@ -167,6 +167,21 @@ public class EfetuarParcelamentoDebitosPortalAction extends GcomAction {
 				valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal(form.getValorCreditoARealizar());
 			}
 			
+			BigDecimal valorCreditosAnterioresCurtoPrazo = BigDecimal.ZERO;
+			if(Util.verificarNaoVazio(form.getValorCreditosAnterioresCurtoPrazo())){
+				valorCreditosAnterioresCurtoPrazo = Util.formatarMoedaRealparaBigDecimal(form.getValorCreditosAnterioresCurtoPrazo());
+			}
+			
+			BigDecimal valorCreditosAnterioresLongoPrazo = BigDecimal.ZERO;
+			if(Util.verificarNaoVazio(form.getValorCreditosAnterioresLongoPrazo())){
+				valorCreditosAnterioresLongoPrazo = Util.formatarMoedaRealparaBigDecimal(form.getValorCreditosAnterioresLongoPrazo());
+			}
+			
+			BigDecimal valorTotalCreditosAnteriores = BigDecimal.ZERO;
+			if(Util.verificarNaoVazio(form.getValorTotalCreditosAnteriores())){
+				valorTotalCreditosAnteriores = Util.formatarMoedaRealparaBigDecimal(form.getValorTotalCreditosAnteriores());
+			}
+			
 			BigDecimal valorAtualizacaoMonetaria = BigDecimal.ZERO;
 			if(Util.verificarNaoVazio(form.getValorAtualizacaoMonetaria())){
 				valorAtualizacaoMonetaria = Util.formatarMoedaRealparaBigDecimal(form.getValorAtualizacaoMonetaria());
@@ -389,7 +404,8 @@ public class EfetuarParcelamentoDebitosPortalAction extends GcomAction {
 					usuarioLogado,
 					cpfClienteParcelamentoDigitado,
 					descontoSancoesRDEspecial,
-					descontoTarifaSocialRDEspecial, colecaoContasEmAntiguidade);
+					descontoTarifaSocialRDEspecial, colecaoContasEmAntiguidade,
+					valorCreditosAnterioresCurtoPrazo, valorCreditosAnterioresLongoPrazo, valorTotalCreditosAnteriores);
 			//=============================================================================================================
 			
 			try{

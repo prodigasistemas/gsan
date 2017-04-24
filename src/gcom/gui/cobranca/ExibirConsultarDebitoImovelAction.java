@@ -350,7 +350,7 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 					// [SB0001] Obter Valores de Curto e Longo Prazo
 					valorRestanteACobrar = dadosDebito.getValorTotalComBonus();
 
-					BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(
+					BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(
 							dadosDebito.getNumeroPrestacaoDebito(),	
 							dadosDebito.getNumeroPrestacaoCobradasMaisBonus(),
 							valorRestanteACobrar);

@@ -50,6 +50,9 @@ public class EfetuarParcelamentoDebitosPortalActionForm extends ValidatorActionF
 	private String valorDebitoACobrarParcelamentoCurtoPrazo;
 	private String valorCreditoARealizar;
 	private String valorDebitoTotalAtualizado;
+	private String valorCreditosAnterioresCurtoPrazo;
+	private String valorCreditosAnterioresLongoPrazo;
+	private String valorTotalCreditosAnteriores;
 	
 	private String indicadorQuantidadeParcelas;
 	private String valorEntradaInformado;
@@ -460,5 +463,29 @@ public class EfetuarParcelamentoDebitosPortalActionForm extends ValidatorActionF
 
 	public void setResolucaoDiretoria(String resolucaoDiretoria) {
 		this.resolucaoDiretoria = resolucaoDiretoria;
+	}
+
+	public String getValorCreditosAnterioresCurtoPrazo() {
+		return valorCreditosAnterioresCurtoPrazo;
+	}
+
+	public void setValorCreditosAnterioresCurtoPrazo(String valorCreditosAnterioresCurtoPrazo) {
+		this.valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo;
+	}
+
+	public String getValorCreditosAnterioresLongoPrazo() {
+		return valorCreditosAnterioresLongoPrazo;
+	}
+
+	public void setValorCreditosAnterioresLongoPrazo(String valorCreditosAnterioresLongoPrazo) {
+		this.valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo;
+	}
+
+	public String getValorTotalCreditosAnteriores() {
+		return valorTotalCreditosAnteriores;
+	}
+
+	public void setValorTotalCreditosAnteriores(String valorTotalCreditosAnteriores) {
+		this.valorTotalCreditosAnteriores = valorTotalCreditosAnteriores;
 	}
 }

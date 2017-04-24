@@ -18,6 +18,9 @@ public interface ConstantesSistema {
 
 	Integer INVALIDO_ID = -1;
 
+	Short INDICADOR_CURTO_PRAZO = new Short("0");
+	Short INDICADOR_LONGO_PRAZO = new Short("1");
+	
 	int NUMERO_NAO_INFORMADO = -1;
 	int NUMERO_MAXIMO_REGISTROS_MANUTENCAO = 50;
 	int NUMERO_MAXIMO_CONSUMO_MINIMO_FIXADO = 100;
