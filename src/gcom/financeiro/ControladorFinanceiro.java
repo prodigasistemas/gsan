@@ -7589,335 +7589,96 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * [UC0714] Gerar Contas a Receber Contábil
      *
      * Adiciona os dados de créditos realizados
-     *
-     * @author Rafael Corrêa
-     * @date 08/11/2007
-     *
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private void adicionarContaAReceberContabilCreditosRealizados(
-            Integer idLocalidade, int anoMesAnteriorFaturamento,
-            Collection colecaoContasAReceberContabil)
-            throws ErroRepositorioException {
-
-        // Pagamento em duplicidade ou excesso
-        Collection colecaoDadosCreditosRealizadosPagamentoExcesso = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosPagamentoExcesso != null
-                && !colecaoDadosCreditosRealizadosPagamentoExcesso.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosPagamentoExcessoIterator = colecaoDadosCreditosRealizadosPagamentoExcesso
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosPagamentoExcessoIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosPagamentoExcesso = (Object[]) colecaoDadosCreditosRealizadosPagamentoExcessoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosPagamentoExcesso[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
-                            50, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosPagamentoExcesso = null;
-
-        }
-
-        // Descontos concedidos no parcelamento
-        Collection colecaoDadosCreditosRealizadosDescontoParcelamento = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
-                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
-
-        if (colecaoDadosCreditosRealizadosDescontoParcelamento != null
-                && !colecaoDadosCreditosRealizadosDescontoParcelamento
-                        .isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = colecaoDadosCreditosRealizadosDescontoParcelamento
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoParcelamentoIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoParcelamento = (Object[]) colecaoDadosCreditosRealizadosDescontoParcelamentoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento,
-                            idGerenciaRegionalConta,
-                            idUnidadeNegocioConta,
-                            idLocalidadeConta,
-                            idCategoriaConta,
-                            valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            100,
-                            LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-                            60, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoParcelamento = null;
-
-        }
-        
-     // Descontos concedidos no parcelamento
-        Collection creditosDescontoParcelamentoFaixaConta = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
-                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
-        System.out.println("------> " + creditosDescontoParcelamentoFaixaConta.size());
-        if (creditosDescontoParcelamentoFaixaConta != null && !creditosDescontoParcelamentoFaixaConta.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = creditosDescontoParcelamentoFaixaConta.iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoParcelamento = (Object[]) colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
-                System.out.println("Valor: " + valorCategoria);
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento,
-                            idGerenciaRegionalConta,
-                            idUnidadeNegocioConta,
-                            idLocalidadeConta,
-                            idCategoriaConta,
-                            valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            100,
-                            LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
-                            65, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            creditosDescontoParcelamentoFaixaConta = null;
-
-        }
-
-        // Descontos condicionais
-        Collection colecaoDadosCreditosRealizadosDescontoCondicional = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDescontoCondicional != null
-                && !colecaoDadosCreditosRealizadosDescontoCondicional.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoCondicionalIterator = colecaoDadosCreditosRealizadosDescontoCondicional
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoCondicionalIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoCondicional = (Object[]) colecaoDadosCreditosRealizadosDescontoCondicionalIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoCondicional[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoCondicional[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoCondicional[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoCondicional[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoCondicional[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.DESCONTOS_CONDICIONAIS, 70, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoCondicional = null;
-
-        }
-
-        // Descontos incondicionais
-        Collection colecaoDadosCreditosRealizadosDescontoIncondicional = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDescontoIncondicional != null
-                && !colecaoDadosCreditosRealizadosDescontoIncondicional
-                        .isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoIncondicionalIterator = colecaoDadosCreditosRealizadosDescontoIncondicional
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoIncondicionalIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoIncondicional = (Object[]) colecaoDadosCreditosRealizadosDescontoIncondicionalIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoIncondicional[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 80, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoIncondicional = null;
-
-        }
-
-        // Ajustes para Zerar a Conta
-        Collection colecaoDadosCreditosRealizadosAjusteZerarConta = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosAjusteZerarConta != null
-                && !colecaoDadosCreditosRealizadosAjusteZerarConta.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosAjusteZerarContaIterator = colecaoDadosCreditosRealizadosAjusteZerarConta
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosAjusteZerarContaIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosAjusteZerarConta = (Object[]) colecaoDadosCreditosRealizadosAjusteZerarContaIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosAjusteZerarConta[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosAjusteZerarConta = null;
-
-        }
-
-        // Devoluções
-        Collection colecaoDadosCreditosRealizadosDevolucao = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDevolucao(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDevolucao != null
-                && !colecaoDadosCreditosRealizadosDevolucao.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDevolucaoIterator = colecaoDadosCreditosRealizadosDevolucao
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDevolucaoIterator.hasNext()) {
-
-                Object[] dadosCreditosRealizadosDevolucao = (Object[]) colecaoDadosCreditosRealizadosDevolucaoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDevolucao[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDevolucao[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDevolucao[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDevolucao[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDevolucao[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDevolucao = null;
-
-        }
-
+	private void adicionarContaAReceberContabilCreditosRealizados(Integer idLocalidade, int anoMesAnteriorFaturamento, Collection colecaoContasAReceberContabil) throws ErroRepositorioException {
+    	// Pagamento em duplicidade ou excesso
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO, 50);
+
+		// Descontos concedidos no parcelamento
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, 60);
+		
+		// Descontos concedidos no parcelamento Faixa Conta
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 65);
+
+		// Descontos condicionais
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONDICIONAIS, 70);
+
+		// Descontos incondicionais
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_INCONDICIONAIS, 80);
+
+		// Ajustes para Zerar a Conta
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90);
+
+		// Devoluções
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDevolucao(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95);
+		
+		
+		// Descontos concedidos no parcelamento Creditos Anteriores Curto e Long Prazo
+		Collection colecaoCurtoELongo = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+		colecaoCurtoELongo.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO));
+		
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoCurtoELongo, anoMesAnteriorFaturamento, 
+				LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES, 100);
+	}
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void distribuirCreditosRelizadosContaAReceberContabil(
+    		Collection colecaoContasAReceberContabil,
+    		Collection colecaoDados,
+    		int anoMesAnteriorFaturamento,
+            Integer idLancamentoTipo, 
+            int sequenciaLancamentoTipo,
+            Integer idLancamentoItem, 
+            int sequenciaLancamentoItem) {
+    	
+    	if (colecaoDados != null && !colecaoDados.isEmpty()) {
+			Iterator iterator = colecaoDados.iterator();
+
+			while (iterator.hasNext()) {
+				Object[] dados = (Object[]) iterator.next();
+				Integer idGerenciaRegional = (Integer) dados[0];
+				Integer idUnidadeNegocio = (Integer) dados[1];
+				Integer idLocalidade = (Integer) dados[2];
+				Integer idCategoria = (Integer) dados[3];
+				BigDecimal valor = (BigDecimal) dados[4];
+
+				if (valor != null && valor.doubleValue() > 0) {
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento, 
+							idGerenciaRegional, 
+							idUnidadeNegocio, 
+							idLocalidade, 
+							idCategoria, 
+							valor.multiply(new BigDecimal("-1")), 
+							idLancamentoTipo, 
+							sequenciaLancamentoTipo, 
+							idLancamentoItem, 
+							sequenciaLancamentoItem, 
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+		}
     }
-
+    
     /**
      * [UC0714] Gerar Contas a Receber Contábil
      *
@@ -8695,6 +8456,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         return colecaoContas;
 
     }
+    
 	private Collection obterContaContabilCreditoARealizarValoresCobradosIndevidamente(Integer idLocalidade, int anoMesAnteriorFaturamento) throws ErroRepositorioException {
 		
 		Collection contasContabeis = new ArrayList();
