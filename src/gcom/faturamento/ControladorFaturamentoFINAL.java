@@ -22481,8 +22481,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Recupera o ano/mês de faturamento corrente
 			Integer anoMesFaturamentoCorrente = sistemaParametro.getAnoMesFaturamento();
 
-			anoMesFaturamentoCorrente = Util.somaMesAnoMesReferencia(201704, -1);
-			// Alterado por Sávio Luiz Data:12/11/2007 Analista:Aryed Lins
 			// Se o mês de faturamento for igual a 11 e o indicador
 			// faturamento
 			// antecipado for igual a 1, então seta o mes de faturamento
