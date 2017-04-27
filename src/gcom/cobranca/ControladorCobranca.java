@@ -11482,6 +11482,7 @@ public class ControladorCobranca implements SessionBean {
 
 		BigDecimal valorZero = new BigDecimal("0.00");
 
+		logger.info("L11485 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " | valorTotalAcrescimosImpontualidade: " + valorTotalAcrescimosImpontualidade);
 		// 1. Parcelamento de Contas
 		if (valorTotalContas != null && valorTotalContas.doubleValue() > 0) {
 
@@ -11563,6 +11564,8 @@ public class ControladorCobranca implements SessionBean {
 		}
 
 		// 3. Parcelamento de Acrescimos por Impontualidade
+		logger.info("L11567 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " valorTotalAcrescimosImpontualidade != null ? " + valorTotalAcrescimosImpontualidade != null);
+		logger.info("L11568 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " valorTotalAcrescimosImpontualidade.doubleValue() > 0 ? " + (valorTotalAcrescimosImpontualidade.doubleValue() > 0));
 		if (valorTotalAcrescimosImpontualidade != null && valorTotalAcrescimosImpontualidade.doubleValue() > 0) {
 
 			DebitoTipo debitoTipoParcelamentoAcrescimosImpontualidade = null;
@@ -11576,7 +11579,7 @@ public class ControladorCobranca implements SessionBean {
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalAcrescimosImpontualidade) < 0) {
 				// valor entrada diferente de Zero e
 				// menor q o valor total de Acrescimos por Impontualidade
-
+				logger.info("L11582 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Primeiro if");
 				valorTotalAcrescimosImpontualidade = valorTotalAcrescimosImpontualidade.subtract(valorEntrada);
 				valorEntrada = valorZero;
 
@@ -11585,6 +11588,7 @@ public class ControladorCobranca implements SessionBean {
 				// valor entrada igual a valor total de Acrescimos por
 				// Impontualidade
 
+				logger.info("L11591 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Segundo if");
 				valorEntrada = valorZero;
 				valorTotalAcrescimosImpontualidade = valorZero;
 
@@ -11592,7 +11596,7 @@ public class ControladorCobranca implements SessionBean {
 				// valor entrada diferente de Zero e
 				// valor entrada maior q o valor total de Acrescimos por
 				// Impontualidade
-
+				logger.info("L11599 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Terceiro if");
 				valorEntrada = valorEntrada.subtract(valorTotalAcrescimosImpontualidade);
 				valorTotalAcrescimosImpontualidade = valorZero;
 
@@ -16241,7 +16245,8 @@ public class ControladorCobranca implements SessionBean {
 			} else {
 				valorEntrada = helper.getValorEntradaInformado();
 			}
-
+			
+			logger.info("L16249 concluirParcelamentoDebitos Imovel: " + helper.getImovel().getId() + " | valorAcrescimos: " +  helper.getValorAcrescimosImpontualidade());
 			// 6.1.9 [SB0005] Gerar Débitos a Cobrar
 			gerarDebitosACobrarParcelamento(
 					helper.getImovel(), 

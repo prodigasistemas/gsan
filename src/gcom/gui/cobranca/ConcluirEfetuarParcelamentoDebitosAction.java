@@ -255,6 +255,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			percentualDescontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal((String) (form.get("percentualDescontoInatividadeLigacaoAgua")));
 		}
 
+		logger.info("Imóvel: " + codigoImovel + " | valorAcrescimosImpontualidade: " + form.get("valorAcrescimosImpontualidade"));
 		BigDecimal valorAcrescimosImpontualidade = BigDecimal.ZERO;
 		if (form.get("valorAcrescimosImpontualidade") != null && !form.get("valorAcrescimosImpontualidade").equals("")) {
 			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorAcrescimosImpontualidade")));

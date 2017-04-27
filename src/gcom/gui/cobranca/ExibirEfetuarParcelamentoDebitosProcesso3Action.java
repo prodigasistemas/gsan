@@ -186,9 +186,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorDebitoTotalAtualizado"));
 				
 			}
-			
 			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorAcrescimosImpontualidade"));
 			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String)  form.get("valorCreditoARealizar"));
+			logger.info("L191 colecaoContaValores - ImóveL:" + codigoImovel + " | valorAcrescimosImpontualidade: " + valorAcrescimosImpontualidade);
 
 		} 
 		else {
@@ -320,13 +320,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 						valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
 						
 						if (parcelamentoDescontoAntiguidadeMaior.getContaMotivoRevisao() != null){
-							
 							//CONTA ENTRARÁ EM REVISÃO
 							contaValoresHelper.setRevisao(1);
-							
 						}
-					}
-					else{
+					} else {
 						
 						valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalContas = valorTotalContas.add(contaValoresHelper.getValorTotalConta());
@@ -420,13 +417,18 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			// Acrescimos por Impotualidade
 			BigDecimal retornoSoma = new BigDecimal("0.00");
 			if( indicadorAcrescimosImpotualidade.equals("1") ){
+				
 				retornoSoma.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
+				
+				logger.info("L425 ImóveL:" + codigoImovel + " | indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade + " | valorAcrescimosImpontualidade: " + retornoSoma);
+				logger.info("L426 	ImóveL:" + codigoImovel + " | valorTotalAcrescimoImpontualidadeContas: " + valorTotalAcrescimoImpontualidadeContas + " , valorTotalAcrescimoImpontualidadeGuias: " + valorTotalAcrescimoImpontualidadeGuias);
 
 				form.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
 				sessao.setAttribute("valorAcrescimosImpontualidade", retornoSoma);
 			}else{
+				logger.info("L431 ImóveL:" + codigoImovel + " | indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade + " | valorAcrescimosImpontualidade: 0.00 ");
 				form.set("valorAcrescimosImpontualidade", "0,00");
 				sessao.setAttribute("valorAcrescimosImpontualidade", new BigDecimal("0.00"));
 			}
