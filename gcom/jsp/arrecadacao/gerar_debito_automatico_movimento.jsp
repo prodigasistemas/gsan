@@ -426,12 +426,6 @@ function montarStringDados(nomeForm, nomeCampoMenu2) {
 						onkeypress="return isCampoNumerico(event);"/>
 					mm/aaaa</td>
 				</tr>
-				<tr>
-					<td width="25%"><strong>Somente grupos faturados:</strong></td>
-					<td width="74%">
-						<input type="checkbox" name="indicadorGruposFaturados" onclick="habilitaDesabilitaBotao();" value="1" />
-					</td>
-				</tr>
 				
 				<tr>
 					<td colspan="2">

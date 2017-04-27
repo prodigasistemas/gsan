@@ -58,7 +58,7 @@ public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction 
 			String dadosFaturamentoGrupo = httpServletRequest.getParameter("criaColecaoBanco");
 
 			// GERANDO COLEÇÃO DE GRUPOS
-			Collection colecaoIdsFaturamentoGrupo = this.obterGruposSelecionados(dadosFaturamentoGrupo, anoMesReferencia, form);
+			Collection colecaoIdsFaturamentoGrupo = this.obterGruposSelecionados(dadosFaturamentoGrupo, anoMesReferencia);
 
 			// OBTENDO OS DÁBITOS AUTOMÁTICOS
 			Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap = fachada.pesquisaDebitoAutomaticoMovimento(
@@ -92,7 +92,7 @@ public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction 
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection obterGruposSelecionados(String faturamentoGrupoStringBuffer, Integer anoMesReferencia, GerarMovimentoDebitoAutomaticoBancoActionForm form) {
+	private Collection obterGruposSelecionados(String faturamentoGrupoStringBuffer, Integer anoMesReferencia) {
 
 		Collection retorno = null;
 
@@ -114,17 +114,13 @@ public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction 
 				anoMesFaturamentoGrupo = new Integer(arrayGrupoEReferencia[1]);
 
 				if (anoMesReferencia > anoMesFaturamentoGrupo) {
-					form.setIndicadorGruposFaturados(null);
 					throw new ActionServletException("atencao.faturamento.posterior.faturamento.grupo");
 				}
 				
-				if (form.getIndicadorGruposFaturados() != null && form.getIndicadorGruposFaturados().equals(ConstantesSistema.SIM.toString())) {
-					boolean grupoFaturado = Fachada.getInstancia().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(
-							idFaturamentoGrupo, anoMesReferencia);
-					if (!grupoFaturado) {
-						form.setIndicadorGruposFaturados(null);
-						throw new ActionServletException("atencao.grupo_nao_faturado", idFaturamentoGrupo.toString());
-					}
+				boolean grupoFaturado = Fachada.getInstancia().verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(
+						idFaturamentoGrupo, anoMesReferencia);
+				if (!grupoFaturado) {
+					throw new ActionServletException("atencao.grupo_nao_faturado", idFaturamentoGrupo.toString());
 				}
 				
 				retorno.add(idFaturamentoGrupo);
