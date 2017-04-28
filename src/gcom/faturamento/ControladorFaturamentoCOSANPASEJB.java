@@ -416,7 +416,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								}
 
-								if (emitirContaHelper.getIdConta().equals(new Integer("65264622"))) {
+								if (emitirContaHelper.getIdConta().equals(new Integer("80926132"))) {
 									System.out.println("Conta!!");
 								}
 								String diasConsumo = obterDiasConsumo(parmsMedicaoHistorico, dataLeituraAnterior, dataLeituraAtual);

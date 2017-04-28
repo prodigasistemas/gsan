@@ -640,9 +640,6 @@ public class ImpressaoContaImpressoraTermica {
 		try {
 			imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
 			
-			if (!imovelEmitido.pertenceACondominio()) {
-				return retorno.toString();
-			}
 			LigacaoTipo lta = new LigacaoTipo();
 			lta.setId(LigacaoTipo.LIGACAO_AGUA);
 			LigacaoTipo lte = new LigacaoTipo();
@@ -896,7 +893,7 @@ public class ImpressaoContaImpressoraTermica {
 			String leituraAtualInformada = obterLeituraAtualInformada(medicaoHistoricoAgua, medicaoHistoricoPoco);
 			retorno.append(formarLinha(7, 0, 188, 330, "LEITURA", 0, 0) + formarLinha(7, 0, 190, 354, leituraAnteriorInformada, 0, 0) + formarLinha(7, 0, 190, 378, leituraAtualInformada, 0, 0));
 			
-			String dataLeituraAnteriorInformada = obterDataLeituraAnteriorInformada(medicaoHistoricoAgua, medicaoHistoricoPoco, emitirContaHelper);
+			String dataLeituraAnteriorInformada = obterDataLeituraAnteriorInformada(medicaoHistoricoAgua, medicaoHistoricoPoco, emitirContaHelper, imovelEmitido.getId());
 			String dataLeituraAtualInformada = obterDataLeituraAtualInformada(medicaoHistoricoAgua, medicaoHistoricoPoco);
 			retorno.append(formarLinha(7, 0, 320, 330, "DATA", 0, 0) + formarLinha(7, 0, 298, 354, dataLeituraAnteriorInformada, 0, 0) + formarLinha(7, 0, 298, 378, dataLeituraAtualInformada, 0, 0));
 			
@@ -1405,12 +1402,12 @@ public class ImpressaoContaImpressoraTermica {
 	
 	@SuppressWarnings("unused")
 	private String obterDataLeituraAnteriorInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, 
-			EmitirContaHelper helper) throws ControladorException {
+			EmitirContaHelper helper, Integer idImovelEmitido) throws ControladorException {
 		String dataLeituraAnteriorInformada = "";
 
 		int mesAnterior = Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1);
-		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(medicaoAgua.getLigacaoAgua().getId(), mesAnterior);
-		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(medicaoAgua.getLigacaoAgua().getId(), mesAnterior);
+		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(idImovelEmitido, mesAnterior);
+		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(idImovelEmitido, mesAnterior);
 		
 		if (medicaoAgua != null) {
 			if (medicaoAguaAnterior != null) {
