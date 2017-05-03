@@ -1890,14 +1890,9 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarQuantidadeContas(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ErroRepositorioException;
+	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper) throws ErroRepositorioException;
 
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper,
-			Integer numeroPagina, boolean percentualInformado)
-			throws ErroRepositorioException;
+	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ErroRepositorioException;
 
 	public Boolean verificarGrupoFaturamentoComandado(int anoMesReferenciaFaturamento, int idGrupoFaturamento) throws ErroRepositorioException;
 

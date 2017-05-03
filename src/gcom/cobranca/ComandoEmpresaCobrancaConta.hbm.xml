@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-		Created by the Middlegen Hibernate plugin
-		
-		http://boss.bekk.no/boss/middlegen/
-		http://hibernate.sourceforge.net/
-	-->
+
 	<class name="gcom.cobranca.ComandoEmpresaCobrancaConta" table="cobranca.cmd_empr_cobr_conta">
 		<id name="id" type="java.lang.Integer" column="cecc_id">
 			<generator class="sequence">
@@ -34,11 +29,11 @@
 		<property name="dataFimCiclo" type="java.sql.Date" column="cecc_dtfimciclo" length="4"/>
 		<property name="dataEncerramento" type="java.sql.Date" column="cecc_dtencerramento" length="4"/>
 		<property name="indicadorGeracaoTxt" type="java.lang.Integer" column="cecc_icgeracaotxt" length="4"/>
-		
-		<property name="qtdContasInicial" type="java.lang.Integer" column="CECC_QTDCONTASINICIAL" length="4"/>
-		<property name="qtdContasFinal" type="java.lang.Integer" column="CECC_QTDCONTASFINAL" length="4"/>
-		<property name="qtdDiasVencimento" type="java.lang.Integer" column="CECC_QTDDIASVENCIMENTO" length="4"/>
-		
+		<property name="qtdContasInicial" type="java.lang.Integer" column="cecc_qtdcontasinicial" length="4"/>
+		<property name="qtdContasFinal" type="java.lang.Integer" column="cecc_qtdcontasfinal" length="4"/>
+		<property name="qtdDiasVencimento" type="java.lang.Integer" column="cecc_qtddiasvencimento" length="4"/>
+		<property name="indicadorCobrancaTelemarketing" type="java.lang.Short" column="cecc_iccobrancatelemarketing" length="1" not-null="true" />
+		<property name="qtdMaximaClientes" type="java.lang.Integer" column="cecc_qtdmaximaclientes" length="9"/>
 
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>
@@ -57,12 +52,6 @@
 		</many-to-one>
 		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio">
 			<column name="uneg_id"/>
-		</many-to-one>
-		<many-to-one name="quadraInicial" class="gcom.cadastro.localidade.Quadra">
-			<column name="qdra_idinicial"/>
-		</many-to-one>
-		<many-to-one name="quadraFinal" class="gcom.cadastro.localidade.Quadra">
-			<column name="qdra_idfinal"/>
 		</many-to-one>
 		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional">
 			<column name="greg_id"/>

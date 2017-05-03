@@ -728,8 +728,7 @@ public interface IControladorCobranca {
 			throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public void gerarArquivoTextoContasEmCobrancaEmpresa(Collection ids, Integer idEmpresa, Integer idUnidadeNegocio, int idFuncionalidadeIniciada)
-			throws ControladorException;
+	public void gerarArquivoTextoContasEmCobrancaEmpresa(Collection ids, Integer idEmpresa, int idFuncionalidadeIniciada) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterUnidadeNegocioEmpresaCobrancaConta(Integer[] ids) throws ControladorException;

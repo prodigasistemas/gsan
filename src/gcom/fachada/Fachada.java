@@ -16161,25 +16161,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0450] Pesquisar Ordem de Servico verifica o tamanho da consulta
-	 * 
-	 * [SB001] Selecionar Ordem de Servico por Situação [SB002] Selecionar Ordem
-	 * de Servico por Situação da Programação [SB003] Selecionar Ordem de
-	 * Servico por Matricula do Imovel [SB004] Selecionar Ordem de Servico por
-	 * Codigo do Cliente [SB005] Selecionar Ordem de Servico por Unidade
-	 * Superior [SB006] Selecionar Ordem de Servico por Município [SB007]
-	 * Selecionar Ordem de Servico por Bairro [SB008] Selecionar Ordem de
-	 * Servico por Bairro Logradouro
-	 * 
-	 * @author Rafael Pinto
-	 * @date 18/08/2006
-	 * 
-	 * @param PesquisarOrdemServicoHelper
-	 * 
-	 * @return Integer
-	 * @throws ControladorException
-	 */
 	public Integer pesquisarOrdemServicoTamanho(PesquisarOrdemServicoHelper filtro) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOrdemServicoTamanho(filtro);
@@ -16188,21 +16169,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Metodo responsável pela remoção das guias de devolução
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 24/11/2006
-	 * 
-	 * @param idImovel
-	 * @param usuarioLogado
-	 * @param ids
-	 * @param pacoteNomeObjeto
-	 * @param operacaoEfetuada
-	 * @param acaoUsuarioHelper
-	 */
 	public void removerGuiaDevolucao(String idImovel, Usuario usuarioLogado, String[] ids, String pacoteNomeObjeto, OperacaoEfetuada operacaoEfetuada,
 			Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper) {
 
@@ -16214,13 +16180,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Usado pelo Filtrar Imovel
-	 * 
-	 * 
-	 * @author Rafael Santos
-	 * @date 27/11/2006
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovel(String idImovel, String idLocalidade, String codigoSetorComercial, String numeroQuadra, String lote, String subLote, String codigoCliente, String idMunicipio,
 			String cep, String idBairro, String idLogradouro, String numeroImovelInicial, String numeroImovelFinal, boolean pesquisarImovelManterVinculo, boolean pesquisarImovelCondominio,
@@ -16234,13 +16193,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Usado pelo Filtrar Imovel e o Pesquisar Imovel Pesquisa a quantidade de
-	 * imoveis
-	 * 
-	 * @author Rafael Santos
-	 * @date 27/11/2006
-	 */
 	public Integer pesquisarQuantidadeImovel(String idImovel, String idLocalidade, String codigoSetorComercial, String numeroQuadra, String lote, String subLote, String codigoCliente,
 			String idMunicipio, String cep, String idBairro, String idLogradouro, String numeroImovelInicial, String numeroImovelFinal, boolean pesquisarImovelManterVinculo,
 			boolean pesquisarImovelCondominio) {
@@ -16253,13 +16205,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Usado pelo Pesquisar Imovel Retorno o Imovel, com o Nome do Cliente,
-	 * Matricula e endereço
-	 * 
-	 * @author Rafael Santos
-	 * @date 27/11/2006
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelInscricao(String idImovel, String idLocalidade, String codigoSetorComercial, String numeroQuadra, String lote, String subLote, String codigoCliente,
 			String idMunicipio, String cep, String idBairro, String idLogradouro, String numeroImovelInicial, String numeroImovelFinal, boolean pesquisarImovelCondominio, Integer numeroPagina) {
@@ -16272,18 +16217,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 23/11/2006
-	 * 
-	 * @param filtroImovel
-	 * @param usuarioLogado
-	 * @return
-	 */
 	public Collection<Imovel> pesquisarImovelEfetuarParcelamento(FiltroImovel filtroImovel, Usuario usuarioLogado) {
 
 		try {
@@ -16293,25 +16226,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0490] Informar Ocorrencia de Cadastro e/ou Anormalidade de Elo
-	 * 
-	 * @author Tiago Moreno
-	 * @date 27/11/2006
-	 * 
-	 * @param idImovel
-	 * @param idOcorrenciaCadastro
-	 * @param idAnormalidadeElo
-	 * @param dataOcorrenciaCadastro
-	 * @param dataAnormalidadeElo
-	 * @param uploadPictureCadastro
-	 * @param uploadPictureAnormalidade
-	 * @param usuarioLogado
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 * 
-	 */
 	public void informarOcorrenciaCadastroAnormalidadeElo(String idImovel, String idOcorrenciaCadastro, String idAnormalidadeElo, String dataOcorrenciaCadastro, String dataAnormalidadeElo,
 			byte[] uploadPictureCadastro, byte[] uploadPictureAnormalidade, Usuario usuarioLogado, Collection colecaoIdCadastroOcorrenciaRemover, Collection colecaoIdAnormalidadeRemover) {
 
@@ -16324,15 +16238,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * [UC0214] - Efetuar Parcelamento de débitos
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 28/11/2006
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 	public Boolean verificarQtdeReparcelamentoPerfil(Integer idPerfilParc, Short numeroReparcelamentoConsecutivos) {
 		try {
 			return this.getControladorCobranca().verificarQtdeReparcelamentoPerfil(idPerfilParc, numeroReparcelamentoConsecutivos);
@@ -16341,23 +16246,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0498] Efetuar Ligação de Água com Instalação de hidrômetro.
-	 * 
-	 * Permite validar o efetuar ligação de Água com Instalação de hidrômetro
-	 * Exibir ou pelo menu ou pela funcionalidade encerrar a execução da ordem
-	 * de serão.
-	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do imóvel
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 27/11/2006
-	 * 
-	 * 
-	 * @param imovel
-	 * @throws ControladorException
-	 */
 	public void validarLigacaoAguaComInstalacaoHidrometroExibir(OrdemServico ordem, boolean veioEncerrarOS) {
 
 		try {
@@ -16369,17 +16257,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Verifica permissão especial para aceitar um valor de entrada menor q o
-	 * valor Mínimo de entrada na terceira página de Efetuar Parcelamento
-	 * débitos
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 28/11/2006
-	 * 
-	 * @param httpServletRequest
-	 * @param usuario
-	 */
 	public boolean verificarPermissaoValMinimoEntrada(Usuario usuario) {
 		try {
 			return this.getControladorPermissaoEspecial().verificarPermissaoValMinimoEntrada(usuario);
@@ -16388,17 +16265,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0498] Efetuar Ligação de Água com Instalação de hidrômetro.
-	 * 
-	 * Permite efetuar ligação de Água com Instalação de Hidrometro ou pelo menu
-	 * ou pela funcionalidade encerrar a execução da ordem de serão.
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 29/11/2006
-	 * 
-	 * @param integracaoComercialHelper
-	 */
 	public void efetuarLigacaoAguaComInstalacaoHidrometro(IntegracaoComercialHelper integracaoComercialHelper, Usuario usuario) {
 
 		try {
@@ -16410,17 +16276,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Usado pelo Filtrar Cliente Filtra o Cliente usando os paramentos
-	 * informados
-	 * 
-	 * @author Rafael Santos
-	 * @date 27/11/2006
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio, String idBairro, String idLogradouro,
 			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, Integer numeroPagina) {
 		try {
@@ -16432,18 +16287,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * 
-	 * Usado pelo Filtrar Cliente Filtra a quantidade de Clientes usando os
-	 * paramentos informados
-	 * 
-	 * @author Rafael Santos
-	 * @date 27/11/2006
-	 * 
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio, String idBairro, String idLogradouro,
 			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder) {
 		try {
@@ -16455,15 +16298,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * [UC0375] Manter Unidade Organizacional
-	 * 
-	 * @author Ana Maria
-	 * @date 24/11/2006
-	 * 
-	 * @param unidadeOrganizacional
-	 * @throws ControladorException
-	 */
 	public void atualizarUnidadeOrganizacional(UnidadeOrganizacional unidadeOrganizacional, Usuario usuario) {
 		try {
 			this.getControladorUnidade().atualizarUnidadeOrganizacional(unidadeOrganizacional, usuario);
@@ -16472,15 +16306,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0375] Manter Unidade Organizacional
-	 * 
-	 * @author Ana Maria
-	 * @date 28/11/2006
-	 * 
-	 * @param unidadeOrganizacional
-	 * @throws ControladorException
-	 */
 	public UnidadeOrganizacional pesquisarUnidadeOrganizacional(Integer idUnidadeOrganizacional) {
 		try {
 			return this.getControladorUnidade().pesquisarUnidadeOrganizacional(idUnidadeOrganizacional);
@@ -16506,18 +16331,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0498] - Efetuar Ligação de Água com Instalaação de hidrômetro
-	 * 
-	 * Pesquisa o id do hidrômetro e a sua situação pelo número
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 29/11/2006
-	 * 
-	 * @param numeroHidrometro
-	 * @return Hidrometro
-	 * @throws ControladorException
-	 */
 	public Hidrometro pesquisarHidrometroPeloNumero(String numeroHidrometro) {
 		try {
 			return this.getControladorMicromedicao().pesquisarHidrometroPeloNumero(numeroHidrometro);
@@ -16526,27 +16339,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0263] Filtrar Movimento dos Arrecadadores
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 30/11/06
-	 * 
-	 * @param codigoBanco
-	 * @param codigoRemessa
-	 * @param descricaoIdentificacaoServico
-	 * @param numeroSequencialArquivo
-	 * @param dataGeracaoInicio
-	 * @param dataGeracaoFim
-	 * @param ultimaAlteracaoInicio
-	 * @param ultimaAlteracaoFim
-	 * @param descricaoOcorrencia
-	 * @param indicadorAceitacao
-	 * @param numeroPagina
-	 * @param indicadorAbertoFechado
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<ArrecadadorMovimento> filtrarMovimentoArrecadadorParaPaginacao(String codigoBanco, String codigoRemessa, String descricaoIdentificacaoServico, String numeroSequencialArquivo,
 			Date dataGeracaoInicio, Date dataGeracaoFim, Date ultimaAlteracaoInicio, Date ultimaAlteracaoFim, String descricaoOcorrencia, String indicadorAceitacao, Integer numeroPagina,
 			String indicadorAbertoFechado) {
@@ -16558,26 +16350,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0263] Filtrar Movimento dos Arrecadadores
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 30/11/06
-	 * 
-	 * @param codigoBanco
-	 * @param codigoRemessa
-	 * @param descricaoIdentificacaoServico
-	 * @param numeroSequencialArquivo
-	 * @param dataGeracaoInicio
-	 * @param dataGeracaoFim
-	 * @param ultimaAlteracaoInicio
-	 * @param ultimaAlteracaoFim
-	 * @param descricaoOcorrencia
-	 * @param indicadorAceitacao
-	 * @param indicadorAbertoFechado
-	 * 
-	 * @throws ControladorException
-	 */
 	public Integer filtrarMovimentoArrecadadoresCount(String codigoBanco, String codigoRemessa, String descricaoIdentificacaoServico, String numeroSequencialArquivo, Date dataGeracaoInicio,
 			Date dataGeracaoFim, Date ultimaAlteracaoInicio, Date ultimaAlteracaoFim, String descricaoOcorrencia, String indicadorAceitacao, String indicadorAbertoFechado) {
 		try {
@@ -16588,17 +16360,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0366] Inserir Registro de Atendimento
-	 * 
-	 * [SB0027] é Inclui Solicitante do Registro de Atendimento
-	 * (REGISTRO_ATENDIMENTO_SOLICITANTE)
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 24/08/2006
-	 * 
-	 * @throws ControladorException
-	 */
 	public boolean clienteObrigatorioInserirRegistroAtendimento(Integer idEspecificacao) {
 
 		try {
@@ -16609,21 +16370,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 29/08/06
-	 * 
-	 * @param FiltroPagamento
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoLocalidadeAmbosRelatorio(String idImovel, String idCliente, String idTipoRelacao, String localidadeInicial, String localidadeFinal, String idAvisoBancario,
 			String idArrecadador, String periodoArrecadacaoInicial, String periodoArrecadacaoFinal, String periodoPagamentoInicio, String periodoPagamentoFim, Date dataPagamentoInicial,
@@ -16638,16 +16384,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa o imóvel pelo id fazendo os carregamentos necessários
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 16/12/06
-	 * 
-	 * @return Imovel
-	 */
 	public Imovel pesquisarImovelPagamento(Integer idImovel) {
 		try {
 			return this.getControladorArrecadacao().pesquisarImovelPagamento(idImovel);
@@ -16656,17 +16392,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa o cliente pelo id fazendo os carregamentos necessários
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 16/12/06
-	 * 
-	 * @return Cliente
-	 * @throws ErroRepositorioException
-	 */
 	public Cliente pesquisarClientePagamento(Integer idCliente) {
 		try {
 			return this.getControladorArrecadacao().pesquisarClientePagamento(idCliente);
@@ -16675,17 +16400,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa o endereço de correspondência do cliente pelo seu id fazendo os
-	 * carregamentos necessários
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 16/12/06
-	 * 
-	 * @return ClienteEndereco
-	 */
 	public ClienteEndereco pesquisarClienteEnderecoPagamento(Integer idCliente) {
 		try {
 			return this.getControladorArrecadacao().pesquisarClienteEnderecoPagamento(idCliente);
@@ -16694,17 +16408,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa o telefone padrão do cliente pelo seu id fazendo os
-	 * carregamentos necessários
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 16/12/06
-	 * 
-	 * @return ClienteFone
-	 */
 	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente) {
 		try {
 			return this.getControladorArrecadacao().pesquisarClienteFonePagamento(idCliente);
@@ -16713,18 +16416,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa os clientes do imóvel pelo seu id do imóvel fazendo os
-	 * carregamentos necessários
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 16/12/06
-	 * 
-	 * @return Collection<ClienteImovel>
-	 * @throws ControladorException
-	 */
 	public Collection<ClienteImovel> pesquisarClientesImoveisPagamento(Integer idImovel) {
 		try {
 			return this.getControladorArrecadacao().pesquisarClientesImoveisPagamento(idImovel);
@@ -16733,20 +16424,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * Pesquisa os pagamentos do tipo Debito a Cobrar do Cliente
-	 * pesquisarPagamentoLocalidade
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 21/12/06
-	 * 
-	 * @return Collection<Pagamento>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Pagamento> pesquisarPagamentoMovimentoArrecadadorParaPaginacao(String idImovel, String idCliente, String idTipoRelacao, String localidadeInicial, String localidadeFinal,
 			String idAvisoBancario, String idArrecadador, String periodoArrecadacaoInicial, String periodoArrecadacaoFinal, String periodoPagamentoInicio, String periodoPagamentoFim,
 			Date dataPagamentoInicial, Date dataPagamentoFinal, String[] idsPagamentosSituacoes, String[] idsDebitosTipos, String[] idsArrecadacaoForma, String[] idsDocumentosTipos,
@@ -16764,23 +16441,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * [UC0490] Informar Situação de Cobrança
-	 * 
-	 * @author Tiago Moreno
-	 * @date 09/12/2006
-	 * 
-	 * @param imovel
-	 * @param situacaoCobranca
-	 * @param cliente
-	 * @param dataImplantação
-	 * @param anoMesInicio
-	 * @param anoMesFim
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 * 
-	 */
 	public void inserirImovelSitucaoCobranca(Imovel imovel, CobrancaSituacao cobrancaSituacao, Cliente cliente, Cliente clienteEscritorio, Cliente clienteAdvogado, Date dataImplantacao,
 			Integer anoMesInicio, Integer anoMesFim, Usuario usuarioLogado) {
 
@@ -16800,17 +16460,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
-	 * 
-	 * 
-	 * @author Sávio Luiz
-	 * @date 14/11/2006
-	 * 
-	 * @param idOS
-	 * @return Integer[]
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Integer[] informarRetornoOSFiscalizacao(Integer idOrdemServico, String indicadorDocumentoEntregue, Integer idLigacaoAguaSituacaoImovel, Integer idLigacaoEsgotoSituacaoImovel,
 			Integer idImovel, String indicadorMedicaoTipo, String indicadorGeracaoDebito, Integer idCobrancaDocumento, Usuario usuarioLogado,
@@ -16825,21 +16474,8 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
-
 	}
 
-	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
-	 * 
-	 * Recupera o id da situação da ligação de agua
-	 * 
-	 * @author Sávio Luiz
-	 * @date 14/11/2006
-	 * 
-	 * @param idOS
-	 * @return OrdemServico
-	 * @throws ControladorException
-	 */
 	public Integer pesquisarIdLigacaoAguaSituacao(Integer idImovel) {
 
 		try {
@@ -39671,16 +39307,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1136] Inserir Contrato de Parcelamento por Cliente [UC1139] Atualizar
-	 * Contrato de Parcelamento por Cliente
-	 * 
-	 * Calcula e retorna os valores das parcelas do contrato de parcelamento a
-	 * partir de uma RD.
-	 * 
-	 * @author Mariana Victor
-	 * @data 29/08/2011
-	 */
 	public InserirContratoParcelamentoValoresParcelasHelper calcularValoresParcelasContratoParcelamentoRD(BigDecimal valorContaSelecaoTotal, BigDecimal valorContaComAcrescimo,
 			String indicadorDebitoAcresc, String indicadorParcelJuros, ContratoParcelamento contratoParcelamento, QuantidadePrestacoes quantidadePrestacoes) {
 		try {
@@ -39691,15 +39317,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1213] Emitir Relatorio de Ordem de Servico de Fiscalizacao
-	 * 
-	 * 
-	 * @author Paulo Diniz
-	 * @date 06/08/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public ClienteImovel pesquisarClienteImovelOSFiscalizada(Integer idImovel) {
 		try {
 			return this.getControladorCliente().pesquisarClienteImovelOSFiscalizada(idImovel);
@@ -39708,15 +39325,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1213] Emitir Relatorio de Ordem de Servico de Fiscalizacao
-	 * 
-	 * 
-	 * @author Paulo Diniz
-	 * @date 06/08/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public OrdemServico pesquisarOrdemServicoFiscalizada(Integer idOrdemServico) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOrdemServicoFiscalizada(idOrdemServico);
@@ -39725,13 +39333,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC 1217] – Gerar Relatório de Transferencia de Pagamento
-	 * 
-	 * @author Raimundo Martins
-	 * 
-	 * @date 19/08/2011
-	 */
 	public List<RelatorioTranferenciaPagamentoBean> pesquisarTransfereciasPagamento(Arrecadador arrecadador, String periodoInicial, String periodoFinal, AvisoBancario avisoBancario,
 			ArrecadacaoForma arrecadacaoForma, DebitoTipo debitoTipo, DocumentoTipo documentoTipo) {
 		try {
@@ -39741,13 +39342,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC 0869] Gerar Arqv Texto das Contas em Cobrança por Empresa
-	 * 
-	 * @author Paulo Diniz
-	 * @data 03/08/2011
-	 * 
-	 */
 	public Object[] pesquisarDadosQtdContasEDiasVencidos(Integer idComando) {
 		try {
 			return this.getControladorCobranca().pesquisarDadosQtdContasEDiasVencidos(idComando);
@@ -39756,13 +39350,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC 0869] Gerar Arqv Texto das Contas em Cobrança por Empresa
-	 * 
-	 * @author Paulo Diniz
-	 * @data 03/08/2011
-	 * 
-	 */
 	public Collection<CmdEmpresaCobrancaContaLigacaoAguaSituacao> pesquisarColecaoLigacaoAguaSituacaoPorComandoEmpresaCobrancaConta(Integer idComando) {
 		try {
 			return this.getControladorCobranca().pesquisarColecaoLigacaoAguaSituacaoPorComandoEmpresaCobrancaConta(idComando);
@@ -39771,18 +39358,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
-	 * 
-	 * 10. O usuário conclui o acerto dos pagamentos
-	 * 
-	 * @author Mariana Victor
-	 * @date 24/08/2011
-	 * 
-	 * @param helper
-	 * @return
-	 * @throws ControladorException
-	 */
 	public void efetuarAcertosPagamentos(InformarAcertoDocumentosNaoAceitosHelper helper) {
 		try {
 
@@ -39793,16 +39368,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
-	 * 
-	 * @author Mariana Victor
-	 * @date 24/08/2011
-	 * 
-	 * @param idGuia
-	 * 
-	 * @return Integer
-	 */
 	public Integer pesquisarLocalidadeGuiaPagamento(Integer idGuia) {
 		try {
 
@@ -39813,16 +39378,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
-	 * 
-	 * @author Mariana Victor
-	 * @date 24/08/2011
-	 * 
-	 * @param idConta
-	 * 
-	 * @return Integer
-	 */
 	public Integer pesquisarLocalidadeConta(Integer idConta) {
 		try {
 
@@ -39833,17 +39388,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
-	 * 
-	 * @author Mariana Victor
-	 * @date 24/08/2011
-	 * 
-	 * @param idDebitoACobrar
-	 * 
-	 * @return Integer
-	 * @throws ControladorException
-	 */
 	public Integer pesquisarLocalidadeDebitoACobrar(Integer idDebitoACobrar) {
 		try {
 
@@ -39854,14 +39398,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa Pesquisa dados do
-	 * popup
-	 * 
-	 * @author Hugo Azevedo
-	 * @date 25/08/2011
-	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "unchecked" })
 	public Collection<Object[]> pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) {
 		try {
 			return this.getControladorCobranca().pesquisarDadosPopupExtensaoComandoAguaSituacao(idComando);
@@ -39870,15 +39407,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1199] Acompanhamento de Arquivos de Roteiro Reordena Sequencial de
-	 * Programação Acompanhamento de Servico
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 27/08/2011
-	 * @param ordemServico
-	 * @throws ControladorException
-	 */
 	public short reordenaSequencialOSProgramacao(Date dataRoteiro, short sequencialInformado, Integer idEquipe) {
 
 		try {
@@ -39888,22 +39416,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1199] - Acompanhamento de Arquivos de Roteiro
-	 * 
-	 * Pesquisa os id's das equipes que ainda possuem OS, para a data informada,
-	 * que ainda não foram encaminhadas para o campo.
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 06/07/2011
-	 * 
-	 * @param dataRoteiro
-	 *            - Data para a pesquisa das OS
-	 * 
-	 * @return Collection<Integer> - Coleção com todos os ID's das equipes.
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Equipe> pesquisarEquipesOSNaoEnviadasProgramadas(Integer idUnidadeLotacao, Date dataRoteiro, Integer idEquipe) {
 		try {
 			return this.getControladorOrdemServico().pesquisarEquipesOSNaoEnviadasProgramadas(idUnidadeLotacao, dataRoteiro, idEquipe);
@@ -39912,22 +39424,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1206] Informar Situação da Ordem de Serviço
-	 * 
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 29/08/2011
-	 * 
-	 * @param idEquipe
-	 *            - Id da equipe atual
-	 * @param dataRoteiro
-	 *            - Data para a incluisão das OS
-	 * 
-	 * @return void...
-	 * 
-	 * @throws ControladorException
-	 */
 	public void atualizarOrdemProgramacaoAcompServicoInformarSituacao(Integer idArquivo, Date dataRoteiro, Integer idOrdemServico, Short novaSituacao, Integer idOsProgramNaoEncerMotivo) {
 		try {
 			this.getControladorOrdemServico().atualizarOrdemProgramacaoAcompServicoInformarSituacao(idArquivo, dataRoteiro, idOrdemServico, novaSituacao, idOsProgramNaoEncerMotivo);
@@ -39936,18 +39432,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0457] - Encerrar Ordem de Serviço. [SB0009] - Verificar Situação
-	 * Especial de Faturamento.
-	 * 
-	 * Verifica se um imóvel está em situação especial de faturamento para um
-	 * dado imovel (idImovel). A situação especial de faturamento tem o ftst_id
-	 * = 2
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * @throws ControladorException
-	 */
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) {
 		try {
 			return this.getControladorImovel().pesquisarImovelSituacaoEspecialFaturamento(idImovel);
@@ -39956,24 +39440,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0467] Atualizar Ordem Serviço
-	 * 
-	 * Atualiza os dados da tabela de acompanhamento de serviço de acordo com os
-	 * dados informados.
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 31/08/2011
-	 * 
-	 * @param idEquipe
-	 *            - Id da equipe atual
-	 * @param dataRoteiro
-	 *            - Data para a incluisão das OS
-	 * 
-	 * @return void...
-	 * 
-	 * @throws ControladorException
-	 */
 	public void atualizarOSProgramacaoAcompServico(Integer idArquivo, Date dataRoteiro, Integer idOrdemServico, Integer idServicoTipo) {
 		try {
 			this.getControladorOrdemServico().atualizarOSProgramacaoAcompServico(idArquivo, dataRoteiro, idOrdemServico, idServicoTipo);
@@ -39982,20 +39448,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC-1209] Acompanhar Serviços no Dispositivo Móvel
-	 * 
-	 * Método que irá pesquisar o arquivo que será carregado no celular
-	 * 
-	 * @autor Bruno Barros
-	 * @date 31/08/2011
-	 * 
-	 * @param imei
-	 *            - Imei do aparalho que irá receber o arquivo
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 	public byte[] baixarArquivoTextoAcompanhamentoServico(long imei) {
 		try {
 			return this.getControladorOrdemServico().baixarArquivoTextoAcompanhamentoServico(imei);
@@ -40004,14 +39456,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1199] Acompanhamento de Arquivos de Roteiro
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 27/08/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<OSProgramacaoAcompanhamentoServico> pesquisarOSProgramacaoAcompArquivoComDataRoteiroIdEquipe(Date dataRoteiro, Integer idArquivo) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOSProgramacaoAcompArquivoComDataRoteiroIdEquipe(dataRoteiro, idArquivo);
@@ -40020,24 +39464,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1199] - Acompanhamento de Arquivos de Roteiro
-	 * 
-	 * Pesquisa o Arquivo Texto do Acompanhamento de Serviço por Equipe e Data
-	 * Roteiro
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 06/07/2011
-	 * 
-	 * @param idEquipe
-	 *            - Identificador da equipe
-	 * @param dataRoteiro
-	 *            - Data do roteiro a ser pesquisado
-	 * 
-	 * @return Integer - Numero do imei da equipe informada
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public ArquivoTextoAcompanhamentoServico pesquisarArquivoTextoAcompanhamentoServicoEquipe(Integer idEquipe, Date dataRoteiro) {
 		try {
 			return this.getControladorOrdemServico().pesquisarArquivoTextoAcompanhamentoServicoEquipe(idEquipe, dataRoteiro);
@@ -40046,14 +39472,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1199] - Acompanhamento Arquivos Roteiro Remanejar Ordem Servico Action
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 06/09/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public OrdemServicoProgramacao pesquisarOSProgramacaoAtivaComDataRoteiroIdEquipe(Integer numeroOS, Date dataRoteiro, Integer idEquipe) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOSProgramacaoAtivaComDataRoteiroIdEquipe(numeroOS, dataRoteiro, idEquipe);
@@ -40062,15 +39480,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Reordena Sequencial de Programação Acompanhamento de Serviço
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 27/08/2011
-	 * 
-	 * @param ordemServico
-	 * @throws ControladorException
-	 */
 	public void reordenaSequencialOSProgramacaoAcompServico(Date dataRoteiro, short sequencialInformado, Integer idEquipe, short sequencialAtual) {
 		try {
 			this.getControladorOrdemServico().reordenaSequencialOSProgramacaoAcompServico(dataRoteiro, sequencialInformado, idEquipe, sequencialAtual);
@@ -40079,18 +39488,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UCXXX] - Retornar Mensagem Cadastrada para Equipe
-	 * 
-	 * @author Thúlio Araújo
-	 * @date 08/09/2011
-	 * 
-	 * @param imei
-	 * 
-	 * @return MensagemAcompanhamentoServico - Objeto de Mensagem
-	 * 
-	 * @throws ControladorException
-	 */
 	public String retornaMensagemAcompanhamentoArquivosRoteiroImei(long imei) {
 		try {
 			return this.getControladorOrdemServico().retornaMensagemAcompanhamentoArquivosRoteiroImei(imei);
@@ -40099,16 +39496,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Obtém a principal categoria
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 13/09/2011
-	 * 
-	 * @param icolecaoImovelSubCategorias
-	 * @return
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Categoria obterPrincipalCategoria(Collection colecaoImovelSubCategorias) {
 		try {
@@ -40118,16 +39505,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Obtém a principal subcategoria
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 13/09/2011
-	 * 
-	 * @param icolecaoImovelSubCategorias
-	 * @return
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public ImovelSubcategoria obterPrincipalSubcategoria(Integer idCategoria, Collection colecaoImovelSubCategorias) {
 		try {
@@ -40137,12 +39514,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
-	 * 
-	 * @author Mariana Victor
-	 * @data 13/09/2011
-	 */
 	public CobrancaForma pesquisarFormaPagamentoRD(Integer idRD) {
 		try {
 			return this.getControladorContratoParcelamento().pesquisarFormaPagamentoRD(idRD);
@@ -40151,19 +39522,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Filtrar a quantidade de pagamento historicos do cliente
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * Pesquisa os pagamentos do Cliente
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 15/09/11
-	 * 
-	 * @return Collection<Pagamento>
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarPagamentoHistoricoClienteCount(String idImovel, String idCliente, String idTipoRelacao, String localidadeInicial, String localidadeFinal, String idAvisoBancario,
 			String idArrecadador, String periodoArrecadacaoInicial, String periodoArrecadacaoFinal, String periodoPagamentoInicio, String periodoPagamentoFim, Date dataPagamentoInicial,
 			Date dataPagamentoFinal, String[] idsPagamentosSituacoes, String[] idsDebitosTipos, String[] idsArrecadacaoForma, String[] idsDocumentosTipos, String valorPagamentoInicial,
@@ -40178,21 +39536,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * historico para o Relatório
-	 * 
-	 * [UC0255] Filtrar Pagamentos
-	 * 
-	 * Pesquisa os pagamentos do cliente pesquisarPagamento
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 16/09/11
-	 * 
-	 * @param FiltroPagamento
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoHistoricoClienteRelatorio(String idImovel, String idCliente, String idTipoRelacao, String localidadeInicial, String localidadeFinal, String idAvisoBancario,
 			String idArrecadador, String periodoArrecadacaoInicial, String periodoArrecadacaoFinal, String periodoPagamentoInicio, String periodoPagamentoFim, Date dataPagamentoInicial,
@@ -40207,20 +39550,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC-1209] Acompanhar Serviço no Dispositivo Móvel
-	 * 
-	 * Método que irá pesquisar o arquivo que será carregado no celular
-	 * 
-	 * @autor Bruno Barros
-	 * @date 31/08/2011
-	 * 
-	 * @param imei
-	 *            - Imei do aparalho que ir?eceber o arquivo
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 	public byte[] atualizarArquivoTextoAcompanhamentoServico(long imei) {
 		try {
 			return this.getControladorOrdemServico().atualizarArquivoTextoAcompanhamentoServico(imei);
@@ -40229,20 +39558,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC-1225] Incluir dados acompanhamento servico
-	 * 
-	 * Método que insere o array de bytes vindo do celular e o insere no banco
-	 * 
-	 * @param numeroOS
-	 *            - Id da OS
-	 * @param tipoFoto
-	 *            - Se essa foto foi do inicio do meio ou do fim da obra
-	 * @param foto
-	 *            - array de bytes com a foto em si
-	 * 
-	 * @throws FachadaException
-	 */
 	public void inserirFotoOrdemServico(int numeroOS, int tipoFoto, byte[] foto) throws FachadaException {
 		try {
 			this.getControladorOrdemServico().inserirFotoOrdemServico(numeroOS, tipoFoto, foto);
@@ -40251,18 +39566,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC-1225] Incluir dados acompanhamento servico
-	 * 
-	 * Altera a situação de uma ordem de serviço no GSAN
-	 * 
-	 * @param numeroOS
-	 *            - Id da OS
-	 * @param situacao
-	 *            - Id da nova situacao
-	 * 
-	 * @throws FachadaException
-	 */
 	public void atualizarSituacaoProgramacaoOrdemServico(int numeroOS, short situacao) throws FachadaException {
 		try {
 			this.getControladorOrdemServico().atualizarSituacaoProgramacaoOrdemServico(numeroOS, situacao);
@@ -40271,20 +39574,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1227] Atualizar Ordens Serviço de Acompanhamento de Celular
-	 * 
-	 * Método que irá atualizar as ordens de serviço para encerradas
-	 * 
-	 * @autor Sávio Luiz
-	 * @date 22/09/2011
-	 * 
-	 * @param dataProgramação
-	 *            - data de programação
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 	public void atualizarOrdemServicoAcompanhamentoServico(Date dataProgramacao, Integer idEquipe, Integer idUnidadeOrganizacional) throws FachadaException {
 		try {
 			this.getControladorOrdemServico().atualizarOrdemServicoAcompanhamentoServico(dataProgramacao, idEquipe, idUnidadeOrganizacional);
@@ -40293,20 +39582,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
-	 * 
-	 * Este caso de uso permite a inserção de dados na tabela de ordem de
-	 * serviço para acompanhamento do serviço.
-	 * 
-	 * @author Thúlio Araújo
-	 * 
-	 * @date 22/09/2011
-	 * @param buffer
-	 *            - BufferedReader com o arquivo selecionado
-	 * @return Object[]
-	 * @throws ControladorException
-	 */
 	public void retornoAtualizarOrdemServicoAcompanhamentoServico(BufferedReader buffer) throws FachadaException {
 		try {
 			this.getControladorOrdemServico().retornoAtualizarOrdemServicoAcompanhamentoServico(buffer);
@@ -40315,20 +39590,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC-1209] Acompanhar Serviços no Dispositivo Móvel
-	 * 
-	 * Método que irá pesquisar o arquivo que será carregado no celular
-	 * 
-	 * @autor Sávio Luiz
-	 * @date 31/08/2011
-	 * 
-	 * @param imei
-	 *            - Imei do aparalho que irá receber o arquivo
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 	public void atualizarSituacaoArquivoTextoAcompanhamentoServico(long imei, Short idSituacaoTransmissaoLeitura) throws FachadaException {
 		try {
 			this.getControladorOrdemServico().atualizarSituacaoArquivoTextoAcompanhamentoServico(imei, idSituacaoTransmissaoLeitura);
@@ -40337,19 +39598,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Gerar um ralatorio de leituras realizadas
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 08/09/2011
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioLeiturasRealizadas(int anoMesFaturamento, Integer idFaturamentoGrupo) {
 		try {
@@ -40359,17 +39607,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * @author Adriana Muniz
-	 * @date 06/12/2011
-	 * 
-	 *       Pesquisa o perfil do imovel pelo id do imóvel
-	 * 
-	 * @param idImovelPerfil
-	 * @return
-	 */
 	public ImovelPerfil pesquisarImovelPerfilIdImovel(Integer idImovel) {
 		try {
 			return this.getControladorImovel().pesquisarImovelPerfilIdImovel(idImovel);
@@ -40378,20 +39615,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Gerar um ralatorio de medicao do faturamento
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 16/09/2011
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param idEmpresa
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioMedicaoFaturamento(int anoMesReferencia, Integer idFaturamentoGrupo, Integer idEmpresa) {
 		try {
@@ -40401,19 +39624,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Gerar um ralatorio de contas retidas
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 15/09/2011
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(int anoMesReferencia, Integer idFaturamentoGrupo) {
 		try {
 			return getControladorFaturamento().pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
@@ -40422,12 +39632,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Relaotio de RAs por Unidade Por Usuário
-	 * 
-	 * @author Wellington Rocha
-	 * @date 18/12/2012
-	 */
 	public List<RAPorUnidadePorUsuarioHelper> filtrarRelatorioRegistroAtendimentoPorUnidadePorUsuario(FiltrarRelatorioRegistroAtendimentoPorUnidadePorUsuarioHelper filtro) {
 		try {
 			return this.getControladorRegistroAtendimento().filtrarRelatorioRegistroAtendimentoPorUnidadePorUsuario(filtro);
@@ -40436,17 +39640,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * @author Pamela Gatinho
-	 * 
-	 * @param imovel
-	 * @param medicaoHistorico
-	 * @param sistemaParametro
-	 * 
-	 * @throws ControladorException
-	 */
 	public boolean verificarSubstituicaoHidrometro(Imovel imovel, MedicaoHistorico medicaoHistorico, SistemaParametro sistemaParametro) throws ControladorException {
 		try {
 			return this.getControladorMicromedicao().verificarSubstituicaoHidrometro(imovel, medicaoHistorico, sistemaParametro);
@@ -40455,11 +39648,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pamela Gatinho - 06/06/2011 Adicionando o método para verificar se houve
-	 * substituicao de hidrometro no período da leitura anterior faturada até a
-	 * data atual
-	 */
 	public boolean verificarInstalacaoSubstituicaoHidrometro(Integer idImovel, MedicaoTipo medicaoTipo) throws ControladorException {
 		try {
 			return this.getControladorMicromedicao().verificarInstalacaoSubstituicaoHidrometro(idImovel, medicaoTipo);
@@ -40468,43 +39656,11 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * 
-	 * @author Pamela Gatinho
-	 * 
-	 *         Metodo que obtem o nome do arquivo transmitido pelo IS
-	 * 
-	 * @return nomeArquivoRetorno
-	 * @param localidade
-	 * @param codigoSetor
-	 * @param codigoRota
-	 * @param anoMesReferencia
-	 * @param tipoFinalizacao
-	 * @throws ErroRepositorioException
-	 */
 	public StringBuilder obterNomeArquivoRetorno(ArquivoTextoRetornoIS arquivoRetorno) {
 
 		return getControladorFaturamento().obterNomeArquivoRetorno(arquivoRetorno);
 	}
 
-	/**
-	 * Alteracao feita para a rota dividida não finalizar os imoveis por IMEI, e
-	 * sim, pelo numero do arquivo dividido.
-	 */
-	/**
-	 * Metodo para atualizar a rota dividida por partes
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 04/02/2011
-	 * 
-	 * @param idRota
-	 * @param anoMesFaturamento
-	 * @param numeroSequenciaArquivo
-	 * @param situacaoAnterior
-	 * @param situacaoNova
-	 * @throws ControladorException
-	 */
 	public void atualizarArquivoTextoDividido(Integer idRota, Integer anoMesFaturamento, Integer numeroSequenciaArquivo, int situacaoAnterior, int situacaoNova) {
 		try {
 			getControladorMicromedicao().atualizarArquivoTextoDividido(idRota, anoMesFaturamento, numeroSequenciaArquivo, situacaoAnterior, situacaoNova);
@@ -40514,14 +39670,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * [UC0146] Manter Conta(por conjunto de imóveis)
-	 * 
-	 * FS0028 - Verificar parâmetro consulta e débito automático
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, Integer idGrupoFaturamento) {
 		try {
@@ -40531,20 +39679,6 @@ public class Fachada {
 		}
 	}
 
-	/*
-	 * autor: Adriana Muniz
-	 * 
-	 * Alteração para a conta considerar como filtro grupo de faturamento,
-	 * quando o mesmo estiver preenchido
-	 */
-	/**
-	 * @autor: Adriana Muniz
-	 * @date: 27/04/2011
-	 * 
-	 *        Método para retornar a quantidade de imóveis com débito automático
-	 *        - Manter Contas de um Conjunto de imóveis.
-	 * 
-	 * */
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, Integer anoMesInicial, Integer anoMesFinal, Date dataVencimentoInicial, Date dataVencimentoFinal,
 			String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico) {
 		try {
@@ -40555,17 +39689,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * @autor: Adriana Muniz
-	 * @date: 23/11/2011
-	 * 
-	 *        Pesquisa todas as esferas de poder ativas. Manter Contas de um
-	 *        Conjunto de Imóveis.
-	 * 
-	 * @return Collection
-	 */
 	public Collection<EsferaPoder> pesquisarEsferaPoder() {
 		try {
 			return getControladorCadastro().pesquisarEsferaPoder();
@@ -40574,19 +39697,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * Método para obter todos os imóveis que já foram processados na
-	 * transmissão do arquivo de retorno do IS
-	 * 
-	 * @author Felipe Santos
-	 * @date 22/08/2011
-	 * 
-	 * @param idRota
-	 * @return List<Integer> retorno
-	 * @throws ErroRepositorioException
-	 */
 	public List<Integer> obterImoveisMovimentoContaPF(Integer idRota, Integer anoMesFaturamento) {
 		try {
 			return this.getControladorFaturamento().obterImoveisMovimentoContaPF(idRota, anoMesFaturamento);
@@ -40595,15 +39705,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa por Localidade, Id da Rota e
-	 * Ano/Mês de Referência
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 * 
-	 * @return ArquivoTextoRoteiroEmpresa
-	 */
 	public ArquivoTextoRoteiroEmpresa pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(Integer idLocalidade, Integer idRota, Integer anoMesReferencia) {
 		try {
 			return this.getControladorMicromedicao().pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(idLocalidade, idRota, anoMesReferencia);
@@ -40612,14 +39713,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa Divisão
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 * 
-	 * @return ArquivoTextoRoteiroEmpresaDivisao
-	 */
 	public ArquivoTextoRoteiroEmpresaDivisao pesquisarArquivoTextoRoteiroEmpresaDivisao(Integer atreId, Integer numeroSequenciaArquivo) {
 		try {
 			return this.getControladorMicromedicao().pesquisarArquivosTextoRoteiroEmpresaDivisao(atreId, numeroSequenciaArquivo);
@@ -40639,20 +39732,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 04/08/2011
-	 * 
-	 *       Metodo que obtem a conta do imóvel, so não retorna a conta que
-	 *       estiver com a situacao CANCELADA POR RETIFICACAO
-	 * 
-	 * @return Conta
-	 * @param anoMesReferencia
-	 * @param idImovel
-	 * @throws ErroRepositorioException
-	 */
 	public Conta obterContaImovel(Integer idImovel, Integer anoMesReferencia) {
 		try {
 			return getControladorFaturamento().obterContaImovel(idImovel, anoMesReferencia);
@@ -40662,19 +39741,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 24/02/2012
-	 * 
-	 *       Metodo que obtem o movimento do imóvel lido pelo IS
-	 * 
-	 * @return MovimentoContaPreFaturada
-	 * @param anoMesReferencia
-	 * @param idImovel
-	 * @throws ErroRepositorioException
-	 */
 	public MovimentoContaPrefaturada obterMovimentoImovel(Integer idImovel, Integer anoMesReferencia) {
 		try {
 			return getControladorFaturamento().obterMovimentoImovel(idImovel, anoMesReferencia);
@@ -40684,16 +39750,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa uma rota pelo id da localidade e do setor comercial
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 01/08/2011
-	 * 
-	 * @param idLocalidade
-	 * @param codigoSetorComercial
-	 * @throws ControladorException
-	 */
 	public MedicaoHistorico pesquisarMedicaoHistorico(Integer idImovel, Integer anoMes, Integer idMedicaoTipo) {
 		try {
 			return getControladorMicromedicao().pesquisarMedicaoHistoricoAnterior(idImovel, anoMes, idMedicaoTipo);
@@ -40703,14 +39759,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0629] Retornar Arquivo Texto Roteiro Empresa completo
-	 * 
-	 * @author Felipe Santos
-	 * @date 28/07/2011
-	 * 
-	 * @return Collection
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarArquivosTextoRoteiroEmpresaCompletoParaArquivoZip(String[] ids) {
 		try {
@@ -40720,20 +39768,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * Método para obter todos os imóveis que faltam ser processados na
-	 * transmissão offline do arquivo de retorno do IS
-	 * 
-	 * @author Felipe Santos
-	 * @date 26/01/2012
-	 * 
-	 * @param idRota
-	 * @return List<Integer> retorno
-	 * @throws ErroRepositorioException
-	 * @throws ErroRepositorioException
-	 */
 	public List<Integer> obterImoveisNaoEnviadosMovimentoContaPreFaturada(Integer idRota, Integer anoMesFaturamento) {
 		try {
 			return this.getControladorMicromedicao().obterImoveisNaoEnviadosMovimentoContaPreFaturada(idRota, anoMesFaturamento);
@@ -40742,28 +39776,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 *
-	 * 
-	 * @author Adriana Muniz
-	 * @date 10/12/2012
-	 * 
-	 *       Consultar Dados Diários da Arrecadação a partir da tabela
-	 *       arrecadacao_dados_diarios_aulixiar
-	 * 
-	 *       Verificar se existe dados diarios da arrecadacao de acordo com o
-	 *       filtro passado
-	 * 
-	 * 
-	 * @param anoMesInicial
-	 *            Inicio do periodo da consulta
-	 * @param anoMesFinal
-	 *            Final do periodo da consulta
-	 * @param filtro
-	 *            Filtro com os parametros setados para a consulta
-	 * @return boolean de existencia dos dados
-	 * @throws ControladorException
-	 */
 	public boolean verificarExistenciaDadosDiariosArrecadacaoAuxiliar(int anoMesInicial, int anoMesFinal, FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) {
 		try {
 

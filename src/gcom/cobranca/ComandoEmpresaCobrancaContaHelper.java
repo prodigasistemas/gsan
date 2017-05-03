@@ -8,16 +8,16 @@ import gcom.cadastro.localidade.UnidadeNegocio;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class ComandoEmpresaCobrancaContaHelper implements
-		Serializable {
+public class ComandoEmpresaCobrancaContaHelper implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
-	
+
 	private ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta;
-	
+
 	private Collection<UnidadeNegocio> colecaoUnidadeNegocio;
-	
+
 	private Collection<GerenciaRegional> colecaoGerenciaRegional;
-	
+
 	private Collection<ImovelPerfil> colecaoImovelPerfil;
 
 	private Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao;
@@ -26,8 +26,11 @@ public class ComandoEmpresaCobrancaContaHelper implements
 		super();
 	}
 
-	public ComandoEmpresaCobrancaContaHelper(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<UnidadeNegocio> colecaoUnidadeNegocio, Collection<GerenciaRegional> colecaoGerenciaRegional, Collection<ImovelPerfil> colecaoImovelPerfil) {
+	public ComandoEmpresaCobrancaContaHelper(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<UnidadeNegocio> colecaoUnidadeNegocio,
+			Collection<GerenciaRegional> colecaoGerenciaRegional, Collection<ImovelPerfil> colecaoImovelPerfil) {
+		
 		super();
+		
 		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
 		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
 		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
@@ -38,8 +41,7 @@ public class ComandoEmpresaCobrancaContaHelper implements
 		return colecaoGerenciaRegional;
 	}
 
-	public void setColecaoGerenciaRegional(
-			Collection<GerenciaRegional> colecaoGerenciaRegional) {
+	public void setColecaoGerenciaRegional(Collection<GerenciaRegional> colecaoGerenciaRegional) {
 		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
 	}
 
@@ -55,8 +57,7 @@ public class ComandoEmpresaCobrancaContaHelper implements
 		return colecaoUnidadeNegocio;
 	}
 
-	public void setColecaoUnidadeNegocio(
-			Collection<UnidadeNegocio> colecaoUnidadeNegocio) {
+	public void setColecaoUnidadeNegocio(Collection<UnidadeNegocio> colecaoUnidadeNegocio) {
 		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
 	}
 
@@ -64,8 +65,7 @@ public class ComandoEmpresaCobrancaContaHelper implements
 		return comandoEmpresaCobrancaConta;
 	}
 
-	public void setComandoEmpresaCobrancaConta(
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
+	public void setComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
 		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
 	}
 
@@ -73,10 +73,8 @@ public class ComandoEmpresaCobrancaContaHelper implements
 		return colecaoLigacaoAguaSituacao;
 	}
 
-	public void setColecaoLigacaoAguaSituacao(
-			Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao) {
+	public void setColecaoLigacaoAguaSituacao(Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao) {
 		this.colecaoLigacaoAguaSituacao = colecaoLigacaoAguaSituacao;
 	}
-	
 
 }

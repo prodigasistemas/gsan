@@ -717,8 +717,7 @@ public interface IControladorFaturamento {
 
 	public Integer obterReferenciaContabilConta(SistemaParametro sistemaParametro);
 
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper,
-			Integer numeroPagina, boolean percentualInformado) throws ControladorException;
+	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) throws ControladorException;

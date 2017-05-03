@@ -64581,21 +64581,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0870] Gerar Movimento de Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa os imóveis das contas
-	 * 
-	 * @author: Rafael Corrêa
-	 * @date: 28/10/2008
 	 */
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper,
-			Integer numeroPagina, boolean percentualInformado)
+	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado)
 			throws ControladorException {
 		try {
-			return repositorioFaturamento
-					.pesquisarImoveisInformarContasEmCobranca(
-							comandoEmpresaCobrancaContaHelper, numeroPagina,
-							percentualInformado);
+			return repositorioFaturamento.pesquisarImoveisInformarContasEmCobranca(helper, percentualInformado);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
@@ -64604,18 +64594,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas
-	 * 
-	 * @author: Rafael Corrêa
-	 * @date: 27/10/2008
 	 */
-	public Collection pesquisarQuantidadeContas(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ControladorException {
+	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper) throws ControladorException {
 		try {
-			return repositorioFaturamento
-					.pesquisarQuantidadeContas(comandoEmpresaCobrancaContaHelper);
+			return repositorioFaturamento.pesquisarQuantidadeContas(helper);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -64623,11 +64605,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0193] - Consultar Histórico de Faturamento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 11/11/2008
-	 * 
-	 * @param imovelID
 	 */
 	public Collection obterDebitoACobrarImovel(Integer imovelID)
 			throws ControladorException {
@@ -64643,11 +64620,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0193] - Consultar Histórico de Faturamento
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 11/11/2008
-	 * 
-	 * @param imovelID
 	 */
 	public Collection obterDebitoACobrarHistoricoImovel(Integer imovelID)
 			throws ControladorException {

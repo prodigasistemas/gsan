@@ -7,9 +7,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
-		Serializable {
+public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private Integer idComandoEmpresaCobrancaConta;
 
 	private Integer idEmpresa;
@@ -22,46 +23,32 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 
 	private BigDecimal valorMinimoConta;
 
-	/** nullable persistent field */
 	private BigDecimal valorMaximoConta;
 
-	/** nullable persistent field */
 	private Integer referenciaContaInicial;
 
-	/** nullable persistent field */
 	private Integer referenciaContaFinal;
 
-	/** nullable persistent field */
 	private Date dataVencimentoContaInicial;
 
-	/** nullable persistent field */
 	private Date dataVencimentoContaFinal;
 
-	/** nullable persistent field */
 	private Date dataExecucao;
 
-	/** nullable persistent field */
 	private Integer idImovel;
 
-	/** nullable persistent field */
 	private Integer idCliente;
 
-	/** nullable persistent field */
 	private String nomeCliente;
 
-	/** nullable persistent field */
 	private Integer idLocalidadeInicial;
 
-	/** nullable persistent field */
 	private Integer idLocalidadeFinal;
 
-	/** nullable persistent field */
 	private Integer idUnidadeNegocio;
 
-	/** nullable persistent field */
 	private String nomeUnidadeNegocio;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
 	private Integer qtdeTotalContasCobranca;
@@ -135,77 +122,29 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 	private Conta conta;
 
 	private String nomeAbreviadoCliente;
-	
+
 	private String tipoLogradouro;
-	
-	// Campos adicionados para o layout 2
 
 	private Integer idGerenciaRegional;
 
 	private String nomeGerenciaRegional;
 
 	private Integer quantidadeContas;
-	
+
 	private Short codigoLayoutTxt;
 
 	private List<Conta> colecaoConta;
 
 	private Integer idOrdemServico;
-	
+
 	private String nomeMunicipio;
-	
-	public String getNomeAbreviadoCliente() {
-		return nomeAbreviadoCliente;
-	}
 
-	public void setNomeAbreviadoCliente(String nomeAbreviadoCliente) {
-		this.nomeAbreviadoCliente = nomeAbreviadoCliente;
-	}
-
-	public Conta getConta() {
-		return conta;
-	}
-
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
-	/**
-	 * Construtor de GerarArquivoTextoContasCobrancaEmpresaHelper
-	 * 
-	 * @param idComandoEmpresaCobrancaConta
-	 * @param empresa
-	 * @param codigoSetorComercialInicial
-	 * @param codigoSetorComercialFinal
-	 * @param valorMinimoConta
-	 * @param valorMaximoConta
-	 * @param referenciaContaInicial
-	 * @param referenciaContaFinal
-	 * @param dataVencimentoContaInicial
-	 * @param dataVencimentoContaFinal
-	 * @param dataExecucao
-	 * @param imovel
-	 * @param cliente
-	 * @param localidadeInicial
-	 * @param localidadeFinal
-	 * @param unidadeNegocio
-	 * @param ultimaAlteracao
-	 * @param qtdeTotalContasCobranca
-	 * @param valorTotalContasCobranca
-	 */
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(
-			Integer idComandoEmpresaCobrancaConta, Integer idEmpresa,
-			String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta,
-			BigDecimal valorMaximoConta, Integer referenciaContaInicial,
-			Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel,
-			Integer idCliente, String nomeCliente, Integer idLocalidadeInicial,
-			Integer idLocalidadeFinal, Integer idUnidadeNegocio,
-			String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca,
-			BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
+			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
 		super();
-		
+
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;
@@ -230,45 +169,13 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/**
-	 * Construtor de GerarArquivoTextoContasCobrancaEmpresaHelper
-	 * 
-	 * @param empresa
-	 * @param codigoSetorComercialInicial
-	 * @param codigoSetorComercialFinal
-	 * @param valorMinimoConta
-	 * @param valorMaximoConta
-	 * @param referenciaContaInicial
-	 * @param referenciaContaFinal
-	 * @param dataVencimentoContaInicial
-	 * @param dataVencimentoContaFinal
-	 * @param dataExecucao
-	 * @param imovel
-	 * @param cliente
-	 * @param localidadeInicial
-	 * @param localidadeFinal
-	 * @param unidadeNegocio
-	 * @param ultimaAlteracao
-	 * @param qtdeTotalContasCobranca
-	 * @param valorTotalContasCobranca
-	 * @param qtdeContasCriterioComando
-	 * @param valorContasCriterioComando
-	 */
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(
-			Integer idComandoEmpresaCobrancaConta, Integer idEmpresa,
-			String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta,
-			BigDecimal valorMaximoConta, Integer referenciaContaInicial,
-			Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel,
-			Integer idCliente, String nomeCliente, Integer idLocalidadeInicial,
-			Integer idLocalidadeFinal, Integer idUnidadeNegocio,
-			String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca,
-			BigDecimal valorTotalContasCobranca,
-			Integer qtdeContasCriterioComando,
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
+			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Integer qtdeContasCriterioComando,
 			BigDecimal valorContasCriterioComando, Date ultimaAlteracao) {
 		super();
-		
+
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;
@@ -295,10 +202,34 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	public GerarArquivoTextoContasCobrancaEmpresaHelper() {
-		
-	}
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
+			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Date ultimaAlteracao) {
+		super();
 
+		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
+		this.idEmpresa = idEmpresa;
+		this.nomeEmpresa = nomeEmpresa;
+		this.codigoSetorComercialInicial = codigoSetorComercialInicial;
+		this.codigoSetorComercialFinal = codigoSetorComercialFinal;
+		this.valorMinimoConta = valorMinimoConta;
+		this.valorMaximoConta = valorMaximoConta;
+		this.referenciaContaInicial = referenciaContaInicial;
+		this.referenciaContaFinal = referenciaContaFinal;
+		this.dataVencimentoContaInicial = dataVencimentoContaInicial;
+		this.dataVencimentoContaFinal = dataVencimentoContaFinal;
+		this.dataExecucao = dataExecucao;
+		this.idImovel = idImovel;
+		this.idCliente = idCliente;
+		this.nomeCliente = nomeCliente;
+		this.idLocalidadeInicial = idLocalidadeInicial;
+		this.idLocalidadeFinal = idLocalidadeFinal;
+		this.idUnidadeNegocio = idUnidadeNegocio;
+		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	
 	public Integer getCodigoSetorComercialFinal() {
 		return codigoSetorComercialFinal;
 	}
@@ -311,8 +242,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		return codigoSetorComercialInicial;
 	}
 
-	public void setCodigoSetorComercialInicial(
-			Integer codigoSetorComercialInicial) {
+	public void setCodigoSetorComercialInicial(Integer codigoSetorComercialInicial) {
 		this.codigoSetorComercialInicial = codigoSetorComercialInicial;
 	}
 
@@ -384,8 +314,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		return valorContasCriterioComando;
 	}
 
-	public void setValorContasCriterioComando(
-			BigDecimal valorContasCriterioComando) {
+	public void setValorContasCriterioComando(BigDecimal valorContasCriterioComando) {
 		this.valorContasCriterioComando = valorContasCriterioComando;
 	}
 
@@ -417,8 +346,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		return idComandoEmpresaCobrancaConta;
 	}
 
-	public void setIdComandoEmpresaCobrancaConta(
-			Integer idComandoEmpresaCobrancaConta) {
+	public void setIdComandoEmpresaCobrancaConta(Integer idComandoEmpresaCobrancaConta) {
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 	}
 
@@ -654,8 +582,6 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 		this.numeroLote = numeroLote;
 	}
 
-	
-
 	public int getNumeroQuadra() {
 		return numeroQuadra;
 	}
@@ -735,7 +661,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 	public void setValorServicos(BigDecimal valorServicos) {
 		this.valorServicos = valorServicos;
 	}
-	
+
 	public String getTipoLogradouro() {
 		return tipoLogradouro;
 	}
@@ -787,77 +713,36 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 	public Integer getIdOrdemServico() {
 		return idOrdemServico;
 	}
-	
+
 	public void setIdOrdemServico(Integer idOrdemServico) {
 		this.idOrdemServico = idOrdemServico;
 	}
-	
+
 	public String getNomeMunicipio() {
 		return nomeMunicipio;
 	}
-	
 
 	public void setNomeMunicipio(String nomeMunicipio) {
 		this.nomeMunicipio = nomeMunicipio;
 	}
 	
-
-	/**
-	 * Construtor de GerarArquivoTextoContasCobrancaEmpresaHelper
-	 * 
-	 * @param idComandoEmpresaCobrancaConta
-	 * @param empresa
-	 * @param codigoSetorComercialInicial
-	 * @param codigoSetorComercialFinal
-	 * @param valorMinimoConta
-	 * @param valorMaximoConta
-	 * @param referenciaContaInicial
-	 * @param referenciaContaFinal
-	 * @param dataVencimentoContaInicial
-	 * @param dataVencimentoContaFinal
-	 * @param dataExecucao
-	 * @param imovel
-	 * @param cliente
-	 * @param localidadeInicial
-	 * @param localidadeFinal
-	 * @param unidadeNegocio
-	 * @param ultimaAlteracao
-	 * @param qtdeTotalContasCobranca
-	 * @param valorTotalContasCobranca
-	 */
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(
-			Integer idComandoEmpresaCobrancaConta, Integer idEmpresa,
-			String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta,
-			BigDecimal valorMaximoConta, Integer referenciaContaInicial,
-			Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel,
-			Integer idCliente, String nomeCliente, Integer idLocalidadeInicial,
-			Integer idLocalidadeFinal, Integer idUnidadeNegocio,
-			String nomeUnidadeNegocio,  Date ultimaAlteracao) {
-		super();
-		
-		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
-		this.idEmpresa = idEmpresa;
-		this.nomeEmpresa = nomeEmpresa;
-		this.codigoSetorComercialInicial = codigoSetorComercialInicial;
-		this.codigoSetorComercialFinal = codigoSetorComercialFinal;
-		this.valorMinimoConta = valorMinimoConta;
-		this.valorMaximoConta = valorMaximoConta;
-		this.referenciaContaInicial = referenciaContaInicial;
-		this.referenciaContaFinal = referenciaContaFinal;
-		this.dataVencimentoContaInicial = dataVencimentoContaInicial;
-		this.dataVencimentoContaFinal = dataVencimentoContaFinal;
-		this.dataExecucao = dataExecucao;
-		this.idImovel = idImovel;
-		this.idCliente = idCliente;
-		this.nomeCliente = nomeCliente;
-		this.idLocalidadeInicial = idLocalidadeInicial;
-		this.idLocalidadeFinal = idLocalidadeFinal;
-		this.idUnidadeNegocio = idUnidadeNegocio;
-		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
-		this.ultimaAlteracao = ultimaAlteracao;
+	public String getNomeAbreviadoCliente() {
+		return nomeAbreviadoCliente;
 	}
 
-	
+	public void setNomeAbreviadoCliente(String nomeAbreviadoCliente) {
+		this.nomeAbreviadoCliente = nomeAbreviadoCliente;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
+	public GerarArquivoTextoContasCobrancaEmpresaHelper() {
+
+	}
 }

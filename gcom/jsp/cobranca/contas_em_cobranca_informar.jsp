@@ -18,22 +18,14 @@
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<html:javascript staticJavascript="false"
-	formName="InformarContasEmCobrancaActionForm" />
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<html:javascript staticJavascript="false" formName="InformarContasEmCobrancaActionForm" />
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>Calendario.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
 
-<SCRIPT LANGUAGE="JavaScript"><!--
-
-	
 	function limparEmpresa() {
 		var form = document.forms[0];
 		form.idEmpresa.value = "";
@@ -434,7 +426,6 @@
 			form.idsGerenciaRegional.value = "-1";
 			form.idsGerenciaRegional.disabled = true;
 			form.idsGerenciaRegional.selectedIndex = 0;
-			//form.idsCategoria.disabled = true;
 			
 		} else if(form.idsLigacaoAguaSituacao.value != null 
 			&& form.idsLigacaoAguaSituacao.value != ''  
@@ -663,13 +654,11 @@
 		}
 	}
 	
-	
---></script>
+</script>
 
 </head>
 
-<body leftmargin="5" topmargin="5"
-	onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();">
+<body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();">
 
 <div id="formDiv">
 <html:form action="/exibirInformarContasEmCobrancaAction"
@@ -730,7 +719,6 @@
 						src="imagens/parahead_right.gif" /></td>
 				</tr>
 			</table>
-			<!--Fim Tabela Reference a Páginação da Tela de Processo-->
 			<p>&nbsp;</p>
 			<html:hidden property="colecaoInformada"/>
 			<html:hidden property="totalSelecionado"/>
@@ -738,9 +726,25 @@
 			<input type="hidden" name="tipoPesquisa" />
 			<table width="100%" border="0">
 				<tr>
-					<td colspan="2">Para gerar o comando das contas em cobrança por empresa,
-					informe os dados abaixo:</td>
+					<td colspan="2">Para gerar o comando das contas em cobrança por empresa, informe os dados abaixo:</td>
 				</tr>
+				
+				<tr><td colspan="2"></td></tr>
+				
+				<tr>
+					<td width="30%"><strong>Cobrança por Telemarketing:</strong></td>
+					<td colspan="6">
+						<span class="style2">
+							<strong>
+								<label><html:radio property="indicadorCobrancaTelemarketing" value="1"/>Sim</label>
+ 				  				<label><html:radio property="indicadorCobrancaTelemarketing" value="2"/>Não</label>
+                  			</strong>
+                  		</span>
+					</td>
+				</tr>
+				
+				<tr><td colspan="2"><hr></td></tr>
+				
 				<tr>
 					<td width="30%"><strong>Imóvel:</strong></td>
 					<td><html:text maxlength="9" property="idImovel" size="9"
@@ -751,12 +755,12 @@
 						src="<bean:message key='caminho.imagens'/>pesquisa.gif" width="23"
 						height="21" alt="Pesquisar" border="0"></a> <logic:present
 						name="imovelInexistente" scope="request">
-						<html:text property="inscricaoImovel" size="40" maxlength="40"
+						<html:text property="inscricaoImovel" size="37" maxlength="37"
 							readonly="true"
 							style="border: 0pt none ; background-color:#EFEFEF; color: #ff0000" />
 					</logic:present> <logic:notPresent name="imovelInexistente"
 						scope="request">
-						<html:text property="inscricaoImovel" size="40" maxlength="40"
+						<html:text property="inscricaoImovel" size="37" maxlength="37"
 							readonly="true"
 							style="background-color:#EFEFEF; border:0; color: #000000" />
 					</logic:notPresent> <a href="javascript:limparImovel();limparTotalizacao();"> <img
@@ -773,12 +777,12 @@
 						src="<bean:message key='caminho.imagens'/>pesquisa.gif" width="23"
 						height="21" alt="Pesquisar" border="0"></a> <logic:present
 						name="clienteInexistente" scope="request">
-						<html:text property="nomeCliente" size="40" maxlength="40"
+						<html:text property="nomeCliente" size="37" maxlength="37"
 							readonly="true"
 							style="border: 0pt none ; background-color:#EFEFEF; color: #ff0000" />
 					</logic:present> <logic:notPresent name="clienteInexistente"
 						scope="request">
-						<html:text property="nomeCliente" size="40" maxlength="40"
+						<html:text property="nomeCliente" size="37" maxlength="37"
 							readonly="true"
 							style="background-color:#EFEFEF; border:0; color: #000000" />
 					</logic:notPresent> <a href="javascript:limparCliente();limparTotalizacao();"> <img
@@ -807,7 +811,7 @@
 				</tr>
 				<tr>
 					<td width="30%"><strong>Perfil do Imóvel:</strong></td>
-					<td><html:select property="idsImovelPerfil" tabindex="3" multiple="mutiple" size="4" onchange="javascript:limparTotalizacao();">
+					<td><html:select property="idsImovelPerfil" tabindex="4" multiple="mutiple" size="4" onchange="javascript:limparTotalizacao();">
 						<logic:notEmpty name="colecaoImovelPerfil">
 							<option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</option>
 							<html:options collection="colecaoImovelPerfil"
@@ -817,7 +821,7 @@
 				</tr>
 				<tr>
 					<td width="30%"><strong>Gerência Regional:</strong></td>
-					<td><html:select property="idsGerenciaRegional" tabindex="3" multiple="mutiple" size="4" onchange="javascript:bloqueiaDados();limparTotalizacao();">
+					<td><html:select property="idsGerenciaRegional" tabindex="5" multiple="mutiple" size="4" onchange="javascript:bloqueiaDados();limparTotalizacao();">
 						<logic:notEmpty name="colecaoGerenciaRegional">
 							<option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</option>
 							<html:options collection="colecaoGerenciaRegional"
@@ -827,7 +831,7 @@
 				</tr>
 				<tr>
 					<td width="30%"><strong>Unidade Negócio:</strong></td>
-					<td><html:select property="idsUnidadeNegocio" tabindex="3" multiple="mutiple" size="4" onchange="javascript:bloqueiaDados();limparTotalizacao();">
+					<td><html:select property="idsUnidadeNegocio" tabindex="6" multiple="mutiple" size="4" onchange="javascript:bloqueiaDados();limparTotalizacao();">
 						<logic:notEmpty name="colecaoUnidadeNegocio">
 							<option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</option>
 							<html:options collection="colecaoUnidadeNegocio"
@@ -838,7 +842,7 @@
 				<tr>
 					<td width="30%"><strong>Situação da Ligação de Água:</strong></td>
 					<td><html:select property="idsLigacaoAguaSituacao" 
-						tabindex="3" multiple="mutiple" size="4" 
+						tabindex="7" multiple="mutiple" size="4" 
 						onchange="javascript:bloqueiaDados();limparTotalizacao();">
 						<logic:notEmpty name="colecaoLigacaoAguaSituacao">
 							<option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</option>
@@ -856,7 +860,7 @@
 					<td><strong>Localidade Inicial:</strong></td>
 					<td><html:text maxlength="3" property="idLocalidadeOrigem" size="3"
 						onkeypress="validaEnterComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=localidadeOrigem', 'idLocalidadeOrigem' ,'Localidade Inicial');"
-						tabindex="4" onkeyup="javascript:replicarCampo(form.idLocalidadeDestino, form.idLocalidadeOrigem);limparLocalidadeOrigemTecla();bloqueiaDados();" 
+						tabindex="8" onkeyup="javascript:replicarCampo(form.idLocalidadeDestino, form.idLocalidadeOrigem);limparLocalidadeOrigemTecla();bloqueiaDados();" 
 						onchange="javascript:limparTotalizacao();" />
 					<a href="javascript:pesquisarLocalidadeOrigem();"> <img width="23"
 						height="21" border="0"
@@ -879,7 +883,7 @@
 					<td><strong>Setor Comercial Inicial:</strong></td>
 					<td><html:text maxlength="3" property="codigoSetorComercialOrigem" size="3"
 						onkeypress="validaEnterDependenciaComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=setorComercialOrigem', document.forms[0].codigoSetorComercialOrigem, document.forms[0].idLocalidadeOrigem.value, 'Localidade Inicial', 'Setor Comercial Inicial');"
-						tabindex="5" onkeyup="javascript:replicarCampo(form.codigoSetorComercialDestino, form.codigoSetorComercialOrigem);limparSetorComercialOrigemTecla();"
+						tabindex="9" onkeyup="javascript:replicarCampo(form.codigoSetorComercialDestino, form.codigoSetorComercialOrigem);limparSetorComercialOrigemTecla();"
 						onchange="javascript:limparTotalizacao();" />
 					<a href="javascript:pesquisarSetorComercialOrigem();"> <img
 						width="23" height="21" border="0"
@@ -904,7 +908,7 @@
 					<td><strong>Quadra Inicial:</strong></td>
 					<td><html:text maxlength="4" property="codigoQuadraInicial" size="3"
 						onkeypress="validaEnterDependenciaComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=quadraInicial', document.forms[0].codigoQuadraInicial, document.forms[0].codigoSetorComercialOrigem.value, 'Setor Comercial Inicial','Quadra Inicial');"
-						tabindex="8"
+						tabindex="10"
 						onkeyup="javascript:replicarCampo(form.codigoQuadraFinal, form.codigoQuadraInicial);limparQuadraInicialTecla();" 
 						onchange="javascript:limparTotalizacao();" />
 						<a href="javascript:pesquisarQuadraInicial();"> <img
@@ -932,7 +936,7 @@
 					<td><html:text maxlength="3" property="idLocalidadeDestino"
 						size="3"
 						onkeypress="validaEnterComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=localidadeDestino', 'idLocalidadeDestino' ,'Localidade Final');bloqueiaDados();"
-						tabindex="6" onkeyup="limparLocalidadeDestinoTecla();" 
+						tabindex="11" onkeyup="limparLocalidadeDestinoTecla();" 
 						onchange="javascript:limparTotalizacao();" /> <a
 						href="javascript:pesquisarLocalidadeDestino();"> <img width="23"
 						height="21" border="0"
@@ -957,7 +961,7 @@
 						size="3"
 						onkeypress="validaEnterDependenciaComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=setorComercialDestino', document.forms[0].codigoSetorComercialDestino, document.forms[0].idLocalidadeDestino.value, 'Localidade Final', 'Setor Comercial Final');"
 						onchange="javascript:limparTotalizacao();" 
-						tabindex="7" onkeyup="limparSetorComercialDestinoTecla();" /> <a
+						tabindex="12" onkeyup="limparSetorComercialDestinoTecla();" /> <a
 						href="javascript:pesquisarSetorComercialDestino();"> <img
 						width="23" height="21" border="0"
 						src="<bean:message key="caminho.imagens"/>pesquisa.gif"
@@ -981,7 +985,7 @@
 					<td><strong>Quadra Final:</strong></td>
 					<td><html:text maxlength="4" property="codigoQuadraFinal" size="3"
 						onkeypress="validaEnterDependenciaComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=quadraFinal', document.forms[0].codigoQuadraFinal, document.forms[0].codigoSetorComercialDestino.value, 'Setor Comercial Final','Quadra Final');"
-						tabindex="8" onkeyup="javascript:limparQuadraFinalTecla();" 
+						tabindex="13" onkeyup="javascript:limparQuadraFinalTecla();" 
 						onchange="javascript:limparTotalizacao();" />
 						<a href="javascript:pesquisarQuadraFinal();"> <img
 							width="23" height="21" border="0"
@@ -1017,12 +1021,12 @@
 						src="<bean:message key='caminho.imagens'/>pesquisa.gif" width="23"
 						height="21" alt="Pesquisar" border="0"></a> <logic:present
 						name="empresaInexistente" scope="request">
-						<html:text property="nomeEmpresa" size="40" maxlength="40"
+						<html:text property="nomeEmpresa" size="37" maxlength="37"
 							readonly="true"
 							style="border: 0pt none ; background-color:#EFEFEF; color: #ff0000" />
 					</logic:present> <logic:notPresent name="empresaInexistente"
 						scope="request">
-						<html:text property="nomeEmpresa" size="40" maxlength="40"
+						<html:text property="nomeEmpresa" size="37" maxlength="37"
 							readonly="true"
 							style="background-color:#EFEFEF; border:0; color: #000000" />
 					</logic:notPresent> <a href="javascript:limparEmpresa();limparTotalizacao();"> <img
@@ -1037,18 +1041,18 @@
 				<tr>
 					<td><strong>Período Refer. das Contas:</strong></td>
 					<td><strong> <html:text maxlength="7" property="referenciaInicial"
-						size="7" tabindex="8"
+						size="7" tabindex="15"
 						onkeyup="mascaraAnoMes(this, event); replicarCampo(document.forms[0].referenciaFinal, document.forms[0].referenciaInicial);"
 						onchange="javascript:limparTotalizacao();" />
 					<strong> a</strong> <html:text maxlength="7"
-						property="referenciaFinal" size="7" tabindex="9"
+						property="referenciaFinal" size="7" tabindex="16"
 						onkeyup="mascaraAnoMes(this, event);"
 						onchange="javascript:limparTotalizacao();" /> </strong> (mm/aaaa)</td>
 				</tr>
 				<tr>
 					<td><strong>Período de Vencimento das Contas:</strong></td>
 					<td><strong> <html:text maxlength="10"
-						property="dataVencimentoInicial" size="10" tabindex="10"
+						property="dataVencimentoInicial" size="10" tabindex="17"
 						onkeyup="mascaraData(this, event);  replicarCampo(document.forms[0].dataVencimentoFinal, document.forms[0].dataVencimentoInicial);"
 						onchange="javascript:limparTotalizacao();" />
 					<a
@@ -1057,7 +1061,7 @@
 						src="<bean:message key="caminho.imagens"/>calendario.gif"
 						width="20" border="0" align="absmiddle" alt="Exibir Calendário" /></a>
 					a</strong> <html:text maxlength="10" property="dataVencimentoFinal"
-						tabindex="11" size="10" onkeyup="mascaraData(this, event);" 
+						tabindex="18" size="10" onkeyup="mascaraData(this, event);" 
 						onchange="javascript:limparTotalizacao();" /> <a
 						href="javascript:abrirCalendario('InformarContasEmCobrancaActionForm', 'dataVencimentoFinal')">
 					<img border="0"
@@ -1068,11 +1072,11 @@
 				<tr>
 					<td><strong>Valor da Conta:</strong></td>
 					<td><strong> <html:text property="valorMinimo" size="14"
-						maxlength="14" tabindex="12"
+						maxlength="14" tabindex="19"
 						onkeyup="formataValorMonetario(this, 14); replicarCampo(document.forms[0].valorMaximo, document.forms[0].valorMinimo);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" /> a <html:text property="valorMaximo"
-						size="14" maxlength="14" tabindex="13"
+						size="14" maxlength="14" tabindex="20"
 						onkeyup="formataValorMonetario(this, 14);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" /> </strong></td>
@@ -1080,11 +1084,11 @@
 				<tr>
 					<td><strong>Quantidade de Contas:</strong></td>
 					<td><strong> <html:text property="quantidadeContasInicial" size="14"
-						maxlength="9" tabindex="12"
+						maxlength="9" tabindex="21"
 						onkeyup="somente_numero(this);replicarCampo(document.forms[0].quantidadeContasFinal, document.forms[0].quantidadeContasInicial);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" /> a <html:text property="quantidadeContasFinal"
-						size="14" maxlength="9" tabindex="13"
+						size="14" maxlength="9" tabindex="22"
 						onkeyup="somente_numero(this);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" /> </strong></td>
@@ -1092,11 +1096,23 @@
 				<tr>
 					<td><strong>Quantidade de Dias de Vencimento:</strong></td>
 					<td><strong> <html:text property="quantidadeDiasVencimento" size="14"
-						maxlength="10" tabindex="12"
+						maxlength="10" tabindex="23"
 						onkeyup="somente_numero(this);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" />
 				</tr>
+				
+				<tr><td><strong> </strong></td><td><strong> </strong></td></tr>
+				
+				<tr>
+					<td><strong>Quantidade Máxima de Clientes no Comando:</strong></td>
+					<td><strong> <html:text property="quantidadeMaximaClientes" size="14"
+						maxlength="10" tabindex="24"
+						onkeyup="somente_numero(this);"
+						onchange="javascript:limparTotalizacao();" 
+						style="text-align:right;" />
+				</tr>
+				
 				<tr>
 					<td colspan="2" align="right"><input type="button"
 						name="selecionar" class="bottonRightCol" value="Selecionar"
@@ -1198,7 +1214,7 @@
 					<tr>
 						<td><strong>Data Início do Ciclo:</strong></td>
 						<td><strong> <html:text maxlength="10" property="dataInicioCiclo"
-							size="10" tabindex="8" onkeyup="mascaraData(this, event);" />
+							size="10" tabindex="25" onkeyup="mascaraData(this, event);" />
 						</strong> <a
 							href="javascript:abrirCalendario('InformarContasEmCobrancaActionForm', 'dataInicioCiclo');" >
 						<img border="0"
@@ -1214,7 +1230,7 @@
 					<tr>
 						<td><strong>Data Início do Ciclo:</strong></td>
 						<td><strong> <html:text maxlength="10" property="dataInicioCiclo"
-							size="10" tabindex="8" onkeyup="mascaraData(this, event);" disabled="disabled"/>
+							size="10" tabindex="26" onkeyup="mascaraData(this, event);" disabled="disabled"/>
 						</strong> <a
 							href="javascript:abrirCalendario('InformarContasEmCobrancaActionForm', 'dataInicioCiclo');">
 						<img border="0"
@@ -1238,7 +1254,7 @@
        				<td colspan="3">
        					<strong>
 
-         					<html:text property="idServicoTipo" size="7" maxlength="4" 
+         					<html:text property="idServicoTipo" size="10" maxlength="4" 
 									onkeyup="somente_numero(this);validaEnterComMensagem(event, 'exibirInformarContasEmCobrancaAction.do?tipoPesquisa=servicoTipo', 'idServicoTipo' ,'Tipo de Serviço');" />
 
                       		<a href="javascript:abrirPopup('exibirPesquisarTipoServicoAction.do', 300, 620);">
@@ -1252,8 +1268,8 @@
 							<logic:present name="idServicoTipoEncontrada" scope="request">
 								
 								<html:text property="descricaoServicoTipo" 
-									size="42"
-									maxlength="30" 
+									size="37"
+									maxlength="37" 
 									readonly="true"
 									style="background-color:#EFEFEF; border:0; color: #000000" />
 							</logic:present> 
@@ -1261,8 +1277,8 @@
 							<logic:notPresent name="idServicoTipoEncontrada" scope="request">
 								
 								<html:text property="descricaoServicoTipo" 
-									size="42"
-									maxlength="30" 
+									size="37"
+									maxlength="37" 
 									readonly="true"
 									style="background-color:#EFEFEF; border:0; color: red" />
 									

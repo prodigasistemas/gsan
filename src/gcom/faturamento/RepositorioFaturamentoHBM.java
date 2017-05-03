@@ -39710,62 +39710,55 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @date: 27/10/2008, 07/04/2011
 	 */
 	public Collection pesquisarQuantidadeContas(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
+			ComandoEmpresaCobrancaContaHelper helper)
 			throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		Collection retorno = null;
 		String consulta = null;
-		ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
+		ComandoEmpresaCobrancaConta comando = helper.getComandoEmpresaCobrancaConta();
 		
 		try {
 			consulta = "SELECT COUNT(DISTINCT conta.cnta_id) as qtdContas, "
-					+ "COUNT(DISTINCT conta.imov_id) as qtdImovel, "
-					+ "SUM ( coalesce( conta.cnta_vlagua, 0 ) + "
-					+ "coalesce( conta.cnta_vlesgoto, 0 ) + "
-					+ "coalesce( conta.cnta_vldebitos, 0 ) - "
-					+ "coalesce( conta.cnta_vlcreditos, 0 ) - "
-					+ "coalesce( conta.cnta_vlimpostos, 0 ) "
-					+ ") as valorTotalDebitos "
+					+ " COUNT(DISTINCT conta.imov_id) as qtdImovel, "
+					+ " SUM ("
+					+ " coalesce(conta.cnta_vlagua, 0) + "
+					+ " coalesce(conta.cnta_vlesgoto, 0) + "
+					+ " coalesce(conta.cnta_vldebitos, 0) - "
+					+ " coalesce(conta.cnta_vlcreditos, 0) - "
+					+ " coalesce(conta.cnta_vlimpostos, 0)"
+					+ " ) as valorTotalDebitos "
 					+ " FROM faturamento.conta conta ";
 			
-			if (comandoEmpresaCobrancaConta.getCliente() != null) {
-				consulta = consulta
-					+ " INNER JOIN cadastro.cliente_conta clieConta "
-					+ "   on clieConta.cnta_id = conta.cnta_id "
-					+ "   AND clieConta.crtp_id = :clienteUsuario ";
+			if (comando.getCliente() != null) {
+				consulta += " INNER JOIN cadastro.cliente_conta clieConta ON clieConta.cnta_id = conta.cnta_id AND clieConta.crtp_id = 2";
 			}
 			
-
-			consulta = consulta 
-				+ " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id "
-				+ " INNER JOIN faturamento.conta_categoria contaCat  on conta.cnta_id = contaCat.cnta_id "			
-				+ " LEFT OUTER JOIN arrecadacao.pagamento pagto  on pagto.cnta_id = conta.cnta_id "
-				+ " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = imov.imov_id ";
+			consulta += " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id "
+					  + " INNER JOIN faturamento.conta_categoria contaCat on conta.cnta_id = contaCat.cnta_id "			
+					  + " LEFT OUTER JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id "
+					  + " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = imov.imov_id ";
 			
-			
-			if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null
-					|| (comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio() != null
-							&& !comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().isEmpty())
-					|| comandoEmpresaCobrancaConta.getGerenciaRegional() != null
-					|| (comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional() != null
-							&& !comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().isEmpty())
-					|| comandoEmpresaCobrancaConta.getLocalidadeInicial() != null
-				) {
-				
-				consulta = consulta
-					+ " INNER JOIN cadastro.localidade loca "
-					+ "   on loca.loca_id = imov.loca_id ";
-				
+			if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
+				consulta += " INNER JOIN cadastro.cliente_imovel clienteImovel ON imov.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND crtp_id <> 1 "
+						  + " INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null";
 			}
 			
-			consulta = consulta + " WHERE ";
-
-			consulta = consulta
-					+ criarCondicionaisPesquisarQuantidadeContas(comandoEmpresaCobrancaContaHelper, false);
+			if (comando.getUnidadeNegocio() != null
+					|| (helper.getColecaoUnidadeNegocio() != null && !helper.getColecaoUnidadeNegocio().isEmpty())
+					|| comando.getGerenciaRegional() != null
+					|| (helper.getColecaoGerenciaRegional() != null && !helper.getColecaoGerenciaRegional().isEmpty())
+					|| comando.getLocalidadeInicial() != null) {
+				
+				consulta += " INNER JOIN cadastro.localidade loca on loca.loca_id = imov.loca_id ";
+			}
 			
-			consulta = consulta + " AND contaCat.catg_id IN (:idsCategoria) ";
+			consulta += " WHERE ";
+
+			consulta += criarCondicionaisPesquisarQuantidadeContas(helper, false);
+			
+			consulta += " AND contaCat.catg_id IN (:idsCategoria) ";
 			
 			Collection<Integer> idsCategorias = new ArrayList();
 			idsCategorias.add(Categoria.RESIDENCIAL);
@@ -39773,210 +39766,165 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			idsCategorias.add(Categoria.INDUSTRIAL);
 			idsCategorias.add(Categoria.PUBLICO);
 			
-			if ((comandoEmpresaCobrancaConta.getIndicadorResidencial() != null && !comandoEmpresaCobrancaConta
-					.getIndicadorResidencial().equals(
-							ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorComercial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorComercial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorIndustrial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorPublico() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorPublico().equals(
-									ConstantesSistema.NAO.intValue()))) {
+			if ((comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue()))) {
 	
 				
 				idsCategorias = new ArrayList();
 				
-				if (comandoEmpresaCobrancaConta.getIndicadorResidencial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorResidencial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+				if (comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.RESIDENCIAL);
 				}
 	
-				if (comandoEmpresaCobrancaConta.getIndicadorComercial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorComercial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+				if (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.COMERCIAL);
 				}
 	
-				if (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorIndustrial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+				if (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.INDUSTRIAL);
 				}
 	
-				if (comandoEmpresaCobrancaConta.getIndicadorPublico() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorPublico()
-								.equals(ConstantesSistema.NAO.intValue())) {
+				if (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.PUBLICO);
 				}
 	
 			}						
 
-			consulta = consulta + " GROUP BY conta.imov_id "; 
+			consulta += " GROUP BY conta.imov_id "; 
 			
 			
-			if (comandoEmpresaCobrancaConta.getQtdContasInicial() != null) {
-				consulta = consulta + " HAVING count(DISTINCT conta.cnta_id) between " +  comandoEmpresaCobrancaConta.getQtdContasInicial() + " and  " +  comandoEmpresaCobrancaConta.getQtdContasFinal() + " ";
+			if (comando.getQtdContasInicial() != null) {
+				consulta += " HAVING count(DISTINCT conta.cnta_id) between " +  comando.getQtdContasInicial() + " and  " +  comando.getQtdContasFinal() + " ";
 			}
 			
-			retorno =  session.createSQLQuery(consulta).addScalar(
-					"qtdContas", Hibernate.INTEGER).addScalar("qtdImovel",
-					Hibernate.INTEGER).addScalar("valorTotalDebitos",
-					Hibernate.BIG_DECIMAL).setParameterList("idsCategoria",idsCategorias).list();
+			Query query = session.createSQLQuery(consulta)
+					.addScalar("qtdContas", Hibernate.INTEGER)
+					.addScalar("qtdImovel",Hibernate.INTEGER)
+					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL)
+					.setParameterList("idsCategoria",idsCategorias);
 			
+			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
+				query.setMaxResults(comando.getQtdMaximaClientes());
+			}
+			
+			retorno =  query.list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
-
 	}
 
 	/**
 	 * [UC0870] Gerar Movimento de Contas em Cobrança por Empresa
 	 * 
 	 * Pesquisa os imóveis das contas
-	 * 
-	 * @author: Rafael Corrêa, Mariana Victor
-	 * @date: 28/10/2008, 03/05/2011
 	 */
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper,
-			Integer numeroPagina, boolean percentualInformado) throws ErroRepositorioException {
-
+	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 		Collection<Integer> retorno = null;
-		String consulta = null;
+		
+		ComandoEmpresaCobrancaConta comando = helper.getComandoEmpresaCobrancaConta();
 
 		try {
 			Integer quantidadeMenorFaixa = null;
-			
-			if (!percentualInformado) {
-				quantidadeMenorFaixa = pesquisarQuantidadeContasMenorFaixa(
-						comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta().getEmpresa().getId());
-			}
-			
-			consulta = "SELECT DISTINCT conta.imov_id as idImovel "
-					+ " FROM faturamento.conta conta ";
 
-			if (comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta().getCliente() != null) {
-				consulta = consulta
-						+ " INNER JOIN cadastro.cliente_conta clieConta "
-						+ " on clieConta.cnta_id = conta.cnta_id ";
+			if (!percentualInformado) {
+				quantidadeMenorFaixa = pesquisarQuantidadeContasMenorFaixa(helper.getComandoEmpresaCobrancaConta().getEmpresa().getId());
 			}
 
-			consulta = consulta
-					+ " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id "
-					+ " INNER JOIN cadastro.localidade loca on loca.loca_id = imov.loca_id "
-					+ " INNER JOIN cadastro.vw_imovel_principal_categoria categoriaPrincipal on categoriaPrincipal.imov_id = imov.imov_id "
-					+ " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = conta.imov_id "
-					+ " LEFT OUTER JOIN cobranca.cmd_empr_cobr_conta cecc on emprCobConta.cecc_id = cecc.cecc_id ";
+			String consulta = "SELECT DISTINCT conta.imov_id as idImovel FROM faturamento.conta conta ";
+
+			if (comando.getCliente() != null) {
+				consulta += " INNER JOIN cadastro.cliente_conta clieConta on clieConta.cnta_id = conta.cnta_id and crtp_id = 2";
+			}
+
+			consulta += " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id " 
+			          + " INNER JOIN cadastro.localidade loca on loca.loca_id = imov.loca_id "
+					  + " INNER JOIN cadastro.vw_imovel_principal_categoria categoriaPrincipal on categoriaPrincipal.imov_id = imov.imov_id "
+					  + " LEFT OUTER JOIN cobranca.empresa_cobranca_conta emprCobConta on emprCobConta.imov_id = conta.imov_id "
+					  + " LEFT OUTER JOIN cobranca.cmd_empr_cobr_conta cecc on emprCobConta.cecc_id = cecc.cecc_id ";
+
+			if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
+				consulta += " INNER JOIN cadastro.cliente_imovel clienteImovel ON imov.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND crtp_id <> 1 "
+						  + " INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null";
+			}
 			
 			if (!percentualInformado) {
-				consulta = consulta 
-						+ " LEFT OUTER JOIN cobranca.cobranca_situacao cbst "
-						+ " ON cbst.cbst_id = imov.cbst_id " + " WHERE "
-						+ " (imov.cbst_id IS NULL or cbst.cbst_icnaocobranca <> 1) "
-						+ " AND imov.imov_id NOT IN (SELECT cbsh.imov_id FROM cobranca.cobranca_situacao_hist cbsh WHERE cbsh.imov_id = imov.imov_id and cbsh.cbsh_amcobrancaretirada IS NULL) " 
-						+ " AND ";
+				consulta += " LEFT OUTER JOIN cobranca.cobranca_situacao cbst ON cbst.cbst_id = imov.cbst_id " 
+						  + " WHERE (imov.cbst_id IS NULL or cbst.cbst_icnaocobranca <> 1) "
+						  + " AND imov.imov_id NOT IN (SELECT cbsh.imov_id FROM cobranca.cobranca_situacao_hist cbsh WHERE cbsh.imov_id = imov.imov_id and cbsh.cbsh_amcobrancaretirada IS NULL) "
+						  + " AND ";
 			} else {
-				consulta = consulta + " WHERE ";
+				consulta += " WHERE ";
 			}
-			
-			consulta = consulta + " NOT EXISTS (select pagto.pgmt_id FROM arrecadacao.pagamento pagto WHERE pagto.cnta_id = conta.cnta_id) AND ";
-			consulta = consulta + " categoriaPrincipal.catg_id in (:idsCategoria) AND ";
-			
-			
-			consulta = consulta
-					+ criarCondicionaisPesquisarQuantidadeContas(comandoEmpresaCobrancaContaHelper, !percentualInformado);
-			
-			if (comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta().getQtdContasInicial() != null) {
-				consulta = consulta + " group by conta.imov_id ";
-				consulta = consulta + " HAVING count(DISTINCT conta.cnta_id) between "
-						+ comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta().getQtdContasInicial()
-						+ " and "
-						+ comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta().getQtdContasFinal();
-			} else if (!percentualInformado && quantidadeMenorFaixa != null){
-				consulta = consulta + " group by conta.imov_id ";
-				consulta = consulta + " HAVING count(DISTINCT conta.cnta_id) >= " + quantidadeMenorFaixa;	
+
+			consulta += " NOT EXISTS (select pagto.pgmt_id FROM arrecadacao.pagamento pagto WHERE pagto.cnta_id = conta.cnta_id) AND ";
+			consulta += " categoriaPrincipal.catg_id in (:idsCategoria) AND ";
+
+			consulta += criarCondicionaisPesquisarQuantidadeContas(helper, !percentualInformado);
+
+			if (helper.getComandoEmpresaCobrancaConta().getQtdContasInicial() != null) {
+				consulta += " group by conta.imov_id ";
+				consulta += " HAVING count(DISTINCT conta.cnta_id) between " + helper.getComandoEmpresaCobrancaConta().getQtdContasInicial() + " and "
+						+ helper.getComandoEmpresaCobrancaConta().getQtdContasFinal();
+			} else if (!percentualInformado && quantidadeMenorFaixa != null) {
+				consulta += " group by conta.imov_id ";
+				consulta += " HAVING count(DISTINCT conta.cnta_id) >= " + quantidadeMenorFaixa;
 			}
-			
+
 			Collection<Integer> idsCategorias = new ArrayList();
 			idsCategorias.add(Categoria.RESIDENCIAL);
 			idsCategorias.add(Categoria.COMERCIAL);
 			idsCategorias.add(Categoria.INDUSTRIAL);
 			idsCategorias.add(Categoria.PUBLICO);
-			
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
 
-			if ((comandoEmpresaCobrancaConta.getIndicadorResidencial() != null && !comandoEmpresaCobrancaConta
-					.getIndicadorResidencial().equals(
-							ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorComercial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorComercial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorIndustrial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorPublico() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorPublico().equals(
-									ConstantesSistema.NAO.intValue()))) {
-	
+			if ((comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue()))) {
+
 				idsCategorias = new ArrayList();
-				
-				if (comandoEmpresaCobrancaConta.getIndicadorResidencial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorResidencial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.RESIDENCIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorComercial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorComercial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.COMERCIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorIndustrial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.INDUSTRIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorPublico() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorPublico()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.PUBLICO);
 				}
-	
-			}			
+			}
+
+			Query query = session.createSQLQuery(consulta).addScalar("idImovel", Hibernate.INTEGER).setParameterList("idsCategoria", idsCategorias);
+
+			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
+				query.setMaxResults(comando.getQtdMaximaClientes());
+			}
 			
-			retorno = session.createSQLQuery(consulta).
-				addScalar("idImovel",Hibernate.INTEGER).
-				setParameterList("idsCategoria",idsCategorias).
-				setMaxResults(1000).
-				setFirstResult(numeroPagina).
-				list();
+			retorno = query.list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
-
 	}
 
 	/**
@@ -52608,237 +52556,183 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			retorno = (ContaHistorico) session.createQuery(consulta).setBigDecimal("valorPagamento", valorPagamento).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	private String criarCondicionaisPesquisarQuantidadeContas(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper, boolean agrupadoPorImovel) {
+	private String criarCondicionaisPesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) {
 		String retorno = "";
 
 		if (agrupadoPorImovel) {
-			retorno = retorno + " (emprCobConta.ecco_id is null or cecc.cecc_dtencerramento is not null) ";			
+			retorno += " (emprCobConta.ecco_id IS NULL or cecc.cecc_dtencerramento IS NOT NULL) ";
 		} else {
-			retorno = retorno + " emprCobConta.ecco_id is null ";
-		}
-		
-		retorno = retorno 
-				+ " AND conta.cmrv_id        IS NULL "
-				+ " AND conta.cnta_dtrevisao IS NULL ";
-		
-		retorno = retorno + " and conta.dcst_idatual in ( "
-				+ DebitoCreditoSituacao.NORMAL
-				+ ", "
-				+ DebitoCreditoSituacao.INCLUIDA
-				+ ", "
-				+ DebitoCreditoSituacao.RETIFICADA + " ) ";
-		
-		ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
-
-		
-		if (comandoEmpresaCobrancaConta.getImovel() != null) {
-			retorno = retorno + " and conta.imov_id = "
-					+ comandoEmpresaCobrancaConta.getImovel().getId();
+			retorno += " emprCobConta.ecco_id IS NULL ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getCliente() != null) {
-			retorno = retorno + " and clieConta.clie_id = "
-					+ comandoEmpresaCobrancaConta.getCliente().getId();
+		retorno += " AND conta.cmrv_id        IS NULL " + " AND conta.cnta_dtrevisao IS NULL ";
+
+		retorno += " and conta.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + ", " + DebitoCreditoSituacao.INCLUIDA + ", " + DebitoCreditoSituacao.RETIFICADA + " ) ";
+
+		ComandoEmpresaCobrancaConta comando = helper.getComandoEmpresaCobrancaConta();
+
+		if (comando.getImovel() != null) {
+			retorno += " and conta.imov_id = " + comando.getImovel().getId();
 		}
 
-		if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null) {
-			
-			retorno = retorno + " and loca.uneg_id = "
-					+ comandoEmpresaCobrancaConta.getUnidadeNegocio().getId();
-			
-		} else if (comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio() != null
-				&& !comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().isEmpty()) {
-			
+		if (comando.getCliente() != null) {
+			retorno += " and clieConta.clie_id = " + comando.getCliente().getId();
+		}
+
+		if (comando.getUnidadeNegocio() != null) {
+			retorno += " and loca.uneg_id = " + comando.getUnidadeNegocio().getId();
+
+		} else if (helper.getColecaoUnidadeNegocio() != null && !helper.getColecaoUnidadeNegocio().isEmpty()) {
+
 			boolean consulta = true;
-			if(comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().size() == 1){
-				Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().iterator();
-				while(it.hasNext()){
-					UnidadeNegocio obj = (UnidadeNegocio) it.next();
-					if(obj != null && obj.getId() == -1){
+			if (helper.getColecaoUnidadeNegocio().size() == 1) {
+				Iterator iterator = helper.getColecaoUnidadeNegocio().iterator();
+				while (iterator.hasNext()) {
+					UnidadeNegocio unidadeNegocio = (UnidadeNegocio) iterator.next();
+					if (unidadeNegocio != null && unidadeNegocio.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
-				Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().iterator();
-				UnidadeNegocio unidadeNegocio = null;
-				retorno = retorno + " and loca.uneg_id in (";
+			if (consulta) {
+				Iterator iterator = helper.getColecaoUnidadeNegocio().iterator();
+				retorno += " and loca.uneg_id in (";
 				while (iterator.hasNext()) {
-					unidadeNegocio = (UnidadeNegocio) iterator.next();
-					retorno = retorno + unidadeNegocio.getId() + ",";
+					UnidadeNegocio unidadeNegocio = (UnidadeNegocio) iterator.next();
+					retorno += unidadeNegocio.getId() + ",";
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
-				retorno = retorno + ") ";
+				retorno += ") ";
 			}
-			
 		}
-		
 
-		if (comandoEmpresaCobrancaConta.getGerenciaRegional() != null) {
-			
-			retorno = retorno + " and loca.greg_id = "
-					+ comandoEmpresaCobrancaConta.getGerenciaRegional().getId();
-			
-		} else if (comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional() != null
-				&& !comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().isEmpty()) {
-			
+		if (comando.getGerenciaRegional() != null) {
+
+			retorno += " and loca.greg_id = " + comando.getGerenciaRegional().getId();
+
+		} else if (helper.getColecaoGerenciaRegional() != null && !helper.getColecaoGerenciaRegional().isEmpty()) {
+
 			boolean consulta = true;
-			if(comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().size() == 1){
-				Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().iterator();
-				while(it.hasNext()){
+			if (helper.getColecaoGerenciaRegional().size() == 1) {
+				Iterator it = helper.getColecaoGerenciaRegional().iterator();
+				while (it.hasNext()) {
 					GerenciaRegional obj = (GerenciaRegional) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
-				Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().iterator();
+			if (consulta) {
+				Iterator iterator = helper.getColecaoGerenciaRegional().iterator();
 				GerenciaRegional gerenciaRegional = null;
-				retorno = retorno + " and loca.greg_id in (";
+				retorno += " and loca.greg_id in (";
 				while (iterator.hasNext()) {
 					gerenciaRegional = (GerenciaRegional) iterator.next();
-					retorno = retorno + gerenciaRegional.getId() + ",";
+					retorno += gerenciaRegional.getId() + ",";
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
-				retorno = retorno + ") ";
+				retorno += ") ";
 			}
-			
+
 		}
 
-		if (comandoEmpresaCobrancaConta.getImovelPerfil() != null) {
-			
-			retorno = retorno + " and imov.iper_id = "
-					+ comandoEmpresaCobrancaConta.getImovelPerfil().getId();
-			
-		} else if (comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil() != null
-				&& !comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().isEmpty()) {
-			
+		if (comando.getImovelPerfil() != null) {
+
+			retorno += " and imov.iper_id = " + comando.getImovelPerfil().getId();
+
+		} else if (helper.getColecaoImovelPerfil() != null && !helper.getColecaoImovelPerfil().isEmpty()) {
+
 			boolean consulta = true;
-			if(comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().size() == 1){
-				Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().iterator();
-				while(it.hasNext()){
+			if (helper.getColecaoImovelPerfil().size() == 1) {
+				Iterator it = helper.getColecaoImovelPerfil().iterator();
+				while (it.hasNext()) {
 					ImovelPerfil obj = (ImovelPerfil) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
-				Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().iterator();
+			if (consulta) {
+				Iterator iterator = helper.getColecaoImovelPerfil().iterator();
 				ImovelPerfil imovelPerfil = null;
-				retorno = retorno + " and imov.iper_id in (";
+				retorno += " and imov.iper_id in (";
 				while (iterator.hasNext()) {
 					imovelPerfil = (ImovelPerfil) iterator.next();
-					retorno = retorno + imovelPerfil.getId() + ",";
+					retorno += imovelPerfil.getId() + ",";
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
-				retorno = retorno + ") ";
+				retorno += ") ";
 			}
-			
+
 		}
 
-		if (comandoEmpresaCobrancaConta.getLigacaoAguaSituacao() != null) {
-			
-			retorno = retorno + " and imov.last_id = "
-					+ comandoEmpresaCobrancaConta.getLigacaoAguaSituacao().getId();
-			
-		} else if (comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao() != null
-				&& !comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().isEmpty()) {
-			
+		if (comando.getLigacaoAguaSituacao() != null) {
+
+			retorno += " and imov.last_id = " + comando.getLigacaoAguaSituacao().getId();
+
+		} else if (helper.getColecaoLigacaoAguaSituacao() != null && !helper.getColecaoLigacaoAguaSituacao().isEmpty()) {
+
 			boolean consulta = true;
-			if(comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().size() == 1){
-				Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().iterator();
-				while(it.hasNext()){
+			if (helper.getColecaoLigacaoAguaSituacao().size() == 1) {
+				Iterator it = helper.getColecaoLigacaoAguaSituacao().iterator();
+				while (it.hasNext()) {
 					LigacaoAguaSituacao obj = (LigacaoAguaSituacao) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
-				Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().iterator();
+			if (consulta) {
+				Iterator iterator = helper.getColecaoLigacaoAguaSituacao().iterator();
 				LigacaoAguaSituacao ligacaoAguaSituacao = null;
-				retorno = retorno + " and imov.last_id in (";
+				retorno += " and imov.last_id in (";
 				while (iterator.hasNext()) {
 					ligacaoAguaSituacao = (LigacaoAguaSituacao) iterator.next();
-					retorno = retorno + ligacaoAguaSituacao.getId() + ",";
+					retorno += ligacaoAguaSituacao.getId() + ",";
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
-				retorno = retorno + ") ";
+				retorno += ") ";
 			}
-			
+
 		}
 
-		if (comandoEmpresaCobrancaConta.getLocalidadeInicial() != null) {
-			retorno = retorno
-					+ " and loca.loca_id between "
-					+ comandoEmpresaCobrancaConta.getLocalidadeInicial()
-							.getId() + " and "
-					+ comandoEmpresaCobrancaConta.getLocalidadeFinal().getId();
+		if (comando.getLocalidadeInicial() != null) {
+			retorno += " and loca.loca_id between " + comando.getLocalidadeInicial().getId() + " and " + comando.getLocalidadeFinal().getId();
 		}
 
-		if (comandoEmpresaCobrancaConta.getCodigoSetorComercialInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_cdsetorcomercial between "
-					+ comandoEmpresaCobrancaConta
-							.getCodigoSetorComercialInicial()
-					+ " and "
-					+ comandoEmpresaCobrancaConta
-							.getCodigoSetorComercialFinal();
+		if (comando.getCodigoSetorComercialInicial() != null) {
+			retorno += " and conta.cnta_cdsetorcomercial between " + comando.getCodigoSetorComercialInicial() + " and " + comando.getCodigoSetorComercialFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getNumeroQuadraInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_nnquadra between "
-					+ comandoEmpresaCobrancaConta.getNumeroQuadraInicial() + " and "
-					+ comandoEmpresaCobrancaConta.getNumeroQuadraFinal();
+		if (comando.getNumeroQuadraInicial() != null) {
+			retorno += " and conta.cnta_nnquadra between " + comando.getNumeroQuadraInicial() + " and " + comando.getNumeroQuadraFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {
-			retorno = retorno + " and conta.cnta_amreferenciaconta between "
-					+ comandoEmpresaCobrancaConta.getReferenciaContaInicial()
-					+ " and "
-					+ comandoEmpresaCobrancaConta.getReferenciaContaFinal();
+		if (comando.getReferenciaContaInicial() != null) {
+			retorno += " and conta.cnta_amreferenciaconta between " + comando.getReferenciaContaInicial() + " and " + comando.getReferenciaContaFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getDataVencimentoContaInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_dtvencimentoconta between to_date('"
-					+ Util
-							.formatarDataComTracoAAAAMMDD(comandoEmpresaCobrancaConta
-									.getDataVencimentoContaInicial())
-					+ "','YYYY-MM-DD') and to_date('"
-					+ Util
-							.formatarDataComTracoAAAAMMDD(comandoEmpresaCobrancaConta
-									.getDataVencimentoContaFinal()) + "','YYYY-MM-DD')";
+		if (comando.getDataVencimentoContaInicial() != null) {
+			retorno += " and conta.cnta_dtvencimentoconta between to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaInicial()) + "','YYYY-MM-DD') and to_date('"
+					+ Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD')";
 		}
 
-		if (comandoEmpresaCobrancaConta.getValorMinimoConta() != null) {
-			retorno = retorno
-					+ " and ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) between "
-					+ comandoEmpresaCobrancaConta.getValorMinimoConta()
-					+ " and "
-					+ comandoEmpresaCobrancaConta.getValorMaximoConta();
+		if (comando.getValorMinimoConta() != null) {
+			retorno += " and ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) "
+					 + " between " + comando.getValorMinimoConta() + " and " + comando.getValorMaximoConta();
 		}
 
-		if (comandoEmpresaCobrancaConta.getQtdDiasVencimento() != null) {
-			retorno = retorno
-					+ " and conta.cnta_dtvencimentoconta < to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(
-							new Date(), comandoEmpresaCobrancaConta.getQtdDiasVencimento())) 
-						+ "','YYYY-MM-DD')";
+		if (comando.getQtdDiasVencimento() != null) {
+			retorno += " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento()))
+					 + " ','YYYY-MM-DD')";
 		}
 
 		return retorno;
@@ -52849,30 +52743,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) {
 		String retorno = "";
 		
-		retorno = retorno + " conta.dcst_idatual in ( "
-				+ ":debitoCreditoSituacaoNormal"
-				+ ", "
-				+ ":debitoCreditoSituacaoIncluida"
-				+ ", "
-				+ ":debitoCreditoSituacaoRetificada" 
-				+ " ) ";
+		retorno += " conta.dcst_idatual in (:debitoCreditoSituacaoNormal, :debitoCreditoSituacaoIncluida, :debitoCreditoSituacaoRetificada) ";
 		
-		ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
+		ComandoEmpresaCobrancaConta comando = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
 		
-		if (comandoEmpresaCobrancaConta.getImovel() != null) {
-			retorno = retorno + " and conta.imov_id = "
-					+ ":idImovel";
+		if (comando.getImovel() != null) {
+			retorno += " and conta.imov_id = :idImovel ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getCliente() != null) {
-			retorno = retorno + " and clieConta.clie_id = "
-					+ ":idCliente";
+		if (comando.getCliente() != null) {
+			retorno += " and clieConta.clie_id = :idCliente ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null) {
+		if (comando.getUnidadeNegocio() != null) {
 			
-			retorno = retorno + " and loca.uneg_id = "
-					+ ":idUnidadeNegocio";
+			retorno += " and loca.uneg_id = :idUnidadeNegocio ";
 			
 		} else if (comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio() != null
 				&& !comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().isEmpty()) {
@@ -52888,16 +52773,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}	
 			}
 			if(consulta){	
-				retorno = retorno + " and loca.uneg_id in (:idsUnidadeNegocio)";
+				retorno += " and loca.uneg_id in (:idsUnidadeNegocio)";
 			}
 			
 		}
-		
 
-		if (comandoEmpresaCobrancaConta.getGerenciaRegional() != null) {
+		if (comando.getGerenciaRegional() != null) {
 			
-			retorno = retorno + " and loca.greg_id = "
-					+ ":idGerenciaRegional";
+			retorno += " and loca.greg_id = :idGerenciaRegional ";
 			
 		} else if (comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional() != null
 				&& !comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().isEmpty()) {
@@ -52913,15 +52796,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}	
 			}
 			if(consulta){	
-				retorno = retorno + " and loca.greg_id in (:idsGerenciaRegional)";
+				retorno += " and loca.greg_id in (:idsGerenciaRegional) ";
 			}
 			
 		}
 
-		if (comandoEmpresaCobrancaConta.getImovelPerfil() != null) {
+		if (comando.getImovelPerfil() != null) {
 			
-			retorno = retorno + " and imov.iper_id = "
-					+ ":idImovelPerfil";
+			retorno += " and imov.iper_id = :idImovelPerfil ";
 			
 		} else if (comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil() != null
 				&& !comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().isEmpty()) {
@@ -52937,15 +52819,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}	
 			}
 			if(consulta){	
-				retorno = retorno + " and imov.iper_id in (:idsImovelPerfil)";
+				retorno += " and imov.iper_id in (:idsImovelPerfil) ";
 			}
 			
 		}
 
-		if (comandoEmpresaCobrancaConta.getLigacaoAguaSituacao() != null) {
+		if (comando.getLigacaoAguaSituacao() != null) {
 			
-			retorno = retorno + " and imov.last_id = "
-					+ ":idLigacaoAguaSituacao";
+			retorno += " and imov.last_id = :idLigacaoAguaSituacao ";
 			
 		} else if (comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao() != null
 				&& !comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().isEmpty()) {
@@ -52961,52 +52842,44 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}	
 			}
 			if(consulta){	
-				retorno = retorno + " and imov.last_id in (:idsLigacaoAguaSituacao)";
+				retorno += " and imov.last_id in (:idsLigacaoAguaSituacao) ";
 			}
 			
 		}
 
-		if (comandoEmpresaCobrancaConta.getLocalidadeInicial() != null) {
-			retorno = retorno
-					+ " and loca.loca_id between :idLocaInicial"
-					+ " and :idLocaFinal";
+		if (comando.getLocalidadeInicial() != null) {
+			retorno += " and loca.loca_id between :idLocaInicial and :idLocaFinal ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getCodigoSetorComercialInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_cdsetorcomercial between :idSetorInicial"
-					+ " and :idSetorFinal";
+		if (comando.getCodigoSetorComercialInicial() != null) {
+			retorno += " and conta.cnta_cdsetorcomercial between :idSetorInicial and :idSetorFinal ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_nnquadra between :idQuadraInicial "
-					+ " and :idQuadraFinal ";
+		if (comando.getNumeroQuadraInicial() != null) {
+			retorno += " and conta.cnta_nnquadra between :numeroQuadraInicial  and :numeroQuadraFinal ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {
-			retorno = retorno + " and conta.cnta_amreferenciaconta between :idAnoMesInicial "
-					+ " and :idAnoMesFinal ";
+		if (comando.getReferenciaContaInicial() != null) {
+			retorno += " and conta.cnta_amreferenciaconta between :idAnoMesInicial  and :idAnoMesFinal ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getDataVencimentoContaInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_dtvencimentoconta between :dataInicial and :dataFinal ";
+		if (comando.getDataVencimentoContaInicial() != null) {
+			retorno += " and conta.cnta_dtvencimentoconta between :dataInicial and :dataFinal ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getValorMinimoConta() != null) {
-			retorno = retorno
-					+ " and ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) between "
-					+ " :valorMaximoConta "
-					+ " and "
-					+ " :valorMinimoConta ";
+		if (comando.getValorMinimoConta() != null) {
+			retorno += " and ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) "
+					 + " between :valorMaximoConta and :valorMinimoConta ";
 		}
 
-		if (comandoEmpresaCobrancaConta.getQtdDiasVencimento() != null) {
-			retorno = retorno
-					+ " and conta.cnta_dtvencimentoconta < :dataMaximaVencimento ";
+		if (comando.getQtdDiasVencimento() != null) {
+			retorno += " and conta.cnta_dtvencimentoconta < :dataMaximaVencimento ";
 		}
-
+		
+		if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
+			retorno += "AND (clienteFoneUsuario.cfon_nnfone IS NOT NULL OR clienteFoneResponsavel.cfon_nnfone IS NOT NULL)";
+		}
+		
 		return retorno;
 	}
 	
@@ -53018,332 +52891,284 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author: Mariana Victor
 	 * @date: 07/04/2011
 	 */
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ErroRepositorioException {
+	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(ComandoEmpresaCobrancaContaHelper helper) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		Collection<Object[]> retorno = null;
 		String consulta = null;
 
-		ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = comandoEmpresaCobrancaContaHelper.getComandoEmpresaCobrancaConta();
-		
+		ComandoEmpresaCobrancaConta comando = helper.getComandoEmpresaCobrancaConta();
+
 		try {
-			consulta = "SELECT COUNT(DISTINCT conta.cnta_id) as qtdContas, "
-					+ "COUNT(DISTINCT conta.imov_id) as qtdImovel, "
-					+ "SUM ( coalesce( conta.cnta_vlagua, 0 ) + "
-					+ "coalesce( conta.cnta_vlesgoto, 0 ) + "
-					+ "coalesce( conta.cnta_vldebitos, 0 ) - "
-					+ "coalesce( conta.cnta_vlcreditos, 0 ) - "
-					+ "coalesce( conta.cnta_vlimpostos, 0 ) "
-					+ ") as valorTotalDebitos "
+			consulta = "SELECT COUNT(DISTINCT conta.cnta_id) as qtdContas, " 
+					+ " COUNT(DISTINCT conta.imov_id) as qtdImovel, " 
+					+ " SUM ("
+					+ " coalesce( conta.cnta_vlagua, 0 ) + "
+					+ " coalesce( conta.cnta_vlesgoto, 0 ) + " 
+					+ " coalesce( conta.cnta_vldebitos, 0 ) - " 
+					+ " coalesce( conta.cnta_vlcreditos, 0 ) - " 
+					+ " coalesce( conta.cnta_vlimpostos, 0 ) ) as valorTotalDebitos " 
 					+ " FROM faturamento.conta conta ";
 
-			if (comandoEmpresaCobrancaConta.getCliente() != null) {
-				consulta = consulta
-					+ " INNER JOIN cadastro.cliente_conta clieConta "
-					+ "   on clieConta.cnta_id = conta.cnta_id "
-					+ "   AND clieConta.crtp_id = :clienteUsuario ";
+			if (comando.getCliente() != null) {
+				consulta += " INNER JOIN cadastro.cliente_conta clieConta on clieConta.cnta_id = conta.cnta_id AND clieConta.crtp_id = :clienteUsuario ";
 			}
 
-			consulta = consulta
-					+ " INNER JOIN cadastro.imovel imov "
-					+ "   on imov.imov_id = conta.imov_id ";
+			consulta += " INNER JOIN cadastro.imovel imov on imov.imov_id = conta.imov_id ";
+
+			if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
+				consulta += " INNER JOIN cadastro.cliente_imovel clienteImovel ON imov.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND crtp_id <> 1 "
+						  + " INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null";
+			}
 			
-			if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null
-					|| (comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio() != null
-							&& !comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().isEmpty())
-					|| comandoEmpresaCobrancaConta.getGerenciaRegional() != null
-					|| (comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional() != null
-							&& !comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().isEmpty())
-					|| comandoEmpresaCobrancaConta.getLocalidadeInicial() != null
-				) {
-				
-				consulta = consulta
-					+ " INNER JOIN cadastro.localidade loca "
-					+ "   on loca.loca_id = imov.loca_id ";
-				
+			if (comando.getUnidadeNegocio() != null
+					|| (helper.getColecaoUnidadeNegocio() != null && !helper.getColecaoUnidadeNegocio().isEmpty())
+					|| comando.getGerenciaRegional() != null
+					|| (helper.getColecaoGerenciaRegional() != null && !helper.getColecaoGerenciaRegional().isEmpty())
+					|| comando.getLocalidadeInicial() != null) {
+
+				consulta += " INNER JOIN cadastro.localidade loca " + "   on loca.loca_id = imov.loca_id ";
 			}
 
-			consulta = consulta
-					+ " LEFT OUTER JOIN cobranca.cobranca_situacao cbst "
-					+ "   ON cbst.cbst_id = imov.cbst_id " + " WHERE ";
-			
-			consulta = consulta 
-					+ " (imov.cbst_id IS NULL or cbst.cbst_icnaocobranca <> 1) "
-					+ " AND imov.imov_id NOT IN (SELECT imov_id FROM cobranca.cobranca_situacao_hist WHERE cbsh_amcobrancaretirada IS NULL) " 
-					+ " AND conta.cmrv_id is null and conta.cnta_dtrevisao is null "
-					+ " AND ";
+			consulta += " LEFT OUTER JOIN cobranca.cobranca_situacao cbst " + "   ON cbst.cbst_id = imov.cbst_id " + " WHERE ";
 
-			consulta = consulta
-					+ " NOT EXISTS (SELECT pagto.pgmt_id "
-					+ "    FROM arrecadacao.pagamento pagto "
-					+ "    WHERE pagto.cnta_id = conta.cnta_id) AND ";
-			
-			consulta = consulta
-					+ " NOT EXISTS (SELECT emprCobConta.imov_id FROM cobranca.empresa_cobranca_conta emprCobConta "
+			consulta += " (imov.cbst_id IS NULL or cbst.cbst_icnaocobranca <> 1) "
+					+ " AND imov.imov_id NOT IN (SELECT imov_id FROM cobranca.cobranca_situacao_hist WHERE cbsh_amcobrancaretirada IS NULL) "
+					+ " AND conta.cmrv_id is null and conta.cnta_dtrevisao is null " + " AND ";
+
+			consulta += " NOT EXISTS (SELECT pagto.pgmt_id " + "    FROM arrecadacao.pagamento pagto " + "    WHERE pagto.cnta_id = conta.cnta_id) AND ";
+
+			consulta += " NOT EXISTS (SELECT emprCobConta.imov_id FROM cobranca.empresa_cobranca_conta emprCobConta "
 					+ "      INNER JOIN cobranca.cmd_empr_cobr_conta cecc ON emprCobConta.cecc_id = cecc.cecc_id "
 					+ "     WHERE emprCobConta.imov_id = imov.imov_id AND cecc.cecc_dtencerramento is null) AND ";
-			
-			if ((comandoEmpresaCobrancaConta.getIndicadorResidencial() != null && !comandoEmpresaCobrancaConta
-					.getIndicadorResidencial().equals(
-							ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorComercial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorComercial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorIndustrial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorPublico() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorPublico().equals(
-									ConstantesSistema.NAO.intValue()))) {
-				
-				consulta = consulta + " imov.imov_idcategoriaprincipal in (:idsCategoria) AND ";
-			}
-			
-			consulta = consulta
-					+ criarCondicionaisPesquisarQuantidadeContasComParametros(comandoEmpresaCobrancaContaHelper);
 
-			consulta = consulta + " GROUP BY conta.imov_id ";
+			if ((comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue()))) {
 
-			if (comandoEmpresaCobrancaConta.getQtdContasInicial() != null) {
-				consulta = consulta + " HAVING count(DISTINCT conta.cnta_id) between :qtdContasInicial  and  :qtdContasFinal ";
+				consulta += " imov.imov_idcategoriaprincipal in (:idsCategoria) AND ";
 			}
-			
-			Query query = session.createSQLQuery(consulta).addScalar(
-					"qtdContas", Hibernate.INTEGER).addScalar("qtdImovel",
-					Hibernate.INTEGER).addScalar("valorTotalDebitos",
-					Hibernate.BIG_DECIMAL).setInteger("debitoCreditoSituacaoNormal", 
-					DebitoCreditoSituacao.NORMAL).setInteger("debitoCreditoSituacaoIncluida", 
-					DebitoCreditoSituacao.INCLUIDA).setInteger("debitoCreditoSituacaoRetificada", 
-					DebitoCreditoSituacao.RETIFICADA);
-		
-			
-			if (comandoEmpresaCobrancaConta.getImovel() != null) {
-				query = query.setInteger("idImovel",comandoEmpresaCobrancaConta.getImovel().getId());
+
+			consulta += criarCondicionaisPesquisarQuantidadeContasComParametros(helper);
+
+			consulta += " GROUP BY conta.imov_id ";
+
+			if (comando.getQtdContasInicial() != null) {
+				consulta += " HAVING count(DISTINCT conta.cnta_id) between :qtdContasInicial  and  :qtdContasFinal ";
 			}
-	
-			if (comandoEmpresaCobrancaConta.getCliente() != null) {
-				query = query.setInteger("clienteUsuario", ClienteRelacaoTipo.USUARIO);
-				query = query.setInteger("idCliente",comandoEmpresaCobrancaConta.getCliente().getId());
+
+			Query query = session.createSQLQuery(consulta)
+					.addScalar("qtdContas", Hibernate.INTEGER)
+					.addScalar("qtdImovel", Hibernate.INTEGER)
+					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL)
+					.setInteger("debitoCreditoSituacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("debitoCreditoSituacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("debitoCreditoSituacaoRetificada", DebitoCreditoSituacao.RETIFICADA);
+
+			if (comando.getImovel() != null) {
+				query.setInteger("idImovel", comando.getImovel().getId());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null) {
-				
-				query = query.setInteger("idUnidadeNegocio",comandoEmpresaCobrancaConta.getUnidadeNegocio().getId());
-				
-			} else if (comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio() != null
-					&& !comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().isEmpty()) {
-				
+
+			if (comando.getCliente() != null) {
+				query.setInteger("clienteUsuario", ClienteRelacaoTipo.USUARIO);
+				query.setInteger("idCliente", comando.getCliente().getId());
+			}
+
+			if (comando.getUnidadeNegocio() != null) {
+
+				query.setInteger("idUnidadeNegocio", comando.getUnidadeNegocio().getId());
+
+			} else if (helper.getColecaoUnidadeNegocio() != null && !helper.getColecaoUnidadeNegocio().isEmpty()) {
+
 				boolean consultar = true;
-				if(comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().size() == 1){
-					Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().iterator();
-					while(it.hasNext()){
+				if (helper.getColecaoUnidadeNegocio().size() == 1) {
+					Iterator it = helper.getColecaoUnidadeNegocio().iterator();
+					while (it.hasNext()) {
 						UnidadeNegocio obj = (UnidadeNegocio) it.next();
-						if(obj != null && obj.getId() == -1){
+						if (obj != null && obj.getId() == -1) {
 							consultar = false;
 						}
-					}	
+					}
 				}
-				if(consultar){	
-					Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoUnidadeNegocio().iterator();
+				if (consultar) {
+					Iterator iterator = helper.getColecaoUnidadeNegocio().iterator();
 					UnidadeNegocio unidadeNegocio = null;
 					Collection<Integer> idsUnidadeNegocio = new ArrayList();
 					while (iterator.hasNext()) {
 						unidadeNegocio = (UnidadeNegocio) iterator.next();
 						idsUnidadeNegocio.add(unidadeNegocio.getId());
 					}
-					query = query.setParameterList("idsUnidadeNegocio",idsUnidadeNegocio);
+					query.setParameterList("idsUnidadeNegocio", idsUnidadeNegocio);
 				}
-				
+
 			}
-			
-	
-			if (comandoEmpresaCobrancaConta.getGerenciaRegional() != null) {
-	
-				query = query.setInteger("idGerenciaRegional",comandoEmpresaCobrancaConta.getGerenciaRegional().getId());
-				
-			} else if (comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional() != null
-					&& !comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().isEmpty()) {
-				
+
+			if (comando.getGerenciaRegional() != null) {
+
+				query.setInteger("idGerenciaRegional", comando.getGerenciaRegional().getId());
+
+			} else if (helper.getColecaoGerenciaRegional() != null && !helper.getColecaoGerenciaRegional().isEmpty()) {
+
 				boolean consultar = true;
-				if(comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().size() == 1){
-					Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().iterator();
-					while(it.hasNext()){
+				if (helper.getColecaoGerenciaRegional().size() == 1) {
+					Iterator it = helper.getColecaoGerenciaRegional().iterator();
+					while (it.hasNext()) {
 						GerenciaRegional obj = (GerenciaRegional) it.next();
-						if(obj != null && obj.getId() == -1){
+						if (obj != null && obj.getId() == -1) {
 							consultar = false;
 						}
-					}	
+					}
 				}
-				if(consultar){	
-					Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoGerenciaRegional().iterator();
+				if (consultar) {
+					Iterator iterator = helper.getColecaoGerenciaRegional().iterator();
 					GerenciaRegional gerenciaRegional = null;
 					Collection<Integer> idsGerenciaRegional = new ArrayList();
 					while (iterator.hasNext()) {
 						gerenciaRegional = (GerenciaRegional) iterator.next();
 						idsGerenciaRegional.add(gerenciaRegional.getId());
 					}
-					query = query.setParameterList("idsGerenciaRegional",idsGerenciaRegional);
+					query.setParameterList("idsGerenciaRegional", idsGerenciaRegional);
 				}
-				
+
 			}
-	
-			if (comandoEmpresaCobrancaConta.getImovelPerfil() != null) {
-	
-				query = query.setInteger("idImovelPerfil",comandoEmpresaCobrancaConta.getImovelPerfil().getId());
-				
-			} else if (comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil() != null
-					&& !comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().isEmpty()) {
-				
+
+			if (comando.getImovelPerfil() != null) {
+
+				query.setInteger("idImovelPerfil", comando.getImovelPerfil().getId());
+
+			} else if (helper.getColecaoImovelPerfil() != null && !helper.getColecaoImovelPerfil().isEmpty()) {
+
 				boolean consultar = true;
-				if(comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().size() == 1){
-					Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().iterator();
-					while(it.hasNext()){
+				if (helper.getColecaoImovelPerfil().size() == 1) {
+					Iterator it = helper.getColecaoImovelPerfil().iterator();
+					while (it.hasNext()) {
 						ImovelPerfil obj = (ImovelPerfil) it.next();
-						if(obj != null && obj.getId() == -1){
+						if (obj != null && obj.getId() == -1) {
 							consultar = false;
 						}
-					}	
+					}
 				}
-				if(consultar){	
-					Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoImovelPerfil().iterator();
+				if (consultar) {
+					Iterator iterator = helper.getColecaoImovelPerfil().iterator();
 					ImovelPerfil imovelPerfil = null;
 					Collection<Integer> idsImovelPerfil = new ArrayList();
 					while (iterator.hasNext()) {
 						imovelPerfil = (ImovelPerfil) iterator.next();
 						idsImovelPerfil.add(imovelPerfil.getId());
 					}
-					query = query.setParameterList("idsImovelPerfil",idsImovelPerfil);
+					query.setParameterList("idsImovelPerfil", idsImovelPerfil);
 				}
-				
+
 			}
-	
-			if (comandoEmpresaCobrancaConta.getLigacaoAguaSituacao() != null) {
-	
-				query = query.setInteger("idLigacaoAguaSituacao",
-						comandoEmpresaCobrancaConta.getLigacaoAguaSituacao().getId());
-				
-			} else if (comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao() != null
-					&& !comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().isEmpty()) {
-				
+
+			if (comando.getLigacaoAguaSituacao() != null) {
+
+				query.setInteger("idLigacaoAguaSituacao", comando.getLigacaoAguaSituacao().getId());
+
+			} else if (helper.getColecaoLigacaoAguaSituacao() != null && !helper.getColecaoLigacaoAguaSituacao().isEmpty()) {
+
 				boolean consultar = true;
-				if(comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().size() == 1){
-					Iterator it = comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().iterator();
-					while(it.hasNext()){
+				if (helper.getColecaoLigacaoAguaSituacao().size() == 1) {
+					Iterator it = helper.getColecaoLigacaoAguaSituacao().iterator();
+					while (it.hasNext()) {
 						LigacaoAguaSituacao obj = (LigacaoAguaSituacao) it.next();
-						if(obj != null && obj.getId() == -1){
+						if (obj != null && obj.getId() == -1) {
 							consultar = false;
 						}
-					}	
+					}
 				}
-				if(consultar){	
-					Iterator iterator = comandoEmpresaCobrancaContaHelper.getColecaoLigacaoAguaSituacao().iterator();
+				if (consultar) {
+					Iterator iterator = helper.getColecaoLigacaoAguaSituacao().iterator();
 					LigacaoAguaSituacao ligacaoAguaSituacao = null;
 					Collection<Integer> idsLigacaoAguaSituacao = new ArrayList();
 					while (iterator.hasNext()) {
 						ligacaoAguaSituacao = (LigacaoAguaSituacao) iterator.next();
 						idsLigacaoAguaSituacao.add(ligacaoAguaSituacao.getId());
 					}
-					query = query.setParameterList("idsLigacaoAguaSituacao",idsLigacaoAguaSituacao);
+					query.setParameterList("idsLigacaoAguaSituacao", idsLigacaoAguaSituacao);
 				}
 			}
-	
-			if (comandoEmpresaCobrancaConta.getLocalidadeInicial() != null) {
-				query = query.setInteger("idLocaInicial",comandoEmpresaCobrancaConta.getLocalidadeInicial().getId());
-				query = query.setInteger("idLocaFinal",comandoEmpresaCobrancaConta.getLocalidadeFinal().getId());
+
+			if (comando.getLocalidadeInicial() != null) {
+				query.setInteger("idLocaInicial", comando.getLocalidadeInicial().getId());
+				query.setInteger("idLocaFinal", comando.getLocalidadeFinal().getId());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getCodigoSetorComercialInicial() != null) {
-				query = query.setInteger("idSetorInicial",comandoEmpresaCobrancaConta.getCodigoSetorComercialInicial());
-				query = query.setInteger("idSetorFinal",comandoEmpresaCobrancaConta.getCodigoSetorComercialFinal());
+
+			if (comando.getCodigoSetorComercialInicial() != null) {
+				query.setInteger("idSetorInicial", comando.getCodigoSetorComercialInicial());
+				query.setInteger("idSetorFinal", comando.getCodigoSetorComercialFinal());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
-				query = query.setInteger("idQuadraInicial",comandoEmpresaCobrancaConta.getQuadraInicial().getNumeroQuadra());
-				query = query.setInteger("idQuadraFinal",comandoEmpresaCobrancaConta.getQuadraFinal().getNumeroQuadra());
+
+			if (comando.getNumeroQuadraInicial() != null) {
+				query.setInteger("idQuadraInicial", comando.getNumeroQuadraInicial());
+				query.setInteger("idQuadraFinal", comando.getNumeroQuadraFinal());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {
-				query = query.setInteger("idAnoMesInicial",comandoEmpresaCobrancaConta.getReferenciaContaInicial());
-				query = query.setInteger("idAnoMesFinal",comandoEmpresaCobrancaConta.getReferenciaContaFinal());
+
+			if (comando.getReferenciaContaInicial() != null) {
+				query.setInteger("idAnoMesInicial", comando.getReferenciaContaInicial());
+				query.setInteger("idAnoMesFinal", comando.getReferenciaContaFinal());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getDataVencimentoContaInicial() != null) {
-				query = query.setDate("dataInicial",comandoEmpresaCobrancaConta.getDataVencimentoContaInicial());
-				query = query.setDate("dataFinal",comandoEmpresaCobrancaConta.getDataVencimentoContaFinal());
+
+			if (comando.getDataVencimentoContaInicial() != null) {
+				query.setDate("dataInicial", comando.getDataVencimentoContaInicial());
+				query.setDate("dataFinal", comando.getDataVencimentoContaFinal());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getValorMinimoConta() != null) {
-				query = query.setBigDecimal("valorMaximoConta",comandoEmpresaCobrancaConta.getValorMinimoConta());
-				query = query.setBigDecimal("valorMinimoConta",comandoEmpresaCobrancaConta.getValorMaximoConta());
+
+			if (comando.getValorMinimoConta() != null) {
+				query.setBigDecimal("valorMaximoConta", comando.getValorMinimoConta());
+				query.setBigDecimal("valorMinimoConta", comando.getValorMaximoConta());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getQtdContasInicial() != null) {
-				query = query.setInteger("qtdContasInicial",comandoEmpresaCobrancaConta.getQtdContasInicial());
-				query = query.setInteger("qtdContasFinal",comandoEmpresaCobrancaConta.getQtdContasFinal());
+
+			if (comando.getQtdContasInicial() != null) {
+				query.setInteger("qtdContasInicial", comando.getQtdContasInicial());
+				query.setInteger("qtdContasFinal", comando.getQtdContasFinal());
 			}
-	
-			if (comandoEmpresaCobrancaConta.getQtdDiasVencimento() != null) {
-				query = query.setDate("dataMaximaVencimento",Util.subtrairNumeroDiasDeUmaData(
-						new Date(), comandoEmpresaCobrancaConta.getQtdDiasVencimento()));
+
+			if (comando.getQtdDiasVencimento() != null) {
+				query.setDate("dataMaximaVencimento", Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento()));
 			}
-	
-			if ((comandoEmpresaCobrancaConta.getIndicadorResidencial() != null && !comandoEmpresaCobrancaConta
-					.getIndicadorResidencial().equals(
-							ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorComercial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorComercial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorIndustrial().equals(
-									ConstantesSistema.NAO.intValue()))
-					|| (comandoEmpresaCobrancaConta.getIndicadorPublico() != null && !comandoEmpresaCobrancaConta
-							.getIndicadorPublico().equals(
-									ConstantesSistema.NAO.intValue()))) {
-	
+
+			if ((comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue()))
+					|| (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue()))) {
+
 				Collection<Integer> idsCategorias = new ArrayList();
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorResidencial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorResidencial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.RESIDENCIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorComercial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorComercial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.COMERCIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorIndustrial()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.INDUSTRIAL);
 				}
-	
-				if (comandoEmpresaCobrancaConta.getIndicadorPublico() != null
-						&& !comandoEmpresaCobrancaConta.getIndicadorPublico()
-								.equals(ConstantesSistema.NAO.intValue())) {
+
+				if (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue())) {
 					idsCategorias.add(Categoria.PUBLICO);
 				}
-	
-				query = query.setParameterList("idsCategoria",idsCategorias);
+
+				query.setParameterList("idsCategoria", idsCategorias);
 			}
-				
-				retorno = query.list();
+			
+			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
+				query.setMaxResults(comando.getQtdMaximaClientes());
+			}
+
+			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
-
 	}
 	
 	/**
@@ -54608,7 +54433,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ criarCondicionaisPesquisarQuantidadeContasComando(movimentarOrdemServicoEmitirOSHelper);
 	
-			consulta = consulta + " GROUP BY ecco.imov_id ";
+			consulta += " GROUP BY ecco.imov_id ";
 			
 			retorno = session.createSQLQuery(consulta).addScalar(
 					"qtdContas", Hibernate.INTEGER).addScalar("qtdImovel",
@@ -54693,49 +54518,39 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @date: 12/05/2011
 	 */
 	private String criarCondicionaisPesquisarQuantidadeContasComando(
-			MovimentarOrdemServicoEmitirOSHelper movimentarOrdemServicoEmitirOSHelper) {
+MovimentarOrdemServicoEmitirOSHelper movimentarOrdemServicoEmitirOSHelper) {
 
 		String retorno = "";
-		
-		ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta = movimentarOrdemServicoEmitirOSHelper.getComandoEmpresaCobrancaConta();
 
-		if (comandoEmpresaCobrancaConta.getId() != null) {
-			retorno = retorno + " and ecco.cecc_id = "
-				+ comandoEmpresaCobrancaConta.getId();
+		ComandoEmpresaCobrancaConta comando = movimentarOrdemServicoEmitirOSHelper.getComandoEmpresaCobrancaConta();
+
+		if (comando.getId() != null) {
+			retorno = retorno + " and ecco.cecc_id = " + comando.getId();
 		}
-		
-		if (movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial() != null
-				&& !movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial().equals("")
-				&& movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal() != null
-				&& !movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal().equals("")) {
-			
-			retorno = retorno
-				+ " and ecco.orse_id between "
-				+ movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial()
-				+ " and "
-				+ movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal();
+
+		if (movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial() != null && !movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial().equals("")
+				&& movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal() != null && !movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal().equals("")) {
+
+			retorno = retorno + " and ecco.orse_id between " + movimentarOrdemServicoEmitirOSHelper.getNumeroOSInicial() + " and " + movimentarOrdemServicoEmitirOSHelper.getNumeroOSFinal();
 		}
-			
-		if (comandoEmpresaCobrancaConta.getUnidadeNegocio() != null) {
-			
-			retorno = retorno
-					+ " and loca.uneg_id = "
-					+ comandoEmpresaCobrancaConta.getUnidadeNegocio().getId();
-			
-		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio() != null
-				&& !movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().isEmpty()) {
-			
+
+		if (comando.getUnidadeNegocio() != null) {
+
+			retorno = retorno + " and loca.uneg_id = " + comando.getUnidadeNegocio().getId();
+
+		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio() != null && !movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().isEmpty()) {
+
 			boolean consulta = true;
-			if(movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().size() == 1){
+			if (movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().size() == 1) {
 				Iterator it = movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().iterator();
-				while(it.hasNext()){
+				while (it.hasNext()) {
 					UnidadeNegocio obj = (UnidadeNegocio) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
+			if (consulta) {
 				Iterator iterator = movimentarOrdemServicoEmitirOSHelper.getColecaoUnidadeNegocio().iterator();
 				UnidadeNegocio unidadeNegocio = null;
 				retorno = retorno + " and loca.uneg_id in (";
@@ -54745,31 +54560,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
 				retorno = retorno + ") ";
-				
-			}
-			
-		}
-		
 
-		if (comandoEmpresaCobrancaConta.getGerenciaRegional() != null) {
-			
-			retorno = retorno + " and loca.greg_id = "
-						+ comandoEmpresaCobrancaConta.getGerenciaRegional().getId();
-			
-		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional() != null
-				&& !movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().isEmpty()) {
-			
+			}
+
+		}
+
+		if (comando.getGerenciaRegional() != null) {
+
+			retorno = retorno + " and loca.greg_id = " + comando.getGerenciaRegional().getId();
+
+		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional() != null && !movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().isEmpty()) {
+
 			boolean consulta = true;
-			if(movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().size() == 1){
+			if (movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().size() == 1) {
 				Iterator it = movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().iterator();
-				while(it.hasNext()){
+				while (it.hasNext()) {
 					GerenciaRegional obj = (GerenciaRegional) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
+			if (consulta) {
 				Iterator iterator = movimentarOrdemServicoEmitirOSHelper.getColecaoGerenciaRegional().iterator();
 				GerenciaRegional gerenciaRegional = null;
 				retorno = retorno + " and loca.greg_id in (";
@@ -54779,31 +54591,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
 				retorno = retorno + ") ";
-				
+
 			}
-			
+
 		}
 
-		if (comandoEmpresaCobrancaConta.getImovelPerfil() != null) {
-			
-			retorno = retorno 
-					+ " and imov.iper_id = "
-					+ comandoEmpresaCobrancaConta.getImovelPerfil().getId();
-			
-		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil() != null
-				&& !movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().isEmpty()) {
-			
+		if (comando.getImovelPerfil() != null) {
+
+			retorno = retorno + " and imov.iper_id = " + comando.getImovelPerfil().getId();
+
+		} else if (movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil() != null && !movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().isEmpty()) {
+
 			boolean consulta = true;
-			if(movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().size() == 1){
+			if (movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().size() == 1) {
 				Iterator it = movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().iterator();
-				while(it.hasNext()){
+				while (it.hasNext()) {
 					ImovelPerfil obj = (ImovelPerfil) it.next();
-					if(obj != null && obj.getId() == -1){
+					if (obj != null && obj.getId() == -1) {
 						consulta = false;
 					}
-				}	
+				}
 			}
-			if(consulta){	
+			if (consulta) {
 				Iterator iterator = movimentarOrdemServicoEmitirOSHelper.getColecaoImovelPerfil().iterator();
 				ImovelPerfil imovelPerfil = null;
 				retorno = retorno + " and imov.iper_id in (";
@@ -54813,110 +54622,67 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				}
 				retorno = Util.removerUltimosCaracteres(retorno, 1);
 				retorno = retorno + ") ";
-				
+
 			}
-			
+
 		}
 
-		if (comandoEmpresaCobrancaConta.getLocalidadeInicial() != null) {
-			retorno = retorno
-					+ " and loca.loca_id between "
-					+ comandoEmpresaCobrancaConta.getLocalidadeInicial()
-							.getId() + " and "
-					+ comandoEmpresaCobrancaConta.getLocalidadeFinal().getId();
+		if (comando.getLocalidadeInicial() != null) {
+			retorno = retorno + " and loca.loca_id between " + comando.getLocalidadeInicial().getId() + " and " + comando.getLocalidadeFinal().getId();
 		}
 
-		if (comandoEmpresaCobrancaConta.getCodigoSetorComercialInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_cdsetorcomercial between "
-					+ comandoEmpresaCobrancaConta
-							.getCodigoSetorComercialInicial()
-					+ " and "
-					+ comandoEmpresaCobrancaConta
-							.getCodigoSetorComercialFinal();
+		if (comando.getCodigoSetorComercialInicial() != null) {
+			retorno = retorno + " and conta.cnta_cdsetorcomercial between " + comando.getCodigoSetorComercialInicial() + " and "
+					+ comando.getCodigoSetorComercialFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getQuadraInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_nnquadra between "
-					+ comandoEmpresaCobrancaConta.getQuadraInicial()
-							.getNumeroQuadra() + " and "
-					+ comandoEmpresaCobrancaConta.getQuadraFinal().getNumeroQuadra();
+		if (comando.getNumeroQuadraInicial() != null) {
+			retorno = retorno + " and conta.cnta_nnquadra between " + comando.getNumeroQuadraInicial() + " and " + comando.getNumeroQuadraFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null) {
-			retorno = retorno + " and conta.cnta_amreferenciaconta between "
-					+ comandoEmpresaCobrancaConta.getReferenciaContaInicial()
-					+ " and "
-					+ comandoEmpresaCobrancaConta.getReferenciaContaFinal();
+		if (comando.getReferenciaContaInicial() != null) {
+			retorno = retorno + " and conta.cnta_amreferenciaconta between " + comando.getReferenciaContaInicial() + " and "
+					+ comando.getReferenciaContaFinal();
 		}
 
-		if (comandoEmpresaCobrancaConta.getDataVencimentoContaInicial() != null) {
-			retorno = retorno
-					+ " and conta.cnta_dtvencimentoconta between to_date('"
-					+ Util
-							.formatarDataComTracoAAAAMMDD(comandoEmpresaCobrancaConta
-									.getDataVencimentoContaInicial())
-					+ "','YYYY-MM-DD') and to_date('"
-					+ Util
-							.formatarDataComTracoAAAAMMDD(comandoEmpresaCobrancaConta
-									.getDataVencimentoContaFinal()) + "','YYYY-MM-DD')";
+		if (comando.getDataVencimentoContaInicial() != null) {
+			retorno = retorno + " and conta.cnta_dtvencimentoconta between to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaInicial())
+					+ "','YYYY-MM-DD') and to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD')";
 		}
 
-		if (comandoEmpresaCobrancaConta.getValorMinimoConta() != null) {
-			retorno = retorno
-					+ " and ecco.ecco_vloriginalconta between "
-					+ comandoEmpresaCobrancaConta.getValorMinimoConta()
-					+ " and "
-					+ comandoEmpresaCobrancaConta.getValorMaximoConta();
+		if (comando.getValorMinimoConta() != null) {
+			retorno = retorno + " and ecco.ecco_vloriginalconta between " + comando.getValorMinimoConta() + " and " + comando.getValorMaximoConta();
 		}
 
-		if ((comandoEmpresaCobrancaConta.getIndicadorResidencial() != null && !comandoEmpresaCobrancaConta
-				.getIndicadorResidencial().equals(
-						ConstantesSistema.NAO.intValue()))
-				|| (comandoEmpresaCobrancaConta.getIndicadorComercial() != null && !comandoEmpresaCobrancaConta
-						.getIndicadorComercial().equals(
-								ConstantesSistema.NAO.intValue()))
-				|| (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null && !comandoEmpresaCobrancaConta
-						.getIndicadorIndustrial().equals(
-								ConstantesSistema.NAO.intValue()))
-				|| (comandoEmpresaCobrancaConta.getIndicadorPublico() != null && !comandoEmpresaCobrancaConta
-						.getIndicadorPublico().equals(
-								ConstantesSistema.NAO.intValue()))) {
+		if ((comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue()))
+				|| (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue()))
+				|| (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue()))
+				|| (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue()))) {
 
 			retorno = retorno + " and imov.imov_idcategoriaprincipal IN ( ";
 
-			if (comandoEmpresaCobrancaConta.getIndicadorResidencial() != null
-					&& !comandoEmpresaCobrancaConta.getIndicadorResidencial()
-							.equals(ConstantesSistema.NAO.intValue())) {
+			if (comando.getIndicadorResidencial() != null && !comando.getIndicadorResidencial().equals(ConstantesSistema.NAO.intValue())) {
 				retorno = retorno + Categoria.RESIDENCIAL + ",";
 			}
 
-			if (comandoEmpresaCobrancaConta.getIndicadorComercial() != null
-					&& !comandoEmpresaCobrancaConta.getIndicadorComercial()
-							.equals(ConstantesSistema.NAO.intValue())) {
+			if (comando.getIndicadorComercial() != null && !comando.getIndicadorComercial().equals(ConstantesSistema.NAO.intValue())) {
 				retorno = retorno + Categoria.COMERCIAL + ",";
 			}
 
-			if (comandoEmpresaCobrancaConta.getIndicadorIndustrial() != null
-					&& !comandoEmpresaCobrancaConta.getIndicadorIndustrial()
-							.equals(ConstantesSistema.NAO.intValue())) {
+			if (comando.getIndicadorIndustrial() != null && !comando.getIndicadorIndustrial().equals(ConstantesSistema.NAO.intValue())) {
 				retorno = retorno + Categoria.INDUSTRIAL + ",";
 			}
 
-			if (comandoEmpresaCobrancaConta.getIndicadorPublico() != null
-					&& !comandoEmpresaCobrancaConta.getIndicadorPublico()
-							.equals(ConstantesSistema.NAO.intValue())) {
+			if (comando.getIndicadorPublico() != null && !comando.getIndicadorPublico().equals(ConstantesSistema.NAO.intValue())) {
 				retorno = retorno + Categoria.PUBLICO + ",";
 			}
 
 			retorno = Util.removerUltimosCaracteres(retorno, 1);
 			retorno = retorno + ")";
 		}
-		
+
 		if (!retorno.equals("")) {
-			retorno = retorno.substring(4, (retorno
-					.length()));
+			retorno = retorno.substring(4, (retorno.length()));
 		}
 
 		return retorno;
@@ -54960,7 +54726,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = consulta
 					+ criarCondicionaisPesquisarQuantidadeContasComando(movimentarOrdemServicoEmitirOSHelper);
 
-			consulta = consulta + " group by ecco.orse_id, ecco.imov_id";
+			consulta += " group by ecco.orse_id, ecco.imov_id";
 			
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idOS", Hibernate.INTEGER)

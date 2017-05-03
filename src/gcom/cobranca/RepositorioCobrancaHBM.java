@@ -13717,7 +13717,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author: Rafael Corrêa
 	 * @date: 28/10/2008
 	 */
-	public Collection<Object[]> pesquisarContasInformarContasEmCobranca(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta,
+	public Collection<Object[]> pesquisarContasInformarContasEmCobranca(ComandoEmpresaCobrancaConta comando,
 			Collection<Integer> idsImoveis, SistemaParametro sistemaParametro) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -13726,61 +13726,76 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		String consulta = null;
 
 		try {
-			consulta = "SELECT conta.cnta_id as idConta, " + " ( " + " 	coalesce( conta.cnta_vlagua, 0 ) + "
-					+ " 	coalesce( conta.cnta_vlesgoto, 0 ) + " + " 	coalesce( conta.cnta_vldebitos, 0 ) - "
-					+ " 	coalesce( conta.cnta_vlcreditos, 0 ) - " + " 	coalesce( conta.cnta_vlimpostos, 0 ) "
-					+ " ) as valorConta, 1 as indicadorPagamentoValido, conta.imov_id as idImovel" + " FROM faturamento.conta conta "
-					+ " LEFT OUTER JOIN arrecadacao.pagamento pagto " + " on pagto.cnta_id = conta.cnta_id "
-					+ " WHERE conta.imov_id in ( :idsImoveis ) " + " and conta.cnta_amreferenciaconta <  "
-					+ sistemaParametro.getAnoMesFaturamento() + " and conta.cmrv_id is null and conta.cnta_dtrevisao is null "
-					+ " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
-					+ " and pagto.pgmt_id is null and conta.dcst_idatual in (:incluida,:normal,:retificada) ";
+			consulta = "SELECT conta.cnta_id as idConta, " 
+					+ " (coalesce( conta.cnta_vlagua, 0 ) + "
+					+ "  coalesce( conta.cnta_vlesgoto, 0 ) + " 
+					+ "  coalesce( conta.cnta_vldebitos, 0 ) - "
+					+ "  coalesce( conta.cnta_vlcreditos, 0 ) - " 
+					+ "  coalesce( conta.cnta_vlimpostos, 0 ) "
+					+ " ) as valorConta, 1 as indicadorPagamentoValido, "
+					+ " conta.imov_id as idImovel" 
+					+ " FROM faturamento.conta conta "
+					+ " LEFT OUTER JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ";
+			
+			consulta += " WHERE conta.imov_id in ( :idsImoveis ) " 
+					  + " and conta.cnta_amreferenciaconta < " + sistemaParametro.getAnoMesFaturamento() 
+					  + " and conta.cmrv_id is null and conta.cnta_dtrevisao is null "
+					  + " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
+					  + " and pagto.pgmt_id is null and conta.dcst_idatual in (:incluida,:normal,:retificada) ";
 
-			if (comandoEmpresaCobrancaConta.getQtdDiasVencimento() != null) {
-				consulta = consulta
-						+ "and conta.cnta_dtvencimentoconta < to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(),
-								comandoEmpresaCobrancaConta.getQtdDiasVencimento())) + "','YYYY-MM-DD') ";
+			if (comando.getQtdDiasVencimento() != null) {
+				consulta += "and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(
+						Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + "','YYYY-MM-DD') ";
 			}
 
-			consulta = consulta + criarCondicionaisPesquisarContasInformarContasEmCobranca(comandoEmpresaCobrancaConta);
+			consulta += criarCondicionaisPesquisarContasInformarContasEmCobranca(comando);
 
-			if (comandoEmpresaCobrancaConta.getReferenciaContaInicial() != null
-					|| comandoEmpresaCobrancaConta.getDataVencimentoContaInicial() != null
-					|| comandoEmpresaCobrancaConta.getValorMinimoConta() != null) {
+			if (comando.getReferenciaContaInicial() != null
+					|| comando.getDataVencimentoContaInicial() != null
+					|| comando.getValorMinimoConta() != null) {
 
-				consulta = consulta + " UNION " + "SELECT conta.cnta_id as idConta, " + " ( " + " 	coalesce( conta.cnta_vlagua, 0 ) + "
-						+ " 	coalesce( conta.cnta_vlesgoto, 0 ) + " + " 	coalesce( conta.cnta_vldebitos, 0 ) - "
-						+ " 	coalesce( conta.cnta_vlcreditos, 0 ) - " + " 	coalesce( conta.cnta_vlimpostos, 0 ) "
-						+ " ) as valorConta, 2 as indicadorPagamentoValido, conta.imov_id as idImovel" + " FROM faturamento.conta conta "
-						+ " LEFT OUTER JOIN arrecadacao.pagamento pagto " + " on pagto.cnta_id = conta.cnta_id "
-						+ " WHERE conta.imov_id in ( :idsImoveis ) and " + " conta.cnta_amreferenciaconta <  "
-						+ sistemaParametro.getAnoMesFaturamento() + " and "
-						+ " conta.cmrv_id is null and conta.cnta_dtrevisao is null and " + " conta.cnta_dtvencimentoconta < to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD')  and ";
+				consulta += " UNION " 
+						+ " SELECT conta.cnta_id as idConta, " 
+						+ " (coalesce( conta.cnta_vlagua, 0 ) + "
+						+ "  coalesce( conta.cnta_vlesgoto, 0 ) + " 
+						+ "  coalesce( conta.cnta_vldebitos, 0 ) - "
+						+ "  coalesce( conta.cnta_vlcreditos, 0 ) - " 
+						+ "  coalesce( conta.cnta_vlimpostos, 0 ) "
+						+ " ) as valorConta, "
+						+ " 2 as indicadorPagamentoValido, "
+						+ " conta.imov_id as idImovel" 
+						+ " FROM faturamento.conta conta "
+						+ " LEFT OUTER JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ";
+				
+				consulta += " WHERE conta.imov_id in ( :idsImoveis ) "
+						  + " and conta.cnta_amreferenciaconta < " + sistemaParametro.getAnoMesFaturamento() 
+						  + " and conta.cmrv_id is null "
+						  + " and conta.cnta_dtrevisao is null "
+						  + " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
+						  + " and ";
 
-				if (comandoEmpresaCobrancaConta.getQtdDiasVencimento() != null) {
-					consulta = consulta
-							+ " conta.cnta_dtvencimentoconta < to_date('"
-							+ Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(),
-									comandoEmpresaCobrancaConta.getQtdDiasVencimento())) + "','YYYY-MM-DD') and ";
+				if (comando.getQtdDiasVencimento() != null) {
+					consulta += " conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(
+							Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + "','YYYY-MM-DD') and ";
 				}
 
-				consulta = consulta + criarCondicionaisPesquisarContasInformarContasEmCobrancaNegacao(comandoEmpresaCobrancaConta);
+				consulta += criarCondicionaisPesquisarContasInformarContasEmCobrancaNegacao(comando);
 			}
 
-			retorno = session.createSQLQuery(consulta).addScalar("idConta", Hibernate.INTEGER)
-					.addScalar("valorConta", Hibernate.BIG_DECIMAL).addScalar("indicadorPagamentoValido", Hibernate.SHORT)
-					.addScalar("idImovel", Hibernate.INTEGER).setParameterList("idsImoveis", idsImoveis)
-					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("valorConta", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorPagamentoValido", Hibernate.SHORT)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.setParameterList("idsImoveis", idsImoveis)
+					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -14320,23 +14335,15 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	/**
 	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
-	 * 
-	 * 
-	 * 
-	 * @author: Rômulo Aurélio, Mariana Victor
-	 * @date: 29/10/2008, 02/05/2011
 	 */
-	public Collection<Object[]> pesquisarDadosArquivoTextoContasCobrancaEmpresa(Collection ids, Integer idUnidadeNegocio,
-			Integer numeroPagina, int quantidadeRegistros, Integer idProgramaEspecial) throws ErroRepositorioException {
+	public Collection<Object[]> pesquisarDadosArquivoTextoContasCobrancaEmpresa(Collection ids, Integer numeroPagina, 
+			int quantidadeRegistros, Integer idProgramaEspecial) throws ErroRepositorioException {
 
 		StatelessSession session = HibernateUtil.getStatelessSession();
-
 		Collection<Object[]> retorno = null;
-		String consulta = null;
 
 		try {
-
-			consulta = "select ecco.ecco_id as idEmpresaCobrancaConta, "// 0
+			String consulta = "select ecco.ecco_id as idEmpresaCobrancaConta, "// 0
 					+ "unidadeNegocio.uneg_id as idUnidadeNegocio, "// 1
 					+ "unidadeNegocio.uneg_nmunidadenegocio as nomeUnidadeNegocio, "// 2
 					+ "rota.ftgr_id as idGrupoFaturamento, "// 3
@@ -14376,13 +14383,14 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "gerenciaRegional.greg_id AS idGerenciaRegional, "// 28
 					+ "gerenciaRegional.greg_nmregional AS nomeGerenciaRegional, "// 29
 					+ "emco.emco_cdlayouttxt AS codigoLayout, "// 30
-					+ "ecco.orse_id AS idOrdemServico " // 31
+					+ "ecco.orse_id AS idOrdemServico, " // 31
+					+ "clienteFone.cfon_cdddd as dddFone "// 32
 					+ "from cobranca.empresa_cobranca_conta ecco "
 					+ "inner join  faturamento.conta conta on (conta.cnta_id = ecco.cnta_id and conta.dcst_idatual in (0 , 1 , 2)) "
 					+ "inner join cadastro.imovel imovel  on imovel.imov_id  = conta.imov_id "
-					+ "inner join cadastro.cliente_imovel clienteImovel   on clienteImovel.imov_id  = imovel.imov_id and (clienteImovel.crtp_id = 2 AND clienteImovel.clim_dtrelacaofim is null) "
+					+ "inner join cadastro.cliente_imovel clienteImovel   on clienteImovel.imov_id  = imovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 "
 					+ "inner join cadastro.cliente cliente  on cliente.clie_id = clienteImovel.clie_id "
-					+ "left outer join cadastro.cliente_fone clienteFone on (clienteFone.clie_id = cliente.clie_id and (clienteFone.cfon_icfonepadrao=1)) "
+					+ "left outer join cadastro.cliente_fone clienteFone on clienteFone.clie_id = cliente.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null "
 					+ "inner join cadastro.cliente_tipo clienteTipo on clienteTipo.cltp_id = cliente.cltp_id "
 					+ "inner join cadastro.localidade localidade  on localidade.loca_id = imovel.loca_id "
 					+ "inner join cadastro.unidade_negocio unidadeNegocio  on unidadeNegocio.uneg_id  = localidade.uneg_id "
@@ -14391,8 +14399,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "inner join micromedicao.rota rota on rota.rota_id = quadra.rota_id "
 					+ "left join cadastro.empr_contrato_cobranca emco on emco.empr_id = ecco.empr_id "
 					+ "left join cadastro.setor_comercial stcm on stcm.stcm_id = imovel.stcm_id "
-					+ "where ecco.cecc_id in (:ids)  and localidade.uneg_id = :idUnidadeNegocio "
-					+ "and  not exists (select pagamento.cnta_id from arrecadacao.pagamento pagamento where pagamento.cnta_id=conta.cnta_id) ";
+					+ "where ecco.cecc_id in (:ids) "
+					+ "and not exists (select pagamento.cnta_id from arrecadacao.pagamento pagamento where pagamento.cnta_id=conta.cnta_id) ";
 
 			if (idProgramaEspecial != null) {
 				consulta += "and imovel.iper_id <> :idProgramaEspecial ";
@@ -14400,24 +14408,41 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 			consulta += " order by ecco.ecco_id, conta.imov_id ";
 
-			Query query = session.createSQLQuery(consulta).addScalar("idEmpresaCobrancaConta", Hibernate.INTEGER)
-					.addScalar("idUnidadeNegocio", Hibernate.INTEGER).addScalar("nomeUnidadeNegocio", Hibernate.STRING)
-					.addScalar("idGrupoFaturamento", Hibernate.INTEGER).addScalar("idLocalidade", Hibernate.INTEGER)
-					.addScalar("nomeLocalidade", Hibernate.STRING).addScalar("codigoRota", Hibernate.SHORT)
-					.addScalar("numeroSequencial", Hibernate.INTEGER).addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("nomeCliente", Hibernate.STRING).addScalar("idClienteTipo", Hibernate.INTEGER)
-					.addScalar("numeroCpf", Hibernate.STRING).addScalar("numeroCnpj", Hibernate.STRING)
-					.addScalar("numeroRg", Hibernate.STRING).addScalar("numeroQuadra", Hibernate.INTEGER)
-					.addScalar("idConta", Hibernate.INTEGER).addScalar("numeroFone", Hibernate.STRING)
-					.addScalar("nomeAbreviadoCliente", Hibernate.STRING).addScalar("anoMesConta", Hibernate.INTEGER)
-					.addScalar("vencimentoConta", Hibernate.DATE).addScalar("valorAgua", Hibernate.BIG_DECIMAL)
-					.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL).addScalar("valorDebitos", Hibernate.BIG_DECIMAL)
-					.addScalar("valorCreditos", Hibernate.BIG_DECIMAL).addScalar("codigoSetorComercial", Hibernate.INTEGER)
-					.addScalar("numeroLote", Hibernate.SHORT).addScalar("numeroSublote", Hibernate.SHORT)
-					.addScalar("idCliente", Hibernate.INTEGER).addScalar("idGerenciaRegional", Hibernate.INTEGER)
-					.addScalar("nomeGerenciaRegional", Hibernate.STRING).addScalar("codigoLayout", Hibernate.SHORT)
-					.addScalar("idOrdemServico", Hibernate.INTEGER).setParameterList("ids", ids)
-					.setInteger("idUnidadeNegocio", idUnidadeNegocio);
+			Query query = session.createSQLQuery(consulta)
+					.addScalar("idEmpresaCobrancaConta", Hibernate.INTEGER)
+					.addScalar("idUnidadeNegocio", Hibernate.INTEGER)
+					.addScalar("nomeUnidadeNegocio", Hibernate.STRING)
+					.addScalar("idGrupoFaturamento", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
+					.addScalar("codigoRota", Hibernate.SHORT)
+					.addScalar("numeroSequencial", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("idClienteTipo", Hibernate.INTEGER)
+					.addScalar("numeroCpf", Hibernate.STRING)
+					.addScalar("numeroCnpj", Hibernate.STRING)
+					.addScalar("numeroRg", Hibernate.STRING)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("numeroFone", Hibernate.STRING)
+					.addScalar("nomeAbreviadoCliente", Hibernate.STRING)
+					.addScalar("anoMesConta", Hibernate.INTEGER)
+					.addScalar("vencimentoConta", Hibernate.DATE)
+					.addScalar("valorAgua", Hibernate.BIG_DECIMAL)
+					.addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+					.addScalar("valorDebitos", Hibernate.BIG_DECIMAL)
+					.addScalar("valorCreditos", Hibernate.BIG_DECIMAL)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroLote", Hibernate.SHORT)
+					.addScalar("numeroSublote", Hibernate.SHORT)
+					.addScalar("idCliente", Hibernate.INTEGER)
+					.addScalar("idGerenciaRegional", Hibernate.INTEGER)
+					.addScalar("nomeGerenciaRegional", Hibernate.STRING)
+					.addScalar("codigoLayout", Hibernate.SHORT)
+					.addScalar("idOrdemServico", Hibernate.INTEGER)
+					.addScalar("dddFone", Hibernate.STRING)
+					.setParameterList("ids", ids);
 
 			if (idProgramaEspecial != null) {
 				query.setInteger("idProgramaEspecial", idProgramaEspecial);
@@ -14426,15 +14451,12 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			retorno = query.setMaxResults(quantidadeRegistros).setFirstResult(numeroPagina).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
-
 	}
 
 	/**
@@ -25561,41 +25583,36 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	/**
 	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 13/04/2011
 	 */
-	public Integer pesquisarQuantidadeContasArquivoTextoContasCobrancaEmpresa(Collection ids, Integer idImovel)
-			throws ErroRepositorioException {
+	public Integer pesquisarQuantidadeContasArquivoTextoContasCobrancaEmpresa(Collection ids, Integer idImovel) throws ErroRepositorioException {
 
 		StatelessSession session = HibernateUtil.getStatelessSession();
-
 		Integer retorno = null;
-		String consulta = null;
 
 		try {
 
-			consulta = " SELECT COUNT(DISTINCT conta.cnta_id) AS quantidadeContas " // 1
-					+ " from cobranca.empresa_cobranca_conta ecco "
-					+ " inner join  faturamento.conta conta on (conta.cnta_id = ecco.cnta_id and conta.dcst_idatual in (0 , 1 , 2)) "
-					+ " inner join cadastro.imovel imovel  on imovel.imov_id = conta.imov_id and imovel.imov_id = :idImovel "
-					+ " where ecco.cecc_id in (:ids) "
-					+ " and  not exists (select pagamento.cnta_id from arrecadacao.pagamento pagamento where pagamento.cnta_id=conta.cnta_id) "
-					+ " order by ecco.ecco_id ";
+			String consulta = " SELECT COUNT(DISTINCT conta.cnta_id) AS quantidadeContas " // 1
+					+ " FROM cobranca.empresa_cobranca_conta ecco "
+					+ " INNER JOIN faturamento.conta conta on (conta.cnta_id = ecco.cnta_id and conta.dcst_idatual in (0 , 1 , 2)) "
+					+ " INNER JOIN cadastro.imovel imovel  on imovel.imov_id = conta.imov_id and imovel.imov_id = :idImovel "
+					+ " WHERE ecco.cecc_id in (:ids) "
+					+ " AND not exists (select pagamento.cnta_id from arrecadacao.pagamento pagamento where pagamento.cnta_id=conta.cnta_id) "
+					+ " GROUP BY ecco.ecco_id "
+					+ " ORDER BY ecco.ecco_id ";
 
-			retorno = (Integer) session.createSQLQuery(consulta).addScalar("quantidadeContas", Hibernate.INTEGER)
-					.setParameterList("ids", ids).setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
-
+			retorno = (Integer) session.createSQLQuery(consulta)
+					.addScalar("quantidadeContas", Hibernate.INTEGER)
+					.setParameterList("ids", ids)
+					.setInteger("idImovel", idImovel)
+					.setMaxResults(1)
+					.uniqueResult();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
-
 	}
 
 	/**

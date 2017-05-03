@@ -1,24 +1,5 @@
 package gcom.batch;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
@@ -272,13 +253,25 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-/**
- * Controlador que possui os metodos de negocio de toda a parte que da suporte
- * ao batch
- * 
- * @author Rodrigo Silveira
- * @date 28/07/2006
- */
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 public class ControladorBatchSEJB implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -294,39 +287,21 @@ public class ControladorBatchSEJB implements SessionBean {
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
 
-	/**
-	 * < <Descricao do metodo>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descricao do metodo>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descricao do metodo>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
 	/**
 	 * Insere um processo iniciado no sistema e suas funcionalidades iniciadas
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 28/07/2006
 	 * 
 	 * @param processoIniciado
 	 * @throws ControladorException
@@ -343,9 +318,7 @@ public class ControladorBatchSEJB implements SessionBean {
 		Integer anoMesFaturamentoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
 		Integer anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
 
-		/** Colecao de ids de localidades para encerrar a arrecadacacao do mes */
-		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao()
-				.pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
+		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao().pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
 
 		try {
 
@@ -2736,67 +2709,41 @@ public class ControladorBatchSEJB implements SessionBean {
 					case Funcionalidade.GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
 
 						TarefaBatchGerarMovimentoContasCobrancaPorEmpresa gerarMovimentoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoContasCobrancaPorEmpresa(
-								processoIniciado.getUsuario(),
-								funcionalidadeIniciada.getId());
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
 						FiltroComandoEmpresaCobrancaConta filtroComandoEmpresaCobrancaConta = new FiltroComandoEmpresaCobrancaConta();
-						filtroComandoEmpresaCobrancaConta
-								.adicionarParametro(new ParametroNulo(
-										FiltroComandoEmpresaCobrancaConta.DATA_EXECUCAO));
+						filtroComandoEmpresaCobrancaConta.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaConta.DATA_EXECUCAO));
 
-						Collection colecaoComandoEmpresaCobrancaConta = getControladorUtil()
-								.pesquisar(
-										filtroComandoEmpresaCobrancaConta,
-										ComandoEmpresaCobrancaConta.class
-												.getName());
+						Collection colecaoComandoEmpresaCobrancaConta = getControladorUtil().pesquisar(filtroComandoEmpresaCobrancaConta, ComandoEmpresaCobrancaConta.class.getName());
 
 						Collection colecaoComandoEmpresaCobrancaContaParaBatch = new ArrayList();
-						
-						if (colecaoComandoEmpresaCobrancaConta != null 
-								&& !colecaoComandoEmpresaCobrancaConta.isEmpty()) {
+
+						if (colecaoComandoEmpresaCobrancaConta != null && !colecaoComandoEmpresaCobrancaConta.isEmpty()) {
 							Iterator iteratorComandos = colecaoComandoEmpresaCobrancaConta.iterator();
-							
-							while(iteratorComandos.hasNext()) {
-								ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) 
-									iteratorComandos.next();
-								
+
+							while (iteratorComandos.hasNext()) {
+								ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) iteratorComandos.next();
+
 								FiltroEmpresaCobranca filtroEmpresaCobranca = new FiltroEmpresaCobranca();
-								filtroEmpresaCobranca.adicionarParametro(new ParametroSimples(
-										FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
-								filtroEmpresaCobranca.adicionarParametro(new ParametroNulo(
-										FiltroEmpresaCobranca.DATA_FIM_CONTRATO));
-								Collection colecaoEmpresaCobranca = getControladorUtil().pesquisar(
-										filtroEmpresaCobranca, EmpresaCobranca.class.getName());
-								
+								filtroEmpresaCobranca.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
+								filtroEmpresaCobranca.adicionarParametro(new ParametroNulo(FiltroEmpresaCobranca.DATA_FIM_CONTRATO));
+								Collection colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtroEmpresaCobranca, EmpresaCobranca.class.getName());
+
 								if (colecaoEmpresaCobranca != null && !colecaoEmpresaCobranca.isEmpty()) {
-									
-									EmpresaCobranca empresaCobranca = (EmpresaCobranca) 
-										Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
-									
-									if ((empresaCobranca.getPercentualContratoCobranca() != null
-											&& empresaCobranca.getPercentualContratoCobranca()
-												.compareTo(BigDecimal.ZERO) > 0)
-										|| (comando.getDataEncerramento() == null)){
-										
+
+									EmpresaCobranca empresaCobranca = (EmpresaCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
+
+									if ((empresaCobranca.getPercentualContratoCobranca() != null && empresaCobranca.getPercentualContratoCobranca().compareTo(BigDecimal.ZERO) > 0)
+											|| (comando.getDataEncerramento() == null)) {
+
 										colecaoComandoEmpresaCobrancaContaParaBatch.add(comando);
-										
 									}
-									
 								}
-								
 							}
 						}
-						
-						gerarMovimentoContasCobrancaPorEmpresa
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoComandoEmpresaCobrancaContaParaBatch);
 
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(gerarMovimentoContasCobrancaPorEmpresa));
+						gerarMovimentoContasCobrancaPorEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoComandoEmpresaCobrancaContaParaBatch);
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoContasCobrancaPorEmpresa));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
@@ -8611,12 +8558,10 @@ public class ControladorBatchSEJB implements SessionBean {
 	 * @param usuario
 	 */
 
-	public Integer inserirProcessoIniciadoContasCobranca(Collection ids,
-			Integer idEmpresa, Usuario usuario) throws ControladorException {
+	public Integer inserirProcessoIniciadoContasCobranca(Collection ids, Integer idEmpresa, Usuario usuario) throws ControladorException {
 
 		Integer codigoProcessoIniciadoGerado = null;
 
-		// Converte a Colecao de id em Integer[]
 		Integer[] idsRegistros = new Integer[ids.size()];
 		Iterator colecaoIteratorIDS = ids.iterator();
 		while (colecaoIteratorIDS.hasNext()) {
@@ -8627,95 +8572,45 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 
 		try {
-
 			ProcessoIniciado processoIniciado = new ProcessoIniciado();
-
 			processoIniciado.setUsuario(usuario);
-
 			ProcessoSituacao processoSituacao = new ProcessoSituacao();
-
-			
 			processoSituacao.setId(ProcessoSituacao.EM_ESPERA);
-
 			processoIniciado.setProcessoSituacao(processoSituacao);
-
 			Processo processo = new Processo();
-
-			processo
-					.setId(Processo.GERAR_ARQUIVO_TEXTO_CONTAS_COBRANCA_EMPRESA);
-
+			processo.setId(Processo.GERAR_ARQUIVO_TEXTO_CONTAS_COBRANCA_EMPRESA);
 			processoIniciado.setProcesso(processo);
-
 			processoIniciado.setDataHoraAgendamento(new Date());
-
 			processoIniciado.setDataHoraInicio(new Date());
-
 			processoIniciado.setDataHoraComando(new Date());
 
-			codigoProcessoIniciadoGerado = (Integer) getControladorUtil()
-					.inserir(processoIniciado);
+			codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
 
-			// Este trecho pesquisa todos do processoFuncionalidade
-			// relacionados
-			// com o processo do objeto a ser inserido
 			FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
+			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO, processoIniciado.getProcesso().getId()));
+			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			filtroProcessoFuncionalidade
-					.adicionarParametro(new ParametroSimples(
-							FiltroProcessoFuncionalidade.ID_PROCESSO,
-							processoIniciado.getProcesso().getId()));
-
-			filtroProcessoFuncionalidade
-					.adicionarParametro(new ParametroSimples(
-							FiltroProcessoFuncionalidade.INDICADOR_USO,
-							ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			Collection processosFuncionaliadade = getControladorUtil()
-					.pesquisar(filtroProcessoFuncionalidade,
-							ProcessoFuncionalidade.class.getName());
+			Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade, ProcessoFuncionalidade.class.getName());
 
 			Iterator iterator = processosFuncionaliadade.iterator();
 			while (iterator.hasNext()) {
-				ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator
-						.next();
+				ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
 				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
 
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
-				funcionalidadeIniciada
-						.setFuncionalidadeSituacao(funcionalidadeSituacao);
-
+				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
 				funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
-
-				funcionalidadeIniciada
-						.setProcessoFuncionalidade(processoFuncionalidade);
-
-				funcionalidadeIniciada.setId((Integer) getControladorUtil()
-						.inserir(funcionalidadeIniciada));
+				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
+				funcionalidadeIniciada.setId((Integer) getControladorUtil().inserir(funcionalidadeIniciada));
 
 				TarefaBatchGerarArquivoTextoContasCobrancaEmpresa tarefaBatchGerarArquivoTextoContasCobrancaEmpresa = new TarefaBatchGerarArquivoTextoContasCobrancaEmpresa(
-						processoIniciado.getUsuario(), funcionalidadeIniciada
-								.getId());
+						processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-				// Seta os parametros para rodar a funcionalidade
-				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro(
-						"idsRegistros", ids);
-				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro(
-						"idEmpresa", idEmpresa);
+				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idsRegistros", ids);
+				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idEmpresa", idEmpresa);
 
-				Collection colecaoUnidadeNegocio = getControladorCobranca()
-						.obterUnidadeNegocioEmpresaCobrancaConta(idsRegistros);
-
-				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro(
-						ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-						colecaoUnidadeNegocio);
-
-				// Seta o objeto para ser serializado no banco, onde
-				// depois sera executado por uma thread
-
-				funcionalidadeIniciada
-						.setTarefaBatch(IoUtil
-								.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoContasCobrancaEmpresa));
+				funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoContasCobrancaEmpresa));
 
 				getControladorUtil().atualizar(funcionalidadeIniciada);
 
@@ -8726,7 +8621,6 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 
 		return codigoProcessoIniciadoGerado;
-
 	}
 
 	/**

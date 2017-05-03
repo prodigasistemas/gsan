@@ -18,15 +18,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-/**
- * Descrição da classe 
- *
- * @author Rafael Corrêa
- * @date 29/10/2008
- */
-public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements
-	MessageDrivenBean,
-	MessageListener{
+public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,24 +26,21 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements
 		super();
 	}
 
-	public void setMessageDrivenContext(MessageDrivenContext ctx)
-			throws EJBException {
-
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 	}
 
 	public void ejbRemove() throws EJBException {
-
 	}
 
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
-
 			ObjectMessage objectMessage = (ObjectMessage) message;
+
 			try {
-				this.getControladorCobranca().
-				gerarMovimentoContasEmCobranca((ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[0],
-						                          (Integer) ((Object[]) objectMessage.getObject())[1]);
-				
+				this.getControladorCobranca().gerarMovimentoContasEmCobranca(
+						(ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[0],
+						(Integer) ((Object[]) objectMessage.getObject())[1]);
+
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
@@ -60,26 +49,14 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements
 				e.printStackTrace();
 			}
 		}
-
 	}
 
-	
 	private ControladorCobrancaLocal getControladorCobranca() {
-
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		ServiceLocator locator = null;
-
 		try {
-			locator = ServiceLocator.getInstancia();
+			ServiceLocator locator = ServiceLocator.getInstancia();
+			ControladorCobrancaLocalHome localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
 
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			
-			local = localHome.create();
-
-			return local;
+			return localHome.create();
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
@@ -88,13 +65,6 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements
 
 	}
 
-	
-
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
 	public void ejbCreate() {
 
 	}
