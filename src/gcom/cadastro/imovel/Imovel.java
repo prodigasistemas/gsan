@@ -1,13 +1,5 @@
 package gcom.cadastro.imovel;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
@@ -47,6 +39,14 @@ import gcom.model.IAtualizacaoCadastro;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @ControleAlteracao()
 public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCadastro{
@@ -2534,5 +2534,9 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public boolean paralizadoSemRealizacaoLeitura() {
 		return this.getFaturamentoSituacaoTipo() != null && 
 			   this.getFaturamentoSituacaoTipo().getId().intValue() == FaturamentoSituacaoTipo.INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA.intValue();
+	}
+	
+	public boolean isImovelHidrometrado() {
+		return hidrometroInstalacaoHistorico != null || (ligacaoAgua != null && ligacaoAgua.getHidrometroInstalacaoHistorico() != null);
 	}
 }
