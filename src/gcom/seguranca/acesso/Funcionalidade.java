@@ -188,6 +188,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
     public static final int TESTE_OPERACIONAL = 12000;
     
     public static final int GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO = 16025;
+    
+    public static final int GERAR_NEGOCIACAO_CONTAS_COBRANCA_EMPRESA = 16039;
 	
 	private Integer id;
 

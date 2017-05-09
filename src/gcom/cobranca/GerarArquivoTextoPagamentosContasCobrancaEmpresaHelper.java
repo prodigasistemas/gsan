@@ -7,9 +7,6 @@ import java.util.Date;
 public class GerarArquivoTextoPagamentosContasCobrancaEmpresaHelper implements
 		Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Integer matricula;
@@ -46,9 +43,9 @@ public class GerarArquivoTextoPagamentosContasCobrancaEmpresaHelper implements
 	
 	private String nomeLocalidade;
 	
-	private Integer idSetor;
+	private Integer codigoSetor;
 	
-	private Integer idQuadra;
+	private Integer numeroQuadra;
 	
 	private Integer lote;
 	
@@ -76,20 +73,20 @@ public class GerarArquivoTextoPagamentosContasCobrancaEmpresaHelper implements
 		this.idLocalidade = idLocalidade;
 	}
 
-	public Integer getIdQuadra() {
-		return idQuadra;
+	public Integer getNumeroQuadra() {
+		return numeroQuadra;
 	}
 
-	public void setIdQuadra(Integer idQuadra) {
-		this.idQuadra = idQuadra;
+	public void setNumeroQuadra(Integer numeroQuadra) {
+		this.numeroQuadra = numeroQuadra;
 	}
 
-	public Integer getIdSetor() {
-		return idSetor;
+	public Integer getCodigoSetor() {
+		return codigoSetor;
 	}
 
-	public void setIdSetor(Integer idSetor) {
-		this.idSetor = idSetor;
+	public void setCodigoSetor(Integer codigoSetor) {
+		this.codigoSetor = codigoSetor;
 	}
 
 	public Integer getIdUnidadeNegocio() {

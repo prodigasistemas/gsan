@@ -727,4 +727,8 @@ public interface ConstantesSistema {
 	
 	String OITO_DIGITOS = "0";
 	String NOVE_DIGITOS = "1";
+	
+	int TIPO_NEGOCIACAO_PARCELAMENTO = 1;
+	int TIPO_NEGOCIACAO_EXTRATO = 2;
+	int TIPO_NEGOCIACAO_GUIA = 3;
 }

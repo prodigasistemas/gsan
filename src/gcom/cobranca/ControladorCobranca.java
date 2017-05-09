@@ -50850,7 +50850,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 		// Quadra
 		if (arraydadosTxt[15] != null) {
-			helper.setIdQuadra((Integer) (arraydadosTxt[15]));
+			helper.setNumeroQuadra((Integer) (arraydadosTxt[15]));
 		}
 		// Lote
 		if (arraydadosTxt[16] != null) {
@@ -50870,7 +50870,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 		// Codigo Setor
 		if (arraydadosTxt[20] != null) {
-			helper.setIdSetor((Integer) (arraydadosTxt[20]));
+			helper.setCodigoSetor((Integer) (arraydadosTxt[20]));
 		}
 		// Data Pagamento
 		if (arraydadosTxt[21] != null) {
@@ -50920,7 +50920,7 @@ public class ControladorCobranca implements SessionBean {
 		}
 		// Valor da Conta tam 15
 		if (helper.getValorConta() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getValorConta()), 15) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getValorConta()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
@@ -50936,6 +50936,15 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			arquivoTxt.append(";");
 		}
+		
+		// dataPagamento tam 10
+		if (helper.getDataPagamento() != null) {
+			String dataPagamento = Util.formatarData(helper.getDataPagamento());
+			arquivoTxt.append(Util.truncarString(dataPagamento.toString(), 10) + ";");
+		} else {
+			arquivoTxt.append(";");
+		}
+		
 		// Numero de Parcelas tam 2
 		if (helper.getNumeroParcelas() != null) {
 			arquivoTxt.append(Util.truncarString(helper.getNumeroParcelas().toString(), 2) + ";");
@@ -50950,31 +50959,31 @@ public class ControladorCobranca implements SessionBean {
 		}
 		// Valor da Conta tam 15
 		if (helper.getValorPagamentoPrincipal() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getValorPagamentoPrincipal()), 15) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getValorPagamentoPrincipal()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
 		// Valor da Conta tam 15
 		if (helper.getValorEncargos() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getValorEncargos()), 15) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getValorEncargos()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
 		// Valor da Pagamento Total tam 15
 		if (helper.getValorPagamentoTotal() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getValorPagamentoTotal()), 15) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getValorPagamentoTotal()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
 		// Valor da Percentual Empresa tam 5
 		if (helper.getPercentualEmpresa() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getPercentualEmpresa()), 5) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getPercentualEmpresa()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
 		// Valor da Pagamento Empresa tam 15
 		if (helper.getValorPagamentoEmpresa() != null) {
-			arquivoTxt.append(Util.truncarString(Util.formatarBigDecimalParaString(helper.getValorPagamentoEmpresa()), 15) + ";");
+			arquivoTxt.append(Util.formatarBigDecimalComPonto(helper.getValorPagamentoEmpresa()) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
@@ -51002,15 +51011,15 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			arquivoTxt.append(";");
 		}
-		// idSetor tam 04
-		if (helper.getIdSetor() != null) {
-			arquivoTxt.append(Util.truncarString(helper.getIdSetor().toString(), 4) + ";");
+		// Codigo Setor tam 04
+		if (helper.getCodigoSetor() != null) {
+			arquivoTxt.append(Util.truncarString(helper.getCodigoSetor().toString(), 4) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
-		// idQuadra tam 07
-		if (helper.getIdQuadra() != null) {
-			arquivoTxt.append(Util.truncarString(helper.getIdQuadra().toString(), 7) + ";");
+		// Numero Quadra tam 07
+		if (helper.getNumeroQuadra() != null) {
+			arquivoTxt.append(Util.truncarString(helper.getNumeroQuadra().toString(), 7) + ";");
 		} else {
 			arquivoTxt.append(";");
 		}
@@ -51038,16 +51047,6 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			arquivoTxt.append(";");
 		}
-
-		// dataPagamento tam 10
-		if (helper.getDataPagamento() != null) {
-
-			String dataPagamento = Util.formatarData(helper.getDataPagamento());
-			arquivoTxt.append(Util.truncarString(dataPagamento.toString(), 10) + ";");
-		} else {
-			arquivoTxt.append(";");
-		}
-
 	}
 
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ControladorException {

@@ -12944,7 +12944,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 						for (Integer anoMesArrecadacaoAtual : colecaoAnoMesReferenciaPagamentos) {
 
-							logger.info("Ano mes arrecadacao: " + anoMesArrecadacaoAtual);
 							repositorioArrecadacao.excluirDadosDiariosArrecadacaoPorAnoMesArrecadacaoPorLocalidade(anoMesArrecadacaoAtual, idLocalidade);
 
 							localidade = new Localidade();

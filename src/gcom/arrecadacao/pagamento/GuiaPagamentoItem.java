@@ -13,82 +13,32 @@ import java.util.Date;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class GuiaPagamentoItem extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-	public String[] retornaCamposChavePrimaria(){
-		String[] retorno = new String[1];
-
-		retorno[0] = "comp_id";
-		
-		return retorno;
+	private GuiaPagamentoItemPK comp_id;
+	private BigDecimal valorDebito;
+	private GuiaPagamentoGeral guiaPagamentoGeral;
+	private DebitoTipo debitoTipo;
+	private Date ultimaAlteracao;
+	private ContaGeral contaGeral;
+	
+	public GuiaPagamentoItem(GuiaPagamentoItemPK comp_id, BigDecimal valorDebito, GuiaPagamentoGeral guiaPagamentoGeral, DebitoTipo debitoTipo, Date ultimaAlteracao) {
+		this.comp_id = comp_id;
+		this.valorDebito = valorDebito;
+		this.guiaPagamentoGeral = guiaPagamentoGeral;
+		this.debitoTipo = debitoTipo;
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 	
-	public Filtro retornaFiltro() {
-		FiltroGuiaPagamentoCategoria filtroGuiaPagamentoCategoria = new FiltroGuiaPagamentoCategoria();
+	public GuiaPagamentoItem(){}
 
-		filtroGuiaPagamentoCategoria.adicionarParametro(new ParametroSimples(
-				FiltroGuiaPagamentoCategoria.ID, this.getComp_id()));
-		filtroGuiaPagamentoCategoria.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
-		filtroGuiaPagamentoCategoria
-				.adicionarCaminhoParaCarregamentoEntidade("categoria");
-
-		return filtroGuiaPagamentoCategoria;
-	}
-
-    /** identifier field */
-    private gcom.arrecadacao.pagamento.GuiaPagamentoItemPK comp_id;
-
-    /** nullable persistent field */
-    private BigDecimal valorDebito;
-
-    /** nullable persistent field */
-    private GuiaPagamentoGeral guiaPagamentoGeral;
-
-    /** nullable persistent field */
-    private DebitoTipo debitoTipo;
-    
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-    
-    private ContaGeral contaGeral;
-
-    /** full constructor */
-    public GuiaPagamentoItem(GuiaPagamentoItemPK comp_id, BigDecimal valorDebito, GuiaPagamentoGeral guiaPagamentoGeral, DebitoTipo debitoTipo, Date ultimaAlteracao) {
-        this.comp_id = comp_id;
-        this.valorDebito = valorDebito;
-        this.guiaPagamentoGeral = guiaPagamentoGeral;
-        this.debitoTipo = debitoTipo;
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
-
-    /** default constructor */
-    public GuiaPagamentoItem(){}
-   
-
-    public boolean equals(Object other) {
-        if ( (this == other ) ) return true;
-        if ( !(other instanceof GuiaPagamentoItem) ) return false;
-        GuiaPagamentoItem castOther = (GuiaPagamentoItem) other;
-        return new EqualsBuilder()
-            .append(this.getComp_id(), castOther.getComp_id())
-            .isEquals();
-    }
-
-    public int hashCode() {
-        return new HashCodeBuilder()
-            .append(getComp_id())
-            .toHashCode();
-    }
-
-	public gcom.arrecadacao.pagamento.GuiaPagamentoItemPK getComp_id() {
+	public GuiaPagamentoItemPK getComp_id() {
 		return comp_id;
 	}
 
-	public void setComp_id(gcom.arrecadacao.pagamento.GuiaPagamentoItemPK comp_id) {
+	public void setComp_id(GuiaPagamentoItemPK comp_id) {
 		this.comp_id = comp_id;
 	}
 
@@ -132,4 +82,41 @@ public class GuiaPagamentoItem extends ObjetoTransacao {
 	public void setContaGeral(ContaGeral contaGeral) {
 		this.contaGeral = contaGeral;
 	}
+	
+	public String[] retornaCamposChavePrimaria(){
+		String[] retorno = new String[1];
+
+		retorno[0] = "comp_id";
+		
+		return retorno;
+	}
+	
+	public Filtro retornaFiltro() {
+		FiltroGuiaPagamentoCategoria filtroGuiaPagamentoCategoria = new FiltroGuiaPagamentoCategoria();
+
+		filtroGuiaPagamentoCategoria.adicionarParametro(new ParametroSimples(
+				FiltroGuiaPagamentoCategoria.ID, this.getComp_id()));
+		filtroGuiaPagamentoCategoria.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
+		filtroGuiaPagamentoCategoria
+				.adicionarCaminhoParaCarregamentoEntidade("categoria");
+
+		return filtroGuiaPagamentoCategoria;
+	}
+
+   
+
+    public boolean equals(Object other) {
+        if ( (this == other ) ) return true;
+        if ( !(other instanceof GuiaPagamentoItem) ) return false;
+        GuiaPagamentoItem castOther = (GuiaPagamentoItem) other;
+        return new EqualsBuilder()
+            .append(this.getComp_id(), castOther.getComp_id())
+            .isEquals();
+    }
+
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .append(getComp_id())
+            .toHashCode();
+    }
 }

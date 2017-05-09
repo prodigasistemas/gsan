@@ -8,33 +8,18 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class Empresa extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricao;
-
-	/** nullable persistent field */
 	private String descricaoAbreviada;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
 	private String email;
-
-	/** nullable persistent field */
 	private Short indicadorEmpresaPrincipal;
-	
 	private Short indicadorEmpresaContratadaCobranca;
-	
 	private Short indicadorLeitura;
 
 	public static final Short INDICADOR_EMPRESA_PRINCIPAL = new Short("1");
@@ -50,7 +35,12 @@ public class Empresa extends ObjetoTransacao {
 		return retorno;
 	}
 
-	/** full constructor */
+	public Empresa() {
+	}
+	
+	public Empresa(Integer id) {
+		this.id = id;
+	}
 	public Empresa(String descricao, String descricaoAbreviada,
 			Short indicadorUso, String email, Date ultimaAlteracao,
 			Short indicadorEmpresaPrincipal) {
@@ -60,10 +50,6 @@ public class Empresa extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.email = email;
 		this.indicadorEmpresaPrincipal = indicadorEmpresaPrincipal;
-	}
-
-	/** default constructor */
-	public Empresa() {
 	}
 
 	public Integer getId() {

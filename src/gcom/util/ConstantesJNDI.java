@@ -11,7 +11,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_DEBITO_A_COBRAR = "";
 	public static String CONTROLADOR_ANALISE_GERACAO_CONTA = "";
 	public static String CONTROLADOR_ATUALIZACAO_CADASTRO = "";
-	
+
 	public static String FUNCOES_EJB = "";
 	public static String CONTROLADOR_TABELA_AUXILIAR_SEJB = "";
 	public static String CONTROLADOR_UTIL_SEJB = "";
@@ -20,6 +20,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_IMOVEL_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_SEJB = "";
 	public static String CONTROLADOR_COBRANCA_SEJB = "";
+	public static String CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB = "";
 	public static String CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB = "";
 	public static String CONTROLADOR_FINANCEIRO_SEJB = "";
 	public static String CONTROLADOR_LOCALIDADE_SEJB = "";
@@ -41,7 +42,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB = "";
 	public static String CONTROLADOR_GERENCIAL_ARRECADACAO_SEJB = "";
 	public static String CONTROLADOR_GERENCIAL_IMOVEL_SEJB = "";
-	
+
 	public static String CONTROLADOR_USUARIO_SEJB = "";
 	public static String CONTROLADOR_ATENDIMENTO_PUBLICO_SEJB = "";
 	public static String CONTROLADOR_UNIDADE_SEJB = "";
@@ -66,16 +67,16 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_FATURAMENTO_COSANPA_SEJB = "";
 	public static String CONTROLADOR_FATURAMENTO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_FATURAMENTO_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
-	
+
 	public static String CONTROLADOR_MICROMEDICAO_COMPESA_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_CAERN_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_CAER_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_CAEMA_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_MICROMEDICAO_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
 	public static String CONTROLADOR_ARRECADACAO_COMPESA_SEJB = "";
 	public static String CONTROLADOR_ARRECADACAO_CAERN_SEJB = "";
@@ -84,7 +85,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_ARRECADACAO_COSANPA_SEJB = "";
 	public static String CONTROLADOR_ARRECADACAO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_ARRECADACAO_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
 	public static String CONTROLADOR_COBRANCA_COMPESA_SEJB = "";
 	public static String CONTROLADOR_COBRANCA_CAERN_SEJB = "";
@@ -93,7 +94,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_COBRANCA_COSANPA_SEJB = "";
 	public static String CONTROLADOR_COBRANCA_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_COBRANCA_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
 	public static String CONTROLADOR_FINANCEIRO_COMPESA_SEJB = "";
 	public static String CONTROLADOR_FINANCEIRO_CAERN_SEJB = "";
@@ -102,7 +103,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_FINANCEIRO_COSANPA_SEJB = "";
 	public static String CONTROLADOR_FINANCEIRO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_FINANCEIRO_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
 	public static String CONTROLADOR_CADASTRO_COMPESA_SEJB = "";
 	public static String CONTROLADOR_CADASTRO_CAERN_SEJB = "";
@@ -111,9 +112,9 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_CADASTRO_COSANPA_SEJB = "";
 	public static String CONTROLADOR_CADASTRO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_CADASTRO_COSAMA_SEJB = "";
-	
+
 	// =====================================================================================================
-	
+
 	public static String BATCH_CONSISTIR_LEITURAS_CALCULAR_CONSUMOS_MDB = "";
 	public static String BATCH_GERAR_DADOS_PARA_LEITURA_MDB = "";
 	public static String BATCH_EFETUAR_RATEIO_CONSUMO_MDB = "";
@@ -153,7 +154,7 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_LANCAMENTOS_CONTABEIS_AVISOS_BANCARIOS_MDB = "";
 	public static String BATCH_GERAR_RESUMO_FATURAMENTO_AGUA_ESGOTO_MDB = "";
 	public static String BATCH_GERAR_RESUMO_REFATURAMENTO_MDB = "";
-    public static String BATCH_GERAR_RESUMO_REFATURAMENTO_OLAP_MDB = "";
+	public static String BATCH_GERAR_RESUMO_REFATURAMENTO_OLAP_MDB = "";
 	public static String BATCH_GERAR_RESUMO_DEVEDORES_DUVIDOSOS_MDB = "";
 	public static String BATCH_GERAR_LANCAMENTOS_CONTABEIS_DEVEDORES_DUVIDOSOS_MDB = "";
 	public static String BATCH_GERAR_RESUMO_PENDENCIA = "";
@@ -172,19 +173,17 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_RESUMO_RECEITA = "";
 	public static String BATCH_GERAR_GUIA_PAGAMENTO_POR_CLIENTE_RESUMO_PENDENCIA = "";
 
-	
 	public static String BATCH_GERAR_RESUMO_CONSUMO_AGUA_MDB = "";
 	public static String BATCH_GERAR_RESUMO_HIDROMETRO_MDB = "";
 	public static String BATCH_GERAR_RESUMO_HISTOGRAMA_AGUA_ESGOTO = "";
 	public static String BATCH_GERAR_RESUMO_REGISTRO_ATENDIMENTO_MDB = "";
 
-	
 	public static String BATCH_GERAR_RESUMO_METAS_MDB = "";
 	public static String BATCH_GERAR_RESUMO_METAS_ACUMULADO_MDB = "";
 	public static String BATCH_GERAR_RESUMO_COLETA_ESGOTO_MDB = "";
 	public static String BATCH_GERAR_CONTAS_A_RECEBER_CONTABIL_MDB = "";
 	public static String BATCH_GERAR_RESUMO_DOCUMENTOS_A_RECEBER_MDB = "";
-    public static String BATCH_ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS_MDB = "";
+	public static String BATCH_ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS_MDB = "";
 	public static String BATCH_EXECUTAR_COMANDO_ENCERRAMENTO_RA_MDB = "";
 	public static String BATCH_GERAR_VALOR_VOLUMES_CONSUMIDOS_NAO_FATURADOS_MDB = "";
 	public static String BATCH_GERAR_RESUMO_INDICADORES_COMERCIALIZACAO_MDB = "";
@@ -269,6 +268,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_ATUALIZACAO_CADASTRAL = "";
 	public static String BATCH_ATUALIZACAO_CADASTRAL = "";
 	public static String BATCH_GERAR_DADOS_RECEITAS_A_FATURAR__RESUMO_MDB = "";
+	public static String BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = "";
 
 	static {
 		inicializarPropriedades();
@@ -289,15 +289,16 @@ public class ConstantesJNDI {
 			}
 
 			if (stream == null) {
-				stream = gcom.util.ConstantesJNDI.class	.getResourceAsStream(NOME_ARQUIVO_PROPRIEDADES);
+				stream = gcom.util.ConstantesJNDI.class.getResourceAsStream(NOME_ARQUIVO_PROPRIEDADES);
 			}
 
 			propriedades.load(stream);
-			
+
 			CONTROLADOR_RETIFICAR_CONTA = propriedades.getProperty("ControladorRetificarConta");
-            CONTROLADOR_DEBITO_A_COBRAR = propriedades.getProperty("ControladorDebitoACobrar");
-            CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
-            CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");
+			CONTROLADOR_DEBITO_A_COBRAR = propriedades.getProperty("ControladorDebitoACobrar");
+			CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
+			CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");
+			CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB = propriedades.getProperty("ControladorCobrancaPorResultado");
 
 			CONTROLADOR_USUARIO_SEJB = propriedades.getProperty("ControladorUsuario");
 			CONTROLADOR_GERENCIAL_CADASTRO_SEJB = propriedades.getProperty("ControladorGerencialCadastro");
@@ -307,6 +308,7 @@ public class ConstantesJNDI {
 			CONTROLADOR_GERENCIAL_SEJB = propriedades.getProperty("ControladorGerencial");
 
 			CONTROLADOR_COBRANCA_SEJB = propriedades.getProperty("ControladorCobranca");
+			CONTROLADOR_COBRANCA_SEJB = propriedades.getProperty("ControladorCobrancaPorResultado");
 			CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB = propriedades.getProperty("ControladorContratoParcelamento");
 			CONTROLADOR_FINANCEIRO_SEJB = propriedades.getProperty("ControladorFinanceiro");
 			CONTROLADOR_ACESSO_SEJB = propriedades.getProperty("ControladorAcesso");
@@ -339,7 +341,8 @@ public class ConstantesJNDI {
 			BATCH_GERAR_DADOS_PARA_LEITURA_MDB = propriedades.getProperty("QueueBatchGerarDadosParaLeituraMDB");
 			BATCH_FATURAR_GRUPO_FATURAMENTO_MDB = propriedades.getProperty("QueueBatchFaturarGrupoFaturamentoMDB");
 			BATCH_EFETUAR_RATEIO_CONSUMO_MDB = propriedades.getProperty("QueueBatchEfetuarRateioConsumoMDB");
-			BATCH_GERAR_DEBITO_A_COBRAR_DE_ACRESCIMOS_POR_IMPONTUALIDADE_MDB = propriedades.getProperty("QueueBatchGerarDebitoACobrarDeAcrescimoPorImpontualidadeMDB");
+			BATCH_GERAR_DEBITO_A_COBRAR_DE_ACRESCIMOS_POR_IMPONTUALIDADE_MDB = propriedades
+					.getProperty("QueueBatchGerarDebitoACobrarDeAcrescimoPorImpontualidadeMDB");
 			BATCH_GERAR_TAXA_ENTREGA_OUTRO_ENDERECO_MDB = propriedades.getProperty("QueueBatchGerarTaxaEntregaOutroEnderecoMDB");
 			BATCH_GERAR_DADOS_DIARIOS_ARRECADACAO_MDB = propriedades.getProperty("QueueBatchGerarDadosDiariosArrecadacaoMDB");
 			BATCH_GERAR_ATIVIDADE_ACAO_COBRANCA_MDB = propriedades.getProperty("QueueBatchGerarAtividadeAcaoCobrancaMDB");
@@ -380,14 +383,14 @@ public class ConstantesJNDI {
 			BATCH_GERAR_LANCAMENTOS_CONTABEIS_ARRECADACAO_MDB = propriedades.getProperty("QueueBatchGerarLancamentosContabeisArrecadacaoMDB");
 			BATCH_GERAR_LANCAMENTOS_CONTABEIS_AVISOS_BANCARIOS_MDB = propriedades.getProperty("QueueBatchGerarLancamentosContabeisAvisosBancariosMDB");
 			BATCH_GERAR_RESUMO_FATURAMENTO_AGUA_ESGOTO_MDB = propriedades.getProperty("QueueBatchGerarResumoFaturamentoAguaEsgotoMDB");
-            BATCH_GERAR_RESUMO_FATURAMENTO_MDB = propriedades.getProperty("QueueBatchGerarResumoFaturamentoMDB");            
+			BATCH_GERAR_RESUMO_FATURAMENTO_MDB = propriedades.getProperty("QueueBatchGerarResumoFaturamentoMDB");
 			BATCH_GERAR_RESUMO_REFATURAMENTO_MDB = propriedades.getProperty("QueueBatchGerarResumoReFaturamentoMDB");
-            BATCH_GERAR_RESUMO_REFATURAMENTO_OLAP_MDB = propriedades.getProperty("QueueBatchGerarResumoReFaturamentoOlapMDB");            
+			BATCH_GERAR_RESUMO_REFATURAMENTO_OLAP_MDB = propriedades.getProperty("QueueBatchGerarResumoReFaturamentoOlapMDB");
 			BATCH_GERAR_RESUMO_REGISTRO_ATENDIMENTO_MDB = propriedades.getProperty("QueueBatchGerarResumoRegistroAtendimentoMDB");
 			BATCH_EMITIR_CONTAS_ORGAO_PUBLICO = propriedades.getProperty("QueueBatchEmitirContasOrgaoPublicoMDB");
 			BATCH_GERAR_RESUMO_METAS_MDB = propriedades.getProperty("QueueBatchGerarResumoMetasMDB");
 			BATCH_GERAR_RESUMO_METAS_ACUMULADO_MDB = propriedades.getProperty("QueueBatchGerarResumoMetasAcumuladoMDB");
-			
+
 			BATCH_APAGAR_RESUMO_DEVEDORES_DUVIDOSOS_MDB = propriedades.getProperty("QueueBatchApagarResumoDevedoresDuvidososMDB");
 			BATCH_GERAR_RESUMO_DEVEDORES_DUVIDOSOS_MDB = propriedades.getProperty("QueueBatchGerarResumoDevedoresDuvidososMDB");
 			BATCH_ATUALIZAR_RESUMO_DEVEDORES_DUVIDOSOS = propriedades.getProperty("QueueBatchAtualizarResumoDevedoresDuvidososMDB");
@@ -404,11 +407,12 @@ public class ConstantesJNDI {
 			BATCH_GERAR_RESUMO_INDICADORES_MICROMEDICAO_MDB = propriedades.getProperty("QueueBatchGerarResumoIndicadoresMicromedicaoMDB");
 			BATCH_GERAR_RESUMO_INDICADORES_FATURAMENTO_MDB = propriedades.getProperty("QueueBatchGerarResumoIndicadoresFaturamentoMDB");
 			BATCH_GERAR_RESUMO_INDICADORES_COBRANCA_MDB = propriedades.getProperty("QueueBatchGerarResumoIndicadoresCobrancaMDB");
-            BATCH_ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS_MDB = propriedades.getProperty("QueueBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonusMDB");
-            BATCH_RELATORIO_CONTAS_BAIXADAS_CONTABILMENTE = propriedades.getProperty("QueueBatchRelatorioContasBaixadasContabilmenteMDB");
+			BATCH_ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS_MDB = propriedades
+					.getProperty("QueueBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonusMDB");
+			BATCH_RELATORIO_CONTAS_BAIXADAS_CONTABILMENTE = propriedades.getProperty("QueueBatchRelatorioContasBaixadasContabilmenteMDB");
 
 			// =====================================================================================================
-			
+
 			BATCH_EXECUTAR_COMANDO_NEGATIVACAO_MDB = propriedades.getProperty("QueueBatchExecutarComandoNegativacaoMDB");
 			BATCH_GERAR_RESUMO_DIARIO_NEGATIVACAO_MDB = propriedades.getProperty("QueueBatchGerarResumoDiarioNegativacaoMDB");
 			BATCH_ATUALIZAR_LIGACAO_AGUA_LIGADO_ANALISE_PARA_LIGADO_MDB = propriedades.getProperty("QueueBatchAtualizarLigacaoAguaLigadoAnaliseParaLigadoMDB");
@@ -416,19 +420,23 @@ public class ConstantesJNDI {
 			BATCH_GERAR_MOVIMENTO_EXCLUSAO_NEGATIVACAO_MDB = propriedades.getProperty("QueueBatchGerarMovimentoExclusaoNegativacaoMDB");
 			BATCH_GERAR_MOVIMENTO_RETORNO_NEGATIVACAO_MDB = propriedades.getProperty("QueueBatchGerarMovimentoRetornoNegativacaoMDB");
 			BATCH_ATUALIZAR_DIFERENCA_ACUMULADA_NO_MES = propriedades.getProperty("QueueBatchAtualizarDiferencaAcumuladaNoMesMDB");
-			BATCH_INCLUIR_DEBITO_A_COBRAR_ENTRADA_PARCELAMENTO_NAO_PAGA_MDB = propriedades.getProperty("QueueBatchIncluirDebitoACobrarEntradaParcelamentoNaoPagaMDB");
+			BATCH_INCLUIR_DEBITO_A_COBRAR_ENTRADA_PARCELAMENTO_NAO_PAGA_MDB = propriedades
+					.getProperty("QueueBatchIncluirDebitoACobrarEntradaParcelamentoNaoPagaMDB");
 			BATCH_ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA = propriedades.getProperty("QueueBatchAtualizarPagamentosContasCobrancaMDB");
 			BATCH_GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarMovimentoContasCobrancaPorEmpresaMDB");
 			BATCH_GERAR_ARQUIVO_TEXTO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarArquivoTextoContasCobrancaMDB");
-			BATCH_GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarMovimentoExtensaoContasCobrancaPorEmpresaMDB");
+			BATCH_GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades
+					.getProperty("QueueBatchGerarMovimentoExtensaoContasCobrancaPorEmpresaMDB");
 			BATCH_ATUALIZAR_AUTOS_INFRACAO_PRAZO_RECURSO_VENCIDO_MDB = propriedades.getProperty("QueueBatchAtualizarAutosInfracaoPrazoRecursoVencidoMDB");
 			BATCH_ATUALIZAR_CONJUNTO_HIDROMETRO_MDB = propriedades.getProperty("QueueBatchAtualizarConjuntoHidrometroMDB");
-			BATCH_GERAR_CARTAS_CAMPANHA_SOLIDARIEDADE_CRIANCA_PARA_NEGOCIACAO_A_VISTA_MDB = propriedades.getProperty("QueueBatchGerarCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB");
-			BATCH_EMITIR_CARTAS_CAMPANHA_SOLIDARIEDADE_CRIANCA_PARA_NEGOCIACAO_A_VISTA_MDB = propriedades.getProperty("QueueBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB");
+			BATCH_GERAR_CARTAS_CAMPANHA_SOLIDARIEDADE_CRIANCA_PARA_NEGOCIACAO_A_VISTA_MDB = propriedades
+					.getProperty("QueueBatchGerarCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB");
+			BATCH_EMITIR_CARTAS_CAMPANHA_SOLIDARIEDADE_CRIANCA_PARA_NEGOCIACAO_A_VISTA_MDB = propriedades
+					.getProperty("QueueBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB");
 			BATCH_GERAR_TABELAS_TEMPORARIAS_ATUALIZACAO_CADASTRAL_MDB = propriedades.getProperty("QueueBatchGerarTabelasTemporariasAtualizacaoCadastralMDB");
-			BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB = propriedades.getProperty("QueueBatchGerarArquivoTextoAtualizacaoCadastralMDB");			
-			BATCH_EMITIR_BOLETOS_MDB = propriedades.getProperty("QueueBatchEmitirBoletosMDB");	
-			BATCH_RETIFICAR_CONJUNTO_CONTA_CONSUMOS_MDB = propriedades.getProperty("QueueBatchRetificarConjuntoContaConsumosMDB");	
+			BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB = propriedades.getProperty("QueueBatchGerarArquivoTextoAtualizacaoCadastralMDB");
+			BATCH_EMITIR_BOLETOS_MDB = propriedades.getProperty("QueueBatchEmitirBoletosMDB");
+			BATCH_RETIFICAR_CONJUNTO_CONTA_CONSUMOS_MDB = propriedades.getProperty("QueueBatchRetificarConjuntoContaConsumosMDB");
 
 			// =====================================================================================================
 			CONTROLADOR_FATURAMENTO_COMPESA_SEJB = propriedades.getProperty("ControladorFaturamentoCOMPESA");
@@ -486,28 +494,30 @@ public class ConstantesJNDI {
 			CONTROLADOR_FINANCEIRO_JUAZEIRO_SEJB = propriedades.getProperty("ControladorFinanceiroJUAZEIRO");
 			CONTROLADOR_FINANCEIRO_COSAMA_SEJB = propriedades.getProperty("ControladorFinanceiroCOSAMA");
 			// =====================================================================================================
-			
+
 			CONTROLADOR_RELATORIO_FATURAMENTO_SEJB = propriedades.getProperty("ControladorRelatorioFaturamento");
 			CONTROLADOR_INTEGRACAO_SEJB = propriedades.getProperty("ControladorIntegracao");
 			BATCH_GERAR_CREDITO_SITUACAO_ESPECIAL_FATURAMENTO_MDB = propriedades.getProperty("QueueBatchGerarCreditoSituacaoEspecialFaturamentoMDB");
 			BATCH_GERAR_MOVIMENTO_HIDROMETRO = propriedades.getProperty("QueueBatchGerarMovimentoHidrometroMDB");
 			BATCH_GERAR_BONUS_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchGerarBonusTarifaSocialMDB");
 			BATCH_EXCLUIR_IMOVEIS_DA_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchExcluirImoveisDaTarifaSocialMDB");
-			BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB");
+			BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA = propriedades
+					.getProperty("QueueBatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB");
 			BATCH_GERAR_RESUMO_NEGATIVACAO_MDB = propriedades.getProperty("QueueBatchGerarResumoNegativacaoMDB");
 			BATCH_ACOMPANHAR_PAGAMENTO_DO_PARCELAMENTO_MDB = propriedades.getProperty("QueueBatchAcompanharPagamentoDoParcelamentoMDB");
 			BATCH_GERAR_CARTAS_DE_FINAL_DE_ANO_MDB = propriedades.getProperty("QueueBatchGerarCartasDeFinalDeAnoMDB");
 			BATCH_EMITIR_CARTAS_DE_FINAL_DE_ANO_MDB = propriedades.getProperty("QueueBatchEmitirCartasDeFinalDeAnoMDB");
-			BATCH_GERAR_ARQUIVO_TEXTO_CONTAS_PROJETOS_ESPECIAIS = propriedades.getProperty("QueueBatchGerarArquivoTextoContasProjetosEspeciaisMDB");		
+			BATCH_GERAR_ARQUIVO_TEXTO_CONTAS_PROJETOS_ESPECIAIS = propriedades.getProperty("QueueBatchGerarArquivoTextoContasProjetosEspeciaisMDB");
 			BATCH_INSERIR_PAGAMENTOS_FATURAS_ESPECIAIS = propriedades.getProperty("QueueBatchInserirPagamentosFaturasEspeciaisMDB");
 			BATCH_SUSPENDER_IMOVEL_EM_PROGRAMA_ESPECIAL = propriedades.getProperty("QueueBatchSuspenderImovelEmProgramaEspecialMDB");
 			BATCH_RESUMO_SIMULACAO_FATURAMENTO = propriedades.getProperty("QueueBatchGerarResumoSimulacaoFaturamentoMDB");
 			BATCH_DETERMINAR_CONFIRMACAO_DA_NEGATIVACAO = propriedades.getProperty("QueueBatchDeterminarConfirmacaoDaNegativacaoMDB");
 			BATCH_EMITIR_ORDEM_FISCALIZACAO = propriedades.getProperty("QueueBatchEmitirOrdemDeFiscalizacaoMDB");
-			BATCH_GERAR_ARQUIVO_ORDEM_FISCALIZACAO  = propriedades.getProperty("QueueBatchGerarArquivoOrdemDeFiscalizacaoMDB");
+			BATCH_GERAR_ARQUIVO_ORDEM_FISCALIZACAO = propriedades.getProperty("QueueBatchGerarArquivoOrdemDeFiscalizacaoMDB");
 			BATCH_ENVIO_EMAIL_CONTA_PARA_CLIENTE = propriedades.getProperty("QueueBatchEnvioEmailContaParaClienteMDB");
 			BATCH_GERAR_DECLARACAO_QUITACAO_ANUAL_DEBITOS = propriedades.getProperty("QueueBatchGerarDadosDeclaracaoQuitacaoAnualDebitosMDB");
-			BATCH_GERAR_ARQUIVO_TEXTO_DECLARACAO_QUITACAO_ANUAL_DEBITOS = propriedades.getProperty("QueueBatchGerarArquivoTextoDeclaracaoQuitacaoAnualDebitosMDB");
+			BATCH_GERAR_ARQUIVO_TEXTO_DECLARACAO_QUITACAO_ANUAL_DEBITOS = propriedades
+					.getProperty("QueueBatchGerarArquivoTextoDeclaracaoQuitacaoAnualDebitosMDB");
 			BATCH_GERAR_RESUMO_PENDENCIA_POR_ANO = propriedades.getProperty("QueueBatchGerarResumoPendenciaPorAnoMDB");
 			BATCH_ATUALIZAR_CODIGO_DEBITO_AUTOMATICO = propriedades.getProperty("QueueBatchAtualizarCodigoDebitoAutomaticoMDB");
 			BATCH_ATUALIZAR_COMANDO_ATIVIDADE_ACAO_COBRANCA = propriedades.getProperty("QueueBatchAtualizarComandoAtividadeAcaoCobrancaMDB");
@@ -516,7 +526,7 @@ public class ConstantesJNDI {
 			BATCH_GERAR_RESUMO_INDICADORES_MICROMEDICAO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoIndicadoresMicromedicaoPorAnoMDB");
 			BATCH_GERAR_RESUMO_CONSUMO_AGUA_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoConsumoAguaPorAnoMDB");
 			BATCH_GERAR_RESUMO_RECEITA = propriedades.getProperty("QueueBatchGerarResumoReceitaMDB");
-			BATCH_GERAR_RESUMO_FATURAMENTO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoFaturamentoPorAnoMDB"); 
+			BATCH_GERAR_RESUMO_FATURAMENTO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoFaturamentoPorAnoMDB");
 			BATCH_GERAR_RESUMO_ARRECADACAO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoArrecadacaoPorAnoMDB");
 			BATCH_GERAR_RESUMO_COLETA_ESGOTO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoColetaEsgotoPorAnoMDB");
 			BATCH_GERAR_RESUMO_REGISTRO_ATENDIMENTO_POR_ANO_MDB = propriedades.getProperty("QueueBatchGerarResumoRegistroAtendimentoPorAnoMDB");
@@ -534,8 +544,8 @@ public class ConstantesJNDI {
 			BATCH_PROCESSAR_ENCERRAMENTO_ORDEM_SERVICO_ACAO_COBRANCA_MDB = propriedades.getProperty("QueueBatchProcessarEncerramentoOSAcaoCobrancaMDB");
 			BATCH_AUTOMATIZAR_PERFIS_DE_GRANDES_CONSUMIDORES_MDB = propriedades.getProperty("QueueBatchAutomatizarPerfisDeGrandesConsumidoresMDB");
 			BATCH_GERAR_RA_OS_ANORMALIDADE_CONSUMO = propriedades.getProperty("QueueBatchGerarRAOSAnormalidadeConsumoMDB");
-			BATCH_PROCESSAR_COMANDO_GERADO  = propriedades.getProperty("QueueBatchProcessarComandoGeradoMDB");
-			BATCH_GERAR_CARTA_TARIFA_SOCIAL   = propriedades.getProperty("QueueBatchGerarCartaTarifaSocialMDB");
+			BATCH_PROCESSAR_COMANDO_GERADO = propriedades.getProperty("QueueBatchProcessarComandoGeradoMDB");
+			BATCH_GERAR_CARTA_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchGerarCartaTarifaSocialMDB");
 			BATCH_RETIRAR_IMOVEL_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchRetirarImovelTarifaSocialMDB");
 			BATCH_GERAR_TXT_IMPRESSAO_CONTAS_BRAILLE = propriedades.getProperty("QueueBatchGerarTxtImpressaoContasBrailleMDB");
 			BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchEncerrarComandosDeCobrancaPorEmpresaMDB");
@@ -545,15 +555,18 @@ public class ConstantesJNDI {
 			BATCH_ENCERRAR_COMANDO_OS_SELETIVA_INSPECAO_ANORMALIDADE = propriedades.getProperty("QueueBatchEncerrarComandoOSSeletivaInspecaoAnormalidadeMDB");
 			BATCH_GERAR_DADOS_ARQUIVO_ACOMPANHAMENTO_SERVICO_MDB = propriedades.getProperty("QueueBatchGerarDadosArquivoAcompanhamentoServicoMDB");
 			BATCH_PROGRAMACAO_AUTO_ROTEIRO_ACOMP_SERVICO = propriedades.getProperty("QueueBatchProgramacaoAutoRoteiroAcompServicoMDB");
-			BATCH_PROCESSAR_ENCERRAMENTO_OS_FISCALIZACAO_DECURSO_PRAZO_MDB = propriedades.getProperty("QueueBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazoMDB");		
-			BATCH_SUSPENDER_LEITURA_PARA_IMOVEL_COM_HIDROMETRO_RETIRADO_MDB = propriedades.getProperty("QueueBatchSuspenderLeituraParaImovelComHidrometroRetiradoMDB");
-			BATCH_SUSPENDER_LEITURA_PARA_IMOVEL_COM_CONSUMO_REAL_NAO_SUPERIOR_A_10_MDB = propriedades.getProperty("QueueBatchSuspenderLeituraParaImovelComConsumoRealNaoSuperiorA10MDB");
+			BATCH_PROCESSAR_ENCERRAMENTO_OS_FISCALIZACAO_DECURSO_PRAZO_MDB = propriedades
+					.getProperty("QueueBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazoMDB");
+			BATCH_SUSPENDER_LEITURA_PARA_IMOVEL_COM_HIDROMETRO_RETIRADO_MDB = propriedades
+					.getProperty("QueueBatchSuspenderLeituraParaImovelComHidrometroRetiradoMDB");
+			BATCH_SUSPENDER_LEITURA_PARA_IMOVEL_COM_CONSUMO_REAL_NAO_SUPERIOR_A_10_MDB = propriedades
+					.getProperty("QueueBatchSuspenderLeituraParaImovelComConsumoRealNaoSuperiorA10MDB");
 			BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = propriedades.getProperty("QueueBatchGerarDadosRelatorioBIGMDB");
 			BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = propriedades.getProperty("QueueBatchProcessarPagamentosDiferencaDoisReaisMDB");
 			BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = propriedades.getProperty("QueueBatchCancelarGuiasPagamentoNaoPagasMDB");
 			BATCH_ATUALIZACAO_CADASTRAL = propriedades.getProperty("QueueBatchAtualizacaoCadastralMDB");
 			BATCH_GERAR_DADOS_RECEITAS_A_FATURAR__RESUMO_MDB = propriedades.getProperty("QueueBatchGerarDadosReceitasAFaturarResumoMDB");
-
+			BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarNegociacaoContasCobrancaEmpresaMDB");
 			stream.close();
 
 		} catch (Exception ex) {

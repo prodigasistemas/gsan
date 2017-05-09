@@ -21,12 +21,17 @@ import gcom.cobranca.bean.FiltrarRelacaoParcelamentoHelper;
 import gcom.cobranca.bean.FiltroSupressoesReligacoesReestabelecimentoHelper;
 import gcom.cobranca.bean.PesquisarQtdeRotasSemCriteriosParaAcoesCobranca;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
+import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaHelper;
+import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.parcelamento.ParcDesctoInativVista;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
@@ -1942,4 +1947,25 @@ public interface IRepositorioCobranca {
 	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
 
 	public BigDecimal getPercentualDescontoPorFaixa(Integer referencia) throws ErroRepositorioException;
+	
+	public Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> pesquisarDadosArquivoTextoParcelamentosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
+		      Integer referenciaFinal)
+		      throws ErroRepositorioException;
+		  
+	public Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> pesquisarDadosArquivoTextoExtratosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
+      Integer referenciaFinal) throws ErroRepositorioException;
+	  
+	public List<Parcelamento> obterParcelamentosCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException;
+	  
+	public List<ContaGeral> obterContasParcelamentosCobrancaEmpresa(Integer idParcelamento, Integer idEmpresa) throws ErroRepositorioException;
+	  
+	public List<CobrancaDocumento> obterExtratosCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException;
+	  
+	public List<ContaGeral> obterContasExtratosCobrancaEmpresa(Integer idExtrato, Integer idEmpresa) throws ErroRepositorioException;
+	  
+	public List<GuiaPagamentoGeral> obterGuiasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException;
+	  
+	public List<ContaGeral> obterContasGuiaCobrancaEmpresa(Integer idGuia, Integer idEmpresa) throws ErroRepositorioException;
+	
+	public List<NegociacaoCobrancaEmpresa> obterNegociacoesEmpresa(List<Integer> negociacoes) throws ErroRepositorioException;
 }

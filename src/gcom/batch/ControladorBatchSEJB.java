@@ -65,6 +65,7 @@ import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaCronograma;
 import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaEventual;
 import gcom.batch.cobranca.TarefaBatchProcessarEncerramentoOSAcaoCobranca;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaPorEmpresa;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarNegociacaoContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchProcessarArquivoTxtEncerramentoOSCobranca;
 import gcom.batch.cobranca.spcserasa.TarefaBatchAcompanharPagamentoDoParcelamento;
 import gcom.batch.cobranca.spcserasa.TarefaBatchAtualizarNumeroExecucaoResumoNegativacao;
@@ -161,6 +162,7 @@ import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.EmpresaCobranca;
+import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.empresa.FiltroEmpresaCobranca;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.ControladorLocalidadeLocal;
@@ -3817,6 +3819,28 @@ public class ControladorBatchSEJB implements SessionBean {
 								colecaoFaturamentoGrupos);
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosReceitasAFaturarResumo));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+					
+					case Funcionalidade.GERAR_NEGOCIACAO_CONTAS_COBRANCA_EMPRESA: {
+						TarefaBatchGerarNegociacaoContasCobrancaEmpresa batch = new TarefaBatchGerarNegociacaoContasCobrancaEmpresa(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						FiltroEmpresa filtroEmpresa = new FiltroEmpresa(FiltroEmpresa.ID);
+						filtroEmpresa.setCampoOrderBy(FiltroEmpresa.ID);
+						filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.SIM));
+						filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADOR_EMPRESA_CONTRATADA_COBRANCA, ConstantesSistema.SIM));
+
+						Collection<Empresa> empresas = getControladorUtil().pesquisar(filtroEmpresa, Empresa.class.getName());
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
@@ -9139,8 +9163,7 @@ public class ControladorBatchSEJB implements SessionBean {
 
 			Processo processo = new Processo();
 
-			processo
-					.setId(Processo.GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_EMPRESA);
+			processo.setId(Processo.GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_EMPRESA);
 
 			Integer processoSituacaoId = this.verificarAutorizacaoBatch(processo.getId());
 			processoSituacao.setId(processoSituacaoId);

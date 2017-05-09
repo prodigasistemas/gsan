@@ -5,6 +5,7 @@ import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.arrecadacao.aviso.AvisoDeducoes;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -38,13 +39,19 @@ import gcom.cobranca.bean.FiltrarRelacaoParcelamentoHelper;
 import gcom.cobranca.bean.FiltroSupressoesReligacoesReestabelecimentoHelper;
 import gcom.cobranca.bean.PesquisarQtdeRotasSemCriteriosParaAcoesCobranca;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
+import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaHelper;
+import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
+import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.parcelamento.ParcDesctoInativVista;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -2651,58 +2658,19 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return
 	 */
 	public void inserirCobrancaSituacaoHistorico(Collection collectionCobrancaSituacaoHistorico) throws ErroRepositorioException {
-		// StatelessSession session = HibernateUtil.getStatelessSession();
-		// Iterator iteratorFSH =
-		// collectionCobrancaSituacaoHistorico.iterator();
-		// try {
-		// // int i = 1;
-		// while (iteratorFSH.hasNext()) {
-		// CobrancaSituacaoHistorico cobrancaSituacaoHistorico =
-		// (CobrancaSituacaoHistorico) iteratorFSH
-		// .next();
-		// session.insert(cobrancaSituacaoHistorico);
-		// /*
-		// * if (i % 50 == 0) { // 20, same as the JDBC batch size //
-		// * flush a batch of inserts and release memory: session.flush();
-		// * session.clear(); } i++;
-		// */
-		// }
-		// // session.flush();
-		// // session.clear();
-		// } catch (HibernateException e) {
-		// e.printStackTrace();
-		// throw new ErroRepositorioException(e, "Erro no Hibernate");
-		// } finally {
-		//
-		// // session.clear();
-		// HibernateUtil.closeSession(session);
-		// // session.close();
-		// }
-		//
-
 		Session session = HibernateUtil.getSession();
 		Iterator iteratorFSH = collectionCobrancaSituacaoHistorico.iterator();
 		try {
-			// int i = 1;
 			while (iteratorFSH.hasNext()) {
 				CobrancaSituacaoHistorico cobrancaSituacaoHistorico = (CobrancaSituacaoHistorico) iteratorFSH.next();
 				session.save(cobrancaSituacaoHistorico);
-				/*
-				 * if (i % 50 == 0) { // 20, same as the JDBC batch size //
-				 * flush a batch of inserts and release memory: session.flush();
-				 * session.clear(); } i++;
-				 */
 			}
 			session.flush();
-			// session.clear();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-
-			// session.clear();
 			HibernateUtil.closeSession(session);
-			// session.close();
 		}
 
 	}
@@ -27137,6 +27105,367 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 
 		return valorDesconto;
+	}
+	
+	public boolean isParcelamentoEfetivado(Integer idParcelamento) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+		boolean efetivado = false;
+
+		try {
+
+			consulta.append("SELECT pagamento from Pagamento pagamento ")
+					.append("INNER JOIN pag.guiaPagamento guia ")
+					.append("WHERE guia.parcelamento.id = :idParcelamento ")
+					.append("AND guia.debitoTipo.id = :entradaParcelamento ");
+
+			Pagamento pagamento = (Pagamento) session.createQuery(consulta.toString())
+					.setInteger("idParcelamento", idParcelamento)
+					.setInteger("entradaParcelamento", DebitoTipo.ENTRADA_PARCELAMENTO)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			if (pagamento != null)
+				efetivado = true;
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return efetivado;
+	}
+	
+	public List<Parcelamento> obterParcelamentosCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<Parcelamento> retorno = new ArrayList<Parcelamento>();
+		
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			
+//			consultaMovimentoParcelamentos.append("select item.parcelamento ")
+//					.append(" from ParcelamentoItem item ")
+//					.append(" inner join item.parcelamento parcelamento ")
+//					.append(" where item.contaGeral.id in (select contaGeral.id from EmpresaCobrancaConta where empresa.id = :idEmpresa) ")
+//					.append(" and parcelamento.id not in  (select negociacao.parcelamento.id from NegociacaoCobrancaEmpresa negociacao ) ")
+//					.append(" order by parcelamento.parcelamento ");
+//
+//			retorno = (List<Parcelamento>)session.createQuery(consultaMovimentoParcelamentos.toString())
+//					.setInteger("idEmpresa", idEmpresa).list();
+
+			consulta.append(" select distinct parcelamento.* ") 
+					.append(" from cobranca.parcelamento_item item  ")
+					.append(" inner join cobranca.parcelamento parcelamento on parcelamento.parc_id = item.parc_id ")
+					.append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+					.append(" and parcelamento.parc_id not in  (select negociacao.parc_id from cobranca.negociacao_cobranca_empresa negociacao ) "); 
+
+			retorno = (List<Parcelamento>) session.createSQLQuery(consulta.toString())
+					.addEntity(Parcelamento.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.list();
+			
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<CobrancaDocumento> obterExtratosCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<CobrancaDocumento> retorno = new ArrayList<CobrancaDocumento>();
+		
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append(" select distinct documento.* ") 
+					.append(" from cobranca.cobranca_documento_item item  ")
+					.append(" inner join cobranca.cobranca_documento documento on documento.cbdo_id = item.cbdo_id ")
+					.append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+					.append(" and documento.cbdo_id not in ")
+					.append(" 			(select negociacao.cbdo_id ")
+					.append(" 			 from cobranca.negociacao_cobranca_empresa negociacao ")
+					.append(" 			 where negociacao.cbdo_id is not null )")
+					.append(" and documento.dotp_id = :extrato "); 
+
+			retorno = (List<CobrancaDocumento>) session.createSQLQuery(consulta.toString())
+					.addEntity(CobrancaDocumento.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("extrato", DocumentoTipo.EXTRATO_DE_DEBITO)
+					.list();
+			
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<GuiaPagamentoGeral> obterGuiasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<GuiaPagamentoGeral> retorno = new ArrayList<GuiaPagamentoGeral>();
+		
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append(" select distinct guiaGeral.* ") 
+					.append(" from faturamento.guia_pagamento_item item  ")
+					.append(" inner join faturamento.guia_pagamento guia on guia.gpag_id = item.gpag_id ")
+					.append(" inner join faturamento.guia_pagamento_geral guiaGeral on guiaGeral.gpag_id = guia.gpag_id ")
+					.append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+					.append(" and guia.gpag_id not in ")
+					.append(" 			(select negociacao.gpag_id ")
+					.append(" 			 from cobranca.negociacao_cobranca_empresa negociacao ")
+					.append(" 			 where negociacao.gpag_id is not null ) ")
+					.append(" and guia.dbtp_id = :parcelamento "); 
+
+			retorno = (List<GuiaPagamentoGeral>) session.createSQLQuery(consulta.toString())
+					.addEntity(GuiaPagamentoGeral.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("parcelamento", DebitoTipo.PARCELAMENTO_CONTAS)
+					.list();
+			
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	
+	public List<ContaGeral> obterContasParcelamentosCobrancaEmpresa(Integer idParcelamento, Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<ContaGeral> retorno = new ArrayList<ContaGeral>();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+//			consulta.append("select item.contaGeral ")
+//					.append(" from ParcelamentoItem item ")
+//					//.append(" inner join item.parcelamento parcelamento ")
+//					//.append(" inner join item.conta conta ")
+//					.append(" where item.contaGeral.id in (select contaGeral.id from EmpresaCobrancaConta where empresa.id = :idEmpresa) ")
+//					.append(" and item.parcelamento.id = :idParcelamento ");
+//
+//			retorno = (List<ContaGeral>) session.createQuery(consulta.toString())
+//							.setInteger("idEmpresa", idEmpresa)
+//							.setInteger("idParcelamento", idParcelamento).list();
+
+			consulta.append("select contaGeral.* ") 
+			 .append(" from cobranca.parcelamento_item item ") 
+			 .append(" inner join faturamento.conta_geral contaGeral on contaGeral.cnta_id = item.cnta_id ")
+			 .append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+			 .append(" and item.parc_id = :idParcelamento ");
+			 
+			retorno = (List<ContaGeral>) session.createSQLQuery(consulta.toString())
+					.addEntity(ContaGeral.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("idParcelamento", idParcelamento).list();
+					
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<ContaGeral> obterContasExtratosCobrancaEmpresa(Integer idExtrato, Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<ContaGeral> retorno = new ArrayList<ContaGeral>();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("select contaGeral.* ") 
+			 .append(" from cobranca.cobranca_documento_item item ") 
+			 .append(" inner join faturamento.conta_geral contaGeral on contaGeral.cnta_id = item.cnta_id ")
+			 .append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+			 .append(" and item.cbdo_id = :idExtrato ");
+			 
+			retorno = (List<ContaGeral>) session.createSQLQuery(consulta.toString())
+					.addEntity(ContaGeral.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("idExtrato", idExtrato).list();
+					
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<ContaGeral> obterContasGuiaCobrancaEmpresa(Integer idGuia, Integer idEmpresa) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		List<ContaGeral> retorno = new ArrayList<ContaGeral>();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("select contaGeral.* ") 
+			 .append(" from faturamento.guia_pagamento_item item ") 
+			 .append(" inner join faturamento.conta_geral contaGeral on contaGeral.cnta_id = item.cnta_id ")
+			 .append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+			 .append(" and item.gpag_id = :idGuia ");
+			 
+			retorno = (List<ContaGeral>) session.createSQLQuery(consulta.toString())
+					.addEntity(ContaGeral.class)
+					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("idGuia", idGuia).list();
+					
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	
+	public Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> pesquisarDadosArquivoTextoParcelamentosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
+			Integer referenciaFinal)
+			throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> retorno = new ArrayList<ArquivoTextoNegociacaoCobrancaEmpresaHelper>();
+		StringBuilder consultaMovimentoParcelamentos = new StringBuilder();
+		StringBuilder consultaParcelamentos = new StringBuilder();
+
+		try {
+
+			// PARCELAMENTOS
+			consultaParcelamentos.append(" (select parcelamento.id from ParcelamentoItem item ")
+								.append(" inner join item.parcelamento parcelamento ")
+								.append(" where item.conta in (select conta from EmpresaCobrancaConta )) ")
+								.append(" and parcelamento.id not in (select movimento.idParcelamento from EmpresaCobrancaConta )) ");
+			
+			consultaMovimentoParcelamentos.append("select new GerarArquivoTextoMovimentoContasCobrancaEmpresaHelper ")
+					.append(" (1, parcelamento.id, parcelamento.parcelamento, guia.dataVencimento, parcelamento.valorConta, parcelamento.valorDescontoAcrescimos,  ")
+					.append("  parcelamento.valorEntrada, parcelamento.valorPrestacao, parcelamento.numeroPrestacoes) ")
+					.append(" from GuiaPagamento guia ")
+					.append(" inner join guia.parcelamento parcelamento")
+					.append(" where  guia.documentoTipo.id = :entradaParcelamento ")
+					.append(" and parcelamento.id in ")
+					.append(consultaParcelamentos.toString())
+					.append(" order by parcelamento.parcelamento ");
+
+			retorno = session.createQuery(consultaMovimentoParcelamentos.toString())
+							.setInteger("entradaParcelamento", DocumentoTipo.ENTRADA_DE_PARCELAMENTO)
+							.list();
+
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		System.out.println(retorno.size());
+		return retorno;
+	}
+	
+	public Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> pesquisarDadosArquivoTextoExtratosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
+			Integer referenciaFinal)
+			throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		Collection<ArquivoTextoNegociacaoCobrancaEmpresaHelper> retorno = new ArrayList<ArquivoTextoNegociacaoCobrancaEmpresaHelper>();
+
+		StringBuilder consultaMovimentoExtratos = new StringBuilder();
+		
+		try {
+
+			consultaMovimentoExtratos.append("select new GerarArquivoTextoMovimentoContasCobrancaEmpresaHelper ")
+					.append(" (2, documento.id, documento.emissao, null, documento.valorDocumento, documento.valorDesconto, null, null, null) ")
+					.append(" from CobrancaDocumentoItem item ")
+					.append(" inner join item.cobrancaDocumento documento")
+					.append(" where  documento.documentoTipo.id = :extrato ")
+					.append(" and item.conta in (select conta from EmpresaCobrancaConta )) ")
+					.append(" order by documento.emissao ");
+			
+			retorno = session.createQuery(consultaMovimentoExtratos.toString())
+					.setInteger("extrato", DocumentoTipo.EXTRATO_DE_DEBITO)
+					.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<NegociacaoCobrancaEmpresa> obterNegociacoesEmpresa(List<Integer> idNegociacoes) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		List<NegociacaoCobrancaEmpresa> negociacoes = new ArrayList<NegociacaoCobrancaEmpresa>();
+
+		StringBuilder consulta = new StringBuilder();
+		
+		try {
+
+			consulta.append("select negociacao ")
+					.append(" from NegociacaoCobrancaEmpresa negociacao ")
+					.append(" left join  fetch negociacao.parcelamento ")
+					.append(" left join  fetch negociacao.cobrancaDocumento ")
+					.append(" left join  fetch negociacao.guiaPagamentoGeral guiaGeral ")
+					.append(" left join  fetch guiaGeral.guiaPagamento guia ")
+					.append(" left join  fetch guiaGeral.guiaPagamentoHistorico guiaHistorico ")
+					.append(" where  negociacao.id in (:negociacoes) ");
+			
+			negociacoes = session.createQuery(consulta.toString())
+					.setParameterList("negociacoes", idNegociacoes)
+					.list();
+			
+			
+			for (NegociacaoCobrancaEmpresa negociacao : negociacoes) {
+				StringBuilder consultaContas = new StringBuilder();
+				
+				consultaContas.append("select distinct cotasNegociadas ")
+								.append(" from NegociacaoContaCobrancaEmpresa cotasNegociadas ")
+								.append(" left join  fetch cotasNegociadas.contaGeral ")
+								.append(" where  cotasNegociadas.negociacao.id = :idNegociacao ");
+		
+				List<NegociacaoContaCobrancaEmpresa> contasNegociadas = session.createQuery(consultaContas.toString())
+																				.setParameter("idNegociacao", negociacao.getId())
+																				.list();
+				
+				negociacao.setContasNegociadas(contasNegociadas);
+				
+			}
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return negociacoes;
 	}
 	
 }

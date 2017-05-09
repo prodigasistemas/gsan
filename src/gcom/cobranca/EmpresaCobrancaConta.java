@@ -15,45 +15,19 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private Empresa empresa;
-	
-	/** nullable persistent field */
 	private ContaGeral contaGeral;
-	
-	/** nullable persistent field */
 	private ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta;
-
-	/** nullable persistent field */
 	private BigDecimal valorOriginalConta;
-	
-	/** nullable persistent field */
 	private BigDecimal percentualEmpresaConta;
-	
-	/** nullable persistent field */
 	private Short indicadorPagamentoValido;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-	
-	/** nullable persistent field */
 	private ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao;
-	
 	private Imovel imovel;
-	
 	private OrdemServico ordemServico;
 	
-	/**
-	* Description of the Field
-	*/
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_SIM = new Short("1");
-
-	/**
-	* Description of the Field
-	*/
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_NAO = new Short("2");
 
 

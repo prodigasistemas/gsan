@@ -12,53 +12,27 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class CobrancaDocumentoItem implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private BigDecimal valorItemCobrado;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private DebitoACobrarGeral debitoACobrarGeral;
-
-    /** persistent field */
-    private gcom.cobranca.CobrancaDocumento cobrancaDocumento;
-
-    /** persistent field */
-    private gcom.cobranca.DocumentoTipo documentoTipo;
-
-    /** persistent field */
+    private CobrancaDocumento cobrancaDocumento;
+    private DocumentoTipo documentoTipo;
     private ContaGeral contaGeral;
-
-    /** persistent field */
     private GuiaPagamentoGeral guiaPagamentoGeral;
-    
-    /** nullable persistent field */
     private Date dataSituacaoDebito;
-    
     private BigDecimal  valorAcrescimos;
-
-    /** persistent field */
     private CobrancaDebitoSituacao cobrancaDebitoSituacao;
-    
-    /** persistent field */
     private CreditoARealizarGeral creditoARealizarGeral;
-    
     private Integer numeroParcelasAntecipadas;
-
     private PrestacaoContratoParcelamento prestacaoContratoParcelamento;
 
     /** full constructor */
-    public CobrancaDocumentoItem(BigDecimal valorItemCobrado, Date ultimaAlteracao, DebitoACobrarGeral debitoACobrarGeral, gcom.cobranca.CobrancaDocumento cobrancaDocumento, gcom.cobranca.DocumentoTipo documentoTipo, ContaGeral contaGeral, GuiaPagamentoGeral guiaPagamentoGeral) {
+    public CobrancaDocumentoItem(BigDecimal valorItemCobrado, Date ultimaAlteracao, DebitoACobrarGeral debitoACobrarGeral, CobrancaDocumento cobrancaDocumento, DocumentoTipo documentoTipo, ContaGeral contaGeral, GuiaPagamentoGeral guiaPagamentoGeral) {
         this.valorItemCobrado = valorItemCobrado;
         this.ultimaAlteracao = ultimaAlteracao;
         this.debitoACobrarGeral = debitoACobrarGeral;
@@ -73,7 +47,7 @@ public class CobrancaDocumentoItem implements Serializable {
     }
 
     /** minimal constructor */
-    public CobrancaDocumentoItem(DebitoACobrarGeral debitoACobrarGeral, gcom.cobranca.CobrancaDocumento cobrancaDocumento, gcom.cobranca.DocumentoTipo documentoTipo, ContaGeral contaGeral, GuiaPagamentoGeral guiaPagamentoGeral) {
+    public CobrancaDocumentoItem(DebitoACobrarGeral debitoACobrarGeral, CobrancaDocumento cobrancaDocumento, DocumentoTipo documentoTipo, ContaGeral contaGeral, GuiaPagamentoGeral guiaPagamentoGeral) {
         this.debitoACobrarGeral = debitoACobrarGeral;
         this.cobrancaDocumento = cobrancaDocumento;
         this.documentoTipo = documentoTipo;
@@ -106,11 +80,11 @@ public class CobrancaDocumentoItem implements Serializable {
     }
 
 
-    public gcom.cobranca.CobrancaDocumento getCobrancaDocumento() {
+    public CobrancaDocumento getCobrancaDocumento() {
         return this.cobrancaDocumento;
     }
 
-    public void setCobrancaDocumento(gcom.cobranca.CobrancaDocumento cobrancaDocumento) {
+    public void setCobrancaDocumento(CobrancaDocumento cobrancaDocumento) {
         this.cobrancaDocumento = cobrancaDocumento;
     }
     
@@ -155,31 +129,18 @@ public class CobrancaDocumentoItem implements Serializable {
             .toString();
     }
 
-	/**
-	 * @return Retorna o campo cobrancaDebitoSituacao.
-	 */
 	public CobrancaDebitoSituacao getCobrancaDebitoSituacao() {
 		return cobrancaDebitoSituacao;
 	}
 
-	/**
-	 * @param cobrancaDebitoSituacao O cobrancaDebitoSituacao a ser setado.
-	 */
-	public void setCobrancaDebitoSituacao(
-			CobrancaDebitoSituacao cobrancaDebitoSituacao) {
+	public void setCobrancaDebitoSituacao(CobrancaDebitoSituacao cobrancaDebitoSituacao) {
 		this.cobrancaDebitoSituacao = cobrancaDebitoSituacao;
 	}
 
-	/**
-	 * @return Retorna o campo dataSituacaoDebito.
-	 */
 	public Date getDataSituacaoDebito() {
 		return dataSituacaoDebito;
 	}
 
-	/**
-	 * @param dataSituacaoDebito O dataSituacaoDebito a ser setado.
-	 */
 	public void setDataSituacaoDebito(Date dataSituacaoDebito) {
 		this.dataSituacaoDebito = dataSituacaoDebito;
 	}
@@ -216,6 +177,4 @@ public class CobrancaDocumentoItem implements Serializable {
 			PrestacaoContratoParcelamento prestacaoContratoParcelamento) {
 		this.prestacaoContratoParcelamento = prestacaoContratoParcelamento;
 	}
-
-
 }

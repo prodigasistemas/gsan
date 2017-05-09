@@ -76,6 +76,7 @@ import gcom.relatorio.cobranca.parcelamento.RelatorioRelacaoParcelamentoCartaoCr
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 import gcom.util.filtro.Filtro;
 
 import java.math.BigDecimal;
