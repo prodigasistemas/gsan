@@ -387,4 +387,24 @@ public final class ServicosEmail implements Serializable {
 			IoUtil.fecharStream(zos);
 		}
     }
+	
+	public static void enviarArquivo(String nome, StringBuilder registros, String receptor, String remetente, String titulo, String corpo) throws ControladorException {
+    	BufferedWriter out = null;
+		
+		try {
+			File arquivo = new File(nome + ".txt");
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivo.getAbsolutePath())));
+			out.write(registros.toString());
+			out.flush();
+			out.close();
+
+			enviarMensagemArquivoAnexado(receptor, remetente, titulo, corpo, arquivo);
+
+			arquivo.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IoUtil.fecharStream(out);
+		}
+    }
 }
