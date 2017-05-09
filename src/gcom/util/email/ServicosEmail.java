@@ -399,8 +399,6 @@ public final class ServicosEmail implements Serializable {
 			out.close();
 
 			enviarMensagemArquivoAnexado(receptor, remetente, titulo, corpo, arquivo);
-
-			arquivo.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
