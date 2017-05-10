@@ -1,7 +1,6 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
 import gcom.cadastro.empresa.Empresa;
-import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;

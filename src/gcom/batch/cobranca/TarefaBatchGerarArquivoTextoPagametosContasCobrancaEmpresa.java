@@ -1,6 +1,6 @@
 package gcom.batch.cobranca;
 
-import gcom.cadastro.localidade.UnidadeNegocio;
+import gcom.cadastro.localidade.Localidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -37,26 +37,23 @@ public class TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa extends
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object executar() throws TarefaException {
 
-		Integer referenciaInicial = (Integer) getParametro("referenciaInicial");
-		Integer referenciaFinal = (Integer) getParametro("referenciaFinal");
-		Integer idEmpresa = (Integer) getParametro("idEmpresa");
-		Collection colecaoUnidadeNegocio = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Collection<Localidade> localidades = (Collection<Localidade>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 
-		Iterator it = colecaoUnidadeNegocio.iterator();
+		Iterator<Localidade> it = localidades.iterator();
 
 		while (it.hasNext()) {
 
-			UnidadeNegocio unidadeNegocio = (UnidadeNegocio) it.next();
+			Localidade localidade = (Localidade) it.next();
 
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA,
-					new Object[] { idEmpresa, referenciaInicial,
-							referenciaFinal, this.getIdFuncionalidadeIniciada(), unidadeNegocio.getId() });
-
+					new Object[] { this.getIdFuncionalidadeIniciada(), localidade.getId()});
 		}
+
 		return null;
 	}
 

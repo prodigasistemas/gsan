@@ -76,7 +76,6 @@ import gcom.relatorio.cobranca.parcelamento.RelatorioRelacaoParcelamentoCartaoCr
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
-import gcom.util.ErroRepositorioException;
 import gcom.util.filtro.Filtro;
 
 import java.math.BigDecimal;
@@ -831,9 +830,6 @@ public interface IControladorCobranca {
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentosSituacaoNormal(Integer idImovel) throws ControladorException;
-
-	public void gerarArquivoTextoPagamentosContasEmCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial, Integer referenciaFinal,
-			int idFuncionalidadeIniciada, Integer idUnidadeNegocio) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ControladorException;

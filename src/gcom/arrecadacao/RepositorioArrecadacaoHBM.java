@@ -23909,16 +23909,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	
-	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
-	 * 
-	 * @author Sávio Luiz
-	 * @data 17/02/2008
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection<Pagamento> pesquisarPagamentoPorLocalidade(Integer idLocalidade,Integer anoMesReferencia)
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade)
 			throws ErroRepositorioException {
 		Collection<Pagamento> retorno = null;
 		
@@ -23963,12 +23954,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" LEFT JOIN pg.pagamentoSituacaoAtual pgst"
                      +" INNER JOIN pg.avisoBancario ab"
                      +" where pg.localidade.id = :idLocalidade"
-                     +" and pg.anoMesReferenciaArrecadacao = :anoMesReferencia"
                      +" and pgst.id = :pagamentoClassificado ";
 		 
 			colecaoDadosPagamentos = session.createQuery(consulta)
 			        .setInteger("idLocalidade",idLocalidade)
-			        .setInteger("anoMesReferencia",anoMesReferencia)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 					.list();
 			

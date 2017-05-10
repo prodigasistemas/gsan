@@ -914,4 +914,30 @@ public class ContaHistorico implements IConta {
 		conta.setQuadraConta(this.getQuadra());
 		return conta;
 	}
+	
+	public BigDecimal getValorTotalContaBigDecimal() {
+		BigDecimal valorTotalConta = new BigDecimal("0.00");
+
+		if (this.getValorAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorAgua());
+		}
+
+		if (this.getValorEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
+		}
+
+		if (this.getValorDebitos() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorDebitos());
+		}
+
+		if (this.getValorCreditos() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
+		}
+
+		if (this.getValorImposto() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
+		}
+
+		return valorTotalConta;
+	}
 }

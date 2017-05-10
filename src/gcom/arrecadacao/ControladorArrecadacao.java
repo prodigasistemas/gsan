@@ -51341,5 +51341,13 @@ public class ControladorArrecadacao implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade) throws ControladorException {
+		try {
+			return repositorioArrecadacao.pesquisarPagamentosClassificados(idLocalidade);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }
 

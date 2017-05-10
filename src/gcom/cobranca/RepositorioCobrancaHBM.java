@@ -47,6 +47,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
+import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.faturamento.GuiaPagamentoGeral;
@@ -13885,22 +13886,30 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author Sávio Luiz
 	 * @date 23/10/2008
 	 */
-	public Collection<Object[]> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException {
+	public List<ParcelamentoItem> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
-		Collection<Object[]> retorno = null;
-		String consulta = null;
+		List<ParcelamentoItem> retorno = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select cg.id," + " dacg.id, " + "CASE " + " WHEN cg.indicadorHistorico = 2  " + " THEN (conta.valorAgua + "
-					+ "conta.valorEsgoto + " + "conta.debitos - " + "(conta.valorCreditos - coalesce(conta.valorImposto,0))) "
-					+ " ELSE (ch.valorAgua + " + "ch.valorEsgoto + " + "ch.valorDebitos - "
-					+ "(ch.valorCreditos - coalesce(ch.valorImposto,0))) " + " END " + " from ParcelamentoItem pi "
-					+ " left join pi.debitoACobrarGeral dacg " + " left join pi.contaGeral cg " + " left join cg.contaHistorico ch "
-					+ " left join cg.conta conta " + " where pi.parcelamento.id = :idParcelamento";
+//			consulta.append("select cg.id," + " dacg.id, " + "CASE " + " WHEN cg.indicadorHistorico = 2  " + " THEN (conta.valorAgua + "
+//					+ "conta.valorEsgoto + " + "conta.debitos - " + "(conta.valorCreditos - coalesce(conta.valorImposto,0))) "
+//					+ " ELSE (ch.valorAgua + " + "ch.valorEsgoto + " + "ch.valorDebitos - "
+//					+ "(ch.valorCreditos - coalesce(ch.valorImposto,0))) " + " END " + " from ParcelamentoItem pi "
+//					+ " left join pi.debitoACobrarGeral dacg " + " left join pi.contaGeral cg " + " left join cg.contaHistorico ch "
+//					+ " left join cg.conta conta " + " where pi.parcelamento.id = :idParcelamento";
+			
+			consulta.append(" select pi ")
+					.append(" from ParcelamentoItem pi ")
+					.append(" left join pi.debitoACobrarGeral dacg ")
+					.append(" left join pi.contaGeral cg ")
+					.append(" left join cg.contaHistorico ch ")
+					.append(" left join cg.conta conta ")
+					.append(" where pi.parcelamento.id = :idParcelamento ");
 
-			retorno = (Collection<Object[]>) session.createQuery(consulta).setInteger("idParcelamento", idParcelamento).list();
+			retorno = (List<ParcelamentoItem>) session.createQuery(consulta.toString()).setInteger("idParcelamento", idParcelamento).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -19804,8 +19813,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author: Hugo Amorim
 	 * @date: 05/10/2009
 	 */
-	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
-			Integer referenciaFinal, Integer quantidadeRegistros, Integer numeroIndice, Integer idUnidadeNegocio)
+	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa)
 			throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -19852,17 +19860,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "inner join cadastro.gerencia_regional             gr  on gr.greg_id = lc.greg_id "
 					+ "inner join cadastro.quadra                        qd  on qd.qdra_id = im.qdra_id "
 					+ "inner join micromedicao.rota                      rt  on rt.rota_id = qd.rota_id "
-					+ "where un.uneg_id = :idUnidadeNegocio ";
-
-			if (referenciaInicial != null && referenciaFinal != null && referenciaInicial != referenciaFinal) {
-				consulta = consulta + "and (eccp_ampagamento between " + referenciaInicial + " and " + referenciaFinal + ") ";
-			} else {
-				consulta = consulta + "and eccp_ampagamento = " + referenciaFinal + " ";
-			}
+					+ "where empresa = :idEmpresa ";
 
 			consulta = consulta
 					+ "group by cc.imov_id, clie_nmcliente, cnhi.cnhi_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, eccp_ictipopagamento,eccp_nnparcelaatual, eccp_nntotalparcelas,cc.ecco_pcempresaconta,lc.uneg_id,un.uneg_nmunidadenegocio,im.loca_id,lc.loca_nmlocalidade,qd.qdra_nnquadra,im.imov_nnlote,im.imov_nnsublote,rt.rota_cdrota,im.imov_nnsequencialrota,cnhi.cnhi_cdsetorcomercial,ccp.eccp_dtpagamento ";
-			// consulta = consulta + "order by 12, 14, 1,3 ";
 
 			consulta = consulta
 					+ " UNION "
@@ -19902,13 +19903,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "inner join cadastro.gerencia_regional             gr  on gr.greg_id = lc.greg_id "
 					+ "inner join cadastro.quadra                        qd  on qd.qdra_id = im.qdra_id "
 					+ "inner join micromedicao.rota                      rt  on rt.rota_id = qd.rota_id "
-					+ "where un.uneg_id = :idUnidadeNegocio ";
-
-			if (referenciaInicial != null && referenciaFinal != null && referenciaInicial != referenciaFinal) {
-				consulta = consulta + "and (eccp_ampagamento between " + referenciaInicial + " and " + referenciaFinal + ") ";
-			} else {
-				consulta = consulta + "and eccp_ampagamento = " + referenciaFinal + " ";
-			}
+					+ "where empresa = :idEmpresa ";
 
 			consulta = consulta
 					+ "group by cc.imov_id, clie_nmcliente, cnta.cnta_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, eccp_ictipopagamento,eccp_nnparcelaatual, eccp_nntotalparcelas,cc.ecco_pcempresaconta,lc.uneg_id,un.uneg_nmunidadenegocio,im.loca_id,lc.loca_nmlocalidade,qd.qdra_nnquadra,im.imov_nnlote,im.imov_nnsublote,rt.rota_cdrota,im.imov_nnsequencialrota,cnta.cnta_cdsetorcomercial,ccp.eccp_dtpagamento ";
@@ -19925,7 +19920,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.addScalar("lote", Hibernate.INTEGER).addScalar("sublote", Hibernate.INTEGER)
 					.addScalar("codigoRota", Hibernate.INTEGER).addScalar("sequenciaRota", Hibernate.INTEGER)
 					.addScalar("codSetor", Hibernate.INTEGER).addScalar("dataPagamento", Hibernate.DATE).setInteger("idEmpresa", idEmpresa)
-					.setInteger("idUnidadeNegocio", idUnidadeNegocio).setMaxResults(quantidadeRegistros).setFirstResult(numeroIndice)
 					.list();
 
 		} catch (HibernateException e) {

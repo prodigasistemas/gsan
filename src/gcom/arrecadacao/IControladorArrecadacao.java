@@ -799,4 +799,6 @@ public interface IControladorArrecadacao {
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ControladorException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException;
+	
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade) throws ControladorException;
 }

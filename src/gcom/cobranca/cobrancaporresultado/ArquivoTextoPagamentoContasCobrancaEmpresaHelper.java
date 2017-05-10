@@ -1,10 +1,12 @@
-package gcom.cobranca;
+package gcom.cobranca.cobrancaporresultado;
+
+import gcom.util.Util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class GerarArquivoTextoPagamentosContasCobrancaEmpresaHelper implements
+public class ArquivoTextoPagamentoContasCobrancaEmpresaHelper implements
 		Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -249,4 +251,37 @@ public class GerarArquivoTextoPagamentosContasCobrancaEmpresaHelper implements
 		this.dataPagamento = dataPagamento;
 	}
 
+	public StringBuilder getArquivoTexto() {
+
+		StringBuilder arquivo = new StringBuilder();
+
+		arquivo.append(this.matricula != null ? this.matricula.toString() : "").append(";");
+		arquivo.append(this.nomeClienteConta != null ? this.nomeClienteConta.toString() : "").append(";");
+		arquivo.append(this.referenciaConta != null ? Util.formatarAnoMesParaMesAno(this.referenciaConta) : "").append(";");
+		arquivo.append(this.valorConta != null ? Util.formatarBigDecimalComPonto(this.valorConta) : "").append(";");
+		arquivo.append(this.referenciaPagamento != null ? Util.formatarAnoMesParaMesAno(this.referenciaPagamento) : "").append(";");
+		arquivo.append(this.tipoPagamento != null ? this.tipoPagamento : "").append(";");
+		arquivo.append(this.dataPagamento != null ? Util.formatarData(this.dataPagamento) : "").append(";");
+		arquivo.append(this.numeroParcelas != null ? this.numeroParcelas : "").append(";");
+		arquivo.append(this.numeroParcelasTotal != null ? this.numeroParcelasTotal : "").append(";");
+		arquivo.append(this.valorPagamentoPrincipal != null ? Util.formatarBigDecimalComPonto(this.valorPagamentoPrincipal) : "").append(";");
+		arquivo.append(this.valorEncargos != null ? Util.formatarBigDecimalComPonto(this.valorEncargos) : "").append(";");
+		arquivo.append(this.valorPagamentoTotal != null ? Util.formatarBigDecimalComPonto(this.valorPagamentoTotal) : "").append(";");
+		arquivo.append(this.percentualEmpresa != null ? Util.formatarBigDecimalComPonto(this.percentualEmpresa) : "").append(";");
+		arquivo.append(this.valorPagamentoEmpresa != null ? Util.formatarBigDecimalComPonto(this.valorPagamentoEmpresa) : "").append(";");
+		arquivo.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio.toString() : "").append(";");
+		arquivo.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio.toString() : "").append(";");
+		arquivo.append(this.idLocalidade != null ? this.idLocalidade.toString() : "").append(";");
+		arquivo.append(this.nomeLocalidade != null ? this.nomeLocalidade.toString() : "").append(";");
+		arquivo.append(this.codigoSetor != null ? this.codigoSetor.toString() : "").append(";");
+		arquivo.append(this.numeroQuadra != null ? this.numeroQuadra.toString() : "").append(";");
+		arquivo.append(this.lote != null ? this.lote.toString() : "").append(";");
+		arquivo.append(this.subLote != null ? this.subLote.toString() : "").append(";");
+		arquivo.append(this.codigoRota != null ? this.codigoRota.toString() : "").append(";");
+		arquivo.append(this.sequencialRota != null ? this.sequencialRota.toString() : "").append(";");
+
+		arquivo.append(System.getProperty("line.separator"));
+
+		return arquivo;
+	}
 }

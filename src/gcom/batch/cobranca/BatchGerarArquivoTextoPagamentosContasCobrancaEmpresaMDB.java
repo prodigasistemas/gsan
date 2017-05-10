@@ -1,7 +1,7 @@
 package gcom.batch.cobranca;
 
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -17,8 +17,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements
-		MessageListener, MessageDrivenBean {
+public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements MessageListener, MessageDrivenBean {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,13 +25,10 @@ public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements
 		super();
 	}
 
-	public void setMessageDrivenContext(MessageDrivenContext ctx)
-			throws EJBException {
-
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 	}
 
 	public void ejbRemove() throws EJBException {
-
 	}
 
 	public void onMessage(Message message) {
@@ -40,30 +36,16 @@ public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				
-				Integer idEmpresa = (Integer) ((Object[]) objectMessage.getObject()) [0];
-				
-				Integer referenciaInicial = (Integer)((Object[]) objectMessage.getObject()) [1];
-				
-				Integer referenciaFinal = (Integer)((Object[]) objectMessage.getObject()) [2];
-				
-				int idFuncionalidadeIniciada = (Integer)((Object[]) objectMessage.getObject()) [3];
-				
-				Integer idUnidadeNegocio = (Integer)((Object[]) objectMessage.getObject()) [4];
-													
-					this.getControladorCobranca()
-						.gerarArquivoTextoPagamentosContasEmCobrancaEmpresa(
-								idEmpresa,
-								referenciaInicial, 
-								referenciaFinal, 
-								idFuncionalidadeIniciada, 
-								idUnidadeNegocio);
-									
+
+				int idFuncionalidadeIniciada = (Integer) ((Object[]) objectMessage.getObject())[0];
+				Integer idEmpresa = (Integer) ((Object[]) objectMessage.getObject())[1];
+
+				this.getControladorCobrancaPorResultado().gerarArquivoTextoPagamentosCobrancaEmpresa(idFuncionalidadeIniciada, idEmpresa);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
-			
+
 			} catch (ControladorException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
@@ -72,26 +54,15 @@ public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements
 
 	}
 
-	/**
-	 * Retorna o valor de ControladorCobrancaLocal
-	 * 
-	 * @return O valor de ControladorCobrancaLocal
-	 */
-	private ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
+		ControladorCobrancaPorResultadoLocalHome localHome = null;
+		ControladorCobrancaPorResultadoLocal local = null;
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -101,16 +72,7 @@ public class BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB implements
 			throw new SistemaException(e);
 		}
 	}
-	
 
-
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
 	public void ejbCreate() {
-
 	}
-
 }
