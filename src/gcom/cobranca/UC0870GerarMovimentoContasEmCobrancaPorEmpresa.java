@@ -407,11 +407,10 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 				Integer quantidadeContas = repositorioCobranca.pesquisarQuantidadeContasEmCobrancaPorImovel(comandoEmpresaCobrancaConta, idImovel, sistemaParametros);
 
-				FiltroEmpresaCobrancaFaixa filtroEmpresaCobrancaFaixa = new FiltroEmpresaCobrancaFaixa();
-				filtroEmpresaCobrancaFaixa.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaFaixa.EMPRESA_CONTRATO_COBRANCA_ID, empresaCobranca.getId()));
+				FiltroEmpresaCobrancaFaixa filtro = new FiltroEmpresaCobrancaFaixa();
+				filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaFaixa.EMPRESA_CONTRATO_COBRANCA_ID, empresaCobranca.getId()));
 
-				List<EmpresaCobrancaFaixa> colecaoEmpresaCobrancaFaixa = (List<EmpresaCobrancaFaixa>) Fachada.getInstancia()
-						.pesquisar(filtroEmpresaCobrancaFaixa, EmpresaCobrancaFaixa.class.getName());
+				List<EmpresaCobrancaFaixa> colecaoEmpresaCobrancaFaixa = (List<EmpresaCobrancaFaixa>) Fachada.getInstancia().pesquisar(filtro, EmpresaCobrancaFaixa.class.getName());
 
 				if (colecaoEmpresaCobrancaFaixa != null && !colecaoEmpresaCobrancaFaixa.isEmpty()) {
 

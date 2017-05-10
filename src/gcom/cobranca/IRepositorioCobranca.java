@@ -567,8 +567,6 @@ public interface IRepositorioCobranca {
 
 	public Collection<Object[]> pesquisarDadosArquivoTextoContasCobrancaEmpresa(Collection ids, Integer idProgramaEspecial) throws ErroRepositorioException;
 
-	public Collection obterUnidadeNegocioEmpresaCobrancaConta(Integer[] ids) throws ErroRepositorioException;
-
 	public void removerEmpresaCobrancaContaPagamentos(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException;
 
 	public Object[] pesquisarParmsCobrancaDocumento(Integer idImovel, BigDecimal valorPagamento) throws ErroRepositorioException;
