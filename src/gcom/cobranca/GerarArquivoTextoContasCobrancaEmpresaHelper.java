@@ -2,13 +2,17 @@ package gcom.cobranca;
 
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteTipo;
 import gcom.faturamento.conta.Conta;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializable {
@@ -1226,5 +1230,187 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 				telefones[i] = clienteFone.getDdd() + clienteFone.getTelefone();
 		}
 		return telefones;
+	}
+	
+	public StringBuilder buildArquivoContasLayoutPadrao(StringBuilder registros) {
+		registros.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio : "").append(";");
+		registros.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio : "").append(";");
+		registros.append(this.idFaturamentoGrupo != null ? this.idFaturamentoGrupo : "").append(";");
+		registros.append(this.idLocalidade != null ? this.idLocalidade : "").append(";");
+		registros.append(this.nomeLocalidade != null ? this.nomeLocalidade : "").append(";");
+		registros.append(this.codigoSetorComercial != null ? this.codigoSetorComercial : "").append(";");
+		registros.append(this.codigoRota != null ? this.codigoRota : "").append(";");
+		registros.append(this.numeroSequencialRota != null ? this.numeroSequencialRota : "").append(";");
+		registros.append(this.numeroQuadra != null ? this.numeroQuadra : "").append(";");
+		registros.append(this.numeroLote != null ? this.numeroLote : "").append(";");
+		registros.append(this.numeroSublote != null ? this.numeroSublote : "").append(";");
+		
+		registros.append(this.idImovel != null ? this.idImovel : "").append(";");
+		registros.append(this.nomeClienteConta != null ? this.nomeClienteConta : "").append(";");
+		registros.append(this.nomeAbreviadoCliente != null ? this.nomeAbreviadoCliente : "").append(";");
+		registros.append(this.tipoLogradouro != null ? this.tipoLogradouro : "").append(";");
+		registros.append(this.nomeLogradouro != null ? this.nomeLogradouro : "").append(";");
+		registros.append(this.numeroImovel != null ? this.numeroImovel.trim() : "").append(";");
+		registros.append(this.complementoEndereco != null ? this.complementoEndereco : "").append(";");
+		registros.append(this.codigoCep != null ? this.codigoCep : "").append(";");
+		registros.append(this.nomeBairro != null ? this.nomeBairro : "").append(";");
+		registros.append(this.telefone != null ? "1;" + this.telefone : "2;").append(";");
+		
+		if (this.idClienteTipo.intValue() == ClienteTipo.INDICADOR_PESSOA_FISICA.intValue()) {
+			registros.append(this.cpf != null ? Util.formatarCpf(this.cpf) : "").append(";");
+			registros.append(this.rg != null ? this.rg : "").append(";");
+		} else {
+			registros.append(this.cnpj != null ? Util.formatarCnpj(this.cnpj) : "").append(";");
+			registros.append(";");
+		}
+		
+		if (this.conta != null) {
+			registros.append(Util.formatarAnoMesParaMesAno(this.conta.getReferencia())).append(";");
+			registros.append(this.conta.getDataVencimentoConta() != null ? Util.formatarData(this.conta.getDataVencimentoConta()) : "").append(";");
+			registros.append(this.conta.getValorAgua() != null ? this.conta.getValorAgua() : "").append(";");
+			registros.append(this.conta.getValorEsgoto() != null ? this.conta.getValorEsgoto() : "").append(";");
+			registros.append(this.conta.getDebitos() != null ? this.conta.getDebitos() : "").append(";");
+			registros.append(this.conta.getValorCreditos() != null ? this.conta.getValorCreditos() : "").append(";");
+			registros.append(this.conta.getValorTotal() != null ? this.conta.getValorTotal() : "").append(";");
+			registros.append(Util.obterAno(this.conta.getReferencia())).append(";");
+			registros.append(this.conta.getId()).append(";");
+		} else {
+			registros.append(";;;;;;;;;");
+		}
+		
+		registros.append(this.ligacaoAguaSituacao != null ? this.ligacaoAguaSituacao : "").append(";");
+		registros.append(this.ligacaoEsgotoSituacao != null ? this.ligacaoEsgotoSituacao : "").append(";");
+		registros.append(this.fonteAbastecimento != null ? this.fonteAbastecimento : "").append(";");
+		registros.append(isImovelHidrometrado() ? "1" : "2").append(";");
+		
+		registros.append(this.qtdEconomiasR1 != null ? this.qtdEconomiasR1 : "0").append(";");
+		registros.append(this.qtdEconomiasR2 != null ? this.qtdEconomiasR2 : "0").append(";");
+		registros.append(this.qtdEconomiasR3 != null ? this.qtdEconomiasR3 : "0").append(";");
+		registros.append(this.qtdEconomiasR4 != null ? this.qtdEconomiasR4 : "0").append(";");
+		
+		registros.append(this.qtdEconomiasC1 != null ? this.qtdEconomiasC1 : "0").append(";");
+		registros.append(this.qtdEconomiasC2 != null ? this.qtdEconomiasC2 : "0").append(";");
+		registros.append(this.qtdEconomiasC3 != null ? this.qtdEconomiasC3 : "0").append(";");
+		registros.append(this.qtdEconomiasC4 != null ? this.qtdEconomiasC4 : "0").append(";");
+		
+		registros.append(this.qtdEconomiasI1 != null ? this.qtdEconomiasI1 : "0").append(";");
+		registros.append(this.qtdEconomiasI2 != null ? this.qtdEconomiasI2 : "0").append(";");
+		registros.append(this.qtdEconomiasI3 != null ? this.qtdEconomiasI3 : "0").append(";");
+		registros.append(this.qtdEconomiasI4 != null ? this.qtdEconomiasI4 : "0").append(";");
+		
+		registros.append(this.qtdEconomiasP1 != null ? this.qtdEconomiasP1 : "0").append(";");
+		registros.append(this.qtdEconomiasP2 != null ? this.qtdEconomiasP2 : "0").append(";");
+		registros.append(this.qtdEconomiasP3 != null ? this.qtdEconomiasP3 : "0").append(";");
+		registros.append(this.qtdEconomiasP4 != null ? this.qtdEconomiasP4 : "0").append(";");
+		
+		registros.append(this.indicadorUsuarioDivida != null ? this.indicadorUsuarioDivida : "").append(";");
+		registros.append(this.codigoClienteUsuario != null ? this.codigoClienteUsuario : "").append(";");
+		registros.append(this.nomeClienteUsuario != null ? this.nomeClienteUsuario : "").append(";");
+		registros.append(this.telefone1ClienteUsuario != null ? this.telefone1ClienteUsuario : "").append(";");
+		registros.append(this.telefone2ClienteUsuario != null ? this.telefone2ClienteUsuario : "").append(";");
+		registros.append(this.telefone3ClienteUsuario != null ? this.telefone3ClienteUsuario : "").append(";");
+		
+		registros.append(this.indicadorResponsavelDivida != null ? this.indicadorResponsavelDivida : "").append(";");
+		registros.append(this.codigoClienteResponsavel != null ? this.codigoClienteResponsavel : "").append(";");
+		registros.append(this.nomeClienteResponsavel != null ? this.nomeClienteResponsavel : "").append(";");
+		registros.append(this.telefone1ClienteResponsavel != null ? this.telefone1ClienteResponsavel : "").append(";");
+		registros.append(this.telefone2ClienteResponsavel != null ? this.telefone2ClienteResponsavel : "").append(";");
+		registros.append(this.telefone3ClienteResponsavel != null ? this.telefone3ClienteResponsavel : "").append(";");
+		
+		registros.append(this.indicadorProprietarioDivida != null ? this.indicadorProprietarioDivida : "").append(";");
+		registros.append(this.codigoClienteProprietario != null ? this.codigoClienteProprietario : "").append(";");
+		registros.append(this.nomeClienteProprietario != null ? this.nomeClienteProprietario : "").append(";");
+		registros.append(this.telefone1ClienteProprietario != null ? this.telefone1ClienteProprietario : "").append(";");
+		registros.append(this.telefone2ClienteProprietario != null ? this.telefone2ClienteProprietario : "").append(";");
+		registros.append(this.telefone3ClienteProprietario != null ? this.telefone3ClienteProprietario : "").append(";");
+		
+		registros.append(this.quantidadeParcelamentos != null ? this.quantidadeParcelamentos : "0").append(";");
+		registros.append(this.quantidadeReparcelamentos != null ? this.quantidadeReparcelamentos : "0").append(";");
+		registros.append(this.quantidadeReparcelamentosConsecutivos != null ? this.quantidadeReparcelamentosConsecutivos : "0").append(";");
+		
+		registros.append(this.indicadorImovelNegativado).append(";");
+		registros.append(this.dataNegativacao != null ? Util.formatarData(this.dataNegativacao) : "").append(";");
+		
+		registros.append(ConstantesSistema.SIM).append(";");
+		
+		registros.append(this.dataInicioCiclo != null ? Util.formatarData(this.dataInicioCiclo) : "").append(";");
+		registros.append(this.dataFimCiclo != null ? Util.formatarData(this.dataFimCiclo) : "").append(";");
+		
+		registros.append(System.getProperty("line.separator"));
+		
+		return registros;
+	}
+	
+	public StringBuilder buildArquivoContasLayoutTipo02(StringBuilder registros) {
+		registros.append(this.idGerenciaRegional != null ? Util.truncarString(this.idGerenciaRegional.toString(), 4) : "").append("#");
+		registros.append(this.nomeGerenciaRegional != null ? Util.truncarString(this.nomeGerenciaRegional, 25) : "").append("#");
+		registros.append(this.idUnidadeNegocio != null ? Util.truncarString(this.idUnidadeNegocio.toString(), 4) : "").append("#");
+		registros.append(this.nomeUnidadeNegocio != null ? Util.truncarString(this.nomeUnidadeNegocio, 50) : "").append("#");
+		registros.append(this.idFaturamentoGrupo != null ? Util.truncarString(this.idFaturamentoGrupo.toString(), 4) : "").append("#");
+		registros.append(this.idLocalidade != null ? Util.truncarString(this.idLocalidade.toString(), 4) : "").append("#");
+		registros.append(this.nomeLocalidade != null ? Util.truncarString(this.nomeLocalidade, 30) : "").append("#");
+		registros.append(this.codigoRota != null ? Util.truncarString(this.codigoRota.toString(), 6) : "").append("#");
+		registros.append(this.numeroSequencialRota != null ? Util.truncarString(this.numeroSequencialRota.toString(), 9) : "").append("#");
+		registros.append(this.idImovel != null ? Util.truncarString(this.idImovel.toString(), 9) : "").append("#");
+		registros.append(this.nomeClienteConta != null ? Util.truncarString(this.nomeClienteConta, 40) : "").append("#");
+		registros.append(this.nomeLogradouro != null ? Util.truncarString(this.nomeLogradouro, 30) : "").append("#");
+		registros.append(this.numeroImovel != null ? Util.adicionarZerosEsquedaNumeroTruncando(5, this.numeroImovel.toString()) : "").append("#");
+		registros.append(this.complementoEndereco != null ? Util.truncarString(this.complementoEndereco, 50) : "").append("#");
+		registros.append(this.codigoCep != null ? Util.truncarString(this.codigoCep.toString(), 10) : "").append("#");
+		registros.append(this.nomeBairro != null ? Util.truncarString(this.nomeBairro, 30) : "").append("#");
+		registros.append(this.telefone != null ? Util.truncarString(this.telefone, 9) : "").append("#");
+		registros.append(this.nomeMunicipio != null ? Util.truncarString(this.nomeMunicipio, 30) : "").append("#");
+
+		if (this.idClienteTipo.toString().equalsIgnoreCase(ClienteTipo.INDICADOR_PESSOA_FISICA.toString())) {
+			registros.append(this.cpf != null ? Util.truncarString(Util.formatarCpf(this.cpf), 18) : "").append("#");
+		} else {
+			registros.append(this.cnpj != null ? Util.truncarString(Util.formatarCnpj(this.cnpj), 18) : "").append("#");
+		}
+
+		if (this.idClienteTipo.toString().equalsIgnoreCase(ClienteTipo.INDICADOR_PESSOA_FISICA.toString())) {
+			registros.append(this.rg != null ? Util.truncarString(this.rg, 13) : "").append("#");
+		} else {
+			registros.append("#");
+		}
+
+		registros.append(this.idOrdemServico != null ? Util.truncarString(this.idOrdemServico.toString(), 10) : "").append("#");
+		registros.append(this.codigoSetorComercial != null ? Util.truncarString(this.codigoSetorComercial.toString(), 4) : "").append("#");
+		registros.append(Util.truncarString(this.numeroQuadra.toString(), 7)).append("#");
+		registros.append(Util.truncarString(this.numeroLote.toString(), 4)).append("#");
+		registros.append(Util.truncarString(this.numeroSublote.toString(), 4)).append("#");
+		registros.append(quantidadeContas != null ? Util.truncarString(quantidadeContas.toString(), 4) : "").append("#");
+
+		if (this.conta != null) {
+			registros.append(Util.formatarAnoMesParaMesAnoSemZeroNoMes(String.valueOf(this.conta.getReferencia()))).append("#");
+			registros.append(this.conta.getDataVencimentoConta() != null ? Util.formatarDataSemZeroAntesMes(this.conta.getDataVencimentoConta()) : "").append("#");
+			registros.append(this.conta.getValorAgua() != null ? Util.adicionarZerosEsquedaNumeroTruncando(15, Util.formatarBigDecimalParaString(this.conta.getValorAgua())) : "").append("#");
+			registros.append(this.conta.getValorEsgoto() != null ? Util.truncarString(Util.formatarBigDecimalParaString(this.conta.getValorEsgoto()), 15) : "").append("#");
+			registros.append(this.conta.getDebitos() != null ? Util.truncarString(Util.formatarBigDecimalParaString(this.conta.getDebitos()), 15) : "").append("#");
+			registros.append(this.conta.getValorCreditos() != null ? Util.truncarString(Util.formatarBigDecimalParaString(this.conta.getValorCreditos()), 15) : "").append("#");
+			registros.append(this.conta.getValorTotal() != null ? Util.truncarString(Util.formatarBigDecimalParaString(this.conta.getValorTotal()), 15) : "").append("#");
+			registros.append(Util.obterAno(this.conta.getReferencia())).append("#");
+			registros.append(Util.truncarString(this.conta.getId().toString(), 10)).append("#");
+
+		} else if (this.colecaoConta != null && !this.colecaoConta.isEmpty()) {
+			Iterator<Conta> iterator = this.colecaoConta.iterator();
+
+			while (iterator.hasNext()) {
+				Conta conta = (Conta) iterator.next();
+
+				registros.append(Util.formatarAnoMesParaMesAnoSemZeroNoMes(String.valueOf(conta.getReferencia()))).append("#");
+				registros.append(conta.getDataVencimentoConta() != null ? Util.formatarDataSemZeroAntesMes(conta.getDataVencimentoConta()) : "").append("#");
+				registros.append(conta.getValorAgua() != null ? Util.adicionarZerosEsquedaNumeroTruncando(15, Util.formatarBigDecimalParaString(conta.getValorAgua())) : "").append("#");
+				registros.append(conta.getValorEsgoto() != null ? Util.truncarString(Util.formatarBigDecimalParaString(conta.getValorEsgoto()), 15) : "").append("#");
+				registros.append(conta.getDebitos() != null ? Util.truncarString(Util.formatarBigDecimalParaString(conta.getDebitos()), 15) : "").append("#");
+				registros.append(conta.getValorCreditos() != null ? Util.truncarString(Util.formatarBigDecimalParaString(conta.getValorCreditos()), 15) : "").append("#");
+				registros.append(conta.getValorTotal() != null ? Util.truncarString(Util.formatarBigDecimalParaString(conta.getValorTotal()), 15) : "").append("#");
+				registros.append(Util.obterAno(conta.getReferencia())).append("#");
+				registros.append(Util.truncarString(conta.getId().toString(), 10)).append("#");
+			}
+		}
+
+		registros.append(System.getProperty("line.separator"));
+
+		return registros;
 	}
 }

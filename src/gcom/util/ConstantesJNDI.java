@@ -308,7 +308,6 @@ public class ConstantesJNDI {
 			CONTROLADOR_GERENCIAL_SEJB = propriedades.getProperty("ControladorGerencial");
 
 			CONTROLADOR_COBRANCA_SEJB = propriedades.getProperty("ControladorCobranca");
-			CONTROLADOR_COBRANCA_SEJB = propriedades.getProperty("ControladorCobrancaPorResultado");
 			CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB = propriedades.getProperty("ControladorContratoParcelamento");
 			CONTROLADOR_FINANCEIRO_SEJB = propriedades.getProperty("ControladorFinanceiro");
 			CONTROLADOR_ACESSO_SEJB = propriedades.getProperty("ControladorAcesso");

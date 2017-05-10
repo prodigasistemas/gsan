@@ -1,8 +1,8 @@
 package gcom.batch.cobranca;
 
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -37,8 +37,8 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements MessageDr
 			ObjectMessage objectMessage = (ObjectMessage) message;
 
 			try {
-				this.getControladorCobranca().gerarMovimentoContasEmCobranca(
-						(ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[0],
+				getControladorCobrancaPorResultado().gerarMovimentoContas(
+						(ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[0], 
 						(Integer) ((Object[]) objectMessage.getObject())[1]);
 
 			} catch (JMSException e) {
@@ -51,10 +51,10 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements MessageDr
 		}
 	}
 
-	private ControladorCobrancaLocal getControladorCobranca() {
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
 		try {
 			ServiceLocator locator = ServiceLocator.getInstancia();
-			ControladorCobrancaLocalHome localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
+			ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 
 			return localHome.create();
 		} catch (CreateException e) {
@@ -65,7 +65,5 @@ public class BatchGerarMovimentoContasCobrancaPorEmpresaMDB implements MessageDr
 
 	}
 
-	public void ejbCreate() {
-
-	}
+	public void ejbCreate() {}
 }

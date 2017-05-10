@@ -1,7 +1,7 @@
 package gcom.batch.cobranca;
 
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -35,20 +35,19 @@ public class BatchGerarArquivoTextoContasCobrancaEmpresaMDB implements MessageDr
 
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "unchecked" })
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
 
-				Collection idsRegistros = (Collection) ((Object[]) objectMessage.getObject())[0];
+				Collection<Integer> comandos = (Collection<Integer>) ((Object[]) objectMessage.getObject())[0];
 
-				Integer idEmpresa = (Integer) ((Object[]) objectMessage.getObject())[1];
-				int idFuncionalidadeIniciada = (Integer) ((Object[]) objectMessage.getObject())[2];
-
-				if (idsRegistros != null) {
-					this.getControladorCobranca().gerarArquivoTextoContasEmCobrancaEmpresa(idsRegistros, idEmpresa, idFuncionalidadeIniciada);
+				if (comandos != null) {
+					this.getControladorCobrancaPorResultado().gerarArquivoContas(comandos, 
+							(Integer) ((Object[]) objectMessage.getObject())[1], 
+							(Integer) ((Object[]) objectMessage.getObject())[2]);
 				}
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
@@ -60,10 +59,10 @@ public class BatchGerarArquivoTextoContasCobrancaEmpresaMDB implements MessageDr
 		}
 	}
 
-	private ControladorCobrancaLocal getControladorCobranca() {
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
 		try {
 			ServiceLocator locator = ServiceLocator.getInstancia();
-			ControladorCobrancaLocalHome localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
+			ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 			return localHome.create();
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -72,6 +71,5 @@ public class BatchGerarArquivoTextoContasCobrancaEmpresaMDB implements MessageDr
 		}
 	}
 
-	public void ejbCreate() {
-	}
+	public void ejbCreate() {}
 }

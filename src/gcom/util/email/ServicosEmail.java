@@ -1,6 +1,5 @@
 package gcom.util.email;
 
-import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
 import gcom.fachada.Fachada;

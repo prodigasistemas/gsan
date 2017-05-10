@@ -15668,31 +15668,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	}
 
-	public Collection obterUnidadeNegocioEmpresaCobrancaConta(Integer[] ids) throws ErroRepositorioException {
-
-		Collection retorno = null;
-		Session session = HibernateUtil.getSession();
-		String consulta;
-
-		try {
-			consulta = "select loca.uneg_id as idUnidadeNegocio " + "from cobranca.empresa_cobranca_conta ecco "
-					+ "inner join cadastro.imovel imov on imov.imov_id = ecco.imov_id "
-					+ "inner join cadastro.localidade loca on loca.loca_id = imov.loca_id " + "where ecco.cecc_id in ( :ids ) "
-					+ "group by loca.uneg_id  ";
-
-			retorno = session.createSQLQuery(consulta).addScalar("idUnidadeNegocio", Hibernate.INTEGER).setParameterList("ids", ids).list();
-
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
 	/**
 	 * [UC0891] Gerar Relatorio de Imóveis com Acordo
 	 * 

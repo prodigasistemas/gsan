@@ -711,9 +711,6 @@ public interface IControladorCobranca {
 	public Integer inserirComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Usuario usuarioLogado)
 			throws ControladorException;
 
-	public void gerarMovimentoContasEmCobranca(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, int idFuncionalidadeIniciada)
-			throws ControladorException;
-
 	public Date obterDataValidadeDocumentoCobranca(CobrancaDocumento cobrancaDocumento, Usuario usuario, Date maiorDataVencimentoContas)
 			throws ControladorException;
 
@@ -726,12 +723,6 @@ public interface IControladorCobranca {
 
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaCount(Integer idEmpresa, Date comandoInicial, Date comandoFinal)
 			throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public void gerarArquivoTextoContasEmCobrancaEmpresa(Collection ids, Integer idEmpresa, int idFuncionalidadeIniciada) throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public Collection obterUnidadeNegocioEmpresaCobrancaConta(Integer[] ids) throws ControladorException;
 
 	public Integer pesquisarQtdeRotasSemCriteriosParaAcoesCobranca(PesquisarQtdeRotasSemCriteriosParaAcoesCobranca filtro) throws ControladorException;
 
