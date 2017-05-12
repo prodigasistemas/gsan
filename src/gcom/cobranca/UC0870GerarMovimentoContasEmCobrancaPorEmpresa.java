@@ -9,20 +9,21 @@ import gcom.batch.ControladorBatchLocalHome;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.empresa.EmpresaCobranca;
 import gcom.cadastro.empresa.EmpresaCobrancaFaixa;
+import gcom.cadastro.empresa.EmpresaContratoCobranca;
 import gcom.cadastro.empresa.FiltroEmpresaCobranca;
 import gcom.cadastro.empresa.FiltroEmpresaCobrancaFaixa;
+import gcom.cadastro.empresa.FiltroEmpresaContratoCobranca;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelCobrancaSituacao;
-import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -94,10 +95,10 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 		}
 	}
 
-	private ControladorFaturamentoLocal getControladorFaturamento() {
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
 		try {
 			ServiceLocator locator = ServiceLocator.getInstancia();
-			ControladorFaturamentoLocalHome localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+			ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 
 			return localHome.create();
 		} catch (CreateException e) {
@@ -150,15 +151,22 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 			
 			
 			ComandoEmpresaCobrancaContaHelper helper = new ComandoEmpresaCobrancaContaHelper();
-			helper.setComandoEmpresaCobrancaConta(comando);
-			helper.setColecaoGerenciaRegional(filtrarContaGerencia(comando, helper));
-			helper.setColecaoUnidadeNegocio(filtrarUnidadeNegocio(comando, helper));
-			helper.setColecaoImovelPerfil(filtrarImovelPerfil(comando, helper));
-			helper.setColecaoLigacaoAguaSituacao(filtrarLigacaoAguaSituacao(comando, helper));
+			helper.setComando(comando);
+			helper.setIdsGerenciaRegional(filtrarGerenciaRegional(comando, helper));
+			helper.setIdsUnidadeNegocio(filtrarUnidadeNegocio(comando, helper));
+			helper.setIdsImovelPerfil(filtrarImovelPerfil(comando, helper));
+			helper.setIdsLigacaoAguaSituacao(filtrarLigacaoAguaSituacao(comando, helper));
 
 			ServicoTipo servicoTipo = filtrarServicoTipo(comando);
 
-			idsImoveis = getControladorFaturamento().pesquisarImoveisInformarContasEmCobranca(helper, empresaCobranca.isPercentualInformado());
+			boolean agruparPorImovel = true;
+			EmpresaContratoCobranca contrato = pesquisarContrato(empresaCobranca.getEmpresa().getId());
+
+			if (contrato.getPercentualContratoCobranca() != null && contrato.getPercentualContratoCobranca().compareTo(BigDecimal.ZERO) != 0) {
+				agruparPorImovel = false;
+			}
+			
+			idsImoveis = getControladorCobrancaPorResultado().pesquisarImoveis(helper, agruparPorImovel, empresaCobranca.isPercentualInformado());
 
 			if (idsImoveis != null && !idsImoveis.isEmpty()) {
 				System.out.println("Cobrança por Resultado - Quantidade de Imóveis do Comando " + comando.getId() + ": " + idsImoveis.size());
@@ -248,10 +256,24 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 	}
 
 	@SuppressWarnings("unchecked")
+	private EmpresaContratoCobranca pesquisarContrato(Integer idEmpresa) {
+		FiltroEmpresaContratoCobranca filtro = new FiltroEmpresaContratoCobranca();
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaContratoCobranca.EMPRESA_ID, idEmpresa));
+		Collection<EmpresaContratoCobranca> colecao = Fachada.getInstancia().pesquisar(filtro, EmpresaContratoCobranca.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return (EmpresaContratoCobranca) Util.retonarObjetoDeColecao(colecao);
+		} else {
+			return null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	private EmpresaCobranca filtrarEmpresaCobranca(ComandoEmpresaCobrancaConta comando) throws ControladorException {
 		FiltroEmpresaCobranca filtro = new FiltroEmpresaCobranca();
 		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
 		filtro.adicionarParametro(new ParametroNulo(FiltroEmpresaCobranca.DATA_FIM_CONTRATO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroEmpresaCobranca.EMPRESA);
 
 		Collection<EmpresaCobranca> colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtro, EmpresaCobranca.class.getName());
 
@@ -280,8 +302,8 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Collection<LigacaoAguaSituacao> filtrarLigacaoAguaSituacao(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
-		Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao = new ArrayList<LigacaoAguaSituacao>();
+	private List<Integer> filtrarLigacaoAguaSituacao(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
+		List<Integer> lista = new ArrayList<Integer>();
 		
 		FiltroCmdEmpresaCobrancaContaLigacaoAguaSituacao filtro = new FiltroCmdEmpresaCobrancaContaLigacaoAguaSituacao();
 		filtro.adicionarParametro(new ParametroSimples(FiltroCmdEmpresaCobrancaContaLigacaoAguaSituacao.ID_COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId()));
@@ -294,17 +316,17 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 			while (iterator.hasNext()) {
 				CmdEmpresaCobrancaContaLigacaoAguaSituacao comandoLigacaoAguaSituacao = (CmdEmpresaCobrancaContaLigacaoAguaSituacao) iterator.next();
 				LigacaoAguaSituacao ligacaoAguaSituacao = comandoLigacaoAguaSituacao.getLigacaoAguaSituacao();
-				colecaoLigacaoAguaSituacao.add(ligacaoAguaSituacao);
+				lista.add(ligacaoAguaSituacao.getId());
 			}
-			return colecaoLigacaoAguaSituacao;
+			return lista;
 		} else {
 			return null;
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Collection<ImovelPerfil> filtrarImovelPerfil(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
-		Collection<ImovelPerfil> colecaoImovelPerfil = new ArrayList<ImovelPerfil>();
+	private List<Integer> filtrarImovelPerfil(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
+		List<Integer> lista = new ArrayList<Integer>();
 		
 		FiltroComandoEmpresaCobrancaContaImovelPerfil filtro = new FiltroComandoEmpresaCobrancaContaImovelPerfil();
 		filtro.adicionarParametro(new ParametroSimples(FiltroComandoEmpresaCobrancaContaImovelPerfil.ID_COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId()));
@@ -316,17 +338,17 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 			Iterator iterator = colecao.iterator();
 			while (iterator.hasNext()) {
 				ComandoEmpresaCobrancaContaImovelPerfil comandoImovelPerfil = (ComandoEmpresaCobrancaContaImovelPerfil) iterator.next();
-				colecaoImovelPerfil.add(comandoImovelPerfil.getImovelPerfil());
+				lista.add(comandoImovelPerfil.getImovelPerfil().getId());
 			}
-			return colecaoImovelPerfil;
+			return lista;
 		} else {
 			return null;
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Collection<GerenciaRegional> filtrarContaGerencia(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
-		Collection<GerenciaRegional> colecaoGerenciaRegional = new ArrayList<GerenciaRegional>();
+	private List<Integer> filtrarGerenciaRegional(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
+		List<Integer> lista = new ArrayList<Integer>();
 		
 		FiltroComandoEmpresaCobrancaContaGerencia filtro = new FiltroComandoEmpresaCobrancaContaGerencia();
 		filtro.adicionarParametro(new ParametroSimples(FiltroComandoEmpresaCobrancaContaGerencia.ID_COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId()));
@@ -335,18 +357,18 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 		if (colecao != null && !colecao.isEmpty()) {
 			Iterator iterator = colecao.iterator();
 			while (iterator.hasNext()) {
-				colecaoGerenciaRegional.add((GerenciaRegional) iterator.next());
+				lista.add(((GerenciaRegional) iterator.next()).getId());
 			}
-			return colecaoGerenciaRegional;
+			return lista;
 		} else {
 			return null;
 		}
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private Collection<UnidadeNegocio> filtrarUnidadeNegocio(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
-		Collection<UnidadeNegocio> colecaoUnidadeNegocio = new ArrayList<UnidadeNegocio>();
-		
+	private List<Integer> filtrarUnidadeNegocio(ComandoEmpresaCobrancaConta comando, ComandoEmpresaCobrancaContaHelper helper) {
+		List<Integer> lista = new ArrayList<Integer>();
+
 		FiltroComandoEmpresaCobrancaContaUnidadeNegocio filtro = new FiltroComandoEmpresaCobrancaContaUnidadeNegocio();
 		filtro.adicionarParametro(new ParametroSimples(FiltroComandoEmpresaCobrancaContaUnidadeNegocio.ID_COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId()));
 		Collection colecao = Fachada.getInstancia().pesquisar(filtro, ComandoEmpresaCobrancaContaUnidadeNegocio.class.getName());
@@ -354,14 +376,15 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 		if (colecao != null && !colecao.isEmpty()) {
 			Iterator iterator = colecao.iterator();
 			while (iterator.hasNext()) {
-				colecaoUnidadeNegocio.add((UnidadeNegocio) iterator.next());
+				lista.add(((UnidadeNegocio) iterator.next()).getId());
 			}
-			return colecaoUnidadeNegocio;
+			return lista;
 		} else {
 			return null;
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private EmpresaCobrancaConta criarEmpresaCobrancaConta(Object[] dadosEmpresaCobrancaConta, ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, EmpresaCobranca empresaCobranca)
 			throws ControladorException, ErroRepositorioException {
 
@@ -370,23 +393,20 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 
 		if (dadosEmpresaCobrancaConta != null) {
 
-			// Id da Conta
 			if (dadosEmpresaCobrancaConta[0] != null) {
 				ContaGeral contaGeral = new ContaGeral();
 				contaGeral.setId((Integer) dadosEmpresaCobrancaConta[0]);
 				retorno.setContaGeral(contaGeral);
 			}
 
-			// Valor Original da Conta
 			if (dadosEmpresaCobrancaConta[1] != null) {
 				retorno.setValorOriginalConta((BigDecimal) dadosEmpresaCobrancaConta[1]);
 			}
 
-			// Indicador Pagamento Válido
 			if (dadosEmpresaCobrancaConta[2] != null) {
 				retorno.setIndicadorPagamentoValido((Short) dadosEmpresaCobrancaConta[2]);
 			}
-			// imovel
+
 			if (dadosEmpresaCobrancaConta[3] != null) {
 				Imovel imovel = new Imovel();
 				imovel.setId((Integer) dadosEmpresaCobrancaConta[3]);
@@ -394,7 +414,6 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 
 				idImovel = imovel.getId();
 			}
-
 		}
 
 		if (empresaCobranca != null) {
@@ -435,7 +454,6 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 					}
 				}
 			}
-
 		}
 
 		retorno.setEmpresa(comandoEmpresaCobrancaConta.getEmpresa());
@@ -446,12 +464,8 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 	}
 
 	private CobrancaSituacaoHistorico criarCobrancaSituacaoHistorico(Integer idImovel, Integer anoMesArrecadacaoInicio, Integer anoMesArrecadacaoFim) {
-
 		CobrancaSituacaoHistorico cobrancaSituacaoHistorico = new CobrancaSituacaoHistorico();
-
-		Imovel imovel = new Imovel();
-		imovel.setId(idImovel);
-		cobrancaSituacaoHistorico.setImovel(imovel);
+		cobrancaSituacaoHistorico.setImovel(new Imovel(idImovel));
 
 		CobrancaSituacaoMotivo cobrancaSituacaoMotivo = new CobrancaSituacaoMotivo();
 		cobrancaSituacaoMotivo.setId(CobrancaSituacaoMotivo.IMOVEIS_ENVIADOS_EMPRESA_TERCEIRIZADA);
@@ -460,12 +474,10 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 		CobrancaSituacaoTipo cobrancaSituacaoTipo = new CobrancaSituacaoTipo();
 		cobrancaSituacaoTipo.setId(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA);
 		cobrancaSituacaoHistorico.setCobrancaSituacaoTipo(cobrancaSituacaoTipo);
-
+		
 		cobrancaSituacaoHistorico.setUltimaAlteracao(new Date());
-
 		cobrancaSituacaoHistorico.setAnoMesCobrancaSituacaoInicio(anoMesArrecadacaoInicio);
 		cobrancaSituacaoHistorico.setAnoMesCobrancaSituacaoFim(anoMesArrecadacaoFim);
-
 		cobrancaSituacaoHistorico.setUsuario(Usuario.USUARIO_BATCH);
 		cobrancaSituacaoHistorico.setUsuarioInforma(Usuario.USUARIO_BATCH);
 
@@ -473,27 +485,21 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 	}
 
 	private ImovelCobrancaSituacao criarImovelCobrancaSituacao(Integer idImovel, ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) throws ControladorException, ErroRepositorioException {
-
 		ImovelCobrancaSituacao imovelCobrancaSituacao = new ImovelCobrancaSituacao();
-
-		Imovel imovel = new Imovel();
-		imovel.setId(idImovel);
-		imovelCobrancaSituacao.setImovel(imovel);
+		imovelCobrancaSituacao.setImovel(new Imovel(idImovel));
 
 		imovelCobrancaSituacao.setDataImplantacaoCobranca(new Date());
 		imovelCobrancaSituacao.setUltimaAlteracao(new Date());
 
-		Integer idCobSituacao = repositorioCobranca.pesquisarCobrancaSituacao(CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
+		Integer idCobrancaSituacao = repositorioCobranca.pesquisarCobrancaSituacao(CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
 
 		CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
-		cobrancaSituacao.setId(idCobSituacao);
+		cobrancaSituacao.setId(idCobrancaSituacao);
 		imovelCobrancaSituacao.setCobrancaSituacao(cobrancaSituacao);
 
 		Cliente cliente = getControladorImovel().pesquisarClienteUsuarioImovel(imovelCobrancaSituacao.getImovel().getId());
-
 		imovelCobrancaSituacao.setCliente(cliente);
 
 		return imovelCobrancaSituacao;
 	}
-
 }

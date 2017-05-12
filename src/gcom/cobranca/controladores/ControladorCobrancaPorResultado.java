@@ -1,7 +1,5 @@
 package gcom.cobranca.controladores;
 
-import gcom.arrecadacao.IRepositorioArrecadacao;
-import gcom.arrecadacao.RepositorioArrecadacaoHBM;
 import gcom.batch.Processo;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.EnvioEmail;
@@ -13,14 +11,13 @@ import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelSubCategoria;
-import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelSubcategoria;
-import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
+import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.NegativacaoImoveis;
@@ -31,9 +28,9 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaH
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.repositorios.IRepositorioCobrancaPorResultadoHBM;
+import gcom.cobranca.repositorios.RepositorioCobrancaPorResultadoHBM;
 import gcom.faturamento.GuiaPagamentoGeral;
-import gcom.faturamento.IRepositorioFaturamento;
-import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.micromedicao.IRepositorioMicromedicao;
@@ -69,20 +66,24 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	
 	private static Logger logger = Logger.getLogger(ControladorCobrancaPorResultado.class);
 
-	protected IRepositorioFaturamento repositorioFaturamento;
-	protected IRepositorioMicromedicao repositorioMicromedicao;
-	protected IRepositorioArrecadacao repositorioArrecadacao;
-	protected IRepositorioImovel repositorioImovel;
+	protected IRepositorioCobrancaPorResultadoHBM repositorioCobrancaPorResultado;
 	protected IRepositorioCobranca repositorioCobranca;
+	protected IRepositorioMicromedicao repositorioMicromedicao;
 
 	public void ejbCreate() throws CreateException {
-		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
-		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
-		repositorioArrecadacao = RepositorioArrecadacaoHBM.getInstancia();
-		repositorioImovel = RepositorioImovelHBM.getInstancia();
+		repositorioCobrancaPorResultado = RepositorioCobrancaPorResultadoHBM.getInstancia();
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
+		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
 
+	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ControladorException {
+		try {
+			return repositorioCobrancaPorResultado.pesquisarQuantidadeContas(helper, agrupadoPorImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 	public void gerarMovimentoContas(ComandoEmpresaCobrancaConta comando, int idFuncionalidadeIniciada) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId());
 
@@ -103,6 +104,14 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
+		}
+	}
+	
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException {
+		try {
+			return repositorioCobrancaPorResultado.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
 		}
 	}
 	

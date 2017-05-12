@@ -64579,30 +64579,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0870] Gerar Movimento de Contas em Cobrança por Empresa
-	 */
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado)
-			throws ControladorException {
-		try {
-			return repositorioFaturamento.pesquisarImoveisInformarContasEmCobranca(helper, percentualInformado);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-			throw new ControladorException("erro.sistema", e);
-		}
-	}
-
-	/**
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 */
-	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper) throws ControladorException {
-		try {
-			return repositorioFaturamento.pesquisarQuantidadeContas(helper);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-	}
-
-	/**
 	 * [UC0193] - Consultar Histórico de Faturamento
 	 */
 	public Collection obterDebitoACobrarImovel(Integer imovelID)
@@ -67603,30 +67579,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		return colecaoConsumoTarifaVigenciaTodasDatas;
-	}
-
-	/**
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imóvel
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 07/04/2011
-	 */
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ControladorException {
-
-		try {
-
-			return repositorioFaturamento
-					.pesquisarQuantidadeContasAgrupandoPorImovel(comandoEmpresaCobrancaContaHelper);
-
-		} catch (Exception e) {
-			sessionContext.setRollbackOnly();
-			throw new EJBException(e);
-		}
-
 	}
 
 	/**

@@ -1,14 +1,10 @@
 package gcom.cobranca;
 
-import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ordemservico.ServicoTipo;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -56,8 +52,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	private Localidade localidadeFinal;
 
-	private UnidadeNegocio unidadeNegocio;
-
 	private Empresa empresa;
 
 	private Date ultimaAlteracao;
@@ -74,10 +68,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	private Integer indicadorGeracaoTxt;
 
-	private GerenciaRegional gerenciaRegional;
-
-	private ImovelPerfil imovelPerfil;
-
 	private CobrancaSituacao cobrancaSituacao;
 
 	private ServicoTipo servicoTipo;
@@ -88,8 +78,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	private Integer qtdDiasVencimento;
 
-	private LigacaoAguaSituacao ligacaoAguaSituacao;
-	
 	private Short indicadorCobrancaTelemarketing;
 	
 	private Integer qtdMaximaClientes;
@@ -237,14 +225,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 		this.localidadeInicial = localidadeInicial;
 	}
 
-	public UnidadeNegocio getUnidadeNegocio() {
-		return unidadeNegocio;
-	}
-
-	public void setUnidadeNegocio(UnidadeNegocio unidadeNegocio) {
-		this.unidadeNegocio = unidadeNegocio;
-	}
-
 	public Integer getIndicadorComercial() {
 		return indicadorComercial;
 	}
@@ -299,22 +279,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setDataInicioCiclo(Date dataInicioCiclo) {
 		this.dataInicioCiclo = dataInicioCiclo;
-	}
-
-	public GerenciaRegional getGerenciaRegional() {
-		return gerenciaRegional;
-	}
-
-	public void setGerenciaRegional(GerenciaRegional gerenciaRegional) {
-		this.gerenciaRegional = gerenciaRegional;
-	}
-
-	public ImovelPerfil getImovelPerfil() {
-		return imovelPerfil;
-	}
-
-	public void setImovelPerfil(ImovelPerfil imovelPerfil) {
-		this.imovelPerfil = imovelPerfil;
 	}
 
 	public Integer getNumeroQuadraFinal() {
@@ -379,14 +343,6 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setQtdDiasVencimento(Integer qtdDiasVencimento) {
 		this.qtdDiasVencimento = qtdDiasVencimento;
-	}
-
-	public LigacaoAguaSituacao getLigacaoAguaSituacao() {
-		return ligacaoAguaSituacao;
-	}
-
-	public void setLigacaoAguaSituacao(LigacaoAguaSituacao ligacaoAguaSituacao) {
-		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
 	}
 
 	public Short getIndicadorCobrancaTelemarketing() {

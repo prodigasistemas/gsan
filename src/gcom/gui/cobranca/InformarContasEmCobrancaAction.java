@@ -1,6 +1,5 @@
 package gcom.gui.cobranca;
 
-import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipo;
 import gcom.atendimentopublico.ordemservico.ServicoTipo;
 import gcom.cadastro.cliente.Cliente;
@@ -8,15 +7,12 @@ import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
 import gcom.cadastro.localidade.FiltroSetorComercial;
-import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
-import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CmdEmpresaCobrancaContaLigacaoAguaSituacao;
 import gcom.cobranca.CmdEmpresaCobrancaContaLigacaoAguaSituacaoPK;
@@ -48,7 +44,7 @@ import org.apache.struts.action.ActionMapping;
 
 public class InformarContasEmCobrancaAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 
 		InformarContasEmCobrancaActionForm form = (InformarContasEmCobrancaActionForm) actionForm;
@@ -60,7 +56,7 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 		String[] idsCategoria = form.getIdsCategoria();
 		String idUnidadeNegocio = null;
 		String[] idsUnidadeNegocio = null;
-		
+
 		if (form.getIdsUnidadeNegocio() != null && form.getIdsUnidadeNegocio().length > 0) {
 			if (form.getIdsUnidadeNegocio().length == 1) {
 				idUnidadeNegocio = form.getIdsUnidadeNegocio()[0];
@@ -126,11 +122,11 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 		if (indicadorCobrancaTelemarketing != null && !indicadorCobrancaTelemarketing.trim().equals("")) {
 			comando.setIndicadorCobrancaTelemarketing(new Short(indicadorCobrancaTelemarketing));
 		}
-		
+
 		if (form.getQuantidadeMaximaClientes() != null && !form.getQuantidadeMaximaClientes().trim().equals("") && Integer.parseInt(form.getQuantidadeMaximaClientes()) > 0) {
 			comando.setQtdMaximaClientes(new Integer(form.getQuantidadeMaximaClientes()));
 		}
-		
+
 		// Imóvel
 		if (idImovel != null && !idImovel.trim().equals("")) {
 
@@ -172,38 +168,6 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 				}
 
 			}
-		}
-
-		// Unidade Negócio
-		if (idUnidadeNegocio != null && !idUnidadeNegocio.trim().equals("") && !idUnidadeNegocio.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			UnidadeNegocio unidadeNegocio = new UnidadeNegocio();
-			unidadeNegocio.setId(new Integer(idUnidadeNegocio));
-
-			comando.setUnidadeNegocio(unidadeNegocio);
-		}
-
-		// Gerência Regional
-		if (idGerenciaRegional != null && !idGerenciaRegional.trim().equals("") && !idGerenciaRegional.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			GerenciaRegional gerenciaRegional = new GerenciaRegional();
-			gerenciaRegional.setId(new Integer(idGerenciaRegional));
-
-			comando.setGerenciaRegional(gerenciaRegional);
-		}
-
-		// Imóvel Perfil
-		if (idImovelPerfil != null && !idImovelPerfil.trim().equals("") && !idImovelPerfil.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			ImovelPerfil imovelPerfil = new ImovelPerfil();
-			imovelPerfil.setId(new Integer(idImovelPerfil));
-
-			comando.setImovelPerfil(imovelPerfil);
-		}
-
-		// Situação de Ligação de Água
-		if (idLigacaoAguaSituacao != null && !idLigacaoAguaSituacao.trim().equals("") && !idLigacaoAguaSituacao.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
-			ligacaoAguaSituacao.setId(new Integer(idLigacaoAguaSituacao));
-
-			comando.setLigacaoAguaSituacao(ligacaoAguaSituacao);
 		}
 
 		// Localidade Inicial
@@ -531,7 +495,8 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 			}
 		}
 
-		// Insere um Comando de Cobrança da Conta por Situação de Ligação de Água na base
+		// Insere um Comando de Cobrança da Conta por Situação de Ligação de
+		// Água na base
 		if (idsLigacaoAguaSituacao != null && idsLigacaoAguaSituacao.length > 0) {
 			for (int i = 0; i < idsLigacaoAguaSituacao.length; i++) {
 				if (!idsLigacaoAguaSituacao[i].equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
@@ -549,10 +514,7 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 			}
 		}
 
-		montarPaginaSucesso(request,
-				"Comando de cobrança de conta informado com sucesso. ", 
-				"Informar outro Comando de Cobrança de Conta",
-				"exibirInformarContasEmCobrancaAction.do?menu=sim");
+		montarPaginaSucesso(request, "Comando de cobrança de conta informado com sucesso. ", "Informar outro Comando de Cobrança de Conta", "exibirInformarContasEmCobrancaAction.do?menu=sim");
 
 		return retorno;
 	}

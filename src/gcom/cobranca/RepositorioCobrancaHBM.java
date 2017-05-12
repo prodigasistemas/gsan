@@ -106,28 +106,12 @@ import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
 
-/**
- * Repositorio para cobrança
- * 
- * @author Rafael Santos
- * @since 02/01/2006
- */
 public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
-	/** Repositorio Cobranca Hibernate */
 	private static RepositorioCobrancaHBM instancia;
 
-	/**
-	 * Construtor da classe RepositorioAcessoHBM
-	 */
-	protected RepositorioCobrancaHBM() {
-	}
+	protected RepositorioCobrancaHBM() {}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static RepositorioCobrancaHBM getInstancia() {
 
 		String dialect = HibernateUtil.getDialect();
