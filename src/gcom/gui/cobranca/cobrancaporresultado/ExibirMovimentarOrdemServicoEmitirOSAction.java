@@ -5,18 +5,12 @@ import gcom.cadastro.empresa.EmpresaContratoCobranca;
 import gcom.cadastro.empresa.FiltroEmpresaCobrancaFaixa;
 import gcom.cadastro.empresa.FiltroEmpresaContratoCobranca;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.FiltroImovelPerfil;
-import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
 import gcom.cadastro.localidade.FiltroSetorComercial;
-import gcom.cadastro.localidade.FiltroUnidadeNegocio;
-import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
-import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaConta;
 import gcom.fachada.Fachada;
@@ -26,7 +20,6 @@ import gcom.gui.StatusWizard;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-import gcom.util.filtro.ParametroSimplesIn;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -818,171 +811,61 @@ public class ExibirMovimentarOrdemServicoEmitirOSAction extends GcomAction {
 		}
 
 		if (form.getIdsCategoria() != null) {
+			String[] ids = form.getIdsCategoria();
 
-			String[] idsCategoria = form.getIdsCategoria();
-
-			for (int i = 0; i < idsCategoria.length; i++) {
-
-				if (idsCategoria[i].equals(Categoria.COMERCIAL.toString())) {
+			for (int i = 0; i < ids.length; i++) {
+				if (ids[i].equals(Categoria.COMERCIAL.toString())) {
 					comando.setIndicadorComercial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.INDUSTRIAL.toString())) {
+				} else if (ids[i].equals(Categoria.INDUSTRIAL.toString())) {
 					comando.setIndicadorIndustrial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.RESIDENCIAL.toString())) {
+				} else if (ids[i].equals(Categoria.RESIDENCIAL.toString())) {
 					comando.setIndicadorResidencial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.PUBLICO.toString())) {
+				} else if (ids[i].equals(Categoria.PUBLICO.toString())) {
 					comando.setIndicadorPublico(ConstantesSistema.SIM.intValue());
 				}
-
 			}
 		}
 
-		Collection colecaoUnidadeNegocio = null;
-		// Unidade Negocio
-		if (form.getIdsUnidadeNegocio() != null && form.getIdsUnidadeNegocio().length > 0) {
-
-			String[] idsUnidadeNegocio = form.getIdsUnidadeNegocio();
-			Collection<String> colecaoIdsUnidadeNegocio = new ArrayList();
-			boolean unidadeInformada = true;
-
-			for (int i = 0; i < idsUnidadeNegocio.length; i++) {
-				if (idsUnidadeNegocio[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					unidadeInformada = false;
-					break;
-				}
-				colecaoIdsUnidadeNegocio.add(idsUnidadeNegocio[i]);
-			}
-
-			if (unidadeInformada) {
-				algumParametroInformado = true;
-
-				FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
-
-				filtroUnidadeNegocio.adicionarParametro(new ParametroSimplesIn(FiltroUnidadeNegocio.ID, colecaoIdsUnidadeNegocio));
-
-				colecaoUnidadeNegocio = this.getFachada().pesquisar(filtroUnidadeNegocio, UnidadeNegocio.class.getName());
-
-				if (colecaoUnidadeNegocio != null && !colecaoUnidadeNegocio.isEmpty()) {
-
-					if (colecaoUnidadeNegocio.size() == 1) {
-						UnidadeNegocio unidadeNegocio = (UnidadeNegocio) colecaoUnidadeNegocio.iterator().next();
-
-						comando.setUnidadeNegocio(unidadeNegocio);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		Collection colecaoGerenciaRegional = null;
-		// Gerência Regional
-		if (form.getIdsGerenciaRegional() != null && form.getIdsGerenciaRegional().length > 0) {
-
-			String[] idsGerenciaRegional = form.getIdsGerenciaRegional();
-			Collection<String> colecaoIdsGerenciaRegional = new ArrayList();
-			boolean gerenciaRegionalInformada = true;
-
-			for (int i = 0; i < idsGerenciaRegional.length; i++) {
-				if (idsGerenciaRegional[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					gerenciaRegionalInformada = false;
-					break;
-				}
-				colecaoIdsGerenciaRegional.add(idsGerenciaRegional[i]);
-			}
-
-			if (gerenciaRegionalInformada) {
-				algumParametroInformado = true;
-
-				FiltroGerenciaRegional filtroGerenciaRegional = new FiltroGerenciaRegional();
-
-				filtroGerenciaRegional.adicionarParametro(new ParametroSimplesIn(FiltroGerenciaRegional.ID, colecaoIdsGerenciaRegional));
-
-				colecaoGerenciaRegional = this.getFachada().pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
-
-				if (colecaoGerenciaRegional != null && !colecaoGerenciaRegional.isEmpty()) {
-
-					if (colecaoGerenciaRegional.size() == 1) {
-						GerenciaRegional gerenciaRegional = (GerenciaRegional) colecaoGerenciaRegional.iterator().next();
-
-						comando.setGerenciaRegional(gerenciaRegional);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		Collection colecaoImovelPerfil = null;
-		// Imovel Perfil
-		if (form.getIdsImovelPerfil() != null && form.getIdsImovelPerfil().length > 0) {
-
-			String[] idsImovelPerfil = form.getIdsImovelPerfil();
-			Collection<String> colecaoIdsImovelPerfil = new ArrayList();
-			boolean imovelPerfilInformada = true;
-
-			for (int i = 0; i < idsImovelPerfil.length; i++) {
-				if (idsImovelPerfil[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					imovelPerfilInformada = false;
-					break;
-				}
-				colecaoIdsImovelPerfil.add(idsImovelPerfil[i]);
-			}
-
-			if (imovelPerfilInformada) {
-				algumParametroInformado = true;
-
-				FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
-
-				filtroImovelPerfil.adicionarParametro(new ParametroSimplesIn(FiltroImovelPerfil.ID, colecaoIdsImovelPerfil));
-
-				colecaoImovelPerfil = this.getFachada().pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
-
-				if (colecaoImovelPerfil != null && !colecaoImovelPerfil.isEmpty()) {
-
-					if (colecaoImovelPerfil.size() == 1) {
-						ImovelPerfil imovelPerfil = (ImovelPerfil) colecaoImovelPerfil.iterator().next();
-
-						comando.setImovelPerfil(imovelPerfil);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		// Valor Conta inicial
 		if (form.getValorMinimo() != null && !form.getValorMinimo().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setValorMinimoConta(Util.formatarMoedaRealparaBigDecimal(form.getValorMinimo()));
 		}
 
-		// Valor Conta Final
 		if (form.getValorMaximo() != null && !form.getValorMaximo().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setValorMaximoConta(Util.formatarMoedaRealparaBigDecimal(form.getValorMaximo()));
 		}
 
 		if (algumParametroInformado) {
-			MovimentarOrdemServicoEmitirOSHelper movimentarOrdemServicoEmitirOSHelper = new MovimentarOrdemServicoEmitirOSHelper();
-			movimentarOrdemServicoEmitirOSHelper.setComandoEmpresaCobrancaConta(comando);
-			movimentarOrdemServicoEmitirOSHelper.setColecaoUnidadeNegocio(colecaoUnidadeNegocio);
-			movimentarOrdemServicoEmitirOSHelper.setColecaoGerenciaRegional(colecaoGerenciaRegional);
-			movimentarOrdemServicoEmitirOSHelper.setColecaoImovelPerfil(colecaoImovelPerfil);
-			movimentarOrdemServicoEmitirOSHelper.setNumeroOSInicial(numeroOSInicial);
-			movimentarOrdemServicoEmitirOSHelper.setNumeroOSFinal(numeroOSFinal);
+			MovimentarOrdemServicoEmitirOSHelper helper = new MovimentarOrdemServicoEmitirOSHelper();
+			helper.setComandoEmpresaCobrancaConta(comando);
+			helper.setIdsUnidadeNegocio(montarListaIds(form.getIdsUnidadeNegocio()));
+			helper.setIdsGerenciaRegional(montarListaIds(form.getIdsGerenciaRegional()));
+			helper.setIdsImovelPerfil(montarListaIds(form.getIdsImovelPerfil()));
+			helper.setNumeroOSInicial(numeroOSInicial);
+			helper.setNumeroOSFinal(numeroOSFinal);
 
-			return movimentarOrdemServicoEmitirOSHelper;
+			return helper;
 		} else {
 			return null;
 		}
 
 	}
 
+	private List<Integer> montarListaIds(String[] ids) {
+		List<Integer> lista = new ArrayList<Integer>();
+
+		if (ids != null && ids.length > 0) {
+			for (int i = 0; i < ids.length; i++) {
+				Integer id = new Integer(ids[i]);
+
+				if (id == ConstantesSistema.NUMERO_NAO_INFORMADO) {
+					lista = null;
+					break;
+				}
+				lista.add(id);
+			}
+		}
+		return lista;
+	}
 }

@@ -1889,11 +1889,6 @@ public interface IRepositorioFaturamento {
 			int anoMesReferenciaFaturamento, Integer idLocalidade)
 			throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper) throws ErroRepositorioException;
-
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ErroRepositorioException;
-
 	public Boolean verificarGrupoFaturamentoComandado(int anoMesReferenciaFaturamento, int idGrupoFaturamento) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
@@ -2622,10 +2617,6 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	public BigDecimal pesquisarValorCreditosARealizar(Integer idImovel, Integer anoMesCredito) throws ErroRepositorioException;
-
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ErroRepositorioException;
 
 	public void alterarLeituristaMovimentoRoteiroEmpresa(Integer idRota,
 			Integer anoMes, Integer idLeituristaNovo)

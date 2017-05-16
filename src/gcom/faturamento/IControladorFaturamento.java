@@ -19,7 +19,6 @@ import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.autoinfracao.AutosInfracao;
@@ -717,11 +716,6 @@ public interface IControladorFaturamento {
 
 	public Integer obterReferenciaContabilConta(SistemaParametro sistemaParametro);
 
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) throws ControladorException;
-	
 	@SuppressWarnings("rawtypes")
 	public Collection obterDebitoACobrarImovel(Integer imovelID) throws ControladorException;
 
@@ -1083,9 +1077,6 @@ public interface IControladorFaturamento {
 
 	public ContaHistorico pesquisarContaHistoricoTipoBoleto(Integer identificacaoCodigoBarras, BigDecimal valorPagamento) throws ControladorException;
 
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ControladorException;
-
 	public void alterarLeituristaMovimentoRoteiroEmpresa(Integer IdRota, Integer anoMes, Integer idLeituristaNovo) throws ControladorException;
 
 	public void alterarLeituristaMovimentoRoteiroEmpresa(Collection<Integer> idsImovel, Integer anoMes, Integer idLeituristaNovo) throws ControladorException;
@@ -1262,4 +1253,7 @@ public interface IControladorFaturamento {
 	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) throws ControladorException;
 	
 	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException;
 }

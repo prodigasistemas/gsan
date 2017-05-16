@@ -15964,6 +15964,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 	}
+
+	@SuppressWarnings("rawtypes")
+	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(idConta, idsFinanciamentoTipo);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 	
 
 }

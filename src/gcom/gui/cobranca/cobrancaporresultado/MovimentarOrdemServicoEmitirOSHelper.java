@@ -1,24 +1,20 @@
 package gcom.gui.cobranca.cobrancaporresultado;
 
-import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.localidade.GerenciaRegional;
-import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
-public class MovimentarOrdemServicoEmitirOSHelper implements
-		Serializable {
+public class MovimentarOrdemServicoEmitirOSHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta;
-	
-	private Collection<UnidadeNegocio> colecaoUnidadeNegocio;
-	
-	private Collection<GerenciaRegional> colecaoGerenciaRegional;
-	
-	private Collection<ImovelPerfil> colecaoImovelPerfil;
+
+	private List<Integer> idsUnidadeNegocio;
+
+	private List<Integer> idsGerenciaRegional;
+
+	private List<Integer> idsImovelPerfil;
 
 	private String numeroOSInicial;
 
@@ -28,55 +24,47 @@ public class MovimentarOrdemServicoEmitirOSHelper implements
 		super();
 	}
 
-	public MovimentarOrdemServicoEmitirOSHelper(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<UnidadeNegocio> colecaoUnidadeNegocio, Collection<GerenciaRegional> colecaoGerenciaRegional, Collection<ImovelPerfil> colecaoImovelPerfil) {
+	public MovimentarOrdemServicoEmitirOSHelper(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, List<Integer> idsUnidadeNegocio, List<Integer> idsGerenciaRegional,
+			List<Integer> idsImovelPerfil, String numeroOSInicial, String numeroOSFinal) {
 		super();
 		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
-		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
-		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
-		this.colecaoImovelPerfil = colecaoImovelPerfil;
-	}
-
-	public Collection<GerenciaRegional> getColecaoGerenciaRegional() {
-		return colecaoGerenciaRegional;
-	}
-
-	public void setColecaoGerenciaRegional(
-			Collection<GerenciaRegional> colecaoGerenciaRegional) {
-		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
-	}
-
-	public Collection<ImovelPerfil> getColecaoImovelPerfil() {
-		return colecaoImovelPerfil;
-	}
-
-	public void setColecaoImovelPerfil(Collection<ImovelPerfil> colecaoImovelPerfil) {
-		this.colecaoImovelPerfil = colecaoImovelPerfil;
-	}
-
-	public Collection<UnidadeNegocio> getColecaoUnidadeNegocio() {
-		return colecaoUnidadeNegocio;
-	}
-
-	public void setColecaoUnidadeNegocio(
-			Collection<UnidadeNegocio> colecaoUnidadeNegocio) {
-		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
+		this.idsUnidadeNegocio = idsUnidadeNegocio;
+		this.idsGerenciaRegional = idsGerenciaRegional;
+		this.idsImovelPerfil = idsImovelPerfil;
+		this.numeroOSInicial = numeroOSInicial;
+		this.numeroOSFinal = numeroOSFinal;
 	}
 
 	public ComandoEmpresaCobrancaConta getComandoEmpresaCobrancaConta() {
 		return comandoEmpresaCobrancaConta;
 	}
 
-	public void setComandoEmpresaCobrancaConta(
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
+	public void setComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
 		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
 	}
 
-	public String getNumeroOSFinal() {
-		return numeroOSFinal;
+	public List<Integer> getIdsUnidadeNegocio() {
+		return idsUnidadeNegocio;
 	}
 
-	public void setNumeroOSFinal(String numeroOSFinal) {
-		this.numeroOSFinal = numeroOSFinal;
+	public void setIdsUnidadeNegocio(List<Integer> idsUnidadeNegocio) {
+		this.idsUnidadeNegocio = idsUnidadeNegocio;
+	}
+
+	public List<Integer> getIdsGerenciaRegional() {
+		return idsGerenciaRegional;
+	}
+
+	public void setIdsGerenciaRegional(List<Integer> idsGerenciaRegional) {
+		this.idsGerenciaRegional = idsGerenciaRegional;
+	}
+
+	public List<Integer> getIdsImovelPerfil() {
+		return idsImovelPerfil;
+	}
+
+	public void setIdsImovelPerfil(List<Integer> idsImovelPerfil) {
+		this.idsImovelPerfil = idsImovelPerfil;
 	}
 
 	public String getNumeroOSInicial() {
@@ -87,4 +75,11 @@ public class MovimentarOrdemServicoEmitirOSHelper implements
 		this.numeroOSInicial = numeroOSInicial;
 	}
 
+	public String getNumeroOSFinal() {
+		return numeroOSFinal;
+	}
+
+	public void setNumeroOSFinal(String numeroOSFinal) {
+		this.numeroOSFinal = numeroOSFinal;
+	}
 }

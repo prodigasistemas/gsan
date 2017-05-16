@@ -37,7 +37,6 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-import gcom.util.filtro.ParametroSimplesIn;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -54,264 +54,154 @@ import org.apache.struts.action.ActionMapping;
 
 public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 
-	@SuppressWarnings("rawtypes")
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-
+	private boolean algumParametroInformado = false;
+	private InformarContasEmCobrancaActionForm form;
+	private HttpSession sessao;
+	
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = actionMapping.findForward("exibirInformarContasEmCobranca");
 
-		InformarContasEmCobrancaActionForm form = (InformarContasEmCobrancaActionForm) actionForm;
+		this.form = (InformarContasEmCobrancaActionForm) actionForm;
+		this.sessao = getSessao(request);
 
-		if (httpServletRequest.getParameter("menu") != null && !httpServletRequest.getParameter("menu").trim().equals("")) {
+		inicializarCampos(request);
+		pesquisarCamposEnter(request);
+		limparTotalizacao(request);
 
-			form.setQuantidadeDiasVencimento("60");
-			form.setIndicadorCobrancaTelemarketing("1");
-
-			// Coleção de Unidade de Negócio
-			FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
-			filtroUnidadeNegocio.setCampoOrderBy(FiltroUnidadeNegocio.NOME);
-
-			Collection<UnidadeNegocio> colecaoUnidadeNegocio = this.getFachada().pesquisar(filtroUnidadeNegocio, UnidadeNegocio.class.getName());
-
-			this.getSessao(httpServletRequest).setAttribute("colecaoUnidadeNegocio", colecaoUnidadeNegocio);
-
-			// Coleção de Categoria
-			FiltroCategoria filtroCategoria = new FiltroCategoria();
-			filtroCategoria.setCampoOrderBy(FiltroCategoria.DESCRICAO);
-
-			Collection<Categoria> colecaoCategoria = this.getFachada().pesquisar(filtroCategoria, Categoria.class.getName());
-
-			this.getSessao(httpServletRequest).setAttribute("colecaoCategoria", colecaoCategoria);
-
-			// Coleção de Perfil de Imóvel
-			FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
-			filtroImovelPerfil.adicionarParametro(new ParametroSimples(FiltroImovelPerfil.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroImovelPerfil.setCampoOrderBy(FiltroImovelPerfil.DESCRICAO);
-
-			Collection<ImovelPerfil> colecaoImovelPerfil = this.getFachada().pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
-
-			this.getSessao(httpServletRequest).setAttribute("colecaoImovelPerfil", colecaoImovelPerfil);
-
-			// Coleção de Gerencia Regional
-			FiltroGerenciaRegional filtroGerenciaRegional = new FiltroGerenciaRegional();
-			filtroGerenciaRegional.adicionarParametro(new ParametroSimples(FiltroGerenciaRegional.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroGerenciaRegional.setCampoOrderBy(FiltroGerenciaRegional.NOME);
-
-			Collection<GerenciaRegional> colecaoGerenciaRegional = this.getFachada().pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
-
-			this.getSessao(httpServletRequest).setAttribute("colecaoGerenciaRegional", colecaoGerenciaRegional);
-
-			// Coleção de Situação de Ligação de Água
-			FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
-			filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroLigacaoAguaSituacao.setCampoOrderBy(FiltroLigacaoAguaSituacao.DESCRICAO);
-
-			Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao = this.getFachada().pesquisar(filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
-
-			this.getSessao(httpServletRequest).setAttribute("colecaoLigacaoAguaSituacao", colecaoLigacaoAguaSituacao);
-
-		}
-
-		pesquisarCamposEnter(httpServletRequest, form, this.getFachada());
-
-		if (httpServletRequest.getParameter("limparTotalizacao") != null && httpServletRequest.getParameter("limparTotalizacao").equalsIgnoreCase("SIM")) {
-
-			form.setQtdContas("");
-			form.setQtdClientes("");
-			form.setValorTotalDivida("");
-
-			form.setTotalSelecionado(null);
-			this.getSessao(httpServletRequest).setAttribute("habilitaCamposCiclo", false);
-
-			form.setColecaoInformada(null);
-			this.getSessao(httpServletRequest).removeAttribute("colecaoQuantidadeContas");
-			this.getSessao(httpServletRequest).removeAttribute("colecaoFaixa");
-			this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeContas");
-			this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeClientes");
-			this.getSessao(httpServletRequest).removeAttribute("colecaoValorTotalDivida");
-		}
-
-		if (httpServletRequest.getParameter("pesquisarQtdContas") != null && form.getIdEmpresa() != null && !form.getIdEmpresa().equals("")) {
-
-			ComandoEmpresaCobrancaContaHelper helper = this.montarHelper(form);
-
-			Integer idEmpresaContratoCobranca = new Integer(form.getIdEmpresa());
+		if (request.getParameter("pesquisarQtdContas") != null && form.getIdEmpresa() != null && !form.getIdEmpresa().equals("")) {
+			ComandoEmpresaCobrancaContaHelper helper = montarHelper();
 
 			if (helper != null) {
 
 				boolean agruparPorImovel = true;
+				EmpresaContratoCobranca contrato = pesquisarContrato();
 
-				FiltroEmpresaContratoCobranca filtroEmpresaContratoCobranca = new FiltroEmpresaContratoCobranca();
-				filtroEmpresaContratoCobranca.adicionarParametro(new ParametroSimples(FiltroEmpresaContratoCobranca.EMPRESA_ID, idEmpresaContratoCobranca));
-
-				Collection colecaoEmpresaContratoCobranca = Fachada.getInstancia().pesquisar(filtroEmpresaContratoCobranca, EmpresaContratoCobranca.class.getName());
-
-				if (colecaoEmpresaContratoCobranca != null && !colecaoEmpresaContratoCobranca.isEmpty()) {
-					EmpresaContratoCobranca empresaContratoCobranca = (EmpresaContratoCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaContratoCobranca);
-
-					idEmpresaContratoCobranca = empresaContratoCobranca.getId();
-
-					if (empresaContratoCobranca.getPercentualContratoCobranca() != null && empresaContratoCobranca.getPercentualContratoCobranca().compareTo(BigDecimal.ZERO) != 0) {
-						agruparPorImovel = false;
-					}
+				if (contrato.getPercentualContratoCobranca() != null && contrato.getPercentualContratoCobranca().compareTo(BigDecimal.ZERO) != 0) {
+					agruparPorImovel = false;
 				}
 
+				Collection<Object[]> colecaoDados = (Collection<Object[]>) getFachada().pesquisarQuantidadeContas(helper, agruparPorImovel);
+
 				if (agruparPorImovel) {
-					Collection<Object[]> colecaoDados = this.getFachada().pesquisarQuantidadeContasAgrupandoPorImovel(helper);
+					selecionarContasAgrupandoPorImovel(request, helper, colecaoDados, contrato);
+				} else {
+					selecionarContas(request, helper, colecaoDados);
+				}
 
-					if (colecaoDados != null && !colecaoDados.isEmpty()) {
-						Collection<String> colecaoFaixa = new ArrayList();
-						Collection<Integer> colecaoQtdeContas = new ArrayList();
-						Collection<Integer> colecaoQtdeClientes = new ArrayList();
-						Collection<BigDecimal> colecaoValorTotalDivida = new ArrayList();
+				form.setTotalSelecionado("sim");
+				sessao.setAttribute("habilitaCamposCiclo", true);
+			} else {
+				sessao.removeAttribute("habilitaCamposCiclo");
+				throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
+			}
+		}
 
-						FiltroEmpresaCobrancaFaixa filtroEmpresaCobrancaFaixa = new FiltroEmpresaCobrancaFaixa();
-						filtroEmpresaCobrancaFaixa.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaFaixa.EMPRESA_CONTRATO_COBRANCA_ID, idEmpresaContratoCobranca));
-						filtroEmpresaCobrancaFaixa.setCampoOrderBy(FiltroEmpresaCobrancaFaixa.NUMERO_MAXIMO_CONTAS_FAIXA);
+		return retorno;
+	}
 
-						List<EmpresaCobrancaFaixa> colecaoEmpresaCobrancaFaixa = (List<EmpresaCobrancaFaixa>) Fachada.getInstancia().pesquisar(filtroEmpresaCobrancaFaixa,
-								EmpresaCobrancaFaixa.class.getName());
+	private void selecionarContas(HttpServletRequest request, ComandoEmpresaCobrancaContaHelper helper, Collection<Object[]> colecaoDados) {
+		limparColecoes(request);
 
-						if (colecaoEmpresaCobrancaFaixa != null && !colecaoEmpresaCobrancaFaixa.isEmpty()) {
+		Integer qtdContas = 0;
+		Integer qtdClientes = 0;
+		BigDecimal valorTotalDivida = new BigDecimal(0.0);
 
-							EmpresaCobrancaFaixa empresaCobrancaFaixa = (EmpresaCobrancaFaixa) colecaoEmpresaCobrancaFaixa.get(0);
-							Integer numeroMinimoContas = null;
-							Integer numeroMaximoContas = empresaCobrancaFaixa.getNumeroMinimoContasFaixa() - 1;
+		if (colecaoDados != null && !colecaoDados.isEmpty()) {
+			for (Iterator<Object[]> iterator = colecaoDados.iterator(); iterator.hasNext();) {
+				Object[] dados = (Object[]) iterator.next();
 
-							Integer qtdeContas = 0;
-							Integer qtdeClientes = 0;
+				qtdContas += (Integer) dados[0];
+				qtdClientes += (Integer) dados[1];
+				valorTotalDivida = valorTotalDivida.add((BigDecimal) dados[2]);
+			}
 
-							Iterator iteratorColecaoDados = colecaoDados.iterator();
+			form.setQtdContas(qtdContas.toString());
+			form.setQtdClientes(qtdClientes.toString());
+			form.setValorTotalDivida(Util.formatarMoedaReal(valorTotalDivida));
+		} else {
+			limparTotais();
+		}
+	}
 
-							for (int i = 0; i < colecaoEmpresaCobrancaFaixa.size(); i++) {
+	private void limparTotalizacao(HttpServletRequest request) {
+		if (request.getParameter("limparTotalizacao") != null && request.getParameter("limparTotalizacao").equalsIgnoreCase("SIM")) {
+			limparTotais();
 
-								empresaCobrancaFaixa = (EmpresaCobrancaFaixa) colecaoEmpresaCobrancaFaixa.get(i);
+			form.setTotalSelecionado(null);
+			sessao.setAttribute("habilitaCamposCiclo", false);
 
-								numeroMinimoContas = empresaCobrancaFaixa.getNumeroMinimoContasFaixa();
+			limparColecoes(request);
+		}
+	}
 
-								numeroMaximoContas = null;
+	private void limparTotais() {
+		form.setQtdContas("");
+		form.setQtdClientes("");
+		form.setValorTotalDivida("");
+	}
 
-								if (i < (colecaoEmpresaCobrancaFaixa.size() - 1)) {
-									numeroMaximoContas = ((EmpresaCobrancaFaixa) colecaoEmpresaCobrancaFaixa.get(i + 1)).getNumeroMinimoContasFaixa() - 1;
-								}
+	@SuppressWarnings("unchecked")
+	private EmpresaContratoCobranca pesquisarContrato() {
+		FiltroEmpresaContratoCobranca filtro = new FiltroEmpresaContratoCobranca();
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaContratoCobranca.EMPRESA_ID, form.getIdEmpresa()));
+		Collection<EmpresaContratoCobranca> colecao = Fachada.getInstancia().pesquisar(filtro, EmpresaContratoCobranca.class.getName());
 
-								qtdeContas = 0;
+		if (colecao != null && !colecao.isEmpty()) {
+			return (EmpresaContratoCobranca) Util.retonarObjetoDeColecao(colecao);
+		} else {
+			return null;
+		}
+	}
 
-								qtdeClientes = 0;
+	private void selecionarContasAgrupandoPorImovel(HttpServletRequest request, ComandoEmpresaCobrancaContaHelper helper, Collection<Object[]> colecaoDados, EmpresaContratoCobranca contrato) {
+		if (colecaoDados != null && !colecaoDados.isEmpty()) {
+			Collection<String> colecaoFaixa = new ArrayList<String>();
+			Collection<Integer> colecaoQtdeContas = new ArrayList<Integer>();
+			Collection<Integer> colecaoQtdeClientes = new ArrayList<Integer>();
+			Collection<BigDecimal> colecaoValorTotalDivida = new ArrayList<BigDecimal>();
 
-								BigDecimal valorTotalDivida = new BigDecimal(0.0);
+			List<EmpresaCobrancaFaixa> faixas = pesquisarFaixas(contrato.getId());
 
-								iteratorColecaoDados = colecaoDados.iterator();
+			if (faixas != null && !faixas.isEmpty()) {
 
-								while (iteratorColecaoDados.hasNext()) {
-									Object[] dados = (Object[]) iteratorColecaoDados.next();
+				EmpresaCobrancaFaixa faixa = (EmpresaCobrancaFaixa) faixas.get(0);
+				Integer numeroMinimoContas = null;
+				Integer numeroMaximoContas = faixa.getNumeroMinimoContasFaixa() - 1;
 
-									if (dados[0] != null) {
-										Integer qnt = (Integer) dados[0];
+				Integer qtdeContas = 0;
+				Integer qtdeClientes = 0;
 
-										if (qnt >= numeroMinimoContas && (numeroMaximoContas == null || qnt <= numeroMaximoContas)) {
+				Iterator<Object[]> iterator = colecaoDados.iterator();
 
-											qtdeContas += qnt;
+				for (int i = 0; i < faixas.size(); i++) {
 
-											if (dados[1] != null) {
-												qtdeClientes += (Integer) dados[1];
-											}
+					faixa = (EmpresaCobrancaFaixa) faixas.get(i);
 
-											if (dados[2] != null) {
-												valorTotalDivida = valorTotalDivida.add((BigDecimal) dados[2]);
-											}
-										}
-									}
+					numeroMinimoContas = faixa.getNumeroMinimoContasFaixa();
 
-								}
+					numeroMaximoContas = null;
 
-								if (i < (colecaoEmpresaCobrancaFaixa.size() - 1)) {
-									colecaoFaixa.add(numeroMinimoContas + " a " + numeroMaximoContas);
-								} else {
-									colecaoFaixa.add("Mais de " + numeroMinimoContas);
-								}
-								colecaoQtdeContas.add(qtdeContas);
-								colecaoQtdeClientes.add(qtdeClientes);
-								colecaoValorTotalDivida.add(valorTotalDivida);
-
-							}
-
-							if (!colecaoQtdeContas.isEmpty() && !colecaoQtdeClientes.isEmpty() && !colecaoValorTotalDivida.isEmpty()) {
-
-								form.setColecaoInformada("sim");
-								this.getSessao(httpServletRequest).setAttribute("colecaoQuantidadeContas", true);
-								this.getSessao(httpServletRequest).setAttribute("tamanho", colecaoFaixa.size());
-								this.getSessao(httpServletRequest).setAttribute("colecaoFaixa", colecaoFaixa);
-								this.getSessao(httpServletRequest).setAttribute("colecaoQtdeContas", colecaoQtdeContas);
-								this.getSessao(httpServletRequest).setAttribute("colecaoQtdeClientes", colecaoQtdeClientes);
-								this.getSessao(httpServletRequest).setAttribute("colecaoValorTotalDivida", colecaoValorTotalDivida);
-
-							} else {
-
-								form.setQtdContas("0");
-								form.setQtdClientes("0");
-								form.setValorTotalDivida(Util.formatarMoedaReal(BigDecimal.ZERO));
-
-								form.setColecaoInformada(null);
-								this.getSessao(httpServletRequest).removeAttribute("colecaoQuantidadeContas");
-								this.getSessao(httpServletRequest).removeAttribute("colecaoFaixa");
-								this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeContas");
-								this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeClientes");
-								this.getSessao(httpServletRequest).removeAttribute("colecaoValorTotalDivida");
-
-							}
-
-						} else {
-							form.setQtdContas("0");
-							form.setQtdClientes("0");
-							form.setValorTotalDivida(Util.formatarMoedaReal(BigDecimal.ZERO));
-
-							form.setColecaoInformada(null);
-							this.getSessao(httpServletRequest).removeAttribute("colecaoQuantidadeContas");
-							this.getSessao(httpServletRequest).removeAttribute("colecaoFaixa");
-							this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeContas");
-							this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeClientes");
-							this.getSessao(httpServletRequest).removeAttribute("colecaoValorTotalDivida");
-
-						}
-
-					} else {
-						form.setQtdContas("0");
-						form.setQtdClientes("0");
-						form.setValorTotalDivida(Util.formatarMoedaReal(BigDecimal.ZERO));
-
-						form.setColecaoInformada(null);
-						this.getSessao(httpServletRequest).removeAttribute("colecaoQuantidadeContas");
-						this.getSessao(httpServletRequest).removeAttribute("colecaoFaixa");
-						this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeContas");
-						this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeClientes");
-						this.getSessao(httpServletRequest).removeAttribute("colecaoValorTotalDivida");
-
+					if (i < (faixas.size() - 1)) {
+						numeroMaximoContas = ((EmpresaCobrancaFaixa) faixas.get(i + 1)).getNumeroMinimoContasFaixa() - 1;
 					}
 
-				} else {
-					form.setColecaoInformada(null);
-					this.getSessao(httpServletRequest).removeAttribute("colecaoQuantidadeContas");
-					this.getSessao(httpServletRequest).removeAttribute("colecaoFaixa");
-					this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeContas");
-					this.getSessao(httpServletRequest).removeAttribute("colecaoQtdeClientes");
-					this.getSessao(httpServletRequest).removeAttribute("colecaoValorTotalDivida");
-					
-					Collection colecaoDados = (Collection) getFachada().pesquisarQuantidadeContas(helper);
+					qtdeContas = 0;
 
-					if (colecaoDados != null && !colecaoDados.isEmpty()) {
-						Iterator iterator = colecaoDados.iterator();
+					qtdeClientes = 0;
 
-						Integer qtdeContas = 0;
-						Integer qtdeClientes = 0;
-						BigDecimal valorTotalDivida = new BigDecimal(0.0);
+					BigDecimal valorTotalDivida = new BigDecimal(0.0);
 
-						while (iterator.hasNext()) {
-							Object[] dados = (Object[]) iterator.next();
+					iterator = colecaoDados.iterator();
 
-							if (dados != null) {
-								if (dados[0] != null) {
-									qtdeContas += (Integer) dados[0];
-								}
+					while (iterator.hasNext()) {
+						Object[] dados = (Object[]) iterator.next();
+
+						if (dados[0] != null) {
+							Integer quantidade = (Integer) dados[0];
+
+							if (quantidade >= numeroMinimoContas && (numeroMaximoContas == null || quantidade <= numeroMaximoContas)) {
+
+								qtdeContas += quantidade;
 
 								if (dados[1] != null) {
 									qtdeClientes += (Integer) dados[1];
@@ -322,293 +212,316 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 								}
 							}
 						}
-						
-						form.setQtdContas(qtdeContas.toString());
-						form.setQtdClientes(qtdeClientes.toString());
-						form.setValorTotalDivida(Util.formatarMoedaReal(valorTotalDivida));
-					} else {
-						form.setQtdContas("0");
-						form.setQtdClientes("0");
-						form.setValorTotalDivida(Util.formatarMoedaReal(BigDecimal.ZERO));
 					}
+
+					if (i < (faixas.size() - 1)) {
+						colecaoFaixa.add(numeroMinimoContas + " a " + numeroMaximoContas);
+					} else {
+						colecaoFaixa.add("Mais de " + numeroMinimoContas);
+					}
+					colecaoQtdeContas.add(qtdeContas);
+					colecaoQtdeClientes.add(qtdeClientes);
+					colecaoValorTotalDivida.add(valorTotalDivida);
 				}
-				form.setTotalSelecionado("sim");
-				this.getSessao(httpServletRequest).setAttribute("habilitaCamposCiclo", true);
+
+				if (!colecaoQtdeContas.isEmpty() && !colecaoQtdeClientes.isEmpty() && !colecaoValorTotalDivida.isEmpty()) {
+					form.setColecaoInformada("sim");
+					sessao.setAttribute("colecaoQuantidadeContas", true);
+					sessao.setAttribute("tamanho", colecaoFaixa.size());
+					sessao.setAttribute("colecaoFaixa", colecaoFaixa);
+					sessao.setAttribute("colecaoQtdeContas", colecaoQtdeContas);
+					sessao.setAttribute("colecaoQtdeClientes", colecaoQtdeClientes);
+					sessao.setAttribute("colecaoValorTotalDivida", colecaoValorTotalDivida);
+				} else {
+					limparCampos(request);
+				}
+
 			} else {
-				this.getSessao(httpServletRequest).removeAttribute("habilitaCamposCiclo");
-				throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
+				limparCampos(request);
 			}
 
+		} else {
+			limparCampos(request);
 		}
-
-		return retorno;
-
 	}
 
 	@SuppressWarnings("unchecked")
-	private void pesquisarCamposEnter(HttpServletRequest httpServletRequest, InformarContasEmCobrancaActionForm informarContasEmCobrancaActionForm, Fachada fachada) {
-		String idEmpresa = informarContasEmCobrancaActionForm.getIdEmpresa();
+	private List<EmpresaCobrancaFaixa> pesquisarFaixas(Integer idContrato) {
+		FiltroEmpresaCobrancaFaixa filtro = new FiltroEmpresaCobrancaFaixa();
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaFaixa.EMPRESA_CONTRATO_COBRANCA_ID, idContrato));
+		filtro.setCampoOrderBy(FiltroEmpresaCobrancaFaixa.NUMERO_MAXIMO_CONTAS_FAIXA);
 
-		// Pesquisa a empresa
+		return (List<EmpresaCobrancaFaixa>) Fachada.getInstancia().pesquisar(filtro, EmpresaCobrancaFaixa.class.getName());
+	}
+
+	private void limparColecoes(HttpServletRequest request) {
+		form.setColecaoInformada(null);
+		sessao.removeAttribute("colecaoQuantidadeContas");
+		sessao.removeAttribute("colecaoFaixa");
+		sessao.removeAttribute("colecaoQtdeContas");
+		sessao.removeAttribute("colecaoQtdeClientes");
+		sessao.removeAttribute("colecaoValorTotalDivida");
+	}
+
+	private void limparCampos(HttpServletRequest request) {
+		form.setQtdContas("0");
+		form.setQtdClientes("0");
+		form.setValorTotalDivida(Util.formatarMoedaReal(BigDecimal.ZERO));
+
+		limparColecoes(request);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void inicializarCampos(HttpServletRequest request) {
+		if (request.getParameter("menu") != null && !request.getParameter("menu").trim().equals("")) {
+			form.setQuantidadeDiasVencimento("60");
+			form.setIndicadorCobrancaTelemarketing("1");
+
+			FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
+			filtroUnidadeNegocio.setCampoOrderBy(FiltroUnidadeNegocio.NOME);
+			Collection<UnidadeNegocio> colecaoUnidadeNegocio = this.getFachada().pesquisar(filtroUnidadeNegocio, UnidadeNegocio.class.getName());
+			sessao.setAttribute("colecaoUnidadeNegocio", colecaoUnidadeNegocio);
+
+			FiltroCategoria filtroCategoria = new FiltroCategoria();
+			filtroCategoria.setCampoOrderBy(FiltroCategoria.DESCRICAO);
+			Collection<Categoria> colecaoCategoria = this.getFachada().pesquisar(filtroCategoria, Categoria.class.getName());
+			sessao.setAttribute("colecaoCategoria", colecaoCategoria);
+
+			FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
+			filtroImovelPerfil.adicionarParametro(new ParametroSimples(FiltroImovelPerfil.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroImovelPerfil.setCampoOrderBy(FiltroImovelPerfil.DESCRICAO);
+			Collection<ImovelPerfil> colecaoImovelPerfil = this.getFachada().pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
+			sessao.setAttribute("colecaoImovelPerfil", colecaoImovelPerfil);
+
+			FiltroGerenciaRegional filtroGerenciaRegional = new FiltroGerenciaRegional();
+			filtroGerenciaRegional.adicionarParametro(new ParametroSimples(FiltroGerenciaRegional.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroGerenciaRegional.setCampoOrderBy(FiltroGerenciaRegional.NOME);
+			Collection<GerenciaRegional> colecaoGerenciaRegional = this.getFachada().pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
+			sessao.setAttribute("colecaoGerenciaRegional", colecaoGerenciaRegional);
+
+			FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
+			filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroLigacaoAguaSituacao.setCampoOrderBy(FiltroLigacaoAguaSituacao.DESCRICAO);
+			Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao = this.getFachada().pesquisar(filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
+			sessao.setAttribute("colecaoLigacaoAguaSituacao", colecaoLigacaoAguaSituacao);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void pesquisarCamposEnter(HttpServletRequest request) {
+		String idEmpresa = form.getIdEmpresa();
 		if (idEmpresa != null && !idEmpresa.trim().equals("")) {
+			FiltroEmpresa filtro = new FiltroEmpresa();
+			filtro.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, idEmpresa));
 
-			FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
-			filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, idEmpresa));
+			Collection<Empresa> colecao = getFachada().pesquisar(filtro, Empresa.class.getName());
 
-			Collection colecaoEmpresa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
-
-			if (colecaoEmpresa != null && !colecaoEmpresa.isEmpty()) {
-				Empresa empresa = (Empresa) Util.retonarObjetoDeColecao(colecaoEmpresa);
-				informarContasEmCobrancaActionForm.setIdEmpresa(empresa.getId().toString());
-				informarContasEmCobrancaActionForm.setNomeEmpresa(empresa.getDescricao());
-				httpServletRequest.setAttribute("nomeCampo", "idEmpresa");
+			if (colecao != null && !colecao.isEmpty()) {
+				Empresa empresa = (Empresa) Util.retonarObjetoDeColecao(colecao);
+				form.setIdEmpresa(empresa.getId().toString());
+				form.setNomeEmpresa(empresa.getDescricao());
+				request.setAttribute("nomeCampo", "idEmpresa");
 			} else {
-				informarContasEmCobrancaActionForm.setIdEmpresa("");
-				informarContasEmCobrancaActionForm.setNomeEmpresa("EMPRESA INEXISTENTE");
-
-				httpServletRequest.setAttribute("empresaInexistente", true);
-				httpServletRequest.setAttribute("nomeCampo", "idEmpresa");
+				form.setIdEmpresa("");
+				form.setNomeEmpresa("EMPRESA INEXISTENTE");
+				request.setAttribute("empresaInexistente", true);
+				request.setAttribute("nomeCampo", "idEmpresa");
 			}
-
 		} else {
-			informarContasEmCobrancaActionForm.setNomeEmpresa("");
+			form.setNomeEmpresa("");
 		}
 
-		String idImovel = informarContasEmCobrancaActionForm.getIdImovel();
-
-		// Pesquisa o imóvel
+		String idImovel = form.getIdImovel();
 		if (idImovel != null && !idImovel.trim().equals("")) {
-
-			Imovel imovel = fachada.pesquisarImovelDigitado(new Integer(idImovel));
+			Imovel imovel = getFachada().pesquisarImovelDigitado(new Integer(idImovel));
 
 			if (imovel != null) {
-				informarContasEmCobrancaActionForm.setIdImovel(imovel.getId().toString());
-				informarContasEmCobrancaActionForm.setInscricaoImovel(imovel.getInscricaoFormatada());
-				httpServletRequest.setAttribute("nomeCampo", "referenciaInicial");
+				form.setIdImovel(imovel.getId().toString());
+				form.setInscricaoImovel(imovel.getInscricaoFormatada());
+				request.setAttribute("nomeCampo", "referenciaInicial");
 			} else {
-				informarContasEmCobrancaActionForm.setIdImovel("");
-				informarContasEmCobrancaActionForm.setInscricaoImovel("IMÓVEL INEXISTENTE");
-
-				httpServletRequest.setAttribute("imovelInexistente", true);
-				httpServletRequest.setAttribute("nomeCampo", "idImovel");
+				form.setIdImovel("");
+				form.setInscricaoImovel("IMÓVEL INEXISTENTE");
+				request.setAttribute("imovelInexistente", true);
+				request.setAttribute("nomeCampo", "idImovel");
 			}
-
 		} else {
-			informarContasEmCobrancaActionForm.setInscricaoImovel("");
+			form.setInscricaoImovel("");
 		}
 
-		String idCliente = informarContasEmCobrancaActionForm.getIdCliente();
-
-		// Pesquisa o cliente
+		String idCliente = form.getIdCliente();
 		if (idCliente != null && !idCliente.trim().equals("")) {
-
-			Cliente cliente = fachada.pesquisarClienteDigitado(new Integer(idCliente));
+			Cliente cliente = getFachada().pesquisarClienteDigitado(new Integer(idCliente));
 
 			if (cliente != null) {
-				informarContasEmCobrancaActionForm.setIdCliente(cliente.getId().toString());
-				informarContasEmCobrancaActionForm.setNomeCliente(cliente.getNome());
-				httpServletRequest.setAttribute("nomeCampo", "referenciaInicial");
+				form.setIdCliente(cliente.getId().toString());
+				form.setNomeCliente(cliente.getNome());
+				request.setAttribute("nomeCampo", "referenciaInicial");
 			} else {
-				informarContasEmCobrancaActionForm.setIdCliente("");
-				informarContasEmCobrancaActionForm.setNomeCliente("CLIENTE INEXISTENTE");
-
-				httpServletRequest.setAttribute("clienteInexistente", true);
-				httpServletRequest.setAttribute("nomeCampo", "idCliente");
+				form.setIdCliente("");
+				form.setNomeCliente("CLIENTE INEXISTENTE");
+				request.setAttribute("clienteInexistente", true);
+				request.setAttribute("nomeCampo", "idCliente");
 			}
-
 		} else {
-			informarContasEmCobrancaActionForm.setNomeCliente("");
+			form.setNomeCliente("");
 		}
 
-		String idServicoTipo = informarContasEmCobrancaActionForm.getIdServicoTipo();
-
-		// Pesquisa o Tipo de Serviço
+		String idServicoTipo = form.getIdServicoTipo();
 		if (idServicoTipo != null && !idServicoTipo.trim().equals("")) {
+			FiltroServicoTipo filtro = new FiltroServicoTipo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroServicoTipo.ID, idServicoTipo));
 
-			FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
-			filtroServicoTipo.adicionarParametro(new ParametroSimples(FiltroServicoTipo.ID, idServicoTipo));
+			Collection<ServicoTipo> colecao = getFachada().pesquisar(filtro, ServicoTipo.class.getName());
 
-			Collection colecaoServicoTipo = fachada.pesquisar(filtroServicoTipo, ServicoTipo.class.getName());
-
-			if (colecaoServicoTipo != null && !colecaoServicoTipo.isEmpty()) {
-				ServicoTipo servicoTipo = (ServicoTipo) Util.retonarObjetoDeColecao(colecaoServicoTipo);
-
-				informarContasEmCobrancaActionForm.setIdServicoTipo(servicoTipo.getId().toString());
-				informarContasEmCobrancaActionForm.setDescricaoServicoTipo(servicoTipo.getDescricao());
-				httpServletRequest.setAttribute("nomeCampo", "idLocalidadeOrigem");
-				httpServletRequest.setAttribute("idServicoTipoEncontrada", true);
+			if (colecao != null && !colecao.isEmpty()) {
+				ServicoTipo servicoTipo = (ServicoTipo) Util.retonarObjetoDeColecao(colecao);
+				form.setIdServicoTipo(servicoTipo.getId().toString());
+				form.setDescricaoServicoTipo(servicoTipo.getDescricao());
+				request.setAttribute("nomeCampo", "idLocalidadeOrigem");
+				request.setAttribute("idServicoTipoEncontrada", true);
 			} else {
-				informarContasEmCobrancaActionForm.setIdServicoTipo("");
-				informarContasEmCobrancaActionForm.setDescricaoServicoTipo("TIPO DE SERVICO INEXISTENTE");
-
-				httpServletRequest.removeAttribute("idServicoTipoEncontrada");
-				httpServletRequest.setAttribute("nomeCampo", "idServicoTipo");
+				form.setIdServicoTipo("");
+				form.setDescricaoServicoTipo("TIPO DE SERVICO INEXISTENTE");
+				request.removeAttribute("idServicoTipoEncontrada");
+				request.setAttribute("nomeCampo", "idServicoTipo");
 			}
-
 		} else {
-			informarContasEmCobrancaActionForm.setNomeCliente("");
+			form.setNomeCliente("");
 		}
 
-		String idLocalidadeOrigem = informarContasEmCobrancaActionForm.getIdLocalidadeOrigem();
-
-		// Pesquisa a localidade inicial
+		String idLocalidadeOrigem = form.getIdLocalidadeOrigem();
 		if (idLocalidadeOrigem != null
 				&& !idLocalidadeOrigem.trim().equals("")
-				&& httpServletRequest.getParameter("tipoPesquisa") != null
-				&& (httpServletRequest.getParameter("tipoPesquisa").equals("localidadeOrigem") || httpServletRequest.getParameter("tipoPesquisa").equals("setorComercialOrigem") || httpServletRequest
-						.getParameter("tipoPesquisa").equals("quadraInicial"))) {
+				&& request.getParameter("tipoPesquisa") != null
+				&& (request.getParameter("tipoPesquisa").equals("localidadeOrigem") 
+						|| request.getParameter("tipoPesquisa").equals("setorComercialOrigem") 
+						|| request.getParameter("tipoPesquisa").equals("quadraInicial"))) {
 
 			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidadeOrigem));
 
-			Collection<Localidade> colecaoLocalidade = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
+			Collection<Localidade> colecaoLocalidade = getFachada().pesquisar(filtroLocalidade, Localidade.class.getName());
 
 			if (colecaoLocalidade != null && !colecaoLocalidade.isEmpty()) {
 				Localidade localidade = (Localidade) Util.retonarObjetoDeColecao(colecaoLocalidade);
 
-				informarContasEmCobrancaActionForm.setIdLocalidadeOrigem(localidade.getId().toString());
-				informarContasEmCobrancaActionForm.setNomeLocalidadeOrigem(localidade.getDescricao());
-				httpServletRequest.setAttribute("nomeCampo", "codigoSetorComercialOrigem");
+				form.setIdLocalidadeOrigem(localidade.getId().toString());
+				form.setNomeLocalidadeOrigem(localidade.getDescricao());
+				request.setAttribute("nomeCampo", "codigoSetorComercialOrigem");
 
-				if (httpServletRequest.getParameter("tipoPesquisa").equals("localidadeOrigem")) {
-
-					informarContasEmCobrancaActionForm.setIdLocalidadeDestino(localidade.getId().toString());
-
-					informarContasEmCobrancaActionForm.setNomeLocalidadeDestino(localidade.getDescricao());
-					httpServletRequest.setAttribute("nomeCampo", "codigoSetorComercialDestino");
-
+				if (request.getParameter("tipoPesquisa").equals("localidadeOrigem")) {
+					form.setIdLocalidadeDestino(localidade.getId().toString());
+					form.setNomeLocalidadeDestino(localidade.getDescricao());
+					request.setAttribute("nomeCampo", "codigoSetorComercialDestino");
 				}
 
-				String codigoSetorComercialOrigem = informarContasEmCobrancaActionForm.getCodigoSetorComercialOrigem();
-
-				// Pesquisa o setor comercial inicial
+				String codigoSetorComercialOrigem = form.getCodigoSetorComercialOrigem();
 				if (codigoSetorComercialOrigem != null && !codigoSetorComercialOrigem.trim().equals("")) {
+					FiltroSetorComercial filtroSetor = new FiltroSetorComercial();
+					filtroSetor.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidade.getId()));
+					filtroSetor.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigoSetorComercialOrigem));
 
-					FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-					filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidade.getId()));
-					filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigoSetorComercialOrigem));
+					Collection<SetorComercial> colecaoSetor = getFachada().pesquisar(filtroSetor, SetorComercial.class.getName());
 
-					Collection<SetorComercial> colecaoSetorComercial = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
+					if (colecaoSetor != null && !colecaoSetor.isEmpty()) {
+						SetorComercial setorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoSetor);
 
-					if (colecaoSetorComercial != null && !colecaoSetorComercial.isEmpty()) {
-						SetorComercial setorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoSetorComercial);
+						form.setIdSetorComercialOrigem("" + setorComercial.getId());
+						form.setCodigoSetorComercialOrigem("" + setorComercial.getCodigo());
+						form.setDescricaoSetorComercialOrigem(setorComercial.getDescricao());
+						request.setAttribute("nomeCampo", "idLocalidadeDestino");
 
-						informarContasEmCobrancaActionForm.setIdSetorComercialOrigem("" + setorComercial.getId());
-						informarContasEmCobrancaActionForm.setCodigoSetorComercialOrigem("" + setorComercial.getCodigo());
-						informarContasEmCobrancaActionForm.setDescricaoSetorComercialOrigem(setorComercial.getDescricao());
-						httpServletRequest.setAttribute("nomeCampo", "idLocalidadeDestino");
-
-						if (httpServletRequest.getParameter("tipoPesquisa").equals("setorComercialOrigem")) {
-
-							informarContasEmCobrancaActionForm.setIdSetorComercialDestino("" + setorComercial.getId());
-							informarContasEmCobrancaActionForm.setCodigoSetorComercialDestino("" + setorComercial.getCodigo());
-							informarContasEmCobrancaActionForm.setDescricaoSetorComercialDestino(setorComercial.getDescricao());
-							httpServletRequest.setAttribute("nomeCampo", "idLocalidadeDestino");
-
+						if (request.getParameter("tipoPesquisa").equals("setorComercialOrigem")) {
+							form.setIdSetorComercialDestino("" + setorComercial.getId());
+							form.setCodigoSetorComercialDestino("" + setorComercial.getCodigo());
+							form.setDescricaoSetorComercialDestino(setorComercial.getDescricao());
+							request.setAttribute("nomeCampo", "idLocalidadeDestino");
 						}
 
-						String codigoQuadraInicial = informarContasEmCobrancaActionForm.getCodigoQuadraInicial();
-
-						// Pesquisa a quadra inicial
+						String codigoQuadraInicial = form.getCodigoQuadraInicial();
 						if (codigoQuadraInicial != null && !codigoQuadraInicial.trim().equals("")) {
-
 							FiltroQuadra filtroQuadra = new FiltroQuadra();
 							filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, setorComercial.getId()));
 							filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, codigoQuadraInicial));
 
-							Collection<Quadra> colecaoQuadra = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
+							Collection<Quadra> colecaoQuadra = getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
 							if (colecaoQuadra != null && !colecaoQuadra.isEmpty()) {
 								Quadra quadra = (Quadra) Util.retonarObjetoDeColecao(colecaoQuadra);
 
-								informarContasEmCobrancaActionForm.setCodigoQuadraInicial("" + quadra.getNumeroQuadra());
-								informarContasEmCobrancaActionForm.setDescricaoQuadraInicial(quadra.getDescricao());
-								httpServletRequest.setAttribute("nomeCampo", "codigoQuadraInicial");
+								form.setCodigoQuadraInicial("" + quadra.getNumeroQuadra());
+								form.setDescricaoQuadraInicial(quadra.getDescricao());
+								request.setAttribute("nomeCampo", "codigoQuadraInicial");
 
-								if (httpServletRequest.getParameter("tipoPesquisa").equals("quadraInicial")) {
-									informarContasEmCobrancaActionForm.setCodigoQuadraFinal("" + quadra.getNumeroQuadra());
-									informarContasEmCobrancaActionForm.setDescricaoQuadraFinal(quadra.getDescricao());
-									httpServletRequest.setAttribute("nomeCampo", "codigoQuadraInicial");
+								if (request.getParameter("tipoPesquisa").equals("quadraInicial")) {
+									form.setCodigoQuadraFinal("" + quadra.getNumeroQuadra());
+									form.setDescricaoQuadraFinal(quadra.getDescricao());
+									request.setAttribute("nomeCampo", "codigoQuadraInicial");
 								}
-
 							} else {
-								informarContasEmCobrancaActionForm.setCodigoQuadraInicial("");
-								informarContasEmCobrancaActionForm.setDescricaoQuadraInicial("QUADRA INEXISTENTE");
-
-								httpServletRequest.setAttribute("quadraInicialInexistente", true);
-								httpServletRequest.setAttribute("nomeCampo", "codigoQuadraInicial");
+								form.setCodigoQuadraInicial("");
+								form.setDescricaoQuadraInicial("QUADRA INEXISTENTE");
+								request.setAttribute("quadraInicialInexistente", true);
+								request.setAttribute("nomeCampo", "codigoQuadraInicial");
 							}
-
 						}
-
 					} else {
-						informarContasEmCobrancaActionForm.setIdSetorComercialOrigem("");
-						informarContasEmCobrancaActionForm.setCodigoSetorComercialOrigem("");
-						informarContasEmCobrancaActionForm.setDescricaoSetorComercialOrigem("SETOR COMERCIAL INEXISTENTE");
-
-						httpServletRequest.setAttribute("setorComercialOrigemInexistente", true);
-						httpServletRequest.setAttribute("nomeCampo", "codigoSetorComercialOrigem");
+						form.setIdSetorComercialOrigem("");
+						form.setCodigoSetorComercialOrigem("");
+						form.setDescricaoSetorComercialOrigem("SETOR COMERCIAL INEXISTENTE");
+						request.setAttribute("setorComercialOrigemInexistente", true);
+						request.setAttribute("nomeCampo", "codigoSetorComercialOrigem");
 					}
-
 				}
-
 			} else {
-				informarContasEmCobrancaActionForm.setIdLocalidadeOrigem("");
-				informarContasEmCobrancaActionForm.setNomeLocalidadeOrigem("LOCALIDADE INEXISTENTE");
-
-				httpServletRequest.setAttribute("localidadeOrigemInexistente", true);
-				httpServletRequest.setAttribute("nomeCampo", "idLocalidadeOrigem");
+				form.setIdLocalidadeOrigem("");
+				form.setNomeLocalidadeOrigem("LOCALIDADE INEXISTENTE");
+				request.setAttribute("localidadeOrigemInexistente", true);
+				request.setAttribute("nomeCampo", "idLocalidadeOrigem");
 			}
-
 		}
 
-		String idLocalidadeDestino = informarContasEmCobrancaActionForm.getIdLocalidadeDestino();
-
-		// Pesquisa a localidade final
+		String idLocalidadeDestino = form.getIdLocalidadeDestino();
 		if (idLocalidadeDestino != null
 				&& !idLocalidadeDestino.trim().equals("")
-				&& httpServletRequest.getParameter("tipoPesquisa") != null
-				&& (httpServletRequest.getParameter("tipoPesquisa").equals("localidadeDestino") || httpServletRequest.getParameter("tipoPesquisa").equals("setorComercialDestino") || httpServletRequest
-						.getParameter("tipoPesquisa").equals("quadraFinal"))) {
+				&& request.getParameter("tipoPesquisa") != null
+				&& (request.getParameter("tipoPesquisa").equals("localidadeDestino") 
+						|| request.getParameter("tipoPesquisa").equals("setorComercialDestino") 
+						|| request.getParameter("tipoPesquisa").equals("quadraFinal"))) {
 
 			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidadeDestino));
 
-			Collection<Localidade> colecaoLocalidade = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
+			Collection<Localidade> colecaoLocalidade = getFachada().pesquisar(filtroLocalidade, Localidade.class.getName());
 
 			if (colecaoLocalidade != null && !colecaoLocalidade.isEmpty()) {
 				Localidade localidade = (Localidade) Util.retonarObjetoDeColecao(colecaoLocalidade);
 
-				informarContasEmCobrancaActionForm.setIdLocalidadeDestino(localidade.getId().toString());
-				informarContasEmCobrancaActionForm.setNomeLocalidadeDestino(localidade.getDescricao());
-				httpServletRequest.setAttribute("nomeCampo", "codigoSetorComercialDestino");
+				form.setIdLocalidadeDestino(localidade.getId().toString());
+				form.setNomeLocalidadeDestino(localidade.getDescricao());
+				request.setAttribute("nomeCampo", "codigoSetorComercialDestino");
 
-				String codigoSetorComercialDestino = informarContasEmCobrancaActionForm.getCodigoSetorComercialDestino();
-
-				// Pesquisa o setor comercial inicial
+				String codigoSetorComercialDestino = form.getCodigoSetorComercialDestino();
 				if (codigoSetorComercialDestino != null && !codigoSetorComercialDestino.trim().equals("")) {
+					FiltroSetorComercial filtroSetor = new FiltroSetorComercial();
+					filtroSetor.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidade.getId()));
+					filtroSetor.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigoSetorComercialDestino));
 
-					FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-					filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidade.getId()));
-					filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigoSetorComercialDestino));
+					Collection<SetorComercial> colecaoSetor = getFachada().pesquisar(filtroSetor, SetorComercial.class.getName());
 
-					Collection<SetorComercial> colecaoSetorComercial = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
+					if (colecaoSetor != null && !colecaoSetor.isEmpty()) {
+						SetorComercial setorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoSetor);
 
-					if (colecaoSetorComercial != null && !colecaoSetorComercial.isEmpty()) {
-						SetorComercial setorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoSetorComercial);
+						form.setIdSetorComercialDestino("" + setorComercial.getId());
+						form.setCodigoSetorComercialDestino("" + setorComercial.getCodigo());
+						form.setDescricaoSetorComercialDestino(setorComercial.getDescricao());
+						request.setAttribute("nomeCampo", "referenciaInicial");
 
-						informarContasEmCobrancaActionForm.setIdSetorComercialDestino("" + setorComercial.getId());
-						informarContasEmCobrancaActionForm.setCodigoSetorComercialDestino("" + setorComercial.getCodigo());
-						informarContasEmCobrancaActionForm.setDescricaoSetorComercialDestino(setorComercial.getDescricao());
-						httpServletRequest.setAttribute("nomeCampo", "referenciaInicial");
-
-						String codigoQuadraFinal = informarContasEmCobrancaActionForm.getCodigoQuadraFinal();
-
-						// Pesquisa a quadra final
+						String codigoQuadraFinal = form.getCodigoQuadraFinal();
 						if (codigoQuadraFinal != null && !codigoQuadraFinal.trim().equals("")) {
-
-							if (informarContasEmCobrancaActionForm.getCodigoQuadraInicial() != null && !informarContasEmCobrancaActionForm.getCodigoQuadraInicial().trim().equals("")) {
+							if (form.getCodigoQuadraInicial() != null && !form.getCodigoQuadraInicial().trim().equals("")) {
 								Integer codQuadraFinal = new Integer(codigoQuadraFinal);
-								Integer codQuadraInicial = new Integer(informarContasEmCobrancaActionForm.getCodigoQuadraInicial());
+								Integer codQuadraInicial = new Integer(form.getCodigoQuadraInicial());
 
 								if (codQuadraFinal.compareTo(codQuadraInicial) < 0) {
 									throw new ActionServletException("atencao.quadraInicial.maior.que.quadraFinal");
@@ -619,534 +532,121 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 							filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, setorComercial.getId()));
 							filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, codigoQuadraFinal));
 
-							Collection<Quadra> colecaoQuadra = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
+							Collection<Quadra> colecaoQuadra = getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
 
 							if (colecaoQuadra != null && !colecaoQuadra.isEmpty()) {
 								Quadra quadra = (Quadra) Util.retonarObjetoDeColecao(colecaoQuadra);
-
-								informarContasEmCobrancaActionForm.setCodigoQuadraFinal("" + quadra.getNumeroQuadra());
-								informarContasEmCobrancaActionForm.setDescricaoQuadraFinal(quadra.getDescricao());
-								httpServletRequest.setAttribute("nomeCampo", "codigoQuadraFinal");
+								form.setCodigoQuadraFinal("" + quadra.getNumeroQuadra());
+								form.setDescricaoQuadraFinal(quadra.getDescricao());
+								request.setAttribute("nomeCampo", "codigoQuadraFinal");
 
 							} else {
-								informarContasEmCobrancaActionForm.setCodigoQuadraFinal("");
-								informarContasEmCobrancaActionForm.setDescricaoQuadraFinal("QUADRA INEXISTENTE");
-
-								httpServletRequest.setAttribute("quadraFinalInexistente", true);
-								httpServletRequest.setAttribute("nomeCampo", "codigoQuadraFinal");
+								form.setCodigoQuadraFinal("");
+								form.setDescricaoQuadraFinal("QUADRA INEXISTENTE");
+								request.setAttribute("quadraFinalInexistente", true);
+								request.setAttribute("nomeCampo", "codigoQuadraFinal");
 							}
-
 						}
-
 					} else {
-						informarContasEmCobrancaActionForm.setIdSetorComercialDestino("");
-						informarContasEmCobrancaActionForm.setCodigoSetorComercialDestino("");
-						informarContasEmCobrancaActionForm.setDescricaoSetorComercialDestino("SETOR COMERCIAL INEXISTENTE");
-
-						httpServletRequest.setAttribute("setorComercialDestinoInexistente", true);
-						httpServletRequest.setAttribute("nomeCampo", "codigoSetorComercialDestino");
+						form.setIdSetorComercialDestino("");
+						form.setCodigoSetorComercialDestino("");
+						form.setDescricaoSetorComercialDestino("SETOR COMERCIAL INEXISTENTE");
+						request.setAttribute("setorComercialDestinoInexistente", true);
+						request.setAttribute("nomeCampo", "codigoSetorComercialDestino");
 					}
-
 				}
-
 			} else {
-				informarContasEmCobrancaActionForm.setIdLocalidadeDestino("");
-				informarContasEmCobrancaActionForm.setNomeLocalidadeDestino("LOCALIDADE INEXISTENTE");
+				form.setIdLocalidadeDestino("");
+				form.setNomeLocalidadeDestino("LOCALIDADE INEXISTENTE");
 
-				httpServletRequest.setAttribute("localidadeDestinoInexistente", true);
-				httpServletRequest.setAttribute("nomeCampo", "idLocalidadeDestino");
+				request.setAttribute("localidadeDestinoInexistente", true);
+				request.setAttribute("nomeCampo", "idLocalidadeDestino");
 			}
-
 		}
 	}
 
-	private ComandoEmpresaCobrancaContaHelper montarHelper(InformarContasEmCobrancaActionForm form) {
-
+	private ComandoEmpresaCobrancaContaHelper montarHelper() {
 		ComandoEmpresaCobrancaConta comando = new ComandoEmpresaCobrancaConta();
 
 		comando.setIndicadorResidencial(ConstantesSistema.NAO.intValue());
 		comando.setIndicadorComercial(ConstantesSistema.NAO.intValue());
 		comando.setIndicadorIndustrial(ConstantesSistema.NAO.intValue());
 		comando.setIndicadorPublico(ConstantesSistema.NAO.intValue());
-
-		boolean algumParametroInformado = false;
-
-		// Imovel
-		if (form.getIdImovel() != null && !form.getIdImovel().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroImovel filtroImovel = new FiltroImovel();
-
-			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, form.getIdImovel()));
-
-			Collection colecaoImovel = this.getFachada().pesquisar(filtroImovel, Imovel.class.getName());
-
-			if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
-
-				Imovel imovel = (Imovel) colecaoImovel.iterator().next();
-				imovel.setId(new Integer(form.getIdImovel()));
-
-				comando.setImovel(imovel);
-
-			} else {
-				throw new ActionServletException("atencao.imovel.inexistente");
-			}
-
-		}
-
-		// Cliente
-		if (form.getIdCliente() != null && !form.getIdCliente().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroCliente filtroCliente = new FiltroCliente();
-
-			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, form.getIdCliente()));
-
-			Collection colecaoCliente = this.getFachada().pesquisar(filtroCliente, Cliente.class.getName());
-
-			if (colecaoCliente != null && !colecaoCliente.isEmpty()) {
-
-				Cliente cliente = (Cliente) colecaoCliente.iterator().next();
-				cliente.setId(new Integer(form.getIdCliente()));
-
-				comando.setCliente(cliente);
-			} else {
-				throw new ActionServletException("atencao.cliente.inexistente");
-			}
-
-		}
-		// Localidade Inicial
-		if (form.getIdLocalidadeOrigem() != null && !form.getIdLocalidadeOrigem().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-
-			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidadeOrigem()));
-
-			Collection colecaoLocalidade = this.getFachada().pesquisar(filtroLocalidade, Localidade.class.getName());
-
-			if (colecaoLocalidade != null && !colecaoLocalidade.isEmpty()) {
-
-				Localidade localidadeInicial = new Localidade();
-
-				localidadeInicial.setId(new Integer(form.getIdLocalidadeOrigem()));
-
-				comando.setLocalidadeInicial(localidadeInicial);
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.localidade_inicial_inexistente");
-
-			}
-		}
-
-		// Localidade Final
-		if (form.getIdLocalidadeDestino() != null && !form.getIdLocalidadeDestino().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-
-			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidadeDestino()));
-
-			Collection colecaoLocalidade = this.getFachada().pesquisar(filtroLocalidade, Localidade.class.getName());
-
-			if (colecaoLocalidade != null && !colecaoLocalidade.isEmpty()) {
-
-				Localidade localidadeFinal = new Localidade();
-
-				localidadeFinal.setId(new Integer(form.getIdLocalidadeDestino()));
-
-				comando.setLocalidadeFinal(localidadeFinal);
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.localidade_final_inexistente");
-
-			}
-
-		}
-
-		// Setor Comercial Inicial
-		if (form.getCodigoSetorComercialOrigem() != null && !form.getCodigoSetorComercialOrigem().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidadeOrigem()));
-
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCodigoSetorComercialOrigem()));
-
-			Collection colecaoSetorComercial = this.getFachada().pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-
-			if (colecaoSetorComercial != null && !colecaoSetorComercial.isEmpty()) {
-
-				SetorComercial setorComercialInicial = (SetorComercial) colecaoSetorComercial.iterator().next();
-
-				setorComercialInicial.setCodigo(new Integer(form.getCodigoSetorComercialOrigem()));
-
-				comando.setCodigoSetorComercialInicial(setorComercialInicial.getCodigo());
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.setor_inicial_inexistente");
-
-			}
-
-		}
-
-		// Setor Comercial Final
-		if (form.getCodigoSetorComercialDestino() != null && !form.getCodigoSetorComercialDestino().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidadeDestino()));
-
-			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCodigoSetorComercialDestino()));
-
-			Collection colecaoSetorComercial = this.getFachada().pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-
-			if (colecaoSetorComercial != null && !colecaoSetorComercial.isEmpty()) {
-
-				SetorComercial setorComercialFinal = (SetorComercial) colecaoSetorComercial.iterator().next();
-
-				setorComercialFinal.setCodigo(new Integer(form.getCodigoSetorComercialDestino()));
-
-				comando.setCodigoSetorComercialFinal(setorComercialFinal.getCodigo());
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.setor_final_inexistente");
-
-			}
-
-		}
-
-		// Quadra Inicial
-		if (form.getCodigoQuadraInicial() != null && !form.getCodigoQuadraInicial().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroQuadra filtroQuadra = new FiltroQuadra();
-
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, form.getIdSetorComercialOrigem()));
-
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, form.getCodigoQuadraInicial()));
-
-			Collection colecaoQuadra = this.getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
-
-			if (colecaoQuadra != null && !colecaoQuadra.isEmpty()) {
-
-				Quadra quadraInicial = (Quadra) colecaoQuadra.iterator().next();
-
-				quadraInicial.setNumeroQuadra(new Integer(form.getCodigoQuadraInicial()));
-
-				comando.setNumeroQuadraInicial(quadraInicial.getNumeroQuadra());
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.quadra_inicial_inexistente");
-
-			}
-
-		}
-
-		// Quadra Final
-		if (form.getCodigoQuadraInicial() != null && !form.getCodigoQuadraInicial().equals("")) {
-
-			algumParametroInformado = true;
-
-			FiltroQuadra filtroQuadra = new FiltroQuadra();
-
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, form.getIdSetorComercialDestino()));
-
-			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, form.getCodigoQuadraFinal()));
-
-			Collection colecaoQuadra = this.getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
-
-			if (colecaoQuadra != null && !colecaoQuadra.isEmpty()) {
-				Quadra quadraFinal = (Quadra) colecaoQuadra.iterator().next();
-				quadraFinal.setNumeroQuadra(new Integer(form.getCodigoQuadraFinal()));
-
-				comando.setNumeroQuadraFinal(quadraFinal.getNumeroQuadra());
-			} else {
-
-				throw new ActionServletException("atencao.pesquisa.quadra_final_inexistente");
-			}
-		}
-
-		if (form.getIdsCategoria() != null) {
-
-			String[] idsCategoria = form.getIdsCategoria();
-
-			for (int i = 0; i < idsCategoria.length; i++) {
-
-				if (idsCategoria[i].equals(Categoria.COMERCIAL.toString())) {
-					comando.setIndicadorComercial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.INDUSTRIAL.toString())) {
-					comando.setIndicadorIndustrial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.RESIDENCIAL.toString())) {
-					comando.setIndicadorResidencial(ConstantesSistema.SIM.intValue());
-				} else if (idsCategoria[i].equals(Categoria.PUBLICO.toString())) {
-					comando.setIndicadorPublico(ConstantesSistema.SIM.intValue());
-				}
-
-			}
-		}
-
-		Collection colecaoUnidadeNegocio = null;
-		// Unidade Negocio
-		if (form.getIdsUnidadeNegocio() != null && form.getIdsUnidadeNegocio().length > 0) {
-
-			String[] idsUnidadeNegocio = form.getIdsUnidadeNegocio();
-			Collection<String> colecaoIdsUnidadeNegocio = new ArrayList();
-			boolean unidadeInformada = true;
-
-			for (int i = 0; i < idsUnidadeNegocio.length; i++) {
-				if (idsUnidadeNegocio[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					unidadeInformada = false;
-					break;
-				}
-				colecaoIdsUnidadeNegocio.add(idsUnidadeNegocio[i]);
-			}
-
-			if (unidadeInformada) {
-				algumParametroInformado = true;
-
-				FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
-
-				filtroUnidadeNegocio.adicionarParametro(new ParametroSimplesIn(FiltroUnidadeNegocio.ID, colecaoIdsUnidadeNegocio));
-
-				colecaoUnidadeNegocio = this.getFachada().pesquisar(filtroUnidadeNegocio, UnidadeNegocio.class.getName());
-
-				if (colecaoUnidadeNegocio != null && !colecaoUnidadeNegocio.isEmpty()) {
-
-					if (colecaoUnidadeNegocio.size() == 1) {
-						UnidadeNegocio unidadeNegocio = (UnidadeNegocio) colecaoUnidadeNegocio.iterator().next();
-
-						comando.setUnidadeNegocio(unidadeNegocio);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		Collection colecaoGerenciaRegional = null;
-		// Gerência Regional
-		if (form.getIdsGerenciaRegional() != null && form.getIdsGerenciaRegional().length > 0) {
-
-			String[] idsGerenciaRegional = form.getIdsGerenciaRegional();
-			Collection<String> colecaoIdsGerenciaRegional = new ArrayList();
-			boolean gerenciaRegionalInformada = true;
-
-			for (int i = 0; i < idsGerenciaRegional.length; i++) {
-				if (idsGerenciaRegional[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					gerenciaRegionalInformada = false;
-					break;
-				}
-				colecaoIdsGerenciaRegional.add(idsGerenciaRegional[i]);
-			}
-
-			if (gerenciaRegionalInformada) {
-				algumParametroInformado = true;
-
-				FiltroGerenciaRegional filtroGerenciaRegional = new FiltroGerenciaRegional();
-
-				filtroGerenciaRegional.adicionarParametro(new ParametroSimplesIn(FiltroGerenciaRegional.ID, colecaoIdsGerenciaRegional));
-
-				colecaoGerenciaRegional = this.getFachada().pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
-
-				if (colecaoGerenciaRegional != null && !colecaoGerenciaRegional.isEmpty()) {
-
-					if (colecaoGerenciaRegional.size() == 1) {
-						GerenciaRegional gerenciaRegional = (GerenciaRegional) colecaoGerenciaRegional.iterator().next();
-
-						comando.setGerenciaRegional(gerenciaRegional);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		Collection colecaoImovelPerfil = null;
-		// Imovel Perfil
-		if (form.getIdsImovelPerfil() != null && form.getIdsImovelPerfil().length > 0) {
-
-			String[] idsImovelPerfil = form.getIdsImovelPerfil();
-			Collection<String> colecaoIdsImovelPerfil = new ArrayList();
-			boolean imovelPerfilInformada = true;
-
-			for (int i = 0; i < idsImovelPerfil.length; i++) {
-				if (idsImovelPerfil[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					imovelPerfilInformada = false;
-					break;
-				}
-				colecaoIdsImovelPerfil.add(idsImovelPerfil[i]);
-			}
-
-			if (imovelPerfilInformada) {
-				algumParametroInformado = true;
-
-				FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
-
-				filtroImovelPerfil.adicionarParametro(new ParametroSimplesIn(FiltroImovelPerfil.ID, colecaoIdsImovelPerfil));
-
-				colecaoImovelPerfil = this.getFachada().pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
-
-				if (colecaoImovelPerfil != null && !colecaoImovelPerfil.isEmpty()) {
-
-					if (colecaoImovelPerfil.size() == 1) {
-						ImovelPerfil imovelPerfil = (ImovelPerfil) colecaoImovelPerfil.iterator().next();
-
-						comando.setImovelPerfil(imovelPerfil);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.unidade_negocio.inexistente");
-				}
-			}
-		}
-
-		Collection colecaoLigacaoAguaSituacao = null;
-		// LigacaoAguaSituacao
-		if (form.getIdsLigacaoAguaSituacao() != null && form.getIdsLigacaoAguaSituacao().length > 0) {
-
-			String[] idsLigacaoAguaSituacao = form.getIdsLigacaoAguaSituacao();
-			Collection<String> colecaoIdsLigacaoAguaSituacao = new ArrayList();
-			boolean ligacaoAguaSituacaoInformada = true;
-
-			for (int i = 0; i < idsLigacaoAguaSituacao.length; i++) {
-				if (idsLigacaoAguaSituacao[i].equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-					ligacaoAguaSituacaoInformada = false;
-					break;
-				}
-				colecaoIdsLigacaoAguaSituacao.add(idsLigacaoAguaSituacao[i]);
-			}
-
-			if (ligacaoAguaSituacaoInformada) {
-				algumParametroInformado = true;
-
-				FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
-
-				filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimplesIn(FiltroLigacaoAguaSituacao.ID, colecaoIdsLigacaoAguaSituacao));
-
-				colecaoLigacaoAguaSituacao = this.getFachada().pesquisar(filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
-
-				if (colecaoLigacaoAguaSituacao != null && !colecaoLigacaoAguaSituacao.isEmpty()) {
-
-					if (colecaoLigacaoAguaSituacao.size() == 1) {
-						LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) colecaoLigacaoAguaSituacao.iterator().next();
-
-						comando.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-					}
-
-				} else {
-					throw new ActionServletException("atencao.pesquisa_inexistente", "Situação da Ligação de Água");
-				}
-			}
-		}
-
-		// Data Vencimento Inicial
+		comando.setImovel(pesquisarImovel());
+		comando.setCliente(pesquisarCliente());
+		comando.setLocalidadeInicial(pesquisarLocalidadeInicial());
+		comando.setLocalidadeFinal(pesquisarLocalidadeFinal());
+		comando.setCodigoSetorComercialInicial(pesquisarSetorComercialInicial());
+		comando.setCodigoSetorComercialFinal(pesquisarSetorComercialFinal());
+		comando.setNumeroQuadraInicial(pesquisarQuadraInicial());
+		comando.setNumeroQuadraFinal(pesquisarQuadraFinal());
+		comando = montarIndicadoresCategoria(comando);
+
+		List<Integer> idsUnidadeNegocio = montarListaIds(form.getIdsUnidadeNegocio());
+		List<Integer> idsGerenciaRegional = montarListaIds(form.getIdsGerenciaRegional());
+		List<Integer> idsImovelPerfil = montarListaIds(form.getIdsImovelPerfil());
+		List<Integer> idsLigacaoAguaSituacao = montarListaIds(form.getIdsLigacaoAguaSituacao());
+		
 		if (form.getDataVencimentoInicial() != null && !form.getDataVencimentoInicial().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setDataVencimentoContaInicial(Util.converteStringParaDate(form.getDataVencimentoInicial()));
 		}
 
-		// Data Vencimento Final
 		if (form.getDataVencimentoFinal() != null && !form.getDataVencimentoFinal().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setDataVencimentoContaFinal(Util.converteStringParaDate(form.getDataVencimentoFinal()));
 		}
 
-		// Referencia Inicial
 		if (form.getReferenciaInicial() != null && !form.getReferenciaInicial().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setReferenciaContaInicial(Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaInicial()));
 		} else {
 			Integer referenciaInicialFormatada = 198001;
 			comando.setReferenciaContaInicial(referenciaInicialFormatada);
 		}
 
-		// Referencia Final
 		if (form.getReferenciaFinal() != null && !form.getReferenciaFinal().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setReferenciaContaFinal(Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaFinal()));
 		} else {
 			SistemaParametro sistemaParametro = this.getFachada().pesquisarParametrosDoSistema();
 			comando.setReferenciaContaFinal(sistemaParametro.getAnoMesArrecadacao());
 		}
 
-		// Valor Conta inicial
 		if (form.getValorMinimo() != null && !form.getValorMinimo().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setValorMinimoConta(Util.formatarMoedaRealparaBigDecimal(form.getValorMinimo()));
 		}
 
-		// Valor Conta Final
 		if (form.getValorMaximo() != null && !form.getValorMaximo().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setValorMaximoConta(Util.formatarMoedaRealparaBigDecimal(form.getValorMaximo()));
 		}
 
-		// Quantidade de Contas inicial
 		if (form.getQuantidadeContasInicial() != null && !form.getQuantidadeContasInicial().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setQtdContasInicial(new Integer(form.getQuantidadeContasInicial()));
 		}
 
-		// Quantidade de Contas Final
 		if (form.getQuantidadeContasFinal() != null && !form.getQuantidadeContasFinal().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setQtdContasFinal(new Integer(form.getQuantidadeContasFinal()));
 		}
 
 		if (comando.getQtdContasInicial() != null && comando.getQtdContasFinal() == null) {
-
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", "Quantidade de Contas Final");
-
 		}
 
 		if (comando.getQtdContasInicial() == null && comando.getQtdContasFinal() != null) {
-
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", "Quantidade de Contas Inicial");
-
 		}
 
-		// [FS0017] ? Verificar quantidade de contas final menor que quantidade
-		// inicial
-		if (comando.getQtdContasInicial() != null && comando.getQtdContasFinal() != null
-				&& comando.getQtdContasFinal().compareTo(comando.getQtdContasInicial()) < 0) {
-
+		if (comando.getQtdContasInicial() != null && comando.getQtdContasFinal() != null && comando.getQtdContasFinal().compareTo(comando.getQtdContasInicial()) < 0) {
 			throw new ActionServletException("atencao.quantidade.contas_final.menor.quantidade_inicial");
-
 		}
 
-		// Quantidade de Dias de Vencimento
 		if (form.getQuantidadeDiasVencimento() != null && !form.getQuantidadeDiasVencimento().equals("")) {
-
 			algumParametroInformado = true;
-
 			comando.setQtdDiasVencimento(new Integer(form.getQuantidadeDiasVencimento()));
 		}
 		
@@ -1159,17 +659,206 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 		}
 
 		if (algumParametroInformado) {
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper = new ComandoEmpresaCobrancaContaHelper();
-			comandoEmpresaCobrancaContaHelper.setComandoEmpresaCobrancaConta(comando);
-			comandoEmpresaCobrancaContaHelper.setColecaoUnidadeNegocio(colecaoUnidadeNegocio);
-			comandoEmpresaCobrancaContaHelper.setColecaoGerenciaRegional(colecaoGerenciaRegional);
-			comandoEmpresaCobrancaContaHelper.setColecaoImovelPerfil(colecaoImovelPerfil);
-			comandoEmpresaCobrancaContaHelper.setColecaoLigacaoAguaSituacao(colecaoLigacaoAguaSituacao);
+			ComandoEmpresaCobrancaContaHelper helper = new ComandoEmpresaCobrancaContaHelper();
+			helper.setComando(comando);
+			helper.setIdsUnidadeNegocio(idsUnidadeNegocio);
+			helper.setIdsGerenciaRegional(idsGerenciaRegional);
+			helper.setIdsImovelPerfil(idsImovelPerfil);
+			helper.setIdsLigacaoAguaSituacao(idsLigacaoAguaSituacao);
 
-			return comandoEmpresaCobrancaContaHelper;
+			return helper;
 		} else {
 			return null;
 		}
+	}
+	
+	private List<Integer> montarListaIds(String[] ids) {
+		List<Integer> lista = new ArrayList<Integer>();
 
+		if (ids != null && ids.length > 0) {
+			for (int i = 0; i < ids.length; i++) {
+				Integer id = new Integer(ids[i]);
+
+				if (id == ConstantesSistema.NUMERO_NAO_INFORMADO) {
+					lista = null;
+					break;
+				}
+				lista.add(id);
+			}
+		}
+
+		return lista;
+	}
+	
+	private ComandoEmpresaCobrancaConta montarIndicadoresCategoria(ComandoEmpresaCobrancaConta comando) {
+		String[] ids = form.getIdsCategoria();
+		if (ids != null) {
+			for (int i = 0; i < ids.length; i++) {
+				if (ids[i].equals(Categoria.COMERCIAL.toString())) {
+					comando.setIndicadorComercial(ConstantesSistema.SIM.intValue());
+				} else if (ids[i].equals(Categoria.INDUSTRIAL.toString())) {
+					comando.setIndicadorIndustrial(ConstantesSistema.SIM.intValue());
+				} else if (ids[i].equals(Categoria.RESIDENCIAL.toString())) {
+					comando.setIndicadorResidencial(ConstantesSistema.SIM.intValue());
+				} else if (ids[i].equals(Categoria.PUBLICO.toString())) {
+					comando.setIndicadorPublico(ConstantesSistema.SIM.intValue());
+				}
+			}
+		}
+		return comando;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Integer pesquisarQuadraFinal() {
+		Integer numero = null;
+		if (form.getCodigoQuadraFinal() != null && !form.getCodigoQuadraFinal().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroQuadra filtroQuadra = new FiltroQuadra();
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, form.getIdSetorComercialDestino()));
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, form.getCodigoQuadraFinal()));
+			Collection<Quadra> colecao = this.getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				numero = new Integer(form.getCodigoQuadraFinal());
+			} else {
+				throw new ActionServletException("atencao.pesquisa.quadra_final_inexistente");
+			}
+		}
+		return numero;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Integer pesquisarQuadraInicial() {
+		Integer numero = null;
+		if (form.getCodigoQuadraInicial() != null && !form.getCodigoQuadraInicial().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroQuadra filtroQuadra = new FiltroQuadra();
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, form.getIdSetorComercialOrigem()));
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, form.getCodigoQuadraInicial()));
+			Collection<Quadra> colecao = this.getFachada().pesquisar(filtroQuadra, Quadra.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				numero = new Integer(form.getCodigoQuadraInicial());
+			} else {
+				throw new ActionServletException("atencao.pesquisa.quadra_inicial_inexistente");
+			}
+		}
+		return numero;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Integer pesquisarSetorComercialFinal() {
+		Integer codigo = null;
+		if (form.getCodigoSetorComercialDestino() != null && !form.getCodigoSetorComercialDestino().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroSetorComercial filtro = new FiltroSetorComercial();
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidadeDestino()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCodigoSetorComercialDestino()));
+			Collection<SetorComercial> colecao = this.getFachada().pesquisar(filtro, SetorComercial.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				codigo = new Integer(form.getCodigoSetorComercialDestino());
+			} else {
+				throw new ActionServletException("atencao.pesquisa.setor_final_inexistente");
+			}
+		}
+		return codigo;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Integer pesquisarSetorComercialInicial() {
+		Integer codigo = null;
+		if (form.getCodigoSetorComercialOrigem() != null && !form.getCodigoSetorComercialOrigem().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroSetorComercial filtro = new FiltroSetorComercial();
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidadeOrigem()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCodigoSetorComercialOrigem()));
+			Collection<SetorComercial> colecao = this.getFachada().pesquisar(filtro, SetorComercial.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				codigo = new Integer(form.getCodigoSetorComercialOrigem());
+			} else {
+				throw new ActionServletException("atencao.pesquisa.setor_inicial_inexistente");
+			}
+		}
+		return codigo;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Localidade pesquisarLocalidadeFinal() {
+		Localidade localidade = null;
+		if (form.getIdLocalidadeDestino() != null && !form.getIdLocalidadeDestino().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroLocalidade filtro = new FiltroLocalidade();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidadeDestino()));
+			Collection<Localidade> colecao = this.getFachada().pesquisar(filtro, Localidade.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				localidade = (Localidade) colecao.iterator().next();
+			} else {
+				throw new ActionServletException("atencao.pesquisa.localidade_final_inexistente");
+			}
+		}
+		return localidade;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Localidade pesquisarLocalidadeInicial() {
+		Localidade localidade = null;
+		if (form.getIdLocalidadeOrigem() != null && !form.getIdLocalidadeOrigem().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroLocalidade filtro = new FiltroLocalidade();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, form.getIdLocalidadeOrigem()));
+			Collection<Localidade> colecao = this.getFachada().pesquisar(filtro, Localidade.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				localidade = (Localidade) colecao.iterator().next();
+			} else {
+				throw new ActionServletException("atencao.pesquisa.localidade_inicial_inexistente");
+			}
+		}
+		return localidade;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Cliente pesquisarCliente() {
+		Cliente cliente = null;
+		if (form.getIdCliente() != null && !form.getIdCliente().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroCliente filtro = new FiltroCliente();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, form.getIdCliente()));
+			Collection<Cliente> colecao = this.getFachada().pesquisar(filtro, Cliente.class.getName());
+			if (colecao != null && !colecao.isEmpty()) {
+				cliente = (Cliente) colecao.iterator().next();
+			} else {
+				throw new ActionServletException("atencao.cliente.inexistente");
+			}
+		}
+		return cliente;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Imovel pesquisarImovel() {
+		Imovel imovel = null;
+		if (form.getIdImovel() != null && !form.getIdImovel().equals("")) {
+			algumParametroInformado = true;
+
+			FiltroImovel filtro = new FiltroImovel();
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, form.getIdImovel()));
+			Collection<Imovel> colecao = this.getFachada().pesquisar(filtro, Imovel.class.getName());
+			if (colecao != null && !colecao.isEmpty()) {
+				imovel = (Imovel) colecao.iterator().next();
+			} else {
+				throw new ActionServletException("atencao.imovel.inexistente");
+			}
+		}
+		return imovel;
 	}
 }

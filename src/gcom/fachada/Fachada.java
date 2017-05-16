@@ -328,6 +328,8 @@ import gcom.cobranca.contratoparcelamento.InserirContratoParcelamentoValoresParc
 import gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamento;
 import gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamentoHelper;
 import gcom.cobranca.contratoparcelamento.QuantidadePrestacoes;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -1380,6 +1382,17 @@ public class Fachada {
 			local = localHome.create();
 
 			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
+		try {
+			ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) ServiceLocator.getInstancia().getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
+			return localHome.create();
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
@@ -27195,30 +27208,6 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0866] Gerar Comando Contas em Cobranca por Empresa
-	 * 
-	 * 
-	 * 
-	 * @author Rafael Correa
-	 * @date 28/10/2008
-	 * 
-	 * @param
-	 * 
-	 * @return Integer
-	 * @throws ControladorException
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) {
-
-		try {
-			return this.getControladorFaturamento().pesquisarQuantidadeContas(comandoEmpresaCobrancaContaHelper);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
-	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
 	 * Autor: Vivianne Sousa
@@ -36473,24 +36462,6 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imóvel
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 07/04/2011
-	 */
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) {
-
-		try {
-			return this.getControladorFaturamento().pesquisarQuantidadeContasAgrupandoPorImovel(comandoEmpresaCobrancaContaHelper);
-
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-
-	/**
 	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
 	 * Pesquisa dados do popup
 	 * 
@@ -40143,6 +40114,14 @@ public class Fachada {
 	public BigDecimal[] obterValorCurtoELongoPrazoParaParcelamento(short numeroPrestacoes, short numeroPrestacoesCobradas, BigDecimal valorTotal, BigDecimal valorRestante) {
 		try {
 			return this.getControladorFaturamento().obterValorCurtoELongoPrazoParaParcelamento(numeroPrestacoes, numeroPrestacoesCobradas, valorTotal, valorRestante);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) {
+		try {
+			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
