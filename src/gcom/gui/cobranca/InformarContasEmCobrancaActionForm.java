@@ -101,6 +101,8 @@ public class InformarContasEmCobrancaActionForm extends ActionForm {
 	private String indicadorCobrancaTelemarketing;
 	
 	private String quantidadeMaximaClientes;
+	
+	private String indicadorGerarComDebitoPreterito;
 
 	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
 		return null;
@@ -472,5 +474,13 @@ public class InformarContasEmCobrancaActionForm extends ActionForm {
 
 	public void setQuantidadeMaximaClientes(String quantidadeMaximaClientes) {
 		this.quantidadeMaximaClientes = quantidadeMaximaClientes;
+	}
+
+	public String getIndicadorGerarComDebitoPreterito() {
+		return indicadorGerarComDebitoPreterito;
+	}
+
+	public void setIndicadorGerarComDebitoPreterito(String indicadorGerarComDebitoPreterito) {
+		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
 	}
 }

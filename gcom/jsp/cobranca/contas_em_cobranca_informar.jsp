@@ -654,11 +654,23 @@
 		}
 	}
 	
+	function verificarValorIndicadorDebitoPreterito() {
+		
+		var form = document.forms[0];
+	
+		if (form.indicadorGerarComDebitoPreterito.checked == true) {
+			form.indicadorGerarComDebitoPreterito.value = '1';
+		} else {
+			form.indicadorGerarComDebitoPreterito.value = '';
+		}
+		
+	}
+	
 </script>
 
 </head>
 
-<body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();">
+<body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();verificarValorIndicadorDebitoPreterito()">
 
 <div id="formDiv">
 <html:form action="/exibirInformarContasEmCobrancaAction"
@@ -1111,6 +1123,14 @@
 						onkeyup="somente_numero(this);"
 						onchange="javascript:limparTotalizacao();" 
 						style="text-align:right;" />
+				</tr>
+				
+				<tr>
+					<td><strong>Incluir débitos pretéritos:</strong></td>
+					<td>
+						<html:checkbox property="indicadorGerarComDebitoPreterito" value="1"
+							onClick="javascript:verificarValorIndicadorDebitoPreterito();"></html:checkbox>
+					</td>
 				</tr>
 				
 				<tr>

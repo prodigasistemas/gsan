@@ -657,6 +657,10 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 		if (form.getQuantidadeMaximaClientes() != null && !form.getQuantidadeMaximaClientes().trim().equals("") && Integer.parseInt(form.getQuantidadeMaximaClientes()) > 0) {
 			comando.setQtdMaximaClientes(new Integer(form.getQuantidadeMaximaClientes()));
 		}
+		
+		if (form.getIndicadorGerarComDebitoPreterito() != null && !form.getIndicadorGerarComDebitoPreterito().trim().equals("")) {
+			comando.setIndicadorGerarComDebitoPreterito(new Short(form.getIndicadorGerarComDebitoPreterito()));
+		}
 
 		if (algumParametroInformado) {
 			ComandoEmpresaCobrancaContaHelper helper = new ComandoEmpresaCobrancaContaHelper();
