@@ -654,23 +654,11 @@
 		}
 	}
 	
-	function verificarValorIndicadorDebitoPreterito() {
-		
-		var form = document.forms[0];
-	
-		if (form.indicadorGerarComDebitoPreterito.checked == true) {
-			form.indicadorGerarComDebitoPreterito.value = '1';
-		} else {
-			form.indicadorGerarComDebitoPreterito.value = '';
-		}
-		
-	}
-	
 </script>
 
 </head>
 
-<body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();verificarValorIndicadorDebitoPreterito()">
+<body leftmargin="5" topmargin="5" onload="javascript:setarFoco('${requestScope.nomeCampo}');bloqueiaDados();liberaGerarDadosCobranca();">
 
 <div id="formDiv">
 <html:form action="/exibirInformarContasEmCobrancaAction"
@@ -1125,11 +1113,17 @@
 						style="text-align:right;" />
 				</tr>
 				
+				<tr><td><strong> </strong></td><td><strong> </strong></td></tr>
+				
 				<tr>
-					<td><strong>Incluir débitos pretéritos:</strong></td>
-					<td>
-						<html:checkbox property="indicadorGerarComDebitoPreterito" value="1"
-							onClick="javascript:verificarValorIndicadorDebitoPreterito();"></html:checkbox>
+					<td width="30%"><strong>Incluir débitos pretéritos:</strong></td>
+					<td colspan="6">
+						<span class="style2">
+							<strong>
+								<label><html:radio property="indicadorGerarComDebitoPreterito" value="1"/>Sim</label>
+ 				  				<label><html:radio property="indicadorGerarComDebitoPreterito" value="2"/>Não</label>
+                  			</strong>
+                  		</span>
 					</td>
 				</tr>
 				

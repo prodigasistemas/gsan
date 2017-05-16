@@ -276,6 +276,7 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 		if (request.getParameter("menu") != null && !request.getParameter("menu").trim().equals("")) {
 			form.setQuantidadeDiasVencimento("60");
 			form.setIndicadorCobrancaTelemarketing("1");
+			form.setIndicadorGerarComDebitoPreterito("1");
 
 			FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
 			filtroUnidadeNegocio.setCampoOrderBy(FiltroUnidadeNegocio.NOME);
