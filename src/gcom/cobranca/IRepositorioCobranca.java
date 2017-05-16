@@ -1966,4 +1966,7 @@ public interface IRepositorioCobranca {
 	public List<ContaGeral> obterContasGuiaCobrancaEmpresa(Integer idGuia, Integer idEmpresa) throws ErroRepositorioException;
 	
 	public List<NegociacaoCobrancaEmpresa> obterNegociacoesEmpresa(List<Integer> negociacoes) throws ErroRepositorioException;
+
+	public void atualizarPagamentosCobrancaPorEmpresaGerados(List<Integer> idsPagamentos) throws ErroRepositorioException;
+
 }

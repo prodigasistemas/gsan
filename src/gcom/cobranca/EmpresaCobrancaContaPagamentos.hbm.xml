@@ -30,5 +30,7 @@
 		<property name="indicadorTipoPagamento" type="java.lang.Short" column="eccp_ictipopagamento" length="4" not-null="false"/>
 		<property name="numeroParcelaAtual" type="java.lang.Integer" column="eccp_nnparcelaatual" length="4" not-null="false"/>
 		<property name="numeroTotalParcelas" type="java.lang.Integer" column="eccp_nntotalparcelas" length="4" not-null="false"/>
+		<property name="indicadorGeracaoArquivo" type="java.lang.Short" column="eccp_icgeracaoarquivo" length="4" not-null="false"/>
+		
 	</class>
 </hibernate-mapping>

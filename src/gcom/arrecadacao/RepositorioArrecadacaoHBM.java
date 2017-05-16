@@ -23909,7 +23909,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	
-	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade)
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
 		Collection<Pagamento> retorno = null;
 		
@@ -23954,11 +23954,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" LEFT JOIN pg.pagamentoSituacaoAtual pgst"
                      +" INNER JOIN pg.avisoBancario ab"
                      +" where pg.localidade.id = :idLocalidade"
-                     +" and pgst.id = :pagamentoClassificado ";
+                     +" and pgst.id = :pagamentoClassificado "
+                     +" and pg.anoMesReferenciaArrecadacao = :referencia ";
 		 
 			colecaoDadosPagamentos = session.createQuery(consulta)
 			        .setInteger("idLocalidade",idLocalidade)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+			        .setInteger("referencia", referencia)
+			        .setMaxResults(quantidadeRegistros)
+					.setFirstResult(numeroPaginas)
 					.list();
 			
 			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
@@ -24070,6 +24074,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			}
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);

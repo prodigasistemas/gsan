@@ -11,53 +11,39 @@ public class ArquivoTextoPagamentoContasCobrancaEmpresaHelper implements
 
 	private static final long serialVersionUID = 1L;
 	
+	private Integer idEmpresaCobrancaContaPagamento;
 	private Integer matricula;
-	
 	private String nomeClienteConta;
-	
 	private Integer referenciaConta;
-	
 	private BigDecimal valorConta;
-	
 	private Integer referenciaPagamento;
-	
 	private Integer tipoPagamento;
-	
 	private Integer numeroParcelas;
-	
 	private Integer numeroParcelasTotal;
-	
 	private BigDecimal valorPagamentoPrincipal;
-	
 	private BigDecimal valorEncargos;
-	
 	private BigDecimal valorPagamentoTotal;
-	
 	private BigDecimal percentualEmpresa;
-	
 	private BigDecimal valorPagamentoEmpresa;
-	
 	private Integer idUnidadeNegocio;
-	
 	private String nomeUnidadeNegocio;
-	
 	private Integer idLocalidade;
-	
 	private String nomeLocalidade;
-	
 	private Integer codigoSetor;
-	
 	private Integer numeroQuadra;
-	
 	private Integer lote;
-	
 	private Integer subLote;
-	
 	private Integer codigoRota;
-	
 	private Integer sequencialRota;
-	
 	private Date dataPagamento;
+
+	public Integer getIdEmpresaCobrancaContaPagamento() {
+		return idEmpresaCobrancaContaPagamento;
+	}
+
+	public void setIdEmpresaCobrancaContaPagamento(Integer idEmpresaCobrancaContaPagamento) {
+		this.idEmpresaCobrancaContaPagamento = idEmpresaCobrancaContaPagamento;
+	}
 
 	public Integer getCodigoRota() {
 		return codigoRota;

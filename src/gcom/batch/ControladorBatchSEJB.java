@@ -44,13 +44,11 @@ import gcom.batch.cadastro.TarefaBatchProcessarComandoGerado;
 import gcom.batch.cadastro.TarefaBatchRetirarImovelTarifaSocial;
 import gcom.batch.cadastro.TarefaBatchSuspenderImovelEmProgramaEspecial;
 import gcom.batch.cobranca.TarefaBatchAtualizarComandoAtividadeAcaoCobranca;
-import gcom.batch.cobranca.TarefaBatchAtualizarPagamentosContasCobranca;
 import gcom.batch.cobranca.TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVista;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasDeFinalDeAno;
 import gcom.batch.cobranca.TarefaBatchEmitirDocumentoCobranca;
 import gcom.batch.cobranca.TarefaBatchGerarArquivoTextoContasCobrancaEmpresa;
-import gcom.batch.cobranca.TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa;
 import gcom.batch.cobranca.TarefaBatchGerarAtividadeAcaoCobranca;
 import gcom.batch.cobranca.TarefaBatchGerarCartasCampanhaSolidariedadeCriancaParaNegociacaoAVista;
 import gcom.batch.cobranca.TarefaBatchGerarCartasDeFinalDeAno;
@@ -64,7 +62,9 @@ import gcom.batch.cobranca.TarefaBatchIncluirDebitoACobrarEntradaParcelamentoNao
 import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaCronograma;
 import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaEventual;
 import gcom.batch.cobranca.TarefaBatchProcessarEncerramentoOSAcaoCobranca;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchAtualizarPagamentosContasCobranca;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaPorEmpresa;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarNegociacaoContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchProcessarArquivoTxtEncerramentoOSCobranca;
 import gcom.batch.cobranca.spcserasa.TarefaBatchAcompanharPagamentoDoParcelamento;
@@ -1773,17 +1773,14 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 						case Funcionalidade.ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA:
 	
-							TarefaBatchAtualizarPagamentosContasCobranca atualizarPagamentosContasCobranca = new TarefaBatchAtualizarPagamentosContasCobranca(
+							TarefaBatchAtualizarPagamentosContasCobranca batchAtualizar = new TarefaBatchAtualizarPagamentosContasCobranca(
 									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 	
-							Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+							Collection<Integer> idsLocalidades = getControladorLocalidade().pesquisarTodosIdsLocalidade();
 	
-							atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesAtualizarPagamentos);
+							batchAtualizar.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, idsLocalidades);
 	
-							atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizar));
 	
 							getControladorUtil().atualizar(funcionalidadeIniciada);
 	
@@ -2528,12 +2525,12 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 						case Funcionalidade.GERAR_ARQUIVO_PAGAMENTO_CONTAS_COBRANCA_EMPRESA: {
 							
-							TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa batch = new TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa(
+							TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa batch = new TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa(
 									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 							
-							Collection<Localidade> localidades = obterLocalidadesAtivas();
+							Collection<Empresa> empresas = obterEmpresasCobranca();
 							
-							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, localidades);
+							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
 	
 							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
@@ -2547,12 +2544,7 @@ public class ControladorBatchSEJB implements SessionBean {
 							TarefaBatchGerarNegociacaoContasCobrancaEmpresa batch = new TarefaBatchGerarNegociacaoContasCobrancaEmpresa(
 									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 	
-							FiltroEmpresa filtroEmpresa = new FiltroEmpresa(FiltroEmpresa.ID);
-							filtroEmpresa.setCampoOrderBy(FiltroEmpresa.ID);
-							filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.SIM));
-							filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADOR_EMPRESA_CONTRATADA_COBRANCA, ConstantesSistema.SIM));
-	
-							Collection<Empresa> empresas = getControladorUtil().pesquisar(filtroEmpresa, Empresa.class.getName());
+							Collection<Empresa> empresas = obterEmpresasCobranca();
 	
 							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
 	
@@ -2574,6 +2566,16 @@ public class ControladorBatchSEJB implements SessionBean {
 			throw e;
 		}
 		return codigoProcessoIniciadoGerado;
+	}
+
+	private Collection<Empresa> obterEmpresasCobranca() throws ControladorException {
+		FiltroEmpresa filtroEmpresa = new FiltroEmpresa(FiltroEmpresa.ID);
+		filtroEmpresa.setCampoOrderBy(FiltroEmpresa.ID);
+		filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.SIM));
+		filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADOR_EMPRESA_CONTRATADA_COBRANCA, ConstantesSistema.SIM));
+
+		Collection<Empresa> empresas = getControladorUtil().pesquisar(filtroEmpresa, Empresa.class.getName());
+		return empresas;
 	}
 
 	private Collection<Localidade> obterLocalidadesAtivas() throws ControladorException {

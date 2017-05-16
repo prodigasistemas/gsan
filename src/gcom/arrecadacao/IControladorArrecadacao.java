@@ -800,5 +800,5 @@ public interface IControladorArrecadacao {
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException;
 	
-	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade) throws ControladorException;
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException;
 }

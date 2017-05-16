@@ -1,5 +1,6 @@
-package gcom.batch.cobranca;
+package gcom.batch.cobranca.cobrancaporresultado;
 
+import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.localidade.Localidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
@@ -11,19 +12,19 @@ import gcom.util.agendadortarefas.AgendadorTarefas;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa extends
+public class TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa extends
 		TarefaBatch {
 
 	private static final long serialVersionUID = 1L;
 
-	public TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa(
+	public TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa(
 			Usuario usuario, int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
 	}
 
 	@Deprecated
-	public TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa() {
+	public TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa() {
 		super(null, 0);
 	}
 
@@ -41,17 +42,16 @@ public class TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa extends
 	@Override
 	public Object executar() throws TarefaException {
 
-		Collection<Localidade> localidades = (Collection<Localidade>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Collection<Empresa> empresas = (Collection<Empresa>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 
-		Iterator<Localidade> it = localidades.iterator();
+		Iterator<Empresa> it = empresas.iterator();
 
 		while (it.hasNext()) {
 
-			Localidade localidade = (Localidade) it.next();
+			Empresa empresa = (Empresa) it.next();
 
-			enviarMensagemControladorBatch(
-					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA,
-					new Object[] { this.getIdFuncionalidadeIniciada(), localidade.getId()});
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA,
+					new Object[] { this.getIdFuncionalidadeIniciada(), empresa.getId()});
 		}
 
 		return null;
@@ -59,9 +59,7 @@ public class TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa extends
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa(
-				"TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa",
-				this);
+		AgendadorTarefas.agendarTarefa("TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa", this);
 
 	}
 

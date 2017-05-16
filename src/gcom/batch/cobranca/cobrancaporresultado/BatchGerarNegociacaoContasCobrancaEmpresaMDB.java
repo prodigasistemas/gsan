@@ -35,8 +35,8 @@ public class BatchGerarNegociacaoContasCobrancaEmpresaMDB implements
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
 				
-				int idFuncionalidadeIniciada = (Integer)((Object[]) objectMessage.getObject()) [0];
-				Integer idEmpresa = (Integer) ((Object[]) objectMessage.getObject()) [1];
+				int idFuncionalidadeIniciada = (Integer)((Object[]) objectMessage.getObject())[0];
+				Integer idEmpresa = (Integer) ((Object[]) objectMessage.getObject())[1];
 				
 				this.getControladorCobrancaPorResultado().gerarNegociacoesCobrancaEmpresa(idFuncionalidadeIniciada, idEmpresa);
 		

@@ -22,7 +22,6 @@ public class ArquivoTextoParagentosCobancaEmpresaBuilder {
 	public ArquivoTextoPagamentoContasCobrancaEmpresaHelper buildHelper() {
 		
 		helper.setMatricula(dados[0] != null ? (Integer)dados[0] : null);
-		
 		helper.setNomeClienteConta((String) (dados[1]));
 		helper.setReferenciaConta((Integer) (dados[2]));
 		helper.setValorConta((BigDecimal) (dados[3]));
@@ -44,6 +43,7 @@ public class ArquivoTextoParagentosCobancaEmpresaBuilder {
 		helper.setSequencialRota((Integer) (dados[19]));
 		helper.setCodigoSetor((Integer) (dados[20]));
 		helper.setDataPagamento((Date) (dados[21]));
+		helper.setIdEmpresaCobrancaContaPagamento((Integer)dados[22]);
 		helper.setValorPagamentoTotal(Util.somaBigDecimal(helper.getValorPagamentoPrincipal(), helper.getValorEncargos()));
 		helper.setValorPagamentoEmpresa(calcularValorPagamentoEmpresa());
 

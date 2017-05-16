@@ -990,7 +990,7 @@ public interface IRepositorioArrecadacao {
 	public void excluirDadosDiariosDevolucaoPorAnoMesArrecadacaoPorLocalidade(int anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
 
-	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade) throws ErroRepositorioException;
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ErroRepositorioException;
 
 	public Integer verificarExistenciaResumoArrecadacaoParaAnoMes(Integer anoMesReferencia) throws ErroRepositorioException;
 

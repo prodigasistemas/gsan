@@ -714,8 +714,6 @@ public interface IControladorCobranca {
 	public Date obterDataValidadeDocumentoCobranca(CobrancaDocumento cobrancaDocumento, Usuario usuario, Date maiorDataVencimentoContas)
 			throws ControladorException;
 
-	public void atualizarPagamentosContasCobranca(Integer idLocalidade, Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException;
-
 	public Collection<ResolucaoDiretoria> pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial() throws ControladorException;
 
 	public Collection<GerarArquivoTextoContasCobrancaEmpresaHelper> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa,

@@ -49,7 +49,6 @@ public class TarefaBatchGerarNegociacaoContasCobrancaEmpresa extends TarefaBatch
 
 			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA,
 					new Object[] { this.getIdFuncionalidadeIniciada(), empresa.getId() });
-
 		}
 
 		return null;
@@ -60,6 +59,5 @@ public class TarefaBatchGerarNegociacaoContasCobrancaEmpresa extends TarefaBatch
 		AgendadorTarefas.agendarTarefa("TarefaBatchGerarNegociacaoContasCobrancaEmpresa", this);
 
 	}
-	
 
 }

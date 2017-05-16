@@ -643,25 +643,65 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 	}
 
-	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ControladorException,
-			ErroRepositorioException {
-		Collection<Pagamento> collPagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade);
-
+	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
+		
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
-		if (collPagamentos != null && !collPagamentos.isEmpty()) {
-			
-			for (Pagamento pagamento : collPagamentos) {
-				
-				Categoria categoria = getControladorImovel().obterPrincipalCategoriaImovel(pagamento.getImovel().getId());
 
-				if (!categoria.getId().equals(Categoria.PUBLICO)) {
-					pagamentosEmpresa.addAll(gerarPagamentoCobrancaDeContas(pagamento));
-					pagamentosEmpresa.addAll(gerarPagamentosCobrancaDeGuias(pagamento));
-					pagamentosEmpresa.addAll(gerarPagamentosCobrandaDeDebitos(pagamento));
+		boolean flagTerminou = false;
+		final int quantidadeRegistros = 500;
+		int numeroPaginas = 0;
+		
+		try {
+			while (!flagTerminou) {
+				
+				numeroPaginas = numeroPaginas + quantidadeRegistros;
+	
+				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+				
+				Collection<Pagamento> pagamentos;
+					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
+				
+				if (pagamentos != null && !pagamentos.isEmpty()) {
+					
+					for (Pagamento pagamento : pagamentos) {
+						
+						if (categoriaPermiteGerarPagamento(pagamento)) {
+							pagamentosEmpresa.addAll(gerarPagamentoCobrancaDeContas(pagamento));
+							pagamentosEmpresa.addAll(gerarPagamentosCobrancaDeGuias(pagamento));
+							pagamentosEmpresa.addAll(gerarPagamentosCobrandaDeDebitos(pagamento));
+						}
+					}
+				}
+				if (pagamentos == null || pagamentos.size() < quantidadeRegistros) {
+	
+					flagTerminou = true;
+				}
+	
+				if (pagamentos != null) {
+					pagamentos.clear();
+					pagamentos = null;
 				}
 			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
 		}
 		return pagamentosEmpresa;
+	}
+	
+	private boolean categoriaPermiteGerarPagamento(Pagamento pagamento) throws ControladorException {
+		boolean permite = false;
+		
+		if (pagamento.getImovel() != null) {
+			Categoria categoria = getControladorImovel().obterPrincipalCategoriaImovel(pagamento.getImovel().getId());
+			
+			if (!categoria.getId().equals(Categoria.PUBLICO)) {
+				permite =  true;
+			}
+			
+		} else {
+			permite =  true;
+		}
+		return permite;
 	}
 
 	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentoCobrancaDeContas(Pagamento pagamento)
@@ -680,7 +720,14 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				List<DebitoCobrado> debitosCobrados = obterDebitosDePagamentoDeParcelamento(pagamento);
 
 				for (DebitoCobrado debitoCobrado : debitosCobrados) {
-					Parcelamento parcelamento = debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento();
+					Parcelamento parcelamento =  null;
+							
+					if (debitoCobrado.getDebitoACobrarGeral() != null
+							&& debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar() != null
+							&& debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento() != null ) {
+						parcelamento = debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento();
+					}
+					
 					pagamentosEmpresa.addAll(verificarItensParcelamentos(parcelamento, null, null, pagamento, debitoCobrado, pagamento.getAnoMesReferenciaArrecadacao()));
 				}
 			}
@@ -825,6 +872,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				pagamentoEmpresa.setNumeroParcelaAtual(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacaoDebito()) : new Integer("0"));
 				pagamentoEmpresa.setNumeroTotalParcelas(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacao()) : new Integer("0"));
 				pagamentoEmpresa.setUltimaAlteracao(new Date());
+				pagamentoEmpresa.setIndicadorGeracaoArquivo(ConstantesSistema.NAO);
 				
 				if (pagamento.getAnoMesReferenciaPagamento() != null) {
 					pagamentoEmpresa.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());
@@ -970,33 +1018,50 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	
 	@SuppressWarnings("rawtypes")
 	public void gerarArquivoTextoPagamentosCobrancaEmpresa(Integer idFuncionalidadeIniciada, Integer idEmpresa) throws ControladorException {
-		int idUnidadeIniciada = 0;
+		
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.EMPRESA, idEmpresa);
 
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.EMPRESA, idEmpresa);
 		try {
 
+			StringBuilder arquivoCompleto = new StringBuilder();
+			
 			Collection colecaoDadosTxt = repositorioCobranca.pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(idEmpresa);
 			
 			if (colecaoDadosTxt != null && !colecaoDadosTxt.isEmpty()) {
 
 				Iterator colecaoDadosTxtIterator = colecaoDadosTxt.iterator();
 
+				List<Integer> idsCobrancaPagamentos = new ArrayList<Integer>();
+				
 				while (colecaoDadosTxtIterator.hasNext()) {
 
 					Object[] dados = (Object[]) colecaoDadosTxtIterator.next();
 
 					ArquivoTextoPagamentoContasCobrancaEmpresaHelper helper = new ArquivoTextoParagentosCobancaEmpresaBuilder(dados).buildHelper(); 
-
-					enviarEmailArquivoPagamentos(idEmpresa, helper.getArquivoTexto());
+					
+					arquivoCompleto.append(helper.getArquivoTexto());
+					
+					idsCobrancaPagamentos.add(helper.getIdEmpresaCobrancaContaPagamento());
 				}
+				enviarEmailArquivoPagamentos(idEmpresa, arquivoCompleto);
 				
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+				atualizarPagamentosGerados(idsCobrancaPagamentos);
 			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			ex.printStackTrace();
 
 			throw new EJBException(ex);
+		}
+	}
+	
+	private void atualizarPagamentosGerados(List<Integer> idsPagamentos) {
+		try {
+			repositorioCobranca.atualizarPagamentosCobrancaPorEmpresaGerados(idsPagamentos);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
 		}
 	}
 	
