@@ -1449,7 +1449,6 @@ public class ImpressaoContaImpressoraTermica {
 	private String obterNomeCliente(EmitirContaHelper emitirContaHelper, Imovel imovel) {
 		String nome = "";
 		try {
-			System.out.println("Imóvel " + imovel.getId() + " isCondominio? " + imovel.isCondominio());
 			if (imovel.isCondominio()) {
 					nome =  getControladorCliente().obterNomeCliente(imovel.getId()).trim();
 			} else {
