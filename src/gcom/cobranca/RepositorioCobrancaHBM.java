@@ -14278,7 +14278,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "imovel.imov_nnsequencialrota as numeroSequencial, "// 7
 					+ "conta.imov_id as idImovel, "// 8
 					+ "cliente.clie_nmcliente as nomeCliente, "// 9
-					+ "clienteTipo.cltp_id as idClienteTipo, "// 10
+					+ "clienteTipo.cltp_icpessoafisicajuridica as idClienteTipo, "// 10
 					+ "cliente.clie_nncpf as numeroCpf, "// 11
 					+ "cliente.clie_nncnpj as numeroCnpj, "// 12
 					+ "cliente.clie_nnrg as numeroRg, "// 13
