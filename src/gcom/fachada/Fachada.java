@@ -29426,11 +29426,11 @@ public class Fachada {
 	 * 
 	 */
 	public void inserirProcessoIniciadoPagamentosContasCobranca(Integer idEmpresa, Integer referenciaInicial, Integer referenciaFinal, Usuario usuario) throws FachadaException {
-		try {
-			this.getControladorBatch().inserirProcessoIniciadoPagamentosContasCobranca(idEmpresa, referenciaInicial, referenciaFinal, usuario);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
+//		try {
+//		//	this.getControladorBatch().inserirProcessoIniciadoPagamentosContasCobranca(idEmpresa, referenciaInicial, referenciaFinal, usuario);
+//		} catch (ControladorException ex) {
+//			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+//		}
 	}
 
 	/**

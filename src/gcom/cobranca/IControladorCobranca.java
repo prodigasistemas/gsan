@@ -714,8 +714,6 @@ public interface IControladorCobranca {
 	public Date obterDataValidadeDocumentoCobranca(CobrancaDocumento cobrancaDocumento, Usuario usuario, Date maiorDataVencimentoContas)
 			throws ControladorException;
 
-	public void atualizarPagamentosContasCobranca(Integer idLocalidade, Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException;
-
 	public Collection<ResolucaoDiretoria> pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial() throws ControladorException;
 
 	public Collection<GerarArquivoTextoContasCobrancaEmpresaHelper> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa,
@@ -821,9 +819,6 @@ public interface IControladorCobranca {
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentosSituacaoNormal(Integer idImovel) throws ControladorException;
-
-	public void gerarArquivoTextoPagamentosContasEmCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial, Integer referenciaFinal,
-			int idFuncionalidadeIniciada, Integer idUnidadeNegocio) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ControladorException;

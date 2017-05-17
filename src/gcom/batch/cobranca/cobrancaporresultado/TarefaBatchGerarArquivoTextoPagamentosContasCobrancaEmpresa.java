@@ -1,6 +1,7 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.localidade.Localidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -11,17 +12,19 @@ import gcom.util.agendadortarefas.AgendadorTarefas;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class TarefaBatchGerarNegociacaoContasCobrancaEmpresa extends TarefaBatch {
+public class TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa extends
+		TarefaBatch {
 
 	private static final long serialVersionUID = 1L;
 
-	public TarefaBatchGerarNegociacaoContasCobrancaEmpresa(Usuario usuario, int idFuncionalidadeIniciada) {
+	public TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa(
+			Usuario usuario, int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
 	}
 
 	@Deprecated
-	public TarefaBatchGerarNegociacaoContasCobrancaEmpresa() {
+	public TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa() {
 		super(null, 0);
 	}
 
@@ -47,8 +50,8 @@ public class TarefaBatchGerarNegociacaoContasCobrancaEmpresa extends TarefaBatch
 
 			Empresa empresa = (Empresa) it.next();
 
-			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA,
-					new Object[] { this.getIdFuncionalidadeIniciada(), empresa.getId() });
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA,
+					new Object[] { this.getIdFuncionalidadeIniciada(), empresa.getId()});
 		}
 
 		return null;
@@ -56,7 +59,7 @@ public class TarefaBatchGerarNegociacaoContasCobrancaEmpresa extends TarefaBatch
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("TarefaBatchGerarNegociacaoContasCobrancaEmpresa", this);
+		AgendadorTarefas.agendarTarefa("TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa", this);
 
 	}
 

@@ -377,7 +377,7 @@ public final class ServicosEmail implements Serializable {
 			ZipUtil.adicionarArquivo(zos, arquivo);
 			zos.close();
 
-			enviarMensagemArquivoAnexado(receptor, remetente, titulo, corpo, compactado);
+			//enviarMensagemArquivoAnexado(receptor, remetente, titulo, corpo, compactado);
 
 			arquivo.delete();
 		} catch (Exception e) {

@@ -18,4 +18,8 @@ public interface IControladorCobrancaPorResultado {
 	public void gerarArquivoContas(Collection<Integer> comandos, Integer idEmpresa, int idFuncionalidadeIniciada) throws ControladorException;
 
 	public void gerarNegociacoesCobrancaEmpresa(int idFuncionalidadeIniciada, Integer idEmpresa) throws ControladorException;
+
+	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idEmpresa) throws ControladorException;
+	
+	public void gerarArquivoTextoPagamentosCobrancaEmpresa(Integer idFuncionalidadeIniciada, Integer idEmpresa) throws ControladorException;
 }

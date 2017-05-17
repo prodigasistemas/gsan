@@ -30,7 +30,9 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_SIM = new Short("1");
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_NAO = new Short("2");
 
-
+	public EmpresaCobrancaConta() {
+	}
+	
 	public EmpresaCobrancaConta(Integer id, Empresa empresa, ContaGeral contaGeral,
 			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, BigDecimal valorOriginalConta, 
 			BigDecimal percentualEmpresaConta, Short indicadorPagamentoValido, Date ultimaAlteracao) {
@@ -44,10 +46,6 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 		this.percentualEmpresaConta = percentualEmpresaConta;
 		this.indicadorPagamentoValido = indicadorPagamentoValido;
 		this.ultimaAlteracao = ultimaAlteracao;
-	}
-
-	public EmpresaCobrancaConta() {
-
 	}
 
 	public String[] retornaCamposChavePrimaria() {

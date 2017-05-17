@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 	
-	NegociacaoCobrancaEmpresa negociacao = null;
+	protected NegociacaoCobrancaEmpresa negociacao = null;
 	protected ArquivoTextoNegociacaoCobrancaEmpresaHelper helper = null;
 	
 	public ArquivoTextoNegociacaoCobrancaEmpresaBuilder() {

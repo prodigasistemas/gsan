@@ -1,9 +1,6 @@
 package gcom.cobranca.cobrancaporresultado;
 
-import gcom.arrecadacao.pagamento.GuiaPagamento;
-import gcom.cobranca.CobrancaDocumento;
-import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -120,6 +117,40 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaHelper implements Serializable
 
 	public void setIdsContas(List<Integer> idsContas) {
 		this.idsContas = idsContas;
+	}
+	
+	public StringBuilder getArquivoTextoNegociacoes() {
+		StringBuilder arquivoTxt = new StringBuilder();
+		
+        arquivoTxt.append(1 + ";");
+        arquivoTxt.append(this.tipoNegociacao + ";");
+        arquivoTxt.append(this.idNegociacao != null ? Util.truncarString(this.idNegociacao.toString(), 9) : "").append(";");
+        arquivoTxt.append(this.dataNegociacao != null ? Util.truncarString(Util.formatarData(this.dataNegociacao).toString(), 10) : "").append(";");
+        arquivoTxt.append(this.dataVencimentoNegociacao != null ? Util.truncarString(Util.formatarData(this.dataVencimentoNegociacao).toString(), 10) : "").append(";");
+        arquivoTxt.append(this.valorDivida != null ? Util.formatarBigDecimalComPonto(this.valorDivida) : "").append(";");
+        arquivoTxt.append(this.valorDescontos != null ? Util.formatarBigDecimalComPonto(this.valorDescontos) : "").append(";");
+        arquivoTxt.append(this.valorEntrada != null ? Util.formatarBigDecimalComPonto(this.valorEntrada) : "").append(";");
+        arquivoTxt.append(this.valorParcela != null ? Util.formatarBigDecimalComPonto(this.valorParcela) : "").append(";");
+        arquivoTxt.append(this.quantidadePrestacoes != null ? Util.truncarString(this.quantidadePrestacoes.toString(), 1) : "").append(";");
+        arquivoTxt.append(System.getProperty("line.separator"));
+
+        arquivoTxt.append(buildArquivoContasNegociadas());
+        
+        return arquivoTxt;
+    }
+	
+	private StringBuilder buildArquivoContasNegociadas() {
+		StringBuilder arquivoTxt = new StringBuilder();
+		
+		arquivoTxt.append(2 + ";");
+		
+		for (Integer idConta : this.idsContas) {
+			arquivoTxt.append(idConta + ";");
+		}
+		
+		arquivoTxt.append(System.getProperty("line.separator"));
+		
+		return arquivoTxt;
 	}
 	
 }

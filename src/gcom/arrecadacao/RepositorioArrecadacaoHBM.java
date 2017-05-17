@@ -23909,16 +23909,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	
-	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
-	 * 
-	 * @author Sávio Luiz
-	 * @data 17/02/2008
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection<Pagamento> pesquisarPagamentoPorLocalidade(Integer idLocalidade,Integer anoMesReferencia)
+	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
 		Collection<Pagamento> retorno = null;
 		
@@ -23963,13 +23954,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" LEFT JOIN pg.pagamentoSituacaoAtual pgst"
                      +" INNER JOIN pg.avisoBancario ab"
                      +" where pg.localidade.id = :idLocalidade"
-                     +" and pg.anoMesReferenciaArrecadacao = :anoMesReferencia"
-                     +" and pgst.id = :pagamentoClassificado ";
+                     +" and pgst.id = :pagamentoClassificado "
+                     +" and pg.anoMesReferenciaArrecadacao = :referencia ";
 		 
 			colecaoDadosPagamentos = session.createQuery(consulta)
 			        .setInteger("idLocalidade",idLocalidade)
-			        .setInteger("anoMesReferencia",anoMesReferencia)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+			        .setInteger("referencia", referencia)
+			        .setMaxResults(quantidadeRegistros)
+					.setFirstResult(numeroPaginas)
 					.list();
 			
 			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
@@ -24081,6 +24074,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			}
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);

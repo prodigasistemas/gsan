@@ -47,6 +47,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
+import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.faturamento.GuiaPagamentoGeral;
@@ -1929,6 +1930,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+	@SuppressWarnings({ "rawtypes" })
 	public void removerDebitoACobrarDoParcelamento(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -2072,6 +2074,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+
+	@SuppressWarnings("rawtypes")
 	public Collection<DebitoACobrar> pesquisarDebitoACobrarDoParcelamento(Integer codigoImovel, Integer codigoParcelamento)
 			throws ErroRepositorioException {
 
@@ -2364,6 +2368,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<CobrancaAcaoAtividadeCronograma> pesquisarCobrancaAcaoAtividadeCronograma() throws ErroRepositorioException {
 
 		// cria a variável que vai armazenar a coleção pesquisada
@@ -2409,6 +2414,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<CobrancaAcaoAtividadeComando> pesquisarCobrancaAcaoAtividadeComando() throws ErroRepositorioException {
 
 		// cria a variável que vai armazenar a coleção pesquisada
@@ -2491,6 +2497,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * Recebimento de Acréscimos por Inpontualidade Autor: Sávio Luiz
 	 * Data:06/11/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItemComConta(Integer idCobrancaDocumento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -2521,6 +2528,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * Recebimento de Acréscimos por Inpontualidade Autor: Sávio Luiz
 	 * Data:06/11/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItemComGuiaPagamento(Integer idCobrancaDocumento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -2561,6 +2569,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItem(Integer idImovel, int numeroSequencialDocumento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -2641,6 +2650,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @param collectionCobrancaSituacaoHistorico
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirCobrancaSituacaoHistorico(Collection collectionCobrancaSituacaoHistorico) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Iterator iteratorFSH = collectionCobrancaSituacaoHistorico.iterator();
@@ -3023,6 +3033,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection gerarRelacaoDebitos(String idImovelCondominio, String idImovelPrincipal, String idNomeConta,
 			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua, String consumoMinimoFinalAgua, String idSituacaoLigacaoEsgoto,
 			String consumoMinimoInicialEsgoto, String consumoMinimoFinalEsgoto, String intervaloValorPercentualEsgotoInicial,
@@ -3924,6 +3935,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 *            , idLogradouro
 	 * @return Collection<CobrancaDocumento>
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoParaEmitir(Integer idCobrancaAcaoCronograma,
 			Integer idCobrancaAcaoComando, Date dataEmissao, Integer idCobrancaAcao, int quantidadeCobrancaDocumentoInicio)
 			throws ErroRepositorioException {
@@ -4032,6 +4044,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 *            , idLogradouro
 	 * @return Collection<CobrancaDocumento>
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoParaEmitirPorRota(Integer idCobrancaAcaoCronograma,
 			Integer idCobrancaAcaoComando, Date dataEmissao, Integer idCobrancaAcao, int quantidadeCobrancaDocumentoInicio)
 			throws ErroRepositorioException {
@@ -4090,6 +4103,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @param CobrancaDocumento
 	 * @return Collection<CobrancaDocumentoItem>
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<CobrancaDocumentoItem> selecionarCobrancaDocumentoItemReferenteConta(CobrancaDocumento cobrancaDocumento)
 			throws ErroRepositorioException {
 
@@ -4128,6 +4142,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @param CobrancaDocumento
 	 * @return Collection<CobrancaDocumentoItem>
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<Object[]> selecionarDadosCobrancaDocumentoItemReferenteGuiaPagamento(CobrancaDocumento cobrancaDocumento)
 			throws ErroRepositorioException {
 
@@ -4386,6 +4401,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author Rafael Corrêa
 	 * @data 22/08/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoDescontoInatividade(Integer idParcelamentoPerfil) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
@@ -4462,6 +4478,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<CobrancaAcaoAtividadeCronograma> pesquisarCobrancaAcaoAtividadeCronogramaComandadosNaoRealizados()
 			throws ErroRepositorioException {
 
@@ -4690,6 +4707,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 *            <CobrancaDocumento>
 	 * @return Collection<CobrancaDocumento>
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<EmitirDocumentoCobrancaBoletimCadastroHelper> pesquisarCobrancaDocumentoBoletimCadastro(
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando, Date dataEmissao, Integer idCobrancaAcao,
 			int quantidadeCobrancaDocumentoInicio) throws ErroRepositorioException {
@@ -4765,6 +4783,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection consultarImovelDocumentosCobranca(Integer idImovel, Integer numeroPagina) throws ErroRepositorioException {
 
 		Collection retorno = null;
@@ -4897,6 +4916,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoRelatorio(Integer idParcelamento) throws ErroRepositorioException {
 
 		Collection retorno = null;
@@ -5015,6 +5035,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoItemPorIdParcelamentoRelatorio(Integer idParcelamento) throws ErroRepositorioException {
 
 		Collection retorno = null;
@@ -5301,6 +5322,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(int idCobrancaAcaoCronograma, int idCobrancaAtividade)
 			throws ErroRepositorioException {
 
@@ -5345,6 +5367,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaAcao(int idCobrancaAcao) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -5388,6 +5411,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<DadosPesquisaCobrancaDocumentoHelper> pesquisarCobrancaDocumento(int idCobrancaAtividadeAcaoCronograma)
 			throws ErroRepositorioException {
 
@@ -5437,6 +5461,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisarOrdemServico(int idDocumentoCobranca) throws ErroRepositorioException {
 
 		Collection retorno = null;
@@ -5444,18 +5469,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
-
-		// int valorIdCronogramaOuComando = -1;
-		// String campoCronogramaOuComando = "";
-		//
-		// if (idCobrancaAtividadeAcaoCronogramaEmitir !=
-		// ConstantesSistema.NUMERO_NAO_INFORMADO){
-		// campoCronogramaOuComando = "caac_id";
-		// valorIdCronogramaOuComando = idCobrancaAtividadeAcaoCronogramaEmitir;
-		// } else {
-		// campoCronogramaOuComando = "cacm_id";
-		// valorIdCronogramaOuComando = idCobrancaAtividadeAcaoComandoEmitir;
-		// }
 
 		try {
 
@@ -5551,6 +5564,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItem(int idCobrancaDocumento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -5603,6 +5617,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContaGeral(int idConta) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -5785,6 +5800,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @return Collection retorno
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGuiaPagamentoGeral(int idGuiaPagamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -13888,22 +13904,30 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author Sávio Luiz
 	 * @date 23/10/2008
 	 */
-	public Collection<Object[]> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException {
+	public List<ParcelamentoItem> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
-		Collection<Object[]> retorno = null;
-		String consulta = null;
+		List<ParcelamentoItem> retorno = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "select cg.id," + " dacg.id, " + "CASE " + " WHEN cg.indicadorHistorico = 2  " + " THEN (conta.valorAgua + "
-					+ "conta.valorEsgoto + " + "conta.debitos - " + "(conta.valorCreditos - coalesce(conta.valorImposto,0))) "
-					+ " ELSE (ch.valorAgua + " + "ch.valorEsgoto + " + "ch.valorDebitos - "
-					+ "(ch.valorCreditos - coalesce(ch.valorImposto,0))) " + " END " + " from ParcelamentoItem pi "
-					+ " left join pi.debitoACobrarGeral dacg " + " left join pi.contaGeral cg " + " left join cg.contaHistorico ch "
-					+ " left join cg.conta conta " + " where pi.parcelamento.id = :idParcelamento";
+//			consulta.append("select cg.id," + " dacg.id, " + "CASE " + " WHEN cg.indicadorHistorico = 2  " + " THEN (conta.valorAgua + "
+//					+ "conta.valorEsgoto + " + "conta.debitos - " + "(conta.valorCreditos - coalesce(conta.valorImposto,0))) "
+//					+ " ELSE (ch.valorAgua + " + "ch.valorEsgoto + " + "ch.valorDebitos - "
+//					+ "(ch.valorCreditos - coalesce(ch.valorImposto,0))) " + " END " + " from ParcelamentoItem pi "
+//					+ " left join pi.debitoACobrarGeral dacg " + " left join pi.contaGeral cg " + " left join cg.contaHistorico ch "
+//					+ " left join cg.conta conta " + " where pi.parcelamento.id = :idParcelamento";
+			
+			consulta.append(" select pi ")
+					.append(" from ParcelamentoItem pi ")
+					.append(" left join fetch pi.debitoACobrarGeral dacg ")
+					.append(" left join fetch pi.contaGeral cg ")
+					.append(" left join fetch cg.contaHistorico ch ")
+					.append(" left join fetch cg.conta conta ")
+					.append(" where pi.parcelamento.id = :idParcelamento ");
 
-			retorno = (Collection<Object[]>) session.createQuery(consulta).setInteger("idParcelamento", idParcelamento).list();
+			retorno = (List<ParcelamentoItem>) session.createQuery(consulta.toString()).setInteger("idParcelamento", idParcelamento).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -14273,7 +14297,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "imovel.imov_nnsequencialrota as numeroSequencial, "// 7
 					+ "conta.imov_id as idImovel, "// 8
 					+ "cliente.clie_nmcliente as nomeCliente, "// 9
-					+ "clienteTipo.cltp_id as idClienteTipo, "// 10
+					+ "clienteTipo.cltp_icpessoafisicajuridica as idClienteTipo, "// 10
 					+ "cliente.clie_nncpf as numeroCpf, "// 11
 					+ "cliente.clie_nncnpj as numeroCnpj, "// 12
 					+ "cliente.clie_nnrg as numeroRg, "// 13
@@ -19782,117 +19806,34 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author: Hugo Amorim
 	 * @date: 05/10/2009
 	 */
-	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial,
-			Integer referenciaFinal, Integer quantidadeRegistros, Integer numeroIndice, Integer idUnidadeNegocio)
+	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa)
 			throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		Collection retorno = null;
-		String consulta = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
 
-			consulta = "select cc.imov_id as idImovel, " // 0
-					+ "clie_nmcliente as nomeCliente, " // 1
-					+ "cnhi.cnhi_amreferenciaconta as anoMesConta, " // 2
-					+ "ecco_vloriginalconta as valorConta, " // 3
-					+ "eccp_ampagamento as anoMesReferenciaPagamento, "// 4
-					+ " eccp_ictipopagamento as tipoPagamento," // 5
-					+ " eccp_nnparcelaatual as numParcelas," // 6
-					+ " eccp_nntotalparcelas as numParcelasTotal," // 7
-					+ "sum(case when  (ccp.dbtp_id not in ( 43, 80, 91, 94, 100 ) or ccp.dbtp_id is null) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorPrincipal, " // 8
-					+ "sum(case when   ccp.dbtp_id     in ( 43,  80, 91, 94, 100 ) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorEncargos, " // 9
-					+ "cc.ecco_pcempresaconta as percentualEmpresa, " // 10
-					+ " lc.uneg_id as idUnidadeNegocio, "// 11
-					+ " un.uneg_nmunidadenegocio as nomeUnidadeNegocio, "// 12
-					+ " im.loca_id as idLocalidade, "// 13
-					+ " lc.loca_nmlocalidade as nomeLocalidade, "// 14
-					+ " qd.qdra_nnquadra as quadra, "// 15
-					+ " im.imov_nnlote as lote, "// 16
-					+ " im.imov_nnsublote as sublote, "// 17
-					+ " rt.rota_cdrota as codigoRota, "// 18
-					+ " im.imov_nnsequencialrota as sequenciaRota, "// 19
-					+ " cnhi.cnhi_cdsetorcomercial as codSetor, "// 20
-					+ " ccp.eccp_dtpagamento as dataPagamento " // 21
-					+ "from   cobranca.empr_cobr_conta_pagto ccp "
-					+ "inner join cobranca.empresa_cobranca_conta        cc  on cc.ecco_id  = ccp.ecco_id and cc.empr_id = :idEmpresa "
-					+ "inner join  faturamento.conta_historico  as cnhi "
-					+ "on cnhi.cnta_id  = cc.cnta_id "
-					+ "inner join cadastro.cliente_imovel                ci  on ( ci.imov_id = ccp.imov_id and ci.crtp_id = 2 "
-					+ "	and ci.clim_dtrelacaofim is null) "
-					+ "inner join cadastro.cliente                       cl  on ( cl.clie_id = ci.clie_id ) "
-					+ "inner join cadastro.imovel                        im  on im.imov_id = ccp.imov_id "
-					+ "inner join cadastro.localidade                    lc  on lc.loca_id = im.loca_id "
-					+ "inner join cadastro.unidade_negocio               un  on un.uneg_id = lc.uneg_id "
-					+ "inner join cadastro.gerencia_regional             gr  on gr.greg_id = lc.greg_id "
-					+ "inner join cadastro.quadra                        qd  on qd.qdra_id = im.qdra_id "
-					+ "inner join micromedicao.rota                      rt  on rt.rota_id = qd.rota_id "
-					+ "where un.uneg_id = :idUnidadeNegocio ";
+			StringBuilder from = new StringBuilder();
+			
+			String colunaAnoMesHistorico = " cnta.cnhi_amreferenciaconta ";
+			String colunaCodigoSetorHistorico = " cnta.cnhi_cdsetorcomercial ";
+			String tabelaContaHistorico = " faturamento.conta_historico as cnta ";
+			
+			String colunaAnoMes = " cnta.cnta_amreferenciaconta ";
+			String colunaCodigoSetor = " cnta.cnta_cdsetorcomercial ";
+			String tabelaConta = " faturamento.conta as cnta ";
+			
+			
+			consulta.append(obterConsultaDadosArquivoTextoPagamentosContasCobrancaEmpresa(colunaAnoMesHistorico, colunaCodigoSetorHistorico, tabelaContaHistorico))
+					.append(" UNION ")
+					.append(obterConsultaDadosArquivoTextoPagamentosContasCobrancaEmpresa(colunaAnoMes, colunaCodigoSetor, tabelaConta))
+					.append(" order by 12, 14, 1,3 ");
 
-			if (referenciaInicial != null && referenciaFinal != null && referenciaInicial != referenciaFinal) {
-				consulta = consulta + "and (eccp_ampagamento between " + referenciaInicial + " and " + referenciaFinal + ") ";
-			} else {
-				consulta = consulta + "and eccp_ampagamento = " + referenciaFinal + " ";
-			}
-
-			consulta = consulta
-					+ "group by cc.imov_id, clie_nmcliente, cnhi.cnhi_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, eccp_ictipopagamento,eccp_nnparcelaatual, eccp_nntotalparcelas,cc.ecco_pcempresaconta,lc.uneg_id,un.uneg_nmunidadenegocio,im.loca_id,lc.loca_nmlocalidade,qd.qdra_nnquadra,im.imov_nnlote,im.imov_nnsublote,rt.rota_cdrota,im.imov_nnsequencialrota,cnhi.cnhi_cdsetorcomercial,ccp.eccp_dtpagamento ";
-			// consulta = consulta + "order by 12, 14, 1,3 ";
-
-			consulta = consulta
-					+ " UNION "
-					+ "select cc.imov_id as idImovel, " // 0
-					+ "clie_nmcliente as nomeCliente, " // 1
-					+ "cnta.cnta_amreferenciaconta as anoMesConta, " // 2
-					+ "ecco_vloriginalconta as valorConta, " // 3
-					+ "eccp_ampagamento as anoMesReferenciaPagamento, "// 4
-					+ " eccp_ictipopagamento as tipoPagamento," // 5
-					+ " eccp_nnparcelaatual as numParcelas," // 6
-					+ " eccp_nntotalparcelas as numParcelasTotal," // 7
-					+ "sum(case when  (ccp.dbtp_id not in ( 43, 80, 91, 94, 100 ) or ccp.dbtp_id is null) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorPrincipal, " // 8
-					+ "sum(case when   ccp.dbtp_id     in ( 43,  80, 91, 94, 100 ) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorEncargos, " // 9
-					+ "cc.ecco_pcempresaconta as percentualEmpresa, " // 10
-					+ " lc.uneg_id as idUnidadeNegocio, "// 11
-					+ " un.uneg_nmunidadenegocio as nomeUnidadeNegocio, "// 12
-					+ " im.loca_id as idLocalidade, "// 13
-					+ " lc.loca_nmlocalidade as nomeLocalidade, "// 14
-					+ " qd.qdra_nnquadra as quadra, "// 15
-					+ " im.imov_nnlote as lote, "// 16
-					+ " im.imov_nnsublote as sublote, "// 17
-					+ " rt.rota_cdrota as codigoRota, "// 18
-					+ " im.imov_nnsequencialrota as sequenciaRota, "// 19
-					+ " cnta.cnta_cdsetorcomercial as codSetor, "// 20
-					+ " ccp.eccp_dtpagamento as dataPagamento " // 21
-					+ "from   cobranca.empr_cobr_conta_pagto ccp "
-					+ "inner join cobranca.empresa_cobranca_conta        cc  on cc.ecco_id  = ccp.ecco_id and cc.empr_id = :idEmpresa "
-					+ "inner join  faturamento.conta  as cnta " + "on cnta.cnta_id  = cc.cnta_id "
-					+ "inner join cadastro.cliente_imovel                ci  on ( ci.imov_id = ccp.imov_id and ci.crtp_id = 2 "
-					+ "	and ci.clim_dtrelacaofim is null) "
-					+ "inner join cadastro.cliente                       cl  on ( cl.clie_id = ci.clie_id ) "
-					+ "inner join cadastro.imovel                        im  on im.imov_id = ccp.imov_id "
-					+ "inner join cadastro.localidade                    lc  on lc.loca_id = im.loca_id "
-					+ "inner join cadastro.unidade_negocio               un  on un.uneg_id = lc.uneg_id "
-					+ "inner join cadastro.gerencia_regional             gr  on gr.greg_id = lc.greg_id "
-					+ "inner join cadastro.quadra                        qd  on qd.qdra_id = im.qdra_id "
-					+ "inner join micromedicao.rota                      rt  on rt.rota_id = qd.rota_id "
-					+ "where un.uneg_id = :idUnidadeNegocio ";
-
-			if (referenciaInicial != null && referenciaFinal != null && referenciaInicial != referenciaFinal) {
-				consulta = consulta + "and (eccp_ampagamento between " + referenciaInicial + " and " + referenciaFinal + ") ";
-			} else {
-				consulta = consulta + "and eccp_ampagamento = " + referenciaFinal + " ";
-			}
-
-			consulta = consulta
-					+ "group by cc.imov_id, clie_nmcliente, cnta.cnta_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, eccp_ictipopagamento,eccp_nnparcelaatual, eccp_nntotalparcelas,cc.ecco_pcempresaconta,lc.uneg_id,un.uneg_nmunidadenegocio,im.loca_id,lc.loca_nmlocalidade,qd.qdra_nnquadra,im.imov_nnlote,im.imov_nnsublote,rt.rota_cdrota,im.imov_nnsequencialrota,cnta.cnta_cdsetorcomercial,ccp.eccp_dtpagamento ";
-			consulta = consulta + "order by 12, 14, 1,3 ";
-
-			retorno = session.createSQLQuery(consulta).addScalar("idImovel", Hibernate.INTEGER).addScalar("nomeCliente", Hibernate.STRING)
+			retorno = session.createSQLQuery(consulta.toString())
+					.addScalar("idImovel", Hibernate.INTEGER).addScalar("nomeCliente", Hibernate.STRING)
 					.addScalar("anoMesConta", Hibernate.INTEGER).addScalar("valorConta", Hibernate.BIG_DECIMAL)
 					.addScalar("anoMesReferenciaPagamento", Hibernate.INTEGER).addScalar("tipoPagamento", Hibernate.INTEGER)
 					.addScalar("numParcelas", Hibernate.INTEGER).addScalar("numParcelasTotal", Hibernate.INTEGER)
@@ -19902,20 +19843,68 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.addScalar("nomeLocalidade", Hibernate.STRING).addScalar("quadra", Hibernate.INTEGER)
 					.addScalar("lote", Hibernate.INTEGER).addScalar("sublote", Hibernate.INTEGER)
 					.addScalar("codigoRota", Hibernate.INTEGER).addScalar("sequenciaRota", Hibernate.INTEGER)
-					.addScalar("codSetor", Hibernate.INTEGER).addScalar("dataPagamento", Hibernate.DATE).setInteger("idEmpresa", idEmpresa)
-					.setInteger("idUnidadeNegocio", idUnidadeNegocio).setMaxResults(quantidadeRegistros).setFirstResult(numeroIndice)
+					.addScalar("codSetor", Hibernate.INTEGER).addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idCobrancaContaPagamento", Hibernate.INTEGER)
+					.setInteger("idEmpresa", idEmpresa)
+					.setShort("indicadorGeracaoArquivo", ConstantesSistema.NAO)
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		System.out.println(retorno.size());
 		return retorno;
-
+	}
+	
+	private StringBuilder obterConsultaDadosArquivoTextoPagamentosContasCobrancaEmpresa(String colunaAnoMes, String colunaCodigoSetor, String tabelaConta) {
+		StringBuilder consulta = new StringBuilder();
+		
+		consulta.append(" select cc.imov_id as idImovel, ") // 0
+	        .append(" clie_nmcliente as nomeCliente, ") // 1
+	        .append( colunaAnoMes + " as anoMesConta, ") // 2
+	        .append(" ecco_vloriginalconta as valorConta, ") // 3
+	        .append(" eccp_ampagamento as anoMesReferenciaPagamento, ")// 4
+	        .append("  eccp_ictipopagamento as tipoPagamento,") // 5
+	        .append("  eccp_nnparcelaatual as numParcelas,") // 6
+	        .append("  eccp_nntotalparcelas as numParcelasTotal,") // 7
+	        .append(" sum(case when  (ccp.dbtp_id not in ( 43, 80, 91, 94, 100 ) or ccp.dbtp_id is null) ")
+	        .append(" then ( coalesce(eccp_vlpagamentomes,0))  end) as valorPrincipal, ") // 8
+	        .append(" sum(case when   ccp.dbtp_id     in ( 43,  80, 91, 94, 100 ) ")
+	        .append(" then ( coalesce(eccp_vlpagamentomes,0))  end) as valorEncargos, ") // 9
+	        .append(" cc.ecco_pcempresaconta as percentualEmpresa, ") // 10
+	        .append("  lc.uneg_id as idUnidadeNegocio, ")// 11
+	        .append("  un.uneg_nmunidadenegocio as nomeUnidadeNegocio, ")// 12
+	        .append("  im.loca_id as idLocalidade, ")// 13
+	        .append("  lc.loca_nmlocalidade as nomeLocalidade, ")// 14
+	        .append("  qd.qdra_nnquadra as quadra, ")// 15
+	        .append("  im.imov_nnlote as lote, ")// 16
+	        .append("  im.imov_nnsublote as sublote, ")// 17
+	        .append("  rt.rota_cdrota as codigoRota, ")// 18
+	        .append("  im.imov_nnsequencialrota as sequenciaRota, ")// 19
+	        .append( colunaCodigoSetor + " as codSetor, ")// 20
+	        .append("  ccp.eccp_dtpagamento as dataPagamento, ") // 21
+	        .append("  ccp.eccp_id as idCobrancaContaPagamento ") // 22
+	        .append(" from   cobranca.empr_cobr_conta_pagto ccp ")
+	        .append(" inner join cobranca.empresa_cobranca_conta        cc  on cc.ecco_id  = ccp.ecco_id and cc.empr_id = :idEmpresa ")
+	        .append(" inner join "+  tabelaConta + " on cnta.cnta_id  = cc.cnta_id ")
+	        .append(" inner join cadastro.cliente_imovel                ci  on ( ci.imov_id = ccp.imov_id and ci.crtp_id = 2 ")
+	        .append("   and ci.clim_dtrelacaofim is null) ")
+	        .append(" inner join cadastro.cliente                       cl  on ( cl.clie_id = ci.clie_id ) ")
+	        .append(" inner join cadastro.imovel                        im  on im.imov_id = ccp.imov_id ")
+	        .append(" inner join cadastro.localidade                    lc  on lc.loca_id = im.loca_id ")
+	        .append(" inner join cadastro.unidade_negocio               un  on un.uneg_id = lc.uneg_id ")
+	        .append(" inner join cadastro.gerencia_regional             gr  on gr.greg_id = lc.greg_id ")
+	        .append(" inner join cadastro.quadra                        qd  on qd.qdra_id = im.qdra_id ")
+	        .append(" inner join micromedicao.rota                      rt  on rt.rota_id = qd.rota_id ")
+	        .append(" where cc.empr_id = :idEmpresa ")
+	        .append(" and ccp.eccp_icgeracaoarquivo = :indicadorGeracaoArquivo ")
+	        .append(" group by cc.imov_id, clie_nmcliente, " +  colunaAnoMes + " , ecco_vloriginalconta, eccp_ampagamento, ")
+	        .append(" eccp_ictipopagamento, eccp_nnparcelaatual, eccp_nntotalparcelas, cc.ecco_pcempresaconta, lc.uneg_id, ")
+	        .append(" un.uneg_nmunidadenegocio, im.loca_id, lc.loca_nmlocalidade, qd.qdra_nnquadra, im.imov_nnlote, ")
+	        .append(" im.imov_nnsublote,rt.rota_cdrota,im.imov_nnsequencialrota, " + colunaCodigoSetor + " ,ccp.eccp_dtpagamento, ccp.eccp_id ");
+		
+		return consulta;
 	}
 
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ErroRepositorioException {
@@ -27444,6 +27433,27 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 		return negociacoes;
+	}
+	
+	public void atualizarPagamentosCobrancaPorEmpresaGerados(List<Integer> idsPagamentos) throws ErroRepositorioException {
+		StringBuilder consulta = new StringBuilder();
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta.append("update EmpresaCobrancaContaPagamentos ")
+					.append(" set indicadorGeracaoArquivo = :arquivoGerado, ultimaAlteracao = :ultimaAlteracao ")
+					.append(" where id in (:idsPagamentos) ");
+
+			session.createQuery(consulta.toString())
+					.setTimestamp("ultimaAlteracao", new Date())
+					.setShort("arquivoGerado", ConstantesSistema.SIM)
+					.setParameterList("idsPagamentos", idsPagamentos).executeUpdate();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 	
 }

@@ -28,6 +28,7 @@ import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
+import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
@@ -546,7 +547,7 @@ public interface IRepositorioCobranca {
 
 	public Collection pesquisarContaDoParcelamentoNaoPago(Integer parcelamento) throws ErroRepositorioException;
 
-	public Collection<Object[]> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException;
+	public List<ParcelamentoItem> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException;
 
 	public Integer pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException;
 
@@ -699,8 +700,7 @@ public interface IRepositorioCobranca {
 
 	public List consultarDocumentosCobranca(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;
 
-	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa, Integer referenciaInicial, Integer referenciaFinal, Integer quantidadeRegistros,
-			Integer numeroIndice, Integer idUnidadeNegocio) throws ErroRepositorioException;
+	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException;
 
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ErroRepositorioException;
 
@@ -1966,4 +1966,7 @@ public interface IRepositorioCobranca {
 	public List<ContaGeral> obterContasGuiaCobrancaEmpresa(Integer idGuia, Integer idEmpresa) throws ErroRepositorioException;
 	
 	public List<NegociacaoCobrancaEmpresa> obterNegociacoesEmpresa(List<Integer> negociacoes) throws ErroRepositorioException;
+
+	public void atualizarPagamentosCobrancaPorEmpresaGerados(List<Integer> idsPagamentos) throws ErroRepositorioException;
+
 }

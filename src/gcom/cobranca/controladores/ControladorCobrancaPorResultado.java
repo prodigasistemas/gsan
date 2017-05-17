@@ -1,5 +1,7 @@
 package gcom.cobranca.controladores;
 
+import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.batch.Processo;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.EnvioEmail;
@@ -9,6 +11,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
+import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelSubCategoria;
 import gcom.cadastro.imovel.Imovel;
@@ -18,6 +21,8 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
+import gcom.cobranca.EmpresaCobrancaConta;
+import gcom.cobranca.EmpresaCobrancaContaPagamentos;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.NegativacaoImoveis;
@@ -25,14 +30,22 @@ import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.UC0870GerarMovimentoContasEmCobrancaPorEmpresa;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaBuilder;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaHelper;
+import gcom.cobranca.cobrancaporresultado.ArquivoTextoPagamentoContasCobrancaEmpresaHelper;
+import gcom.cobranca.cobrancaporresultado.ArquivoTextoParagentosCobancaEmpresaBuilder;
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.repositorios.IRepositorioCobrancaPorResultadoHBM;
 import gcom.cobranca.repositorios.RepositorioCobrancaPorResultadoHBM;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
+import gcom.faturamento.debito.DebitoACobrar;
+import gcom.faturamento.debito.DebitoACobrarGeral;
+import gcom.faturamento.debito.DebitoCobrado;
+import gcom.faturamento.debito.DebitoTipo;
+import gcom.financeiro.FinanciamentoTipo;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.spcserasa.FiltroNegativacaoImoveis;
@@ -60,8 +73,8 @@ import javax.ejb.EJBException;
 
 import org.apache.log4j.Logger;
 
-public class ControladorCobrancaPorResultado extends ControladorComum {
 
+public class ControladorCobrancaPorResultado extends ControladorComum {
 	private static final long serialVersionUID = 4498794060506412760L;
 	
 	private static Logger logger = Logger.getLogger(ControladorCobrancaPorResultado.class);
@@ -597,9 +610,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				StringBuilder arquivoTxt = new StringBuilder();
 				for (NegociacaoCobrancaEmpresa negociacao : negociacoes) {
 					ArquivoTextoNegociacaoCobrancaEmpresaHelper helper = new ArquivoTextoNegociacaoCobrancaEmpresaBuilder(negociacao).buildHelper();
-
-					buildArquivoNegociacoes(arquivoTxt, helper);
-					helper = null;
+					arquivoTxt = helper.getArquivoTextoNegociacoes();
 				}
 
 				enviarEmailArquivoNegociacoes(idEmpresa, arquivoTxt);
@@ -619,33 +630,463 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 		return retorno;
 	}
+	
+	
+	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
+		
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+		
+		try {
+			//repositorioCobranca.removerEmpresaCobrancaContaPagamentos(anoMesArrecadacao, idLocalidade);
+			Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = obterPagamentosEmpresa(idLocalidade);
 
-	private void buildArquivoNegociacoes(StringBuilder arquivoTxt, ArquivoTextoNegociacaoCobrancaEmpresaHelper helper) {
-		arquivoTxt.append(1 + ";");
-		arquivoTxt.append(helper.getTipoNegociacao() + ";");
-		arquivoTxt.append(helper.getIdNegociacao() != null ? Util.truncarString(helper.getIdNegociacao().toString(), 9) : "").append(";");
-		arquivoTxt.append(helper.getDataNegociacao() != null ? Util.truncarString(Util.formatarData(helper.getDataNegociacao()).toString(), 10) : "").append(";");
-		arquivoTxt.append(helper.getDataVencimentoNegociacao() != null ? Util.truncarString(Util.formatarData(helper.getDataVencimentoNegociacao()).toString(), 10) : "").append(";");
-		arquivoTxt.append(helper.getValorDivida() != null ? Util.formatarBigDecimalComPonto(helper.getValorDivida()) : "").append(";");
-		arquivoTxt.append(helper.getValorDescontos() != null ? Util.formatarBigDecimalComPonto(helper.getValorDescontos()) : "").append(";");
-		arquivoTxt.append(helper.getValorEntrada() != null ? Util.formatarBigDecimalComPonto(helper.getValorEntrada()) : "").append(";");
-		arquivoTxt.append(helper.getValorParcela() != null ? Util.formatarBigDecimalComPonto(helper.getValorParcela()) : "").append(";");
-		arquivoTxt.append(helper.getQuantidadePrestacoes() != null ? Util.truncarString(helper.getQuantidadePrestacoes().toString(), 1) : "").append(";");
-		arquivoTxt.append(System.getProperty("line.separator"));
+			if (!pagamentosEmpresa.isEmpty()) {
+				getControladorBatch().inserirColecaoObjetoParaBatch(pagamentosEmpresa);
+			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
-		buildArquivoContasNegociadas(arquivoTxt, helper);
-	}
-
-	private void buildArquivoContasNegociadas(StringBuilder arquivoTxt, ArquivoTextoNegociacaoCobrancaEmpresaHelper helper) {
-		arquivoTxt.append(2 + ";");
-
-		for (Integer idConta : helper.getIdsContas()) {
-			arquivoTxt.append(idConta + ";");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 		}
-
-		arquivoTxt.append(System.getProperty("line.separator"));
 	}
 
+	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
+		
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+
+		boolean flagTerminou = false;
+		final int quantidadeRegistros = 500;
+		int numeroPaginas = 0;
+		
+		try {
+			while (!flagTerminou) {
+				
+				numeroPaginas = numeroPaginas + quantidadeRegistros;
+	
+				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+				
+				Collection<Pagamento> pagamentos;
+					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
+				
+				if (pagamentos != null && !pagamentos.isEmpty()) {
+					
+					for (Pagamento pagamento : pagamentos) {
+						
+						if (categoriaPermiteGerarPagamento(pagamento)) {
+							pagamentosEmpresa.addAll(gerarPagamentoCobrancaDeContas(pagamento));
+							pagamentosEmpresa.addAll(gerarPagamentosCobrancaDeGuias(pagamento));
+							pagamentosEmpresa.addAll(gerarPagamentosCobrandaDeDebitos(pagamento));
+						}
+					}
+				}
+				if (pagamentos == null || pagamentos.size() < quantidadeRegistros) {
+	
+					flagTerminou = true;
+				}
+	
+				if (pagamentos != null) {
+					pagamentos.clear();
+					pagamentos = null;
+				}
+			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		return pagamentosEmpresa;
+	}
+	
+	private boolean categoriaPermiteGerarPagamento(Pagamento pagamento) throws ControladorException {
+		boolean permite = false;
+		
+		if (pagamento.getImovel() != null) {
+			Categoria categoria = getControladorImovel().obterPrincipalCategoriaImovel(pagamento.getImovel().getId());
+			
+			if (!categoria.getId().equals(Categoria.PUBLICO)) {
+				permite =  true;
+			}
+			
+		} else {
+			permite =  true;
+		}
+		return permite;
+	}
+
+	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentoCobrancaDeContas(Pagamento pagamento)
+			throws ErroRepositorioException, ControladorException {
+		
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+		
+		if (pagamento.getContaGeral() != null) {
+
+			if (isContaEmCobranca(pagamento)) {
+			
+				pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(pagamento.getContaGeral().getId(), pagamento.getValorPagamento(),
+						pagamento, null, null, false, null, ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
+			
+			} else {
+				List<DebitoCobrado> debitosCobrados = obterDebitosDePagamentoDeParcelamento(pagamento);
+
+				for (DebitoCobrado debitoCobrado : debitosCobrados) {
+					Parcelamento parcelamento =  null;
+							
+					if (debitoCobrado.getDebitoACobrarGeral() != null
+							&& debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar() != null
+							&& debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento() != null ) {
+						parcelamento = debitoCobrado.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento();
+					}
+					
+					pagamentosEmpresa.addAll(verificarItensParcelamentos(parcelamento, null, null, pagamento, debitoCobrado, pagamento.getAnoMesReferenciaArrecadacao()));
+				}
+			}
+		}
+		return pagamentosEmpresa;
+	}
+
+	private Boolean isContaEmCobranca(Pagamento pagamento) throws ErroRepositorioException {
+		Integer idEmpresaCobrancaConta = repositorioCobranca.pesquisarEmpresaCobrancaConta(pagamento.getContaGeral().getId());
+		
+		if (idEmpresaCobrancaConta != null) return true;
+		else return false;
+	}
+
+	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentosCobrandaDeDebitos(Pagamento pagamento) throws ControladorException {
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+
+		if (pagamento.getDebitoACobrarGeral() != null
+				&& (pagamento.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento() != null)) {
+
+			pagamentosEmpresa.addAll(verificarItensParcelamentos(pagamento.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento(), null,
+					pagamento.getDebitoACobrarGeral().getDebitoACobrar(), pagamento, null, pagamento.getAnoMesReferenciaArrecadacao()));
+		}
+		
+		return pagamentosEmpresa;
+	}
+
+	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentosCobrancaDeGuias(Pagamento pagamento) throws ControladorException {
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+
+		if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getParcelamento() != null) {
+			
+			pagamentosEmpresa.addAll(verificarItensParcelamentos(pagamento.getGuiaPagamento().getParcelamento(), pagamento.getGuiaPagamento(), null, 
+					pagamento, null, pagamento.getAnoMesReferenciaArrecadacao()));
+		}
+		return pagamentosEmpresa;
+	}
+
+	private List<DebitoCobrado> obterDebitosDePagamentoDeParcelamento(Pagamento pagamento) throws ControladorException {
+		
+		Collection<Integer> financiamentos = obterFinanciamentoTipoParcelamento();
+
+		Collection<Object[]> colecaoDadosDebitoCobrado = getControladorFaturamento().pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(
+															pagamento.getContaGeral().getId(), financiamentos);
+		
+		List<DebitoCobrado> debitos = new ArrayList<DebitoCobrado>();
+
+		if (colecaoDadosDebitoCobrado != null && !colecaoDadosDebitoCobrado.isEmpty()) {
+
+			for (Object[] dadosDebitoCobrado : colecaoDadosDebitoCobrado) {
+				if (dadosDebitoCobrado != null) {
+					DebitoTipo debitoTipo = null;
+					Parcelamento parcelamento = null;
+					DebitoCobrado debitoCobrado = null;
+
+					if (dadosDebitoCobrado[3] != null) {
+						debitoCobrado = new DebitoCobrado();
+						debitoCobrado.setValorPrestacao((BigDecimal) dadosDebitoCobrado[3]);
+						debitoCobrado.setNumeroPrestacaoDebito((Short) dadosDebitoCobrado[4]);
+						debitoCobrado.setNumeroPrestacao((Short) dadosDebitoCobrado[5]);
+						if (dadosDebitoCobrado[0] != null) {
+							debitoTipo = new DebitoTipo();
+							debitoTipo.setId((Integer) dadosDebitoCobrado[0]);
+							debitoCobrado.setDebitoTipo(debitoTipo);
+						}
+
+						if (dadosDebitoCobrado[1] != null) {
+							parcelamento = new Parcelamento();
+							parcelamento.setId((Integer) dadosDebitoCobrado[1]);
+							if (dadosDebitoCobrado[2] != null) {
+								parcelamento.setValorDebitoAtualizado((BigDecimal) dadosDebitoCobrado[2]);
+							}
+							if (dadosDebitoCobrado[6] != null) {
+								parcelamento.setValorConta((BigDecimal) dadosDebitoCobrado[6]);
+							}
+							DebitoACobrar debitoACobrar = new DebitoACobrar();
+							debitoACobrar.setParcelamento(parcelamento);
+							
+							debitoCobrado.setDebitoACobrarGeral(new DebitoACobrarGeral(debitoACobrar));
+						}
+					}
+					
+					debitos.add(debitoCobrado);
+				}
+			}
+		}
+		
+		return debitos;
+	}
+
+	private Collection<Integer> obterFinanciamentoTipoParcelamento() {
+		Collection<Integer> collIdsFincanciamentoTipo = new ArrayList<Integer>();
+		
+		collIdsFincanciamentoTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+		collIdsFincanciamentoTipo.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+		collIdsFincanciamentoTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+		collIdsFincanciamentoTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+		collIdsFincanciamentoTipo.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
+		
+		return collIdsFincanciamentoTipo;
+	}
+	
+	private Collection<EmpresaCobrancaContaPagamentos> criaColecaoEmpresaContaCobrancaPagamento(Integer idConta, BigDecimal valorConta, Pagamento pagamento,
+			DebitoTipo debitoTipo, Parcelamento parcelamento, boolean nivel2, BigDecimal valorPagamentoSemPercentual,
+			Short indicadorTipoPagamento, DebitoCobrado debitoCobrado) throws ControladorException {
+
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+		try {
+
+			Integer idEmpresa = repositorioCobranca.pesquisarEmpresaCobrancaConta(idConta);
+
+			if (idEmpresa != null) {
+				// caso seja um re-parcelamento
+				BigDecimal percentualContaParcelada = null;
+				BigDecimal valorPagamentoMes = null;
+
+				if (nivel2) {
+					percentualContaParcelada = Util.dividirArredondando(valorConta, parcelamento.getValorConta());
+					valorPagamentoMes = (valorPagamentoSemPercentual.multiply(percentualContaParcelada)).setScale(2,
+							BigDecimal.ROUND_HALF_DOWN);
+				} else {
+					// caso exista parcelamento, calcular o percentual da conta paga
+					if (parcelamento != null) {
+						percentualContaParcelada = Util.dividirArredondando(valorConta, parcelamento.getValorConta());
+						valorPagamentoMes = (valorPagamentoSemPercentual.multiply(percentualContaParcelada)).setScale(2,
+								BigDecimal.ROUND_HALF_DOWN);
+					} else {
+						// caso não tenha parcelamento, o pagamento refere-se a uma conta e esteja em cobrança por alguma empresa.
+						valorPagamentoMes = valorConta;
+					}
+				}
+
+				EmpresaCobrancaContaPagamentos pagamentoEmpresa = new EmpresaCobrancaContaPagamentos();
+				
+				EmpresaCobrancaConta empresaCobrancaConta = new EmpresaCobrancaConta();
+				empresaCobrancaConta.setId(idEmpresa);
+
+				pagamentoEmpresa.setDebitoTipo(debitoTipo);
+				pagamentoEmpresa.setEmpresaCobrancaConta(empresaCobrancaConta);
+				pagamentoEmpresa.setAnoMesPagamentoArrecadacao(pagamento.getAnoMesReferenciaArrecadacao());
+				pagamentoEmpresa.setValorPagamentoMes(valorPagamentoMes);
+				pagamentoEmpresa.setIndicadorTipoPagamento(indicadorTipoPagamento);
+				pagamentoEmpresa.setNumeroParcelaAtual(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacaoDebito()) : new Integer("0"));
+				pagamentoEmpresa.setNumeroTotalParcelas(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacao()) : new Integer("0"));
+				pagamentoEmpresa.setUltimaAlteracao(new Date());
+				pagamentoEmpresa.setIndicadorGeracaoArquivo(ConstantesSistema.NAO);
+				
+				if (pagamento.getAnoMesReferenciaPagamento() != null) {
+					pagamentoEmpresa.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());
+				}
+				
+				pagamentoEmpresa.setDataPagamento(pagamento.getDataPagamento());
+				
+				if (pagamento.getImovel() != null) {
+					pagamentoEmpresa.setIdImovel(pagamento.getImovel().getId());
+				}
+				
+				if (pagamento.getAvisoBancario() != null) {
+					pagamentoEmpresa.setIdArrecadador(pagamento.getAvisoBancario().getArrecadador().getId());
+				}
+				pagamentosEmpresa.add(pagamentoEmpresa);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new EJBException(ex);
+		}
+		return pagamentosEmpresa;
+	}
+	
+	private Collection<EmpresaCobrancaContaPagamentos> verificarItensParcelamentos(Parcelamento parcelamento, GuiaPagamento guiaPagamento, DebitoACobrar debitoACobrar,
+			Pagamento pagamento, DebitoCobrado debitoCobrado, Integer anoMesArrecadacao)
+			throws ControladorException {
+		
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+		try {
+
+			if (parcelamento != null) {
+
+				List<ParcelamentoItem> itens = repositorioCobranca.pesquisarItensParcelamentos(parcelamento.getId());
+				
+				if (itens != null && !itens.isEmpty()) {
+					
+					for (ParcelamentoItem item : itens) {
+
+						if (item.getContaGeral() != null) {
+							
+							BigDecimal valorConta = item.getContaGeral().obterValorConta();
+
+							// caso não seja guia de pagamento nem debito a cobrar
+							if (guiaPagamento == null && debitoACobrar == null) {
+								
+								// [SB0003] - Atualizar pagamento de conta parcelada a partir do debito cobrado
+								pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(item.getContaGeral().getId(), valorConta, pagamento,
+										debitoCobrado.getDebitoTipo(), parcelamento, false, debitoCobrado.getValorPrestacao(),
+										ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO,debitoCobrado));
+							} else {
+								if (guiaPagamento != null) {
+									// [SB0007] - Atualizar pagamento de conta parcelada a partir da guia de pagamento
+									pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(item.getContaGeral().getId(), valorConta, pagamento,
+											guiaPagamento.getDebitoTipo(), parcelamento, false, guiaPagamento.getValorDebito(),
+											ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
+								} else {
+									// [SB0011] - Atualizar pagamento de conta parcelada a partir do debito a cobrar
+									pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(item.getContaGeral().getId(), valorConta, pagamento,
+											debitoACobrar.getDebitoTipo(), parcelamento, false, debitoACobrar.getValorTotalComBonus(),
+											ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO, null));
+								}
+							}
+						}
+						
+						// verifica se existe o id do debito a cobrar geral, refeere-se a um re-parcelamento
+						if (item.getDebitoACobrarGeral() != null) {
+							pagamentosEmpresa.addAll(verificarItensParcelamentosNivel2(parcelamento, guiaPagamento, debitoACobrar, pagamento, debitoCobrado,
+									anoMesArrecadacao, item.getDebitoACobrarGeral().getId()));
+						}
+
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new EJBException(ex);
+		}
+		
+		return pagamentosEmpresa;
+	}
+	
+	@SuppressWarnings("unused")
+	private Collection<EmpresaCobrancaContaPagamentos> verificarItensParcelamentosNivel2(Parcelamento parcelamento, GuiaPagamento guiaPagamento, DebitoACobrar debitoACobrar,
+			Pagamento pagamento, DebitoCobrado debitoCobrado, Integer anoMesArrecadacao, Integer idDebitoACobrarNivel2) throws ControladorException {
+		
+		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
+		
+		try {
+
+			Integer idParcelamento = null;
+
+			if (idParcelamento != null) {
+
+				Collection<Object[]> collItensParcelamentosNivel2 = repositorioCobranca.pesquisarItensParcelamentosNivel2(idParcelamento);
+
+				Integer idContaGeralNivel2 = null;
+				BigDecimal valorContaNivel2 = null;
+
+				if (collItensParcelamentosNivel2 != null && !collItensParcelamentosNivel2.isEmpty()) {
+					for (Object[] dadosItensParcelamento : collItensParcelamentosNivel2) {
+
+						if (dadosItensParcelamento != null) {
+
+							if (dadosItensParcelamento[2] != null) {
+								valorContaNivel2 = (BigDecimal) dadosItensParcelamento[2];
+							}
+
+							if (dadosItensParcelamento[0] != null) {
+								idContaGeralNivel2 = (Integer) dadosItensParcelamento[0];
+
+								if (guiaPagamento == null && debitoACobrar == null) {
+									// [SB0005] - Atualizar pagamento de conta parcelada a partir do debito cobrado - nivel 2
+									
+									pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(idContaGeralNivel2, valorContaNivel2, pagamento,
+											debitoCobrado.getDebitoTipo(), parcelamento, true, debitoCobrado.getValorPrestacao(),
+											ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO, debitoCobrado));
+								} else {
+									if (guiaPagamento != null) {
+										// [SB0008] - Atualizar pagamento de conta parcelada a partir da guia de - pagamento nivel 2
+										pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(idContaGeralNivel2, valorContaNivel2, pagamento,
+												guiaPagamento.getDebitoTipo(), parcelamento, true, guiaPagamento.getValorDebito(),
+												ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
+									} else {
+										// [SB0013] - Atualizar pagamento de conta parcelada a partir do debito a cobrar nivel 2
+										pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(idContaGeralNivel2, valorContaNivel2, pagamento,
+												debitoACobrar.getDebitoTipo(), parcelamento, true, debitoACobrar.getValorTotalComBonus(),
+												ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO, null));
+									}
+								}
+							}
+						}
+						idContaGeralNivel2 = null;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new EJBException(ex);
+		}
+		return pagamentosEmpresa;
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	public void gerarArquivoTextoPagamentosCobrancaEmpresa(Integer idFuncionalidadeIniciada, Integer idEmpresa) throws ControladorException {
+		
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.EMPRESA, idEmpresa);
+
+		try {
+
+			StringBuilder arquivoCompleto = new StringBuilder();
+			
+			Collection colecaoDadosTxt = repositorioCobranca.pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(idEmpresa);
+			
+			if (colecaoDadosTxt != null && !colecaoDadosTxt.isEmpty()) {
+
+				Iterator colecaoDadosTxtIterator = colecaoDadosTxt.iterator();
+
+				List<Integer> idsCobrancaPagamentos = new ArrayList<Integer>();
+				
+				while (colecaoDadosTxtIterator.hasNext()) {
+
+					Object[] dados = (Object[]) colecaoDadosTxtIterator.next();
+
+					ArquivoTextoPagamentoContasCobrancaEmpresaHelper helper = new ArquivoTextoParagentosCobancaEmpresaBuilder(dados).buildHelper(); 
+					
+					arquivoCompleto.append(helper.getArquivoTexto());
+					
+					idsCobrancaPagamentos.add(helper.getIdEmpresaCobrancaContaPagamento());
+				}
+				enviarEmailArquivoPagamentos(idEmpresa, arquivoCompleto);
+				
+				atualizarPagamentosGerados(idsCobrancaPagamentos);
+			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			ex.printStackTrace();
+
+			throw new EJBException(ex);
+		}
+	}
+	
+	private void atualizarPagamentosGerados(List<Integer> idsPagamentos) {
+		try {
+			repositorioCobranca.atualizarPagamentosCobrancaPorEmpresaGerados(idsPagamentos);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void enviarEmailArquivoPagamentos(Integer idEmpresa, StringBuilder arquivo) throws ControladorException {
+		String dataHora = Util.formatarDataAAAAMMDD(new Date()) + "-" + Util.formatarDataHHMM(new Date());
+
+		String nomeArquivo = "pagamentos_contas_cobranca_empresa_" + idEmpresa + "_" + dataHora;
+		
+		EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.COBRANCA_EMPRESA);
+		
+		String titulo = "Negociações da Empresa de Cobrança - " + idEmpresa ;
+		String corpo = "Negociações da Empresa de Cobrança : " + idEmpresa ;
+		
+		ServicosEmail.enviarArquivoCompactado(nomeArquivo, arquivo, envioEmail.getEmailReceptor(), envioEmail.getEmailRemetente(), titulo, corpo);
+	}
+	
 	private void enviarEmailArquivoNegociacoes(Integer idEmpresa, StringBuilder arquivoTxt) throws ControladorException {
 		String dataHora = Util.formatarDataAAAAMMDD(new Date()) + "-" + Util.formatarDataHHMM(new Date());
 
@@ -658,4 +1099,5 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 
 		ServicosEmail.enviarArquivoCompactado(nomeArquivo, arquivoTxt, envioEmail.getEmailReceptor(), envioEmail.getEmailRemetente(), titulo, corpo);
 	}
+
 }
