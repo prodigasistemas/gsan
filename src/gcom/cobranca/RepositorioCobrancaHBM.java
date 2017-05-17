@@ -13689,18 +13689,27 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " FROM faturamento.conta conta "
 					+ " LEFT OUTER JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ";
 			
+			if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+				consulta += " INNER JOIN cadastro.cliente_conta cc ON cc.cnta_id = conta.cnta_id AND cc.clct_icnomeconta = 1 ";
+			}
+			
 			consulta += " WHERE conta.imov_id in ( :idsImoveis ) " 
 					  + " and conta.cnta_amreferenciaconta < " + sistemaParametro.getAnoMesFaturamento() 
 					  + " and conta.cmrv_id is null and conta.cnta_dtrevisao is null "
-					  + " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
 					  + " and pagto.pgmt_id is null and conta.dcst_idatual in (:incluida,:normal,:retificada) ";
 
 			if (comando.getQtdDiasVencimento() != null) {
 				consulta += "and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(
 						Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + "','YYYY-MM-DD') ";
+			} else {
+				consulta += " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') ";
 			}
 
 			consulta += criarCondicionaisPesquisarContasInformarContasEmCobranca(comando);
+			
+			if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+				consulta += " and cc.clie_id in (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = 2 and ci.clim_dtrelacaofim is null) ";
+			}
 
 			if (comando.getReferenciaContaInicial() != null
 					|| comando.getDataVencimentoContaInicial() != null
@@ -13719,19 +13728,29 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						+ " FROM faturamento.conta conta "
 						+ " LEFT OUTER JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ";
 				
+				if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+					consulta += " INNER JOIN cadastro.cliente_conta cc ON cc.cnta_id = conta.cnta_id AND cc.clct_icnomeconta = 1 ";
+				}
+				
 				consulta += " WHERE conta.imov_id in ( :idsImoveis ) "
 						  + " and conta.cnta_amreferenciaconta < " + sistemaParametro.getAnoMesFaturamento() 
 						  + " and conta.cmrv_id is null "
 						  + " and conta.cnta_dtrevisao is null "
-						  + " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
+//						  + " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') "
 						  + " and ";
 
 				if (comando.getQtdDiasVencimento() != null) {
 					consulta += " conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(
 							Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + "','YYYY-MM-DD') and ";
+				} else {
+					consulta += " and conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') ";
 				}
 
 				consulta += criarCondicionaisPesquisarContasInformarContasEmCobrancaNegacao(comando);
+				
+				if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+					consulta += " and cc.clie_id in (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = 2 and ci.clim_dtrelacaofim is null) ";
+				}
 			}
 
 			retorno = session.createSQLQuery(consulta)
@@ -14104,14 +14123,14 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " comando.cliente.nome,"
 					+ " comando.localidadeInicial.id,"
 					+ " comando.localidadeFinal.id,"
-					+ " comando.unidadeNegocio.id,"
-					+ " comando.unidadeNegocio.nome,"
+//					+ " comando.unidadeNegocio.id,"
+//					+ " comando.unidadeNegocio.nome,"
 					+ " comando.ultimaAlteracao) "
 					+ "from ComandoEmpresaCobrancaConta comando "
 					+ "left join comando.cliente cliente "
 					+ "left join comando.localidadeInicial localidadeInicial "
 					+ "left join comando.localidadeFinal localidadeFinal "
-					+ "left join comando.unidadeNegocio unidadeNegocio "
+//					+ "left join comando.unidadeNegocio unidadeNegocio "
 					+ "inner join comando.empresa empresa "
 					+ "where comando.empresa.id = :idEmpresa ";
 
