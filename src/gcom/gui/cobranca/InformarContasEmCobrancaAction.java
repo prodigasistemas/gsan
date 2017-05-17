@@ -107,6 +107,7 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 
 		String quantidadeDiasVencimento = form.getQuantidadeDiasVencimento();
 		String indicadorCobrancaTelemarketing = form.getIndicadorCobrancaTelemarketing();
+		String indicadorGerarDebitoPreterito = form.getIndicadorGerarComDebitoPreterito();
 
 		String codigoQuadraInicial = form.getCodigoQuadraInicial();
 		String codigoQuadraFinal = form.getCodigoQuadraFinal();
@@ -118,6 +119,10 @@ public class InformarContasEmCobrancaAction extends GcomAction {
 		comando.setIndicadorComercial(ConstantesSistema.NAO.intValue());
 		comando.setIndicadorIndustrial(ConstantesSistema.NAO.intValue());
 		comando.setIndicadorPublico(ConstantesSistema.NAO.intValue());
+		
+		if (indicadorGerarDebitoPreterito != null && !indicadorGerarDebitoPreterito.trim().equals("")) {
+			comando.setIndicadorGerarComDebitoPreterito(new Short(indicadorGerarDebitoPreterito));
+		}
 
 		if (indicadorCobrancaTelemarketing != null && !indicadorCobrancaTelemarketing.trim().equals("")) {
 			comando.setIndicadorCobrancaTelemarketing(new Short(indicadorCobrancaTelemarketing));
