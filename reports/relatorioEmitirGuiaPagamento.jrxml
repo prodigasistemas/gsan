@@ -62,6 +62,15 @@
 			<groupExpression><![CDATA[$F{getIdGuiaPagamento}]]></groupExpression>
 			<groupHeader>
 			<band height="450"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="418"
+						y="18"
+						width="0"
+						height="366"
+						key="line-13"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 				<rectangle radius="5" >
 					<reportElement
 						x="2"
@@ -122,7 +131,7 @@
 						<subreportParameterExpression><![CDATA[$F{getArrayJRDetail}]]></subreportParameterExpression>
 					</subreportParameter>
 					<dataSourceExpression><![CDATA[$F{getArrayJRDetail}]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA["relatorioEmitirGuiaPagamentoDetail.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioEmitirGuiaPagamentoDetailParcelamento.jasper"]]></subreportExpression>
 				</subreport>
 				<rectangle radius="5" >
 					<reportElement
@@ -213,15 +222,6 @@
 						width="534"
 						height="0"
 						key="line-19"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="418"
-						y="18"
-						width="0"
-						height="366"
-						key="line-13"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<staticText>

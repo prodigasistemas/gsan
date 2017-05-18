@@ -1,8 +1,11 @@
 package gcom.relatorio.arrecadacao.pagamento;
 
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.batch.Relatorio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.relatorio.ConstantesRelatorios;
@@ -70,7 +73,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 					valor = Util.formatarMoedaReal(guiaPagamentoItem.getValorDebito());
 
-					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor);
+					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, false);
 
 					colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 				}
@@ -79,8 +82,9 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 				valor = Util.formatarMoedaReal(helper.getValorDebito());
 
-				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor);
+				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, true);
 
+				preencherInformacoesParcelamento(relatorioEmitirGuiaPagamentoDetailBean, helper.getIdGuiaPagamento());
 				colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 			}
 
@@ -139,6 +143,29 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		}
 
 		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Parcelamento obterParcelamentoGuia(String idGuiaPagamento) {
+		FiltroGuiaPagamento filtro = new FiltroGuiaPagamento();
+		
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
+
+		Collection<GuiaPagamento> guias = Fachada.getInstancia().pesquisar(filtro, GuiaPagamento.class.getName());
+		GuiaPagamento guia = guias.iterator().next();
+		
+		if (guia.getParcelamento() != null)
+			return guia.getParcelamento();
+		else
+			return null;
+	}
+	
+	private void preencherInformacoesParcelamento(RelatorioEmitirGuiaPagamentoDetailBean relatorio, String idGuiaPagamento) {
+		Parcelamento parcelamento = obterParcelamentoGuia(idGuiaPagamento);
+		
+		if (parcelamento != null)
+			relatorio.preencherDadosParcelamento(parcelamento);
 	}
 
 	public Object executar() throws TarefaException {

@@ -1779,6 +1779,10 @@ public class Util {
 		}
 
 	}
+	
+	public static String formatarMoedaRealComCifrao(BigDecimal valor) {
+		return "R$ " + Util.formatarMoedaReal(valor);
+	}
 
 	public static String formatarMoedaReal4Casas(BigDecimal valor) {
 		/**
