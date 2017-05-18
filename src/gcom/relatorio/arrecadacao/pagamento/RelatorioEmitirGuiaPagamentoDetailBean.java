@@ -130,16 +130,17 @@ public class RelatorioEmitirGuiaPagamentoDetailBean implements RelatorioBean {
 		this.valorParcela = valorParcela;
 	}
 
-	public void preencherDadosParcelamento(Parcelamento parcelamento) {
+	public void preencherDadosParcelamento(Parcelamento parcelamento, Integer[] periodoDebitos, Short diaVencimento) {
 		
-		this.periodoDebito = null;
-		this.valorAtualizadoParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorParcelado());
-		this.valorNegociadoParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado());
+		this.periodoDebito = Util.formatarAnoMesParaMesAno(periodoDebitos[0].intValue()) + " a " + Util.formatarAnoMesParaMesAno(periodoDebitos[1].intValue());
+		this.valorAtualizadoParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado());
+		this.valorNegociadoParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorParcelado());
 		this.valorAVistaParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado());
 		this.valorEntradaParcelamento= Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada());
 		this.qtdParcelasParcelamento= parcelamento.getNumeroPrestacoes().toString();
 		this.numeroContratoParcelamento= parcelamento.getId().toString();
-		this.dataVencimentoParcela= null;
+		this.dataVencimentoParcela= diaVencimento.toString();
 		this.valorParcela= Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao());
 	}
+	
 }

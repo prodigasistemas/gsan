@@ -40126,4 +40126,20 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) {
+		try {
+			return this.getControladorCobranca().obterPeriodoContasParceladas(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) {
+		try {
+			return this.getControladorFaturamento().obterDiaVencimentoConta(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

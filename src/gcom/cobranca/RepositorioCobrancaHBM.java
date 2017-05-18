@@ -27436,5 +27436,32 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 	}
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ErroRepositorioException {
+		Integer[] retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
 	
+		try {
+			consulta.append("select min(conta.referencia) as menorReferencia, max(conta.referencia) as maiorReferencia")
+					.append(" from ParcelamentoItem item ")
+					.append(" inner join item.contaGeral contaGeral ")
+					.append(" inner join contaGeral.conta conta ")
+					.append(" where item.parcelamento.id = :idParcelamento ");
+	
+		Object[] referencias = (Object[]) session.createQuery(consulta.toString())
+					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+	
+		retorno = new Integer[2];
+		
+		retorno[0] = (Integer)referencias[0];
+		retorno[1] = (Integer)referencias[1];
+	
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }

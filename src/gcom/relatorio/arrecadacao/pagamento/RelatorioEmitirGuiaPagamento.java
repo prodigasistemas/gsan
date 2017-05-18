@@ -164,8 +164,11 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 	private void preencherInformacoesParcelamento(RelatorioEmitirGuiaPagamentoDetailBean relatorio, String idGuiaPagamento) {
 		Parcelamento parcelamento = obterParcelamentoGuia(idGuiaPagamento);
 		
+		Integer[] periodoDebitos = Fachada.getInstancia().obterPeriodoContasParceladas(parcelamento.getId());
+		
+		Short diaVencimento = Fachada.getInstancia().obterDiaVencimentoConta(parcelamento.getImovel().getId());
 		if (parcelamento != null)
-			relatorio.preencherDadosParcelamento(parcelamento);
+			relatorio.preencherDadosParcelamento(parcelamento, periodoDebitos, diaVencimento);
 	}
 
 	public Object executar() throws TarefaException {

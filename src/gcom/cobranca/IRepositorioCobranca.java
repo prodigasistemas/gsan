@@ -1969,4 +1969,5 @@ public interface IRepositorioCobranca {
 
 	public void atualizarPagamentosCobrancaPorEmpresaGerados(List<Integer> idsPagamentos) throws ErroRepositorioException;
 
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ErroRepositorioException;
 }

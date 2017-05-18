@@ -67,21 +67,6 @@
 		</columnHeader>
 		<detail>
 			<band height="131"  isSplitAllowed="true" >
-				<line direction="TopDown">
-					<reportElement
-						x="416"
-						y="2"
-						width="0"
-						height="129"
-						key="line-7"
-						positionType="Float"
-						isPrintInFirstWholeBand="true"
-						printWhenGroupChanges="espacamento"
-						isPrintWhenDetailOverflows="true">
-							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
-						</reportElement>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<rectangle>
 					<reportElement
 						x="1"
