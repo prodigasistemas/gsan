@@ -214,7 +214,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
 			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
 			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
-			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
+			/*Integer idUnidadeNegocio, String nomeUnidadeNegocio, */Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
 		super();
 
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
@@ -234,8 +234,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 		this.nomeCliente = nomeCliente;
 		this.idLocalidadeInicial = idLocalidadeInicial;
 		this.idLocalidadeFinal = idLocalidadeFinal;
-		this.idUnidadeNegocio = idUnidadeNegocio;
-		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
+//		this.idUnidadeNegocio = idUnidadeNegocio;
+//		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
 		this.qtdeTotalContasCobranca = qtdeTotalContasCobranca;
 		this.valorTotalContasCobranca = valorTotalContasCobranca;
 		this.ultimaAlteracao = ultimaAlteracao;
@@ -244,7 +244,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
 			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
 			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
-			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Integer qtdeContasCriterioComando,
+			/*Integer idUnidadeNegocio, String nomeUnidadeNegocio,*/ Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Integer qtdeContasCriterioComando,
 			BigDecimal valorContasCriterioComando, Date ultimaAlteracao) {
 		super();
 
@@ -265,8 +265,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 		this.nomeCliente = nomeCliente;
 		this.idLocalidadeInicial = idLocalidadeInicial;
 		this.idLocalidadeFinal = idLocalidadeFinal;
-		this.idUnidadeNegocio = idUnidadeNegocio;
-		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
+//		this.idUnidadeNegocio = idUnidadeNegocio;
+//		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
 		this.qtdeTotalContasCobranca = qtdeTotalContasCobranca;
 		this.valorTotalContasCobranca = valorTotalContasCobranca;
 		this.qtdeContasCriterioComando = qtdeContasCriterioComando;
@@ -277,7 +277,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
 			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
 			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
-			Integer idUnidadeNegocio, String nomeUnidadeNegocio, Date ultimaAlteracao) {
+			/*Integer idUnidadeNegocio, String nomeUnidadeNegocio,*/ Date ultimaAlteracao) {
 		super();
 
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
@@ -297,8 +297,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 		this.nomeCliente = nomeCliente;
 		this.idLocalidadeInicial = idLocalidadeInicial;
 		this.idLocalidadeFinal = idLocalidadeFinal;
-		this.idUnidadeNegocio = idUnidadeNegocio;
-		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
+//		this.idUnidadeNegocio = idUnidadeNegocio;
+//		this.nomeUnidadeNegocio = nomeUnidadeNegocio;
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
@@ -1233,8 +1233,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	}
 	
 	public StringBuilder buildArquivoContasLayoutPadrao(StringBuilder registros) {
-		registros.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio : "").append(";");
-		registros.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio : "").append(";");
+//		registros.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio : "").append(";");
+//		registros.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio : "").append(";");
 		registros.append(this.idFaturamentoGrupo != null ? this.idFaturamentoGrupo : "").append(";");
 		registros.append(this.idLocalidade != null ? this.idLocalidade : "").append(";");
 		registros.append(this.nomeLocalidade != null ? this.nomeLocalidade : "").append(";");
@@ -1344,8 +1344,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	public StringBuilder buildArquivoContasLayoutTipo02(StringBuilder registros) {
 		registros.append(this.idGerenciaRegional != null ? Util.truncarString(this.idGerenciaRegional.toString(), 4) : "").append("#");
 		registros.append(this.nomeGerenciaRegional != null ? Util.truncarString(this.nomeGerenciaRegional, 25) : "").append("#");
-		registros.append(this.idUnidadeNegocio != null ? Util.truncarString(this.idUnidadeNegocio.toString(), 4) : "").append("#");
-		registros.append(this.nomeUnidadeNegocio != null ? Util.truncarString(this.nomeUnidadeNegocio, 50) : "").append("#");
+//		registros.append(this.idUnidadeNegocio != null ? Util.truncarString(this.idUnidadeNegocio.toString(), 4) : "").append("#");
+//		registros.append(this.nomeUnidadeNegocio != null ? Util.truncarString(this.nomeUnidadeNegocio, 50) : "").append("#");
 		registros.append(this.idFaturamentoGrupo != null ? Util.truncarString(this.idFaturamentoGrupo.toString(), 4) : "").append("#");
 		registros.append(this.idLocalidade != null ? Util.truncarString(this.idLocalidade.toString(), 4) : "").append("#");
 		registros.append(this.nomeLocalidade != null ? Util.truncarString(this.nomeLocalidade, 30) : "").append("#");

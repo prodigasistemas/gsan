@@ -469,8 +469,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			mapHelper.put((Integer) (dados[8]), helperImovel);
 		} else {
 			helper.setIdCobrancaConta((Integer) (dados[0]));
-			helper.setIdUnidadeNegocio((Integer) (dados[1]));
-			helper.setNomeUnidadeNegocio((String) (dados[2]));
+//			helper.setIdUnidadeNegocio((Integer) (dados[1]));
+//			helper.setNomeUnidadeNegocio((String) (dados[2]));
 			helper.setIdFaturamentoGrupo((Integer) (dados[3]));
 			helper.setIdLocalidade((Integer) (dados[4]));
 			helper.setNomeLocalidade((String) (dados[5]));

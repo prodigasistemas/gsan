@@ -34,6 +34,7 @@
 		<property name="qtdDiasVencimento" 				type="java.lang.Integer" 	column="cecc_qtddiasvencimento" 		length="4"/>
 		<property name="indicadorCobrancaTelemarketing" type="java.lang.Short" 		column="cecc_iccobrancatelemarketing" 	length="1" not-null="true" />
 		<property name="qtdMaximaClientes" 				type="java.lang.Integer" 	column="cecc_qtdmaximaclientes" 		length="9"/>
+		<property name="indicadorGerarComDebitoPreterito" type="java.lang.Short" 	column="cecc_icdebitopreterito" 	    length="1" />
 
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>
