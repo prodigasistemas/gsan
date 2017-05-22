@@ -9,17 +9,18 @@
 			</generator>
 		</id>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ncem_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataVencimento" type="java.sql.Timestamp" column="ncem_dtvencimento" length="8"/>
 
 		<!-- Associations -->
-		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="true">
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="false">
 			<column name="parc_id"/>
 		</many-to-one>
 
-		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="true">
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
 			<column name="cbdo_id"/>
 		</many-to-one>
 
-		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="true">
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
 			<column name="gpag_id"/>
 		</many-to-one>
 

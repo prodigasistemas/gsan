@@ -552,6 +552,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		for (Parcelamento parcelamento : parcelamentos) {
 			NegociacaoCobrancaEmpresa negociacao = new NegociacaoCobrancaEmpresa(parcelamento, new Empresa(idEmpresa), new Date());
 
+			Date dataVencimento = getControladorCobranca().obterDataVencimentoEntradaParcelamento(parcelamento.getId());
+			negociacao.setDataVencimento(dataVencimento);
+			
 			Integer idNegociacao = (Integer) getControladorUtil().inserir(negociacao);
 			negociacao.setId(idNegociacao);
 			negociacoes.add(idNegociacao);
@@ -610,7 +613,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				StringBuilder arquivoTxt = new StringBuilder();
 				for (NegociacaoCobrancaEmpresa negociacao : negociacoes) {
 					ArquivoTextoNegociacaoCobrancaEmpresaHelper helper = new ArquivoTextoNegociacaoCobrancaEmpresaBuilder(negociacao).buildHelper();
-					arquivoTxt = helper.getArquivoTextoNegociacoes();
+					arquivoTxt.append(helper.getArquivoTextoNegociacoes());
 				}
 
 				enviarEmailArquivoNegociacoes(idEmpresa, arquivoTxt);

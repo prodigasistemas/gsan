@@ -62598,4 +62598,12 @@ public class ControladorCobranca implements SessionBean {
 		
 		return valorDescontoFaixaReferenciaConta;
 	}
+	
+	public Date obterDataVencimentoEntradaParcelamento(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorioCobranca.obterDataVencimentoEntradaParcelamento(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

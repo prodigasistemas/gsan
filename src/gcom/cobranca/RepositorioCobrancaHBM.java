@@ -27380,11 +27380,19 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 			consulta.append("select negociacao ")
 					.append(" from NegociacaoCobrancaEmpresa negociacao ")
-					.append(" left join  fetch negociacao.parcelamento ")
-					.append(" left join  fetch negociacao.cobrancaDocumento ")
+					.append(" left join  fetch negociacao.parcelamento parcelamento ")
+					.append(" left join  fetch parcelamento.imovel imovel ")
+					.append(" left join  fetch negociacao.parcelamento.cliente ")
+					.append(" left join  fetch negociacao.cobrancaDocumento cobrancaDocumento ")
+					.append(" left join  fetch cobrancaDocumento.imovel ")
+					.append(" left join  fetch cobrancaDocumento.cliente ")
 					.append(" left join  fetch negociacao.guiaPagamentoGeral guiaGeral ")
 					.append(" left join  fetch guiaGeral.guiaPagamento guia ")
+					.append(" left join  fetch guia.imovel ")
+					.append(" left join  fetch guia.cliente ")
 					.append(" left join  fetch guiaGeral.guiaPagamentoHistorico guiaHistorico ")
+					.append(" left join  fetch guiaHistorico.imovel ")
+					.append(" left join  fetch guiaHistorico.cliente ")
 					.append(" where  negociacao.id in (:negociacoes) ");
 			
 			negociacoes = session.createQuery(consulta.toString())
@@ -27436,5 +27444,27 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 	}
-	
+
+	public Date obterDataVencimentoEntradaParcelamento(Integer idParcelamento) throws ErroRepositorioException {
+		StringBuilder consulta = new StringBuilder();
+		Session session = HibernateUtil.getSession();
+		Date retorno = null;
+		try {
+			consulta.append("select guia.dataVencimento ")
+					.append(" from GuiaPagamento guia ")
+					.append(" where guia.parcelamento.id = :idParcelamento ")
+					.append(" and guia.financiamentoTipo.id = :entrada ");
+
+			retorno = (Date) session.createQuery(consulta.toString())
+					.setInteger("idParcelamento", idParcelamento)
+					.setInteger("entrada", FinanciamentoTipo.ENTRADA_PARCELAMENTO).uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
 }

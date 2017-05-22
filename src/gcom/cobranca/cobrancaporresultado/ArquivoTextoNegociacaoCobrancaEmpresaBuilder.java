@@ -1,5 +1,6 @@
 package gcom.cobranca.cobrancaporresultado;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.util.ConstantesSistema;
 
 import java.util.ArrayList;
@@ -38,12 +39,15 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 		helper.setTipoNegociacao(ConstantesSistema.TIPO_NEGOCIACAO_PARCELAMENTO);
 		helper.setIdNegociacao(negociacao.getParcelamento().getId());
 		helper.setDataNegociacao(negociacao.getParcelamento().getParcelamento());
-		helper.setDataVencimentoNegociacao(null);
+		helper.setDataVencimentoNegociacao(negociacao.getDataVencimento());
 		helper.setValorDivida(negociacao.getParcelamento().getValorNegociado());
 		helper.setValorDescontos(negociacao.getParcelamento().getValorDescontoAcrescimos());
 		helper.setValorEntrada(negociacao.getParcelamento().getValorEntrada());
 		helper.setValorParcela(negociacao.getParcelamento().getValorPrestacao());
 		helper.setQuantidadePrestacoes(negociacao.getParcelamento().getNumeroPrestacoes().intValue());
+		helper.setIdImovel(negociacao.getParcelamento().getImovel().getId());
+		
+		buildDadosCliente(negociacao.getParcelamento().getCliente());
 	}
 
 	protected void buildExtratoHelper() {
@@ -56,6 +60,9 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 		helper.setValorEntrada(null);
 		helper.setValorParcela(negociacao.getCobrancaDocumento().getValorDocumento());
 		helper.setQuantidadePrestacoes(new Integer(1));
+		helper.setIdImovel(negociacao.getCobrancaDocumento().getImovel() != null ? negociacao.getCobrancaDocumento().getImovel().getId() : null);
+		
+		buildDadosCliente(negociacao.getCobrancaDocumento().getCliente());
 	}
 	
 	protected void buildGuiaHelper() {
@@ -78,6 +85,10 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 		helper.setValorEntrada(null);
 		helper.setValorParcela(null);
 		helper.setQuantidadePrestacoes(new Integer(1));
+		helper.setIdImovel(negociacao.getGuiaPagamentoGeral().getGuiaPagamento().getImovel().getId());
+		helper.setIdImovel(negociacao.getGuiaPagamentoGeral().getGuiaPagamento().getImovel().getId());
+		
+		buildDadosCliente(negociacao.getGuiaPagamentoGeral().getGuiaPagamento().getCliente());
 	}
 	
 	protected void buildGuiaPagamentoHistoricoHelper() {
@@ -90,6 +101,9 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 		helper.setValorEntrada(null);
 		helper.setValorParcela(null);
 		helper.setQuantidadePrestacoes(new Integer(1));
+		helper.setIdImovel(negociacao.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getImovel().getId());
+		
+		buildDadosCliente(negociacao.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getCliente());
 	}
 	
 	protected void buildContas() {
@@ -104,6 +118,15 @@ public class ArquivoTextoNegociacaoCobrancaEmpresaBuilder {
 		}
 		
 		return ids;
+	}
+	
+	private void buildDadosCliente(Cliente cliente) {
+		
+		if (cliente != null) {
+			helper.setIdCliente(cliente.getId());
+			helper.setNomeCliente(cliente.getNome());
+			helper.setCpfCliente(cliente.getCpf());
+		}
 	}
 }
 

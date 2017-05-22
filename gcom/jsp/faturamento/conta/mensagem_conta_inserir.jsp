@@ -513,325 +513,289 @@ function desabilitaOuHabilitaQuadra(){
 	<table width="770" border="0" cellspacing="5" cellpadding="0">
 		<tr>
 			<td width="130" valign="top" class="leftcoltext">
-			<div align="center">
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<%@ include file="/jsp/util/informacoes_usuario.jsp"%>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<%@ include file="/jsp/util/mensagens.jsp"%>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			<p align="left">&nbsp;</p>
-			</div>
+				<div align="center">
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<%@ include file="/jsp/util/informacoes_usuario.jsp"%>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<%@ include file="/jsp/util/mensagens.jsp"%>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+					<p align="left">&nbsp;</p>
+				</div>
 			</td>
+			
 			<td width="615" valign="top" class="centercoltext">
-			<table height="100%">
-				<tr>
-					<td></td>
-				</tr>
-			</table>
-			<table width="100%" border="0" align="center" cellpadding="0"
-				cellspacing="0">
-				<tr>
-					<td width="11"><img border="0"
-						src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-					<td class="parabg">Inserir Mensagem da Conta</td>
-					<td width="11"><img border="0"
-						src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
-				</tr>
-			</table>
-			<p>&nbsp;</p>
-			<table border="0" width="100%">
-				<tr>
-					<td>Para adicionar a mensagem da conta, informe os
-					dados abaixo:</td>
-					<logic:present scope="application" name="urlHelp">
-						<td align="right"><a href="javascript:abrirPopupHelp('${applicationScope.urlHelp}faturamentoContaMensagemInserir', 500, 700);"><span style="font-weight: bold"><font color="#3165CE">Ajuda</font></span></a></td>									
-					</logic:present>
-					<logic:notPresent scope="application" name="urlHelp">
-						<td align="right"><span style="font-weight: bold"><font color=#696969><u>Ajuda</u></font></span></td>									
-					</logic:notPresent>				
-				</tr>
-			</table>
-			<table border="0" width="100%">	
-				<tr>
-					<td width="30%">
-						<strong>Referência do Faturamento:<font color="#ff0000">*</font></strong>
-					</td>
-					<td align="right" colspan="3">
-						<div align="left">
-							<html:text property="referenciaFaturamento"
-										size="7" 
-										maxlength="7" 
-										onkeyup="mascaraAnoMes(this, event); verificaPreenchimentoLocalidade();"
-										onkeypress="return isCampoNumerico(event);"/>
-							mm/aaaa
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<strong>Mensagem da Conta:<font color="#ff0000">*</font></strong>
-					</td>
-
-					<td align="right" colspan="3">
-						<div align="left">
-							<html:text property="mensagemConta01"
-										maxlength="100" 
-										size="60" 
-										onkeyup="habilitaMensagem2();" />
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td><strong></strong></td>
-
-					<td align="right" colspan="3">
-					<div align="left"><html:text property="mensagemConta02"
-						maxlength="100" size="60" disabled="true" onkeyup="habilitaMensagem3();"/></div>
-					</td>
-				</tr>
-				<tr>
-					<td><strong></strong></td>
-
-					<td align="right" colspan="3">
-					<div align="left"><html:text property="mensagemConta03"
-						maxlength="100" size="60" disabled="true" /></div>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><strong>Grupo de Faturamento:</strong></td>
-					<td align="right" colspan="3">
-					<div align="left"><strong> <html:select property="grupoFaturamento"
-						style="width: 150px;" onchange="validarGrupoFaturamento(1);">
-						<logic:present name="colecaoFaturamentoGrupo">
-							<html:option value="">&nbsp;</html:option>
-							<html:options collection="colecaoFaturamentoGrupo"
-								labelProperty="descricao" property="id" />
+				<table height="100%">
+					<tr>
+						<td></td>
+					</tr>
+				</table>
+				<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="11"> <img border="0" src="<bean:message key="caminho.imagens"/>parahead_left.gif" /> </td>
+						<td class="parabg">Inserir Mensagem da Conta</td>
+						<td width="11"><img border="0"src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
+					</tr>
+				</table>
+				<p>&nbsp;</p>
+				<table border="0" width="100%">
+					<tr>
+						<td>Para adicionar a mensagem da conta, informe os dados abaixo:</td>
+						<logic:present scope="application" name="urlHelp">
+							<td align="right"><a href="javascript:abrirPopupHelp('${applicationScope.urlHelp}faturamentoContaMensagemInserir', 500, 700);"><span style="font-weight: bold"><font color="#3165CE">Ajuda</font></span></a></td>									
 						</logic:present>
-					</html:select> </strong></div>
-					</td>
-				</tr>
-
-				<tr>
-					<td colspan="2">
-					
-						<table width="100%" align="center" bgcolor="#99CCFF" border="0">
-						<tr>
-							<td align="center"><strong>Dados da Qualidade de Água</strong></td>
-						</tr>
-						<tr bgcolor="#cbe5fe">
-							<td width="100%" align="center">
-
-							<table width="100%" border="0">
-								<tr>
-									<td width="31%"><strong>Qualidade de Água:</strong></td>
-									<td colspan="3"><html:select property="qualidadeAgua"
-										style="width: 150px;" onchange="habilitarIndice();">
-										<html:option value="">&nbsp;</html:option>
-										<html:option value="<%= ""+ConstantesSistema.TURBIDEZ %>">TURBIDEZ</html:option>
-										<html:option value="<%= ""+ConstantesSistema.CLORO%>">CLORO</html:option>
-										<html:option value="<%= ""+ConstantesSistema.PH%>">PH</html:option>
-										<html:option value="<%= ""+ConstantesSistema.COR%>">COR</html:option>
-										<html:option value="<%= ""+ConstantesSistema.FLUOR%>">FLUOR</html:option>
-										<html:option value="<%= ""+ConstantesSistema.FERRO%>">FERRO</html:option>
-										<html:option value="<%= ""+ConstantesSistema.COLIFORMES_TOTAIS%>">COLIFORMES TOTAIS</html:option>
-										<html:option value="<%= ""+ConstantesSistema.COLIFORMES_FECAIS%>">COLIFORMES FECAIS</html:option>
-										<html:option value="<%= ""+ConstantesSistema.NITRATO%>">NITRATO</html:option>
-										</html:select></td>
-								</tr>
-								<tr>
-									<td><strong>Índice Inicial:</strong></td>
-									<td><html:text property="indiceInicial" size="10"
-										maxlength="8" style="text-align: right;" 
-										onkeyup="formataValorMonetario(this, 7);"/></td>
-									<td><strong>Índice Final:</strong></td>
-									<td><html:text property="indiceFinal" size="10"
-										maxlength="8" style="text-align: right;" 
-										onkeyup="formataValorMonetario(this, 7);"/>
-										
-										<input name="selecionar" class="bottonRightCol" value="Selecionar" type="button"
-										onclick="carregarSetoresComerciaisPorQualidade();"></td>
-								</tr>
-								
-							</table>
-
-							</td>
-						</tr>
-						</table>
-						
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-					
-						<table width="100%" align="center" bgcolor="#99CCFF" border="0">
-						<tr>
-							<td align="center"><strong>Dados de Localização Geográfica</strong></td>
-						</tr>
-						<tr bgcolor="#cbe5fe">
-							<td width="100%" align="center">
-
-							<table width="100%" border="0">
-								
-								<tr>
-									<td width="30%"><strong>Gerência Regional:</strong></td>
-									<td><html:select property="gerenciaRegional"
-										style="width: 230px;"
-										onchange="limpaLocalidade(); desabilitarGrupoFaturamento();">
-										<logic:present name="colecaoGerenciaRegional">
+						<logic:notPresent scope="application" name="urlHelp">
+							<td align="right"><span style="font-weight: bold"><font color=#696969><u>Ajuda</u></font></span></td>									
+						</logic:notPresent>				
+					</tr>
+				</table>
+			
+				<table border="0" width="100%">	
+					<tr>
+						<td width="30%">
+							<strong>Referência do Faturamento:<font color="#ff0000">*</font></strong>
+						</td>
+						<td align="right" colspan="3">
+							<div align="left">
+								<html:text property="referenciaFaturamento"
+											size="7" 
+											maxlength="7" 
+											onkeyup="mascaraAnoMes(this, event); verificaPreenchimentoLocalidade();"
+											onkeypress="return isCampoNumerico(event);"/>
+								mm/aaaa
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>Mensagem da Conta:<font color="#ff0000">*</font></strong>
+						</td>
+	
+						<td align="right" colspan="3">
+							<div align="left">
+								<html:text property="mensagemConta01"
+											maxlength="100" 
+											size="60" 
+											onkeyup="habilitaMensagem2();" />
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td align="right" colspan="3">
+							<div align="left"><html:text property="mensagemConta02"maxlength="100" size="60" disabled="true" onkeyup="habilitaMensagem3();"/></div>
+						</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td align="right" colspan="3">
+							<div align="left"><html:text property="mensagemConta03" maxlength="100" size="60" disabled="true" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Grupo de Faturamento:</strong></td>
+						<td align="right" colspan="3">
+							<div align="left">
+								<strong> 
+									<html:select property="grupoFaturamento" style="width: 150px;" onchange="validarGrupoFaturamento(1);">
+										<logic:present name="colecaoFaturamentoGrupo">
 											<html:option value="">&nbsp;</html:option>
-											<logic:iterate name="colecaoGerenciaRegional" id="gerenciaRegional" >
-											<option value="<bean:write property="id" name="gerenciaRegional"/>">
-											<bean:write property="nomeAbreviado" name="gerenciaRegional"/> - <bean:write property="nome" name="gerenciaRegional"/>
-											</option>
-											</logic:iterate>
+											<html:options collection="colecaoFaturamentoGrupo"labelProperty="descricao" property="id" />
 										</logic:present>
-									</html:select></td>
-								</tr>
+									</html:select> 
+								</strong>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 								<tr>
-									<td><strong>Localidade:</strong></td>
-									<td>
-										<html:text property="localidade" size="3"
-													maxlength="3" 
-													onkeyup="desabilitarGrupoFaturamento2();"
-													onkeydown="limpaLocalidadeSemApagarCodigo();"
-													onkeypress="validaEnter(event, 'exibirInserirMensagemContaAction.do', 'localidade');return isCampoNumerico(event);" />
-									<a href="javascript:chamaPopupLocalidade();"> 
-										<img src="imagens/pesquisa.gif" style="" height="21" width="23"
-											 border="0" title="Pesquisar Localidade">
-									</a> 
-									<logic:present name="localidadeInexistente" scope="request">
-										<html:text property="localidadeDescricao" 
-													size="40" 
-													maxlength="40"
-													readonly="true"
-													style="background-color:#EFEFEF; border:0; color: #ff0000;" />
-									</logic:present> 
-									<logic:notPresent name="localidadeInexistente" scope="request">
-										<html:text property="localidadeDescricao" 
-													size="40" 
-													maxlength="40"
-													readonly="true"
-													style="background-color:#EFEFEF; border:0; color: #000000;" />
-									</logic:notPresent> 
-										<a href="javascript:limpaLocalidade();">
-											<img src="imagens/limparcampo.gif" 
-												 border="0" title="Apagar">
-										</a>
+									<td align="center"><strong>Dados da Qualidade de Água</strong></td>
+								</tr>
+								<tr bgcolor="#cbe5fe">
+									<td width="100%" align="center">
+										<table width="100%" border="0">
+											<tr>
+												<td width="31%"><strong>Qualidade de Água:</strong></td>
+												<td colspan="3">
+													<html:select property="qualidadeAgua" style="width: 150px;" onchange="habilitarIndice();">
+														<html:option value="">&nbsp;</html:option>
+														<html:option value="<%= ""+ConstantesSistema.TURBIDEZ %>">TURBIDEZ</html:option>
+														<html:option value="<%= ""+ConstantesSistema.CLORO%>">CLORO</html:option>
+														<html:option value="<%= ""+ConstantesSistema.PH%>">PH</html:option>
+														<html:option value="<%= ""+ConstantesSistema.COR%>">COR</html:option>
+														<html:option value="<%= ""+ConstantesSistema.FLUOR%>">FLUOR</html:option>
+														<html:option value="<%= ""+ConstantesSistema.FERRO%>">FERRO</html:option>
+														<html:option value="<%= ""+ConstantesSistema.COLIFORMES_TOTAIS%>">COLIFORMES TOTAIS</html:option>
+														<html:option value="<%= ""+ConstantesSistema.COLIFORMES_FECAIS%>">COLIFORMES FECAIS</html:option>
+														<html:option value="<%= ""+ConstantesSistema.NITRATO%>">NITRATO</html:option>
+													</html:select>
+												</td>
+											</tr>
+											<tr>
+												<td><strong>Índice Inicial:</strong></td>
+												<td><html:text property="indiceInicial" size="10" maxlength="8" style="text-align: right;" onkeyup="formataValorMonetario(this, 7);"/></td>
+												<td><strong>Índice Final:</strong></td>
+												<td>
+													<html:text property="indiceFinal" size="10" maxlength="8" style="text-align: right;" onkeyup="formataValorMonetario(this, 7);"/>
+													<input name="selecionar" class="bottonRightCol" value="Selecionar" type="button" onclick="carregarSetoresComerciaisPorQualidade();">
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
-								
-								<tr>
-									<td><strong>Setor Comercial:</strong></td>
-									<td><html:select styleId="listSetor" property="setorComercial" style="width: 400px;" multiple="mutiple" size="4" 
-													 onchange="javascript:desabilitaOuHabilitaQuadra();" >
-											
-											<logic:present name="colecaoSetorComercialPorQualidade">
-												<html:option value=""/>
-												
-												<logic:iterate name="colecaoSetorComercialPorQualidade" id="setorComercial" type="SetorComercial" >
-
-													<html:option value="<%="" + setorComercial.getId()%>" >
-														<bean:write name="setorComercial" property="localidade.descricao"/> - 		
-														<bean:write name="setorComercial" property="descricao"/>
-													</html:option>
-													
-												</logic:iterate>
-												
-											</logic:present>
-											
-											<logic:present name="colecaoSetorComercialPorLocalidade">
-												<html:option value=""/>
-												
-												<logic:iterate name="colecaoSetorComercialPorLocalidade" id="setorComercial" type="SetorComercial">
-													
-													<html:option value="<%="" + setorComercial.getId()%>">
-														<bean:write name="setorComercial" property="descricao"/>
-													</html:option>
-													
-												</logic:iterate>
-												
-											</logic:present>
-											
-										</html:select>
-									</td>
-								</tr>
-								
-								<tr>
-									<td><strong>Quadra:</strong></td>
-									<td><html:select property="quadra" style="width: 400px;" multiple="mutiple" size="4">
-											
-											<logic:present name="colecaoQuadraPorLocalidade">
-												<html:option value=""/>
-												
-												<logic:iterate name="colecaoQuadraPorLocalidade" id="quadra" type="Quadra">
-													
-													<html:option value="<%="" + quadra.getId()%>">
-														<bean:write name="quadra" property="numeroQuadra"/>
-													</html:option>
-													
-												</logic:iterate>
-												
-											</logic:present>
-											
-										</html:select>
-									</td>
-								</tr>
-								
 							</table>
-
-							</td>
-						</tr>
-						</table>
-						
-					</td>
-				</tr>
-				
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right">&nbsp;</td>
-				</tr>
-
-				<tr>
-					<td><strong> <font color="#ff0000"></font></strong></td>
-					<td align="right">
-					<div align="left"><strong><font color="#ff0000">*</font></strong>
-					Campos obrigatórios</div>
-					</td>
-				</tr>
-				<tr>
-					<td><strong> <font color="#ff0000"> <input name="Submit22"
-						class="bottonRightCol" value="Desfazer" type="button"
-						onclick="window.location.href='/gsan/exibirInserirMensagemContaAction.do?menu=sim';">
-
-					<input name="Submit23" class="bottonRightCol" value="Cancelar"
-						type="button"
-						onclick="window.location.href='/gsan/telaPrincipal.do'"> </font></strong></td>
-					<td align="right"><input name="botao" class="bottonRightCol"
-						value="Inserir" onclick="validaForm();" type="button"></td>
-				</tr>
-			</table>
-			<p>&nbsp;</p>
-			<!-- Fim do Corpo - Roberta Costa --></td>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+								<tr>
+									<td align="center"><strong>Dados de Localização Geográfica</strong></td>
+								</tr>
+								<tr bgcolor="#cbe5fe">
+								<td width="100%" align="center">
+	
+								<table width="100%" border="0">
+									<tr>
+										<td width="30%"><strong>Gerência Regional:</strong></td>
+										<td>
+											<html:select property="gerenciaRegional" style="width: 230px;" onchange="limpaLocalidade(); desabilitarGrupoFaturamento();">
+												<logic:present name="colecaoGerenciaRegional">
+													<html:option value="">&nbsp;</html:option>
+													<logic:iterate name="colecaoGerenciaRegional" id="gerenciaRegional" >
+														<option value="<bean:write property="id" name="gerenciaRegional"/>">
+														<bean:write property="nomeAbreviado" name="gerenciaRegional"/> - <bean:write property="nome" name="gerenciaRegional"/>
+														</option>
+													</logic:iterate>
+												</logic:present>
+											</html:select>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>Localidade:</strong></td>
+										<td>
+											<html:text property="localidade" size="3"
+														maxlength="3" 
+														onkeyup="desabilitarGrupoFaturamento2();"
+														onkeydown="limpaLocalidadeSemApagarCodigo();"
+														onkeypress="validaEnter(event, 'exibirInserirMensagemContaAction.do', 'localidade');return isCampoNumerico(event);" />
+											<a href="javascript:chamaPopupLocalidade();"> 
+												<img src="imagens/pesquisa.gif" style="" height="21" width="23" border="0" title="Pesquisar Localidade">
+											</a> 
+												
+											<logic:present name="localidadeInexistente" scope="request">
+												<html:text property="localidadeDescricao" 
+															size="40" 
+															maxlength="40"
+															readonly="true"
+															style="background-color:#EFEFEF; border:0; color: #ff0000;" />
+											</logic:present> 
+											<logic:notPresent name="localidadeInexistente" scope="request">
+												<html:text property="localidadeDescricao" 
+															size="40" 
+															maxlength="40"
+															readonly="true"
+															style="background-color:#EFEFEF; border:0; color: #000000;" />
+											</logic:notPresent> 
+											<a href="javascript:limpaLocalidade();"><img src="imagens/limparcampo.gif" border="0" title="Apagar"></a>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>Setor Comercial:</strong></td>
+										<td>
+											<html:select styleId="listSetor" property="setorComercial" style="width: 400px;" multiple="mutiple" size="4" onchange="javascript:desabilitaOuHabilitaQuadra();" >
+												<logic:present name="colecaoSetorComercialPorQualidade">
+													<html:option value=""/>
+													<logic:iterate name="colecaoSetorComercialPorQualidade" id="setorComercial" type="SetorComercial" >
+	
+														<html:option value="<%="" + setorComercial.getId()%>" >
+															<bean:write name="setorComercial" property="localidade.descricao"/> - 		
+															<bean:write name="setorComercial" property="descricao"/>
+														</html:option>
+														
+													</logic:iterate>
+												</logic:present>
+												<logic:present name="colecaoSetorComercialPorLocalidade">
+													<html:option value=""/>
+													
+													<logic:iterate name="colecaoSetorComercialPorLocalidade" id="setorComercial" type="SetorComercial">
+														<html:option value="<%="" + setorComercial.getId()%>">
+															<bean:write name="setorComercial" property="descricao"/>
+														</html:option>
+													</logic:iterate>
+												</logic:present>
+											</html:select>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>Quadra:</strong></td>
+										<td>
+											<html:select property="quadra" style="width: 400px;" multiple="mutiple" size="4">
+												<logic:present name="colecaoQuadraPorLocalidade">
+													<html:option value=""/>
+													<logic:iterate name="colecaoQuadraPorLocalidade" id="quadra" type="Quadra">
+														<html:option value="<%="" + quadra.getId()%>">
+															<bean:write name="quadra" property="numeroQuadra"/>
+														</html:option>
+													</logic:iterate>
+												</logic:present>
+											</html:select>
+										</td>
+									</tr>
+								</table>
+	
+								</td>
+							</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td align="right">&nbsp;</td>
+					</tr>
+					<tr>
+						<td><strong> <font color="#ff0000"></font></strong></td>
+						<td align="right">
+							<div align="left"><strong><font color="#ff0000">*</font></strong>Campos obrigatórios</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<strong> 
+								<font color="#ff0000"> 
+									<input name="Submit22" class="bottonRightCol" value="Desfazer" type="button" onclick="window.location.href='/gsan/exibirInserirMensagemContaAction.do?menu=sim';">
+	
+									<input name="Submit23" class="bottonRightCol" value="Cancelar" type="button" onclick="window.location.href='/gsan/telaPrincipal.do'"> 
+								</font>
+							</strong>
+						</td>
+						<td align="right"><input name="botao" class="bottonRightCol" value="Inserir" onclick="validaForm();" type="button"></td>
+					</tr>
+				</table>
+			
+				<p>&nbsp;</p>
+			
+				<!-- Fim do Corpo - Roberta Costa -->
+			</td>
 		</tr>
 	</table>
 
@@ -839,13 +803,11 @@ function desabilitaOuHabilitaQuadra(){
 
 </html:form>
 </body>
+
 <script language="JavaScript">
-<!-- 
-	verificaPreenchimentoLocalidade();
--->
+<!-- verificaPreenchimentoLocalidade(); -->
   habilitaMensagem2();
   habilitaMensagem3();
 </script>
-
 
 </html:html>

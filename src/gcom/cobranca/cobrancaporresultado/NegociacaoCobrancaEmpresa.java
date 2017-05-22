@@ -9,7 +9,6 @@ import gcom.util.filtro.Filtro;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class NegociacaoCobrancaEmpresa extends ObjetoTransacao {
 
@@ -20,6 +19,7 @@ public class NegociacaoCobrancaEmpresa extends ObjetoTransacao {
 	private CobrancaDocumento cobrancaDocumento;
 	private GuiaPagamentoGeral guiaPagamentoGeral;
 	private Empresa empresa;
+	private Date dataVencimento;
 	private Date ultimaAlteracao;
 	
 	private List<NegociacaoContaCobrancaEmpresa> contasNegociadas;
@@ -91,6 +91,14 @@ public class NegociacaoCobrancaEmpresa extends ObjetoTransacao {
 
 	public void setContasNegociadas(List<NegociacaoContaCobrancaEmpresa> contasNegociadas) {
 		this.contasNegociadas = contasNegociadas;
+	}
+
+	public Date getDataVencimento() {
+		return dataVencimento;
+	}
+
+	public void setDataVencimento(Date dataVencimento) {
+		this.dataVencimento = dataVencimento;
 	}
 
 	@Override
