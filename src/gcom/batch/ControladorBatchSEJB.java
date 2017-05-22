@@ -584,7 +584,7 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 							dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
 									colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-							dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao", anoMesArrecadacaoSistemaParametro);
+							dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
 	
 							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
 	

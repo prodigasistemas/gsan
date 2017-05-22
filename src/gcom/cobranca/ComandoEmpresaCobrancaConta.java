@@ -81,6 +81,8 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 	private Short indicadorCobrancaTelemarketing;
 	
 	private Integer qtdMaximaClientes;
+	
+	private Short indicadorGerarComDebitoPreterito;
 
 	public ComandoEmpresaCobrancaConta() {}
 
@@ -359,5 +361,13 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setQtdMaximaClientes(Integer qtdMaximaClientes) {
 		this.qtdMaximaClientes = qtdMaximaClientes;
+	}
+
+	public Short getIndicadorGerarComDebitoPreterito() {
+		return indicadorGerarComDebitoPreterito;
+	}
+
+	public void setIndicadorGerarComDebitoPreterito(Short indicadorGerarComDebitoPreterito) {
+		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
 	}
 }

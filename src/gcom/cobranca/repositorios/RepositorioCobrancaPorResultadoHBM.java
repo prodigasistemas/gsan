@@ -146,8 +146,14 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 
 	private StringBuilder montarConsultaContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, ComandoEmpresaCobrancaConta comando) {
 		StringBuilder consulta = new StringBuilder(); 
+		consulta.append(" LEFT JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ");
+		
 		if (comando.getCliente() != null) {
 			consulta.append(" INNER JOIN cadastro.cliente_conta clienteConta ON clienteConta.cnta_id = conta.cnta_id AND clienteConta.crtp_id = 2 ");
+		}
+		
+		if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+			consulta.append(" INNER JOIN cadastro.cliente_conta cc ON cc.cnta_id = conta.cnta_id AND cc.clct_icnomeconta = 1 ");
 		}
 		
 		consulta.append("INNER JOIN cadastro.imovel imovel on imovel.imov_id = conta.imov_id ")
@@ -155,7 +161,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				.append("LEFT OUTER JOIN cobranca.empresa_cobranca_conta empresaCobrancaConta on empresaCobrancaConta.imov_id = imovel.imov_id ");
 		
 		if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
-			consulta.append("INNER JOIN cadastro.cliente_imovel clienteImovel ON imovel.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND crtp_id <> 1 ")
+			consulta.append("INNER JOIN cadastro.cliente_imovel clienteImovel ON imovel.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND clienteImovel.crtp_id <> 1 ")
 					.append("INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null ");
 		}
 		
@@ -168,7 +174,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		
 		consulta.append("WHERE ")
 				.append(criarCondicionaisContas(helper, agrupadoPorImovel))
-				.append("GROUP BY conta.imov_id "); 
+				.append("GROUP BY conta.imov_id ");
 		
 		return consulta;
 	}
@@ -249,6 +255,11 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + " ','YYYY-MM-DD') ");
 		}
 		
+		if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+			consulta.append(" AND cc.clie_id in (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = 2 and ci.clim_dtrelacaofim is null)  ");
+		}
+		
+		consulta.append(" AND coalesce(pagto.pgmt_vlpagamento, 0.00) = 0 ");
 		consulta.append("AND contaCategoria.catg_id IN (:categorias) ");
 		
 		return consulta.toString();

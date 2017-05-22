@@ -1113,6 +1113,20 @@
 						style="text-align:right;" />
 				</tr>
 				
+				<tr><td><strong> </strong></td><td><strong> </strong></td></tr>
+				
+				<tr>
+					<td width="30%"><strong>Incluir débitos pretéritos:</strong></td>
+					<td colspan="6">
+						<span class="style2">
+							<strong>
+								<label><html:radio property="indicadorGerarComDebitoPreterito" value="1"/>Sim</label>
+ 				  				<label><html:radio property="indicadorGerarComDebitoPreterito" value="2"/>Não</label>
+                  			</strong>
+                  		</span>
+					</td>
+				</tr>
+				
 				<tr>
 					<td colspan="2" align="right"><input type="button"
 						name="selecionar" class="bottonRightCol" value="Selecionar"
