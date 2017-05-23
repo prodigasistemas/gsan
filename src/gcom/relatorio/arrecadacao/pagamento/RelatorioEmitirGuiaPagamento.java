@@ -50,7 +50,8 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		colecaoDetail.clear();
 
 		while (iterator.hasNext()) {
-
+			boolean ehParcelamento = false;
+			
 			GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
 
 			String descricaoServicosTarifas = "";
@@ -73,16 +74,18 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 					valor = Util.formatarMoedaReal(guiaPagamentoItem.getValorDebito());
 
-					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, false);
+					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, ehParcelamento);
 
 					colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 				}
 			} else {
+				ehParcelamento = true;
+				
 				descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
 
 				valor = Util.formatarMoedaReal(helper.getValorDebito());
 
-				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, true);
+				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, ehParcelamento);
 
 				preencherInformacoesParcelamento(relatorioEmitirGuiaPagamentoDetailBean, helper.getIdGuiaPagamento());
 				colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
@@ -134,7 +137,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 			RelatorioEmitirGuiaPagamentoBean bean = new RelatorioEmitirGuiaPagamentoBean(colecaoDetail, matricula, nomeCliente, dataVencimento, inscricao, enderecoImovel, enderecoClienteResponsavel,
 					representacaoNumericaCodBarraFormatada, representacaoNumericaCodBarraSemDigito, dataValidade, valorTotal, idGuiaPagamento, observacao, cpfCnpjCliente, idImovel, nossoNumero,
-					sacadoParte01, sacadoParte02, subRelatorio, colecaoDetail);
+					sacadoParte01, sacadoParte02, subRelatorio, colecaoDetail, obterMensagemParcelamento(ehParcelamento), ehParcelamento);
 
 			colecaoDetail.clear();
 
@@ -256,5 +259,12 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 	public void agendarTarefaBatch() {
 		AgendadorTarefas.agendarTarefa("RelatorioEmitirGuiaPagamento", this);
+	}
+	
+	private String obterMensagemParcelamento(boolean ehParcelamento) {
+		if (ehParcelamento)
+			return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget congue orci. Phasellus viverra mattis fringilla. Maecenas elit enim, porta eu vestibulum vel, lobortis quis sapien. Nullam mattis eros id nulla consequat, porttitor aliquet eros pretium. Cras molestie vehicula eros, ut euismod odio malesuada a. Etiam accumsan lacinia dolor, ac bibendum tellus tincidunt a. Proin lacinia mattis felis, sit amet facilisis justo consequat nec. Donec tristique felis vel ullamcorper maximus. In sed nulla a ex eleifend eleifend et sit amet mi. Vestibulum quis nulla semper, feugiat magna eu, ultrices arcu. In eget eleifend tellus. Cras id fermentum massa, feugiat mattis quam.";
+		else
+			return "";
 	}
 }

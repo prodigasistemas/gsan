@@ -343,7 +343,9 @@
 						y="90"
 						width="95"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font fontName="Courier New"/>
@@ -356,7 +358,9 @@
 						y="90"
 						width="95"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font fontName="Courier New"/>
@@ -369,7 +373,9 @@
 						y="6"
 						width="364"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font fontName="Courier New"/>
@@ -382,7 +388,9 @@
 						y="38"
 						width="43"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="Courier New"/>
@@ -395,7 +403,9 @@
 						y="39"
 						width="89"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="Courier New"/>
@@ -408,7 +418,9 @@
 						y="39"
 						width="95"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="Courier New"/>
@@ -421,7 +433,9 @@
 						y="24"
 						width="77"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="Courier New"/>
@@ -434,7 +448,9 @@
 						y="39"
 						width="95"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="Courier New"/>
@@ -447,7 +463,9 @@
 						y="90"
 						width="95"
 						height="12"
-						key="textField"/>
+						key="textField">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
 						<font fontName="Courier New"/>
