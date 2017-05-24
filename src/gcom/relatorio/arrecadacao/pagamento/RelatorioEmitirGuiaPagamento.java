@@ -6,6 +6,8 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.batch.Relatorio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.relatorio.ConstantesRelatorios;
@@ -18,6 +20,7 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		super(null, "");
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Collection<RelatorioEmitirGuiaPagamentoBean> inicializarBeanRelatorio(Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio) {
 
 		Collection<RelatorioEmitirGuiaPagamentoDetailBean> colecaoDetail = new ArrayList<RelatorioEmitirGuiaPagamentoDetailBean>();
@@ -174,6 +178,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 			relatorio.preencherDadosParcelamento(parcelamento, periodoDebitos, diaVencimento);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object executar() throws TarefaException {
 
 		// ------------------------------------
@@ -261,10 +266,20 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		AgendadorTarefas.agendarTarefa("RelatorioEmitirGuiaPagamento", this);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private String obterMensagemParcelamento(boolean ehParcelamento) {
-		if (ehParcelamento)
-			return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget congue orci. Phasellus viverra mattis fringilla. Maecenas elit enim, porta eu vestibulum vel, lobortis quis sapien. Nullam mattis eros id nulla consequat, porttitor aliquet eros pretium. Cras molestie vehicula eros, ut euismod odio malesuada a. Etiam accumsan lacinia dolor, ac bibendum tellus tincidunt a. Proin lacinia mattis felis, sit amet facilisis justo consequat nec. Donec tristique felis vel ullamcorper maximus. In sed nulla a ex eleifend eleifend et sit amet mi. Vestibulum quis nulla semper, feugiat magna eu, ultrices arcu. In eget eleifend tellus. Cras id fermentum massa, feugiat mattis quam.";
-		else
+		if (ehParcelamento) {
+			
+			FiltroMensagemParcelamentoBoleto filtro = new FiltroMensagemParcelamentoBoleto();
+			filtro.adicionarParametro(new ParametroNulo(FiltroMensagemParcelamentoBoleto.FIM_VIGENCIA));
+	
+			Collection mensagens = Fachada.getInstancia().pesquisar(filtro, MensagemParcelamentoBoleto.class.getName());
+			Iterator itMensagem = mensagens.iterator();
+			
+			MensagemParcelamentoBoleto mensagem = (MensagemParcelamentoBoleto) itMensagem.next();
+		
+			return mensagem.getMensagem();
+		}else
 			return "";
 	}
 }
