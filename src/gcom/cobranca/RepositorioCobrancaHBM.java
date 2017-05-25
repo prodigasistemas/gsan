@@ -14181,67 +14181,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	/**
 	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
-	 * 
-	 * 
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 29/10/2008
-	 */
-	public Collection<Object[]> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCriterio(Integer idEmpresa, Date comandoInicial,
-			Date comandoFinal, int numeroIndice, int quantidadeRegistros) throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-
-		Collection<Object[]> retorno = null;
-		String consulta = null;
-
-		try {
-			consulta = "select comandoEmpresaCobrancaConta.id, " + "count(ecco.comandoEmpresaCobrancaConta.id), "
-					+ "sum(ecco.valorOriginalConta) " + "from EmpresaCobrancaConta ecco "
-					+ "inner JOIN ecco.comandoEmpresaCobrancaConta comandoEmpresaCobrancaConta "
-					// + "inner join ecco.contaGeral contaGeral "
-					// + "inner join contaGeral.conta conta "
-					+ "where comandoEmpresaCobrancaConta.empresa.id = :idEmpresa and ecco.indicadorPagamentoValido = 1 "
-			/*
-			 * + "and conta.debitoCreditoSituacaoAtual.id in (" +
-			 * DebitoCreditoSituacao.NORMAL + ", " +
-			 * DebitoCreditoSituacao.RETIFICADA +", " +
-			 * DebitoCreditoSituacao.INCLUIDA + " )" +
-			 * "and  NOT EXISTS (select pg.conta.id from Pagamento pg where pg.conta.id = conta.id)"
-			 */;
-
-			if (comandoInicial != null && comandoFinal != null) {
-
-				consulta = consulta + " and " + "  comandoEmpresaCobrancaConta.dataExecucao between to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(comandoInicial) + "','YYYY-MM-DD') and to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(comandoFinal) + "','YYYY-MM-DD') ";
-
-			}
-
-			consulta = consulta + " group by comandoEmpresaCobrancaConta.id  ";
-
-			retorno = session.createQuery(consulta).setInteger("idEmpresa", idEmpresa).setMaxResults(quantidadeRegistros)
-					.setFirstResult(numeroIndice).list();
-
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-
-	}
-
-	/**
-	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
-	 * 
-	 * 
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 29/10/2008
 	 */
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaCount(Integer idEmpresa, Date comandoInicial,
 			Date comandoFinal) throws ErroRepositorioException {
@@ -17621,35 +17560,35 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "cecc_vlmaximoconta as vlMaximo, "// 7
 					+ "imov_id as imovel, "// 8
 					+ "cli.clie_nmcliente as cliente, "// 9
-					+ "uneg.uneg_id as idUneg, "// 10
-					+ "uneg.uneg_nmunidadenegocio as nomeUneg, "// 11
-					+ "loca_idinicial as locaIncial, "// 12
-					+ "loca_idfinal as locaFinal, "// 13
-					+ "cecc_cdsetorcomercialinicial as setorInicial, "// 14
-					+ "cecc_cdsetorcomercialfinal as setorFinal, "// 15
-					+ "iper.iper_id as idImovelPerfil, "// 16
-					+ "iper.iper_dsimovelperfil as dsImovelPerfil, "// 17
-					+ "greg.greg_id as idGerenciaRegional, "// 18
-					+ "greg.greg_nmregional as dsGerenciaRegional, "// 19
-					+ "cecc_nnquadrainicial as idQuadraInicial, "// 20
-					+ "cecc_nnquadrafinal as idQuadraFinal "// 21
-					+ "from cobranca.cmd_empr_cobr_conta cecc " + "inner join cadastro.empresa empre on cecc.empr_id = empre.empr_id "
+					+ "loca_idinicial as locaIncial, "// 10
+					+ "loca_idfinal as locaFinal, "// 11
+					+ "cecc_cdsetorcomercialinicial as setorInicial, "// 12
+					+ "cecc_cdsetorcomercialfinal as setorFinal, "// 13
+					+ "cecc_nnquadrainicial as idQuadraInicial, "// 14
+					+ "cecc_nnquadrafinal as idQuadraFinal "// 15
+					+ "from cobranca.cmd_empr_cobr_conta cecc " 
+					+ "inner join cadastro.empresa empre on cecc.empr_id = empre.empr_id "
 					+ "left join cadastro.cliente cli on cli.clie_id = cecc.clie_id "
-					+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = cecc.uneg_id "
-					+ "left join cadastro.imovel_perfil iper on iper.iper_id = cecc.iper_id "
-					+ "left join cadastro.gerencia_regional greg on cecc.greg_id = greg.greg_id " + "where cecc.cecc_id = :idComando ";
+					+ "where cecc.cecc_id = :idComando ";
 
-			retorno = session.createSQLQuery(consulta).addScalar("empresa", Hibernate.STRING).addScalar("dataExecucao", Hibernate.DATE)
-					.addScalar("dataContaInicial", Hibernate.INTEGER).addScalar("dataContaFinal", Hibernate.INTEGER)
-					.addScalar("vencimentoIncial", Hibernate.DATE).addScalar("vencimentoFinal", Hibernate.DATE)
-					.addScalar("vlMinino", Hibernate.BIG_DECIMAL).addScalar("vlMaximo", Hibernate.BIG_DECIMAL)
-					.addScalar("imovel", Hibernate.INTEGER).addScalar("cliente", Hibernate.STRING).addScalar("idUneg", Hibernate.INTEGER)
-					.addScalar("nomeUneg", Hibernate.STRING).addScalar("locaIncial", Hibernate.INTEGER)
-					.addScalar("locaFinal", Hibernate.INTEGER).addScalar("setorInicial", Hibernate.INTEGER)
-					.addScalar("setorFinal", Hibernate.INTEGER).addScalar("idImovelPerfil", Hibernate.INTEGER)
-					.addScalar("dsImovelPerfil", Hibernate.STRING).addScalar("idGerenciaRegional", Hibernate.INTEGER)
-					.addScalar("dsGerenciaRegional", Hibernate.STRING).addScalar("idQuadraInicial", Hibernate.INTEGER)
-					.addScalar("idQuadraFinal", Hibernate.INTEGER).setInteger("idComando", idComando).list();
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("empresa", Hibernate.STRING)
+					.addScalar("dataExecucao", Hibernate.DATE)
+					.addScalar("dataContaInicial", Hibernate.INTEGER)
+					.addScalar("dataContaFinal", Hibernate.INTEGER)
+					.addScalar("vencimentoIncial", Hibernate.DATE)
+					.addScalar("vencimentoFinal", Hibernate.DATE)
+					.addScalar("vlMinino", Hibernate.BIG_DECIMAL)
+					.addScalar("vlMaximo", Hibernate.BIG_DECIMAL)
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("cliente", Hibernate.STRING)
+					.addScalar("locaIncial", Hibernate.INTEGER)
+					.addScalar("locaFinal", Hibernate.INTEGER)
+					.addScalar("setorInicial", Hibernate.INTEGER)
+					.addScalar("setorFinal", Hibernate.INTEGER)
+					.addScalar("idQuadraInicial", Hibernate.INTEGER)
+					.addScalar("idQuadraFinal", Hibernate.INTEGER)
+					.setInteger("idComando", idComando).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -26771,16 +26710,18 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		String consulta;
 
 		try {
-			consulta = " SELECT cecc.CECC_QTDCONTASINICIAL AS qtdContasInicial, " + "   cecc.CECC_QTDCONTASINICIAL AS qtdContasFinal, "
-					+ "   cecc.CECC_QTDDIASVENCIMENTO AS qtdDiasVencidos, " + "   last.last_id AS ligacaoId, "
-					+ "   last.last_dsligacaoaguasituacao AS ligacaoNome " + " FROM cobranca.cmd_empr_cobr_conta cecc "
-					+ " left join atendimentopublico.ligacao_agua_situacao last on last.last_id = cecc.last_id "
+			consulta = " SELECT cecc.CECC_QTDCONTASINICIAL AS qtdContasInicial, " 
+					+ "   cecc.CECC_QTDCONTASINICIAL AS qtdContasFinal, "
+					+ "   cecc.CECC_QTDDIASVENCIMENTO AS qtdDiasVencidos "
+					+ " FROM cobranca.cmd_empr_cobr_conta cecc "
 					+ " WHERE cecc.cecc_id = :idComando ";
 
-			retorno = (Object[]) session.createSQLQuery(consulta).addScalar("qtdContasInicial", Hibernate.INTEGER)
-					.addScalar("qtdContasFinal", Hibernate.INTEGER).addScalar("qtdDiasVencidos", Hibernate.INTEGER)
-					.addScalar("ligacaoId", Hibernate.INTEGER).addScalar("ligacaoNome", Hibernate.STRING)
-					.setInteger("idComando", idComando).setMaxResults(1).uniqueResult();
+			retorno = (Object[]) session.createSQLQuery(consulta)
+					.addScalar("qtdContasInicial", Hibernate.INTEGER)
+					.addScalar("qtdContasFinal", Hibernate.INTEGER)
+					.addScalar("qtdDiasVencidos", Hibernate.INTEGER)
+					.setInteger("idComando", idComando)
+					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

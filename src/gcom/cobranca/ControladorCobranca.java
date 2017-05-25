@@ -338,7 +338,6 @@ import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.IRepositorioUtil;
-import gcom.util.IoUtil;
 import gcom.util.RepositorioUtilHBM;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -44216,50 +44215,6 @@ public class ControladorCobranca implements SessionBean {
 					.pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(idEmpresa, comandoInicial, comandoFinal,
 							numeroIndice, quantidadeRegistros);
 
-			/*
-			 * Collection dadosContasCobrancaEmpresaParaCriterio =
-			 * repositorioCobranca
-			 * .pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCriterio
-			 * ( idEmpresa, comandoInicial, comandoFinal, numeroIndice,
-			 * quantidadeRegistros);
-			 * 
-			 * Map<Integer, GerarArquivoTextoContasCobrancaEmpresaHelper>
-			 * mapHelper = new HashMap<Integer,
-			 * GerarArquivoTextoContasCobrancaEmpresaHelper>();
-			 * 
-			 * if (dadosContasCobrancaEmpresaParaCriterio != null &&
-			 * !dadosContasCobrancaEmpresaParaCriterio.isEmpty()) {
-			 * 
-			 * Iterator dadosContasCobrancaEmpresaParaCriterioIterator =
-			 * dadosContasCobrancaEmpresaParaCriterio .iterator();
-			 * 
-			 * while (dadosContasCobrancaEmpresaParaCriterioIterator .hasNext())
-			 * { // cria um array de objetos para pegar os parametros // de //
-			 * retorno da pesquisa Object[]
-			 * arraydadosContasCobrancaEmpresaParaCriterio = (Object[])
-			 * dadosContasCobrancaEmpresaParaCriterioIterator .next();
-			 * 
-			 * GerarArquivoTextoContasCobrancaEmpresaHelper helper = new
-			 * GerarArquivoTextoContasCobrancaEmpresaHelper();
-			 * 
-			 * if (arraydadosContasCobrancaEmpresaParaCriterio[0] != null) {
-			 * helper .setIdComandoEmpresaCobrancaConta((Integer)
-			 * arraydadosContasCobrancaEmpresaParaCriterio[0]); }
-			 * 
-			 * if (arraydadosContasCobrancaEmpresaParaCriterio[1] != null) {
-			 * helper .setQtdeContasCriterioComando((Integer)
-			 * arraydadosContasCobrancaEmpresaParaCriterio[1]); }
-			 * 
-			 * if (arraydadosContasCobrancaEmpresaParaCriterio[2] != null) {
-			 * helper .setValorContasCriterioComando((BigDecimal)
-			 * arraydadosContasCobrancaEmpresaParaCriterio[2]); }
-			 * 
-			 * mapHelper.put( helper.getIdComandoEmpresaCobrancaConta(),
-			 * helper); }
-			 * 
-			 * }
-			 */
-
 			if (colecaoGerarArquivoTextoContasCobrancaEmpresaHelper != null
 					&& !colecaoGerarArquivoTextoContasCobrancaEmpresaHelper.isEmpty()) {
 
@@ -44271,28 +44226,6 @@ public class ControladorCobranca implements SessionBean {
 					// empresa
 					GerarArquivoTextoContasCobrancaEmpresaHelper helperArquivoTextoContasCobrancaEmpresa = (GerarArquivoTextoContasCobrancaEmpresaHelper) colecaoGerarArquivoTextoContasCobrancaEmpresaHelperIterator
 							.next();
-
-					// Passa os dados do Map para o Helper principal
-
-					/*
-					 * if (mapHelper
-					 * .containsKey(helperArquivoTextoContasCobrancaEmpresa
-					 * .getIdComandoEmpresaCobrancaConta())) {
-					 * 
-					 * GerarArquivoTextoContasCobrancaEmpresaHelper aux =
-					 * mapHelper .get(helperArquivoTextoContasCobrancaEmpresa
-					 * .getIdComandoEmpresaCobrancaConta());
-					 * 
-					 * helperArquivoTextoContasCobrancaEmpresa
-					 * .setQtdeContasCriterioComando(aux
-					 * .getQtdeContasCriterioComando());
-					 * 
-					 * helperArquivoTextoContasCobrancaEmpresa
-					 * .setValorContasCriterioComando(aux
-					 * .getValorContasCriterioComando());
-					 * 
-					 * }
-					 */
 
 					Collection<ExtensaoComandoContasCobrancaEmpresaHelper> colecaoExtensaoComandoContasCobrancaEmpresaHelper = new ArrayList();
 
@@ -44338,21 +44271,6 @@ public class ControladorCobranca implements SessionBean {
 								helperExtensaoComandoContasCobrancaEmpresa
 										.setDataExecucaoComandoEmpresaCobrancaContaExtensao((Date) dados[3]);
 							}
-							/*
-							 * if (dados[4] != null) {
-							 * helperExtensaoComandoContasCobrancaEmpresa
-							 * .setQtdeContasParaCobranca((Integer) dados[4]); }
-							 * else { helperExtensaoComandoContasCobrancaEmpresa
-							 * .setQtdeContasParaCobranca(new Integer( 0)); } if
-							 * (dados[5] != null) {
-							 * helperExtensaoComandoContasCobrancaEmpresa
-							 * .setValorTotalContasParaCobranca((BigDecimal)
-							 * dados[5]); } else {
-							 * 
-							 * 
-							 * 
-							 * }
-							 */
 
 							helperExtensaoComandoContasCobrancaEmpresa.setQtdeContasParaCobranca(new Integer(0));
 
@@ -44395,25 +44313,7 @@ public class ControladorCobranca implements SessionBean {
 
 			}
 
-			/**
-			 * Incrementa o nº do indice da páginação
-			 */
-			// numeroIndice = numeroIndice + quantidadeRegistros;
-
-			/**
-			 * Caso a coleção de dados retornados for menor que a quantidade de
-			 * registros seta a flag indicando que a paginação terminou.
-			 */
-			/*
-			 * if (colecaoGerarArquivoTextoContasCobrancaEmpresaHelper == null
-			 * || colecaoGerarArquivoTextoContasCobrancaEmpresaHelper .size() <
-			 * quantidadeRegistros) {
-			 * 
-			 * flagTerminou = true; }
-			 */
-
 			return colecaoGerarExtensaoComandoContasCobrancaEmpresaHelper;
-
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -48067,26 +47967,26 @@ public class ControladorCobranca implements SessionBean {
 			Collection dadosCobranca = repositorioCobranca.pesquisarValorTotalCobranca(idComando, dateInicial, dateFinal);
 
 			// Quantidade Total de Contas Selecionadas para Cobrança
-			retorno[22] = dadosCobranca.size();
+			retorno[16] = dadosCobranca.size();
 			Iterator iteraDadosCobranca = dadosCobranca.iterator();
 			BigDecimal somaCobranca = new BigDecimal("0.0");
 			while (iteraDadosCobranca.hasNext()) {
 				BigDecimal valor = (BigDecimal) iteraDadosCobranca.next();
 				somaCobranca = somaCobranca.add(valor);
 			}
-			retorno[23] = somaCobranca;
+			retorno[17] = somaCobranca;
 
 			// Dados das Cobranças do Comando
 			Collection dadosCriterio = repositorioCobranca.pesquisarValorTotalCobrancaCriterio(idComando, dateInicial, dateFinal);
 			// Quantidade Total de Contas Selecionadas para Cobrança Criterio
-			retorno[24] = dadosCriterio.size();
+			retorno[18] = dadosCriterio.size();
 			Iterator iteratorCobrancaCriterio = dadosCriterio.iterator();
 			BigDecimal somaCobrancaCriterio = new BigDecimal("0.0");
 			while (iteratorCobrancaCriterio.hasNext()) {
 				BigDecimal valor = (BigDecimal) iteratorCobrancaCriterio.next();
 				somaCobrancaCriterio = somaCobrancaCriterio.add(valor);
 			}
-			retorno[25] = somaCobrancaCriterio;
+			retorno[19] = somaCobrancaCriterio;
 
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();

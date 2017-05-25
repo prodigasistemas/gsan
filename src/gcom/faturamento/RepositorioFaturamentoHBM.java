@@ -39878,58 +39878,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
-	 * 
-	 * 
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 29/10/2008
-	 */
-	public Collection<Object[]> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCriterio(
-			Integer idEmpresa, Date comandoInicial, Date comandoFinal)
-			throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-
-		Collection<Object[]> retorno = null;
-		String consulta = null;
-
-		try {
-			consulta = "select comandoEmpresaCobrancaConta.id, "
-					+ "count(ecco.comandoEmpresaCobrancaConta.id), "
-					+ "sum(ecco.cnta_vlagua) "
-					+ "from ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta "
-					+ "LEFT JOIN EmpresaCobrancaConta ecco "
-					+ "where comandoEmpresaCobrancaConta.Empresa.id = :idEmpresa and ecco.indicadorPagamentoValido = 1 ";
-
-			if (comandoInicial != null && comandoFinal != null) {
-
-				consulta = consulta + "and "
-						+ "  comandoEmpresaCobrancaConta.dataExecucao between to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(comandoInicial)
-						+ "','YYYY-MM-DD') and to_date('"
-						+ Util.formatarDataComTracoAAAAMMDD(comandoFinal)  + "','YYYY-MM-DD')";
-
-			}
-
-			retorno = session.createQuery(consulta).setInteger("idEmpresa",
-					idEmpresa).list();
-
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-
-	}
-
-	// ///////////////////////////////////////////////////////////////////////////
-
-	/**
 	 * [UC0193] - Consultar Histórico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
@@ -39957,10 +39905,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
