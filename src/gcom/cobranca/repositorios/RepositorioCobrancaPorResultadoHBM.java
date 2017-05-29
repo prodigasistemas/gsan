@@ -9,7 +9,6 @@ import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ErroRepositorioException {
+	public Collection<Object[]> pesquisarQuantidadeContas2(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Collection<Object[]> retorno = null;
 		ComandoEmpresaCobrancaConta comando = helper.getComando();
@@ -60,8 +59,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			Query query = session.createSQLQuery(consulta.toString())
 					.addScalar("qtdContas", Hibernate.INTEGER)
 					.addScalar("qtdImovel",Hibernate.INTEGER)
-					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL)
-					.setParameterList("categorias", getCategorias(comando));
+					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL);
+					//.setParameterList("categorias", getCategorias(comando));
 			
 			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
 				query.setMaxResults(comando.getQtdMaximaClientes());
@@ -78,7 +77,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ErroRepositorioException {
+	public List<Integer> pesquisarImoveis2(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		List<Integer> retorno = null;
 		ComandoEmpresaCobrancaConta comando = helper.getComando();
@@ -100,8 +99,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			}
 
 			Query query = session.createSQLQuery(consulta.toString())
-					.addScalar("idImovel",Hibernate.INTEGER)
-					.setParameterList("categorias", getCategorias(comando));
+					.addScalar("idImovel",Hibernate.INTEGER);
+					//.setParameterList("categorias", getCategorias(comando));
 			
 			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
 				query.setMaxResults(comando.getQtdMaximaClientes());
@@ -144,6 +143,149 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return retorno;
 	}
 
+	private StringBuilder obterCategoriasComando(ComandoEmpresaCobrancaConta comando) {
+		StringBuilder consulta = new StringBuilder();
+		StringBuilder categorias = new StringBuilder(); 
+
+		if ((comando.getIndicadorResidencial() != null && comando.getIndicadorResidencial() == ConstantesSistema.SIM.intValue())
+				|| (comando.getIndicadorComercial() != null && comando.getIndicadorComercial() == ConstantesSistema.SIM.intValue())
+				|| (comando.getIndicadorIndustrial() != null && comando.getIndicadorIndustrial() == ConstantesSistema.SIM.intValue())
+				|| (comando.getIndicadorPublico() != null && comando.getIndicadorPublico() == ConstantesSistema.SIM.intValue())) {
+			
+			consulta.append("AND contaCategoria.catg_id IN ( ");
+			
+			if (comando.getIndicadorResidencial() != null && comando.getIndicadorResidencial() == ConstantesSistema.SIM.intValue()) {
+				categorias.append(Categoria.RESIDENCIAL + ";");
+			}
+
+			if (comando.getIndicadorComercial() != null && comando.getIndicadorComercial() == ConstantesSistema.SIM.intValue()) {
+				categorias.append(Categoria.COMERCIAL + ";");
+			}
+
+			if (comando.getIndicadorIndustrial() != null && comando.getIndicadorIndustrial() == ConstantesSistema.SIM.intValue()) {
+				categorias.append(Categoria.INDUSTRIAL + ";");
+			}
+
+			if (comando.getIndicadorPublico() != null && comando.getIndicadorPublico() == ConstantesSistema.SIM.intValue()) {
+				categorias.append(Categoria.PUBLICO + ";");
+			}
+			int tamanho = consulta.toString().length();
+			
+			consulta.append(categorias.toString().substring(0, tamanho-1) + ") "); 
+		}
+		
+		return consulta;
+	}
+	
+	private StringBuilder obterConsultaComandoCobrancaPorResultado(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, Integer quantidadeMenorFaixa, String colunasRetorno) {
+		ComandoEmpresaCobrancaConta comando = helper.getComando();
+		
+		StringBuilder consulta = new StringBuilder();
+		
+		consulta.append("WITH CONTAS AS (")
+				.append(" select imov_id, valorTotalDebitos, qtdContas ")
+				.append(" from ( select conta.imov_id as imov_id, ")
+				.append(" 			coalesce(conta.cnta_vlagua, 0) + ")
+				.append(" 			coalesce(conta.cnta_vlesgoto, 0) + ")
+				.append(" 			coalesce(conta.cnta_vldebitos, 0) - ")
+				.append(" 			coalesce(conta.cnta_vlcreditos, 0) - ")
+				.append(" 			coalesce(conta.cnta_vlimpostos, 0)")
+				.append(" 			as valorTotalDebitos, ")
+				.append("			count(conta.imov_id) OVER(PARTITION BY conta.imov_id) AS qtdContas ")
+				.append(" 			FROM faturamento.conta conta ")
+				.append(montarConsultaContas(helper, agrupadoPorImovel, comando))
+				.append(" ) as contas ");
+
+		if (comando.getQtdContasInicial() != null) {
+			consulta.append(" WHERE qtdContas between " + comando.getQtdContasInicial() + " AND " + comando.getQtdContasFinal());
+		} else if (quantidadeMenorFaixa != null) {
+			consulta.append(" WHERE qtdContas >= " + quantidadeMenorFaixa);
+		}
+		consulta.append(" order by imov_id )")
+				.append("select " + colunasRetorno)
+				.append(" from contas ");
+		
+		if (comando.getValorMinimoConta() != null) {
+			consulta.append("where imov_id not in (select imov_id from contas WHERE valorTotalDebitos ")
+					.append(" NOT BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + ") ");
+		}
+		
+		consulta.append("group by imov_id,qtdContas");
+
+		return consulta;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		List<Integer> retorno = null;
+		ComandoEmpresaCobrancaConta comando = helper.getComando();
+
+		try {
+			Integer quantidadeMenorFaixa = null;
+			if (!percentualInformado) {
+				quantidadeMenorFaixa = pesquisarMenorFaixa(helper.getComando().getEmpresa().getId());
+			}
+
+			String colunasRetorno = "distinct imov_id ";
+			
+			StringBuilder consulta = obterConsultaComandoCobrancaPorResultado(helper, agrupadoPorImovel, quantidadeMenorFaixa, colunasRetorno);
+			
+			consulta.append(" order by imov_id");
+			
+			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
+				//query.setMaxResults(comando.getQtdMaximaClientes());
+				consulta.append(" limit " + comando.getQtdMaximaClientes());
+			}
+			Query query = session.createSQLQuery(consulta.toString())
+					.addScalar("imov_id", Hibernate.INTEGER);
+					//.setParameterList("categorias", getCategorias(comando));
+			
+			
+			retorno = query.list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Collection<Object[]> retorno = null;
+		ComandoEmpresaCobrancaConta comando = helper.getComando();
+
+		try {
+			String colunasRetorno = "qtdContas, count(distinct imov_id) as qtdImoveis, sum(valorTotalDebitos) as valorTotalDebitos ";
+			
+			StringBuilder consulta = obterConsultaComandoCobrancaPorResultado(helper, agrupadoPorImovel, null, colunasRetorno);
+			
+			consulta.append(" order by 2");
+				
+			Query query = session.createSQLQuery(consulta.toString())
+					.addScalar("qtdContas", Hibernate.INTEGER)
+					.addScalar("qtdImoveis", Hibernate.INTEGER)
+					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL);
+					//.setParameterList("categorias", getCategorias(comando));
+			
+			if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
+				query.setMaxResults(comando.getQtdMaximaClientes());
+			}
+			
+			retorno = query.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
 	private StringBuilder montarConsultaContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, ComandoEmpresaCobrancaConta comando) {
 		StringBuilder consulta = new StringBuilder(); 
 		consulta.append(" LEFT JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id ");
@@ -157,7 +299,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		}
 		
 		consulta.append("INNER JOIN cadastro.imovel imovel on imovel.imov_id = conta.imov_id ")
-				.append("INNER JOIN faturamento.conta_categoria contaCategoria on conta.cnta_id = contaCategoria.cnta_id ")
+				.append("LEFT JOIN faturamento.conta_categoria contaCategoria on conta.cnta_id = contaCategoria.cnta_id ")
 				.append("LEFT OUTER JOIN cobranca.empresa_cobranca_conta empresaCobrancaConta on empresaCobrancaConta.imov_id = imovel.imov_id ");
 		
 		if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
@@ -174,7 +316,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		
 		consulta.append("WHERE ")
 				.append(criarCondicionaisContas(helper, agrupadoPorImovel))
-				.append("GROUP BY conta.imov_id ");
+				.append("ORDER BY imov_id ");
 		
 		return consulta;
 	}
@@ -246,10 +388,10 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					.append("and to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD') ");
 		}
 
-		if (comando.getValorMinimoConta() != null) {
-			consulta.append("AND ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) ")
-					.append("BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
-		}
+//		if (comando.getValorMinimoConta() != null) {
+//			consulta.append("AND ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) ")
+//					.append("BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
+//		}
 
 		if (comando.getQtdDiasVencimento() != null) {
 			consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + " ','YYYY-MM-DD') ");
@@ -260,42 +402,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		}
 		
 		consulta.append(" AND coalesce(pagto.pgmt_vlpagamento, 0.00) = 0 ");
-		consulta.append("AND contaCategoria.catg_id IN (:categorias) ");
+		consulta.append(obterCategoriasComando(comando));
 		
 		return consulta.toString();
-	}
-
-	private List<Integer> getCategorias(ComandoEmpresaCobrancaConta comando) {
-		List<Integer> categorias = new ArrayList<Integer>();
-		categorias.add(Categoria.RESIDENCIAL);
-		categorias.add(Categoria.COMERCIAL);
-		categorias.add(Categoria.INDUSTRIAL);
-		categorias.add(Categoria.PUBLICO);
-		
-		if ((comando.getIndicadorResidencial() != null && comando.getIndicadorResidencial() == ConstantesSistema.SIM.intValue())
-				|| (comando.getIndicadorComercial() != null && comando.getIndicadorComercial() == ConstantesSistema.SIM.intValue())
-				|| (comando.getIndicadorIndustrial() != null && comando.getIndicadorIndustrial() == ConstantesSistema.SIM.intValue())
-				|| (comando.getIndicadorPublico() != null && comando.getIndicadorPublico() == ConstantesSistema.SIM.intValue())) {
-
-			categorias = new ArrayList<Integer>();
-			
-			if (comando.getIndicadorResidencial() != null && comando.getIndicadorResidencial() == ConstantesSistema.SIM.intValue()) {
-				categorias.add(Categoria.RESIDENCIAL);
-			}
-
-			if (comando.getIndicadorComercial() != null && comando.getIndicadorComercial() == ConstantesSistema.SIM.intValue()) {
-				categorias.add(Categoria.COMERCIAL);
-			}
-
-			if (comando.getIndicadorIndustrial() != null && comando.getIndicadorIndustrial() == ConstantesSistema.SIM.intValue()) {
-				categorias.add(Categoria.INDUSTRIAL);
-			}
-
-			if (comando.getIndicadorPublico() != null && comando.getIndicadorPublico() == ConstantesSistema.SIM.intValue()) {
-				categorias.add(Categoria.PUBLICO);
-			}
-		}
-		
-		return categorias;
 	}
 }
