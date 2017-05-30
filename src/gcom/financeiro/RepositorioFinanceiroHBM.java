@@ -3044,33 +3044,24 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                     + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria, idLancamentoItemContabil ";
 
             // executa o sql
-            retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
-					Hibernate.INTEGER).addScalar("idUnidadeNegocio",
-					Hibernate.INTEGER).addScalar("idLocalidade",
-					Hibernate.INTEGER).addScalar("idCategoria",
-					Hibernate.INTEGER).addScalar("idLancamentoItemContabil",
-					Hibernate.INTEGER).addScalar("valorCategoria",
-					Hibernate.BIG_DECIMAL).setInteger("idLocalidade",
-					idLocalidade).setInteger("anoMesReferenciaContabil",
-					anoMesReferenciaContabil).setInteger("situacaoNormal",
-					DebitoCreditoSituacao.NORMAL).setInteger(
-					"situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
-					.setInteger("situacaoRetificada",
-							DebitoCreditoSituacao.RETIFICADA).setInteger(
-							"situacaoCancelada",
-							DebitoCreditoSituacao.CANCELADA).setInteger(
-							"situacaoCanceladaPorRetificacao",
-							DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-					.setInteger("situacaoParcelada",
-							DebitoCreditoSituacao.PARCELADA).setInteger(
-							"situacaoDebitoPrescrito",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**
-			 		* Inclusao das contas incluidas canceladas por prescrição
-			 		*  de débito na geração do resumo*/
-					.setInteger("situacaoDebitoPrescritoContasIncluidas",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).setInteger(
-							"servico", FinanciamentoTipo.SERVICO_NORMAL).list();
+            retorno = session.createSQLQuery(consulta)
+            		.addScalar("idGerencia", Hibernate.INTEGER)
+            		.addScalar("idUnidadeNegocio", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("idCategoria", Hibernate.INTEGER)
+					.addScalar("idLancamentoItemContabil", Hibernate.INTEGER)
+					.addScalar("valorCategoria", Hibernate.BIG_DECIMAL)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger( "situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("situacaoRetificada",DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
+					.setInteger( "situacaoCanceladaPorRetificacao",DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
+					.setInteger("situacaoDebitoPrescrito",DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					.setInteger("situacaoDebitoPrescritoContasIncluidas",DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setInteger( "servico", FinanciamentoTipo.SERVICO_NORMAL).list();
 
         } catch (HibernateException e) {
             // levanta a exceção para a próxima camada
@@ -3098,7 +3089,8 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 *             Erro no hibernate
 	 */
-    public Collection<Object[]> pesquisarDadosDebitosCobradosCategoriaParcelamento(
+    @SuppressWarnings("unchecked")
+	public Collection<Object[]> pesquisarDadosDebitosCobradosCategoriaParcelamento(
             int anoMesReferenciaContabil, Integer idLocalidade)
             throws ErroRepositorioException {
         Collection<Object[]> retorno = null;
@@ -3128,53 +3120,38 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                     + " or ( conta.cnta_amreferenciacontabil > :anoMesReferenciaContabil "
                     + " and conta.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
                     + " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and ( conta.dcst_idanterior is null or ( conta.cnta_amreferenciaconta <= :anoMesReferenciaContabil and conta.dcst_idanterior <> :situacaoIncluida ) ) ) ) "
-                    + " and debCob.fntp_id in ( :parcelamentoAgua, "
-                    + " :parcelamentoEsgoto, :parcelamentoServico, "
-                    + " :arrastoAgua, :arrastoEsgoto, "
-                    + " :arrastoServico, :jurosParcelamento ) "
+                    + " and debCob.fntp_id in ( :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico, :arrastoAgua, :arrastoEsgoto, "
+                    + " :arrastoServico, :jurosParcelamento , :entradaParcelamento, :doacoes) "
                     + " GROUP BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria, idLancamentoItemContabil "
                     + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria, idLancamentoItemContabil ";
 
             // executa o sql
-            retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
-                    Hibernate.INTEGER).addScalar("idUnidadeNegocio",
-					Hibernate.INTEGER).addScalar("idLocalidade",
-					Hibernate.INTEGER).addScalar("idCategoria",
-					Hibernate.INTEGER).addScalar("idLancamentoItemContabil",
-					Hibernate.INTEGER).addScalar("valorCategoria",
-					Hibernate.BIG_DECIMAL).setInteger("idLocalidade",
-					idLocalidade).setInteger("anoMesReferenciaContabil",
-                    anoMesReferenciaContabil).setInteger("situacaoNormal",
-                    DebitoCreditoSituacao.NORMAL).setInteger(
-                    "situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
-                    .setInteger("situacaoRetificada",
-                            DebitoCreditoSituacao.RETIFICADA).setInteger(
-                            "situacaoCancelada",
-                            DebitoCreditoSituacao.CANCELADA).setInteger(
-                            "situacaoCanceladaPorRetificacao",
-                            DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-                    .setInteger("situacaoParcelada",
-                            DebitoCreditoSituacao.PARCELADA).setInteger(
-                            "situacaoDebitoPrescrito",
-                            DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**
-			 		* Inclusao das contas incluidas canceladas por prescrição
-			 		*  de débito na geração do resumo*/
-					.setInteger("situacaoDebitoPrescritoContasIncluidas",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).setInteger(
-                            "parcelamentoAgua",
-                            FinanciamentoTipo.PARCELAMENTO_AGUA).setInteger(
-                            "parcelamentoEsgoto",
-                            FinanciamentoTipo.PARCELAMENTO_ESGOTO).setInteger(
-                            "parcelamentoServico",
-                            FinanciamentoTipo.PARCELAMENTO_SERVICO).setInteger(
-                            "arrastoAgua", FinanciamentoTipo.ARRASTO_AGUA)
-                    .setInteger("arrastoEsgoto",
-                            FinanciamentoTipo.ARRASTO_ESGOTO)
-                    .setInteger("arrastoServico",
-                            FinanciamentoTipo.ARRASTO_SERVICO).setInteger(
-                            "jurosParcelamento",
-                            FinanciamentoTipo.JUROS_PARCELAMENTO).list();
+            retorno = session.createSQLQuery(consulta)
+            		.addScalar("idGerencia", Hibernate.INTEGER)
+                    .addScalar("idUnidadeNegocio", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("idCategoria", Hibernate.INTEGER)
+					.addScalar("idLancamentoItemContabil", Hibernate.INTEGER)
+					.addScalar("valorCategoria", Hibernate.BIG_DECIMAL)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
+                    .setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+                    .setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+                    .setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+                    .setInteger( "situacaoCancelada",DebitoCreditoSituacao.CANCELADA)
+                    .setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
+                    .setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
+                    .setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					.setInteger("situacaoDebitoPrescritoContasIncluidas", DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
+					.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
+                    .setInteger("parcelamentoEsgoto", FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+                    .setInteger("parcelamentoServico", FinanciamentoTipo.PARCELAMENTO_SERVICO)
+                    .setInteger("arrastoAgua", FinanciamentoTipo.ARRASTO_AGUA)
+                    .setInteger("arrastoEsgoto", FinanciamentoTipo.ARRASTO_ESGOTO)
+                    .setInteger("arrastoServico", FinanciamentoTipo.ARRASTO_SERVICO)
+                    .setInteger("jurosParcelamento", FinanciamentoTipo.JUROS_PARCELAMENTO)
+                    .setInteger("entradaParcelamento", FinanciamentoTipo.ENTRADA_PARCELAMENTO)
+                    .setInteger("doacoes", FinanciamentoTipo.DOACOES).list();
 
         } catch (HibernateException e) {
             // levanta a exceção para a próxima camada
@@ -3467,7 +3444,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
      *             Erro no hibernate
      */
     @SuppressWarnings("unchecked")
-	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
+	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(
             int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
             throws ErroRepositorioException {
         Collection<Object[]> retorno = null;
@@ -3695,94 +3672,6 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).setInteger(
                             "descontoIncondicional",
                             CreditoOrigem.DESCONTOS_INCONDICIONAIS).list();
-
-        } catch (HibernateException e) {
-            // levanta a exceção para a próxima camada
-            throw new ErroRepositorioException(e, "Erro no Hibernate");
-        } finally {
-            // fecha a sessão
-            HibernateUtil.closeSession(session);
-        }
-
-        return retorno;
-    }
-
-    /**
-     * [UC0714] - Gerar Contas a Receber Contábil
-     *
-     * Acumula os valores dos créditos realizados para ajustes para zerar conta
-     * pela gerência, localidade e categoria
-     *
-     * @author Rafael Corrêa
-     * @date 08/11/2007
-     *
-     * @param idLocalidade
-     * @param anoMesReferenciaContabil
-     *            Ano e mês de referência contabil
-     * @throws ErroRepositorioException
-     *             Erro no hibernate
-     */
-    public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(
-            int anoMesReferenciaContabil, Integer idLocalidade)
-            throws ErroRepositorioException {
-        Collection<Object[]> retorno = null;
-
-        // cria uma sessão com o hibernate
-        Session session = HibernateUtil.getSession();
-
-        // cria a variável que vai conter o hql
-        String consulta;
-
-        try {
-            // constroi o sql
-            consulta = "SELECT loca.greg_id as idGerencia, loca.uneg_id as idUnidadeNegocio, loca.loca_id as idLocalidade, "
-                    + " credRealizadoCat.catg_id as idCategoria, sum(credRealizadoCat.crcg_vlcategoria) as valorCategoria "
-                    + " FROM cadastro.localidade loca "
-                    + " INNER JOIN faturamento.conta conta "
-                    + " on loca.loca_id = conta.loca_id "
-                    + " INNER JOIN faturamento.credito_realizado credRealizado "
-                    + " on credRealizado.cnta_id = conta.cnta_id "
-                    + " INNER JOIN faturamento.cred_realizado_catg credRealizadoCat "
-                    + " on credRealizadoCat.crrz_id = credRealizado.crrz_id "
-                    + " WHERE loca.loca_id = :idLocalidade "
-                    + " and ( ( conta.cnta_amreferenciacontabil <= :anoMesReferenciaContabil "
-                    + " and conta.dcst_idatual in ( :situacaoNormal, "
-                    + " :situacaoIncluida, :situacaoRetificada ) ) "
-                    + " or ( conta.cnta_amreferenciacontabil > :anoMesReferenciaContabil "
-                    + " and conta.dcst_idatual in ( :situacaoCancelada, :situacaoCanceladaPorRetificacao, "
-                    + " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) and ( conta.dcst_idanterior is null or ( conta.cnta_amreferenciaconta <= :anoMesReferenciaContabil and conta.dcst_idanterior <> :situacaoIncluida ) ) ) ) "
-                    + " and ( credRealizado.crog_id = :ajusteZerarConta ) "
-                    + " GROUP BY loca.greg_id, loca.uneg_id, loca.loca_id, credrealizadocat.catg_id "
-                    + " ORDER BY idGerencia, idUnidadeNegocio, idLocalidade, idCategoria ";
-
-            // executa o sql
-            retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
-                    Hibernate.INTEGER).addScalar("idUnidadeNegocio",
-                    Hibernate.INTEGER).addScalar("idLocalidade",
-                    Hibernate.INTEGER).addScalar("idCategoria",
-                    Hibernate.INTEGER).addScalar("valorCategoria",
-                    Hibernate.BIG_DECIMAL).setInteger("idLocalidade",
-                    idLocalidade).setInteger("anoMesReferenciaContabil",
-                    anoMesReferenciaContabil).setInteger("situacaoNormal",
-                    DebitoCreditoSituacao.NORMAL).setInteger(
-                    "situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
-                    .setInteger("situacaoRetificada",
-                            DebitoCreditoSituacao.RETIFICADA).setInteger(
-                            "situacaoCancelada",
-                            DebitoCreditoSituacao.CANCELADA).setInteger(
-                            "situacaoCanceladaPorRetificacao",
-                            DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
-                    .setInteger("situacaoParcelada",
-                            DebitoCreditoSituacao.PARCELADA).setInteger(
-                            "situacaoDebitoPrescrito",
-                            DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**
-			 		* Inclusao das contas incluidas canceladas por prescrição
-			 		*  de débito na geração do resumo*/
-					.setInteger("situacaoDebitoPrescritoContasIncluidas",
-							DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).setInteger(
-                            "ajusteZerarConta",
-                            CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA).list();
 
         } catch (HibernateException e) {
             // levanta a exceção para a próxima camada

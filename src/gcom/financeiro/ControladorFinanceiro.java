@@ -7599,12 +7599,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 		// Descontos concedidos no parcelamento
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
-				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), 
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, 60);
 		
 		// Descontos concedidos no parcelamento Faixa Conta
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
-				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 65);
 
 		// Descontos condicionais
@@ -7619,7 +7619,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 		// Ajustes para Zerar a Conta
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
-				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(anoMesAnteriorFaturamento, idLocalidade), 
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90);
 
 		// Devoluções
@@ -7627,15 +7627,23 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDevolucao(anoMesAnteriorFaturamento, idLocalidade), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95);
 		
-		
 		// Descontos concedidos no parcelamento Creditos Anteriores Curto e Long Prazo
-		Collection colecaoCurtoELongo = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, 
+		Collection colecaoCurtoELongo = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
 				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
-		colecaoCurtoELongo.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(anoMesAnteriorFaturamento, idLocalidade, 
+		colecaoCurtoELongo.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
 				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO));
 		
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoCurtoELongo, anoMesAnteriorFaturamento, 
 				LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES, 100);
+		
+		// Descontos concedidos na Recuperacao de crédito 
+		Collection colecaoRecuperacao = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+		colecaoRecuperacao.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA));
+		
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoRecuperacao, anoMesAnteriorFaturamento, 
+					LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.RECUPERACAO_CREDITO, 99);
 	}
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -8685,6 +8693,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return colecaoContasAReceberContabil;
     }
     
+	@SuppressWarnings("unchecked")
 	private Collection obterContaAReceberContabilResidual(int anoMesAnteriorFaturamento, 
 			Collection<Object[]> colecaoValorResidual, int sequenciaLancamentoTipo,
             Integer idLancamentoItem, int sequenciaLancamentoItem,
@@ -8723,6 +8732,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return colecaoContasAReceberContabil;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection obterContaAReceberContabilCreditoARealizar(int anoMesAnteriorFaturamento,
 			Collection colecaoCreditosARealizar,
 			Collection<Object[]> colecaoCreditosARealizarValorResidual,
@@ -8801,6 +8811,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param idLocalidade
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("unchecked")
 	public void gerarValorVolumesConsumidosNaoFaturados(Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 
 		System.out.println("LOCALIDADE " + idLocalidade);
@@ -8930,6 +8941,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @date 08/11/2007, 08/06/2008
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	private void adicionarValorVolumesConsumidosNaoFaturadosAguaEsgoto(
 			Integer idLocalidade,
 			int anoMesFaturamento,
@@ -9042,6 +9054,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void gerarLancamentosContabeisDevedoresDuvidosos(Integer anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException{
 		
 		
@@ -9208,6 +9221,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemDevedoresDuvidosos(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -15667,6 +15681,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection pesquisarOutrasReceitasResumoPagamentoConta(Date dataInicial, Date dataFinal)
 		throws ControladorException{
 		

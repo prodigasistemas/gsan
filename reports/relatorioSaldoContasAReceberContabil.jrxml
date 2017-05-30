@@ -1329,7 +1329,7 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 			<band height="79"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="0"
+						x="1"
 						y="10"
 						width="209"
 						height="18"

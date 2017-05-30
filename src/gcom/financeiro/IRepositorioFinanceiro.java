@@ -152,16 +152,13 @@ public interface IRepositorioFinanceiro {
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(int anoMesReferenciaContabil, Integer idLocalidade) 
 			throws ErroRepositorioException;
 	
-	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
+	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(int anoMesReferenciaContabil, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(int anoMesReferenciaContabil, Integer idLocalidade)
-			throws ErroRepositorioException;
-	
-	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(int anoMesReferenciaContabil, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDevolucao(int anoMesReferenciaContabil, Integer idLocalidade)

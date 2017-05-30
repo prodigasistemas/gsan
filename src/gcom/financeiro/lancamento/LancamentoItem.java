@@ -102,6 +102,7 @@ public class LancamentoItem implements Serializable {
 	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(128);
 	public static final Integer CREDITOS_DE_PARCELAMENTOS_TRANSFERIDOS_PARA_CURTO_PRAZO = new Integer(129);
 	public static final Integer DESCONTOS_CREDITOS_ANTERIORES = new Integer(130);
+	public final static Integer RECUPERACAO_CREDITO = new Integer(131);
 
     private Integer id;
     private String descricao;
