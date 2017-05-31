@@ -251,6 +251,7 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.Util;
+import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
@@ -316,7 +317,7 @@ public class ControladorBatchSEJB implements SessionBean {
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
 		Integer anoMesFaturamentoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
-		Integer anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
+		//Integer anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
 
 		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao().pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
 
@@ -1807,7 +1808,8 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 									FiltroEmpresaCobranca filtroEmpresaCobranca = new FiltroEmpresaCobranca();
 									filtroEmpresaCobranca.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
-									filtroEmpresaCobranca.adicionarParametro(new ParametroNulo(FiltroEmpresaCobranca.DATA_FIM_CONTRATO));
+									filtroEmpresaCobranca.adicionarParametro(new MaiorQue(FiltroEmpresaCobranca.DATA_FIM_CONTRATO, new Date()));
+
 									Collection colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtroEmpresaCobranca, EmpresaCobranca.class.getName());
 	
 									if (colecaoEmpresaCobranca != null && !colecaoEmpresaCobranca.isEmpty()) {
@@ -2568,6 +2570,7 @@ public class ControladorBatchSEJB implements SessionBean {
 		return codigoProcessoIniciadoGerado;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Collection<Empresa> obterEmpresasCobranca() throws ControladorException {
 		FiltroEmpresa filtroEmpresa = new FiltroEmpresa(FiltroEmpresa.ID);
 		filtroEmpresa.setCampoOrderBy(FiltroEmpresa.ID);
@@ -2578,6 +2581,7 @@ public class ControladorBatchSEJB implements SessionBean {
 		return empresas;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Collection<Localidade> obterLocalidadesAtivas() throws ControladorException {
 		FiltroLocalidade filtroBatch = new FiltroLocalidade(FiltroLocalidade.ID);
 		filtroBatch.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
@@ -5497,6 +5501,7 @@ public class ControladorBatchSEJB implements SessionBean {
 		return codigoProcessoIniciadoGerado;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Integer inserirAtualizarMovimentacaoHidrometroIdsBatch(MovimentoHidrometroHelper helper) throws ControladorException {
 		Integer codigoProcessoIniciadoGerado = null;
 
