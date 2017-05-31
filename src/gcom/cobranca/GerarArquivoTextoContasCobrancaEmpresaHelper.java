@@ -1233,8 +1233,8 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	}
 	
 	public StringBuilder buildArquivoContasLayoutPadrao(StringBuilder registros) {
-//		registros.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio : "").append(";");
-//		registros.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio : "").append(";");
+		registros.append(this.idUnidadeNegocio != null ? this.idUnidadeNegocio : "").append(";");
+		registros.append(this.nomeUnidadeNegocio != null ? this.nomeUnidadeNegocio : "").append(";");
 		registros.append(this.idFaturamentoGrupo != null ? this.idFaturamentoGrupo : "").append(";");
 		registros.append(this.idLocalidade != null ? this.idLocalidade : "").append(";");
 		registros.append(this.nomeLocalidade != null ? this.nomeLocalidade : "").append(";");
