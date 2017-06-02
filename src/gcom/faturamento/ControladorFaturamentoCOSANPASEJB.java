@@ -3039,7 +3039,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1)));
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
-
+			
+			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper);
+			emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+			emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+			emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+			emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 
 			if (cobrarTaxaEmissaoConta) {
@@ -3502,5 +3508,4 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		return colecaoDebitosACobrarCategorias;
 	}
-	
 }

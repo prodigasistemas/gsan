@@ -120,6 +120,10 @@
 	<field name="getTipoDeConsumo" class="java.lang.String"/>
 	<field name="getIcClienteFaturaAgrupada" class="java.lang.String"/>
 	<field name="getDataPagamentoConta" class="java.lang.String"/>
+	<field name="getDescricaoImpostosEAliquotas" class="java.lang.String"/>
+	<field name="getPercentualImpostosEAliquotas" class="java.lang.String"/>
+	<field name="getValorBaseCalculoImpostos" class="java.lang.String"/>
+	<field name="getValorImpostosEAliquotas" class="java.lang.String"/>
 
 
 		<group  name="Conta" isStartNewPage="true" >
@@ -175,7 +179,7 @@
 						x="2"
 						y="112"
 						width="531"
-						height="160"
+						height="136"
 						key="subreport-1">
 							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
 						</reportElement>
@@ -1854,6 +1858,134 @@
 						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDataPagamentoConta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="10"
+						y="251"
+						width="80"
+						height="10"
+						key="staticText-106">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<text><![CDATA[Tributos Alíquota]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="90"
+						y="251"
+						width="20"
+						height="10"
+						key="staticText-107">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<text><![CDATA[(%)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="110"
+						y="251"
+						width="70"
+						height="10"
+						key="staticText-108">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<text><![CDATA[Base de Cálculo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="180"
+						y="251"
+						width="70"
+						height="10"
+						key="staticText-109">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<text><![CDATA[Base de Cálculo]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="10"
+						y="261"
+						width="80"
+						height="10"
+						key="textField-51">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricaoImpostosEAliquotas}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="90"
+						y="261"
+						width="20"
+						height="10"
+						key="textField-52">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getPercentualImpostosEAliquotas}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="110"
+						y="261"
+						width="70"
+						height="10"
+						key="textField-53">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorBaseCalculoImpostos}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="180"
+						y="261"
+						width="70"
+						height="10"
+						key="textField-54">
+							<printWhenExpression><![CDATA[new Boolean($F{getIndicadorPrimeiraPagina}.equals("1")
+&& $F{getBoleto}.equals("2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorImpostosEAliquotas}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>

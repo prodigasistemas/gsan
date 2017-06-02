@@ -109,7 +109,6 @@ import gcom.faturamento.debito.DebitoCobradoHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
-import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
@@ -15974,5 +15973,42 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-
+	@SuppressWarnings("unchecked")
+	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper) {
+		Object[] retorno = new Object[4];
+		try {
+			
+			Collection<Integer> financiamentosTipo = new ArrayList<Integer>();
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+			financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+			
+			FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
+			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+			filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+			
+			Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+			
+			BigDecimal valorPrestacao = new BigDecimal(0.00);
+			for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+				DebitoCobrado debito = (DebitoCobrado) iterator.next();
+				valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+			}
+			
+			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
+			
+			BigDecimal aliquota = new BigDecimal(9.25);
+			BigDecimal percentualAliquota = aliquota.divide(new BigDecimal(100));
+			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
+	    	
+			retorno[0] = "PIS/PASEP e COFINS"; // criar descrição em SistemaParametros
+			retorno[1] = aliquota.toString(); // criar aliquota em SistemaParametros
+			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		return retorno;
+    }
 }

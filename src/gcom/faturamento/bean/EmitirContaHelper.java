@@ -156,6 +156,11 @@ public class EmitirContaHelper implements Serializable {
 	private Integer consumoMacro;
 	private BigDecimal valorTotalASerrateado;
 	
+	private String descricaoImpostosEAliquotas;
+	private BigDecimal percentualImpostosEAliquotas;
+	private BigDecimal valorBaseCalculoImpostos;
+	private BigDecimal valorImpostosEAliquotas;
+	
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
 	}
@@ -1798,5 +1803,37 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setConsumoMacro(Integer consumoMacro) {
 		this.consumoMacro = consumoMacro;
+	}
+
+	public String getDescricaoImpostosEAliquotas() {
+		return descricaoImpostosEAliquotas;
+	}
+
+	public void setDescricaoImpostosEAliquotas(String descricaoImpostosEAliquotas) {
+		this.descricaoImpostosEAliquotas = descricaoImpostosEAliquotas;
+	}
+
+	public BigDecimal getPercentualImpostosEAliquotas() {
+		return percentualImpostosEAliquotas;
+	}
+
+	public void setPercentualImpostosEAliquotas(BigDecimal percentualImpostosEAliquotas) {
+		this.percentualImpostosEAliquotas = percentualImpostosEAliquotas;
+	}
+
+	public BigDecimal getValorBaseCalculoImpostos() {
+		return valorBaseCalculoImpostos;
+	}
+
+	public void setValorBaseCalculoImpostos(BigDecimal valorBaseCalculoImpostos) {
+		this.valorBaseCalculoImpostos = valorBaseCalculoImpostos;
+	}
+
+	public BigDecimal getValorImpostosEAliquotas() {
+		return valorImpostosEAliquotas;
+	}
+
+	public void setValorImpostosEAliquotas(BigDecimal valorImpostosEAliquotas) {
+		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
 	}
 }
