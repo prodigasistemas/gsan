@@ -46,6 +46,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoCobrado;
+import gcom.financeiro.FinanciamentoTipo;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -2552,9 +2553,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoRegistroTipo04.append(Util.completaString("", 6));
 			}
-
-			arquivoTextoRegistroTipo04.append(System
-					.getProperty("line.separator"));
+			
 		} else {
 
 			if (anoMesAcumulado == null || anoMesAcumulado.equals("")) {
@@ -2600,10 +2599,18 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoRegistroTipo04.append(Util.completaString("", 6));
 			}
 
-			arquivoTextoRegistroTipo04.append(System
-					.getProperty("line.separator"));
-
 		}
+		
+		int financiamentoTipo = debitoCobrado.getDebitoTipo().getFinanciamentoTipo().getId();
+	    if (financiamentoTipo == FinanciamentoTipo.JUROS_PARCELAMENTO || financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_AGUA) {
+	      arquivoTextoRegistroTipo04.append(ConstantesSistema.NAO);
+	    } else {
+	      arquivoTextoRegistroTipo04.append(ConstantesSistema.SIM);
+	    }
+	    
+
+	    arquivoTextoRegistroTipo04.append(System
+	        .getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipo04;
 	}
