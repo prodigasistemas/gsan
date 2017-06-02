@@ -55825,7 +55825,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
                 "FROM " +
                 "  DebitoCobrado dbcb " +
                 "  INNER JOIN dbcb.conta conta " +
-                "  INNER JOIN FETCH dbcb.financiamentoTipo fntp " +
+                "  INNER JOIN dbcb.financiamentoTipo fntp " +
                 "WHERE " +
                 "  conta.id = :idConta AND " +
                 "  fntp.id IN(:agua, :esgoto, :servico) " +
