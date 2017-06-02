@@ -214,7 +214,7 @@
 	function pesquisarQuantidadeContas() {
 		var form = document.forms[0];
 		
-		if(validarLocalidade() && validarSetorComercial() && validarEmpresa()){
+		if(validarLocalidade() && validarSetorComercial() && validarEmpresa() && validarQuantidadeDiasVencimento() && validarQuantidadeDeContas() && validarValorContas()){
 		
 			form.action = 'exibirInformarContasEmCobrancaAction.do?pesquisarQtdContas=sim';
 	    	
@@ -512,7 +512,63 @@
 				return true;
 			}
 	}
+
+	function validarQuantidadeDiasVencimento(){
+		var form = document.forms[0];
+
+		if((form.idImovel.value == null || form.idImovel.value == '') && (form.idCliente.value == null || form.idCliente.value == '')){
+			
+			if(form.quantidadeDiasVencimento.value == null || form.quantidadeDiasVencimento.value == ''){
+					
+				alert('Informe a Quantidade de Dias de Vencimento.');	
+				return false;	
+					
+			} else {
+				return true;
+			}
+			
+		}else{
+				return true;
+		}
+	}
+
+	function validarQuantidadeDeContas(){
+		var form = document.forms[0];
+		
+		if((form.idImovel.value == null || form.idImovel.value == '') && (form.idCliente.value == null || form.idCliente.value == '')){
+
+			if((form.quantidadeContasInicial.value == null && form.quantidadeContasInicial.value != '')
+				|| (form.quantidadeContasFinal.value == null || form.quantidadeContasFinal.value == '')){
+					
+				alert('Informe a Quantidade Inicial e Final de Contas.');
+				return false;		
+					
+			}else{
+				return true;
+			}
+		}else{
+				return true;
+			}
+	}
 	
+	function validarValorContas(){
+		var form = document.forms[0];
+		
+		if((form.idImovel.value == null || form.idImovel.value == '') && (form.idCliente.value == null || form.idCliente.value == '')){
+		
+			if((form.valorMinimo.value == null && form.valorMinimo.value != '')
+				|| (form.valorMaximo.value == null || form.valorMaximo.value == '')){
+					
+				alert('Informe o Valor Mínimo e Máximo da Conta.');
+				return false;		
+					
+			}else{
+				return true;
+			}
+		}else{
+				return true;
+			}
+	}
 	function desabilitaEmpresa(){
 		var form = document.forms[0];
 		
@@ -1070,36 +1126,35 @@
 					(dd/mm/aaaa)</td>
 				</tr>
 				<tr>
-					<td><strong>Valor da Conta:</strong></td>
-					<td><strong> <html:text property="valorMinimo" size="14"
-						maxlength="14" tabindex="19"
-						onkeyup="formataValorMonetario(this, 14); replicarCampo(document.forms[0].valorMaximo, document.forms[0].valorMinimo);"
-						onchange="javascript:limparTotalizacao();" 
-						style="text-align:right;" /> a <html:text property="valorMaximo"
-						size="14" maxlength="14" tabindex="20"
-						onkeyup="formataValorMonetario(this, 14);"
-						onchange="javascript:limparTotalizacao();" 
-						style="text-align:right;" /> </strong></td>
+					<td><strong>Valor da Conta:<font color="#FF0000">*</font></strong></td>
+					<td>
+						<strong> 
+							<html:text property="valorMinimo" size="14" maxlength="14" tabindex="19"
+								onkeyup="formataValorMonetario(this, 14); replicarCampo(document.forms[0].valorMaximo, document.forms[0].valorMinimo);"
+								onchange="javascript:limparTotalizacao();" style="text-align:right;" /> a 
+							<html:text property="valorMaximo" size="14" maxlength="14" tabindex="20" onkeyup="formataValorMonetario(this, 14);" 
+								onchange="javascript:limparTotalizacao();" style="text-align:right;" /> 
+						</strong>
+					</td>
 				</tr>
 				<tr>
-					<td><strong>Quantidade de Contas:</strong></td>
-					<td><strong> <html:text property="quantidadeContasInicial" size="14"
-						maxlength="9" tabindex="21"
-						onkeyup="somente_numero(this);replicarCampo(document.forms[0].quantidadeContasFinal, document.forms[0].quantidadeContasInicial);"
-						onchange="javascript:limparTotalizacao();" 
-						style="text-align:right;" /> a <html:text property="quantidadeContasFinal"
-						size="14" maxlength="9" tabindex="22"
-						onkeyup="somente_numero(this);"
-						onchange="javascript:limparTotalizacao();" 
-						style="text-align:right;" /> </strong></td>
+					<td><strong>Quantidade de Contas:<font color="#FF0000">*</font></strong></td>
+					<td>
+						<strong> 
+							<html:text property="quantidadeContasInicial" size="14" maxlength="9" tabindex="21"
+								onkeyup="somente_numero(this);replicarCampo(document.forms[0].quantidadeContasFinal, document.forms[0].quantidadeContasInicial);"
+								onchange="javascript:limparTotalizacao();" style="text-align:right;" /> a 
+							<html:text property="quantidadeContasFinal" size="14" maxlength="9" tabindex="22" onkeyup="somente_numero(this);"
+								onchange="javascript:limparTotalizacao();" style="text-align:right;" /> 
+						</strong>
+					</td>
 				</tr>
 				<tr>
-					<td><strong>Quantidade de Dias de Vencimento:</strong></td>
-					<td><strong> <html:text property="quantidadeDiasVencimento" size="14"
-						maxlength="10" tabindex="23"
-						onkeyup="somente_numero(this);"
-						onchange="javascript:limparTotalizacao();" 
-						style="text-align:right;" />
+					<td><strong>Quantidade de Dias de Vencimento:<font color="#FF0000">*</font></strong></td>
+					<td>
+						<strong> 
+							<html:text property="quantidadeDiasVencimento" size="14" maxlength="10" tabindex="23" onkeyup="somente_numero(this);"
+								onchange="javascript:limparTotalizacao();" style="text-align:right;" />
 				</tr>
 				
 				<tr><td><strong> </strong></td><td><strong> </strong></td></tr>
