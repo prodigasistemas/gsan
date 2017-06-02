@@ -2311,6 +2311,9 @@ public class UC0745GerarArquivoTextoFaturamento {
 											(arrayDebitoCobrado[3] != null ? arrayDebitoCobrado[3]
 													: "")
 													+ "", 6));
+					
+					// Como a consulta eh de parcelamentos, o debito nao deve ser incluido no calculo de impostos no IS.
+			          arquivoTextoRegistroTipo04.append(ConstantesSistema.NAO);
 
 					arquivoTextoRegistroTipo04.append(System
 							.getProperty("line.separator"));
