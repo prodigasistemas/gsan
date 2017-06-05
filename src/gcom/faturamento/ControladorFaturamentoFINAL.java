@@ -86,6 +86,7 @@ import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.RepositorioLocalidadeHBM;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
+import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
@@ -214,6 +215,7 @@ import gcom.faturamento.debito.DebitoTipoVigencia;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarCategoria;
 import gcom.faturamento.debito.FiltroDebitoACobrarGeral;
+import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipoVigencia;
 import gcom.faturamento.debito.IDebitoCobrado;
@@ -306,6 +308,7 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
+import gcom.util.filtro.ParametroSimplesIn;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44212,6 +44215,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setValorContaString(Util
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
+			
+			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper);
+			emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+			emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+			emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+			emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
 
 			PagamentoHistorico pagamento = getControladorArrecadacao()
 					.pesquisarPagamentoDeContaEmHistorico(idContaEP);
@@ -69876,5 +69885,56 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaAtual.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.RETIFICADA)) 
 				&& Util.compararAnoMesReferencia(contaAtual.getReferenciaContabil(),sistemaParametro.getAnoMesFaturamento(),"<"));
 	}
+	
+	@SuppressWarnings("unchecked")
+	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper) {
+		Object[] retorno = new Object[4];
+		try {
+			
+			Collection<Integer> financiamentosTipo = new ArrayList<Integer>();
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+			financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+			
+			FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
+			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+			filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+			
+			Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+			
+			BigDecimal valorPrestacao = new BigDecimal(0.00);
+			for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+				DebitoCobrado debito = (DebitoCobrado) iterator.next();
+				valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+			}
+			
+			FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
+			Collection colecao = getControladorUtil().pesquisar(filtroSistemaParametro,SistemaParametro.class.getName());
+			
+			String descricaoAliquotaImposto = "";
+			BigDecimal aliquota = null;
+				
+			if(colecao != null && !colecao.isEmpty()){
+				SistemaParametro sistemaParametro = (SistemaParametro) colecao.iterator().next();
+				descricaoAliquotaImposto = sistemaParametro.getDescricaoAliquotaImposto();
+				aliquota = sistemaParametro.getValorAliquotaImposto();
+			}
+			
+			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
+			
+			
+			BigDecimal percentualAliquota = aliquota.divide(new BigDecimal(100));
+			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
+	    	
+			retorno[0] = descricaoAliquotaImposto; 
+			retorno[1] = aliquota; 
+			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP);
+			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		return retorno;
+    }
 	
 }

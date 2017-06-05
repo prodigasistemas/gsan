@@ -33,6 +33,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
+import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaForma;
@@ -15996,16 +15997,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
 			}
 			
+			FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
+			Collection colecao = getControladorUtil().pesquisar(filtroSistemaParametro,SistemaParametro.class.getName());
+			
+			String descricaoAliquotaImposto = "";
+			BigDecimal aliquota = null;
+				
+			if(colecao != null && !colecao.isEmpty()){
+				SistemaParametro sistemaParametro = (SistemaParametro) colecao.iterator().next();
+				descricaoAliquotaImposto = sistemaParametro.getDescricaoAliquotaImposto();
+				aliquota = sistemaParametro.getValorAliquotaImposto();
+			}
+			
 			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
 			
-			BigDecimal aliquota = new BigDecimal(9.25);
+			
 			BigDecimal percentualAliquota = aliquota.divide(new BigDecimal(100));
 			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
 	    	
-			retorno[0] = "PIS/PASEP e COFINS"; // criar descrição em SistemaParametros
-			retorno[1] = aliquota.toString(); // criar aliquota em SistemaParametros
-			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+			retorno[0] = descricaoAliquotaImposto; 
+			retorno[1] = aliquota; 
+			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP);
+			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP);
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
