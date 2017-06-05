@@ -5439,6 +5439,10 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// } else {
 		// arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(2,""));
 		// }
+		
+		// INFORMACOES DE IMPOSTOS PARA DEMONSTRACAO NA CONTA
+		arquivoTextoRegistroTipo11.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(sistemaParametro.getDescricaoAliquotaImposto(), 30));
+		arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(14, Util.formatarBigDecimalComPonto(sistemaParametro.getValorAliquotaImposto())));
 
 		return arquivoTextoRegistroTipo11;
 	}
