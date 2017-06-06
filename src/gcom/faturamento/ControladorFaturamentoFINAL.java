@@ -216,6 +216,7 @@ import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarCategoria;
 import gcom.faturamento.debito.FiltroDebitoACobrarGeral;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
+import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipoVigencia;
 import gcom.faturamento.debito.IDebitoCobrado;
@@ -303,6 +304,7 @@ import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
@@ -44216,7 +44218,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
 			
-			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper);
+			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, true);
 			emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
 			emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
 			emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
@@ -69887,7 +69889,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper) {
+	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper, boolean isContaHistorico) {
 		Object[] retorno = new Object[4];
 		try {
 			
@@ -69897,9 +69899,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
 			financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
 			
-			FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
-			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
-			filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+			Filtro filtro = null;
+			if (isContaHistorico) {
+				filtro = new FiltroDebitoCobradoHistorico();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobradoHistorico.CONTA_HISTORICO_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobradoHistorico.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+			} else {
+				filtro = new FiltroDebitoCobrado();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+			}
 			
 			Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
 			

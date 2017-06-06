@@ -186,6 +186,7 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -15975,9 +15976,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper) {
+	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper, boolean isContaHistorico) {
 		Object[] retorno = new Object[4];
 		try {
+			
+			BigDecimal valorPrestacao = new BigDecimal(0.00);
 			
 			Collection<Integer> financiamentosTipo = new ArrayList<Integer>();
 			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
@@ -15985,16 +15988,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
 			financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
 			
-			FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
-			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
-			filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
-			
-			Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
-			
-			BigDecimal valorPrestacao = new BigDecimal(0.00);
-			for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
-				DebitoCobrado debito = (DebitoCobrado) iterator.next();
-				valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+			Filtro filtro = null;
+			if (isContaHistorico) {
+				filtro = new FiltroDebitoCobradoHistorico();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobradoHistorico.CONTA_HISTORICO_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobradoHistorico.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+				
+				Collection<DebitoCobradoHistorico> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobradoHistorico.class.getName());
+				
+				for (Iterator<DebitoCobradoHistorico> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+					DebitoCobradoHistorico debito = (DebitoCobradoHistorico) iterator.next();
+					valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+				}
+
+			} else {
+				filtro = new FiltroDebitoCobrado();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+				
+				Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+				
+				for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+					DebitoCobrado debito = (DebitoCobrado) iterator.next();
+					valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+				}
+
 			}
 			
 			FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();

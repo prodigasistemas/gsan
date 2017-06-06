@@ -1921,7 +1921,7 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
 					</textElement>
-				<text><![CDATA[Base de Cálculo]]></text>
+				<text><![CDATA[Valor (R$)]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

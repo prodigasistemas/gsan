@@ -3040,7 +3040,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
 			
-			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper);
+			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
 			emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
 			emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
 			emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
