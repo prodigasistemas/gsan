@@ -3515,18 +3515,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
 		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
 		
-		if (dadosAliquotasImpostos.length <= 0) {
-			return null;
+		if (dadosAliquotasImpostos.length > 0) {
+			contaTxt.append(Util.completaString("Tributos", 30));
+			contaTxt.append(Util.completaString((String) dadosAliquotasImpostos[0], 30));
+			contaTxt.append(Util.completaString("(%)", 30));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
+			contaTxt.append(Util.completaString("Base de cálculo", 30));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaString("Valor (R$)", 30));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
 		}
-		
-		contaTxt.append(Util.completaString("Tributos", 30));
-		contaTxt.append(Util.completaString((String) dadosAliquotasImpostos[0], 30));
-		contaTxt.append(Util.completaString("(%)", 30));
-		contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
-		contaTxt.append(Util.completaString("Base de cálculo", 30));
-		contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
-		contaTxt.append(Util.completaString("Valor (R$)", 30));
-		contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
 		
 		return contaTxt;
 	}
