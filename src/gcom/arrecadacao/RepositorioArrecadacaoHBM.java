@@ -23916,9 +23916,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		Collection<Object[]> colecaoDadosPagamentos = null;
 
 		Session session = HibernateUtil.getSession();
+		//StringBuilder consulta = new StringBuilder();
 		String consulta;
 		
+		System.out.println("Localidade: " + idLocalidade);
+		System.out.println("referencia: " + quantidadeRegistros);
 		try {
+			
 			consulta = "SELECT pg.id,"//0
 				     		+" pg.valorPagamento,"//1
 				     		+" cnt.id, "//2
@@ -23935,7 +23939,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				     		+" pg.anoMesReferenciaPagamento,"//13
 				     		+" pg.dataPagamento,"//14
 				     		+" pg.imovel.id,"//15
-				     		+" ab.arrecadador.id, "//16
+				     		//+" ab.arrecadador.id, "//16
+				     		+" null, "//16
 				     		+" pgp.valorConta, "//17
 				     		+" pdac.valorConta, "//18
 				     		+" dac.numeroPrestacaoDebito, "//19
@@ -23956,8 +23961,69 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" where pg.localidade.id = :idLocalidade"
                      +" and pgst.id = :pagamentoClassificado "
                      +" and pg.anoMesReferenciaArrecadacao = :referencia ";
-		 
+		 /*
+			consulta.append(" SELECT pg.pgmt_id as col_0, ") 
+				.append(" pg.pgmt_vlpagamento as col_1,  ")
+				.append(" cnt.cnta_id as col_2 ,   ")
+				.append(" gp.gpag_id as col_3,  ")
+				.append(" pgp.parc_id as col_4,  ")
+				.append(" pgp.parc_vldebitoatualizado as col_5,  ")
+				.append(" gp.gpag_vldebito as col_6,  ")
+				.append(" dtgp.dbtp_id as col_7, ")
+				.append(" dac.dbac_id as col_8,  ")
+				.append(" pdac.parc_id as col_9,  ")
+				.append(" pdac.parc_vldebitoatualizado as col_10,  ")
+				.append(" dac.dbac_vldebito as col_11,   ")
+				.append(" dtdac.dbtp_id as col_12,  ")
+				.append(" pg.pgmt_amreferenciapagamento as col_13,  ")
+				.append(" pg.pgmt_dtpagamento as col_14,  ")
+				.append(" pg.imov_id as col_15,  ")
+				.append(" null as col_16,   ")
+				.append(" pgp.parc_vlconta as col_17,   ")
+				.append(" pdac.parc_vlconta as col_18,   ")
+				.append(" dac.dbac_nnprestacaodebito as col_19,   ")
+				.append(" dac.dbac_nnprestacaocobradas as col_20,   ")
+				.append(" dac.dbac_nnparcelabonus as col_21  ")
+				.append(" FROM arrecadacao.pagamento pg  ")
+				.append(" LEFT JOIN faturamento.conta_geral cntGeral on cntGeral.cnta_id = pg.cnta_id  ")
+				.append(" LEFT JOIN faturamento.conta cnt on cnt.cnta_id = cntGeral.cnta_id  ")
+				.append(" LEFT JOIN faturamento.guia_pagamento gp on gp.gpag_id = pg.gpag_id ")
+				.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id  ")
+				.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")  
+				.append(" --LEFT JOIN pg.debitoACobrarGeral dacGeral  ")
+				.append(" LEFT JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = pg.dbac_id ")
+				.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id   ")
+				.append(" --LEFT JOIN faturamento.debito_tipo dtdac on dac.dbtp_id = dtdac.dbtp_id ")
+				.append(" LEFT JOIN faturamento.debito_tipo dtdac on dtdac.dbtp_id = dac.dbtp_id ")
+				.append(" LEFT JOIN arrecadacao.pagamento_situacao pgst on pgst.pgst_id = pg.pgst_idatual  ")
+				.append(" where pg.loca_id = :idLocalidade ")
+				.append(" and pgst.pgst_id = :pagamentoClassificado   ")
+				.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia  ");
+*/
 			colecaoDadosPagamentos = session.createQuery(consulta)
+					/*
+					.addScalar("col_0",Hibernate.INTEGER)
+					.addScalar("col_1",Hibernate.BIG_DECIMAL)
+					.addScalar("col_2",Hibernate.INTEGER)
+					.addScalar("col_3",Hibernate.INTEGER)
+					.addScalar("col_4",Hibernate.INTEGER)
+					.addScalar("col_5",Hibernate.BIG_DECIMAL)
+					.addScalar("col_6",Hibernate.BIG_DECIMAL)
+					.addScalar("col_7",Hibernate.INTEGER)
+					.addScalar("col_8",Hibernate.INTEGER)
+					.addScalar("col_9",Hibernate.INTEGER)
+					.addScalar("col_10",Hibernate.BIG_DECIMAL)
+					.addScalar("col_11",Hibernate.BIG_DECIMAL)
+					.addScalar("col_12",Hibernate.INTEGER)
+					.addScalar("col_13",Hibernate.INTEGER)
+					.addScalar("col_14",Hibernate.DATE)
+					.addScalar("col_15",Hibernate.INTEGER)
+					//.addScalar("col_16",Hibernate.BIG_DECIMAL)
+					.addScalar("col_17",Hibernate.BIG_DECIMAL)
+					.addScalar("col_18",Hibernate.BIG_DECIMAL)
+					.addScalar("col_19",Hibernate.INTEGER)
+					.addScalar("col_20",Hibernate.INTEGER)
+					.addScalar("col_21",Hibernate.INTEGER)*/
 			        .setInteger("idLocalidade",idLocalidade)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 			        .setInteger("referencia", referencia)
@@ -23965,9 +24031,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setFirstResult(numeroPaginas)
 					.list();
 			
+			System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
 			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
+				System.out.println(colecaoDadosPagamentos.size());
 				retorno = new ArrayList();
 				for(Object[] dadosPagamento : colecaoDadosPagamentos){
+					
+					System.out.println("dadosPgamento: " + (dadosPagamento != null));
+					
 					if(dadosPagamento != null){
 						Pagamento pagamento = new Pagamento();
 						if(dadosPagamento[0] != null){
@@ -24068,7 +24139,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setAvisoBancario(avisoBancario);
 						}
 						
+						System.out.println("Adicionando pagamento...");
 						retorno.add(pagamento);
+						System.out.println(retorno.size());
 					}
 				}
 			}
