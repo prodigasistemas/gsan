@@ -888,6 +888,10 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorParcelamentoGCOM.jar</ejb>
+	</module>
+	
+	<module>
 		<ejb>BatchGerarNegociacaoContasCobrancaEmpresaMDB.jar</ejb>
 	</module>
 	
