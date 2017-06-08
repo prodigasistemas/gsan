@@ -1,46 +1,57 @@
 package gcom.cobranca.controladores;
 
-import gcom.cobranca.IRepositorioCobranca;
-import gcom.cobranca.RepositorioCobrancaHBM;
-import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.repositorios.IRepositorioParcelamentoHBM;
+import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
 import gcom.util.ControladorComum;
+import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.CreateException;
 
-import org.apache.log4j.Logger;
-
 public class ControladorParcelamento extends ControladorComum {
 
 	private static final long serialVersionUID = -2063305788601928963L;
 
-	private static Logger logger = Logger.getLogger(ControladorParcelamento.class);
-
-	protected IRepositorioCobranca repositorioCobranca;
+	protected IRepositorioParcelamentoHBM repositorioParcelamento;
 
 	public void ejbCreate() throws CreateException {
-		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
+		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
 	}
 
-	public void cancelarParcelamento(List<Parcelamento> parcelamentos) {
+	public void cancelarParcelamentos() throws ControladorException {
+		try {
+			List<Object[]> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
+			
+			for (Object[] parcelamento : parcelamentos) {
+				Integer idParcelamento = (Integer) parcelamento[0];
+				BigDecimal saldoDevedor = (BigDecimal) parcelamento[1];
+				
+				cancelarParcelamento(idParcelamento);
+				BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(saldoDevedor);
+				gerarContaIncluida();
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public void cancelarParcelamento(Integer idParcelamento) {
+		cancelarDebitoACobrar(idParcelamento);
+		cancelarCreditoARealizar(idParcelamento);
+	}
+
+	private void cancelarDebitoACobrar(Integer idParcelamento) {
 
 	}
 
-	private void cancelarDebitoACobrar() {
+	private void cancelarCreditoARealizar(Integer idParcelamento) {
 
 	}
 
-	private void cancelarCreditoARealizar() {
-
-	}
-
-	private BigDecimal calcularSaldoDevedor() {
-		return null;
-	}
-
-	private BigDecimal calcularAcrescimosPorImpontualidade() {
+	private BigDecimal calcularAcrescimosPorImpontualidade(BigDecimal saldoDevedor) {
 		return null;
 	}
 
