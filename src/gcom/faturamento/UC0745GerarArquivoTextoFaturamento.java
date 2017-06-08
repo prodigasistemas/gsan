@@ -2605,7 +2605,10 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 		
 		int financiamentoTipo = debitoCobrado.getDebitoTipo().getFinanciamentoTipo().getId();
-	    if (financiamentoTipo == FinanciamentoTipo.JUROS_PARCELAMENTO || financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_AGUA) {
+	    if (financiamentoTipo == FinanciamentoTipo.JUROS_PARCELAMENTO 
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_AGUA
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_ESGOTO
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_SERVICO) {
 	      arquivoTextoRegistroTipo04.append(ConstantesSistema.NAO);
 	    } else {
 	      arquivoTextoRegistroTipo04.append(ConstantesSistema.SIM);
