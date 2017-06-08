@@ -1349,7 +1349,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// TIPO DO REGISTRO
 		arquivoTextoRegistroTipo01.append("01");
 
-		System.out.println("Montando arquivo do imóvel " + imovel.getId());
 		// MATRÍCULA DO IMÓVEL
 		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, imovel.getId().toString()));
 

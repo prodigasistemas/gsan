@@ -274,7 +274,7 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 	@SuppressWarnings("unchecked")
 	private void inicializarCampos(HttpServletRequest request) {
 		if (request.getParameter("menu") != null && !request.getParameter("menu").trim().equals("")) {
-			form.setQuantidadeDiasVencimento("60");
+			form.setQuantidadeDiasVencimento("25");
 			form.setIndicadorCobrancaTelemarketing("1");
 			form.setIndicadorGerarComDebitoPreterito("1");
 

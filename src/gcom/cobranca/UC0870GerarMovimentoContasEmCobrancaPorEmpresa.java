@@ -37,7 +37,7 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.Util;
-import gcom.util.filtro.ParametroNulo;
+import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
@@ -141,10 +141,10 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 			Integer anoMesArrecadacaoInicio = sistemaParametros.getAnoMesArrecadacao();
 			Integer anoMesArrecadacaoFim = Util.somaMesAnoMesReferencia(sistemaParametros.getAnoMesArrecadacao(), 36);
 			
-//			if (comando.getDataInicioCiclo() != null && comando.getDataFimCiclo() != null) {
-//				anoMesArrecadacaoInicio = Util.recuperaAnoMesDaData(comando.getDataInicioCiclo());
-//				anoMesArrecadacaoFim = Util.recuperaAnoMesDaData(comando.getDataFimCiclo());
-//			} 
+			if (comando.getDataInicioCiclo() != null && comando.getDataFimCiclo() != null) {
+				anoMesArrecadacaoInicio = Util.recuperaAnoMesDaData(comando.getDataInicioCiclo());
+				anoMesArrecadacaoFim = Util.recuperaAnoMesDaData(comando.getDataFimCiclo());
+			} 
 
 			EmpresaCobranca empresaCobranca = filtrarEmpresaCobranca(comando);
 
@@ -277,7 +277,7 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 	private EmpresaCobranca filtrarEmpresaCobranca(ComandoEmpresaCobrancaConta comando) throws ControladorException {
 		FiltroEmpresaCobranca filtro = new FiltroEmpresaCobranca();
 		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
-		filtro.adicionarParametro(new ParametroNulo(FiltroEmpresaCobranca.DATA_FIM_CONTRATO));
+		filtro.adicionarParametro(new MaiorQue(FiltroEmpresaCobranca.DATA_FIM_CONTRATO, new Date()));
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroEmpresaCobranca.EMPRESA);
 
 		Collection<EmpresaCobranca> colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtro, EmpresaCobranca.class.getName());

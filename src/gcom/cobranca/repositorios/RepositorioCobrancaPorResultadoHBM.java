@@ -183,7 +183,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		StringBuilder consulta = new StringBuilder();
 		
 		consulta.append("WITH CONTAS AS (")
-				.append(" select imov_id, valorTotalDebitos, qtdContas ")
+				.append(" select imov_id, valorTotalDebitos, qtdContas, cnta_amreferenciaconta ")
 				.append(" from ( select conta.imov_id as imov_id, ")
 				.append(" 			coalesce(conta.cnta_vlagua, 0) + ")
 				.append(" 			coalesce(conta.cnta_vlesgoto, 0) + ")
@@ -191,7 +191,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				.append(" 			coalesce(conta.cnta_vlcreditos, 0) - ")
 				.append(" 			coalesce(conta.cnta_vlimpostos, 0)")
 				.append(" 			as valorTotalDebitos, ")
-				.append("			count(conta.imov_id) OVER(PARTITION BY conta.imov_id) AS qtdContas ")
+				.append("			count(conta.imov_id) OVER(PARTITION BY conta.imov_id) AS qtdContas, ")
+				.append("           cnta_amreferenciaconta ")
 				.append(" 			FROM faturamento.conta conta ")
 				.append(montarConsultaContas(helper, agrupadoPorImovel, comando))
 				.append(" ) as contas ");
@@ -207,7 +208,11 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		
 		if (comando.getValorMinimoConta() != null) {
 			consulta.append("where imov_id not in (select imov_id from contas WHERE valorTotalDebitos ")
-					.append(" NOT BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + ") ");
+					.append(" NOT BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() );
+		}
+		
+		if (comando.getReferenciaContaInicial() != null) {
+			consulta.append("AND contas.cnta_amreferenciaconta between " + comando.getReferenciaContaInicial() + " AND " + comando.getReferenciaContaFinal() + ") ");
 		}
 		
 		consulta.append("group by imov_id,qtdContas");
@@ -379,19 +384,14 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append("AND conta.cnta_nnquadra between " + comando.getNumeroQuadraInicial() + " AND " + comando.getNumeroQuadraFinal() + " ");
 		}
 
-		if (comando.getReferenciaContaInicial() != null) {
-			consulta.append("AND conta.cnta_amreferenciaconta between " + comando.getReferenciaContaInicial() + " AND " + comando.getReferenciaContaFinal() + " ");
-		}
+//		if (comando.getReferenciaContaInicial() != null) {
+//			consulta.append("AND conta.cnta_amreferenciaconta between " + comando.getReferenciaContaInicial() + " AND " + comando.getReferenciaContaFinal() + " ");
+//		}
 
 		if (comando.getDataVencimentoContaInicial() != null) {
 			consulta.append("AND conta.cnta_dtvencimentoconta between to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaInicial()) + "','YYYY-MM-DD') ")
 					.append("and to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD') ");
 		}
-
-//		if (comando.getValorMinimoConta() != null) {
-//			consulta.append("AND ( coalesce( conta.cnta_vlagua, 0 ) + coalesce( conta.cnta_vlesgoto, 0 ) + coalesce( conta.cnta_vldebitos, 0 ) - coalesce( conta.cnta_vlcreditos, 0 ) - coalesce( conta.cnta_vlimpostos, 0 ) ) ")
-//					.append("BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
-//		}
 
 		if (comando.getQtdDiasVencimento() != null) {
 			consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + " ','YYYY-MM-DD') ");
