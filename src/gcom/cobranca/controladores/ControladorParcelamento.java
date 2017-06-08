@@ -5,6 +5,7 @@ import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.util.ControladorComum;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -15,7 +16,7 @@ public class ControladorParcelamento extends ControladorComum {
 
 	private static final long serialVersionUID = -2063305788601928963L;
 
-	private static Logger log = Logger.getLogger(ControladorParcelamento.class);
+	private static Logger logger = Logger.getLogger(ControladorParcelamento.class);
 
 	protected IRepositorioCobranca repositorioCobranca;
 
@@ -24,6 +25,26 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	public void cancelarParcelamento(List<Parcelamento> parcelamentos) {
-		
+
+	}
+
+	private void cancelarDebitoACobrar() {
+
+	}
+
+	private void cancelarCreditoARealizar() {
+
+	}
+
+	private BigDecimal calcularSaldoDevedor() {
+		return null;
+	}
+
+	private BigDecimal calcularAcrescimosPorImpontualidade() {
+		return null;
+	}
+
+	private void gerarContaIncluida() {
+
 	}
 }
