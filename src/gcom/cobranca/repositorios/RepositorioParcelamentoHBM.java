@@ -1,9 +1,12 @@
 package gcom.cobranca.repositorios;
 
+import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +29,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
+	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		List<Object[]> retorno = null;
+		List<CancelarParcelamentoDTO> dtos = new ArrayList<CancelarParcelamentoDTO>();
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
@@ -43,9 +46,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 					.append("GROUP BY p.parc_id, c.imov_id ")
-					.append("HAVING count(distinct c.cnta_id) >= 3; ");
+					.append("HAVING count(distinct c.cnta_id) >= :qtdContas; ");
 			
-			retorno = session.createSQLQuery(consulta.toString())
+			List<Object[]> lista = session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("saldoDevedor", Hibernate.BIG_DECIMAL)
@@ -53,14 +56,18 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("qtdContas", ConstantesSistema.QTD_CONTAS_CANCELAMENTO_PARCELAMENTO)
 					.list();
 			
+			for (Object[] dto : lista) {
+				dtos.add(new CancelarParcelamentoDTO(dto));
+			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 		
-		return retorno;
+		return dtos;
 	}
 }

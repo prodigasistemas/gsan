@@ -2,6 +2,7 @@ package gcom.cobranca.controladores;
 
 import gcom.cobranca.repositorios.IRepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
+import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
@@ -29,14 +30,12 @@ public class ControladorParcelamento extends ControladorComum {
 
 	public void cancelarParcelamentos() throws ControladorException {
 		try {
-			List<Object[]> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
+			List<CancelarParcelamentoDTO> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
 
-			for (Object[] parcelamento : parcelamentos) {
-				Integer idParcelamento = (Integer) parcelamento[0];
-				BigDecimal saldoDevedor = (BigDecimal) parcelamento[1];
-
-				cancelarParcelamento(idParcelamento);
-				BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(saldoDevedor);
+			for (CancelarParcelamentoDTO dto : parcelamentos) {
+				cancelarParcelamento(dto.getIdParcelamento());
+				
+				BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(dto.getSaldoDevedor());
 				gerarContaIncluida();
 			}
 		} catch (ErroRepositorioException e) {
