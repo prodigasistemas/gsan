@@ -5,7 +5,6 @@ import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
-import gcom.faturamento.debito.FiltroDebitoCreditoSituacao;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -23,8 +22,6 @@ public class ControladorParcelamento extends ControladorComum {
 	private static final long serialVersionUID = -2063305788601928963L;
 
 	protected IRepositorioParcelamentoHBM repositorioParcelamento;
-	
-	private DebitoCreditoSituacao situacaoCancelada;
 
 	public void ejbCreate() throws CreateException {
 		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
@@ -33,14 +30,11 @@ public class ControladorParcelamento extends ControladorComum {
 	public void cancelarParcelamentos() throws ControladorException {
 		try {
 			List<Object[]> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
-			FiltroDebitoCreditoSituacao filtroDebitoCreditoSituacao = new  FiltroDebitoCreditoSituacao();
-			filtroDebitoCreditoSituacao.adicionarParametro(new ParametroSimples(FiltroDebitoCreditoSituacao.ID, DebitoCreditoSituacao.CANCELADA));
-			situacaoCancelada = (DebitoCreditoSituacao) super.getControladorUtil().pesquisar(filtroDebitoCreditoSituacao, DebitoCreditoSituacao.class.toString()).iterator().next();
-			
+
 			for (Object[] parcelamento : parcelamentos) {
 				Integer idParcelamento = (Integer) parcelamento[0];
 				BigDecimal saldoDevedor = (BigDecimal) parcelamento[1];
-				
+
 				cancelarParcelamento(idParcelamento);
 				BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(saldoDevedor);
 				gerarContaIncluida();
@@ -49,28 +43,28 @@ public class ControladorParcelamento extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
+
 	public void cancelarParcelamento(Integer idParcelamento) {
 		cancelarDebitoACobrar(idParcelamento);
 		cancelarCreditoARealizar(idParcelamento);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void cancelarDebitoACobrar(Integer idParcelamento) {
 		try {
-			FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
-			filtroDebitoACobrar.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
-			Collection<DebitoACobrar> colecaoDebitoACobrar = super.getControladorUtil().pesquisar(filtroDebitoACobrar, DebitoACobrar.class.toString());
-			
-			if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
-				for (DebitoACobrar debitoACobrar : colecaoDebitoACobrar) {
-					debitoACobrar.setDebitoCreditoSituacaoAnterior(debitoACobrar.getDebitoCreditoSituacaoAtual());
-					debitoACobrar.setDebitoCreditoSituacaoAtual(situacaoCancelada);
-					debitoACobrar.setUltimaAlteracao(new Date());
-					
-					super.getControladorUtil().atualizar(debitoACobrar);
+			FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
+			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
+			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				for (DebitoACobrar debito : colecao) {
+					debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
+					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+					debito.setUltimaAlteracao(new Date());
+
+					super.getControladorUtil().atualizar(debito);
 				}
 			}
-			
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
@@ -86,5 +80,9 @@ public class ControladorParcelamento extends ControladorComum {
 
 	private void gerarContaIncluida() {
 
+	}
+
+	private DebitoCreditoSituacao getSituacaoCancelada() {
+		return new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA);
 	}
 }
