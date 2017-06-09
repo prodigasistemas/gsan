@@ -151,6 +151,11 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 
 	private String dataPagamentoConta;
 	
+	private String textoDescricaoImpostosEAliquotas;
+	private String textoPercentualImpostosEAliquotas;
+	private String textoValorBaseCalculoImpostos;
+	private String textoValorImpostosEAliquotas;
+	
 	private String descricaoImpostosEAliquotas;
 	private String percentualImpostosEAliquotas;
 	private String valorBaseCalculoImpostos;
@@ -619,10 +624,27 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 			this.numeroCpfCnpj = Util.formatarCnpj(emitirContaHelper.getCnpj());
 		}
 
-		this.descricaoImpostosEAliquotas = emitirContaHelper.getDescricaoImpostosEAliquotas();
-		this.percentualImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getPercentualImpostosEAliquotas());
-		this.valorBaseCalculoImpostos = Util.converterDecimalParaString(emitirContaHelper.getValorBaseCalculoImpostos());
-		this.valorImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getValorImpostosEAliquotas());
+		if (emitirContaHelper.isInformarImpostos()) {
+			this.textoDescricaoImpostosEAliquotas = "Tributos";
+			this.textoPercentualImpostosEAliquotas = "(%)";
+			this.textoValorBaseCalculoImpostos = "Base de cálculo";
+			this.textoValorImpostosEAliquotas = "Valor (R$)";
+			
+			this.descricaoImpostosEAliquotas = emitirContaHelper.getDescricaoImpostosEAliquotas();
+			this.percentualImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getPercentualImpostosEAliquotas());
+			this.valorBaseCalculoImpostos = Util.converterDecimalParaString(emitirContaHelper.getValorBaseCalculoImpostos());
+			this.valorImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getValorImpostosEAliquotas());
+		} else {
+			this.textoDescricaoImpostosEAliquotas = "";
+			this.textoPercentualImpostosEAliquotas = "";
+			this.textoValorBaseCalculoImpostos = "";
+			this.textoValorImpostosEAliquotas = "";
+			
+			this.descricaoImpostosEAliquotas = "";
+			this.percentualImpostosEAliquotas = "";
+			this.valorBaseCalculoImpostos = "";
+			this.valorImpostosEAliquotas = "";
+		}
 	}
 
 	public JRBeanCollectionDataSource getArrayJRDetail() {
@@ -1167,5 +1189,37 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 
 	public void setValorImpostosEAliquotas(String valorImpostosEAliquotas) {
 		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
+	}
+
+	public String getTextoDescricaoImpostosEAliquotas() {
+		return textoDescricaoImpostosEAliquotas;
+	}
+
+	public void setTextoDescricaoImpostosEAliquotas(String textoDescricaoImpostosEAliquotas) {
+		this.textoDescricaoImpostosEAliquotas = textoDescricaoImpostosEAliquotas;
+	}
+
+	public String getTextoPercentualImpostosEAliquotas() {
+		return textoPercentualImpostosEAliquotas;
+	}
+
+	public void setTextoPercentualImpostosEAliquotas(String textoPercentualImpostosEAliquotas) {
+		this.textoPercentualImpostosEAliquotas = textoPercentualImpostosEAliquotas;
+	}
+
+	public String getTextoValorBaseCalculoImpostos() {
+		return textoValorBaseCalculoImpostos;
+	}
+
+	public void setTextoValorBaseCalculoImpostos(String textoValorBaseCalculoImpostos) {
+		this.textoValorBaseCalculoImpostos = textoValorBaseCalculoImpostos;
+	}
+
+	public String getTextoValorImpostosEAliquotas() {
+		return textoValorImpostosEAliquotas;
+	}
+
+	public void setTextoValorImpostosEAliquotas(String textoValorImpostosEAliquotas) {
+		this.textoValorImpostosEAliquotas = textoValorImpostosEAliquotas;
 	}
 }

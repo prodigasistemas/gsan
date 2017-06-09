@@ -6,6 +6,7 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -3043,11 +3044,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
 			
-			Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
-			emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
-			emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
-			emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
-			emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+			Integer esferaPoder = null;
+			try {
+				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(idContaEP);
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
+			// Nao exibe demonstrativo de impostos para imoveis publicos federais
+			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
+				emitirContaHelper.setInformarImpostos(true);
+				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
+				emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+				emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+				emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+				emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+			} 
 			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 

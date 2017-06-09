@@ -156,6 +156,8 @@ public class EmitirContaHelper implements Serializable {
 	private Integer consumoMacro;
 	private BigDecimal valorTotalASerrateado;
 	
+	private boolean informarImpostos;
+	
 	private String descricaoImpostosEAliquotas;
 	private BigDecimal percentualImpostosEAliquotas;
 	private BigDecimal valorBaseCalculoImpostos;
@@ -1835,5 +1837,13 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setValorImpostosEAliquotas(BigDecimal valorImpostosEAliquotas) {
 		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
+	}
+
+	public boolean isInformarImpostos() {
+		return informarImpostos;
+	}
+
+	public void setInformarImpostos(boolean informarImpostos) {
+		this.informarImpostos = informarImpostos;
 	}
 }
