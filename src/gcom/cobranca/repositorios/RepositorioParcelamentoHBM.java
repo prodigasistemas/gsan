@@ -1,5 +1,6 @@
 package gcom.cobranca.repositorios;
 
+import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -31,24 +32,27 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
-			consulta.append("SELECT distinct parc_id as idParcelamento, sum(valorPrestacao) as saldoDevedor ")
-					.append("FROM ( ")
-					.append("SELECT distinct p.parc_id, c.cnta_id, sum(dc.dbcb_vlprestacao) as valorPrestacao ")
+			consulta.append("SELECT parc_id as idParcelamento, ")
+					.append("       c.imov_id as idImovel, ")
+					.append("       sum(dc.dbcb_vlprestacao) as saldoDevedor ")
 					.append("FROM faturamento.conta c ")
 					.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
 					.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
 					.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
 					.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
-					.append("      and c.cnta_id NOT IN (SELECT cnta_id FROM arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
-					.append("GROUP BY p.parc_id, c.cnta_id HAVING count(c.cnta_id) >= :qtdContas ")
-					.append(") as parcelamentos ")
-					.append("GROUP BY parc_id ");
+					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
+					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
+					.append("GROUP BY p.parc_id, c.imov_id ")
+					.append("HAVING count(distinct c.cnta_id) >= 3; ");
 			
 			retorno = session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("saldoDevedor", Hibernate.BIG_DECIMAL)
 					.setDate("dataAtual", new Date())
-					.setInteger("qtdContas", 3)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
 					.list();
 			
 		} catch (HibernateException e) {

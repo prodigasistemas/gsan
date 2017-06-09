@@ -47,6 +47,8 @@ public class ControladorParcelamento extends ControladorComum {
 	public void cancelarParcelamento(Integer idParcelamento) {
 		cancelarDebitoACobrar(idParcelamento);
 		cancelarCreditoARealizar(idParcelamento);
+		
+		// CANCELAR PARCELAMENTO
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,14 +58,12 @@ public class ControladorParcelamento extends ControladorComum {
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
 
-			if (colecao != null && !colecao.isEmpty()) {
-				for (DebitoACobrar debito : colecao) {
-					debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
-					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
-					debito.setUltimaAlteracao(new Date());
+			for (DebitoACobrar debito : colecao) {
+				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
+				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				debito.setUltimaAlteracao(new Date());
 
-					super.getControladorUtil().atualizar(debito);
-				}
+				super.getControladorUtil().atualizar(debito);
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
