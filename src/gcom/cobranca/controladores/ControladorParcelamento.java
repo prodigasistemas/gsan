@@ -3,12 +3,15 @@ package gcom.cobranca.controladores;
 import gcom.cobranca.repositorios.IRepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
+import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
@@ -53,7 +56,7 @@ public class ControladorParcelamento extends ControladorComum {
 	@SuppressWarnings("unchecked")
 	private void cancelarDebitoACobrar(Integer idParcelamento) {
 		try {
-			FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
+			Filtro filtro = new FiltroDebitoACobrar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
 
@@ -69,8 +72,23 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void cancelarCreditoARealizar(Integer idParcelamento) {
+		try {
+			Filtro filtro = new FiltroCreditoARealizar();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
+			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.toString());
 
+			for (CreditoARealizar credito : colecao) {
+				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
+				credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				credito.setUltimaAlteracao(new Date());
+
+				super.getControladorUtil().atualizar(credito);
+			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private BigDecimal calcularAcrescimosPorImpontualidade(BigDecimal saldoDevedor) {
