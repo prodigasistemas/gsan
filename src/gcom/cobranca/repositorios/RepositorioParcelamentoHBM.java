@@ -37,7 +37,12 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			StringBuilder consulta = new StringBuilder();
 			consulta.append("SELECT parc_id as idParcelamento, ")
 					.append("       c.imov_id as idImovel, ")
-					.append("       sum(dc.dbcb_vlprestacao) as saldoDevedor ")
+					.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas, ")
+					.append("       parc_vldebitoatualizado as valorOriginal, ")
+					.append("       parc_nnprestacoes as numeroPrestacoes, ")
+					.append("       parc_vljurosparcelamento as valorJuros, ")
+					.append("       parc_vlentrada as valorEntrada, ")
+					.append("       sum(dc.dbcb_vlprestacao) as valorTotalDebitoCobrado ")
 					.append("FROM faturamento.conta c ")
 					.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
 					.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
@@ -46,12 +51,17 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 					.append("GROUP BY p.parc_id, c.imov_id ")
-					.append("HAVING count(distinct c.cnta_id) >= :qtdContas; ");
+					.append("HAVING count(distinct c.cnta_id) >= :qtdContas");
 			
 			List<Object[]> lista = session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("saldoDevedor", Hibernate.BIG_DECIMAL)
+					.addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER)
+					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
+					.addScalar("numeroPrestacoes", Hibernate.INTEGER)
+					.addScalar("valorJuros", Hibernate.BIG_DECIMAL)
+					.addScalar("valorEntrada", Hibernate.BIG_DECIMAL)
+					.addScalar("valorTotalDebitoCobrado", Hibernate.BIG_DECIMAL)
 					.setDate("dataAtual", new Date())
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)

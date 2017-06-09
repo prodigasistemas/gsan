@@ -37,9 +37,7 @@ public class ControladorParcelamento extends ControladorComum {
 
 			for (CancelarParcelamentoDTO dto : parcelamentos) {
 				cancelarParcelamento(dto.getIdParcelamento());
-				
-				BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(dto.getSaldoDevedor());
-				gerarContaIncluida();
+				gerarContaIncluida(dto);
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
@@ -50,7 +48,9 @@ public class ControladorParcelamento extends ControladorComum {
 		cancelarDebitoACobrar(idParcelamento);
 		cancelarCreditoARealizar(idParcelamento);
 		
-		// CANCELAR PARCELAMENTO
+		/**
+		 * TODO - CANCELAR PARCELAMENTO
+		 */
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,12 +91,35 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	private BigDecimal calcularAcrescimosPorImpontualidade(BigDecimal saldoDevedor) {
+	private BigDecimal calcularSaldoDevedor(CancelarParcelamentoDTO dto) {
+		BigDecimal valorCobrado = dto.getValorEntrada().add(dto.getValorTotalDebitoCobrado());
+		BigDecimal saldoDevedor = dto.getValorOriginal().subtract(valorCobrado);
+		
+		BigDecimal parcelaJuros = dto.getValorJuros().divide(new BigDecimal(dto.getNumeroPrestacoes()));
+		BigDecimal jurosCobrado = parcelaJuros.multiply(new BigDecimal(dto.getNumeroPrestacoesCobradas()));
+		
+		saldoDevedor = saldoDevedor.subtract(jurosCobrado);
+		
+		return saldoDevedor.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
+	
+	/**
+	 * TODO - calcularAcrescimosPorImpontualidade
+	 * 
+	 * Data Inicial - Data que o parcelamento foi efetuado
+	 * Data Final - new Date()
+	 */
+	private BigDecimal calcularAcrescimosPorImpontualidade() {
 		return null;
 	}
 
-	private void gerarContaIncluida() {
-
+	/**
+	 * TODO - gerarContaIncluida
+	 */
+	private void gerarContaIncluida(CancelarParcelamentoDTO dto) {
+		BigDecimal saldoDevedor = calcularSaldoDevedor(dto);
+		BigDecimal acrescimos = calcularAcrescimosPorImpontualidade();
 	}
 
 	private DebitoCreditoSituacao getSituacaoCancelada() {
