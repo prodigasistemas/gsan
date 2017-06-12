@@ -23937,7 +23937,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				     		+" pg.dataPagamento,"//14
 				     		+" pg.imovel.id,"//15
 				     		+" ab.arrecadador.id, "//16
-				     		+" null, "//16
 				     		+" pgp.valorConta, "//17
 				     		+" pdac.valorConta, "//18
 				     		+" dac.numeroPrestacaoDebito, "//19
