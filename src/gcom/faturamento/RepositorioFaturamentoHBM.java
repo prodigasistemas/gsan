@@ -59827,6 +59827,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 		return retorno;
 	}
+	
+	
+	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException {
+		Object[] retorno = null;
+		
+		try {
+			Session session = HibernateUtil.getSession();
+			String consulta = 
+					"select ar.areg_nmagencia nome_agencia, ar.areg_telefone telefone, ar.areg_email email from atendimentopublico.agencia_reguladora ar " +
+					"inner join atendimentopublico.agencia_regul_municipio arm on arm.areg_id = ar.areg_id " +
+					"and muni_id = :idMunicipio";
+			retorno = (Object[]) session.createSQLQuery(consulta)
+					   .addScalar("nome_agencia", Hibernate.STRING)
+					   .addScalar("telefone", Hibernate.STRING)
+					   .addScalar("email", Hibernate.STRING)
+					   .setInteger("idMunicipio", idMunicipio).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}
+		
+		return retorno;
+	}
 }
 
 

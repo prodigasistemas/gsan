@@ -7,6 +7,8 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.geografico.FiltroMunicipio;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -15,6 +17,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadraFace;
+import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -3060,7 +3063,31 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
 				emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
 				emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
-			} 
+			}
+			
+			FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID, emitirContaHelper.getIdSetorComercial()));
+			
+			SetorComercial setorComercial = (SetorComercial) getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName()).iterator().next();
+			
+			FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
+			filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, setorComercial.getMunicipio().getId()));
+			
+			Municipio municipio = (Municipio) getControladorUtil().pesquisar(filtroMunicipio, Municipio.class.getName()).iterator().next();
+			
+			Object[] contatoAgenciaReguladora = null;
+			try {
+				contatoAgenciaReguladora = repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
+				if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+					emitirContaHelper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
+					emitirContaHelper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
+					emitirContaHelper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
 			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 

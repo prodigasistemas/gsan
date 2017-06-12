@@ -160,6 +160,10 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	private String percentualImpostosEAliquotas;
 	private String valorBaseCalculoImpostos;
 	private String valorImpostosEAliquotas;
+	
+	private String agenciaReguladora;
+	private String telefoneAgenciaReguladora;
+	private String emailAgenciaReguladora;
 
 	public String getDataPagamentoConta() {
 		return dataPagamentoConta;
@@ -645,6 +649,10 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 			this.valorBaseCalculoImpostos = "";
 			this.valorImpostosEAliquotas = "";
 		}
+		
+		this.agenciaReguladora = emitirContaHelper.getAgenciaReguladora();
+		this.telefoneAgenciaReguladora = emitirContaHelper.getTelefoneAgenciaReguladora();
+		this.emailAgenciaReguladora = emitirContaHelper.getEmailAgenciaReguladora();
 	}
 
 	public JRBeanCollectionDataSource getArrayJRDetail() {
@@ -1221,5 +1229,29 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 
 	public void setTextoValorImpostosEAliquotas(String textoValorImpostosEAliquotas) {
 		this.textoValorImpostosEAliquotas = textoValorImpostosEAliquotas;
+	}
+
+	public String getAgenciaReguladora() {
+		return agenciaReguladora;
+	}
+
+	public void setAgenciaReguladora(String agenciaReguladora) {
+		this.agenciaReguladora = agenciaReguladora;
+	}
+
+	public String getTelefoneAgenciaReguladora() {
+		return telefoneAgenciaReguladora;
+	}
+
+	public void setTelefoneAgenciaReguladora(String telefoneAgenciaReguladora) {
+		this.telefoneAgenciaReguladora = telefoneAgenciaReguladora;
+	}
+
+	public String getEmailAgenciaReguladora() {
+		return emailAgenciaReguladora;
+	}
+
+	public void setEmailAgenciaReguladora(String emailAgenciaReguladora) {
+		this.emailAgenciaReguladora = emailAgenciaReguladora;
 	}
 }
