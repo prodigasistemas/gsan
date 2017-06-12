@@ -664,23 +664,16 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		try {
 			while (!flagTerminou) {
 				
-				numeroPaginas = numeroPaginas + quantidadeRegistros;
-	
 				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
-				if (idLocalidade.intValue() != 4) {
-					break;
-				}
+
 				Collection<Pagamento> pagamentos;
 					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
-					logger.info("??? " + (pagamentos != null && !pagamentos.isEmpty()));
 				
 				if (pagamentos != null && !pagamentos.isEmpty()) {
-					logger.info("Qtd pagamentos: " + pagamentos.size());
 					
 					for (Pagamento pagamento : pagamentos) {
 						
 						if (categoriaPermiteGerarPagamento(pagamento)) {
-							logger.info("Gerando pagamento para o pagamento " + pagamento.getId());
 							pagamentosEmpresa.addAll(gerarPagamentoCobrancaDeContas(pagamento));
 							pagamentosEmpresa.addAll(gerarPagamentosCobrancaDeGuias(pagamento));
 							pagamentosEmpresa.addAll(gerarPagamentosCobrandaDeDebitos(pagamento));
@@ -696,6 +689,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 					pagamentos.clear();
 					pagamentos = null;
 				}
+				
+				numeroPaginas = numeroPaginas + quantidadeRegistros;
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -725,15 +720,12 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 		
 		if (pagamento.getContaGeral() != null) {
-			logger.info("Pagamento possui conta " + pagamento.getId() + " - " + pagamento.getContaGeral().getId());
 
 			if (isContaEmCobranca(pagamento)) {
-				logger.info("Cobranca por empresa " + pagamento.getId() + " - " + pagamento.getContaGeral().getId());
 				pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(pagamento.getContaGeral().getId(), pagamento.getValorPagamento(),
 						pagamento, null, null, false, null, ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
 			
 			} else {
-				logger.info("NÃO ESTÁ EM Cobranca por empresa " + pagamento.getId() + " - " + pagamento.getContaGeral().getId());
 				List<DebitoCobrado> debitosCobrados = obterDebitosDePagamentoDeParcelamento(pagamento);
 
 				for (DebitoCobrado debitoCobrado : debitosCobrados) {
