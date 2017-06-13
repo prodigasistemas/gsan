@@ -61,7 +61,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.addScalar("numeroPrestacoes", Hibernate.INTEGER)
 					.addScalar("valorJuros", Hibernate.BIG_DECIMAL)
 					.addScalar("valorEntrada", Hibernate.BIG_DECIMAL)
-					.addScalar("valorTotalDebitoCobrado", Hibernate.BIG_DECIMAL)
+					.addScalar("referencia", Hibernate.INTEGER)
 					.setDate("dataAtual", new Date())
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
