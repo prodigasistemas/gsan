@@ -1082,8 +1082,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.COBRANCA_EMPRESA);
 		
-		String titulo = "Negociações da Empresa de Cobrança - " + idEmpresa ;
-		String corpo = "Negociações da Empresa de Cobrança : " + idEmpresa ;
+		String titulo = "Pagamentos contas da Empresa de Cobrança - " + idEmpresa ;
+		String corpo = "Pagamentos contas da Empresa de Cobrança : " + idEmpresa ;
 		
 		ServicosEmail.enviarArquivoCompactado(nomeArquivo, arquivo, envioEmail.getEmailReceptor(), envioEmail.getEmailRemetente(), titulo, corpo);
 	}
