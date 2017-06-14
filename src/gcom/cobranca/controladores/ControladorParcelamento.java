@@ -102,27 +102,14 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private BigDecimal calcularSaldoDevedor(CancelarParcelamentoDTO dto) {
-		BigDecimal valorCobrado = dto.getValorEntrada().add(dto.getValorTotalDebitoCobrado());
+		BigDecimal valorPrestacoesCobradas = dto.getValorPrestacao().multiply(BigDecimal.valueOf(dto.getNumeroPrestacoesCobradas()));
+		BigDecimal valorCobrado = dto.getValorEntrada().add(valorPrestacoesCobradas);
 		BigDecimal saldoDevedor = dto.getValorOriginal().subtract(valorCobrado);
-		
-		BigDecimal parcelaJuros = dto.getValorJuros().divide(new BigDecimal(dto.getNumeroPrestacoes()));
-		BigDecimal jurosCobrado = parcelaJuros.multiply(new BigDecimal(dto.getNumeroPrestacoesCobradas()));
-		
-		saldoDevedor = saldoDevedor.subtract(jurosCobrado);
 		
 		return saldoDevedor.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
-	
-	/**
-	 * TODO - calcularAcrescimosPorImpontualidade
-	 * 
-	 * Data Inicial - Data que o parcelamento foi efetuado
-	 * Data Final - new Date()
-	 * @throws ControladorException 
-	 */
 	private BigDecimal calcularAcrescimosPorImpontualidade(CancelarParcelamentoDTO dto) throws ControladorException {
-		
 		BigDecimal acrescimos = BigDecimal.ZERO;
 		
 		try {
@@ -131,20 +118,25 @@ public class ControladorParcelamento extends ControladorComum {
 			
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
-			CalcularAcrescimoPorImpontualidadeHelper acrescimosHelper = getControladorCobranca().calcularAcrescimoPorImpontualidade(
-					parcelamento.getAnoMesReferenciaFaturamento(), parcelamento.getUltimaAlteracao(), 
-					dataProximaConta, parcelamento.getValorParcelado(),  BigDecimal.ZERO,
-					ConstantesSistema.SIM, sistemaParametro.getAnoMesArrecadacao().toString(), null,
+			CalcularAcrescimoPorImpontualidadeHelper helper = getControladorCobranca().calcularAcrescimoPorImpontualidade(
+					parcelamento.getAnoMesReferenciaFaturamento(),
+					parcelamento.getUltimaAlteracao(), 
+					dataProximaConta,
+					parcelamento.getValorParcelado(),
+					BigDecimal.ZERO,
+					ConstantesSistema.SIM,
+					sistemaParametro.getAnoMesArrecadacao().toString(),
+					null,
 					ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
 			
-			acrescimos = acrescimosHelper.getValorAtualizacaoMonetaria().add(acrescimosHelper.getValorJurosMora()).add(acrescimosHelper.getValorMulta());
+			acrescimos = helper.getValorAtualizacaoMonetaria().add(helper.getValorJurosMora()).add(helper.getValorMulta());
 			
 		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao calcular acréscimo para cancelamento de parcelamento.", e);
 		}
 
-		return acrescimos;
+		return acrescimos.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -210,12 +202,22 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	/**
-	 * TODO - gerarContaIncluida
-	 * @throws ControladorException 
+	 * TODO
 	 */
-	private void gerarContaIncluida(CancelarParcelamentoDTO dto) throws ControladorException {
+	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoDTO dto) throws ControladorException {
 		BigDecimal saldoDevedor = calcularSaldoDevedor(dto);
 		BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(dto);
+		
+		return null;
+	}
+	
+	/**
+	 * TODO
+	 */
+	private void gerarContaIncluida(CancelarParcelamentoDTO dto) throws ControladorException {
+		DebitoACobrar debito = gerarDebitoACobrar(dto);
+		
+		// TODO - Gerar conta incluída
 	}
 
 	private DebitoCreditoSituacao getSituacaoCancelada() {
