@@ -25441,7 +25441,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @author: Mariana Victor
 	 * @date: 18/04/2011
 	 */
-	public Integer pesquisarCobrancaSituacao(Integer codigoConstante) throws ErroRepositorioException {
+	public Integer pesquisarCobrancaSituacao(Integer idSituacao) throws ErroRepositorioException {
 
 		StatelessSession session = HibernateUtil.getStatelessSession();
 
@@ -25450,10 +25450,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = " SELECT cbst_id AS id " + " FROM cobranca.cobranca_situacao " + " WHERE cbst_cdconstante = :codigoConstante ";
+			consulta = " SELECT cbst_id AS id " + " FROM cobranca.cobranca_situacao " + " WHERE cbst_id = :idSituacao ";
 
 			retorno = (Integer) session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER)
-					.setInteger("codigoConstante", codigoConstante).setMaxResults(1).uniqueResult();
+					.setInteger("idSituacao", idSituacao).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada

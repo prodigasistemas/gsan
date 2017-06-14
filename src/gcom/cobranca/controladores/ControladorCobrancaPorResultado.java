@@ -661,14 +661,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		boolean flagTerminou = false;
 		final int quantidadeRegistros = 500;
 		int numeroPaginas = 0;
-		
 		try {
 			while (!flagTerminou) {
 				
-				numeroPaginas = numeroPaginas + quantidadeRegistros;
-	
 				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
-				
+
 				Collection<Pagamento> pagamentos;
 					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
 				
@@ -692,6 +689,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 					pagamentos.clear();
 					pagamentos = null;
 				}
+				
+				numeroPaginas = numeroPaginas + quantidadeRegistros;
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -723,7 +722,6 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		if (pagamento.getContaGeral() != null) {
 
 			if (isContaEmCobranca(pagamento)) {
-			
 				pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(pagamento.getContaGeral().getId(), pagamento.getValorPagamento(),
 						pagamento, null, null, false, null, ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
 			
@@ -1084,8 +1082,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.COBRANCA_EMPRESA);
 		
-		String titulo = "Negociações da Empresa de Cobrança - " + idEmpresa ;
-		String corpo = "Negociações da Empresa de Cobrança : " + idEmpresa ;
+		String titulo = "Pagamentos contas da Empresa de Cobrança - " + idEmpresa ;
+		String corpo = "Pagamentos contas da Empresa de Cobrança : " + idEmpresa ;
 		
 		ServicosEmail.enviarArquivoCompactado(nomeArquivo, arquivo, envioEmail.getEmailReceptor(), envioEmail.getEmailRemetente(), titulo, corpo);
 	}

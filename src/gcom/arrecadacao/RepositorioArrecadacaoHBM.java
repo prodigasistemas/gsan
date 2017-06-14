@@ -23919,6 +23919,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta;
 		
 		try {
+			
 			consulta = "SELECT pg.id,"//0
 				     		+" pg.valorPagamento,"//1
 				     		+" cnt.id, "//2
@@ -23955,19 +23956,24 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" INNER JOIN pg.avisoBancario ab"
                      +" where pg.localidade.id = :idLocalidade"
                      +" and pgst.id = :pagamentoClassificado "
-                     +" and pg.anoMesReferenciaArrecadacao = :referencia ";
-		 
-			colecaoDadosPagamentos = session.createQuery(consulta)
+                     +" and pg.anoMesReferenciaArrecadacao = :referencia "; 
+			
+			colecaoDadosPagamentos = session.createQuery(consulta.toString())
 			        .setInteger("idLocalidade",idLocalidade)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 			        .setInteger("referencia", referencia)
-			        .setMaxResults(quantidadeRegistros)
 					.setFirstResult(numeroPaginas)
+					.setMaxResults(quantidadeRegistros)
 					.list();
 			
+			System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
 			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
+				System.out.println(colecaoDadosPagamentos.size());
 				retorno = new ArrayList();
 				for(Object[] dadosPagamento : colecaoDadosPagamentos){
+					
+					System.out.println("dadosPgamento: " + (dadosPagamento != null));
+					
 					if(dadosPagamento != null){
 						Pagamento pagamento = new Pagamento();
 						if(dadosPagamento[0] != null){
@@ -24068,7 +24074,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setAvisoBancario(avisoBancario);
 						}
 						
+						System.out.println("Adicionando pagamento...");
 						retorno.add(pagamento);
+						System.out.println(retorno.size());
 					}
 				}
 			}

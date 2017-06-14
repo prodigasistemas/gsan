@@ -58924,6 +58924,7 @@ public class ControladorCobranca implements SessionBean {
 
 		} catch (ErroRepositorioException ex) {
 			// levanta a exceção para a próxima camada
+			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}

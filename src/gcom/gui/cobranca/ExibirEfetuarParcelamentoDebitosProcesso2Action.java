@@ -73,7 +73,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
 		
 		logger.info("Parcelamento do imóvel " + codigoImovel);
-
+		logger.info("1 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
 		Boolean indicadorContas = true;
 
 		if (semIntervaloParcelamento(fimIntervaloParcelamento, inicioIntervaloParcelamento)){
@@ -336,6 +336,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 					form.set("valorGuiasPagamento", "0,00");
 				}
 							
+				logger.info("2 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
 				// Acrescimos por Impontualidade
 				BigDecimal retornoSoma = new BigDecimal("0.00");
 				if( indicadorAcrescimosImpotualidade.equals("1") ){
