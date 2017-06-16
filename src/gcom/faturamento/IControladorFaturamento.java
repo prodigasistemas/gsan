@@ -1256,4 +1256,7 @@ public interface IControladorFaturamento {
 	
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoriaOuSubcategoria) throws ControladorException;
 }

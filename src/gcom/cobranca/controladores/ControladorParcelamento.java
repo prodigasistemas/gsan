@@ -20,6 +20,7 @@ import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
+import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
@@ -277,7 +278,7 @@ public class ControladorParcelamento extends ControladorComum {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
 		Imovel imovel = obterImovel(dto.getIdImovel());
-		DebitoACobrar debito = gerarDebitoACobrar(dto, imovel, usuarioLogado);
+		DebitoACobrar debitoACobrar = gerarDebitoACobrar(dto, imovel, usuarioLogado);
 		Integer anoMesConta = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(imovel.getId());
 		
 		ContaGeral contaGeral = gerarContaGeral();
@@ -321,21 +322,45 @@ public class ControladorParcelamento extends ControladorComum {
 		
 		conta.setValorAgua(BigDecimal.ZERO);
 		conta.setValorEsgoto(BigDecimal.ZERO);
-		conta.setDebitos(debito.getValorDebito());
+		conta.setDebitos(debitoACobrar.getValorDebito());
 		conta.setValorCreditos(BigDecimal.ZERO);
 		GerarImpostosDeduzidosContaHelper impostosDeduzidos = getControladorFaturamento().gerarImpostosDeduzidosConta(
 				conta.getImovel().getId(), anoMesConta, conta.getValorAgua(), conta.getValorEsgoto(), conta.getDebitos(), BigDecimal.ZERO, false);
 		conta.setValorImposto(impostosDeduzidos.getValorTotalImposto());
 
 		getControladorUtil().inserir(conta);
-		gerarDebitoCobrado();
+		gerarDebitoCobrado(conta, imovel, debitoACobrar);
 		getControladorFaturamento().inserirClienteConta(conta, imovel);
 		getControladorFaturamento().inserirImpostosDeduzidosConta(impostosDeduzidos, conta);
 	}
 
-	private void gerarDebitoCobrado() {
-		// TODO Auto-generated method stub
-		
+	private void gerarDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar) throws ControladorException {
+		DebitoCobrado debitoCobrado = new DebitoCobrado();
+		debitoCobrado.setDebitoTipo(new DebitoTipo(DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO));
+		debitoCobrado.setDebitoCobrado(new Date());
+		debitoCobrado.setConta(conta);
+		debitoCobrado.setLancamentoItemContabil(new LancamentoItemContabil(LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO));
+		debitoCobrado.setLocalidade(imovel.getLocalidade());
+		debitoCobrado.setQuadra(imovel.getQuadra());
+		debitoCobrado.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+		debitoCobrado.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+		debitoCobrado.setNumeroLote(imovel.getLote());
+		debitoCobrado.setNumeroSubLote(imovel.getSubLote());
+		debitoCobrado.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
+		debitoCobrado.setAnoMesCobrancaDebito(debitoACobrar.getAnoMesCobrancaDebito());
+		debitoCobrado.setValorPrestacao(debitoACobrar.getValorPrestacao());
+		debitoCobrado.setNumeroPrestacao(new Short("1"));
+		debitoCobrado.setNumeroPrestacaoDebito(debitoACobrar.getNumeroPrestacaoDebito());
+		debitoCobrado.setDebitoACobrarGeral(debitoACobrar.getDebitoACobrarGeral());
+		debitoCobrado.setFinanciamentoTipo(new FinanciamentoTipo(FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO));
+		debitoCobrado.setNumeroParcelaBonus(new Short("0"));
+		debitoCobrado.setUltimaAlteracao(new Date());
+
+		Integer id = (Integer) this.getControladorUtil().inserir(debitoCobrado);
+		debitoCobrado.setId(id);
+
+		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
+		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
 	}
 
 	private Rota obterRota(Imovel imovel) {
