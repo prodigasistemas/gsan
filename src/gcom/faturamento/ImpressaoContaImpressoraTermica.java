@@ -1620,9 +1620,9 @@ public class ImpressaoContaImpressoraTermica {
 	  }
 	
 	public void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
-    	String linha = formarLinha(0, 2, 550, 345, String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
-    	linha += formarLinha(0, 2, 550, 365, String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
-    	linha += formarLinha(0, 2, 550, 385, String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);    	
+    	String linha = formarLinha(0, 2, 450, 31, String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
+    	linha += formarLinha(0, 2, 450, 51, String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
+    	linha += formarLinha(0, 2, 450, 66, String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);    	
     	
     	retorno.append(linha);
     }
