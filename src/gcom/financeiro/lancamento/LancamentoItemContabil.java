@@ -23,8 +23,8 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	public final static Integer OUTROS_SERVICOS_ESGOTO = new Integer(9);
 	public final static Integer TARIFA_DE_AGUA = new Integer(10);
 	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
-	public final static Integer CANCELAMENTO_PARCELAMENTO = new Integer(12); // TODO - QUAL ID? Manter o 12 e 13 da base?
-	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(2); // TODO - MANTER?????!?!?!?!?!?
+	public final static Integer CANCELAMENTO_PARCELAMENTO = new Integer(12);
+	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(13);
 
 	private Integer id;
 	private String descricao;

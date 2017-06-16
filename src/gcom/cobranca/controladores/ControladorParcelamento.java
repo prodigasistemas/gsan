@@ -7,6 +7,7 @@ import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.cobranca.repositorios.IRepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
@@ -52,21 +53,26 @@ public class ControladorParcelamento extends ControladorComum {
 			List<CancelarParcelamentoDTO> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
 
 			for (CancelarParcelamentoDTO dto : parcelamentos) {
-				cancelarParcelamento(dto.getIdParcelamento());
-				gerarContaIncluida(dto, usuarioLogado);
+				cancelarParcelamento(dto, usuarioLogado);
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
 
-	public void cancelarParcelamento(Integer idParcelamento) {
-		cancelarDebitoACobrar(idParcelamento);
-		cancelarCreditoARealizar(idParcelamento);
-		
-		/**
-		 * TODO - CANCELAR PARCELAMENTO
-		 */
+	public void cancelarParcelamento(CancelarParcelamentoDTO dto, Usuario usuarioLogado) throws ControladorException {
+		try {
+			cancelarDebitoACobrar(dto.getIdParcelamento());
+			cancelarCreditoARealizar(dto.getIdParcelamento());
+			
+			Parcelamento parcelamento = repositorioParcelamento.pesquisarPorId(dto.getIdParcelamento());
+			parcelamento.setParcelamentoSituacao(new ParcelamentoSituacao(ParcelamentoSituacao.CANCELADO));
+			getControladorUtil().atualizar(parcelamento);
+
+			gerarContaIncluida(dto, usuarioLogado);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,14 +80,14 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroDebitoACobrar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
-			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
+			Collection<DebitoACobrar> colecao = getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
 
 			for (DebitoACobrar debito : colecao) {
 				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
 				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
 				debito.setUltimaAlteracao(new Date());
 
-				super.getControladorUtil().atualizar(debito);
+				getControladorUtil().atualizar(debito);
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -93,14 +99,14 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroCreditoARealizar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
-			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.toString());
+			Collection<CreditoARealizar> colecao = getControladorUtil().pesquisar(filtro, CreditoARealizar.class.toString());
 
 			for (CreditoARealizar credito : colecao) {
 				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
 				credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
 				credito.setUltimaAlteracao(new Date());
 
-				super.getControladorUtil().atualizar(credito);
+				getControladorUtil().atualizar(credito);
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -121,8 +127,8 @@ public class ControladorParcelamento extends ControladorComum {
 		BigDecimal acrescimos = BigDecimal.ZERO;
 		
 		try {
-			Parcelamento parcelamento = this.obterParcelamento(dto.getIdParcelamento());
-			Date dataProximaConta = this.obterDataProximaConta(dto.getIdImovel());
+			Parcelamento parcelamento = obterParcelamento(dto.getIdParcelamento());
+			Date dataProximaConta = obterDataProximaConta(dto.getIdImovel());
 			
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
@@ -155,7 +161,7 @@ public class ControladorParcelamento extends ControladorComum {
 			filtro.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
 			Collection<Parcelamento> colecao;
 
-			colecao = super.getControladorUtil().pesquisar(filtro, Parcelamento.class.toString());
+			colecao = getControladorUtil().pesquisar(filtro, Parcelamento.class.toString());
 
 			if (colecao != null && colecao.isEmpty())
 				parcelamento = (Parcelamento) colecao.iterator().next();
@@ -174,7 +180,7 @@ public class ControladorParcelamento extends ControladorComum {
 			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 			Collection<Imovel> colecao;
 
-			colecao = super.getControladorUtil().pesquisar(filtro, Imovel.class.toString());
+			colecao = getControladorUtil().pesquisar(filtro, Imovel.class.toString());
 
 			if (colecao != null && colecao.isEmpty())
 				imovel = (Imovel) colecao.iterator().next();
