@@ -60,9 +60,11 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
 					.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
 					.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
+					.append("INNER JOIN cadastro.imovel i on i.imov_id = c.imov_id ")
 					.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
 					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
+					.append("AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
 					.append("GROUP BY p.parc_id, c.imov_id ")
 					.append("HAVING count(distinct c.cnta_id) >= :qtdContas");
 			
