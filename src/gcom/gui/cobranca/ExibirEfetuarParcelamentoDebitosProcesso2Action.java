@@ -460,13 +460,17 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 										creditoARealizar.getNumeroPrestacaoRealizada(), 
 										creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
 								
-								valorCreditosAnterioresCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo.add(valores[indiceCurtoPrazo]);
+								BigDecimal valorCurtoPrazo = new BigDecimal("0.00");
+								valorCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorCurtoPrazo = valorCurtoPrazo.add(valores[indiceCurtoPrazo]);
 								
-								valorCreditosAnterioresLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-								valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo.add(valores[indiceLongoPrazo]);
+								BigDecimal valorLongoPrazo = new BigDecimal("0.00");								
+								valorLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+								valorLongoPrazo = valorLongoPrazo.add(valores[indiceLongoPrazo]);
 								
-								valorTotalCreditosAnteriores = valorTotalCreditosAnteriores.add(valorCreditosAnterioresCurtoPrazo).add(valorCreditosAnterioresLongoPrazo);
+								valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo.add(valorCurtoPrazo);
+								valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo.add(valorLongoPrazo);
+								valorTotalCreditosAnteriores = valorTotalCreditosAnteriores.add(valorCurtoPrazo).add(valorLongoPrazo);
 							} else {
 								valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 								valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
