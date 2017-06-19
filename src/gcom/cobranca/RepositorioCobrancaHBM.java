@@ -27402,12 +27402,13 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		Session session = HibernateUtil.getSession();
 		Date retorno = null;
 		try {
-			consulta.append("select guia.dataVencimento ")
-					.append(" from GuiaPagamento guia ")
-					.append(" where guia.parcelamento.id = :idParcelamento ")
-					.append(" and guia.financiamentoTipo.id = :entrada ");
+			consulta.append("select guia.gpag_dtvencimento as vencimento ")
+					.append(" from faturamento.guia_pagamento  guia ")
+					.append(" where guia.parc_id = :idParcelamento ")
+					.append(" and guia.fntp_id = :entrada ");
 
-			retorno = (Date) session.createQuery(consulta.toString())
+			retorno = (Date) session.createSQLQuery(consulta.toString())
+					.addScalar("vencimento", Hibernate.DATE)
 					.setInteger("idParcelamento", idParcelamento)
 					.setInteger("entrada", FinanciamentoTipo.ENTRADA_PARCELAMENTO).uniqueResult();
 			
