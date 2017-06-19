@@ -1,5 +1,6 @@
 package gcom.cobranca.repositorios;
 
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ConstantesSistema;
@@ -74,6 +75,23 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		
 		return retorno;
 	}
+		
+		public Parcelamento pesquisarPorId(Integer id) throws ErroRepositorioException {
+			Session session = HibernateUtil.getSession();
+			Parcelamento parcelamento = null;
+			
+			try {
+				parcelamento = (Parcelamento) session.get(Parcelamento.class, id);
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+			
+			return parcelamento;
+		}
+			
+
 	
 	@SuppressWarnings("unchecked")
 	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {

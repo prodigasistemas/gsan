@@ -92,7 +92,6 @@ import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaSituacao;
-import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.DocumentoTipo;
 import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.cobranca.FiltroCobrancaDocumentoItem;
@@ -8172,9 +8171,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0145] - Inserir Conta [SF002] - Gerar dados da conta [SF003] - Gerar
-	 * os débitos cobrados Author: Raphael Rossiter, Pedro Alexandre Data
-	 * 05/12/2005, 20/11/2006
+	 * [UC0145] - Inserir Conta [SF002] - Gerar dados da conta [SF003] - Gerar os débitos cobrados
 	 * 
 	 * @param mesAnoConta
 	 * @param imovel
@@ -8200,177 +8197,75 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta,
 			ContaMotivoInclusao contaMotivoInclusao,
 			Map<String, String[]> requestMap, Usuario usuarioLogado,
-			Integer leituraAnterior, Integer leituraAtual)
-			throws ControladorException {
+			Integer leituraAnterior, Integer leituraAtual) throws ControladorException {
 
-		/*
-		 * Legenda: calcularValoresConta 1 - Valor total de água 2 - Valor total
-		 * de esgoto 3 - Valor total dos débitos 4 - Valor total da conta 5 -
-		 * Array de objetos [UC0120] - Calcular valores de água e esgoto
-		 */
 
 		Integer retorno = new Integer("0");
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_INSERIR_CONTA, new UsuarioAcaoUsuarioHelper(
-						usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
+		
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_INSERIR_CONTA, new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_INSERIR_CONTA);
-
 		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 		operacaoEfetuada.setOperacao(operacao);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-		// [FS0003] - Verificar existência da conta
-		// =========================================
 		FiltroConta filtroConta = new FiltroConta();
+		filtroConta.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.IMOVEL_ID, imovel.getId()));
+		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.REFERENCIA, mesAnoConta));
 
-		filtroConta
-				.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-		filtroConta.adicionarParametro(new ParametroSimples(
-				FiltroConta.IMOVEL_ID, imovel.getId()));
-		filtroConta.adicionarParametro(new ParametroSimples(
-				FiltroConta.REFERENCIA, mesAnoConta));
-
-		Collection colecaoConta = this.getControladorUtil().pesquisar(
-				filtroConta, Conta.class.getName());
-
+		Collection colecaoConta = this.getControladorUtil().pesquisar(filtroConta, Conta.class.getName());
 		if (colecaoConta != null && !colecaoConta.isEmpty()) {
-
 			Conta conta = (Conta) colecaoConta.iterator().next();
 
-			if (conta.getDebitoCreditoSituacaoAtual().getId()
-					.equals(DebitoCreditoSituacao.CANCELADA)
-					|| conta.getDebitoCreditoSituacaoAtual()
-							.getId()
-							.equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
-				throw new ControladorException(
-						"atencao.conta_ja_existente_cancelada", null,
-						Util.formatarMesAnoReferencia(mesAnoConta));
+			if (conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.CANCELADA)
+					|| conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
+				throw new ControladorException("atencao.conta_ja_existente_cancelada", null, Util.formatarMesAnoReferencia(mesAnoConta));
 			} else {
-				throw new ControladorException(
-						"atencao.conta_ja_existente_imovel_anomesreferencia",
-						null, imovel.getId()
-								+ " já possui a conta com a referência "
-								+ Util.formatarMesAnoReferencia(mesAnoConta)
-								+ ".");
+				throw new ControladorException("atencao.conta_ja_existente_imovel_anomesreferencia", null, imovel.getId() + " já possui a conta com a referência " + Util.formatarMesAnoReferencia(mesAnoConta) + ".");
 			}
-
 		}
 
-		/*
-		 * [SF002] - Gerar dados da conta
-		 * ========================================
-		 * ==============================
-		 */
-
-		// Inseri a conta na tabela Conta_Geral
 		ContaGeral contaGeralInserir = new ContaGeral();
-
-		// valor fixo
-		Short indicadorHistorico = 2;
-
-		contaGeralInserir.setIndicadorHistorico(indicadorHistorico);
-
-		// Ultima Alteração
+		contaGeralInserir.setIndicadorHistorico(ConstantesSistema.NAO);
 		contaGeralInserir.setUltimaAlteracao(new Date());
 
-		/**
-		 * alterado por pedro alexandre dia 20/11/2006 alteração feita para
-		 * acoplar o controle de abrangência de usuário
-		 */
-		// ------------ CONTROLE DE ABRANGENCIA ----------------
-		Integer idGerado = null;
 		Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
-
+		Integer id = null;
 		if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.acesso.negado.abrangencia");
 		} else {
-			// Inserindo no BD
-			idGerado = (Integer) this.getControladorUtil().inserir(
-					contaGeralInserir);
+			id = (Integer) this.getControladorUtil().inserir(contaGeralInserir);
 		}
-		// ------------ FIM CONTROLE DE ABRANGENCIA -------------
 
-		// seta o id da Conta Geral gerada no objeto contaGeral
-		contaGeralInserir.setId(idGerado);
+		contaGeralInserir.setId(id);
 
 		Conta contaInserir = new Conta();
 
-		// Adiciona o idGerado da tabela Conta Geral
-		contaInserir.setId(idGerado);
-
-		// setando a conta geral na conta
+		contaInserir.setId(id);
 		contaInserir.setContaGeral(contaGeralInserir);
-
-		// Adiciona o id do imóvel selecionado
 		contaInserir.setImovel(imovel);
-
-		// Ano e mês de referência informado
 		contaInserir.setReferencia(mesAnoConta.intValue());
+		contaInserir.setDataVencimentoConta(dataVencimentoConta);
+		contaInserir.setDataVencimentoOriginal(dataVencimentoConta);
+		contaInserir.setIndicadorAlteracaoVencimento(ConstantesSistema.NAO);
 
-		// Debito Credito Situacao Atual(Com o valor correspondente a incluída
-		// na tabela)
-		DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-		debitoCreditoSituacaoAtual.setId(DebitoCreditoSituacao.INCLUIDA);
-		contaInserir.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
+		contaInserir.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA));
 
-		// Debito Credito Situacao Anterior(Com o valor NULL)
-
-		// Situação da ligação de água
 		contaInserir.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-
-		// Situação da ligação de esgoto
 		contaInserir.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 
-		// Motivo Nao Entrega Documento(Com o valor NULL)
-
-		// Localidade do imóvel
 		contaInserir.setLocalidade(imovel.getLocalidade());
-
-		// Quadra do imóvel
 		contaInserir.setQuadraConta(imovel.getQuadra());
-
-		// Lote do imóvel
 		contaInserir.setLote(imovel.getLote());
-
-		// Sublote do imóvel
 		contaInserir.setSubLote(imovel.getSubLote());
+		contaInserir.setCodigoSetorComercial(imovel.getQuadra().getSetorComercial().getCodigo());
+		contaInserir.setQuadra(new Integer(imovel.getQuadra().getNumeroQuadra()));
 
-		// Código do setor comercial do imóvel
-		contaInserir.setCodigoSetorComercial(imovel.getQuadra()
-				.getSetorComercial().getCodigo());
+		contaInserir.setDigitoVerificadorConta(new Short(String.valueOf(Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(mesAnoConta))));
+		contaInserir.setIndicadorCobrancaMulta(ConstantesSistema.NAO);
 
-		// Número da quadra do imóvel
-		contaInserir
-				.setQuadra(new Integer(imovel.getQuadra().getNumeroQuadra()));
-
-		// Dígito verificador (Implementar cálculo)
-		contaInserir
-				.setDigitoVerificadorConta(new Short(
-						String.valueOf(Util
-								.calculoRepresentacaoNumericaCodigoBarrasModulo10(mesAnoConta))));
-
-		// Indicador cobranca multa (2)
-		contaInserir.setIndicadorCobrancaMulta(new Integer(2).shortValue());
-
-		// Data de vencimento informada
-		contaInserir.setDataVencimentoConta(dataVencimentoConta);
-
-		// Data de vencimento Original = Data de vencimento
-		contaInserir.setDataVencimentoOriginal(dataVencimentoConta);
-
-		// Indicador alteração vencimento (2)
-		contaInserir.setIndicadorAlteracaoVencimento(new Short("2"));
-
-		// Consumo de Água
-		Integer consumoTotalAgua = this
-				.calcularConsumoTotalAguaOuEsgotoPorCategoria(
-						calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
-
+		Integer consumoTotalAgua = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
 		if (consumoTotalAgua.equals(new Integer("0"))) {
 			if (consumoAgua != null && !consumoAgua.trim().equalsIgnoreCase("")) {
 				contaInserir.setConsumoAgua(new Integer(consumoAgua));
@@ -8381,22 +8276,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			contaInserir.setConsumoAgua(consumoTotalAgua);
 		}
 
-		// CRC4202 - adicionado por Vivianne Sousa - 21/09/2010 -
-		// analista:Adriana Ribeiro
-		this.verificarValoresLeituraAnteriorEAtual(leituraAnterior,
-				leituraAtual, null, null, null, contaInserir.getConsumoAgua(), contaInserir.getConsumoAgua());
-
+		this.verificarValoresLeituraAnteriorEAtual(leituraAnterior, leituraAtual, null, null, null, contaInserir.getConsumoAgua(), contaInserir.getConsumoAgua());
 		contaInserir.setNumeroLeituraAnterior(leituraAnterior);
 		contaInserir.setNumeroLeituraAtual(leituraAtual);
 
-		// Consumo de Esgoto
-		Integer consumoTotalEsgoto = this
-				.calcularConsumoTotalAguaOuEsgotoPorCategoria(
-						calcularValoresConta, ConstantesSistema.CALCULAR_ESGOTO);
-
+		Integer consumoTotalEsgoto = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_ESGOTO);
 		if (consumoTotalEsgoto.equals(new Integer("0"))) {
-			if (consumoEsgoto != null
-					&& !consumoEsgoto.trim().equalsIgnoreCase("")) {
+			if (consumoEsgoto != null && !consumoEsgoto.trim().equalsIgnoreCase("")) {
 				contaInserir.setConsumoEsgoto(new Integer(consumoEsgoto));
 			} else {
 				contaInserir.setConsumoEsgoto(new Integer("0"));
@@ -8405,117 +8291,43 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			contaInserir.setConsumoEsgoto(consumoTotalEsgoto);
 		}
 
-		// Consumo Rateio Água (Com valor NULL)
-
-		// Consumo Rateio Água (Com valor NULL)
-
-		// Valor total de água
-		BigDecimal valorTotalAgua = this
-				.calcularValorTotalAguaOuEsgotoPorCategoria(
-						calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
-
+		BigDecimal valorTotalAgua = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_AGUA);
 		contaInserir.setValorAgua(valorTotalAgua);
-
-		// Valor total de esgoto
-		BigDecimal valorTotalEsgoto = this
-				.calcularValorTotalAguaOuEsgotoPorCategoria(
-						calcularValoresConta, ConstantesSistema.CALCULAR_ESGOTO);
-
+		BigDecimal valorTotalEsgoto = this.calcularValorTotalAguaOuEsgotoPorCategoria(calcularValoresConta, ConstantesSistema.CALCULAR_ESGOTO);
 		contaInserir.setValorEsgoto(valorTotalEsgoto);
 
-		// Valor total dos débitos
-		BigDecimal valorTotalDebito = this.calcularValorTotalDebitoConta(
-				colecaoDebitoCobrado, requestMap);
+		BigDecimal valorTotalDebito = this.calcularValorTotalDebitoConta(colecaoDebitoCobrado, requestMap);
 		contaInserir.setDebitos(valorTotalDebito);
 
-		// Valor total dos créditos (Com valor 0)
-		BigDecimal valorTotalCreditos = new BigDecimal("0.00");
+		BigDecimal valorTotalCreditos = new BigDecimal(0.00);
 		contaInserir.setValorCreditos(valorTotalCreditos);
 
-		// Percentual de esgoto
 		if (percentualEsgoto != null && !percentualEsgoto.equalsIgnoreCase("")) {
-
-			contaInserir.setPercentualEsgoto(Util
-					.formatarMoedaRealparaBigDecimal(percentualEsgoto));
+			contaInserir.setPercentualEsgoto(Util.formatarMoedaRealparaBigDecimal(percentualEsgoto));
 		} else {
 			contaInserir.setPercentualEsgoto(new BigDecimal("0.00"));
 		}
 
-		// PERCENTUAL COLETA DE ESGOTO
-		contaInserir.setPercentualColeta(this
-				.obterPercentualColetaEsgotoImovel(imovel.getId()));
+		contaInserir.setPercentualColeta(obterPercentualColetaEsgotoImovel(imovel.getId()));
 
-		// Data de validade da conta
-		Date dataValidadeConta = this
-				.retornaDataValidadeConta(dataVencimentoConta);
-		contaInserir.setDataValidadeConta(dataValidadeConta);
+		contaInserir.setDataValidadeConta(retornaDataValidadeConta(dataVencimentoConta));
+		contaInserir.setDataInclusao(new GregorianCalendar().getTime());
+		contaInserir.setDataEmissao(new GregorianCalendar().getTime());
 
-		// Data de inclusão - data corrente
-		Calendar dataInclusaoConta = new GregorianCalendar();
-		contaInserir.setDataInclusao(dataInclusaoConta.getTime());
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		// Data de revisão (Com valor NULL)
+		contaInserir.setReferenciaContabil(obterReferenciaContabilConta(sistemaParametro, contaInserir.getReferencia()));
 
-		// Data de retificação (Com valor NULL)
-
-		// Data de cancelamento (Com valor NULL)
-
-		// Data de emissão - data corrente
-		Calendar dataEmissaoConta = new GregorianCalendar();
-		contaInserir.setDataEmissao(dataEmissaoConta.getTime());
-
-		/*
-		 * Alterado por Raphael Rossiter em 30/07/2007 (Analista: Rosana
-		 * Carvalho)
-		 * 
-		 * OBJETIVO: Quando o mes/ano de faturamento for maior que o mes/ano de
-		 * faturamento atual, colocar o mes/ano contábil para a data do mes/ano
-		 * de faturamento informado
-		 */
-
-		// Ano / Mês de referência contábil
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		// alterado por Vivianne Sousa 06/05/2008
-		// analista :Aryed
-		Integer referenciaContabil = obterReferenciaContabilConta(
-				sistemaParametro, contaInserir.getReferencia());
-		contaInserir.setReferenciaContabil(referenciaContabil);
-
-		// Ano / Mês de referência baixa contábil (Com valor NULL)
-
-		// Motivo de inclusão da conta
 		contaInserir.setContaMotivoInclusao(contaMotivoInclusao);
 
-		// Consumo tarifa
 		contaInserir.setConsumoTarifa(imovel.getConsumoTarifa());
-
-		// Perfil do imóvel
 		contaInserir.setImovelPerfil(imovel.getImovelPerfil());
+		contaInserir.setIndicadorDebitoConta(ConstantesSistema.NAO);
 
-		// Indicador débito conta
-		contaInserir.setIndicadorDebitoConta(new Short("2"));
-
-		// NomeConta
-		// contaInserir.setNomeConta(imovel.getNomeConta());
-
-		/*
-		 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO: Gravar na
-		 * tabela de conta o usuário que está logado no sistema
-		 */
-
-		// Usuario
 		contaInserir.setUsuario(usuarioLogado);
 
-		// Conta numero da retificação
-		contaInserir.setNumeroRetificacoes(new Integer(0));
+		contaInserir.setNumeroRetificacoes(0);
 
-		// Numero Fatura
-		contaInserir.setNumeroFatura(null);
-
-		// ROTA_IDALTERNATIVA da tabela IMOVEL caso seja diferente de nulo,
-		// caso contrário ROTA_ID da tabela QUADRA com QDRA_ID da tabela IMOVEL
 		Rota rota = new Rota();
 		if (imovel.getRotaAlternativa() != null) {
 			rota = imovel.getRotaAlternativa();
@@ -8526,91 +8338,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		contaInserir.setRota(rota);
 
-		// Caso ROTA_IDALTERNATIVA da tabela IMOVEL seja diferente de nulo
-		// FTGR_ID
-		// da tabela ROTA com ROTA_ID= ROTA_IDALTERNATIVA da tabela IMOVEL caso
-		// contrárito FTGR_ID
-		// da tabela ROTA com ROTA_ID da tabela QUADRA com QDRA_ID da tabela
-		// IMOVEL
-		FaturamentoGrupo faturamentoGrupo = this.getControladorImovel()
-				.pesquisarGrupoImovel(imovel.getId());
-		contaInserir.setFaturamentoGrupo(faturamentoGrupo);
+		contaInserir.setFaturamentoGrupo(getControladorImovel().pesquisarGrupoImovel(imovel.getId()));
+		contaInserir.setNumeroAlteracoesVencimento(0);
 
-		// Ano Mes Referencia Baixa Social
-		contaInserir.setAnoMesReferenciaBaixaSocial(null);
+		GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = gerarImpostosDeduzidosConta(contaInserir.getImovel().getId(), 
+				mesAnoConta, valorTotalAgua, valorTotalEsgoto, valorTotalDebito, valorTotalCreditos, false);
+		contaInserir.setValorImposto(impostosDeduzidosConta.getValorTotalImposto());
 
-		// Numero Alteracoes Vencimento
-		contaInserir.setNumeroAlteracoesVencimento(new Integer(0));
-
-		/*
-		 * Colocado por Raphael Rossiter em 30/10/2007 OBJ: Gerar o valor dos
-		 * impostos
-		 */
-		GerarImpostosDeduzidosContaHelper impostosDeduzidosConta = this
-				.gerarImpostosDeduzidosConta(contaInserir.getImovel().getId(),
-						mesAnoConta, valorTotalAgua, valorTotalEsgoto,
-						valorTotalDebito, valorTotalCreditos, false);
-
-		// Valor Impostos
-		contaInserir.setValorImposto(impostosDeduzidosConta
-				.getValorTotalImposto());
-
-		// NUMERAÇÃO BOLETO
-		contaInserir.setNumeroBoleto(this.verificarGeracaoBoleto(
-				sistemaParametro, contaInserir));
-
-		// Ultima Alteração
+		contaInserir.setNumeroBoleto(verificarGeracaoBoleto(sistemaParametro, contaInserir));
 		contaInserir.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
 		contaInserir.setOperacaoEfetuada(operacaoEfetuada);
-		contaInserir.adicionarUsuario(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		contaInserir.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(contaInserir);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
 
-		// Inserindo no BD
-		Integer idContaGerado = (Integer) this.getControladorUtil().inserir(
-				contaInserir);
-
-		// setando o id da conta gerada no retorno - Tiago Moreno
+		Integer idContaGerado = (Integer) this.getControladorUtil().inserir(contaInserir);
 		retorno = idContaGerado;
 
-		// Carregando o ID gerado no objeto Conta
-		// contaInserir.setId(idContaGerado);
-
-		/*
-		 * Inserir na tabela CONTA_CATEGORIA e CONTA_CATEGORIA_CONSUMO_FAIXA
-		 * ====================================================================
-		 */
-
-		this.inserirContaCategoria(calcularValoresConta, colecaoCategoria,
-				contaInserir);
-
-		/*
-		 * Inserir na tabela CLIENTE_CONTA CLIENTE_CONTA ClienteConta
-		 * ============
-		 * ==========================================================
-		 */
-
-		this.inserirClienteConta(contaInserir, imovel);
-
-		/*
-		 * Gerar os débitos cobrados - DEBITO_COBRADO e DEBITO_COBRADO_CATEGORIA
-		 * ==
-		 * ====================================================================
-		 */
-
-		this.inserirDebitoCobrado(contaInserir, colecaoDebitoCobrado, imovel,
-				colecaoCategoria);
-
-		/*
-		 * incluir os impostos deduzidos da conta
-		 * ================================
-		 * ======================================
-		 */
-
-		this.inserirImpostosDeduzidosConta(impostosDeduzidosConta, contaInserir);
+		inserirContaCategoria(calcularValoresConta, colecaoCategoria, contaInserir);
+		inserirClienteConta(contaInserir, imovel);
+		inserirDebitoCobrado(contaInserir, colecaoDebitoCobrado, imovel, colecaoCategoria);
+		inserirImpostosDeduzidosConta(impostosDeduzidosConta, contaInserir);
 
 		return retorno;
 	}
