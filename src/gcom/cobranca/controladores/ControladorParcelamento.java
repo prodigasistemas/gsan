@@ -46,13 +46,23 @@ public class ControladorParcelamento extends ControladorComum {
 	public void ejbCreate() throws CreateException {
 		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
 	}
+	
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelamento(Integer idParcelamento) {
+		try {
+			return repositorioParcelamento.pesquisarParcelamentoParaCancelar(idParcelamento);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	public void cancelarParcelamentos(Usuario usuarioLogado) throws ControladorException {
 		try {
 			List<CancelarParcelamentoDTO> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
 
 			for (CancelarParcelamentoDTO dto : parcelamentos) {
-				cancelarParcelamento(dto.getIdParcelamento());
+				cancelarParcelamento(dto, usuarioLogado);
 				gerarContaIncluida(dto, usuarioLogado);
 			}
 		} catch (ErroRepositorioException e) {
@@ -60,9 +70,9 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	public void cancelarParcelamento(Integer idParcelamento) {
-		cancelarDebitoACobrar(idParcelamento);
-		cancelarCreditoARealizar(idParcelamento);
+	public void cancelarParcelamento(CancelarParcelamentoDTO parcelamentoDto, Usuario usuarioLogado) {
+		cancelarDebitoACobrar(parcelamentoDto.getIdParcelamento());
+		cancelarCreditoARealizar(parcelamentoDto.getIdParcelamento());
 		
 		/**
 		 * TODO - CANCELAR PARCELAMENTO
@@ -74,7 +84,7 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroDebitoACobrar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
-			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
+			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			for (DebitoACobrar debito : colecao) {
 				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
@@ -93,7 +103,7 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroCreditoARealizar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
-			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.toString());
+			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.getName());
 
 			for (CreditoARealizar credito : colecao) {
 				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());

@@ -28,6 +28,53 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return instancia;
 	}
 	
+	public String montarRaizConsulta() {
+		StringBuilder consulta = new StringBuilder();
+		consulta.append("SELECT p.parc_id as idParcelamento, ")
+			.append("       c.imov_id as idImovel, ")
+			.append("       p.parc_vldebitoatualizado as valorOriginal, ")
+			.append("       p.parc_vlentrada as valorEntrada, ")
+			.append("       p.parc_vlprestacao as valorPrestacao, ")
+			.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
+			.append("FROM faturamento.conta c ")
+			.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
+			.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
+			.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+		
+		return consulta.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		CancelarParcelamentoDTO retorno = null;
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+					consulta.append(montarRaizConsulta())
+					.append("WHERE  p.parc_id = :idParcelamento ")
+					.append("GROUP BY p.parc_id, c.imov_id ");
+			
+			Object[] dto = (Object[]) session.createSQLQuery(consulta.toString())
+					.addScalar("idParcelamento", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
+					.addScalar("valorEntrada", Hibernate.BIG_DECIMAL)
+					.addScalar("valorPrestacao", Hibernate.BIG_DECIMAL)
+					.addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER)
+					.setInteger("idParcelamento", idParcelamento)
+					.uniqueResult();
+			
+			retorno = new CancelarParcelamentoDTO(dto);
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
@@ -35,17 +82,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
-			consulta.append("SELECT parc_id as idParcelamento, ")
-					.append("       c.imov_id as idImovel, ")
-					.append("       parc_vldebitoatualizado as valorOriginal, ")
-					.append("       parc_vlentrada as valorEntrada, ")
-					.append("       parc_vlprestacao as valorPrestacao, ")
-					.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
-					.append("FROM faturamento.conta c ")
-					.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
-					.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
-					.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
-					.append("INNER JOIN cadastro.imovel i on i.imov_id = c.imov_id ")
+					consulta.append(montarRaizConsulta())
 					.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
 					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")

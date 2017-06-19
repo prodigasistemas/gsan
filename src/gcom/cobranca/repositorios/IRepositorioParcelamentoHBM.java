@@ -8,4 +8,6 @@ import java.util.List;
 public interface IRepositorioParcelamentoHBM {
 
 	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException;
+	
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException;
 }
