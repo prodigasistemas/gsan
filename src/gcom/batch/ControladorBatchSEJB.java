@@ -44,6 +44,7 @@ import gcom.batch.cadastro.TarefaBatchProcessarComandoGerado;
 import gcom.batch.cadastro.TarefaBatchRetirarImovelTarifaSocial;
 import gcom.batch.cadastro.TarefaBatchSuspenderImovelEmProgramaEspecial;
 import gcom.batch.cobranca.TarefaBatchAtualizarComandoAtividadeAcaoCobranca;
+import gcom.batch.cobranca.TarefaBatchCancelarParcelamentos;
 import gcom.batch.cobranca.TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVista;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasDeFinalDeAno;
@@ -1367,6 +1368,15 @@ public class ControladorBatchSEJB implements SessionBean {
 									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 	
 							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosDesfazerParcelamentoPorEntradaNaoPaga));
+	
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+	
+							break;
+							
+						case Funcionalidade.CANCELAR_PARCELAMENTOS:
+							TarefaBatchCancelarParcelamentos dadosCancelarParcelamentos = new TarefaBatchCancelarParcelamentos(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							dadosCancelarParcelamentos.addParametro("usuario", processoIniciado.getUsuario());
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosCancelarParcelamentos));
 	
 							getControladorUtil().atualizar(funcionalidadeIniciada);
 	

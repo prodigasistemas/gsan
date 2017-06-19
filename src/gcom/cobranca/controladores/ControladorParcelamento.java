@@ -1,5 +1,6 @@
 package gcom.cobranca.controladores;
 
+import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -43,6 +44,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 
 public class ControladorParcelamento extends ControladorComum {
 
@@ -54,19 +56,26 @@ public class ControladorParcelamento extends ControladorComum {
 		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
 	}
 
-	public void cancelarParcelamentos(Usuario usuarioLogado) throws ControladorException {
+	public void cancelarParcelamentos(Usuario usuario, int idFuncionalidadeIniciada) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
+
 		try {
 			List<CancelarParcelamentoDTO> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
 
 			for (CancelarParcelamentoDTO dto : parcelamentos) {
-				cancelarParcelamento(dto, usuarioLogado);
+				cancelarParcelamento(dto, usuario);
 			}
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			ex.printStackTrace();
+			sessionContext.setRollbackOnly();
+			throw new EJBException(ex);
 		}
 	}
 
-	public void cancelarParcelamento(CancelarParcelamentoDTO dto, Usuario usuarioLogado) throws ControladorException {
+	public void cancelarParcelamento(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
 		try {
 			cancelarDebitoACobrar(dto.getIdParcelamento());
 			cancelarCreditoARealizar(dto.getIdParcelamento());
@@ -75,7 +84,7 @@ public class ControladorParcelamento extends ControladorComum {
 			parcelamento.setParcelamentoSituacao(new ParcelamentoSituacao(ParcelamentoSituacao.CANCELADO));
 			getControladorUtil().atualizar(parcelamento);
 			
-			gerarContaIncluida(dto, usuarioLogado);
+			gerarContaIncluida(dto, usuario);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -220,7 +229,7 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoDTO dto, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoDTO dto, Imovel imovel, Usuario usuario) throws ControladorException {
 		DebitoACobrar debitoACobrar = new DebitoACobrar();
 
 		try {
@@ -251,7 +260,7 @@ public class ControladorParcelamento extends ControladorComum {
 			debitoACobrar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 			debitoACobrar.setParcelamentoGrupo(null);
 			debitoACobrar.setCobrancaForma(new CobrancaForma(CobrancaForma.COBRANCA_EM_CONTA));
-			debitoACobrar.setUsuario(usuarioLogado);
+			debitoACobrar.setUsuario(usuario);
 			debitoACobrar.setUltimaAlteracao(new Date());
 
 			this.getControladorUtil().inserir(debitoACobrar);
@@ -274,11 +283,11 @@ public class ControladorParcelamento extends ControladorComum {
 		return debitoACobrarGeral;
 	}
 	
-	private void gerarContaIncluida(CancelarParcelamentoDTO dto, Usuario usuarioLogado) throws ControladorException {
+	private void gerarContaIncluida(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
 		Imovel imovel = obterImovel(dto.getIdImovel());
-		DebitoACobrar debitoACobrar = gerarDebitoACobrar(dto, imovel, usuarioLogado);
+		DebitoACobrar debitoACobrar = gerarDebitoACobrar(dto, imovel, usuario);
 		Integer anoMesConta = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(imovel.getId());
 		
 		ContaGeral contaGeral = gerarContaGeral();
@@ -315,7 +324,7 @@ public class ControladorParcelamento extends ControladorComum {
 		conta.setNumeroAlteracoesVencimento(0);
 		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(sistemaParametro, conta));
 		conta.setUltimaAlteracao(new Date());
-		conta.setUsuario(usuarioLogado);
+		conta.setUsuario(usuario);
 
 		BigDecimal percentualEsgoto = imovel.getLigacaoEsgoto().getPercentual();
 		conta.setPercentualEsgoto(percentualEsgoto != null ? percentualEsgoto : BigDecimal.ZERO);
