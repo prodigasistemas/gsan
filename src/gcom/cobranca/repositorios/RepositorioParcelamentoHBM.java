@@ -144,7 +144,14 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		Imovel imovel = null;
 
 		try {
-			imovel = (Imovel) session.get(Imovel.class, id);
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT i FROM Imovel i ")
+					.append("INNER JOIN FETCH i.quadra ")
+					.append("INNER JOIN FETCH i.setorComercial ")
+					.append("LEFT JOIN FETCH i.ligacaoEsgoto ")
+					.append("WHERE i.id = :id");
+			
+			imovel = (Imovel) session.createQuery(consulta.toString()).setInteger("id", id).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

@@ -1,5 +1,6 @@
 package gcom.cobranca.controladores;
 
+import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -259,7 +260,7 @@ public class ControladorParcelamento extends ControladorComum {
 		conta.setQuadraConta(dto.getImovel().getQuadra());
 		conta.setLote(dto.getImovel().getLote());
 		conta.setSubLote(dto.getImovel().getSubLote());
-		conta.setCodigoSetorComercial(dto.getImovel().getQuadra().getSetorComercial().getCodigo());
+		conta.setCodigoSetorComercial(dto.getImovel().getSetorComercial().getCodigo());
 		conta.setQuadra(dto.getImovel().getQuadra().getNumeroQuadra());
 		conta.setRota(obterRota(dto.getImovel()));
 		conta.setDigitoVerificadorConta(new Short(String.valueOf(Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(anoMesConta))));
@@ -281,8 +282,8 @@ public class ControladorParcelamento extends ControladorComum {
 		conta.setUltimaAlteracao(new Date());
 		conta.setUsuario(usuario);
 
-		BigDecimal percentualEsgoto = dto.getImovel().getLigacaoEsgoto().getPercentual();
-		conta.setPercentualEsgoto(percentualEsgoto != null ? percentualEsgoto : BigDecimal.ZERO);
+		LigacaoEsgoto ligacaoEsgoto = dto.getImovel().getLigacaoEsgoto();
+		conta.setPercentualEsgoto(ligacaoEsgoto != null ? ligacaoEsgoto.getPercentual() : BigDecimal.ZERO);
 		
 		conta.setValorAgua(BigDecimal.ZERO);
 		conta.setValorEsgoto(BigDecimal.ZERO);
