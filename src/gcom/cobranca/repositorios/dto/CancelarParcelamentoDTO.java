@@ -1,12 +1,15 @@
 package gcom.cobranca.repositorios.dto;
 
+import gcom.cadastro.imovel.Imovel;
+import gcom.cobranca.parcelamento.Parcelamento;
+
 import java.math.BigDecimal;
 
 public class CancelarParcelamentoDTO {
 
-	private Integer idParcelamento;
+	private Parcelamento parcelamento;
 
-	private Integer idImovel;
+	private Imovel imovel;
 
 	private BigDecimal valorOriginal;
 
@@ -15,35 +18,35 @@ public class CancelarParcelamentoDTO {
 	private BigDecimal valorPrestacao;
 
 	private Integer numeroPrestacoesCobradas;
-
+	
 	public CancelarParcelamentoDTO() {
 		super();
 	}
-
-	public CancelarParcelamentoDTO(Object[] dados) {
+	
+	public CancelarParcelamentoDTO(Parcelamento parcelamento, Imovel imovel, Object[] dados) {
 		super();
-		this.idParcelamento = (Integer) dados[0];
-		this.idImovel = (Integer) dados[1];
+		this.parcelamento = parcelamento;
+		this.imovel = imovel;
 		this.valorOriginal = (BigDecimal) dados[2];
 		this.valorEntrada = (BigDecimal) dados[3];
 		this.valorPrestacao = (BigDecimal) dados[4];
 		this.numeroPrestacoesCobradas = (Integer) dados[5];
 	}
 
-	public Integer getIdParcelamento() {
-		return idParcelamento;
+	public Parcelamento getParcelamento() {
+		return parcelamento;
 	}
 
-	public void setIdParcelamento(Integer idParcelamento) {
-		this.idParcelamento = idParcelamento;
+	public void setParcelamento(Parcelamento parcelamento) {
+		this.parcelamento = parcelamento;
 	}
 
-	public Integer getIdImovel() {
-		return idImovel;
+	public Imovel getImovel() {
+		return imovel;
 	}
 
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
 	}
 
 	public BigDecimal getValorOriginal() {

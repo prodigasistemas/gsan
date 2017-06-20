@@ -1,5 +1,6 @@
 package gcom.cobranca.repositorios;
 
+import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -29,21 +30,6 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return instancia;
 	}
 	
-	public Parcelamento pesquisarPorId(Integer id) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		Parcelamento parcelamento = null;
-
-		try {
-			parcelamento = (Parcelamento) session.get(Parcelamento.class, id);
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return parcelamento;
-	}
-	
 	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		CancelarParcelamentoDTO retorno = null;
@@ -54,7 +40,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.append("WHERE  p.parc_id = :idParcelamento ")
 					.append("GROUP BY p.parc_id, c.imov_id ");
 			
-			Object[] dto = (Object[]) session.createSQLQuery(consulta.toString())
+			Object[] dados = (Object[]) session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
@@ -64,7 +50,11 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.setInteger("idParcelamento", idParcelamento)
 					.uniqueResult();
 			
-			retorno = new CancelarParcelamentoDTO(dto);
+			if (dados != null && dados.length > 0){
+				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);
+				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
+				retorno = new CancelarParcelamentoDTO(parcelamento, imovel, dados);
+			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -82,10 +72,12 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		try {
 			StringBuilder consulta = new StringBuilder();
 			consulta.append(montarRaizConsulta())
+					.append("INNER JOIN cadastro.imovel i on i.imov_id = p.imov_id ")
 					.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
 					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 					.append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
+					.append("      AND parc_amreferenciafaturamento = 201702 ")
 					.append("GROUP BY p.parc_id, c.imov_id ")
 					.append("HAVING count(distinct c.cnta_id) >= :qtdContas");
 
@@ -102,8 +94,10 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
 					.setInteger("qtdContas", ConstantesSistema.QTD_CONTAS_CANCELAMENTO_PARCELAMENTO).list();
 
-			for (Object[] dto : lista) {
-				dtos.add(new CancelarParcelamentoDTO(dto));
+			for (Object[] dados : lista) {
+				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);
+				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
+				dtos.add(new CancelarParcelamentoDTO(parcelamento, imovel, dados));
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -128,5 +122,35 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
 		
 		return consulta.toString();
+	}
+	
+	private Parcelamento pesquisarPorId(Integer id) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Parcelamento parcelamento = null;
+
+		try {
+			parcelamento = (Parcelamento) session.get(Parcelamento.class, id);
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return parcelamento;
+	}
+	
+	private Imovel pesquisarImovelPorId(Integer id) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Imovel imovel = null;
+
+		try {
+			imovel = (Imovel) session.get(Imovel.class, id);
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return imovel;
 	}
 }
