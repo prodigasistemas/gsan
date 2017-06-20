@@ -50,26 +50,25 @@ public class ControladorParcelamento extends ControladorComum {
 
 	private static final long serialVersionUID = -2063305788601928963L;
 
-	protected IRepositorioParcelamentoHBM repositorioParcelamento;
+	protected IRepositorioParcelamentoHBM repositorio;
 
 	public void ejbCreate() throws CreateException {
-		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
+		repositorio = RepositorioParcelamentoHBM.getInstancia();
 	}
 	
-	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelamento(Integer idParcelamento) throws ControladorException {
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ControladorException {
 		try {
-			return repositorioParcelamento.pesquisarParcelamentoParaCancelar(idParcelamento);
+			return repositorio.pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-		
 	}
 
 	public void cancelarParcelamentos(Usuario usuario, int idFuncionalidadeIniciada) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
 		try {
-			List<CancelarParcelamentoDTO> parcelamentos = repositorioParcelamento.pesquisarParcelamentosParaCancelar();
+			List<CancelarParcelamentoDTO> parcelamentos = repositorio.pesquisarParcelamentosParaCancelar();
 
 			for (CancelarParcelamentoDTO dto : parcelamentos) {
 				cancelarParcelamento(dto, usuario);
@@ -89,7 +88,7 @@ public class ControladorParcelamento extends ControladorComum {
 			cancelarDebitoACobrar(dto.getIdParcelamento());
 			cancelarCreditoARealizar(dto.getIdParcelamento());
 			
-			Parcelamento parcelamento = repositorioParcelamento.pesquisarPorId(dto.getIdParcelamento());
+			Parcelamento parcelamento = repositorio.pesquisarPorId(dto.getIdParcelamento());
 			parcelamento.setParcelamentoSituacao(new ParcelamentoSituacao(ParcelamentoSituacao.CANCELADO));
 			parcelamento.setUltimaAlteracao(new Date());
 			getControladorUtil().atualizar(parcelamento);

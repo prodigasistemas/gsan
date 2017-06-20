@@ -40151,9 +40151,9 @@ public class Fachada {
 		}
 	}
 	
-	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelamento(Integer idParcelamento) {
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
 		try {
-			return getControladorParcelamento().pesquisarParcelamentoParaCancelamento(idParcelamento);
+			return getControladorParcelamento().pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
