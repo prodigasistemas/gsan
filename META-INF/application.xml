@@ -270,6 +270,10 @@
 		<ejb>BatchDesfazerParcelamentoPorEntradaNaoPagaMDB.jar</ejb>
 	</module>
 
+		<module>
+		<ejb>BatchCancelarParcelamentosMDB.jar</ejb>
+	</module>
+	
 	<module>
 		<ejb>BatchGerarHistoricoContaMDB.jar</ejb>
 	</module>

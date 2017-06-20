@@ -86,7 +86,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 		CancelarParcelamentoDTO cancelarParcelamentoDTO = null;
 		
 		if (acao != null && acao.equals("cancelar")) {
-		  cancelarParcelamentoDTO = fachada.pesquisarParcelamentoParaCancelamento(Integer.parseInt(codigoParcelamento));
+		  cancelarParcelamentoDTO = fachada.pesquisarParcelamentoParaCancelar(Integer.parseInt(codigoParcelamento));
 		  Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 		  fachada.cancelarParcelamento(cancelarParcelamentoDTO, usuarioLogado);
 		  
@@ -370,8 +370,8 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 			 }
 		 }
 		 
-		 boolean possuiPermissaoCancelarParcelamento = fachada.verificarPermissaoEspecial( PermissaoEspecial.CANCELAR_PARCELAMENTO , (Usuario) sessao.getAttribute("usuarioLogado") );
-	     httpServletRequest.setAttribute("possuiPermissaoCancelarParcelamento",possuiPermissaoCancelarParcelamento);
+		 boolean possuiPermissaoCancelarParcelamento = this.getFachada().verificarPermissaoEspecial( PermissaoEspecial.CANCELAR_PARCELAMENTO , (Usuario) sessao.getAttribute("usuarioLogado") );
+		 httpServletRequest.setAttribute("possuiPermissaoCancelarParcelamento",possuiPermissaoCancelarParcelamento);
 		 
 		 
 		return retorno;
