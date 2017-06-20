@@ -20,7 +20,7 @@ import javax.jms.ObjectMessage;
 
 public class BatchCancelarParcelamentosMDB implements MessageDrivenBean, MessageListener {
 
-	private static final long serialVersionUID = 7570671057480957383L;
+	private static final long serialVersionUID = 1L;
 
 	public BatchCancelarParcelamentosMDB() {
 		super();
@@ -28,11 +28,10 @@ public class BatchCancelarParcelamentosMDB implements MessageDrivenBean, Message
 
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
-
 			ObjectMessage objectMessage = (ObjectMessage) message;
+
 			try {
 				getControladorParcelamento().cancelarParcelamentos((Usuario) ((Object[]) objectMessage.getObject())[0], (Integer) ((Object[]) objectMessage.getObject())[1]);
-
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
@@ -43,14 +42,11 @@ public class BatchCancelarParcelamentosMDB implements MessageDrivenBean, Message
 		}
 	}
 
-	public void ejbCreate() {
-	}
+	public void ejbCreate() {}
 
-	public void ejbRemove() throws EJBException {
-	}
+	public void ejbRemove() throws EJBException {}
 
-	public void setMessageDrivenContext(MessageDrivenContext arg0) throws EJBException {
-	}
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {}
 
 	private ControladorParcelamentoLocal getControladorParcelamento() {
 		try {

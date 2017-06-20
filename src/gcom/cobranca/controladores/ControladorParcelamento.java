@@ -82,6 +82,7 @@ public class ControladorParcelamento extends ControladorComum {
 			
 			Parcelamento parcelamento = repositorioParcelamento.pesquisarPorId(dto.getIdParcelamento());
 			parcelamento.setParcelamentoSituacao(new ParcelamentoSituacao(ParcelamentoSituacao.CANCELADO));
+			parcelamento.setUltimaAlteracao(new Date());
 			getControladorUtil().atualizar(parcelamento);
 			
 			gerarContaIncluida(dto, usuario);

@@ -10,11 +10,16 @@ import java.util.Collection;
 
 public class TarefaBatchCancelarParcelamentos extends TarefaBatch {
 
+	private static final long serialVersionUID = 1L;
+
+	@Deprecated
+	public TarefaBatchCancelarParcelamentos() {
+		super(null, 0);
+	}
+	
 	public TarefaBatchCancelarParcelamentos(Usuario usuario, int idFuncionalidadeIniciada) {
 		super(usuario, idFuncionalidadeIniciada);
 	}
-
-	private static final long serialVersionUID = 7384165591762776053L;
 
 	@Override
 	protected Collection<Object> pesquisarTodasUnidadeProcessamentoBatch() {
@@ -28,8 +33,7 @@ public class TarefaBatchCancelarParcelamentos extends TarefaBatch {
 
 	@Override
 	public Object executar() throws TarefaException {
-		Usuario usuario = (Usuario) getParametro("usuario");
-		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_CANCELAR_PARCELAMENTOS_MDB, new Object[] { usuario, this.getIdFuncionalidadeIniciada() });
+		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_CANCELAR_PARCELAMENTOS_MDB, new Object[] { (Usuario) getParametro("usuario"), this.getIdFuncionalidadeIniciada() });
 		return null;
 	}
 
