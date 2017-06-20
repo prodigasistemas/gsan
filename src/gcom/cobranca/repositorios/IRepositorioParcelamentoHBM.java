@@ -11,4 +11,6 @@ public interface IRepositorioParcelamentoHBM {
 	public Parcelamento pesquisarPorId(Integer id) throws ErroRepositorioException;
 	
 	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException;
+	
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException;
 }

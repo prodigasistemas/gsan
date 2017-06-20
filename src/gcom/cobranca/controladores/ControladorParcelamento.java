@@ -55,6 +55,15 @@ public class ControladorParcelamento extends ControladorComum {
 	public void ejbCreate() throws CreateException {
 		repositorioParcelamento = RepositorioParcelamentoHBM.getInstancia();
 	}
+	
+	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelamento(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorioParcelamento.pesquisarParcelamentoParaCancelar(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		
+	}
 
 	public void cancelarParcelamentos(Usuario usuario, int idFuncionalidadeIniciada) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
@@ -96,7 +105,7 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroDebitoACobrar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
-			Collection<DebitoACobrar> colecao = getControladorUtil().pesquisar(filtro, DebitoACobrar.class.toString());
+			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			for (DebitoACobrar debito : colecao) {
 				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
@@ -115,7 +124,7 @@ public class ControladorParcelamento extends ControladorComum {
 		try {
 			Filtro filtro = new FiltroCreditoARealizar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
-			Collection<CreditoARealizar> colecao = getControladorUtil().pesquisar(filtro, CreditoARealizar.class.toString());
+			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.getName());
 
 			for (CreditoARealizar credito : colecao) {
 				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());

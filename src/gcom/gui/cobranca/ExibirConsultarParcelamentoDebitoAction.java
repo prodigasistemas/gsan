@@ -13,6 +13,7 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
+import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.fachada.Fachada;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
@@ -20,6 +21,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
@@ -79,6 +81,16 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 		String codigoImovel = httpServletRequest.getParameter("codigoImovel");
 		String codigoParcelamento = httpServletRequest.getParameter("codigoParcelamento");
 		sessao.setAttribute("idParcelamento", codigoParcelamento);
+		String acao = httpServletRequest.getParameter("acao");
+		CancelarParcelamentoDTO cancelarParcelamentoDTO = null;
+		
+		if (acao != null && acao.equals("cancelar")) {
+		  cancelarParcelamentoDTO = fachada.pesquisarParcelamentoParaCancelamento(Integer.parseInt(codigoParcelamento));
+		  Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
+		  fachada.cancelarParcelamento(cancelarParcelamentoDTO, usuarioLogado);
+		  
+		  return retorno;
+		}
 		
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
 			
@@ -298,6 +310,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 		        		
 		        		
 		        	}
+		            
 		        }
 			}
 		}
@@ -355,6 +368,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 				 httpServletRequest.setAttribute("habilitarBotaoDesfazer", "SIM");
 			 }
 		 }
+		 
 		 
 		return retorno;
 	}
