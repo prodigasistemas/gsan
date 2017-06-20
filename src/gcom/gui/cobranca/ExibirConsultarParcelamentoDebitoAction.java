@@ -21,6 +21,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.Util;
@@ -368,6 +369,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 				 httpServletRequest.setAttribute("habilitarBotaoDesfazer", "SIM");
 			 }
 		 }
+		 
+		 boolean possuiPermissaoCancelarParcelamento = fachada.verificarPermissaoEspecial( PermissaoEspecial.CANCELAR_PARCELAMENTO , (Usuario) sessao.getAttribute("usuarioLogado") );
+	     httpServletRequest.setAttribute("possuiPermissaoCancelarParcelamento",possuiPermissaoCancelarParcelamento);
 		 
 		 
 		return retorno;

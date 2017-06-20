@@ -709,7 +709,9 @@ function voltar(){
 							<td colspan="3" align="right">
 									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
 									
-									<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="javascript:window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento=${parcelamento.id}'">
+									<logic:equal name="possuiPermissaoCancelarParcelamento" value="true">				      				
+										<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="javascript:window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento=${parcelamento.id}'">
+									</logic:equal>
 									
 									 
 									<logic:present name="buttonCartaoCredito" scope="session">
