@@ -1,6 +1,5 @@
 package gcom.cobranca.controladores;
 
-import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -26,7 +25,6 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
-import gcom.micromedicao.Rota;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
@@ -39,7 +37,6 @@ import gcom.util.filtro.ParametroSimples;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -191,38 +188,27 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
-		DebitoACobrar debitoACobrar = new DebitoACobrar();
-
+		DebitoACobrar debitoACobrar = new DebitoACobrar(
+				gerarDebitoACobrarGeral(),
+				dto.getImovel(),
+				calcularSaldoDevedor(dto),
+				new Short("1"),
+				new Short("0"),
+				new Date(),
+				parametros.getAnoMesFaturamento(),
+				parametros.getAnoMesArrecadacao(),
+				getControladorFaturamento().obterReferenciaContabilConta(parametros),
+				BigDecimal.ZERO,
+				DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO,
+				FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO,
+				LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO,
+				DebitoCreditoSituacao.NORMAL,
+				null,
+				CobrancaForma.COBRANCA_EM_CONTA,
+				usuario);
+		
 		try {
-			DebitoACobrarGeral debitoACobrarGeral = gerarDebitoACobrarGeral();
-			debitoACobrar.setId(debitoACobrarGeral.getId());
-			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
-			debitoACobrar.setImovel(dto.getImovel());
-			debitoACobrar.setValorDebito(calcularSaldoDevedor(dto));
-			debitoACobrar.setNumeroPrestacaoDebito(new Short("1"));
-			debitoACobrar.setNumeroPrestacaoCobradas(new Short("0"));
-			debitoACobrar.setGeracaoDebito(new Date());
-			debitoACobrar.setAnoMesReferenciaDebito(parametros.getAnoMesFaturamento());
-			debitoACobrar.setAnoMesCobrancaDebito(parametros.getAnoMesArrecadacao());
-			debitoACobrar.setAnoMesReferenciaContabil(getControladorFaturamento().obterReferenciaContabilConta(parametros));
-			debitoACobrar.setLocalidade(dto.getImovel().getLocalidade());
-			debitoACobrar.setQuadra(dto.getImovel().getQuadra());
-			debitoACobrar.setCodigoSetorComercial(dto.getImovel().getSetorComercial().getCodigo());
-			debitoACobrar.setNumeroQuadra(dto.getImovel().getQuadra().getNumeroQuadra());
-			debitoACobrar.setNumeroLote(dto.getImovel().getLote());
-			debitoACobrar.setNumeroSubLote(dto.getImovel().getSubLote());
-			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
-			debitoACobrar.setDebitoTipo(new DebitoTipo(DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO));
-			debitoACobrar.setFinanciamentoTipo(new FinanciamentoTipo(FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO));
-			debitoACobrar.setLancamentoItemContabil(new LancamentoItemContabil(LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO));
-			debitoACobrar.setDebitoCreditoSituacaoAnterior(null);
-			debitoACobrar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
-			debitoACobrar.setParcelamentoGrupo(null);
-			debitoACobrar.setCobrancaForma(new CobrancaForma(CobrancaForma.COBRANCA_EM_CONTA));
-			debitoACobrar.setUsuario(usuario);
-			debitoACobrar.setUltimaAlteracao(new Date());
-
-			this.getControladorUtil().inserir(debitoACobrar);
+			getControladorUtil().inserir(debitoACobrar);
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao inserir novo Debito a Cobrar", e);
@@ -244,54 +230,36 @@ public class ControladorParcelamento extends ControladorComum {
 	
 	private void gerarContaIncluida(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
 		DebitoACobrar debitoACobrar = gerarDebitoACobrar(dto, usuario);
-		Integer anoMesConta = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(dto.getImovel().getId());
+		Integer referencia = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(dto.getImovel().getId());
 		
-		ContaGeral contaGeral = gerarContaGeral();
-		Conta conta = new Conta();
-		conta.setId(contaGeral.getId());
-		conta.setContaGeral(contaGeral);
-		conta.setImovel(dto.getImovel());
-		conta.setReferencia(anoMesConta);
-		conta.setIndicadorAlteracaoVencimento(ConstantesSistema.NAO);
-		conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA));
-		conta.setLigacaoAguaSituacao(dto.getImovel().getLigacaoAguaSituacao());
-		conta.setLigacaoEsgotoSituacao(dto.getImovel().getLigacaoEsgotoSituacao());
-		conta.setLocalidade(dto.getImovel().getLocalidade());
-		conta.setQuadraConta(dto.getImovel().getQuadra());
-		conta.setLote(dto.getImovel().getLote());
-		conta.setSubLote(dto.getImovel().getSubLote());
-		conta.setCodigoSetorComercial(dto.getImovel().getSetorComercial().getCodigo());
-		conta.setQuadra(dto.getImovel().getQuadra().getNumeroQuadra());
-		conta.setRota(obterRota(dto.getImovel()));
-		conta.setDigitoVerificadorConta(new Short(String.valueOf(Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(anoMesConta))));
-		conta.setIndicadorCobrancaMulta(ConstantesSistema.NAO);
-		conta.setDataVencimentoConta(new Date());
-		conta.setDataVencimentoOriginal(new Date());
-		conta.setDataValidadeConta(getControladorFaturamento().retornaDataValidadeConta(new Date()));
-		conta.setDataInclusao(new GregorianCalendar().getTime());
-		conta.setDataEmissao(new GregorianCalendar().getTime());
-		conta.setReferenciaContabil(getControladorFaturamento().obterReferenciaContabilConta(parametros, conta.getReferencia()));
-		conta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.CANCELAMENTO_DE_PARCELAMENTO));
-		conta.setConsumoTarifa(dto.getImovel().getConsumoTarifa());
-		conta.setImovelPerfil(dto.getImovel().getImovelPerfil());
-		conta.setIndicadorDebitoConta(ConstantesSistema.NAO);
-		conta.setNumeroRetificacoes(0);
-		conta.setFaturamentoGrupo(getControladorImovel().pesquisarGrupoImovel(dto.getImovel().getId()));
-		conta.setNumeroAlteracoesVencimento(0);
-		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(parametros, conta));
-		conta.setUltimaAlteracao(new Date());
-		conta.setUsuario(usuario);
-
-		LigacaoEsgoto ligacaoEsgoto = dto.getImovel().getLigacaoEsgoto();
-		conta.setPercentualEsgoto(ligacaoEsgoto != null ? ligacaoEsgoto.getPercentual() : BigDecimal.ZERO);
+		Conta conta = new Conta(gerarContaGeral(),
+				referencia,
+				getControladorFaturamento().obterReferenciaContabilConta(parametros, referencia),
+				ConstantesSistema.NAO,
+				new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA),
+				dto.getImovel(),
+				Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(referencia).shortValue(),
+				ConstantesSistema.NAO,
+				new Date(),
+				new Date(),
+				getControladorFaturamento().retornaDataValidadeConta(new Date()),
+				new Date(),
+				new Date(),
+				new ContaMotivoInclusao(ContaMotivoInclusao.CANCELAMENTO_DE_PARCELAMENTO),
+				ConstantesSistema.NAO,
+				0,
+				getControladorImovel().pesquisarGrupoImovel(dto.getImovel().getId()),
+				0,
+				usuario,
+				BigDecimal.ZERO,
+				BigDecimal.ZERO,
+				debitoACobrar.getValorDebito(),
+				BigDecimal.ZERO);
 		
-		conta.setValorAgua(BigDecimal.ZERO);
-		conta.setValorEsgoto(BigDecimal.ZERO);
-		conta.setDebitos(debitoACobrar.getValorDebito());
-		conta.setValorCreditos(BigDecimal.ZERO);
 		GerarImpostosDeduzidosContaHelper impostosDeduzidos = getControladorFaturamento().gerarImpostosDeduzidosConta(
-				conta.getImovel().getId(), anoMesConta, conta.getValorAgua(), conta.getValorEsgoto(), conta.getDebitos(), BigDecimal.ZERO, false);
+				conta.getImovel().getId(), referencia, conta.getValorAgua(), conta.getValorEsgoto(), conta.getDebitos(), BigDecimal.ZERO, false);
 		conta.setValorImposto(impostosDeduzidos.getValorTotalImposto());
+		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(parametros, conta));
 
 		getControladorUtil().inserir(conta);
 		gerarDebitoCobrado(conta, dto.getImovel(), debitoACobrar);
@@ -300,43 +268,22 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private void gerarDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar) throws ControladorException {
-		DebitoCobrado debitoCobrado = new DebitoCobrado();
-		debitoCobrado.setDebitoTipo(new DebitoTipo(DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO));
-		debitoCobrado.setDebitoCobrado(new Date());
-		debitoCobrado.setConta(conta);
-		debitoCobrado.setLancamentoItemContabil(new LancamentoItemContabil(LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO));
-		debitoCobrado.setLocalidade(imovel.getLocalidade());
-		debitoCobrado.setQuadra(imovel.getQuadra());
-		debitoCobrado.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
-		debitoCobrado.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
-		debitoCobrado.setNumeroLote(imovel.getLote());
-		debitoCobrado.setNumeroSubLote(imovel.getSubLote());
-		debitoCobrado.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
-		debitoCobrado.setAnoMesCobrancaDebito(debitoACobrar.getAnoMesCobrancaDebito());
-		debitoCobrado.setValorPrestacao(debitoACobrar.getValorPrestacao());
-		debitoCobrado.setNumeroPrestacao(new Short("1"));
-		debitoCobrado.setNumeroPrestacaoDebito(debitoACobrar.getNumeroPrestacaoDebito());
-		debitoCobrado.setDebitoACobrarGeral(debitoACobrar.getDebitoACobrarGeral());
-		debitoCobrado.setFinanciamentoTipo(new FinanciamentoTipo(FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO));
-		debitoCobrado.setNumeroParcelaBonus(new Short("0"));
-		debitoCobrado.setUltimaAlteracao(new Date());
+		DebitoCobrado debitoCobrado = new DebitoCobrado(
+				new Date(),
+				imovel,
+				DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO,
+				conta,
+				LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO,
+				debitoACobrar,
+				new Short("1"),
+				new Short("0"),
+				FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO);
 
 		Integer id = (Integer) this.getControladorUtil().inserir(debitoCobrado);
 		debitoCobrado.setId(id);
 
 		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
-	}
-
-	private Rota obterRota(Imovel imovel) {
-		Rota rota = new Rota();
-		if (imovel.getRotaAlternativa() != null) {
-			rota = imovel.getRotaAlternativa();
-
-		} else {
-			rota = imovel.getQuadra().getRota();
-		}
-		return rota;
 	}
 
 	private ContaGeral gerarContaGeral() throws ControladorException {
