@@ -290,8 +290,8 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	}
 
 	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento) {
-		CancelarParcelamentoHelper cancelarParcelamentoDTO = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
+		CancelarParcelamentoHelper helper = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
-		getFachada().cancelarParcelamento(cancelarParcelamentoDTO, usuarioLogado);
+		getFachada().cancelarParcelamento(helper, usuarioLogado);
 	}
 }

@@ -67,7 +67,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	@SuppressWarnings("unchecked")
 	public List<CancelarParcelamentoHelper> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		List<CancelarParcelamentoHelper> dtos = new ArrayList<CancelarParcelamentoHelper>();
+		List<CancelarParcelamentoHelper> helper = new ArrayList<CancelarParcelamentoHelper>();
 
 		try {
 			StringBuilder complementoConsulta = new StringBuilder();
@@ -99,7 +99,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			for (Object[] dados : lista) {
 				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);
 				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
-				dtos.add(new CancelarParcelamentoHelper(parcelamento, imovel, dados));
+				helper.add(new CancelarParcelamentoHelper(parcelamento, imovel, dados));
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -107,7 +107,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			HibernateUtil.closeSession(session);
 		}
 
-		return dtos;
+		return helper;
 	}
 	
 	private String montarRaizConsulta(String complementoConsulta) {
