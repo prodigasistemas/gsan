@@ -35,10 +35,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		CancelarParcelamentoDTO retorno = null;
 		
 		try {
+			String complementoConsulta = "WHERE  p.parc_id = :idParcelamento GROUP BY p.parc_id, c.imov_id "; 
 			StringBuilder consulta = new StringBuilder();
-					consulta.append(montarRaizConsulta())
-					.append("WHERE  p.parc_id = :idParcelamento ")
-					.append("GROUP BY p.parc_id, c.imov_id ");
+			consulta.append(montarRaizConsulta(complementoConsulta));
 			
 			Object[] dados = (Object[]) session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
@@ -70,18 +69,19 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		List<CancelarParcelamentoDTO> dtos = new ArrayList<CancelarParcelamentoDTO>();
 
 		try {
-			StringBuilder consulta = new StringBuilder();
-			consulta.append(montarRaizConsulta())
-					.append("INNER JOIN cadastro.imovel i on i.imov_id = p.imov_id ")
-					.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
-					.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
-					.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
-					.append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
-					.append("      AND parc_amreferenciafaturamento = 201702 ")
-					.append("GROUP BY p.parc_id, c.imov_id ")
-					.append("HAVING count(distinct c.cnta_id) >= :qtdContas");
+			StringBuilder complementoConsulta = new StringBuilder();
+			complementoConsulta.append("INNER JOIN cadastro.imovel i on i.imov_id = p.imov_id ")
+								.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
+								.append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
+								.append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
+								.append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
+								.append("      AND parc_amreferenciafaturamento = 201702 ")
+								.append("GROUP BY p.parc_id, c.imov_id ")
+								.append("HAVING count(distinct c.cnta_id) >= :qtdContas");
+			
+			String consulta = montarRaizConsulta(complementoConsulta.toString());
 
-			List<Object[]> lista = session.createSQLQuery(consulta.toString())
+			List<Object[]> lista = session.createSQLQuery(consulta)
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
@@ -108,7 +108,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return dtos;
 	}
 	
-	private String montarRaizConsulta() {
+	private String montarRaizConsulta(String complementoConsulta) {
 		StringBuilder consulta = new StringBuilder();
 		consulta.append("SELECT p.parc_id as idParcelamento, ")
 				.append("       c.imov_id as idImovel, ")
@@ -119,7 +119,22 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 				.append("FROM faturamento.conta c ")
 				.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
 				.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
-				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
+				.append(complementoConsulta);
+		
+		consulta.append(" UNION ALL ");
+		
+		consulta.append("SELECT p.parc_id as idParcelamento, ")
+				.append("       c.imov_id as idImovel, ")
+				.append("       p.parc_vldebitoatualizado as valorOriginal, ")
+				.append("       p.parc_vlentrada as valorEntrada, ")
+				.append("       p.parc_vlprestacao as valorPrestacao, ")
+				.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
+				.append("FROM faturamento.conta_historico c ")
+				.append("INNER JOIN faturamento.debito_cobrado_historico dc on dc.cnta_id = c.cnta_id ")
+				.append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = dc.dbac_id ")
+				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
+				.append(complementoConsulta);
 		
 		return consulta.toString();
 	}
