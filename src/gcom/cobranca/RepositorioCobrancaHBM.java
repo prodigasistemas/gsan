@@ -27056,25 +27056,17 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 			
-//			consultaMovimentoParcelamentos.append("select item.parcelamento ")
-//					.append(" from ParcelamentoItem item ")
-//					.append(" inner join item.parcelamento parcelamento ")
-//					.append(" where item.contaGeral.id in (select contaGeral.id from EmpresaCobrancaConta where empresa.id = :idEmpresa) ")
-//					.append(" and parcelamento.id not in  (select negociacao.parcelamento.id from NegociacaoCobrancaEmpresa negociacao ) ")
-//					.append(" order by parcelamento.parcelamento ");
-//
-//			retorno = (List<Parcelamento>)session.createQuery(consultaMovimentoParcelamentos.toString())
-//					.setInteger("idEmpresa", idEmpresa).list();
-
 			consulta.append(" select distinct parcelamento.* ") 
 					.append(" from cobranca.parcelamento_item item  ")
 					.append(" inner join cobranca.parcelamento parcelamento on parcelamento.parc_id = item.parc_id ")
 					.append(" where item.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta where empr_id = :idEmpresa) ") 
+					.append(" and parcelamento.pcst_id = :normal ")
 					.append(" and parcelamento.parc_id not in  (select negociacao.parc_id from cobranca.negociacao_cobranca_empresa negociacao ) "); 
 
 			retorno = (List<Parcelamento>) session.createSQLQuery(consulta.toString())
 					.addEntity(Parcelamento.class)
 					.setInteger("idEmpresa", idEmpresa)
+					.setInteger("normal", ParcelamentoSituacao.NORMAL)
 					.list();
 			
 		} catch (HibernateException e) {
@@ -27410,12 +27402,13 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		Session session = HibernateUtil.getSession();
 		Date retorno = null;
 		try {
-			consulta.append("select guia.dataVencimento ")
-					.append(" from GuiaPagamento guia ")
-					.append(" where guia.parcelamento.id = :idParcelamento ")
-					.append(" and guia.financiamentoTipo.id = :entrada ");
+			consulta.append("select guia.gpag_dtvencimento as vencimento ")
+					.append(" from faturamento.guia_pagamento  guia ")
+					.append(" where guia.parc_id = :idParcelamento ")
+					.append(" and guia.fntp_id = :entrada ");
 
-			retorno = (Date) session.createQuery(consulta.toString())
+			retorno = (Date) session.createSQLQuery(consulta.toString())
+					.addScalar("vencimento", Hibernate.DATE)
 					.setInteger("idParcelamento", idParcelamento)
 					.setInteger("entrada", FinanciamentoTipo.ENTRADA_PARCELAMENTO).uniqueResult();
 			
