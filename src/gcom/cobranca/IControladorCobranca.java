@@ -1094,4 +1094,6 @@ public interface IControladorCobranca {
 	public Collection pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) throws ControladorException;
 	
 	public Date obterDataVencimentoEntradaParcelamento(Integer idParcelamento) throws ControladorException;
+	
+	public String getCobrancaParametro(String parametro) throws ControladorException;
 }

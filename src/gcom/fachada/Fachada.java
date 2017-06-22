@@ -40166,4 +40166,13 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
+	
+	public String getCobrancaParametro(String parametro) {
+		try {
+			return this.getControladorCobranca().getCobrancaParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cobranca.CobrancaParametro" table="cobranca.parametro">
+		<id name="id" type="java.lang.Integer" column="id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_cobranca_parametro</param>
+			</generator>
+		</id>
+		<property name="nome"  type="java.lang.String" column="nome" not-null="true" length="40"/>
+		<property name="valor" type="java.lang.String" column="valor" not-null="true" length="150"/>
+	</class>
+</hibernate-mapping>
