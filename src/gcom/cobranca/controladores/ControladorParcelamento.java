@@ -5,11 +5,11 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.cobranca.repositorios.IRepositorioParcelamentoHBM;
 import gcom.cobranca.repositorios.RepositorioParcelamentoHBM;
-import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
@@ -54,7 +54,7 @@ public class ControladorParcelamento extends ControladorComum {
 		repositorio = RepositorioParcelamentoHBM.getInstancia();
 	}
 	
-	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ControladorException {
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ControladorException {
 		try {
 			return repositorio.pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (ErroRepositorioException e) {
@@ -66,9 +66,9 @@ public class ControladorParcelamento extends ControladorComum {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
 		try {
-			List<CancelarParcelamentoDTO> parcelamentos = repositorio.pesquisarParcelamentosParaCancelar();
+			List<CancelarParcelamentoHelper> parcelamentos = repositorio.pesquisarParcelamentosParaCancelar();
 
-			for (CancelarParcelamentoDTO dto : parcelamentos) {
+			for (CancelarParcelamentoHelper dto : parcelamentos) {
 				cancelarParcelamento(dto, usuario);
 			}
 			
@@ -81,7 +81,7 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	public void cancelarParcelamento(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
+	public void cancelarParcelamento(CancelarParcelamentoHelper dto, Usuario usuario) throws ControladorException {
 		parametros = getControladorUtil().pesquisarParametrosDoSistema();
 		
 		cancelarDebitoACobrar(dto.getParcelamento().getId());
@@ -133,7 +133,7 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	private BigDecimal calcularSaldoDevedor(CancelarParcelamentoDTO dto) throws ControladorException {
+	private BigDecimal calcularSaldoDevedor(CancelarParcelamentoHelper dto) throws ControladorException {
 		BigDecimal valorPrestacoesCobradas = dto.getValorPrestacao().multiply(BigDecimal.valueOf(dto.getNumeroPrestacoesCobradas()));
 		BigDecimal valorCobrado = dto.getValorEntrada().add(valorPrestacoesCobradas);
 		BigDecimal saldoDevedor = dto.getValorOriginal().subtract(valorCobrado);
@@ -143,7 +143,7 @@ public class ControladorParcelamento extends ControladorComum {
 		return saldoDevedor.add(acrescimos).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
-	private BigDecimal calcularAcrescimosPorImpontualidade(CancelarParcelamentoDTO dto, BigDecimal saldoDevedor) throws ControladorException {
+	private BigDecimal calcularAcrescimosPorImpontualidade(CancelarParcelamentoHelper dto, BigDecimal saldoDevedor) throws ControladorException {
 		CalcularAcrescimoPorImpontualidadeHelper helper = null;
 		
 		try {
@@ -187,7 +187,7 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
+	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoHelper dto, Usuario usuario) throws ControladorException {
 		DebitoACobrar debitoACobrar = new DebitoACobrar(
 				gerarDebitoACobrarGeral(),
 				dto.getImovel(),
@@ -228,7 +228,7 @@ public class ControladorParcelamento extends ControladorComum {
 		return debitoACobrarGeral;
 	}
 	
-	private void gerarContaIncluida(CancelarParcelamentoDTO dto, Usuario usuario) throws ControladorException {
+	private void gerarContaIncluida(CancelarParcelamentoHelper dto, Usuario usuario) throws ControladorException {
 		DebitoACobrar debitoACobrar = gerarDebitoACobrar(dto, usuario);
 		Integer referencia = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(dto.getImovel().getId());
 		

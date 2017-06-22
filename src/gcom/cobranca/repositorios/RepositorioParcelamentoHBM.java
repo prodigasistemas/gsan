@@ -1,8 +1,8 @@
 package gcom.cobranca.repositorios;
 
 import gcom.cadastro.imovel.Imovel;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
@@ -30,9 +30,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return instancia;
 	}
 	
-	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException {
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		CancelarParcelamentoDTO retorno = null;
+		CancelarParcelamentoHelper retorno = null;
 		
 		try {
 			String complementoConsulta = "WHERE  p.parc_id = :idParcelamento GROUP BY p.parc_id, c.imov_id "; 
@@ -52,7 +52,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			if (dados != null && dados.length > 0){
 				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);
 				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
-				retorno = new CancelarParcelamentoDTO(parcelamento, imovel, dados);
+				retorno = new CancelarParcelamentoHelper(parcelamento, imovel, dados);
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -64,9 +64,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	}
 		
 	@SuppressWarnings("unchecked")
-	public List<CancelarParcelamentoDTO> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
+	public List<CancelarParcelamentoHelper> pesquisarParcelamentosParaCancelar() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		List<CancelarParcelamentoDTO> dtos = new ArrayList<CancelarParcelamentoDTO>();
+		List<CancelarParcelamentoHelper> dtos = new ArrayList<CancelarParcelamentoHelper>();
 
 		try {
 			StringBuilder complementoConsulta = new StringBuilder();
@@ -97,7 +97,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			for (Object[] dados : lista) {
 				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);
 				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
-				dtos.add(new CancelarParcelamentoDTO(parcelamento, imovel, dados));
+				dtos.add(new CancelarParcelamentoHelper(parcelamento, imovel, dados));
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

@@ -1,11 +1,11 @@
-package gcom.cobranca.repositorios.dto;
+package gcom.cobranca.bean;
 
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
 
 import java.math.BigDecimal;
 
-public class CancelarParcelamentoDTO {
+public class CancelarParcelamentoHelper {
 
 	private Parcelamento parcelamento;
 
@@ -19,11 +19,11 @@ public class CancelarParcelamentoDTO {
 
 	private Integer numeroPrestacoesCobradas;
 	
-	public CancelarParcelamentoDTO() {
+	public CancelarParcelamentoHelper() {
 		super();
 	}
 	
-	public CancelarParcelamentoDTO(Parcelamento parcelamento, Imovel imovel, Object[] dados) {
+	public CancelarParcelamentoHelper(Parcelamento parcelamento, Imovel imovel, Object[] dados) {
 		super();
 		this.parcelamento = parcelamento;
 		this.imovel = imovel;
@@ -79,5 +79,35 @@ public class CancelarParcelamentoDTO {
 
 	public void setNumeroPrestacoesCobradas(Integer numeroPrestacoesCobradas) {
 		this.numeroPrestacoesCobradas = numeroPrestacoesCobradas;
+	}
+	
+	public BigDecimal getParcelaSemJuros() {
+		// TODO
+		return null;
+	}
+	
+	public BigDecimal totalContasCobradas() {
+		// TODO
+		return null;
+	}
+	
+	public BigDecimal saldoDevedorContas() {
+		// TODO
+		return null;
+	}
+	
+	public BigDecimal totalAcrescimosCobrados() {
+		// TODO
+		return null;
+	}
+	
+	public BigDecimal saldoDevedorAcrescimos() {
+		// TODO
+		return null;
+	}
+	
+	public BigDecimal saldoDevedorCancelamentoDescontos() {
+		// TODO
+		return null;
 	}
 }

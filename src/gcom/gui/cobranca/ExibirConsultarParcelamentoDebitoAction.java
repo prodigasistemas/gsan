@@ -9,7 +9,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaParametro;
-import gcom.cobranca.FiltroCobrancaParametro;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
@@ -17,8 +17,6 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
-import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
-import gcom.fachada.Fachada;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -305,7 +303,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	}
 
 	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento) {
-		CancelarParcelamentoDTO cancelarParcelamentoDTO = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
+		CancelarParcelamentoHelper cancelarParcelamentoDTO = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 		getFachada().cancelarParcelamento(cancelarParcelamentoDTO, usuarioLogado);
 	}
