@@ -289,6 +289,7 @@ import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
@@ -335,7 +336,6 @@ import gcom.cobranca.controladores.ControladorParcelamentoLocalHome;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
-import gcom.cobranca.repositorios.dto.CancelarParcelamentoDTO;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.ExtratoQuitacaoItem;
@@ -40151,7 +40151,7 @@ public class Fachada {
 		}
 	}
 	
-	public CancelarParcelamentoDTO pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
 		try {
 			return getControladorParcelamento().pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (Exception ex) {
@@ -40159,7 +40159,7 @@ public class Fachada {
 		}
 	}
 	
-	public void cancelarParcelamento(CancelarParcelamentoDTO cancelarParcelamentoDTO, Usuario usuarioLogado) {
+	public void cancelarParcelamento(CancelarParcelamentoHelper cancelarParcelamentoDTO, Usuario usuarioLogado) {
 		try {
 			this.getControladorParcelamento().cancelarParcelamento(cancelarParcelamentoDTO, usuarioLogado);
 		} catch (Exception ex) {
