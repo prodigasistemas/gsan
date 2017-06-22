@@ -109,32 +109,33 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	}
 	
 	private String montarRaizConsulta(String complementoConsulta) {
+		StringBuilder select = new StringBuilder();
+		select.append("SELECT p.parc_id as idParcelamento, ")
+			  .append("       c.imov_id as idImovel, ")
+			  .append("       p.parc_vldebitoatualizado as valorOriginal, ")
+			  .append("       p.parc_vlentrada as valorEntrada, ")
+			  .append("       p.parc_vlprestacao as valorPrestacao, ")
+			  .append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
+			  .append("FROM faturamento.conta c ");
+		
+		StringBuilder join = new StringBuilder();
+		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
+			.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
+			.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+		
+		StringBuilder joinHistorico = new StringBuilder();
+		join.append("INNER JOIN faturamento.debito_cobrado_historico dc on dc.cnta_id = c.cnta_id ")
+			.append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = dc.dbac_id ")
+			.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+		
 		StringBuilder consulta = new StringBuilder();
-		consulta.append("SELECT p.parc_id as idParcelamento, ")
-				.append("       c.imov_id as idImovel, ")
-				.append("       p.parc_vldebitoatualizado as valorOriginal, ")
-				.append("       p.parc_vlentrada as valorEntrada, ")
-				.append("       p.parc_vlprestacao as valorPrestacao, ")
-				.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
-				.append("FROM faturamento.conta c ")
-				.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
-				.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
-				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
-				.append(complementoConsulta);
-		
-		consulta.append(" UNION ALL ");
-		
-		consulta.append("SELECT p.parc_id as idParcelamento, ")
-				.append("       c.imov_id as idImovel, ")
-				.append("       p.parc_vldebitoatualizado as valorOriginal, ")
-				.append("       p.parc_vlentrada as valorEntrada, ")
-				.append("       p.parc_vlprestacao as valorPrestacao, ")
-				.append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
-				.append("FROM faturamento.conta_historico c ")
-				.append("INNER JOIN faturamento.debito_cobrado_historico dc on dc.cnta_id = c.cnta_id ")
-				.append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = dc.dbac_id ")
-				.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ")
-				.append(complementoConsulta);
+		consulta.append(select)
+		        .append(join)
+		        .append(complementoConsulta)
+		        .append(" UNION ALL ")
+		        .append(select)
+		        .append(joinHistorico)
+		        .append(complementoConsulta);
 		
 		return consulta.toString();
 	}
