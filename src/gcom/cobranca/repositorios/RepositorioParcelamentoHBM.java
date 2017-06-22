@@ -42,9 +42,10 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			Object[] dados = (Object[]) session.createSQLQuery(consulta.toString())
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
+					.addScalar("valorContas", Hibernate.BIG_DECIMAL)
 					.addScalar("valorEntrada", Hibernate.BIG_DECIMAL)
-					.addScalar("valorPrestacao", Hibernate.BIG_DECIMAL)
+					.addScalar("valorAcrescimoscao", Hibernate.BIG_DECIMAL)
+					.addScalar("numeroPrestacoes", Hibernate.INTEGER)
 					.addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER)
 					.setInteger("idParcelamento", idParcelamento)
 					.uniqueResult();
@@ -84,9 +85,10 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			List<Object[]> lista = session.createSQLQuery(consulta)
 					.addScalar("idParcelamento", Hibernate.INTEGER)
 					.addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("valorOriginal", Hibernate.BIG_DECIMAL)
+					.addScalar("valorContas", Hibernate.BIG_DECIMAL)
 					.addScalar("valorEntrada", Hibernate.BIG_DECIMAL)
-					.addScalar("valorPrestacao", Hibernate.BIG_DECIMAL)
+					.addScalar("valorAcrescimos", Hibernate.BIG_DECIMAL)
+					.addScalar("numeroPrestacoes", Hibernate.INTEGER)
 					.addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER)
 					.setDate("dataAtual", new Date())
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
@@ -112,9 +114,10 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT p.parc_id as idParcelamento, ")
 			  .append("       c.imov_id as idImovel, ")
-			  .append("       p.parc_vldebitoatualizado as valorOriginal, ")
+			  .append("       p.parc_vlconta as valorContas, ")
 			  .append("       p.parc_vlentrada as valorEntrada, ")
-			  .append("       p.parc_vlprestacao as valorPrestacao, ")
+			  .append("       (p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria) as valorAcrescimos, ")
+			  .append("       p.parc_nnprestacoes as numeroPrestacoes ")
 			  .append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
 			  .append("FROM faturamento.conta c ");
 		
