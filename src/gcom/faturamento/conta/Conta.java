@@ -444,8 +444,12 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.numeroRetificacoes = numeroRetificacoes;
 		this.faturamentoGrupo = faturamentoGrupo;
 		this.numeroAlteracoesVencimento = numeroAlteracoesVencimento;
-		this.usuario = usuario;
 		this.percentualEsgoto = imovel.getLigacaoEsgoto() != null ? imovel.getLigacaoEsgoto().getPercentual() : BigDecimal.ZERO;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.usuario = usuario;
 		this.ultimaAlteracao = new Date();
 	}
 	

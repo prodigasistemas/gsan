@@ -33361,41 +33361,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0351 - Calcular Impostos Deduzidos da Conta
-	 * 
-	 * @author Fernanda Paiva, Raphael Rossiter
-	 * @date 21/09/2006, 04/04/2008
-	 * 
-	 * @param idImovel
-	 * @param anoMesReferencia
-	 * @param valorAgua
-	 * @param valorEsgoto
-	 * @param valorDebito
-	 * @param valorCredito
-	 * @return GerarImpostosDeduzidosContaHelper
-	 * @throws ControladorException
 	 */
 	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(
 			Integer idImovel, Integer anoMesReferencia, BigDecimal valorAgua,
 			BigDecimal valorEsgoto, BigDecimal valorDebito,
-			BigDecimal valorCredito, boolean preFaturamento)
-			throws ControladorException {
+			BigDecimal valorCredito, boolean preFaturamento) throws ControladorException {
 
 		GerarImpostosDeduzidosContaHelper retorno = new GerarImpostosDeduzidosContaHelper();
 
-		Integer idCliente = null;
-
 		try {
-
-			/*
-			 * Pesquisa um cliente Federal para este imovel e com relação tipo
-			 * igual a Responsável.
-			 */
-			idCliente = this.repositorioFaturamento
-					.pesquisarClienteResponsavelImovel(idImovel);
+			Integer idCliente = repositorioFaturamento.pesquisarClienteResponsavelImovel(idImovel);
 
 			if (idCliente != null) {
-
-				ImpostoDeduzidoHelper impostoDeduzidoHelper = null;
+				ImpostoDeduzidoHelper helper = null;
 				Collection<ImpostoDeduzidoHelper> colecaoHelper = null;
 
 				BigDecimal baseCalculo = new BigDecimal("0.00");
@@ -33422,67 +33400,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					baseCalculo = ConstantesSistema.VALOR_ZERO;
 				}
 
-				// Recupera a colecao dos tipos de imposto
 				FiltroImpostoTipo filtroImpostoTipo = new FiltroImpostoTipo();
+				filtroImpostoTipo.adicionarParametro(new ParametroSimples(FiltroImpostoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				// Colocado por Raphael Rossiter em 13/11/2008 - Analista:
-				// Eduardo Borges
-				filtroImpostoTipo.adicionarParametro(new ParametroSimples(
-						FiltroImpostoTipo.INDICADOR_USO,
-						ConstantesSistema.INDICADOR_USO_ATIVO));
-
-				Collection colecaoImpostoTipo = getControladorUtil().pesquisar(
-						filtroImpostoTipo, ImpostoTipo.class.getName());
+				Collection colecaoImpostoTipo = getControladorUtil().pesquisar(filtroImpostoTipo, ImpostoTipo.class.getName());
 
 				ImpostoTipo impostoTipo = null;
 				if (colecaoImpostoTipo != null && !colecaoImpostoTipo.isEmpty()) {
-
-					/*
-					 * Para cada tipo de imposto calcula o valor do imposto
-					 * deduzido e acumula um valor total.
-					 */
 					colecaoHelper = new ArrayList();
 
-					Iterator iteratorImpostoTipo = colecaoImpostoTipo
-							.iterator();
+					Iterator iteratorImpostoTipo = colecaoImpostoTipo.iterator();
 
 					while (iteratorImpostoTipo.hasNext()) {
 
 						impostoTipo = (ImpostoTipo) iteratorImpostoTipo.next();
-						impostoDeduzidoHelper = new ImpostoDeduzidoHelper();
+						helper = new ImpostoDeduzidoHelper();
 
 						// Pesquisa a aliquota para cada tipo de imposto
-						impostoTipoAliquota = this.repositorioFaturamento
-								.pesquisarAliquotaImposto(impostoTipo.getId(),
-										anoMesReferencia);
-
-						// TOTAL PERCENTAGEM IMPOSTOS
-						// ===========================================
-						percetagemTotalAliquota = percetagemTotalAliquota
-								.add(impostoTipoAliquota
-										.getPercentualAliquota());
-						// =======================================================================
+						impostoTipoAliquota = repositorioFaturamento.pesquisarAliquotaImposto(impostoTipo.getId(), anoMesReferencia);
+						percetagemTotalAliquota = percetagemTotalAliquota.add(impostoTipoAliquota.getPercentualAliquota());
 
 						/*
-						 * Colocado por Raphael Rossiter em 04/06/2007
-						 * 
 						 * O valor do último imposto não será mais calculado,
 						 * será a diferença entre o valor total do imposto com o
 						 * valor dos impostos calculados.
 						 */
 						if (iteratorImpostoTipo.hasNext()) {
-
-							percetagemAliquota = Util
-									.dividirArredondando(impostoTipoAliquota
-											.getPercentualAliquota(),
-											new BigDecimal("100.00"));
-
-							valorImpostoDeduzido = baseCalculo
-									.multiply(percetagemAliquota);
-
-							// ARREDONDAMENTO
-							valorImpostoDeduzido = valorImpostoDeduzido
-									.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+							percetagemAliquota = Util.dividirArredondando(impostoTipoAliquota.getPercentualAliquota(), new BigDecimal("100.00"));
+							valorImpostoDeduzido = baseCalculo.multiply(percetagemAliquota);
+							valorImpostoDeduzido = valorImpostoDeduzido.setScale(2, BigDecimal.ROUND_HALF_DOWN);
 
 							/*
 							 * Se o valor deduzido for maior que zero, cria uma
@@ -33490,92 +33436,39 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * imposto e guarda um valor total de todos os
 							 * impostos.
 							 */
-							if (valorImpostoDeduzido
-									.compareTo(ConstantesSistema.VALOR_ZERO) == 1
-									|| preFaturamento) {
+							if (valorImpostoDeduzido.compareTo(ConstantesSistema.VALOR_ZERO) == 1 || preFaturamento) {
+								helper.setIdImpostoTipo(impostoTipoAliquota.getImpostoTipoAliquota().getId());
+								helper.setValor(valorImpostoDeduzido);
+								helper.setPercentualAliquota(impostoTipoAliquota.getPercentualAliquota());
+								valorImpostoDeduzidoFinal = valorImpostoDeduzidoFinal.add(valorImpostoDeduzido);
 
-								// IMPOSTO_TIPO
-								impostoDeduzidoHelper
-										.setIdImpostoTipo(impostoTipoAliquota
-												.getImpostoTipoAliquota()
-												.getId());
-
-								// VALOR_IMPOSTO
-								impostoDeduzidoHelper
-										.setValor(valorImpostoDeduzido);
-
-								// ALIGUOTA
-								impostoDeduzidoHelper
-										.setPercentualAliquota(impostoTipoAliquota
-												.getPercentualAliquota());
-
-								// VALOR_IMPOSTO_TOTAL
-								valorImpostoDeduzidoFinal = valorImpostoDeduzidoFinal
-										.add(valorImpostoDeduzido);
-
-								colecaoHelper.add(impostoDeduzidoHelper);
+								colecaoHelper.add(helper);
 							}
 						} else {
+							percetagemTotalAliquota = Util.dividirArredondando(percetagemTotalAliquota, new BigDecimal("100.00"));
+							valorImpostoDeduzidoTotal = baseCalculo.multiply(percetagemTotalAliquota);
+							valorImpostoDeduzidoTotal = valorImpostoDeduzidoTotal.setScale(2, BigDecimal.ROUND_HALF_DOWN);
 
-							// TOTAL
-							// =================================================
-							percetagemTotalAliquota = Util.dividirArredondando(
-									percetagemTotalAliquota, new BigDecimal(
-											"100.00"));
-
-							valorImpostoDeduzidoTotal = baseCalculo
-									.multiply(percetagemTotalAliquota);
-
-							valorImpostoDeduzidoTotal = valorImpostoDeduzidoTotal
-									.setScale(2, BigDecimal.ROUND_HALF_DOWN);
-							// =======================================================
-
-							// ÚLTIMO IMPOSTO
-							// ========================================
-							valorImpostoDeduzido = valorImpostoDeduzidoTotal
-									.subtract(valorImpostoDeduzidoFinal);
-
-							valorImpostoDeduzido = valorImpostoDeduzido
-									.setScale(2, BigDecimal.ROUND_DOWN);
-							// =======================================================
+							valorImpostoDeduzido = valorImpostoDeduzidoTotal.subtract(valorImpostoDeduzidoFinal);
+							valorImpostoDeduzido = valorImpostoDeduzido.setScale(2, BigDecimal.ROUND_DOWN);
 
 							/*
-							 * Se o valor deduzido for maior que zero, cria uma
-							 * colecao com o tipo, o valor e a aliquota do
-							 * imposto e guarda um valor total de todos os
-							 * impostos.
+							 * Se o valor deduzido for maior que zero, cria uma colecao com o tipo, o valor e a aliquota do
+							 * imposto e guarda um valor total de todos os impostos.
 							 */
-							if (valorImpostoDeduzido
-									.compareTo(ConstantesSistema.VALOR_ZERO) == 1
-									|| preFaturamento) {
-
-								// IMPOSTO_TIPO
-								impostoDeduzidoHelper
-										.setIdImpostoTipo(impostoTipoAliquota
-												.getImpostoTipoAliquota()
-												.getId());
-
-								// VALOR_IMPOSTO
-								impostoDeduzidoHelper
-										.setValor(valorImpostoDeduzido);
-
-								// ALIGUOTA
-								impostoDeduzidoHelper
-										.setPercentualAliquota(impostoTipoAliquota
-												.getPercentualAliquota());
-
-								// VALOR_IMPOSTO_TOTAL
+							if (valorImpostoDeduzido.compareTo(ConstantesSistema.VALOR_ZERO) == 1 || preFaturamento) {
+								helper.setIdImpostoTipo(impostoTipoAliquota.getImpostoTipoAliquota().getId());
+								helper.setValor(valorImpostoDeduzido);
+								helper.setPercentualAliquota(impostoTipoAliquota.getPercentualAliquota());
 								valorImpostoDeduzidoFinal = valorImpostoDeduzidoTotal;
-
-								colecaoHelper.add(impostoDeduzidoHelper);
+								colecaoHelper.add(helper);
 							}
 						}
 					}
 
 					retorno.setListaImpostosDeduzidos(colecaoHelper);
 
-					valorImpostoDeduzidoFinal = valorImpostoDeduzidoFinal
-							.setScale(2, BigDecimal.ROUND_DOWN);
+					valorImpostoDeduzidoFinal = valorImpostoDeduzidoFinal.setScale(2, BigDecimal.ROUND_DOWN);
 
 					retorno.setValorTotalImposto(valorImpostoDeduzidoFinal);
 					retorno.setValorBaseCalculo(baseCalculo);
@@ -33593,6 +33486,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return retorno;
 	}
 
+	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(Conta conta, boolean preFaturamento) throws ControladorException {
+		try {
+			return gerarImpostosDeduzidosConta(
+					conta.getImovel().getId(),
+					conta.getReferencia(),
+					conta.getValorAgua(),
+					conta.getValorEsgoto(),
+					conta.getValorDebitos(),
+					conta.getValorCreditos(),
+					preFaturamento);
+			
+		} catch (ControladorException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 	/**
 	 * [UC0150] - Retificar Conta Author: Fernanda Paiva Data: 25/09/2006
 	 * 

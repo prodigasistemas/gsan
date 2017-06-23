@@ -378,6 +378,8 @@ public interface IControladorFaturamento {
 
 	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(Integer idImovel, Integer anoMesReferencia, BigDecimal valorAgua,
 			BigDecimal valorEsgoto, BigDecimal valorDebito, BigDecimal valorCredito, boolean preFaturamento) throws ControladorException;
+	
+	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(Conta conta, boolean preFaturamento) throws ControladorException;
 
 	public void inserirClienteImovel(Imovel imovel, Conta contaAtual) throws ControladorException;
 

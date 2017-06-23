@@ -11,8 +11,8 @@ public class ParcelamentoSituacao implements Serializable {
 
 	public final static Integer NORMAL = new Integer(1);
 	public final static Integer DESFEITO = new Integer(2);
+	public final static Integer CONCLUIDO = new Integer(3);
 	public final static Integer CANCELADO = new Integer(4);
-	public final static Integer CONCLUIDO = new Integer(5);
 	
 	private Integer id;
 

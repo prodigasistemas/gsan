@@ -142,12 +142,11 @@ public class CancelarParcelamentoHelper {
 		return valorAcrescimos.subtract(getTotalAcrescimosCobrados());
 	}
 
-	public BigDecimal getSaldoDevedorDescontosAcrescimos() {
-		// TODO
-		return null;
+	public BigDecimal getTotalCancelamentoDescontos() {
+		return getParcelaAcrescimos().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas));
 	}
 	
 	public BigDecimal getSaldoDevedorTotal() {
-		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getSaldoDevedorDescontosAcrescimos());
+		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos());
 	}
 }

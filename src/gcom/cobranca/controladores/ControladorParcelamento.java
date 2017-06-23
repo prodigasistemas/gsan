@@ -133,6 +133,54 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
+	private void gerarContaIncluida(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
+		Integer referencia = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(helper.getImovel().getId());
+		Conta conta = new Conta(gerarContaGeral(),
+				referencia,
+				getControladorFaturamento().obterReferenciaContabilConta(sistemaParametro, referencia),
+				ConstantesSistema.NAO,
+				new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA),
+				helper.getImovel(),
+				Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(referencia).shortValue(),
+				ConstantesSistema.NAO,
+				new Date(),
+				new Date(),
+				getControladorFaturamento().retornaDataValidadeConta(new Date()),
+				new Date(),
+				new Date(),
+				new ContaMotivoInclusao(ContaMotivoInclusao.CANCELAMENTO_DE_PARCELAMENTO),
+				ConstantesSistema.NAO,
+				0,
+				getControladorImovel().pesquisarGrupoImovel(helper.getImovel().getId()),
+				0,
+				usuario,
+				BigDecimal.ZERO,
+				BigDecimal.ZERO,
+				helper.getSaldoDevedorTotal(),
+				BigDecimal.ZERO);
+		
+		GerarImpostosDeduzidosContaHelper impostosDeduzidos = getControladorFaturamento().gerarImpostosDeduzidosConta(conta, false);
+		conta.setValorImposto(impostosDeduzidos.getValorTotalImposto());
+		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(sistemaParametro, conta));
+
+		getControladorUtil().inserir(conta);
+		getControladorFaturamento().inserirClienteConta(conta, helper.getImovel());
+		getControladorFaturamento().inserirImpostosDeduzidosConta(impostosDeduzidos, conta);
+		
+		gerarDebitos(helper, conta, usuario);
+	}
+	
+	private ContaGeral gerarContaGeral() throws ControladorException {
+		ContaGeral contaGeral = new ContaGeral();
+		contaGeral.setIndicadorHistorico(ConstantesSistema.NAO);
+		contaGeral.setUltimaAlteracao(new Date());
+		
+		Integer id = (Integer) getControladorUtil().inserir(contaGeral);
+		contaGeral.setId(id);
+		
+		return contaGeral;
+	}
+	
 	private Date obterDataProximaConta(Imovel imovel) throws ControladorException {
 		Integer proximaReferencia = obterReferenciaProximaConta(imovel.getId());
 		
@@ -174,7 +222,7 @@ public class ControladorParcelamento extends ControladorComum {
 				usuario);
 		try {
 			getControladorUtil().inserir(debitoACobrar);
-			inserirDebitoCobrado(conta, helper.getImovel(), debitoACobrar, DebitoTipo.JUROS_MORA);
+			inserirDebitoCobrado(conta, helper.getImovel(), debitoACobrar, idDebitoTipo);
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao inserir novo Debito a Cobrar", e);
@@ -192,48 +240,10 @@ public class ControladorParcelamento extends ControladorComum {
 		return debitoACobrarGeral;
 	}
 	
-	private void gerarContaIncluida(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
-		Integer referencia = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(helper.getImovel().getId());
-		Conta conta = new Conta(gerarContaGeral(),
-				referencia,
-				getControladorFaturamento().obterReferenciaContabilConta(sistemaParametro, referencia),
-				ConstantesSistema.NAO,
-				new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA),
-				helper.getImovel(),
-				Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(referencia).shortValue(),
-				ConstantesSistema.NAO,
-				new Date(),
-				new Date(),
-				getControladorFaturamento().retornaDataValidadeConta(new Date()),
-				new Date(),
-				new Date(),
-				new ContaMotivoInclusao(ContaMotivoInclusao.CANCELAMENTO_DE_PARCELAMENTO),
-				ConstantesSistema.NAO,
-				0,
-				getControladorImovel().pesquisarGrupoImovel(helper.getImovel().getId()),
-				0,
-				usuario,
-				BigDecimal.ZERO,
-				BigDecimal.ZERO,
-				helper.getSaldoDevedorTotal(),
-				BigDecimal.ZERO);
-		
-		gerarDebitos(helper, conta, usuario);
-		
-		GerarImpostosDeduzidosContaHelper impostosDeduzidos = getControladorFaturamento().gerarImpostosDeduzidosConta(
-				conta.getImovel().getId(), referencia, conta.getValorAgua(), conta.getValorEsgoto(), conta.getDebitos(), BigDecimal.ZERO, false);
-		conta.setValorImposto(impostosDeduzidos.getValorTotalImposto());
-		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(sistemaParametro, conta));
-
-		getControladorUtil().inserir(conta);
-		getControladorFaturamento().inserirClienteConta(conta, helper.getImovel());
-		getControladorFaturamento().inserirImpostosDeduzidosConta(impostosDeduzidos, conta);
-	}
-
 	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
-		inserirDebitoACobrar(helper.getSaldoDevedorContas(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS, usuario);
-		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS, usuario);
-		inserirDebitoACobrar(helper.getSaldoDevedorDescontosAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorContas(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS, usuario); // TODO - Separar em Curto e Longo
+		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS, usuario); // TODO - Separar em Curto e Longo
+		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario);
 		
 		gerarNovosAcrescimos(helper, conta, usuario);
 	}
@@ -242,8 +252,8 @@ public class ControladorParcelamento extends ControladorComum {
 		CalcularAcrescimoPorImpontualidadeHelper acrescimos = calcularAcrescimosPorImpontualidade(helper);
 		
 		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.JUROS_MORA, usuario);
-		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.MULTA_IMPONTUALIDADE, usuario);
-		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.ATUALIZACAO_MONETARIA, usuario);
+		inserirDebitoACobrar(acrescimos.getValorMulta(), helper, conta, DebitoTipo.MULTA_IMPONTUALIDADE, usuario);
+		inserirDebitoACobrar(acrescimos.getValorAtualizacaoMonetaria(), helper, conta, DebitoTipo.ATUALIZACAO_MONETARIA, usuario);
 	}
 
 	private void inserirDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar, Integer idDebitoTipo) throws ControladorException {
@@ -289,17 +299,6 @@ public class ControladorParcelamento extends ControladorComum {
 		return acrescimos;
 	}
 	
-	private ContaGeral gerarContaGeral() throws ControladorException {
-		ContaGeral contaGeral = new ContaGeral();
-		contaGeral.setIndicadorHistorico(ConstantesSistema.NAO);
-		contaGeral.setUltimaAlteracao(new Date());
-		
-		Integer id = (Integer) getControladorUtil().inserir(contaGeral);
-		contaGeral.setId(id);
-		
-		return contaGeral;
-	}
-
 	private DebitoCreditoSituacao getSituacaoCancelada() {
 		return new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA);
 	}
