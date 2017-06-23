@@ -22,7 +22,7 @@ public class FinanciamentoTipo extends ObjetoTransacao {
 	public final static Integer JUROS_PARCELAMENTO = new Integer(8);
 	public final static Integer ENTRADA_PARCELAMENTO = new Integer(9);
 	public final static Integer DOACOES = new Integer(10);
-	public final static Integer CANCELAMENTO_DE_PARCELAMENTO = new Integer(11);
+	public final static Integer CANCELAMENTO_PARCELAMENTO = new Integer(11);
 
 	public final static Short INDICADOR_INCLUSAO_SIM = new Short("1");
 	public final static Short INDICADOR_INCLUSAO_NAO = new Short("2");

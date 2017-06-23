@@ -46,7 +46,7 @@ public class ControladorParcelamento extends ControladorComum {
 
 	private static final long serialVersionUID = -2063305788601928963L;
 	
-	private SistemaParametro parametros;
+	private SistemaParametro sistemaParametro;
 
 	protected IRepositorioParcelamentoHBM repositorio;
 
@@ -82,7 +82,7 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
-		parametros = getControladorUtil().pesquisarParametrosDoSistema();
+		sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
 		cancelarDebitoACobrar(helper.getParcelamento().getId());
 		cancelarCreditoARealizar(helper.getParcelamento().getId());
@@ -133,40 +133,6 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
-	private BigDecimal calcularSaldoDevedor(CancelarParcelamentoHelper helper) throws ControladorException {
-		BigDecimal valorPrestacoesCobradas = helper.getValorPrestacao().multiply(BigDecimal.valueOf(helper.getNumeroPrestacoesCobradas()));
-		BigDecimal valorCobrado = helper.getValorEntrada().add(valorPrestacoesCobradas);
-		BigDecimal saldoDevedor = helper.getValorOriginal().subtract(valorCobrado);
-		
-		BigDecimal acrescimos = calcularAcrescimosPorImpontualidade(helper, saldoDevedor);
-		
-		return saldoDevedor.add(acrescimos).setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-	
-	private BigDecimal calcularAcrescimosPorImpontualidade(CancelarParcelamentoHelper helper, BigDecimal saldoDevedor) throws ControladorException {
-		CalcularAcrescimoPorImpontualidadeHelper helperAcrescimos = null;
-		
-		try {
-			Date dataProximaConta = obterDataProximaConta(helper.getImovel());
-			
-			helperAcrescimos = getControladorCobranca().calcularAcrescimoPorImpontualidade(
-					helper.getParcelamento().getAnoMesReferenciaFaturamento(),
-					helper.getParcelamento().getUltimaAlteracao(), 
-					dataProximaConta,
-					saldoDevedor,
-					BigDecimal.ZERO,
-					ConstantesSistema.SIM,
-					parametros.getAnoMesArrecadacao().toString(),
-					null,
-					ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
-		} catch (ControladorException e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("Erro ao calcular acréscimo para cancelamento de parcelamento.", e);
-		}
-
-		return helperAcrescimos.getValorTotalAcrescimosImpontualidade();
-	}
-	
 	private Date obterDataProximaConta(Imovel imovel) throws ControladorException {
 		Integer proximaReferencia = obterReferenciaProximaConta(imovel.getId());
 		
@@ -179,42 +145,40 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 	
 	private Integer obterReferenciaProximaConta(Integer idImovel) throws ControladorException {
-		Conta conta = getControladorFaturamento().obterContaImovel(idImovel, parametros.getAnoMesFaturamento());
+		Conta conta = getControladorFaturamento().obterContaImovel(idImovel, sistemaParametro.getAnoMesFaturamento());
 		if (conta == null) {
-			return parametros.getAnoMesFaturamento();
+			return sistemaParametro.getAnoMesFaturamento();
 		} else {
-			return Util.somaMesAnoMesReferencia(parametros.getAnoMesFaturamento(), 1);
+			return Util.somaMesAnoMesReferencia(sistemaParametro.getAnoMesFaturamento(), 1);
 		}
 	}
 
-	private DebitoACobrar gerarDebitoACobrar(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
+	private void inserirDebitoACobrar(BigDecimal valor, CancelarParcelamentoHelper helper, Conta conta, Integer idDebitoTipo, Usuario usuario) throws ControladorException {
 		DebitoACobrar debitoACobrar = new DebitoACobrar(
 				gerarDebitoACobrarGeral(),
 				helper.getImovel(),
-				calcularSaldoDevedor(helper),
+				valor,
 				new Short("1"),
 				new Short("0"),
 				new Date(),
-				parametros.getAnoMesFaturamento(),
-				parametros.getAnoMesArrecadacao(),
-				getControladorFaturamento().obterReferenciaContabilConta(parametros),
+				sistemaParametro.getAnoMesFaturamento(),
+				sistemaParametro.getAnoMesArrecadacao(),
+				getControladorFaturamento().obterReferenciaContabilConta(sistemaParametro),
 				BigDecimal.ZERO,
-				DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO,
-				FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO,
-				LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO,
+				idDebitoTipo,
+				FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO,
+				LancamentoItemContabil.CANCELAMENTO_PARCELAMENTO,
 				DebitoCreditoSituacao.NORMAL,
 				null,
 				CobrancaForma.COBRANCA_EM_CONTA,
 				usuario);
-		
 		try {
 			getControladorUtil().inserir(debitoACobrar);
+			inserirDebitoCobrado(conta, helper.getImovel(), debitoACobrar, DebitoTipo.JUROS_MORA);
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao inserir novo Debito a Cobrar", e);
 		}
-
-		return debitoACobrar;
 	}
 
 	private DebitoACobrarGeral gerarDebitoACobrarGeral() throws ControladorException {
@@ -229,12 +193,10 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 	
 	private void gerarContaIncluida(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
-		DebitoACobrar debitoACobrar = gerarDebitoACobrar(helper, usuario);
 		Integer referencia = getControladorFaturamento().pesquisarAnoMesReferenciaFaturamentoGrupo(helper.getImovel().getId());
-		
 		Conta conta = new Conta(gerarContaGeral(),
 				referencia,
-				getControladorFaturamento().obterReferenciaContabilConta(parametros, referencia),
+				getControladorFaturamento().obterReferenciaContabilConta(sistemaParametro, referencia),
 				ConstantesSistema.NAO,
 				new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA),
 				helper.getImovel(),
@@ -253,31 +215,48 @@ public class ControladorParcelamento extends ControladorComum {
 				usuario,
 				BigDecimal.ZERO,
 				BigDecimal.ZERO,
-				debitoACobrar.getValorDebito(),
+				helper.getSaldoDevedorTotal(),
 				BigDecimal.ZERO);
+		
+		gerarDebitos(helper, conta, usuario);
 		
 		GerarImpostosDeduzidosContaHelper impostosDeduzidos = getControladorFaturamento().gerarImpostosDeduzidosConta(
 				conta.getImovel().getId(), referencia, conta.getValorAgua(), conta.getValorEsgoto(), conta.getDebitos(), BigDecimal.ZERO, false);
 		conta.setValorImposto(impostosDeduzidos.getValorTotalImposto());
-		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(parametros, conta));
+		conta.setNumeroBoleto(getControladorFaturamento().verificarGeracaoBoleto(sistemaParametro, conta));
 
 		getControladorUtil().inserir(conta);
-		gerarDebitoCobrado(conta, helper.getImovel(), debitoACobrar);
 		getControladorFaturamento().inserirClienteConta(conta, helper.getImovel());
 		getControladorFaturamento().inserirImpostosDeduzidosConta(impostosDeduzidos, conta);
 	}
 
-	private void gerarDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar) throws ControladorException {
+	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
+		inserirDebitoACobrar(helper.getSaldoDevedorContas(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorDescontosAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario);
+		
+		gerarNovosAcrescimos(helper, conta, usuario);
+	}
+
+	private void gerarNovosAcrescimos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
+		CalcularAcrescimoPorImpontualidadeHelper acrescimos = calcularAcrescimosPorImpontualidade(helper);
+		
+		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.JUROS_MORA, usuario);
+		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.MULTA_IMPONTUALIDADE, usuario);
+		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.ATUALIZACAO_MONETARIA, usuario);
+	}
+
+	private void inserirDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar, Integer idDebitoTipo) throws ControladorException {
 		DebitoCobrado debitoCobrado = new DebitoCobrado(
 				new Date(),
 				imovel,
-				DebitoTipo.CANCELAMENTO_DE_PARCELAMENTO,
+				idDebitoTipo,
 				conta,
-				LancamentoItemContabil.CANCELAMENTO_DE_PARCELAMENTO,
+				LancamentoItemContabil.CANCELAMENTO_PARCELAMENTO,
 				debitoACobrar,
 				new Short("1"),
 				new Short("0"),
-				FinanciamentoTipo.CANCELAMENTO_DE_PARCELAMENTO);
+				FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO);
 
 		Integer id = (Integer) this.getControladorUtil().inserir(debitoCobrado);
 		debitoCobrado.setId(id);
@@ -285,7 +264,31 @@ public class ControladorParcelamento extends ControladorComum {
 		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
 	}
+	
+	private CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimosPorImpontualidade(CancelarParcelamentoHelper helper) throws ControladorException {
+		CalcularAcrescimoPorImpontualidadeHelper acrescimos = null;
+		
+		try {
+			Date dataProximaConta = obterDataProximaConta(helper.getImovel());
+			
+			acrescimos = getControladorCobranca().calcularAcrescimoPorImpontualidade(
+					helper.getParcelamento().getAnoMesReferenciaFaturamento(),
+					helper.getParcelamento().getUltimaAlteracao(), 
+					dataProximaConta,
+					helper.getSaldoDevedorTotal(),
+					BigDecimal.ZERO,
+					ConstantesSistema.SIM,
+					sistemaParametro.getAnoMesArrecadacao().toString(),
+					null,
+					ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
+		} catch (ControladorException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("Erro ao calcular acréscimo para cancelamento de parcelamento.", e);
+		}
 
+		return acrescimos;
+	}
+	
 	private ContaGeral gerarContaGeral() throws ControladorException {
 		ContaGeral contaGeral = new ContaGeral();
 		contaGeral.setIndicadorHistorico(ConstantesSistema.NAO);

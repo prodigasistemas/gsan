@@ -116,7 +116,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			  .append("       c.imov_id as idImovel, ")
 			  .append("       p.parc_vlconta as valorContas, ")
 			  .append("       p.parc_vlentrada as valorEntrada, ")
-			  .append("       (p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria) as valorAcrescimos, ")
+			  .append("       p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria as valorAcrescimos, ")
+			  .append("       p.parc_vldescontoacrescimos as valorDescontoAcrescimos, ")
+			  .append("       p.parc_vldescontofaixa as valorDescontoFaixa, ")
 			  .append("       p.parc_nnprestacoes as numeroPrestacoes ")
 			  .append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
 			  .append("FROM faturamento.conta c ");
