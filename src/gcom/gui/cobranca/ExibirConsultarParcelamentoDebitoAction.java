@@ -17,6 +17,7 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
+import gcom.cobranca.parcelamento.ParcelamentoTipo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -58,7 +59,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		String codigoParcelamento = request.getParameter("codigoParcelamento");
 		sessao.setAttribute("idParcelamento", codigoParcelamento);
 		String acao = request.getParameter("acao");
-		boolean parcelamentoRealizadoNoGsan = false;
+		boolean exibirBotaoCancelamentoParcelamento = false;
 
 		if (acao != null && acao.equals("cancelar")) {
 			cancelarParcelamento(sessao, Integer.parseInt(codigoParcelamento));
@@ -95,14 +96,14 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 						verificarContas(sessao, idsContaEP, codigoImovel, codigoParcelamento);
 					}
 					
-					parcelamentoRealizadoNoGsan = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento());
+					exibirBotaoCancelamentoParcelamento = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento()) && isParcelamentoNormal(parcelamento);
 				}
 			}
 		}
 
 		verificarGuiaEntrada(sessao, codigoParcelamento);
 		verificarPagamentoCartaoDeCredito(sessao, request, codigoParcelamento);
-		verificarPermissaoCancelarParcelamento(request, sessao, parcelamentoRealizadoNoGsan);
+		verificarPermissaoCancelarParcelamento(request, sessao, exibirBotaoCancelamentoParcelamento);
 
 		return retorno;
 	}
@@ -300,6 +301,10 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		Date dataInicioParcelamentoGsan = Util.converteStringParaDate(data);
 		
 		return dataParcelamento.compareTo(dataInicioParcelamentoGsan) >= 0;
+	}
+	
+	private boolean isParcelamentoNormal(Parcelamento parcelamento) {
+		return parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.NORMAL.intValue();
 	}
 
 	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento) {
