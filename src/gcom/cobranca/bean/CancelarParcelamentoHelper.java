@@ -129,6 +129,17 @@ public class CancelarParcelamentoHelper {
 	public BigDecimal getSaldoDevedorContas() {
 		return getValorContasSemEntrada().subtract(getTotalContasCobradas()).add(valorDescontoFaixa);
 	}
+	
+	public BigDecimal getSaldoDevedorContasCurtoPrazo() {
+		int numeroPrestacoesCurtoPrazo = numeroPrestacoesCobradas >= 12 ? 12 : numeroPrestacoesCobradas;
+		BigDecimal valorCurtoPrazo = parcelamento.getValorPrestacao().multiply(new BigDecimal(numeroPrestacoesCurtoPrazo));
+		return valorCurtoPrazo;
+	}
+	
+	public BigDecimal getSaldoDevedorContasLongoPrazo() {
+		BigDecimal valorLongoPrazo = getSaldoDevedorContas().subtract(getSaldoDevedorContasCurtoPrazo());
+		return valorLongoPrazo;
+	}
 
 	public BigDecimal getParcelaAcrescimos() {
 		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
@@ -140,6 +151,17 @@ public class CancelarParcelamentoHelper {
 
 	public BigDecimal getSaldoDevedorAcrescimos() {
 		return valorAcrescimos.subtract(getTotalAcrescimosCobrados());
+	}
+	
+	public BigDecimal getSaldoDevedorAcrescimosCurtoPrazo() {
+		int numeroPrestacoesCurtoPrazo = numeroPrestacoesCobradas >= 12 ? 12 : numeroPrestacoesCobradas;
+		BigDecimal valorAcrescimosCurtoPrazo = getParcelaAcrescimos().multiply(new BigDecimal(numeroPrestacoesCurtoPrazo));
+		return valorAcrescimosCurtoPrazo;
+	}
+	
+	public BigDecimal getSaldoDevedorAcrescimosLongoPrazo() {
+		BigDecimal valorAcrescimosLongoPrazo = getSaldoDevedorAcrescimos().subtract(getSaldoDevedorAcrescimosCurtoPrazo());
+		return valorAcrescimosLongoPrazo;
 	}
 
 	public BigDecimal getTotalCancelamentoDescontos() {
