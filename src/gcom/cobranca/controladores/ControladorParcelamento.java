@@ -229,6 +229,25 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 
+	private void inserirDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar, Integer idDebitoTipo) throws ControladorException {
+		DebitoCobrado debitoCobrado = new DebitoCobrado(
+				new Date(),
+				imovel,
+				idDebitoTipo,
+				conta,
+				LancamentoItemContabil.CANCELAMENTO_PARCELAMENTO,
+				debitoACobrar,
+				new Short("1"),
+				new Short("0"),
+				FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO);
+
+		Integer id = (Integer) this.getControladorUtil().inserir(debitoCobrado);
+		debitoCobrado.setId(id);
+
+		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
+		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
+	}
+	
 	private DebitoACobrarGeral gerarDebitoACobrarGeral() throws ControladorException {
 		DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 		debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
@@ -249,33 +268,14 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private void gerarNovosAcrescimos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
-		CalcularAcrescimoPorImpontualidadeHelper acrescimos = calcularAcrescimosPorImpontualidade(helper);
+		CalcularAcrescimoPorImpontualidadeHelper acrescimos = calcularAcrescimosPorImpontualidade(helper, conta.getId());
 		
 		inserirDebitoACobrar(acrescimos.getValorJurosMora(), helper, conta, DebitoTipo.JUROS_MORA, usuario);
 		inserirDebitoACobrar(acrescimos.getValorMulta(), helper, conta, DebitoTipo.MULTA_IMPONTUALIDADE, usuario);
 		inserirDebitoACobrar(acrescimos.getValorAtualizacaoMonetaria(), helper, conta, DebitoTipo.ATUALIZACAO_MONETARIA, usuario);
 	}
-
-	private void inserirDebitoCobrado(Conta conta, Imovel imovel, DebitoACobrar debitoACobrar, Integer idDebitoTipo) throws ControladorException {
-		DebitoCobrado debitoCobrado = new DebitoCobrado(
-				new Date(),
-				imovel,
-				idDebitoTipo,
-				conta,
-				LancamentoItemContabil.CANCELAMENTO_PARCELAMENTO,
-				debitoACobrar,
-				new Short("1"),
-				new Short("0"),
-				FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO);
-
-		Integer id = (Integer) this.getControladorUtil().inserir(debitoCobrado);
-		debitoCobrado.setId(id);
-
-		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
-		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
-	}
 	
-	private CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimosPorImpontualidade(CancelarParcelamentoHelper helper) throws ControladorException {
+	private CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimosPorImpontualidade(CancelarParcelamentoHelper helper, Integer idConta) throws ControladorException {
 		CalcularAcrescimoPorImpontualidadeHelper acrescimos = null;
 		
 		try {
@@ -289,7 +289,7 @@ public class ControladorParcelamento extends ControladorComum {
 					BigDecimal.ZERO,
 					ConstantesSistema.SIM,
 					sistemaParametro.getAnoMesArrecadacao().toString(),
-					null,
+					idConta,
 					ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
 		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
@@ -298,7 +298,7 @@ public class ControladorParcelamento extends ControladorComum {
 
 		return acrescimos;
 	}
-	
+
 	private DebitoCreditoSituacao getSituacaoCancelada() {
 		return new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA);
 	}

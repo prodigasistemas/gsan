@@ -17,13 +17,13 @@ public class CancelarParcelamentoHelper {
 
 	private BigDecimal valorAcrescimos;
 
-	private BigDecimal valordescontoAcrescimos;
+	private BigDecimal valorDescontoAcrescimos;
 
 	private BigDecimal valorDescontoFaixa;
 
-	private Integer numeroPrestacoes;
+	private BigDecimal numeroPrestacoes;
 
-	private Integer numeroPrestacoesCobradas;
+	private BigDecimal numeroPrestacoesCobradas;
 
 	public CancelarParcelamentoHelper() {
 		super();
@@ -36,10 +36,10 @@ public class CancelarParcelamentoHelper {
 		this.valorContas = (BigDecimal) dados[2];
 		this.valorEntrada = (BigDecimal) dados[3];
 		this.valorAcrescimos = (BigDecimal) dados[4];
-		this.valordescontoAcrescimos = (BigDecimal) dados[5];
+		this.valorDescontoAcrescimos = (BigDecimal) dados[5];
 		this.valorDescontoFaixa = (BigDecimal) dados[6];
-		this.numeroPrestacoes = (Integer) dados[7];
-		this.numeroPrestacoesCobradas = (Integer) dados[8];
+		this.numeroPrestacoes = BigDecimal.valueOf((Integer) dados[7]).setScale(2);
+		this.numeroPrestacoesCobradas = BigDecimal.valueOf((Integer) dados[8]).setScale(2);
 	}
 
 	public Parcelamento getParcelamento() {
@@ -58,84 +58,12 @@ public class CancelarParcelamentoHelper {
 		this.imovel = imovel;
 	}
 
-	public BigDecimal getValorContas() {
-		return valorContas;
-	}
-
-	public void setValorContas(BigDecimal valorContas) {
-		this.valorContas = valorContas;
-	}
-
-	public BigDecimal getValorEntrada() {
-		return valorEntrada;
-	}
-
-	public void setValorEntrada(BigDecimal valorEntrada) {
-		this.valorEntrada = valorEntrada;
-	}
-
-	public BigDecimal getValorAcrescimos() {
-		return valorAcrescimos;
-	}
-
-	public void setValorAcrescimos(BigDecimal valorAcrescimos) {
-		this.valorAcrescimos = valorAcrescimos;
-	}
-
-	public BigDecimal getValordescontoAcrescimos() {
-		return valordescontoAcrescimos;
-	}
-
-	public void setValordescontoAcrescimos(BigDecimal valordescontoAcrescimos) {
-		this.valordescontoAcrescimos = valordescontoAcrescimos;
-	}
-
-	public BigDecimal getValorDescontoFaixa() {
-		return valorDescontoFaixa;
-	}
-
-	public void setValorDescontoFaixa(BigDecimal valorDescontoFaixa) {
-		this.valorDescontoFaixa = valorDescontoFaixa;
-	}
-
-	public Integer getNumeroPrestacoes() {
-		return numeroPrestacoes;
-	}
-
-	public void setNumeroPrestacoes(Integer numeroPrestacoes) {
-		this.numeroPrestacoes = numeroPrestacoes;
-	}
-
-	public Integer getNumeroPrestacoesCobradas() {
-		return numeroPrestacoesCobradas;
-	}
-
-	public void setNumeroPrestacoesCobradas(Integer numeroPrestacoesCobradas) {
-		this.numeroPrestacoesCobradas = numeroPrestacoesCobradas;
-	}
-
-	public BigDecimal getValorContasSemEntrada() {
-		return valorContas.subtract(valorEntrada);
-	}
-
-	public BigDecimal getParcelaSemJuros() {
-		return getValorContasSemEntrada().divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
-	}
-
-	public BigDecimal getTotalContasCobradas() {
-		return getParcelaSemJuros().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas)).setScale(2, BigDecimal.ROUND_DOWN);
+	public BigDecimal getSaldoDevedorTotal() {
+		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos());
 	}
 
 	public BigDecimal getSaldoDevedorContas() {
 		return getValorContasSemEntrada().subtract(getTotalContasCobradas()).add(valorDescontoFaixa);
-	}
-
-	public BigDecimal getParcelaAcrescimos() {
-		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
-	}
-
-	public BigDecimal getTotalAcrescimosCobrados() {
-		return getParcelaAcrescimos().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas)).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
 	public BigDecimal getSaldoDevedorAcrescimos() {
@@ -143,10 +71,30 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getTotalCancelamentoDescontos() {
-		return getParcelaAcrescimos().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas));
+		return getParcelaDescontoAcrescimos().multiply(numeroPrestacoesCobradas).setScale(2, BigDecimal.ROUND_DOWN);
 	}
-	
-	public BigDecimal getSaldoDevedorTotal() {
-		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos());
+
+	private BigDecimal getValorContasSemEntrada() {
+		return valorContas.subtract(valorEntrada);
+	}
+
+	private BigDecimal getParcelaSemJuros() {
+		return getValorContasSemEntrada().divide(numeroPrestacoes).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+
+	private BigDecimal getTotalContasCobradas() {
+		return getParcelaSemJuros().multiply(numeroPrestacoesCobradas).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+
+	private BigDecimal getParcelaAcrescimos() {
+		return valorAcrescimos.divide(numeroPrestacoes).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+
+	private BigDecimal getTotalAcrescimosCobrados() {
+		return getParcelaAcrescimos().multiply(numeroPrestacoesCobradas).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+
+	private BigDecimal getParcelaDescontoAcrescimos() {
+		return valorDescontoAcrescimos.divide(numeroPrestacoes).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 }
