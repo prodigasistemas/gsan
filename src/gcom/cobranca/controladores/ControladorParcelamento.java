@@ -202,6 +202,8 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private void inserirDebitoACobrar(BigDecimal valor, CancelarParcelamentoHelper helper, Conta conta, Integer idDebitoTipo, Usuario usuario) throws ControladorException {
+		if (valor == null || valor == BigDecimal.ZERO) return;
+		
 		DebitoACobrar debitoACobrar = new DebitoACobrar(
 				gerarDebitoACobrarGeral(),
 				helper.getImovel(),
@@ -260,8 +262,10 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 	
 	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
-		inserirDebitoACobrar(helper.getSaldoDevedorContas(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS, usuario); // TODO - Separar em Curto e Longo
-		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS, usuario); // TODO - Separar em Curto e Longo
+		inserirDebitoACobrar(helper.getSaldoDevedorContasCurtoPrazo(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS_CURTO, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorContasLongoPrazo(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_CONTAS_LONGO, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimosCurtoPrazo(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS_CURTO, usuario);
+		inserirDebitoACobrar(helper.getSaldoDevedorAcrescimosLongoPrazo(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_ACRESCIMOS_LONGO, usuario);
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario);
 		
 		gerarNovosAcrescimos(helper, conta, usuario);
