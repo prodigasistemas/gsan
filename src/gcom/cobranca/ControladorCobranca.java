@@ -62507,4 +62507,13 @@ public class ControladorCobranca implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public String getCobrancaParametro(String parametro) throws ControladorException {
+		FiltroCobrancaParametro filtroCobrancaParametro = new FiltroCobrancaParametro();
+		filtroCobrancaParametro.adicionarParametro(new ParametroSimples(FiltroCobrancaParametro.NOME, parametro));
+
+		Collection parametros = Fachada.getInstancia().pesquisar(filtroCobrancaParametro, CobrancaParametro.class.getName());
+
+		 return ((CobrancaParametro) parametros.iterator().next()).getValor();
+	}
 }

@@ -8,6 +8,7 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.CobrancaParametro;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoMotivoDesfazer;
@@ -31,6 +32,7 @@ import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,6 +58,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		String codigoParcelamento = request.getParameter("codigoParcelamento");
 		sessao.setAttribute("idParcelamento", codigoParcelamento);
 		String acao = request.getParameter("acao");
+		boolean parcelamentoRealizadoNoGsan = false;
 
 		if (acao != null && acao.equals("cancelar")) {
 			cancelarParcelamento(sessao, Integer.parseInt(codigoParcelamento));
@@ -91,13 +94,15 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 						pesquisarMotivosDesfazerParcelamento(request);
 						verificarContas(sessao, idsContaEP, codigoImovel, codigoParcelamento);
 					}
+					
+					parcelamentoRealizadoNoGsan = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento());
 				}
 			}
 		}
 
 		verificarGuiaEntrada(sessao, codigoParcelamento);
 		verificarPagamentoCartaoDeCredito(sessao, request, codigoParcelamento);
-		verificarPermissaoCancelarParcelamento(request, sessao);
+		verificarPermissaoCancelarParcelamento(request, sessao, parcelamentoRealizadoNoGsan);
 
 		return retorno;
 	}
@@ -203,9 +208,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 				form.setCpfCnpj(cliente.getCnpjFormatado());
 			}
 			
-			form.setParcelamento(imovel.getNumeroParcelamento().toString());
-			form.setReparcelamento(imovel.getNumeroReparcelamento().toString());
-			form.setReparcelamentoConsecutivo(imovel.getNumeroReparcelamentoConsecutivos().toString());
+			form.setParcelamento(imovel.getNumeroParcelamento() != null ? imovel.getNumeroParcelamento().toString() : null);
+			form.setReparcelamento(imovel.getNumeroReparcelamento() != null ? imovel.getNumeroReparcelamento().toString() : null);
+			form.setReparcelamentoConsecutivo(imovel.getNumeroReparcelamentoConsecutivos() != null ? imovel.getNumeroReparcelamentoConsecutivos().toString() : null);
 
 			request.setAttribute("imovelPesquisado", imovel);
 			request.setAttribute("enderecoFormatado", pesquisarEnderecoFormatado(codigoImovel));
@@ -284,9 +289,17 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
 	}
 
-	private void verificarPermissaoCancelarParcelamento(HttpServletRequest request, HttpSession sessao) {
+	private void verificarPermissaoCancelarParcelamento(HttpServletRequest request, HttpSession sessao, boolean isParcalamentoRealizadoNoGsan) {
 		boolean possuiPermissaoCancelarParcelamento = this.getFachada().verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO, (Usuario) sessao.getAttribute("usuarioLogado"));
-		request.setAttribute("possuiPermissaoCancelarParcelamento", possuiPermissaoCancelarParcelamento);
+		boolean exibirBotao = possuiPermissaoCancelarParcelamento && isParcalamentoRealizadoNoGsan;
+		request.setAttribute("possuiPermissaoCancelarParcelamento", exibirBotao);
+	}
+	
+	public boolean isParcelamentoRealizadoNoGsan(Date dataParcelamento) {
+		String data = getFachada().getCobrancaParametro(CobrancaParametro.NOME_PARAMETRO_COBRANCA.DATA_INICIO_PARCELAMENTO_GSAN.toString());
+		Date dataInicioParcelamentoGsan = Util.converteStringParaDate(data);
+		
+		return dataParcelamento.compareTo(dataInicioParcelamentoGsan) >= 0;
 	}
 
 	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento) {
