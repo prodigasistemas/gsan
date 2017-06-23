@@ -694,37 +694,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
 	        				 
-	        				 /**
-	        				  * Bônus social 
-	        				  * 
-	        				  * Verifica se foi concedido ao imovel credito de bonus social
-	        				  * fazer essa verificação no credito realizado 
-	        				  * e excluir o credito realizado e o credito a realizar
-	        				  * */
-	        				 if (contaAtualizacao.getImovel() != null){
-	        					 Imovel imovel = RepositorioImovelHBM.getInstancia().pesquisarImovel(contaAtualizacao.getImovel().getId());
-	        					 
-	        					 if (imovel.getImovelPerfil().getId().equals(ImovelPerfil.TARIFA_SOCIAL)) {
-	        						 
-	        						 if(contaAtualizacao.getConsumoAgua() > 10) {
-	        							 CreditoRealizado creditoRealizadoBS = null;
-	        							 creditoRealizadoBS = repositorioFaturamento.pesquisarCreditoRealizadoBonusSocial(contaAtualizacao.getId());
-
-	        							 if(creditoRealizadoBS != null) {
-	        								 CreditoARealizar creditoARealizarBS = repositorioFaturamento .pesquisarCreditoARealizarBonusSocial(contaAtualizacao.getImovel().getId(), contaAtualizacao.getReferencia());
-	        								 repositorioFaturamento.excluirCreditoRealizadoBonusSocial(creditoRealizadoBS.getId());
-	        								 repositorioFaturamento.excluirCreditoARealizarBonusSocial(creditoARealizarBS.getId());
-	        								 
-	        								 BigDecimal valorAtualizadoCredito = contaAtualizacao.getValorCreditos().subtract(creditoARealizarBS.getValorCredito());
-	        								 if(valorAtualizadoCredito.compareTo(ConstantesSistema.VALOR_ZERO) == -1 )
-	        									 contaAtualizacao.setValorCreditos(valorAtualizadoCredito.multiply(new BigDecimal("-1")));
-	        								 else
-	        									 contaAtualizacao.setValorCreditos(valorAtualizadoCredito);
-	        							 }
-	        						 }
-	        					 }
-	        				 }
-	        				 
 	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 	        				 
 	        				 logger.info(" 1 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
@@ -2659,90 +2628,33 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void gerarBonusTarifaSocial(FaturamentoGrupo faturamentoGrupo,
 			SistemaParametro sistemaParametro, Collection<Rota> colecaoRotas,
 			int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
-		BigDecimal valorBonusSocial = new BigDecimal("0.0");
 
-		// -------------------------
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		// -------------------------
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(
-						idFuncionalidadeIniciada,
-						UnidadeProcessamento.ROTA,
-						((Rota) Util.retonarObjetoDeColecao(colecaoRotas))
-								.getId());
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA,
+				((Rota) Util.retonarObjetoDeColecao(colecaoRotas)).getId());
 
 		try {
 
-			// **********************************
-			// Calculo do valor do Bônus Social
-			// **********************************
-			Collection collectionCosumoTarifaVigente = this
-					.obterConsumoTarifaVigenciaCalcularAguaEsgotoPorMesAno(
-							ConsumoTarifa.CONSUMO_NORMAL, null, null,
-							faturamentoGrupo.getAnoMesReferencia());
+			BigDecimal valorBonusSocial = calcularValorBonusSocial(faturamentoGrupo, sistemaParametro);
 
-			ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
-					.retonarObjetoDeColecao(collectionCosumoTarifaVigente);
+			Integer anoMes = Util.subtraiAteSeisMesesAnoMesReferencia(faturamentoGrupo.getAnoMesReferencia(), 1);
 
-			FiltroConsumoTarifaCategoria filtroConsumoTarifaCategoria = new FiltroConsumoTarifaCategoria();
-
-			filtroConsumoTarifaCategoria
-					.adicionarParametro(new ParametroSimples(
-							FiltroConsumoTarifaCategoria.CATEGORIA_ID,
-							Categoria.RESIDENCIAL));
-			filtroConsumoTarifaCategoria
-					.adicionarParametro(new ParametroSimples(
-							FiltroConsumoTarifaCategoria.CONSUMO_VIGENCIA_ID,
-							consumoTarifaVigencia.getId()));
-
-			ConsumoTarifaCategoria consumoTarifaCategoria = (ConsumoTarifaCategoria) this
-					.getControladorUtil()
-					.pesquisar(filtroConsumoTarifaCategoria,
-							ConsumoTarifaCategoria.class.getName()).iterator()
-					.next();
-
-			valorBonusSocial = (consumoTarifaCategoria.getValorTarifaMinima()
-					.multiply(sistemaParametro.getPercentualBonusSocial()))
-					.divide(new BigDecimal("100.0"));
-			// *****************************************************************
-
-			// Seleciona anoMês de referencia anterior ao mês/ano do faturamento
-			Integer anoMes = Util.subtraiAteSeisMesesAnoMesReferencia(
-					faturamentoGrupo.getAnoMesReferencia(), 1);
-			// *****************************************************************
-
-			// Cria Credito Tipo
-			FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
-			filtroCreditoTipo.adicionarParametro(new ParametroSimples(
-					FiltroCreditoTipo.ID, CreditoTipo.DESCONTO_TARIFA_SOCIAL));
-			filtroCreditoTipo
-					.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
-
-			Collection colecaoTipoCredito = this.getControladorUtil()
-					.pesquisar(filtroCreditoTipo, CreditoTipo.class.getName());
-
-			CreditoTipo creditoTipo = (CreditoTipo) Util
-					.retonarObjetoDeColecao(colecaoTipoCredito);
-			// Fim da Criação do Credito Tipo
+			CreditoTipo creditoTipo = obterCreditoTipotarifaSocial();
 
 			if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
 
 				Iterator iteratorRotas = colecaoRotas.iterator();
 
-				// LAÇO PARA FATURAR TODAS AS ROTAS
 				while (iteratorRotas.hasNext()) {
 
 					Rota rota = (Rota) iteratorRotas.next();
 
-					// Variáveis para a paginação da pesquisa de Imovel por
-					// Grupo Faturamento
+					// Variáveis para a paginação da pesquisa de Imovel por Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
 					final int quantidadeRegistros = 500;
@@ -2751,10 +2663,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					while (!flagTerminou) {
 
-						Collection colecaoImovel = this
-								.pesquisarImovelGrupoFaturamento(rota,
-										numeroIndice, quantidadeRegistros,
-										false, false);
+						Collection colecaoImovel = this.pesquisarImovelGrupoFaturamento(rota, numeroIndice, quantidadeRegistros, false, false);
 
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
@@ -2764,428 +2673,227 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								Imovel imovel = (Imovel) iteratorImoveis.next();
 
-								// APAGAR DADOS GERADOS PARA A ROTA
-								FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+								apagarDadosBonusSocialInicioBatch(anoMes, creditoTipo, imovel);
 
-								filtroCreditoARealizar
-										.adicionarParametro(new ParametroSimples(
-												FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,
-												anoMes));
-								filtroCreditoARealizar
-										.adicionarParametro(new ParametroSimples(
-												FiltroCreditoARealizar.IMOVEL_ID,
-												imovel.getId()));
-								filtroCreditoARealizar
-										.adicionarParametro(new ParametroSimples(
-												FiltroCreditoARealizar.ID_CREDITO_TIPO,
-												creditoTipo.getId()));
-
-								Collection colecaoCreditoARealizar = (Collection) this
-										.getControladorUtil().pesquisar(
-												filtroCreditoARealizar,
-												CreditoARealizar.class
-														.getName());
-
-								// Caso já tenha sido efetuado o crédito
-								// passa pro proximo imóvel.
-								// Caso contrario deleto as informações do
-								// creditoARealizar,creditoARealizarGeral e
-								// CreditoARealizarCategoria
-								if (colecaoCreditoARealizar != null
-										&& !colecaoCreditoARealizar.isEmpty()) {
-
-									CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar
-											.iterator().next();
-
-									if (credito.getNumeroPrestacaoRealizada()
-											.compareTo(new Short("1")) == 0) {
-										continue;
-									} else {
-
-										// Pesquisa os CreditoARealizarCategoria
-										// para serem excluidos
-										FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
-
-										filtroCreditoARealizarCategoria
-												.adicionarParametro(new ParametroSimples(
-														FiltroCreditoARealizarCategoria.ID_CREDITO_A_REALIZAR,
-														credito.getId()));
-
-										Iterator iteratorCreditoARealizarCategoria = this
-												.getControladorUtil()
-												.pesquisar(
-														filtroCreditoARealizarCategoria,
-														CreditoARealizarCategoria.class
-																.getName())
-												.iterator();
-
-										while (iteratorCreditoARealizarCategoria
-												.hasNext()) {
-											this.getControladorUtil().remover(
-													iteratorCreditoARealizarCategoria
-															.next());
-										}
-
-										// Pesquisa Credito A Realizar Geral,
-										// que possuam o ID igual ao
-										// CreditoARealizar
-										FiltroCreditoARealizarGeral filtro = new FiltroCreditoARealizarGeral();
-
-										filtro.adicionarParametro(new ParametroSimples(
-												FiltroCreditoARealizarGeral.ID,
-												credito.getId()));
-
-										CreditoARealizarGeral creditoARealizarGeral = (CreditoARealizarGeral) this
-												.getControladorUtil()
-												.pesquisar(
-														filtro,
-														CreditoARealizarGeral.class
-																.getName())
-												.iterator().next();
-
-										// Exclui o creditoARealizar
-										this.getControladorUtil().remover(
-												credito);
-
-										// Exclui o creditoARealizarGeral
-										this.getControladorUtil().remover(
-												creditoARealizarGeral);
-									}
-								}
-								// ****************APAGAR DADOS GERADOS PARA A
-								// ROTA*****************
-
-								// Fluxo 4.1
-								// Verifica se o imovel tem perfil de Tarifa
-								// Social,
-								// Caso não possua passa para o próximo imóvel.
-								if (!imovel.getImovelPerfil().getId()
-										.equals(ImovelPerfil.TARIFA_SOCIAL)) {
+								// Fluxo 4.1 - Verifica se o imovel tem perfil de Tarifa Social,caso não possua passa para o próximo imóvel.
+								if (!imovel.getImovelPerfil().getId().equals(ImovelPerfil.TARIFA_SOCIAL)) 
 									continue;
-								}
-								
-								/**
-								 * Data: 22/01/2011
-								 * 
-								 * 
-								 * Verifica se o imóvel pertence ao R1
-								 */
-								Integer subcategoriaImovel = null;
-								//busca a subcategoria do imóvel
-								subcategoriaImovel = repositorioFaturamento.pesquisarSubcategoriaImovel(imovel.getId());
-								
-								//compara com o id da subcategoria
-								if(!subcategoriaImovel.equals(Subcategoria.SUBCATEGORIA_R1))
+
+								 // Verifica se o imóvel pertence ao R1
+								Integer subcategoriaImovel = repositorioFaturamento.pesquisarSubcategoriaImovel(imovel.getId());
+
+								if (!subcategoriaImovel.equals(Subcategoria.SUBCATEGORIA_R1))
 									continue;
 
 								/*
-								 * autor: Adriana Muniz
-								 * data: 02/05/2011
-								 * Verificar se o imóvel está com a situação da ligação de agua como Ligado, 
-								 * antes de gerar o credito. 
-								 * Obs.: Atende ao IS já que mais abaixo verifica se o consumo de agua for nulo,
-								 * o crédito não é gerado, mas como o consumo para imoveis do IS não é verificado no GSAN,
-								 * imoveis suprimidos(e que atendam todas as outras condições para concessão do credito), 
-								 * por exemplo, recebem o crédito.
-								 * */
-								
-								if(!imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)){
-									continue;
-								}
-								
-								Collection collectionConta = this
-										.pesquisarVencimentoConta(
-												imovel.getId(), anoMes);
-
-								// FS0002
-								// Caso não exista conta com anoMês selecionado,
-								// segue para o próximo imóvel.
-								if (collectionConta == null
-										|| collectionConta.isEmpty()) {
+								 * autor: Adriana Muniz data: 02/05/2011
+								 * Verificar se o imóvel está com a situação da ligação de agua como Ligado, antes de gerar o credito. 
+								 * Obs.: Atende ao IS já que mais abaixo verifica se o consumo de agua for nulo, o crédito não é gerado, mas como o
+								 * consumo para imoveis do IS não é verificado no GSAN, imoveis suprimidos(e que atendam todas as outras condições 
+								 * para concessão do credito), por exemplo, recebem o crédito.
+								 */
+								if (!imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)) {
 									continue;
 								}
 
-								// Gerenciamento dos dados retornados do método
-								// pesquisarVencimentoConta().
-								Object[] conta = (Object[]) collectionConta
-										.iterator().next();
-								Integer idConta = new Integer(
-										conta[0].toString());
+								System.out.println("Ano es vencimento: " + anoMes);
+								Collection collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMes);
+
+								// Caso não exista conta com anoMês selecionado, segue para o próximo imóvel.
+								if (collectionConta == null || collectionConta.isEmpty()) {
+									continue;
+								}
+
+								// Gerenciamento dos dados retornados do método pesquisarVencimentoConta().
+								Object[] conta = (Object[]) collectionConta.iterator().next();
+								Integer idConta = new Integer(conta[0].toString());
 								Date dataVencimento = (Date) conta[1];
 
-								
-								/**
-								 * autor: Adriana Muniz
-								 * data: 17/06/2011
-								 * 
-								 * verificar se a conta está cancelada, se sim o bônus é concedido sem 
-								 * executar outras verificações
+								/*
+								 * autor: Adriana Muniz data: 17/06/2011
+								 * verificar se a conta está cancelada, se sim o bônus é concedido sem executar outras verificações
 								 * */
-									if(!repositorioFaturamento.verificaContaCancelada(idConta)){
-										
-									
+								if (!repositorioFaturamento.verificaContaCancelada(idConta)) {
+
 									/**
 									 * Data: 22/01/2011
 									 * 
+									 * Primeira condição Verificação se o dia do vencimento da conta é maior que a data atual, se for procurar 
+									 * o pagamento do mês anterior para liberar ou não a geração do crédito
 									 * 
-									 * Verifica se o consumo dos imóveis, que não fazem parte do impressão simultânea, é maior que 10 
-									 * Se for maior que 10, não gera o crédito
-									 */
-									if(!rota.getLeituraTipo().getId().equals(LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA)) {
-										Integer consumoAgua = repositorioFaturamento.pesquisarConsumoAguaImovel(imovel.getId(),faturamentoGrupo.getAnoMesReferencia());
-	
-										if(consumoAgua == null || consumoAgua > 10)
-											continue;
-									}
-									
-									/**
-									 * Data: 22/01/2011
-									 * 
-									 * Primeira condição
-									 * Verificação se o dia do vencimento da conta é maior que a data atual, se for
-									 * procurar o pagamento do mês anterior para liberar ou não a geração do crédito
-									 * 
-									 * Segunda condição
-									 * Devido o processamento de algumas contas não acontecer no mesmo dia, foi estabelecido 
-									 * um prazo de cinco dias posterior ao vencimento. Se a conta se encontrar nessa situação, 
-									 * o pagamento a ser considerado será do mês posterior. 
+									 * Segunda condição Devido o processamento de algumas contas não acontecer no mesmo dia, foi estabelecido 
+									 * um prazo de cinco dias posterior ao vencimento. Se a conta se encontrar nessa situação, o pagamento
+									 * a ser considerado será do mês posterior.
 									 * 
 									 */
-									
+
 									SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
 									String data = s.format(dataVencimento);
 									Date dtVenc = s.parse(data);
+
+									Integer anoMesConsumo = anoMes;
 									
-									if(dtVenc.after(new Date()) || dataVencimento.equals(new Date())) {
-										collectionConta = this.pesquisarVencimentoConta(imovel.getId(),Util.subtraiAteSeisMesesAnoMesReferencia(anoMes, 1));
+									if (dtVenc.after(new Date()) || dataVencimento.equals(new Date())) {
 										
+										anoMesConsumo = Util.subtraiAteSeisMesesAnoMesReferencia(anoMes, 1);
 										
-										// FS0002
-										// Caso não exista conta com anoMês selecionado,
-										// segue para o próximo imóvel.
-										if(collectionConta==null || collectionConta.isEmpty()){
+										collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMesConsumo);
+
+										// Caso não exista conta com anoMês selecionado, segue para o próximo imóvel.
+										if (collectionConta == null || collectionConta.isEmpty()) {
 											continue;
 										}
-										
-										//Gerenciamento dos dados retornados do método pesquisarVencimentoConta().
+
+										// Gerenciamento dos dados retornados do método pesquisarVencimentoConta().
 										conta = (Object[]) collectionConta.iterator().next();
-										idConta = new Integer(conta[0].toString());							
+										idConta = new Integer(conta[0].toString());
 										dataVencimento = (Date) conta[1];
-										
-									}
-									else if(dtVenc.before(new Date())){
-										if(Util.diferencaEntreDatas(dtVenc, new Date()) <= 5) {
-											collectionConta = this.pesquisarVencimentoConta(imovel.getId(),Util.subtraiAteSeisMesesAnoMesReferencia(anoMes, 1));
+
+									} else if (dtVenc.before(new Date())) {
+										if (Util.diferencaEntreDatas(dtVenc, new Date()) <= 5) {
 											
-											// FS0002
-											// Caso não exista conta com anoMês selecionado,
-											// segue para o próximo imóvel.
-											if(collectionConta==null || collectionConta.isEmpty()){
+											anoMesConsumo = Util.subtraiAteSeisMesesAnoMesReferencia(anoMes, 1);
+											
+											collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMesConsumo);
+
+											// FS0002  Caso não exista conta com anoMês selecionado, segue para o próximo imóvel.
+											if (collectionConta == null || collectionConta.isEmpty()) {
 												continue;
 											}
-											
-											//Gerenciamento dos dados retornados do método pesquisarVencimentoConta().
+
+											// Gerenciamento dos dados retornados do método pesquisarVencimentoConta().
 											conta = (Object[]) collectionConta.iterator().next();
-											idConta = new Integer(conta[0].toString());							
+											idConta = new Integer(conta[0].toString());
 											dataVencimento = (Date) conta[1];
 										}
-										
+
+									}
+
+									Collection collectionDataPagamento = this.pesquisarDataPagamento(idConta);
+
+									// Fluxo 4.3.2 - Caso não seja localizado o pagamento, segue para o próximo imóvel
+									if (collectionDataPagamento == null || collectionDataPagamento.isEmpty()) {
+										continue;
+									}
+
+									Object arrayDataPagamento = (Object) collectionDataPagamento.iterator().next();
+
+									// Fluxo 4.3.3 - Caso exista pegamento, Verifica quantidade de dias uteis em relação a data de vencimento
+									Date dataPagamento = (Date) arrayDataPagamento;
+
+									Municipio municipioImovel = (Municipio) this.getControladorGeografico().pesquisarMunicipioDoImovel(imovel.getId())
+											.iterator().next();
+
+									Integer diasUteis = this.getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataPagamento,
+											municipioImovel);
+
+									// Fluxo 4.3.4 - Verifica se numero dias e maior que "numeroDiasCalculoAcrescimos"
+									if (diasUteis.compareTo(new Integer(sistemaParametro.getNumeroDiasCalculoAcrescimos())) > 0) {
+										continue;
 									}
 									
-									Collection collectionDataPagamento = this
-											.pesquisarDataPagamento(idConta);
-	
-									// Fluxo 4.3.2
-									// Caso não seja localizado o pagamento,
-									// segue para o próximo imóvel
-									if (collectionDataPagamento == null
-											|| collectionDataPagamento.isEmpty()) {
-										continue;
-									}
-	
-									Object arrayDataPagamento = (Object) collectionDataPagamento
-											.iterator().next();
-	
-									// Caso exista pegamento,
-									// Verifica quantidade de dias uteis em relação
-									// a data de vencimento
-									// Fluxo 4.3.3
-									Date dataPagamento = (Date) arrayDataPagamento;
-	
-									Municipio municipioImovel = (Municipio) this
-											.getControladorGeografico()
-											.pesquisarMunicipioDoImovel(
-													imovel.getId()).iterator()
-											.next();
-	
-									Integer diasUteis = this
-											.getControladorUtil()
-											.calcularDiferencaDiasUteisEntreDuasDatas(
-													dataVencimento, dataPagamento,
-													municipioImovel);
-	
-									// Fluxo 4.3.4
-									// Verifica se numero dias e maior que
-									// "numeroDiasCalculoAcrescimos"
-									if (diasUteis
-											.compareTo(new Integer(
-													sistemaParametro
-															.getNumeroDiasCalculoAcrescimos())) > 0) {
-										continue;
-									}
+									/*
+									 * Data: 22/01/2011 
+									 * Verifica se o consumo dos imóveis, que não fazem parte do impressão simultânea, é maior que 10.
+									 * Se for maior que 10, não gera o crédito
+									 */
+									//if (!rota.getLeituraTipo().getId().equals(LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA)) {
+										Integer consumoAgua = repositorioFaturamento.pesquisarConsumoAguaImovel(imovel.getId(), anoMesConsumo);
+
+										if (consumoAgua == null || consumoAgua > 10)
+											continue;
+									//}
 								}
 
 								// ******************************
 								// INICIO DA GERAÇÃO DO CREDITO
 								// ******************************
 
-								Date dataAtual = new Date(
-										System.currentTimeMillis());
+								Date dataAtual = new Date(System.currentTimeMillis());
 
 								// Inclusão do CreditoARealizarGeral
 								CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
-								creditoARealizarGeral
-										.setIndicadorHistorico(new Short("2"));
-								creditoARealizarGeral
-										.setUltimaAlteracao(dataAtual);
+								creditoARealizarGeral.setIndicadorHistorico(new Short("2"));
+								creditoARealizarGeral.setUltimaAlteracao(dataAtual);
 
-								Object idCreditoARealizarGeral = repositorioUtil
-										.inserir(creditoARealizarGeral);
+								Object idCreditoARealizarGeral = repositorioUtil.inserir(creditoARealizarGeral);
 
-								creditoARealizarGeral.setId(new Integer(
-										idCreditoARealizarGeral.toString()));
+								creditoARealizarGeral.setId(new Integer(idCreditoARealizarGeral.toString()));
 								// *************Fim****************
 
 								// Inclusão do CreditoARealizar
 								CreditoARealizar creditoARealizar = new CreditoARealizar();
 
-								creditoARealizar.setId(new Integer(
-										idCreditoARealizarGeral.toString()));
+								creditoARealizar.setId(new Integer(idCreditoARealizarGeral.toString()));
 								creditoARealizar.setImovel(imovel);
 								creditoARealizar.setCreditoTipo(creditoTipo);
 								creditoARealizar.setGeracaoCredito(dataAtual);
-								creditoARealizar
-										.setAnoMesReferenciaCredito(anoMes);
-								creditoARealizar
-										.setAnoMesCobrancaCredito(sistemaParametro
-												.getAnoMesArrecadacao());
+								creditoARealizar.setAnoMesReferenciaCredito(anoMes);
+								creditoARealizar.setAnoMesCobrancaCredito(sistemaParametro.getAnoMesArrecadacao());
 
-								// Seta AnoMesReferenciaContabil, com maior
-								// valor entre o ano/Mês
-								// da data corrente e o ano/Mês de referencia do
-								// faturamento.
+								// Seta AnoMesReferenciaContabil, com maior valor entre o ano/Mês da data corrente e o ano/Mês de referencia do faturamento.
 								Integer mesDataAtual = Util.getMes(dataAtual);
-								Integer mesArreacadao = new Integer(
-										sistemaParametro.getAnoMesFaturamento()
-												.toString().substring(4));
+								Integer mesArreacadao = new Integer(sistemaParametro.getAnoMesFaturamento().toString().substring(4));
 
 								if (mesDataAtual.compareTo(mesArreacadao) > 0) {
-									creditoARealizar
-											.setAnoMesReferenciaContabil(Util
-													.recuperaAnoMesDaData(dataAtual));
+									creditoARealizar.setAnoMesReferenciaContabil(Util.recuperaAnoMesDaData(dataAtual));
 								} else {
-									creditoARealizar
-											.setAnoMesReferenciaContabil(sistemaParametro
-													.getAnoMesFaturamento());
+									creditoARealizar.setAnoMesReferenciaContabil(sistemaParametro.getAnoMesFaturamento());
 								}
 								// ***************************************************************
 
-								creditoARealizar
-										.setValorCredito(valorBonusSocial);
-								creditoARealizar
-										.setValorResidualMesAnterior(new BigDecimal(
-												"0.0"));
-								creditoARealizar
-										.setNumeroPrestacaoCredito(new Short(
-												"1"));
-								creditoARealizar
-										.setNumeroPrestacaoRealizada(new Short(
-												"0"));
-								creditoARealizar.setLocalidade(imovel
-										.getLocalidade());
+								creditoARealizar.setValorCredito(valorBonusSocial);
+								creditoARealizar.setValorResidualMesAnterior(new BigDecimal("0.0"));
+								creditoARealizar.setNumeroPrestacaoCredito(new Short("1"));
+								creditoARealizar.setNumeroPrestacaoRealizada(new Short("0"));
+								creditoARealizar.setLocalidade(imovel.getLocalidade());
 								creditoARealizar.setQuadra(imovel.getQuadra());
-								creditoARealizar.setCodigoSetorComercial(imovel
-										.getSetorComercial().getCodigo());
-								creditoARealizar.setNumeroQuadra(imovel
-										.getQuadra().getNumeroQuadra());
-								creditoARealizar
-										.setNumeroLote(imovel.getLote());
-								creditoARealizar.setNumeroSubLote(imovel
-										.getSubLote());
+								creditoARealizar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+								creditoARealizar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+								creditoARealizar.setNumeroLote(imovel.getLote());
+								creditoARealizar.setNumeroSubLote(imovel.getSubLote());
 								creditoARealizar.setRegistroAtendimento(null);
 								creditoARealizar.setOrdemServico(null);
-								creditoARealizar
-										.setLancamentoItemContabil(creditoTipo
-												.getLancamentoItemContabil());
-								creditoARealizar
-										.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(
-												DebitoCreditoSituacao.NORMAL));
-								creditoARealizar
-										.setDebitoCreditoSituacaoAnterior(null);
-								creditoARealizar
-										.setCreditoARealizarGeral(creditoARealizarGeral);
-								creditoARealizar
-										.setCreditoOrigem(new CreditoOrigem(
-												CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO));
+								creditoARealizar.setLancamentoItemContabil(creditoTipo.getLancamentoItemContabil());
+								creditoARealizar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+								creditoARealizar.setDebitoCreditoSituacaoAnterior(null);
+								creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
+								creditoARealizar.setCreditoOrigem(new CreditoOrigem(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO));
 								creditoARealizar.setUltimaAlteracao(dataAtual);
-								creditoARealizar
-										.setUsuario(Usuario.USUARIO_BATCH);
+								creditoARealizar.setUsuario(Usuario.USUARIO_BATCH);
 
-								Object idCreditoARealizar = repositorioUtil
-										.inserir(creditoARealizar);
+								Object idCreditoARealizar = repositorioUtil.inserir(creditoARealizar);
 
-								creditoARealizar.setId(new Integer(
-										idCreditoARealizar.toString()));
+								creditoARealizar.setId(new Integer(idCreditoARealizar.toString()));
 								// *************Fim****************
 
 								// Inclusão do CreditoARealizarCategoria
 								// UC0108 - Obter Quantidade de Economias por
 								// Categoria
-								Collection colecaoCategoriasImovel = this
-										.getControladorImovel()
-										.obterQuantidadeEconomiasCategoria(
-												imovel);
+								Collection colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel
-										.iterator();
+								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 
 								// UC0185 - Obter Valor por Categoria
-								Iterator iteratorColecaoValorPorCategoria = getControladorImovel()
-										.obterValorPorCategoria(
-												colecaoCategoriasImovel,
-												valorBonusSocial).iterator();
+								Iterator iteratorColecaoValorPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel,
+										valorBonusSocial).iterator();
 
-								while (iteratorColecaoCategoriasImovel
-										.hasNext()
-										&& iteratorColecaoValorPorCategoria
-												.hasNext()) {
+								while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorPorCategoria.hasNext()) {
 
-									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel
-											.next();
+									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
 
-									BigDecimal valor = (BigDecimal) iteratorColecaoValorPorCategoria
-											.next();
+									BigDecimal valor = (BigDecimal) iteratorColecaoValorPorCategoria.next();
 
 									CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
 
-									creditoARealizarCategoria
-											.setComp_id(new CreditoARealizarCategoriaPK(
-													creditoARealizar.getId(),
-													categoria.getId()));
-									creditoARealizarCategoria
-											.setCreditoARealizar(creditoARealizar);
-									creditoARealizarCategoria
-											.setCategoria(categoria);
-									creditoARealizarCategoria
-											.setQuantidadeEconomia(categoria
-													.getQuantidadeEconomiasCategoria());
-									creditoARealizarCategoria
-											.setValorCategoria(valor);
-									creditoARealizarCategoria
-											.setUltimaAlteracao(dataAtual);
+									creditoARealizarCategoria.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
+									creditoARealizarCategoria.setCreditoARealizar(creditoARealizar);
+									creditoARealizarCategoria.setCategoria(categoria);
+									creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+									creditoARealizarCategoria.setValorCategoria(valor);
+									creditoARealizarCategoria.setUltimaAlteracao(dataAtual);
 
-									repositorioUtil
-											.inserir(creditoARealizarCategoria);
+									repositorioUtil.inserir(creditoARealizarCategoria);
 								}
 								// *************Fim****************
 
@@ -3206,8 +2914,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						 * quantidade de registros seta a flag indicando que a
 						 * paginação terminou.
 						 */
-						if (colecaoImovel == null
-								|| colecaoImovel.size() < quantidadeRegistros) {
+						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 
 							flagTerminou = true;
 						}
@@ -3220,27 +2927,110 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			} else {
 				// A LISTA COM AS ROTAS ESTÁ NULA OU VAZIA
-				throw new ControladorException(
-						"atencao.pesquisa.grupo_rota_vazio");
+				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 			// -----------------------------------------------------
 			//
 			// Registrar o fim da execução da Unidade de Processamento
 			//
 			// -----------------------------------------------------
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception e) {
 			// Este catch serve para interceptar qualquer exceção que o processo
 			// batch venha a lançar e garantir que a unidade de processamento do
 			// batch será atualizada com o erro ocorrido
 			e.printStackTrace();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void apagarDadosBonusSocialInicioBatch(Integer anoMes, CreditoTipo creditoTipo, Imovel imovel) throws ControladorException {
+		
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO, anoMes));
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, imovel.getId()));
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID_CREDITO_TIPO, creditoTipo.getId()));
+
+		Collection colecaoCreditoARealizar = (Collection) this.getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+		if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
+
+			CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
+
+			if (credito.getNumeroPrestacaoRealizada().compareTo(new Short("0")) == 0) {
+
+				FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
+
+				filtroCreditoARealizarCategoria.adicionarParametro(new ParametroSimples(
+						FiltroCreditoARealizarCategoria.ID_CREDITO_A_REALIZAR, credito.getId()));
+
+				Iterator iteratorCreditoARealizarCategoria = this.getControladorUtil()
+						.pesquisar(filtroCreditoARealizarCategoria, CreditoARealizarCategoria.class.getName()).iterator();
+
+				while (iteratorCreditoARealizarCategoria.hasNext()) {
+					this.getControladorUtil().remover(iteratorCreditoARealizarCategoria.next());
+				}
+
+				FiltroCreditoARealizarGeral filtro = new FiltroCreditoARealizarGeral();
+
+				filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizarGeral.ID, credito.getId()));
+
+				CreditoARealizarGeral creditoARealizarGeral = (CreditoARealizarGeral) this.getControladorUtil()
+						.pesquisar(filtro, CreditoARealizarGeral.class.getName()).iterator().next();
+
+				this.getControladorUtil().remover(credito);
+				this.getControladorUtil().remover(creditoARealizarGeral);
+			}
+		}
+	}
+
+	private CreditoTipo obterCreditoTipotarifaSocial() throws ControladorException {
+		FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
+		filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, CreditoTipo.DESCONTO_TARIFA_SOCIAL));
+		filtroCreditoTipo.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
+
+		Collection colecaoTipoCredito = this.getControladorUtil().pesquisar(filtroCreditoTipo, CreditoTipo.class.getName());
+
+		CreditoTipo creditoTipo = (CreditoTipo) Util.retonarObjetoDeColecao(colecaoTipoCredito);
+		return creditoTipo;
+	}
+
+	private BigDecimal calcularValorBonusSocial(FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro) throws ControladorException {
+		BigDecimal valorBonusSocial;
+		Collection collectionCosumoTarifaVigente = this
+				.obterConsumoTarifaVigenciaCalcularAguaEsgotoPorMesAno(
+						ConsumoTarifa.CONSUMO_NORMAL, null, null,
+						faturamentoGrupo.getAnoMesReferencia());
+
+		ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
+				.retonarObjetoDeColecao(collectionCosumoTarifaVigente);
+
+		FiltroConsumoTarifaCategoria filtroConsumoTarifaCategoria = new FiltroConsumoTarifaCategoria();
+
+		filtroConsumoTarifaCategoria
+				.adicionarParametro(new ParametroSimples(
+						FiltroConsumoTarifaCategoria.CATEGORIA_ID,
+						Categoria.RESIDENCIAL));
+		filtroConsumoTarifaCategoria
+				.adicionarParametro(new ParametroSimples(
+						FiltroConsumoTarifaCategoria.CONSUMO_VIGENCIA_ID,
+						consumoTarifaVigencia.getId()));
+
+		ConsumoTarifaCategoria consumoTarifaCategoria = (ConsumoTarifaCategoria) this
+				.getControladorUtil()
+				.pesquisar(filtroConsumoTarifaCategoria,
+						ConsumoTarifaCategoria.class.getName()).iterator()
+				.next();
+
+		valorBonusSocial = (consumoTarifaCategoria.getValorTarifaMinima()
+				.multiply(sistemaParametro.getPercentualBonusSocial()))
+				.divide(new BigDecimal("100.0"));
+		return valorBonusSocial;
 	}
 
 	/**
