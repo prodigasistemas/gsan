@@ -63,6 +63,7 @@ public class ControladorParcelamento extends ControladorComum {
 
 	public void cancelarParcelamentos(Usuario usuario, int idFuncionalidadeIniciada) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
+		sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
 			List<CancelarParcelamentoHelper> parcelamentos = repositorio.pesquisarParcelamentosParaCancelar();
@@ -79,10 +80,14 @@ public class ControladorParcelamento extends ControladorComum {
 			throw new EJBException(ex);
 		}
 	}
-
-	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
-		sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+	
+	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuario, SistemaParametro sistemaParametro) throws ControladorException {
+		this.sistemaParametro = sistemaParametro;
 		
+		cancelarParcelamento(helper, usuario);
+	}
+
+	private void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
 		cancelarDebitoACobrar(helper.getParcelamento().getId());
 		cancelarCreditoARealizar(helper.getParcelamento().getId());
 		
@@ -93,7 +98,7 @@ public class ControladorParcelamento extends ControladorComum {
 		
 		gerarContaIncluida(helper, usuario);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	private void cancelarDebitoACobrar(Integer idParcelamento) {
 		try {

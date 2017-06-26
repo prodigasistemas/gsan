@@ -61,16 +61,16 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		String acao = request.getParameter("acao");
 		boolean exibirBotaoCancelamentoParcelamento = false;
 
+		SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
+		
 		if (acao != null && acao.equals("cancelar")) {
-			cancelarParcelamento(sessao, Integer.parseInt(codigoParcelamento));
+			cancelarParcelamento(sessao, Integer.parseInt(codigoParcelamento), sistemaParametro);
 		}
 
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
 			Collection<ClienteImovel> clienteImovel = pesquisarImovel(codigoImovel);
 			verificarImovel(request, form, clienteImovel);
 			setarDadosClienteImovel(request, form, codigoImovel, clienteImovel);
-			
-			SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
 
 			Collection<Parcelamento> colecaoParcelamento = pesquisarParcelamento(codigoParcelamento);
 			
@@ -307,9 +307,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.NORMAL.intValue();
 	}
 
-	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento) {
+	private void cancelarParcelamento(HttpSession sessao, Integer codigoParcelamento, SistemaParametro sistemaParametro) {
 		CancelarParcelamentoHelper helper = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
-		getFachada().cancelarParcelamento(helper, usuarioLogado);
+		getFachada().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
 	}
 }

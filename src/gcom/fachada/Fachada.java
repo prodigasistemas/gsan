@@ -40159,9 +40159,9 @@ public class Fachada {
 		}
 	}
 	
-	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuarioLogado) {
+	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuarioLogado, SistemaParametro sistemaParametro) {
 		try {
-			getControladorParcelamento().cancelarParcelamento(helper, usuarioLogado);
+			getControladorParcelamento().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
 		} catch (Exception ex) {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
