@@ -100,7 +100,7 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaAcrescimos() {
-		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 	
 	public BigDecimal getTotalAcrescimosCobrados() {
@@ -108,6 +108,6 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaDescontoAcrescimos() {
-		return valorDescontoAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorDescontoAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 }
