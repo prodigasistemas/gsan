@@ -69,7 +69,6 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					   .append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 					   .append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 					   .append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
-					   .append("      AND parc_amreferenciafaturamento = 201702 ")
 					   .append("GROUP BY p.parc_id, p.imov_id ")
 					   .append("HAVING count(distinct c.cnta_id) >= :qtdContas");
 			
@@ -180,7 +179,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					  .addScalar("valorAcrescimos", Hibernate.BIG_DECIMAL)
 					  .addScalar("valorDescontoAcrescimos", Hibernate.BIG_DECIMAL)
 					  .addScalar("valorDescontoFaixa", Hibernate.BIG_DECIMAL)
-					  .addScalar("numeroPrestacoes", Hibernate.INTEGER)
-					  .addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER);
+					  .addScalar("numeroPrestacoes", Hibernate.SHORT)
+					  .addScalar("numeroPrestacoesCobradas", Hibernate.SHORT);
 	}
 }
