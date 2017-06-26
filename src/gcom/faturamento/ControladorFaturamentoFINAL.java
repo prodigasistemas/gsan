@@ -27800,48 +27800,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * Metódo responsável por emitir os txts das contas.
-	 * 
 	 * [UC0348] Emitir Contas
-	 * 
 	 * [SB0005] Obter Consumo Faturado e Consumo médio Diário
-	 * 
-	 * @author Sávio Luiz
-	 * @date 17/05/2006
-	 * 
-	 * @param colecaoConta
-	 * @throws ControladorException
 	 */
-	public String[] obterConsumoFaturadoConsumoMedioDiario(
-			EmitirContaHelper emitirContaHelper, Integer tipoMedicao,
-			String diasConsumo) throws ControladorException {
+	public String[] obterConsumoFaturadoConsumoMedioDiario(EmitirContaHelper helper, Integer tipoMedicao, String diasConsumo) throws ControladorException {
 		String[] parmsConsumo = new String[2];
 		String consumoFaturado = "";
 		String consumoMedioDiario = "";
-		// caso o tipo de medição seja agua
-		if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA)) {
-			consumoFaturado = "" + emitirContaHelper.getConsumoAgua();
-		} else {
-			// senão caso o tipo de medição seja poco
-			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)) {
-				consumoFaturado = "" + emitirContaHelper.getConsumoEsgoto();
-			}
-		}
-		// se o consumo faturado e o dias consumo não estiver vazio
-		if (consumoFaturado != null && !consumoFaturado.equals("")
-				&& diasConsumo != null && !diasConsumo.equals("")
-				&& !diasConsumo.equals("0")) {
-			BigDecimal consumoMedioBigDecimal = Util
-					.formatarMoedaRealparaBigDecimal(consumoFaturado);
-			BigDecimal diasConsumoBigDecimal = Util
-					.formatarMoedaRealparaBigDecimal(diasConsumo);
-			if (consumoMedioBigDecimal != null && diasConsumoBigDecimal != null) {
-				BigDecimal consumoMedioDiarioBigDecimal = consumoMedioBigDecimal
-						.divide(diasConsumoBigDecimal, 2, RoundingMode.UP);
-				consumoMedioDiario = consumoMedioDiarioBigDecimal.toString()
-						.replace(".", ",");
-			}
 
+		if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA) && helper.getConsumoAgua() != null) {
+			consumoFaturado = helper.getConsumoAgua().toString();
+		} else if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)) {
+			consumoFaturado = helper.getConsumoEsgoto().toString();
 		}
+
+		if (consumoFaturado != null && !consumoFaturado.equals("") && diasConsumo != null && !diasConsumo.equals("") && !diasConsumo.equals("0")) {
+			BigDecimal consumoMedioBigDecimal = Util.formatarMoedaRealparaBigDecimal(consumoFaturado);
+			BigDecimal diasConsumoBigDecimal = Util.formatarMoedaRealparaBigDecimal(diasConsumo);
+			if (consumoMedioBigDecimal != null && diasConsumoBigDecimal != null) {
+				BigDecimal consumoMedioDiarioBigDecimal = consumoMedioBigDecimal.divide(diasConsumoBigDecimal, 2, RoundingMode.UP);
+				consumoMedioDiario = consumoMedioDiarioBigDecimal.toString().replace(".", ",");
+			}
+		}
+		
 		parmsConsumo[0] = consumoFaturado;
 		parmsConsumo[1] = consumoMedioDiario;
 

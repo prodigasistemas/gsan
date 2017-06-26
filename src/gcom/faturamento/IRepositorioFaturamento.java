@@ -3041,4 +3041,6 @@ public interface IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
 			throws ErroRepositorioException;
+	
+	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idImovel, Date dataVencimento) throws ErroRepositorioException;
 }

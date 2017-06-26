@@ -59785,4 +59785,83 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno;
 	}
+
+	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idConta, Date dataVencimento) throws ErroRepositorioException {
+		
+		Integer qtdContasNaoPagas = 0;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			Integer idCliente = obterIdClienteConta(idConta, ClienteRelacaoTipo.USUARIO);
+			
+			if (idCliente != null) {
+				consulta.append(" SELECT count(*) FROM ClienteConta clienteConta ")
+				.append(" INNER JOIN clienteConta.conta conta ")
+				.append(" WHERE conta.dataVencimentoConta < :dataVencimento ")
+				.append(" AND conta.debitoCreditoSituacaoAtual in (:normal, :incluida, :retificada) ")
+				.append(" AND clienteConta.clienteRelacaoTipo.id in (:responsavel, :usuario) ")
+				.append(" AND clienteConta.cliente.id = :idCliente ")
+				.append(" AND NOT EXISTS (from Pagamento pg where pg.contaGeral.id = conta.id ) ");
+				
+				Integer qtd = (Integer) session.createQuery(consulta.toString())
+						.setDate("dataVencimento", dataVencimento)
+						.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+						.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+						.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+						.setInteger("responsavel", ClienteRelacaoTipo.RESPONSAVEL)
+						.setInteger("usuario", ClienteRelacaoTipo.USUARIO)
+						.setInteger("idCliente", idCliente).uniqueResult();
+				
+				if (qtd != null) {
+					qtdContasNaoPagas = qtd;
+				}
+			}
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter a quantidade de contas anteriores vencidas e nao pagas");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return qtdContasNaoPagas;
+	}
+	
+	private Integer obterIdClienteConta(Integer idConta, Short clienteRelacaoTipo) throws ErroRepositorioException {
+
+		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append(" SELECT cliente.id FROM ClienteConta clienteConta ")
+					.append(" INNER JOIN FETCH clienteConta.cliente cliente ")
+					.append(" WHERE clienteConta.conta.id = :idConta ")
+					.append(" AND clienteConta.clienteRelacaoTipo.id = :clienteRelacaoTipo ");
+			
+			retorno = (Integer) session.createQuery(consulta.toString())
+							.setInteger("idConta", idConta)
+							.setShort("clienteRelacaoTipo", clienteRelacaoTipo).uniqueResult();
+			
+			if (retorno == null) {
+				consulta = new StringBuilder();
+				consulta.append(" SELECT cliente.id FROM ClienteContaHistorico clienteConta ")
+						.append(" INNER JOIN FETCH clienteConta.cliente cliente ")
+						.append(" WHERE clienteConta.contaHistorico.id = :idConta ")
+						.append(" AND clienteConta.clienteRelacaoTipo.id = :clienteRelacaoTipo ");
+		
+				 retorno = (Integer) session.createQuery(consulta.toString())
+								.setInteger("idConta", idConta)
+								.setShort("clienteRelacaoTipo", clienteRelacaoTipo).uniqueResult();
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro ao obter cliente conta de uma conta");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }
