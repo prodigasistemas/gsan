@@ -36,7 +36,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		CancelarParcelamentoHelper retorno = null;
 		
 		try {
-			String complemento = "WHERE  p.parc_id = :idParcelamento GROUP BY p.parc_id, c.imov_id "; 
+			String complemento = "WHERE  p.parc_id = :idParcelamento GROUP BY p.parc_id, p.imov_id "; 
 			StringBuilder consulta = new StringBuilder();
 			consulta.append(montarRaizConsulta(complemento));
 			
@@ -70,7 +70,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					   .append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 					   .append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ")
 					   .append("      AND parc_amreferenciafaturamento = 201702 ")
-					   .append("GROUP BY p.parc_id, c.imov_id ")
+					   .append("GROUP BY p.parc_id, p.imov_id ")
 					   .append("HAVING count(distinct c.cnta_id) >= :qtdContas");
 			
 			String consulta = montarRaizConsulta(complemento.toString());
@@ -100,7 +100,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	private String montarRaizConsulta(String complemento) {
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT p.parc_id as idParcelamento, ")
-			  .append("       c.imov_id as idImovel, ")
+			  .append("       p.imov_id as idImovel, ")
 			  .append("       p.parc_vlconta as valorContas, ")
 			  .append("       p.parc_vlentrada as valorEntrada, ")
 			  .append("       p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria as valorAcrescimos, ")
@@ -108,17 +108,19 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			  .append("       p.parc_vldescontofaixa as valorDescontoFaixa, ")
 			  .append("       p.parc_nnprestacoes as numeroPrestacoes, ")
 			  .append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
-			  .append("FROM faturamento.conta c ");
+			  .append("FROM cobranca.parcelamento p ");
 		
 		StringBuilder join = new StringBuilder();
-		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.cnta_id = c.cnta_id ")
-			.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = dc.dbac_id ")
-			.append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+		join.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.parc_id = p.parc_id  ")
+			.append("LEFT JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
+			.append("LEFT JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ")
+			.append("INNER JOIN faturamento.guia_pagamento guia on guia.parc_id = p.parc_id ");
 		
 		StringBuilder joinHistorico = new StringBuilder();
-		joinHistorico.append("INNER JOIN faturamento.debito_cobrado_historico dc on dc.cnta_id = c.cnta_id ")
-					 .append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = dc.dbac_id ")
-					 .append("INNER JOIN cobranca.parcelamento p on p.parc_id = dac.parc_id ");
+		joinHistorico.append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.parc_id = p.parc_id  ")
+					 .append("LEFT JOIN faturamento.debito_cobrado_historico dc on dc.dbac_id = dac.dbac_id  ")
+					 .append("LEFT JOIN faturamento.conta_historico c on c.cnta_id = dc.cnta_id ")
+					 .append("INNER JOIN faturamento.guia_pagamento_historico guia on guia.parc_id = p.parc_id ");
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)

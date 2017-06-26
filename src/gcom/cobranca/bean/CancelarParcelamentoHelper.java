@@ -4,6 +4,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class CancelarParcelamentoHelper {
 
@@ -37,7 +38,7 @@ public class CancelarParcelamentoHelper {
 		this.valorEntrada = (BigDecimal) dados[3];
 		this.valorAcrescimos = (BigDecimal) dados[4];
 		this.valorDescontoAcrescimos = (BigDecimal) dados[5];
-		this.valorDescontoFaixa = (BigDecimal) dados[6];
+		this.valorDescontoFaixa = dados[6] == null ? new BigDecimal(0) : (BigDecimal) dados[6];
 		this.numeroPrestacoes = BigDecimal.valueOf((Integer) dados[7]).setScale(2);
 		this.numeroPrestacoesCobradas = BigDecimal.valueOf((Integer) dados[8]).setScale(2);
 	}
@@ -101,7 +102,7 @@ public class CancelarParcelamentoHelper {
 	}
 
 	private BigDecimal getParcelaSemJuros() {
-		return getValorContasSemEntrada().divide(numeroPrestacoes).setScale(2, BigDecimal.ROUND_DOWN);
+		return getValorContasSemEntrada().divide(numeroPrestacoes,2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
 	private BigDecimal getTotalContasCobradas() {
