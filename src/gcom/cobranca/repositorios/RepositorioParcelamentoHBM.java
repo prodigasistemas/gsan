@@ -178,7 +178,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					  .addScalar("valorAcrescimos", Hibernate.BIG_DECIMAL)
 					  .addScalar("valorDescontoAcrescimos", Hibernate.BIG_DECIMAL)
 					  .addScalar("valorDescontoFaixa", Hibernate.BIG_DECIMAL)
-					  .addScalar("numeroPrestacoes", Hibernate.INTEGER)
-					  .addScalar("numeroPrestacoesCobradas", Hibernate.INTEGER);
+					  .addScalar("numeroPrestacoes", Hibernate.SHORT)
+					  .addScalar("numeroPrestacoesCobradas", Hibernate.SHORT);
 	}
 }
