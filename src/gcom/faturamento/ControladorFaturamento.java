@@ -2696,7 +2696,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									continue;
 								}
 
-								System.out.println("Ano es vencimento: " + anoMes);
 								Collection collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMes);
 
 								// Caso não exista conta com anoMês selecionado, segue para o próximo imóvel.
@@ -2797,12 +2796,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									 * Verifica se o consumo dos imóveis, que não fazem parte do impressão simultânea, é maior que 10.
 									 * Se for maior que 10, não gera o crédito
 									 */
-									//if (!rota.getLeituraTipo().getId().equals(LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA)) {
-										Integer consumoAgua = repositorioFaturamento.pesquisarConsumoAguaImovel(imovel.getId(), anoMesConsumo);
+									Integer consumoAgua = repositorioFaturamento.pesquisarConsumoAguaImovel(imovel.getId(), anoMesConsumo);
 
-										if (consumoAgua == null || consumoAgua > 10)
-											continue;
-									//}
+									if (consumoAgua == null || consumoAgua > 10)
+										continue;
+
+									Integer qtdContasEmDebito = repositorioFaturamento.obterQuantidadeContasAnterioresVencidasENaoPagas(idConta, dataVencimento);
+									if (qtdContasEmDebito > 0) 
+										continue;
 								}
 
 								// ******************************
