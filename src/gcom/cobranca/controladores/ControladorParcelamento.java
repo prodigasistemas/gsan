@@ -193,7 +193,7 @@ public class ControladorParcelamento extends ControladorComum {
 				helper.getImovel(),
 				valor,
 				new Short("1"),
-				new Short("0"),
+				new Short("1"),
 				new Date(),
 				sistemaParametro.getAnoMesFaturamento(),
 				sistemaParametro.getAnoMesArrecadacao(),
@@ -300,9 +300,20 @@ public class ControladorParcelamento extends ControladorComum {
 			if (acrescimos.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) > 0)
 				inserirDebitoACobrar(acrescimos.getValorAtualizacaoMonetaria(), helper, conta, DebitoTipo.ATUALIZACAO_MONETARIA, usuario);
 			
+			atualizarValorDebitosConta(conta, acrescimos.getValorTotalAcrescimosImpontualidade());
 		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao calcular acréscimo para cancelamento de parcelamento.", e);
+		}
+	}
+
+	private void atualizarValorDebitosConta(Conta conta, BigDecimal valorTotalAcrescimos) throws ControladorException {
+		try {
+			conta.setValorDebitos(conta.getValorDebitos().add(valorTotalAcrescimos));
+			getControladorUtil().atualizar(conta);
+		} catch (ControladorException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("Erro ao atualizar valor de débitos da conta: " + conta.getId(), e);
 		}
 	}
 
