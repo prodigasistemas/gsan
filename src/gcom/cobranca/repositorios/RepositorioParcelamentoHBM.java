@@ -3,6 +3,8 @@ package gcom.cobranca.repositorios;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.ParcelamentoSituacao;
+import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
@@ -67,6 +69,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			StringBuilder where = new StringBuilder();
 			where.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
 				 .append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
+				 .append("      AND p.pcst_id = :parcelamentoSituacao ")
 				 .append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 				 .append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ");
 			
@@ -79,6 +82,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 										.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 										.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 										.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+										.setInteger("parcelamentoSituacao", ParcelamentoSituacao.NORMAL)
 										.setInteger("qtdContas", ConstantesSistema.QTD_CONTAS_CANCELAMENTO_PARCELAMENTO)
 										.list();
 
@@ -190,6 +194,32 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 				   .append("                   WHERE parc_id IN (p.parc_id) and dcst_idatual = " + DebitoCreditoSituacao.NORMAL + "))) ");
 		
 		return complemento.toString();
+	}
+	
+	public DebitoACobrar pesquisarDebitoACobrar(Integer idParcelamento, Integer idDebitoTipo) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		DebitoACobrar debitoACobrar = null;
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT dac FROM DebitoACobrar dac ")
+					.append("INNER JOIN FETCH dac.imovel i ")
+					.append("INNER JOIN FETCH i.quadra ")
+					.append("INNER JOIN FETCH i.setorComercial ")
+					.append("WHERE dac.parcelamento.id = :idParcelamento AND dac.debitoTipo.id = :idDebitoTipo");
+			
+			debitoACobrar = (DebitoACobrar) session.createQuery(consulta.toString())
+					.setInteger("idParcelamento", idParcelamento)
+					.setInteger("idDebitoTipo", idDebitoTipo)
+					.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return debitoACobrar;
 	}
 }
 

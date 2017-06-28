@@ -284,9 +284,7 @@ public class DebitoACobrar extends ObjetoTransacao {
     		Integer anoMesCobrancaDebito,
     		Integer anoMesReferenciaContabil,
     		BigDecimal percentualTaxaJurosFinanciamento,
-    		Integer idDebitoTipo,
-    		Integer idFinanciamentoTipo,
-    		Integer idLancamentoItemContabil,
+    		DebitoTipo debitoTipo,
     		Integer idDebitoCreditoSituacaoAtual,
     		ParcelamentoGrupo parcelamentoGrupo,
     		Integer idCobrancaForma,
@@ -310,9 +308,9 @@ public class DebitoACobrar extends ObjetoTransacao {
     	this.numeroLote = imovel.getLote();
     	this.numeroSubLote = imovel.getSubLote();
     	this.percentualTaxaJurosFinanciamento = percentualTaxaJurosFinanciamento;
-    	this.debitoTipo = new DebitoTipo(idDebitoTipo);
-    	this.financiamentoTipo = new FinanciamentoTipo(idFinanciamentoTipo);
-    	this.lancamentoItemContabil = new LancamentoItemContabil(idLancamentoItemContabil);
+    	this.debitoTipo = debitoTipo;
+    	this.financiamentoTipo = debitoTipo.getFinanciamentoTipo();
+    	this.lancamentoItemContabil = debitoTipo.getLancamentoItemContabil();
     	this.debitoCreditoSituacaoAtual = new DebitoCreditoSituacao(idDebitoCreditoSituacaoAtual);
     	this.parcelamentoGrupo = parcelamentoGrupo;
     	this.cobrancaForma = new CobrancaForma(idCobrancaForma);

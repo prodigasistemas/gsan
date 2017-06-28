@@ -1,6 +1,5 @@
 package gcom.faturamento.debito;
 
-import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cobranca.ParcelamentoGrupo;
@@ -110,27 +109,26 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 		this.debitoTipo = debitoTipo;
 	}
 
-	public DebitoCobrado(Date debitoCobrado, Imovel imovel, Integer idDebitoTipo, Conta conta, Integer idLancamentoItemContabil, DebitoACobrar debitoACobrar, Short numeroPrestacao,
-			Short numeroParcelaBonus, Integer idFinanciamentoTipo) {
+	public DebitoCobrado(Date debitoCobrado, DebitoACobrar debitoACobrar, Conta conta, BigDecimal valor) {
 		super();
-
+		
 		this.debitoCobrado = new Date();
-		this.localidade = imovel.getLocalidade();
-		this.codigoSetorComercial = imovel.getSetorComercial().getCodigo();
-		this.quadra = imovel.getQuadra();
-		this.numeroQuadra = imovel.getQuadra().getNumeroQuadra();
-		this.numeroLote = imovel.getLote();
-		this.numeroSubLote = imovel.getSubLote();
-		this.debitoTipo = new DebitoTipo(idDebitoTipo);
+		this.localidade = debitoACobrar.getImovel().getLocalidade();
+		this.codigoSetorComercial = debitoACobrar.getImovel().getSetorComercial().getCodigo();
+		this.quadra = debitoACobrar.getImovel().getQuadra();
+		this.numeroQuadra = debitoACobrar.getImovel().getQuadra().getNumeroQuadra();
+		this.numeroLote = debitoACobrar.getImovel().getLote();
+		this.numeroSubLote = debitoACobrar.getImovel().getSubLote();
+		this.debitoTipo = debitoACobrar.getDebitoTipo();
 		this.conta = conta;
-		this.lancamentoItemContabil = new LancamentoItemContabil(idLancamentoItemContabil);
+		this.lancamentoItemContabil = debitoACobrar.getLancamentoItemContabil();
 		this.anoMesReferenciaDebito = debitoACobrar.getAnoMesReferenciaDebito();
 		this.anoMesCobrancaDebito = debitoACobrar.getAnoMesCobrancaDebito();
-		this.valorPrestacao = debitoACobrar.getValorPrestacao();
-		this.numeroPrestacao = numeroPrestacao;
+		this.valorPrestacao = valor;
+		this.numeroPrestacao = debitoACobrar.getNumeroPrestacaoDebito();
 		this.numeroPrestacaoDebito = debitoACobrar.getNumeroPrestacaoDebito();
-		this.numeroParcelaBonus = numeroParcelaBonus;
-		this.financiamentoTipo = new FinanciamentoTipo(idFinanciamentoTipo);
+		this.numeroParcelaBonus = debitoACobrar.getNumeroParcelaBonus();
+		this.financiamentoTipo = debitoACobrar.getFinanciamentoTipo();
 		this.debitoACobrarGeral = debitoACobrar.getDebitoACobrarGeral();
 		this.ultimaAlteracao = new Date();
 	}
