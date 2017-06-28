@@ -67,7 +67,8 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 
 		try {
 			StringBuilder where = new StringBuilder();
-			where.append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
+			where.append("INNER JOIN cadastro.imovel i on i.imov_id = p.imov_id ")
+				 .append("WHERE c.cnta_dtvencimentoconta < :dataAtual ")
 				 .append("      AND c.dcst_idatual IN (:normal, :retificada, :incluida) ")
 				 .append("      AND p.pcst_id = :parcelamentoSituacao ")
 				 .append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
