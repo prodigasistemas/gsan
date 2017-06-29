@@ -11,27 +11,29 @@ import java.util.Date;
 public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 
 	private static final long serialVersionUID = 7599238519918851586L;
-	
-	@ReportElementType(description="Data do Credito Previsto", group=true, type=ReportElementType.TYPE_DATE)
+
+	@ReportElementType(description = "Data do Credito Previsto", group = true, type = ReportElementType.TYPE_DATE)
 	private String dataPagamentoPrevisto;
-	
-	@ReportElementType(description="Data do Aviso", type=ReportElementType.TYPE_DATE)
+
+	@ReportElementType(description = "Data do Aviso", type = ReportElementType.TYPE_DATE)
 	private String dataRealizada;
-	
-	@ReportElementType(description="Arrecadador")
+
+	@ReportElementType(description = "Arrecadador")
 	private String descricaoArrecadador;
-	
-	@ReportElementType(description="Valor do Pagamento (R$)", align="right", totalizer=true, type=ReportElementType.TYPE_MONEY)
-	private String valorPagamento;
+
+	@ReportElementType(description = "Valor do Pagamento (R$)", align = "right", totalizer = true, type = ReportElementType.TYPE_MONEY)
+	private String valorPagamentoSemDevolucao;
 
 	public ResumoCreditosAvisosBancariosDTO() {}
-	
-	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento) {
+
+	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento, BigDecimal valorDevolucao) {
 		super();
 		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO);
 		this.dataRealizada = Util.formatarData(dataRealizada, FormatoData.AMERICANO_COM_TRACO);
 		this.descricaoArrecadador = descricaoArrecadador;
-		this.valorPagamento = valorPagamento.toString();
+		
+		valorDevolucao = valorDevolucao != null ? valorDevolucao : BigDecimal.ZERO;
+		this.valorPagamentoSemDevolucao = (valorPagamento.subtract(valorDevolucao)).toString();
 	}
 
 	public String getDataPagamentoPrevisto() {
@@ -58,11 +60,11 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 		this.descricaoArrecadador = descricaoArrecadador;
 	}
 
-	public String getValorPagamento() {
-		return valorPagamento;
+	public String getValorPagamentoSemDevolucao() {
+		return valorPagamentoSemDevolucao;
 	}
 
-	public void setValorPagamento(String valorPagamento) {
-		this.valorPagamento = valorPagamento;
+	public void setValorPagamentoSemDevolucao(String valorPagamentoSemDevolucao) {
+		this.valorPagamentoSemDevolucao = valorPagamentoSemDevolucao;
 	}
 }
