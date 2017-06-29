@@ -22,12 +22,17 @@
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript">
-<!--
+
 function voltar(){
 	window.location.href="exibirConsultarListaParcelamentoDebitoAction.do?menu=sim";
 }
  
-//-->
+
+function cancelarParcelamento(parcelamentoId, imovelId) {
+	if (confirm('Confirmar cancelamento do parcelamento do imóvel ' + imovelId + '?')) {
+		window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento='+parcelamentoId+'&codigoImovel='+imovelId;
+	}
+}
 </script>
 </head>
 
@@ -695,9 +700,9 @@ function voltar(){
 									
 								</logic:iterate>
 								</logic:present>
-								<%-- <input name="Button" type="button" class="bottonRightCol" value="Voltar" onClick="javascript:voltar();">--%>
+								<input name="Button" type="button" class="bottonRightCol" value="Voltar" onClick="javascript:voltar();">
 								
-								 <input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:history.back();"> 
+								 <%-- <input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:history.back();"> --> 
 								<%-- <input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);"> 
 								<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" 
 								onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"/>--%>
@@ -710,7 +715,7 @@ function voltar(){
 									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
 									
 									<logic:equal name="possuiPermissaoCancelarParcelamento" value="true">				      				
-										<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="javascript:window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento=${parcelamento.id}&codigoImovel=${parcelamento.imovel.id}'">
+										<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="cancelarParcelamento(${parcelamento.id},${parcelamento.imovel.id})">
 									</logic:equal>
 									
 									 
