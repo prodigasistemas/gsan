@@ -31679,7 +31679,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	      	   .append("         data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento, tarifa.actf_vltarifa ");
 		
 		StringBuilder sql = new StringBuilder();
-	   	sql.append("SELECT data_pagamento_previsto, data_aviso, descricao_arrecadador, sum((valor_pagamento - (qtd_documentos * valor_tarifa))) as valor_pagamento ")
+	   	sql.append("SELECT data_pagamento_previsto, data_aviso, descricao_arrecadador, sum((valor_pagamento - (qtd_documentos * valor_tarifa))) as valor_pagamento, sum(valor_devolucao) as valor_devolucao ")
 		   .append("FROM (")
 		   
 		   .append(select)
@@ -31687,7 +31687,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
            .append("adiciona_dias_uteis(p.pgmt_dtpagamento, tarifa.actf_nndiafloat,1) as data_pagamento_previsto, ")
            .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
            .append("count(distinct p.amit_id) as qtd_documentos, ")
-           .append("tarifa.actf_vltarifa as valor_tarifa ")
+           .append("tarifa.actf_vltarifa as valor_tarifa, ")
+           .append("(SELECT sum(devl_vldevolucao) FROM arrecadacao.devolucao d WHERE d.avbc_id = a.avbc_id) as valor_devolucao ")
            .append(from)
            .append("INNER JOIN arrecadacao.pagamento p ON a.avbc_id = p.avbc_id ")
            .append("WHERE p.pgmt_dtpagamento >= current_date - 10 ")
@@ -31704,6 +31705,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("data_aviso", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
 					.addScalar("valor_pagamento", Hibernate.BIG_DECIMAL)
+					.addScalar("valor_devolucao", Hibernate.BIG_DECIMAL)
 					.setDate("data", data)
 					.list();
 			
@@ -31714,7 +31716,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						(Date) arrayDadosResumo[0],
 						(Date) arrayDadosResumo[1],
 						(String) arrayDadosResumo[2],
-						(BigDecimal) arrayDadosResumo[3]);
+						(BigDecimal) arrayDadosResumo[3],
+						(BigDecimal) arrayDadosResumo[4]);
 				
 				retorno.add(dto);
 			}
