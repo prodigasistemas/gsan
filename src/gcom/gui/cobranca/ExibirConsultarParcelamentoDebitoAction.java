@@ -17,7 +17,6 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
-import gcom.cobranca.parcelamento.ParcelamentoTipo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.debito.DebitoACobrar;
