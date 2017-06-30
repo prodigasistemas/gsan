@@ -59864,4 +59864,95 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno;
 	}
+	
+	public BigDecimal obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento, int idLancamentoItem)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append(" select sum(dccg.dccg_vlcategoria) as valor ")
+	          .append(" lict.lict_nnsequenciaimpressao as col_1, ")
+	          .append(" lict.lict_id as col_2 ")
+	          .append(" from  ")
+	          .append("  faturamento.debito_cobrado_categoria dccg ")
+	          .append(" inner join  ")
+	          .append("  faturamento.debito_cobrado dbcb on dccg.dbcb_id=dbcb.dbcb_id ")
+	          .append(" inner join  ")
+	          .append("  faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id ")
+	          .append(" inner join  ")
+	          .append("  financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id ")
+	          .append("  where  ")
+	          .append(" cnta.cnta_amreferenciaconta= :anoMesReferencia ")
+	          .append(" and cnta.loca_id= :idLocalidade ")
+	          .append(" and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
+	          .append(" and dccg.catg_id= :idCategoria ")
+	          .append(" and dbcb.fntp_id= :idTipoFinanciamento ")
+	          .append(" and lict.lict_id = :idLancamentoItem ");
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
+							.addScalar("valor", Hibernate.BIG_DECIMAL)
+							.setInteger("anoMesReferencia", anoMesReferencia)
+							.setInteger("idLocalidade", idLocalidade)
+							.setInteger("idCategoria", idCategoria)
+							.setInteger("idSituacaoAtual", idSituacaoAtual)
+							.setInteger("idSituacaoAnterior", idSituacaoAnterior)
+							.setInteger("idTipoFinanciamento", idTipoFinanciamento)
+							.setInteger("idLancamentoItem", idLancamentoItem).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idFinanciamentoTipo)
+			throws ErroRepositorioException {
+		BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append(" select sum(lp) from ( ")
+					.append("      select trunc((sum(dccg.dccg_vlcategoria) - (12 * trunc(( dbac_vldebito / dbac_nnprestacaodebito),2))),2) as lp ")
+					.append("      from  faturamento.debito_cobrado_categoria dccg  ")
+					.append("      inner join  faturamento.debito_cobrado  dbcb on dccg.dbcb_id=dbcb.dbcb_id  ")
+					.append("      inner join  faturamento.debito_a_cobrar dacb on dacb.dbac_id = dbcb.dbac_id ")
+					.append("      inner join  cobranca.parcelamento p on p.parc_id = dacb.parc_id ")
+					.append("      inner join  financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id  ")
+					.append("      inner join  faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id  ")
+					.append(" 		where cnta.cnta_amreferenciaconta= :anoMesReferencia ")
+					.append(" 		and cnta.loca_id= :idLocalidade ")
+					.append(" 		and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
+					.append(" 		and dccg.catg_id= :idCategoria ")
+					.append(" 		and dbcb.fntp_id= :idTipoFinanciamento ")
+					.append("      and dbcb.dbcb_nnprestacao > 12 ")
+					.append("      group by dbac_vldebito, dbac_nnprestacaodebito) as x ");
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
+							.addScalar("valor", Hibernate.BIG_DECIMAL)
+							.setInteger("anoMesReferencia", anoMesReferencia)
+							.setInteger("idLocalidade", idLocalidade)
+							.setInteger("idCategoria", idCategoria)
+							.setInteger("idSituacaoAtual", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("idSituacaoAnterior", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("idTipoFinanciamento", idFinanciamentoTipo).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+			
 }

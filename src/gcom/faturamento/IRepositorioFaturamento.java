@@ -3043,4 +3043,13 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 	
 	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idImovel, Date dataVencimento) throws ErroRepositorioException;
+	
+	public BigDecimal obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento, int idLancamentoItem)
+			throws ErroRepositorioException;
+	
+	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idFinanciamentoTipo)
+			throws ErroRepositorioException;
 }

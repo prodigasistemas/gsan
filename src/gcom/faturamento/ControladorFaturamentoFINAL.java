@@ -15627,8 +15627,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
+					BigDecimal valorLongoPrazoParcelamentosIncluidos = repositorioFaturamento.
+							obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(anoMesFaturamento, idLocalidade, idCategoria, FinanciamentoTipo.JUROS_PARCELAMENTO);
+				
 					if (valorItemFaturamento != null) {
 
+						if (valorLongoPrazoParcelamentosIncluidos != null && valorLongoPrazoParcelamentosIncluidos.compareTo(BigDecimal.ZERO) != 0) {
+							valorItemFaturamento = valorItemFaturamento.add(valorLongoPrazoParcelamentosIncluidos);
+						}
+						
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
 								valorItemFaturamento,
 								anoMesFaturamento,
@@ -16130,6 +16137,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						Integer idItemLancamentoContabil = (Integer) arrayDadosDebitoCobrado[2];
 
 						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
+							
+							BigDecimal valorContaIncluida = repositorioFaturamento.obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.INCLUIDA,
+									DebitoCreditoSituacao.INCLUIDA,
+									FinanciamentoTipo.PARCELAMENTO_SERVICO,
+									idItemLancamentoContabil.intValue());
+							
+							if (valorContaIncluida != null && valorContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
+								valor = valor.add(valorContaIncluida);
+							}
+							
 							ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
 									valor,
 					                anoMesFaturamento,
@@ -16186,6 +16205,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// fim Linha 70
 
 					// Linha 64
+					/*
+					 * TODO : Pamela
+					 * INcluir também a situação de conta INCLUIDA
+					 */
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
@@ -16194,8 +16217,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.PARCELAMENTO_AGUA);
 
+					BigDecimal valorParcelamentosIncluidos = repositorioFaturamento
+							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.INCLUIDA,
+									DebitoCreditoSituacao.INCLUIDA,
+									FinanciamentoTipo.PARCELAMENTO_AGUA);
+					
 					// se o objeto retornado não for nulo
 					if (valorItemFaturamento != null && valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
+						
+						if (valorParcelamentosIncluidos != null && valorParcelamentosIncluidos.compareTo(BigDecimal.ZERO) != 0) {
+							valorItemFaturamento = valorItemFaturamento.add(valorParcelamentosIncluidos);
+						}
+						
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
 								valorItemFaturamento,
 				                anoMesFaturamento,
