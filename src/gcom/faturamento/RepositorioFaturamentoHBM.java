@@ -34111,8 +34111,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * juros de parcelamento e a diferença de prestações maior que 11(onze)
 	 */
 	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
-			int anoMesReferencia, int idLocalidade, int idCategoria,
-			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
@@ -34135,7 +34134,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) "
 					+ "  and dccg.catg_id= :idCategoria  "
-					+ " and dbcb.fntp_id in ( :idFinanciamentoTipo, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
+					+ " and dbcb.fntp_id in ( :jurosParcelamento, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
 					+ "  and (dbcb.dbcb_nnprestacao - dbcb.dbcb_nnprestacaodebito) > 11 ";
 
 			 retorno = (BigDecimal) session.createSQLQuery(consulta)
@@ -34145,7 +34144,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idCategoria", idCategoria)
 					.setInteger("idSituacaoAtual", idSituacaoAtual)
 					.setInteger("idSituacaoAnterior", idSituacaoAnterior)
-					.setInteger("idFinanciamentoTipo", idFinanciamentoTipo)
+					.setInteger("jurosParcelamento", FinanciamentoTipo.JUROS_PARCELAMENTO)
 					.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
 					.setInteger("parcelamentoEsgoto",FinanciamentoTipo.PARCELAMENTO_ESGOTO)
 					.setInteger("parcelamentoServico",FinanciamentoTipo.PARCELAMENTO_SERVICO)
@@ -59877,8 +59876,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 
 			consulta.append(" select sum(dccg.dccg_vlcategoria) as valor ")
-	          .append(" lict.lict_nnsequenciaimpressao as col_1, ")
-	          .append(" lict.lict_id as col_2 ")
 	          .append(" from  ")
 	          .append("  faturamento.debito_cobrado_categoria dccg ")
 	          .append(" inner join  ")
@@ -59903,7 +59900,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setInteger("idSituacaoAtual", idSituacaoAtual)
 							.setInteger("idSituacaoAnterior", idSituacaoAnterior)
 							.setInteger("idTipoFinanciamento", idTipoFinanciamento)
-							.setInteger("idLancamentoItem", idLancamentoItem).list();
+							.setInteger("idLancamentoItem", idLancamentoItem).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -59914,15 +59911,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
-			int anoMesReferencia, int idLocalidade, int idCategoria, int idFinanciamentoTipo)
-			throws ErroRepositorioException {
+			int anoMesReferencia, int idLocalidade, int idCategoria) throws ErroRepositorioException {
+		
 		BigDecimal retorno = null;
 		Session session = HibernateUtil.getSession();
 		StringBuilder consulta = new StringBuilder();
 
 		try {
 
-			consulta.append(" select sum(lp) from ( ")
+			consulta.append(" select sum(lp) as valor from ( ")
 					.append("      select trunc((sum(dccg.dccg_vlcategoria) - (12 * trunc(( dbac_vldebito / dbac_nnprestacaodebito),2))),2) as lp ")
 					.append("      from  faturamento.debito_cobrado_categoria dccg  ")
 					.append("      inner join  faturamento.debito_cobrado  dbcb on dccg.dbcb_id=dbcb.dbcb_id  ")
@@ -59934,7 +59931,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" 		and cnta.loca_id= :idLocalidade ")
 					.append(" 		and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
 					.append(" 		and dccg.catg_id= :idCategoria ")
-					.append(" 		and dbcb.fntp_id= :idTipoFinanciamento ")
+					.append(" 		and dbcb.fntp_id in ( :jurosParcelamento, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) ")
 					.append("      and dbcb.dbcb_nnprestacao > 12 ")
 					.append("      group by dbac_vldebito, dbac_nnprestacaodebito) as x ");
 
@@ -59945,7 +59942,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setInteger("idCategoria", idCategoria)
 							.setInteger("idSituacaoAtual", DebitoCreditoSituacao.INCLUIDA)
 							.setInteger("idSituacaoAnterior", DebitoCreditoSituacao.INCLUIDA)
-							.setInteger("idTipoFinanciamento", idFinanciamentoTipo).list();
+							.setInteger("jurosParcelamento", FinanciamentoTipo.JUROS_PARCELAMENTO)
+							.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
+							.setInteger("parcelamentoEsgoto",FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+							.setInteger("parcelamentoServico",FinanciamentoTipo.PARCELAMENTO_SERVICO).uniqueResult();;
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

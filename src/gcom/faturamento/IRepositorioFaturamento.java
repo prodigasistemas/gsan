@@ -14,7 +14,6 @@ import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
@@ -1616,8 +1615,7 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
-			int anoMesReferencia, int idLocalidade, int idCategoria,
-			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException;
 
 	public Object[] pesquisarValorLongoECurtoPrazoDebitoACobrarPorGrupoParcelamento(
@@ -3038,9 +3036,7 @@ public interface IRepositorioFaturamento {
 			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacao) throws ErroRepositorioException;
 	
 	public ResumoFaturamento acumularValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
-			int anoMesReferencia, int idLocalidade, int idCategoria,
-			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
-			throws ErroRepositorioException;
+			int anoMesReferencia, int idLocalidade, int idCategoria, Integer[] idsCreditoOrigem, Integer idSituacaoAtual) throws ErroRepositorioException;
 	
 	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idImovel, Date dataVencimento) throws ErroRepositorioException;
 	
@@ -3050,6 +3046,5 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 	
 	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
-			int anoMesReferencia, int idLocalidade, int idCategoria, int idFinanciamentoTipo)
-			throws ErroRepositorioException;
+			int anoMesReferencia, int idLocalidade, int idCategoria) throws ErroRepositorioException;
 }

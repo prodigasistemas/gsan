@@ -15623,12 +15623,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
 									anoMesFaturamento, idLocalidade,
 									idCategoria,
-									FinanciamentoTipo.JUROS_PARCELAMENTO,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
 					BigDecimal valorLongoPrazoParcelamentosIncluidos = repositorioFaturamento.
-							obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(anoMesFaturamento, idLocalidade, idCategoria, FinanciamentoTipo.JUROS_PARCELAMENTO);
+							obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(anoMesFaturamento, idLocalidade, idCategoria);
 				
 					if (valorItemFaturamento != null) {
 
