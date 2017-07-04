@@ -97,9 +97,9 @@ var bCancel = false;
     
     var confirmou = false;
     
-    var faixaInicial = parseInt(form.faixaInicial.value, 10);
+    var faixaInicial = parseInt(form.faixaInicial.value, 11);
     
-    var faixaFinal = parseInt(form.faixaFinal.value, 10);
+    var faixaFinal = parseInt(form.faixaFinal.value, 11);
     
     var quantidadeHidrometro = (faixaFinal - faixaInicial) + 1;
     
@@ -225,9 +225,9 @@ function validarForm(form){
 		   var mensagem = 'deve ser diferente de zero.'
 		   var flag = true;
     
-   		   var faixaInicial = parseInt(form.faixaInicial.value, 10);
+   		   var faixaInicial = parseInt(form.faixaInicial.value, 11);
     
-		    var faixaFinal = parseInt(form.faixaFinal.value, 10);
+		    var faixaFinal = parseInt(form.faixaFinal.value, 11);
 		    
 		    var quantidadeHidrometro = (faixaFinal - faixaInicial) + 1;
  
@@ -382,9 +382,10 @@ function validarForm(form){
 				</tr>
 				<tr>
 					<td><strong>Faixa:<font color="#FF0000">*</font></strong></td>
-					<td><html:text maxlength="6" property="faixaInicial" size="6"
-						tabindex="2" /> <html:text maxlength="6" property="faixaFinal"
-						size="6" tabindex="3" /></td>
+					<td>
+						<html:text maxlength="7" property="faixaInicial" size="7" tabindex="2" /> 
+						<html:text maxlength="7" property="faixaFinal" size="7" tabindex="3" />
+					</td>
 				</tr>
 
 				<tr>

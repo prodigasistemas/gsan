@@ -7255,14 +7255,9 @@ public class ControladorMicromedicao extends ControladorComum {
 
 		for (int i = 0; i < quantidade; i++) {
 
-			String intervalo = (new Integer(faixaInicial.intValue() + i))
-					.toString();
+			String intervalo = (new Integer(faixaInicial.intValue() + i)).toString();
 
-			String numeroFormatado = "";
-
-			numeroFormatado = Util.adicionarZerosEsquedaNumero(6, intervalo);
-
-			hidrometro.setNumero(fixo + numeroFormatado);
+			hidrometro.setNumero(fixo + intervalo);
 
 			try {
 				repositorioUtil.inserir(hidrometro);
@@ -7320,33 +7315,11 @@ public class ControladorMicromedicao extends ControladorComum {
 		return (Integer) this.getControladorUtil().inserir(hidrometroMarca);
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param fixo
-	 *            Descrição do parâmetro
-	 * @param faixaInicial
-	 *            Descrição do parâmetro
-	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @throws ControladorException
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNumeroHidrometroFaixa(String fixo,
 			String faixaInicial, String faixaFinal) throws ControladorException {
 		try {
-
-			String numeroFormatadoInicial = "";
-			String numeroFormatadoFinal = "";
-
-			numeroFormatadoInicial = Util.adicionarZerosEsquedaNumero(6,
-					faixaInicial);
-			numeroFormatadoFinal = Util.adicionarZerosEsquedaNumero(6,
-					faixaFinal);
-
-			return repositorioMicromedicao.pesquisarNumeroHidrometroFaixa(
-					(fixo + numeroFormatadoInicial),
-					(fixo + numeroFormatadoFinal));
+			return repositorioMicromedicao.pesquisarNumeroHidrometroFaixa( (fixo + faixaInicial), (fixo + faixaFinal));
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
