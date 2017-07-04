@@ -13,7 +13,7 @@
 				<param name="sequence">micromedicao.seq_hidrometro</param>
 			</generator>
 		</id>
-		<property name="numero" type="java.lang.String" column="hidr_nnhidrometro" not-null="true" length="10"/>
+		<property name="numero" type="java.lang.String" column="hidr_nnhidrometro" not-null="true" length="11"/>
 		<property name="dataAquisicao" type="java.sql.Date" column="hidr_dtaquisicao" not-null="true" length="4"/>
 		<property name="anoFabricacao" type="java.lang.Short" column="hidr_nnanofabricacao" not-null="true" length="2"/>
 		<property name="indicadorMacromedidor" type="java.lang.Short" column="hidr_icmacro" length="2"/>
