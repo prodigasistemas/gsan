@@ -1,5 +1,6 @@
 package gcom.faturamento.debito;
 
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cobranca.ParcelamentoGrupo;
@@ -132,7 +133,7 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 		this.debitoACobrarGeral = debitoACobrar.getDebitoACobrarGeral();
 		this.ultimaAlteracao = new Date();
 	}
-
+	
 	public Integer getId() {
 		return this.id;
 	}

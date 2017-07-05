@@ -158,7 +158,9 @@ public class LancamentoTipo implements Serializable {
 	public final static Integer OUTROS_CREDITOS_A_REALIZAR_POR_RECUPERACAO_CREDITO_INCLUIDOS = new Integer(103);
 	public final static Integer OUTROS_CREDITOS_A_REALIZAR_POR_RECUPERACAO_CREDITO_CANCELADOS = new Integer(104);
 	
-	public final static Integer CANCELAMENTO_CREDITOS_CONCEDIDOS_PARCELAMENTO = new Integer(105);
+	public final static Integer RECUEPRACAO_CREDITO = new Integer(105);
+	public final static Integer CREDITOS_PARCELAMETOSD_ANT_CONT_DUPL = new Integer(106);
+	public final static Integer CANCELAMENTO_CREDITOS_CONCEDIDOS_PARCELAMENTO = new Integer(107);
 	
 	public final static Integer RECUPERACAO_CREDITO = new Integer(105);
 	
