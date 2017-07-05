@@ -16307,6 +16307,55 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// fim Linha 67
 
+					// Linha 67.1
+					BigDecimal valorContaIncluida = repositorioFaturamento.obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+								anoMesFaturamento, idLocalidade,
+								idCategoria, DebitoCreditoSituacao.INCLUIDA,
+								DebitoCreditoSituacao.INCLUIDA,
+								FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO,
+								LancamentoItem.GRUPO_CONTABIL);
+						
+					if (valorContaIncluida != null && valorContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
+
+							ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+									valorContaIncluida, anoMesFaturamento, categoria, localidade, 
+									new LancamentoTipo(LancamentoTipo.CANCELAMENTO_CREDITOS_CONCEDIDOS_PARCELAMENTO), 
+									new LancamentoItem(LancamentoItem.GRUPO_CONTABIL), 
+									new LancamentoItemContabil(LancamentoItemContabil.ACRESCIMOS_POR_IMPONTUALIDADE), 
+									new Short("2000"), new Short("10"));
+
+							// soma o sequência igual 1900 ao total cobrado nas contas
+							resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas.getValorItemFaturamento().add(
+									resumoFaturamento.getValorItemFaturamento()));
+
+							colecaoResumoFaturamento.add(resumoFaturamento);
+					}
+					//fim Linha 67.1
+					
+					//Linha 67.2 - CANCELAMENTO DOS DESCONTOS DOS ACRESCIMOS - CANCELAMENTO PARCELAMENTO
+					valorContaIncluida = repositorioFaturamento.obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+							anoMesFaturamento, idLocalidade,
+							idCategoria, DebitoCreditoSituacao.INCLUIDA,
+							DebitoCreditoSituacao.INCLUIDA,
+							FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO,
+							LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
+					
+					if (valorContaIncluida != null && valorContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
+
+						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+								valorContaIncluida, anoMesFaturamento, categoria, localidade, 
+								new LancamentoTipo(LancamentoTipo.CANCELAMENTO_CREDITOS_CONCEDIDOS_PARCELAMENTO), 
+								new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
+								null, new Short("2000"), new Short("20"));
+
+						// soma o sequência igual 1900 ao total cobrado nas contas
+						resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas.getValorItemFaturamento().add(
+								resumoFaturamento.getValorItemFaturamento()));
+
+						colecaoResumoFaturamento.add(resumoFaturamento);
+					}
+					//fim Linha 67.2
+					
 					// Linha 68
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento

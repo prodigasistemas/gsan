@@ -59876,14 +59876,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 
 			consulta.append(" select sum(dccg.dccg_vlcategoria) as valor ")
-	          .append(" from  ")
-	          .append("  faturamento.debito_cobrado_categoria dccg ")
-	          .append(" inner join  ")
-	          .append("  faturamento.debito_cobrado dbcb on dccg.dbcb_id=dbcb.dbcb_id ")
-	          .append(" inner join  ")
-	          .append("  faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id ")
-	          .append(" inner join  ")
-	          .append("  financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id ")
+	          .append(" from faturamento.debito_cobrado_categoria dccg ")
+	          .append(" inner join faturamento.debito_cobrado dbcb on dccg.dbcb_id=dbcb.dbcb_id ")
+	          .append(" inner join faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id ")
+	          .append(" inner join financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id ")
 	          .append("  where  ")
 	          .append(" cnta.cnta_amreferenciaconta= :anoMesReferencia ")
 	          .append(" and cnta.loca_id= :idLocalidade ")
