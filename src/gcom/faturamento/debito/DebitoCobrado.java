@@ -31,14 +31,14 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 	private Integer anoMesReferenciaDebito;
 	private Integer anoMesCobrancaDebito;
 
-	@ControleAlteracao(funcionalidade=Conta.ATRIBUTOS_RETIFICAR_CONTA)
+	@ControleAlteracao(funcionalidade = Conta.ATRIBUTOS_RETIFICAR_CONTA)
 	private BigDecimal valorPrestacao;
 
 	private short numeroPrestacao;
 	private short numeroPrestacaoDebito;
 	private Date ultimaAlteracao;
 	private int lictId;
-    private Short numeroParcelaBonus;
+	private Short numeroParcelaBonus;
 	private LancamentoItemContabil lancamentoItemContabil;
 	private Conta conta;
 	private FinanciamentoTipo financiamentoTipo;
@@ -52,16 +52,9 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 	private Set debitoCobradoCategorias;
 
 	@SuppressWarnings("rawtypes")
-	public DebitoCobrado(Date debitoCobrado, Integer codigoSetorComercial,
-			Integer numeroQuadra, Short numeroLote, Short numeroSubLote,
-			Integer anoMesReferenciaDebito, Integer anoMesCobrancaDebito,
-			BigDecimal valorPrestacao, short numeroPrestacao,
-			short numeroPrestacaoDebito, Date ultimaAlteracao, int lictId,
-			LancamentoItemContabil lancamentoItemContabil, Conta conta,
-			FinanciamentoTipo financiamentoTipo, Quadra quadra,
-			Localidade localidade,
-			gcom.faturamento.debito.DebitoTipo debitoTipo,
-			ParcelamentoGrupo parcelamentoGrupo, Set debitoCobradoCategorias) {
+	public DebitoCobrado(Date debitoCobrado, Integer codigoSetorComercial, Integer numeroQuadra, Short numeroLote, Short numeroSubLote, Integer anoMesReferenciaDebito, Integer anoMesCobrancaDebito,
+			BigDecimal valorPrestacao, short numeroPrestacao, short numeroPrestacaoDebito, Date ultimaAlteracao, int lictId, LancamentoItemContabil lancamentoItemContabil, Conta conta,
+			FinanciamentoTipo financiamentoTipo, Quadra quadra, Localidade localidade, gcom.faturamento.debito.DebitoTipo debitoTipo, ParcelamentoGrupo parcelamentoGrupo, Set debitoCobradoCategorias) {
 		this.debitoCobrado = debitoCobrado;
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
@@ -90,15 +83,10 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 	public DebitoCobrado(Integer id) {
 		this.id = id;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public DebitoCobrado(Date debitoCobrado, BigDecimal valorPrestacao,
-			short numeroPrestacao, short numeroPrestacaoDebito,
-			LancamentoItemContabil lancamentoItemContabil, Conta conta,
-			FinanciamentoTipo financiamentoTipo, Quadra quadra,
-			Localidade localidade,
-			gcom.faturamento.debito.DebitoTipo debitoTipo,
-			ParcelamentoGrupo parcelamentoGrupo, Set debitoCobradoCategorias) {
+	public DebitoCobrado(Date debitoCobrado, BigDecimal valorPrestacao, short numeroPrestacao, short numeroPrestacaoDebito, LancamentoItemContabil lancamentoItemContabil, Conta conta,
+			FinanciamentoTipo financiamentoTipo, Quadra quadra, Localidade localidade, gcom.faturamento.debito.DebitoTipo debitoTipo, ParcelamentoGrupo parcelamentoGrupo, Set debitoCobradoCategorias) {
 		this.debitoCobrado = debitoCobrado;
 		this.valorPrestacao = valorPrestacao;
 		this.numeroPrestacao = numeroPrestacao;
@@ -112,14 +100,37 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 		this.parcelamentoGrupo = parcelamentoGrupo;
 		this.debitoCobradoCategorias = debitoCobradoCategorias;
 	}
-	
-	public DebitoCobrado(Integer anoMesReferenciaDebito, short numeroPrestacaoDebito, short numeroPrestacao,
-			BigDecimal valorPrestacao, DebitoTipo debitoTipo) {
+
+	public DebitoCobrado(Integer anoMesReferenciaDebito, short numeroPrestacaoDebito, short numeroPrestacao, BigDecimal valorPrestacao, DebitoTipo debitoTipo) {
 		this.anoMesReferenciaDebito = anoMesReferenciaDebito;
 		this.numeroPrestacaoDebito = numeroPrestacaoDebito;
 		this.numeroPrestacao = numeroPrestacao;
 		this.valorPrestacao = valorPrestacao;
 		this.debitoTipo = debitoTipo;
+	}
+
+	public DebitoCobrado(Date debitoCobrado, DebitoACobrar debitoACobrar, Conta conta, BigDecimal valor) {
+		super();
+		
+		this.debitoCobrado = new Date();
+		this.localidade = debitoACobrar.getImovel().getLocalidade();
+		this.codigoSetorComercial = debitoACobrar.getImovel().getSetorComercial().getCodigo();
+		this.quadra = debitoACobrar.getImovel().getQuadra();
+		this.numeroQuadra = debitoACobrar.getImovel().getQuadra().getNumeroQuadra();
+		this.numeroLote = debitoACobrar.getImovel().getLote();
+		this.numeroSubLote = debitoACobrar.getImovel().getSubLote();
+		this.debitoTipo = debitoACobrar.getDebitoTipo();
+		this.conta = conta;
+		this.lancamentoItemContabil = debitoACobrar.getLancamentoItemContabil();
+		this.anoMesReferenciaDebito = debitoACobrar.getAnoMesReferenciaDebito();
+		this.anoMesCobrancaDebito = debitoACobrar.getAnoMesCobrancaDebito();
+		this.valorPrestacao = valor;
+		this.numeroPrestacao = debitoACobrar.getNumeroPrestacaoDebito();
+		this.numeroPrestacaoDebito = debitoACobrar.getNumeroPrestacaoDebito();
+		this.numeroParcelaBonus = debitoACobrar.getNumeroParcelaBonus();
+		this.financiamentoTipo = debitoACobrar.getFinanciamentoTipo();
+		this.debitoACobrarGeral = debitoACobrar.getDebitoACobrarGeral();
+		this.ultimaAlteracao = new Date();
 	}
 
 	public Integer getId() {
@@ -230,8 +241,7 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 		return lancamentoItemContabil;
 	}
 
-	public void setLancamentoItemContabil(
-			LancamentoItemContabil lancamentoItemContabil) {
+	public void setLancamentoItemContabil(LancamentoItemContabil lancamentoItemContabil) {
 		this.lancamentoItemContabil = lancamentoItemContabil;
 	}
 
@@ -300,10 +310,9 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
-		
-		filtro.adicionarParametro(
-				new ParametroSimples(FiltroDebitoCobrado.CODIGO, this.getId()));
-		return filtro; 
+
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CODIGO, this.getId()));
+		return filtro;
 	}
 
 	@Override
@@ -313,57 +322,53 @@ public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 		return retorno;
 	}
 
-    public boolean equals(Object other) {
-        if ( (this == other ) ) return true;
-        if ( !(other instanceof DebitoCobrado) ) return false;
-        DebitoCobrado castOther = (DebitoCobrado) other;
-        return new EqualsBuilder()
-            .append(this.getId(), castOther.getId())
-            .isEquals();
-    }
+	public boolean equals(Object other) {
+		if ((this == other))
+			return true;
+		if (!(other instanceof DebitoCobrado))
+			return false;
+		DebitoCobrado castOther = (DebitoCobrado) other;
+		return new EqualsBuilder().append(this.getId(), castOther.getId()).isEquals();
+	}
 
-    @Override
-    public void initializeLazy() {
-    	if (this.getDebitoTipo() != null){
-    		this.getDebitoTipo().initializeLazy();
-    	}
-    	
-    }
-    
-    public String getDescricao(){
-    	String desc = "";
-    	if (getDebitoTipo() != null){
-    		desc = getDebitoTipo().getDescricao();
-    	}
-    	return desc;
-    }
-    
-    @Override
-    public String getDescricaoParaRegistroTransacao() {
-    	return this.getDescricao();
-    }
+	@Override
+	public void initializeLazy() {
+		if (this.getDebitoTipo() != null) {
+			this.getDebitoTipo().initializeLazy();
+		}
 
-    public Short getNumeroParcelaBonus() {
-        return numeroParcelaBonus;
-    }
+	}
 
-    public void setNumeroParcelaBonus(Short numeroParcelaBonus) {
-        this.numeroParcelaBonus = numeroParcelaBonus;
-    }
+	public String getDescricao() {
+		String desc = "";
+		if (getDebitoTipo() != null) {
+			desc = getDebitoTipo().getDescricao();
+		}
+		return desc;
+	}
 
-    /**
-     * @author Vivianne Sousa
-     * @created 05/03/2008
-    */
-    public short getNumeroTotalParcelasMenosBonus() {
-        short retorno = getNumeroPrestacao();
-        
-        if (getNumeroParcelaBonus() != null){
-            retorno = Short.parseShort(""+ (retorno - getNumeroParcelaBonus().shortValue()));
-        }
-             
-        return retorno;
-    }
+	@Override
+	public String getDescricaoParaRegistroTransacao() {
+		return this.getDescricao();
+	}
+
+	public Short getNumeroParcelaBonus() {
+		return numeroParcelaBonus;
+	}
+
+	public void setNumeroParcelaBonus(Short numeroParcelaBonus) {
+		this.numeroParcelaBonus = numeroParcelaBonus;
+	}
+
+	public short getNumeroTotalParcelasMenosBonus() {
+		short retorno = getNumeroPrestacao();
+
+		if (getNumeroParcelaBonus() != null) {
+			retorno = Short.parseShort("" + (retorno - getNumeroParcelaBonus().shortValue()));
+		}
+
+		return retorno;
+	}
 
 	public DebitoACobrarGeral getDebitoACobrarGeral() {
 		return debitoACobrarGeral;

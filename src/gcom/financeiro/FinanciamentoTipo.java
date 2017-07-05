@@ -8,11 +8,11 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class FinanciamentoTipo extends ObjetoTransacao {
+
 	private static final long serialVersionUID = 1L;
-    //Constantes tipo de financiamento >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
+
+	//Constantes tipo de financiamento >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
     public final static Integer SERVICO_NORMAL = new Integer(1);
     public final static Integer PARCELAMENTO_AGUA = new Integer(2);
     public final static Integer PARCELAMENTO_ESGOTO = new Integer(3);
@@ -51,61 +51,64 @@ public class FinanciamentoTipo extends ObjetoTransacao {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
-	}      
-    
-    /** full constructor */
-    public FinanciamentoTipo(String descricao, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
-        this.descricao = descricao;
-        this.descricaoAbreviada = descricaoAbreviada;
-        this.indicadorUso = indicadorUso;
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	}
 
-    /** default constructor */
-    public FinanciamentoTipo() {
-    }
+	public FinanciamentoTipo(String descricao, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
+		this.descricao = descricao;
+		this.descricaoAbreviada = descricaoAbreviada;
+		this.indicadorUso = indicadorUso;
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public FinanciamentoTipo() {
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public FinanciamentoTipo(Integer id) {
+		super();
+		this.id = id;
+	}
 
-    public String getDescricao() {
-        return this.descricao;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getDescricaoAbreviada() {
-        return this.descricaoAbreviada;
-    }
+	public String getDescricao() {
+		return this.descricao;
+	}
 
-    public void setDescricaoAbreviada(String descricaoAbreviada) {
-        this.descricaoAbreviada = descricaoAbreviada;
-    }
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public String getDescricaoAbreviada() {
+		return this.descricaoAbreviada;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public void setDescricaoAbreviada(String descricaoAbreviada) {
+		this.descricaoAbreviada = descricaoAbreviada;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public Short getIndicadorInclusao() {
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public Short getIndicadorInclusao() {
 		return indicadorInclusao;
 	}
 
@@ -114,15 +117,12 @@ public class FinanciamentoTipo extends ObjetoTransacao {
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 
-	public Filtro retornaFiltro(){
+	public Filtro retornaFiltro() {
 		FiltroFinanciamentoTipo filtro = new FiltroFinanciamentoTipo();
-		filtro. adicionarParametro(
-				new ParametroSimples(FiltroFinanciamentoTipo.ID, this.getId()));		
+		filtro.adicionarParametro(new ParametroSimples(FiltroFinanciamentoTipo.ID, this.getId()));
 		return filtro;
 	}
 
@@ -130,7 +130,7 @@ public class FinanciamentoTipo extends ObjetoTransacao {
 	public void initializeLazy() {
 		retornaCamposChavePrimaria();
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricao();

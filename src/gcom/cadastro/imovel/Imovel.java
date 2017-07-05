@@ -2539,4 +2539,15 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public boolean isImovelHidrometrado() {
 		return hidrometroInstalacaoHistorico != null || (ligacaoAgua != null && ligacaoAgua.getHidrometroInstalacaoHistorico() != null);
 	}
+	
+	public Rota obterRota() {
+		Rota rota = new Rota();
+		if (this.rotaAlternativa != null) {
+			rota = this.rotaAlternativa;
+
+		} else {
+			rota = this.quadra.getRota();
+		}
+		return rota;
+	}
 }

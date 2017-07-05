@@ -289,6 +289,7 @@ import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
@@ -330,6 +331,8 @@ import gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamentoHelper;
 import gcom.cobranca.contratoparcelamento.QuantidadePrestacoes;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
+import gcom.cobranca.controladores.ControladorParcelamentoLocal;
+import gcom.cobranca.controladores.ControladorParcelamentoLocalHome;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -681,6 +684,27 @@ public class Fachada {
 		return instancia;
 	}
 
+	private ControladorParcelamentoLocal getControladorParcelamento() {
+		ControladorParcelamentoLocalHome localHome = null;
+		ControladorParcelamentoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PARCELAMENTO);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
 	private ControladorTabelaAuxiliarLocal getControladorTabelaAuxiliar() {
 		ControladorTabelaAuxiliarLocalHome localHome = null;
 		ControladorTabelaAuxiliarLocal local = null;
@@ -40126,4 +40150,29 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
+		try {
+			return getControladorParcelamento().pesquisarParcelamentoParaCancelar(idParcelamento);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuarioLogado, SistemaParametro sistemaParametro) {
+		try {
+			getControladorParcelamento().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public String getCobrancaParametro(String parametro) {
+		try {
+			return this.getControladorCobranca().getCobrancaParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+
 }

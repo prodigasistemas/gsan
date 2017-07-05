@@ -13,6 +13,7 @@
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<<<<<<< HEAD
 <link rel="stylesheet"
 	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
 	type="text/css">
@@ -22,13 +23,25 @@
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript">
-<!--
+
 function voltar(){
 	window.location.href="exibirConsultarListaParcelamentoDebitoAction.do?menu=sim";
 }
  
-//-->
+
+function cancelarParcelamento(parcelamentoId, imovelId) {
+	if (confirm('Confirmar cancelamento do parcelamento do imóvel ' + imovelId + '?')) {
+		window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento='+parcelamentoId+'&codigoImovel='+imovelId;
+	}
+}
 </script>
+=======
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="ParcelamentoDebitoActionForm"/>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
+
+>>>>>>> 9692aa8ac2ea3499994a7a7dd906716d8c7e0304
 </head>
 
 <logic:notPresent name="codigoImovel">
@@ -690,24 +703,24 @@ function voltar(){
 								    
 								    <logic:present name="habilitarBotaoDesfazer" scope="request">
 									    <gsan:controleAcessoBotao name="desfazer" value="Desfazer Parcelamento" onclick="javascript:window.location.href = 'exibirDesfazerParcelamentoDebitoAction.do?codigoParcelamento=${parcelamento.id}&motivo='+parcelamentoMotivoDesfazer.value" url="exibirDesfazerParcelamentoDebitoAction.do"/>
-										<%--<input name="desfazer" type="button" class="bottonRightCol" value="Desfazer" onclick="javascript:window.location.href = 'exibirDesfazerParcelamentoDebitoAction.do?codigoParcelamento=<bean:write name="parcelamento" property="id" />&motivo='+parcelamentoMotivoDesfazer.value">--%>
 									</logic:present>
 									
 								</logic:iterate>
 								</logic:present>
-								<%-- <input name="Button" type="button" class="bottonRightCol" value="Voltar" onClick="javascript:voltar();">--%>
-								
-								 <input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:history.back();"> 
-								<%-- <input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);"> 
-								<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" 
-								onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"/>--%>
+								<input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:window.location.href='exibirConsultarListaParcelamentoDebitoAction.do?codigoImovel=${parcelamento.imovel.id}'">
 							</td>
 						</tr>
 						
 						
 						<tr>
 							<td colspan="3" align="right">
-									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);"> 
+									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
+									
+									<logic:equal name="possuiPermissaoCancelarParcelamento" value="true">				      				
+										<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="cancelarParcelamento(${parcelamento.id},${parcelamento.imovel.id})">
+									</logic:equal>
+									
+									 
 									<logic:present name="buttonCartaoCredito" scope="session">
 										<input type="button" name="" value="Consultar Dados Cartão Crédito" class="bottonRightCol" 
 											onclick="abrirPopup('consultarDadosParcelamentoCartaoCreditoAction.do?carregamentoInicial=ok',210,775);"/>			

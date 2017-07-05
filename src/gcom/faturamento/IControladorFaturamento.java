@@ -378,6 +378,8 @@ public interface IControladorFaturamento {
 
 	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(Integer idImovel, Integer anoMesReferencia, BigDecimal valorAgua,
 			BigDecimal valorEsgoto, BigDecimal valorDebito, BigDecimal valorCredito, boolean preFaturamento) throws ControladorException;
+	
+	public GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosConta(Conta conta, boolean preFaturamento) throws ControladorException;
 
 	public void inserirClienteImovel(Imovel imovel, Conta contaAtual) throws ControladorException;
 
@@ -1256,4 +1258,7 @@ public interface IControladorFaturamento {
 	
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoriaOuSubcategoria) throws ControladorException;
 }
