@@ -76,7 +76,7 @@ public class CancelarParcelamentoHelper {
 	}
 	
 	public BigDecimal getParcelaSemJuros() {
-		return getValorContasSemEntrada().divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
+		return getValorContasSemEntrada().divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 
 	public BigDecimal getTotalContasCobradas() {
@@ -84,7 +84,7 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaAcrescimos() {
-		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorAcrescimos.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 
 	public BigDecimal getTotalAcrescimosCobrados() {
@@ -92,11 +92,11 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaDescontoAcrescimos() {
-		return valorDescontoAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorDescontoAcrescimos.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 	
 	public BigDecimal getParcelaDescontoFaixa() {
-		return valorDescontoFaixa.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorDescontoFaixa.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 	
 }
