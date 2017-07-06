@@ -493,6 +493,10 @@ public class SistemaParametro extends ObjetoTransacao {
 	private String dddTelefone;
 	
 	private Cliente clienteResponsavelNegativacao;
+	
+	private String descricaoAliquotaImposto;
+
+	private BigDecimal valorAliquotaImposto;
 
 	public Short getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() {
 		return numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
@@ -2532,5 +2536,21 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public void setClienteResponsavelNegativacao(Cliente clienteResponsavelNegativacao) {
 		this.clienteResponsavelNegativacao = clienteResponsavelNegativacao;
+	}
+
+	public String getDescricaoAliquotaImposto() {
+		return descricaoAliquotaImposto;
+	}
+
+	public void setDescricaoAliquotaImposto(String descricaoAliquotaImposto) {
+		this.descricaoAliquotaImposto = descricaoAliquotaImposto;
+	}
+
+	public BigDecimal getValorAliquotaImposto() {
+		return valorAliquotaImposto;
+	}
+
+	public void setValorAliquotaImposto(BigDecimal valorAliquotaImposto) {
+		this.valorAliquotaImposto = valorAliquotaImposto;
 	}
 }
