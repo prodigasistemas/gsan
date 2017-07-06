@@ -16061,7 +16061,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								idCategoria, DebitoCreditoSituacao.INCLUIDA,
 								DebitoCreditoSituacao.INCLUIDA,
 								FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO,
-								LancamentoItem.GRUPO_CONTABIL);
+								LancamentoItemContabil.CANCELAMENTO_DESCONTOS_ACRESCIMOS_PARCELAMENTO);
 						
 					if (valorContaIncluida != null && valorContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
 
@@ -16086,7 +16086,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							idCategoria, DebitoCreditoSituacao.INCLUIDA,
 							DebitoCreditoSituacao.INCLUIDA,
 							FinanciamentoTipo.CANCELAMENTO_PARCELAMENTO,
-							LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
+							LancamentoItemContabil.CANCELAMENTO_DESCONTOS_FAIXA_PARCELAMENTO);
 					
 					if (valorContaIncluida != null && valorContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
 

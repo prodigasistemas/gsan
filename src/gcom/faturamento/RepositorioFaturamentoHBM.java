@@ -59866,7 +59866,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	public BigDecimal obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
 			int anoMesReferencia, int idLocalidade, int idCategoria,
-			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento, int idLancamentoItem)
+			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento, int idLancamentoItemContabil)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
@@ -59896,7 +59896,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setInteger("idSituacaoAtual", idSituacaoAtual)
 							.setInteger("idSituacaoAnterior", idSituacaoAnterior)
 							.setInteger("idTipoFinanciamento", idTipoFinanciamento)
-							.setInteger("idLancamentoItem", idLancamentoItem).uniqueResult();
+							.setInteger("idLancamentoItem", idLancamentoItemContabil).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

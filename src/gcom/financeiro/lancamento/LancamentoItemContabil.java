@@ -25,6 +25,9 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
 	public final static Integer CANCELAMENTO_DE_PARCELAMENTO = new Integer(12);
 	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(13);
+	
+	public final static Integer CANCELAMENTO_DESCONTOS_ACRESCIMOS_PARCELAMENTO = new Integer(14);
+	public final static Integer CANCELAMENTO_DESCONTOS_FAIXA_PARCELAMENTO = new Integer(15);
 
 	private Integer id;
 	private String descricao;

@@ -188,9 +188,11 @@ public class ControladorParcelamento extends ControladorComum {
 		atualizarDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_ACRESCIMOS_IMPONTUALIDADE);
 		
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario, false);
+		inserirDebitoACobrar(helper.getTotalCancelamentoDescontoFaixa(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_FAIXA, usuario, false);
 		gerarNovosAcrescimos(helper, conta, usuario);
 	}
 
+	
 	private void atualizarDebitoACobrar(BigDecimal valor, Integer idParcelamento, Conta conta, Integer idDebitoTipo) throws ControladorException {
 		try {
 			DebitoACobrar debitoACobrar = repositorio.pesquisarDebitoACobrar(idParcelamento, idDebitoTipo);
@@ -254,7 +256,7 @@ public class ControladorParcelamento extends ControladorComum {
 		Integer id = (Integer) getControladorUtil().inserir(debitoCobrado);
 		debitoCobrado.setId(id);
 
-		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(debitoACobrar.getImovel());
+		Collection<?> colecaoCategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(conta.getImovel());
 		getControladorFaturamento().inserirDebitoCobradoCategoria(debitoCobrado, colecaoCategoria);
 	}
 	

@@ -103,16 +103,16 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 	
 	private String montarRaizConsulta(String where, String groupBy) {
 		StringBuilder select = new StringBuilder();
-		select.append("SELECT p.parc_id as idParcelamento, ")
+		select.append("SELECT distinct p.parc_id as idParcelamento, ")
 			  .append("       p.imov_id as idImovel, ")
 			  .append("       p.parc_vlconta as valorContas, ")
 			  .append("       p.parc_vlentrada as valorEntrada, ")
 			  .append("       p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria as valorAcrescimos, ")
 			  .append("       p.parc_vldescontoacrescimos as valorDescontoAcrescimos, ")
 			  .append("       p.parc_vldescontofaixa as valorDescontoFaixa, ")
-			  .append("       p.parc_nnprestacoes as numeroPrestacoes, ")
-			  .append("       count(distinct c.cnta_id) as numeroPrestacoesCobradas ")
-			  .append("FROM cobranca.parcelamento p ");
+			  .append("       p.parc_nnprestacoes as numeroPrestacoes, ");
+			 // .append("       dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
+			 // .append("FROM cobranca.parcelamento p ");
 		
 		StringBuilder join = new StringBuilder();
 		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
@@ -120,18 +120,22 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)
+			.append("       dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
+			  .append("FROM cobranca.parcelamento p ")
 				.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
 		        .append(where)
 		        .append(montarComplementoGuia())
-		        .append(groupBy)
+		        //.append(groupBy)
 		        .append(" UNION ALL ")
 		        .append(select)
+		        .append("       dac.dahi_nnprestacaocobradas as numeroPrestacoesCobradas ")
+			  .append("FROM cobranca.parcelamento p ")
 		        .append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
 		        .append(where)
-		        .append(montarComplementoGuia())
-		        .append(groupBy);
+		        .append(montarComplementoGuia());
+		        //.append(groupBy);
 		
 		return consulta.toString();
 	}

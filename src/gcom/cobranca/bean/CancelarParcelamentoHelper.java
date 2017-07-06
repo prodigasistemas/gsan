@@ -4,6 +4,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class CancelarParcelamentoHelper {
 
@@ -58,6 +59,10 @@ public class CancelarParcelamentoHelper {
 		return getParcelaDescontoAcrescimos().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas)).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
+	public BigDecimal getTotalCancelamentoDescontoFaixa() {
+		return getParcelaDescontoFaixa().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas)).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+	
 	public BigDecimal getSaldoDevedorContas() {
 		return getValorContasSemEntrada().subtract(getTotalContasCobradas()).add(valorDescontoFaixa);
 	}
@@ -69,9 +74,9 @@ public class CancelarParcelamentoHelper {
 	public BigDecimal getValorContasSemEntrada() {
 		return valorContas.subtract(valorEntrada);
 	}
-
+	
 	public BigDecimal getParcelaSemJuros() {
-		return getValorContasSemEntrada().divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
+		return getValorContasSemEntrada().divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
 	public BigDecimal getTotalContasCobradas() {
@@ -79,7 +84,7 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaAcrescimos() {
-		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
 
 	public BigDecimal getTotalAcrescimosCobrados() {
@@ -87,6 +92,11 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getParcelaDescontoAcrescimos() {
-		return valorDescontoAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes)).setScale(2, BigDecimal.ROUND_DOWN);
+		return valorDescontoAcrescimos.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
 	}
+	
+	public BigDecimal getParcelaDescontoFaixa() {
+		return valorDescontoFaixa.divide(BigDecimal.valueOf(numeroPrestacoes),2,RoundingMode.HALF_DOWN).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+	
 }
