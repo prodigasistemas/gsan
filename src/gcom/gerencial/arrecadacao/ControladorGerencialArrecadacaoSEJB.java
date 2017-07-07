@@ -797,8 +797,8 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			//
 			// --------------------------------------------------------
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
 			// Este catch serve para interceptar qualquer exceção que o processo
 			// batch venha a lançar e garantir que a unidade de processamento do
