@@ -224,6 +224,10 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 						UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		try {
+			
+			if (idLocalidade == 2) {
+				
+			
 			//System.out.print("=====> LOCALIDADE : " + idLocalidade);
 			
 			List imoveisResumoArrecadacaoAguaEsgoto = this.repositorioGerencialArrecadacao
@@ -794,6 +798,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			// --------------------------------------------------------
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			}
 		} catch (Exception ex) {
 			// Este catch serve para interceptar qualquer exceção que o processo
 			// batch venha a lançar e garantir que a unidade de processamento do
@@ -1045,8 +1050,10 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 						if (idLocalidade == 2) System.out.println(" 9.27 - " + i);
 						if (helper.getIdSetorComercial().equals(0)) {
 							if (idLocalidade == 2) System.out.println(" 9.28 - " + i);
+							
 							dadosPagamentoSemContaGuiaDebito = (Object[]) repositorioGerencialArrecadacao
 								.pesquisarDadosPagamentoSemContaGuiaDebito(helper.getIdLocalidade());
+							
 							if (idLocalidade == 2) System.out.println(" 9.29 - " + i);
 							// Setor Comercial
 							helper.setIdSetorComercial((Integer) dadosPagamentoSemContaGuiaDebito[0]);
