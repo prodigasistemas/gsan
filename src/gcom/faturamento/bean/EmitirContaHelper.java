@@ -156,6 +156,17 @@ public class EmitirContaHelper implements Serializable {
 	private Integer consumoMacro;
 	private BigDecimal valorTotalASerrateado;
 	
+	private boolean informarImpostos;
+	
+	private String descricaoImpostosEAliquotas;
+	private BigDecimal percentualImpostosEAliquotas;
+	private BigDecimal valorBaseCalculoImpostos;
+	private BigDecimal valorImpostosEAliquotas;
+	
+	private String agenciaReguladora;
+	private String telefoneAgenciaReguladora;
+	private String emailAgenciaReguladora;
+	
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
 	}
@@ -1798,5 +1809,69 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setConsumoMacro(Integer consumoMacro) {
 		this.consumoMacro = consumoMacro;
+	}
+
+	public String getDescricaoImpostosEAliquotas() {
+		return descricaoImpostosEAliquotas;
+	}
+
+	public void setDescricaoImpostosEAliquotas(String descricaoImpostosEAliquotas) {
+		this.descricaoImpostosEAliquotas = descricaoImpostosEAliquotas;
+	}
+
+	public BigDecimal getPercentualImpostosEAliquotas() {
+		return percentualImpostosEAliquotas;
+	}
+
+	public void setPercentualImpostosEAliquotas(BigDecimal percentualImpostosEAliquotas) {
+		this.percentualImpostosEAliquotas = percentualImpostosEAliquotas;
+	}
+
+	public BigDecimal getValorBaseCalculoImpostos() {
+		return valorBaseCalculoImpostos;
+	}
+
+	public void setValorBaseCalculoImpostos(BigDecimal valorBaseCalculoImpostos) {
+		this.valorBaseCalculoImpostos = valorBaseCalculoImpostos;
+	}
+
+	public BigDecimal getValorImpostosEAliquotas() {
+		return valorImpostosEAliquotas;
+	}
+
+	public void setValorImpostosEAliquotas(BigDecimal valorImpostosEAliquotas) {
+		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
+	}
+
+	public boolean isInformarImpostos() {
+		return informarImpostos;
+	}
+
+	public void setInformarImpostos(boolean informarImpostos) {
+		this.informarImpostos = informarImpostos;
+	}
+
+	public String getAgenciaReguladora() {
+		return agenciaReguladora;
+	}
+
+	public void setAgenciaReguladora(String agenciaReguladora) {
+		this.agenciaReguladora = agenciaReguladora;
+	}
+
+	public String getTelefoneAgenciaReguladora() {
+		return telefoneAgenciaReguladora;
+	}
+
+	public void setTelefoneAgenciaReguladora(String telefoneAgenciaReguladora) {
+		this.telefoneAgenciaReguladora = telefoneAgenciaReguladora;
+	}
+
+	public String getEmailAgenciaReguladora() {
+		return emailAgenciaReguladora;
+	}
+
+	public void setEmailAgenciaReguladora(String emailAgenciaReguladora) {
+		this.emailAgenciaReguladora = emailAgenciaReguladora;
 	}
 }

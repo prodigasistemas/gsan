@@ -2,10 +2,11 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="gcom.atendimentopublico.AgenciaReguladoraMunicipio" table="atendimentopublico.agencia_regul_municipio">
-		<composite-id name="comp_id" class="gcom.atendimentopublico.AgenciaReguladoraMunicipioPK">
-			<key-property name="agenciaReguladoraId" column="areg_id" type="java.lang.Integer" length="4"/>
-			<key-property name="municipioId" column="muni_id" type="java.lang.Integer" length="4"/>
-		</composite-id>
+		<id name="id" type="java.lang.Integer" column="armu_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_agencia_regul_municipio</param>
+			</generator>
+		</id>
 		
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" not-null="true" column="armu_tmultimaalteracao" length="8"/>
 		

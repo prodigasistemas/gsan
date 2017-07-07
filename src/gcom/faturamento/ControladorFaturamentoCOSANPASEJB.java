@@ -6,6 +6,9 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.geografico.FiltroMunicipio;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -14,6 +17,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadraFace;
+import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -514,6 +518,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior6, diasConsumoMes6);
 
 								contaTxt = preencherDadosRateioAguaEsgoto(emitirContaHelper, contaTxt);
+								
+								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
+								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
+								
 								
 								if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
 										&& municipioEntrega.equals(municipioImovel)) {
@@ -3039,7 +3047,40 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1)));
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
-
+			
+			Integer esferaPoder = null;
+			try {
+				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(idContaEP);
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
+			// Nao exibe demonstrativo de impostos para imoveis publicos federais
+			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
+				emitirContaHelper.setInformarImpostos(true);
+				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
+				emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+				emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+				emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+				emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+			}
+			
+			
+			Object[] contatoAgenciaReguladora = null;
+			try {
+				contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
+				if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+					emitirContaHelper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
+					emitirContaHelper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
+					emitirContaHelper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 
 			if (cobrarTaxaEmissaoConta) {
@@ -3503,4 +3544,47 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return colecaoDebitosACobrarCategorias;
 	}
 	
+	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException {
+		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID, emitirContaHelper.getIdSetorComercial()));
+		
+		SetorComercial setorComercial = (SetorComercial) getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName()).iterator().next();
+		
+		FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
+		filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, setorComercial.getMunicipio().getId()));
+		
+		Municipio municipio = (Municipio) getControladorUtil().pesquisar(filtroMunicipio, Municipio.class.getName()).iterator().next();
+		
+		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
+	}
+
+	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
+		
+		if (dadosAliquotasImpostos.length > 0) {
+			contaTxt.append(Util.completaString("Tributos", 15));
+			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[0], 21), 21));
+			contaTxt.append(Util.completaString("(%)", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
+			contaTxt.append(Util.completaString("Base de cálculo", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaString("Valor (R$)", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
+		}
+		
+		return contaTxt;
+	}
+	
+	private StringBuilder preencherContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
+		Object[] contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
+		if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+			contaTxt.append(Util.completaString("Ag. reguladora", 14));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[0], 10));
+			contaTxt.append(Util.completaString("Telefone", 10));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[1], 15));
+			contaTxt.append(Util.completaString("Email", 5));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[2], 30));
+		}
+		return contaTxt;
+	}
 }

@@ -33,6 +33,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
+import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaForma;
@@ -109,7 +110,6 @@ import gcom.faturamento.debito.DebitoCobradoHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
-import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
@@ -186,6 +186,7 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -15765,5 +15766,71 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper, boolean isContaHistorico) {
+		Object[] retorno = new Object[4];
+		try {
+			
+			BigDecimal valorPrestacao = new BigDecimal(0.00);
+			
+			Collection<Integer> financiamentosTipo = new ArrayList<Integer>();
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+			financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+			financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+			
+			Filtro filtro = null;
+			if (isContaHistorico) {
+				filtro = new FiltroDebitoCobradoHistorico();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobradoHistorico.CONTA_HISTORICO_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobradoHistorico.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+				
+				Collection<DebitoCobradoHistorico> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobradoHistorico.class.getName());
+				
+				for (Iterator<DebitoCobradoHistorico> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+					DebitoCobradoHistorico debito = (DebitoCobradoHistorico) iterator.next();
+					valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+				}
 
+			} else {
+				filtro = new FiltroDebitoCobrado();
+				filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
+				
+				Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+				
+				for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+					DebitoCobrado debito = (DebitoCobrado) iterator.next();
+					valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+				}
+
+			}
+			
+			FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
+			Collection colecao = getControladorUtil().pesquisar(filtroSistemaParametro,SistemaParametro.class.getName());
+			
+			String descricaoAliquotaImposto = "";
+			BigDecimal aliquota = null;
+				
+			if(colecao != null && !colecao.isEmpty()){
+				SistemaParametro sistemaParametro = (SistemaParametro) colecao.iterator().next();
+				descricaoAliquotaImposto = sistemaParametro.getDescricaoAliquotaImposto();
+				aliquota = sistemaParametro.getValorAliquotaImposto();
+			}
+			
+			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
+			
+			
+			BigDecimal percentualAliquota = aliquota.divide(new BigDecimal(100));
+			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
+	    	
+			retorno[0] = descricaoAliquotaImposto; 
+			retorno[1] = aliquota; 
+			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP);
+			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		return retorno;
+    }
 }
