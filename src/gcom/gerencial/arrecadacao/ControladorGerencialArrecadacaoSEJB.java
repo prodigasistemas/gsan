@@ -1049,8 +1049,13 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 						
 						if (idLocalidade == 2) System.out.println(" 9.27 - " + i);
 						if (helper.getIdSetorComercial().equals(0)) {
+							if (idLocalidade == 2) System.out.println(" imovel: - " + idImovel);
+
 							if (idLocalidade == 2) System.out.println(" 9.28 - " + i);
-							
+							if (idLocalidade == 2) System.out.println("setor:");
+							if (idLocalidade == 2) System.out.println(helper.getIdSetorComercial());
+							if (idLocalidade == 2) System.out.println("localidade:" + (helper.getIdLocalidade() == null));
+							if (idLocalidade == 2) System.out.println(helper.getIdLocalidade());
 							dadosPagamentoSemContaGuiaDebito = (Object[]) repositorioGerencialArrecadacao
 								.pesquisarDadosPagamentoSemContaGuiaDebito(helper.getIdLocalidade());
 							
