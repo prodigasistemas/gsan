@@ -1411,7 +1411,7 @@ public class ControladorBatchSEJB implements SessionBean {
 							TarefaBatchGerarResumoArrecadacao dadosGerarResumoArrecadacao = new TarefaBatchGerarResumoArrecadacao(processoIniciado.getUsuario(),
 									funcionalidadeIniciada.getId());
 	
-							FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade();
+							FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade(FiltroLocalidade.ID);
 							Collection<Localidade> colLocalidadeResumoArrecadacao = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacao,
 									Localidade.class.getName());
 	
