@@ -224,10 +224,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 						UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		try {
-			
-			if (idLocalidade == 2) {
-				
-			
 			//System.out.print("=====> LOCALIDADE : " + idLocalidade);
 			
 			List imoveisResumoArrecadacaoAguaEsgoto = this.repositorioGerencialArrecadacao
@@ -797,7 +793,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			//
 			// --------------------------------------------------------
 
-			}
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
 			// Este catch serve para interceptar qualquer exceção que o processo
@@ -835,35 +830,29 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			List imoveisResumoArrecadacaoOutrosGuiaPagamento = new ArrayList();
 			List imoveisResumoArrecadacaoOutrosDebitoACobrar = new ArrayList();
 			
-			if (idLocalidade == 2) System.out.println("Processando localidade " + idLocalidade);
-			
 			// Usado para calcular os Valor Não Identificado
 			Integer idPagamento = 0;
 			Integer idPagamentoAnterior = 0;
 			BigDecimal valorNaoIdentificado = null;
 			
-			if (idLocalidade == 2) System.out.println(" 1 ");
 			//**************************************************************************************
 			// RESUMO ARRECADACAO OUTROS - CONTA
 			//**************************************************************************************
 			imoveisResumoArrecadacaoOutrosConta = this.repositorioGerencialArrecadacao
 					.getImoveisResumoArrecadacaoOutrosConta(
 							idLocalidade, anoMesReferenciaArrecadacao);
-			if (idLocalidade == 2) System.out.println(" 2 ");
 			//**************************************************************************************
 			// RESUMO ARRECADACAO OUTROS - GUIA PAGAMENTO
 			//**************************************************************************************
 			imoveisResumoArrecadacaoOutrosGuiaPagamento = this.repositorioGerencialArrecadacao
 					.getImoveisResumoArrecadacaoOutrosGuiaPagamento(
 							idLocalidade, anoMesReferenciaArrecadacao);
-			if (idLocalidade == 2) System.out.println(" 3 ");
 			//**************************************************************************************
 			// RESUMO ARRECADACAO OUTROS - DEBITO A COBRAR
 			//**************************************************************************************
 			imoveisResumoArrecadacaoOutrosDebitoACobrar = this.repositorioGerencialArrecadacao
 					.getImoveisResumoArrecadacaoOutrosDebitoACobrar(
 							idLocalidade, anoMesReferenciaArrecadacao);
-			if (idLocalidade == 2) System.out.println(" 4 ");
 			//**************************************************************************************
 			
 			//**************************************************************************************
@@ -872,18 +861,16 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					!imoveisResumoArrecadacaoOutrosConta.isEmpty()) {
 				imoveisResumoArrecadacaoOutros.addAll(imoveisResumoArrecadacaoOutrosConta);
 			}
-			if (idLocalidade == 2) System.out.println(" 5 ");
+			
 			if (imoveisResumoArrecadacaoOutrosGuiaPagamento != null &&
 					!imoveisResumoArrecadacaoOutrosGuiaPagamento.isEmpty()) {
 				imoveisResumoArrecadacaoOutros.addAll(imoveisResumoArrecadacaoOutrosGuiaPagamento);
 			}
 			
-			if (idLocalidade == 2) System.out.println(" 6 ");
 			if (imoveisResumoArrecadacaoOutrosDebitoACobrar != null &&
 					!imoveisResumoArrecadacaoOutrosDebitoACobrar.isEmpty()) {
 				imoveisResumoArrecadacaoOutros.addAll(imoveisResumoArrecadacaoOutrosDebitoACobrar);
 			}
-			if (idLocalidade == 2) System.out.println(" 7 ");
 			//**************************************************************************************
 
 			List<ResumoArrecadacaoAguaEsgotoHelper> listaSimplificada = new ArrayList();
@@ -897,14 +884,13 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			Integer anoMesReferenciaDocumento = null;
 			int posicao = 0;
 			ResumoArrecadacaoAguaEsgotoHelper jaCadastrado = null;
-			if (idLocalidade == 2) System.out.println(" 8 ");
+			
 			for (int i = 0; i < imoveisResumoArrecadacaoOutros.size(); i++) {
-				if (idLocalidade == 2) System.out.println(" 9.1 - " + i);
 				obj = imoveisResumoArrecadacaoOutros.get(i);
-				if (idLocalidade == 2) System.out.println(" 9.2 - " + i);
+				
 				if (obj instanceof Object[]) {
 					retorno = (Object[]) obj;
-					if (idLocalidade == 2) System.out.println(" 9.3 - " + i);
+					
 					// Se o Tipo de Financiamento for igual a NULL, despresar o Pagamento
 					//if (retorno[25] != null) {
 						
@@ -930,46 +916,39 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 								(Integer) retorno[18], // Número da Quadra
 								(Integer) retorno[19], // Forma de Arrecadacao
 								(Integer) retorno[20]);// Agente Arrecadador
-						if (idLocalidade == 2) System.out.println(" 9.4 - " + i);
+
 						Integer idImovel = (Integer) retorno[0]; // Codigo do imovel que esta sendo processado
-						if (idLocalidade == 2) System.out.println(" 9.5 - " + i);
+						
 						if (idImovel != null) {
-							if (idLocalidade == 2) System.out.println(" 9.6 - " + i);
 							// Pesquisamos a esfera de poder do cliente responsavel
 							helper.setIdEsferaPoder(repositorioGerencialCadastro.pesquisarEsferaPoderClienteResponsavelImovel(idImovel));
-							if (idLocalidade == 2) System.out.println(" 9.7 - " + i);
 							// Pesquisamos o tipo de cliente responsavel do imovel
 							helper.setIdTipoCliente(repositorioGerencialCadastro.pesquisarTipoClienteClienteResponsavelImovel(idImovel));
-							if (idLocalidade == 2) System.out.println(" 9.8 - " + i);
+
 							// pesquisando a categoria
 							// [UC0306] - Obtter principal categoria do imóvel
 							Categoria categoria = null;
 							categoria = this.getControladorImovel().obterPrincipalCategoriaImovel(idImovel);
-							if (idLocalidade == 2) System.out.println(" 9.9 - " + i);
+
 							if (categoria != null) {
-								if (idLocalidade == 2) System.out.println(" 9.10 - " + i);
 								helper.setIdCategoria(categoria.getId());
 
 								// Pesquisando a principal subcategoria
 								ImovelSubcategoria subcategoria =
 									this.getControladorImovel().obterPrincipalSubcategoria(categoria.getId(), idImovel);
-								if (idLocalidade == 2) System.out.println(" 9.11 - " + i);
+
 								if (subcategoria != null){
 									helper.setIdSubCategoria(subcategoria.getComp_id().getSubcategoria().getId());
 								}
-								if (idLocalidade == 2) System.out.println(" 9.12 - " + i);
 							}
-							if (idLocalidade == 2) System.out.println(" 9.13 - " + i);
+							
 							// Verifica Indicador de Hidrometro para o imovel
 							// [UC0307] - Obter Indicador de Existência de Hidrômetro
 							String indicadorHidrometroString = new Integer(this.getControladorImovel().
 									obterIndicadorExistenciaHidrometroImovel(idImovel)).toString();
-							if (idLocalidade == 2) System.out.println(" 9.14 - " + i);
 							indicadorHidrometro = new Short(indicadorHidrometroString);
 							helper.setIndicadorHidrometro(indicadorHidrometro);
-							if (idLocalidade == 2) System.out.println(" 9.15 - " + i);
 						}else {
-							if (idLocalidade == 2) System.out.println(" 9.16 - " + i);
 							// Esfera de Poder
 							helper.setIdEsferaPoder(null);
 							// Tipo de Cliente
@@ -980,15 +959,14 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 							helper.setIdSubCategoria(10);
 							// Indicador de Hidrometro
 							helper.setIndicadorHidrometro(new Short("2"));
-							if (idLocalidade == 2) System.out.println(" 9.17 - " + i);
 						}
-						if (idLocalidade == 2) System.out.println(" 9.18 - " + i);
+						
 						anoMesReferenciaDocumento = null;
 						if (retorno[21] != null) {
 							anoMesReferenciaDocumento = (Integer) retorno[21];
 							helper.setAnoMesReferenciaDocumento(anoMesReferenciaDocumento);
 						}
-						if (idLocalidade == 2) System.out.println(" 9.19 - " + i);
+						
 						// Verifica Epoca de Pagamento
 						Integer epocaPagamento = null;
 						String dataPagamento = retorno[22].toString();
@@ -997,19 +975,19 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 
 							dataVencimentoConta = retorno[23].toString();
 						}
-						if (idLocalidade == 2) System.out.println(" 9.20 - " + i);
+						
 						//***********************************************************************
 						// Verifica o Indicador de Contas Recebidas no Mes
 						//***********************************************************************
 						helper.setIdIndicadorContasRecebidas(this.verificarIndicadorContasRecebidasNoMes(
 								anoMesReferenciaDocumento, dataPagamento));
 						//***********************************************************************
-						if (idLocalidade == 2) System.out.println(" 9.21 - " + i);
+						
 						String dataVencimentoGuia = "";
 						if (retorno[24] != null && !retorno[24].equals("")) {
 							dataVencimentoGuia = retorno[24].toString();
 						}
-						if (idLocalidade == 2) System.out.println(" 9.22 - " + i);
+						
 						/*********************************************************************
 						 * Dados da Arrecadacao OUTROS
 						 *********************************************************************/
@@ -1018,18 +996,18 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 							tipoFinanciamento = (Integer) retorno[25];
 							helper.setIdTipoFinanciamento(tipoFinanciamento);
 						}
-						if (idLocalidade == 2) System.out.println(" 9.23 - " + i);
+						
 						Integer lancamentoItemContabilOutros = null;
 						if (retorno[26] != null) {
 							lancamentoItemContabilOutros = (Integer) retorno[26];
 							helper.setIdLancamentoItemContabilOutros(lancamentoItemContabilOutros);
 						}
-						if (idLocalidade == 2) System.out.println(" 9.24 - " + i);
+						
 						BigDecimal valorDebitos = new BigDecimal(0);
 						if (retorno[27] != null) {
 							valorDebitos = (BigDecimal) retorno[27];
 						}
-						if (idLocalidade == 2) System.out.println(" 9.25 - " + i);
+						
 						/*********************************************************************/
 						
 						if (helper.getIdEpocaPagamento() == 99) {
@@ -1041,25 +1019,16 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 							epocaPagamento = retornaValorEpocaPagamento(dataPagamento, dataVencimentoGuia);
 							helper.setIdEpocaPagamento(epocaPagamento);						
 						}
-						if (idLocalidade == 2) System.out.println(" 9.26 - " + i);
+						
 						//***********************************************************************
 						// Verifica os Casos em que recupera os Primeiros Registros
 						//***********************************************************************
 						Object[] dadosPagamentoSemContaGuiaDebito = null; 
 						
-						if (idLocalidade == 2) System.out.println(" 9.27 - " + i);
 						if (helper.getIdSetorComercial().equals(0)) {
-							if (idLocalidade == 2) System.out.println(" imovel: - " + idImovel);
-
-							if (idLocalidade == 2) System.out.println(" 9.28 - " + i);
-							if (idLocalidade == 2) System.out.println("setor:");
-							if (idLocalidade == 2) System.out.println(helper.getIdSetorComercial());
-							if (idLocalidade == 2) System.out.println("localidade:" + (helper.getIdLocalidade() == null));
-							if (idLocalidade == 2) System.out.println(helper.getIdLocalidade());
 							dadosPagamentoSemContaGuiaDebito = (Object[]) repositorioGerencialArrecadacao
 								.pesquisarDadosPagamentoSemContaGuiaDebito(helper.getIdLocalidade());
 							
-							if (idLocalidade == 2) System.out.println(" 9.29 - " + i);
 							// Setor Comercial
 							helper.setIdSetorComercial((Integer) dadosPagamentoSemContaGuiaDebito[0]);
 							// Codigo Setor Comercial
@@ -1070,13 +1039,12 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 							helper.setIdQuadra((Integer) dadosPagamentoSemContaGuiaDebito[3]);
 							// Numero Quadra
 							helper.setIdNumeroQuadra((Integer) dadosPagamentoSemContaGuiaDebito[4]);
-							if (idLocalidade == 2) System.out.println(" 9.30 - " + i);
 						}
 						
 						// Codigo da Rota
 						helper.setCodigoRota(this.pesquisaCodigoRota(helper.getIdRota()).intValue());
 						//***********************************************************************
-						if (idLocalidade == 2) System.out.println(" 9.31 - " + i);
+						
 						//***********************************************************************
 						// Calcula o Valor Não Identificado
 						//***********************************************************************
@@ -1088,7 +1056,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 								valorNaoIdentificado = (BigDecimal) retorno[28];
 							}
 						}
-						if (idLocalidade == 2) System.out.println(" 9.32 - " + i);
 						idPagamentoAnterior = idPagamento;
 						//***********************************************************************
 						
@@ -1097,7 +1064,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 						// Um objeto eh igual ao outro se ele tem todos as
 						// informacoes de quebra iguais.
 						if (listaSimplificada.contains(helper)) {
-							if (idLocalidade == 2) System.out.println(" 9.33 - " + i);
 							posicao = listaSimplificada.indexOf(helper);
 							jaCadastrado = (ResumoArrecadacaoAguaEsgotoHelper) listaSimplificada.get(posicao);
 
@@ -1107,9 +1073,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 							// Somatorio de Valor Nao Identificado
 							jaCadastrado.setValorNaoIdentificado(jaCadastrado.getValorNaoIdentificado()
 									.add(valorNaoIdentificado));
-							if (idLocalidade == 2) System.out.println(" 9.34 - " + i);
 						} else {
-							if (idLocalidade == 2) System.out.println(" 9.35 - " + i);
 							// Incluimos o Valor Debitos
 							helper.setValorDebitos(valorDebitos);
 							
@@ -1118,13 +1082,11 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 									.add(valorNaoIdentificado));
 							
 							listaSimplificada.add(helper);
-							if (idLocalidade == 2) System.out.println(" 9.36 - " + i);
 						}
 					//}
 				}
 			}
-			if (idLocalidade == 2) System.out.println(" 10 ");
-
+			
 			imoveisResumoArrecadacaoOutros.clear();
 			imoveisResumoArrecadacaoOutros = null;
 			
@@ -1136,7 +1098,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			
 			imoveisResumoArrecadacaoOutrosGuiaPagamento.clear();
 			imoveisResumoArrecadacaoOutrosGuiaPagamento = null;
-			if (idLocalidade == 2) System.out.println(" 11 ");
+			
 			/**
 			 * para todas as ResumoArrecadacaoAguaEsgotoHelper cria
 			 * UnResumoArrecadacao
@@ -1153,7 +1115,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			BigDecimal volumeNaoIdentificado = new BigDecimal(0);
 			valorImpostos = new BigDecimal(0);
 			Date ultimaAlteracao = null;
-			if (idLocalidade == 2) System.out.println(" 12 ");
+			
 			//GSubcategoria subCategoria = null;
 			GClienteTipo clienteTipo = null;
 			GLigacaoAguaSituacao ligacaoAguaSituacao = null;
@@ -1176,7 +1138,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			GArrecadacaoForma formaArrecadacao = null;
 			GArrecadador agenteArrecadador = null;
 			UnResumoArrecadacao resumoArrecadacaoAguaEsgoto = null;
-			if (idLocalidade == 2) System.out.println(" 13 ");
+			
 			BigDecimal valorDebito = new BigDecimal(0);
 			
 			// Preenche os Objetos com valor 0 que serão usados em Credito e Outros
@@ -1184,11 +1146,10 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 			Integer itemContabelOutros = null;
 			Integer itemContabelCredito = null;
 			Integer financiamentoTipoOutros = null;
-			if (idLocalidade == 2) System.out.println(" 14 ");
+			
 			for (int i = 0; i < listaSimplificada.size(); i++) {
-				if (idLocalidade == 2) System.out.println(" 14.1 " + i);
 				helper = (ResumoArrecadacaoAguaEsgotoHelper) listaSimplificada.get(i);
-				if (idLocalidade == 2) System.out.println(" 14.2 " + i);
+
 				// Mes ano de referencia
 				anoMesReferencia = anoMesReferenciaArrecadacao;
 				
@@ -1201,7 +1162,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 				if (helper.getIdNumeroQuadra() != null) {
 					numeroQuadra = (helper.getIdNumeroQuadra());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.3 " + i);
+				
 				// Indicador de Recebidas no Mes
 				if (helper.getIdIndicadorContasRecebidas() != null) {
 					indicadorRecebidasNomes = (helper.getIdIndicadorContasRecebidas().shortValue());
@@ -1217,7 +1178,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					subCategoria.setId(helper.getIdSubCategoria());
 				}
 				
-				if (idLocalidade == 2) System.out.println(" 14.4 " + i);
 				// Tipo do Cliente Responsável
 				if (helper.getIdTipoCliente() != null) {
 					clienteTipo = new GClienteTipo();
@@ -1235,7 +1195,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					unidadeNegocio = new GUnidadeNegocio();
 					unidadeNegocio.setId(helper.getIdUnidadeNegocio());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.5 " + i);
+				
 				// Localidade
 				if (helper.getIdLocalidade() != null){
 					localidade = new GLocalidade();
@@ -1247,7 +1207,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					elo = new GLocalidade();
 					elo.setId(helper.getIdCodigoElo());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.6 " + i);
+				
 				// Quadra
 				if (helper.getIdQuadra() != null) {
 					quadra = new GQuadra();
@@ -1266,7 +1226,6 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					ligacaoEsgotoPerfil.setId(helper.getIdPerfilLigacaoEsgoto());
 				}
 				
-				if (idLocalidade == 2) System.out.println(" 14.7 " + i);
 				// Gerencia Regional
 				if (helper.getIdGerenciaRegional() != null) {
 					gerenciaRegional = new GGerenciaRegional();
@@ -1284,7 +1243,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					documentoTipo = new GDocumentoTipo();
 					documentoTipo.setId(helper.getIdTipoDocumento());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.8 " + i);
+				
 				// Situacao do Pagamento
 				if (helper.getIdSituacaoPagamento() != null) {
 					pagamentoSituacao = new GPagamentoSituacao();
@@ -1302,7 +1261,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					epocaPagamento = new GEpocaPagamento();
 					epocaPagamento.setId(helper.getIdEpocaPagamento());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.9 " + i);
+				
 				// Esfera de Poder
 				if (helper.getIdEsferaPoder() != null){
 					esferaPoder = new GEsferaPoder();
@@ -1321,7 +1280,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					imovelPerfil = new GImovelPerfil();
 					imovelPerfil.setId(helper.getIdPerfilImovel());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.10 " + i);
+				
 				// Rota
 				if (helper.getIdRota() != null) {
 					rota = new GRota();
@@ -1339,7 +1298,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					agenteArrecadador = new GArrecadador();
 					agenteArrecadador.setId(helper.getIdAgenteArrecadador());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.11 " + i);
+				
 				// Indicador Hidrometro
 				indicadorHidrometro = helper.getIndicadorHidrometro();
 				
@@ -1354,7 +1313,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 				if (helper.getValorNaoIdentificado() != null) {
 					volumeNaoIdentificado = (helper.getValorNaoIdentificado());
 				}
-				if (idLocalidade == 2) System.out.println(" 14.12 " + i);
+				
 				// Criamos um resumo de Arrecadacao Agua/Esgoto
 				resumoArrecadacaoAguaEsgoto = new UnResumoArrecadacao(
 						anoMesReferencia , codigoSetorComercial    , numeroQuadra,
@@ -1381,7 +1340,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 				resumoArrecadacaoAguaEsgoto.setCreditoOrigemIdCredito(creditoOrigem);
 				resumoArrecadacaoAguaEsgoto.setLancamentoItemIdCredito(itemContabelCredito);
 				resumoArrecadacaoAguaEsgoto.setValorDocumentosRecebidosCredito(new BigDecimal(0));
-				if (idLocalidade == 2) System.out.println(" 14.13 " + i);
+				
 				/*********************************************************************************
 				 * Arrecadacao OUTROS
 				 *********************************************************************************/
@@ -1400,7 +1359,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 				if (helper.getIdTipoFinanciamento() != null) {
 					financiamentoTipoOutros = helper.getIdTipoFinanciamento();
 				}
-				if (idLocalidade == 2) System.out.println(" 14.14 " + i);
+				
 				// Se o Tipo de Financiamento for igual a NULL, despresar o Pagamento
 				//if (financiamentoTipoOutros != null) {
 					resumoArrecadacaoAguaEsgoto.setLancamentoItemIdOutros(itemContabelOutros);
@@ -1411,7 +1370,7 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					//System.out.print("=====> Inserindo Resumo Arrecadacao OUTROS <=====");
 					this.getControladorBatch().inserirObjetoParaBatchGerencial(resumoArrecadacaoAguaEsgoto);
 				//}
-					if (idLocalidade == 2) System.out.println(" 14.15 " + i);
+				
 				helper = null;
 				resumoArrecadacaoAguaEsgoto = null;
 			}
