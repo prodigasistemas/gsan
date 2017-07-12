@@ -62,6 +62,8 @@ public class RelatorioDadosDiariosValoresDiariosBean implements RelatorioBean {
 	
 	private String percentualDoDia;
 	
+	private String arrecadador;
+	
 	public RelatorioDadosDiariosValoresDiariosBean() {
 		super();
 	}
@@ -293,6 +295,14 @@ public class RelatorioDadosDiariosValoresDiariosBean implements RelatorioBean {
 
 	public void setValorAteDia(String valorAteDia) {
 		this.valorAteDia = valorAteDia;
+	}
+
+	public String getArrecadador() {
+		return arrecadador;
+	}
+
+	public void setArrecadador(String arrecadador) {
+		this.arrecadador = arrecadador;
 	}
 
 }

@@ -290,6 +290,10 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 				bean.setValorAteDia(Util.formatarMoedaReal(valorDia));
 				bean.setPercentualDoDia(Util.formatarMoedaReal(percentualDoDia));
 				
+				if (itemHelper.getArrecadador() != null && !itemHelper.getArrecadador().isEmpty()) {
+					bean.setArrecadador(itemHelper.getArrecadador());
+				}
+				
 				colecaoBean.add(bean);
 			}
 		}

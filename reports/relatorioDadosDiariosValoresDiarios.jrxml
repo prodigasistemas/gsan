@@ -61,10 +61,11 @@
 	<field name="getQuantPag" class="java.lang.String"/>
 	<field name="getValor" class="java.lang.String"/>
 	<field name="getValorAteDia" class="java.lang.String"/>
+	<field name="getArrecadador" class="java.lang.String"/>
 
 
-		<group  name="dadosDiarios" isStartNewPage="true" >
-			<groupExpression><![CDATA[$F{getMesAno}]]></groupExpression>
+		<group  name="dadosDiarios" >
+			<groupExpression><![CDATA[$F{getMesAno}+$F{getData}]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -74,8 +75,8 @@
 			</band>
 			</groupFooter>
 		</group>
-		<group  name="parametros" >
-			<groupExpression><![CDATA[]]></groupExpression>
+		<group  name="parametros" isStartNewPage="true" >
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="62"  isSplitAllowed="true" >
 				<rectangle radius="0" >
@@ -267,7 +268,7 @@
 			</groupFooter>
 		</group>
 		<group  name="gerencia" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="17"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeGerencia} != null)]]></printWhenExpression>
@@ -305,7 +306,7 @@
 			</groupFooter>
 		</group>
 		<group  name="unidadeNegocio" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="16"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeUnidadeNegocio} != null)]]></printWhenExpression>
@@ -343,7 +344,7 @@
 			</groupFooter>
 		</group>
 		<group  name="elo" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="16"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeLocalidadePolo} != null)]]></printWhenExpression>
@@ -381,7 +382,7 @@
 			</groupFooter>
 		</group>
 		<group  name="localidade" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="15"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeLocalidade} != null)]]></printWhenExpression>
@@ -419,7 +420,7 @@
 			</groupFooter>
 		</group>
 		<group  name="agente" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="15"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeAgente} != null)]]></printWhenExpression>
@@ -452,12 +453,12 @@
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="7"  isSplitAllowed="true" >
+			<band height="18"  isSplitAllowed="true" >
 			</band>
 			</groupFooter>
 		</group>
 		<group  name="categoria" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="16"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeCategoria} != null)]]></printWhenExpression>
@@ -495,7 +496,7 @@
 			</groupFooter>
 		</group>
 		<group  name="perfil" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="15"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomePerfil} != null)]]></printWhenExpression>
@@ -533,7 +534,7 @@
 			</groupFooter>
 		</group>
 		<group  name="documento" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="17"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeDocumento} != null)]]></printWhenExpression>
@@ -571,7 +572,7 @@
 			</groupFooter>
 		</group>
 		<group  name="arrecadacaoForma" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="15"  isSplitAllowed="true" >
 				<printWhenExpression><![CDATA[new Boolean($F{getNomeArrecadacaoForma} != null)]]></printWhenExpression>
@@ -609,7 +610,7 @@
 			</groupFooter>
 		</group>
 		<group  name="valor" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="44"  isSplitAllowed="true" >
 				<rectangle radius="0" >
@@ -1175,14 +1176,15 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="17"  isSplitAllowed="true" >
+			<band height="48"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="3"
-						y="3"
+						y="2"
 						width="65"
 						height="11"
-						key="textField-202"/>
+						key="textField-202"
+						isPrintRepeatedValues="false"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="Courier New" size="8"/>
@@ -1192,7 +1194,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="188"
-						y="3"
+						y="35"
 						width="75"
 						height="11"
 						key="textField-208"/>
@@ -1205,7 +1207,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="266"
-						y="3"
+						y="35"
 						width="76"
 						height="11"
 						key="textField-209"/>
@@ -1218,7 +1220,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="347"
-						y="3"
+						y="35"
 						width="95"
 						height="11"
 						key="textField-210"/>
@@ -1231,7 +1233,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="445"
-						y="3"
+						y="35"
 						width="65"
 						height="11"
 						key="textField-211"/>
@@ -1244,7 +1246,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="514"
-						y="3"
+						y="35"
 						width="113"
 						height="11"
 						key="textField-212"/>
@@ -1257,7 +1259,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="752"
-						y="3"
+						y="35"
 						width="28"
 						height="11"
 						key="textField-213"/>
@@ -1270,7 +1272,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="630"
-						y="3"
+						y="35"
 						width="31"
 						height="11"
 						key="textField-231"/>
@@ -1283,7 +1285,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="74"
-						y="3"
+						y="35"
 						width="53"
 						height="11"
 						key="textField-232"/>
@@ -1296,7 +1298,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="130"
-						y="3"
+						y="35"
 						width="54"
 						height="11"
 						key="textField-233"/>
@@ -1309,7 +1311,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="665"
-						y="3"
+						y="35"
 						width="83"
 						height="11"
 						key="textField-248"/>
@@ -1318,6 +1320,19 @@
 						<font fontName="Courier New" size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorAteDia}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="30"
+						y="18"
+						width="216"
+						height="11"
+						key="textField-252"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Courier New" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getArrecadador}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
