@@ -498,7 +498,7 @@ public class ImpressaoContaImpressoraTermica {
 						qtdLinhas++;
 						descricao = "";
 						descricao = "TARIFA MINIMA "
-								+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias))) + " POR UNIDADE ";
+								+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN)) + " POR UNIDADE ";
 						linhas += formarLinha(7, 0, 63, 733, descricao, 0, qtdLinhas * 34);
 						descricao = consumoMinimo + " m3";
 						linhas += formarLinha(7, 0, 571, 733, descricao, 0, qtdLinhas * 34);
@@ -512,7 +512,7 @@ public class ImpressaoContaImpressoraTermica {
 						if (contaCategoria.getConsumoAgua() != null && cContaCategoriaConsumoFaixa != null && cContaCategoriaConsumoFaixa.size() > 0) {
 							qtdLinhas++;
 							descricao = "ATE " + ((int) contaCategoria.getConsumoMinimoAgua() / quantidaEconomias) + " m3 - "
-									+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias)))
+									+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN))
 									+ " POR UNIDADE";
 							linhas += formarLinha(7, 0, 73, 733, descricao, 0, qtdLinhas * 34);
 							linhas += formarLinha(7, 0, 571, 733, contaCategoria.getConsumoMinimoAgua() + " m3", 0, qtdLinhas * 34);
