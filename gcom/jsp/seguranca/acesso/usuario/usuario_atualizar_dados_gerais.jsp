@@ -596,6 +596,10 @@ function desabilitaCPFeNasc(){
 						</td>
 					</tr>
 					
+					<tr>
+						<td width="26%"><strong>Limite de Processos Batch:</strong></td>
+						<td width="74%"><html:text property="limiteBatch" size="11" maxlength="3" onkeypress="return isCampoNumerico(event);" /></td>
+					</tr>
 					
 					<tr>
 						<td colspan="2">
