@@ -51352,7 +51352,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) throws ControladorException {
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, matricula));
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
@@ -51387,7 +51387,7 @@ public class ControladorArrecadacao implements SessionBean {
 		linkBancoBrasil.append("&cidade="+municipio);
 		linkBancoBrasil.append("&indicadorPessoa="+clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica());
 		linkBancoBrasil.append("&tpDuplicata=DS"); 
-		linkBancoBrasil.append("&tpPagamento=21"); // 2 - Boleto, 21 - Segunda via Boleto
+		linkBancoBrasil.append("&tpPagamento="+ (primeiraVia ? "2" : "21")); // 2 - Boleto, 21 - Segunda via Boleto
 		linkBancoBrasil.append("&valor="+valorFormatado);
 		linkBancoBrasil.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
 		linkBancoBrasil.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));

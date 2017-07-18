@@ -369,7 +369,8 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 	}
 	
 	public String obterLinkBoletoBB(Parcelamento parcelamento) {
-		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada());
+		// Segunda Via
+		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), false);
 		
 		return linkBoletoBB;
 	}

@@ -12,6 +12,7 @@ import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.NegociacaoOpcoesParcelamentoHelper;
 import gcom.cobranca.bean.OpcoesParcelamentoHelper;
+import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.fachada.Fachada;
@@ -477,7 +478,8 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 							"gerarRelatorioParcelamentoAction.do", 
 							"Imprimir Termo", 
 							"Imprimir Guia Pagto Entrada",
-							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
+//							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
+							obterLinkBoletoBB(idParcelamento));
 				}
 
 			} else if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
@@ -506,5 +508,15 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				throw new ActionServletException("atencao.valor.entrada.menor.possivel");
 			}
 		}
+	}
+	
+	public String obterLinkBoletoBB(Integer idParcelamento) {
+		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+		filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+		Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+		// Primeira via
+		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), true);
+		
+		return linkBoletoBB;
 	}
 }

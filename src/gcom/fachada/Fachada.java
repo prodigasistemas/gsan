@@ -40128,9 +40128,9 @@ public class Fachada {
 	}
 	
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) {
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor, boolean primeiraVia) {
 		try {
-			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, valor);
+			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, valor, primeiraVia);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

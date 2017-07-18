@@ -802,5 +802,5 @@ public interface IControladorArrecadacao {
 	
 	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException;
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) throws ControladorException;
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException;
 }
