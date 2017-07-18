@@ -1,134 +1,77 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
-
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
 	<class name="gcom.seguranca.acesso.usuario.Usuario" table="seguranca.usuario">
 		<id name="id" type="java.lang.Integer" column="usur_id">
 			<generator class="sequence">
 				<param name="sequence">seguranca.seq_usuario</param>
 			</generator>
 		</id>
-		<property name="login" type="java.lang.String" column="usur_nmlogin" not-null="true" length="11"/>
-		<property name="senha" type="java.lang.String" column="usur_nmsenha" length="10"/>
-		<property name="numeroAcessos" type="java.lang.Integer" column="usur_nnacessos" length="4"/>
-		<property name="bloqueioAcesso" type="java.lang.Short" column="usur_nnbloqueioacesso" length="2"/>
-		<property name="dataExpiracaoAcesso" type="java.sql.Date" column="usur_dtexpiracaoacesso" length="4"/>
-		<property name="dataPrazoMensagemExpiracao" type="java.sql.Date" column="usur_dtprazomsgexpiracao" length="4"/>
-		<property name="dataCadastroAcesso" type="java.sql.Date" column="usur_dtcadastroacesso" length="4"/>
-		<property name="dataCadastroInicio" type="java.sql.Date" column="usur_dtcadastroinicio" length="4"/>
-		<property name="dataCadastroFim" type="java.sql.Date" column="usur_dtcadastrofim" length="4"/>
-		<property name="descricaoEmail" type="java.lang.String" column="usur_dsemail" length="40"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usur_tmultimaalteracao" length="8"/>
-		<property name="ultimoAcesso" type="java.sql.Timestamp" column="usur_tmultimoacesso" length="8"/>
-		<property name="nomeUsuario" type="java.lang.String" column="usur_nmusuario" not-null="true" length="50"/>
-		<property name="dataNascimento" type="java.sql.Date" column="usur_dtnascimento" length="10"/>
-		<property name="lembreteSenha" type="java.lang.String" column="usur_dslembretesenha" length="10" not-null="false"/>
-		<property name="cpf" type="java.lang.String" column="usur_nncpf" length="11" not-null="false"/>
-		<property name="indicadorTipoRelatorioPadrao" type="java.lang.Short" column="usur_ictiporelatoriopadrao" length="2"/>
-		<property name="indicadorExibeMensagem" type="java.lang.Short" column="usur_icexibemensagem" length="2"/>
+		<property name="login" 							type="java.lang.String" 	column="usur_nmlogin" not-null="true" length="11"/>
+		<property name="senha" 							type="java.lang.String" 	column="usur_nmsenha" length="10"/>
+		<property name="numeroAcessos" 					type="java.lang.Integer" 	column="usur_nnacessos" length="4"/>
+		<property name="bloqueioAcesso" 				type="java.lang.Short" 		column="usur_nnbloqueioacesso" length="2"/>
+		<property name="dataExpiracaoAcesso" 			type="java.sql.Date" 		column="usur_dtexpiracaoacesso" length="4"/>
+		<property name="dataPrazoMensagemExpiracao" 	type="java.sql.Date" 		column="usur_dtprazomsgexpiracao" length="4"/>
+		<property name="dataCadastroAcesso" 			type="java.sql.Date" 		column="usur_dtcadastroacesso" length="4"/>
+		<property name="dataCadastroInicio" 			type="java.sql.Date" 		column="usur_dtcadastroinicio" length="4"/>
+		<property name="dataCadastroFim" 				type="java.sql.Date" 		column="usur_dtcadastrofim" length="4"/>
+		<property name="descricaoEmail" 				type="java.lang.String" 	column="usur_dsemail" length="40"/>
+		<property name="ultimaAlteracao" 				type="java.sql.Timestamp" 	column="usur_tmultimaalteracao" length="8"/>
+		<property name="ultimoAcesso" 					type="java.sql.Timestamp" 	column="usur_tmultimoacesso" length="8"/>
+		<property name="nomeUsuario" 					type="java.lang.String" 	column="usur_nmusuario" not-null="true" length="50"/>
+		<property name="dataNascimento" 				type="java.sql.Date" 		column="usur_dtnascimento" length="10"/>
+		<property name="lembreteSenha" 					type="java.lang.String" 	column="usur_dslembretesenha" length="10" not-null="false"/>
+		<property name="cpf" 							type="java.lang.String" 	column="usur_nncpf" length="11" not-null="false"/>
+		<property name="indicadorTipoRelatorioPadrao" 	type="java.lang.Short" 		column="usur_ictiporelatoriopadrao" length="2"/>
+		<property name="indicadorExibeMensagem" 		type="java.lang.Short" 		column="usur_icexibemensagem" length="2"/>
+		<property name="indicadorUsuarioBatch" 			type="java.lang.Short" 		column="usur_icrotinabatch" length="2" />
+		<property name="indicadorUsuarioInternet" 		type="java.lang.Short" 		column="usur_icinternet" length="2" />
+		<property name="limiteBatch" 					type="java.lang.Short" 		column="usur_limitebatch" length="3" />
 		
-		<property name="indicadorUsuarioBatch" type="java.lang.Short" column="usur_icrotinabatch" length="2" />
-		<property name="indicadorUsuarioInternet" type="java.lang.Short" column="usur_icinternet" length="2" />
-		
-		<!-- Associations -->
-		<!-- bi-directional many-to-one association to UnidadeEmpresa -->
 		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="false">
 			<column name="unid_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to UsuarioGrupo -->
-		<!-- -->
+		
 		<set name="usuarioGrupos" lazy="true" inverse="true" cascade="all">
 			<key>
 				<column name="usur_id"/>
 			</key>
 			<one-to-many class="gcom.seguranca.acesso.usuario.UsuarioGrupo"/>
 		</set>
-		<!-- bi-directional one-to-many association to UsuarioAlteracao -->
-		<!-- 
-    <set
-        name="usuarioAlteracaos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="usis_id" />
-        </key>
-        <one-to-many 
-            class="gcom.UsuarioAlteracao"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to UsuarioPermissaoEspecial -->
-		<!-- 
-    <set
-        name="usuarioPermissaoEspecials"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="usis_id" />
-        </key>
-        <one-to-many 
-            class="gcom.UsuarioPermissaoEspecial"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeComand -->
-		<!-- 
-    <set
-        name="cobrancaAcaoAtividadeComands"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="usur_id" />
-        </key>
-        <one-to-many 
-            class="gcom.CobrancaAcaoAtividadeComand"
-        />
-    </set>
-    -->
-		<!-- bi-directional many-to-one association to UsuarioSituacao -->
+		
 		<many-to-one name="usuarioSituacao" class="gcom.seguranca.acesso.usuario.UsuarioSituacao" not-null="true">
 			<column name="usst_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Empresa -->
+
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to GerenciaRegional -->
+
 		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
 			<column name="greg_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+
 		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
 			<column name="uneg_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Localidade -->
+
 		<many-to-one name="localidadeElo" class="gcom.cadastro.localidade.Localidade" not-null="true">
 			<column name="loca_cdelo"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Localidade -->
+
 		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
 			<column name="loca_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to UsuarioTipo -->
+
 		<many-to-one name="usuarioTipo" class="gcom.seguranca.acesso.usuario.UsuarioTipo" not-null="true">
 			<column name="utip_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to UsuarioAbrangencia -->
+		
 		<many-to-one name="usuarioAbrangencia" class="gcom.seguranca.acesso.usuario.UsuarioAbrangencia" not-null="true">
 			<column name="usab_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Funcionario -->
+		
 		<many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario" not-null="true">
 			<column name="func_id"/>
 		</many-to-one>

@@ -12,7 +12,9 @@
 		<property name="indicadorUso"         type="short"              column="proc_icuso" not-null="true" length="2"/>
 		<property name="ultimaAlteracao"      type="java.sql.Timestamp" column="proc_tmultimaalteracao" length="8"/>
 		<property name="indicadorAutorizacao" type="short"              column="proc_icautorizacao" not-null="true" length="2"/>
+		<property name="limite"               type="java.lang.Integer"  column="proc_limite"/>
 		<property name="nomeArquivoBatch"     type="java.lang.String"   column="proc_nmarquivobatch" length="40"/>
+		<property name="prioridade"           type="java.lang.Integer"  column="proc_prioridade"/>
 
 		<set name="processosFuncionalidade" lazy="true" inverse="true" cascade="all">
 			<key>
