@@ -102,8 +102,10 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
@@ -258,9 +260,9 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.FormatoData;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
-import gcom.util.ParametroNaoInformadoException;
 import gcom.util.RepositorioUtilHBM;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -51348,6 +51350,49 @@ public class ControladorArrecadacao implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
+	}
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) throws ControladorException {
+		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, matricula));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_TIPO);
+		
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
+		
+		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		String refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
+		ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroClienteImovel, ClienteImovel.class.getName()));
+		boolean isClientePF = clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
+
+		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(clienteImovel.getCliente().getId());
+		String enderecoCliente = dadosEndereco[0] + ", " + dadosEndereco[3];
+		String municipio = dadosEndereco[1];
+		String unidadeFederacao = dadosEndereco[2];
+		String cep = dadosEndereco[4];
+		
+		StringBuilder linkBancoBrasil = new StringBuilder();
+		linkBancoBrasil.append("https://mpag.bb.com.br/site/mpag/");
+		linkBancoBrasil.append("?idConv=315828");
+		linkBancoBrasil.append("&refTran="+refTran);
+		linkBancoBrasil.append("&cpfCnpj="+(isClientePF ? clienteImovel.getCliente().getCpf() : clienteImovel.getCliente().getCnpj()));
+		linkBancoBrasil.append("&nome="+clienteImovel.getCliente().getNome());
+		linkBancoBrasil.append("&endereco="+enderecoCliente);
+		linkBancoBrasil.append("&uf="+unidadeFederacao);
+		linkBancoBrasil.append("&cep="+cep);
+		linkBancoBrasil.append("&cidade="+municipio);
+		linkBancoBrasil.append("&indicadorPessoa="+clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica());
+		linkBancoBrasil.append("&tpDuplicata=DS"); 
+		linkBancoBrasil.append("&tpPagamento=21"); // 2 - Boleto, 21 - Segunda via Boleto
+		linkBancoBrasil.append("&valor="+valorFormatado);
+		linkBancoBrasil.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
+		linkBancoBrasil.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
+		
+		return linkBancoBrasil.toString();
 	}
 }
 

@@ -801,4 +801,6 @@ public interface IControladorArrecadacao {
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException;
 	
 	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException;
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) throws ControladorException;
 }

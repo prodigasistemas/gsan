@@ -40126,4 +40126,13 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor) {
+		try {
+			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, valor);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
