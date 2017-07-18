@@ -139,12 +139,14 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 			
 			Integer anoMesArrecadacaoInicio = sistemaParametros.getAnoMesArrecadacao();
-			Integer anoMesArrecadacaoFim = Util.somaMesAnoMesReferencia(sistemaParametros.getAnoMesArrecadacao(), 36);
+			Integer anoMesArrecadacaoFim = Util.somaMesAnoMesReferencia(sistemaParametros.getAnoMesArrecadacao(), 3);
 			
 			if (comando.getDataInicioCiclo() != null && comando.getDataFimCiclo() != null) {
 				anoMesArrecadacaoInicio = Util.recuperaAnoMesDaData(comando.getDataInicioCiclo());
 				anoMesArrecadacaoFim = Util.recuperaAnoMesDaData(comando.getDataFimCiclo());
 			} 
+			
+			
 
 			EmpresaCobranca empresaCobranca = filtrarEmpresaCobranca(comando);
 

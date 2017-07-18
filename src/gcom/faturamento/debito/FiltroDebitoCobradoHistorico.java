@@ -20,6 +20,8 @@ public class FiltroDebitoCobradoHistorico extends Filtro {
      * Description of the Field
      */
     public final static String CONTA_HISTORICO_ID = "contaHistorico.id";
+    
+    public final static String FINANCIAMENTO_TIPO_ID = "financiamentoTipo.id";
 
     public final static String DEBITO_TIPO = "debitoTipo";
 

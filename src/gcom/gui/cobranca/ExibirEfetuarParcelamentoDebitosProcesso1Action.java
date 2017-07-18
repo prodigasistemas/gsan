@@ -739,6 +739,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute(Usuario.USUARIO_LOGADO);
 		Collection<Imovel> imovelPesquisado = fachada.pesquisarImovelEfetuarParcelamento(filtroImovel, usuarioLogado);
+		
+		// Limpando cache de sessao
+		sessao.removeAttribute("imovel");
 
 		// Verificar existêncioa da matrícula do imóvel
 		if (imovelPesquisado == null || imovelPesquisado.isEmpty()) {
@@ -785,6 +788,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 				efetuarParcelamentoDebitosActionForm.set("descricaoPerfilImovel", "" + imovel.getImovelPerfil().getDescricao());
 
 				sessao.setAttribute("imovel", imovel);
+				
+				logger.info(String.format("PESQUISANDO IMOVEL: %d", imovel.getIdImovel()));
 
 				// Pega o endereço do Imovel
 				String enderecoFormatado = "";

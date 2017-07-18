@@ -3,11 +3,11 @@ package gcom.batch;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class FuncionalidadeSituacao implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public static final Integer EM_ESPERA = 3;
@@ -17,35 +17,26 @@ public class FuncionalidadeSituacao implements Serializable {
 	public static final int CONCLUIDA = 2;
 
 	public static final int CONCLUIDA_COM_ERRO = 4;
-	
+
 	public static final int AGENDADA = 5;
 
 	public static final Integer EXECUCAO_CANCELADA = 6;
-	 
+
 	public static final Integer AGUARDANDO_AUTORIZACAO = 7;
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
 	private String descricaoOperacaoSituacao;
 
-	/** nullable persistent field */
 	private String descricaoAbreviada;
 
-	/** persistent field */
 	private short indicadorUso;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private Set funcionalidadesIniciadas;
 
-	/** full constructor */
-	public FuncionalidadeSituacao(String descricaoOperacaoSituacao,
-			String descricaoAbreviada, short indicadorUso,
-			Date ultimaAlteracao, Set funcionalidadesIniciadas) {
+	public FuncionalidadeSituacao(String descricaoOperacaoSituacao, String descricaoAbreviada, short indicadorUso, Date ultimaAlteracao, Set funcionalidadesIniciadas) {
 		this.descricaoOperacaoSituacao = descricaoOperacaoSituacao;
 		this.descricaoAbreviada = descricaoAbreviada;
 		this.indicadorUso = indicadorUso;
@@ -53,15 +44,17 @@ public class FuncionalidadeSituacao implements Serializable {
 		this.funcionalidadesIniciadas = funcionalidadesIniciadas;
 	}
 
-	/** default constructor */
 	public FuncionalidadeSituacao() {
 	}
 
-	/** minimal constructor */
-	public FuncionalidadeSituacao(short indicadorUso,
-			Set funcionalidadesIniciadas) {
+	public FuncionalidadeSituacao(short indicadorUso, Set funcionalidadesIniciadas) {
 		this.indicadorUso = indicadorUso;
 		this.funcionalidadesIniciadas = funcionalidadesIniciadas;
+	}
+
+	public FuncionalidadeSituacao(Integer id) {
+		super();
+		this.id = id;
 	}
 
 	public Integer getId() {

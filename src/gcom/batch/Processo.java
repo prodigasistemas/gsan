@@ -179,7 +179,9 @@ public class Processo extends ObjetoGcom {
 	private short indicadorUso;
 	private short indicadorAutorizacao;
 	private Date ultimaAlteracao;
+	private Integer limite;
 	private String nomeArquivoBatch;
+	private Integer prioridade;
 
 	@SuppressWarnings("rawtypes")
 	private Set processosFuncionalidade;
@@ -311,5 +313,21 @@ public class Processo extends ObjetoGcom {
 	
 	public boolean isExcluido(){
 		return indicadorUso == 2;
+	}
+
+	public Integer getLimite() {
+		return limite;
+	}
+
+	public void setLimite(Integer limite) {
+		this.limite = limite;
+	}
+
+	public Integer getPrioridade() {
+		return prioridade;
+	}
+
+	public void setPrioridade(Integer prioridade) {
+		this.prioridade = prioridade;
 	}
 }

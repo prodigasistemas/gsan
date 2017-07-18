@@ -59864,4 +59864,69 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno;
 	}
+	
+	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException {
+		Integer retorno = null;
+		try {
+			Session session = HibernateUtil.getSession();
+			String consulta = 
+					"select ep.epod_id as esfera_poder "
+					+"from faturamento.conta c "
+					+"inner join cadastro.cliente_conta cc on cc.cnta_id = c.cnta_id "
+					+"inner join cadastro.cliente cl        on cl.clie_id = cc.clie_id "
+					+"inner join cadastro.cliente_tipo ct   on ct.cltp_id = cl.cltp_id "
+					+"inner join cadastro.esfera_poder ep   on ep.epod_id = ct.epod_id "
+					+ "where c.cnta_id = :idConta "
+					+ "and cc.crtp_id = :clienteResponsavel";
+			
+			retorno = (Integer) session.createSQLQuery(consulta)
+						.addScalar("esfera_poder", Hibernate.INTEGER)
+						.setInteger("idConta", idConta)
+						.setInteger("clienteResponsavel", ClienteRelacaoTipo.RESPONSAVEL)
+						.uniqueResult();
+			
+			if (retorno != null) return retorno;
+			
+			retorno = (Integer) session.createSQLQuery(consulta)
+					.addScalar("esfera_poder", Hibernate.INTEGER)
+					.setInteger("idConta", idConta)
+					.setInteger("clienteResponsavel", ClienteRelacaoTipo.USUARIO)
+					.uniqueResult();
+			
+			if (retorno != null) return retorno;
+			
+			retorno = (Integer) session.createSQLQuery(consulta)
+					.addScalar("esfera_poder", Hibernate.INTEGER)
+					.setInteger("idConta", idConta)
+					.setInteger("clienteResponsavel", ClienteRelacaoTipo.PROPRIETARIO)
+					.uniqueResult();
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}
+		
+		return retorno;
+	}
+	
+	
+	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException {
+		Object[] retorno = null;
+		
+		try {
+			Session session = HibernateUtil.getSession();
+			String consulta = 
+					"select ar.areg_nmagencia nome_agencia, ar.areg_telefone telefone, ar.areg_email email from atendimentopublico.agencia_reguladora ar " +
+					"inner join atendimentopublico.agencia_regul_municipio arm on arm.areg_id = ar.areg_id " +
+					"and muni_id = :idMunicipio";
+			retorno = (Object[]) session.createSQLQuery(consulta)
+					   .addScalar("nome_agencia", Hibernate.STRING)
+					   .addScalar("telefone", Hibernate.STRING)
+					   .addScalar("email", Hibernate.STRING)
+					   .setInteger("idMunicipio", idMunicipio).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}
+		
+		return retorno;
+	}
 }

@@ -3043,4 +3043,8 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 	
 	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idImovel, Date dataVencimento) throws ErroRepositorioException;
+
+	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException;
+	
+	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException;
 }

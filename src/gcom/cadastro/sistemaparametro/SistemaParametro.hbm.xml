@@ -665,6 +665,13 @@
 			type="java.lang.Integer" column="parm_nnmesesreiniciositespfatu" length="2" not-null="false" />
 
 		<property name="dddTelefone" type="java.lang.String" column="parm_dddfone" length="2" not-null="false" />
+		
+		<property name="descricaoAliquotaImposto" column="parm_dsaliquotaimposto"
+			type="java.lang.String" length="20" />
+		
+		<property name="valorAliquotaImposto"
+			column="parm_vlaliquotaimposto" type="java.math.BigDecimal"
+			length="13" />
 
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Logradouro -->

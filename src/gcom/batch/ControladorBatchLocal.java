@@ -140,9 +140,6 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	
 	public void autorizarProcessoIniciado(ProcessoIniciado processoIniciado,Integer processoSituacao,Integer funcionalidadeSituacao) throws ControladorException;
 
-	//public Integer inserirProcessoIniciadoPagamentosContasCobranca(Integer idEmpresa,Integer referenciaInicial, Integer referenciaFinal, Usuario usuario)
-	//		throws ControladorException;
-	
 	public Integer inserirProcessoGerarTxtContasProcessosEspeciais(String anoMes, Integer idCliente, Usuario usuario) throws ControladorException;
 	
 	public void atualizarObjetoParaBatch(Object objetoParaAtualizar) throws ControladorException;
@@ -174,5 +171,3 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	
 	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ControladorException;
 }
-
-

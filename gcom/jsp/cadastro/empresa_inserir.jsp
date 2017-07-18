@@ -375,7 +375,7 @@
 						<td colspan="2"><span class="style2"> <html:text
 							property="percentualPagamento" size="7" maxlength="7"
 							onkeypress="return isCampoNumerico(event);" onchange="bloqueiaCampos();"
-							onkeyup="formataValorMonetario(this, 5);" tabindex="12"
+							onkeyup="formataValorDecimalTresCasas(this, 6);" tabindex="12"
 							disabled="true" /> </span></td>
 						<td>&nbsp;</td>
 					</tr>
@@ -387,7 +387,7 @@
 						<td colspan="2"><span class="style2"> <html:text
 							property="percentualPagamento" size="7" maxlength="7"
 							onkeypress="return isCampoNumerico(event);" onchange="bloqueiaCampos();"
-							onkeyup="formataValorMonetario(this, 5);" tabindex="12"/> </span></td>
+							onkeyup="formataValorDecimalTresCasas(this, 6);" tabindex="12"/> </span></td>
 						<td>&nbsp;</td>
 					</tr>
 				</logic:notPresent>

@@ -1411,7 +1411,7 @@ public class ControladorBatchSEJB implements SessionBean {
 							TarefaBatchGerarResumoArrecadacao dadosGerarResumoArrecadacao = new TarefaBatchGerarResumoArrecadacao(processoIniciado.getUsuario(),
 									funcionalidadeIniciada.getId());
 	
-							FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade();
+							FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade(FiltroLocalidade.ID);
 							Collection<Localidade> colLocalidadeResumoArrecadacao = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacao,
 									Localidade.class.getName());
 	
@@ -3529,31 +3529,33 @@ public class ControladorBatchSEJB implements SessionBean {
 
 	public void verificarProcessosIniciados() throws ControladorException {
 		try {
-			Collection<FuncionalidadeIniciada> colecaoFuncionalidadesIniciadasParaExecucao = verificarFuncionalidadesIniciadasProntasParaExecucao();
-			Iterator<FuncionalidadeIniciada> iterator = colecaoFuncionalidadesIniciadasParaExecucao.iterator();
+			Collection<FuncionalidadeIniciada> funcionalidadesParaExecucao = verificarFuncionalidadesIniciadasProntasParaExecucao();
+			Iterator<FuncionalidadeIniciada> iterator = funcionalidadesParaExecucao.iterator();
 
 			while (iterator.hasNext()) {
 				FuncionalidadeIniciada funcionalidadeIniciada = iterator.next();
-				TarefaBatch tarefaBatch = (TarefaBatch) IoUtil.transformarBytesParaObjeto(funcionalidadeIniciada.getTarefaBatch());
-
-				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
-				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_PROCESSAMENTO);
-				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
-				funcionalidadeIniciada.setDataHoraInicio(new Date());
-
 				ProcessoIniciado processoIniciado = funcionalidadeIniciada.getProcessoIniciado();
-				if (!processoIniciado.getProcessoSituacao().getId().equals(ProcessoSituacao.EM_PROCESSAMENTO)) {
-					ProcessoSituacao processoSituacao = new ProcessoSituacao();
-					processoSituacao.setId(ProcessoSituacao.EM_PROCESSAMENTO);
-					processoIniciado.setProcessoSituacao(processoSituacao);
+				Integer processoSituacao = processoIniciado.getProcessoSituacao().getId();
+				
+				if (!processoSituacao.equals(ProcessoSituacao.EM_PROCESSAMENTO)) {
+					if (!permiteIniciarProcesso(processoIniciado.getUsuario())) {
+						continue;
+					}
+					
+					processoIniciado.setProcessoSituacao(new ProcessoSituacao(ProcessoSituacao.EM_PROCESSAMENTO));
 					getControladorUtil().atualizar(processoIniciado);
 				}
 
+				funcionalidadeIniciada.setFuncionalidadeSituacao(new FuncionalidadeSituacao(FuncionalidadeSituacao.EM_PROCESSAMENTO));
+				funcionalidadeIniciada.setDataHoraInicio(new Date());
 				getControladorUtil().atualizar(funcionalidadeIniciada);
 
+				TarefaBatch tarefaBatch = (TarefaBatch) IoUtil.transformarBytesParaObjeto(funcionalidadeIniciada.getTarefaBatch());
 				if (tarefaBatch != null) {
 					tarefaBatch.agendarTarefaBatch();
 				}
+				
+				break;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -3974,27 +3976,24 @@ public class ControladorBatchSEJB implements SessionBean {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<FuncionalidadeIniciada> verificarFuncionalidadesIniciadasProntasParaExecucao() throws ControladorException {
-
 		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
 
 		try {
+			Collection<Object[]> funcionalidadesParaExecucao = repositorioBatch.pesquisarFuncionaldadesIniciadasProntasExecucao();
 
-			Collection<Object[]> funcionalidadesIniciadasExecucao = repositorioBatch.pesquisarFuncionaldadesIniciadasProntasExecucao();
-
-			for (Object[] objects : funcionalidadesIniciadasExecucao) {
-				FuncionalidadeIniciada funcionalidadeIniciada = (FuncionalidadeIniciada) objects[0];
+			for (Object[] dados : funcionalidadesParaExecucao) {
+				FuncionalidadeIniciada funcionalidadeIniciada = (FuncionalidadeIniciada) dados[0];
 
 				int quantidadeFuncionalidadesForaOrdem = repositorioBatch.pesquisarQuantidadeFuncionaldadesIniciadasForaOrdemExecucao(
-						(int) ((Short) objects[1]), funcionalidadeIniciada.getProcessoIniciado().getId());
-				if (quantidadeFuncionalidadesForaOrdem == 0
-						&& (!funcionalidadeIniciada.getFuncionalidadeSituacao().getId().equals(FuncionalidadeSituacao.CONCLUIDA))) {
+						(int) ((Short) dados[1]), funcionalidadeIniciada.getProcessoIniciado().getId());
+				
+				if (quantidadeFuncionalidadesForaOrdem == 0 && (!funcionalidadeIniciada.getFuncionalidadeSituacao().getId().equals(FuncionalidadeSituacao.CONCLUIDA))) {
 					retorno.add(funcionalidadeIniciada);
-
-					break;
 				}
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
+			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
 		}
 		return retorno;
@@ -6285,6 +6284,21 @@ public class ControladorBatchSEJB implements SessionBean {
 			return repositorioBatch.obterUsuarioQueDisparouProcesso(idFuncionalidadeIniciada);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro ao obter usuario que disparou processo", e);
+		}
+	}
+	
+	private boolean permiteIniciarProcesso(Usuario usuario) throws ControladorException {
+		try {
+			Short quantidade = repositorioBatch.pesquisarQuantidadeBatchPorUsuario(usuario.getId());
+			Short limite = usuario.getLimiteBatch();
+			
+			if (limite != null && limite > 0) {
+				return quantidade >= limite ? false : true;
+			} else {
+				return true;
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao verificar se permite inserir processo", e);
 		}
 	}
 }

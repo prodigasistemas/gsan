@@ -18,7 +18,7 @@ import java.util.Set;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
-public class Usuario extends ObjetoTransacao{
+public class Usuario extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,28 +27,25 @@ public class Usuario extends ObjetoTransacao{
 	public static final int ATRIBUTOS_REMOVER_USUARIO = 60;
 	public static final int ATRIBUTOS_USUARIO_ALTERAR_SENHA = 52;
 	public static final int ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN = 818;
-	
+
 	public static final String USUARIO_LOGADO = "usuarioLogado";
+	public static final Usuario USUARIO_BATCH;
 
-    /** Usuário utilizado para o processamento batch*/
-    public static final Usuario USUARIO_BATCH;
-
-    static {
-        USUARIO_BATCH = new Usuario();
-        USUARIO_BATCH.setId(new Integer(1));
-        UsuarioAbrangencia usuarioAbrangencia = new UsuarioAbrangencia();
+	static {
+		USUARIO_BATCH = new Usuario();
+		USUARIO_BATCH.setId(new Integer(1));
+		UsuarioAbrangencia usuarioAbrangencia = new UsuarioAbrangencia();
 		usuarioAbrangencia.setId(1);
 		USUARIO_BATCH.setUsuarioAbrangencia(usuarioAbrangencia);
 	}
-    
+
 	public static final Usuario USUARIO_TESTE;
 
 	static {
 		USUARIO_TESTE = new Usuario();
 		USUARIO_TESTE.setId(new Integer(1));
 		USUARIO_TESTE.setLogin("pedro");
-		USUARIO_TESTE.setUltimaAlteracao(Util
-				.converteStringParaDate("01/01/2006"));
+		USUARIO_TESTE.setUltimaAlteracao(Util.converteStringParaDate("01/01/2006"));
 		UnidadeOrganizacional unidadeOrganizacional = new UnidadeOrganizacional();
 		unidadeOrganizacional.setId(3);
 		USUARIO_TESTE.setUnidadeOrganizacional(unidadeOrganizacional);
@@ -59,83 +56,84 @@ public class Usuario extends ObjetoTransacao{
 
 	private Integer id;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_REMOVER_USUARIO, 
-			ATRIBUTOS_USUARIO_ALTERAR_SENHA, ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_REMOVER_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA, ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN })
 	private String login;
 	private String senha;
 	private Integer numeroAcessos;
 	private Short bloqueioAcesso;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private Date dataExpiracaoAcesso;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private Date dataPrazoMensagemExpiracao;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private Date dataCadastroAcesso;
 
 	private Date dataCadastroInicio;
 	private Date dataCadastroFim;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private String descricaoEmail;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA,ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA, ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN })
 	private Date ultimaAlteracao;
 
 	private Date ultimoAcesso;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private UnidadeOrganizacional unidadeOrganizacional;
 
-	@ControleAlteracao(value=FiltroUsuarioSituacao.DESCRICAO, funcionalidade={ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuarioSituacao.DESCRICAO, funcionalidade = { ATRIBUTOS_ATUALIZAR_USUARIO })
 	private UsuarioSituacao usuarioSituacao;
 
-	@ControleAlteracao(value=FiltroUsuario.EMPRESA, funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuario.EMPRESA, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private Empresa empresa;
 
-	@ControleAlteracao(value=FiltroUsuario.GERENCIA_REGIONAL, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuario.GERENCIA_REGIONAL, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private GerenciaRegional gerenciaRegional;
-	
-	@ControleAlteracao(value=FiltroUsuario.UNIDADE_NEGOCIO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+
+	@ControleAlteracao(value = FiltroUsuario.UNIDADE_NEGOCIO, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private UnidadeNegocio unidadeNegocio;
 
-	@ControleAlteracao(value=FiltroUsuario.LOCALIDADE_ELO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuario.LOCALIDADE_ELO, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private Localidade localidadeElo;
 
-	@ControleAlteracao(value=FiltroUsuario.LOCALIDADE, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuario.LOCALIDADE, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private Localidade localidade;
 
-	@ControleAlteracao(value=FiltroUsuarioTipo.DESCRICAO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuarioTipo.DESCRICAO, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private UsuarioTipo usuarioTipo;
 
-	@ControleAlteracao(value=FiltroUsuario.USUARIO_ABRANGENCIA, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
+	@ControleAlteracao(value = FiltroUsuario.USUARIO_ABRANGENCIA, funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO })
 	private UsuarioAbrangencia usuarioAbrangencia;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private Funcionario funcionario;
 
 	private String nomeUsuario;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private Date dataNascimento;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA })
 	private String lembreteSenha;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_INSERIR_USUARIO })
 	private String cpf;
 
 	private Short indicadorTipoRelatorioPadrao;
 	private Short indicadorExibeMensagem;
 	private Short indicadorUsuarioBatch;
 	private Short indicadorUsuarioInternet;
-	
+
 	@SuppressWarnings("rawtypes")
 	private Set usuarioGrupos;
-	
+
 	private String ipLogado;
+
+	private Short limiteBatch;
 	
 	@SuppressWarnings("rawtypes")
 	public Set getUsuarioGrupos() {
@@ -147,18 +145,10 @@ public class Usuario extends ObjetoTransacao{
 		this.usuarioGrupos = usuarioGrupos;
 	}
 
-		/** full constructor */
-	public Usuario(String login, String senha, Integer numeroAcessos,
-			Short bloqueioAcesso, Date dataExpiracaoAcesso,
-			Date dataPrazoMensagemExpiracao, Date dataCadastroAcesso,
-			Date dataCadastroInicio, Date dataCadastroFim,
-			String descricaoEmail, Date ultimaAlteracao, Date ultimoAcesso,
-			UnidadeOrganizacional unidadeOrganizacional, UsuarioSituacao usuarioSituacao,
-			Empresa empresa, GerenciaRegional gerenciaRegional,
-			Localidade localidadeElo, Localidade localidade,
-			UsuarioTipo usuarioTipo, UsuarioAbrangencia usuarioAbrangencia,
-			Funcionario funcionario, String nomeUsuario,
-			Short indicadorTipoRelatorioPadrao, Short indicadorExibeMensagem) {
+	public Usuario(String login, String senha, Integer numeroAcessos, Short bloqueioAcesso, Date dataExpiracaoAcesso, Date dataPrazoMensagemExpiracao, Date dataCadastroAcesso,
+			Date dataCadastroInicio, Date dataCadastroFim, String descricaoEmail, Date ultimaAlteracao, Date ultimoAcesso, UnidadeOrganizacional unidadeOrganizacional,
+			UsuarioSituacao usuarioSituacao, Empresa empresa, GerenciaRegional gerenciaRegional, Localidade localidadeElo, Localidade localidade, UsuarioTipo usuarioTipo,
+			UsuarioAbrangencia usuarioAbrangencia, Funcionario funcionario, String nomeUsuario, Short indicadorTipoRelatorioPadrao, Short indicadorExibeMensagem) {
 		this.login = login;
 		this.senha = senha;
 		this.numeroAcessos = numeroAcessos;
@@ -185,18 +175,10 @@ public class Usuario extends ObjetoTransacao{
 		this.indicadorExibeMensagem = indicadorExibeMensagem;
 	}
 
-	/** full constructor */
-	public Usuario(String login, String senha, Integer numeroAcessos,
-			Short bloqueioAcesso, Date dataExpiracaoAcesso,
-			Date dataPrazoMensagemExpiracao, Date dataCadastroAcesso,
-			Date dataCadastroInicio, Date dataCadastroFim,
-			String descricaoEmail, String cpf, Date ultimaAlteracao,
-			Date ultimoAcesso, UnidadeOrganizacional unidadeOrganizacional,
-			UsuarioSituacao usuarioSituacao, Empresa empresa,
-			GerenciaRegional gerenciaRegional, Localidade localidadeElo,
-			Localidade localidade, UsuarioTipo usuarioTipo,
-			UsuarioAbrangencia usuarioAbrangencia, Funcionario funcionario,
-			String nomeUsuario) {
+	public Usuario(String login, String senha, Integer numeroAcessos, Short bloqueioAcesso, Date dataExpiracaoAcesso, Date dataPrazoMensagemExpiracao, Date dataCadastroAcesso,
+			Date dataCadastroInicio, Date dataCadastroFim, String descricaoEmail, String cpf, Date ultimaAlteracao, Date ultimoAcesso, UnidadeOrganizacional unidadeOrganizacional,
+			UsuarioSituacao usuarioSituacao, Empresa empresa, GerenciaRegional gerenciaRegional, Localidade localidadeElo, Localidade localidade, UsuarioTipo usuarioTipo,
+			UsuarioAbrangencia usuarioAbrangencia, Funcionario funcionario, String nomeUsuario) {
 		this.login = login;
 		this.senha = senha;
 		this.numeroAcessos = numeroAcessos;
@@ -229,7 +211,7 @@ public class Usuario extends ObjetoTransacao{
 	public void setIndicadorExibeMensagem(Short indicadorExibeMensagem) {
 		this.indicadorExibeMensagem = indicadorExibeMensagem;
 	}
-	
+
 	public Short getIndicadorUsuarioBatch() {
 		return indicadorUsuarioBatch;
 	}
@@ -237,26 +219,20 @@ public class Usuario extends ObjetoTransacao{
 	public void setIndicadorUsuarioBatch(Short indicadorUsuarioBatch) {
 		this.indicadorUsuarioBatch = indicadorUsuarioBatch;
 	}
-	
+
 	public Short getIndicadorTipoRelatorioPadrao() {
 		return indicadorTipoRelatorioPadrao;
 	}
 
-	public void setIndicadorTipoRelatorioPadrao(
-			Short indicadorTipoRelatorioPadrao) {
+	public void setIndicadorTipoRelatorioPadrao(Short indicadorTipoRelatorioPadrao) {
 		this.indicadorTipoRelatorioPadrao = indicadorTipoRelatorioPadrao;
 	}
 
-	/** default constructor */
 	public Usuario() {
 	}
 
-	/** minimal constructor */
-	public Usuario(UnidadeOrganizacional unidadeOrganizacional,
-			UsuarioSituacao usuarioSituacao, Empresa empresa,
-			GerenciaRegional gerenciaRegional, Localidade localidadeElo,
-			Localidade localidade, UsuarioTipo usuarioTipo,
-			UsuarioAbrangencia usuarioAbrangencia, Funcionario funcionario) {
+	public Usuario(UnidadeOrganizacional unidadeOrganizacional, UsuarioSituacao usuarioSituacao, Empresa empresa, GerenciaRegional gerenciaRegional, Localidade localidadeElo, Localidade localidade,
+			UsuarioTipo usuarioTipo, UsuarioAbrangencia usuarioAbrangencia, Funcionario funcionario) {
 		this.unidadeOrganizacional = unidadeOrganizacional;
 		this.usuarioSituacao = usuarioSituacao;
 		this.empresa = empresa;
@@ -268,8 +244,6 @@ public class Usuario extends ObjetoTransacao{
 		this.funcionario = funcionario;
 	}
 
-	
-	
 	public UnidadeOrganizacional getUnidadeOrganizacional() {
 		return unidadeOrganizacional;
 	}
@@ -499,21 +473,20 @@ public class Usuario extends ObjetoTransacao{
 	}
 
 	public boolean equals(Object arg) {
-		if (arg == null){
+		if (arg == null) {
 			return false;
 		}
-		if (!(arg instanceof Usuario)){
+		if (!(arg instanceof Usuario)) {
 			return false;
-		} 		
+		}
 		return this.id.intValue() == ((Usuario) arg).getId().intValue();
 	}
-	
+
 	public Filtro retornaFiltro() {
 		FiltroUsuario filtroUsuario = new FiltroUsuario();
 
-		filtroUsuario.adicionarParametro(
-			new ParametroSimples(FiltroUsuario.ID,this.getId()));
-		
+		filtroUsuario.adicionarParametro(new ParametroSimples(FiltroUsuario.ID, this.getId()));
+
 		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacional");
 		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("usuarioSituacao");
 		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("empresa");
@@ -527,48 +500,46 @@ public class Usuario extends ObjetoTransacao{
 		return filtroUsuario;
 	}
 
-	
 	@Override
 	public Filtro retornaFiltroRegistroOperacao() {
 		FiltroUsuario filtro = new FiltroUsuario();
 
-		filtro.adicionarParametro(
-			new ParametroSimples(FiltroUsuario.ID,this.getId()));
-		
+		filtro.adicionarParametro(new ParametroSimples(FiltroUsuario.ID, this.getId()));
+
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.UNIDADE_ORGANIZACIONAL);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.USUARIO_SITUACAO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.EMPRESA);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.GERENCIA_REGIONAL);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.LOCALIDADE_ELO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.USUARIO_TIPO);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.USUARIO_ABRANGENCIA);		
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.USUARIO_ABRANGENCIA);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroUsuario.FUNCIONARIO);
-		
+
 		return filtro;
 	}
-	
-	
+
 	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = { "nomeUsuario" };
 		return retorno;
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getNomeUsuario();
 	}
-	
+
 	@Override
 	public String[] retornarAtributosInformacoesOperacaoEfetuada() {
-		String []labels = {"nomeUsuario"};
-		return labels;		
+		String[] labels = { "nomeUsuario" };
+		return labels;
 	}
-	
+
 	@Override
 	public String[] retornarLabelsInformacoesOperacaoEfetuada() {
-		String []labels = {"Nome usuario"};
-		return labels;		
+		String[] labels = { "Nome usuario" };
+		return labels;
 	}
+
 	@Override
 	public void initializeLazy() {
 		getNomeUsuario();
@@ -583,5 +554,12 @@ public class Usuario extends ObjetoTransacao{
 	public void setIndicadorUsuarioInternet(Short indicadorUsuarioInternet) {
 		this.indicadorUsuarioInternet = indicadorUsuarioInternet;
 	}
-	
+
+	public Short getLimiteBatch() {
+		return limiteBatch;
+	}
+
+	public void setLimiteBatch(Short limiteBatch) {
+		this.limiteBatch = limiteBatch;
+	}
 }

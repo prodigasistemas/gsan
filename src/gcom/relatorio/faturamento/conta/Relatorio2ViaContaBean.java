@@ -9,47 +9,42 @@ import java.util.Collection;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-/**
- * [UC0482] Emitir 2ª Via de Conta
- * @author Vivianne Sousa
- * @date 15/09/2006
- */
 public class Relatorio2ViaContaBean implements RelatorioBean {
-	
+
 	private String indicadorPrimeiraPagina;
-	
+
 	private JRBeanCollectionDataSource arrayJRDetail;
 	private ArrayList arrayRelatorio2ViaContaDetailBean;
-	
+
 	private JRBeanCollectionDataSource arrayJRBoleto;
 	private ArrayList arrayRelatorio2ViaContaBoletoBancarioBean;
 	private String boleto;
-	
-	//Linha 1
+
+	// Linha 1
 	private String empresa;
 	private String enderecoEmpresa;
-	//Linha 2 
+	// Linha 2
 	private String descricaoLocalidade;
-	//Linha 3 
+	// Linha 3
 	private String matriculaImovelFormatada;
 	private String dataVencimento;
-	//Linha 4 
+	// Linha 4
 	private String nomeCliente;
-	//Linha 5 
+	// Linha 5
 	private String enderecoImovel;
 	private String fatura;
-	//Linha 6 
+	// Linha 6
 	private String inscricao;
-	//Linha 7
+	// Linha 7
 	private String idClienteResponsavel;
 	private String enderecoClienteResponsavel;
 	private String enderecoClienteResponsavelLinha2;
 	private String descricaoAguaSituacao;
 	private String descricaoEsgotoSituacao;
-	//Linha 9
+	// Linha 9
 	private String dadosConsumoMes1;
 	private String dadosConsumoMes4;
-	//Linha 10
+	// Linha 10
 	private String dadosConsumoMes2;
 	private String dadosConsumoMes5;
 	private String leituraAnterior;
@@ -57,32 +52,32 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	private String consumoFaturamento;
 	private String diasConsumo;
 	private String consumoMedioDiario;
-	//Linha 11
+	// Linha 11
 	private String dadosConsumoMes3;
 	private String dadosConsumoMes6;
 	private String dataLeituraAnterior;
 	private String dataLeituraAtual;
-	//Linha 12
+	// Linha 12
 	private String descricaoTipoConsumo;
 	private String descricaoAnormalidadeConsumo;
-	//Linha 13
+	// Linha 13
 	private String quantidadeEconomiaConta;
 	private String consumoEconomia;
 	private String codigoAuxiliarString;
 	private String mesagemConsumoString;
 
-	//Linha 17
+	// Linha 17
 	private String valorContaString;
-	//Linha 18
+	// Linha 18
 	private String primeiraParte;
-	//Linha 19
+	// Linha 19
 	private String segundaParte;
-	//Linha 20
+	// Linha 20
 	private String terceiraParte;
-	//Linha 21
+	// Linha 21
 	private String nomeGerenciaRegional;
 	private String mesAnoFormatado;
-	//Linha 22
+	// Linha 22
 	private String numeroIndiceTurbidez;
 	private String numeroCloroResidual;
 	private String valorMedioTurbidez;
@@ -110,638 +105,431 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	private String valorExigidoColiformesTotais;
 	private String valorExigidoColiformesTermotolerantes;
 	private String tipoDeConsumo;
-	//Linha 24
+	// Linha 24
 	private String representacaoNumericaCodBarraFormatada;
-	//Linha 25
+	// Linha 25
 	private String representacaoNumericaCodBarraSemDigito;
-	//Linha28
+	// Linha28
 	private String dataValidade;
-	//Linha 31
-	private String grupo;	
+	// Linha 31
+	private String grupo;
 	private String firma;
-	
+
 	private String idConta;
-	
+
 	private String totalPaginasRelatorio;
-	
+
 	private String contaSemCodigoBarras;
-	
+
 	private String numeroDocumento;
 	private String numeroCpfCnpj;
-	
+
 	private String codigoDebitoAutomatico;
-	
-	//só aparece na CAERN
+
+	// só aparece na CAERN
 	private String rotaEntrega;
 	private String debitoCreditoSituacaoAtualConta;
 	private String contaPaga;
-	
+
 	private String numeroNitrato;
 	private String numeroColiformesTotais;
 	private String numeroPH;
-	
-	
-
-
 
 	public String getValorConformeColiformesTotais() {
 		return valorConformeColiformesTotais;
 	}
 
-
-
-
-
 	private String consumoAnormalidade;
 	private String leituraAnormalidade;
-	
+
 	private String leituraAnteriorInformada;
 	private String leituraAtualInformada;
 	private String dataLeituraAnteriorInformada;
 	private String dataLeituraAtualInformada;
-	/**
-	 * Não imprimir o código de barras na segunda via das contas agrupadas
-	 * 
-	 * @author Wellington Rocha
-	 * @date 25/01/2012*/
-	private String icClienteFaturaAgrupada;
 	
-	/**
-	 * Informar data de pagamento e agente arrecadador em caso de conta paga
-	 * 
-	 * @author Wellington Rocha
-	 * @date 14/03/2012*/
+	private String icClienteFaturaAgrupada;
+
 	private String dataPagamentoConta;
 	
+	private String textoDescricaoImpostosEAliquotas;
+	private String textoPercentualImpostosEAliquotas;
+	private String textoValorBaseCalculoImpostos;
+	private String textoValorImpostosEAliquotas;
+	
+	private String descricaoImpostosEAliquotas;
+	private String percentualImpostosEAliquotas;
+	private String valorBaseCalculoImpostos;
+	private String valorImpostosEAliquotas;
+	
+	private String agenciaReguladora;
+	private String telefoneAgenciaReguladora;
+	private String emailAgenciaReguladora;
+
 	public String getDataPagamentoConta() {
 		return dataPagamentoConta;
 	}
-
-
 
 	public void setDataPagamentoConta(String dataPagamentoConta) {
 		this.dataPagamentoConta = dataPagamentoConta;
 	}
 
-
-
 	public String getIcClienteFaturaAgrupada() {
 		return icClienteFaturaAgrupada;
 	}
 
-
-
 	public void setIcClienteFaturaAgrupada(String icClienteFaturaAgrupada) {
 		this.icClienteFaturaAgrupada = icClienteFaturaAgrupada;
 	}
-	
+
 	public String getValorConformeCor() {
 		return valorConformeCor;
 	}
-
-
 
 	public void setValorConformeCor(String valorConformeCor) {
 		this.valorConformeCor = valorConformeCor;
 	}
 
-
-
 	public String getValorConformeCloro() {
 		return valorConformeCloro;
 	}
-
-
 
 	public void setValorConformeCloro(String valorConformeCloro) {
 		this.valorConformeCloro = valorConformeCloro;
 	}
 
-
-
 	public String getValorConformeFluor() {
 		return valorConformeFluor;
 	}
-
-
 
 	public void setValorConformeFluor(String valorConformeFluor) {
 		this.valorConformeFluor = valorConformeFluor;
 	}
 
-
-
 	public String getValorCoformeColiformesTotais() {
 		return valorConformeColiformesTotais;
 	}
-
-
 
 	public void setValorCoformeColiformesTotais(String valorCoformeColiformesTotais) {
 		this.valorConformeColiformesTotais = valorCoformeColiformesTotais;
 	}
 
-
-
 	public String getValorConformeColiformesTermotolerantes() {
 		return valorConformeColiformesTermotolerantes;
 	}
 
-
-
-	public void setValorConformeColiformesTermotolerantes(
-			String valorConformeColiformesTermotolerantes) {
+	public void setValorConformeColiformesTermotolerantes(String valorConformeColiformesTermotolerantes) {
 		this.valorConformeColiformesTermotolerantes = valorConformeColiformesTermotolerantes;
 	}
-
-
 
 	public String getValorConformeTurbidez() {
 		return valorConformeTurbidez;
 	}
 
-
-
 	public void setValorConformeTurbidez(String valorConformeTurbidez) {
 		this.valorConformeTurbidez = valorConformeTurbidez;
 	}
-
-
 
 	public String getValorExigidoTurbidez() {
 		return valorExigidoTurbidez;
 	}
 
-
-
 	public void setValorExigidoTurbidez(String valorExigidoTurbidez) {
 		this.valorExigidoTurbidez = valorExigidoTurbidez;
 	}
-
-
 
 	public String getValorExigidoCor() {
 		return valorExigidoCor;
 	}
 
-
-
 	public void setValorExigidoCor(String valorExigidoCor) {
 		this.valorExigidoCor = valorExigidoCor;
 	}
-
-
 
 	public String getValorExigidoCloro() {
 		return valorExigidoCloro;
 	}
 
-
-
 	public void setValorExigidoCloro(String valorExigidoCloro) {
 		this.valorExigidoCloro = valorExigidoCloro;
 	}
-
-
 
 	public String getValorExigidoFluor() {
 		return valorExigidoFluor;
 	}
 
-
-
 	public void setValorExigidoFluor(String valorExigidoFluor) {
 		this.valorExigidoFluor = valorExigidoFluor;
 	}
-
-
 
 	public String getValorExigidoColiformesTotais() {
 		return valorExigidoColiformesTotais;
 	}
 
-
-
 	public void setValorExigidoColiformesTotais(String valorExigidoColiformesTotais) {
 		this.valorExigidoColiformesTotais = valorExigidoColiformesTotais;
 	}
-
-
 
 	public String getValorExigidoColiformesTermotolerantes() {
 		return valorExigidoColiformesTermotolerantes;
 	}
 
-
-
-	public void setValorExigidoColiformesTermotolerantes(
-			String valorExigidoColiformesTermotolerantes) {
+	public void setValorExigidoColiformesTermotolerantes(String valorExigidoColiformesTermotolerantes) {
 		this.valorExigidoColiformesTermotolerantes = valorExigidoColiformesTermotolerantes;
 	}
 
-	
 	public String getValorMedioColiformesTermotolerantes() {
 		return valorMedioColiformesTermotolerantes;
 	}
 
-
-
-	public void setValorMedioColiformesTermotolerantes(
-			String valorMedioColiformesTermotolerantes) {
+	public void setValorMedioColiformesTermotolerantes(String valorMedioColiformesTermotolerantes) {
 		this.valorMedioColiformesTermotolerantes = valorMedioColiformesTermotolerantes;
 	}
-
-
 
 	public String getPadraoColiformesTermotolerantes() {
 		return padraoColiformesTermotolerantes;
 	}
 
-
-
-	public void setPadraoColiformesTermotolerantes(
-			String padraoColiformesTermotolerantes) {
+	public void setPadraoColiformesTermotolerantes(String padraoColiformesTermotolerantes) {
 		this.padraoColiformesTermotolerantes = padraoColiformesTermotolerantes;
 	}
-
-
 
 	public String getConsumoAnormalidade() {
 		return consumoAnormalidade;
 	}
 
-
-
 	public void setConsumoAnormalidade(String consumoAnormalidade) {
 		this.consumoAnormalidade = consumoAnormalidade;
 	}
-
-
 
 	public String getLeituraAnormalidade() {
 		return leituraAnormalidade;
 	}
 
-
-
 	public void setLeituraAnormalidade(String leituraAnormalidade) {
 		this.leituraAnormalidade = leituraAnormalidade;
 	}
-
-
 
 	public String getLeituraAnteriorInformada() {
 		return leituraAnteriorInformada;
 	}
 
-
-
 	public void setLeituraAnteriorInformada(String leituraAnteriorInformada) {
 		this.leituraAnteriorInformada = leituraAnteriorInformada;
 	}
-
-
 
 	public String getLeituraAtualInformada() {
 		return leituraAtualInformada;
 	}
 
-
-
 	public void setLeituraAtualInformada(String leituraAtualInformada) {
 		this.leituraAtualInformada = leituraAtualInformada;
 	}
-
-
 
 	public String getDataLeituraAnteriorInformada() {
 		return dataLeituraAnteriorInformada;
 	}
 
-
-
 	public void setDataLeituraAnteriorInformada(String dataLeituraAnteriorInformada) {
 		this.dataLeituraAnteriorInformada = dataLeituraAnteriorInformada;
 	}
-
-
 
 	public String getDataLeituraAtualInformada() {
 		return dataLeituraAtualInformada;
 	}
 
-
-
 	public void setDataLeituraAtualInformada(String dataLeituraAtualInformada) {
 		this.dataLeituraAtualInformada = dataLeituraAtualInformada;
 	}
-
-
 
 	public String getValorMedioTurbidez() {
 		return valorMedioTurbidez;
 	}
 
-
-
 	public void setValorMedioTurbidez(String valorMedioTurbidez) {
 		this.valorMedioTurbidez = valorMedioTurbidez;
 	}
-
-
 
 	public String getPadraoTurbidez() {
 		return padraoTurbidez;
 	}
 
-
-
 	public void setPadraoTurbidez(String padraoTurbidez) {
 		this.padraoTurbidez = padraoTurbidez;
 	}
-
 
 	public String getValorMedioCor() {
 		return valorMedioCor;
 	}
 
-
-
 	public void setValorMedioCor(String valorMedioCor) {
 		this.valorMedioCor = valorMedioCor;
 	}
-
-
 
 	public String getValorMedioCloro() {
 		return valorMedioCloro;
 	}
 
-
-
 	public void setValorMedioCloro(String valorMedioCloro) {
 		this.valorMedioCloro = valorMedioCloro;
 	}
-
-
 
 	public String getValorMedioFluor() {
 		return valorMedioFluor;
 	}
 
-
-
 	public void setValorMedioFluor(String valorMedioFluor) {
 		this.valorMedioFluor = valorMedioFluor;
 	}
-
 
 	public String getValorMedioColiformesTotais() {
 		return valorMedioColiformesTotais;
 	}
 
-
 	public void setValorMedioColiformesTotais(String valorMedioColiformesTotais) {
 		this.valorMedioColiformesTotais = valorMedioColiformesTotais;
 	}
-
-
 
 	public String getValorMedioColiformesfecais() {
 		return valorMedioColiformesTermotolerantes;
 	}
 
-
-
 	public void setValorMedioColiformesfecais(String valorMedioColiformesfecais) {
 		this.valorMedioColiformesTermotolerantes = valorMedioColiformesfecais;
 	}
-
 
 	public String getPadraoCor() {
 		return padraoCor;
 	}
 
-
-
 	public void setPadraoCor(String padraoCor) {
 		this.padraoCor = padraoCor;
 	}
-
-
 
 	public String getPadraoCloro() {
 		return padraoCloro;
 	}
 
-
-
 	public void setPadraoCloro(String padraoCloro) {
 		this.padraoCloro = padraoCloro;
 	}
-
-
 
 	public String getPadraoFluor() {
 		return padraoFluor;
 	}
 
-
-
 	public void setPadraoFluor(String padraoFluor) {
 		this.padraoFluor = padraoFluor;
 	}
-
-
 
 	public String getPadraoColiformesTotais() {
 		return padraoColiformesTotais;
 	}
 
-
-
 	public void setPadraoColiformesTotais(String padraoColiformesTotais) {
 		this.padraoColiformesTotais = padraoColiformesTotais;
 	}
-
-
 
 	public String getPadraoColiformesfecais() {
 		return padraoColiformesTermotolerantes;
 	}
 
-
-
 	public void setPadraoColiformesfecais(String padraoColiformesfecais) {
 		this.padraoColiformesTermotolerantes = padraoColiformesfecais;
 	}
 
-	public void setValorConformeColiformesTotais(
-			String valorConformeColiformesTotais) {
+	public void setValorConformeColiformesTotais(String valorConformeColiformesTotais) {
 		this.valorConformeColiformesTotais = valorConformeColiformesTotais;
 	}
-
-
 
 	public String getTipoDeConsumo() {
 		return tipoDeConsumo;
 	}
 
-
-
 	public void setTipoDeConsumo(String tipoDeConsumo) {
 		this.tipoDeConsumo = tipoDeConsumo;
 	}
 
+	public Relatorio2ViaContaBean(String indicadorPrimeiraPagina, Collection colecaoDetail, String descricaoLocalidade, String matriculaImovelFormatada, String dataVencimento, String nomeCliente,
+			String enderecoImovel, String fatura, String inscricao, String idClienteResponsavel, String enderecoClienteResponsavel, String descricaoAguaSituacao, String descricaoEsgotoSituacao,
+			String dadosConsumoMes1, String dadosConsumoMes4, String dadosConsumoMes2, String dadosConsumoMes5, String leituraAnterior, String leituraAtual, String consumoFaturamento,
+			String diasConsumo, String consumoMedioDiario, String dadosConsumoMes3, String dadosConsumoMes6, String dataLeituraAnterior, String dataLeituraAtual, String descricaoTipoConsumo,
+			String descricaoAnormalidadeConsumo, String quantidadeEconomiaConta, String consumoEconomia, String codigoAuxiliarString, String mesagemConsumoString, String valorContaString,
+			String primeiraParte, String segundaParte, String terceiraParte, String nomeGerenciaRegional, String mesAnoFormatado, String numeroIndiceTurbidez, String numeroCloroResidual,
+			String numeroNitrato, String numeroColiformesTotais, String numeroPH, String representacaoNumericaCodBarraFormatada, String representacaoNumericaCodBarraSemDigito, String dataValidade,
+			String grupo, String firma, String totalPaginasRelatorio, String idConta, String rotaEntrega, String contaSemCodigoBarras, String debitoCreditoSituacaoAtualConta, String contaPaga,
+			String enderecoClienteResponsavelLinha2, Collection colecaoBoleto) {
 
+		this.indicadorPrimeiraPagina = indicadorPrimeiraPagina;
+		this.arrayRelatorio2ViaContaDetailBean = new ArrayList();
+		this.arrayRelatorio2ViaContaDetailBean.addAll(colecaoDetail);
+		this.arrayJRDetail = new JRBeanCollectionDataSource(this.arrayRelatorio2ViaContaDetailBean);
 
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.matriculaImovelFormatada = matriculaImovelFormatada;
+		this.dataVencimento = dataVencimento;
+		this.nomeCliente = nomeCliente;
+		this.enderecoImovel = enderecoImovel;
+		this.fatura = fatura;
+		this.inscricao = inscricao;
+		this.idClienteResponsavel = idClienteResponsavel;
+		this.enderecoClienteResponsavel = enderecoClienteResponsavel;
+		this.descricaoAguaSituacao = descricaoAguaSituacao;
+		this.descricaoEsgotoSituacao = descricaoEsgotoSituacao;
+		this.dadosConsumoMes1 = dadosConsumoMes1;
+		this.dadosConsumoMes4 = dadosConsumoMes4;
+		this.dadosConsumoMes2 = dadosConsumoMes2;
+		this.dadosConsumoMes5 = dadosConsumoMes5;
+		this.leituraAnterior = leituraAnterior;
+		this.leituraAtual = leituraAtual;
+		this.consumoFaturamento = consumoFaturamento;
+		this.diasConsumo = diasConsumo;
+		this.consumoMedioDiario = consumoMedioDiario;
+		this.dadosConsumoMes3 = dadosConsumoMes3;
+		this.dadosConsumoMes6 = dadosConsumoMes6;
+		this.dataLeituraAnterior = dataLeituraAnterior;
+		this.dataLeituraAtual = dataLeituraAtual;
+		this.descricaoTipoConsumo = descricaoTipoConsumo;
+		this.descricaoAnormalidadeConsumo = descricaoAnormalidadeConsumo;
+		this.quantidadeEconomiaConta = quantidadeEconomiaConta;
+		this.consumoEconomia = consumoEconomia;
+		this.codigoAuxiliarString = codigoAuxiliarString;
+		this.mesagemConsumoString = mesagemConsumoString;
+		this.valorContaString = valorContaString;
+		this.primeiraParte = primeiraParte;
+		this.segundaParte = segundaParte;
+		this.terceiraParte = terceiraParte;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.mesAnoFormatado = mesAnoFormatado;
+		this.numeroIndiceTurbidez = numeroIndiceTurbidez;
+		this.numeroCloroResidual = numeroCloroResidual;
+		this.numeroNitrato = numeroNitrato;
+		this.numeroColiformesTotais = numeroColiformesTotais;
+		this.numeroPH = numeroPH;
+		this.representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarraFormatada;
+		this.representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarraSemDigito;
+		this.dataValidade = dataValidade;
+		this.grupo = grupo;
+		this.firma = firma;
+		this.totalPaginasRelatorio = totalPaginasRelatorio;
+		this.idConta = idConta;
+		this.rotaEntrega = rotaEntrega;
+		this.contaSemCodigoBarras = contaSemCodigoBarras;
+		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
+		this.contaPaga = contaPaga;
+		this.enderecoClienteResponsavelLinha2 = enderecoClienteResponsavelLinha2;
 
+		this.arrayRelatorio2ViaContaBoletoBancarioBean = new ArrayList();
+		this.arrayRelatorio2ViaContaBoletoBancarioBean.addAll(colecaoBoleto);
+		this.arrayJRBoleto = new JRBeanCollectionDataSource(this.arrayRelatorio2ViaContaBoletoBancarioBean);
+	}
 
-	
-	public Relatorio2ViaContaBean(
-			    String indicadorPrimeiraPagina, 
-			    Collection colecaoDetail,
-	    		String descricaoLocalidade,
-	    		String matriculaImovelFormatada,
-	    		String dataVencimento,
-	    		String nomeCliente,
-	    		String enderecoImovel,
-	    		String fatura,
-	    		String inscricao,
-	    		String idClienteResponsavel,
-	    		String enderecoClienteResponsavel,
-	    		String descricaoAguaSituacao,
-	    		String descricaoEsgotoSituacao,
-	    		String dadosConsumoMes1,
-	    		String dadosConsumoMes4,
-	    		String dadosConsumoMes2,
-	    		String dadosConsumoMes5,
-	    		String leituraAnterior,
-	    		String leituraAtual,
-	    		String consumoFaturamento,
-	    		String diasConsumo,
-	    		String consumoMedioDiario,
-	    		String dadosConsumoMes3,
-	    		String dadosConsumoMes6,
-	    		String dataLeituraAnterior,
-	    		String dataLeituraAtual,
-	    		String descricaoTipoConsumo,
-	    		String descricaoAnormalidadeConsumo,
-	    		String quantidadeEconomiaConta,
-	    		String consumoEconomia,
-	    		String codigoAuxiliarString,
-	    		String mesagemConsumoString,
-	    		String valorContaString,
-	    		String primeiraParte,
-	    		String segundaParte,
-	    		String terceiraParte,
-	    		String nomeGerenciaRegional,
-	    		String mesAnoFormatado,
-	    		String numeroIndiceTurbidez,
-	    		String numeroCloroResidual,	
-	    		String numeroNitrato,
-	    		String numeroColiformesTotais,
-	    		String numeroPH,
-	    		String representacaoNumericaCodBarraFormatada,
-	    		String representacaoNumericaCodBarraSemDigito,
-	    		String dataValidade,
-	    		String grupo,	
-	    		String firma,
-	    		String totalPaginasRelatorio,
-	    		String idConta,
-	    		String rotaEntrega,
-	    		String contaSemCodigoBarras,
-	    		String debitoCreditoSituacaoAtualConta,
-	    		String contaPaga,
-	    		String enderecoClienteResponsavelLinha2,
-	    		Collection colecaoBoleto) {
-	    	
-		    this.indicadorPrimeiraPagina = indicadorPrimeiraPagina;
-			this.arrayRelatorio2ViaContaDetailBean = new ArrayList();
-			this.arrayRelatorio2ViaContaDetailBean.addAll(colecaoDetail);
-			this.arrayJRDetail = new JRBeanCollectionDataSource(
-					this.arrayRelatorio2ViaContaDetailBean);
-		  
-	    	this.descricaoLocalidade = descricaoLocalidade;
-	    	this.matriculaImovelFormatada = matriculaImovelFormatada;
-	    	this.dataVencimento = dataVencimento;
-	    	this.nomeCliente = nomeCliente;
-	    	this.enderecoImovel = enderecoImovel;
-	    	this.fatura = fatura;
-	    	this.inscricao = inscricao;
-	    	this.idClienteResponsavel = idClienteResponsavel;
-	    	this.enderecoClienteResponsavel = enderecoClienteResponsavel;
-	    	this.descricaoAguaSituacao = descricaoAguaSituacao;
-	    	this.descricaoEsgotoSituacao = descricaoEsgotoSituacao;
-	    	this.dadosConsumoMes1 = dadosConsumoMes1;
-	    	this.dadosConsumoMes4 = dadosConsumoMes4;
-	    	this.dadosConsumoMes2 = dadosConsumoMes2;
-	    	this.dadosConsumoMes5 = dadosConsumoMes5;
-	    	this.leituraAnterior = leituraAnterior;
-	    	this.leituraAtual = leituraAtual;
-	    	this.consumoFaturamento = consumoFaturamento;
-	    	this.diasConsumo = diasConsumo;
-	    	this.consumoMedioDiario = consumoMedioDiario;
-	    	this.dadosConsumoMes3 = dadosConsumoMes3;
-	    	this.dadosConsumoMes6 = dadosConsumoMes6;
-	    	this.dataLeituraAnterior = dataLeituraAnterior;
-	    	this.dataLeituraAtual = dataLeituraAtual;
-	    	this.descricaoTipoConsumo = descricaoTipoConsumo;
-	    	this.descricaoAnormalidadeConsumo = descricaoAnormalidadeConsumo;
-	    	this.quantidadeEconomiaConta = quantidadeEconomiaConta;
-	    	this.consumoEconomia = consumoEconomia;
-	    	this.codigoAuxiliarString = codigoAuxiliarString;
-	    	this.mesagemConsumoString = mesagemConsumoString;
-	    	this.valorContaString = valorContaString;
-	    	this.primeiraParte = primeiraParte;
-	    	this.segundaParte = segundaParte;
-	    	this.terceiraParte = terceiraParte;
-	    	this.nomeGerenciaRegional = nomeGerenciaRegional;
-	    	this.mesAnoFormatado = mesAnoFormatado;
-	    	this.numeroIndiceTurbidez = numeroIndiceTurbidez;
-	    	this.numeroCloroResidual = numeroCloroResidual;
-	    	this.numeroNitrato = numeroNitrato;
-	    	this.numeroColiformesTotais = numeroColiformesTotais;
-	    	this.numeroPH = numeroPH;
-	    	this.representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarraFormatada;
-	    	this.representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarraSemDigito;
-	    	this.dataValidade = dataValidade;
-	    	this.grupo = grupo;	
-	    	this.firma = firma;
-	    	this.totalPaginasRelatorio = totalPaginasRelatorio;
-	    	this.idConta = idConta;
-	    	this.rotaEntrega = rotaEntrega;
-	    	this.contaSemCodigoBarras = contaSemCodigoBarras;
-	    	this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
-	    	this.contaPaga = contaPaga;
-	    	this.enderecoClienteResponsavelLinha2 = enderecoClienteResponsavelLinha2;
-	    	
-	    	this.arrayRelatorio2ViaContaBoletoBancarioBean = new ArrayList();
-			this.arrayRelatorio2ViaContaBoletoBancarioBean.addAll(colecaoBoleto);
-			this.arrayJRBoleto = new JRBeanCollectionDataSource(
-					this.arrayRelatorio2ViaContaBoletoBancarioBean);
-	    }
+	public Relatorio2ViaContaBean(EmitirContaHelper emitirContaHelper, int indicadorPrimeiraPagina, Collection colecaoDetail, String dataVencimentoFormatada, String enderecoClienteResponsavel,
+			int totalPaginasRelatorio, String codigoRota, String debitoCreditoSituacaoAtualConta, String contaPaga, String enderecoClienteResponsavelLinha2, Collection colecaoBoleto, int boleto) {
 
-	
-
-	public Relatorio2ViaContaBean(EmitirContaHelper emitirContaHelper,
-			int indicadorPrimeiraPagina,
-			Collection colecaoDetail,
-			String dataVencimentoFormatada,
-			String enderecoClienteResponsavel,
-			int totalPaginasRelatorio,
-			String codigoRota,
-			String debitoCreditoSituacaoAtualConta,
-			String contaPaga,
-			String enderecoClienteResponsavelLinha2,
-			Collection colecaoBoleto,
-			int boleto){
-		
 		this.indicadorPrimeiraPagina = "" + indicadorPrimeiraPagina;
 		this.arrayRelatorio2ViaContaDetailBean = new ArrayList();
 		this.arrayRelatorio2ViaContaDetailBean.addAll(colecaoDetail);
-		this.arrayJRDetail = new JRBeanCollectionDataSource(
-				this.arrayRelatorio2ViaContaDetailBean);
+		this.arrayJRDetail = new JRBeanCollectionDataSource(this.arrayRelatorio2ViaContaDetailBean);
 		this.descricaoLocalidade = emitirContaHelper.getDescricaoLocalidade();
 		this.matriculaImovelFormatada = emitirContaHelper.getIdImovel() + "";
 		this.dataVencimento = dataVencimentoFormatada;
@@ -797,11 +585,9 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		this.enderecoClienteResponsavelLinha2 = enderecoClienteResponsavelLinha2;
 		this.arrayRelatorio2ViaContaBoletoBancarioBean = new ArrayList();
 		this.arrayRelatorio2ViaContaBoletoBancarioBean.addAll(colecaoBoleto);
-		this.arrayJRBoleto = new JRBeanCollectionDataSource(
-				this.arrayRelatorio2ViaContaBoletoBancarioBean);
+		this.arrayJRBoleto = new JRBeanCollectionDataSource(this.arrayRelatorio2ViaContaBoletoBancarioBean);
 		this.boleto = "" + boleto;
-		this.numeroDocumento = (""+emitirContaHelper.getAmReferencia() ) +
-							   (emitirContaHelper.getIdImovel().toString());
+		this.numeroDocumento = ("" + emitirContaHelper.getAmReferencia()) + (emitirContaHelper.getIdImovel().toString());
 		this.padraoCloro = emitirContaHelper.getPadraoCloro();
 		this.padraoColiformesTermotolerantes = emitirContaHelper.getPadraoColiformesfecais();
 		this.padraoColiformesTotais = emitirContaHelper.getPadraoColiformesTotais();
@@ -835,23 +621,40 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		this.tipoDeConsumo = emitirContaHelper.getDescricaoTipoConsumo();
 		this.icClienteFaturaAgrupada = emitirContaHelper.getClienteComFaturaAgrupada().toString();
 		this.dataPagamentoConta = emitirContaHelper.getDataPagamentoConta();
-		
-		
-		
-		String documentoCpfCnpj = "";
-		if (emitirContaHelper.getCpf() != null && !emitirContaHelper.getCpf().equals("")){
-			documentoCpfCnpj = Util.formatarCpf(emitirContaHelper.getCpf()) ;
-		}else if (emitirContaHelper.getCnpj() != null && !emitirContaHelper.getCnpj().equals("")){
-			documentoCpfCnpj = Util.formatarCnpj(emitirContaHelper.getCnpj());
+
+		if (emitirContaHelper.getCpf() != null && !emitirContaHelper.getCpf().equals("")) {
+			this.numeroCpfCnpj = Util.formatarCpf(emitirContaHelper.getCpf());
+		} else if (emitirContaHelper.getCnpj() != null && !emitirContaHelper.getCnpj().equals("")) {
+			this.numeroCpfCnpj = Util.formatarCnpj(emitirContaHelper.getCnpj());
+		}
+
+		if (emitirContaHelper.isInformarImpostos()) {
+			this.textoDescricaoImpostosEAliquotas = "Tributos";
+			this.textoPercentualImpostosEAliquotas = "(%)";
+			this.textoValorBaseCalculoImpostos = "Base de cálculo";
+			this.textoValorImpostosEAliquotas = "Valor (R$)";
+			
+			this.descricaoImpostosEAliquotas = emitirContaHelper.getDescricaoImpostosEAliquotas();
+			this.percentualImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getPercentualImpostosEAliquotas());
+			this.valorBaseCalculoImpostos = Util.converterDecimalParaString(emitirContaHelper.getValorBaseCalculoImpostos());
+			this.valorImpostosEAliquotas = Util.converterDecimalParaString(emitirContaHelper.getValorImpostosEAliquotas());
+		} else {
+			this.textoDescricaoImpostosEAliquotas = "";
+			this.textoPercentualImpostosEAliquotas = "";
+			this.textoValorBaseCalculoImpostos = "";
+			this.textoValorImpostosEAliquotas = "";
+			
+			this.descricaoImpostosEAliquotas = "";
+			this.percentualImpostosEAliquotas = "";
+			this.valorBaseCalculoImpostos = "";
+			this.valorImpostosEAliquotas = "";
 		}
 		
-		this.numeroCpfCnpj = documentoCpfCnpj;
-		
-		
+		this.agenciaReguladora = emitirContaHelper.getAgenciaReguladora();
+		this.telefoneAgenciaReguladora = emitirContaHelper.getTelefoneAgenciaReguladora();
+		this.emailAgenciaReguladora = emitirContaHelper.getEmailAgenciaReguladora();
 	}
-	
-	
-	
+
 	public JRBeanCollectionDataSource getArrayJRDetail() {
 		return arrayJRDetail;
 	}
@@ -864,8 +667,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return arrayRelatorio2ViaContaDetailBean;
 	}
 
-	public void setArrayRelatorio2ViaContaDetailBean(
-			ArrayList arrayRelatorio2ViaContaDetailBean) {
+	public void setArrayRelatorio2ViaContaDetailBean(ArrayList arrayRelatorio2ViaContaDetailBean) {
 		this.arrayRelatorio2ViaContaDetailBean = arrayRelatorio2ViaContaDetailBean;
 	}
 
@@ -1164,23 +966,23 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	public void setNumeroIndiceTurbidez(String numeroIndiceTurbidez) {
 		this.numeroIndiceTurbidez = numeroIndiceTurbidez;
 	}
-	
+
 	public String getNumeroColiformesTotais() {
 		return numeroColiformesTotais;
 	}
-	
+
 	public void setNumeroColiformesTotais(String numeroColiformesTotais) {
 		this.numeroColiformesTotais = numeroColiformesTotais;
 	}
-	
+
 	public String getNumeroNitrato() {
 		return numeroNitrato;
 	}
-	
+
 	public void setNumeroNitrato(String numeroNitrato) {
 		this.numeroNitrato = numeroNitrato;
 	}
-	
+
 	public String getNumeroPH() {
 		return numeroPH;
 	}
@@ -1209,8 +1011,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return representacaoNumericaCodBarraFormatada;
 	}
 
-	public void setRepresentacaoNumericaCodBarraFormatada(
-			String representacaoNumericaCodBarraFormatada) {
+	public void setRepresentacaoNumericaCodBarraFormatada(String representacaoNumericaCodBarraFormatada) {
 		this.representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarraFormatada;
 	}
 
@@ -1218,8 +1019,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return representacaoNumericaCodBarraSemDigito;
 	}
 
-	public void setRepresentacaoNumericaCodBarraSemDigito(
-			String representacaoNumericaCodBarraSemDigito) {
+	public void setRepresentacaoNumericaCodBarraSemDigito(String representacaoNumericaCodBarraSemDigito) {
 		this.representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarraSemDigito;
 	}
 
@@ -1271,11 +1071,9 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		this.rotaEntrega = rotaEntrega;
 	}
 
-
 	public String getContaSemCodigoBarras() {
 		return contaSemCodigoBarras;
 	}
-
 
 	public void setContaSemCodigoBarras(String contaSemCodigoBarras) {
 		this.contaSemCodigoBarras = contaSemCodigoBarras;
@@ -1285,8 +1083,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return debitoCreditoSituacaoAtualConta;
 	}
 
-	public void setDebitoCreditoSituacaoAtualConta(
-			String debitoCreditoSituacaoAtualConta) {
+	public void setDebitoCreditoSituacaoAtualConta(String debitoCreditoSituacaoAtualConta) {
 		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
 	}
 
@@ -1302,8 +1099,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return enderecoClienteResponsavelLinha2;
 	}
 
-	public void setEnderecoClienteResponsavelLinha2(
-			String enderecoClienteResponsavelLinha2) {
+	public void setEnderecoClienteResponsavelLinha2(String enderecoClienteResponsavelLinha2) {
 		this.enderecoClienteResponsavelLinha2 = enderecoClienteResponsavelLinha2;
 	}
 
@@ -1319,8 +1115,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		return arrayRelatorio2ViaContaBoletoBancarioBean;
 	}
 
-	public void setArrayRelatorio2ViaContaBoletoBancarioBean(
-			ArrayList arrayRelatorio2ViaContaBoletoBancarioBean) {
+	public void setArrayRelatorio2ViaContaBoletoBancarioBean(ArrayList arrayRelatorio2ViaContaBoletoBancarioBean) {
 		this.arrayRelatorio2ViaContaBoletoBancarioBean = arrayRelatorio2ViaContaBoletoBancarioBean;
 	}
 
@@ -1348,39 +1143,115 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 		this.numeroCpfCnpj = numeroCpfCnpj;
 	}
 
-
-
 	public String getCodigoDebitoAutomatico() {
 		return codigoDebitoAutomatico;
 	}
-
-
 
 	public void setCodigoDebitoAutomatico(String codigoDebitoAutomatico) {
 		this.codigoDebitoAutomatico = codigoDebitoAutomatico;
 	}
 
-
-
 	public String getEmpresa() {
 		return empresa;
 	}
-
-
 
 	public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 
-
-
 	public String getEnderecoEmpresa() {
 		return enderecoEmpresa;
 	}
 
-
-
 	public void setEnderecoEmpresa(String enderecoEmpresa) {
 		this.enderecoEmpresa = enderecoEmpresa;
+	}
+
+	public String getDescricaoImpostosEAliquotas() {
+		return descricaoImpostosEAliquotas;
+	}
+
+	public void setDescricaoImpostosEAliquotas(String descricaoImpostosEAliquotas) {
+		this.descricaoImpostosEAliquotas = descricaoImpostosEAliquotas;
+	}
+
+	public String getPercentualImpostosEAliquotas() {
+		return percentualImpostosEAliquotas;
+	}
+
+	public void setPercentualImpostosEAliquotas(String percentualImpostosEAliquotas) {
+		this.percentualImpostosEAliquotas = percentualImpostosEAliquotas;
+	}
+
+	public String getValorBaseCalculoImpostos() {
+		return valorBaseCalculoImpostos;
+	}
+
+	public void setValorBaseCalculoImpostos(String valorBaseCalculoImpostos) {
+		this.valorBaseCalculoImpostos = valorBaseCalculoImpostos;
+	}
+
+	public String getValorImpostosEAliquotas() {
+		return valorImpostosEAliquotas;
+	}
+
+	public void setValorImpostosEAliquotas(String valorImpostosEAliquotas) {
+		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
+	}
+
+	public String getTextoDescricaoImpostosEAliquotas() {
+		return textoDescricaoImpostosEAliquotas;
+	}
+
+	public void setTextoDescricaoImpostosEAliquotas(String textoDescricaoImpostosEAliquotas) {
+		this.textoDescricaoImpostosEAliquotas = textoDescricaoImpostosEAliquotas;
+	}
+
+	public String getTextoPercentualImpostosEAliquotas() {
+		return textoPercentualImpostosEAliquotas;
+	}
+
+	public void setTextoPercentualImpostosEAliquotas(String textoPercentualImpostosEAliquotas) {
+		this.textoPercentualImpostosEAliquotas = textoPercentualImpostosEAliquotas;
+	}
+
+	public String getTextoValorBaseCalculoImpostos() {
+		return textoValorBaseCalculoImpostos;
+	}
+
+	public void setTextoValorBaseCalculoImpostos(String textoValorBaseCalculoImpostos) {
+		this.textoValorBaseCalculoImpostos = textoValorBaseCalculoImpostos;
+	}
+
+	public String getTextoValorImpostosEAliquotas() {
+		return textoValorImpostosEAliquotas;
+	}
+
+	public void setTextoValorImpostosEAliquotas(String textoValorImpostosEAliquotas) {
+		this.textoValorImpostosEAliquotas = textoValorImpostosEAliquotas;
+	}
+
+	public String getAgenciaReguladora() {
+		return agenciaReguladora;
+	}
+
+	public void setAgenciaReguladora(String agenciaReguladora) {
+		this.agenciaReguladora = agenciaReguladora;
+	}
+
+	public String getTelefoneAgenciaReguladora() {
+		return telefoneAgenciaReguladora;
+	}
+
+	public void setTelefoneAgenciaReguladora(String telefoneAgenciaReguladora) {
+		this.telefoneAgenciaReguladora = telefoneAgenciaReguladora;
+	}
+
+	public String getEmailAgenciaReguladora() {
+		return emailAgenciaReguladora;
+	}
+
+	public void setEmailAgenciaReguladora(String emailAgenciaReguladora) {
+		this.emailAgenciaReguladora = emailAgenciaReguladora;
 	}
 }
