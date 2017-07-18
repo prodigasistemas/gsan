@@ -59912,9 +59912,22 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		BigDecimal retorno = null;
 		Session session = HibernateUtil.getSession();
 		StringBuilder consulta = new StringBuilder();
+		StringBuilder parcelasCobradas = new StringBuilder();
 
 		try {
-
+			parcelasCobradas.append("(select sum(qtd_parcelas) - 1 ")
+							.append(" from ( ")
+							.append("     select count(*) as qtd_parcelas ")
+							.append("     from faturamento.debito_a_cobrar cobrar ")
+							.append("     left join faturamento.debito_cobrado_historico cobradoH on cobradoH.dbac_id = cobrar.dbac_id ")
+							.append("     where cobrar.dbac_id = dacb.dbac_id ")
+							.append("     UNION ")
+							.append("     select count(*) as qtd_parcelas ")
+							.append("     from faturamento.debito_a_cobrar cobrar ")
+							.append("     left join faturamento.debito_cobrado cobrado on cobrado.dbac_id = cobrar.dbac_id ")
+							.append("     where cobrar.dbac_id = dacb.dbac_id) x) ");
+			
+			
 			consulta.append(" select sum(lp) as valor from ( ")
 					.append("      select trunc((sum(dccg.dccg_vlcategoria) - (12 * trunc(( dbac_vldebito / dbac_nnprestacaodebito),2))),2) as lp ")
 					.append("      from  faturamento.debito_cobrado_categoria dccg  ")
@@ -59928,7 +59941,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" 		and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
 					.append(" 		and dccg.catg_id= :idCategoria ")
 					.append(" 		and dbcb.fntp_id in ( :jurosParcelamento, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) ")
-					.append("      and dbcb.dbcb_nnprestacao > 12 ")
+					.append("      and ( (dbcb.dbcb_nnprestacao - ").append(parcelasCobradas.toString()).append(") > 12) ")
 					.append("      group by dbac_vldebito, dbac_nnprestacaodebito) as x ");
 
 			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
