@@ -11,6 +11,10 @@ public interface ConstantesSistema {
 
 	String COLECAO_UNIDADES_PROCESSAMENTO_BATCH = "ColecaoBatch";
 	
+	public static final String NOME_AGENCIA_REGULADORA = "AMAE";
+	public static final String NUMERO_AGENCIA_REGULADORA = "91-984647478";
+	public static final String EMAIL_AGENCIA_REGULADORA = "ouvidoria.amae@gmail.com";
+	
 	Short SET_ZERO = new Short("0");
 	Short ZERO = new Short("0");
 	

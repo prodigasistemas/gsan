@@ -9,18 +9,19 @@ public class AgenciaReguladoraMunicipio implements Serializable {
 
 	private static final long serialVersionUID = -7529386649851704773L;
 	
-	private AgenciaReguladoraMunicipioPK comp_id;
+//	private AgenciaReguladoraMunicipioPK comp_id;
 	
+	private Integer id; 
 	private AgenciaReguladora agenciaReguladora;
 	private Municipio municipio;
 	private Date ultimaAlteracao;
 	
-	public AgenciaReguladoraMunicipioPK getComp_id() {
-		return comp_id;
-	}
-	public void setComp_id(AgenciaReguladoraMunicipioPK comp_id) {
-		this.comp_id = comp_id;
-	}
+//	public AgenciaReguladoraMunicipioPK getComp_id() {
+//		return comp_id;
+//	}
+//	public void setComp_id(AgenciaReguladoraMunicipioPK comp_id) {
+//		this.comp_id = comp_id;
+//	}
 	public AgenciaReguladora getAgenciaReguladora() {
 		return agenciaReguladora;
 	}
@@ -38,5 +39,11 @@ public class AgenciaReguladoraMunicipio implements Serializable {
 	}
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

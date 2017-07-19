@@ -13,20 +13,11 @@
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-
-<html:javascript staticJavascript="false"
-	formName="InserirUsuarioDadosGeraisActionForm"
-	dynamicJavascript="false" />
-
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>Calendario.js"></script>
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<html:javascript staticJavascript="false" formName="InserirUsuarioDadosGeraisActionForm" dynamicJavascript="false" />
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
 	window.onmousemove = verificarAcesso;
@@ -633,6 +624,11 @@ function desabilitaCPFeNasc(){
 						onchange="javascript:desabilitaCPFeNasc();" /></td>
 				</tr>
 
+				<tr>
+					<td width="26%"><strong>Limite de Processos Batch:</strong></td>
+					<td width="74%"><html:text property="limiteBatch" size="11" maxlength="3" onkeypress="return isCampoNumerico(event);" /></td>
+				</tr>
+				
 				<tr>
 					<td colspan="2">
 					<table border="0" width="100%">

@@ -3,53 +3,44 @@ package gcom.batch;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class ProcessoSituacao implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public static final int AGENDADO = 4;
 
 	public static final int EM_ESPERA = 3;
-	
+
 	public static final int INICIO_A_COMANDAR = 5;
-	
+
 	public static final int EM_PROCESSAMENTO = 1;
-	
+
 	public static final int CONCLUIDO = 2;
-	
+
 	public static final int CONCLUIDO_COM_ERRO = 6;
-	
+
 	public static final int EXECUCAO_CANCELADA = 7;
-	
+
 	public static final int AGUARDANDO_AUTORIZACAO = 8;
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
 	private String descricao;
 
-	/** nullable persistent field */
 	private String descricaoAbreviada;
 
-	/** persistent field */
 	private short indicadorUso;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private Set processosIniciados;
 
-	/** full constructor */
-	public ProcessoSituacao(Integer id, String descricao,
-			String descricaoAbreviada, short indicadorUso,
-			Date ultimaAlteracao, Set processosIniciados) {
+	public ProcessoSituacao(Integer id, String descricao, String descricaoAbreviada, short indicadorUso, Date ultimaAlteracao, Set processosIniciados) {
 		this.id = id;
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
@@ -58,16 +49,18 @@ public class ProcessoSituacao implements Serializable {
 		this.processosIniciados = processosIniciados;
 	}
 
-	/** default constructor */
 	public ProcessoSituacao() {
 	}
 
-	/** minimal constructor */
-	public ProcessoSituacao(Integer id, short indicadorUso,
-			Set processosIniciados) {
+	public ProcessoSituacao(Integer id, short indicadorUso, Set processosIniciados) {
 		this.id = id;
 		this.indicadorUso = indicadorUso;
 		this.processosIniciados = processosIniciados;
+	}
+
+	public ProcessoSituacao(Integer id) {
+		super();
+		this.id = id;
 	}
 
 	public String getDescricaoAbreviada() {
@@ -120,8 +113,7 @@ public class ProcessoSituacao implements Serializable {
 		if (!(other instanceof ProcessoSituacao))
 			return false;
 		ProcessoSituacao castOther = (ProcessoSituacao) other;
-		return new EqualsBuilder().append(this.getId(), castOther.getId())
-				.isEquals();
+		return new EqualsBuilder().append(this.getId(), castOther.getId()).isEquals();
 	}
 
 	public int hashCode() {
@@ -135,5 +127,4 @@ public class ProcessoSituacao implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 }

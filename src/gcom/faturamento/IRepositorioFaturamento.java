@@ -3047,4 +3047,8 @@ public interface IRepositorioFaturamento {
 	
 	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
 			int anoMesReferencia, int idLocalidade, int idCategoria) throws ErroRepositorioException;
+
+	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException;
+	
+	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException;
 }

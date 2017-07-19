@@ -393,7 +393,7 @@ function bloqueiaDadosEmpresaCobranca(){
 						<td><strong>Percentual do Pagamento das Contas Cobradas:</strong></td>
 						<td colspan="2"><span class="style2"> <html:text 
 							property="percentualPagamento" size="7" maxlength="7"
-							onkeyup="formataValorMonetario(this, 5);"  onchange="bloqueiaCampos('sim');"
+							onkeyup="formataValorDecimalTresCasas(this, 6);"  onchange="bloqueiaCampos('sim');"
 							onkeypress="return isCampoNumerico(event);"
 							tabindex="10" readonly="true" style="background-color:#EFEFEF;" /> </span></td>
 						
@@ -405,7 +405,7 @@ function bloqueiaDadosEmpresaCobranca(){
 						<td><strong>Percentual do Pagamento das Contas Cobradas:</strong></td>
 						<td colspan="2"><span class="style2"> <html:text
 							property="percentualPagamento" size="7" maxlength="7"
-							onkeyup="formataValorMonetario(this, 5);"  onchange="bloqueiaCampos('sim');"
+							onkeyup="formataValorDecimalTresCasas(this, 6);"  onchange="bloqueiaCampos('sim');"
 							onkeypress="return isCampoNumerico(event);"
 							tabindex="10"/> </span></td>
 						

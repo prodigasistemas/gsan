@@ -1247,8 +1247,7 @@ public class RepositorioGerencialArrecadacaoHBM implements IRepositorioGerencial
 
 			retorno = session.createQuery(hql)
 				.setInteger("idLocalidade", idLocalidade)
-				.setShort("indicadorUso", ConstantesSistema.INDICADOR_USO_ATIVO)
-				.setMaxResults(1).uniqueResult();
+				.setShort("indicadorUso", ConstantesSistema.INDICADOR_USO_ATIVO).list().iterator().next();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada  

@@ -35,6 +35,13 @@ public class CobrancaSituacaoTipo extends ObjetoTransacao implements Serializabl
     
     //Indicador usado para a empresa Terceirizada da CAEMA
     public final static Integer COBRANCA_EMPRESA_TERCEIRIZADA = new Integer(1);
+    public final static Integer PARALISAR_ACOES_DE_COBRANÇA = new Integer(5);
+    public final static Integer PARALISAR_ARRASTO = new Integer(6);
+    public final static Integer PARALISAR_ARRASTO_TODAS_AS_ACOES_DE_COBRANÇA = new Integer(7);
+    public final static Integer PARALISAR_ACOES_DE_COBRANCA_E_ACRESCIMOS_IMPONT = new Integer(8);
+    public final static Integer PARALISAR_ORDENS_DE_CORTE_E_SUPRESSAO = new Integer(9);
+    public final static Integer PARALISAR_ORDENS_DE_SUPRESSAO_TOTAL_E_PARCIAL = new Integer(10);
+    public final static Integer SUSPENDER_PAGAMENTO_DA_CONTA = new Integer(11);
 
     public Short getIndicadorInformarDataFinal() {
 		return indicadorInformarDataFinal;

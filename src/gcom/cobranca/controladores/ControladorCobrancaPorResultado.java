@@ -91,7 +91,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 
 	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ControladorException {
 		try {
-			return repositorioCobrancaPorResultado.pesquisarQuantidadeContas(helper, agrupadoPorImovel);
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+			
+			return repositorioCobrancaPorResultado.pesquisarQuantidadeContas(helper, agrupadoPorImovel, sistemaParametro.getAnoMesFaturamento());
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -122,7 +124,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	
 	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException {
 		try {
-			return repositorioCobrancaPorResultado.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado);
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+			
+			return repositorioCobrancaPorResultado.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

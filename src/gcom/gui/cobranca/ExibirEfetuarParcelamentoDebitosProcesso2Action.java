@@ -73,7 +73,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
 		
 		logger.info("Parcelamento do imóvel " + codigoImovel);
-		logger.info("1 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
+		logger.info("[" + codigoImovel + "] 1 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
 		Boolean indicadorContas = true;
 
 		if (semIntervaloParcelamento(fimIntervaloParcelamento, inicioIntervaloParcelamento)){
@@ -336,14 +336,16 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 					form.set("valorGuiasPagamento", "0,00");
 				}
 							
-				logger.info("2 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
+				logger.info("[" + codigoImovel + "] 2 - indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade);
 				// Acrescimos por Impontualidade
 				BigDecimal retornoSoma = new BigDecimal("0.00");
 				if( indicadorAcrescimosImpotualidade.equals("1") ){
 					retornoSoma.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 					retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
 					retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
-	
+					logger.info("[" + codigoImovel + "] 2.1 - valorTotalAcrescimoImpontualidadeContas: " + valorTotalAcrescimoImpontualidadeContas);
+					logger.info("[" + codigoImovel + "] 2.2 - valorTotalAcrescimoImpontualidadeGuias: " + valorTotalAcrescimoImpontualidadeGuias);
+					
 					form.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
 					sessao.setAttribute("valorAcrescimosImpontualidade", retornoSoma);
 					
