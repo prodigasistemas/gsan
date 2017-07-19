@@ -471,6 +471,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				idGuiaPagamento = "" + guiaPagamento.getId();
 
 				if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
+					retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
 					montarPaginaSucesso(request,
 							"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
 							"Efetuar outro Parcelamento de Débitos",
