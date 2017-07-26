@@ -15198,11 +15198,11 @@
 			</field>
 			
 			<field property="periodoComandoInicial"
-				depends="required,caracteresespeciais, mesAno">
+				depends="required,caracteresespeciais">
 				<arg0 key="Período de Execução do Comando Inicial" resource="false" />
 			</field>
 			<field property="periodoComandoFinal"
-				depends="required,caracteresespeciais, mesAno">
+				depends="required,caracteresespeciais">
 				<arg0 key="Período de Execução do Comando Final" resource="false" />
 			</field>
 			
