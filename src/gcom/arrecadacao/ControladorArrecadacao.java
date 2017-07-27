@@ -165,6 +165,8 @@ import gcom.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoH
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
+import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.fachada.Fachada;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
@@ -51391,6 +51393,7 @@ public class ControladorArrecadacao implements SessionBean {
 		linkBancoBrasil.append("&valor="+valorFormatado);
 		linkBancoBrasil.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
 		linkBancoBrasil.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
+		linkBancoBrasil.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId()));
 		
 		return linkBancoBrasil.toString();
 	}
@@ -51400,16 +51403,34 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
 
 	    Iterator iterator = dadosRelatorio.iterator();
+	    String descricaoServicosTarifas = null;
+	    String valor = null;
 
 	    while (iterator.hasNext()) {
 	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
-	    	String descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
-	        String valor = Util.formatarMoedaReal(helper.getValorDebito());
+	    	descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
+	        valor = Util.formatarMoedaReal(helper.getValorDebito());
+	        
 	    }
-		return null;
+	    
+	    String mensagemParcelamento = descricaoServicosTarifas + "     R$ " + valor;
+	    mensagemParcelamento += "<br>";
+	    mensagemParcelamento += "     " + obterMensagemParcelamento();
+	    
+		return mensagemParcelamento;
 	}
 	
-	
+	private String obterMensagemParcelamento() {
+		FiltroMensagemParcelamentoBoleto filtro = new FiltroMensagemParcelamentoBoleto();
+		filtro.adicionarParametro(new ParametroNulo(FiltroMensagemParcelamentoBoleto.FIM_VIGENCIA));
+
+		Collection mensagens = Fachada.getInstancia().pesquisar(filtro, MensagemParcelamentoBoleto.class.getName());
+		Iterator itMensagem = mensagens.iterator();
+
+		MensagemParcelamentoBoleto mensagem = (MensagemParcelamentoBoleto) itMensagem.next();
+
+		return mensagem.getMensagem();
+	}
 }
 
 
