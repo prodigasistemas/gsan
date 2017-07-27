@@ -365,11 +365,7 @@ public class ExibirAtualizarEmpresaAction extends GcomAction {
 	}
 	
 	private String obterPercentualFormatado(BigDecimal percentual) {
-		String formatado = null;
-		
-		percentual.toString().replace(".", ",");
-		
-		return formatado;
+		return percentual.toString().replace(".", ",");
 	}
 	
 }
