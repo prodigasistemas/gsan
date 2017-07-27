@@ -51394,5 +51394,37 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		return linkBancoBrasil.toString();
 	}
+	
+	
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento) {
+		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
+
+	    Iterator iterator = dadosRelatorio.iterator();
+
+	    while (iterator.hasNext()) {
+	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
+	    	String descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
+	        String valor = Util.formatarMoedaReal(helper.getValorDebito());
+	    }
+		return null;
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
