@@ -250,9 +250,7 @@ public class ExibirAtualizarEmpresaAction extends GcomAction {
 							.formatarData(empresaCobranca
 									.getDataFinalContrato()));
 
-					atualizarEmpresaActionForm.setPercentualPagamento(Util
-							.formatarMoedaReal(empresaCobranca
-									.getPercentualContratoCobranca()));
+					atualizarEmpresaActionForm.setPercentualPagamento(this.obterPercentualFormatado(empresaCobranca.getPercentualContratoCobranca()));
 					
 					FiltroEmpresaCobrancaFaixa filtro = new FiltroEmpresaCobrancaFaixa();
 					filtro.adicionarParametro(new ParametroSimples(
@@ -365,4 +363,13 @@ public class ExibirAtualizarEmpresaAction extends GcomAction {
 		
 		return retorno;
 	}
+	
+	private String obterPercentualFormatado(BigDecimal percentual) {
+		String formatado = null;
+		
+		percentual.toString().replace(".", ",");
+		
+		return formatado;
+	}
+	
 }
