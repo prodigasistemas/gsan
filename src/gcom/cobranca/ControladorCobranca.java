@@ -62507,4 +62507,12 @@ public class ControladorCobranca implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }
