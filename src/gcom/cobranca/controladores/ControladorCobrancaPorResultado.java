@@ -641,13 +641,13 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 	
 	
-	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
+	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade, Integer anoMesArrecadacao) throws ControladorException {
 		
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		try {
 			//repositorioCobranca.removerEmpresaCobrancaContaPagamentos(anoMesArrecadacao, idLocalidade);
-			Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = obterPagamentosEmpresa(idLocalidade);
+			Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
 
 			if (!pagamentosEmpresa.isEmpty()) {
 				getControladorBatch().inserirColecaoObjetoParaBatch(pagamentosEmpresa);
@@ -660,7 +660,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 	}
 
-	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
+	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade, Integer anoMesArrecadacao) throws ErroRepositorioException {
 		
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 
@@ -670,10 +670,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		try {
 			while (!flagTerminou) {
 				
-				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
-
 				Collection<Pagamento> pagamentos;
-					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
+					pagamentos = getControladorArrecadacao().obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, anoMesArrecadacao, numeroPaginas, quantidadeRegistros);
 				
 				if (pagamentos != null && !pagamentos.isEmpty()) {
 					
@@ -889,6 +887,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				pagamentoEmpresa.setNumeroTotalParcelas(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacao()) : new Integer("0"));
 				pagamentoEmpresa.setUltimaAlteracao(new Date());
 				pagamentoEmpresa.setIndicadorGeracaoArquivo(ConstantesSistema.NAO);
+				pagamentoEmpresa.setIdPagamento(pagamento.getId());
 				
 				if (pagamento.getAnoMesReferenciaPagamento() != null) {
 					pagamentoEmpresa.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());

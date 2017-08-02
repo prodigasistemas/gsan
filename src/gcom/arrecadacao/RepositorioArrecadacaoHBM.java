@@ -23909,56 +23909,75 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	
-	public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
+	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
 		Collection<Pagamento> retorno = null;
 		
 		Collection<Object[]> colecaoDadosPagamentos = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 		
 		try {
 			
-			consulta = "SELECT pg.id,"//0
-				     		+" pg.valorPagamento,"//1
-				     		+" cnt.id, "//2
-				     		+" gp.id,"//3
-				     		+" pgp.id,"//4
-				     		+" pgp.valorDebitoAtualizado,"//5
-				     		+" gp.valorDebito,"//6
-				     		+" dtgp.id,"//7
-				     		+" dac.id,"//8
-				     		+" pdac.id,"//9
-				     		+" pdac.valorDebitoAtualizado,"//10
-				     		+" dac.valorDebito, "//11
-				     		+" dtdac.id,"//12
-				     		+" pg.anoMesReferenciaPagamento,"//13
-				     		+" pg.dataPagamento,"//14
-				     		+" pg.imovel.id,"//15
-				     		+" ab.arrecadador.id, "//16
-				     		+" pgp.valorConta, "//17
-				     		+" pdac.valorConta, "//18
-				     		+" dac.numeroPrestacaoDebito, "//19
-				     		+" dac.numeroPrestacaoCobradas, "//20
-				     		+" dac.numeroParcelaBonus "//21
-                     +" FROM Pagamento pg"
-                     +" LEFT JOIN pg.contaGeral cntGeral"
-                     +" LEFT JOIN cntGeral.conta cnt"
-                     +" LEFT JOIN pg.guiaPagamento gp"
-                     +" LEFT JOIN gp.parcelamento pgp"
-                     +" LEFT JOIN gp.debitoTipo dtgp"
-                     +" LEFT JOIN pg.debitoACobrarGeral dacGeral"
-                     +" LEFT JOIN dacGeral.debitoACobrar dac"
-                     +" LEFT JOIN dac.parcelamento pdac"
-                     +" LEFT JOIN dac.debitoTipo dtdac"
-                     +" LEFT JOIN pg.pagamentoSituacaoAtual pgst"
-                     +" INNER JOIN pg.avisoBancario ab"
-                     +" where pg.localidade.id = :idLocalidade"
-                     +" and pgst.id = :pagamentoClassificado "
-                     +" and pg.anoMesReferenciaArrecadacao = :referencia "; 
+			consulta.append("SELECT pg.pgmt_id as idPagamento, ")
+			.append(" pg.pgmt_vlpagamento as valorPagamento,")
+			.append(" cnt.cnta_id as idConta, ")
+			.append(" gp.gpag_id as idGuia,")
+			.append(" pgp.parc_id as idParcelamentoGuia,")
+			.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia,")
+			.append(" gp.gpag_vldebito as valorGuia,")
+			.append(" dtgp.dbtp_id as debitoTipoGuia,")
+			.append(" dac.dbac_id as idDebito,")
+			.append(" pdac.parc_id as idParcelamentoDebito, ")
+			.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito,")
+			.append(" dac.dbac_vldebito as valorDebito, ")
+			.append(" dac.dbtp_id as deitoTipoDebito, ")
+			.append(" pg.pgmt_amreferenciapagamento as referenciaPagamento,")
+			.append(" pg.pgmt_dtpagamento as dataPagamento,")
+			.append(" pg.imov_id as imovel,")
+			.append(" ab.arrc_id as arrecadador, ")
+			.append(" pgp.parc_vlconta as valorParcelamentoConta, ")
+			.append(" pdac.parc_vlconta as valorParcelamentoContaDebito, ")
+			.append(" dac.dbac_nnprestacaodebito as numPrestacaoDebito, ")
+			.append(" dac.dbac_nnprestacaocobradas as numPrestacoesCobradas, ")
+			.append(" dac.dbac_nnparcelabonus as numParcelaBonus")
+			.append(" FROM arrecadacao.pagamento pg")
+			.append(" LEFT JOIN faturamento.conta cnt on cnt.cnta_id = pg.cnta_id")
+			.append(" LEFT JOIN faturamento.guia_pagamento gp on gp.gpag_id = pg.gpag_id")
+			.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id")
+			.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id")
+			.append(" LEFT JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = pg.dbac_id")
+			.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id")
+			.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id")
+			.append(" where pg.loca_id = :idLocalidade")
+			.append(" and pg.pgst_idatual = :pagamentoClassificado ")
+			.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia ")
+			.append(" and pg.pgmt_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp)");
 			
-			colecaoDadosPagamentos = session.createQuery(consulta.toString())
+			colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
+					.addScalar("idPagamento", Hibernate.INTEGER)
+					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("idGuia", Hibernate.INTEGER)
+					.addScalar("idParcelamentoGuia", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoGuia", Hibernate.BIG_DECIMAL)
+					.addScalar("valorGuia", Hibernate.BIG_DECIMAL)
+					.addScalar("debitoTipoGuia", Hibernate.INTEGER)
+					.addScalar("idDebito", Hibernate.INTEGER)
+					.addScalar("idParcelamentoDebito", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("deitoTipoDebito", Hibernate.INTEGER)
+					.addScalar("referenciaPagamento", Hibernate.INTEGER)
+					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("arrecadador", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoConta", Hibernate.BIG_DECIMAL)
+					.addScalar("valorParcelamentoContaDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("numPrestacaoDebito", Hibernate.SHORT)
+					.addScalar("numPrestacoesCobradas", Hibernate.SHORT)
+					.addScalar("numParcelaBonus", Hibernate.SHORT)
 			        .setInteger("idLocalidade",idLocalidade)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 			        .setInteger("referencia", referencia)
@@ -23966,6 +23985,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setMaxResults(quantidadeRegistros)
 					.list();
 			
+    		
 			System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
 			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
 				System.out.println(colecaoDadosPagamentos.size());
@@ -24074,9 +24094,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setAvisoBancario(avisoBancario);
 						}
 						
-						System.out.println("Adicionando pagamento...");
 						retorno.add(pagamento);
-						System.out.println(retorno.size());
 					}
 				}
 			}
