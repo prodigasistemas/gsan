@@ -13,16 +13,22 @@ import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.FiltroImovelCobrancaSituacao;
 import gcom.cadastro.imovel.FiltroImovelSubCategoria;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelCobrancaSituacao;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.CobrancaSituacao;
+import gcom.cobranca.CobrancaSituacaoHistorico;
+import gcom.cobranca.CobrancaSituacaoTipo;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.cobranca.EmpresaCobrancaContaPagamentos;
+import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.NegativacaoImoveis;
@@ -55,6 +61,7 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -79,12 +86,12 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	
 	private static Logger logger = Logger.getLogger(ControladorCobrancaPorResultado.class);
 
-	protected IRepositorioCobrancaPorResultadoHBM repositorioCobrancaPorResultado;
+	protected IRepositorioCobrancaPorResultadoHBM repositorio;
 	protected IRepositorioCobranca repositorioCobranca;
 	protected IRepositorioMicromedicao repositorioMicromedicao;
 
 	public void ejbCreate() throws CreateException {
-		repositorioCobrancaPorResultado = RepositorioCobrancaPorResultadoHBM.getInstancia();
+		repositorio = RepositorioCobrancaPorResultadoHBM.getInstancia();
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
@@ -93,7 +100,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		try {
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
-			return repositorioCobrancaPorResultado.pesquisarQuantidadeContas(helper, agrupadoPorImovel, sistemaParametro.getAnoMesFaturamento());
+			return repositorio.pesquisarQuantidadeContas(helper, agrupadoPorImovel, sistemaParametro.getAnoMesFaturamento());
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -126,7 +133,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		try {
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
-			return repositorioCobrancaPorResultado.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
+			return repositorio.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -645,21 +652,67 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		try {
 			//repositorioCobranca.removerEmpresaCobrancaContaPagamentos(anoMesArrecadacao, idLocalidade);
-			Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = obterPagamentosEmpresa(idLocalidade);
+			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade);
 
-			if (!pagamentosEmpresa.isEmpty()) {
-				getControladorBatch().inserirColecaoObjetoParaBatch(pagamentosEmpresa);
+			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
+				getControladorUtil().inserir(pagamento);
+				atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
 			}
+			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 		}
 	}
 
-	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
+	private void atualizarSituacaoCobranca(Integer idImovel, Integer idComando) throws ErroRepositorioException {
+		if (repositorio.isContasPagas(idImovel, idComando)) {
+			try {
+				atualizarImovelCobrancaSituacao(idImovel);
+				atualizarCobrancaSituacaoHistorico(idImovel);
+			} catch (ControladorException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void atualizarImovelCobrancaSituacao(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroImovelCobrancaSituacao();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID_COBRANCA_SITUACAO, CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA));
+		filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
 		
+		Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			ImovelCobrancaSituacao situacao = (ImovelCobrancaSituacao) Util.retonarObjetoDeColecao(colecao);
+			situacao.setDataRetiradaCobranca(new Date());
+			situacao.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(situacao);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void atualizarCobrancaSituacaoHistorico(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroCobrancaSituacaoHistorico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA));
+		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
+		
+		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+			
+			CobrancaSituacaoHistorico situacao = (CobrancaSituacaoHistorico) Util.retonarObjetoDeColecao(colecao);
+			situacao.setAnoMesCobrancaRetirada(parametros.getAnoMesFaturamento());
+			situacao.setObservacaoRetira("TODAS AS CONTAS FORAM PAGAS");
+			situacao.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(situacao);
+		}
+	}
+	
+	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 
 		boolean flagTerminou = false;
@@ -670,13 +723,10 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				
 				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-				Collection<Pagamento> pagamentos;
-					pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
+				Collection<Pagamento> pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
 				
 				if (pagamentos != null && !pagamentos.isEmpty()) {
-					
 					for (Pagamento pagamento : pagamentos) {
-						
 						if (categoriaPermiteGerarPagamento(pagamento)) {
 							pagamentosEmpresa.addAll(gerarPagamentoCobrancaDeContas(pagamento));
 							pagamentosEmpresa.addAll(gerarPagamentosCobrancaDeGuias(pagamento));
@@ -684,6 +734,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 						}
 					}
 				}
+				
 				if (pagamentos == null || pagamentos.size() < quantidadeRegistros) {
 	
 					flagTerminou = true;
@@ -694,7 +745,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 					pagamentos = null;
 				}
 				
-				numeroPaginas = numeroPaginas + quantidadeRegistros;
+				numeroPaginas += quantidadeRegistros;
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -749,9 +800,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 
 	private Boolean isContaEmCobranca(Pagamento pagamento) throws ErroRepositorioException {
-		Integer idEmpresaCobrancaConta = repositorioCobranca.pesquisarEmpresaCobrancaConta(pagamento.getContaGeral().getId());
+		EmpresaCobrancaConta empresaCobrancaConta = repositorio.pesquisarEmpresaCobrancaConta(pagamento.getContaGeral().getId());
 		
-		if (idEmpresaCobrancaConta != null) return true;
+		if (empresaCobrancaConta != null) return true;
 		else return false;
 	}
 
@@ -850,9 +901,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 		try {
 
-			Integer idEmpresa = repositorioCobranca.pesquisarEmpresaCobrancaConta(idConta);
+			EmpresaCobrancaConta empresaCobrancaConta = repositorio.pesquisarEmpresaCobrancaConta(idConta);
 
-			if (idEmpresa != null) {
+			if (empresaCobrancaConta != null) {
 				// caso seja um re-parcelamento
 				BigDecimal percentualContaParcelada = null;
 				BigDecimal valorPagamentoMes = null;
@@ -874,10 +925,6 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				}
 
 				EmpresaCobrancaContaPagamentos pagamentoEmpresa = new EmpresaCobrancaContaPagamentos();
-				
-				EmpresaCobrancaConta empresaCobrancaConta = new EmpresaCobrancaConta();
-				empresaCobrancaConta.setId(idEmpresa);
-
 				pagamentoEmpresa.setDebitoTipo(debitoTipo);
 				pagamentoEmpresa.setEmpresaCobrancaConta(empresaCobrancaConta);
 				pagamentoEmpresa.setAnoMesPagamentoArrecadacao(pagamento.getAnoMesReferenciaArrecadacao());

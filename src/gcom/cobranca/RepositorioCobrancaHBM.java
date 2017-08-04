@@ -13940,42 +13940,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa se a conta está na tabela de empresa cobranca conta
-	 * 
-	 * @author Sávio Luiz
-	 * @date 23/10/2008
-	 */
-	public Integer pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-
-		Integer retorno = null;
-		String consulta = null;
-
-		try {
-			consulta = "select ecc.id " + " from EmpresaCobrancaConta ecc " + " inner join ecc.contaGeral cntaG "
-					+ " where cntaG.id = :idConta ";
-
-			retorno = (Integer) session.createQuery(consulta).setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
-
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
-	/**
-	 * Recupera os dados do debito a cobrar
-	 * 
-	 * @author Sávio Luiz
-	 * @date 23/10/2008
-	 */
 	public Object[] pesquisarDadosDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
@@ -16623,13 +16587,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * (CBDO_CDSETORCOMERCIAL), quadra (CBDO_NNQUADRA), lote e sublote
 	 * (IMOV_NNLOTE e IMOV_SUBLOTE da tabela IMOVEL com IMOV_ID da tabela
 	 * DOCUMENTO_COBRANCA)
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 17/06/2009
-	 * 
-	 * @param idRota
-	 *            , idDocumentoTipo
-	 * @return Collection<CobrancaDocumento>
 	 */
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoParaEmitir(Integer idRota, Integer idDocumentoTipo)
 			throws ErroRepositorioException {
@@ -16640,20 +16597,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		String consulta = null;
 
 		try {
-			// consulta = "SELECT cbdo "
-			// + "FROM CobrancaDocumento as cbdo "
-			// + "LEFT JOIN fetch cbdo.empresa as empr "
-			// + "LEFT JOIN fetch cbdo.localidade as loca "
-			// + "LEFT JOIN fetch cbdo.imovel as imov "
-			// + "LEFT JOIN fetch cbdo.quadra qdr "
-			// + "LEFT JOIN fetch qdr.rota rot "
-			// + "LEFT JOIN cbdo.documentoTipo as docTipo "
-			// + "WHERE "
-			// + "rot.id = :idRota and docTipo = :idDocumentoTipo "
-			// +
-			// "ORDER BY empr.id, loca.id, cbdo.codigoSetorComercial, cbdo.numeroQuadra, "
-			// + "imov.lote, imov.subLote, cbdo.id";
-
 			consulta = "SELECT cbdo " + "FROM CobrancaDocumento as cbdo " + "LEFT JOIN fetch cbdo.empresa as empr "
 					+ "LEFT JOIN cbdo.localidade as loca " + "LEFT JOIN fetch cbdo.imovel as imov " + "LEFT JOIN fetch cbdo.quadra qdr "
 					+ "LEFT JOIN fetch qdr.rota rot " + "LEFT JOIN cbdo.documentoTipo as docTipo " + "WHERE rot.id = :idRota AND "

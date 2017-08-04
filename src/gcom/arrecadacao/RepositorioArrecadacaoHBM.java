@@ -23956,7 +23956,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                      +" INNER JOIN pg.avisoBancario ab"
                      +" where pg.localidade.id = :idLocalidade"
                      +" and pgst.id = :pagamentoClassificado "
-                     +" and pg.anoMesReferenciaArrecadacao = :referencia "; 
+                     +" and pg.anoMesReferenciaArrecadacao = :referencia and pg.imovel.id in (1793306, 1784803, 1785559) "; 
 			
 			colecaoDadosPagamentos = session.createQuery(consulta.toString())
 			        .setInteger("idLocalidade",idLocalidade)

@@ -428,32 +428,42 @@ public interface IRepositorioCobranca {
 	public Collection<Object[]> pesquisarOrdemServicoEventual(int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
 
 	public void deletarResumoCobrancaAcaoEventual(int idCobrancaAcaoCronograma) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosCobrancaDocumentoEventualAgrupadoPorDataPrevista(int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
 
 	public void atualizarCobrancaAcaoAtividadeComando(int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarIdsImoveisCliente(String codigoCliente) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGuiasPagamentoIdsImoveis(Integer idCliente, Collection idsImoveis, int indicadorPagamento, String situacaoNormal, Date dataVencimentoInicial, Date dataVencimentoFinal)
 			throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGuiasPagamentoIdsImoveis(Integer idCliente, Collection idsImoveis, int indicadorPagamento, String situacaoNormal, Short clienteRelacaoTipo, Date dataVencimentoInicial,
 			Date dataVencimentoFinal) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarIdImoveisClienteSemRelacaoFim(String codigoCliente, Short relacaoTipo) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarIdImoveisClienteSuperiorSemRelacaoFim(String codigoCliente) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection gerarCurvaAbcDebitos(String classificacao, String indicadorImovelMedicaoIndividualizada, String indicadorImovelParalizacaoFaturamentoCobranca, String[] gerenciaRegional,
 			String idLocalidadeInicial, String idLocalidadeFinal, String idSetorComercialInicial, String idSetorComercialFinal, String idMunicipio, String[] situacaoLigacaoAgua,
 			String[] situacaoLigacaoEsgoto, String intervaloConsumoMinimoFixadoEsgotoInicial, String intervaloConsumoMinimoFixadoEsgotoFinal, String indicadorMedicao, String idTipoMedicao,
 			String idPerfilImovel, String idTipoCategoria, String[] categoria, String idSubCategoria) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentosSituacaoNormal(Integer idImovel) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitosACobrarImovelParcelamento(Integer idParcelamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCreditosARealizarParcelamento(Integer idParcelamento) throws ErroRepositorioException;
 
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoParaEmitirCAER(Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando, Date dataEmissao, Integer idCobrancaAcao,
@@ -464,7 +474,8 @@ public interface IRepositorioCobranca {
 	public BigDecimal pesquisarValorDebitoACobrarSancoes(Integer idImovel, Integer anoMesInicialReferenciaDebito, Integer anoMesFinalReferenciaDebito) throws ErroRepositorioException;
 
 	public BigDecimal pesquisarValorDebitoACobrar(Integer idImovel, Integer anoMesInicialReferenciaDebito, Integer anoMesFinalReferenciaDebito) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitosCliente(Integer idCliente, Short relacaoTipo, Collection idsImoveis, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
 			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
 			Date anoMesInicialVecimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException;
@@ -478,22 +489,30 @@ public interface IRepositorioCobranca {
 	public Integer pesquisarMaximoAnoMesIndicesAcerscimosImpontualidade() throws ErroRepositorioException;
 
 	public IndicesAcrescimosImpontualidade pesquisarMenorIndiceAcrescimoImpontualidade() throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitoImovelPorFaixaValores(String idImovel, String valorMinimoDebito, String anoMesReferenciaInicial, String anoMesReferenciaFinal, String classificacao,
 			boolean pesquisaMunicipio) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloUnidadeNegocio(String idUnidadeNegocio, String idCobrancaAcao) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloGrupo(String idGrupoCobranca, String idCobrancaAcao) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloGerencia(String idGerenciaRegional, String idCobrancaAcao) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloLocalidade(String idLocalidadeInicial, String idLocalidadeFinal, String idCobrancaAcao) throws ErroRepositorioException;
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloSetor(String codigoSetorComercialInicial, String codigoSetorComercialFinal, String idLocalidade, String idCobrancaAcao) throws ErroRepositorioException;
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotas(String codigoSetorComercial, String rotaInicial, String rotaFinal, String idLocalidade, String idCobrancaAcao) throws ErroRepositorioException;
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasPorCobrancaAcao(String idCobrancaAcao) throws ErroRepositorioException;
 
 	public boolean existeDevolucao(CreditoARealizar creditoARealizar) throws ErroRepositorioException;
@@ -506,14 +525,18 @@ public interface IRepositorioCobranca {
 
 	public void atualizarNumeroParcelasPagasConsecutivasParcelamento(Integer idParcelamento, Short numeroParcelas) throws ErroRepositorioException;
 
+	@SuppressWarnings("rawtypes")
 	public Collection consultarNegativacao(DadosConsultaNegativacaoHelper dadosConsultaNegativacaoHelper, int tipo) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoResumoAcaoCobranca(int idCobrancaAtividadeAcaoCronograma, int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
 
 	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, Integer idConta, Integer idGuiaPagamento, Integer idDebitoACobrar) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosCobrancaDocumentoItemSituacaoJaAtualizada(Integer idDocumentoCobranca) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoEventualSemCriterio(int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
 
 	public Collection<CriterioSituacaoCobranca> pesquisarCobrancaCriterioSituacaoCobranca(Integer idCobrancaCriterio) throws ErroRepositorioException;
@@ -523,7 +546,8 @@ public interface IRepositorioCobranca {
 	public Collection<CriterioSituacaoLigacaoEsgoto> pesquisarCobrancaCriterioSituacaoLigacaoEsgoto(Integer idCobrancaCriterio) throws ErroRepositorioException;
 
 	public Object[] pesquisarParmsCobrancaDocumento(Integer idImovel, Date dataEmissao) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItem(Integer idImovel, Date dataEmissao) throws ErroRepositorioException;
 
 	public boolean exitePagamentoContaEntradaParcelamento(Integer idImovel, Date dataParcelamento) throws ErroRepositorioException;
@@ -544,31 +568,34 @@ public interface IRepositorioCobranca {
 	public void cancelarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;
 
 	public void desassociarContaParcelamento(Integer idConta) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContaDoParcelamentoNaoPago(Integer parcelamento) throws ErroRepositorioException;
 
 	public List<ParcelamentoItem> pesquisarItensParcelamentos(Integer idParcelamento) throws ErroRepositorioException;
 
-	public Integer pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException;
-
 	public Object[] pesquisarDadosDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException;
 
 	public Collection<Object[]> pesquisarItensParcelamentosNivel2(Integer idPagamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobranca(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
 			throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
 			throws ErroRepositorioException;
 
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaCount(Integer idEmpresa, Date comandoInicial, Date comandoFinal) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisarDadosArquivoTextoContasCobrancaEmpresa(Collection ids, Integer idProgramaEspecial) throws ErroRepositorioException;
 
 	public void removerEmpresaCobrancaContaPagamentos(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException;
 
 	public Object[] pesquisarParmsCobrancaDocumento(Integer idImovel, BigDecimal valorPagamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoItem(Integer idImovel, BigDecimal valorPagamento) throws ErroRepositorioException;
 
 	public Collection<ResolucaoDiretoria> pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial() throws ErroRepositorioException;
@@ -597,14 +624,18 @@ public interface IRepositorioCobranca {
 	public Integer pesquisarQuantidadePagamentosPorDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando) throws ErroRepositorioException;
 
 	public Integer pesquisarQuantidadeComandosSucessores(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaOpcaoTotalizacao(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, Integer referenciaPagamentoInicial, Integer referenciaPagamentoFinal)
 			throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresaParaCobranca(Integer idComandoEmpresaCobrancaConta) throws ErroRepositorioException;
 
 	public Integer retornaAnoMesContaUltimaExtensao(Integer idComandoEmpresaCobrancaConta) throws ErroRepositorioException;
@@ -612,13 +643,16 @@ public interface IRepositorioCobranca {
 	public Collection<Object[]> filtrarRelacaoParcelamentoAnalitico(FiltrarRelacaoParcelamentoHelper filtrarRelacaoParcelamento, Integer anoMesReferenciaFaturamento) throws ErroRepositorioException;
 
 	public Object[] obterParcelamentoMaisAtualDoImovel(Integer idImovel) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection obterDebitoACobrarDoParcelamento(Integer idParcelamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection obterContasComParcelasEmAtrasoDoParcelamento(Integer idImovel, Integer refInicialInformada, Integer refFinalInformada) throws ErroRepositorioException;
 
 	public void inserirMovimentoExtensaoContasEmCobranca(Integer idLocalidade, Integer idPerfil) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarRelatorioImoveisComAcordo(Integer idUnidadeNegocio, Integer idLocalidadeInicial, Integer idLocalidadeFinal, Integer idGerenciaRegional,
 			Date dataInicialAcordo, Date dataFinalAcordo, Integer rotaInicial, Integer rotaFinal, Integer sequencialRotaInicial, Integer sequencialRotaFinal, Integer idSetorComercialInicial,
 			Integer idSetorComercialFinal) throws ErroRepositorioException;
@@ -634,17 +668,20 @@ public interface IRepositorioCobranca {
 	public Integer pesquisarQuantidadeDocumentosGeradosAcimaValorLimite(Integer idCAAC, Integer idCACM, Integer idLocalidade, BigDecimal valorLimite) throws ErroRepositorioException;
 
 	public Integer pesquisarQuantidadeDocumentosGerados(Integer idCAAC, Integer idCACM, Integer idLocalidade) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDocumentosCobrancaExcedentes(Integer idCAAC, Integer idCACM, int quantidadeParaRemover, Integer idLocalidade) throws ErroRepositorioException;
 
 	public void adicionarMetaCicloLocalidade(int idMetaCiclo, int idGrupo, int idLocalidade, int quantidadeASerAdicionada) throws ErroRepositorioException;
 
 	public Collection<CicloMetaGrupo> pesquisarCicloMetaGrupoPorCicloMeta(Integer idCicloMeta, Integer idGrupo) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeImoveisPorGrupoLocalidade(Collection idsLast) throws ErroRepositorioException;
 
 	public Integer pesquisarPagamentoDeContaPorDebitoAutomatico(Integer idConta) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitosACobrarParcelamento(Integer idParcelamento) throws ErroRepositorioException;
 
 	public Integer pesquisarIdParcelamentoNormal(Integer idImovel, Integer referencia) throws ErroRepositorioException;
@@ -654,9 +691,11 @@ public interface IRepositorioCobranca {
 	public Integer pesquisarQuantidadeContasNaoPagasParcelamento(Integer idParcelamento, Integer idDebitoACobrar) throws ErroRepositorioException;
 
 	public Integer pesquisarResolucaoDiretoriaComPercentualDoacao() throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasPorGrupoFaturamento(Integer idGrupoFaturamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosImoveisPorRota(Integer idRota) throws ErroRepositorioException;
 
 	public void deletarCobrancaDocumentoECobrancaDocumentoItem(Integer idRota, Integer documentoTipo) throws ErroRepositorioException;
@@ -666,9 +705,11 @@ public interface IRepositorioCobranca {
 	public Collection<CobrancaDocumento> pesquisarCobrancaDocumentoParaEmitir(Integer idRota, Integer idDocumentoTipo) throws ErroRepositorioException;
 
 	public Date pesquisarDataVencimentoRota(Integer idRota, Integer anoMesFaturamento, Integer grupoFaturamento) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisaFaturaClienteResponsavelFederal(Integer anoMes, Integer clienteID) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisaImpostoFaturaClienteResponsavelFederal(Integer anoMes, Integer idCliente) throws ErroRepositorioException;
 
 	public Collection<Imovel> pesquisarImoveisFaturaClienteResponsavel(Integer idFatura) throws ErroRepositorioException;
@@ -676,29 +717,39 @@ public interface IRepositorioCobranca {
 	public Collection<CobrancaAcaoAtividadeCronograma> pesquisarAcoesCiclo(Collection<Integer> idsAcao, Integer anoMesReferencia) throws ErroRepositorioException;
 
 	public Object[] calcularTotaisCronogramaAcaoCobranca(Integer idCAAC) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public List consultarColecaoCicloMetaGrupoRelatorio(Integer idCicloMeta) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarValorTotalCobranca(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarValorTotalCobrancaCriterio(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
 
 	public IndicesAcrescimosImpontualidade pesquisarMenorIgualIndiceAcrescimoImpontualidade(int anoMesReferenciaDebito) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosPopup(Integer idComando) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public List filtrarCobrancaDocumento(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public List filtrarSupressoesReligacoesReestabelecimentos(FiltroSupressoesReligacoesReestabelecimentoHelper filtro) throws ErroRepositorioException;
 
 	public Integer filtrarCobrancaDocumentoCount(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public List consultarColecaoAcaoCobranca(RelatorioAcompanhamentoAcoesCobrancaHelper helper) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public List consultarDocumentosCobranca(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosArquivoTextoPagamentosContasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection obterUnidadeNegocioPagamentosEmpresaCobrancaConta() throws ErroRepositorioException;
 
 	public CobrancaDocumento pesquisarCobrancaDocumentoImpressaoSimultanea(Date dataEmissao, Integer idImovel) throws ErroRepositorioException;
@@ -712,7 +763,8 @@ public interface IRepositorioCobranca {
 	public void removerCicloMetaGrupo(Integer idCicloMeta) throws ErroRepositorioException;
 
 	public Collection<Integer> pesquisarEmpresaCobrancaDaRota(Integer idLocalidade) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitoACobrarParceladoComIDNulo(Integer idImovel) throws ErroRepositorioException;
 
 	public void atualizarValorDocumentoEValorDescontoCobrancaDocumento(Integer idCobrancaDocumento, BigDecimal valorDocumento, BigDecimal valorDesconto) throws ErroRepositorioException;
@@ -721,18 +773,12 @@ public interface IRepositorioCobranca {
 
 	public void inserirCartaFinalAno(Integer idCobrancaGrupo, Integer idEmpresa, Integer idLocalidade, Integer codigoSetor, Integer numeroQuadra, Integer lote, Integer subLote, Integer sequencial,
 			String txt_parte1, String txt_parte2, Integer idRota) throws ErroRepositorioException;
-
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCartaFinalAnoGrupo(Integer idCobrancaGrupo) throws ErroRepositorioException;
 
 	public void deletarCartaFinalAno(Integer idRota) throws ErroRepositorioException;
 
-	/**
-	 * @author Anderson Italo
-	 * @date 26/11/2009
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarQuantidadeImoveisPorGrupoCobranca(Integer idCobrancaGrupo, Integer gerencia, Integer unidade, Integer localidade, Integer setorComercial, Integer quadra)
 			throws ErroRepositorioException;
 

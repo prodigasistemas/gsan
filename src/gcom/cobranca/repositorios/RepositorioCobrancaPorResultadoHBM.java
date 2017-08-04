@@ -4,6 +4,7 @@ import gcom.cadastro.imovel.Categoria;
 import gcom.cobranca.CobrancaSituacaoTipo;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
+import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
@@ -337,5 +338,57 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				.append(CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANCA_E_ACRESCIMOS_IMPONT).append(") ");
 		
 		return consulta.toString();
+	}
+	
+	public boolean isContasPagas(Integer idImovel, Integer idComando) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		int quantidade;
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT count(*) as quantidade ")
+					.append("FROM cobranca.empresa_cobranca_conta ")
+			        .append("WHERE imov_id = :idImovel ")
+			        .append("AND cecc_id = :idComando ")
+			        .append("AND ecco_id NOT IN (SELECT ecco_id FROM cobranca.empr_cobr_conta_pagto)");
+				
+			quantidade = (Integer) session.createSQLQuery(consulta.toString())
+					.addScalar("quantidade", Hibernate.INTEGER)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idComando", idComando)
+					.setMaxResults(1)
+					.uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return quantidade == 0;
+	}
+	
+	public EmpresaCobrancaConta pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		EmpresaCobrancaConta retorno = null;
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT empresaCobrancaConta ")
+					.append("FROM EmpresaCobrancaConta empresaCobrancaConta ")
+					.append("INNER JOIN empresaCobrancaConta.contaGeral conta ")
+					.append("INNER JOIN FETCH empresaCobrancaConta.comandoEmpresaCobrancaConta comando ")
+					.append("WHERE conta.id = :idConta");
+
+			retorno = (EmpresaCobrancaConta) session.createQuery(consulta.toString())
+					.setInteger("idConta", idConta)
+					.setMaxResults(1)
+					.uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
 	}
 }
