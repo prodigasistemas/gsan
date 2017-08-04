@@ -1204,10 +1204,10 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 					BigDecimal percentualEmpresa = new BigDecimal(0.0);
 					// percentualEmpresa
 					if (dados[7] != null) {
-						percentualEmpresa = (BigDecimal) dados[7];
+						percentualEmpresa = new BigDecimal((String)dados[7]);
 
 					}
-					relatorioBean.setPercentualEmpresa(Util.formatarMoedaReal(percentualEmpresa));
+					relatorioBean.setPercentualEmpresa(percentualEmpresa.toString().replace(".", ","));
 
 					// Id da Localidade
 					if (dados[8] != null) {
