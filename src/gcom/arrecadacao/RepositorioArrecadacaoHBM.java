@@ -23911,7 +23911,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
-		Collection<Pagamento> retorno = null;
+		Collection<Pagamento> retorno = new ArrayList();
 		
 		Collection<Object[]> colecaoDadosPagamentos = null;
 
@@ -23986,111 +23986,109 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.list();
 			
     		
-			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
+			if (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) {
 				System.out.println(colecaoDadosPagamentos.size());
-				retorno = new ArrayList();
-				for(Object[] dadosPagamento : colecaoDadosPagamentos){
-					
-					if(dadosPagamento != null){
+				for (Object[] dadosPagamento : colecaoDadosPagamentos) {
+
+					if (dadosPagamento != null) {
 						Pagamento pagamento = new Pagamento();
-						if(dadosPagamento[0] != null){
-							pagamento.setId((Integer)dadosPagamento[0]);
+						if (dadosPagamento[0] != null) {
+							pagamento.setId((Integer) dadosPagamento[0]);
 						}
-						if(dadosPagamento[1] != null){
-							pagamento.setValorPagamento((BigDecimal)dadosPagamento[1]);
+						if (dadosPagamento[1] != null) {
+							pagamento.setValorPagamento((BigDecimal) dadosPagamento[1]);
 						}
-						if(dadosPagamento[2] != null){
+						if (dadosPagamento[2] != null) {
 							ContaGeral conta = new ContaGeral();
-							conta.setId((Integer)dadosPagamento[2]);
+							conta.setId((Integer) dadosPagamento[2]);
 							pagamento.setContaGeral(conta);
 						}
-						if(dadosPagamento[3] != null){
+						if (dadosPagamento[3] != null) {
 							GuiaPagamento guia = new GuiaPagamento();
-							guia.setId((Integer)dadosPagamento[3]);
-							if(dadosPagamento[4] != null){
+							guia.setId((Integer) dadosPagamento[3]);
+							if (dadosPagamento[4] != null) {
 								Parcelamento parcelamento = new Parcelamento();
-								parcelamento.setId((Integer)dadosPagamento[4]);
-								if(dadosPagamento[5] != null){
-									parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[5]);
+								parcelamento.setId((Integer) dadosPagamento[4]);
+								if (dadosPagamento[5] != null) {
+									parcelamento.setValorDebitoAtualizado((BigDecimal) dadosPagamento[5]);
 								}
-								if(dadosPagamento[17] != null){
-									parcelamento.setValorConta((BigDecimal)dadosPagamento[17]);
+								if (dadosPagamento[17] != null) {
+									parcelamento.setValorConta((BigDecimal) dadosPagamento[17]);
 								}
 								guia.setParcelamento(parcelamento);
 							}
-							if(dadosPagamento[6] != null){
-								guia.setValorDebito((BigDecimal)dadosPagamento[6]);
+							if (dadosPagamento[6] != null) {
+								guia.setValorDebito((BigDecimal) dadosPagamento[6]);
 							}
-							if(dadosPagamento[7] != null){
+							if (dadosPagamento[7] != null) {
 								DebitoTipo debitoTipo = new DebitoTipo();
-								debitoTipo.setId((Integer)dadosPagamento[7]);
+								debitoTipo.setId((Integer) dadosPagamento[7]);
 								guia.setDebitoTipo(debitoTipo);
 							}
-							
+
 							pagamento.setGuiaPagamento(guia);
 						}
-						if(dadosPagamento[8] != null){
+						if (dadosPagamento[8] != null) {
 							DebitoACobrar debitoACobrar = new DebitoACobrar();
-							debitoACobrar.setId((Integer)dadosPagamento[8]);
-							if(dadosPagamento[9] != null){
+							debitoACobrar.setId((Integer) dadosPagamento[8]);
+							if (dadosPagamento[9] != null) {
 								Parcelamento parcelamento = new Parcelamento();
-								parcelamento.setId((Integer)dadosPagamento[9]);
-								if(dadosPagamento[10] != null){
-									parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[10]);
+								parcelamento.setId((Integer) dadosPagamento[9]);
+								if (dadosPagamento[10] != null) {
+									parcelamento.setValorDebitoAtualizado((BigDecimal) dadosPagamento[10]);
 								}
-								if(dadosPagamento[18] != null){
-									parcelamento.setValorConta((BigDecimal)dadosPagamento[18]);
+								if (dadosPagamento[18] != null) {
+									parcelamento.setValorConta((BigDecimal) dadosPagamento[18]);
 								}
 								debitoACobrar.setParcelamento(parcelamento);
-								
+
 							}
-							if(dadosPagamento[11] != null){
-								debitoACobrar.setValorDebito((BigDecimal)dadosPagamento[11]);
+							if (dadosPagamento[11] != null) {
+								debitoACobrar.setValorDebito((BigDecimal) dadosPagamento[11]);
 							}
-							
-							if(dadosPagamento[19] != null){
-								debitoACobrar.setNumeroPrestacaoDebito((Short)dadosPagamento[19]);
+
+							if (dadosPagamento[19] != null) {
+								debitoACobrar.setNumeroPrestacaoDebito((Short) dadosPagamento[19]);
 							}
-							if(dadosPagamento[20] != null){
-								debitoACobrar.setNumeroPrestacaoCobradas((Short)dadosPagamento[20]);
+							if (dadosPagamento[20] != null) {
+								debitoACobrar.setNumeroPrestacaoCobradas((Short) dadosPagamento[20]);
 							}
-							if(dadosPagamento[21] != null){
-								debitoACobrar.setNumeroParcelaBonus((Short)dadosPagamento[21]);
+							if (dadosPagamento[21] != null) {
+								debitoACobrar.setNumeroParcelaBonus((Short) dadosPagamento[21]);
 							}
-							
-							if(dadosPagamento[12] != null){
+
+							if (dadosPagamento[12] != null) {
 								DebitoTipo debitoTipo = new DebitoTipo();
-								debitoTipo.setId((Integer)dadosPagamento[12]);
+								debitoTipo.setId((Integer) dadosPagamento[12]);
 								debitoACobrar.setDebitoTipo(debitoTipo);
 							}
-							
+
 							DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 							debitoACobrarGeral.setId(debitoACobrar.getId());
 							debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
-							
-							
+
 							pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
 						}
-						
-						if(dadosPagamento[13] != null){
-							pagamento.setAnoMesReferenciaPagamento((Integer)dadosPagamento[13]);
+
+						if (dadosPagamento[13] != null) {
+							pagamento.setAnoMesReferenciaPagamento((Integer) dadosPagamento[13]);
 						}
-						if(dadosPagamento[14] != null){
-							pagamento.setDataPagamento((Date)dadosPagamento[14]);
+						if (dadosPagamento[14] != null) {
+							pagamento.setDataPagamento((Date) dadosPagamento[14]);
 						}
-						if(dadosPagamento[15] != null){
+						if (dadosPagamento[15] != null) {
 							Imovel imovel = new Imovel();
-							imovel.setId((Integer)dadosPagamento[15]);
+							imovel.setId((Integer) dadosPagamento[15]);
 							pagamento.setImovel(imovel);
 						}
-						if(dadosPagamento[16] != null){
+						if (dadosPagamento[16] != null) {
 							Arrecadador arrecadador = new Arrecadador();
-							arrecadador.setId((Integer)dadosPagamento[16]);
+							arrecadador.setId((Integer) dadosPagamento[16]);
 							AvisoBancario avisoBancario = new AvisoBancario();
 							avisoBancario.setArrecadador(arrecadador);
 							pagamento.setAvisoBancario(avisoBancario);
 						}
-						
+
 						retorno.add(pagamento);
 					}
 				}
@@ -24098,9 +24096,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			
 	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
 	        
-	        if (historico != null && !historico.isEmpty()) {
-	              retorno.addAll(historico);
-	        }
+			if (historico != null && !historico.isEmpty()) {
+				retorno.addAll(historico);
+			}
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
