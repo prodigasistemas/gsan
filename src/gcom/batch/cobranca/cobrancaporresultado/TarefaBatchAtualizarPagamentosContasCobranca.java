@@ -39,7 +39,7 @@ public class TarefaBatchAtualizarPagamentosContasCobranca extends TarefaBatch {
 	@SuppressWarnings("unchecked")
 	public Object executar() throws TarefaException {
 		Collection<Integer> colecaoIdsLocalidade = (Collection<Integer>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
-		
+		Integer anoMesArrecadacao = (Integer) getParametro("anoMesArrecadacao");
 
 		Iterator<Integer> iterator = colecaoIdsLocalidade.iterator();
 
@@ -49,7 +49,7 @@ public class TarefaBatchAtualizarPagamentosContasCobranca extends TarefaBatch {
 
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA,
-					new Object[]{this.getIdFuncionalidadeIniciada(), idLocalidade});
+					new Object[]{this.getIdFuncionalidadeIniciada(), idLocalidade, anoMesArrecadacao});
 
 		}
 
