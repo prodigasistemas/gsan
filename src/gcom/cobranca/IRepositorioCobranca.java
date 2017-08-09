@@ -624,18 +624,7 @@ public interface IRepositorioCobranca {
 	public Integer pesquisarQuantidadePagamentosPorDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando) throws ErroRepositorioException;
 
 	public Integer pesquisarQuantidadeComandosSucessores(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaOpcaoTotalizacao(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, Integer referenciaPagamentoInicial, Integer referenciaPagamentoFinal)
-			throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
+
 	public Collection pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresaParaCobranca(Integer idComandoEmpresaCobrancaConta) throws ErroRepositorioException;
 
 	public Integer retornaAnoMesContaUltimaExtensao(Integer idComandoEmpresaCobrancaConta) throws ErroRepositorioException;

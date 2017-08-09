@@ -32,6 +32,7 @@ import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.NegativacaoImoveis;
+import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.UC0870GerarMovimentoContasEmCobrancaPorEmpresa;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaBuilder;
@@ -54,6 +55,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
+import gcom.relatorio.cobranca.RelatorioPagamentosContasCobrancaEmpresaBean;
 import gcom.spcserasa.FiltroNegativacaoImoveis;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
@@ -646,13 +648,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 	
 	
-	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
-		
+	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade, Integer anoMesArrecadacao) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		try {
-			//repositorioCobranca.removerEmpresaCobrancaContaPagamentos(anoMesArrecadacao, idLocalidade);
-			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade);
+			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
 
 			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
 				getControladorUtil().inserir(pagamento);
@@ -712,7 +712,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 	}
 	
-	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade) throws ErroRepositorioException {
+	private Collection<EmpresaCobrancaContaPagamentos> obterPagamentosEmpresa(Integer idLocalidade, Integer anoMesArrecadacao) throws ErroRepositorioException {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 
 		boolean flagTerminou = false;
@@ -720,11 +720,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		int numeroPaginas = 0;
 		try {
 			while (!flagTerminou) {
-				
-				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+				Collection<Pagamento> pagamentos = getControladorArrecadacao().obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, anoMesArrecadacao, numeroPaginas, quantidadeRegistros);
 
-				Collection<Pagamento> pagamentos = getControladorArrecadacao().pesquisarPagamentosClassificados(idLocalidade, sistemaParametros.getAnoMesArrecadacao(), numeroPaginas, quantidadeRegistros);
-				
 				if (pagamentos != null && !pagamentos.isEmpty()) {
 					for (Pagamento pagamento : pagamentos) {
 						if (categoriaPermiteGerarPagamento(pagamento)) {
@@ -734,17 +731,17 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 						}
 					}
 				}
-				
+
 				if (pagamentos == null || pagamentos.size() < quantidadeRegistros) {
-	
+
 					flagTerminou = true;
 				}
-	
+
 				if (pagamentos != null) {
 					pagamentos.clear();
 					pagamentos = null;
 				}
-				
+
 				numeroPaginas += quantidadeRegistros;
 			}
 		} catch (ControladorException e) {
@@ -934,6 +931,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				pagamentoEmpresa.setNumeroTotalParcelas(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacao()) : new Integer("0"));
 				pagamentoEmpresa.setUltimaAlteracao(new Date());
 				pagamentoEmpresa.setIndicadorGeracaoArquivo(ConstantesSistema.NAO);
+				pagamentoEmpresa.setIdPagamento(pagamento.getId());
 				
 				if (pagamento.getAnoMesReferenciaPagamento() != null) {
 					pagamentoEmpresa.setAnoMesReferenciaPagamento(pagamento.getAnoMesReferenciaPagamento());
@@ -1152,4 +1150,206 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		ServicosEmail.enviarArquivoCompactado(nomeArquivo, arquivoTxt, envioEmail.getEmailReceptor(), envioEmail.getEmailRemetente(), titulo, corpo);
 	}
 
+	@SuppressWarnings("rawtypes")
+	public Integer pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, String dataPagamentoInicial, String dataPagamentoFinal) throws ControladorException {
+		Integer retorno = 0;
+
+		try {
+			Collection colecao = repositorio.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(idEmpresa, dataPagamentoInicial, dataPagamentoFinal);
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator iterator = colecao.iterator();
+				while (iterator.hasNext()) {
+					retorno += (Integer) iterator.next();
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		return retorno;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ControladorException {
+		Collection<RelatorioPagamentosContasCobrancaEmpresaBean> retorno = new ArrayList<RelatorioPagamentosContasCobrancaEmpresaBean>();
+		Collection<Object[]> colecaoDados = null;
+
+		try {
+			colecaoDados = repositorio.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaOpcaoTotalizacao(helper);
+
+			if (colecaoDados != null && !colecaoDados.isEmpty()) {
+				for (Object[] dados : colecaoDados) {
+					RelatorioPagamentosContasCobrancaEmpresaBean bean = new RelatorioPagamentosContasCobrancaEmpresaBean();
+
+					// idImovel
+					if (dados[0] != null) {
+						Integer idImovel = (Integer) dados[0];
+						bean.setMatricula(Util.retornaMatriculaImovelFormatada(idImovel));
+					}
+					// nomeCliente
+					if (dados[1] != null) {
+						String nomeCliente = (String) dados[1];
+						bean.setNomeCliente(nomeCliente);
+					}
+					// anoMesConta
+					if (dados[2] != null) {
+						Integer anoMesConta = (Integer) dados[2];
+						bean.setAnoMesConta(Util.formatarAnoMesParaMesAno(anoMesConta.intValue()));
+					}
+
+					// valorConta
+					if (dados[3] != null) {
+						BigDecimal valorConta = (BigDecimal) dados[3];
+						bean.setValorConta(Util.formatarMoedaReal(valorConta));
+					}
+
+					// anoMesReferenciaPagamento
+					if (dados[4] != null) {
+						Integer anoMesReferenciaPagamento = (Integer) dados[4];
+						bean.setAnoMesReferenciaPagamento(Util.formatarAnoMesParaMesAno(anoMesReferenciaPagamento));
+					}
+
+					// valorPrincipal
+					BigDecimal valorPrincipal = new BigDecimal(0.0);
+					if (dados[5] != null) {
+						valorPrincipal = (BigDecimal) dados[5];
+					}
+					
+					bean.setValorPrincipal(Util.formatarMoedaReal(valorPrincipal));
+
+					BigDecimal valorEncargos = new BigDecimal(0.0);
+					// valorEncargos
+					if (dados[6] != null) {
+						valorEncargos = (BigDecimal) dados[6];
+					}
+					
+					bean.setValorEncargos(Util.formatarMoedaReal(valorEncargos));
+
+					BigDecimal percentualEmpresa = new BigDecimal(0.0);
+					// percentualEmpresa
+					if (dados[7] != null) {
+						percentualEmpresa = new BigDecimal((String) dados[7]);
+
+					}
+					bean.setPercentualEmpresa(percentualEmpresa.toString().replace(".", ","));
+
+					// Id da Localidade
+					if (dados[8] != null) {
+						Integer idLocalidade = (Integer) dados[8];
+						bean.setIdLocalidade(idLocalidade.toString());
+					}
+
+					// nome da Localidade
+					if (dados[9] != null) {
+						bean.setNomeLocalidade((String) dados[9]);
+					}
+
+					// Id Gerencia Regional
+					if (dados[10] != null) {
+						Integer idGerenciaRegional = (Integer) dados[10];
+						bean.setIdGerenciaRegional(idGerenciaRegional.toString());
+					}
+
+					// Nome Gerencia Regional
+					if (dados[11] != null) {
+						bean.setNomeGerenciaRegional((String) dados[11]);
+					}
+
+					// Id Unidade Negocio
+					if (dados[12] != null) {
+						Integer idUnidadeNegocio = (Integer) dados[12];
+						bean.setIdUnidadeNegocio(idUnidadeNegocio.toString());
+					}
+
+					// Nome Unidade Negocio
+					if (dados[13] != null) {
+						bean.setNomeUnidadeNegocio((String) dados[13]);
+					}
+
+					// Id Rota
+					if (dados[14] != null) {
+						Integer idRota = (Integer) dados[14];
+						bean.setIdRota(idRota.toString());
+					}
+					// Indicador do Tipo de Pagamento
+					if (dados[15] != null) {
+						Short indicadorTipoPagamento = (Short) dados[15];
+						bean.setIndicadorTipoPagamento(indicadorTipoPagamento.toString());
+						if (indicadorTipoPagamento.intValue() == ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA.intValue()) {
+							bean.setTipoPagamento("À Vista");
+						} else {
+							bean.setTipoPagamento("Parcelado");
+						}
+					}
+
+					// Numero Parcela Atual
+					if (dados[16] != null) {
+						Integer numeroParcelaAtual = (Integer) dados[16];
+						bean.setNumeroParcelaAtual(numeroParcelaAtual.toString());
+					}
+					// Numero Total Parcelas
+					if (dados[17] != null) {
+						Integer numeroTotalParcelas = (Integer) dados[17];
+						bean.setNumeroTotalParcelas(numeroTotalParcelas.toString());
+					}
+
+					BigDecimal valorTotal = new BigDecimal(0.0);
+
+					valorTotal = valorTotal.add(valorPrincipal);
+					valorTotal = valorTotal.add(valorEncargos);
+
+					// Valor total
+					bean.setValorTotalPagamentos(Util.formatarMoedaReal4Casas(valorTotal));
+
+					// Valor Empresa
+					BigDecimal valorEmpresa = new BigDecimal(0.0);
+
+					BigDecimal aux = new BigDecimal(100.0);
+
+					valorEmpresa = valorEmpresa.add(valorTotal.multiply(percentualEmpresa));
+					valorEmpresa = valorEmpresa.setScale(4, BigDecimal.ROUND_HALF_UP);
+					valorEmpresa = valorEmpresa.divide(aux);
+					valorEmpresa = valorEmpresa.setScale(4, BigDecimal.ROUND_HALF_UP);
+
+					bean.setValorEmpresa(Util.formatarMoedaReal4Casas(valorEmpresa));
+					bean.setCodigoQuebra2("");
+					bean.setDescricaoQuebra2("");
+
+					if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoGerencia")) {
+						bean.setCodigoQuebra(bean.getIdGerenciaRegional());
+						bean.setDescricaoQuebra(bean.getNomeGerenciaRegional());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoLocalidade")) {
+						bean.setCodigoQuebra(bean.getIdLocalidade());
+						bean.setDescricaoQuebra(bean.getNomeLocalidade());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("gerenciaRegional")) {
+						bean.setCodigoQuebra(bean.getIdGerenciaRegional());
+						bean.setDescricaoQuebra(bean.getNomeGerenciaRegional());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("gerenciaRegionalLocalidade")) {
+						bean.setCodigoQuebra(bean.getIdGerenciaRegional());
+						bean.setDescricaoQuebra(bean.getNomeGerenciaRegional());
+						bean.setCodigoQuebra2(bean.getIdLocalidade());
+						bean.setDescricaoQuebra2(bean.getNomeLocalidade());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("localidade")) {
+						bean.setCodigoQuebra(bean.getIdLocalidade());
+						bean.setDescricaoQuebra(bean.getNomeLocalidade());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoUnidadeNegocio")) {
+						bean.setCodigoQuebra(bean.getIdUnidadeNegocio());
+						bean.setDescricaoQuebra(bean.getNomeUnidadeNegocio());
+					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("unidadeNegocio")) {
+						bean.setCodigoQuebra(bean.getIdUnidadeNegocio());
+						bean.setDescricaoQuebra(bean.getNomeUnidadeNegocio());
+					} else {
+						bean.setCodigoQuebra("");
+						SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+						bean.setDescricaoQuebra(sistemaParametro.getNomeEstado());
+					}
+					retorno.add(bean);
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+		return retorno;
+	}
 }

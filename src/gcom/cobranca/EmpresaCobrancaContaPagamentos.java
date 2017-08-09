@@ -26,11 +26,12 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 	private Integer numeroParcelaAtual;
 	private Integer numeroTotalParcelas;
 	private Short indicadorGeracaoArquivo;
+	private Integer idPagamento;
 	
 
 	public EmpresaCobrancaContaPagamentos(Integer id, EmpresaCobrancaConta empresaCobrancaConta, Integer anoMesPagamentoArrecadacao,
 			DebitoTipo debitoTipo,
-			Date ultimaAlteracao,BigDecimal valorPagamentoMes) {
+			Date ultimaAlteracao,BigDecimal valorPagamentoMes, Integer idPagamento) {
 		super();
 		
 		this.id = id;
@@ -39,6 +40,7 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 		this.debitoTipo = debitoTipo;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.valorPagamentoMes = valorPagamentoMes;
+		this.idPagamento = idPagamento;
 	}
 
 	public EmpresaCobrancaContaPagamentos() {
@@ -178,5 +180,13 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 
 	public void setIndicadorGeracaoArquivo(Short indicadorGeracaoArquivo) {
 		this.indicadorGeracaoArquivo = indicadorGeracaoArquivo;
+	}
+
+	public Integer getIdPagamento() {
+		return idPagamento;
+	}
+
+	public void setIdPagamento(Integer idPagamento) {
+		this.idPagamento = idPagamento;
 	}
 }

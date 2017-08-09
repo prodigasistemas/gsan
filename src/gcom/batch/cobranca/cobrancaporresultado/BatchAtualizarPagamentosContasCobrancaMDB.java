@@ -49,7 +49,8 @@ public class BatchAtualizarPagamentosContasCobrancaMDB implements
 			try {
 				this.getControladorCobrancaPorResultado().
 				atualizarPagamentosContasCobranca((Integer) ((Object[]) objectMessage.getObject())[0],
-						                          (Integer) ((Object[]) objectMessage.getObject())[1]);
+						                          (Integer) ((Object[]) objectMessage.getObject())[1],
+						                          (Integer) ((Object[]) objectMessage.getObject())[2]);
 				
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
