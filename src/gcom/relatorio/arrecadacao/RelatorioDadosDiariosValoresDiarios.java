@@ -205,15 +205,18 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 			Collection<FiltrarDadosDiariosArrecadacaoHelper> colecaoDadosDiarios) {
 		
 		Collection<RelatorioDadosDiariosValoresDiariosBean> colecaoBean = new ArrayList<RelatorioDadosDiariosValoresDiariosBean>();
+		int cont = 0;
 
 		if (colecaoDadosDiarios != null && !colecaoDadosDiarios.isEmpty()){
 			Iterator iterator = colecaoDadosDiarios.iterator();
 
 			BigDecimal valorDia = new BigDecimal("0.00");
+			BigDecimal valorTotalMes = new BigDecimal("0.00");
 			Date dataAnterior = null;
 			
 			while (iterator.hasNext()) {
 				boolean mudouDia = false;
+				boolean mudouMes = false;
 				FiltrarDadosDiariosArrecadacaoHelper itemHelper = (FiltrarDadosDiariosArrecadacaoHelper) iterator.next();
 				RelatorioDadosDiariosValoresDiariosBean bean = new RelatorioDadosDiariosValoresDiariosBean();
 
@@ -263,7 +266,9 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 				
 				if (dataAnterior != null && data.compareTo(dataAnterior) != 0) {
 					mudouDia = true;
+					
 				}
+				
 				
 				bean.setData(Util.formatarData(data));
 				
@@ -298,13 +303,30 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 				} else {
 					valorDia = itemHelper.getValorArrecadacaoLiquida().add(valorDia);
 				}
+				if (cont == 0) {
+					valorTotalMes = itemHelper.getValorArrecadacaoLiquida();
+				} else {
+					valorTotalMes = valorTotalMes.add(itemHelper.getValorArrecadacaoLiquida());
+				}
 				BigDecimal percentualMultiplicacaoDoDia = valorDia.multiply(new BigDecimal("100.00"));
 				BigDecimal percentualDoDia = percentualMultiplicacaoDoDia.divide(
 						valorTotal,2,BigDecimal.ROUND_HALF_UP);
 				
+				cont++;
+				if (cont == getQuantidadeRegistrosData(data, colecaoDadosDiarios)) {
+					mudouMes = true;
+					cont = 0;
+				}
+				
 				bean.setPercentual(Util.formatarMoedaReal(percentual));
 				bean.setValorAteDia(Util.formatarMoedaReal(valorDia));
 				bean.setPercentualDoDia(Util.formatarMoedaReal(percentualDoDia));
+				bean.setValorTotalMes(Util.formatarMoedaReal(valorTotalMes));
+				bean.setMudouMes(mudouMes || !iterator.hasNext());
+				
+				
+				
+				
 				
 				dataAnterior = new Date(data.getTime());
 				colecaoBean.add(bean);
@@ -312,5 +334,23 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 		}
 		
 		return colecaoBean;
+	}
+	
+	public int getQuantidadeRegistrosData(Date data, Collection colecaoDadosDiarios) {
+		Iterator iterator = colecaoDadosDiarios.iterator();
+		int cont = 0;
+		
+		while (iterator.hasNext()) {
+			FiltrarDadosDiariosArrecadacaoHelper itemHelper = (FiltrarDadosDiariosArrecadacaoHelper) iterator.next();
+			Date dataColecao = (Date) itemHelper.getItemAgrupado();
+			
+			int mesColecao = Util.getAnoMesComoInt(dataColecao);
+			int mesAtual    = Util.getAnoMesComoInt(data);
+			
+			if (mesColecao == mesAtual) {
+				cont++;
+			}
+		}
+		return cont;
 	}
 }

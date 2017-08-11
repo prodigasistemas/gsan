@@ -62,6 +62,8 @@
 	<field name="getValor" class="java.lang.String"/>
 	<field name="getValorAteDia" class="java.lang.String"/>
 	<field name="getArrecadador" class="java.lang.String"/>
+	<field name="getValorTotalMes" class="java.lang.String"/>
+	<field name="getMudouMes" class="java.lang.Boolean"/>
 
 
 		<group  name="dadosDiarios" >
@@ -454,6 +456,39 @@
 			</groupHeader>
 			<groupFooter>
 			<band height="18"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="326"
+						y="5"
+						width="75"
+						height="11"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-154">
+							<printWhenExpression><![CDATA[$F{getMudouMes}]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#FFFFFF" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[Total do mês:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="5"
+						width="83"
+						height="11"
+						key="textField-253">
+							<printWhenExpression><![CDATA[$F{getMudouMes}]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Courier New" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorTotalMes}]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupFooter>
 		</group>
@@ -1176,7 +1211,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="48"  isSplitAllowed="true" >
+			<band height="63"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="3"
