@@ -23985,9 +23985,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setMaxResults(quantidadeRegistros)
 					.list();
 			
-    		
 			if (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) {
-				System.out.println(colecaoDadosPagamentos.size());
 				for (Object[] dadosPagamento : colecaoDadosPagamentos) {
 
 					if (dadosPagamento != null) {
@@ -24092,11 +24090,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						retorno.add(pagamento);
 					}
 				}
+				
+				System.out.println("Qtd pagamentos: " + retorno.size());
 			}
 			
 	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
 	        
 			if (historico != null && !historico.isEmpty()) {
+				System.out.println("Qtd historico: " + historico.size());
 				retorno.addAll(historico);
 			}
 
@@ -31904,7 +31905,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
             .append("INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
             .append("where pg.loca_id = :idLocalidade ")
             .append("and pg.pgst_idatual = :pagamentoClassificado ")
-            .append("and pg.pghi_amreferenciaarrecadacao = :referencia ")
+            .append("and pg.pghi_amreferenciaarrecadacao in (:referencia5, :referencia6, :referencia7, :referencia8) ")
             .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
             
             colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
@@ -31930,9 +31931,12 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                         .addScalar("numPrestacaoDebito", Hibernate.SHORT)
                         .addScalar("numPrestacoesCobradas", Hibernate.SHORT)
                         .addScalar("numParcelaBonus", Hibernate.SHORT)
-                    .setInteger("idLocalidade",idLocalidade)
-                    .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-                    .setInteger("referencia", referencia)
+                        .setInteger("idLocalidade",idLocalidade)
+                        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+                        .setInteger("referencia5", 201705)
+                        .setInteger("referencia6", 201706)
+                        .setInteger("referencia7", 201707)
+                        .setInteger("referencia8", 201708)
                         .setFirstResult(numeroPaginas)
                         .setMaxResults(quantidadeRegistros)
                         .list();
