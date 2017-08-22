@@ -607,7 +607,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					+ "where eccp_sub.dbtp_id in ( 80, 91, 94, 100 ) and eccp_sub.ecco_id = ecc.ecco_id and eccp_sub.eccp_id = eccp.eccp_id) as valorEncargos, "// 6
 					+ "ecc.ecco_pcempresaconta as percentualEmpresa, " // 7
 					+ "imovel.loca_id, " // 8
-					+ "loca.loca_nmlocalidade "// 9
+					+ "loca.loca_nmlocalidade, "// 9
 					+ "loca.greg_id, " // 10
 					+ "greg.greg_nmregional, " // 11
 					+ "loca.uneg_id, " // 12
