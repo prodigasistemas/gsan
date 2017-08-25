@@ -2,15 +2,10 @@ package gcom.gui.seguranca.acesso.usuario;
 
 import org.apache.struts.validator.ValidatorForm;
 
-/**
- * 
- * Form que exibe o menu
- * 
- * @author Sávio Luiz
- * @date 02/05/2006
- */
 public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private String usuarioTipo = "";
 
 	private String usuarioTipoFuncionario = "false";
@@ -38,7 +33,7 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 	private String login = "";
 
 	private String email = "";
-	
+
 	private String[] grupo = null;
 
 	private String abrangencia = "";
@@ -66,17 +61,19 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 	private String parmsUsuarioTipo = "";
 
 	private String unidadeNegocio = "";
-	
+
 	private String situacao = "";
-	
+
 	private String cpf = "";
-	
+
 	private String dataNascimento;
-	
+
 	private Short indicadorUsuarioBatch;
-	
+
 	private Short indicadorUsuarioInternet;
 	
+	private String limiteBatch;
+
 	/**
 	 * @return Retorna o campo situacao.
 	 */
@@ -85,7 +82,8 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 	}
 
 	/**
-	 * @param situacao O situacao a ser setado.
+	 * @param situacao
+	 *            O situacao a ser setado.
 	 */
 	public void setSituacao(String situacao) {
 		this.situacao = situacao;
@@ -428,7 +426,7 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-	
+
 	public Short getIndicadorUsuarioBatch() {
 		return indicadorUsuarioBatch;
 	}
@@ -436,7 +434,7 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 	public void setIndicadorUsuarioBatch(Short indicadorUsuarioBatch) {
 		this.indicadorUsuarioBatch = indicadorUsuarioBatch;
 	}
-	
+
 	public Short getIndicadorUsuarioInternet() {
 		return indicadorUsuarioInternet;
 	}
@@ -445,4 +443,11 @@ public class AtualizarUsuarioDadosGeraisActionForm extends ValidatorForm {
 		this.indicadorUsuarioInternet = indicadorUsuarioInternet;
 	}
 
+	public String getLimiteBatch() {
+		return limiteBatch;
+	}
+
+	public void setLimiteBatch(String limiteBatch) {
+		this.limiteBatch = limiteBatch;
+	}
 }

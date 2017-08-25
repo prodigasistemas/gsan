@@ -481,7 +481,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 	}
 
 	private void validarMudancaImovel(HttpSession sessao, DynaActionForm form, String codigoImovelAntes, String codigoImovel) {
-		logger.info("validarMudancaImovel: " + !codigoImovelAntes.equals(codigoImovel));
+		logger.info("[" + codigoImovel + "] validarMudancaImovel: " + !codigoImovelAntes.equals(codigoImovel));
 		if (!codigoImovelAntes.equals(codigoImovel)) {
 			// Reinicia a Data do Parcelamento
 			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");

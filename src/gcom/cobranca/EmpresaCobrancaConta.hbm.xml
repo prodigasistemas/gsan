@@ -33,7 +33,7 @@
 			<column name="orse_id"/>
 		</many-to-one>
 		<property name="valorOriginalConta" type="java.math.BigDecimal" column="ecco_vloriginalconta" length="13"/>
-		<property name="percentualEmpresaConta" type="java.math.BigDecimal" column="ecco_pcempresaconta" length="5"/>
+		<property name="percentualEmpresaConta" type="java.math.BigDecimal" column="ecco_pcempresaconta" length="6" />
 		<property name="indicadorPagamentoValido" type="java.lang.Short" column="ecco_icpagamentovalido" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ecco_tmultimaalteracao" length="8"/>
 	</class>

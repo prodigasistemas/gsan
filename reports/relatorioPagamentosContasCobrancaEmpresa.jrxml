@@ -96,7 +96,7 @@
 	</variable>
 
 		<group  name="total" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -567,7 +567,7 @@
 						mode="Opaque"
 						x="86"
 						y="47"
-						width="144"
+						width="127"
 						height="13"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -576,7 +576,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Bottom" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="9" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[Referência do Pagamento:]]></text>
+				<text><![CDATA[Referência Pagamento:]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -593,23 +593,23 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="222"
+						x="216"
 						y="47"
-						width="47"
+						width="68"
 						height="13"
 						key="textField"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
-						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{periodoPagamentoInicial}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="268"
+						x="287"
 						y="47"
-						width="11"
+						width="7"
 						height="13"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -622,14 +622,14 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="299"
 						y="47"
-						width="47"
+						width="71"
 						height="13"
 						key="textField-99"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Bottom">
-						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{periodoPagamentoFinal}]]></textFieldExpression>
 				</textField>
@@ -1027,7 +1027,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="330"
+						x="373"
 						y="48"
 						width="105"
 						height="12"
@@ -1044,9 +1044,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="435"
+						x="478"
 						y="48"
-						width="241"
+						width="198"
 						height="12"
 						key="textField-119">
 							<printWhenExpression><![CDATA[new Boolean($F{getCodigoQuebra2} != null && !$F{getCodigoQuebra2}.equals(""))]]></printWhenExpression>

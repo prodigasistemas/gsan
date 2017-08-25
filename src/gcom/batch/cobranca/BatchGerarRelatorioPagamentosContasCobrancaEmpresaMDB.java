@@ -1,8 +1,8 @@
 package gcom.batch.cobranca;
 
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -46,14 +46,8 @@ public class BatchGerarRelatorioPagamentosContasCobrancaEmpresaMDB implements
 						.getObject())[0];
 
 				if (helper.getEmpresa() != null) {
-
-					this
-							.getControladorCobranca()
-							.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(
-									helper);
-
+					this.getControladorCobrancaPorResultado().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(helper);
 				}
-
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
 				e.printStackTrace();
@@ -62,7 +56,6 @@ public class BatchGerarRelatorioPagamentosContasCobrancaEmpresaMDB implements
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	/**
@@ -70,9 +63,9 @@ public class BatchGerarRelatorioPagamentosContasCobrancaEmpresaMDB implements
 	 * 
 	 * @return O valor de ControladorCobrancaLocal
 	 */
-	private ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
+		ControladorCobrancaPorResultadoLocalHome localHome = null;
+		ControladorCobrancaPorResultadoLocal local = null;
 
 		// pega a instância do ServiceLocator.
 
@@ -81,8 +74,7 @@ public class BatchGerarRelatorioPagamentosContasCobrancaEmpresaMDB implements
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
+			localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 			// guarda a referencia de um objeto capaz de fazer chamadas à
 			// objetos remotamente
 			local = localHome.create();
