@@ -733,13 +733,6 @@ public interface IControladorCobranca {
 	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando)
 			throws ControladorException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper)
-			throws ControladorException;
-
-	public Integer pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, Integer referenciaPagamentoInicial,
-			Integer referenciaPagamentoFinal) throws ControladorException;
-
 	public Collection<GerarExtensaoComandoContasCobrancaEmpresaHelper> pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(Integer idEmpresa,
 			Date comandoInicial, Date comandoFinal, int numeroIndice) throws ControladorException;
 

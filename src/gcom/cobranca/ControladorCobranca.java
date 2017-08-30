@@ -62,8 +62,6 @@ import gcom.batch.IRepositorioBatch;
 import gcom.batch.RepositorioBatchHBM;
 import gcom.batch.UnidadeProcessamento;
 import gcom.batch.auxiliarbatch.CobrancaDocumentoControleGeracao;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
@@ -298,7 +296,6 @@ import gcom.relatorio.cobranca.RelatorioDocumentosAReceberBean;
 import gcom.relatorio.cobranca.RelatorioEmitirDeclaracaoTransferenciaDebitoBean;
 import gcom.relatorio.cobranca.RelatorioImoveisComAcordoBean;
 import gcom.relatorio.cobranca.RelatorioNotificacaoDebitoBean;
-import gcom.relatorio.cobranca.RelatorioPagamentosContasCobrancaEmpresaBean;
 import gcom.relatorio.cobranca.RelatorioVisitaCobrancaBean;
 import gcom.relatorio.cobranca.RelatorioVisitaCobrancaSubBean;
 import gcom.relatorio.cobranca.parcelamento.ExtratoDebitoRelatorioHelper;
@@ -317,8 +314,6 @@ import gcom.seguranca.acesso.ControladorAcessoLocalHome;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.PermissaoEspecial;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
 import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
@@ -333,6 +328,7 @@ import gcom.spcserasa.RepositorioSpcSerasaHBM;
 import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -390,7 +386,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.mail.SendFailedException;
 
@@ -400,7 +395,7 @@ import org.hibernate.cache.HashtableCache;
 
 import br.com.danhil.BarCode.Interleaved2of5;
 
-public class ControladorCobranca implements SessionBean {
+public class ControladorCobranca extends ControladorComum {
 
 	protected static final long serialVersionUID = 1L;
 
@@ -2323,25 +2318,6 @@ public class ControladorCobranca implements SessionBean {
 		}
 	}
 
-	private ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
 	/**
 	 * Retorna a interface remota de ControladorUnidade
 	 * 
@@ -2667,35 +2643,6 @@ public class ControladorCobranca implements SessionBean {
 			locator = ServiceLocator.getInstancia();
 			localHome = (ControladorLocalidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
 			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
-	private ControladorUsuarioLocal getControladorUsuario() {
-		ControladorUsuarioLocalHome localHome = null;
-		ControladorUsuarioLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUsuarioLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -43872,267 +43819,6 @@ public class ControladorCobranca implements SessionBean {
 	/**
 	 * [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobranca por Empresa
 	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 08/01/2009
-	 */
-	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper)
-			throws ControladorException {
-
-		Collection<RelatorioPagamentosContasCobrancaEmpresaBean> retorno = new ArrayList<RelatorioPagamentosContasCobrancaEmpresaBean>();
-
-		Collection<Object[]> colecaoDados = null;
-
-		try {
-
-			colecaoDados = repositorioCobranca.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaOpcaoTotalizacao(helper);
-
-			if (colecaoDados != null && !colecaoDados.isEmpty()) {
-
-				for (Object[] dados : colecaoDados) {
-
-					RelatorioPagamentosContasCobrancaEmpresaBean relatorioBean = new RelatorioPagamentosContasCobrancaEmpresaBean();
-
-					// idImovel
-					if (dados[0] != null) {
-						Integer idImovel = (Integer) dados[0];
-
-						relatorioBean.setMatricula(Util.retornaMatriculaImovelFormatada(idImovel));
-					}
-					// nomeCliente
-					if (dados[1] != null) {
-						String nomeCliente = (String) dados[1];
-
-						relatorioBean.setNomeCliente(nomeCliente);
-					}
-					// anoMesConta
-					if (dados[2] != null) {
-						Integer anoMesConta = (Integer) dados[2];
-
-						relatorioBean.setAnoMesConta(Util.formatarAnoMesParaMesAno(anoMesConta.intValue()));
-					}
-
-					// valorConta
-					if (dados[3] != null) {
-						BigDecimal valorConta = (BigDecimal) dados[3];
-
-						relatorioBean.setValorConta(Util.formatarMoedaReal(valorConta));
-					}
-
-					// anoMesReferenciaPagamento
-					if (dados[4] != null) {
-						Integer anoMesReferenciaPagamento = (Integer) dados[4];
-
-						relatorioBean.setAnoMesReferenciaPagamento(Util.formatarAnoMesParaMesAno(anoMesReferenciaPagamento));
-					}
-
-					// valorPrincipal
-					BigDecimal valorPrincipal = new BigDecimal(0.0);
-					if (dados[5] != null) {
-						valorPrincipal = (BigDecimal) dados[5];
-					}
-					relatorioBean.setValorPrincipal(Util.formatarMoedaReal(valorPrincipal));
-
-					BigDecimal valorEncargos = new BigDecimal(0.0);
-					// valorEncargos
-					if (dados[6] != null) {
-						valorEncargos = (BigDecimal) dados[6];
-
-					}
-					relatorioBean.setValorEncargos(Util.formatarMoedaReal(valorEncargos));
-
-					BigDecimal percentualEmpresa = new BigDecimal(0.0);
-					// percentualEmpresa
-					if (dados[7] != null) {
-						percentualEmpresa = (BigDecimal) dados[7];
-
-					}
-					relatorioBean.setPercentualEmpresa(Util.formatarMoedaReal(percentualEmpresa));
-
-					// Id da Localidade
-					if (dados[8] != null) {
-						Integer idLocalidade = (Integer) dados[8];
-						relatorioBean.setIdLocalidade(idLocalidade.toString());
-					}
-
-					// nome da Localidade
-					if (dados[9] != null) {
-
-						relatorioBean.setNomeLocalidade((String) dados[9]);
-					}
-
-					// Id Gerencia Regional
-					if (dados[10] != null) {
-						Integer idGerenciaRegional = (Integer) dados[10];
-						relatorioBean.setIdGerenciaRegional(idGerenciaRegional.toString());
-					}
-
-					// Nome Gerencia Regional
-					if (dados[11] != null) {
-
-						relatorioBean.setNomeGerenciaRegional((String) dados[11]);
-					}
-
-					// Id Unidade Negocio
-					if (dados[12] != null) {
-						Integer idUnidadeNegocio = (Integer) dados[12];
-						relatorioBean.setIdUnidadeNegocio(idUnidadeNegocio.toString());
-					}
-
-					// Nome Unidade Negocio
-					if (dados[13] != null) {
-
-						relatorioBean.setNomeUnidadeNegocio((String) dados[13]);
-					}
-
-					// Id Rota
-					if (dados[14] != null) {
-						Integer idRota = (Integer) dados[14];
-						relatorioBean.setIdRota(idRota.toString());
-					}
-					// Indicador do Tipo de Pagamento
-					if (dados[15] != null) {
-						Short indicadorTipoPagamento = (Short) dados[15];
-						relatorioBean.setIndicadorTipoPagamento(indicadorTipoPagamento.toString());
-						if (indicadorTipoPagamento.intValue() == ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA.intValue()) {
-							relatorioBean.setTipoPagamento("À Vista");
-						} else {
-							relatorioBean.setTipoPagamento("Parcelado");
-						}
-					}
-
-					// Numero Parcela Atual
-					if (dados[16] != null) {
-						Integer numeroParcelaAtual = (Integer) dados[16];
-						relatorioBean.setNumeroParcelaAtual(numeroParcelaAtual.toString());
-					}
-					// Numero Total Parcelas
-					if (dados[17] != null) {
-						Integer numeroTotalParcelas = (Integer) dados[17];
-						relatorioBean.setNumeroTotalParcelas(numeroTotalParcelas.toString());
-					}
-
-					BigDecimal valorTotal = new BigDecimal(0.0);
-
-					valorTotal = valorTotal.add(valorPrincipal);
-					valorTotal = valorTotal.add(valorEncargos);
-
-					// Valor total
-					relatorioBean.setValorTotalPagamentos(Util.formatarMoedaReal4Casas(valorTotal));
-
-					// Valor Empresa
-					BigDecimal valorEmpresa = new BigDecimal(0.0);
-
-					BigDecimal aux = new BigDecimal(100.0);
-
-					valorEmpresa = valorEmpresa.add(valorTotal.multiply(percentualEmpresa));
-
-					valorEmpresa = valorEmpresa.setScale(4, BigDecimal.ROUND_HALF_UP);
-
-					valorEmpresa = valorEmpresa.divide(aux);
-
-					valorEmpresa = valorEmpresa.setScale(4, BigDecimal.ROUND_HALF_UP);
-
-					relatorioBean.setValorEmpresa(Util.formatarMoedaReal4Casas(valorEmpresa));
-
-					relatorioBean.setCodigoQuebra2("");
-
-					relatorioBean.setDescricaoQuebra2("");
-
-					if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoGerencia")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdGerenciaRegional());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeGerenciaRegional());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoLocalidade")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdLocalidade());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeLocalidade());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("gerenciaRegional")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdGerenciaRegional());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeGerenciaRegional());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("gerenciaRegionalLocalidade")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdGerenciaRegional());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeGerenciaRegional());
-
-						relatorioBean.setCodigoQuebra2(relatorioBean.getIdLocalidade());
-
-						relatorioBean.setDescricaoQuebra2(relatorioBean.getNomeLocalidade());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("localidade")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdLocalidade());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeLocalidade());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoUnidadeNegocio")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdUnidadeNegocio());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeUnidadeNegocio());
-
-					} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("unidadeNegocio")) {
-
-						relatorioBean.setCodigoQuebra(relatorioBean.getIdUnidadeNegocio());
-
-						relatorioBean.setDescricaoQuebra(relatorioBean.getNomeUnidadeNegocio());
-
-					} else {
-						relatorioBean.setCodigoQuebra("");
-
-						SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-						relatorioBean.setDescricaoQuebra(sistemaParametro.getNomeEstado());
-					}
-					retorno.add(relatorioBean);
-				}
-
-			}
-
-		} catch (ErroRepositorioException e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
-		return retorno;
-	}
-
-	public Integer pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, Integer referenciaPagamentoInicial,
-			Integer referenciaPagamentoFinal) throws ControladorException {
-		Integer retorno = 0;
-		Collection colecaoDados = null;
-
-		try {
-
-			colecaoDados = repositorioCobranca.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(idEmpresa,
-					referenciaPagamentoInicial, referenciaPagamentoFinal);
-
-			if (colecaoDados != null && !colecaoDados.isEmpty()) {
-				Iterator it = colecaoDados.iterator();
-				while (it.hasNext()) {
-					Integer objeto = (Integer) it.next();
-
-					retorno = retorno + objeto;
-				}
-			}
-
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return retorno;
-
-	}
-
-	/**
-	 * [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobranca por Empresa
-	 * 
 	 * Pesquisa a quantidade de contas
 	 * 
 	 * @author: Rômulo Aurélio
@@ -44149,7 +43835,7 @@ public class ControladorCobranca implements SessionBean {
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.RELATORIO, 0);
 
-		colecaoRelatorioPagamentosContasCobrancaEmpresaBean = this.pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(helper);
+		colecaoRelatorioPagamentosContasCobrancaEmpresaBean = getControladorCobrancaPorResultado().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(helper);
 
 		getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 

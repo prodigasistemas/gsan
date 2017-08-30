@@ -1,5 +1,7 @@
 package gcom.relatorio.cobranca;
 
+import java.math.BigDecimal;
+
 import gcom.relatorio.RelatorioBean;
 
 /**
@@ -391,11 +393,5 @@ public class RelatorioPagamentosContasCobrancaEmpresaBean implements RelatorioBe
 	public void setTipoPagamento(String tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
 	}
-
-	
-	
-	
-	
-	
 
 }

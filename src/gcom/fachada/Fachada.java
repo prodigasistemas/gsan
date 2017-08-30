@@ -27890,15 +27890,15 @@ public class Fachada {
 	public Collection<RelatorioPagamentosContasCobrancaEmpresaBean> pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper) {
 
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(helper);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(helper);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
-	public Integer pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, Integer referenciaPagamentoInicial, Integer referenciaPagamentoFinal) {
+	public Integer pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(Integer idEmpresa, String dataPagamentoInicial, String dataPagamentoFinal) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(idEmpresa, referenciaPagamentoInicial, referenciaPagamentoFinal);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresaCount(idEmpresa, dataPagamentoInicial, dataPagamentoFinal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

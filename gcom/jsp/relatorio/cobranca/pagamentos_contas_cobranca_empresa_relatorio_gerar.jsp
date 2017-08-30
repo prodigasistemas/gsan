@@ -85,6 +85,11 @@
    			 }
     
     }
+	function validaForm2() {
+		alert('ok');
+		botaoAvancarTelaEspera('/gsan/gerarRelatorioPagamentosContasCobrancaEmpresaAction.do');
+		alert('ok 2');
+	}
 	
 	function validaForm() {
 		var form =  document.forms[0];
@@ -243,12 +248,55 @@
 				
 				<tr>
 					<td><strong>Período de Referência do Pagamento:<font color="#FF0000">*</font></strong></td>
-					<td colspan="2"><strong> <html:text maxlength="7" property="periodoComandoInicial"
-						size="7" tabindex="8"
-						onkeyup="mascaraAnoMes(this, event); replicarCampo(document.forms[0].periodoComandoFinal, document.forms[0].periodoComandoInicial);" />
-					<strong> a</strong> <html:text maxlength="7"
-						property="periodoComandoFinal" size="7" tabindex="9"
-						onkeyup="mascaraAnoMes(this, event);" /> </strong> (mm/aaaa)</td>
+					<td colspan="2">
+						<strong> 
+						<!--  
+							<html:text maxlength="7" property="periodoComandoInicial" size="7" tabindex="8" onkeyup="mascaraAnoMes(this, event);" /> 
+							<strong> a</strong>
+							<html:text maxlength="7" property="periodoComandoFinal" size="7" tabindex="9" onkeyup="mascaraAnoMes(this, event);" />
+						</strong> (dd/mm/aaaa)
+						-->
+
+							<html:text onkeyup="mascaraData(this, event);somente_numero(this);replicarCampo(document.forms[0].periodoComandoFinal, document.forms[0].periodoComandoInicial);"
+							property="periodoComandoInicial" 
+							size="10" 
+							maxlength="10"
+							tabindex="8"
+							onkeypress="javascript:return isCampoNumerico(event);"/> 
+						
+							<a href="javascript:abrirCalendario('GerarRelatorioPagamentosContasCobrancaEmpresaActionForm', 'periodoComandoInicial')">
+							<img border="0" 
+								width="16" 
+								height="15"
+								src="<bean:message key="caminho.imagens"/>calendario.gif"
+								width="20" 
+								border="0" 
+								align="absmiddle" 
+								alt="Exibir Calendário" /></a> 
+								
+							<strong> a</strong> 
+							
+							
+							<html:text onkeyup="mascaraData(this, event);somente_numero(this);"
+							property="periodoComandoFinal" 
+							size="10" 
+							maxlength="10"
+							tabindex="9"
+							onkeypress="javascript:return isCampoNumerico(event);"/> 
+						
+							<a href="javascript:abrirCalendario('GerarRelatorioPagamentosContasCobrancaEmpresaActionForm', 'periodoComandoFinal')">
+							<img border="0" 
+								width="16" 
+								height="15"
+								src="<bean:message key="caminho.imagens"/>calendario.gif"
+								width="20" 
+								border="0" 
+								align="absmiddle" 
+								alt="Exibir Calendário" /></a>
+								
+						</strong> 
+						(dd/mm/aaaa) 
+					</td>
 				</tr>
 				
 				

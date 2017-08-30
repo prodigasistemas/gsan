@@ -3,15 +3,16 @@ package gcom.cobranca;
 import gcom.cadastro.empresa.Empresa;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class RelatorioPagamentosContasCobrancaEmpresaHelper implements
 		Serializable {
 	private static final long serialVersionUID = 1L;
 	private Empresa empresa;
 
-	private int referenciaPagamentoInicial;
+	private String dataPagamentoInicial;
 
-	private int referenciaPagamentoFinal;
+	private String dataPagamentoFinal;
 
 	private String opcaoTotalizacao;
 
@@ -53,20 +54,20 @@ public class RelatorioPagamentosContasCobrancaEmpresaHelper implements
 		this.opcaoTotalizacao = opcaoTotalizacao;
 	}
 
-	public int getReferenciaPagamentoFinal() {
-		return referenciaPagamentoFinal;
+	public String getDataPagamentoFinal() {
+		return dataPagamentoFinal;
 	}
 
-	public void setReferenciaPagamentoFinal(int referenciaPagamentoFinal) {
-		this.referenciaPagamentoFinal = referenciaPagamentoFinal;
+	public void setReferenciaPagamentoFinal(String referenciaPagamentoFinal) {
+		this.dataPagamentoFinal = referenciaPagamentoFinal;
 	}
 
-	public int getReferenciaPagamentoInicial() {
-		return referenciaPagamentoInicial;
+	public String getDataPagamentoInicial() {
+		return dataPagamentoInicial;
 	}
 
-	public void setReferenciaPagamentoInicial(int referenciaPagamentoInicial) {
-		this.referenciaPagamentoInicial = referenciaPagamentoInicial;
+	public void setReferenciaPagamentoInicial(String referenciaPagamentoInicial) {
+		this.dataPagamentoInicial = referenciaPagamentoInicial;
 	}
 
 	public Integer getUnidadeNegocio() {
@@ -81,8 +82,8 @@ public class RelatorioPagamentosContasCobrancaEmpresaHelper implements
 	 * Construtor de RelatorioPagamentosContasCobrancaEmpresaHelper 
 	 * 
 	 * @param empresa
-	 * @param referenciaPagamentoInicial
-	 * @param referenciaPagamentoFinal
+	 * @param dataPagamentoInicial
+	 * @param dataPagamentoFinal
 	 * @param opcaoEmissao
 	 * @param tipoFormatoRelatorio
 	 * @param opcaoTotalizacao
@@ -90,12 +91,12 @@ public class RelatorioPagamentosContasCobrancaEmpresaHelper implements
 	 * @param codigoGerencia
 	 * @param unidadeNegocio
 	 */
-	public RelatorioPagamentosContasCobrancaEmpresaHelper(Empresa empresa, int referenciaPagamentoInicial, int referenciaPagamentoFinal,  String opcaoTotalizacao, Integer codigoLocalidade, Integer codigoGerencia, Integer unidadeNegocio) {
+	public RelatorioPagamentosContasCobrancaEmpresaHelper(Empresa empresa, String dataPagamentoInicial, String dataPagamentoFinal,  String opcaoTotalizacao, Integer codigoLocalidade, Integer codigoGerencia, Integer unidadeNegocio) {
 		super();
 		
 		this.empresa = empresa;
-		this.referenciaPagamentoInicial = referenciaPagamentoInicial;
-		this.referenciaPagamentoFinal = referenciaPagamentoFinal;
+		this.dataPagamentoInicial = dataPagamentoInicial;
+		this.dataPagamentoFinal = dataPagamentoFinal;
 		this.opcaoTotalizacao = opcaoTotalizacao;
 		this.codigoLocalidade = codigoLocalidade;
 		this.codigoGerencia = codigoGerencia;
