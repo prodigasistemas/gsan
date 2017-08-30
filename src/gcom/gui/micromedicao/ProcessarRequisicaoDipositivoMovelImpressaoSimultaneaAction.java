@@ -10,7 +10,6 @@ import gcom.micromedicao.ArquivoTextoRetornoIS;
 import gcom.micromedicao.ServicoTipoCelular;
 import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.util.Util;
-import gcom.util.ZipUtil;
 import gcom.util.filtro.ParametroSimples;
 
 import java.io.BufferedReader;
@@ -22,8 +21,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,52 +59,43 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 		try {
 			in = request.getInputStream();
-			
-			ZipInputStream zin = new ZipInputStream(request.getInputStream());
-        	ZipEntry ze = null;
-        	ZipUtil.criarZip(request.getInputStream(), obterNomeArquivoRetorno(request.getInputStream()), obterCaminhoArquivo());
+			DataInputStream din = new DataInputStream(in);
 
-			while ((ze = zin.getNextEntry()) != null) {
-        		if (isArquivoRetorno(ze.getName())) {
-        			
-        			DataInputStream din = new DataInputStream(zin);
-        			int pacote = din.readByte();
-        			
-        			logger.info("Solicitacao Mobile : " + pacote);
-        			
-        			switch (pacote) {
-        			case PACOTE_BAIXAR_ARQUIVO:
-        				this.baixarArquivo(din, response, out);
-        				break;
-        				
-        			case ATUALIZAR_MOVIMENTO:
-        				this.atualizarMovimentacao(din, response, out);
-        				break;
-        			case FINALIZAR_LEITURA:
-        				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA);
-        				break;
-        				
-        			case FINALIZAR_LEITURA_INCOMPLETA:
-        				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA_INCOMPLETA);
-        				break;
-        				
-        			case CONFIRMAR_ARQUIVO_RECEBIDO:
-        				this.confirmacaoArquivoRecebido(din, response, out);
-        				break;
-        				
-        			case BAIXAR_NOVA_VERSAO_JAD:
-        				this.baixarNovaVersaoJad(din, response, out);
-        				break;
-        				
-        			case BAIXAR_NOVA_VERSAO_JAR:
-        				this.baixarNovaVersaoJar(din, response, out);
-        				break;
-        				
-        			case FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO:
-        				this.finalizarMovimentacao(din, response, out,FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO);
-        				break;
-        			}
-        		}
+			int pacote = din.readByte();
+
+			logger.info("Solicitacao Mobile : " + pacote);
+
+			switch (pacote) {
+			case PACOTE_BAIXAR_ARQUIVO:
+				this.baixarArquivo(din, response, out);
+				break;
+
+			case ATUALIZAR_MOVIMENTO:
+				this.atualizarMovimentacao(din, response, out);
+				break;
+			case FINALIZAR_LEITURA:
+				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA);
+				break;
+			
+			case FINALIZAR_LEITURA_INCOMPLETA:
+				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA_INCOMPLETA);
+				break;
+				
+			case CONFIRMAR_ARQUIVO_RECEBIDO:
+				this.confirmacaoArquivoRecebido(din, response, out);
+				break;
+
+			case BAIXAR_NOVA_VERSAO_JAD:
+				this.baixarNovaVersaoJad(din, response, out);
+				break;
+
+			case BAIXAR_NOVA_VERSAO_JAR:
+				this.baixarNovaVersaoJar(din, response, out);
+				break;
+
+			case FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO:
+				this.finalizarMovimentacao(din, response, out,FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO);
+				break;
 			}
 
 		} catch (Exception e) {
@@ -566,16 +554,5 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 		}
 	}
-	
-	private String obterCaminhoArquivo() {
-		return null;
-	}
-	
-	private String obterNomeArquivoRetorno(InputStream data) {
-		return "Retorno.zip";
-	}
-	
-	private boolean isArquivoRetorno(String nomeArquivo) {
-		return nomeArquivo.startsWith("G");
-	}
+
 }

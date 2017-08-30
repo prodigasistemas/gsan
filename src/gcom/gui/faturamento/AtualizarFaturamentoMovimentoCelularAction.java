@@ -80,115 +80,217 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                 // Caso não seja um field do formulario é o arquivo
                 if ( !item.isFormField() ){
 
-                	ZipInputStream zin = new ZipInputStream(item.getInputStream());
-                	ZipEntry ze = null;
-                	ZipUtil.criarZip(item.getInputStream(), item.getName(), obterCaminhoArquivo());
-
-                	while ((ze = zin.getNextEntry()) != null) {
-                		if (isArquivoRetorno(ze.getName())) {
-                			
-                			InputStreamReader reader = new InputStreamReader(zin);
-                			InputStreamReader inputSemRegistroZero = new InputStreamReader(zin);
-                			InputStreamReader readerOriginal = new InputStreamReader(zin);
-                			BufferedReader buffer = new BufferedReader(reader);
-                			BufferedReader bufferOriginal = new BufferedReader(readerOriginal);
-                			BufferedReader bufferSemRegistroZero = new BufferedReader(inputSemRegistroZero);
-                			
-                			String nomeArquivo = ze.getName();
-                			String registro0 = buffer.readLine();
-                			
-                			logger.info("Linha arquivo String: " + registro0);
-                			
-                			if (registro0 != null && !registro0.trim().equals("")) {
-                				ArquivoTextoRetornoIS arquivoRetorno = new ArquivoTextoRetornoIS();
+                	if (item.getName().endsWith(".zip")) {
+                		
+                		ZipInputStream zin = new ZipInputStream(item.getInputStream());
+                		ZipEntry ze = null;
+                		ZipUtil.criarZip(item.getInputStream(), item.getName(), obterCaminhoArquivo());
+                		
+                		while ((ze = zin.getNextEntry()) != null) {
+                			if (isArquivoRetorno(ze.getName())) {
                 				
-                				int registroTipo = Integer.parseInt(registro0.substring(0, 1));
+                				InputStreamReader reader = new InputStreamReader(zin);
+                				InputStreamReader inputSemRegistroZero = new InputStreamReader(zin);
+                				InputStreamReader readerOriginal = new InputStreamReader(zin);
+                				BufferedReader buffer = new BufferedReader(reader);
+                				BufferedReader bufferOriginal = new BufferedReader(readerOriginal);
+                				BufferedReader bufferSemRegistroZero = new BufferedReader(inputSemRegistroZero);
                 				
-                				if(registroTipo == 0){
-                					bufferSemRegistroZero = null;
-                					inputSemRegistroZero = null;
-                					temRegistroTipo0 = true;
+                				String nomeArquivo = ze.getName();
+                				String registro0 = buffer.readLine();
+                				
+                				logger.info("Linha arquivo String: " + registro0);
+                				
+                				if (registro0 != null && !registro0.trim().equals("")) {
+                					ArquivoTextoRetornoIS arquivoRetorno = new ArquivoTextoRetornoIS();
                 					
-                					indcFinalizacao = Integer.parseInt(registro0.substring(1,2));
-                					codRota = Integer.parseInt(registro0.substring(8,15));
-                					setorComercial = Integer.parseInt(registro0.substring(5,8));
-                					localidade = Integer.parseInt(registro0.substring(2,5));
+                					int registroTipo = Integer.parseInt(registro0.substring(0, 1));
                 					
-                					if (registro0.length() == 17) {
-                						numeroSequenciaArquivo = Integer.parseInt(registro0.substring(15, 17));
-                						idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota, setorComercial, localidade);
-                					} else {
-                						numeroSequenciaArquivo = Integer.parseInt(registro0.substring(19, 21));
-                						idRota = Integer.parseInt(registro0.substring(15, 19));
+                					if(registroTipo == 0){
+                						bufferSemRegistroZero = null;
+                						inputSemRegistroZero = null;
+                						temRegistroTipo0 = true;
+                						
+                						indcFinalizacao = Integer.parseInt(registro0.substring(1,2));
+                						codRota = Integer.parseInt(registro0.substring(8,15));
+                						setorComercial = Integer.parseInt(registro0.substring(5,8));
+                						localidade = Integer.parseInt(registro0.substring(2,5));
+                						
+                						if (registro0.length() == 17) {
+                							numeroSequenciaArquivo = Integer.parseInt(registro0.substring(15, 17));
+                							idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota, setorComercial, localidade);
+                						} else {
+                							numeroSequenciaArquivo = Integer.parseInt(registro0.substring(19, 21));
+                							idRota = Integer.parseInt(registro0.substring(15, 19));
+                						}
+                						
+                						anoMesReferencia = fachada.retornaAnoMesFaturamentoGrupoDaRota(idRota);
+                						
+                						arquivoRetorno.setAnoMesReferencia(anoMesReferencia);
+                						arquivoRetorno.setCodigoRota(codRota);
+                						arquivoRetorno.setCodigoSetorComercial(setorComercial);
+                						arquivoRetorno.setLocalidade(new Localidade(localidade));
+                						arquivoRetorno.setNomeArquivo(nomeArquivo);
+                						arquivoRetorno.setTempoRetornoArquivo(new Date());
+                						arquivoRetorno.setUltimaAlteracao(new Date());
+                						
+                						int tipoFinalizacao = ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO;
+                						arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
+                						
+                						logger.info("Finalizando arquivo offline [Localidade: " + localidade + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
+                						
+                						
+                						if ( idRota == null ){
+                							String primeiroRegistro = buffer.readLine();
+                							Integer matricula = Integer.parseInt( primeiroRegistro.substring( 1, 10 ) );
+                							
+                							FiltroImovel filtroImovel = new FiltroImovel();
+                							filtroImovel.adicionarCaminhoParaCarregamentoEntidade( "rotaAlternativa.setorComercial" );
+                							filtroImovel.adicionarParametro( new ParametroSimples( FiltroImovel.ID, matricula ) );				
+                							Collection<Imovel> colImovel = Fachada.getInstancia().pesquisar( filtroImovel, Imovel.class.getName() );
+                							Imovel imo = (Imovel) Util.retonarObjetoDeColecao( colImovel );
+                							
+                							localidade = imo.getLocalidade().getId();
+                							setorComercial = imo.getRotaAlternativa().getSetorComercial().getCodigo();
+                							codRota = imo.getRotaAlternativa().getCodigo().intValue();
+                							idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota,setorComercial,localidade);
+                							
+                							String linha;
+                							StringBuffer arquivo = new StringBuffer();
+                							arquivo.append( primeiroRegistro + "\n" );
+                							
+                							while( ( linha = buffer.readLine() ) != null ){					
+                								arquivo.append(linha + "\n");					
+                							}				
+                							
+                							InputStream is = new ByteArrayInputStream( arquivo.toString().getBytes() );        	
+                							InputStreamReader readerRetorno = new InputStreamReader( is );    		
+                							buffer = new BufferedReader(readerRetorno);
+                						}                		
+                						
+                						// Caso o tipo de finalização seja de arquivo com imóveis faltando, pesquisamos quais ja chegaram
+                						if ( indcFinalizacao == ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO ){        				
+                							buffer = fachada.removerImoveisJaProcessadosBufferImpressaoSimultanea( idRota, buffer );
+                						}
+                					} else {          
+                						buffer = bufferSemRegistroZero;
+                						throw new ActionServletException("atencao.arquivo_sem_registro_tipo0", nomeArquivo);
                 					}
                 					
-                					anoMesReferencia = fachada.retornaAnoMesFaturamentoGrupoDaRota(idRota);
                 					
-                					arquivoRetorno.setAnoMesReferencia(anoMesReferencia);
-                					arquivoRetorno.setCodigoRota(codRota);
-                					arquivoRetorno.setCodigoSetorComercial(setorComercial);
-                					arquivoRetorno.setLocalidade(new Localidade(localidade));
-                					arquivoRetorno.setNomeArquivo(nomeArquivo);
-                					arquivoRetorno.setTempoRetornoArquivo(new Date());
-                					arquivoRetorno.setUltimaAlteracao(new Date());
+                					RetornoAtualizarFaturamentoMovimentoCelularHelper helper = null;
                 					
-                					int tipoFinalizacao = ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO;
-                					arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
+                					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
+                					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
+                					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
                 					
-                					logger.info("Finalizando arquivo offline [Localidade: " + localidade + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
-                					
-                					
-                					if ( idRota == null ){
-                						String primeiroRegistro = buffer.readLine();
-                						Integer matricula = Integer.parseInt( primeiroRegistro.substring( 1, 10 ) );
-                						
-                						FiltroImovel filtroImovel = new FiltroImovel();
-                						filtroImovel.adicionarCaminhoParaCarregamentoEntidade( "rotaAlternativa.setorComercial" );
-                						filtroImovel.adicionarParametro( new ParametroSimples( FiltroImovel.ID, matricula ) );				
-                						Collection<Imovel> colImovel = Fachada.getInstancia().pesquisar( filtroImovel, Imovel.class.getName() );
-                						Imovel imo = (Imovel) Util.retonarObjetoDeColecao( colImovel );
-                						
-                						localidade = imo.getLocalidade().getId();
-                						setorComercial = imo.getRotaAlternativa().getSetorComercial().getCodigo();
-                						codRota = imo.getRotaAlternativa().getCodigo().intValue();
-                						idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota,setorComercial,localidade);
-                						
-                						String linha;
-                						StringBuffer arquivo = new StringBuffer();
-                						arquivo.append( primeiroRegistro + "\n" );
-                						
-                						while( ( linha = buffer.readLine() ) != null ){					
-                							arquivo.append(linha + "\n");					
-                						}				
-                						
-                						InputStream is = new ByteArrayInputStream( arquivo.toString().getBytes() );        	
-                						InputStreamReader readerRetorno = new InputStreamReader( is );    		
-                						buffer = new BufferedReader(readerRetorno);
-                					}                		
-                					
-                					// Caso o tipo de finalização seja de arquivo com imóveis faltando, pesquisamos quais ja chegaram
-                					if ( indcFinalizacao == ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO ){        				
-                						buffer = fachada.removerImoveisJaProcessadosBufferImpressaoSimultanea( idRota, buffer );
-                					}
-                				} else {          
-                					buffer = bufferSemRegistroZero;
-                					throw new ActionServletException("atencao.arquivo_sem_registro_tipo0", nomeArquivo);
+                				} else {
+                					throw new ActionServletException("atencao.arquivo_sem_dados", nomeArquivo);
                 				}
                 				
-                				
-                				RetornoAtualizarFaturamentoMovimentoCelularHelper helper = null;
-                				
-                				helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
-                				byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
-                				indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
-                				
-                			} else {
-                				throw new ActionServletException("atencao.arquivo_sem_dados", nomeArquivo);
-                			}
-                		
-                		} 
+                			} 
+                		}
+                	} else {
+        				InputStreamReader reader = new InputStreamReader(item.getInputStream());
+        				InputStreamReader inputSemRegistroZero = new InputStreamReader(item.getInputStream());
+        				InputStreamReader readerOriginal = new InputStreamReader(item.getInputStream());
+        				BufferedReader buffer = new BufferedReader(reader);
+        				BufferedReader bufferOriginal = new BufferedReader(readerOriginal);
+        				BufferedReader bufferSemRegistroZero = new BufferedReader(inputSemRegistroZero);
+        				
+        				String nomeArquivo = item.getName();
+        				String registro0 = buffer.readLine();
+        				
+        				logger.info("Linha arquivo String: " + registro0);
+        				
+        				if (registro0 != null && !registro0.trim().equals("")) {
+        					ArquivoTextoRetornoIS arquivoRetorno = new ArquivoTextoRetornoIS();
+        					
+        					int registroTipo = Integer.parseInt(registro0.substring(0, 1));
+        					
+        					if(registroTipo == 0){
+        						bufferSemRegistroZero = null;
+        						inputSemRegistroZero = null;
+        						temRegistroTipo0 = true;
+        						
+        						indcFinalizacao = Integer.parseInt(registro0.substring(1,2));
+        						codRota = Integer.parseInt(registro0.substring(8,15));
+        						setorComercial = Integer.parseInt(registro0.substring(5,8));
+        						localidade = Integer.parseInt(registro0.substring(2,5));
+        						
+        						if (registro0.length() == 17) {
+        							numeroSequenciaArquivo = Integer.parseInt(registro0.substring(15, 17));
+        							idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota, setorComercial, localidade);
+        						} else {
+        							numeroSequenciaArquivo = Integer.parseInt(registro0.substring(19, 21));
+        							idRota = Integer.parseInt(registro0.substring(15, 19));
+        						}
+        						
+        						anoMesReferencia = fachada.retornaAnoMesFaturamentoGrupoDaRota(idRota);
+        						
+        						arquivoRetorno.setAnoMesReferencia(anoMesReferencia);
+        						arquivoRetorno.setCodigoRota(codRota);
+        						arquivoRetorno.setCodigoSetorComercial(setorComercial);
+        						arquivoRetorno.setLocalidade(new Localidade(localidade));
+        						arquivoRetorno.setNomeArquivo(nomeArquivo);
+        						arquivoRetorno.setTempoRetornoArquivo(new Date());
+        						arquivoRetorno.setUltimaAlteracao(new Date());
+        						
+        						int tipoFinalizacao = ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO;
+        						arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
+        						
+        						logger.info("Finalizando arquivo offline [Localidade: " + localidade + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
+        						
+        						
+        						if ( idRota == null ){
+        							String primeiroRegistro = buffer.readLine();
+        							Integer matricula = Integer.parseInt( primeiroRegistro.substring( 1, 10 ) );
+        							
+        							FiltroImovel filtroImovel = new FiltroImovel();
+        							filtroImovel.adicionarCaminhoParaCarregamentoEntidade( "rotaAlternativa.setorComercial" );
+        							filtroImovel.adicionarParametro( new ParametroSimples( FiltroImovel.ID, matricula ) );				
+        							Collection<Imovel> colImovel = Fachada.getInstancia().pesquisar( filtroImovel, Imovel.class.getName() );
+        							Imovel imo = (Imovel) Util.retonarObjetoDeColecao( colImovel );
+        							
+        							localidade = imo.getLocalidade().getId();
+        							setorComercial = imo.getRotaAlternativa().getSetorComercial().getCodigo();
+        							codRota = imo.getRotaAlternativa().getCodigo().intValue();
+        							idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota,setorComercial,localidade);
+        							
+        							String linha;
+        							StringBuffer arquivo = new StringBuffer();
+        							arquivo.append( primeiroRegistro + "\n" );
+        							
+        							while( ( linha = buffer.readLine() ) != null ){					
+        								arquivo.append(linha + "\n");					
+        							}				
+        							
+        							InputStream is = new ByteArrayInputStream( arquivo.toString().getBytes() );        	
+        							InputStreamReader readerRetorno = new InputStreamReader( is );    		
+        							buffer = new BufferedReader(readerRetorno);
+        						}                		
+        						
+        						// Caso o tipo de finalização seja de arquivo com imóveis faltando, pesquisamos quais ja chegaram
+        						if ( indcFinalizacao == ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO ){        				
+        							buffer = fachada.removerImoveisJaProcessadosBufferImpressaoSimultanea( idRota, buffer );
+        						}
+        					} else {          
+        						buffer = bufferSemRegistroZero;
+        						throw new ActionServletException("atencao.arquivo_sem_registro_tipo0", nomeArquivo);
+        					}
+        					
+        					
+        					RetornoAtualizarFaturamentoMovimentoCelularHelper helper = null;
+        					
+        					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
+        					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
+        					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
+        					
+        				} else {
+        					throw new ActionServletException("atencao.arquivo_sem_dados", nomeArquivo);
+        				}
                 	}
-                    break;
+                	break;
                 }                
             }
             
