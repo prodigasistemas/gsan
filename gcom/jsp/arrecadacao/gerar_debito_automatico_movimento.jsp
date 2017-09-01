@@ -428,6 +428,13 @@ function montarStringDados(nomeForm, nomeCampoMenu2) {
 				</tr>
 				
 				<tr>
+					<td width="25%"><strong>Somente grupos faturados:</strong></td>
+					<td width="74%">
+						<input type="checkbox" name="indicadorGruposFaturados" onclick="habilitaDesabilitaBotao();" value="1" />
+					</td>
+				</tr>
+				
+				<tr>
 					<td colspan="2">
 					<div align="right"><input name="botaoListaBancos" type="button"
 						class="bottonRightCol" value="Lista de Bancos" tabindex="3"
