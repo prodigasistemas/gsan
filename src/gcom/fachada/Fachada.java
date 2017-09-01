@@ -40126,4 +40126,8 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public String obterCaminhoDownloadArquivos(String modulo) {
+		return this.getControladorUtil().getCaminhoDownloadArquivos(modulo);
+	}
 }

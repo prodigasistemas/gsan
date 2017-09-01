@@ -84,7 +84,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                 		
                 		ZipInputStream zin = new ZipInputStream(item.getInputStream());
                 		ZipEntry ze = null;
-                		ZipUtil.criarZip(item.getInputStream(), item.getName(), obterCaminhoArquivo());
+                		ZipUtil.criarZip(item.getInputStream(), item.getName(), fachada.obterCaminhoDownloadArquivos("ïs"));
                 		
                 		while ((ze = zin.getNextEntry()) != null) {
                 			if (isArquivoRetorno(ze.getName())) {
@@ -445,10 +445,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
     }
     
     private boolean isArquivoRetorno(String nomeArquivo) {
-		return nomeArquivo.startsWith("G");
+		return nomeArquivo.endsWith(".txt");
 	}
     
-    private String obterCaminhoArquivo() {
-    	return "";
-    }
 }
