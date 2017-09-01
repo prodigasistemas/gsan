@@ -84,7 +84,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                 		
                 		ZipInputStream zin = new ZipInputStream(item.getInputStream());
                 		ZipEntry ze = null;
-                		ZipUtil.criarZip(item.getInputStream(), item.getName(), fachada.obterCaminhoDownloadArquivos("ïs"));
+                		ZipUtil.criarZip(item.getInputStream(), item.getName(), fachada.obterCaminhoDownloadArquivos("is"));
                 		
                 		while ((ze = zin.getNextEntry()) != null) {
                 			if (isArquivoRetorno(ze.getName())) {
