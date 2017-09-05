@@ -591,8 +591,8 @@
 						mode="Opaque"
 						x="5"
 						y="431"
-						width="505"
-						height="15"
+						width="524"
+						height="35"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="staticText-235"/>
@@ -600,7 +600,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[Observação: A cobrança por serviço Improcedente será a partir de R$15,00]]></text>
+				<text><![CDATA[Observação: No caso de Improcedência da solicitação, será cobrado o valor do serviço realizado, na próxima fatura]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
