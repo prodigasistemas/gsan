@@ -441,27 +441,11 @@ public interface IControladorArrecadacao {
 
 	public Collection<DeducoesHelper> pesquisarDeducoesAvisoBancario(Integer idAvisoBancario) throws ControladorException;
 
-<<<<<<< HEAD
-	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * Transfere para o histórico as devoluções informadas.
-	 * 
-	 * @author Administrador
-	 * @date 09/01/2007
-	 * 
-	 * @param colecaoDevolucoes
-	 * @throws ControladorException
-	 */
-	public void transferirDevolucaoParaHistorico(
-			Collection<Devolucao> colecaoDevolucoes)
-			throws ControladorException;
-=======
+	public void transferirDevolucaoParaHistorico(Collection<Devolucao> colecaoDevolucoes)throws ControladorException;
+
 	@SuppressWarnings("rawtypes")
 	public Collection filtrarMovimentoArrecadadorParaRelatorio(String codigoBanco, String codigoRemessa, String descricaoIdentificacaoServico, String numeroSequencialArquivo, Date dataGeracaoInicio,
 			Date dataGeracaoFim, Date ultimaAlteracaoInicio, Date ultimaAlteracaoFim, String descricaoOcorrencia, String indicadorAceitacao, String indicadorAbertoFechado) throws ControladorException;
-
->>>>>>> master
 
 	public Integer filtrarMovimentoArrecadadoresRelatorioCount(String codigoBanco, String codigoRemessa, String descricaoIdentificacaoServico, String numeroSequencialArquivo, Date dataGeracaoInicio,
 			Date dataGeracaoFim, Date ultimaAlteracaoInicio, Date ultimaAlteracaoFim, String descricaoOcorrencia, String indicadorAceitacao, String indicadorAbertoFechado) throws ControladorException;
@@ -471,44 +455,24 @@ public interface IControladorArrecadacao {
 
 	public void transferirGuiaPagamentoParaHistorico(Collection<GuiaPagamento> colecaoGuiasPagamento) throws ControladorException;
 
-	public void transferirPagamentoParaHistorico(Collection<Pagamento> colecaoPagamentos) throws ControladorException;
+	//public void transferirPagamentoParaHistorico(Collection<Pagamento> colecaoPagamentos) throws ControladorException;
 
-<<<<<<< HEAD
 	public GuiaPagamento pesquisarGuiaPagemento(Integer idGuiaPagamento) throws ControladorException;
 
 	public void gerarHistoricoParaEncerrarArrecadacaoMes(
 			Integer anoMesReferenciaArrecadacao, Integer idLocalidade,
 			int idFuncionalidadeIniciada) throws ControladorException;
 
-	/**
-	 * @author Marcio Roberto
-	 * @date 07/02/2007
-	 * 
-	 * @param codigoAgente
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public boolean verificarExistenciaAgente(Integer codigoAgente)
 			throws ControladorException;
-=======
-	public void transferirDevolucaoParaHistorico(Collection<Devolucao> colecaoDevolucoes) throws ControladorException;
 
 	public void atualizarAnoMesArrecadacao(Integer anoMesArrecadacaoSistemaParametro) throws ControladorException;
->>>>>>> master
 
 	public Integer inserirAgenciaBancaria(Agencia agencia) throws ControladorException;
 
 	public void atualizarAgenciaBancaria(Agencia agencia) throws ControladorException;
 
 	public Integer inserirArrecadador(String idAgente, String idCliente, String inscricaoEstadual, String idImovel, Usuario usuarioLogado) throws ControladorException;
-
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarGuiaPagemento(Integer idGuiaPagamento) throws ControladorException;
-
-	public void gerarHistoricoParaEncerrarArrecadacaoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException;
-
-	public boolean verificarExistenciaAgente(Integer codigoAgente) throws ControladorException;
 
 	public void removerArrecadador(String[] ids, Usuario usuarioLogado) throws ControladorException;
 
