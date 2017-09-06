@@ -43377,8 +43377,8 @@ public class ControladorCobranca extends ControladorComum {
 		return valorDescontoAcrescimosImpontualidadePagamentoAVista.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 	}
 
+	<<<<<<< HEAD
 	/**
-<<<<<<< HEAD
 	 * [UC0867] Atualizar Pagamentos das Contas em Cobrança
 	 * 
 	 * @author Sávio Luiz
@@ -43835,9 +43835,9 @@ public class ControladorCobranca extends ControladorComum {
 
 	}
 
+	=======
+			>>>>>>> master
 	/**
-=======
->>>>>>> master
 	 * [UC0869] Gerar Arquivo Texto de Contas em Cobrança por Empresa
 	 * 
 	 * Pesquisa a quantidade de contas
