@@ -13462,6 +13462,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			hql = " select distinct pagamentoHistorico "
 					+ " from gcom.arrecadacao.pagamento.PagamentoHistorico pagamentoHistorico "
 					+ " LEFT JOIN FETCH pagamentoHistorico.avisoBancario avbc "
+					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamento gpag "
 					+ " LEFT JOIN FETCH avbc.arrecadador arrec "
 					+ " LEFT JOIN FETCH arrec.cliente clie"
 					+ " LEFT JOIN FETCH pagamentoHistorico.documentoTipo doctoTp "
@@ -18509,15 +18510,16 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 
 			consulta.append("select pgmt.id from Pagamento pgmt ")
-					.append("where ((pgmt.localidade.id= :idLocalidade) and ")
-					.append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
-					.append("and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao))")
-					.append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
-					.append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao)) ")
-					.append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
-					.append(" and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao) ) ")
-					.append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
-					.append(" order by pgmt.id");
+		            .append("inner join pgmt.localidade loca ")
+		            .append("where ((loca.id= :idLocalidade) and ")
+		            .append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
+		            .append("and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))")
+		            .append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
+		            .append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
+		            .append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
+		            .append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
+		            .append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
+		            .append(" order by pgmt.id");
 
 			retorno = session.createQuery(consulta.toString())
 				.setInteger("idLocalidade", idLocalidade)
@@ -20061,8 +20063,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select dbac from DebitoACobrar dbac "
 					+ "inner join dbac.localidade loca "
 					+ "where dbac.id in "
-					+ "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
-					+ "and (pgmt.pagamentoSituacaoAtual.id = "
+                    + "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+                    + "and (pgmt.pagamentoSituacaoAtual.id = "
 					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO
 					+ " or pgmt.pagamentoSituacaoAtual.id = "
 					+ PagamentoSituacao.VALOR_A_BAIXAR
@@ -24003,15 +24005,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						}
 						if (dadosPagamento[3] != null) {
 							GuiaPagamento guia = new GuiaPagamento();
-<<<<<<< HEAD
 							guia.setId((Integer)dadosPagamento[3]);
 							guia.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer)dadosPagamento[3]));
 							
 							if(dadosPagamento[4] != null){
-=======
-							guia.setId((Integer) dadosPagamento[3]);
-							if (dadosPagamento[4] != null) {
->>>>>>> master
 								Parcelamento parcelamento = new Parcelamento();
 								parcelamento.setId((Integer) dadosPagamento[4]);
 								if (dadosPagamento[5] != null) {
@@ -24030,14 +24027,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								debitoTipo.setId((Integer) dadosPagamento[7]);
 								guia.setDebitoTipo(debitoTipo);
 							}
-<<<<<<< HEAD
 							
 							pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
 							
-=======
-
-							pagamento.setGuiaPagamento(guia);
->>>>>>> master
 						}
 						if (dadosPagamento[8] != null) {
 							DebitoACobrar debitoACobrar = new DebitoACobrar();
@@ -31801,7 +31793,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
-<<<<<<< HEAD
 	public void criarPagamentoHistoricoDeGuia(Integer idPagamento, Integer idGuia) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -31875,7 +31866,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			retorno = (PagamentoHistorico) session.createQuery(consulta).setInteger("idPagamento", idPagamento).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-=======
+		} finally {
+			session.flush();
+			session.clear();
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException { 
 		
 		List<ArrecadadorMovimentoItemDTO> retorno = new ArrayList<ArrecadadorMovimentoItemDTO>();
@@ -31927,12 +31926,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
->>>>>>> master
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
-<<<<<<< HEAD
 	}
 	
 	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException {
@@ -31957,9 +31954,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 
 		return idGuia;
-	}
-=======
-		
 	}
 	
 	public Collection<Pagamento> obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
@@ -32086,7 +32080,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                                           guia.setDebitoTipo(debitoTipo);
                                     }
                                     
-                                    pagamento.setGuiaPagamento(guia);
+                                    pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
                               }
                               if(dadosPagamento[8] != null){
                                     DebitoACobrar debitoACobrar = new DebitoACobrar();
@@ -32164,6 +32158,5 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
       
       return retorno;
 
-}
->>>>>>> master
+	}
 }
