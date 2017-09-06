@@ -4847,261 +4847,15 @@ public class ControladorArrecadacao implements SessionBean {
 
 			// Verifica se o id da conta é diferente de nulo
 			if (idGuiaPagamento != null) {
-<<<<<<< HEAD
-
-				GuiaPagamentoGeral guiaPagamento = new GuiaPagamentoGeral(idGuiaPagamento);
-				pagamento.setGuiaPagamento(guiaPagamento);
-
-			} else {
-				pagamento.setGuiaPagamento(null);
-			}
-
-			// verifica se o id da conta é diferente de nulo
-			if (idLocalidade != null) {
-
-				Localidade localidade = new Localidade();
-				localidade.setId(idLocalidade);
-				pagamento.setLocalidade(localidade);
-
-			} else {
-				pagamento.setLocalidade(null);
-			}
-
-			DocumentoTipo documentoTipo = new DocumentoTipo();
-			/**
-			 * Alterado por Arthur Carvalho
-			 * Data: 31/05/2010
-			 */
-			documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
-			documentoTipo.setDescricaoDocumentoTipo(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
-			pagamento.setDocumentoTipo(documentoTipo);
-
-			pagamento.setAvisoBancario(null);
-
-			if (idImovelNaBase != null) {
-				pagamento.setImovel(imovel);
-			} else {
-				pagamento.setImovel(null);
-			}
-
-			pagamento.setArrecadadorMovimentoItem(null);
-
-			ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-			arrecadacaoForma.setId(idFormaArrecadacao);
-			pagamento.setArrecadacaoForma(arrecadacaoForma);
-			pagamento.setCliente(null);
-			pagamento.setUltimaAlteracao(new Date());
-
-			pagamento.setFatura(null);
-			pagamento.setCobrancaDocumento(null);
-			
-			/*
-			 * Alteracao referente ao Relatorio do Float - Francisco: 14/07/08
-			 */
-			DocumentoTipo documentoAgregador = new DocumentoTipo();
-			documentoAgregador.setId(DocumentoTipo.GUIA_PAGAMENTO);
-			pagamento.setDocumentoTipoAgregador(documentoAgregador);
-			
-			pagamento.setDataProcessamento(new Date());
-			
-			colecaoPagamentos.add(pagamento);
-			
-			/*
-			 * Caso o pagamento tenha sido incluído para uma guia existente e que tenha uma conta 
-			 * associada (CNTA_ID da tabela GUIA_PAGAMENTO_ITEM com valor diferente de nulo)
-			 */
-			if (idGuiaPagamento != null){
-				
-				Conta contaPagamentoParcial = null;
-				
-				try {
-					
-					contaPagamentoParcial = repositorioArrecadacao
-                    .pesquisarContaParaPagamentoParcial(idGuiaPagamento);
-
-                } catch (ErroRepositorioException e) {
-                    throw new ControladorException("erro.sistema", e);
-                }
-                
-                if (contaPagamentoParcial != null){
-                	
-                	//[SB0016] - Processar Pagamento Parcial de Conta
-                	ProcessarPagamentoParcialContaHelper helper = 
-                	this.processarPagamentoParcialConta(contaPagamentoParcial, valorPagamento);
-                	
-                	colecaoPagamentoParcial.add(helper);
-                }
-			}
-
-		} else {
-
-			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
-			indicadorAceitacaoRegistro = "2";
-		}
-
-		// Seta os parametros que serão retornados
-		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
-		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
-		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
-		pagamentoHelperCodigoBarras.setColecaoProcessarPagamentoParcialContaHelper(colecaoPagamentoParcial);
-
-		return pagamentoHelperCodigoBarras;
-	}
-
-	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
-	 * 
-	 * GUIA DE PAGAMENTO CLIENTE(Tipo 6)
-	 * 
-	 * Autor: Ana Maria Data: 06/08/2007
-	 */
-	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasGuiaPagamentoCliente(
-			RegistroHelperCodigoBarras registroHelperCodigoBarras,
-			SistemaParametro sistemaParametro, Date dataPagamento,
-			Integer anoMesPagamento, BigDecimal valorPagamento,
-			Integer idFormaArrecadacao) throws ControladorException {
-
-		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
-		String descricaoOcorrencia = "OK";
-
-		String indicadorAceitacaoRegistro = "1";
-
-		Collection colecaoPagamnetos = new ArrayList();
-
-		boolean idLocalidadeInvalida = false;
-		boolean idClienteInvalido = false;
-
-		Integer idClienteNaBase = null;
-
-		idLocalidadeInvalida = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento1());
-
-		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
-		}
-
-		idClienteInvalido = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento2());
-
-		Integer idCliente = null;
-		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
-		} else {
-			// verifica se existe o id do cliente na
-			// base
-			idCliente = new Integer(registroHelperCodigoBarras
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2());
-
-			try {
-				idClienteNaBase = repositorioCliente
-						.verificarExistenciaCliente(new Integer(idCliente));
-			} catch (ErroRepositorioException e) {
-				throw new ControladorException("erro.sistema", e);
-			}
-
-			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
-			}
-		}
-
-		// Valida o namo mes de referencia da conta
-		boolean codigoTipoDebito = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento4());
-
-		if (codigoTipoDebito) {
-			descricaoOcorrencia = "TIPO DO DÉBITO NÃO NUMÉRICO";
-		} else {
-
-			Integer idDebitoTipoNaBase = getControladorFaturamento()
-					.verificarExistenciaDebitoTipo(
-							Util
-									.converterStringParaInteger(registroHelperCodigoBarras
-											.getRegistroHelperCodigoBarrasTipoPagamento()
-											.getIdPagamento4()));
-
-			if (idDebitoTipoNaBase == null) {
-				descricaoOcorrencia = "TIPO DO DÉBITO INEXISTENTE";
-			}
-		}
-
-		if (descricaoOcorrencia.equals("OK")) {
-
-			Integer idLocalidade = new Integer(registroHelperCodigoBarras
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento1());
-
-			Integer idGuiaPagamento = null;
-
-			Integer idDebitoTipo = new Integer(registroHelperCodigoBarras
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento4());
-
-			try {
-				idGuiaPagamento = repositorioArrecadacao
-						.pesquisarExistenciaGuiaPagamentoCliente(idCliente,
-								idDebitoTipo);
-
-			} catch (ErroRepositorioException e) {
-				e.printStackTrace();
-				throw new ControladorException("erro.sistema", e);
-			}
-
-			if (idGuiaPagamento == null || idGuiaPagamento.equals("")) {
-				descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
-			}
-
-			// Cria o objeto pagamento para setar os dados
-			Pagamento pagamento = new Pagamento();
-			pagamento.setAnoMesReferenciaPagamento(null);
-
-			/*
-			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
-			 * data de debito
-			 */
-			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
-
-				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
-
-			} else {
-
-				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
-				 * parametro
-				 */
-				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
-						.getAnoMesArrecadacao());
-			}
-
-			pagamento.setValorPagamento(valorPagamento);
-			pagamento.setDataPagamento(dataPagamento);
-			pagamento.setPagamentoSituacaoAtual(null);
-			pagamento.setPagamentoSituacaoAnterior(null);
-			DebitoTipo debitoTipo = new DebitoTipo();
-			debitoTipo.setId(idDebitoTipo);
-			pagamento.setDebitoTipo(debitoTipo);
-
-			pagamento.setContaGeral(null);
-
-			// Verifica se o id da conta é diferente de nulo
-			if (idGuiaPagamento != null) {
-
-				GuiaPagamentoGeral guiaPagamento = new GuiaPagamentoGeral(idGuiaPagamento);
-=======
 				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
+				
+				GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral(idGuiaPagamento);
 				
 				GuiaPagamento guiaPagamento = new GuiaPagamento();
 				guiaPagamento.setId(idGuiaPagamento);
->>>>>>> master
-				pagamento.setGuiaPagamento(guiaPagamento);
+				guiaPagamento.setGuiaPagamentoGeral(guiaGeral);
+				
+				pagamento.setGuiaPagamento(guiaGeral);
 
 			} else {
 				pagamento.setGuiaPagamento(null);
@@ -34069,61 +33823,61 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @param colecaoGuiasPagamento
 	 * @throws ControladorException
 	 */
-	public void transferirGuiaPagamentoParaHistorico(Collection<GuiaPagamento> colecaoGuiasPagamento)throws ControladorException {
-
-		try {
-			GuiaPagamentoHistorico guiaPagamentoHistoricoTemp = null;
-
-			Collection colecaoGuiasPagamentoRemover = new ArrayList();
-
-			if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
-
-				colecaoGuiasPagamentoRemover.addAll(colecaoGuiasPagamento);
-				int cont = 0;
-				for (GuiaPagamento guiaPagamento : colecaoGuiasPagamento) {
-					cont++;
-
-					Integer idGuiaPagamento = guiaPagamento.getId();
-
-					guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
-					guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
-					guiaPagamentoHistoricoTemp.setAnoMesReferenciaContabil(guiaPagamento.getAnoMesReferenciaContabil());
-					guiaPagamentoHistoricoTemp.setCliente(guiaPagamento.getCliente());
-					guiaPagamentoHistoricoTemp.setDataEmissao(guiaPagamento.getDataEmissao());
-					guiaPagamentoHistoricoTemp.setDataVencimento(guiaPagamento.getDataVencimento());
-					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdanterior(guiaPagamento.getDebitoCreditoSituacaoAnterior());
-					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdatual(guiaPagamento.getDebitoCreditoSituacaoAtual());
-					guiaPagamentoHistoricoTemp.setDebitoTipo(guiaPagamento.getDebitoTipo());
-					guiaPagamentoHistoricoTemp.setDocumentoTipo(guiaPagamento.getDocumentoTipo());
-					guiaPagamentoHistoricoTemp.setFinanciamentoTipo(guiaPagamento.getFinanciamentoTipo());
-					guiaPagamentoHistoricoTemp.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
-					guiaPagamentoHistoricoTemp.setImovel(guiaPagamento.getImovel());
-					guiaPagamentoHistoricoTemp.setIndicadorMulta(guiaPagamento.getIndicadoCobrancaMulta());
-					guiaPagamentoHistoricoTemp.setLancamentoItemContabil(guiaPagamento.getLancamentoItemContabil());
-					guiaPagamentoHistoricoTemp.setLocalidade(guiaPagamento.getLocalidade());
-					guiaPagamentoHistoricoTemp.setOrdemServico(guiaPagamento.getOrdemServico());
-					guiaPagamentoHistoricoTemp.setParcelamento(guiaPagamento.getParcelamento());
-					guiaPagamentoHistoricoTemp.setRegistroAtendimento(guiaPagamento.getRegistroAtendimento());
-					guiaPagamentoHistoricoTemp.setUltimaAlteracao(new Date());
-					guiaPagamentoHistoricoTemp.setValorDebito(guiaPagamento.getValorDebito());
-					guiaPagamentoHistoricoTemp.setObservacao(guiaPagamento.getObservacao());
-					guiaPagamentoHistoricoTemp.setIndicadorEmitirObservacao(guiaPagamento.getIndicadorEmitirObservacao());
-					guiaPagamentoHistoricoTemp.setNumeroGuiaFatura(guiaPagamento.getNumeroGuiaFatura());
-
-					getControladorUtil().inserir(guiaPagamentoHistoricoTemp);
-					enviarGuiaPagamentoCategoriaParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
-					enviarClienteGuiaPagamentoParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
-				}
-			}
-
-			getControladorBatch().removerColecaoGuiaPagamentoParaBatch(colecaoGuiasPagamentoRemover);
-			colecaoGuiasPagamentoRemover = null;
-			colecaoGuiasPagamento = null;
-
-		} catch (Exception ex) {
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
+//	public void transferirGuiaPagamentoParaHistorico(Collection<GuiaPagamento> colecaoGuiasPagamento)throws ControladorException {
+//
+//		try {
+//			GuiaPagamentoHistorico guiaPagamentoHistoricoTemp = null;
+//
+//			Collection colecaoGuiasPagamentoRemover = new ArrayList();
+//
+//			if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
+//
+//				colecaoGuiasPagamentoRemover.addAll(colecaoGuiasPagamento);
+//				int cont = 0;
+//				for (GuiaPagamento guiaPagamento : colecaoGuiasPagamento) {
+//					cont++;
+//
+//					Integer idGuiaPagamento = guiaPagamento.getId();
+//
+//					guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
+//					guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
+//					guiaPagamentoHistoricoTemp.setAnoMesReferenciaContabil(guiaPagamento.getAnoMesReferenciaContabil());
+//					guiaPagamentoHistoricoTemp.setCliente(guiaPagamento.getCliente());
+//					guiaPagamentoHistoricoTemp.setDataEmissao(guiaPagamento.getDataEmissao());
+//					guiaPagamentoHistoricoTemp.setDataVencimento(guiaPagamento.getDataVencimento());
+//					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdanterior(guiaPagamento.getDebitoCreditoSituacaoAnterior());
+//					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdatual(guiaPagamento.getDebitoCreditoSituacaoAtual());
+//					guiaPagamentoHistoricoTemp.setDebitoTipo(guiaPagamento.getDebitoTipo());
+//					guiaPagamentoHistoricoTemp.setDocumentoTipo(guiaPagamento.getDocumentoTipo());
+//					guiaPagamentoHistoricoTemp.setFinanciamentoTipo(guiaPagamento.getFinanciamentoTipo());
+//					guiaPagamentoHistoricoTemp.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
+//					guiaPagamentoHistoricoTemp.setImovel(guiaPagamento.getImovel());
+//					guiaPagamentoHistoricoTemp.setIndicadorMulta(guiaPagamento.getIndicadoCobrancaMulta());
+//					guiaPagamentoHistoricoTemp.setLancamentoItemContabil(guiaPagamento.getLancamentoItemContabil());
+//					guiaPagamentoHistoricoTemp.setLocalidade(guiaPagamento.getLocalidade());
+//					guiaPagamentoHistoricoTemp.setOrdemServico(guiaPagamento.getOrdemServico());
+//					guiaPagamentoHistoricoTemp.setParcelamento(guiaPagamento.getParcelamento());
+//					guiaPagamentoHistoricoTemp.setRegistroAtendimento(guiaPagamento.getRegistroAtendimento());
+//					guiaPagamentoHistoricoTemp.setUltimaAlteracao(new Date());
+//					guiaPagamentoHistoricoTemp.setValorDebito(guiaPagamento.getValorDebito());
+//					guiaPagamentoHistoricoTemp.setObservacao(guiaPagamento.getObservacao());
+//					guiaPagamentoHistoricoTemp.setIndicadorEmitirObservacao(guiaPagamento.getIndicadorEmitirObservacao());
+//					guiaPagamentoHistoricoTemp.setNumeroGuiaFatura(guiaPagamento.getNumeroGuiaFatura());
+//
+//					getControladorUtil().inserir(guiaPagamentoHistoricoTemp);
+//					enviarGuiaPagamentoCategoriaParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
+//					enviarClienteGuiaPagamentoParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
+//				}
+//			}
+//
+//			getControladorBatch().removerColecaoGuiaPagamentoParaBatch(colecaoGuiasPagamentoRemover);
+//			colecaoGuiasPagamentoRemover = null;
+//			colecaoGuiasPagamento = null;
+//
+//		} catch (Exception ex) {
+//			throw new ControladorException("erro.sistema", ex);
+//		}
+//	}
 
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
@@ -43919,13 +43673,7 @@ public class ControladorArrecadacao implements SessionBean {
 				else {
 					pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 				}
-<<<<<<< HEAD
-
-=======
 				
-				DocumentoTipo documentoTipo = new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO);
-				
->>>>>>> master
 				pagamento.setValorPagamento(valorPagamento);
 				pagamento.setDataPagamento(dataPagamento);
 				pagamento.setPagamentoSituacaoAtual(null);
@@ -43933,7 +43681,6 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setDebitoTipo(debitoTipo);
 				pagamento.setContaGeral(null);
 				pagamento.setLocalidade(new Localidade(idLocalidade));
-<<<<<<< HEAD
 				pagamento.setDocumentoTipo(new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO));
 				pagamento.setAvisoBancario(null);
 				pagamento.setImovel(null);
@@ -43945,22 +43692,6 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setFatura(null);
 				pagamento.setCobrancaDocumento(null);
 				pagamento.setDocumentoTipoAgregador(new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO));
-=======
-				pagamento.setDocumentoTipo(documentoTipo);
-				pagamento.setAvisoBancario(null);
-				pagamento.setImovel(null);
-				pagamento.setArrecadadorMovimentoItem(null);
-
-				ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-				arrecadacaoForma.setId(idFormaArrecadacao);
-				pagamento.setArrecadacaoForma(arrecadacaoForma);
-				pagamento.setCliente(cliente);
-				pagamento.setGuiaPagamento(guiaPagamento);
-				pagamento.setUltimaAlteracao(new Date());
-				pagamento.setFatura(null);
-				pagamento.setCobrancaDocumento(null);
-				pagamento.setDocumentoTipoAgregador(documentoTipo);
->>>>>>> master
 				pagamento.setDataProcessamento(new Date());
 
 				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
@@ -51207,37 +50938,3 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 }
-
-
-
-
-/*
-2016-04-15 16:04:00,562 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes guias: 16:04:00 - 562
-2016-04-15 16:04:03,950 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes debitos: 16:04:03 - 950
-2016-04-15 16:04:04,216 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes creditos: 16:04:04 - 216
-2016-04-15 16:04:04,255 INFO  [gcom.arrecadacao.ControladorArrecadacao] 1 - antes pagamentos: 16:04:04 - 255
-2016-04-15 16:04:00,552 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes guias: 16:04:00 - 551
-2016-04-15 16:04:04,981 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes debitos: 16:04:04 - 981
-2016-04-15 16:04:05,091 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes creditos: 16:04:05 - 91
-2016-04-15 16:04:05,095 INFO  [gcom.arrecadacao.ControladorArrecadacao] 2 - antes pagamentos: 16:04:05 - 95
-2016-04-15 16:04:00,561 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes guias: 16:04:00 - 561
-2016-04-15 16:04:02,038 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes debitos: 16:04:02 - 38
-2016-04-15 16:04:02,264 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes creditos: 16:04:02 - 264
-2016-04-15 16:04:02,368 INFO  [gcom.arrecadacao.ControladorArrecadacao] 3 - antes pagamentos: 16:04:02 - 367
-2016-04-15 16:04:00,562 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes guias: 16:04:00 - 561
-2016-04-15 16:04:00,574 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes debitos: 16:04:00 - 574
-2016-04-15 16:04:00,584 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes creditos: 16:04:00 - 584
-2016-04-15 16:04:00,592 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes pagamentos: 16:04:00 - 592
-2016-04-15 16:04:04,576 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - antes devolucoes: 16:04:04 - 576
-2016-04-15 16:04:04,581 INFO  [gcom.arrecadacao.ControladorArrecadacao] 4 - depois devolucoes: 16:04:04 - 581
-2016-04-15 16:04:00,561 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes guias: 16:04:00 - 561
-2016-04-15 16:04:01,006 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes debitos: 16:04:01 - 6
-2016-04-15 16:04:01,124 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes creditos: 16:04:01 - 124
-2016-04-15 16:04:01,135 INFO  [gcom.arrecadacao.ControladorArrecadacao] 5 - antes pagamentos: 16:04:01 - 135
-2016-04-15 16:04:04,663 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes guias: 16:04:04 - 663
-2016-04-15 16:04:05,999 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes debitos: 16:04:05 - 999
-2016-04-15 16:04:06,060 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes creditos: 16:04:06 - 60
-2016-04-15 16:04:06,090 INFO  [gcom.arrecadacao.ControladorArrecadacao] 6 - antes pagamentos: 16:04:06 - 90
-
-
-*/
