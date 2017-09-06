@@ -574,24 +574,24 @@ public class ControladorBatchSEJB implements SessionBean {
 							break;
 	
 						case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
-	
-							if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
-									getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
-								throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
-							}
-	
-							TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-							dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+
+				            if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
+				                    getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
+				              throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
+				            }
+
+				            TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
+				                processoIniciado.getUsuario(),
+				                funcionalidadeIniciada.getId());
+
+				            dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+				            dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao",anoMesArrecadacaoSistemaParametro);
+
+				            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
+
+				            getControladorUtil().atualizar(funcionalidadeIniciada);
+
+				            break;
 	
 						case Funcionalidade.GERAR_HISTORICO_CONTA:
 							
@@ -1774,19 +1774,19 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 						case Funcionalidade.ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA:
 	
-							TarefaBatchAtualizarPagamentosContasCobranca batchAtualizar = new TarefaBatchAtualizarPagamentosContasCobranca(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> idsLocalidades = getControladorLocalidade().pesquisarTodosIdsLocalidade();
-	
-							batchAtualizar.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, idsLocalidades);
-							batchAtualizar.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesFaturamento());
-							
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizar));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+							TarefaBatchAtualizarPagamentosContasCobranca atualizarPagamentosContasCobranca = 
+								new TarefaBatchAtualizarPagamentosContasCobranca(processoIniciado.getUsuario(),funcionalidadeIniciada.getId());
+
+					            Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+
+					            atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesAtualizarPagamentos);
+					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
+
+					            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
+
+					            getControladorUtil().atualizar(funcionalidadeIniciada);
+
+					            break;
 	
 						case Funcionalidade.GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
 	
