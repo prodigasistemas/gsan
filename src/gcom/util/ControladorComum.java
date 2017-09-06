@@ -36,6 +36,8 @@ import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.cobranca.controladores.ControladorParcelamentoLocal;
 import gcom.cobranca.controladores.ControladorParcelamentoLocalHome;
 import gcom.faturamento.ControladorFaturamentoLocal;
@@ -451,4 +453,21 @@ public abstract class ControladorComum implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
+	
+	protected ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
+        try {
+            ServiceLocator locator = ServiceLocator.getInstancia();
+
+            ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
+
+            ControladorCobrancaPorResultadoLocal local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+	
 }

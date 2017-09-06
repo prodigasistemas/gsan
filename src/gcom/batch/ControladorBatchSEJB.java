@@ -1790,7 +1790,8 @@ public class ControladorBatchSEJB implements SessionBean {
 							Collection<Integer> idsLocalidades = getControladorLocalidade().pesquisarTodosIdsLocalidade();
 	
 							batchAtualizar.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, idsLocalidades);
-	
+							batchAtualizar.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesFaturamento());
+							
 							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizar));
 	
 							getControladorUtil().atualizar(funcionalidadeIniciada);

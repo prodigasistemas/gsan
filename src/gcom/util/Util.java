@@ -386,7 +386,37 @@ public class Util {
 		}
 		return anoMesFormatado;
 	}
+	
+	public static Date formatarDDMMAAAAParaDate(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("/");
+			
+		String dia = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String ano = arrayDia[2]; 
 
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
+	public static String formatarYYYYMMDDTracoParaDDMMAAAABarra(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("-");
+			
+		String ano = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String dia = arrayDia[2]; 
+
+		StringBuilder dataFormatada = new StringBuilder();
+		
+		dataFormatada.append(dia).append("/").append(mes).append("/").append(ano);
+		
+		return dataFormatada.toString();
+	}
+	
 	public static int somarData(int data) {
 		String dataFormatacao = "" + data;
 
@@ -691,6 +721,43 @@ public class Util {
 			retorno = dataBD.toString();
 		}
 		return retorno;
+	}
+	
+	public static String formatarDataComBarraDDMMAAAA(Date data) {
+		String retorno = "";
+		if (data != null) { // 1
+			Calendar dataCalendar = new GregorianCalendar();
+			StringBuffer dataBD = new StringBuffer();
+
+			dataCalendar.setTime(data);
+			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
+			} else {
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
+			}
+
+			dataBD.append("/");
+
+			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
+			} else {
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
+			}
+			
+			dataBD.append("/");
+			dataBD.append(dataCalendar.get(Calendar.YEAR));
+
+			retorno = dataBD.toString();
+		}
+		return retorno;
+	}
+	
+	public static void main (String [] args) {
+		Date data = Util.formatarDDMMAAAAParaDate("01/07/2017");
+		
+		System.out.println(data);
+		
+		System.out.println(Util.formatarDataComBarraDDMMAAAA(data));
 	}
 
 	/**

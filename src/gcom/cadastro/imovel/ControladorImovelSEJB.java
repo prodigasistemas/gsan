@@ -1,25 +1,5 @@
 package gcom.cadastro.imovel;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-import javax.transaction.SystemException;
-
-import org.jboss.logging.Logger;
-
 import gcom.arrecadacao.banco.Agencia;
 import gcom.arrecadacao.banco.Banco;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
@@ -41,8 +21,6 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
@@ -52,14 +30,10 @@ import gcom.cadastro.cliente.ClienteImovelEconomia;
 import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.endereco.Cep;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.EnderecoReferencia;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
@@ -104,8 +78,6 @@ import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.CobrancaSituacaoHistorico;
 import gcom.cobranca.CobrancaSituacaoMotivo;
 import gcom.cobranca.CobrancaSituacaoTipo;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.FiltroCobrancaSituacao;
 import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
@@ -116,8 +88,6 @@ import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
@@ -141,8 +111,6 @@ import gcom.faturamento.debito.FiltroDebitoACobrarGeral;
 import gcom.gui.ActionServletException;
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.interceptor.RegistradorOperacao;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.RelatorioAnaliseConsumoHelper;
 import gcom.micromedicao.consumo.ConsumoHistorico;
@@ -158,11 +126,7 @@ import gcom.operacional.SistemaEsgoto;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Abrangencia;
-import gcom.seguranca.acesso.ControladorAcessoLocal;
-import gcom.seguranca.acesso.ControladorAcessoLocalHome;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
@@ -170,18 +134,10 @@ import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.Filtro;
@@ -191,6 +147,24 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.ejb.CreateException;
+import javax.transaction.SystemException;
+
+import org.jboss.logging.Logger;
 
 public class ControladorImovelSEJB extends ControladorComum {
 	private static final long serialVersionUID = -1644768299562397955L;
@@ -3181,7 +3155,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 				FiltroCobrancaSituacaoHistorico filtro = new FiltroCobrancaSituacaoHistorico();
 				
 				filtro.adicionarParametro(new ParametroSimples(
-						FiltroCobrancaSituacaoHistorico.ID_IMOVEL,imov_id));
+						FiltroCobrancaSituacaoHistorico.IMOVEL_ID,imov_id));
 				
 				Collection<CobrancaSituacaoHistorico> colecaoCobranca = getControladorUtil().pesquisar(filtro,CobrancaSituacaoHistorico.class.getName());
 				

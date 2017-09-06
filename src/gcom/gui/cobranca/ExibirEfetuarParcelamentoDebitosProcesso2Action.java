@@ -345,6 +345,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 					retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
 					logger.info("[" + codigoImovel + "] 2.1 - valorTotalAcrescimoImpontualidadeContas: " + valorTotalAcrescimoImpontualidadeContas);
 					logger.info("[" + codigoImovel + "] 2.2 - valorTotalAcrescimoImpontualidadeGuias: " + valorTotalAcrescimoImpontualidadeGuias);
+					logger.info("[" + codigoImovel + "] 2.3 - retornoSoma: " + retornoSoma);
 					
 					form.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
 					sessao.setAttribute("valorAcrescimosImpontualidade", retornoSoma);
@@ -667,6 +668,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 			}
 		}
 		
+		logger.info("[" + codigoImovel + "] valor acrescimos final: " + form.get("valorAcrescimosImpontualidade"));
 		return retorno;
 	}
 

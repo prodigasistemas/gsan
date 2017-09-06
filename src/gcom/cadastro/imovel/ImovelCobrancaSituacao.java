@@ -11,124 +11,121 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class ImovelCobrancaSituacao extends ObjetoTransacao {
-	
+
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
-    private Integer id;
+	private Integer id;
 
-    /** persistent field */
-    private Date dataImplantacaoCobranca;
+	private Date dataImplantacaoCobranca;
 
-    /** nullable persistent field */
-    private Date dataRetiradaCobranca;
+	private Date dataRetiradaCobranca;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
+	private Date ultimaAlteracao;
 
-    /** persistent field */
-    private gcom.cadastro.imovel.Imovel imovel;
+	private gcom.cadastro.imovel.Imovel imovel;
 
-    /** persistent field */
-    private CobrancaSituacao cobrancaSituacao;
+	private CobrancaSituacao cobrancaSituacao;
 
-    private Integer anoMesReferenciaInicio;
-    
-    private Integer anoMesReferenciaFinal;
-    
-    private Cliente cliente;
-    
-    private ContaMotivoRevisao contaMotivoRevisao;
-    
-    private Cliente escritorio;
-    
-    private Cliente advogado;
-    
-    /** full constructor */
-    public ImovelCobrancaSituacao(Date dataImplantacaoCobranca,
-            Date dataRetiradaCobranca, Integer cpfCobranca,
-            Integer cnpjCobranca, Date ultimaAlteracao,
-            gcom.cadastro.imovel.Imovel imovel,
-            CobrancaSituacao cobrancaSituacao,
-            Integer anoMesReferenciaInicio,
-            Integer anoMesReferenciaFinal,
-            Cliente cliente,ContaMotivoRevisao contaMotivoRevisao) {
-        this.dataImplantacaoCobranca = dataImplantacaoCobranca;
-        this.dataRetiradaCobranca = dataRetiradaCobranca;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.imovel = imovel;
-        this.cobrancaSituacao = cobrancaSituacao;
-        this.anoMesReferenciaInicio = anoMesReferenciaInicio;
-        this.anoMesReferenciaFinal = anoMesReferenciaFinal;
-        
-    }
+	private Integer anoMesReferenciaInicio;
 
-    /** default constructor */
-    public ImovelCobrancaSituacao() {
-    }
+	private Integer anoMesReferenciaFinal;
 
-    /** minimal constructor */
-    public ImovelCobrancaSituacao(Date dataImplantacaoCobranca,
-            gcom.cadastro.imovel.Imovel imovel,
-            CobrancaSituacao cobrancaSituacao) {
-        this.dataImplantacaoCobranca = dataImplantacaoCobranca;
-        this.imovel = imovel;
-        this.cobrancaSituacao = cobrancaSituacao;
-    }
+	private Cliente cliente;
 
-    public Integer getId() {
-        return this.id;
-    }
+	private ContaMotivoRevisao contaMotivoRevisao;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	private Cliente escritorio;
 
-    public Date getDataImplantacaoCobranca() {
-        return this.dataImplantacaoCobranca;
-    }
+	private Cliente advogado;
 
-    public void setDataImplantacaoCobranca(Date dataImplantacaoCobranca) {
-        this.dataImplantacaoCobranca = dataImplantacaoCobranca;
-    }
+	public ImovelCobrancaSituacao(
+			Date dataImplantacaoCobranca,
+			Date dataRetiradaCobranca, 
+			Integer cpfCobranca, 
+			Integer cnpjCobranca, 
+			Date ultimaAlteracao, 
+			Imovel imovel,
+			CobrancaSituacao cobrancaSituacao, 
+			Integer anoMesReferenciaInicio, 
+			Integer anoMesReferenciaFinal, 
+			Cliente cliente, 
+			ContaMotivoRevisao contaMotivoRevisao) {
+		
+		this.dataImplantacaoCobranca = dataImplantacaoCobranca;
+		this.dataRetiradaCobranca = dataRetiradaCobranca;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.imovel = imovel;
+		this.cobrancaSituacao = cobrancaSituacao;
+		this.anoMesReferenciaInicio = anoMesReferenciaInicio;
+		this.anoMesReferenciaFinal = anoMesReferenciaFinal;
 
-    public Date getDataRetiradaCobranca() {
-        return this.dataRetiradaCobranca;
-    }
+	}
 
-    public void setDataRetiradaCobranca(Date dataRetiradaCobranca) {
-        this.dataRetiradaCobranca = dataRetiradaCobranca;
-    }
+	public ImovelCobrancaSituacao() {
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public ImovelCobrancaSituacao(
+			Date dataImplantacaoCobranca,
+			Imovel imovel, 
+			CobrancaSituacao cobrancaSituacao) {
+		
+		this.dataImplantacaoCobranca = dataImplantacaoCobranca;
+		this.imovel = imovel;
+		this.cobrancaSituacao = cobrancaSituacao;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public gcom.cadastro.imovel.Imovel getImovel() {
-        return this.imovel;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setImovel(gcom.cadastro.imovel.Imovel imovel) {
-        this.imovel = imovel;
-    }
+	public Date getDataImplantacaoCobranca() {
+		return this.dataImplantacaoCobranca;
+	}
 
-    public CobrancaSituacao getCobrancaSituacao() {
-        return this.cobrancaSituacao;
-    }
+	public void setDataImplantacaoCobranca(Date dataImplantacaoCobranca) {
+		this.dataImplantacaoCobranca = dataImplantacaoCobranca;
+	}
 
-    public void setCobrancaSituacao(CobrancaSituacao cobrancaSituacao) {
-        this.cobrancaSituacao = cobrancaSituacao;
-    }
+	public Date getDataRetiradaCobranca() {
+		return this.dataRetiradaCobranca;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", getId()).toString();
-    }
+	public void setDataRetiradaCobranca(Date dataRetiradaCobranca) {
+		this.dataRetiradaCobranca = dataRetiradaCobranca;
+	}
+
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public gcom.cadastro.imovel.Imovel getImovel() {
+		return this.imovel;
+	}
+
+	public void setImovel(gcom.cadastro.imovel.Imovel imovel) {
+		this.imovel = imovel;
+	}
+
+	public CobrancaSituacao getCobrancaSituacao() {
+		return this.cobrancaSituacao;
+	}
+
+	public void setCobrancaSituacao(CobrancaSituacao cobrancaSituacao) {
+		this.cobrancaSituacao = cobrancaSituacao;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 
 	public Integer getAnoMesReferenciaFinal() {
 		return anoMesReferenciaFinal;
@@ -161,21 +158,20 @@ public class ImovelCobrancaSituacao extends ObjetoTransacao {
 	public void setContaMotivoRevisao(ContaMotivoRevisao contaMotivoRevisao) {
 		this.contaMotivoRevisao = contaMotivoRevisao;
 	}
-	
+
 	public Filtro retornaFiltro() {
-		
-		FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
-		filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID,this.getId()));
-		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("imovel");
-		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacao");
-		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("cliente");
-		filtroImovelCobrancaSituacao.adicionarCaminhoParaCarregamentoEntidade("contaMotivoRevisao");
-		
-		return filtroImovelCobrancaSituacao;
+		Filtro filtro = new FiltroImovelCobrancaSituacao();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID, this.getId()));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("contaMotivoRevisao");
+
+		return filtro;
 	}
 
 	public String[] retornaCamposChavePrimaria() {
-		String[] retorno = {"id"};
+		String[] retorno = { "id" };
 		return retorno;
 	}
 
@@ -194,6 +190,4 @@ public class ImovelCobrancaSituacao extends ObjetoTransacao {
 	public void setEscritorio(Cliente escritorio) {
 		this.escritorio = escritorio;
 	}
-
-    
 }
