@@ -179,6 +179,8 @@ import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
@@ -248,6 +250,7 @@ import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.spcserasa.IRepositorioSpcSerasa;
 import gcom.spcserasa.RepositorioSpcSerasaHBM;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
@@ -674,6 +677,27 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
 
 	/**
 	 * Retorna o valor de controladorEndereco
@@ -930,1524 +954,1265 @@ public class ControladorArrecadacao implements SessionBean {
      */
 
     @SuppressWarnings("rawtypes")
-	public Collection registrarMovimentoArrecadadores(
-            StringBuilder stringBuilderTxt, Short codigoArrecadador,
-            String nomeArrecadador, String idTipoMovimento,
-            int quantidadeRegistros, Usuario usuario, Integer idArrecadador,
-            ArrecadadorContrato arrecadadorContrato)
-            throws ControladorException {
+	public Collection registrarMovimentoArrecadadores(StringBuilder stringBuilderTxt, Short codigoArrecadador,
+            String nomeArrecadador, String idTipoMovimento, int quantidadeRegistros, Usuario usuario, Integer idArrecadador, 
+            ArrecadadorContrato arrecadadorContrato) throws ControladorException {
 
-        Collection<ArrecadadorMovimento> arrecadadoresMovimento = new ArrayList<ArrecadadorMovimento>();
+		Collection<ArrecadadorMovimento> arrecadadoresMovimento = new ArrayList<ArrecadadorMovimento>();
 
-        boolean sucesso = true;
-        EnvioEmail envioEmailError = null;
-        
-        int aux = 1;
-        
-        try {
+		boolean sucesso = true;
+		EnvioEmail envioEmailError = null;
 
-            envioEmailError = getControladorCadastro().pesquisarEnvioEmail(
-                    EnvioEmail.REGISTRAR_MOVIMENTO_ARRECADADORES_COM_ERRO);
+		int aux = 1;
 
-            // tamanho de cada linha da string builder
-            int tamanhoLinha = 0;
-            // inicio da linha da string builder
-            Integer inicioLinha = 0;
+		try {
 
-            ArrecadadorMovimento arrecadadorMovimento = null;
+			envioEmailError = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.REGISTRAR_MOVIMENTO_ARRECADADORES_COM_ERRO);
 
-            // inicializa um RegistroHelperCodigoA
-            RegistroHelperCodigoA registroHelperCodigoA = null;
-            
-            // cria uma coleção com as linhas do txt
-            Collection linhas = new ArrayList();
-            // Coleção dos registros C para serem mandados para o acrrecadador
-            Collection colecaoCodigoRegistrosC = new ArrayList();
-            // cria uma coleção de avisos bancarios
-            Collection<AvisoBancario> avisosBancarios = new ArrayList<AvisoBancario>();
-            // cria uma coleção de pagamentos
-            Collection pagamentos = new ArrayList();
-            // cria uma coleção de pagamentos
-            Collection devolucoes = new ArrayList();
-            // cria uma coleção para os pagamentos parciais de conta
-            Collection pagamentosParciais = new ArrayList();
+			int tamanhoLinha = 0;
+			Integer inicioLinha = 0;
 
-            // recupera o numeroSequencialArquivoEnvioDebitoAutomatico da tabela ArrecadadorContrato
-            // para ser inserido no arquivo de envio caso exista a coleção de registros C
-            Integer numeroSequencialArquivoEnvioDebitoAutomatico = null;
-            // caso seja código de barras
-            Integer numeroSequecialArquivoRetornoCodigoBarras = null;
-            // caso seja debito automático
-            Integer numeroSequencialArquivoRetornoDebitoAutomatico = null;
+			ArrecadadorMovimento arrecadadorMovimento = null;
 
-            int countRegistros = 0;
+			RegistroHelperCodigoA registroHelperCodigoA = null;
 
-            // verifica se existe o registro Z no arquivo
-            boolean verificaRegistroZ = false;
+			Collection linhas = new ArrayList();
+			Collection colecaoCodigoRegistrosC = new ArrayList();
+			Collection<AvisoBancario> avisosBancarios = new ArrayList<AvisoBancario>();
+			Collection pagamentos = new ArrayList();
+			Collection devolucoes = new ArrayList();
+			Collection pagamentosParciais = new ArrayList();
 
-            // recupera o arrecadadorContrato para atualizar o numero sequencial do arquivo
-            boolean flagRetornoCodigoBarras = false;
-            boolean flagRetornoDebitoAutomatico = false;
-            boolean flagEnvioDebitoAutomatico = false;
-            boolean flagRetornoFichaCompensacao = false;
+			// recupera o numeroSequencialArquivoEnvioDebitoAutomatico da tabela
+			// ArrecadadorContrato
+			// para ser inserido no arquivo de envio caso exista a coleção de
+			// registros C
+			Integer numeroSequencialArquivoEnvioDebitoAutomatico = null;
+			Integer numeroSequecialArquivoRetornoCodigoBarras = null;
+			Integer numeroSequencialArquivoRetornoDebitoAutomatico = null;
 
-            // cria um boolean que verifica se é a primeira linha
-            boolean primeiraLinha = true;
-            
-            if (idTipoMovimento != null && (idTipoMovimento.equals("DEBITO AUTOMATICO") || idTipoMovimento.equals("CODIGO DE BARRAS"))) {
-            //[SB0001]-Validar Arquivo de Movimento de Arrecadador 
-                tamanhoLinha = 150;
-                
-                for (int i = 1; i <= quantidadeRegistros; i++) {
-                    countRegistros = countRegistros + 1;
-                    
-                    String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
-                    
-                    //incrementa a primeira linha.O +1 é para tirar o
-    
-                    // System.getProperty("line.separator")
-                    inicioLinha = inicioLinha + tamanhoLinha + 1;
-    
-                    // cria uma variavel da descrição da ocorrencia do
-                    // movimento com o valor setado para OK
-                    String descricaoOcorrenciaMovimento = "OK";
-                    // cria uma variavel do indicador de aceitação do
-                    // registro do movimento
-                    int indicadorAceitacaoRegistroMovimento = 1;
-    
-                    // recupera o codigo do registro
-                    String codigoRegistro = linha.substring(0, 1);
-    
-                    short numeroSequencialAvisoBancario = 0;
-    
-                    
-                    // verifica se é a primeira linha
-                    if (primeiraLinha) {
-                        /**
-                         * [SF0001] - Validar Arquivo de Movimento de Arrecadador
-                         * Autor: Sávio Luiz Data: 31/01/2006
-                         */
-                    	
-                    	/*
-                    	 * Colocado por Raphael Rossiter em 10/11/2008 Analista: Eduardo Borges
-                    	 * [SB0001] - Validar Arquivo de Movimento de Arrecadador
-                    	 */
-                    	arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
-                    	
+			int countRegistros = 0;
 
-                        if (arrecadadorContrato != null && !arrecadadorContrato.equals("")) {
-                        	// recupera o numeroSequecialArquivoRetornoCodigoBarras
-                            numeroSequecialArquivoRetornoCodigoBarras = arrecadadorContrato
-                            .getNumeroSequecialArquivoRetornoCodigoBarras();
+			boolean verificaRegistroZ = false;
 
-                            // recupera o numeroSequencialArquivoRetornoDebitoAutomatico
-                            numeroSequencialArquivoRetornoDebitoAutomatico = arrecadadorContrato
-                            .getNumeroSequencialArquivoRetornoDebitoAutomatico();
+			// recupera o arrecadadorContrato para atualizar o numero sequencial
+			// do arquivo
+			boolean flagRetornoCodigoBarras = false;
+			boolean flagRetornoDebitoAutomatico = false;
+			boolean flagEnvioDebitoAutomatico = false;
+			boolean flagRetornoFichaCompensacao = false;
 
-                            // recupera o numeroSequencialArquivoEnvioDebitoAutomatico
-                            numeroSequencialArquivoEnvioDebitoAutomatico = arrecadadorContrato
-                            .getNumeroSequencialArquivoEnvioDebitoAutomatico();
-                        }
-                        
-                        //[SF0001] - Validar Arquivo de Movimento de Arrecadador
-                    	registroHelperCodigoA = this.validarArquivoMovimentoArrecadador(codigoRegistro, linha, codigoArrecadador,
-                        nomeArrecadador, idTipoMovimento, arrecadadorContrato, numeroSequecialArquivoRetornoCodigoBarras, 
-                        numeroSequencialArquivoRetornoDebitoAutomatico, numeroSequencialArquivoEnvioDebitoAutomatico, idArrecadador);
-                    	
-                    	//Verifica o Tipo de Pagamento
-                        if (registroHelperCodigoA.getTipoMovimento().equals(ConstantesSistema.DEBITO_AUTOMATICO)) {
-                            numeroSequencialArquivoRetornoDebitoAutomatico += 1;
-                            flagRetornoDebitoAutomatico = true;
-                        } 
-                        else {
-                            numeroSequecialArquivoRetornoCodigoBarras += 1;
-                            flagRetornoCodigoBarras = true;
-                        }
-                    	
-                    	if (registroHelperCodigoA.getCodigoBanco() != null
-                                && registroHelperCodigoA.getDataGeracaoArquivo() != null) {
-    
-                            Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA
-                                            .getDataGeracaoArquivo());
-    
-                            Short valorMaximoNumeroSequencia = null;
-                            try {
-                                valorMaximoNumeroSequencia = repositorioArrecadacao.pesquisarValorMaximoNumeroSequencial(
-                                                dataGeracao, registroHelperCodigoA.getCodigoBanco());
-                            } catch (ErroRepositorioException e) {
-                                throw new ControladorException("erro.sistema");
-                            }
-    
-                            if (valorMaximoNumeroSequencia != null) {
-                                numeroSequencialAvisoBancario = (short) (valorMaximoNumeroSequencia.shortValue() + 1);
-                            }
-                        } else {
-                            numeroSequencialAvisoBancario = 0;
-                        }
-    
-                        // depois de ler a primeira linha atribui ela para falso
-                        primeiraLinha = false;
-    
-                    } else {
-    
-                        // verifica se o código do registro é "A", caso seja então
-                        // não existe o codigo do registro "Z" e encerra o caso de uso
-                        if (codigoRegistro.toUpperCase().equals("A")) {
-                            throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
-                        }
-                        if (registroHelperCodigoA.getTipoMovimento() != null
-                                && !registroHelperCodigoA.getTipoMovimento().equals("")) {
-                            // caso o tipo de medição seja igual a DEBITO AUTOMATICO
-                            if (registroHelperCodigoA.getTipoMovimento().equals("DEBITO AUTOMATICO")) {
-    
-                                // caso exista no arquivo codigo do registro igual de "G"
-                                if (codigoRegistro.toUpperCase().equals("G")) {
-                                    throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
-                                }
-    
-                            } else {
-                                // caso exista no arquivo codigo do registro diferente de "A" , "G" , "Z"
-                                if (!codigoRegistro.toUpperCase().equals("A") 
-                                        && !codigoRegistro.toUpperCase().equals("G")
-                                        && !codigoRegistro.toUpperCase().equals("Z")) {
-                                    throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
-                                }
-                            }
-                        } else {
-                            // caso exista no arquivo codigo do registro diferente de "A" , "G" , "Z"
-                            if (!codigoRegistro.toUpperCase().equals("A")
-                                    && !codigoRegistro.toUpperCase().equals("G")
-                                    && !codigoRegistro.toUpperCase().equals("Z")) {
-                                throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
-                            }
-    
-                        }
-    
-                        // verifica se o código do registro é diferente de "Z", caso seja então adiciona
-                        // a linha na coleção de linhas para depois serem processadas
-                        if (!codigoRegistro.toUpperCase().equals("Z")) {
-    
-                            linhas.add(linha);
-                        } else {
-                            // se entrou no else então é porque tem registro Z então seta o boolean para true
-                            verificaRegistroZ = true;
-    
-                            // caso código do registro seja "Z" então processa a coleção
-                            // de linhas e inseri o movimento de arrecadadores
-                            RegistroHelperCodigoZ registroHelperCodigoZ = (RegistroHelperCodigoZ) distribuirdadosRegistroMovimentoArrecadador(
-                                    linha, null);
-                            // caso a quantidade de registros for diferente da
-                            // quantidade de registros do txt então ecerra o caso de uso
-                            if (Integer.parseInt(registroHelperCodigoZ.
-                                    getTotalRegistrosArquivo().trim()) != countRegistros) {
-                                throw new ControladorException("atencao.total.registros.invalido");
-                            }
-                            
-                            // [SF0002] - Inserir o movimento do arrecadador 
-                            // Autor: Sávio Luiz 
-                            // Data: 31/01/2006
-                            arrecadadorMovimento = inserirMovimentoArrecadador(
-                                    registroHelperCodigoA, registroHelperCodigoZ,idTipoMovimento);
-                            arrecadadoresMovimento.add(arrecadadorMovimento);
-    
-                            Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA
-                                            .getDataGeracaoArquivo());
-    
-                            // cria uma iterator para pegar linha a linha da coleção de linhas
-                            Iterator linhaIterator = linhas.iterator();
-                            aux = 1;
-                            while (linhaIterator.hasNext()) {
+			boolean primeiraLinha = true;
 
-                                aux++;
-                                // cria uma variavel da descrição da ocorrencia do
-                                // movimento com o valor setado para OK
-                                descricaoOcorrenciaMovimento = "OK";
-                                // cria uma variavel do indicador de aceitação do registro do movimento
-                                indicadorAceitacaoRegistroMovimento = 1;
-    
-                                // cria uma variavel para validar data
-                                boolean dataInvalida = false;
-    
-                                boolean valorDebitoInvalido = false;
-    
-                                Date dataDebito = null;
-    
-                                // recupera a linha da coelção
-                                String linhaRegistro = (String) linhaIterator.next();
-    
-                                final char b = 'B';
-                                final char f = 'F';
-                                final char g = 'G';
-                                final char x = 'X';
-                                
-                                // recupera o código do registro de cada linha
-                                char codigoRegistroChar = linhaRegistro.substring(0, 1).toUpperCase().charAt(0);
-                                switch (codigoRegistroChar) {
-    
-                                case b:
-                                    
-                                	/**
-                                     * [SF0003] - Processar Registro Código B 
-                                     * Autor: Sávio Luiz 
-                                     * Data: 31/01/2006
-                                     */
-                                	
-                                	//[SF0003] - Processar Registro Código B
-                                	RegistroHelperCodigoC registroHelperCodigoC = this.processarRegistroCodigoTipoB(registroHelperCodigoA,
-                                	linhaRegistro, arrecadadorMovimento);
-                                    
-                                	if (registroHelperCodigoC != null){
-                                		colecaoCodigoRegistrosC.add(registroHelperCodigoC);
-                                	}
-                                	
-                                	break;
-    
-                                case f:
-                                	/**
-                                     * [SF0004] - Processar Registro Código F 
-                                     * Autor: Sávio Luiz 
-                                     * Data: 31/01/2006
-                                     */
-                                    RegistroHelperCodigoF registroHelperCodigoF = (RegistroHelperCodigoF) distribuirdadosRegistroMovimentoArrecadador(
-                                            linhaRegistro, null);
-                                    
-                                    Integer anoMesArrecadacao = Integer.parseInt(registroHelperCodigoF.getDataDebito().substring(0,6));
-    
-                                    boolean dataExcludentes = false;
-    
-                                    // valida a data
-                                    dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoF.getDataDebito());
-                                    if (dataInvalida) {
-                                        dataExcludentes = true;
-                                        descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
-                                    }
-                                    // caso a data seja inválida não verifica se é maior que a data atual
-                                    if (!dataExcludentes) {
-                                        // verifica se a data de bedito/pagamento é superior a atual
-                                        dataDebito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoF
-                                                        .getDataDebito());
-                                        //[FS0008]Validar data de débito/pagamento
-                                        
-                                        
-                                        if (dataDebito.after(new Date())
-                                        		&& (registroHelperCodigoF.getCodigoRetorno().equals("00") 
-                                        		|| registroHelperCodigoF.getCodigoRetorno().equals("31"))) {
-                                            descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
-                                        }
-                                    }
-                                    
-                                    // VALIDANDO O ANO E MÊS DE REFERÊNCIA DA CONTA
-                                    boolean anoMesReferencia = false;
-                                    
-                                    if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
-                                    	
-                                    	anoMesReferencia = Util
-                                        .validarAnoMesSemBarra(registroHelperCodigoF.getAnoMesReferenciaConta());
-                                    }
-                                    
-                                    if (anoMesReferencia) {
-                                        descricaoOcorrenciaMovimento = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
-                                    }
-                                    
-                                    // valida o valor de debito recebido
-                                    valorDebitoInvalido = Util
-                                            .validarValorNaoNumerico(registroHelperCodigoF.getValorDebito());
-                                    if (valorDebitoInvalido) {
-                                        descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
-                                    }
-                                    
-                                    // verifica se existe a matricula do imóvel na base
-                                    Integer idImovelNaBase = null;
-                                    
-                                    boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
-                                    
-                                    if(codigoDebitoAutomaticoInvalido){
-                                    	descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
-                                    }
-                                    
-                                    Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
-                                    
-                                    FiltroImovel filtroImovel = new FiltroImovel();
-                             		
-                             		filtroImovel.adicionarParametro(
-                             				new ParametroSimples(FiltroImovel.CODIGO_DEBITO_AUTOMATICO,codigoDebitoAutomatico));
-                             		
-                             		Collection colecaoImoveis = 
-                             			this.getControladorUtil()
-                             				.pesquisar(filtroImovel, Imovel.class.getName());
-                             		
-                             		if(colecaoImoveis!=null && !colecaoImoveis.isEmpty()){
-                             			Imovel imovel = (Imovel) colecaoImoveis.iterator().next();                           
-                                 		idImovelNaBase = imovel.getId();
-                             		}else{
-                             			
-                             			FiltroImovel filtroImovelAntigo = new FiltroImovel();
-                                  		
-                             			filtroImovelAntigo.adicionarParametro(
-                                  				new ParametroSimples(FiltroImovel.ID,codigoDebitoAutomatico));
-                                  		
-                                  		Collection colecaoImoveisAntigo = 
-                                  			this.getControladorUtil()
-                                  				.pesquisar(filtroImovelAntigo, Imovel.class.getName());
-                             			
-                                  		if(colecaoImoveisAntigo!=null && !colecaoImoveisAntigo.isEmpty()){
-                                  			Imovel imovel = (Imovel) colecaoImoveisAntigo.iterator().next();                           
-                                     		idImovelNaBase = imovel.getId();
-                                  		
-                                  		}else{
-                             			
-                                  			descricaoOcorrenciaMovimento = "DÉBITO AUTOMÁTICO NÃO CADASTRADO";
-                             			
-                                  		}
-                             		}                                                        		                                
-    
-                                    // caso a descricao de movimento seja igual a OK
-                                    if (descricaoOcorrenciaMovimento.equals("OK")) {
-    
-                                        // verifica a conta
-                                        DebitoAutomaticoMovimento debitoAutomaticoMovimento = null;
-    
-                                        Integer idConta = null;
-                                        
-                                        if (idImovelNaBase != null) {
-                                            
-                                        	try {
-                                        		Imovel imovel = new Imovel();
-                                                imovel.setId(idImovelNaBase);
-                                                
-                                                // OBTENDO A CONTA ATRAVÉS DO ANO E MES DE REFERÊNCIA E A IDENTIFICAÇÃO DO IMÓVEL
-                                                if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
-                                                	
-                                                	idConta = repositorioFaturamento.pesquisarExistenciaContaComSituacaoAtual(
-                                                     imovel,new Integer(registroHelperCodigoF.getAnoMesReferenciaConta()));
-                                                }
-                                                
-                                                //OBTENDO A CONTA ATRAVÉS DA IDENTIFICAÇÃO QUE ESTA VINDO NO ARQUIVO
-                                                else if (! registroHelperCodigoF.getReservadoFuturo().equals("")){
-                                                	
-                                                	Long identificacao = Long.valueOf(registroHelperCodigoF.getReservadoFuturo());
-                                                	Conta contaPorIdentificacao = this.pesquisarExistenciaContaPorNumeroFatura(identificacao.toString());
-                                                	
-                                                	if (contaPorIdentificacao != null){
-                                                		
-                                                		idConta = contaPorIdentificacao.getId();
-                                                    	registroHelperCodigoF.setAnoMesReferenciaConta(
-                                                    	String.valueOf(contaPorIdentificacao.getReferencia()));
-                                                	}
-                                                	
-                                                }
-                                                
-                                                if (idConta != null) {
-                                                    
-                                                	debitoAutomaticoMovimento = repositorioFaturamento
-                                                    .obterDebitoAutomaticoMovimento(idImovelNaBase,
-                                                    new Integer(registroHelperCodigoF.getAnoMesReferenciaConta()));
-                                                	
-                                                } 
-                                                else {
-                                                    descricaoOcorrenciaMovimento = "CONTA INEXISTENTE";
-                                                }
-                                                
-                                            } catch (ErroRepositorioException e) {
-                                                throw new ControladorException("erro.sistema", e);
-                                            }
-                                        }
-    
-                                        // se debitoAutomaticaMovimento for nula seta o valor para o
-                                        // campo descrição movimento caso contrario atualiza o
-                                        // debitoAutomaticaMovimento
-                                        if (debitoAutomaticoMovimento != null) {
-    
-                                            DebitoAutomaticoRetornoCodigo debitoAutomaticoRetornoCodigo = new DebitoAutomaticoRetornoCodigo();
-                                            debitoAutomaticoRetornoCodigo.setId(new Integer(registroHelperCodigoF.getCodigoRetorno()));
-                                            debitoAutomaticoMovimento.setDebitoAutomaticoRetornoCodigo(debitoAutomaticoRetornoCodigo);
-                                            debitoAutomaticoMovimento.setRetornoBanco(new Date());
-                                            debitoAutomaticoMovimento.setNumeroSequenciaArquivoRecebido(new Integer(
-                                                            registroHelperCodigoA.getNumeroSequencialArquivo()));
-                                            debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
-                                            try {
-                                                repositorioUtil.atualizar(debitoAutomaticoMovimento);
-                                            } catch (ErroRepositorioException e) {
-                                                throw new ControladorException("erro.sistema", e);
-                                            }
-                                            
-                                            if (idImovelNaBase != null) {
-                                            	if (registroHelperCodigoF.getCodigoRetorno().equals("30")) {
-                                            		this.getControladorCobranca().removerDebitoAutomatico(idImovelNaBase.toString(), 
-                                            				registroHelperCodigoA.getCodigoBanco(), registroHelperCodigoF.getAgenciaDebito(),
-                                            				registroHelperCodigoF.getIdClienteBanco(), new Date());
-                                            	}
-                                            }
-                                        }
-    
-                                        
-                                        if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
-                                        	/**
-                                        	 *
-                                        	 * As contas em débito automático que retornavam com o código 31
-                                        	 * não tinham o seu pagamento efetuado
-                                        	 * 
-                                        	 * @author Wellington Rocha
-                                        	 * @date 25/01/2012*/
-                                        	Integer codigoDeRetorno = new Integer (registroHelperCodigoF.getCodigoRetorno());
-                                            if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO) ||
-                                            		codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
-        
-                                                // inseri o item movimento arrecadador
-                                                Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(
-                                                    linhaRegistro,arrecadadorMovimento.getId(),descricaoOcorrenciaMovimento,
-                                                    indicadorAceitacaoRegistroMovimento, idImovelNaBase);
-        
-                                                // inicializa o id da localidade
-                                                Integer idLocalidade = null;
-        
-                                                /*
-                                                 * Alterado por Raphael Rossiter em 09/01/2008 - Analistas: Eduardo e Aryed
-                                                 * OBJ: Gerar os pagamentos associados com a localidade da conta e NÃO com
-                                                 * a localidade do imóvel.
-                                                 */
-                                                if (idConta != null) {
-                                                	
-                                                	try {
-                                                        idLocalidade = repositorioLocalidade
-                                                        .pesquisarIdLocalidadePorConta(idConta);
-        
-                                                    } catch (ErroRepositorioException e) {
-                                                        throw new ControladorException("erro.sistema", e);
-                                                    }
-                                                }
-                                                else{
-                                                	
-                                                	try {
-                                                        idLocalidade = repositorioLocalidade
-                                                        .pesquisarIdLocalidade(idImovelNaBase);
-        
-                                                    } catch (ErroRepositorioException e) {
-                                                        throw new ControladorException("erro.sistema", e);
-                                                    }
-                                                }
-                                                
-                                                // cria o objeto pagamento para setar os dados
-                                                Pagamento pagamento = new Pagamento();
-                                                pagamento.setAnoMesReferenciaPagamento(Integer
-                                                        .parseInt(registroHelperCodigoF.getAnoMesReferenciaConta()));
-                                                Integer anoMesDebito = Util.recuperaAnoMesDaData(dataDebito);
-                                                // caso o ano mes da data de dedito seja maior que o ano mes de
-                                                // arrecadação da tabela sistema parametro então
-                                                // seta o ano mes da data de debito
-                                                if (anoMesDebito > getSistemaParametro().getAnoMesArrecadacao()) {
-                                                    pagamento.setAnoMesReferenciaArrecadacao(anoMesDebito);
-                                                } else {
-                                                    // caso contrario seta o o ano mes
-                                                    // arrecadação da tabela sistema parametro
-                                                    pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
-                                                                    .getAnoMesArrecadacao());
-                                                }
-                                                // formata o valor debitado
-                                                BigDecimal valorDebitado = Util.
-                                                formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF
-                                                                .getValorDebito());
-                                                pagamento.setValorPagamento(valorDebitado);
-                                                pagamento.setDataPagamento(dataDebito);
-                                                pagamento.setPagamentoSituacaoAtual(null);
-                                                pagamento.setPagamentoSituacaoAnterior(null);
-                                                pagamento.setDebitoTipo(null);
-                                                // verifica se o id da conta é diferente de nulo
-                                                if (idConta != null) {
-                                                    ContaGeral conta = new ContaGeral();
-                                                    conta.setId(idConta);
-                                                    pagamento.setContaGeral(conta);
-                                                } else {
-                                                    pagamento.setContaGeral(null);
-                                                }
-                                                pagamento.setGuiaPagamento(null);
-        
-                                                // verifica se o id da Localidade é diferente de nulo
-                                                if (idLocalidade != null) {
-                                                    Localidade localidade = new Localidade();
-                                                    localidade.setId(idLocalidade);
-                                                    pagamento.setLocalidade(localidade);
-                                                } else {
-                                                    pagamento.setLocalidade(null);
-                                                }
-                                                DocumentoTipo documentoTipo = new DocumentoTipo();
-                                                documentoTipo.setId(DocumentoTipo.CONTA);
-                                                pagamento.setDocumentoTipo(documentoTipo);
-        
-                                                // seta o id do aviso bancario
-        
-                                                // seta o imovel
-                                                if (idImovelNaBase != null) {
-                                                    Imovel imovel = new Imovel();
-                                                    imovel.setId(idImovelNaBase);
-                                                    pagamento.setImovel(imovel);
-                                                } else {
-                                                    pagamento.setImovel(null);
-                                                }
-        
-                                                ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-                                                arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
-        
-                                                pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-        
-                                                ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-                                                arrecadacaoForma.setId(ArrecadacaoForma.DEBITO_AUTOMATICO);
-                                                pagamento.setArrecadacaoForma(arrecadacaoForma);
-                                                pagamento.setCliente(null);
-                                                pagamento.setUltimaAlteracao(new Date());
-        
-                                    			/*
-                                    			 * Alteracao referente ao relatorio de Float - Francisco 04/11/08
-                                    			 */
-                                    			pagamento.setFatura(null);
-                                    			pagamento.setCobrancaDocumento(null);
-                                    			
-                                    			DocumentoTipo documentoTipoAgregador = new DocumentoTipo();
-                                    			documentoTipoAgregador.setId(DocumentoTipo.CONTA);
-                                    			pagamento.setDocumentoTipoAgregador(documentoTipoAgregador);
-                                    			
-                                    			pagamento.setDataProcessamento(new Date());
-                                    			
-                                                Integer codigoBanco = new Integer(registroHelperCodigoA.getCodigoBanco());
-        
-                                                // pesquisa a quantidade de dias de float
-                                                Short numeroDiasFloat = null;
-                                                Integer idFormaArrecadacao = ArrecadacaoForma.DEBITO_AUTOMATICO;
-                                                try {
-                                                    numeroDiasFloat = repositorioArrecadacao
-                                                            .pesquisarNumeroDiasFloat(codigoBanco,idFormaArrecadacao);
-                                                } catch (ErroRepositorioException e) {
-                                                    throw new ControladorException("erro.sistema", e);
-                                                }
-        
-                                                Date dataPrevistaCredito = null;
-                                                if (numeroDiasFloat != null) {
-        
-                                                    dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(
-                                                                    dataDebito, numeroDiasFloat);
-                                                } else {
-                                                    dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(dataDebito, 0);
-                                                }
-        
-                                                // 2.5.3.Parte que determina os valores calculado 
-                                                // e informado do pagamento e da devolução
-                                                BigDecimal valorCalcPagamento = valorDebitado;
-                                                BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
-                                                BigDecimal valorInfPagamento = valorDebitado;
-                                                BigDecimal valorInfDevolucao = new BigDecimal("0.00");
-        
-                                                // pesquisa o aviso bancario passando o
-                                                // código do banco a data de geração
-                                                // do arquivo e a data prevista calculada
-                                                AvisoBancario avisoBancario = null;
-                                                try {
-                                                    avisoBancario = repositorioArrecadacao.pesquisarAvisoBancario(
-                                                                    codigoBanco,dataGeracao,dataPrevistaCredito,arrecadadorMovimento.getId(),
-                                                                    idFormaArrecadacao);
-        
-                                                } catch (ErroRepositorioException e) {
-                                                    throw new ControladorException("erro.sistema", e);
-                                                }
-        
-                                                // verifica seo aviso bancario é diferente de nulo
-    											// Alterado por Sávio Luiz
-    											// Data:04/01/2007
-                                                if (avisoBancario != null) {
-                                                    // avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
-                                                    // avisoBancario.adicionarUsuario(usuario, usuarioAcao);
-        
-                                                    if (avisoBancario.getValorArrecadacaoCalculado() != null
-                                                            && !avisoBancario.getValorArrecadacaoCalculado().equals("")) {
-                                                        BigDecimal novoValorArrecadacaoCalculado = avisoBancario
-                                                                .getValorArrecadacaoCalculado().add(valorCalcPagamento);
-                                                        avisoBancario
-                                                                .setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
-                                                    } else {
-                                                        avisoBancario.setValorArrecadacaoCalculado(valorCalcPagamento);
-                                                    }
-        
-                                                    if (avisoBancario.getValorDevolucaoCalculado() != null
-                                                            && !avisoBancario.getValorDevolucaoCalculado().equals("")) {
-                                                        BigDecimal novoValorDevolucaoCalculado = avisoBancario
-                                                                .getValorDevolucaoCalculado().add(valorCalcDevolucao);
-                                                        avisoBancario.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                                                    } else {
-                                                        avisoBancario.setValorDevolucaoCalculado(valorCalcDevolucao);
-                                                    }
-        
-                                                    if (avisoBancario.getValorArrecadacaoInformado() != null
-                                                            && !avisoBancario.getValorArrecadacaoInformado().equals("")) {
-                                                        BigDecimal novoValorArrecadacaoInformado = avisoBancario
-                                                                .getValorArrecadacaoInformado().add(valorInfPagamento);
-                                                        avisoBancario
-                                                                .setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                                                    } else {
-                                                        avisoBancario.setValorArrecadacaoInformado(valorInfPagamento);
-                                                    }
-                                                    
-                                                    if (avisoBancario.getValorRealizado() != null
-                                                            && !avisoBancario.getValorRealizado().equals("")) {
-                                                        BigDecimal novoValorArrecadacaoInformado = avisoBancario
-                                                                .getValorRealizado().add(valorInfPagamento);
-                                                        avisoBancario.setValorRealizado(novoValorArrecadacaoInformado);
-                                                    } else {
-                                                        avisoBancario.setValorRealizado(valorInfPagamento);
-                                                    }
-        
-                                                    if (avisoBancario.getValorDevolucaoInformado() != null
-                                                            && !avisoBancario.getValorDevolucaoInformado().equals("")) {
-                                                        BigDecimal novoValorDevolucaoInformado = avisoBancario
-                                                                .getValorDevolucaoInformado().add(valorInfDevolucao);
-                                                        avisoBancario.setValorDevolucaoInformado(novoValorDevolucaoInformado);
-                                                    } else {
-                                                        avisoBancario.setValorDevolucaoInformado(valorInfDevolucao);
-                                                    }
-        
-                                                    avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
-                                                    avisoBancario.setUltimaAlteracao(new Date());
-                                                    // atualiza o aviso bancário
-                                                    try {
-                                                        repositorioUtil.atualizar(avisoBancario);
-                                                    } catch (ErroRepositorioException e) {
-                                                        throw new ControladorException("erro.sistema", e);
-                                                    }
-        
-                                                    pagamento.setAvisoBancario(avisoBancario);
-        
-                                                } else {
-                                                    // seta o aviso bancario para null
-                                                    pagamento.setAvisoBancario(null);
-                                                    // seta o valor da data prevista para quando for inserir o
-                                                    // pagamento saber de que aviso bancário o pagamento está relacionádo.
-                                                    pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-        
-                                                    Iterator avisosBancarioIterator = avisosBancarios.iterator();
-                                                    // cria um boolean para saber se existe algum aviso bancario da
-                                                    // coleção com a mesma data prevista da data
-                                                    // prevista calculada anteriormente
-                                                    boolean achou = false;
-                                                    while (avisosBancarioIterator.hasNext()) {
-                                                        AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator
-                                                                .next();
-                                                        boolean comparaDataIguais = Util
-                                                        .datasIguais(
-                                                                avisoBancarioDaColecao
-                                                                        .getDataPrevista(),
-                                                                dataPrevistaCredito);
-                                                		                                          
-    		                                            boolean formasArrecadacaoIguais = avisoBancarioDaColecao
-    		                                            	.getArrecadacaoForma().getId().intValue() ==
-    		                                            		idFormaArrecadacao.intValue();
-    		                                            
-    		                                            boolean anoMesReferenciaArrecadacaoIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesArrecadacao;
-    	                                            
-    		                                            if (comparaDataIguais && formasArrecadacaoIguais && anoMesReferenciaArrecadacaoIguais) {
-        
-                                                            if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
-                                                                    && !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
-                                                                BigDecimal novoValorArrecadacaoCalculado = 
-                                                                    avisoBancarioDaColecao.getValorArrecadacaoCalculado()
-                                                                        .add(valorCalcPagamento);
-                                                                avisoBancarioDaColecao.setValorArrecadacaoCalculado(
-                                                                        novoValorArrecadacaoCalculado);
-                                                            } else {
-                                                                avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
-                                                            }
-                                                            
-                                                            if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
-                                                                    && !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
-                                                                BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao
-                                                                        .getValorDevolucaoCalculado().add(valorCalcDevolucao);
-                                                                avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                                                            } else {
-                                                                avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
-                                                            }
-        
-                                                            if (avisoBancarioDaColecao
-                                                                    .getValorArrecadacaoInformado() != null
-                                                                    && !avisoBancarioDaColecao
-                                                                            .getValorArrecadacaoInformado()
-                                                                            .equals("")) {
-                                                                BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao
-                                                                        .getValorArrecadacaoInformado()
-                                                                        .add(
-                                                                                valorInfPagamento);
-                                                                avisoBancarioDaColecao
-                                                                        .setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                                                            } else {
-                                                                avisoBancarioDaColecao
-                                                                        .setValorArrecadacaoInformado(valorInfPagamento);
-                                                            }
-        
-                                                            if (avisoBancarioDaColecao
-                                                                    .getValorRealizado() != null
-                                                                    && !avisoBancarioDaColecao
-                                                                            .getValorRealizado()
-                                                                            .equals("")) {
-                                                                BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao
-                                                                        .getValorRealizado()
-                                                                        .add(
-                                                                                valorInfPagamento);
-                                                                avisoBancarioDaColecao
-                                                                        .setValorRealizado(novoValorArrecadacaoInformado);
-                                                            } else {
-                                                                avisoBancarioDaColecao
-                                                                        .setValorRealizado(valorInfPagamento);
-                                                            }
-        
-                                                            if (avisoBancarioDaColecao
-                                                                    .getValorDevolucaoInformado() != null
-                                                                    && !avisoBancarioDaColecao
-                                                                            .getValorDevolucaoInformado()
-                                                                            .equals("")) {
-                                                                BigDecimal novoValorDevolucaoInformado = avisoBancarioDaColecao
-                                                                        .getValorDevolucaoInformado()
-                                                                        .add(
-                                                                                valorInfDevolucao);
-                                                                avisoBancarioDaColecao
-                                                                        .setValorDevolucaoInformado(novoValorDevolucaoInformado);
-                                                            } else {
-                                                                avisoBancarioDaColecao
-                                                                        .setValorDevolucaoInformado(valorInfDevolucao);
-                                                            }
-                                                            
-                                                            avisoBancario = avisoBancarioDaColecao;
-                                                            
-                                                            achou = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!achou) {
-        
-                                                        // chama o método para cria
-                                                        // o objeto
-                                                        // do aviso bancário
-                                                        avisoBancario = gerarOcorrenciaAvisoBancario(
-                                                                arrecadadorMovimento
-                                                                        .getId(),
-                                                                registroHelperCodigoA,
-                                                                dataPrevistaCredito,
-                                                                registroHelperCodigoZ
-                                                                        .getValorTotalRegistrosArquivo(),
-                                                                registroHelperCodigoA
-                                                                        .getCodigoBanco(),
-                                                                valorCalcPagamento,
-                                                                valorInfPagamento,
-                                                                valorCalcDevolucao,
-                                                                valorInfDevolucao,
-                                                                numeroSequencialAvisoBancario,
-                                                                idFormaArrecadacao,
-                                                               	indicadorAceitacaoRegistroMovimento,
-                                                               	arrecadadorContrato.getCodigoConvenio(), anoMesArrecadacao);
-        
-                                                        numeroSequencialAvisoBancario += 1;
-        
-                                                        avisoBancario
-                                                                .setValorRealizado(valorInfPagamento);
-        
-                                                        // adiciona o aviso bancário
-                                                        // na
-                                                        // coleção de avisos
-                                                        // bancários
-                                                        avisosBancarios
-                                                                .add(avisoBancario);
-                                                    }
-                                                }
-        
-                                                // adiciona o pagamento na coleção
-                                                // de
-                                                // pagamentos
-                                                pagamentos.add(pagamento);
-                                                
-                                                pagamento.setAvisoBancario(avisoBancario);
-        
-                                            } 
-                                            else {
-        
-                                            	/*
-                                            	 * Seta o indicador de aceitação do registro
-                                            	 * do movimento para 2(NÃO).
-                                            	 */
-                                                indicadorAceitacaoRegistroMovimento = 2;
-        
-                                                // Atualiza o aviso bancário
-                                                try {
-                                                    descricaoOcorrenciaMovimento = repositorioArrecadacao
-                                                    .pesquisarDescricaoDebitoAutomatico(new Integer(
-                                                    registroHelperCodigoF.getCodigoRetorno()));
-                                                    
-                                                } 
-                                                catch (ErroRepositorioException e) {
-                                                	throw new ControladorException("erro.sistema", e);
-                                                }
-        
-                                                // inseri o item movimento arrecadador
-                                                inserirItemMovimentoArrecadador(linhaRegistro,
-                                                arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
-                                                indicadorAceitacaoRegistroMovimento, null);
-                                            }
-                                        }
-                                        else{
-                                        	
-                                        	/*
-                                        	 * Seta o indicador de aceitação do registro
-                                        	 * do movimento para 2(NÃO).
-                                        	 */
-                                        	indicadorAceitacaoRegistroMovimento = 2;
-        
-                                            // Inseri o item movimento arrecadador
-                                            this.inserirItemMovimentoArrecadador(linhaRegistro,
-                                            arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
-                                            indicadorAceitacaoRegistroMovimento, null);
-                                        }
-                                    } 
-                                    else {
-                                        
-                                    	/*
-                                    	 * Seta o indicador de aceitação do registro
-                                    	 * do movimento para 2(NÃO).
-                                    	 */
-                                    	indicadorAceitacaoRegistroMovimento = 2;
-    
-                                        // Inseri o item movimento arrecadador
-                                        this.inserirItemMovimentoArrecadador(linhaRegistro,
-                                        arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
-                                        indicadorAceitacaoRegistroMovimento, null);
-                                    }
-                                    
-                                    break;
-    
-                                case g:
-                                    /**
-                                     * [SF0005] - Processar Registro Código G Autor:
-                                     * Sávio Luiz Data: 31/01/2006
-                                     */
-    
-                                	if (aux % 500 == 0){                                		
-                                		System.out.println("MovArrec.TipoG.leituraArquivo=" + aux);	
-                                	}
-                                	
-                                    RegistroHelperCodigoG registroHelperCodigoG = (RegistroHelperCodigoG) distribuirdadosRegistroMovimentoArrecadador(
-                                            linhaRegistro, null);
-                                    Integer anoMesReferenciaArrecadacao =  Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6));
-    
-                                    dataExcludentes = false;
-    
-                                    // valida a data
-                                    dataInvalida = Util
-                                            .validarAnoMesDiaSemBarra(registroHelperCodigoG
-                                                    .getDataPagamento());
-                                    if (dataInvalida) {
-                                        dataExcludentes = true;
-                                        descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
-                                    }
-                                    // caso a data seja inválida não verifica se
-                                    // é maior
-                                    // que a data
-                                    // atual
-                                    if (!dataExcludentes) {
-                                        // verifica se a data de
-                                        // bedito/pagamento é
-                                        // superior
-                                        // a atual
-                                        dataDebito = Util
-                                                .converteStringInvertidaSemBarraParaDate(registroHelperCodigoG
-                                                        .getDataPagamento());
-                                        if (dataDebito.after(new Date())) {
-                                            descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
-                                        }
-                                    }
-                                    // validar data de credito
-                                    if(!registroHelperCodigoG
-                                            .getDataPrevistaCredito().equals("")){
-                                    	
-                                    	dataInvalida = Util
-                                            .validarAnoMesDiaSemBarra(registroHelperCodigoG
-                                                    .getDataPrevistaCredito());
-                                    	
-                                    	if (dataInvalida) {
-                                    	
-                                    		descricaoOcorrenciaMovimento = "DATA DE CRÉDITO INVÁLIDA";
-                                        
-                                    	}
-                                    }
-    
-                                    // valida o valor recebido
-                                    valorDebitoInvalido = Util
-                                            .validarValorNaoNumerico(registroHelperCodigoG
-                                                    .getValorRecebido());
-                                    if (valorDebitoInvalido) {
-                                        descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
-                                    }
-    
-                                    // caso a descricao de movimento seja igual
-                                    // a OK
-                                    if (descricaoOcorrenciaMovimento.equals("OK")) {
-    
-                                        String codigoBarras = registroHelperCodigoG
-                                                .getCodigoBarras();
-    
-                                        Integer idFormaArrecadacao = null;
-    
-                                        try {
-                                        	idFormaArrecadacao = repositorioArrecadacao
-                                                    .pesquisarIdArrecadacaoForma(registroHelperCodigoG
-                                                            .getCodigoFormaArrecadacao());
-                                        } catch (ErroRepositorioException e) {
-                                            throw new ControladorException(
-                                                    "erro.sistema", e);
-                                        }
-    
-                                        if (idFormaArrecadacao == null) {
-                                        	idFormaArrecadacao = ArrecadacaoForma.GUICHE_CAIXA;
-                                        }
-    
-                                        // chama o caso de uso [UC0259] -
-                                        // Processar
-                                        // Pagamento com Código de Barras
-                                        PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosCodigoBarras(
-                                                codigoBarras, dataDebito,
-                                                idFormaArrecadacao, getSistemaParametro(), usuario);
-    
-                                        // seta a descricao da occerencia do
-                                        // caso de uso
-                                        // [UC0259] - Processar Pagamento com
-                                        // Código de
-                                        // Barras
-                                        descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras
-                                                .getDescricaoOcorrencia();
-    
-                                        // seta o indicador daaceitação do caso
-                                        // de uso
-                                        // [UC0259] - Processar Pagamento com
-                                        // Código de
-                                        // Barras
-                                        indicadorAceitacaoRegistroMovimento = Integer
-                                        .parseInt(pagamentoHelperCodigoBarras
-                                                .getIndicadorAceitacaoRegistro());
-                                        
-                                        // caso o indicador de aceitação for
-                                        // igual a
-                                        // 1(SIM)
-                                        Short numeroDiasFloat = null;
-                                        Integer codigoBanco = new Integer(
-                                                registroHelperCodigoA
-                                                        .getCodigoBanco());
-                                        
-                                        Date dataPrevistaCredito = null;
-                                        
-                                        // verifica se a data prevista é
-                                        // zero, se
-                                        // for calcula a data prevista
-                                        if (registroHelperCodigoG
-                                                .getDataPrevistaCredito().equals("")) {
-    
-                                            try {
-                                                numeroDiasFloat = repositorioArrecadacao
-                                                        .pesquisarNumeroDiasFloat(
-                                                                codigoBanco,
-                                                                idFormaArrecadacao);
-                                                
-                                                dataPrevistaCredito = Util
-                                                .adicionarNumeroDiasDeUmaData(
-                                                        dataDebito, numeroDiasFloat);
-                                                
-                                                
-                                            } catch (ErroRepositorioException e) {
-                                                throw new ControladorException(
-                                                        "erro.sistema", e);
-                                            }
-                                            	
-                                        } else {
-                                        	dataPrevistaCredito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoG
-                                                    .getDataPrevistaCredito());
-                                        }
-    
-                                        // verifica se a data de
-                                        // dedito/pagamento é superior
-                                        // a atual
-                                        
-    
-                                        // pesquisa o aviso bancario
-                                        // passando o
-                                        // código do banco a data de geração
-                                        // do
-                                        // arquivo
-                                        // e a data prevista calculada
-                                        AvisoBancario avisoBancario = null;
-                                        try {
-                                            avisoBancario = repositorioArrecadacao
-                                                    .pesquisarAvisoBancario(
-                                                            codigoBanco,
-                                                            dataGeracao,
-                                                            dataPrevistaCredito,arrecadadorMovimento.getId(),
-                                                            idFormaArrecadacao);
-                                        } catch (ErroRepositorioException e) {
-                                            throw new ControladorException(
-                                                    "erro.sistema", e);
-                                        }
-                                        // recupera o valor debitado
-                                        // formatado
-                                        // como
-                                        // bigDecimal
-                                        BigDecimal valorDebito = Util
-                                                .formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
-                                                        .getRegistroHelperCodigoBarras()
-                                                        .getValorPagamento());
-    
-                                        // 3.4.4.Parte que determina os
-                                        // valores
-                                        // calculado e informado do
-                                        // pagamento e da
-                                        // devolução
-                                        BigDecimal valorCalcPagamento = new BigDecimal(
-                                                "0.00");
-                                        BigDecimal valorCalcDevolucao = new BigDecimal(
-                                                "0.00");
-                                        BigDecimal valorInfPagamento = valorDebito;
-                                        BigDecimal valorInfDevolucao = new BigDecimal(
-                                                "0.00");
-                                        
-                                        if (indicadorAceitacaoRegistroMovimento == 1) {
-    
-                                            Integer idImovelPagamento = null;
-                                            if (pagamentoHelperCodigoBarras
-                                                    .getColecaoPagamentos() != null
-                                                    && !pagamentoHelperCodigoBarras
-                                                            .getColecaoPagamentos()
-                                                            .isEmpty()) {
-                                                Pagamento pagamento = (Pagamento) Util
-                                                        .retonarObjetoDeColecao(pagamentoHelperCodigoBarras
-                                                                .getColecaoPagamentos());
-                                                if (pagamento.getImovel() != null) {
-                                                	
-                                                	
-                                                    idImovelPagamento = pagamento
-                                                            .getImovel().getId();
-                                                }
-                                            }
-    
-                                            // inseri o item movimento
-                                            // arrecadador
-                                            Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(
-                                                    linhaRegistro,
-                                                    arrecadadorMovimento.getId(),
-                                                    descricaoOcorrenciaMovimento,
-                                                    indicadorAceitacaoRegistroMovimento,
-                                                    idImovelPagamento);
-                                            ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-                                            arrecadadorMovimentoItem
-                                                    .setId(idArrecadadorMovimentoItem);
-    
-                                            /*
-                                             * Verifica seo aviso bancario é diferente de nulo
-                                             */
-                                            if (avisoBancario != null) {
-    
-                                                /*
-                                                 * PAGAMENTO
-                                                 * 
-                                                 * Recupera a coleção de pagamentos do caso de uso
-                                                 * [UC0259] - Processar Pagamento com Código de Barras
-                                                 * para setar o aviso bancário no objeto pagamento
-                                                 */
-                                            	Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras
-                                                .getColecaoPagamentos();
-                                                
-                                                
-                                                Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras
-                                                .iterator();
-    
-                                                while (pagamentosCodigoBarraIterator.hasNext()) {
-                                                    
-                                                	Pagamento pagamento = (Pagamento) 
-                                                	pagamentosCodigoBarraIterator.next();
-    
-                                                    // Adiciona o valor do pagamento
-                                                    valorCalcPagamento = valorCalcPagamento.add(pagamento
-                                                    .getValorPagamento());
-    
-                                                    pagamento.setAvisoBancario(avisoBancario);
-    
-                                                    pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-    
-                                                    // PAGAMENTOS QUE SERÃO INSERIDOS
-                                                    pagamentos.add(pagamento);
-    
-                                                }
-    
-                                                
-                                                /*
-                                                 * DEVOLUÇÃO
-                                                 * 
-                                                 * Alterado por Raphael Rossiter em 31/10/2007
-                                                 * Analista: Aryed Lins
-                                                 * 
-                                                 * Recupera uma coleção de devoluções do caso de uso
-                                                 * [UC0259] - Processar Pagamento com Código de Barras
-                                                 */
-                                                Collection<Devolucao> colecaoDevolucaoCodigoBarras = 
-                                                pagamentoHelperCodigoBarras.getColecaoDevolucao();
-    
-                                                if (colecaoDevolucaoCodigoBarras != null && 
-                                                	!colecaoDevolucaoCodigoBarras.isEmpty()) {
-    
-                                                    for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
-    
-                                                        // Adiciona o valor da devolução
-                                                        valorCalcDevolucao = valorCalcDevolucao
-                                                        .add(devolucao.getValorDevolucao());
-    
-                                                        devolucao.setAvisoBancario(avisoBancario);
-    
-                                                        devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-    
-                                                        // DEVOLUÇÕES QUE SERÃO INSERIDAS
-                                                        devolucoes.add(devolucao);
-                                                    }
-                                                }
-                                            } 
-                                            else {
-                                                
-                                            	/*
-                                                 * PAGAMENTO
-                                                 * 
-                                                 * Recupera a coleção de pagamentos do caso de uso
-                                                 * [UC0259] - Processar Pagamento com Código de Barras
-                                                 * para setar o aviso bancário no objeto pagamento
-                                                 */
-                                                Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras
-                                                .getColecaoPagamentos();
-                                                
-                                                Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras
-                                                .iterator();
-    
-                                                while (pagamentosCodigoBarraIterator.hasNext()) {
-                                                    
-                                                	Pagamento pagamento = (Pagamento) 
-                                                	pagamentosCodigoBarraIterator.next();
-    
-                                                	 // Adiciona o valor do pagamento
-                                                    valorCalcPagamento = valorCalcPagamento
-                                                    .add(pagamento.getValorPagamento());
-                                                    
-                                                	// Seta o aviso bancario para NULL
-                                                    pagamento.setAvisoBancario(null);
-                                                    
-                                                    pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+			if (idTipoMovimento != null && (idTipoMovimento.equals("DEBITO AUTOMATICO") || idTipoMovimento.equals("CODIGO DE BARRAS"))) {
+				// [SB0001]-Validar Arquivo de Movimento de Arrecadador
+				tamanhoLinha = 150;
 
-                                                    /*
-                                                     * Seta o valor da data prevista para quando for inserir o
-                                                     * pagamento saber de que aviso bancário o pagamento está
-                                                     * relacionado.
-                                                     */
-                                                    pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-    
-                                                    //PAGAMENTOS QUE SERÃO INSERIDOS
-                                                    pagamentos.add(pagamento);
-    
-                                                }
-    
-                                                
-                                                /*
-                                                 * DEVOLUÇÃO
-                                                 * 
-                                                 * Alterado por Raphael Rossiter em 31/10/2007
-                                                 * Analista: Aryed Lins
-                                                 * 
-                                                 * Recupera uma coleção de devoluções do caso de uso
-                                                 * [UC0259] - Processar Pagamento com Código de Barras
-                                                 */
-                                                Collection<Devolucao> colecaoDevolucaoCodigoBarras = 
-                                                pagamentoHelperCodigoBarras.getColecaoDevolucao();
-    
-                                                if (colecaoDevolucaoCodigoBarras != null && 
-                                                	!colecaoDevolucaoCodigoBarras.isEmpty()) {
-    
-                                                    for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
-    
-                                                        // Adiciona o valor da devolução
-                                                        valorCalcDevolucao = valorCalcDevolucao
-                                                        .add(devolucao.getValorDevolucao());
-    
-                                                        devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-                                                        
-                                                        /*
-                                                         * Seta o valor da data prevista para quando for inserir o
-                                                         * pagamento saber de que aviso bancário o pagamento está
-                                                         * relacionado.
-                                                         */
-                                                        devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-    
-                                                        //DEVOLUÇÕES QUE SERÃO INSERIDAS
-                                                        devolucoes.add(devolucao);
-                                                    }
-                                                }
-                                            }
-                                            
-                                            /*
-                                             * PAGAMENTO PARCIAL
-                                             * 
-                                             * Alterado por Raphael Rossiter em 13/10/2009
-                                             * Analista: Rosana Carvalho
-                                             * 
-                                             * Recupera uma coleção de pagamentos parciais do caso de uso
-                                             * [UC0259] - Processar Pagamento com Código de Barras
-                                             */
-                                            Collection<ProcessarPagamentoParcialContaHelper> 
-                                            colecaoPagamentosParciaisCodigoBarras = pagamentoHelperCodigoBarras
-                                            .getColecaoProcessarPagamentoParcialContaHelper();
+				for (int i = 1; i <= quantidadeRegistros; i++) {
+					countRegistros = countRegistros + 1;
 
-                                            if (colecaoPagamentosParciaisCodigoBarras != null && 
-                                            	!colecaoPagamentosParciaisCodigoBarras.isEmpty()) {
+					String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
 
-                                                //PAGAMENTOS PARCIAIS QUE SERÃO INSERIDOS
-                                            	pagamentosParciais.addAll(colecaoPagamentosParciaisCodigoBarras);
-                                            }
-    
-                                        } else {
-                                            // inseri o item movimento
-                                            // arrecadador
-                                            Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(
-                                                    linhaRegistro,
-                                                    arrecadadorMovimento.getId(),
-                                                    descricaoOcorrenciaMovimento,
-                                                    indicadorAceitacaoRegistroMovimento,
-                                                    null);
+					// incrementa a primeira linha.O +1 é para tirar o
 
-                                            ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-                                            arrecadadorMovimentoItem
-                                                    .setId(idArrecadadorMovimentoItem);
-                                            
-                                            // 3.5.	Caso contrário, ou seja, o Indicador de Aceitação do Registro do Movimento corresponda a 2 (NÃO):
-                                            // 3.5.1. E caso exista cliente fictício para documento não identificado (CLIE_IDDOCNAOIDENTIFICADO da tabela SISTEMA_PARAMETRO com valor diferente de nulo).
-                                            if (getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
-                                            		&& getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
-                                        	  
-	                                        	  // 3.5.1.1. O sistema cria um pagamento para esse cliente [SB0019 ? Inserir pagamento para cliente fictício].
-	                                        	  Pagamento pagamentoCliente = this.inserirPagamentosClienteFicticio(
-	                                          			registroHelperCodigoG.getValorRecebido(), 
-	                                          			registroHelperCodigoG.getDataPagamento(),
-	                                          			idFormaArrecadacao, dataPrevistaCredito);
-	                                        	  
-	                                        	  // 3.5.1.2. Adiciona o pagamento à coleção de pagamentos deste caso de uso;
-	                                        	  Collection colecaoPagamentos = new ArrayList();
-	                                        	  colecaoPagamentos.add(pagamentoCliente);
-	                                        	  pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
-	                                        	  
-	                                        	  // 3.5.1.3. Determina os valores calculados e informados do pagamento e da devolução:
+					inicioLinha = inicioLinha + tamanhoLinha + 1;
 
-	                                            /*
-	                                             * 3.5.2. Caso já exista o aviso bancário o sistema atualiza o valor da arrecadação e da devolução do aviso bancário 
-	                                             */
-	                                            if (avisoBancario != null) {
-	    
-	                                                /*
-	                                                 * PAGAMENTO
-	                                                 */
-	                                            	Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras
-	                                                .getColecaoPagamentos();
-	                                                
-	                                                
-	                                                Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras
-	                                                .iterator();
-	    
-	                                                while (pagamentosCodigoBarraIterator.hasNext()) {
-	                                                    
-	                                                	Pagamento pagamento = (Pagamento) 
-	                                                	pagamentosCodigoBarraIterator.next();
-	    
-	                                                    // Adiciona o valor do pagamento
-	                                                    valorCalcPagamento = valorCalcPagamento.add(pagamento
-	                                                    .getValorPagamento());
-	    
-	                                                    pagamento.setAvisoBancario(avisoBancario);
-	    
-	                                                    pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-	    
-	                                                    // PAGAMENTOS QUE SERÃO INSERIDOS
-	                                                    pagamentos.add(pagamento);
-	    
-	                                                }
-	    
-	                                                /*
-	                                                 * DEVOLUÇÃO
-	                                                 */
-	                                                Collection<Devolucao> colecaoDevolucaoCodigoBarras = 
-	                                                pagamentoHelperCodigoBarras.getColecaoDevolucao();
-	    
-	                                                if (colecaoDevolucaoCodigoBarras != null && 
-	                                                	!colecaoDevolucaoCodigoBarras.isEmpty()) {
-	    
-	                                                    for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
-	    
-	                                                        // Adiciona o valor da devolução
-	                                                        valorCalcDevolucao = valorCalcDevolucao
-	                                                        .add(devolucao.getValorDevolucao());
-	    
-	                                                        devolucao.setAvisoBancario(avisoBancario);
-	    
-	                                                        devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-	    
-	                                                        // DEVOLUÇÕES QUE SERÃO INSERIDAS
-	                                                        devolucoes.add(devolucao);
-	                                                    }
-	                                                }
-	                                                
-	                                            } else {
-	                                                // 3.5.3. Caso contrário, o sistema gera uma nova ocorrência na coleção de avisos bancários 
-	                                            	/*
-	                                                 * PAGAMENTO
-	                                                 */
-	                                                Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras
-	                                                .getColecaoPagamentos();
-	                                                
-	                                                Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras
-	                                                .iterator();
-	    
-	                                                while (pagamentosCodigoBarraIterator.hasNext()) {
-	                                                    
-	                                                	Pagamento pagamento = (Pagamento) 
-	                                                	pagamentosCodigoBarraIterator.next();
-	    
-	                                                	 // Adiciona o valor do pagamento
-	                                                    valorCalcPagamento = valorCalcPagamento
-	                                                    .add(pagamento.getValorPagamento());
-	                                                    
-	                                                	// Seta o aviso bancario para NULL
-	                                                    pagamento.setAvisoBancario(null);
-	                                                    
-	                                                    pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-	
-	                                                    pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-	    
-	                                                    //PAGAMENTOS QUE SERÃO INSERIDOS
-	                                                    pagamentos.add(pagamento);
-	    
-	                                                }
-	    
-	                                                
-	                                                /*
-	                                                 * DEVOLUÇÃO
-	                                                 */
-	                                                Collection<Devolucao> colecaoDevolucaoCodigoBarras = 
-	                                                pagamentoHelperCodigoBarras.getColecaoDevolucao();
-	    
-	                                                if (colecaoDevolucaoCodigoBarras != null && 
-	                                                	!colecaoDevolucaoCodigoBarras.isEmpty()) {
-	    
-	                                                    for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
-	    
-	                                                        // Adiciona o valor da devolução
-	                                                        valorCalcDevolucao = valorCalcDevolucao
-	                                                        .add(devolucao.getValorDevolucao());
-	    
-	                                                        devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-	                                                        
-	                                                        devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-	    
-	                                                        //DEVOLUÇÕES QUE SERÃO INSERIDAS
-	                                                        devolucoes.add(devolucao);
-	                                                    }
-	                                                }  
-                                                }
-                                            }
-                                          
-                                        }
-    
-                                        if (avisoBancario != null) {
-    
-                                            if (avisoBancario
-                                                    .getValorArrecadacaoCalculado() != null
-                                                    && !avisoBancario
-                                                            .getValorArrecadacaoCalculado()
-                                                            .equals("")) {
-                                                BigDecimal novoValorArrecadacaoCalculado = avisoBancario
-                                                        .getValorArrecadacaoCalculado()
-                                                        .add(valorCalcPagamento);
-                                                avisoBancario
-                                                        .setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
-                                            } else {
-                                                avisoBancario
-                                                        .setValorArrecadacaoCalculado(valorCalcPagamento);
-                                            }
-    
-                                            if (avisoBancario
-                                                    .getValorDevolucaoCalculado() != null
-                                                    && !avisoBancario
-                                                            .getValorDevolucaoCalculado()
-                                                            .equals("")) {
-                                                BigDecimal novoValorDevolucaoCalculado = avisoBancario
-                                                        .getValorDevolucaoCalculado()
-                                                        .add(valorCalcDevolucao);
-                                                avisoBancario
-                                                        .setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                                            } else {
-                                                avisoBancario
-                                                        .setValorDevolucaoCalculado(valorCalcDevolucao);
-                                            }
-    
-                                            if (avisoBancario
-                                                    .getValorArrecadacaoInformado() != null
-                                                    && !avisoBancario
-                                                            .getValorArrecadacaoInformado()
-                                                            .equals("")) {
-                                                BigDecimal novoValorArrecadacaoInformado = avisoBancario
-                                                        .getValorArrecadacaoInformado()
-                                                        .add(valorInfPagamento);
-                                                avisoBancario
-                                                        .setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                                                avisoBancario
-                                                        .setValorRealizado(novoValorArrecadacaoInformado);
-                                            } else {
-                                                avisoBancario
-                                                        .setValorArrecadacaoInformado(valorInfPagamento);
-                                                avisoBancario
-                                                        .setValorRealizado(valorInfPagamento);
-                                            }
-    
-                                            // se for atualiza o valor da
-                                            // arrecadação no aviso bancario
-    
-                                            avisoBancario
-                                                    .setArrecadadorMovimento(arrecadadorMovimento);
-                                            avisoBancario
-                                                    .setUltimaAlteracao(new Date());
-                                            // atualiza o aviso bancário
-                                            try {
-                                                repositorioUtil
-                                                        .atualizar(avisoBancario);
-                                            } catch (ErroRepositorioException e) {
-                                                throw new ControladorException(
-                                                        "erro.sistema", e);
-                                            }
-                                        } else {
-                                            Iterator avisosBancarioIterator = avisosBancarios
-                                                    .iterator();
-                                            // cria um boolean para saber se
-                                            // existe
-                                            // algum aviso bancario da
-                                            // coleção
-                                            // com a mesma data prevista da
-                                            // data
-                                            // prevista calculada
-                                            // anteriormente
-                                            boolean achou = false;
+					// cria uma variavel da descrição da ocorrencia do
+					// movimento com o valor setado para OK
+					String descricaoOcorrenciaMovimento = "OK";
+					// cria uma variavel do indicador de aceitação do
+					// registro do movimento
+					int indicadorAceitacaoRegistroMovimento = 1;
+
+					// recupera o codigo do registro
+					String codigoRegistro = linha.substring(0, 1);
+
+					short numeroSequencialAvisoBancario = 0;
+
+					// verifica se é a primeira linha
+					if (primeiraLinha) {
+						/**
+						 * [SF0001] - Validar Arquivo de Movimento de
+						 * Arrecadador Autor: Sávio Luiz Data: 31/01/2006
+						 */
+						arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
+
+						if (arrecadadorContrato != null && !arrecadadorContrato.equals("")) {
+							// recupera o
+							// numeroSequecialArquivoRetornoCodigoBarras
+							numeroSequecialArquivoRetornoCodigoBarras = arrecadadorContrato.getNumeroSequecialArquivoRetornoCodigoBarras();
+
+							// recupera o
+							// numeroSequencialArquivoRetornoDebitoAutomatico
+							numeroSequencialArquivoRetornoDebitoAutomatico = arrecadadorContrato.getNumeroSequencialArquivoRetornoDebitoAutomatico();
+
+							// recupera o
+							// numeroSequencialArquivoEnvioDebitoAutomatico
+							numeroSequencialArquivoEnvioDebitoAutomatico = arrecadadorContrato.getNumeroSequencialArquivoEnvioDebitoAutomatico();
+						}
+
+						// [SF0001] - Validar Arquivo de Movimento de
+						// Arrecadador
+						registroHelperCodigoA = this.validarArquivoMovimentoArrecadador(codigoRegistro, linha, codigoArrecadador, nomeArrecadador, idTipoMovimento,
+								arrecadadorContrato, numeroSequecialArquivoRetornoCodigoBarras, numeroSequencialArquivoRetornoDebitoAutomatico,
+								numeroSequencialArquivoEnvioDebitoAutomatico, idArrecadador);
+
+						// Verifica o Tipo de Pagamento
+						if (registroHelperCodigoA.getTipoMovimento().equals(ConstantesSistema.DEBITO_AUTOMATICO)) {
+							numeroSequencialArquivoRetornoDebitoAutomatico += 1;
+							flagRetornoDebitoAutomatico = true;
+						} else {
+							numeroSequecialArquivoRetornoCodigoBarras += 1;
+							flagRetornoCodigoBarras = true;
+						}
+
+						if (registroHelperCodigoA.getCodigoBanco() != null && registroHelperCodigoA.getDataGeracaoArquivo() != null) {
+
+							Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA.getDataGeracaoArquivo());
+
+							Short valorMaximoNumeroSequencia = null;
+							try {
+								valorMaximoNumeroSequencia = repositorioArrecadacao.pesquisarValorMaximoNumeroSequencial(dataGeracao, registroHelperCodigoA.getCodigoBanco());
+							} catch (ErroRepositorioException e) {
+								throw new ControladorException("erro.sistema");
+							}
+
+							if (valorMaximoNumeroSequencia != null) {
+								numeroSequencialAvisoBancario = (short) (valorMaximoNumeroSequencia.shortValue() + 1);
+							}
+						} else {
+							numeroSequencialAvisoBancario = 0;
+						}
+
+						// depois de ler a primeira linha atribui ela para falso
+						primeiraLinha = false;
+
+					} else {
+
+						// verifica se o código do registro é "A", caso seja
+						// então
+						// não existe o codigo do registro "Z" e encerra o caso
+						// de uso
+						if (codigoRegistro.toUpperCase().equals("A")) {
+							throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
+						}
+						if (registroHelperCodigoA.getTipoMovimento() != null && !registroHelperCodigoA.getTipoMovimento().equals("")) {
+							// caso o tipo de medição seja igual a DEBITO
+							// AUTOMATICO
+							if (registroHelperCodigoA.getTipoMovimento().equals("DEBITO AUTOMATICO")) {
+
+								// caso exista no arquivo codigo do registro
+								// igual de "G"
+								if (codigoRegistro.toUpperCase().equals("G")) {
+									throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
+								}
+
+							} else {
+								// caso exista no arquivo codigo do registro
+								// diferente de "A" , "G" , "Z"
+								if (!codigoRegistro.toUpperCase().equals("A") && !codigoRegistro.toUpperCase().equals("G") && !codigoRegistro.toUpperCase().equals("Z")) {
+									throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
+								}
+							}
+						} else {
+							// caso exista no arquivo codigo do registro
+							// diferente de "A" , "G" , "Z"
+							if (!codigoRegistro.toUpperCase().equals("A") && !codigoRegistro.toUpperCase().equals("G") && !codigoRegistro.toUpperCase().equals("Z")) {
+								throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
+							}
+
+						}
+
+						// verifica se o código do registro é diferente de "Z",
+						// caso seja então adiciona
+						// a linha na coleção de linhas para depois serem
+						// processadas
+						if (!codigoRegistro.toUpperCase().equals("Z")) {
+
+							linhas.add(linha);
+						} else {
+							// se entrou no else então é porque tem registro Z
+							// então seta o boolean para true
+							verificaRegistroZ = true;
+
+							// caso código do registro seja "Z" então processa a
+							// coleção
+							// de linhas e inseri o movimento de arrecadadores
+							RegistroHelperCodigoZ registroHelperCodigoZ = (RegistroHelperCodigoZ) distribuirdadosRegistroMovimentoArrecadador(linha, null);
+							// caso a quantidade de registros for diferente da
+							// quantidade de registros do txt então ecerra o
+							// caso de uso
+							if (Integer.parseInt(registroHelperCodigoZ.getTotalRegistrosArquivo().trim()) != countRegistros) {
+								throw new ControladorException("atencao.total.registros.invalido");
+							}
+
+							arrecadadorMovimento = inserirMovimentoArrecadador(registroHelperCodigoA, registroHelperCodigoZ, idTipoMovimento);
+							arrecadadoresMovimento.add(arrecadadorMovimento);
+
+							Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA.getDataGeracaoArquivo());
+
+							// cria uma iterator para pegar linha a linha da
+							// coleção de linhas
+							Iterator linhaIterator = linhas.iterator();
+							aux = 1;
+							while (linhaIterator.hasNext()) {
+
+								aux++;
+								descricaoOcorrenciaMovimento = "OK";
+								indicadorAceitacaoRegistroMovimento = 1;
+
+								// cria uma variavel para validar data
+								boolean dataInvalida = false;
+
+								boolean valorDebitoInvalido = false;
+
+								Date dataDebito = null;
+
+								String linhaRegistro = (String) linhaIterator.next();
+
+								final char b = 'B';
+								final char f = 'F';
+								final char g = 'G';
+								final char x = 'X';
+
+								char codigoRegistroChar = linhaRegistro.substring(0, 1).toUpperCase().charAt(0);
+								switch (codigoRegistroChar) {
+
+								case b:
+
+									// [SF0003] - Processar Registro Código B
+									RegistroHelperCodigoC registroHelperCodigoC = this.processarRegistroCodigoTipoB(registroHelperCodigoA, linhaRegistro, arrecadadorMovimento);
+
+									if (registroHelperCodigoC != null) {
+										colecaoCodigoRegistrosC.add(registroHelperCodigoC);
+									}
+
+									break;
+
+								case f:
+									RegistroHelperCodigoF registroHelperCodigoF = (RegistroHelperCodigoF) distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, null);
+
+									Integer anoMesArrecadacao = Integer.parseInt(registroHelperCodigoF.getDataDebito().substring(0, 6));
+
+									boolean dataExcludentes = false;
+
+									dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoF.getDataDebito());
+									if (dataInvalida) {
+										dataExcludentes = true;
+										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+									}
+									// caso a data seja inválida não verifica se
+									// é maior que a data atual
+									if (!dataExcludentes) {
+										// verifica se a data de
+										// bedito/pagamento é superior a atual
+										dataDebito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoF.getDataDebito());
+										// [FS0008]Validar data de
+										// débito/pagamento
+
+										if (dataDebito.after(new Date())
+												&& (registroHelperCodigoF.getCodigoRetorno().equals("00") || registroHelperCodigoF.getCodigoRetorno().equals("31"))) {
+											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+										}
+									}
+
+									// VALIDANDO O ANO E MÊS DE REFERÊNCIA DA
+									// CONTA
+									boolean anoMesReferencia = false;
+
+									if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")) {
+										anoMesReferencia = Util.validarAnoMesSemBarra(registroHelperCodigoF.getAnoMesReferenciaConta());
+									}
+
+									if (anoMesReferencia) {
+										descricaoOcorrenciaMovimento = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+									}
+
+									// valida o valor de debito recebido
+									valorDebitoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getValorDebito());
+									if (valorDebitoInvalido) {
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+									}
+
+									// verifica se existe a matricula do imóvel
+									// na base
+									Integer idImovelNaBase = null;
+
+									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
+
+									if (codigoDebitoAutomaticoInvalido) {
+										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+									}
+
+									Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
+
+									FiltroImovel filtroImovel = new FiltroImovel();
+
+									filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.CODIGO_DEBITO_AUTOMATICO, codigoDebitoAutomatico));
+
+									Collection colecaoImoveis = this.getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
+
+									if (colecaoImoveis != null && !colecaoImoveis.isEmpty()) {
+										Imovel imovel = (Imovel) colecaoImoveis.iterator().next();
+										idImovelNaBase = imovel.getId();
+									} else {
+										FiltroImovel filtroImovelAntigo = new FiltroImovel();
+
+										filtroImovelAntigo.adicionarParametro(new ParametroSimples(FiltroImovel.ID, codigoDebitoAutomatico));
+
+										Collection colecaoImoveisAntigo = this.getControladorUtil().pesquisar(filtroImovelAntigo, Imovel.class.getName());
+
+										if (colecaoImoveisAntigo != null && !colecaoImoveisAntigo.isEmpty()) {
+											Imovel imovel = (Imovel) colecaoImoveisAntigo.iterator().next();
+											idImovelNaBase = imovel.getId();
+										} else {
+											descricaoOcorrenciaMovimento = "DÉBITO AUTOMÁTICO NÃO CADASTRADO";
+										}
+									}
+
+									// caso a descricao de movimento seja igual
+									// a OK
+									if (descricaoOcorrenciaMovimento.equals("OK")) {
+
+										// verifica a conta
+										DebitoAutomaticoMovimento debitoAutomaticoMovimento = null;
+
+										Integer idConta = null;
+
+										if (idImovelNaBase != null) {
+
+											try {
+												Imovel imovel = new Imovel();
+												imovel.setId(idImovelNaBase);
+
+												if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")) {
+													idConta = repositorioFaturamento.pesquisarExistenciaContaComSituacaoAtual(imovel,
+															new Integer(registroHelperCodigoF.getAnoMesReferenciaConta()));
+												} else if (!registroHelperCodigoF.getReservadoFuturo().equals("")) {
+													Long identificacao = Long.valueOf(registroHelperCodigoF.getReservadoFuturo());
+													Conta contaPorIdentificacao = this.pesquisarExistenciaContaPorNumeroFatura(identificacao.toString());
+
+													if (contaPorIdentificacao != null) {
+														idConta = contaPorIdentificacao.getId();
+														registroHelperCodigoF.setAnoMesReferenciaConta(String.valueOf(contaPorIdentificacao.getReferencia()));
+													}
+												}
+
+												if (idConta != null) {
+													debitoAutomaticoMovimento = repositorioFaturamento.obterDebitoAutomaticoMovimento(idImovelNaBase, new Integer(
+															registroHelperCodigoF.getAnoMesReferenciaConta()));
+												} else {
+													descricaoOcorrenciaMovimento = "CONTA INEXISTENTE";
+												}
+
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+										}
+
+										// se debitoAutomaticaMovimento for nula
+										// seta o valor para o
+										// campo descrição movimento caso
+										// contrario atualiza o
+										// debitoAutomaticaMovimento
+										if (debitoAutomaticoMovimento != null) {
+
+											DebitoAutomaticoRetornoCodigo debitoAutomaticoRetornoCodigo = new DebitoAutomaticoRetornoCodigo();
+											debitoAutomaticoRetornoCodigo.setId(new Integer(registroHelperCodigoF.getCodigoRetorno()));
+											debitoAutomaticoMovimento.setDebitoAutomaticoRetornoCodigo(debitoAutomaticoRetornoCodigo);
+											debitoAutomaticoMovimento.setRetornoBanco(new Date());
+											debitoAutomaticoMovimento.setNumeroSequenciaArquivoRecebido(new Integer(registroHelperCodigoA.getNumeroSequencialArquivo()));
+											debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
+											try {
+												repositorioUtil.atualizar(debitoAutomaticoMovimento);
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+
+											if (idImovelNaBase != null) {
+												if (registroHelperCodigoF.getCodigoRetorno().equals("30")) {
+													this.getControladorCobranca().removerDebitoAutomatico(idImovelNaBase.toString(), registroHelperCodigoA.getCodigoBanco(),
+															registroHelperCodigoF.getAgenciaDebito(), registroHelperCodigoF.getIdClienteBanco(), new Date());
+												}
+											}
+										}
+
+										if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")) {
+											/**
+											 * As contas em débito automático
+											 * que retornavam com o código 31
+											 * não tinham o seu pagamento
+											 * efetuado
+											 * 
+											 * @author Wellington Rocha
+											 * @date 25/01/2012
+											 */
+											BigDecimal valorDebitado = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF.getValorDebito());
+
+											Integer codigoDeRetorno = new Integer(registroHelperCodigoF.getCodigoRetorno());
+											if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO)
+													|| codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
+
+												Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(),
+														descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelNaBase, DocumentoTipo.CONTA, idConta,
+														valorDebitado);
+
+												Integer idLocalidade = null;
+
+												if (idConta != null) {
+													try {
+														idLocalidade = repositorioLocalidade.pesquisarIdLocalidadePorConta(idConta);
+													} catch (ErroRepositorioException e) {
+														throw new ControladorException("erro.sistema", e);
+													}
+												} else {
+													try {
+														idLocalidade = repositorioLocalidade.pesquisarIdLocalidade(idImovelNaBase);
+													} catch (ErroRepositorioException e) {
+														throw new ControladorException("erro.sistema", e);
+													}
+												}
+
+												// cria o objeto pagamento para
+												// setar os dados
+												Pagamento pagamento = new Pagamento();
+												pagamento.setAnoMesReferenciaPagamento(Integer.parseInt(registroHelperCodigoF.getAnoMesReferenciaConta()));
+												Integer anoMesDebito = Util.recuperaAnoMesDaData(dataDebito);
+												if (anoMesDebito > getSistemaParametro().getAnoMesArrecadacao()) {
+													pagamento.setAnoMesReferenciaArrecadacao(anoMesDebito);
+												} else {
+													pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
+												}
+												// formata o valor debitado
+												// BigDecimal valorDebitado =
+												// Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF.getValorDebito());
+												pagamento.setValorPagamento(valorDebitado);
+												pagamento.setDataPagamento(dataDebito);
+												pagamento.setPagamentoSituacaoAtual(null);
+												pagamento.setPagamentoSituacaoAnterior(null);
+												pagamento.setDebitoTipo(null);
+												// verifica se o id da conta é
+												// diferente de nulo
+												if (idConta != null) {
+													ContaGeral conta = new ContaGeral();
+													conta.setId(idConta);
+													pagamento.setContaGeral(conta);
+												} else {
+													pagamento.setContaGeral(null);
+												}
+												pagamento.setGuiaPagamento(null);
+
+												// verifica se o id da
+												// Localidade é diferente de
+												// nulo
+												if (idLocalidade != null) {
+													Localidade localidade = new Localidade();
+													localidade.setId(idLocalidade);
+													pagamento.setLocalidade(localidade);
+												} else {
+													pagamento.setLocalidade(null);
+												}
+												DocumentoTipo documentoTipo = new DocumentoTipo();
+												documentoTipo.setId(DocumentoTipo.CONTA);
+												pagamento.setDocumentoTipo(documentoTipo);
+
+												// seta o id do aviso bancario
+
+												// seta o imovel
+												if (idImovelNaBase != null) {
+													Imovel imovel = new Imovel();
+													imovel.setId(idImovelNaBase);
+													pagamento.setImovel(imovel);
+												} else {
+													pagamento.setImovel(null);
+												}
+
+												ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+												arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+
+												pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+												ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
+												arrecadacaoForma.setId(ArrecadacaoForma.DEBITO_AUTOMATICO);
+												pagamento.setArrecadacaoForma(arrecadacaoForma);
+												pagamento.setCliente(null);
+												pagamento.setUltimaAlteracao(new Date());
+												pagamento.setFatura(null);
+												pagamento.setCobrancaDocumento(null);
+
+												DocumentoTipo documentoTipoAgregador = new DocumentoTipo();
+												documentoTipoAgregador.setId(DocumentoTipo.CONTA);
+												pagamento.setDocumentoTipoAgregador(documentoTipoAgregador);
+
+												pagamento.setDataProcessamento(new Date());
+
+												Integer codigoBanco = new Integer(registroHelperCodigoA.getCodigoBanco());
+
+												// pesquisa a quantidade de dias
+												// de float
+												Short numeroDiasFloat = null;
+												Integer idFormaArrecadacao = ArrecadacaoForma.DEBITO_AUTOMATICO;
+												try {
+													numeroDiasFloat = repositorioArrecadacao.pesquisarNumeroDiasFloat(codigoBanco, idFormaArrecadacao);
+												} catch (ErroRepositorioException e) {
+													throw new ControladorException("erro.sistema", e);
+												}
+
+												Date dataPrevistaCredito = null;
+												if (numeroDiasFloat != null) {
+													dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(dataDebito, numeroDiasFloat);
+												} else {
+													dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(dataDebito, 0);
+												}
+
+												BigDecimal valorCalcPagamento = valorDebitado;
+												BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
+												BigDecimal valorInfPagamento = valorDebitado;
+												BigDecimal valorInfDevolucao = new BigDecimal("0.00");
+
+												AvisoBancario avisoBancario = null;
+												try {
+													avisoBancario = repositorioArrecadacao.pesquisarAvisoBancario(codigoBanco, dataGeracao, dataPrevistaCredito,
+															arrecadadorMovimento.getId(), idFormaArrecadacao);
+
+												} catch (ErroRepositorioException e) {
+													throw new ControladorException("erro.sistema", e);
+												}
+
+												if (avisoBancario != null) {
+
+													if (avisoBancario.getValorArrecadacaoCalculado() != null && !avisoBancario.getValorArrecadacaoCalculado().equals("")) {
+														BigDecimal novoValorArrecadacaoCalculado = avisoBancario.getValorArrecadacaoCalculado().add(valorCalcPagamento);
+														avisoBancario.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+													} else {
+														avisoBancario.setValorArrecadacaoCalculado(valorCalcPagamento);
+													}
+
+													if (avisoBancario.getValorDevolucaoCalculado() != null && !avisoBancario.getValorDevolucaoCalculado().equals("")) {
+														BigDecimal novoValorDevolucaoCalculado = avisoBancario.getValorDevolucaoCalculado().add(valorCalcDevolucao);
+														avisoBancario.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+													} else {
+														avisoBancario.setValorDevolucaoCalculado(valorCalcDevolucao);
+													}
+
+													if (avisoBancario.getValorArrecadacaoInformado() != null && !avisoBancario.getValorArrecadacaoInformado().equals("")) {
+														BigDecimal novoValorArrecadacaoInformado = avisoBancario.getValorArrecadacaoInformado().add(valorInfPagamento);
+														avisoBancario.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+													} else {
+														avisoBancario.setValorArrecadacaoInformado(valorInfPagamento);
+													}
+
+													if (avisoBancario.getValorRealizado() != null && !avisoBancario.getValorRealizado().equals("")) {
+														BigDecimal novoValorArrecadacaoInformado = avisoBancario.getValorRealizado().add(valorInfPagamento);
+														avisoBancario.setValorRealizado(novoValorArrecadacaoInformado);
+													} else {
+														avisoBancario.setValorRealizado(valorInfPagamento);
+													}
+
+													if (avisoBancario.getValorDevolucaoInformado() != null && !avisoBancario.getValorDevolucaoInformado().equals("")) {
+														BigDecimal novoValorDevolucaoInformado = avisoBancario.getValorDevolucaoInformado().add(valorInfDevolucao);
+														avisoBancario.setValorDevolucaoInformado(novoValorDevolucaoInformado);
+													} else {
+														avisoBancario.setValorDevolucaoInformado(valorInfDevolucao);
+													}
+
+													avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
+													avisoBancario.setUltimaAlteracao(new Date());
+													// atualiza o aviso bancário
+													try {
+														repositorioUtil.atualizar(avisoBancario);
+													} catch (ErroRepositorioException e) {
+														throw new ControladorException("erro.sistema", e);
+													}
+
+													pagamento.setAvisoBancario(avisoBancario);
+
+												} else {
+													pagamento.setAvisoBancario(null);
+													// seta o valor da data
+													// prevista para quando for
+													// inserir o pagamento saber
+													// de que
+													// aviso bancário o
+													// pagamento está
+													// relacionádo.
+													pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+
+													Iterator avisosBancarioIterator = avisosBancarios.iterator();
+													// cria um boolean para
+													// saber se existe algum
+													// aviso bancario da
+													// coleção com a mesma data
+													// prevista da data prevista
+													// calculada anteriormente
+													boolean achou = false;
+													while (avisosBancarioIterator.hasNext()) {
+														AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator.next();
+														boolean comparaDataIguais = Util.datasIguais(avisoBancarioDaColecao.getDataPrevista(), dataPrevistaCredito);
+
+														boolean formasArrecadacaoIguais = avisoBancarioDaColecao.getArrecadacaoForma().getId().intValue() == idFormaArrecadacao
+																.intValue();
+
+														boolean anoMesReferenciaArrecadacaoIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesArrecadacao;
+
+														if (comparaDataIguais && formasArrecadacaoIguais && anoMesReferenciaArrecadacaoIguais) {
+
+															if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
+																	&& !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
+																BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao.getValorArrecadacaoCalculado().add(
+																		valorCalcPagamento);
+																avisoBancarioDaColecao.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+															} else {
+																avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
+															}
+
+															if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
+																	&& !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
+																BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao.getValorDevolucaoCalculado()
+																		.add(valorCalcDevolucao);
+																avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+															} else {
+																avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
+															}
+
+															if (avisoBancarioDaColecao.getValorArrecadacaoInformado() != null
+																	&& !avisoBancarioDaColecao.getValorArrecadacaoInformado().equals("")) {
+																BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorArrecadacaoInformado().add(
+																		valorInfPagamento);
+																avisoBancarioDaColecao.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+															} else {
+																avisoBancarioDaColecao.setValorArrecadacaoInformado(valorInfPagamento);
+															}
+
+															if (avisoBancarioDaColecao.getValorRealizado() != null && !avisoBancarioDaColecao.getValorRealizado().equals("")) {
+																BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorRealizado().add(valorInfPagamento);
+																avisoBancarioDaColecao.setValorRealizado(novoValorArrecadacaoInformado);
+															} else {
+																avisoBancarioDaColecao.setValorRealizado(valorInfPagamento);
+															}
+
+															if (avisoBancarioDaColecao.getValorDevolucaoInformado() != null
+																	&& !avisoBancarioDaColecao.getValorDevolucaoInformado().equals("")) {
+																BigDecimal novoValorDevolucaoInformado = avisoBancarioDaColecao.getValorDevolucaoInformado().add(valorInfDevolucao);
+																avisoBancarioDaColecao.setValorDevolucaoInformado(novoValorDevolucaoInformado);
+															} else {
+																avisoBancarioDaColecao.setValorDevolucaoInformado(valorInfDevolucao);
+															}
+
+															avisoBancario = avisoBancarioDaColecao;
+
+															achou = true;
+															break;
+														}
+													}
+													if (!achou) {
+
+														// chama o método para
+														// cria
+														// o objeto
+														// do aviso bancário
+														avisoBancario = gerarOcorrenciaAvisoBancario(arrecadadorMovimento.getId(), registroHelperCodigoA, dataPrevistaCredito,
+																registroHelperCodigoZ.getValorTotalRegistrosArquivo(), registroHelperCodigoA.getCodigoBanco(), valorCalcPagamento,
+																valorInfPagamento, valorCalcDevolucao, valorInfDevolucao, numeroSequencialAvisoBancario, idFormaArrecadacao,
+																indicadorAceitacaoRegistroMovimento, arrecadadorContrato.getCodigoConvenio(), anoMesArrecadacao);
+
+														numeroSequencialAvisoBancario += 1;
+
+														avisoBancario.setValorRealizado(valorInfPagamento);
+
+														// adiciona o aviso
+														// bancário
+														// na
+														// coleção de avisos
+														// bancários
+														avisosBancarios.add(avisoBancario);
+													}
+												}
+
+												// adiciona o pagamento na
+												// coleção
+												// de
+												// pagamentos
+												pagamentos.add(pagamento);
+
+												pagamento.setAvisoBancario(avisoBancario);
+
+											} else {
+
+												// Seta o indicador de aceitação
+												// do registro do movimento para
+												// 2(NÃO).
+												indicadorAceitacaoRegistroMovimento = 2;
+
+												try {
+													descricaoOcorrenciaMovimento = repositorioArrecadacao.pesquisarDescricaoDebitoAutomatico(new Integer(registroHelperCodigoF
+															.getCodigoRetorno()));
+
+												} catch (ErroRepositorioException e) {
+													throw new ControladorException("erro.sistema", e);
+												}
+
+												inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
+														indicadorAceitacaoRegistroMovimento, null, null, null, null);
+											}
+										} else {
+
+											// Seta o indicador de aceitação do
+											// registro do movimento para
+											// 2(NÃO).
+											indicadorAceitacaoRegistroMovimento = 2;
+
+											this.inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
+													indicadorAceitacaoRegistroMovimento, null, null, null, null);
+										}
+									} else {
+
+										// Seta o indicador de aceitação do
+										// registro do movimento para 2(NÃO).
+										indicadorAceitacaoRegistroMovimento = 2;
+
+										this.inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
+												indicadorAceitacaoRegistroMovimento, null, null, null, null);
+									}
+
+									break;
+
+								case g:
+									/**
+									 * [SF0005] - Processar Registro Código G
+									 * Autor: Sávio Luiz Data: 31/01/2006
+									 */
+
+									if (aux % 500 == 0) {
+										System.out.println("MovArrec.TipoG.leituraArquivo=" + aux);
+									}
+
+									RegistroHelperCodigoG registroHelperCodigoG = (RegistroHelperCodigoG) distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, null);
+									Integer anoMesReferenciaArrecadacao = Integer.parseInt(registroHelperCodigoG.getDataPagamento().substring(0, 6));
+
+									dataExcludentes = false;
+
+									// valida a data
+									dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoG.getDataPagamento());
+									if (dataInvalida) {
+										dataExcludentes = true;
+										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+									}
+									// caso a data seja inválida não verifica se
+									// é maior
+									// que a data
+									// atual
+									if (!dataExcludentes) {
+										// verifica se a data de
+										// bedito/pagamento é
+										// superior
+										// a atual
+										dataDebito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoG.getDataPagamento());
+										if (dataDebito.after(new Date())) {
+											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+										}
+									}
+									// validar data de credito
+									if (!registroHelperCodigoG.getDataPrevistaCredito().equals("")) {
+
+										dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoG.getDataPrevistaCredito());
+
+										if (dataInvalida) {
+
+											descricaoOcorrenciaMovimento = "DATA DE CRÉDITO INVÁLIDA";
+
+										}
+									}
+
+									// valida o valor recebido
+									valorDebitoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoG.getValorRecebido());
+									if (valorDebitoInvalido) {
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+									}
+
+									// caso a descricao de movimento seja igual
+									// a OK
+									if (descricaoOcorrenciaMovimento.equals("OK")) {
+
+										String codigoBarras = registroHelperCodigoG.getCodigoBarras();
+
+										Integer idFormaArrecadacao = null;
+
+										try {
+											idFormaArrecadacao = repositorioArrecadacao.pesquisarIdArrecadacaoForma(registroHelperCodigoG.getCodigoFormaArrecadacao());
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
+
+										if (idFormaArrecadacao == null) {
+											idFormaArrecadacao = ArrecadacaoForma.GUICHE_CAIXA;
+										}
+
+										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosCodigoBarras(codigoBarras, dataDebito, idFormaArrecadacao,
+												getSistemaParametro(), usuario);
+
+										descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
+
+										indicadorAceitacaoRegistroMovimento = Integer.parseInt(pagamentoHelperCodigoBarras.getIndicadorAceitacaoRegistro());
+
+										// caso o indicador de aceitação for
+										// igual a
+										// 1(SIM)
+										Short numeroDiasFloat = null;
+										Integer codigoBanco = new Integer(registroHelperCodigoA.getCodigoBanco());
+
+										Date dataPrevistaCredito = null;
+
+										// verifica se a data prevista é
+										// zero, se
+										// for calcula a data prevista
+										if (registroHelperCodigoG.getDataPrevistaCredito().equals("")) {
+
+											try {
+												numeroDiasFloat = repositorioArrecadacao.pesquisarNumeroDiasFloat(codigoBanco, idFormaArrecadacao);
+
+												dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(dataDebito, numeroDiasFloat);
+
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+
+										} else {
+											dataPrevistaCredito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoG.getDataPrevistaCredito());
+										}
+
+										// verifica se a data de
+										// dedito/pagamento é superior a atual
+
+										// pesquisa o aviso bancario passando o
+										// código do banco a data de geração
+										// do arquivo e a data prevista
+										// calculada
+										AvisoBancario avisoBancario = null;
+										try {
+											avisoBancario = repositorioArrecadacao.pesquisarAvisoBancario(codigoBanco, dataGeracao, dataPrevistaCredito,
+													arrecadadorMovimento.getId(), idFormaArrecadacao);
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
+										// recupera o valor debitado formatado
+										// como bigDecimal
+										BigDecimal valorDebito = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
+												.getRegistroHelperCodigoBarras().getValorPagamento());
+
+										// 3.4.4.Parte que determina os
+										// valores
+										// calculado e informado do
+										// pagamento e da
+										// devolução
+										BigDecimal valorCalcPagamento = new BigDecimal("0.00");
+										BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
+										BigDecimal valorInfPagamento = valorDebito;
+										BigDecimal valorInfDevolucao = new BigDecimal("0.00");
+
+										if (indicadorAceitacaoRegistroMovimento == 1) {
+
+											Integer idImovelPagamento = null;
+											if (pagamentoHelperCodigoBarras.getColecaoPagamentos() != null && !pagamentoHelperCodigoBarras.getColecaoPagamentos().isEmpty()) {
+												Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(pagamentoHelperCodigoBarras.getColecaoPagamentos());
+												if (pagamento.getImovel() != null) {
+
+													idImovelPagamento = pagamento.getImovel().getId();
+												}
+											}
+
+											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(),
+													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelPagamento,
+													pagamentoHelperCodigoBarras.getTipoDocumento(), pagamentoHelperCodigoBarras.getIdDocumento(),
+													pagamentoHelperCodigoBarras.getValorDocumento());
+
+											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+
+											if (avisoBancario != null) {
+
+												Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+
+												Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras.iterator();
+
+												while (pagamentosCodigoBarraIterator.hasNext()) {
+
+													Pagamento pagamento = (Pagamento) pagamentosCodigoBarraIterator.next();
+
+													// Adiciona o valor do
+													// pagamento
+													valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+													pagamento.setAvisoBancario(avisoBancario);
+
+													pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+													// PAGAMENTOS QUE SERÃO
+													// INSERIDOS
+													pagamentos.add(pagamento);
+
+												}
+
+												/*
+												 * DEVOLUÇÃO
+												 * 
+												 * Alterado por Raphael Rossiter
+												 * em 31/10/2007 Analista: Aryed
+												 * Lins
+												 * 
+												 * Recupera uma coleção de
+												 * devoluções do caso de uso
+												 * [UC0259] - Processar
+												 * Pagamento com Código de
+												 * Barras
+												 */
+												Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
+
+												if (colecaoDevolucaoCodigoBarras != null && !colecaoDevolucaoCodigoBarras.isEmpty()) {
+
+													for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
+
+														// Adiciona o valor da
+														// devolução
+														valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
+
+														devolucao.setAvisoBancario(avisoBancario);
+
+														devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+														// DEVOLUÇÕES QUE SERÃO
+														// INSERIDAS
+														devolucoes.add(devolucao);
+													}
+												}
+											} else {
+
+												/*
+												 * PAGAMENTO
+												 * 
+												 * Recupera a coleção de
+												 * pagamentos do caso de uso
+												 * [UC0259] - Processar
+												 * Pagamento com Código de
+												 * Barras para setar o aviso
+												 * bancário no objeto pagamento
+												 */
+												Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+
+												Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras.iterator();
+
+												while (pagamentosCodigoBarraIterator.hasNext()) {
+
+													Pagamento pagamento = (Pagamento) pagamentosCodigoBarraIterator.next();
+
+													// Adiciona o valor do
+													// pagamento
+													valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+													// Seta o aviso bancario
+													// para NULL
+													pagamento.setAvisoBancario(null);
+
+													pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+													/*
+													 * Seta o valor da data
+													 * prevista para quando for
+													 * inserir o pagamento saber
+													 * de que aviso bancário o
+													 * pagamento está
+													 * relacionado.
+													 */
+													pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+
+													// PAGAMENTOS QUE SERÃO
+													// INSERIDOS
+													pagamentos.add(pagamento);
+
+												}
+
+												/*
+												 * DEVOLUÇÃO
+												 * 
+												 * Alterado por Raphael Rossiter
+												 * em 31/10/2007 Analista: Aryed
+												 * Lins
+												 * 
+												 * Recupera uma coleção de
+												 * devoluções do caso de uso
+												 * [UC0259] - Processar
+												 * Pagamento com Código de
+												 * Barras
+												 */
+												Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
+
+												if (colecaoDevolucaoCodigoBarras != null && !colecaoDevolucaoCodigoBarras.isEmpty()) {
+
+													for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
+
+														// Adiciona o valor da
+														// devolução
+														valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
+
+														devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+														/*
+														 * Seta o valor da data
+														 * prevista para quando
+														 * for inserir o
+														 * pagamento saber de
+														 * que aviso bancário o
+														 * pagamento está
+														 * relacionado.
+														 */
+														devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+
+														// DEVOLUÇÕES QUE SERÃO
+														// INSERIDAS
+														devolucoes.add(devolucao);
+													}
+												}
+											}
+
+											/*
+											 * PAGAMENTO PARCIAL
+											 * 
+											 * Alterado por Raphael Rossiter em
+											 * 13/10/2009 Analista: Rosana
+											 * Carvalho
+											 * 
+											 * Recupera uma coleção de
+											 * pagamentos parciais do caso de
+											 * uso [UC0259] - Processar
+											 * Pagamento com Código de Barras
+											 */
+											Collection<ProcessarPagamentoParcialContaHelper> colecaoPagamentosParciaisCodigoBarras = pagamentoHelperCodigoBarras
+													.getColecaoProcessarPagamentoParcialContaHelper();
+
+											if (colecaoPagamentosParciaisCodigoBarras != null && !colecaoPagamentosParciaisCodigoBarras.isEmpty()) {
+
+												// PAGAMENTOS PARCIAIS QUE SERÃO
+												// INSERIDOS
+												pagamentosParciais.addAll(colecaoPagamentosParciaisCodigoBarras);
+											}
+
+										} else {
+											// inseri o item movimento
+											// arrecadador
+											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(),
+													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, null, null, null, null);
+
+											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+
+											// 3.5. Caso contrário, ou seja, o
+											// Indicador de Aceitação do
+											// Registro do Movimento corresponda
+											// a 2 (NÃO):
+											// 3.5.1. E caso exista cliente
+											// fictício para documento não
+											// identificado
+											// (CLIE_IDDOCNAOIDENTIFICADO da
+											// tabela SISTEMA_PARAMETRO com
+											// valor diferente de nulo).
+											if (getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
+													&& getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
+
+												// 3.5.1.1. O sistema cria um
+												// pagamento para esse cliente
+												// [SB0019 ? Inserir pagamento
+												// para cliente fictício].
+												Pagamento pagamentoCliente = this.inserirPagamentosClienteFicticio(registroHelperCodigoG.getValorRecebido(),
+														registroHelperCodigoG.getDataPagamento(), idFormaArrecadacao, dataPrevistaCredito);
+
+												// 3.5.1.2. Adiciona o pagamento
+												// à coleção de pagamentos deste
+												// caso de uso;
+												Collection colecaoPagamentos = new ArrayList();
+												colecaoPagamentos.add(pagamentoCliente);
+												pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
+
+												// 3.5.1.3. Determina os valores
+												// calculados e informados do
+												// pagamento e da devolução:
+
+												/*
+												 * 3.5.2. Caso já exista o aviso
+												 * bancário o sistema atualiza o
+												 * valor da arrecadação e da
+												 * devolução do aviso bancário
+												 */
+												if (avisoBancario != null) {
+
+													/*
+													 * PAGAMENTO
+													 */
+													Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+
+													Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras.iterator();
+
+													while (pagamentosCodigoBarraIterator.hasNext()) {
+
+														Pagamento pagamento = (Pagamento) pagamentosCodigoBarraIterator.next();
+
+														// Adiciona o valor do
+														// pagamento
+														valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+														pagamento.setAvisoBancario(avisoBancario);
+
+														pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+														// PAGAMENTOS QUE SERÃO
+														// INSERIDOS
+														pagamentos.add(pagamento);
+
+													}
+
+													/*
+													 * DEVOLUÇÃO
+													 */
+													Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
+
+													if (colecaoDevolucaoCodigoBarras != null && !colecaoDevolucaoCodigoBarras.isEmpty()) {
+
+														for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
+
+															// Adiciona o valor
+															// da devolução
+															valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
+
+															devolucao.setAvisoBancario(avisoBancario);
+
+															devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+															// DEVOLUÇÕES QUE
+															// SERÃO INSERIDAS
+															devolucoes.add(devolucao);
+														}
+													}
+
+												} else {
+													// 3.5.3. Caso contrário, o
+													// sistema gera uma nova
+													// ocorrência na coleção de
+													// avisos bancários
+													/*
+													 * PAGAMENTO
+													 */
+													Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+
+													Iterator pagamentosCodigoBarraIterator = pagamentosCodigoBarras.iterator();
+
+													while (pagamentosCodigoBarraIterator.hasNext()) {
+
+														Pagamento pagamento = (Pagamento) pagamentosCodigoBarraIterator.next();
+
+														// Adiciona o valor do
+														// pagamento
+														valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+														// Seta o aviso bancario
+														// para NULL
+														pagamento.setAvisoBancario(null);
+
+														pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+														pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+
+														// PAGAMENTOS QUE SERÃO
+														// INSERIDOS
+														pagamentos.add(pagamento);
+
+													}
+
+													/*
+													 * DEVOLUÇÃO
+													 */
+													Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
+
+													if (colecaoDevolucaoCodigoBarras != null && !colecaoDevolucaoCodigoBarras.isEmpty()) {
+
+														for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
+
+															// Adiciona o valor
+															// da devolução
+															valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
+
+															devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+															devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+
+															// DEVOLUÇÕES QUE
+															// SERÃO INSERIDAS
+															devolucoes.add(devolucao);
+														}
+													}
+												}
+											}
+
+										}
+
+										if (avisoBancario != null) {
+
+											if (avisoBancario.getValorArrecadacaoCalculado() != null && !avisoBancario.getValorArrecadacaoCalculado().equals("")) {
+												BigDecimal novoValorArrecadacaoCalculado = avisoBancario.getValorArrecadacaoCalculado().add(valorCalcPagamento);
+												avisoBancario.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+											} else {
+												avisoBancario.setValorArrecadacaoCalculado(valorCalcPagamento);
+											}
+
+											if (avisoBancario.getValorDevolucaoCalculado() != null && !avisoBancario.getValorDevolucaoCalculado().equals("")) {
+												BigDecimal novoValorDevolucaoCalculado = avisoBancario.getValorDevolucaoCalculado().add(valorCalcDevolucao);
+												avisoBancario.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+											} else {
+												avisoBancario.setValorDevolucaoCalculado(valorCalcDevolucao);
+											}
+
+											if (avisoBancario.getValorArrecadacaoInformado() != null && !avisoBancario.getValorArrecadacaoInformado().equals("")) {
+												BigDecimal novoValorArrecadacaoInformado = avisoBancario.getValorArrecadacaoInformado().add(valorInfPagamento);
+												avisoBancario.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+												avisoBancario.setValorRealizado(novoValorArrecadacaoInformado);
+											} else {
+												avisoBancario.setValorArrecadacaoInformado(valorInfPagamento);
+												avisoBancario.setValorRealizado(valorInfPagamento);
+											}
+
+											// se for atualiza o valor da
+											// arrecadação no aviso bancario
+
+											avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
+											avisoBancario.setUltimaAlteracao(new Date());
+											// atualiza o aviso bancário
+											try {
+												repositorioUtil.atualizar(avisoBancario);
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+										} else {
+											Iterator avisosBancarioIterator = avisosBancarios.iterator();
+											// cria um boolean para saber se
+											// existe
+											// algum aviso bancario da
+											// coleção
+											// com a mesma data prevista da
+											// data
+											// prevista calculada
+											// anteriormente
+											boolean achou = false;
 											while (avisosBancarioIterator.hasNext()) {
 												AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator.next();
 												boolean comparaDataIguais = Util.datasIguais(avisoBancarioDaColecao.getDataPrevista(), dataPrevistaCredito);
 
-												boolean formasArrecadacaoIguais = avisoBancarioDaColecao.getArrecadacaoForma().getId().intValue() == idFormaArrecadacao
-														.intValue();
-												
+												boolean formasArrecadacaoIguais = avisoBancarioDaColecao.getArrecadacaoForma().getId().intValue() == idFormaArrecadacao.intValue();
+
 												boolean anoMesReferenciaArrecadacaoIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesReferenciaArrecadacao;
 
 												if (comparaDataIguais && formasArrecadacaoIguais && anoMesReferenciaArrecadacaoIguais) {
 
 													if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
 															&& !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
-														BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao.getValorArrecadacaoCalculado().add(
-																valorCalcPagamento);
+														BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao.getValorArrecadacaoCalculado().add(valorCalcPagamento);
 														avisoBancarioDaColecao.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
 													} else {
 														avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
@@ -2455,8 +2220,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 													if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
 															&& !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
-														BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao.getValorDevolucaoCalculado().add(
-																valorCalcDevolucao);
+														BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao.getValorDevolucaoCalculado().add(valorCalcDevolucao);
 														avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
 													} else {
 														avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
@@ -2464,8 +2228,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 													if (avisoBancarioDaColecao.getValorArrecadacaoInformado() != null
 															&& !avisoBancarioDaColecao.getValorArrecadacaoInformado().equals("")) {
-														BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorArrecadacaoInformado().add(
-																valorInfPagamento);
+														BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorArrecadacaoInformado().add(valorInfPagamento);
 														avisoBancarioDaColecao.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
 														avisoBancarioDaColecao.setValorRealizado(novoValorArrecadacaoInformado);
 													} else {
@@ -2478,1134 +2241,985 @@ public class ControladorArrecadacao implements SessionBean {
 													break;
 												}
 											}
-                                            if (!achou) {
-                                            	
-                                            							
-                                            /**
-                                             * @date 24/10/2013
-                                             * @author Adriana Muniz e Wellington Rocha
-                                             * Correção da passagem de paramêtros
-                                             * */	
-    
-                                                // chama o método para cria
-                                                // o
-                                                // objeto
-                                                // do aviso bancário
-                                                avisoBancario = gerarOcorrenciaAvisoBancario(
-                                                        arrecadadorMovimento
-                                                                .getId(),
-                                                        registroHelperCodigoA,
-                                                        dataPrevistaCredito,
-                                                        registroHelperCodigoZ
-                                                                .getValorTotalRegistrosArquivo(),
-                                                        registroHelperCodigoA
-                                                                .getCodigoBanco(),
-                                                        valorInfPagamento,
-                                                        valorCalcPagamento,
-                                                        valorCalcDevolucao,
-                                                        valorInfDevolucao,
-                                                        numeroSequencialAvisoBancario,
-                                                        idFormaArrecadacao,
-                                                        indicadorAceitacaoRegistroMovimento,
-                                                        arrecadadorContrato.getCodigoConvenio(),
-                                                        anoMesReferenciaArrecadacao);
-                                                numeroSequencialAvisoBancario += 1;
-    
-                                                // adiciona o aviso bancário
-                                                // na
-                                                // coleção de avisos
-                                                // bancários
-                                                avisosBancarios.add(avisoBancario);
-                                            }
-                                        }
-                                        
-                                     } else {
-                                        // seta o indicador de aceitação do
-                                        // registro
-                                        // do movimento para 2(NÃO)
-                                        indicadorAceitacaoRegistroMovimento = 2;
-    
-                                        // inseri o item movimento arrecadador
-                                        inserirItemMovimentoArrecadador(
-                                                linhaRegistro,
-                                                arrecadadorMovimento.getId(),
-                                                descricaoOcorrenciaMovimento,
-                                                indicadorAceitacaoRegistroMovimento,
-                                                null);
-                                    }
-                                    break;
-    
-                                case x:
-                                    /**
-                                     * [SF0007] - Processar Registro Código X Autor:
-                                     * Sávio Luiz Data: 21/02/2006
-                                     */
-    
-                                    RegistroHelperCodigoX registroHelperCodigoX = (RegistroHelperCodigoX) distribuirdadosRegistroMovimentoArrecadador(
-                                            linhaRegistro, null);
-    
-                                    Agencia agencia = null;
-    
-                                    try {
-                                        agencia = repositorioArrecadacao
-                                                .pesquisarAgencia(
-                                                        registroHelperCodigoX
-                                                                .getCodigoAgencia(),
-                                                        new Integer(
-                                                                registroHelperCodigoA
-                                                                        .getCodigoBanco()));
-                                    } catch (NumberFormatException e) {
-                                        agencia = null;
-                                    }
-                                    // caso exista agencia então atualiza a agencia
-                                    if (agencia != null && !agencia.equals("")) {
-                                        // nome da agencia
-                                        agencia
-                                                .setNomeAgencia(registroHelperCodigoX
-                                                        .getNomeAgencia());
-                                        // id do cep
-                                        Cep cep = null;
-                                        try {
-                                            cep = getControladorEndereco()
-                                                    .pesquisarCep(
-                                                            new Integer(
-                                                                    registroHelperCodigoX
-                                                                            .getCodigoCep()
-                                                                            + registroHelperCodigoX
-                                                                                    .getSufixoCep()));
-                                        } catch (NumberFormatException e) {
-                                            cep = null;
-                                        }
-    
-                                        if (cep != null && !cep.equals("")) {
-                                            agencia.setCep(cep);
-                                        }
-    
-                                        // numero do imovel
-                                        agencia
-                                                .setNumeroImovel(registroHelperCodigoX
-                                                        .getNumero());
-    
-                                        // numero do imovel
-                                        agencia.setUltimaAlteracao(new Date());
-                                        // atualiza a agencia na base
-                                        getControladorUtil().atualizar(agencia);
-    
-                                    } else {
-                                        // caso não exista agencia então cria uma
-                                        // agencia com os dados do arquivo
-                                        agencia = new Agencia();
-                                        agencia
-                                                .setCodigoAgencia(registroHelperCodigoX
-                                                        .getCodigoAgencia());
-                                        Banco banco = new Banco();
-                                        banco
-                                                .setId(Util
-                                                        .converterStringParaInteger(registroHelperCodigoA
-                                                                .getCodigoBanco()));
-                                        agencia.setBanco(banco);
-    
-                                        // nome da agencia
-                                        agencia
-                                                .setNomeAgencia(registroHelperCodigoX
-                                                        .getNomeAgencia());
-                                        agencia.setNumeroTelefone("0");
-    
-                                        // numero do imovel
-                                        agencia
-                                                .setNumeroImovel(registroHelperCodigoX
-                                                        .getNumero());
-    
-                                        // id do cep
-                                        Cep cep = null;
-                                        try {
-                                            cep = getControladorEndereco()
-                                                    .pesquisarCep(
-                                                            new Integer(
-                                                                    registroHelperCodigoX
-                                                                            .getCodigoCep()
-                                                                            + registroHelperCodigoX
-                                                                                    .getSufixoCep()));
-                                        } catch (NumberFormatException e) {
-                                            cep = null;
-                                        }
-    
-                                        if (cep != null && !cep.equals("")) {
-                                            agencia.setCep(cep);
-                                        }
-    
-                                        EnderecoReferencia endenrecoReferencia = new EnderecoReferencia();
-                                        endenrecoReferencia
-                                                .setId(EnderecoReferencia.NUMERO);
-                                        agencia
-                                                .setEnderecoReferencia(endenrecoReferencia);
-                                        agencia.setUltimaAlteracao(new Date());
-    
-                                        // inseri a agencia na base
-                                        getControladorUtil().inserir(agencia);
-                                    }
-    
-                                    // inseri o item movimento arrecadador
-                                    inserirItemMovimentoArrecadador(linhaRegistro,
-                                            arrecadadorMovimento.getId(),
-                                            descricaoOcorrenciaMovimento,
-                                            indicadorAceitacaoRegistroMovimento,
-                                            null);
-    
-                                    break;
-                                // caso não tenha sido nenhuma das opções
-                                // anteriores
-                                default:
-                                    descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
-    
-                                    // o indicador de aceitação é setado para
-                                    // 2(NÃO)
-                                    indicadorAceitacaoRegistroMovimento = 2;
-    
-                                    // inseri o item movimento arrecadador
-                                    inserirItemMovimentoArrecadador(linhaRegistro,
-                                            arrecadadorMovimento.getId(),
-                                            descricaoOcorrenciaMovimento,
-                                            indicadorAceitacaoRegistroMovimento,
-                                            null);
-    
-                                }
-                            }
-    
-                            // verifica se a coleção de registros C é diferente de
-                            // nulo,null
-                            if (colecaoCodigoRegistrosC != null
-                                    && !colecaoCodigoRegistrosC.isEmpty()) {
-                                // cria um arquivo para mandar para o banco com os
-                                // registros do tipo c
-                                gerarArquivoRegistrosTipoC(
-                                        registroHelperCodigoA,
-                                        registroHelperCodigoZ,
-                                        colecaoCodigoRegistrosC,
-                                        numeroSequencialArquivoEnvioDebitoAutomatico,
-                                        descricaoOcorrenciaMovimento,
-                                        indicadorAceitacaoRegistroMovimento,
-                                        idTipoMovimento);
-    
-                            }
-    
-                            // verifica se a coleção de avisos bancario é diferente
-                            // de
-                            // nulo
-                            if (avisosBancarios != null
-                                    && !avisosBancarios.isEmpty()) {
-                                Iterator avisosBancarioIterator = avisosBancarios
-                                        .iterator();
-                                while (avisosBancarioIterator.hasNext()) {
-                                    AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator
-                                            .next();
-                                    // avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
-                                    // avisoBancario
-                                    // .adicionarUsuario(usuario, usuarioAcao);
-                                    //
-                                    // inseri o aviso bancário na base e recupera o
-                                    // id
-                                    Integer idAvisoBancario = (Integer)getControladorUtil()
-                                            .inserir(avisoBancario);
-    
-                                    avisoBancario.setId(idAvisoBancario);
-    
-                                }
-                            }
-    
-                            // PREPARANDO A INSERÇÃO DOS PAGAMENTOS
-                            if (pagamentos != null && !pagamentos.isEmpty()) {
-    
-                                Collection colecaoPagamentos = new ArrayList();
-    
-                                Iterator pagamentoIterator = pagamentos.iterator();
-                                
-                                while (pagamentoIterator.hasNext()) {
-                                    
-                                	Pagamento pagamento = (Pagamento) pagamentoIterator.next();
-                                    
-                                    /*
-                                     * Verifica se existe o aviso bancário no pagamento,
-                                     * se não existe então seta o aviso bancário no pagamento
-                                     */
-                                	if (pagamento.getAvisoBancario() == null) {
-                                        
-                                		Iterator avisosBancarioIterator = avisosBancarios.iterator();
-                                        
-                                		while (avisosBancarioIterator.hasNext()) {
-                                            
-                                			AvisoBancario avisoBancario = (AvisoBancario) 
-                                			avisosBancarioIterator.next();
-                                            
-                                			/*
-                                			 * Caso a data prevista seja a mesma estão seta o aviso
-                                			 * bancário no pagamento.
-                                			 */
-                                			boolean comparaDataIguais = Util.datasIguais(
-                                            avisoBancario.getDataPrevista(),
-                                            pagamento.getDataPrevistaCreditoHelper());
-                                    		                                    
-		                                    boolean formasArrecadacaoIguais = 
-		                                    avisoBancario.getArrecadacaoForma().getId().intValue() ==
-		                                    pagamento.getArrecadacaoForma().getId().intValue();
-		                                    
-		                                    if (comparaDataIguais && formasArrecadacaoIguais) {
+											if (!achou) {
 
-                                                pagamento.setAvisoBancario(avisoBancario);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                	
-                                	//PAGAMENTOS QUE SERÃO INSERIDOS
-                                    colecaoPagamentos.add(pagamento);
-                                }
-    
-                                System.out.println(" >> MovArrec.Inserindo pagamentos [" 
-                                + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
-                                
-                                
-                                //INSERINDO OS PAGAMENTOS
-                                getControladorBatch().inserirColecaoObjetoParaBatchTransacao(
-                                colecaoPagamentos);
-                                
-                                
-                                System.out.println(" >> MovArrec.Pagamentos inseridos [" 
-                                + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
-                                
-                                
-                                /*
-                                 * Alterado por Francisco - 28/05/2008 / Analista: Ana Breda
-                                 * 
-                                 * Para cada pagamento, atualizar os itens de documento de cobranca correspondente
-                                 * Para uso do Resumo de Ações de cobranca
-                                 */
-                                int contador = 1;
-                                int total = colecaoPagamentos.size();
-                                Iterator iter = colecaoPagamentos.iterator();
-                                
-                                while (iter.hasNext()) {
-                                	
-                                	if (contador++ % 500 == 0){
-                                		
-                                		System.out.println(" >> MovArrec.Atualizando itens de cobranca[" 
-                                		+ contador++ + "/" + total +"]");
-                                		
-                                	}
-                                	
-                                	Pagamento pagamento = (Pagamento) iter.next();
-									
-									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento,
-									CobrancaDebitoSituacao.PAGO);		
-									
-									//CRC2725 - alterado por Vivianne Sousa - 11/09/2009 analista:Fátima
-									//Atualizar os itens de negativação
-									//[SB0017] - Verificar correspondência do pagamento com item de cobrança ou de negativação
-									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
-									
+												/**
+												 * @date 24/10/2013
+												 * @author Adriana Muniz e
+												 *         Wellington Rocha
+												 *         Correção da passagem
+												 *         de paramêtros
+												 */
+
+												// chama o método para cria
+												// o
+												// objeto
+												// do aviso bancário
+												avisoBancario = gerarOcorrenciaAvisoBancario(arrecadadorMovimento.getId(), registroHelperCodigoA, dataPrevistaCredito,
+														registroHelperCodigoZ.getValorTotalRegistrosArquivo(), registroHelperCodigoA.getCodigoBanco(), valorInfPagamento,
+														valorCalcPagamento, valorCalcDevolucao, valorInfDevolucao, numeroSequencialAvisoBancario, idFormaArrecadacao,
+														indicadorAceitacaoRegistroMovimento, arrecadadorContrato.getCodigoConvenio(), anoMesReferenciaArrecadacao);
+												numeroSequencialAvisoBancario += 1;
+
+												// adiciona o aviso bancário
+												// na
+												// coleção de avisos
+												// bancários
+												avisosBancarios.add(avisoBancario);
+											}
+										}
+
+									} else {
+										// seta o indicador de aceitação do
+										// registro do movimento para 2(NÃO)
+										indicadorAceitacaoRegistroMovimento = 2;
+
+										inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
+												indicadorAceitacaoRegistroMovimento, null, null, null, null);
+									}
+									break;
+
+								case x:
+									/**
+									 * [SF0007] - Processar Registro Código X
+									 * Autor: Sávio Luiz Data: 21/02/2006
+									 */
+
+									RegistroHelperCodigoX registroHelperCodigoX = (RegistroHelperCodigoX) distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, null);
+
+									Agencia agencia = null;
+
+									try {
+										agencia = repositorioArrecadacao.pesquisarAgencia(registroHelperCodigoX.getCodigoAgencia(),
+												new Integer(registroHelperCodigoA.getCodigoBanco()));
+									} catch (NumberFormatException e) {
+										agencia = null;
+									}
+									// caso exista agencia então atualiza a
+									// agencia
+									if (agencia != null && !agencia.equals("")) {
+										// nome da agencia
+										agencia.setNomeAgencia(registroHelperCodigoX.getNomeAgencia());
+										// id do cep
+										Cep cep = null;
+										try {
+											cep = getControladorEndereco().pesquisarCep(new Integer(registroHelperCodigoX.getCodigoCep() + registroHelperCodigoX.getSufixoCep()));
+										} catch (NumberFormatException e) {
+											cep = null;
+										}
+
+										if (cep != null && !cep.equals("")) {
+											agencia.setCep(cep);
+										}
+
+										// numero do imovel
+										agencia.setNumeroImovel(registroHelperCodigoX.getNumero());
+
+										// numero do imovel
+										agencia.setUltimaAlteracao(new Date());
+										// atualiza a agencia na base
+										getControladorUtil().atualizar(agencia);
+
+									} else {
+										// caso não exista agencia então cria
+										// uma
+										// agencia com os dados do arquivo
+										agencia = new Agencia();
+										agencia.setCodigoAgencia(registroHelperCodigoX.getCodigoAgencia());
+										Banco banco = new Banco();
+										banco.setId(Util.converterStringParaInteger(registroHelperCodigoA.getCodigoBanco()));
+										agencia.setBanco(banco);
+
+										// nome da agencia
+										agencia.setNomeAgencia(registroHelperCodigoX.getNomeAgencia());
+										agencia.setNumeroTelefone("0");
+
+										// numero do imovel
+										agencia.setNumeroImovel(registroHelperCodigoX.getNumero());
+
+										// id do cep
+										Cep cep = null;
+										try {
+											cep = getControladorEndereco().pesquisarCep(new Integer(registroHelperCodigoX.getCodigoCep() + registroHelperCodigoX.getSufixoCep()));
+										} catch (NumberFormatException e) {
+											cep = null;
+										}
+
+										if (cep != null && !cep.equals("")) {
+											agencia.setCep(cep);
+										}
+
+										EnderecoReferencia endenrecoReferencia = new EnderecoReferencia();
+										endenrecoReferencia.setId(EnderecoReferencia.NUMERO);
+										agencia.setEnderecoReferencia(endenrecoReferencia);
+										agencia.setUltimaAlteracao(new Date());
+
+										// inseri a agencia na base
+										getControladorUtil().inserir(agencia);
+									}
+
+									// inseri o item movimento arrecadador
+									inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento,
+											null, null, null, null);
+
+									break;
+								// caso não tenha sido nenhuma das opções
+								// anteriores
+								default:
+									descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
+
+									// o indicador de aceitação é setado para
+									// 2(NÃO)
+									indicadorAceitacaoRegistroMovimento = 2;
+
+									// inseri o item movimento arrecadador
+									inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento,
+											null, null, null, null);
 
 								}
-                                
-                                System.out.println(" >> MovArrec.Finalizou atualização dos itens");
-                            }
-    
-                            
-                            // PREPARANDO A INSERÇÃO DAS DEVOLUÇÕES
-                            if (devolucoes != null && !devolucoes.isEmpty()) {
-    
-                                /*
-                                 * Colocado por Raphael Rossiter em 29/10/2007
-                                 * Analista: Aryed Lins 
-                                 * 
-                                 * OBJ: Este caso de uso ficará
-                                 * responsável pela inserção das guias de devolução
-                                 */
-                                Integer idGuiaDevolucao = null;
-                                Collection colecaoDevolucao = new ArrayList();
-    
-                                Iterator devolucaoIterator = devolucoes.iterator();
-                                
-                                while (devolucaoIterator.hasNext()) {
-                                    
-                                	Devolucao devolucao = (Devolucao) devolucaoIterator.next();
-                                    
-                                	/*
-                                	 * Verifica se existe o aviso bancário no pagamento,
-                                	 * se não existe então seta o aviso bancario no pagamento
-                                	 */
-                                	if (devolucao.getAvisoBancario() == null) {
-                                        
-                                		Iterator avisosBancarioIterator = avisosBancarios.iterator();
-                                        
-                                		while (avisosBancarioIterator.hasNext()) {
-                                            
-                                			AvisoBancario avisoBancario = (AvisoBancario) 
-                                			avisosBancarioIterator.next();
-                                            
-                                			/*
-                                			 * Caso a data prevista seja a mesma estão seta o aviso
-                                			 * bancário no pagamento
-                                			 */
-                                			boolean comparaDataIguais = Util.datasIguais(
-                                            devolucao.getDataPrevistaCreditoHelper(),
-                                            avisoBancario.getDataPrevista());
-                                            
-                                			if (comparaDataIguais) {
-                                                
-                                				devolucao.setAvisoBancario(avisoBancario);
-                                                
-                                				break;
-                                            }
-                                        }
-                                    }
-                                	
-                                    /*
-                                     * Colocado por Sávio Luiz em 14/11/2007
-                                     * Analista: Aryed Lins 
-                                     * 
-                                     * OBJ: Este caso de uso ficará responsável pela inserção das 
-                                     * guias de devolução
-                                     */
-                                    if (devolucao.getGuiaDevolucao() != null) {
-                                        
-                                    	//GERANDO A GUIA DE DEVOLUÇÃO
-                                    	idGuiaDevolucao = (Integer) getControladorUtil()
-                                        .inserir(devolucao.getGuiaDevolucao());
-                                        
-                                    	devolucao.getGuiaDevolucao().setId(idGuiaDevolucao);
-                                    }
-    
-                                    colecaoDevolucao.add(devolucao);
-                                }
-    
-                                //INSERINDO AS DEVOLUÇÕES
-                                getControladorBatch().inserirColecaoObjetoParaBatchTransacao(
-                                colecaoDevolucao);
-    
-                            }
-                            
-                            // PREPARANDO A RETIFICAÇÃO DAS CONTAS PARA DAR BAIXA NOS PAGAMENTOS PARCIAIS
-                            if (pagamentosParciais != null && !pagamentosParciais.isEmpty()) {
-                            	
-                            	try {
-                            		
-                            		Iterator pagamentosParciaisIterator = pagamentosParciais.iterator();
-                                    
-                                    while (pagamentosParciaisIterator.hasNext()) {
-                                        
-                                    	ProcessarPagamentoParcialContaHelper helper = 
-                                    	(ProcessarPagamentoParcialContaHelper) pagamentosParciaisIterator.next();
-                                        
-                                    	System.out.println(" >> MovArrec.Retificando Contas[ ID Conta = " 
-                                    	+ helper.getConta().getId().toString() + " ]");
-                                    	
-                                    	Integer consumoAgua = 0;
-                                		if (helper.getConta().getConsumoAgua() != null){
-                                			consumoAgua = helper.getConta().getConsumoAgua();
-                                		}
-                                		
-                                		Integer volumeEsgoto = 0;
-                                		if (helper.getConta().getConsumoEsgoto() != null){
-                                			volumeEsgoto = helper.getConta().getConsumoEsgoto();
-                                		}
-                                    	
-                                    	//[UC0150] - Retificar Conta
-                						this.getControladorFaturamento().retificarConta(
-                						new Integer(helper.getConta().getReferencia()), helper.getConta(), 
-                						helper.getConta().getImovel(), helper.getColecaoDebitoCobrado(), 
-                						helper.getColecaoCreditoRealizado(), helper.getConta().getLigacaoAguaSituacao(),
-                						helper.getConta().getLigacaoEsgotoSituacao(), 
-                						helper.getColecaoCategoriaOUSubcategoria(), 
-                						consumoAgua.toString(), volumeEsgoto.toString(), 
-                						helper.getConta().getPercentualEsgoto().toString(),
-                						helper.getConta().getDataVencimentoConta(), 
-                						helper.getValoresConta(), helper.getContaMotivoRetificacao(), null, 
-                						Usuario.USUARIO_BATCH, 
-                						helper.getConta().getConsumoTarifa().getId().toString(), false,
-                						null,null,false, null,null,null,null,null);
+							}
+
+							// verifica se a coleção de registros C é diferente
+							// de
+							// nulo,null
+							if (colecaoCodigoRegistrosC != null && !colecaoCodigoRegistrosC.isEmpty()) {
+								// cria um arquivo para mandar para o banco com
+								// os
+								// registros do tipo c
+								gerarArquivoRegistrosTipoC(registroHelperCodigoA, registroHelperCodigoZ, colecaoCodigoRegistrosC, numeroSequencialArquivoEnvioDebitoAutomatico,
+										descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idTipoMovimento);
 
-                                    }
-                                    
-                                    System.out.println(" >> MovArrec.Finalizou Retificação das Contas");
-                                    
-                            	} catch (Exception ex) {
-                    				sessionContext.setRollbackOnly();
-                    				ex.printStackTrace();
-                    				new ControladorException("erro.sistema", ex);
-                    			}
-                            	
-                            }
-    
-                            // o sistema atualiza o numero sequencial do
-                            // arquivo(NSA)
-                            // verifica o tipo de pagamento
-                            if (registroHelperCodigoA.getTipoMovimento().equals(
-                                    ConstantesSistema.DEBITO_AUTOMATICO)) {
-                                arrecadadorContrato
-                                        .setNumeroSequencialArquivoRetornoDebitoAutomatico(numeroSequencialArquivoRetornoDebitoAutomatico);
-    
-                            } else {
-                                arrecadadorContrato
-                                        .setNumeroSequecialArquivoRetornoCodigoBarras(numeroSequecialArquivoRetornoCodigoBarras);
-    
-                            }
-    
-                            // caso a coleção de registros c não está vazia então
-                            // adiciona mais 1 para numero do
-                            // sequencial do arquivo de envio.
-                            if (colecaoCodigoRegistrosC != null
-                                    && !colecaoCodigoRegistrosC.isEmpty()) {
-                                numeroSequencialArquivoEnvioDebitoAutomatico += 1;
-                                flagEnvioDebitoAutomatico = true;
-                                arrecadadorContrato
-                                        .setNumeroSequencialArquivoEnvioDebitoAutomatico(numeroSequencialArquivoEnvioDebitoAutomatico);
-                            }
-    
-                            // atualiza arrecadação contrato na base
-                            try {
-                                repositorioArrecadacao
-                                        .atualizarDadosArrecadadorContrato(
-                                                arrecadadorContrato,
-                                                flagEnvioDebitoAutomatico,
-                                                flagRetornoCodigoBarras,
-                                                flagRetornoDebitoAutomatico,
-                                                flagRetornoFichaCompensacao);
-                            } catch (ErroRepositorioException e) {
-                                throw new ControladorException("erro.sistema", e);
-                            }
-    
-                            // -- PARTE QUE LIMPA OS CAMPOS PARA LER UM NOVO ARQUIVO(CASO EXISTA)--
-                            linhas = new ArrayList();
-                            registroHelperCodigoA = null;
-                            colecaoCodigoRegistrosC = new ArrayList();
-                            primeiraLinha = true;
-                            avisosBancarios = new ArrayList();
-                            pagamentos = new ArrayList();
-                            //comentador por: Anderson Italo
-                            //data:15/03/2010
-                            //motivo: Não faz sentido limpar o arrecadadorContrato pois
-                            //apenas deve existir um, devido ao usuário ter informado o código do
-                            //convênio na tela.
-                            //arrecadadorContrato = null;
-                            flagEnvioDebitoAutomatico = false;
-                            flagRetornoCodigoBarras = false;
-                            flagRetornoDebitoAutomatico = false;
-                            countRegistros = 0;
-                            devolucoes = new ArrayList();
-                        }
-    
-                    }
-                }
-                // caso não exista o registro Z.
-                if (!verificaRegistroZ) {
-                    throw new ControladorException(
-                            "atencao.arquivo.movimento.nao.codigo.z");
-                }
-                
-            }else{
-                tamanhoLinha = 400;
+							}
 
-                flagRetornoFichaCompensacao = true;
-                
-                boolean verificaRegistro9 = false;
-                
-                //Integer numeroSequecialArquivoRetornoFichaComp = null;
-                
-                RegistroFichaCompensacaoHeaderHelper registroHeader = null;
-                RegistroFichaCompensacaoTipo7Helper registroTipo7 = null;
-                RegistroFichaCompensacaoTrailerHelper registroTrailer = null;
-                
-                
-                
-                BigDecimal somatorioValorRecebido = BigDecimal.ZERO;
-                
-                for (int i = 1; i <= quantidadeRegistros; i++) {
-                    countRegistros = countRegistros + 1;
-    
-                    String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
-                    
-                    inicioLinha = inicioLinha + tamanhoLinha + 1;
-    
-                    String descricaoOcorrenciaMovimento = "OK";
-                    int indicadorAceitacaoRegistroMovimento = 1;
-    
-                    String codigoRegistro = linha.substring(0, 1);
-    
-                    short numeroSequencialAvisoBancario = 0;
-                    
-                    if (primeiraLinha) {
-                    	arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
+							// verifica se a coleção de avisos bancario é
+							// diferente
+							// de
+							// nulo
+							if (avisosBancarios != null && !avisosBancarios.isEmpty()) {
+								Iterator avisosBancarioIterator = avisosBancarios.iterator();
+								while (avisosBancarioIterator.hasNext()) {
+									AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
+									// avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
+									// avisoBancario
+									// .adicionarUsuario(usuario, usuarioAcao);
+									//
+									// inseri o aviso bancário na base e
+									// recupera o
+									// id
+									Integer idAvisoBancario = (Integer) getControladorUtil().inserir(avisoBancario);
 
-                    	registroHeader = RegistroFichaCompensacaoBuilder.getHeader(linha, arrecadadorContrato);
+									avisoBancario.setId(idAvisoBancario);
 
-                    	if (registroHeader.getIdCodigoBanco() != null
-                                && registroHeader.getDataGravacao() != null) {
-    
-                            Date dataGeracao = Util.converteStringSemBarraParaDateAnoSimples(registroHeader.getDataGravacao());
-    
-                            Short valorMaximoNumeroSequencia = null;
-                            try {
-                                valorMaximoNumeroSequencia = repositorioArrecadacao.pesquisarValorMaximoNumeroSequencial(
-                                                dataGeracao, registroHeader.getIdCodigoBanco());
-                            } catch (ErroRepositorioException e) {
-                                throw new ControladorException("erro.sistema");
-                            }
-    
-                            if (valorMaximoNumeroSequencia != null) {
-                                numeroSequencialAvisoBancario = (short) (valorMaximoNumeroSequencia.shortValue() + 1);
-                            }
-                        } else {
-                            numeroSequencialAvisoBancario = 0;
-                        }
-                        
-                        primeiraLinha = false;
+								}
+							}
 
-                    } else {
-                    	
-                        if (!codigoRegistro.equals("0") && !codigoRegistro.equals("2")
-                            && !codigoRegistro.equals("3") && !codigoRegistro.equals("5")
-                            && !codigoRegistro.equals("7") && !codigoRegistro.equals("9")) {
-                            throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
-                        }
-                        
-                        if (!codigoRegistro.equals("9")){
-                              linhas.add(linha);
-                        } else {
-                            verificaRegistro9 = true;
-                            
-                            registroTrailer = RegistroFichaCompensacaoBuilder.getTrailer(linha);
+							// PREPARANDO A INSERÇÃO DOS PAGAMENTOS
+							if (pagamentos != null && !pagamentos.isEmpty()) {
 
-                            if (registroTrailer.getTotalLinhas() != countRegistros) {
-                                throw new ControladorException("atencao.total.registros.invalido");
-                            }
-                            
-                            arrecadadorMovimento = inserirMovimentoArrecadadorFichaCompensacaoNovo(registroHeader, registroTrailer);
-                            
-                            arrecadadoresMovimento.add(arrecadadorMovimento);
+								Collection colecaoPagamentos = new ArrayList();
 
-                            Iterator linhaIterator = linhas.iterator();
-                            aux = 1;
+								Iterator pagamentoIterator = pagamentos.iterator();
 
-                            while (linhaIterator.hasNext()) {
+								while (pagamentoIterator.hasNext()) {
 
-                            	aux++;
-                            	descricaoOcorrenciaMovimento = "OK";
-                            	indicadorAceitacaoRegistroMovimento = 1;
+									Pagamento pagamento = (Pagamento) pagamentoIterator.next();
 
-                            	boolean dataValida = false;
-                            	//boolean valorDebitoInvalido = false;
-                            	//Date dataDebito = null;
+									/*
+									 * Verifica se existe o aviso bancário no
+									 * pagamento, se não existe então seta o
+									 * aviso bancário no pagamento
+									 */
+									if (pagamento.getAvisoBancario() == null) {
 
-                            	String linhaRegistro = (String) linhaIterator.next();
+										Iterator avisosBancarioIterator = avisosBancarios.iterator();
 
-                            	Integer codigoRegistroInteger = new Integer (linhaRegistro.substring(0,1));
+										while (avisosBancarioIterator.hasNext()) {
 
-                            	switch (codigoRegistroInteger) {
+											AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
 
-                            	case 7:
-                            		registroTipo7 = RegistroFichaCompensacaoBuilder.getTipo7(linhaRegistro);
-                            		
-                            		dataValida = Util.validarDiaMesAnoSemBarraAnoSimples(registroTipo7.getDataLiquidacao());
-                            		if (!dataValida) {
-                            			descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
-                            		} else {
-                            			if (registroTipo7.getDataLiquidacaoFormatado().after(new Date())) {
-                            				descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
-                            			}
-                            		}
+											/*
+											 * Caso a data prevista seja a mesma
+											 * estão seta o aviso bancário no
+											 * pagamento.
+											 */
+											boolean comparaDataIguais = Util.datasIguais(avisoBancario.getDataPrevista(), pagamento.getDataPrevistaCreditoHelper());
 
-                            		if (Util.validarValorNaoNumerico(registroTipo7.getValorRecebido())) {
-                            			descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
-                            		}
+											boolean formasArrecadacaoIguais = avisoBancario.getArrecadacaoForma().getId().intValue() == pagamento.getArrecadacaoForma().getId()
+													.intValue();
 
-                            		somatorioValorRecebido = somatorioValorRecebido.add(registroTipo7.getValorRecebidoFormatado());
-                            		
-                            		Date dataLiquidacao = Util.converteStringSemBarraParaDateAnoSimples(registroTipo7.getDataLiquidacao());
-                                    Integer anoMesReferenciaArrecadacao = Integer.parseInt(new SimpleDateFormat("yyyyMM").format(dataLiquidacao));
+											if (comparaDataIguais && formasArrecadacaoIguais) {
 
-                            		if (descricaoOcorrenciaMovimento.equals("OK")) {
+												pagamento.setAvisoBancario(avisoBancario);
+												break;
+											}
+										}
+									}
 
+									// PAGAMENTOS QUE SERÃO INSERIDOS
+									colecaoPagamentos.add(pagamento);
+								}
 
-                            			PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
-                            					registroTipo7, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
+								System.out.println(" >> MovArrec.Inserindo pagamentos [" + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
 
-                            			descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
+								// INSERINDO OS PAGAMENTOS
+								getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoPagamentos);
 
-                            			indicadorAceitacaoRegistroMovimento = Integer.parseInt(pagamentoHelperCodigoBarras.getIndicadorAceitacaoRegistro());
+								System.out.println(" >> MovArrec.Pagamentos inseridos [" + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
 
-                            			Date dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(registroTipo7.getDataLiquidacaoFormatado(), 2);
+								/*
+								 * Alterado por Francisco - 28/05/2008 /
+								 * Analista: Ana Breda
+								 * 
+								 * Para cada pagamento, atualizar os itens de
+								 * documento de cobranca correspondente Para uso
+								 * do Resumo de Ações de cobranca
+								 */
+								int contador = 1;
+								int total = colecaoPagamentos.size();
+								Iterator iter = colecaoPagamentos.iterator();
 
-                            			AvisoBancario avisoBancario = null;
+								while (iter.hasNext()) {
 
-                            			try {
-                            				avisoBancario = repositorioArrecadacao.pesquisarAvisoBancario(
-                            						Integer.valueOf(registroHeader.getIdCodigoBanco()), registroHeader.getDataGravacaoFormatado(), 
-                            						dataPrevistaCredito,arrecadadorMovimento.getId(),
-                            						ArrecadacaoForma.FICHA_COMPENSACAO);
-                            			} catch (ErroRepositorioException e) {
-                            				throw new ControladorException("erro.sistema", e);
-                            			}
+									if (contador++ % 500 == 0) {
 
+										System.out.println(" >> MovArrec.Atualizando itens de cobranca[" + contador++ + "/" + total + "]");
 
-                            			BigDecimal valorCalcPagamento = new BigDecimal("0.00");
-                            			BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
-                            			BigDecimal valorInfPagamento = registroTipo7.getValorRecebidoFormatado();
-                            			BigDecimal valorInfDevolucao = new BigDecimal("0.00");
+									}
 
-                            			if (indicadorAceitacaoRegistroMovimento == 1) {
+									Pagamento pagamento = (Pagamento) iter.next();
 
-                            				Integer idImovelPagamento = null;
-                            				if (pagamentoHelperCodigoBarras.getColecaoPagamentos() != null
-                            						&& !pagamentoHelperCodigoBarras.getColecaoPagamentos().isEmpty()) {
+									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
 
-                            					Pagamento pagamento = (Pagamento) Util
-                            							.retonarObjetoDeColecao(pagamentoHelperCodigoBarras.getColecaoPagamentos());
-
-                            					if (pagamento.getImovel() != null) {
-                            						idImovelPagamento = pagamento.getImovel().getId();
-                            					}
-                            				}
-
-                            				Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(
-                            						linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, 
-                            						indicadorAceitacaoRegistroMovimento,idImovelPagamento);
-
-                            				ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-                            				arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
-
-                            				if (avisoBancario != null && avisoBancario.getValorArrecadacaoCalculado().compareTo(BigDecimal.ZERO) == 0) {
-
-                            					Collection pagamentosFichaCompensacao = pagamentoHelperCodigoBarras.getColecaoPagamentos();
-                            					Iterator pagamentosFichaCompensacaoIterator = pagamentosFichaCompensacao.iterator();
-
-                            					while (pagamentosFichaCompensacaoIterator.hasNext()) {
-                            						Pagamento pagamento = (Pagamento) pagamentosFichaCompensacaoIterator.next();
-
-                            						valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
-
-                            						pagamento.setAvisoBancario(avisoBancario);
-                            						pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-
-                            						pagamentos.add(pagamento);
-
-                            					}
-
-                            				} else {
-                            					Collection pagamentosFichaCompensacao = pagamentoHelperCodigoBarras.getColecaoPagamentos();
-                            					Iterator pagamentosFichaCompensacaoIterator = pagamentosFichaCompensacao.iterator();
-
-                            					while (pagamentosFichaCompensacaoIterator.hasNext()) {
-                            						Pagamento pagamento = (Pagamento) pagamentosFichaCompensacaoIterator.next();
-
-                            						pagamento.setAvisoBancario(null);
-                            						pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
-                            						pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
-
-                            						valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
-
-                            						pagamentos.add(pagamento);
-
-                            					}
-                            				}
-
-                            			}
-
-                            			if (avisoBancario != null) {
-
-                            				if (avisoBancario.getValorArrecadacaoCalculado() != null
-                            						&& !avisoBancario.getValorArrecadacaoCalculado().equals("")) {
-                            					BigDecimal novoValorArrecadacaoCalculado = avisoBancario
-                            							.getValorArrecadacaoCalculado().add(valorCalcPagamento);
-                            					avisoBancario.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
-                            				} else {
-                            					avisoBancario.setValorArrecadacaoCalculado(valorCalcPagamento);
-                            				}
-
-                            				if (avisoBancario.getValorDevolucaoCalculado() != null
-                            						&& !avisoBancario.getValorDevolucaoCalculado().equals("")) {
-                            					BigDecimal novoValorDevolucaoCalculado = avisoBancario
-                            							.getValorDevolucaoCalculado().add(valorCalcDevolucao);
-                            					avisoBancario.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                            				} else {
-                            					avisoBancario.setValorDevolucaoCalculado(valorCalcDevolucao);
-                            				}
-
-                            				if (avisoBancario.getValorArrecadacaoInformado() != null
-                            						&& !avisoBancario.getValorArrecadacaoInformado().equals("")) {
-                            					BigDecimal novoValorArrecadacaoInformado = avisoBancario
-                            							.getValorArrecadacaoInformado().add(valorInfPagamento);
-                            					avisoBancario.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                            					avisoBancario.setValorRealizado(novoValorArrecadacaoInformado);
-                            				} else {
-                            					avisoBancario.setValorArrecadacaoInformado(valorInfPagamento);
-                            					avisoBancario.setValorRealizado(valorInfPagamento);
-                            				}
-
-                            				avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
-                            				avisoBancario.setUltimaAlteracao(new Date());
-
-                            				try {
-                            					repositorioUtil.atualizar(avisoBancario);
-                            				} catch (ErroRepositorioException e) {
-                            					throw new ControladorException("erro.sistema", e);
-                            				}
-                            			} else {
-                            				Iterator<AvisoBancario> avisosBancarioIterator = avisosBancarios.iterator();
-
-                            				boolean achou = false;
-                            				while (avisosBancarioIterator.hasNext()) {
-                            					AvisoBancario avisoBancarioDaColecao = avisosBancarioIterator.next();
-                            					boolean comparaDataIguais = Util.datasIguais(avisoBancarioDaColecao.getDataPrevista(), dataPrevistaCredito);
-                            					boolean comparaAnoMeReferenciaIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesReferenciaArrecadacao;
-                            					if (comparaDataIguais && comparaAnoMeReferenciaIguais) {
-
-                            						if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
-                            								&& !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
-                            							BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao
-                            									.getValorArrecadacaoCalculado().add(valorCalcPagamento);
-                            							avisoBancarioDaColecao.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
-                            						} else {
-                            							avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
-                            						}
-
-                            						if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
-                            								&& !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
-                            							BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao
-                            									.getValorDevolucaoCalculado().add(valorCalcDevolucao);
-                            							avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
-                            						} else {
-                            							avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
-                            						}
-
-                            						if (avisoBancarioDaColecao.getValorArrecadacaoInformado() != null
-                            								&& !avisoBancarioDaColecao.getValorArrecadacaoInformado().equals("")) {
-                            							BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao
-                            									.getValorArrecadacaoInformado().add(valorInfPagamento);
-                            							avisoBancarioDaColecao.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
-                            							avisoBancarioDaColecao.setValorRealizado(novoValorArrecadacaoInformado);
-                            						} else {
-                            							avisoBancarioDaColecao.setValorArrecadacaoInformado(valorInfPagamento);
-                            							avisoBancarioDaColecao.setValorRealizado(valorInfPagamento);
-                            						}
-
-                            						achou = true;
-                            						break;
-                            					}
-                            				}
-                            				if (!achou) {
-
-                            					avisoBancario = gerarOcorrenciaFichaAvisoBancarioNovo(
-                            							arrecadadorMovimento.getId(), registroHeader,
-                            							dataPrevistaCredito, anoMesReferenciaArrecadacao,
-                            							valorInfPagamento, valorCalcPagamento, valorCalcDevolucao,      
-                            							valorInfDevolucao, numeroSequencialAvisoBancario);
-
-                            					numeroSequencialAvisoBancario += 1;
-
-                            					avisosBancarios.add(avisoBancario);
-                            				}
-                            			}
-                            		}
-
-                            		break;
-
-
-                            		// caso não tenha sido nenhuma das opções
-                            		// anteriores
-                            	default:
-                            		descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
-
-                            		// o indicador de aceitação é setado para 2(NÃO)
-                            		indicadorAceitacaoRegistroMovimento = 2;
-
-                            		// inseri o item movimento arrecadador
-                            		inserirItemMovimentoArrecadador(linhaRegistro,
-                            				arrecadadorMovimento.getId(),
-                            				descricaoOcorrenciaMovimento,
-                            				indicadorAceitacaoRegistroMovimento,
-                            				null);
-
-                            	}
-                            }
-                            
-                            // atualiza valor total movimento do ARRECADADOR_MOVIMENTO
-                            atualizarValorMovimentoArrecadadorMovimento(
-                                    arrecadadorMovimento.getId(), somatorioValorRecebido);
-                            
-                            
-                            //verifica se a coleção de avisos bancario é diferente de nulo
-                            if (avisosBancarios != null && !avisosBancarios.isEmpty()) {
-                                Iterator avisosBancarioIterator = avisosBancarios.iterator();
-                                while (avisosBancarioIterator.hasNext()) {
-                                    AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
-                                    
-                                    // insere o aviso bancário na base e recupera o id
-                                    Integer idAvisoBancario = (Integer) getControladorUtil().inserir(avisoBancario);
-    
-                                    avisoBancario.setId(idAvisoBancario);
-    
-                                }
-                            }
-    
-                            // verifica se a coleção de pagamentos está diferente de nulo
-    
-                            if (pagamentos != null && !pagamentos.isEmpty()) {
-    
-                                Collection colecaoPagamentos = new ArrayList();
-    
-                                Iterator pagamentoIterator = pagamentos.iterator();
-                                while (pagamentoIterator.hasNext()) {
-                                    Pagamento pagamento = (Pagamento) pagamentoIterator.next();
-                                    // verifica se existe o aviso bancario no pagamento,
-                                    // se não existe então seta o aviso bancario no pagamento
-                                    if (pagamento.getAvisoBancario() == null
-                                            || pagamento.getAvisoBancario().equals("")) {
-                                        
-                                        Iterator avisosBancarioIterator = avisosBancarios.iterator();
-                                        while (avisosBancarioIterator.hasNext()) {
-                                            AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
-                                            
-                                            // caso a data prevista seja a mesma 
-                                            // estão seta o aviso bancário no pagamento
-                                            boolean comparaDataIguais = Util.datasIguais(pagamento
-                                                    .getDataPrevistaCreditoHelper(), avisoBancario.getDataPrevista());
-                                            if (comparaDataIguais) {
-                                                pagamento.setAvisoBancario(avisoBancario);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    colecaoPagamentos.add(pagamento);
-    
-                                }
-    
-                                System.out.println(" >> MovArrec.Inserindo pagamentos [" 
-                                	+ nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
-                                getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoPagamentos);
-                                
-                                System.out.println(" >> MovArrec.Pagamentos inseridos [" 
-                                    	+ nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
-                                	        
-                                // Alterado por Francisco - 14/10/2008 / Analista: Ana Breda
-                                // Para cada pagamento, atualizar os itens de documento de cobranca correspondente
-                                // Para uso do Resumo de Ações de cobranca
-                                int contador = 1;
-                                int total = colecaoPagamentos.size();
-                                Iterator iter = colecaoPagamentos.iterator();
-                                while (iter.hasNext()) {
-                                	if (contador++ % 500 == 0){
-                                		System.out.println(" >> MovArrec.Atualizando itens de cobranca[" + contador++ + "/" + total +"]");
-                                	}
-                                    Pagamento pagamento = (Pagamento) iter.next();
-                                    getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento,
-                                          CobrancaDebitoSituacao.PAGO);   
-                                    
-//                                  //CRC3233 - alterado por Vivianne Sousa - 01/12/2009 analista:Fátima
-									//[SB0017] - Verificar correspondência do pagamento com item de cobrança ou de negativação
+									// CRC2725 - alterado por Vivianne Sousa -
+									// 11/09/2009 analista:Fátima
+									// Atualizar os itens de negativação
+									// [SB0017] - Verificar correspondência do
+									// pagamento com item de cobrança ou de
+									// negativação
 									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
-                                    
-                                }
 
-                                System.out.println(" >> MovArrec.Finalizou atualização dos itens");                                
-    
-                            }
-                            
-                            arrecadadorContrato.setNumeroSequencialArquivoRetornoFichaCompensacao(Integer.valueOf(registroHeader.getSequencialRetorno()));
-    
-                            // atualiza arrecadação contrato na base
-                            try {
-                                repositorioArrecadacao.atualizarDadosArrecadadorContrato(
-                                        arrecadadorContrato, flagEnvioDebitoAutomatico,flagRetornoCodigoBarras,flagRetornoDebitoAutomatico,flagRetornoFichaCompensacao);
-                            } catch (ErroRepositorioException e) {
-                                throw new ControladorException("erro.sistema", e);
-                            }
-                            
-                        }    
-                    }
-                }
-                
-                //caso não exista o registro 9.
-                if (!verificaRegistro9) {
-                    throw new ControladorException(
-                            "atencao.arquivo.movimento.nao.codigo.z");
-                }
-                
-            }
-            
+								}
 
-        } catch (ControladorException e) {
+								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
+							}
+
+							// PREPARANDO A INSERÇÃO DAS DEVOLUÇÕES
+							if (devolucoes != null && !devolucoes.isEmpty()) {
+
+								/*
+								 * Colocado por Raphael Rossiter em 29/10/2007
+								 * Analista: Aryed Lins
+								 * 
+								 * OBJ: Este caso de uso ficará responsável pela
+								 * inserção das guias de devolução
+								 */
+								Integer idGuiaDevolucao = null;
+								Collection colecaoDevolucao = new ArrayList();
+
+								Iterator devolucaoIterator = devolucoes.iterator();
+
+								while (devolucaoIterator.hasNext()) {
+
+									Devolucao devolucao = (Devolucao) devolucaoIterator.next();
+
+									/*
+									 * Verifica se existe o aviso bancário no
+									 * pagamento, se não existe então seta o
+									 * aviso bancario no pagamento
+									 */
+									if (devolucao.getAvisoBancario() == null) {
+
+										Iterator avisosBancarioIterator = avisosBancarios.iterator();
+
+										while (avisosBancarioIterator.hasNext()) {
+
+											AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
+
+											/*
+											 * Caso a data prevista seja a mesma
+											 * estão seta o aviso bancário no
+											 * pagamento
+											 */
+											boolean comparaDataIguais = Util.datasIguais(devolucao.getDataPrevistaCreditoHelper(), avisoBancario.getDataPrevista());
+
+											if (comparaDataIguais) {
+
+												devolucao.setAvisoBancario(avisoBancario);
+
+												break;
+											}
+										}
+									}
+
+									/*
+									 * Colocado por Sávio Luiz em 14/11/2007
+									 * Analista: Aryed Lins
+									 * 
+									 * OBJ: Este caso de uso ficará responsável
+									 * pela inserção das guias de devolução
+									 */
+									if (devolucao.getGuiaDevolucao() != null) {
+
+										// GERANDO A GUIA DE DEVOLUÇÃO
+										idGuiaDevolucao = (Integer) getControladorUtil().inserir(devolucao.getGuiaDevolucao());
+
+										devolucao.getGuiaDevolucao().setId(idGuiaDevolucao);
+									}
+
+									colecaoDevolucao.add(devolucao);
+								}
+
+								// INSERINDO AS DEVOLUÇÕES
+								getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoDevolucao);
+
+							}
+
+							// PREPARANDO A RETIFICAÇÃO DAS CONTAS PARA DAR
+							// BAIXA NOS PAGAMENTOS PARCIAIS
+							if (pagamentosParciais != null && !pagamentosParciais.isEmpty()) {
+
+								try {
+
+									Iterator pagamentosParciaisIterator = pagamentosParciais.iterator();
+
+									while (pagamentosParciaisIterator.hasNext()) {
+
+										ProcessarPagamentoParcialContaHelper helper = (ProcessarPagamentoParcialContaHelper) pagamentosParciaisIterator.next();
+
+										System.out.println(" >> MovArrec.Retificando Contas[ ID Conta = " + helper.getConta().getId().toString() + " ]");
+
+										Integer consumoAgua = 0;
+										if (helper.getConta().getConsumoAgua() != null) {
+											consumoAgua = helper.getConta().getConsumoAgua();
+										}
+
+										Integer volumeEsgoto = 0;
+										if (helper.getConta().getConsumoEsgoto() != null) {
+											volumeEsgoto = helper.getConta().getConsumoEsgoto();
+										}
+
+										// [UC0150] - Retificar Conta
+										this.getControladorRetificarConta().retificarConta(new Integer(helper.getConta().getReferencia()), helper.getConta(),
+												helper.getConta().getImovel(), helper.getColecaoDebitoCobrado(), helper.getColecaoCreditoRealizado(),
+												helper.getConta().getLigacaoAguaSituacao(), helper.getConta().getLigacaoEsgotoSituacao(),
+												helper.getColecaoCategoriaOUSubcategoria(), consumoAgua.toString(), volumeEsgoto.toString(),
+												helper.getConta().getPercentualEsgoto().toString(), helper.getConta().getDataVencimentoConta(), helper.getValoresConta(),
+												helper.getContaMotivoRetificacao(), null, Usuario.USUARIO_BATCH, helper.getConta().getConsumoTarifa().getId().toString(), false,
+												null, null, false, null, null, null, null, null, null);
+
+									}
+
+									System.out.println(" >> MovArrec.Finalizou Retificação das Contas");
+
+								} catch (Exception ex) {
+									sessionContext.setRollbackOnly();
+									ex.printStackTrace();
+									new ControladorException("erro.sistema", ex);
+								}
+
+							}
+
+							// o sistema atualiza o numero sequencial do
+							// arquivo(NSA)
+							// verifica o tipo de pagamento
+							if (registroHelperCodigoA.getTipoMovimento().equals(ConstantesSistema.DEBITO_AUTOMATICO)) {
+								arrecadadorContrato.setNumeroSequencialArquivoRetornoDebitoAutomatico(numeroSequencialArquivoRetornoDebitoAutomatico);
+
+							} else {
+								arrecadadorContrato.setNumeroSequecialArquivoRetornoCodigoBarras(numeroSequecialArquivoRetornoCodigoBarras);
+
+							}
+
+							// caso a coleção de registros c não está vazia
+							// então
+							// adiciona mais 1 para numero do
+							// sequencial do arquivo de envio.
+							if (colecaoCodigoRegistrosC != null && !colecaoCodigoRegistrosC.isEmpty()) {
+								numeroSequencialArquivoEnvioDebitoAutomatico += 1;
+								flagEnvioDebitoAutomatico = true;
+								arrecadadorContrato.setNumeroSequencialArquivoEnvioDebitoAutomatico(numeroSequencialArquivoEnvioDebitoAutomatico);
+							}
+
+							// atualiza arrecadação contrato na base
+							try {
+								repositorioArrecadacao.atualizarDadosArrecadadorContrato(arrecadadorContrato, flagEnvioDebitoAutomatico, flagRetornoCodigoBarras,
+										flagRetornoDebitoAutomatico, flagRetornoFichaCompensacao);
+							} catch (ErroRepositorioException e) {
+								throw new ControladorException("erro.sistema", e);
+							}
+
+							// -- PARTE QUE LIMPA OS CAMPOS PARA LER UM NOVO
+							// ARQUIVO(CASO EXISTA)--
+							linhas = new ArrayList();
+							registroHelperCodigoA = null;
+							colecaoCodigoRegistrosC = new ArrayList();
+							primeiraLinha = true;
+							avisosBancarios = new ArrayList();
+							pagamentos = new ArrayList();
+							// comentador por: Anderson Italo
+							// data:15/03/2010
+							// motivo: Não faz sentido limpar o
+							// arrecadadorContrato pois
+							// apenas deve existir um, devido ao usuário ter
+							// informado o código do
+							// convênio na tela.
+							// arrecadadorContrato = null;
+							flagEnvioDebitoAutomatico = false;
+							flagRetornoCodigoBarras = false;
+							flagRetornoDebitoAutomatico = false;
+							countRegistros = 0;
+							devolucoes = new ArrayList();
+						}
+
+					}
+				}
+				// caso não exista o registro Z.
+				if (!verificaRegistroZ) {
+					throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
+				}
+
+			} else {
+				tamanhoLinha = 400;
+
+				flagRetornoFichaCompensacao = true;
+
+				boolean verificaRegistro9 = false;
+
+				// Integer numeroSequecialArquivoRetornoFichaComp = null;
+
+				RegistroFichaCompensacaoHeaderHelper registroHeader = null;
+				RegistroFichaCompensacaoTipo7Helper registroTipo7 = null;
+				RegistroFichaCompensacaoTrailerHelper registroTrailer = null;
+
+				BigDecimal somatorioValorRecebido = BigDecimal.ZERO;
+
+				for (int i = 1; i <= quantidadeRegistros; i++) {
+					countRegistros = countRegistros + 1;
+
+					String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
+
+					inicioLinha = inicioLinha + tamanhoLinha + 1;
+
+					String descricaoOcorrenciaMovimento = "OK";
+					int indicadorAceitacaoRegistroMovimento = 1;
+
+					String codigoRegistro = linha.substring(0, 1);
+
+					short numeroSequencialAvisoBancario = 0;
+
+					if (primeiraLinha) {
+						arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
+
+						registroHeader = RegistroFichaCompensacaoBuilder.getHeader(linha, arrecadadorContrato);
+
+						if (registroHeader.getIdCodigoBanco() != null && registroHeader.getDataGravacao() != null) {
+
+							Date dataGeracao = Util.converteStringSemBarraParaDateAnoSimples(registroHeader.getDataGravacao());
+
+							Short valorMaximoNumeroSequencia = null;
+							try {
+								valorMaximoNumeroSequencia = repositorioArrecadacao.pesquisarValorMaximoNumeroSequencial(dataGeracao, registroHeader.getIdCodigoBanco());
+							} catch (ErroRepositorioException e) {
+								throw new ControladorException("erro.sistema");
+							}
+
+							if (valorMaximoNumeroSequencia != null) {
+								numeroSequencialAvisoBancario = (short) (valorMaximoNumeroSequencia.shortValue() + 1);
+							}
+						} else {
+							numeroSequencialAvisoBancario = 0;
+						}
+
+						primeiraLinha = false;
+
+					} else {
+
+						if (!codigoRegistro.equals("0") && !codigoRegistro.equals("2") && !codigoRegistro.equals("3") && !codigoRegistro.equals("5") && !codigoRegistro.equals("7")
+								&& !codigoRegistro.equals("9")) {
+							throw new ControladorException("atencao.arquivo.movimento.codigo.invalido");
+						}
+
+						if (!codigoRegistro.equals("9")) {
+							linhas.add(linha);
+						} else {
+							verificaRegistro9 = true;
+
+							registroTrailer = RegistroFichaCompensacaoBuilder.getTrailer(linha);
+
+							if (registroTrailer.getTotalLinhas() != countRegistros) {
+								throw new ControladorException("atencao.total.registros.invalido");
+							}
+
+							arrecadadorMovimento = inserirMovimentoArrecadadorFichaCompensacaoNovo(registroHeader, registroTrailer);
+
+							arrecadadoresMovimento.add(arrecadadorMovimento);
+
+							Iterator linhaIterator = linhas.iterator();
+							aux = 1;
+
+							while (linhaIterator.hasNext()) {
+								aux++;
+								descricaoOcorrenciaMovimento = "OK";
+								indicadorAceitacaoRegistroMovimento = 1;
+
+								boolean dataValida = false;
+
+								String linhaRegistro = (String) linhaIterator.next();
+
+								Integer codigoRegistroInteger = new Integer(linhaRegistro.substring(0, 1));
+
+								switch (codigoRegistroInteger) {
+
+								case 7:
+									registroTipo7 = RegistroFichaCompensacaoBuilder.getTipo7(linhaRegistro);
+
+									dataValida = Util.validarDiaMesAnoSemBarraAnoSimples(registroTipo7.getDataLiquidacao());
+									if (!dataValida) {
+										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+									} else {
+										if (registroTipo7.getDataLiquidacaoFormatado().after(new Date())) {
+											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+										}
+									}
+
+									if (Util.validarValorNaoNumerico(registroTipo7.getValorRecebido())) {
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+									}
+
+									somatorioValorRecebido = somatorioValorRecebido.add(registroTipo7.getValorRecebidoFormatado());
+
+									Date dataLiquidacao = Util.converteStringSemBarraParaDateAnoSimples(registroTipo7.getDataLiquidacao());
+									Integer anoMesReferenciaArrecadacao = Integer.parseInt(new SimpleDateFormat("yyyyMM").format(dataLiquidacao));
+
+									if (descricaoOcorrenciaMovimento.equals("OK")) {
+ 										PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacaoNovo(
+												registroTipo7, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
+
+										descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
+
+										indicadorAceitacaoRegistroMovimento = Integer.parseInt(pagamentoHelperCodigoBarras.getIndicadorAceitacaoRegistro());
+
+										Date dataPrevistaCredito = Util.adicionarNumeroDiasDeUmaData(registroTipo7.getDataLiquidacaoFormatado(), 2);
+
+										AvisoBancario avisoBancario = null;
+
+										try {
+											avisoBancario = repositorioArrecadacao.pesquisarAvisoBancario(Integer.valueOf(registroHeader.getIdCodigoBanco()),
+													registroHeader.getDataGravacaoFormatado(), dataPrevistaCredito, arrecadadorMovimento.getId(),
+													ArrecadacaoForma.FICHA_COMPENSACAO);
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
+
+										BigDecimal valorCalcPagamento = new BigDecimal("0.00");
+										BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
+										BigDecimal valorInfPagamento = registroTipo7.getValorRecebidoFormatado();
+										BigDecimal valorInfDevolucao = new BigDecimal("0.00");
+
+										if (indicadorAceitacaoRegistroMovimento == 1) {
+
+											Integer idImovelPagamento = null;
+											if (pagamentoHelperCodigoBarras.getColecaoPagamentos() != null && !pagamentoHelperCodigoBarras.getColecaoPagamentos().isEmpty()) {
+
+												Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(pagamentoHelperCodigoBarras.getColecaoPagamentos());
+
+												if (pagamento.getImovel() != null) {
+													idImovelPagamento = pagamento.getImovel().getId();
+												}
+											}
+
+											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(linhaRegistro, arrecadadorMovimento.getId(),
+													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelPagamento, pagamentoHelperCodigoBarras.getTipoDocumento(),
+													pagamentoHelperCodigoBarras.getIdDocumento(), pagamentoHelperCodigoBarras.getValorDocumento());
+
+											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+
+											if (avisoBancario != null && avisoBancario.getValorArrecadacaoCalculado().compareTo(BigDecimal.ZERO) == 0) {
+
+												Collection pagamentosFichaCompensacao = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+												Iterator pagamentosFichaCompensacaoIterator = pagamentosFichaCompensacao.iterator();
+
+												while (pagamentosFichaCompensacaoIterator.hasNext()) {
+													Pagamento pagamento = (Pagamento) pagamentosFichaCompensacaoIterator.next();
+
+													valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+													pagamento.setAvisoBancario(avisoBancario);
+													pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+													pagamentos.add(pagamento);
+
+												}
+
+											} else {
+												Collection pagamentosFichaCompensacao = pagamentoHelperCodigoBarras.getColecaoPagamentos();
+												Iterator pagamentosFichaCompensacaoIterator = pagamentosFichaCompensacao.iterator();
+
+												while (pagamentosFichaCompensacaoIterator.hasNext()) {
+													Pagamento pagamento = (Pagamento) pagamentosFichaCompensacaoIterator.next();
+
+													pagamento.setAvisoBancario(null);
+													pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
+													pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
+
+													valorCalcPagamento = valorCalcPagamento.add(pagamento.getValorPagamento());
+
+													pagamentos.add(pagamento);
+
+												}
+											}
+
+										}
+
+										if (avisoBancario != null) {
+
+											if (avisoBancario.getValorArrecadacaoCalculado() != null && !avisoBancario.getValorArrecadacaoCalculado().equals("")) {
+												BigDecimal novoValorArrecadacaoCalculado = avisoBancario.getValorArrecadacaoCalculado().add(valorCalcPagamento);
+												avisoBancario.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+											} else {
+												avisoBancario.setValorArrecadacaoCalculado(valorCalcPagamento);
+											}
+
+											if (avisoBancario.getValorDevolucaoCalculado() != null && !avisoBancario.getValorDevolucaoCalculado().equals("")) {
+												BigDecimal novoValorDevolucaoCalculado = avisoBancario.getValorDevolucaoCalculado().add(valorCalcDevolucao);
+												avisoBancario.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+											} else {
+												avisoBancario.setValorDevolucaoCalculado(valorCalcDevolucao);
+											}
+
+											if (avisoBancario.getValorArrecadacaoInformado() != null && !avisoBancario.getValorArrecadacaoInformado().equals("")) {
+												BigDecimal novoValorArrecadacaoInformado = avisoBancario.getValorArrecadacaoInformado().add(valorInfPagamento);
+												avisoBancario.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+												avisoBancario.setValorRealizado(novoValorArrecadacaoInformado);
+											} else {
+												avisoBancario.setValorArrecadacaoInformado(valorInfPagamento);
+												avisoBancario.setValorRealizado(valorInfPagamento);
+											}
+
+											avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
+											avisoBancario.setUltimaAlteracao(new Date());
+
+											try {
+												repositorioUtil.atualizar(avisoBancario);
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+										} else {
+											Iterator<AvisoBancario> avisosBancarioIterator = avisosBancarios.iterator();
+
+											boolean achou = false;
+											while (avisosBancarioIterator.hasNext()) {
+												AvisoBancario avisoBancarioDaColecao = avisosBancarioIterator.next();
+												boolean comparaDataIguais = Util.datasIguais(avisoBancarioDaColecao.getDataPrevista(), dataPrevistaCredito);
+												boolean comparaAnoMeReferenciaIguais = avisoBancarioDaColecao.getAnoMesReferenciaArrecadacao() == anoMesReferenciaArrecadacao;
+												if (comparaDataIguais && comparaAnoMeReferenciaIguais) {
+
+													if (avisoBancarioDaColecao.getValorArrecadacaoCalculado() != null
+															&& !avisoBancarioDaColecao.getValorArrecadacaoCalculado().equals("")) {
+														BigDecimal novoValorArrecadacaoCalculado = avisoBancarioDaColecao.getValorArrecadacaoCalculado().add(valorCalcPagamento);
+														avisoBancarioDaColecao.setValorArrecadacaoCalculado(novoValorArrecadacaoCalculado);
+													} else {
+														avisoBancarioDaColecao.setValorArrecadacaoCalculado(valorCalcPagamento);
+													}
+
+													if (avisoBancarioDaColecao.getValorDevolucaoCalculado() != null
+															&& !avisoBancarioDaColecao.getValorDevolucaoCalculado().equals("")) {
+														BigDecimal novoValorDevolucaoCalculado = avisoBancarioDaColecao.getValorDevolucaoCalculado().add(valorCalcDevolucao);
+														avisoBancarioDaColecao.setValorDevolucaoCalculado(novoValorDevolucaoCalculado);
+													} else {
+														avisoBancarioDaColecao.setValorDevolucaoCalculado(valorCalcDevolucao);
+													}
+
+													if (avisoBancarioDaColecao.getValorArrecadacaoInformado() != null
+															&& !avisoBancarioDaColecao.getValorArrecadacaoInformado().equals("")) {
+														BigDecimal novoValorArrecadacaoInformado = avisoBancarioDaColecao.getValorArrecadacaoInformado().add(valorInfPagamento);
+														avisoBancarioDaColecao.setValorArrecadacaoInformado(novoValorArrecadacaoInformado);
+														avisoBancarioDaColecao.setValorRealizado(novoValorArrecadacaoInformado);
+													} else {
+														avisoBancarioDaColecao.setValorArrecadacaoInformado(valorInfPagamento);
+														avisoBancarioDaColecao.setValorRealizado(valorInfPagamento);
+													}
+
+													achou = true;
+													break;
+												}
+											}
+											if (!achou) {
+
+												avisoBancario = gerarOcorrenciaFichaAvisoBancarioNovo(arrecadadorMovimento.getId(), registroHeader, dataPrevistaCredito,
+														anoMesReferenciaArrecadacao, valorInfPagamento, valorCalcPagamento, valorCalcDevolucao, valorInfDevolucao,
+														numeroSequencialAvisoBancario);
+
+												numeroSequencialAvisoBancario += 1;
+
+												avisosBancarios.add(avisoBancario);
+											}
+										}
+									}
+
+									break;
+
+								// caso não tenha sido nenhuma das opções
+								// anteriores
+								default:
+									descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
+
+									// o indicador de aceitação é setado para
+									// 2(NÃO)
+									indicadorAceitacaoRegistroMovimento = 2;
+
+									// inseri o item movimento arrecadador
+									inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento,
+											null, null, null, null);
+
+								}
+							}
+
+							// atualiza valor total movimento do
+							// ARRECADADOR_MOVIMENTO
+							atualizarValorMovimentoArrecadadorMovimento(arrecadadorMovimento.getId(), somatorioValorRecebido);
+
+							// verifica se a coleção de avisos bancario é
+							// diferente de nulo
+							if (avisosBancarios != null && !avisosBancarios.isEmpty()) {
+								Iterator avisosBancarioIterator = avisosBancarios.iterator();
+								while (avisosBancarioIterator.hasNext()) {
+									AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
+
+									// insere o aviso bancário na base e
+									// recupera o id
+									Integer idAvisoBancario = (Integer) getControladorUtil().inserir(avisoBancario);
+
+									avisoBancario.setId(idAvisoBancario);
+
+								}
+							}
+
+							// verifica se a coleção de pagamentos está
+							// diferente de nulo
+
+							if (pagamentos != null && !pagamentos.isEmpty()) {
+
+								Collection colecaoPagamentos = new ArrayList();
+
+								Iterator pagamentoIterator = pagamentos.iterator();
+								while (pagamentoIterator.hasNext()) {
+									Pagamento pagamento = (Pagamento) pagamentoIterator.next();
+									// verifica se existe o aviso bancario no
+									// pagamento,
+									// se não existe então seta o aviso bancario
+									// no pagamento
+									if (pagamento.getAvisoBancario() == null || pagamento.getAvisoBancario().equals("")) {
+
+										Iterator avisosBancarioIterator = avisosBancarios.iterator();
+										while (avisosBancarioIterator.hasNext()) {
+											AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
+
+											// caso a data prevista seja a mesma
+											// estão seta o aviso bancário no
+											// pagamento
+											boolean comparaDataIguais = Util.datasIguais(pagamento.getDataPrevistaCreditoHelper(), avisoBancario.getDataPrevista());
+											if (comparaDataIguais) {
+												pagamento.setAvisoBancario(avisoBancario);
+												break;
+											}
+										}
+									}
+									colecaoPagamentos.add(pagamento);
+
+								}
+
+								System.out.println(" >> MovArrec.Inserindo pagamentos [" + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
+								getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoPagamentos);
+
+								System.out.println(" >> MovArrec.Pagamentos inseridos [" + nomeArrecadador + ", " + idTipoMovimento + "] = " + colecaoPagamentos.size());
+
+								// Para cada pagamento, atualizar os itens de
+								// documento de cobranca correspondente
+								// Para uso do Resumo de Ações de cobranca
+								int contador = 1;
+								int total = colecaoPagamentos.size();
+								Iterator iter = colecaoPagamentos.iterator();
+								while (iter.hasNext()) {
+									if (contador++ % 500 == 0) {
+										System.out.println(" >> MovArrec.Atualizando itens de cobranca[" + contador++ + "/" + total + "]");
+									}
+									Pagamento pagamento = (Pagamento) iter.next();
+									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
+
+									// [SB0017] - Verificar correspondência do
+									// pagamento com item de cobrança ou de
+									// negativação
+									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
+
+								}
+
+								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
+
+							}
+
+							arrecadadorContrato.setNumeroSequencialArquivoRetornoFichaCompensacao(Integer.valueOf(registroHeader.getSequencialRetorno()));
+
+							// atualiza arrecadação contrato na base
+							try {
+								repositorioArrecadacao.atualizarDadosArrecadadorContrato(arrecadadorContrato, flagEnvioDebitoAutomatico, flagRetornoCodigoBarras,
+										flagRetornoDebitoAutomatico, flagRetornoFichaCompensacao);
+							} catch (ErroRepositorioException e) {
+								throw new ControladorException("erro.sistema", e);
+							}
+
+						}
+					}
+				}
+
+				// caso não exista o registro 9.
+				if (!verificaRegistro9) {
+					throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
+				}
+
+			}
+
+		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(e.getMessage());
-		} catch (Exception e) {            
-            System.out.println( "Deu erro na linha: " + aux );
-            e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Deu erro na linha: " + aux);
+			e.printStackTrace();
 
-            String mensagem = e.getMessage();
-            if (mensagem != null) {
-                String[] inicioMensagem = mensagem.split("\\.");
-                if (inicioMensagem != null && 
-                	(!inicioMensagem[0].equals("erro") && !inicioMensagem[0].equals("atencao"))) {
-                    
-                	mensagem = "erro.sistema";
-                }
-            } else {
-                mensagem = "erro.sistema";
-            }
+			String mensagem = e.getMessage();
+			if (mensagem != null) {
+				String[] inicioMensagem = mensagem.split("\\.");
+				if (inicioMensagem != null && (!inicioMensagem[0].equals("erro") && !inicioMensagem[0].equals("atencao"))) {
 
-            String emailRemetente = envioEmailError.getEmailRemetente();
-            String tituloMensagem = envioEmailError.getTituloMensagem() + " "
-            	+ stringBuilderTxt.substring(73, 79).trim();
-            String emailReceptor = envioEmailError.getEmailReceptor();
-
-            try {
-                
-            	ServicosEmail.enviarMensagem(emailRemetente, 
-                	emailReceptor,
-                    tituloMensagem, 
-                    ConstantesAplicacao.get(mensagem));
-                
-            } catch (ErroEmailException e1) {
-
-            }
-            
-            
-            e.printStackTrace();
-            if(!(e instanceof SendFailedException)) {
-            	sessionContext.setRollbackOnly();
-                sucesso = false;
+					mensagem = "erro.sistema";
+				}
+			} else {
+				mensagem = "erro.sistema";
 			}
-            
 
-        }
+			String emailRemetente = envioEmailError.getEmailRemetente();
+			String tituloMensagem = envioEmailError.getTituloMensagem() + " " + stringBuilderTxt.substring(73, 79).trim();
+			String emailReceptor = envioEmailError.getEmailReceptor();
 
-        if (sucesso) {
+			try {
 
-            EnvioEmail envioEmail = getControladorCadastro()
-                    .pesquisarEnvioEmail(
-                            EnvioEmail.REGISTRAR_MOVIMENTO_ARRECADADORES_PDF);
-            
-            // Parte que gera o relatório e envia por email
-            // cria uma instância da classe do relatório
-            RelatorioMovimentoArrecadador relatorioMovimentoArrecadador = 
-            	new RelatorioMovimentoArrecadador(usuario);
-            
-            Collection arrecadadores = new ArrayList();
+				ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, ConstantesAplicacao.get(mensagem));
 
-            //Metodo que pesquisar os Movimentos Arrecadadores Atualizados, para exibir os valores atuais no relatorio.
-            if ( arrecadadoresMovimento != null ) {
-	            Iterator iteratorArrecadadoresMovimento = arrecadadoresMovimento.iterator();
-	            
-	            while ( iteratorArrecadadoresMovimento.hasNext() ) {
-	            	
-	            	ArrecadadorMovimento arrecadadorMovimento = (ArrecadadorMovimento) iteratorArrecadadoresMovimento.next();
-	            
-	            	FiltroArrecadadorMovimento filtroArrecadadorMovimento = new FiltroArrecadadorMovimento();
-	                filtroArrecadadorMovimento.adicionarParametro( new ParametroSimples( FiltroArrecadadorMovimento.ID , arrecadadorMovimento.getId()));
-	                
-	                ArrecadadorMovimento arrecadador = new ArrecadadorMovimento();
+			} catch (ErroEmailException e1) {
+
+			}
+
+			e.printStackTrace();
+			if (!(e instanceof SendFailedException)) {
+				sessionContext.setRollbackOnly();
+				sucesso = false;
+			}
+
+		}
+
+		if (sucesso) {
+			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.REGISTRAR_MOVIMENTO_ARRECADADORES_PDF);
+
+			// Parte que gera o relatório e envia por email cria uma instância
+			// da classe do relatório
+			RelatorioMovimentoArrecadador relatorioMovimentoArrecadador = new RelatorioMovimentoArrecadador(usuario);
+
+			Collection arrecadadores = new ArrayList();
+
+			// Metodo que pesquisar os Movimentos Arrecadadores Atualizados,
+			// para exibir os valores atuais no relatorio.
+			if (arrecadadoresMovimento != null) {
+				Iterator iteratorArrecadadoresMovimento = arrecadadoresMovimento.iterator();
+
+				while (iteratorArrecadadoresMovimento.hasNext()) {
+
+					ArrecadadorMovimento arrecadadorMovimento = (ArrecadadorMovimento) iteratorArrecadadoresMovimento.next();
+
+					FiltroArrecadadorMovimento filtroArrecadadorMovimento = new FiltroArrecadadorMovimento();
+					filtroArrecadadorMovimento.adicionarParametro(new ParametroSimples(FiltroArrecadadorMovimento.ID, arrecadadorMovimento.getId()));
+
+					ArrecadadorMovimento arrecadador = new ArrecadadorMovimento();
 					try {
-						
-						Collection colecaoArrecadador =  repositorioUtil.pesquisar( 
-									filtroArrecadadorMovimento , ArrecadadorMovimento.class.getName() );
-						
-						arrecadador = ( ArrecadadorMovimento ) Util.retonarObjetoDeColecao(colecaoArrecadador);
-						arrecadadores.add( arrecadador );
-						
+
+						Collection colecaoArrecadador = repositorioUtil.pesquisar(filtroArrecadadorMovimento, ArrecadadorMovimento.class.getName());
+
+						arrecadador = (ArrecadadorMovimento) Util.retonarObjetoDeColecao(colecaoArrecadador);
+						arrecadadores.add(arrecadador);
+
 					} catch (ErroRepositorioException e) {
-						
+
 						e.printStackTrace();
 					}
-	            	
-	            
-	            
-	            }
-            }
-            
-            
-            
-            
-            relatorioMovimentoArrecadador.addParametro("arrecadadoresMovimentos", arrecadadores);
-            relatorioMovimentoArrecadador.addParametro("tipoFormatoRelatorio",TarefaRelatorio.TIPO_PDF);
-            
-            byte[] relatorioGerado = (byte[]) relatorioMovimentoArrecadador.executar();
 
-            String emailRemetente = envioEmail.getEmailRemetente();
+				}
+			}
 
-            String tituloMensagem = envioEmail.getTituloMensagem() + " "
-            	+ stringBuilderTxt.substring(73, 79).trim();
+			relatorioMovimentoArrecadador.addParametro("arrecadadoresMovimentos", arrecadadores);
+			relatorioMovimentoArrecadador.addParametro("tipoFormatoRelatorio", TarefaRelatorio.TIPO_PDF);
 
-            String corpoMensagem = envioEmail.getCorpoMensagem();
-            String emailReceptor = envioEmail.getEmailReceptor();
+			byte[] relatorioGerado = (byte[]) relatorioMovimentoArrecadador.executar();
 
-            String mensagemErro = "Ocorreu um problema no processamento de: " + nomeArrecadador;
-            
-            ZipOutputStream zos = null;
-            FileOutputStream out = null;
-            try {
-            	
-            	String nomeZip = "registrar_movimento_arrecadador_banco_"+nomeArrecadador+ "-"+idTipoMovimento;
-            	nomeZip = nomeZip.replace("/","");
-            	nomeZip = nomeZip.replace(" ","_");
-            	
-            	File leitura = new File(nomeZip +".PDF");
-                File compactado = new File(nomeZip + ".zip"); // nomeZip
+			String emailRemetente = envioEmail.getEmailRemetente();
+
+			String tituloMensagem = envioEmail.getTituloMensagem() + " " + stringBuilderTxt.substring(73, 79).trim();
+
+			String corpoMensagem = envioEmail.getCorpoMensagem();
+			String emailReceptor = envioEmail.getEmailReceptor();
+
+			String mensagemErro = "Ocorreu um problema no processamento de: " + nomeArrecadador;
+
+			ZipOutputStream zos = null;
+			FileOutputStream out = null;
+			try {
+
+				String nomeZip = "registrar_movimento_arrecadador_banco_" + nomeArrecadador + "-" + idTipoMovimento;
+				nomeZip = nomeZip.replace("/", "");
+				nomeZip = nomeZip.replace(" ", "_");
+
+				File leitura = new File(nomeZip + ".PDF");
+				File compactado = new File(nomeZip + ".zip"); // nomeZip
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
-                
+
 				out = new FileOutputStream(leitura.getAbsolutePath());
-                out.write(relatorioGerado);
-                out.flush();
-                
-                ZipUtil.adicionarArquivo(zos, leitura);
-				
-               /* ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor,
-               		emailRemetente, 
-	                tituloMensagem, 
-	                corpoMensagem, 
-	                leitura);*/
-                
-                leitura.delete();
+				out.write(relatorioGerado);
+				out.flush();
 
-            } catch (IOException e) {
-            	
-            	try {
-					
-            		ServicosEmail.enviarMensagem(emailRemetente,
-						emailReceptor, 
-						tituloMensagem, 
-						mensagemErro);
-					
+				ZipUtil.adicionarArquivo(zos, leitura);
+
+				leitura.delete();
+
+			} catch (IOException e) {
+
+				try {
+
+					ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, mensagemErro);
+
 				} catch (ErroEmailException e1) {
 					e1.printStackTrace();
 				}
-				
-//            	sessionContext.setRollbackOnly();
-                throw new ControladorException("erro.sistema", e);
-                
-            } catch (Exception e) {
-            	
-            	try {
-					
-            		ServicosEmail.enviarMensagem(emailRemetente,
-				        emailReceptor, 
-				        tituloMensagem, 
-				        mensagemErro);
-					
+
+				throw new ControladorException("erro.sistema", e);
+
+			} catch (Exception e) {
+
+				try {
+
+					ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, mensagemErro);
+
 				} catch (ErroEmailException e1) {
 					e1.printStackTrace();
 				}
-            	
-//				sessionContext.setRollbackOnly();
-                throw new ControladorException("erro.sistema", e);
-            } finally {
-            	IoUtil.fecharStream(out);
-            	IoUtil.fecharStream(zos);
-            }
-            
-        }
-        // não tem mais retorno
-        return null;
 
-    }
+				throw new ControladorException("erro.sistema", e);
+			} finally {
+				IoUtil.fecharStream(out);
+				IoUtil.fecharStream(zos);
+			}
+
+		}
+		return null;
+	}
 
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
@@ -3851,7 +3465,7 @@ public class ControladorArrecadacao implements SessionBean {
         
         // inseri o item movimento arrecadador
         inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(),
-        descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, null);
+        descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, null, null, null, null);
         
         return registroHelperCodigoC;
     }
@@ -4458,25 +4072,21 @@ public class ControladorArrecadacao implements SessionBean {
 	 */
 	public Integer inserirItemMovimentoArrecadador(String linhaRegistro,
 			Integer idMovimento, String descricaoOcorrencia,
-			int indicadorAceitacaoRegistro, Integer idImovelPagamento)
+			int indicadorAceitacaoRegistro, Integer idImovelPagamento, 
+			Integer tipoDocumento, Integer idDocumento, BigDecimal valorDocumento)
 			throws ControladorException {
 
 		Integer idArrecadadorMovimentoItem = null;
 
-		// recupera o código do registro de cada linha
 		String codigoRegistro = linhaRegistro.substring(0, 1);
 
-		// recupera o id do registro da tabela REGSITRO_CÓDIGO passando o código
-		// do registro
 		Integer idRegistroCodigo = null;
 		try {
-			idRegistroCodigo = repositorioArrecadacao
-					.pesquisarIdRegistroCodigo(codigoRegistro);
+			idRegistroCodigo = repositorioArrecadacao.pesquisarIdRegistroCodigo(codigoRegistro);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 
-		// seta os campos para a inserção em arrecadador movimento item
 		ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
 
 		RegistroCodigo registroCodigo = new RegistroCodigo();
@@ -4491,13 +4101,13 @@ public class ControladorArrecadacao implements SessionBean {
 
 		arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
 		arrecadadorMovimentoItem.setConteudoRegistro(completaLinhaRegistro);
-		ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
-		arrecadadorMovimento.setId(idMovimento);
-		arrecadadorMovimentoItem.setArrecadadorMovimento(arrecadadorMovimento);
+		arrecadadorMovimentoItem.setArrecadadorMovimento(new ArrecadadorMovimento(idMovimento));
 		arrecadadorMovimentoItem.setDescricaoOcorrencia(descricaoOcorrencia);
-		arrecadadorMovimentoItem.setIndicadorAceitacao(new Short(""
-				+ indicadorAceitacaoRegistro));
+		arrecadadorMovimentoItem.setIndicadorAceitacao(new Short(""+ indicadorAceitacaoRegistro));
 		arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
+		arrecadadorMovimentoItem.preencherDocumento(tipoDocumento, idDocumento);
+		arrecadadorMovimentoItem.setValorDocumento(valorDocumento);
+		
 		if (idImovelPagamento != null) {
 			Imovel imovel = new Imovel();
 			imovel.setId(idImovelPagamento);
@@ -4505,8 +4115,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 
 		try {
-			idArrecadadorMovimentoItem = (Integer) repositorioUtil
-					.inserir(arrecadadorMovimentoItem);
+			idArrecadadorMovimentoItem = (Integer) repositorioUtil.inserir(arrecadadorMovimentoItem);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -4532,7 +4141,9 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idFormaArrecadacao) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.CONTA);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -4697,7 +4308,8 @@ public class ControladorArrecadacao implements SessionBean {
 
 			// Verifica se o id da conta é diferente de nulo
 			if (idConta != null) {
-
+				pagamentoHelperCodigoBarras.setIdDocumento(idConta);
+				
 				ContaGeral conta = new ContaGeral();
 				conta.setId(idConta);
 				pagamento.setContaGeral(conta);
@@ -4784,7 +4396,9 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idFormaArrecadacao) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -4983,8 +4597,257 @@ public class ControladorArrecadacao implements SessionBean {
 
 			pagamento.setContaGeral(null);
 
+			if (idGuiaPagamento != null) {
+				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
+				
+				GuiaPagamento guiaPagamento = new GuiaPagamento();
+				guiaPagamento.setId(idGuiaPagamento);
+				pagamento.setGuiaPagamento(guiaPagamento);
+
+			} else {
+				pagamento.setGuiaPagamento(null);
+			}
+
+			// verifica se o id da conta é diferente de nulo
+			if (idLocalidade != null) {
+
+				Localidade localidade = new Localidade();
+				localidade.setId(idLocalidade);
+				pagamento.setLocalidade(localidade);
+
+			} else {
+				pagamento.setLocalidade(null);
+			}
+
+			DocumentoTipo documentoTipo = new DocumentoTipo();
+			/**
+			 * Alterado por Arthur Carvalho
+			 * Data: 31/05/2010
+			 */
+			documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
+			documentoTipo.setDescricaoDocumentoTipo(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
+			pagamento.setDocumentoTipo(documentoTipo);
+
+			pagamento.setAvisoBancario(null);
+
+			if (idImovelNaBase != null) {
+				pagamento.setImovel(imovel);
+			} else {
+				pagamento.setImovel(null);
+			}
+
+			pagamento.setArrecadadorMovimentoItem(null);
+
+			ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
+			arrecadacaoForma.setId(idFormaArrecadacao);
+			pagamento.setArrecadacaoForma(arrecadacaoForma);
+			pagamento.setCliente(null);
+			pagamento.setUltimaAlteracao(new Date());
+
+			pagamento.setFatura(null);
+			pagamento.setCobrancaDocumento(null);
+			
+			/*
+			 * Alteracao referente ao Relatorio do Float - Francisco: 14/07/08
+			 */
+			DocumentoTipo documentoAgregador = new DocumentoTipo();
+			documentoAgregador.setId(DocumentoTipo.GUIA_PAGAMENTO);
+			pagamento.setDocumentoTipoAgregador(documentoAgregador);
+			
+			pagamento.setDataProcessamento(new Date());
+			
+			colecaoPagamentos.add(pagamento);
+			
+			/*
+			 * Caso o pagamento tenha sido incluído para uma guia existente e que tenha uma conta 
+			 * associada (CNTA_ID da tabela GUIA_PAGAMENTO_ITEM com valor diferente de nulo)
+			 */
+			if (idGuiaPagamento != null){
+				
+				Conta contaPagamentoParcial = null;
+				
+				try {
+					
+					contaPagamentoParcial = repositorioArrecadacao
+                    .pesquisarContaParaPagamentoParcial(idGuiaPagamento);
+
+                } catch (ErroRepositorioException e) {
+                    throw new ControladorException("erro.sistema", e);
+                }
+                
+                if (contaPagamentoParcial != null){
+                	
+                	//[SB0016] - Processar Pagamento Parcial de Conta
+                	ProcessarPagamentoParcialContaHelper helper = 
+                	this.processarPagamentoParcialConta(contaPagamentoParcial, valorPagamento);
+                	
+                	colecaoPagamentoParcial.add(helper);
+                }
+			}
+
+		} else {
+
+			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
+			indicadorAceitacaoRegistro = "2";
+		}
+
+		// Seta os parametros que serão retornados
+		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
+		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
+		pagamentoHelperCodigoBarras.setColecaoProcessarPagamentoParcialContaHelper(colecaoPagamentoParcial);
+
+		return pagamentoHelperCodigoBarras;
+	}
+
+	/**
+	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * 
+	 * GUIA DE PAGAMENTO CLIENTE(Tipo 6)
+	 * 
+	 * Autor: Ana Maria Data: 06/08/2007
+	 */
+	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasGuiaPagamentoCliente(
+			RegistroHelperCodigoBarras registroHelperCodigoBarras,
+			SistemaParametro sistemaParametro, Date dataPagamento,
+			Integer anoMesPagamento, BigDecimal valorPagamento,
+			Integer idFormaArrecadacao) throws ControladorException {
+
+		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
+		String descricaoOcorrencia = "OK";
+
+		String indicadorAceitacaoRegistro = "1";
+
+		Collection colecaoPagamnetos = new ArrayList();
+
+		boolean idLocalidadeInvalida = false;
+		boolean idClienteInvalido = false;
+
+		Integer idClienteNaBase = null;
+
+		idLocalidadeInvalida = Util
+				.validarValorNaoNumerico(registroHelperCodigoBarras
+						.getRegistroHelperCodigoBarrasTipoPagamento()
+						.getIdPagamento1());
+
+		if (idLocalidadeInvalida) {
+			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+		}
+
+		idClienteInvalido = Util
+				.validarValorNaoNumerico(registroHelperCodigoBarras
+						.getRegistroHelperCodigoBarrasTipoPagamento()
+						.getIdPagamento2());
+
+		Integer idCliente = null;
+		if (idClienteInvalido) {
+			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+		} else {
+			// verifica se existe o id do cliente na
+			// base
+			idCliente = new Integer(registroHelperCodigoBarras
+					.getRegistroHelperCodigoBarrasTipoPagamento()
+					.getIdPagamento2());
+
+			try {
+				idClienteNaBase = repositorioCliente
+						.verificarExistenciaCliente(new Integer(idCliente));
+			} catch (ErroRepositorioException e) {
+				throw new ControladorException("erro.sistema", e);
+			}
+
+			if (idClienteNaBase == null) {
+				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+			}
+		}
+
+		// Valida o namo mes de referencia da conta
+		boolean codigoTipoDebito = Util
+				.validarValorNaoNumerico(registroHelperCodigoBarras
+						.getRegistroHelperCodigoBarrasTipoPagamento()
+						.getIdPagamento4());
+
+		if (codigoTipoDebito) {
+			descricaoOcorrencia = "TIPO DO DÉBITO NÃO NUMÉRICO";
+		} else {
+
+			Integer idDebitoTipoNaBase = getControladorFaturamento()
+					.verificarExistenciaDebitoTipo(
+							Util
+									.converterStringParaInteger(registroHelperCodigoBarras
+											.getRegistroHelperCodigoBarrasTipoPagamento()
+											.getIdPagamento4()));
+
+			if (idDebitoTipoNaBase == null) {
+				descricaoOcorrencia = "TIPO DO DÉBITO INEXISTENTE";
+			}
+		}
+
+		if (descricaoOcorrencia.equals("OK")) {
+
+			Integer idLocalidade = new Integer(registroHelperCodigoBarras
+					.getRegistroHelperCodigoBarrasTipoPagamento()
+					.getIdPagamento1());
+
+			Integer idGuiaPagamento = null;
+
+			Integer idDebitoTipo = new Integer(registroHelperCodigoBarras
+					.getRegistroHelperCodigoBarrasTipoPagamento()
+					.getIdPagamento4());
+
+			try {
+				idGuiaPagamento = repositorioArrecadacao
+						.pesquisarExistenciaGuiaPagamentoCliente(idCliente,
+								idDebitoTipo);
+
+			} catch (ErroRepositorioException e) {
+				e.printStackTrace();
+				throw new ControladorException("erro.sistema", e);
+			}
+
+			if (idGuiaPagamento == null || idGuiaPagamento.equals("")) {
+				descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
+			}
+
+			// Cria o objeto pagamento para setar os dados
+			Pagamento pagamento = new Pagamento();
+			pagamento.setAnoMesReferenciaPagamento(null);
+
+			/*
+			 * Caso o ano mes da data de dedito seja maior que o ano mes de
+			 * arrecadação da tabela sistema parametro então seta o ano mes da
+			 * data de debito
+			 */
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
+
+				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
+
+			} else {
+
+				/*
+				 * caso contrario seta o o ano mes arrecadação da tabela sistema
+				 * parametro
+				 */
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
+						.getAnoMesArrecadacao());
+			}
+
+			pagamento.setValorPagamento(valorPagamento);
+			pagamento.setDataPagamento(dataPagamento);
+			pagamento.setPagamentoSituacaoAtual(null);
+			pagamento.setPagamentoSituacaoAnterior(null);
+			DebitoTipo debitoTipo = new DebitoTipo();
+			debitoTipo.setId(idDebitoTipo);
+			pagamento.setDebitoTipo(debitoTipo);
+
+			pagamento.setContaGeral(null);
+
 			// Verifica se o id da conta é diferente de nulo
 			if (idGuiaPagamento != null) {
+<<<<<<< HEAD
 
 				GuiaPagamentoGeral guiaPagamento = new GuiaPagamentoGeral(idGuiaPagamento);
 				pagamento.setGuiaPagamento(guiaPagamento);
@@ -5232,6 +5095,12 @@ public class ControladorArrecadacao implements SessionBean {
 			if (idGuiaPagamento != null) {
 
 				GuiaPagamentoGeral guiaPagamento = new GuiaPagamentoGeral(idGuiaPagamento);
+=======
+				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
+				
+				GuiaPagamento guiaPagamento = new GuiaPagamento();
+				guiaPagamento.setId(idGuiaPagamento);
+>>>>>>> master
 				pagamento.setGuiaPagamento(guiaPagamento);
 
 			} else {
@@ -5317,7 +5186,9 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idFormaArrecadacao, Usuario usuarioLogado) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -5406,6 +5277,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 			// caso exista documento de cobrança
 			if (parmsDocumentoCobranca != null) {
+				
 				Integer idCobrancaDocumento = null;
 				BigDecimal valorAcrescimo = new BigDecimal("0.00");
 				BigDecimal valorDesconto = new BigDecimal("0.00");
@@ -5428,6 +5300,7 @@ public class ControladorArrecadacao implements SessionBean {
 					valorTaxa = ((BigDecimal) parmsDocumentoCobranca[4]);
 				}
 				
+				pagamentoHelperCodigoBarras.setIdDocumento(idCobrancaDocumento);
 				/*
                  * Alterado por Raphael Rossiter em 10/01/2008 - Analistas: Eduardo e Aryed
                  * OBJ: Gerar os pagamentos associados com a localidade do document de cobrança e NÃO com
@@ -6701,7 +6574,9 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idFormaArrecadacao) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.FATURA_CLIENTE);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -6757,6 +6632,8 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer numeroSequencial = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
 					.getIdPagamento6());
+			
+			
 			try {
 				faturaItens = repositorioFaturamento.pesquisarFaturaItem(
 						idClienteNaBase, anoMes, numeroSequencial,
@@ -6806,6 +6683,10 @@ public class ControladorArrecadacao implements SessionBean {
 					// verifica o id da fatura
 					if (faturaItem[6] != null) {
 						idFatura = (Integer) faturaItem[6];
+						
+						if (pagamentoHelperCodigoBarras.getIdDocumento() == null) {
+							pagamentoHelperCodigoBarras.setIdDocumento(idFatura);
+						}
 					}
 
 					// cria o objeto pagamento para setar os
@@ -7967,9 +7848,7 @@ public class ControladorArrecadacao implements SessionBean {
 		String tipoPagamento = registroHelperCodigoBarras.getTipoPagamento();
 	
 		if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_MATRICULA.toString())){
-			
-			pagamentoHelperCodigoBarras = this
-			.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
@@ -7978,9 +7857,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 			
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA.toString())){
-			
-			pagamentoHelperCodigoBarras = this
-				.processarPagamentosCodigoBarrasConta(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasConta(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
@@ -7989,9 +7866,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO.toString())){
-			
-			pagamentoHelperCodigoBarras = this
-				.processarPagamentosCodigoBarrasGuiaPagamento(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasGuiaPagamento(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
@@ -8000,9 +7875,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA.toString())){
-
-			pagamentoHelperCodigoBarras = this
-				.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao, usuarioLogado);
@@ -8012,9 +7885,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_CLIENTE.toString())){
-			
-			pagamentoHelperCodigoBarras = this
-				.processarPagamentosCodigoBarrasGuiaPagamentoCliente(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasGuiaPagamentoCliente(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
@@ -8024,9 +7895,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL.toString())){
-			
-			pagamentoHelperCodigoBarras = this
-				.processarPagamentosCodigoBarrasClienteResponsavel(
+			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasClienteResponsavel(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
@@ -8037,30 +7906,32 @@ public class ControladorArrecadacao implements SessionBean {
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA_NOVO.toString())){
 			
 			if(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento4().compareTo(
-								DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO.toString()) == 0) {
-				pagamentoHelperCodigoBarras = this
-					.processarPagamentosCodigoBarrasContratoParcelamento(
+						.getIdPagamento4().compareTo(DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO.toString()) == 0) {
+				
+				pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasContratoParcelamento(
 						registroHelperCodigoBarras, getSistemaParametro(),
 						dataPagamento, anoMesPagamento, valorPagamento,
 						idFormaArrecadacao, usuarioLogado);
 			} else {
-				pagamentoHelperCodigoBarras = this
-					.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(
+				pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(
 						registroHelperCodigoBarras, getSistemaParametro(),
 						dataPagamento, anoMesPagamento, valorPagamento,
 						idFormaArrecadacao);
 			}
+			pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
+			pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
 			//===============================================================================================================================			
 		}
 		
 		else if(tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_CLIENTE.toString())){
-			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
+
+			pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
+			pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
 			
 			//===============================================================================================================================			
 		}else{
@@ -8787,18 +8658,11 @@ public class ControladorArrecadacao implements SessionBean {
 		// instancia o objeto de código de barras, setando os valores que são iguais para todas as empresas
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarrasGeral(codigoBarras);
 		
-		registroHelperCodigoBarras.setTipoPagamento(codigoBarras.substring(43,
-				44).trim());
+		registroHelperCodigoBarras.setTipoPagamento(codigoBarras.substring(43, 44).trim());
 
 		// recupera o id pagamento da string
 		String idPagamento = codigoBarras.substring(19, 43);
 		
-		// recupera o tipo pagamento e passa para int
-		/*int tipoPagamento = Integer.parseInt(registroHelperCodigoBarras
-		.getTipoPagamento().trim());*/
-		
-		// chama o método distribuirDadosCodigoBarrasPorTipoPagamento para
-		// distribuir os dados de acordo com o tipo de pagamento
 		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = distribuirDadosCodigoBarrasPorTipoPagamento(
 		idPagamento, registroHelperCodigoBarras.getTipoPagamento().trim(), registroHelperCodigoBarras.getIdEmpresa());
 
@@ -8821,75 +8685,6 @@ public class ControladorArrecadacao implements SessionBean {
 			String idPagamento, String tipoPagamento, String idEmpresa) throws ControladorException {
 
 		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
-		
-		/*
-		int tipoPagamentoParaComparacao = Integer.parseInt(tipoPagamento.trim());
-
-		switch (tipoPagamentoParaComparacao) {
-		//GUIA DE PAGAMENTO COM IDENTIFICACAO
-		case 1:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_COM_IDENTIFICACAO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-		//CONTA	
-		case 3:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_CONTA(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-
-		//GUIA PAGAMENTO - IMOVEL
-		case 4:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_IMOVEL(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//DOCUMENTO COBRANCA - EXTRATO DE DEBITO
-		case 5:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_EXTRATO_DEBITO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//GUIA PAGAMENTO - CLIENTE
-		case 6:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_CLIENTE(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-			
-		//FATURA CLIENTE RESPONSÁVEL
-		case 7:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_FATURA_CLIENTE_RESPONSAVEL(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-
-		//DOCUMENTO COBRANCA NOVO
-		case 8:
-			
-			registroHelperCodigoBarrasTipoPagamento =
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_DOCUMENTO_COBRANCA(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-			
-			break;
-		
-		//GUIA DE PAGAMENTO COM IDENTIFICACAO
-		case 9:
-
-			registroHelperCodigoBarrasTipoPagamento = 
-			this.distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_COM_IDENTIFICACAO(registroHelperCodigoBarrasTipoPagamento, idPagamento);
-				
-			break;
-		}
-		*/
 		
 		if(tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_MATRICULA.toString()))
 			
@@ -9475,7 +9270,7 @@ public class ControladorArrecadacao implements SessionBean {
 			inserirItemMovimentoArrecadador(linhaRegistroC.toString(),
 					arrecadadorMovimento.getId(), registroHelperCodigoC
 							.getDescricaoOcorrenciaMovimento(),
-					indicadorAceitacaoRegistro, null);
+					indicadorAceitacaoRegistro, null, null, null, null);
 			registrosC.append(linhaRegistroC);
 			registrosC.append(System.getProperty("line.separator"));
 		}
@@ -9557,37 +9352,26 @@ public class ControladorArrecadacao implements SessionBean {
 		Integer idMovimento = null;
 		ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
 		// cria o objeto de arrecadador movimento para a inserção
-		arrecadadorMovimento.setCodigoRemessa(new Short(registroHelperCodigoA
-				.getCodigoRemessa()));
-		arrecadadorMovimento.setCodigoConvenio(registroHelperCodigoA
-				.getCodigoConvenio().trim());
-		arrecadadorMovimento.setNomeEmpresa(registroHelperCodigoA
-				.getNomeEmpresa().trim());
-		arrecadadorMovimento.setCodigoBanco(new Short(registroHelperCodigoA
-				.getCodigoBanco().trim()));
-		arrecadadorMovimento.setNomeBanco(registroHelperCodigoA.getNomeBanco()
-				.trim());
-		Date dataGeracao = Util
-				.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA
-						.getDataGeracaoArquivo().trim());
+		arrecadadorMovimento.setCodigoRemessa(new Short(registroHelperCodigoA.getCodigoRemessa()));
+		arrecadadorMovimento.setCodigoConvenio(registroHelperCodigoA.getCodigoConvenio().trim());
+		arrecadadorMovimento.setNomeEmpresa(registroHelperCodigoA.getNomeEmpresa().trim());
+		arrecadadorMovimento.setCodigoBanco(new Short(registroHelperCodigoA.getCodigoBanco().trim()));
+		arrecadadorMovimento.setNomeBanco(registroHelperCodigoA.getNomeBanco().trim());
+		
+		Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA.getDataGeracaoArquivo().trim());
 		arrecadadorMovimento.setDataGeracao(dataGeracao);
-		arrecadadorMovimento.setNumeroSequencialArquivo(new Integer(
-				registroHelperCodigoA.getNumeroSequencialArquivo().trim()));
-		arrecadadorMovimento.setNumeroVersaoLayout(new Integer(
-				registroHelperCodigoA.getVersaoLayout().trim()));
-		arrecadadorMovimento.setDescricaoIdentificacaoServico(idTipoMovimento
-				.trim());
-		arrecadadorMovimento.setNumeroRegistrosMovimento(new Integer(
-				registroHelperCodigoZ.getTotalRegistrosArquivo().trim()));
-		BigDecimal valorTotalRegistros = Util
-				.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoZ
-						.getValorTotalRegistrosArquivo().trim());
+		
+		arrecadadorMovimento.setNumeroSequencialArquivo(new Integer(registroHelperCodigoA.getNumeroSequencialArquivo().trim()));
+		arrecadadorMovimento.setNumeroVersaoLayout(new Integer(registroHelperCodigoA.getVersaoLayout().trim()));
+		arrecadadorMovimento.setDescricaoIdentificacaoServico(idTipoMovimento.trim());
+		arrecadadorMovimento.setNumeroRegistrosMovimento(new Integer(registroHelperCodigoZ.getTotalRegistrosArquivo().trim()));
+		
+		BigDecimal valorTotalRegistros = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoZ.getValorTotalRegistrosArquivo().trim());
 		arrecadadorMovimento.setValorTotalMovimento(valorTotalRegistros);
 		arrecadadorMovimento.setUltimaAlteracao(new Date());
 
 		try {
-			idMovimento = (Integer) repositorioUtil
-					.inserir(arrecadadorMovimento);
+			idMovimento = (Integer) repositorioUtil.inserir(arrecadadorMovimento);
 			arrecadadorMovimento.setId(idMovimento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema");
@@ -10514,8 +10298,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * registro da linha senão então seta o valor de código registro para 'C'
 	 */
 
-	public Object distribuirdadosRegistroMovimentoArrecadador(String linha,
-			String descricaoOcorrencia) throws ControladorException {
+	public Object distribuirdadosRegistroMovimentoArrecadador(String linha, String descricaoOcorrencia) throws ControladorException {
 		Object registroHelperCodigo = null;
 
 		// inicializa a variavel como 0
@@ -10535,40 +10318,30 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoA.setCodigoRegistro("" + codigoRegistro);
 			// recupera o codigo da remessa
-			registroHelperCodigoA
-					.setCodigoRemessa(linha.substring(1, 2).trim());
+			registroHelperCodigoA.setCodigoRemessa(linha.substring(1, 2).trim());
 			// recupera o código do convênio
-			registroHelperCodigoA.setCodigoConvenio(linha.substring(2, 22)
-					.trim());
+			registroHelperCodigoA.setCodigoConvenio(linha.substring(2, 22).trim());
 			// recupera o nome da empresa
-			registroHelperCodigoA
-					.setNomeEmpresa(linha.substring(22, 42).trim());
+			registroHelperCodigoA.setNomeEmpresa(linha.substring(22, 42).trim());
 			// recupera o codigo do banco
-			registroHelperCodigoA
-					.setCodigoBanco(linha.substring(42, 45).trim());
+			registroHelperCodigoA.setCodigoBanco(linha.substring(42, 45).trim());
 			// recupera o nome do banco
 			registroHelperCodigoA.setNomeBanco(linha.substring(45, 65).trim());
 			// recupera a data de geração do arquivo
-			registroHelperCodigoA.setDataGeracaoArquivo(linha.substring(65, 73)
-					.trim());
+			registroHelperCodigoA.setDataGeracaoArquivo(linha.substring(65, 73).trim());
 			// recupera o numero sequencial do arquivo(NSA)
-			registroHelperCodigoA.setNumeroSequencialArquivo(linha.substring(
-					73, 79).trim());
+			registroHelperCodigoA.setNumeroSequencialArquivo(linha.substring(73, 79).trim());
 			// recupera a versão do layout
-			registroHelperCodigoA.setVersaoLayout(linha.substring(79, 81)
-					.trim());
+			registroHelperCodigoA.setVersaoLayout(linha.substring(79, 81).trim());
 			// recupera o tipo de movimento
-			registroHelperCodigoA.setTipoMovimento(linha.substring(81, 98)
-					.trim());
-			
+			registroHelperCodigoA.setTipoMovimento(linha.substring(81, 98).trim());
+
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
-				registroHelperCodigoA.setReservadoFuturo(linha.substring(98,
-						149).trim());
+				registroHelperCodigoA.setReservadoFuturo(linha.substring(98, 149).trim());
 			} else {
 				// recupera o reservado para o futuro
-				registroHelperCodigoA.setReservadoFuturo(linha.substring(98,
-						150).trim());
+				registroHelperCodigoA.setReservadoFuturo(linha.substring(98, 150).trim());
 			}
 
 			// faz um cast para o object
@@ -10580,24 +10353,18 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoB.setCodigoRegistro("" + codigoRegistro);
 			// recupera a identificação do cliente na empresa
-			registroHelperCodigoB.setIdClienteEmpresa(linha.substring(1, 26)
-					.trim());
+			registroHelperCodigoB.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
-			registroHelperCodigoB.setAgenciaDebito(linha.substring(26, 30)
-					.trim());
+			registroHelperCodigoB.setAgenciaDebito(linha.substring(26, 30).trim());
 			// recupera o identificação do cliente no banco
-			registroHelperCodigoB.setIdClienteBanco(linha.substring(30, 44)
-					.trim());
+			registroHelperCodigoB.setIdClienteBanco(linha.substring(30, 44).trim());
 			// recupera a data de Opção/Exclusão
-			registroHelperCodigoB.setDataOpcaoExclusao(linha.substring(44, 52)
-					.trim());
+			registroHelperCodigoB.setDataOpcaoExclusao(linha.substring(44, 52).trim());
 			// recupera o reservado para o futuro
-			registroHelperCodigoB.setReservadoFuturo(linha.substring(52, 149)
-					.trim());
+			registroHelperCodigoB.setReservadoFuturo(linha.substring(52, 149).trim());
 			// recupera a codigo movimento
 			if (!linha.substring(149, 150).trim().equals("*")) {
-				registroHelperCodigoB.setCodigoMovimento(linha.substring(149,
-						150).trim());
+				registroHelperCodigoB.setCodigoMovimento(linha.substring(149, 150).trim());
 			}
 			// faz um cast para o object
 			registroHelperCodigo = registroHelperCodigoB;
@@ -10608,26 +10375,20 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoC.setCodigoRegistro("" + codigoRegistro);
 			// recupera a identificação do cliente na empresa
-			registroHelperCodigoC.setIdClienteEmpresa(linha.substring(1, 26)
-					.trim());
+			registroHelperCodigoC.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
-			registroHelperCodigoC.setAgenciaDebito(linha.substring(26, 30)
-					.trim());
+			registroHelperCodigoC.setAgenciaDebito(linha.substring(26, 30).trim());
 			// recupera o identificação do cliente no banco
-			registroHelperCodigoC.setIdClienteBanco(linha.substring(30, 44)
-					.trim());
+			registroHelperCodigoC.setIdClienteBanco(linha.substring(30, 44).trim());
 			// recupera a descrição da ocorrencia do movimento
-			registroHelperCodigoC
-					.setDescricaoOcorrenciaMovimento(descricaoOcorrencia);
+			registroHelperCodigoC.setDescricaoOcorrenciaMovimento(descricaoOcorrencia);
 			// recupera os brancos
 			registroHelperCodigoC.setBrancos(linha.substring(84, 124).trim());
 			// recupera o reservado para o futuro
-			registroHelperCodigoC.setReservadoFuturo(linha.substring(124, 149)
-					.trim());
+			registroHelperCodigoC.setReservadoFuturo(linha.substring(124, 149).trim());
 			if (!linha.substring(149, 150).trim().equals("*")) {
 				// recupera a codigo movimento
-				registroHelperCodigoC.setCodigoMovimento(linha.substring(149,
-						150).trim());
+				registroHelperCodigoC.setCodigoMovimento(linha.substring(149, 150).trim());
 			}
 			// faz um cast para o object
 			registroHelperCodigo = registroHelperCodigoC;
@@ -10638,49 +10399,38 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoE.setCodigoRegistro("" + codigoRegistro);
 			// recupera a identificação do cliente na empresa
-			registroHelperCodigoE.setIdClienteEmpresa(linha.substring(1, 26)
-					.trim());
+			registroHelperCodigoE.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
-			registroHelperCodigoE.setAgenciaDebito(linha.substring(26, 30)
-					.trim());
+			registroHelperCodigoE.setAgenciaDebito(linha.substring(26, 30).trim());
 			// recupera o identificação do cliente no banco
-			registroHelperCodigoE.setIdClienteBanco(linha.substring(30, 44)
-					.trim());
+			registroHelperCodigoE.setIdClienteBanco(linha.substring(30, 44).trim());
 			// recupera a data do debito
 			registroHelperCodigoE.setDataDebito(linha.substring(44, 52).trim());
 			// recupera o valor debitado
-			registroHelperCodigoE
-					.setValorDebito(linha.substring(52, 67).trim());
+			registroHelperCodigoE.setValorDebito(linha.substring(52, 67).trim());
 			// recupera o codigo da moeda
-			registroHelperCodigoE
-					.setCodigoMoeda(linha.substring(67, 69).trim());
+			registroHelperCodigoE.setCodigoMoeda(linha.substring(67, 69).trim());
 			// recupera o código de movimento
-			registroHelperCodigoE.setAnoMesReferenciaConta(linha.substring(69,
-					75).trim());
+			registroHelperCodigoE.setAnoMesReferenciaConta(linha.substring(69, 75).trim());
 			// recupera o digito verificado no modulo dez(10) do ano e mes
 			// da
 			// contadebitada
-			registroHelperCodigoE.setDigitoVerificadoAnoMesConta(linha
-					.substring(75, 76).trim());
+			registroHelperCodigoE.setDigitoVerificadoAnoMesConta(linha.substring(75, 76).trim());
 			// grupo de faturamento
-			registroHelperCodigoE.setGruposFaturamento(linha.substring(76, 129)
-					.trim());
+			registroHelperCodigoE.setGruposFaturamento(linha.substring(76, 129).trim());
 			// recupera o reservado para o futuro
-			registroHelperCodigoE.setReservadoFuturo(linha.substring(129, 149)
-					.trim());
+			registroHelperCodigoE.setReservadoFuturo(linha.substring(129, 149).trim());
 			if (!linha.substring(149, 150).trim().equals("*")) {
 				// recupera o codigo do movimento enviado no registro de
 				// código
 				// E
-				registroHelperCodigoE.setCodigoMovimento(linha.substring(149,
-						150).trim());
+				registroHelperCodigoE.setCodigoMovimento(linha.substring(149, 150).trim());
 			}
 			// faz um cast para o object
 			registroHelperCodigo = registroHelperCodigoE;
 			break;
 
 		case 'F':
-			
 			// faz um cast para o object
 			registroHelperCodigo = this.distribuirDadosRegistroMovimentoArrecadadorTipoF(codigoRegistro, linha);
 			break;
@@ -10690,40 +10440,31 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoG.setCodigoRegistro("" + codigoRegistro);
 			// recupera a identificação da agencia /conta/digito creditada
-			registroHelperCodigoG.setIdAgenciaContaDigito(linha
-					.substring(1, 21).trim());
+			registroHelperCodigoG.setIdAgenciaContaDigito(linha.substring(1, 21).trim());
 			// recupera a data de pagamento(AAAAMMDD)
-			registroHelperCodigoG.setDataPagamento(linha.substring(21, 29)
-					.trim());
+			registroHelperCodigoG.setDataPagamento(linha.substring(21, 29).trim());
 			// recupera a data prevista para o credito(AAAAMMDD)
-			registroHelperCodigoG.setDataPrevistaCredito(linha
-					.substring(29, 37).trim());
-			
+			registroHelperCodigoG.setDataPrevistaCredito(linha.substring(29, 37).trim());
+
 			// recupera O CÓDIGO DE BARRAS
-			//String codigoBarras = linha.substring(37, 81).trim();
+			// String codigoBarras = linha.substring(37, 81).trim();
 			String codigoBarras = linha.substring(37, 93).trim();
-			
+
 			RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarras(codigoBarras);
 			// seta também o código de barra como string
 			registroHelperCodigoG.setCodigoBarras(codigoBarras);
-			registroHelperCodigoG
-					.setRegistroHelperCodigoBarras(registroHelperCodigoBarras);
+			registroHelperCodigoG.setRegistroHelperCodigoBarras(registroHelperCodigoBarras);
 			// recupera o valor recebido
-			registroHelperCodigoG.setValorRecebido(linha.substring(81, 93)
-					.trim());
+			registroHelperCodigoG.setValorRecebido(linha.substring(81, 93).trim());
 			// recupera o valor da tarifa
-			registroHelperCodigoG.setValorTarifa(linha.substring(93, 100)
-					.trim());
+			registroHelperCodigoG.setValorTarifa(linha.substring(93, 100).trim());
 			// recupera o numero sequencial do registro(NRS)
-			registroHelperCodigoG.setNumeroSeqRegistro(linha
-					.substring(100, 108).trim());
+			registroHelperCodigoG.setNumeroSeqRegistro(linha.substring(100, 108).trim());
 			// recupera o codigo da agencia arrecadadora
-			registroHelperCodigoG.setCodigoAgenciaArrecadadora(linha.substring(
-					108, 116).trim());
+			registroHelperCodigoG.setCodigoAgenciaArrecadadora(linha.substring(108, 116).trim());
 			// recupera a foma de arrecadação/captura
 			String codigoArrecadacaoForma = linha.substring(116, 117).trim();
-			registroHelperCodigoG
-					.setCodigoFormaArrecadacao(codigoArrecadacaoForma);
+			registroHelperCodigoG.setCodigoFormaArrecadacao(codigoArrecadacaoForma);
 			String descricaoArrecadacaoForma = "";
 			try {
 				descricaoArrecadacaoForma = this.repositorioArrecadacao
@@ -10732,29 +10473,24 @@ public class ControladorArrecadacao implements SessionBean {
 				e.printStackTrace();
 			}
 
-			registroHelperCodigoG
-					.setFormaArrecadacao(descricaoArrecadacaoForma);
+			registroHelperCodigoG.setFormaArrecadacao(descricaoArrecadacaoForma);
 
 			// recupera o numero de autenticação caixa ou código de
 			// transação
-			registroHelperCodigoG.setNumeroAutenticacao(linha.substring(117,
-					140).trim());
+			registroHelperCodigoG.setNumeroAutenticacao(linha.substring(117, 140).trim());
 			if (!linha.substring(140, 141).trim().equals("")) {
 				// recupera a forma de pagamento
-				registroHelperCodigoG.setFormaPagamento(linha.substring(140,
-						141).trim());
+				registroHelperCodigoG.setFormaPagamento(linha.substring(140, 141).trim());
 			} else {
 				// recupera a forma de pagamento
 				registroHelperCodigoG.setFormaPagamento("1");
 			}
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
-				registroHelperCodigoG.setReservadoFuturo(linha.substring(141,
-						149).trim());
+				registroHelperCodigoG.setReservadoFuturo(linha.substring(141, 149).trim());
 			} else {
 				// recupera o reservado para o futuro
-				registroHelperCodigoG.setReservadoFuturo(linha.substring(141,
-						150).trim());
+				registroHelperCodigoG.setReservadoFuturo(linha.substring(141, 150).trim());
 			}
 
 			// faz um cast para o object
@@ -10780,18 +10516,15 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o nome da cidade
 			registroHelperCodigoX.setNomeCidade(linha.substring(78, 98));
 			// recupera a sigla da unidade federação
-			registroHelperCodigoX.setSiglaUnidadeFederacao(linha.substring(98,
-					100));
+			registroHelperCodigoX.setSiglaUnidadeFederacao(linha.substring(98, 100));
 			// recupera a situação da agencia
 			registroHelperCodigoX.setSituacaoAgencia(linha.substring(100, 101));
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
-				registroHelperCodigoX.setReservadoFuturo(linha.substring(101,
-						149));
+				registroHelperCodigoX.setReservadoFuturo(linha.substring(101, 149));
 			} else {
 				// recupera o reservado para o futuro
-				registroHelperCodigoX.setReservadoFuturo(linha.substring(101,
-						150));
+				registroHelperCodigoX.setReservadoFuturo(linha.substring(101, 150));
 			}
 			// faz um cast para o object
 			registroHelperCodigo = registroHelperCodigoX;
@@ -10802,19 +10535,15 @@ public class ControladorArrecadacao implements SessionBean {
 			// recupera o codigo do registro
 			registroHelperCodigoZ.setCodigoRegistro("" + codigoRegistro);
 			// recupera o total de registros do arquivo
-			registroHelperCodigoZ.setTotalRegistrosArquivo(linha
-					.substring(1, 7));
+			registroHelperCodigoZ.setTotalRegistrosArquivo(linha.substring(1, 7));
 			// recupera o valor total recebido dos registrosdo arquivo
-			registroHelperCodigoZ.setValorTotalRegistrosArquivo(linha
-					.substring(7, 24));
+			registroHelperCodigoZ.setValorTotalRegistrosArquivo(linha.substring(7, 24));
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
-				registroHelperCodigoZ.setReservadoFuturo(linha.substring(24,
-						149));
+				registroHelperCodigoZ.setReservadoFuturo(linha.substring(24, 149));
 			} else {
 				// recupera o reservado para o futuro
-				registroHelperCodigoZ.setReservadoFuturo(linha.substring(24,
-						150));
+				registroHelperCodigoZ.setReservadoFuturo(linha.substring(24, 150));
 			}
 			// faz um cast para o object
 			registroHelperCodigo = registroHelperCodigoZ;
@@ -11561,130 +11290,78 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return DadosConteudoCodigoBarrasHelper
 	 */
 	public DadosConteudoCodigoBarrasHelper apresentarDadosConteudoCodigoBarras(
-			RegistroHelperCodigoG registroHelperCodigoG)
-			throws ControladorException {
+			RegistroHelperCodigoG registroHelperCodigoG) throws ControladorException {
 
 		DadosConteudoCodigoBarrasHelper retorno = new DadosConteudoCodigoBarrasHelper();
 
-		retorno.setIdentificacaoProduto(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdProduto());
-		retorno.setIdentificacaoSegmento(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdSegmento());
-		retorno.setIdentificacaoValorRealOUReferencia(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getIdValorReal());
-		retorno.setDigitoVerificadorGeral(registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getDigitoVerificadorGeral());
-		retorno
-				.setValorPagamento(Util
-						.formatarMoedaReal(Util
-								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
-										.getRegistroHelperCodigoBarras()
-										.getValorPagamento())));
+		retorno.setIdentificacaoProduto(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdProduto());
+		retorno.setIdentificacaoSegmento(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdSegmento());
+		retorno.setIdentificacaoValorRealOUReferencia(registroHelperCodigoG.getRegistroHelperCodigoBarras().getIdValorReal());
+		retorno.setDigitoVerificadorGeral(registroHelperCodigoG.getRegistroHelperCodigoBarras().getDigitoVerificadorGeral());
+		retorno.setValorPagamento(Util.formatarMoedaReal(
+				Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
+				registroHelperCodigoG.getRegistroHelperCodigoBarras().getValorPagamento()))
+		);
 
-		String tipoPagamento = registroHelperCodigoG
-				.getRegistroHelperCodigoBarras().getTipoPagamento();
+		String tipoPagamento = registroHelperCodigoG.getRegistroHelperCodigoBarras().getTipoPagamento();
 
-
-		if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA
-								.toString())) {
+		if (tipoPagamento != null && tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA.toString())) {
 
 			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_CONTA);
 
-			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento1()).toString());
+			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1()).toString());
 
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
 
-			retorno
-					.setMesAnoReferenciaConta(Util
-							.formatarMesAnoSemBarraParaMesAnoComBarra(registroHelperCodigoG
-									.getRegistroHelperCodigoBarras()
-									.getRegistroHelperCodigoBarrasTipoPagamento()
-									.getIdPagamento4()));
+			retorno.setMesAnoReferenciaConta(Util.formatarMesAnoSemBarraParaMesAnoComBarra(registroHelperCodigoG
+					.getRegistroHelperCodigoBarras().getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4()));
 
-			retorno.setDigitoVerificadorContaModulo10(new Integer(
-					registroHelperCodigoG.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento5()).toString());
+			retorno.setDigitoVerificadorContaModulo10(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5()).toString());
 
 		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO
-								.toString())) {
+				&& tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_GUIA_PAGAMENTO);
 
-			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento1()).toString());
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setCodigoTipoDebito(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento4()).toString());
-			retorno.setAnoEmissaoGuiaPagamento(new Integer(
-					registroHelperCodigoG.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento5()).toString());
+			retorno.setCodigoLocalidade(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1()).toString());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setCodigoTipoDebito(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4()).toString());
+			retorno.setAnoEmissaoGuiaPagamento(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5()).toString());
 
 		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA
-								.toString())) {
+				&& tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
 
-			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setSequencialDocumentoCobranca(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento3());
-			retorno.setCodigoTipoDocumento(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento4());
+			retorno.setMatriculaImovel(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setSequencialDocumentoCobranca(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
+			retorno.setCodigoTipoDocumento(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
-		} else if (tipoPagamento != null
-				&& tipoPagamento
-						.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL
-								.toString())) {
+		} else if (tipoPagamento != null && tipoPagamento
+				.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL.toString())) {
 
-			retorno
-					.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL);
+			retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL);
 
-			retorno.setCodigoCliente(new Integer(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2()).toString());
-			retorno.setMesAnoReferenciaConta(Util
-					.formatarAnoMesParaMesAno(new Integer(registroHelperCodigoG
-							.getRegistroHelperCodigoBarras()
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento2()).intValue()));
-			retorno.setDigitoVerificadorContaModulo10(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento5());
-			retorno.setSequencialFaturaClienteResponsavel(registroHelperCodigoG
-					.getRegistroHelperCodigoBarras()
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento6());
+			retorno.setCodigoCliente(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).toString());
+			retorno.setMesAnoReferenciaConta(
+					Util.formatarAnoMesParaMesAno(new Integer(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+							.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2()).intValue())
+			);
+			retorno.setDigitoVerificadorContaModulo10(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento5());
+			retorno.setSequencialFaturaClienteResponsavel(registroHelperCodigoG.getRegistroHelperCodigoBarras()
+					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
 
 		}
 
@@ -13414,7 +13091,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 						for (Integer anoMesArrecadacaoAtual : colecaoAnoMesReferenciaPagamentos) {
 
-							logger.info("Ano mes arrecadacao: " + anoMesArrecadacaoAtual);
 							repositorioArrecadacao.excluirDadosDiariosArrecadacaoPorAnoMesArrecadacaoPorLocalidade(anoMesArrecadacaoAtual, idLocalidade);
 
 							localidade = new Localidade();
@@ -15777,23 +15453,18 @@ public class ControladorArrecadacao implements SessionBean {
 		Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap = null;
 		try {
 
-			Collection colecaoidsBancos = repositorioArrecadacao
-					.pesquisaBancosDebitoAutomatico();
+			Collection colecaoidsBancos = repositorioArrecadacao.pesquisaBancosDebitoAutomatico();
 
 			if (colecaoidsBancos != null && !colecaoidsBancos.isEmpty()) {
 
-				Collection colecaoBancoDebitoAutomaticoMovimento = repositorioArrecadacao
-						.pesquisaDebitoAutomaticoMovimento(
-								colecaoIdsFaturamentoGrupo,
-								anoMesReferenciaFaturamento, colecaoidsBancos);
+				Collection colecaoBancoDebitoAutomaticoMovimento = repositorioArrecadacao.pesquisaDebitoAutomaticoMovimento(colecaoIdsFaturamentoGrupo,
+						anoMesReferenciaFaturamento, colecaoidsBancos);
 
-				if (colecaoBancoDebitoAutomaticoMovimento != null
-						&& !colecaoBancoDebitoAutomaticoMovimento.isEmpty()) {
+				if (colecaoBancoDebitoAutomaticoMovimento != null && !colecaoBancoDebitoAutomaticoMovimento.isEmpty()) {
 
 					debitosAutomaticoBancosMap = new HashMap();
 
-					Iterator iteCollBancoDebitoAutomaticoMovimento = colecaoBancoDebitoAutomaticoMovimento
-							.iterator();
+					Iterator iteCollBancoDebitoAutomaticoMovimento = colecaoBancoDebitoAutomaticoMovimento.iterator();
 
 					boolean primeiraVez = true;
 					Integer idBancoUltimo = null;
@@ -15801,8 +15472,7 @@ public class ControladorArrecadacao implements SessionBean {
 					Collection colecaoDebitoAutomaticoMovimento = new ArrayList();
 
 					while (iteCollBancoDebitoAutomaticoMovimento.hasNext()) {
-						Object[] bancoDebitoAutomaticoMovimento = (Object[]) iteCollBancoDebitoAutomaticoMovimento
-								.next();
+						Object[] bancoDebitoAutomaticoMovimento = (Object[]) iteCollBancoDebitoAutomaticoMovimento.next();
 						if (bancoDebitoAutomaticoMovimento != null) {
 
 							Banco banco = null;
@@ -15817,41 +15487,37 @@ public class ControladorArrecadacao implements SessionBean {
 							}
 
 							if (primeiraVez) {
-								
-								//VERIFICANDO SE HOUVE MUDANÇA DE BANCO
-								if (idBancoUltimo != null &&
-									!idBancoUltimo.equals(banco.getId())) {
-									
-									//FINALIZANDO O MOVIMENTO DO BANCO
-									debitosAutomaticoBancosMap.put(bancoInserir,
-									colecaoDebitoAutomaticoMovimento);
-									
-									//INICIANDO O MOVIMENTO DO PROXIMO BANCO
+
+								// VERIFICANDO SE HOUVE MUDANÇA DE BANCO
+								if (idBancoUltimo != null && !idBancoUltimo.equals(banco.getId())) {
+
+									// FINALIZANDO O MOVIMENTO DO BANCO
+									debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
+
+									// INICIANDO O MOVIMENTO DO PROXIMO BANCO
 									colecaoDebitoAutomaticoMovimento = new ArrayList();
 								}
-								
+
 								idBancoUltimo = banco.getId();
 								bancoInserir = banco;
 								primeiraVez = false;
 							}
-							
+
 							if (idBancoUltimo.equals(banco.getId())) {
-								
-								//ACUMULNADO OS MOVIMENTOS
+
+								// ACUMULNADO OS MOVIMENTOS
 								colecaoDebitoAutomaticoMovimento.add(debitoAutomaticoMovimento);
-							} 
-							else {
-								
-								//FINALIZANDO O MOVIMENTO DO BANCO
-								debitosAutomaticoBancosMap.put(bancoInserir,
-								colecaoDebitoAutomaticoMovimento);
-								
-								//INICIANDO O MOVIMENTO DO PROXIMO BANCO
+							} else {
+
+								// FINALIZANDO O MOVIMENTO DO BANCO
+								debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
+
+								// INICIANDO O MOVIMENTO DO PROXIMO BANCO
 								colecaoDebitoAutomaticoMovimento = new ArrayList();
-								
+
 								idBancoUltimo = banco.getId();
 								bancoInserir = banco;
-								
+
 								colecaoDebitoAutomaticoMovimento.add(debitoAutomaticoMovimento);
 								primeiraVez = true;
 
@@ -15859,7 +15525,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						}
 					}
-					
+
 					debitosAutomaticoBancosMap.put(bancoInserir, colecaoDebitoAutomaticoMovimento);
 
 				}
@@ -16240,7 +15906,6 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
 				try {
-
 
 					File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
 					out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
@@ -20584,9 +20249,12 @@ public class ControladorArrecadacao implements SessionBean {
 						 * gera o resumo da arrecadação caso o valor acumulado
 						 * seja maior que 0(zero)
 						 */
+						Integer[] idsCreditos = new Integer[1];
+						idsCreditos[0] = CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO;
+						
 						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+										idsCreditos);
 
 						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso != null
 								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso.doubleValue() > 0.00) {
@@ -20596,9 +20264,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 							lancamentoItemTemp = new LancamentoItem(LancamentoItem.DOCUMENTOS_PAGOS_EM_DUPLICIDADE_EXCESSO);
 
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							
 							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
 									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmDuplicidadeExcesso,
 									lancamentoItemTemp, null, new Short("800"), new Short("0"));
@@ -20607,16 +20272,12 @@ public class ControladorArrecadacao implements SessionBean {
 							
 						}
 
-						/**
-						 * Contabilizar créditos com crédito origem
-						 * correspondente a Contas Pagas em Excesso
-						 * 
-						 * @author Wellington Rocha
-						 * @date
-						 */
+						idsCreditos = new Integer[1];
+						idsCreditos[0] = CreditoOrigem.CONTAS_PAGAS_EM_EXCESSO;
+						
 						BigDecimal somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(idLocalidade, anoMesReferenciaArrecadacao, idCategoria,
-										CreditoOrigem.CONTAS_PAGAS_EM_EXCESSO);
+										idsCreditos);
 
 						if (somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso != null
 								&& somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso.doubleValue() > 0.00) {
@@ -20625,9 +20286,6 @@ public class ControladorArrecadacao implements SessionBean {
 									.add(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso);
 
 							lancamentoItemTemp = new LancamentoItem(LancamentoItem.CONTAS_PAGAS_EM_EXCESSO);
-
-							//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							//lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
 
 							resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
 									anoMesReferenciaArrecadacao, somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso,
@@ -20680,19 +20338,16 @@ public class ControladorArrecadacao implements SessionBean {
 						
 						
 						ResumoArrecadacao resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-								LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
+								anoMesReferenciaArrecadacao, localidade, categoria, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(resumo.getValorItemArrecadacao());
+							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
 							colecaoResumoArrecadacao.add(resumo);
 						}
 						
-						
-						resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
-								LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, new Short("1000"), new Short("10"));
+						resumo = obterResumoDescontosConcedidos(
+								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS,
+								LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1010"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
@@ -20700,18 +20355,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 						
 
-						resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS,
-								LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1010"), new Short("0"));
-						
-						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
-									.add(resumo.getValorItemArrecadacao());
-							colecaoResumoArrecadacao.add(resumo);
-						}
-						
-
-						resumo = obterResumoDescontosConcedidosParcelamento(
+						resumo = obterResumoDescontosConcedidos(
 								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.DESCONTOS_INCONDICIONAIS,
 								LancamentoItem.DESCONTOS_INCONDICIONAIS, new Short("1020"), new Short("0"));
 						
@@ -20721,7 +20365,7 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumo);
 						}
 						
-						resumo = obterResumoDescontosConcedidosParcelamento(
+						resumo = obterResumoDescontosConcedidos(
 								anoMesReferenciaArrecadacao, localidade, categoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
 								LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short("1030"), new Short("0"));
 						
@@ -21177,15 +20821,14 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
-						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
-								CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
+						resumo = obterResumoDescontosConcedidosParcelamentoRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
+								 LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							
 							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.add(resumo.getValorItemArrecadacao());
 							colecaoResumoArrecadacao.add(resumo);
 						}
-
 						
 						resumo = obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
 								CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 
@@ -21482,12 +21125,26 @@ public class ControladorArrecadacao implements SessionBean {
 						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos = repositorioArrecadacao
 								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
 										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+						
+						BigDecimal valorCreditosAnterioresCurto = repositorioArrecadacao
+								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
+										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
 
+						BigDecimal valorCreditosAnterioresLongo = repositorioArrecadacao
+								.acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(idLocalidade,
+										anoMesReferenciaArrecadacao, idCategoria, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
+
+						BigDecimal valorTotal = BigDecimal.ZERO;
+						
+						if (somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos != null)
+							valorTotal = somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos;
+						
+						if (valorCreditosAnterioresCurto != null) valorTotal.add(valorCreditosAnterioresCurto);
+						if (valorCreditosAnterioresLongo != null) valorTotal.add(valorCreditosAnterioresLongo);
+						
 						// [FS0005] - Verificar valor acumulado igual a zero
-						if (somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos != null
-								&& somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos.doubleValue() > 0.00) {
-							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4210e4499
-									.add(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+						if (valorTotal != null && valorTotal.doubleValue() > 0.00) {
+							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = valorAcumuladoSequenciaTipoLancamentoEntre4210e4499.add(valorTotal);
 							recebimentoTipoTemp = new RecebimentoTipo();
 							lancamentoTipoTemp = new LancamentoTipo();
 							lancamentoItemTemp = new LancamentoItem();
@@ -21507,8 +21164,7 @@ public class ControladorArrecadacao implements SessionBean {
 							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("4440"));
 							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
 							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoDescontosConcedidos);
+							resumoArrecadacaoTemp.setValorItemArrecadacao(valorTotal);
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
@@ -24925,11 +24581,18 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	private ResumoArrecadacao obterResumoDescontosConcedidosParcelamento(Integer anoMesReferenciaArrecadacao, Localidade localidade,
-			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+			Categoria categoria, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
 
 		ResumoArrecadacao resumo = null;
+		
+		Integer[] idsOrigensCredito = new Integer[4];
+		idsOrigensCredito[0] = CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO;
+		idsOrigensCredito[1] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO;
+		idsOrigensCredito[2] = CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO;
+		idsOrigensCredito[3] = CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA;
+		
 		BigDecimal valor = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
-				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idsOrigensCredito);
 
 		if (valor != null && valor.doubleValue() > 0.00) {
 
@@ -24940,6 +24603,29 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		return resumo;
 	}
+	
+	private ResumoArrecadacao obterResumoDescontosConcedidos(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		
+		Integer[] idsOrigensCredito = new Integer[1];
+		idsOrigensCredito[0] = idCreditoOrigem;
+		
+		BigDecimal valor = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
+				localidade.getId(), anoMesReferenciaArrecadacao, categoria.getId(), idsOrigensCredito);
+
+		if (valor != null && valor.doubleValue() > 0.00) {
+
+			LancamentoItem lancamentoItem = new LancamentoItem(idLancamentoItem);
+
+			resumo = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosCreditosRealizados(localidade, categoria,
+					anoMesReferenciaArrecadacao, valor, lancamentoItem, null, seqTipoLancamento, seqItemTipoLancamento);
+		}
+		return resumo;
+	}
+	
+	
 
 	private ResumoArrecadacao obterResumoDescontosConcedidosRecebimentoMesesAnterioresClassificados(Integer anoMesReferenciaArrecadacao, Localidade localidade,
 			Categoria categoria, Integer idCreditoOrigem, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
@@ -24960,6 +24646,50 @@ public class ControladorArrecadacao implements SessionBean {
 			resumo.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
 			resumo.setLancamentoItem(new LancamentoItem(idLancamentoItem));
 			resumo.setLancamentoItemContabil(null);
+			resumo.setSequenciaTipoLancamento(seqTipoLancamento);
+			resumo.setSequenciaItemTipoLancamento(seqItemTipoLancamento);
+			resumo.setUltimaAlteracao(new Date());
+			resumo.setValorItemArrecadacao(soma);
+		}
+		
+		return resumo;
+
+	}
+	
+	private ResumoArrecadacao obterResumoDescontosConcedidosParcelamentoRecebimentoMesesAnterioresClassificados(Integer anoMesReferenciaArrecadacao, Localidade localidade,
+			Categoria categoria, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento ) throws ErroRepositorioException {
+
+		ResumoArrecadacao resumo = null;
+		
+		BigDecimal somaDescontos = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+				anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+		
+		BigDecimal somaCurtoPrazo = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+						anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+		
+		BigDecimal somaLongoPrazo = repositorioArrecadacao
+				.acumularValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesPorOrigemCredito(localidade.getId(),
+						anoMesReferenciaArrecadacao, categoria.getId(), CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO);
+		
+		BigDecimal soma = BigDecimal.ZERO;
+		
+		if (somaDescontos != null) soma = somaDescontos;
+		if (somaCurtoPrazo != null) soma = soma.add(somaCurtoPrazo);
+		if (somaLongoPrazo != null) soma = soma.add(somaLongoPrazo);
+		
+		if (soma != null && soma.doubleValue() > 0.00) {
+			
+			resumo = new ResumoArrecadacao();
+			resumo.setGerenciaRegional(localidade.getGerenciaRegional());
+			resumo.setLocalidade(localidade);
+			resumo.setCategoria(categoria);
+			resumo.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+			resumo.setRecebimentoTipo(new RecebimentoTipo(RecebimentoTipo.RECEBIMENTO_MESES_ANTERIORES_CLASSIFICADAS_NO_MES));
+			resumo.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
+			resumo.setLancamentoItem(new LancamentoItem(idLancamentoItem));
+			resumo.setLancamentoItemContabil(null);
 			resumo.setSequenciaTipoLancamento(new Short("4400"));
 			resumo.setSequenciaItemTipoLancamento(new Short("0"));
 			resumo.setUltimaAlteracao(new Date());
@@ -24969,6 +24699,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return resumo;
 
 	}
+	
 	private Map<Integer, BigDecimal> obterValorImpostoPagamentosClassificadosConta(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, Integer tipoImposto) 
 			throws ErroRepositorioException, ControladorException {
 		
@@ -25171,8 +24902,11 @@ public class ControladorArrecadacao implements SessionBean {
 	private ResumoArrecadacao contabilizarCreditosRealizadosRecuperacaoCredito(Integer referenciaArrecadacao, Localidade localidade, Categoria categoria, 
 			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException {
 		
+		Integer[] idsCreditosOrigem = new Integer[1];
+		idsCreditosOrigem[0] = idCreditoOrigem;
+		
 		BigDecimal valorCreditos = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
-						localidade.getId(), referenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+						localidade.getId(), referenciaArrecadacao, categoria.getId(), idsCreditosOrigem);
 		
 		ResumoArrecadacao resumoArrecadacao = null;
 		if (valorCreditos != null && valorCreditos.doubleValue() > 0.00) {
@@ -29786,18 +29520,16 @@ public class ControladorArrecadacao implements SessionBean {
 					
 					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
 					
-//					Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(),75);
-					String fatorVencimento = fachada.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
+					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
 					
-					representacaoNumericaCodBarraSemDigito = fachada.
-						obterEspecificacaoCodigoBarraFichaCompensacao(
+					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
 					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
 					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
 						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 					                                
 					representacaoNumericaCodBarraFormatada = 
-					fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
 
 					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
 				} else {
@@ -37420,15 +37152,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por
-	 * NSA
-	 * 
-	 * @author Ana Maria
-	 * @date 12/07/2007
-	 * 
-	 * @param idMovimentoArrecadador
-	 * @return
+	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por NSA
 	 */
 	public Collection<MovimentoArrecadadoresPorNSAHelper> gerarMovimentoArrecadadoresNSA(
 			Collection<Integer> idsArrecadadorMovimento,
@@ -37450,41 +37174,42 @@ public class ControladorArrecadacao implements SessionBean {
 
 	/**
 	 * [UC0259] - Processar Pagamento com código de Barras
-	 * 
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento 
-	 *
-	 * @author Vivianne Sousa, Raphael Rossiter
-	 * @date 19/07/2007, 12/04/2010
-	 *
-	 * @param idDebitoACobrar
-	 * @param numeroParcelasAntecipadas
-	 * @throws ControladorException
 	 */
-	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) 
-		throws ControladorException {
+	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
 
-		Integer idImovel = null;
+		FiltroDebitoACobrar filtro = new FiltroDebitoACobrar();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.IMOVEL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.FINANCIAMENTO_TIPO);
 
-		try {
+		Collection colecao = getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
-			//Pesquisando o imóvel a partir do débito a cobrar
-			idImovel = repositorioFaturamento.pesquisarImovelDebitoACobrar(idDebitoACobrar);
+		if (colecao != null && !colecao.isEmpty() && numeroParcelasAntecipadas == null) {
+			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);
 
-			if (idImovel != null && numeroParcelasAntecipadas == null) {
+			if (debito.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.NORMAL)
+					&& debito.getFinanciamentoTipo().getId().equals(FinanciamentoTipo.JUROS_PARCELAMENTO)) {
+
+				if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					debito.setDebitoCreditoSituacaoAnterior(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+				}
 				
-				/*
-				 * Atualiza DSCT_IDATUAL com o valor correspondente a cancelado(3),
-				 * na tabela DEBITO_A_COBRAR com IMOV_ID do debito a cobrar que foi pago,
-				 * DCST_IDATUAL com o valor correspondente a normal (0) e FNTP_ID com o valor 
-				 * correspondente a juros de parcelamento (8)
-				 */
-				repositorioFaturamento.atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(idImovel);
-			}
+				debito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA));
+				
+				int anoMesReferenciaContabil = anoMesFaturamento;
+				int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+				if (anoMesFaturamento < anoMesCorrente) {
+					anoMesReferenciaContabil = anoMesCorrente;
+				}
+				
+				debito.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
 
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			ex.printStackTrace();
-			throw new ControladorException("erro.sistema", ex);
+				getControladorUtil().atualizar(debito);
+			}
 		}
 	}
 
@@ -37493,25 +37218,6 @@ public class ControladorArrecadacao implements SessionBean {
 	 * acordo com os parâmetros informados
 	 * 
 	 * [UC0229] Obter Representação Numérica do Código de Barras
-	 * 
-	 * @author Pedro Alexandre,Hugo Amorim,Hugo Amorim
-	 * @date 20/04/2006,12/01/2010,10/03/2010
-	 * 
-	 * @param tipoPagamento
-	 * @param valorCodigoBarra
-	 * @param idLocalidade
-	 * @param matriculaImovel
-	 * @param anoMesReferenciaConta
-	 * @param digitoVerificadorRefContaModulo10
-	 * @param idTipoDebito
-	 * @param anoEmissaoGuiaPagamento
-	 * @param sequencialDocumentoCobranca
-	 * @param idTipoDocumento
-	 * @param idCliente
-	 * @param seqFaturaClienteResponsavel
-	 * @param idGuiaPagamento
-	 * @return
-	 * @throws ParametroNaoInformadoException
 	 */
 	public String obterRepresentacaoNumericaCodigoBarra(Integer tipoPagamento,
 			BigDecimal valorCodigoBarra, Integer idLocalidade,
@@ -37519,19 +37225,16 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer digitoVerificadorRefContaModulo10, Integer idTipoDebito,
 			String anoEmissaoGuiaPagamento, String sequencialDocumentoCobranca,
 			Integer idTipoDocumento, Integer idCliente,
-			Integer seqFaturaClienteResponsavel,String idGuiaPagamento) throws ControladorException {
+			Integer seqFaturaClienteResponsavel, String idGuiaPagamento) throws ControladorException {
 
-		// Cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
-		
-		// Obtem parametros do sistema
+
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		
+
 		// [FS0001] Verificar compatibilidade dos campos informados com o tipo
 		// de pagamento
 		if (tipoPagamento == null) {
-			throw new ControladorException(
-					"atencao.parametros.incompletos.codigobarra");
+			throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 		}
 		// Caso o tipo de pagamento seja referente a conta
 		if (tipoPagamento.intValue() == 3) {
@@ -37542,11 +37245,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| mesAnoReferenciaConta == null
-					|| digitoVerificadorRefContaModulo10 == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idLocalidade == null || matriculaImovel == null || mesAnoReferenciaConta == null || digitoVerificadorRefContaModulo10 == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso o tipo de pagamento seja referente a guia de pagamento
@@ -37557,11 +37257,9 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| idTipoDebito == null
+			if (idLocalidade == null || matriculaImovel == null || idTipoDebito == null
 					|| anoEmissaoGuiaPagamento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a documento de
@@ -37573,11 +37271,9 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || matriculaImovel == null
-					|| sequencialDocumentoCobranca == null
+			if (idLocalidade == null || matriculaImovel == null || sequencialDocumentoCobranca == null
 					|| idTipoDocumento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso o tipo de pagamento seja referente a fatura do cliente
@@ -37588,10 +37284,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idCliente == null || mesAnoReferenciaConta == null
-					|| seqFaturaClienteResponsavel == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idCliente == null || mesAnoReferenciaConta == null || seqFaturaClienteResponsavel == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a guia de pagamento
@@ -37601,11 +37295,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idLocalidade == null || idCliente == null
-					|| idTipoDebito == null
-					|| anoEmissaoGuiaPagamento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idLocalidade == null || idCliente == null || idTipoDebito == null || anoEmissaoGuiaPagamento == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		} else if (tipoPagamento.intValue() == 8) {
 
@@ -37614,10 +37305,8 @@ public class ControladorArrecadacao implements SessionBean {
 			// não forem informados levanta uma exceção para o usuário
 			// indicando que os parâmetros para geração do código de barras
 			// está incompleto.
-			if (idCliente == null || sequencialDocumentoCobranca == null
-					|| idTipoDocumento == null) {
-				throw new ControladorException(
-						"atencao.parametros.incompletos.codigobarra");
+			if (idCliente == null || sequencialDocumentoCobranca == null || idTipoDocumento == null) {
+				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		}
 
@@ -37627,72 +37316,56 @@ public class ControladorArrecadacao implements SessionBean {
 
 		// G.05.1 - Identificação do produto
 		String identificacaoProduto = "8";
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoProduto;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoProduto;
 
 		// G.05.2 - Identificação do segmento
 		String identificacaoSegmento = "2";
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoSegmento;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoSegmento;
 
 		// G.05.3 - Identificação dovalor real ou referência
 
 		// MODULO 10
 		Short moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_10;
 		String identificacaoValorRealOuReferencia = "6";
-		
-		if(getSistemaParametro().getNumeroModuloDigitoVerificador()!=null
-				&& getSistemaParametro().getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
+
+		if (getSistemaParametro().getNumeroModuloDigitoVerificador() != null && getSistemaParametro()
+				.getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11) == 0) {
 			// MODULO 11
 			moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_11;
 			identificacaoValorRealOuReferencia = "8";
 		}
-		
 
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoValorRealOuReferencia;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoValorRealOuReferencia;
 
 		// G.05.5 - Valor do código de barras
 		String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(11,
 				valorCodigoBarra.setScale(2).toString().replace(".", ""));
 		valorCodigoBarraFormatado = valorCodigoBarraFormatado.replace("-", "");
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ valorCodigoBarraFormatado;
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + valorCodigoBarraFormatado;
 
 		// G.05.6 - Identificação da empresa
-		String identificacaoEmpresa = getSistemaParametro()
-				.getCodigoEmpresaFebraban().toString();
-		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4,
-				identificacaoEmpresa);
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoEmpresa;
+		String identificacaoEmpresa = getSistemaParametro().getCodigoEmpresaFebraban().toString();
+		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4, identificacaoEmpresa);
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoEmpresa;
 
 		// G.05.7 Identificação do pagamento
 		// [SB0001] Obter Identificação do Pagamento
-		String identificacaoPagamento = obterIdentificacaoPagamento(
-				tipoPagamento, idLocalidade, matriculaImovel,
-				mesAnoReferenciaConta, digitoVerificadorRefContaModulo10,
-				idTipoDebito, anoEmissaoGuiaPagamento,
-				sequencialDocumentoCobranca, idTipoDocumento, idCliente,
-				seqFaturaClienteResponsavel,idGuiaPagamento);
+		String identificacaoPagamento = obterIdentificacaoPagamento(tipoPagamento, idLocalidade, matriculaImovel,
+				mesAnoReferenciaConta, digitoVerificadorRefContaModulo10, idTipoDebito, anoEmissaoGuiaPagamento,
+				sequencialDocumentoCobranca, idTipoDocumento, idCliente, seqFaturaClienteResponsavel, idGuiaPagamento);
 
-		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-				+ identificacaoPagamento + tipoPagamento.toString();
+		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoPagamento + tipoPagamento.toString();
 
 		// G.05.4 - Dígito verificador geral
 		// [SB0002] Obter Dígito verificador geral
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace(".", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace("-", "");
-		String digitoVerificadorGeral = (Util
-				.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra,moduloVerificador))
-				.toString();
+		String digitoVerificadorGeral = (Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra, moduloVerificador)).toString();
 
 		// Monta a representaçaõ númerica com todos os campos informados
-		representacaoNumericaCodigoBarra = identificacaoProduto
-				+ identificacaoSegmento + identificacaoValorRealOuReferencia
-				+ digitoVerificadorGeral + valorCodigoBarraFormatado
-				+ identificacaoEmpresa + identificacaoPagamento
-				+ tipoPagamento.toString();
+		representacaoNumericaCodigoBarra = identificacaoProduto + identificacaoSegmento
+				+ identificacaoValorRealOuReferencia + digitoVerificadorGeral + valorCodigoBarraFormatado
+				+ identificacaoEmpresa + identificacaoPagamento + tipoPagamento.toString();
 
 		// Cria as variáveis que vão armazenar o código de barra separado por
 		// campos
@@ -37711,64 +37384,27 @@ public class ControladorArrecadacao implements SessionBean {
 		// e para cada um dos grupos calcula o dígito verificador do módulo 11
 		codigoBarraCampo1 = representacaoNumericaCodigoBarra.substring(0, 11);
 
-		codigoBarraDigitoVerificadorCampo1 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo1),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo1 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo1), moduloVerificador)).toString();
 		codigoBarraCampo2 = representacaoNumericaCodigoBarra.substring(11, 22);
 
-		codigoBarraDigitoVerificadorCampo2 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo2),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo2 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo2), moduloVerificador)).toString();
 		codigoBarraCampo3 = representacaoNumericaCodigoBarra.substring(22, 33);
 
-		codigoBarraDigitoVerificadorCampo3 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo3),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo3 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo3), moduloVerificador)).toString();
 		codigoBarraCampo4 = representacaoNumericaCodigoBarra.substring(33, 44);
 
-		codigoBarraDigitoVerificadorCampo4 = (Util
-				.obterDigitoVerificador(new Long(codigoBarraCampo4),moduloVerificador))
-				.toString();
+		codigoBarraDigitoVerificadorCampo4 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo4), moduloVerificador)).toString();
 
 		// Monta a representação númerica do código de barras com os dígitos
 		// verificadores
-		representacaoNumericaCodigoBarra = codigoBarraCampo1
-				+ codigoBarraDigitoVerificadorCampo1 + codigoBarraCampo2
-				+ codigoBarraDigitoVerificadorCampo2 + codigoBarraCampo3
-				+ codigoBarraDigitoVerificadorCampo3 + codigoBarraCampo4
-				+ codigoBarraDigitoVerificadorCampo4;
+		representacaoNumericaCodigoBarra = codigoBarraCampo1 + codigoBarraDigitoVerificadorCampo1 + codigoBarraCampo2
+				+ codigoBarraDigitoVerificadorCampo2 + codigoBarraCampo3 + codigoBarraDigitoVerificadorCampo3
+				+ codigoBarraCampo4 + codigoBarraDigitoVerificadorCampo4;
 
 		// Retorna a representação númerica do código de barras
 		return representacaoNumericaCodigoBarra;
 	}
 
-	/**
-	 * Obtém a representação númerica do código de barras de um pagamento de
-	 * acordo com os parâmetros informados
-	 * 
-	 * [UC0229] Obter Representação Numérica do Código de Barras
-	 * 
-	 * Formata a identificação do pagamento de acordo com o tipo de pagamento
-	 * informado
-	 * 
-	 * [SB0001] Obter Identificação do Pagamento
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 20/04/2006
-	 * 
-	 * @param tipoPagamento
-	 * @param idLocalidade
-	 * @param matriculaImovel
-	 * @param anoMesReferenciaConta
-	 * @param digitoVerificadorRefContaModulo10
-	 * @param idTipoDebito
-	 * @param anoEmissaoGuiaPagamento
-	 * @param sequencialDocumentoCobranca
-	 * @param idTipoDocumento
-	 * @param idCliente
-	 * @param seqFaturaClienteResponsavel
-	 * @return
-	 */
 	public String obterIdentificacaoPagamento(Integer tipoPagamento,
 			Integer idLocalidade, Integer matriculaImovel,
 			String mesAnoReferenciaConta,
@@ -38625,167 +38261,9 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterRepresentacaoNumericaCodigoBarraFichaCompensacao(String especificacaoCodigoBarra)
-                 throws ControladorException {
-        
-        String representacaoNumericaCodigoBarra = especificacaoCodigoBarra;
-
-        // Cria as variáveis que vão armazenar o código de barra separado por
-        // campos e seus respectivos dígitos verificadores se existirem
-        String codigoBarraCampo1 = null;
-        String codigoBarraDigitoVerificadorCampo1 = null;
-        String codigoBarraCampo2 = null;
-        String codigoBarraDigitoVerificadorCampo2 = null;
-        String codigoBarraCampo3 = null;
-        String codigoBarraDigitoVerificadorCampo3 = null;
-        String codigoBarraDigitoVerificadorCampo4 = null;
-        String codigoBarraCampo5 = null;
-
-        // Separa as 44 posições do código de barras em 5 partes, 
-        // sendo 3 primeiros constituidos por DV(módulo 10) e, entre cada campo, 
-        // espaço equivalente a uma posição.No quarto campo é indicado, isoladamente, 
-        // o DV(módulo 11) do código de barras.
-        codigoBarraCampo1 = representacaoNumericaCodigoBarra.substring(0, 4) + representacaoNumericaCodigoBarra.substring(20, 21);
-        codigoBarraCampo1 = codigoBarraCampo1 + "." +  representacaoNumericaCodigoBarra.substring(21, 25);
-        codigoBarraDigitoVerificadorCampo1 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo1.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo1 = codigoBarraDigitoVerificadorCampo1 + " ";
-        
-        codigoBarraCampo2 = representacaoNumericaCodigoBarra.substring(24, 29);
-        codigoBarraCampo2 = codigoBarraCampo2 + "." +  representacaoNumericaCodigoBarra.substring(29, 34);
-        codigoBarraDigitoVerificadorCampo2 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo2.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo2 = codigoBarraDigitoVerificadorCampo2 + " ";
-        
-        codigoBarraCampo3 = representacaoNumericaCodigoBarra.substring(34, 39);
-        codigoBarraCampo3 = codigoBarraCampo3 + "." +  representacaoNumericaCodigoBarra.substring(39, 44);
-        codigoBarraDigitoVerificadorCampo3 = (Util.obterDigitoVerificadorModulo10(new Long(codigoBarraCampo3.replace(".","")))).toString();
-        codigoBarraDigitoVerificadorCampo3 = codigoBarraDigitoVerificadorCampo3 + " ";
-        
-        codigoBarraDigitoVerificadorCampo4 = representacaoNumericaCodigoBarra.substring(4,5) + " ";
-        
-        codigoBarraCampo5 = representacaoNumericaCodigoBarra.substring(5, 19);
-        
-        // Monta a representação númerica do código de barras com os dígitos verificadores
-        representacaoNumericaCodigoBarra = codigoBarraCampo1
-                + codigoBarraDigitoVerificadorCampo1 
-                + codigoBarraCampo2
-                + codigoBarraDigitoVerificadorCampo2 
-                + codigoBarraCampo3
-                + codigoBarraDigitoVerificadorCampo3 
-                + codigoBarraDigitoVerificadorCampo4
-                + codigoBarraCampo5;
-        
-        // Retorna a representação númerica do código de barras
-        return representacaoNumericaCodigoBarra;
-    }
-
-    /**
-     * Obtém a representação númerica do código de barras da Ficha de Compensação
-     * 
-     * [UC0716] Obter Representação Numérica do Código de Barras da Ficha de Compensação
-     * 
-     * @author Vivianne Sousa
-     * @date 12/11/2007
-     * 
-     * @param codigoBanco
-     * @param codigoMoeda
-     * @param valorCodigoBarra
-     * @param nossoNumero
-     * @param carteira
-     * @param fatorVencimento
-     * @return
-     * @throws ParametroNaoInformadoException
-     */
-    public String obterEspecificacaoCodigoBarraFichaCompensacao( String codigoBanco,
-                 String codigoMoeda, BigDecimal valorCodigoBarra, String nossoNumeroSemDV,
-                 String carteira, String fatorVencimento)
-                 throws ControladorException {
-        
-        // Cria a variável que vai armazenar a representação númerica do código de barras
-        String representacaoNumericaCodigoBarra = "";
-
-        // G.05.1 - Código do Banco
-        codigoBanco = Util.adicionarZerosEsquedaNumero(3,codigoBanco);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + codigoBanco;
-
-        // G.05.2 - Código da Moeda
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + codigoMoeda;
-        
-        // G.05.4 - Fator de Vencimento
-        fatorVencimento = Util.adicionarZerosEsquedaNumero(4,fatorVencimento);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + fatorVencimento;
-
-        // G.05.5 - Valor do código de barras
-        String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(10,
-                valorCodigoBarra.setScale(2).toString().replace(".", ""));
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra
-                + valorCodigoBarraFormatado;
-
-        // G.05.6 - Zeros
-        String zeros = "";
-        zeros = Util.adicionarZerosEsquedaNumero(6,zeros);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + zeros;
-
-        // G.05.7 Nosso número sem o DV
-        nossoNumeroSemDV = Util.adicionarZerosEsquedaNumero(17,nossoNumeroSemDV);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + nossoNumeroSemDV;
-
-        // G.05.8 Tipo de Carteira
-        carteira = Util.adicionarZerosEsquedaNumero(2,carteira);
-        representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + carteira;
-        
-        // G.05.3 - Dígito verificador geral
-        // [SB0001] Obter Dígito verificador geral
-        String digitoVerificadorGeral = (Util.obterDigitoVerificadorModulo11(representacaoNumericaCodigoBarra)).toString();
-            //(Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra)).toString();
-
-        if(digitoVerificadorGeral.equalsIgnoreCase("0") ||
-                digitoVerificadorGeral.equalsIgnoreCase("10") ||
-                digitoVerificadorGeral.equalsIgnoreCase("11")){
-            digitoVerificadorGeral = "1";
-        }
-        
-        // Monta a representaçaõ númerica com todos os campos informados
-        representacaoNumericaCodigoBarra = codigoBanco + codigoMoeda 
-                        + digitoVerificadorGeral +  fatorVencimento 
-                        + valorCodigoBarraFormatado + zeros 
-                        + nossoNumeroSemDV + carteira;
-        
-
-        // Retorna a representação númerica do código de barras
-        return representacaoNumericaCodigoBarra;
-    }
-    
-    /**
-	 * [UC0626] Gerar Resumo de Metas Acumulado no Mês (CAERN)
-	 * 
-	 * @author Sávio Luiz
-	 * @data 28/11/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection pesquisarPagamentoDeContas(Collection colecaoConta)
-			throws ControladorException{
+	public Collection pesquisarPagamentoDeContas(Collection colecaoConta) throws ControladorException{
 		try {
-			return repositorioArrecadacao
-					.pesquisarPagamentoDeContas(colecaoConta);
+			return repositorioArrecadacao.pesquisarPagamentoDeContas(colecaoConta);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -39457,290 +38935,273 @@ public class ControladorArrecadacao implements SessionBean {
     
     
     public PagamentoHelperCodigoBarras processarPagamentosFichaCompensacaoNovo(
-            RegistroFichaCompensacaoTipo7Helper registroTipo7, Integer idFormaArrecadacao, Usuario usuarioLogado) throws ControladorException {
+            RegistroFichaCompensacaoTipo7Helper registroTipo7, Integer idFormaArrecadacao, 
+            Usuario usuarioLogado) throws ControladorException {
 
-        PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-     
-        String descricaoOcorrencia = "OK";
-        String indicadorAceitacaoRegistro = "1";
+		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
 
-        Collection colecaoPagamnetos = new ArrayList();
-        
-        FiltroDocumentoTipo filtroDocumentoTipo = new FiltroDocumentoTipo();
-        filtroDocumentoTipo.adicionarParametro(new ParametroSimples(FiltroDocumentoTipo.ID, registroTipo7.getTipoDocumentoInteger()));
-        Collection colecaoDocumentoTipo = getControladorUtil().pesquisar(filtroDocumentoTipo,DocumentoTipo.class.getName());
-        
-        if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()){
-            indicadorAceitacaoRegistro = "2";
-            descricaoOcorrencia  = "TIPO DE DOCUMENTO INVÁLIDO";
-        }else{
-          
-            if(registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.CONTA)){
-                IConta conta = null ;
-                
-                conta = this.getControladorFaturamento().pesquisarContaTipoBoleto(registroTipo7.getIdDocumentoEmitido(), registroTipo7.getValorRecebidoFormatado());
-                
-                if(conta == null){
-                	conta = this.getControladorFaturamento().pesquisarContaHistoricoTipoBoleto(registroTipo7.getIdDocumentoEmitido(), registroTipo7.getValorRecebidoFormatado());
-                    
-                    if (conta == null){
-                        descricaoOcorrencia = "CONTA INEXISTENTE";
-                    }
-                }
-                
-                if(descricaoOcorrencia.equalsIgnoreCase("OK")){
-                    Pagamento pagamento = new Pagamento();
-                    Integer anoMesPagamento = Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado());
-                    
-                    pagamento.setAnoMesReferenciaPagamento(conta.getReferencia());
-                    
-                    if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
-                        pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
-                    } else {
-                        pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
-                    }
+		String descricaoOcorrencia = "OK";
+		String indicadorAceitacaoRegistro = "1";
 
-                    pagamento.setValorPagamento(registroTipo7.getValorRecebidoFormatado());
-                    pagamento.setDataPagamento(registroTipo7.getDataLiquidacaoFormatado());
-                    pagamento.setPagamentoSituacaoAtual(null);
-                    pagamento.setPagamentoSituacaoAnterior(null);
-                    pagamento.setDebitoTipo(null);
-                    
-                    if(conta instanceof Conta){
-                    	ContaGeral contaGeral = new ContaGeral();
-                    	contaGeral.setId(conta.getId());
-                    	contaGeral.setConta(conta);
-                    	
-                        pagamento.setContaGeral(contaGeral);
-                    }
-                    
-                    pagamento.setLocalidade(conta.getImovel().getLocalidade());
-                    pagamento.setImovel(conta.getImovel());
-                    
-                    pagamento.setGuiaPagamento(null);
+		Collection colecaoPagamentos = new ArrayList();
 
-                    DocumentoTipo documentoTipo = new DocumentoTipo();
-                    documentoTipo.setId(DocumentoTipo.CONTA);
-                    pagamento.setDocumentoTipo(documentoTipo);
-                    pagamento.setAvisoBancario(null);
-                    
-                    pagamento.setArrecadadorMovimentoItem(null);
+		FiltroDocumentoTipo filtroDocumentoTipo = new FiltroDocumentoTipo();
+		filtroDocumentoTipo.adicionarParametro(new ParametroSimples(FiltroDocumentoTipo.ID, registroTipo7.getTipoDocumentoInteger()));
+		Collection colecaoDocumentoTipo = getControladorUtil().pesquisar(filtroDocumentoTipo, DocumentoTipo.class.getName());
 
-                    ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-                    arrecadacaoForma.setId(idFormaArrecadacao);
-                    pagamento.setArrecadacaoForma(arrecadacaoForma);
-                    pagamento.setCliente(null);
-                    pagamento.setUltimaAlteracao(new Date());
+		if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()) {
+			indicadorAceitacaoRegistro = "2";
+			descricaoOcorrencia = "TIPO DE DOCUMENTO INVÁLIDO";
+		} else {
 
-                    pagamento.setFatura(null);
-        			pagamento.setCobrancaDocumento(null);
-        			
-        			DocumentoTipo documentoAgregador = new DocumentoTipo();
-        			documentoAgregador.setId(DocumentoTipo.CONTA);
-        			pagamento.setDocumentoTipoAgregador(documentoAgregador);	
-                    
-                    colecaoPagamnetos.add(pagamento);
+			if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.CONTA)) {
+				IConta conta = null;
 
-                }else{
-                    indicadorAceitacaoRegistro = "2";
-                }
-            }
-            else if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.EXTRATO_DE_DEBITO) || 
-            		registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.VISITA_COBRANCA) ||
-            		registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.ORDEM_CORTE)){
-            	
-            	CobrancaDocumento cobrancaDocumento = null ;
-                
-            	try {
-            		cobrancaDocumento = repositorioArrecadacao.pesquisarCobrancaDocumentoProcessarFichaCompensacao(
-            																								registroTipo7.getIdDocumentoEmitido());
-                } 
-            	catch (ErroRepositorioException e) {
-                    throw new ControladorException("erro.sistema", e);
-                }
-            	
-            	if (cobrancaDocumento == null){
-            		descricaoOcorrencia = "DOCUMENTO INEXISTENTE";
-            		indicadorAceitacaoRegistro = "2";
-            	}
-            	
-            	if(descricaoOcorrencia.equalsIgnoreCase("OK")){
-            		
-            		PagamentoHelperCodigoBarras retorno = new PagamentoHelperCodigoBarras();
-            		
-            		RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
-            		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
-            		
-            		if (cobrancaDocumento.getImovel() != null){
-            			if (cobrancaDocumento.getLocalidade() != null){
-            				registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getLocalidade().getId().toString());
-            			}
-            			else{
-            				registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getImovel().getLocalidade().getId().toString());
-            			}
-            			
-            			//IMÓVEL
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getImovel().getId().toString());
-        				
-            			//SEQUENCIAL DO DOCUMENTO
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
-        				
-            			//TIPO DO DOCUMENTO
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumento.getDocumentoTipo().getId().toString());
-            			
-        				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
-        				
-            			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
-            			 * [SB0003] – Processar Pagamento de Documento de Cobrança - IMÓVEL
-            			 */
-        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5Novo(registroHelperCodigoBarras, registroTipo7, 
-        																										idFormaArrecadacao, usuarioLogado);
-        				
-        				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
-        				descricaoOcorrencia = retorno.getDescricaoOcorrencia();
-        				indicadorAceitacaoRegistro = retorno.getIndicadorAceitacaoRegistro();
-            		}
-            		else{
-            			
-            			//CLIENTE
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getCliente().getId().toString());
-        				
-            			//SEQUENCIAL DO DOCUMENTO
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
-        				
-            			//TIPO DO DOCUMENTO
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumento.getDocumentoTipo().getId().toString());
-            			
-        				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
-        				
-            			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
-            			 * [SB0003] – Processar Pagamento de Documento de Cobrança - CLIENTE
-            			 */
-        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8Novo(registroHelperCodigoBarras, registroTipo7, 
-        																														idFormaArrecadacao);
-        				
-        				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
-        				descricaoOcorrencia = retorno.getDescricaoOcorrencia();
-        				indicadorAceitacaoRegistro = retorno.getIndicadorAceitacaoRegistro();
-            		}
-            	}
-            } else if(registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO)){
-                //6.1.3. Extrato Contrato Parcelamento 
-                // [SB0009] ? Processar Pagamento Extrato Contrato Parcelamento
+				conta = this.getControladorFaturamento().pesquisarContaTipoBoleto(registroTipo7.getIdDocumentoEmitido(), registroTipo7.getValorRecebidoFormatado());
 
-            	CobrancaDocumentoItem cobrancaDocumentoItem = null ;
-                
-            	try {
-            		cobrancaDocumentoItem = repositorioArrecadacao.pesquisarCobrancaDocumentoItemProcessarFichaCompensacao(registroTipo7.getIdDocumentoEmitido());
-                } 
-            	catch (ErroRepositorioException e) {
-                    throw new ControladorException("erro.sistema", e);
-                }
-            	
-            	// [FS0002 ? Validar documento de cobrança]
-            	if (cobrancaDocumentoItem == null){
-            		descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
-            	}
-            	
-				if(descricaoOcorrencia.equalsIgnoreCase("OK")){
-			            		
-            		PagamentoHelperCodigoBarras retorno = new PagamentoHelperCodigoBarras();
-            		
-            		RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
-            		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
-            		
-        			//CLIENTE
-        			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumentoItem.getCobrancaDocumento().getCliente().getId().toString());
-    				
-        			//SEQUENCIAL DO DOCUMENTO
-        			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(registroTipo7.getIdDocumentoEmitido()));
-    				
-        			//TIPO DO DOCUMENTO
-        			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumentoItem.getCobrancaDocumento().getDocumentoTipo().getId().toString());
-        			
-    				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
-    				
-    				retorno = this.processarPagamentosCodigoBarrasContratoParcelamento(registroHelperCodigoBarras, 
-    						getSistemaParametro(), registroTipo7.getDataLiquidacaoFormatado(), 
-    						Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()), registroTipo7.getValorRecebidoFormatado(), 
-    						ArrecadacaoForma.FICHA_COMPENSACAO, usuarioLogado);
-    				
-    				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
-    				
-    				descricaoOcorrencia = retorno.getDescricaoOcorrencia();
-    				
-    				indicadorAceitacaoRegistro = retorno.getIndicadorAceitacaoRegistro();
+				if (conta == null) {
+					conta = this.getControladorFaturamento().pesquisarContaHistoricoTipoBoleto(registroTipo7.getIdDocumentoEmitido(), registroTipo7.getValorRecebidoFormatado());
+
+					if (conta == null) {
+						descricaoOcorrencia = "CONTA INEXISTENTE";
+					}
 				}
-                
-            }
-            else if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.GUIA_PAGAMENTO)){
-            	
-            	GuiaPagamento guiaPagamento = null;
-            	
-            	try {
-    				
-    				guiaPagamento = this.repositorioArrecadacao.pesquisarGuiaPagamentoProcessarFichaCompensacao(registroTipo7.getIdDocumentoEmitido());										
 
-    			} catch (ErroRepositorioException e) {
-    				e.printStackTrace();
-    				throw new ControladorException("erro.sistema", e);
-    			}
-    			
-    			if (guiaPagamento == null){
-            		descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
-            		indicadorAceitacaoRegistro = "2";
-            	}
-    			
-    			if(descricaoOcorrencia.equalsIgnoreCase("OK")){
-    				
-    				PagamentoHelperCodigoBarras retorno = new PagamentoHelperCodigoBarras();
-            		
-            		RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
+				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
+					Pagamento pagamento = new Pagamento();
+					Integer anoMesPagamento = Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado());
 
-            		RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
-        			registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(guiaPagamento.getLocalidade().getId().toString());
-        			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(guiaPagamento.getId().toString());
-        			
-        			if (guiaPagamento.getImovel() != null){
-    					
-            			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(String.valueOf(guiaPagamento.getImovel().getId().toString()));
-            			registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
-            			
-        				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
-        						registroHelperCodigoBarras, getSistemaParametro(), registroTipo7.getDataLiquidacaoFormatado(), 
-        						Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()), 
-        						registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
-        				
-    				} else {
-    					
-    					registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(String.valueOf(guiaPagamento.getCliente().getId().toString()));
-            			registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
-            			
-        				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
-        						registroHelperCodigoBarras, getSistemaParametro(), registroTipo7.getDataLiquidacaoFormatado(), 
-        						Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()), 
-        						registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
-    				}
-        			
-        			colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
-    				descricaoOcorrencia = retorno.getDescricaoOcorrencia();
-    				indicadorAceitacaoRegistro = retorno.getIndicadorAceitacaoRegistro();
-    			}
-            }
-            else{
-                indicadorAceitacaoRegistro = "2";
-                descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
-            }
-        }
-        
-        pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamnetos);
-        pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
-        pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
-        
-        return pagamentoHelperCodigoBarras;
-    }
+					pagamento.setAnoMesReferenciaPagamento(conta.getReferencia());
+
+					if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
+						pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
+					} else {
+						pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
+					}
+
+					pagamento.setValorPagamento(registroTipo7.getValorRecebidoFormatado());
+					pagamento.setDataPagamento(registroTipo7.getDataLiquidacaoFormatado());
+					pagamento.setPagamentoSituacaoAtual(null);
+					pagamento.setPagamentoSituacaoAnterior(null);
+					pagamento.setDebitoTipo(null);
+
+					if (conta instanceof Conta) {
+						ContaGeral contaGeral = new ContaGeral();
+						contaGeral.setId(conta.getId());
+						contaGeral.setConta(conta);
+						
+						pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.CONTA);
+						pagamentoHelperCodigoBarras.setIdDocumento(conta.getId());
+
+						pagamento.setContaGeral(contaGeral);
+					}
+					
+					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
+
+					pagamento.setLocalidade(conta.getImovel().getLocalidade());
+					pagamento.setImovel(conta.getImovel());
+
+					pagamento.setGuiaPagamento(null);
+
+					DocumentoTipo documentoTipo = new DocumentoTipo();
+					documentoTipo.setId(DocumentoTipo.CONTA);
+					pagamento.setDocumentoTipo(documentoTipo);
+					pagamento.setAvisoBancario(null);
+
+					pagamento.setArrecadadorMovimentoItem(null);
+
+					ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
+					arrecadacaoForma.setId(idFormaArrecadacao);
+					pagamento.setArrecadacaoForma(arrecadacaoForma);
+					pagamento.setCliente(null);
+					pagamento.setUltimaAlteracao(new Date());
+
+					pagamento.setFatura(null);
+					pagamento.setCobrancaDocumento(null);
+
+					DocumentoTipo documentoAgregador = new DocumentoTipo();
+					documentoAgregador.setId(DocumentoTipo.CONTA);
+					pagamento.setDocumentoTipoAgregador(documentoAgregador);
+
+					colecaoPagamentos.add(pagamento);
+
+				} else {
+					indicadorAceitacaoRegistro = "2";
+				}
+			} else if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.EXTRATO_DE_DEBITO)
+					|| registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.VISITA_COBRANCA) 
+					|| registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.ORDEM_CORTE)) {
+
+				CobrancaDocumento cobrancaDocumento = null;
+
+				try {
+					cobrancaDocumento = repositorioArrecadacao.pesquisarCobrancaDocumentoProcessarFichaCompensacao(registroTipo7.getIdDocumentoEmitido());
+				} catch (ErroRepositorioException e) {
+					throw new ControladorException("erro.sistema", e);
+				}
+
+				if (cobrancaDocumento == null) {
+					descricaoOcorrencia = "DOCUMENTO INEXISTENTE";
+					indicadorAceitacaoRegistro = "2";
+				}
+
+				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
+
+					RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
+					RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
+
+					if (cobrancaDocumento.getImovel() != null) {
+						if (cobrancaDocumento.getLocalidade() != null) {
+							registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getLocalidade().getId().toString());
+						} else {
+							registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getImovel().getLocalidade().getId().toString());
+						}
+
+						// IMÓVEL
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getImovel().getId().toString());
+						// SEQUENCIAL DO DOCUMENTO
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
+						// TIPO DO DOCUMENTO
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumento.getDocumentoTipo().getId().toString());
+						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
+
+						/*
+						 * [UC0259] - Processar Pagamento com Código de Barras
+						 * [SB0003] - Processar Pagamento de Documento de Cobrança - IMÓVEL
+						 */
+						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao, usuarioLogado);
+					} else {
+
+						// CLIENTE
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getCliente().getId().toString());
+
+						// SEQUENCIAL DO DOCUMENTO
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
+
+						// TIPO DO DOCUMENTO
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumento.getDocumentoTipo().getId().toString());
+
+						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
+
+						/*
+						 * [UC0259] - Processar Pagamento com Código de Barras
+						 * [SB0003] - Processar Pagamento de Documento de
+						 * Cobrança - CLIENTE
+						 */
+						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao);
+					}
+					
+					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
+					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
+					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
+				}
+			} else if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO)) {
+				// 6.1.3. Extrato Contrato Parcelamento
+				// [SB0009] Processar Pagamento Extrato Contrato Parcelamento
+
+				CobrancaDocumentoItem cobrancaDocumentoItem = null;
+
+				try {
+					cobrancaDocumentoItem = repositorioArrecadacao.pesquisarCobrancaDocumentoItemProcessarFichaCompensacao(registroTipo7.getIdDocumentoEmitido());
+				} catch (ErroRepositorioException e) {
+					throw new ControladorException("erro.sistema", e);
+				}
+
+				// [FS0002 - Validar documento de cobrança]
+				if (cobrancaDocumentoItem == null) {
+					descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
+				}
+
+				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
+
+					PagamentoHelperCodigoBarras retorno = new PagamentoHelperCodigoBarras();
+
+					RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
+					RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
+
+					// CLIENTE
+					registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumentoItem.getCobrancaDocumento().getCliente().getId().toString());
+
+					// SEQUENCIAL DO DOCUMENTO
+					registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(registroTipo7.getIdDocumentoEmitido()));
+
+					// TIPO DO DOCUMENTO
+					registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(cobrancaDocumentoItem.getCobrancaDocumento().getDocumentoTipo().getId().toString());
+
+					registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
+
+					pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasContratoParcelamento(registroHelperCodigoBarras, getSistemaParametro(),
+							registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
+							registroTipo7.getValorRecebidoFormatado(), ArrecadacaoForma.FICHA_COMPENSACAO, usuarioLogado);
+					
+					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
+					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
+					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
+				}
+
+			} else if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
+
+				GuiaPagamento guiaPagamento = null;
+
+				try {
+
+					guiaPagamento = this.repositorioArrecadacao.pesquisarGuiaPagamentoProcessarFichaCompensacao(registroTipo7.getIdDocumentoEmitido());
+
+				} catch (ErroRepositorioException e) {
+					e.printStackTrace();
+					throw new ControladorException("erro.sistema", e);
+				}
+
+				if (guiaPagamento == null) {
+					descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
+					indicadorAceitacaoRegistro = "2";
+					
+					pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+					pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
+				}
+
+				if (descricaoOcorrencia.equalsIgnoreCase("OK")) {
+
+					RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
+
+					RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento = new RegistroHelperCodigoBarrasTipoPagamento();
+					registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(guiaPagamento.getLocalidade().getId().toString());
+					registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(guiaPagamento.getId().toString());
+
+					if (guiaPagamento.getImovel() != null) {
+
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(String.valueOf(guiaPagamento.getImovel().getId().toString()));
+						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
+
+						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(registroHelperCodigoBarras, getSistemaParametro(),
+								registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
+								registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
+
+					} else {
+
+						registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(String.valueOf(guiaPagamento.getCliente().getId().toString()));
+						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
+
+						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(registroHelperCodigoBarras, getSistemaParametro(),
+								registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
+								registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
+					}
+
+					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
+					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
+					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
+				}
+			} else {
+				indicadorAceitacaoRegistro = "2";
+				descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
+				
+				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
+			}
+		}
+
+		return pagamentoHelperCodigoBarras;
+	}
 
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores 
@@ -39805,35 +39266,35 @@ public class ControladorArrecadacao implements SessionBean {
     }
     
     public Integer inserirItemMovimentoArrecadadorFichaCompensacaoNovo(String linhaRegistro, Integer idMovimento, String descricaoOcorrencia,
-            int indicadorAceitacaoRegistro, Integer idImovelPagamento)
+            int indicadorAceitacaoRegistro, Integer idImovelPagamento, Integer tipoDocumento, Integer idDocumento, BigDecimal valorDocumento)
             throws ControladorException {
 
         Integer idArrecadadorMovimentoItem = null;
 
         Integer idRegistroCodigo = RegistroCodigo.FICHA_COMPENSACAO_ID;
         
-        ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+        ArrecadadorMovimentoItem item = new ArrecadadorMovimentoItem();
 
         RegistroCodigo registroCodigo = new RegistroCodigo();
         registroCodigo.setId(idRegistroCodigo);
         
-        arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
-        ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
-        arrecadadorMovimento.setId(idMovimento);
-        arrecadadorMovimentoItem.setConteudoRegistro(linhaRegistro);
-        arrecadadorMovimentoItem.setArrecadadorMovimento(arrecadadorMovimento);
-        arrecadadorMovimentoItem.setDescricaoOcorrencia(descricaoOcorrencia);
-        arrecadadorMovimentoItem.setIndicadorAceitacao(new Short("" + indicadorAceitacaoRegistro));
-        arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
+        item.setRegistroCodigo(registroCodigo);
+        item.setConteudoRegistro(linhaRegistro);
+        item.setArrecadadorMovimento(new ArrecadadorMovimento(idMovimento));
+        item.setDescricaoOcorrencia(descricaoOcorrencia);
+        item.setIndicadorAceitacao(new Short("" + indicadorAceitacaoRegistro));
+        item.setUltimaAlteracao(new Date());
+        item.preencherDocumento(tipoDocumento, idDocumento);
+        item.setValorDocumento(valorDocumento);
 
         if (idImovelPagamento != null) {
             Imovel imovel = new Imovel();
             imovel.setId(idImovelPagamento);
-            arrecadadorMovimentoItem.setImovel(imovel);
+            item.setImovel(imovel);
         }
 
         try {
-            idArrecadadorMovimentoItem = (Integer) repositorioUtil.inserir(arrecadadorMovimentoItem);
+            idArrecadadorMovimentoItem = (Integer) repositorioUtil.inserir(item);
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.sistema", e);
         }
@@ -41095,18 +40556,15 @@ public class ControladorArrecadacao implements SessionBean {
         
         
         Date dataVencimentoMais15 = Util.adicionarNumeroDiasDeUmaData(new Date(),15);
-        String fatorVencimento = getControladorFaturamento().obterFatorVencimento(dataVencimentoMais15);
+        String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais15);
         
-        String especificacaoCodigoBarra = obterEspecificacaoCodigoBarraFichaCompensacao(
+        String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
                     ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                     valorPagamento, nossoNumeroSemDV.toString(),
                     ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
         
         String digitoVerificador = especificacaoCodigoBarra.substring(4,5);
-        
-//        String representacaoNumericaCodigoBarraFichaCompensacao = 
-//            obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
         
         //código do banco
         retorno.setCodigoBanco(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO);
@@ -44036,7 +43494,9 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idFormaArrecadacao) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
-
+		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
+		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
+		
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -44097,7 +43557,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 		if (descricaoOcorrencia.equals("OK")) {
 
-
 			Integer idGuiaPagamento =  null;
 			GuiaPagamento guiaPagamento = null;
 
@@ -44137,6 +43596,8 @@ public class ControladorArrecadacao implements SessionBean {
              */
             if (idGuiaPagamento != null) {
 
+            	pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
+            	
 				try {
 					idLocalidade = repositorioLocalidade
 							.pesquisarIdLocalidadePorGuiaPagamento(idGuiaPagamento);
@@ -44458,7 +43919,13 @@ public class ControladorArrecadacao implements SessionBean {
 				else {
 					pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 				}
+<<<<<<< HEAD
 
+=======
+				
+				DocumentoTipo documentoTipo = new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO);
+				
+>>>>>>> master
 				pagamento.setValorPagamento(valorPagamento);
 				pagamento.setDataPagamento(dataPagamento);
 				pagamento.setPagamentoSituacaoAtual(null);
@@ -44466,6 +43933,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setDebitoTipo(debitoTipo);
 				pagamento.setContaGeral(null);
 				pagamento.setLocalidade(new Localidade(idLocalidade));
+<<<<<<< HEAD
 				pagamento.setDocumentoTipo(new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO));
 				pagamento.setAvisoBancario(null);
 				pagamento.setImovel(null);
@@ -44477,8 +43945,25 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setFatura(null);
 				pagamento.setCobrancaDocumento(null);
 				pagamento.setDocumentoTipoAgregador(new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO));
+=======
+				pagamento.setDocumentoTipo(documentoTipo);
+				pagamento.setAvisoBancario(null);
+				pagamento.setImovel(null);
+				pagamento.setArrecadadorMovimentoItem(null);
+
+				ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
+				arrecadacaoForma.setId(idFormaArrecadacao);
+				pagamento.setArrecadacaoForma(arrecadacaoForma);
+				pagamento.setCliente(cliente);
+				pagamento.setGuiaPagamento(guiaPagamento);
+				pagamento.setUltimaAlteracao(new Date());
+				pagamento.setFatura(null);
+				pagamento.setCobrancaDocumento(null);
+				pagamento.setDocumentoTipoAgregador(documentoTipo);
+>>>>>>> master
 				pagamento.setDataProcessamento(new Date());
-				
+
+				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
 				colecaoPagamentos.add(pagamento);
 			}
 			else{
@@ -51431,9 +50916,9 @@ public class ControladorArrecadacao implements SessionBean {
         
         
         Date dataVencimentoMais15 = Util.adicionarNumeroDiasDeUmaData(new Date(),15);
-        String fatorVencimento = getControladorFaturamento().obterFatorVencimento(dataVencimentoMais15);
+        String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais15);
         
-        String especificacaoCodigoBarra = obterEspecificacaoCodigoBarraFichaCompensacao(
+        String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
                     ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
                     ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
                     valorPagamento, nossoNumeroSemDV.toString(),
@@ -51693,7 +51178,21 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 			return repositorioArrecadacao.pesquisarPagamentoInconformeImovel(idImovel);
 		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException {
+		try {
+			return repositorioArrecadacao.obterItensPorAviso(idAvisoBancario);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException {
+		try {
+			return repositorioArrecadacao.obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros);
+		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}

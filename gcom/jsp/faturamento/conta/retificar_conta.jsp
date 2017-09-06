@@ -1635,8 +1635,8 @@ function desabilita2(){
 							<td height="10"><strong>Leitura Anterior:</strong></td>
 							<td>
 							<html:text property="leituraAnteriorAgua" size="10" maxlength="6"
-								tabindex="6" style="text-align: right;" 
-								 onkeypress="javascript:return isCampoNumerico(event);" />
+								tabindex="6" style="text-align: right; background-color:#EFEFEF; border:0"
+								readonly="true" />
 							</td>
 							
 						</tr>

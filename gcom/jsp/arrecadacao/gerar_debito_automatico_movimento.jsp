@@ -426,6 +426,7 @@ function montarStringDados(nomeForm, nomeCampoMenu2) {
 						onkeypress="return isCampoNumerico(event);"/>
 					mm/aaaa</td>
 				</tr>
+				
 				<tr>
 					<td colspan="2">
 					<div align="right"><input name="botaoListaBancos" type="button"

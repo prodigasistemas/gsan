@@ -3149,4 +3149,5 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public void atualizarSituacaoArquivoTextoAcompanhamentoServico( long imei,Short idSituacaoTransmissaoLeitura  ) throws ControladorException;
 
+	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException;
 }

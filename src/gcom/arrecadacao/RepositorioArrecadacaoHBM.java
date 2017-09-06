@@ -5724,29 +5724,17 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * Acumula o valor dos créditos realizados por localidade e categoria para
 	 * os pagamentos classificados de contas, para origem de crédito igual a
 	 * descontos concedidos.
-	 * 
-	 * @author Pedro Alexandre, Pedro Alexandre
-	 * @date 22/05/2006, 22/05/2008
-	 * 
-	 * @param idLocalidade
-	 * @param anoMesReferenciaArrecadacao
-	 * @param idCategoria
-	 * @return
-	 * @throws ErroRepositorioException
 	 */
 	public BigDecimal acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
 			Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao,
 			Integer idCategoria, 
-			Integer idCreditoOrigem)
+			Integer[] idsCreditosOrigem)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
 
-		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
-
-		// cria a variável que vai conter o hql
 		String consulta = "";
 
 		try {
@@ -5763,7 +5751,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					 				"from " +
 					 				"faturamento.credito_realizado crrz " + 
 					 				"where " +
-					 				"crrz.crog_id=:idCreditoOrigem  " +
+					 				"crrz.crog_id in (:idsCreditosOrigem)  " +
 					 				"and (crrz.cnta_id in (" +
 											 				"select " +
 											 				"distinct pgmt.cnta_id " + 
@@ -5782,7 +5770,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			retorno = (BigDecimal) session.createSQLQuery(consulta)
 					.addScalar("col_0",Hibernate.BIG_DECIMAL)
 					.setInteger("idCategoria", idCategoria)
-					.setInteger("idCreditoOrigem",idCreditoOrigem)
+					.setParameterList("idsCreditosOrigem",idsCreditosOrigem)
 					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
 					.setInteger("idLocalidade",idLocalidade)
 					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
@@ -18688,12 +18676,22 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			hql = "select pagamento "
 					+ "from gcom.arrecadacao.pagamento.Pagamento pagamento "
+					+ "left join fetch pagamento.imovel imovel "
+					+ "left join fetch imovel.localidade localidade "
+					+ "left join fetch pagamento.contaGeral contaGeral "
+					+ "left join fetch contaGeral.conta conta "
+					+ "left join fetch contaGeral.contaHistorico contaHistorico "
+					+ "left join fetch pagamento.guiaPagamento guiaPagamento "
+					+ "left join fetch guiaPagamento.localidade localidadeG "
+					+ "left join fetch pagamento.cobrancaDocumento cobrancaDocumento "
+					+ "left join fetch cobrancaDocumento.localidade localidadeC "
 					+ "where pagamento.avisoBancario.id = :idAvisoBancario ";
 
 			retorno = session.createQuery(hql).setInteger("idAvisoBancario",
 					idAvisoBancario).list();
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -20115,7 +20113,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			Integer idOrigemCredito)
 			throws ErroRepositorioException {
 
-		BigDecimal retorno = null;
+		BigDecimal retorno = BigDecimal.ZERO;
 
 		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();
@@ -23911,181 +23909,213 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	
-	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
-	 * 
-	 * @author Sávio Luiz
-	 * @data 17/02/2008
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Collection<Pagamento> pesquisarPagamentoPorLocalidade(Integer idLocalidade,Integer anoMesReferencia)
+	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
-		Collection<Pagamento> retorno = null;
+		Collection<Pagamento> retorno = new ArrayList();
 		
 		Collection<Object[]> colecaoDadosPagamentos = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 		
 		try {
-			consulta = "SELECT pg.id,"//0
-				     		+" pg.valorPagamento,"//1
-				     		+" cnt.id, "//2
-				     		+" gp.id,"//3
-				     		+" pgp.id,"//4
-				     		+" pgp.valorDebitoAtualizado,"//5
-				     		+" gp.valorDebito,"//6
-				     		+" dtgp.id,"//7
-				     		+" dac.id,"//8
-				     		+" pdac.id,"//9
-				     		+" pdac.valorDebitoAtualizado,"//10
-				     		+" dac.valorDebito, "//11
-				     		+" dtdac.id,"//12
-				     		+" pg.anoMesReferenciaPagamento,"//13
-				     		+" pg.dataPagamento,"//14
-				     		+" pg.imovel.id,"//15
-				     		+" ab.arrecadador.id, "//16
-				     		+" pgp.valorConta, "//17
-				     		+" pdac.valorConta, "//18
-				     		+" dac.numeroPrestacaoDebito, "//19
-				     		+" dac.numeroPrestacaoCobradas, "//20
-				     		+" dac.numeroParcelaBonus "//21
-                     +" FROM Pagamento pg"
-                     +" LEFT JOIN pg.contaGeral cntGeral"
-                     +" LEFT JOIN cntGeral.conta cnt"
-                     +" LEFT JOIN pg.guiaPagamento gp"
-                     +" LEFT JOIN gp.parcelamento pgp"
-                     +" LEFT JOIN gp.debitoTipo dtgp"
-                     +" LEFT JOIN pg.debitoACobrarGeral dacGeral"
-                     +" LEFT JOIN dacGeral.debitoACobrar dac"
-                     +" LEFT JOIN dac.parcelamento pdac"
-                     +" LEFT JOIN dac.debitoTipo dtdac"
-                     +" LEFT JOIN pg.pagamentoSituacaoAtual pgst"
-                     +" INNER JOIN pg.avisoBancario ab"
-                     +" where pg.localidade.id = :idLocalidade"
-                     +" and pg.anoMesReferenciaArrecadacao = :anoMesReferencia"
-                     +" and pgst.id = :pagamentoClassificado ";
-		 
-			colecaoDadosPagamentos = session.createQuery(consulta)
+			
+			consulta.append("SELECT pg.pgmt_id as idPagamento, ")
+			.append(" pg.pgmt_vlpagamento as valorPagamento,")
+			.append(" cnt.cnta_id as idConta, ")
+			.append(" gp.gpag_id as idGuia,")
+			.append(" pgp.parc_id as idParcelamentoGuia,")
+			.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia,")
+			.append(" gp.gpag_vldebito as valorGuia,")
+			.append(" dtgp.dbtp_id as debitoTipoGuia,")
+			.append(" dac.dbac_id as idDebito,")
+			.append(" pdac.parc_id as idParcelamentoDebito, ")
+			.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito,")
+			.append(" dac.dbac_vldebito as valorDebito, ")
+			.append(" dac.dbtp_id as deitoTipoDebito, ")
+			.append(" pg.pgmt_amreferenciapagamento as referenciaPagamento,")
+			.append(" pg.pgmt_dtpagamento as dataPagamento,")
+			.append(" pg.imov_id as imovel,")
+			.append(" ab.arrc_id as arrecadador, ")
+			.append(" pgp.parc_vlconta as valorParcelamentoConta, ")
+			.append(" pdac.parc_vlconta as valorParcelamentoContaDebito, ")
+			.append(" dac.dbac_nnprestacaodebito as numPrestacaoDebito, ")
+			.append(" dac.dbac_nnprestacaocobradas as numPrestacoesCobradas, ")
+			.append(" dac.dbac_nnparcelabonus as numParcelaBonus")
+			.append(" FROM arrecadacao.pagamento pg")
+			.append(" LEFT JOIN faturamento.conta cnt on cnt.cnta_id = pg.cnta_id")
+			.append(" LEFT JOIN faturamento.guia_pagamento gp on gp.gpag_id = pg.gpag_id")
+			.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id")
+			.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id")
+			.append(" LEFT JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = pg.dbac_id")
+			.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id")
+			.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id")
+			.append(" where pg.loca_id = :idLocalidade")
+			.append(" and pg.pgst_idatual = :pagamentoClassificado ")
+			.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia ")
+			.append(" and pg.pgmt_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null)");
+			
+			colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
+					.addScalar("idPagamento", Hibernate.INTEGER)
+					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("idGuia", Hibernate.INTEGER)
+					.addScalar("idParcelamentoGuia", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoGuia", Hibernate.BIG_DECIMAL)
+					.addScalar("valorGuia", Hibernate.BIG_DECIMAL)
+					.addScalar("debitoTipoGuia", Hibernate.INTEGER)
+					.addScalar("idDebito", Hibernate.INTEGER)
+					.addScalar("idParcelamentoDebito", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("deitoTipoDebito", Hibernate.INTEGER)
+					.addScalar("referenciaPagamento", Hibernate.INTEGER)
+					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("arrecadador", Hibernate.INTEGER)
+					.addScalar("valorParcelamentoConta", Hibernate.BIG_DECIMAL)
+					.addScalar("valorParcelamentoContaDebito", Hibernate.BIG_DECIMAL)
+					.addScalar("numPrestacaoDebito", Hibernate.SHORT)
+					.addScalar("numPrestacoesCobradas", Hibernate.SHORT)
+					.addScalar("numParcelaBonus", Hibernate.SHORT)
 			        .setInteger("idLocalidade",idLocalidade)
-			        .setInteger("anoMesReferencia",anoMesReferencia)
 			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+			        .setInteger("referencia", referencia)
+					.setFirstResult(numeroPaginas)
+					.setMaxResults(quantidadeRegistros)
 					.list();
 			
-			if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
-				retorno = new ArrayList();
-				for(Object[] dadosPagamento : colecaoDadosPagamentos){
-					if(dadosPagamento != null){
+			if (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) {
+				for (Object[] dadosPagamento : colecaoDadosPagamentos) {
+
+					if (dadosPagamento != null) {
 						Pagamento pagamento = new Pagamento();
-						if(dadosPagamento[0] != null){
-							pagamento.setId((Integer)dadosPagamento[0]);
+						if (dadosPagamento[0] != null) {
+							pagamento.setId((Integer) dadosPagamento[0]);
 						}
-						if(dadosPagamento[1] != null){
-							pagamento.setValorPagamento((BigDecimal)dadosPagamento[1]);
+						if (dadosPagamento[1] != null) {
+							pagamento.setValorPagamento((BigDecimal) dadosPagamento[1]);
 						}
-						if(dadosPagamento[2] != null){
+						if (dadosPagamento[2] != null) {
 							ContaGeral conta = new ContaGeral();
-							conta.setId((Integer)dadosPagamento[2]);
+							conta.setId((Integer) dadosPagamento[2]);
 							pagamento.setContaGeral(conta);
 						}
-						if(dadosPagamento[3] != null){
+						if (dadosPagamento[3] != null) {
 							GuiaPagamento guia = new GuiaPagamento();
+<<<<<<< HEAD
 							guia.setId((Integer)dadosPagamento[3]);
 							guia.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer)dadosPagamento[3]));
 							
 							if(dadosPagamento[4] != null){
+=======
+							guia.setId((Integer) dadosPagamento[3]);
+							if (dadosPagamento[4] != null) {
+>>>>>>> master
 								Parcelamento parcelamento = new Parcelamento();
-								parcelamento.setId((Integer)dadosPagamento[4]);
-								if(dadosPagamento[5] != null){
-									parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[5]);
+								parcelamento.setId((Integer) dadosPagamento[4]);
+								if (dadosPagamento[5] != null) {
+									parcelamento.setValorDebitoAtualizado((BigDecimal) dadosPagamento[5]);
 								}
-								if(dadosPagamento[17] != null){
-									parcelamento.setValorConta((BigDecimal)dadosPagamento[17]);
+								if (dadosPagamento[17] != null) {
+									parcelamento.setValorConta((BigDecimal) dadosPagamento[17]);
 								}
 								guia.setParcelamento(parcelamento);
 							}
-							if(dadosPagamento[6] != null){
-								guia.setValorDebito((BigDecimal)dadosPagamento[6]);
+							if (dadosPagamento[6] != null) {
+								guia.setValorDebito((BigDecimal) dadosPagamento[6]);
 							}
-							if(dadosPagamento[7] != null){
+							if (dadosPagamento[7] != null) {
 								DebitoTipo debitoTipo = new DebitoTipo();
-								debitoTipo.setId((Integer)dadosPagamento[7]);
+								debitoTipo.setId((Integer) dadosPagamento[7]);
 								guia.setDebitoTipo(debitoTipo);
 							}
+<<<<<<< HEAD
 							
 							pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
 							
+=======
+
+							pagamento.setGuiaPagamento(guia);
+>>>>>>> master
 						}
-						if(dadosPagamento[8] != null){
+						if (dadosPagamento[8] != null) {
 							DebitoACobrar debitoACobrar = new DebitoACobrar();
-							debitoACobrar.setId((Integer)dadosPagamento[8]);
-							if(dadosPagamento[9] != null){
+							debitoACobrar.setId((Integer) dadosPagamento[8]);
+							if (dadosPagamento[9] != null) {
 								Parcelamento parcelamento = new Parcelamento();
-								parcelamento.setId((Integer)dadosPagamento[9]);
-								if(dadosPagamento[10] != null){
-									parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[10]);
+								parcelamento.setId((Integer) dadosPagamento[9]);
+								if (dadosPagamento[10] != null) {
+									parcelamento.setValorDebitoAtualizado((BigDecimal) dadosPagamento[10]);
 								}
-								if(dadosPagamento[18] != null){
-									parcelamento.setValorConta((BigDecimal)dadosPagamento[18]);
+								if (dadosPagamento[18] != null) {
+									parcelamento.setValorConta((BigDecimal) dadosPagamento[18]);
 								}
 								debitoACobrar.setParcelamento(parcelamento);
-								
+
 							}
-							if(dadosPagamento[11] != null){
-								debitoACobrar.setValorDebito((BigDecimal)dadosPagamento[11]);
+							if (dadosPagamento[11] != null) {
+								debitoACobrar.setValorDebito((BigDecimal) dadosPagamento[11]);
 							}
-							
-							if(dadosPagamento[19] != null){
-								debitoACobrar.setNumeroPrestacaoDebito((Short)dadosPagamento[19]);
+
+							if (dadosPagamento[19] != null) {
+								debitoACobrar.setNumeroPrestacaoDebito((Short) dadosPagamento[19]);
 							}
-							if(dadosPagamento[20] != null){
-								debitoACobrar.setNumeroPrestacaoCobradas((Short)dadosPagamento[20]);
+							if (dadosPagamento[20] != null) {
+								debitoACobrar.setNumeroPrestacaoCobradas((Short) dadosPagamento[20]);
 							}
-							if(dadosPagamento[21] != null){
-								debitoACobrar.setNumeroParcelaBonus((Short)dadosPagamento[21]);
+							if (dadosPagamento[21] != null) {
+								debitoACobrar.setNumeroParcelaBonus((Short) dadosPagamento[21]);
 							}
-							
-							if(dadosPagamento[12] != null){
+
+							if (dadosPagamento[12] != null) {
 								DebitoTipo debitoTipo = new DebitoTipo();
-								debitoTipo.setId((Integer)dadosPagamento[12]);
+								debitoTipo.setId((Integer) dadosPagamento[12]);
 								debitoACobrar.setDebitoTipo(debitoTipo);
 							}
-							
+
 							DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 							debitoACobrarGeral.setId(debitoACobrar.getId());
 							debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
-							
-							
+
 							pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
 						}
-						
-						if(dadosPagamento[13] != null){
-							pagamento.setAnoMesReferenciaPagamento((Integer)dadosPagamento[13]);
+
+						if (dadosPagamento[13] != null) {
+							pagamento.setAnoMesReferenciaPagamento((Integer) dadosPagamento[13]);
 						}
-						if(dadosPagamento[14] != null){
-							pagamento.setDataPagamento((Date)dadosPagamento[14]);
+						if (dadosPagamento[14] != null) {
+							pagamento.setDataPagamento((Date) dadosPagamento[14]);
 						}
-						if(dadosPagamento[15] != null){
+						if (dadosPagamento[15] != null) {
 							Imovel imovel = new Imovel();
-							imovel.setId((Integer)dadosPagamento[15]);
+							imovel.setId((Integer) dadosPagamento[15]);
 							pagamento.setImovel(imovel);
 						}
-						if(dadosPagamento[16] != null){
+						if (dadosPagamento[16] != null) {
 							Arrecadador arrecadador = new Arrecadador();
-							arrecadador.setId((Integer)dadosPagamento[16]);
+							arrecadador.setId((Integer) dadosPagamento[16]);
 							AvisoBancario avisoBancario = new AvisoBancario();
 							avisoBancario.setArrecadador(arrecadador);
 							pagamento.setAvisoBancario(avisoBancario);
 						}
-						
+
 						retorno.add(pagamento);
 					}
 				}
+				
+				System.out.println("Qtd pagamentos: " + retorno.size());
+			}
+			
+	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
+	        
+			if (historico != null && !historico.isEmpty()) {
+				System.out.println("Qtd historico: " + historico.size());
+				retorno.addAll(historico);
 			}
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -31666,7 +31696,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	      	   .append("         data_lancamento, credito, debito, ano_mes_arrecadacao, dias_float, data_pagamento, tarifa.actf_vltarifa ");
 		
 		StringBuilder sql = new StringBuilder();
-	   	sql.append("SELECT data_pagamento_previsto, data_aviso, descricao_arrecadador, sum((valor_pagamento - (qtd_documentos * valor_tarifa))) as valor_pagamento ")
+	   	sql.append("SELECT data_pagamento_previsto, data_aviso, descricao_arrecadador, sum((valor_pagamento - (qtd_documentos * valor_tarifa))) as valor_pagamento, sum(valor_devolucao) as valor_devolucao ")
 		   .append("FROM (")
 		   
 		   .append(select)
@@ -31674,7 +31704,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
            .append("adiciona_dias_uteis(p.pgmt_dtpagamento, tarifa.actf_nndiafloat,1) as data_pagamento_previsto, ")
            .append("sum(p.pgmt_vlpagamento) as valor_pagamento, ")
            .append("count(distinct p.amit_id) as qtd_documentos, ")
-           .append("tarifa.actf_vltarifa as valor_tarifa ")
+           .append("tarifa.actf_vltarifa as valor_tarifa, ")
+           .append("(SELECT sum(devl_vldevolucao) FROM arrecadacao.devolucao d WHERE d.avbc_id = a.avbc_id) as valor_devolucao ")
            .append(from)
            .append("INNER JOIN arrecadacao.pagamento p ON a.avbc_id = p.avbc_id ")
            .append("WHERE p.pgmt_dtpagamento >= current_date - 10 ")
@@ -31691,6 +31722,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("data_aviso", Hibernate.DATE)
 					.addScalar("descricao_arrecadador", Hibernate.STRING)
 					.addScalar("valor_pagamento", Hibernate.BIG_DECIMAL)
+					.addScalar("valor_devolucao", Hibernate.BIG_DECIMAL)
 					.setDate("data", data)
 					.list();
 			
@@ -31701,7 +31733,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						(Date) arrayDadosResumo[0],
 						(Date) arrayDadosResumo[1],
 						(String) arrayDadosResumo[2],
-						(BigDecimal) arrayDadosResumo[3]);
+						(BigDecimal) arrayDadosResumo[3],
+						(BigDecimal) arrayDadosResumo[4]);
 				
 				retorno.add(dto);
 			}
@@ -31768,6 +31801,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
+<<<<<<< HEAD
 	public void criarPagamentoHistoricoDeGuia(Integer idPagamento, Integer idGuia) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -31841,10 +31875,64 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			retorno = (PagamentoHistorico) session.createQuery(consulta).setInteger("idPagamento", idPagamento).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+=======
+	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException { 
+		
+		List<ArrecadadorMovimentoItemDTO> retorno = new ArrayList<ArrecadadorMovimentoItemDTO>();
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT item.imov_id as imovel, ")
+			.append("       imovel.loca_id as localidade, ")
+			.append("       item.amit_vldocumento as valor, ")
+			.append("       item.cnta_id as conta, ")
+			.append("       item.gpag_id as guia, ")
+			.append("       item.cbdo_id as documento, ")
+			.append("       item.fatu_id as fatura ")
+			.append("FROM arrecadacao.arrecadador_mov_item as item ")
+			.append("left join cadastro.imovel imovel on imovel.imov_id = item.imov_id ")
+			.append("where item.amit_id in ")
+			.append("	( select pag.amit_id from arrecadacao.pagamento as pag ")
+			.append("     where pag.avbc_id = :idAvisoBancario) ")
+			.append("AND item.amit_vldocumento is not null");
+			
+			Collection colecao = session.createSQLQuery(consulta.toString())
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("localidade", Hibernate.INTEGER)
+					.addScalar("valor", Hibernate.BIG_DECIMAL)
+					.addScalar("conta", Hibernate.INTEGER)
+					.addScalar("guia", Hibernate.INTEGER)
+					.addScalar("documento", Hibernate.INTEGER)
+					.addScalar("fatura", Hibernate.INTEGER)
+					.setInteger("idAvisoBancario", idAvisoBancario)
+					.list();
+			
+			for (Object dadosItem : colecao) {
+				Object[] arrayDadosItem = (Object[]) dadosItem;
+				
+				ArrecadadorMovimentoItemDTO dto = new ArrecadadorMovimentoItemDTO(
+						(Integer) arrayDadosItem[0],
+						(Integer) arrayDadosItem[1],
+						(BigDecimal) arrayDadosItem[2],
+						(Integer) arrayDadosItem[3],
+						(Integer) arrayDadosItem[4],
+						(Integer) arrayDadosItem[5],
+						(Integer) arrayDadosItem[6]);
+				
+				retorno.add(dto);
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+>>>>>>> master
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+<<<<<<< HEAD
 	}
 	
 	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException {
@@ -31870,4 +31958,212 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		return idGuia;
 	}
+=======
+		
+	}
+	
+	public Collection<Pagamento> obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
+            throws ErroRepositorioException {
+      Collection<Pagamento> retorno = null;
+      
+      Collection<Object[]> colecaoDadosPagamentos = null;
+
+      Session session = HibernateUtil.getSession();
+      StringBuilder consulta = new StringBuilder();
+      
+      try {
+            
+            consulta.append("SELECT pg.pghi_id as idPagamento, ")
+            .append("pg.pghi_vlpagamento as valorPagamento, ")
+            .append("cnt.cnta_id as idConta, ")
+            .append("gp.gpag_id as idGuia, ")
+            .append("pgp.parc_id as idParcelamentoGuia, ")
+            .append("pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
+            .append("gp.gphi_vldebito as valorGuia, ")
+            .append("dtgp.dbtp_id as debitoTipoGuia, ")
+            .append("dac.dbac_id as idDebito, ")
+            .append("pdac.parc_id as idParcelamentoDebito, ")
+            .append("pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
+            .append("dac.dahi_vldebito as valorDebito, ")
+            .append("dac.dbtp_id as deitoTipoDebito, ")
+            .append("pg.pghi_amreferenciapagamento as referenciaPagamento, ")
+            .append("pg.pghi_dtpagamento as dataPagamento, ")
+            .append("pg.imov_id as imovel, ")
+            .append("ab.arrc_id as arrecadador, ")
+            .append("pgp.parc_vlconta as valorParcelamentoConta, ")
+            .append("pdac.parc_vlconta as valorParcelamentoContaDebito,   ")
+            .append("dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
+            .append("dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
+            .append("dac.dahi_nnparcelabonus as numParcelaBonus ")
+            .append("FROM arrecadacao.pagamento_historico pg ")
+            .append("LEFT JOIN faturamento.conta_historico cnt on cnt.cnta_id = pg.cnta_id ")
+            .append("LEFT JOIN faturamento.guia_pagamento_historico gp on gp.gpag_id = pg.gpag_id ")
+            .append("LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id ")
+            .append("LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")
+            .append("LEFT JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = pg.dbac_id ")
+            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
+            .append("INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
+            .append("where pg.loca_id = :idLocalidade ")
+            .append("and pg.pgst_idatual = :pagamentoClassificado ")
+            .append("and pg.pghi_amreferenciaarrecadacao in (:referencia5, :referencia6, :referencia7, :referencia8) ")
+            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
+            
+            colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
+                        .addScalar("idPagamento", Hibernate.INTEGER)
+                        .addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+                        .addScalar("idConta", Hibernate.INTEGER)
+                        .addScalar("idGuia", Hibernate.INTEGER)
+                        .addScalar("idParcelamentoGuia", Hibernate.INTEGER)
+                        .addScalar("valorParcelamentoGuia", Hibernate.BIG_DECIMAL)
+                        .addScalar("valorGuia", Hibernate.BIG_DECIMAL)
+                        .addScalar("debitoTipoGuia", Hibernate.INTEGER)
+                        .addScalar("idDebito", Hibernate.INTEGER)
+                        .addScalar("idParcelamentoDebito", Hibernate.INTEGER)
+                        .addScalar("valorParcelamentoDebito", Hibernate.BIG_DECIMAL)
+                        .addScalar("valorDebito", Hibernate.BIG_DECIMAL)
+                        .addScalar("deitoTipoDebito", Hibernate.INTEGER)
+                        .addScalar("referenciaPagamento", Hibernate.INTEGER)
+                        .addScalar("dataPagamento", Hibernate.DATE)
+                        .addScalar("imovel", Hibernate.INTEGER)
+                        .addScalar("arrecadador", Hibernate.INTEGER)
+                        .addScalar("valorParcelamentoConta", Hibernate.BIG_DECIMAL)
+                        .addScalar("valorParcelamentoContaDebito", Hibernate.BIG_DECIMAL)
+                        .addScalar("numPrestacaoDebito", Hibernate.SHORT)
+                        .addScalar("numPrestacoesCobradas", Hibernate.SHORT)
+                        .addScalar("numParcelaBonus", Hibernate.SHORT)
+                        .setInteger("idLocalidade",idLocalidade)
+                        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+                        .setInteger("referencia5", 201705)
+                        .setInteger("referencia6", 201706)
+                        .setInteger("referencia7", 201707)
+                        .setInteger("referencia8", 201708)
+                        .setFirstResult(numeroPaginas)
+                        .setMaxResults(quantidadeRegistros)
+                        .list();
+            
+      
+            System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
+            if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
+                  System.out.println(colecaoDadosPagamentos.size());
+                  retorno = new ArrayList();
+                  for(Object[] dadosPagamento : colecaoDadosPagamentos){
+                        
+                        System.out.println("dadosPgamento: " + (dadosPagamento != null));
+                        
+                        if(dadosPagamento != null){
+                              Pagamento pagamento = new Pagamento();
+                              if(dadosPagamento[0] != null){
+                                    pagamento.setId((Integer)dadosPagamento[0]);
+                              }
+                              if(dadosPagamento[1] != null){
+                                    pagamento.setValorPagamento((BigDecimal)dadosPagamento[1]);
+                              }
+                              if(dadosPagamento[2] != null){
+                                    ContaGeral conta = new ContaGeral();
+                                    conta.setId((Integer)dadosPagamento[2]);
+                                    pagamento.setContaGeral(conta);
+                              }
+                              if(dadosPagamento[3] != null){
+                                    GuiaPagamento guia = new GuiaPagamento();
+                                    guia.setId((Integer)dadosPagamento[3]);
+                                    if(dadosPagamento[4] != null){
+                                          Parcelamento parcelamento = new Parcelamento();
+                                          parcelamento.setId((Integer)dadosPagamento[4]);
+                                          if(dadosPagamento[5] != null){
+                                                parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[5]);
+                                          }
+                                          if(dadosPagamento[17] != null){
+                                                parcelamento.setValorConta((BigDecimal)dadosPagamento[17]);
+                                          }
+                                          guia.setParcelamento(parcelamento);
+                                    }
+                                    if(dadosPagamento[6] != null){
+                                          guia.setValorDebito((BigDecimal)dadosPagamento[6]);
+                                    }
+                                    if(dadosPagamento[7] != null){
+                                          DebitoTipo debitoTipo = new DebitoTipo();
+                                          debitoTipo.setId((Integer)dadosPagamento[7]);
+                                          guia.setDebitoTipo(debitoTipo);
+                                    }
+                                    
+                                    pagamento.setGuiaPagamento(guia);
+                              }
+                              if(dadosPagamento[8] != null){
+                                    DebitoACobrar debitoACobrar = new DebitoACobrar();
+                                    debitoACobrar.setId((Integer)dadosPagamento[8]);
+                                    if(dadosPagamento[9] != null){
+                                          Parcelamento parcelamento = new Parcelamento();
+                                          parcelamento.setId((Integer)dadosPagamento[9]);
+                                          if(dadosPagamento[10] != null){
+                                                parcelamento.setValorDebitoAtualizado((BigDecimal)dadosPagamento[10]);
+                                          }
+                                          if(dadosPagamento[18] != null){
+                                                parcelamento.setValorConta((BigDecimal)dadosPagamento[18]);
+                                          }
+                                          debitoACobrar.setParcelamento(parcelamento);
+                                          
+                                    }
+                                    if(dadosPagamento[11] != null){
+                                          debitoACobrar.setValorDebito((BigDecimal)dadosPagamento[11]);
+                                    }
+                                    
+                                    if(dadosPagamento[19] != null){
+                                          debitoACobrar.setNumeroPrestacaoDebito((Short)dadosPagamento[19]);
+                                    }
+                                    if(dadosPagamento[20] != null){
+                                          debitoACobrar.setNumeroPrestacaoCobradas((Short)dadosPagamento[20]);
+                                    }
+                                    if(dadosPagamento[21] != null){
+                                          debitoACobrar.setNumeroParcelaBonus((Short)dadosPagamento[21]);
+                                    }
+                                    
+                                    if(dadosPagamento[12] != null){
+                                          DebitoTipo debitoTipo = new DebitoTipo();
+                                          debitoTipo.setId((Integer)dadosPagamento[12]);
+                                          debitoACobrar.setDebitoTipo(debitoTipo);
+                                    }
+                                    
+                                    DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
+                                    debitoACobrarGeral.setId(debitoACobrar.getId());
+                                    debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
+                                    
+                                    
+                                    pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
+                              }
+                              
+                              if(dadosPagamento[13] != null){
+                                    pagamento.setAnoMesReferenciaPagamento((Integer)dadosPagamento[13]);
+                              }
+                              if(dadosPagamento[14] != null){
+                                    pagamento.setDataPagamento((Date)dadosPagamento[14]);
+                              }
+                              if(dadosPagamento[15] != null){
+                                    Imovel imovel = new Imovel();
+                                    imovel.setId((Integer)dadosPagamento[15]);
+                                    pagamento.setImovel(imovel);
+                              }
+                              if(dadosPagamento[16] != null){
+                                    Arrecadador arrecadador = new Arrecadador();
+                                    arrecadador.setId((Integer)dadosPagamento[16]);
+                                    AvisoBancario avisoBancario = new AvisoBancario();
+                                    avisoBancario.setArrecadador(arrecadador);
+                                    pagamento.setAvisoBancario(avisoBancario);
+                              }
+                              
+                              retorno.add(pagamento);
+                        }
+                  }
+            }
+
+      } catch (HibernateException e) {
+            e.printStackTrace();
+            throw new ErroRepositorioException("Erro no Hibernate");
+      } finally {
+            HibernateUtil.closeSession(session);
+      }
+      
+      return retorno;
+
+}
+>>>>>>> master
 }

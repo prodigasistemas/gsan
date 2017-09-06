@@ -2,6 +2,8 @@ package gcom.cadastro.cliente;
 
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.localidade.Localidade;
+import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.filtro.GeradorHQLCondicional;
@@ -11,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -19,47 +22,26 @@ public class RepositorioClienteEnderecoHBM implements
 
 	private static IRepositorioClienteEndereco instancia;
 
-	/**
-	 * Constructor for the RepositorioClienteTipoHBM object
-	 */
 	public RepositorioClienteEnderecoHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static IRepositorioClienteEndereco getInstancia() {
 
 		if (instancia == null) {
 			instancia = new RepositorioClienteEnderecoHBM();
 		}
-
 		return instancia;
 	}
 
-	/**
-	 * Pesquisa uma coleção de cliente endereco com uma query especifica
-	 * 
-	 * @param filtroClienteImovel
-	 *            parametros para a consulta
-	 * @return Description of the Return Value
-	 * @exception ErroRepositorioException
-	 *                Description of the Exception
-	 */
-
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection pesquisarClienteEndereco(
 			FiltroClienteEndereco filtroClienteEndereco)
 			throws ErroRepositorioException {
 
-		// cria a coleção de retorno
 		Collection retorno = null;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 
 		try {
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
 			retorno = new ArrayList(new CopyOnWriteArraySet(GeradorHQLCondicional
 					.gerarCondicionalQuery(
 							filtroClienteEndereco,
@@ -69,25 +51,15 @@ public class RepositorioClienteEnderecoHBM implements
 									+ "left join clienteEndereco.cliente.clienteTipo "
 									+ "left join clienteEndereco.logradouroCep ",
 							session).list()));
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa ClienteEndereco percorrendo o ClienteImovel
-	 * 
-	 * @param filtroClienteEndereco
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(
 			FiltroClienteEndereco filtroClienteEndereco)
 			throws ErroRepositorioException {
@@ -116,17 +88,7 @@ public class RepositorioClienteEnderecoHBM implements
 		return retorno;
 	}
 	
-	
-	/**
-	 * [UC0366] Inserir Registro de Atendimento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/08/2006
-	 * 
-	 * @param idCliente
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEnderecosClienteAbreviado(Integer idCliente)
 		throws ErroRepositorioException {
 		
@@ -211,19 +173,6 @@ public class RepositorioClienteEnderecoHBM implements
 		
 	}
 	
-	
-	
-	/**
-	 * Atualiza logradouroBairro de um ou mais imóveis  
-	 * 
-	 * [UC0] Atualizar Logradouro
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 22/02/2007
-	 * 
-	 * @param 
-	 * @return void
-	 */
 	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, 
 			LogradouroBairro logradouroBairroNovo) throws ErroRepositorioException {
 
@@ -251,18 +200,6 @@ public class RepositorioClienteEnderecoHBM implements
 		}
 	}
 	
-	
-	/**
-	 * Atualiza logradouroCep de um ou mais imóveis  
-	 * 
-	 * [UC0] Atualizar Logradouro
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 22/02/2007
-	 * 
-	 * @param 
-	 * @return void
-	 */
 	public void atualizarLogradouroCep(LogradouroCep logradouroCepAntigo, 
 			LogradouroCep logradouroCepNovo) throws ErroRepositorioException {
 
@@ -289,5 +226,39 @@ public class RepositorioClienteEnderecoHBM implements
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Localidade pesquisarLocalidadeCliente(Integer idCliente) throws ErroRepositorioException {
+		Integer idLocalidade = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			
+			StringBuilder consulta = new StringBuilder();
+			consulta.append(" select localidade.loca_id ")
+					.append(" from cadastro.cliente_endereco clienteEndereco ")
+					.append(" inner join cadastro.cliente cliente on cliente.clie_id = clienteEndereco.clie_id ")
+					.append(" left join cadastro.logradouro_bairro logradouroBairro on logradouroBairro.lgbr_id = clienteEndereco.lgbr_id ")
+					.append(" left join cadastro.bairro bairro on bairro.bair_id = logradouroBairro.bair_id ")
+					.append(" left join cadastro.municipio municipio on municipio.muni_id = bairro.muni_id ")
+					.append(" inner join cadastro.localidade localidade on localidade.muni_idprincipal = municipio.muni_id ")
+					.append(" where cliente.clie_id = :idCliente ")
+					.append(" and clienteEndereco.cled_icenderecocorrespondencia = indicadorSim ") 
+					.append(" order by localidade.loca_id  ")
+					.append(" limit 1 ");
 
+
+			idLocalidade = (Integer)session.createSQLQuery(consulta.toString())
+					.addScalar("id", Hibernate.INTEGER)
+					.setInteger("idCliente", idCliente.intValue())
+					.setShort("indicadorSim", ConstantesSistema.SIM)
+					.setMaxResults(1).uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return new Localidade(idLocalidade);
+	}
 }

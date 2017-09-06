@@ -152,6 +152,34 @@
 		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) )  || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemIndustrial}.doubleValue()) )]]></variableExpression>
 		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
 	</variable>
+	<variable name="sumContasAReceberTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemTotal}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="sumValorItemTotal_1" class="java.math.BigDecimal" resetType="None" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemTotal}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0) ]]></initialValueExpression>
+	</variable>
+	<variable name="sumContasAReceberPublico" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemPublico}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="sumContasAReceberParticular" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemParticular}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="sumContasAReceberIndustrial" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemIndustrial}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="sumContasAReceberComercial" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemComercial}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="sumContasAReceberResidencial" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[( ( ($F{getSequenciaLancamentoTipo}.equals(new Integer(310))) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(11)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(400)) && $F{getSequenciaLancamentoItem}.equals(new Integer(21)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(100)) && $F{getSequenciaLancamentoItem}.equals(new Integer(101)) ) || ( $F{getSequenciaLancamentoTipo}.equals(new Integer(200)) && $F{getSequenciaLancamentoItem}.equals(new Integer(99)) ) || ($F{getIdLancamentoTipo}.equals(new Integer(52))) ) ? new BigDecimal(0) : new BigDecimal( $F{getValorItemResidencial}.doubleValue()) )]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal(0)]]></initialValueExpression>
+	</variable>
 
 		<group  name="localidade" isStartNewPage="true" isReprintHeaderOnEachPage="true" >
 			<groupExpression><![CDATA[$F{getDescricaoGrupo}]]></groupExpression>
@@ -761,7 +789,7 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 		<group  name="lancamentoTipo" >
 			<groupExpression><![CDATA[$F{getDescricaoLancamentoTipo}]]></groupExpression>
 			<groupHeader>
-			<band height="42"  isSplitAllowed="true" >
+			<band height="39"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="3"
@@ -777,7 +805,7 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 				</textField>
 				<staticText>
 					<reportElement
-						x="3"
+						x="4"
 						y="3"
 						width="203"
 						height="18"
@@ -791,102 +819,6 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 					</textElement>
 				<text><![CDATA[TOTAL DO CONTAS A RECEBER]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="485"
-						y="2"
-						width="95"
-						height="18"
-						key="textField-154"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdasParticular}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="586"
-						y="2"
-						width="95"
-						height="18"
-						key="textField-155"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdasPublico}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="686"
-						y="2"
-						width="95"
-						height="18"
-						key="textField-156"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdas}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="216"
-						y="2"
-						width="85"
-						height="18"
-						key="textField-166"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdasResidencial}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="305"
-						y="2"
-						width="85"
-						height="18"
-						key="textField-167"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdasComercial}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="394"
-						y="2"
-						width="85"
-						height="18"
-						key="textField-168"
-						isRemoveLineWhenBlank="true">
-							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font fontName="Courier 10 Pitch" pdfFontName="Courier-Bold" size="9" isBold="true" isItalic="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getTotalGeralSemPerdasIndustrial}]]></textFieldExpression>
-				</textField>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
@@ -899,6 +831,96 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 						</reportElement>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="686"
+						y="3"
+						width="95"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberTotal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="586"
+						y="3"
+						width="95"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberPublico}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="485"
+						y="3"
+						width="95"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberParticular}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="305"
+						y="3"
+						width="85"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberComercial}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="394"
+						y="3"
+						width="85"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberIndustrial}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="216"
+						y="3"
+						width="85"
+						height="18"
+						key="textField">
+							<printWhenExpression><![CDATA[($V{exibirTotalContasReceber})]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Courier-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{sumContasAReceberResidencial}]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -1307,7 +1329,7 @@ $F{getTipoGrupo} + ": " + $F{getIdGrupo} + "-" + $F{getDescricaoGrupo}]]></textF
 			<band height="79"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="0"
+						x="1"
 						y="10"
 						width="209"
 						height="18"

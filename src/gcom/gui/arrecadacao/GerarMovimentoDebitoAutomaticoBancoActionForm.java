@@ -155,7 +155,5 @@ public class GerarMovimentoDebitoAutomaticoBancoActionForm extends
 			String idGrupoFaturamentoSelecionados) {
 		this.idGrupoFaturamentoSelecionados = idGrupoFaturamentoSelecionados;
 	}
-	
-	
 
 }

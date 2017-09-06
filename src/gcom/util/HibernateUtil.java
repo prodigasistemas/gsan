@@ -417,6 +417,8 @@ import gcom.cobranca.ResumoNegativacao;
 import gcom.cobranca.ResumoPendencia;
 import gcom.cobranca.RotaAcaoCriterio;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
+import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
+import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamentoCliente;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem;
@@ -1154,6 +1156,8 @@ public class HibernateUtil {
 					.addClass(LigacaoSitComandoOSS.class)
 					.addClass(AnormalidadeComandoOSS.class)
 					.addClass(CapacidHidrComandoOSS.class)
+					.addClass(NegociacaoCobrancaEmpresa.class)
+					.addClass(NegociacaoContaCobrancaEmpresa.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //
@@ -1556,6 +1560,7 @@ public class HibernateUtil {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static String loggerEntidadesPorConsulta(Session session, StackTraceElement[] elements, long tempoTotalSession) {
 
 		String callerMethodName = elements[1].getMethodName();
@@ -1608,6 +1613,7 @@ public class HibernateUtil {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static int getColumnSize(Class mappedClass, String propertyName) {
 		Configuration cfg = HibernateUtil.getConfig();
 		PersistentClass pClass = cfg.getClassMapping(mappedClass.getName());
@@ -1641,6 +1647,7 @@ public class HibernateUtil {
 	 *            Nome da propriedade da classe
 	 * @return nome da coluna
 	 */
+	@SuppressWarnings("rawtypes")
 	public static String getNameColumn(Class mappedClass, String propertyName) {
 		String retorno = null;
 		Configuration cfg = HibernateUtil.getConfig();
@@ -1714,6 +1721,7 @@ public class HibernateUtil {
 	 *            Nome da classe
 	 * @return O String nome da tablea
 	 */
+	@SuppressWarnings("rawtypes")
 	public static String getNameTable(Class mappedClass) {
 		Configuration cfg = HibernateUtil.getConfig();
 		PersistentClass pClass = cfg.getClassMapping(mappedClass.getName());
@@ -1737,6 +1745,7 @@ public class HibernateUtil {
 	 *            caminho da tabela
 	 * @return caminho da classe
 	 */
+	@SuppressWarnings("rawtypes")
 	public static String getClassName(String tableName) {
 		Configuration cfg = HibernateUtil.getConfig();
 		if (cfg != null) {

@@ -91,8 +91,11 @@ public class ArrecadadorMovimento implements Serializable {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/** default constructor */
 	public ArrecadadorMovimento() {
+	}
+	
+	public ArrecadadorMovimento(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getId() {

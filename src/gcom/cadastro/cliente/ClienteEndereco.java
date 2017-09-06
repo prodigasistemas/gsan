@@ -23,45 +23,29 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
+	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR,Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String numero;
 
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
+	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String complemento;
 
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
+	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private Short indicadorEnderecoCorrespondencia;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroClienteEndereco.ENDERECO_TIPO,
-		funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
+	@ControleAlteracao(value=FiltroClienteEndereco.ENDERECO_TIPO, funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
 			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private EnderecoTipo enderecoTipo;
 
-	/** persistent field */
 	private gcom.cadastro.cliente.Cliente cliente;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroClienteEndereco.ENDERECO_REFERENCIA,
-			funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-				Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})	
+	@ControleAlteracao(value=FiltroClienteEndereco.ENDERECO_REFERENCIA, funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})	
 	private EnderecoReferencia enderecoReferencia;
 
-	@ControleAlteracao(value=FiltroClienteEndereco.LOGRADOURO_CEP,
-			funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-				Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})	
+	@ControleAlteracao(value=FiltroClienteEndereco.LOGRADOURO_CEP, funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})	
 	private LogradouroCep logradouroCep;
 
 	@ControleAlteracao(value=FiltroClienteEndereco.LOGRADOURO_BAIRRO,

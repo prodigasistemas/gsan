@@ -1,14 +1,8 @@
 package gcom.gui.batch;
 
-import gcom.batch.Processo;
-import gcom.batch.ProcessoIniciado;
-import gcom.batch.ProcessoSituacao;
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import gcom.batch.FiltroProcesso;
+import gcom.batch.Processo;
+import gcom.batch.ProcessoIniciado;
+import gcom.batch.ProcessoSituacao;
+import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.util.filtro.ParametroSimples;
 
 /**
  * Action que insere um ProcessoIniciado no sistema
@@ -25,9 +28,7 @@ import org.apache.struts.action.ActionMapping;
  */
 public class InserirProcessoMensalEventualAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		// Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
@@ -36,46 +37,41 @@ public class InserirProcessoMensalEventualAction extends GcomAction {
 
 		Fachada fachada = Fachada.getInstancia();
 
-		int idProcesso = Integer
-				.parseInt(inserirProcessoMensalEventualActionForm
-						.getIdProcesso());
-//		int idSituacaoProcesso = Integer
-//				.parseInt(inserirProcessoMensalEventualActionForm
-//						.getIdSituacaoProcesso());
-		String dataAgendamento = inserirProcessoMensalEventualActionForm
-				.getDataAgendamento();
-		String horaAgendamento = inserirProcessoMensalEventualActionForm
-				.getHoraAgendamento();
-		String idProcessoIniciadoPrecedenteRequest = inserirProcessoMensalEventualActionForm
-				.getIdProcessoIniciadoPrecedente();
+		int idProcesso = Integer.parseInt(inserirProcessoMensalEventualActionForm.getIdProcesso());
+		
+		FiltroProcesso filtro = new FiltroProcesso();
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcesso.ID, Integer.valueOf(idProcesso)));
+		
+		Collection lista = fachada.pesquisar(filtro, Processo.class.getName());
+		
+		Processo processo = (Processo) lista.iterator().next();
+		
+		if (processo.isExcluido()){
+			throw new ActionServletException("atencao.processo_excluido");
+		}
+		
+		String dataAgendamento = inserirProcessoMensalEventualActionForm.getDataAgendamento();
+		String horaAgendamento = inserirProcessoMensalEventualActionForm.getHoraAgendamento();
+		String idProcessoIniciadoPrecedenteRequest = inserirProcessoMensalEventualActionForm.getIdProcessoIniciadoPrecedente();
 		Integer idProcessoIniciadoPrecedente = null;
-		if (idProcessoIniciadoPrecedenteRequest != null
-				&& !idProcessoIniciadoPrecedenteRequest.trim().equals("")) {
-
-			idProcessoIniciadoPrecedente = Integer
-					.parseInt(idProcessoIniciadoPrecedenteRequest);
+		
+		if (idProcessoIniciadoPrecedenteRequest != null && !idProcessoIniciadoPrecedenteRequest.trim().equals("")) {
+			idProcessoIniciadoPrecedente = Integer.parseInt(idProcessoIniciadoPrecedenteRequest);
 		}
 
 		ProcessoIniciado processoIniciado = new ProcessoIniciado();
 
-		Processo processo = new Processo();
-		processo.setId(idProcesso);
-
-		SimpleDateFormat formatoDataHora = new SimpleDateFormat(
-				"dd/MM/yyyy k:mm:ss");
+		SimpleDateFormat formatoDataHora = new SimpleDateFormat("dd/MM/yyyy k:mm:ss");
 
 		try {
-			if (dataAgendamento != null && !dataAgendamento.equals("")
-					&& horaAgendamento != null && !horaAgendamento.equals("")) {
-				processoIniciado.setDataHoraAgendamento(formatoDataHora
-						.parse(dataAgendamento + " " + horaAgendamento));
+			if (dataAgendamento != null && !dataAgendamento.equals("") && horaAgendamento != null && !horaAgendamento.equals("")) {
+				processoIniciado.setDataHoraAgendamento(formatoDataHora.parse(dataAgendamento + " " + horaAgendamento));
 			}
 		} catch (ParseException e) {
 			throw new ActionServletException("erro.sistema");
 		}
 
 		ProcessoSituacao processoSituacao = new ProcessoSituacao();
-//		processoSituacao.setId(idSituacaoProcesso);
 
 		processoIniciado.setProcesso(processo);
 		processoIniciado.setProcessoSituacao(processoSituacao);
@@ -85,14 +81,12 @@ public class InserirProcessoMensalEventualAction extends GcomAction {
 			processoIniciadoPrecedente.setId(idProcessoIniciadoPrecedente);
 
 			processoIniciado.setProcessoIniciadoPrecedente(processoIniciadoPrecedente);
-
 		}
 
 		//Falta setar o usuário real
 		processoIniciado.setUsuario(this.getUsuarioLogado(httpServletRequest));
 
-		Integer codigoProcessoIniciadoGerado = (Integer) fachada
-				.inserirProcessoIniciado(processoIniciado);
+		Integer codigoProcessoIniciadoGerado = (Integer) fachada.inserirProcessoIniciado(processoIniciado);
 
 		montarPaginaSucesso(httpServletRequest, "Processo Iniciado de código "
 				+ codigoProcessoIniciadoGerado + " inserido com sucesso.",

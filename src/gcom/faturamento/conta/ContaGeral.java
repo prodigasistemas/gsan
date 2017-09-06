@@ -1,6 +1,7 @@
 package gcom.faturamento.conta;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,12 +14,17 @@ public class ContaGeral implements Serializable {
 	private short indicadorHistorico;
 	private Date ultimaAlteracao;
 	private ContaImpressao contaImpressao;
-	private gcom.faturamento.conta.Conta conta;
+	private Conta conta;
 	private ContaHistorico contaHistorico;
+	@SuppressWarnings("rawtypes")
 	private Set debitoAutomaticoMovimentos;
 	
     public final static short INDICADOR_HISTORICO = 1;
 
+    public ContaGeral() {
+    }
+
+    @SuppressWarnings("rawtypes")
 	public ContaGeral(Integer id, short indicadorHistorico,
 			Date ultimaAlteracao, ContaImpressao contaImpressao,
 			Set debitoAutomaticoMovimentos, Conta conta) {
@@ -30,11 +36,7 @@ public class ContaGeral implements Serializable {
 		this.conta = conta;
 	}
 
-	/** default constructor */
-	public ContaGeral() {
-	}
-
-	/** minimal constructor */
+	@SuppressWarnings("rawtypes")
 	public ContaGeral(Integer id, short indicadorHistorico,
 			Date ultimaAlteracao, Set debitoAutomaticoMovimentos) {
 		this.id = id;
@@ -55,10 +57,12 @@ public class ContaGeral implements Serializable {
 		this.contaImpressao = contaImpressao;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getDebitoAutomaticoMovimentos() {
 		return this.debitoAutomaticoMovimentos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setDebitoAutomaticoMovimentos(Set debitoAutomaticoMovimentos) {
 		this.debitoAutomaticoMovimentos = debitoAutomaticoMovimentos;
 	}
@@ -101,11 +105,11 @@ public class ContaGeral implements Serializable {
 		return conta;
 	}
 
-	public void setConta(gcom.faturamento.conta.Conta conta) {
+	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
 	
-	public void setConta(gcom.faturamento.conta.IConta conta) {
+	public void setConta(IConta conta) {
 		this.conta = (Conta) conta;
 	}
 
@@ -115,5 +119,18 @@ public class ContaGeral implements Serializable {
 
 	public void setContaHistorico(ContaHistorico contaHistorico) {
 		this.contaHistorico = contaHistorico;
+	}
+	
+	public BigDecimal obterValorConta() {
+		
+		BigDecimal valorConta = null;
+		
+		if (conta != null) {
+			valorConta = conta.getValorTotalContaBigDecimal(); 
+		} else if (contaHistorico != null) {
+			valorConta = contaHistorico.getValorTotalContaBigDecimal(); 
+		}
+		
+		return valorConta;
 	}
 }

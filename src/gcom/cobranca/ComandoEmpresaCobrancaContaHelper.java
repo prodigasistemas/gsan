@@ -1,82 +1,62 @@
 package gcom.cobranca;
 
-import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
-import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.localidade.GerenciaRegional;
-import gcom.cadastro.localidade.UnidadeNegocio;
-
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
-public class ComandoEmpresaCobrancaContaHelper implements
-		Serializable {
+public class ComandoEmpresaCobrancaContaHelper implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
-	private ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta;
-	
-	private Collection<UnidadeNegocio> colecaoUnidadeNegocio;
-	
-	private Collection<GerenciaRegional> colecaoGerenciaRegional;
-	
-	private Collection<ImovelPerfil> colecaoImovelPerfil;
 
-	private Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao;
+	private ComandoEmpresaCobrancaConta comando;
+
+	private List<Integer> idsUnidadeNegocio;
+
+	private List<Integer> idsGerenciaRegional;
+
+	private List<Integer> idsImovelPerfil;
+
+	private List<Integer> idsLigacaoAguaSituacao;
 
 	public ComandoEmpresaCobrancaContaHelper() {
-		super();
 	}
 
-	public ComandoEmpresaCobrancaContaHelper(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<UnidadeNegocio> colecaoUnidadeNegocio, Collection<GerenciaRegional> colecaoGerenciaRegional, Collection<ImovelPerfil> colecaoImovelPerfil) {
-		super();
-		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
-		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
-		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
-		this.colecaoImovelPerfil = colecaoImovelPerfil;
+	public ComandoEmpresaCobrancaConta getComando() {
+		return comando;
 	}
 
-	public Collection<GerenciaRegional> getColecaoGerenciaRegional() {
-		return colecaoGerenciaRegional;
+	public void setComando(ComandoEmpresaCobrancaConta comando) {
+		this.comando = comando;
 	}
 
-	public void setColecaoGerenciaRegional(
-			Collection<GerenciaRegional> colecaoGerenciaRegional) {
-		this.colecaoGerenciaRegional = colecaoGerenciaRegional;
+	public List<Integer> getIdsUnidadeNegocio() {
+		return idsUnidadeNegocio;
 	}
 
-	public Collection<ImovelPerfil> getColecaoImovelPerfil() {
-		return colecaoImovelPerfil;
+	public void setIdsUnidadeNegocio(List<Integer> idsUnidadeNegocio) {
+		this.idsUnidadeNegocio = idsUnidadeNegocio;
 	}
 
-	public void setColecaoImovelPerfil(Collection<ImovelPerfil> colecaoImovelPerfil) {
-		this.colecaoImovelPerfil = colecaoImovelPerfil;
+	public List<Integer> getIdsGerenciaRegional() {
+		return idsGerenciaRegional;
 	}
 
-	public Collection<UnidadeNegocio> getColecaoUnidadeNegocio() {
-		return colecaoUnidadeNegocio;
+	public void setIdsGerenciaRegional(List<Integer> idsGerenciaRegional) {
+		this.idsGerenciaRegional = idsGerenciaRegional;
 	}
 
-	public void setColecaoUnidadeNegocio(
-			Collection<UnidadeNegocio> colecaoUnidadeNegocio) {
-		this.colecaoUnidadeNegocio = colecaoUnidadeNegocio;
+	public List<Integer> getIdsImovelPerfil() {
+		return idsImovelPerfil;
 	}
 
-	public ComandoEmpresaCobrancaConta getComandoEmpresaCobrancaConta() {
-		return comandoEmpresaCobrancaConta;
+	public void setIdsImovelPerfil(List<Integer> idsImovelPerfil) {
+		this.idsImovelPerfil = idsImovelPerfil;
 	}
 
-	public void setComandoEmpresaCobrancaConta(
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
-		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
+	public List<Integer> getIdsLigacaoAguaSituacao() {
+		return idsLigacaoAguaSituacao;
 	}
 
-	public Collection<LigacaoAguaSituacao> getColecaoLigacaoAguaSituacao() {
-		return colecaoLigacaoAguaSituacao;
+	public void setIdsLigacaoAguaSituacao(List<Integer> idsLigacaoAguaSituacao) {
+		this.idsLigacaoAguaSituacao = idsLigacaoAguaSituacao;
 	}
-
-	public void setColecaoLigacaoAguaSituacao(
-			Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao) {
-		this.colecaoLigacaoAguaSituacao = colecaoLigacaoAguaSituacao;
-	}
-	
-
 }

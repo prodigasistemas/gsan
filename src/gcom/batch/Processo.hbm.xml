@@ -1,39 +1,33 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin 2.1
-
-    http://boss.bekk.no/boss/middlegen/
-    http://www.hibernate.org/
--->
 	<class name="gcom.batch.Processo" table="batch.processo">
 		<id name="id" type="java.lang.Integer" column="proc_id">
 			<generator class="sequence">
 				<param name="sequence">batch.seq_processo</param>
 			</generator>
 		</id>
-		<property name="descricaoProcesso" type="java.lang.String" column="proc_dsprocesso" length="40"/>
-		<property name="descricaoAbreviada" type="java.lang.String" column="proc_dsabreviado" length="10"/>
-		<property name="indicadorUso" type="short" column="proc_icuso" not-null="true" length="2"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="proc_tmultimaalteracao" length="8"/>
-		<property name="indicadorAutorizacao" type="short" column="proc_icautorizacao" not-null="true" length="2"/>
-		<!-- Associations -->
-		<!-- bi-directional one-to-many association to ProcessoFuncionalidade -->
+		<property name="descricaoProcesso"    type="java.lang.String"   column="proc_dsprocesso" length="40"/>
+		<property name="descricaoAbreviada"   type="java.lang.String"   column="proc_dsabreviado" length="10"/>
+		<property name="indicadorUso"         type="short"              column="proc_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao"      type="java.sql.Timestamp" column="proc_tmultimaalteracao" length="8"/>
+		<property name="indicadorAutorizacao" type="short"              column="proc_icautorizacao" not-null="true" length="2"/>
+		<property name="limite"               type="java.lang.Integer"  column="proc_limite"/>
+		<property name="nomeArquivoBatch"     type="java.lang.String"   column="proc_nmarquivobatch" length="40"/>
+		<property name="prioridade"           type="java.lang.Integer"  column="proc_prioridade"/>
+
 		<set name="processosFuncionalidade" lazy="true" inverse="true" cascade="all">
 			<key>
 				<column name="proc_id"/>
 			</key>
 			<one-to-many class="gcom.batch.ProcessoFuncionalidade"/>
 		</set>
-		<!-- bi-directional one-to-many association to ProcessoIniciado -->
 		<set name="processosIniciados" lazy="true" inverse="true" cascade="all">
 			<key>
 				<column name="proc_id"/>
 			</key>
 			<one-to-many class="gcom.batch.ProcessoIniciado"/>
 		</set>
-		<!-- bi-directional many-to-one association to ProcessoTipo -->
 		<many-to-one name="processoTipo" class="gcom.batch.ProcessoTipo" not-null="true">
 			<column name="prtp_id"/>
 		</many-to-one>

@@ -23,6 +23,7 @@ public class FiltroCobrancaDocumento extends Filtro implements Serializable {
     }
     public final static String ID = "id";
     public final static String IMOVEL_ID = "imovel.id";
+    public final static String CLIENTE_ID = "cliente.id";
     public final static String DATA_EMISSAO = "emissao";
     public final static String DOCUMENTO_EMISSAO_FORMA = "documentoEmissaoForma";
     public final static String ATIVIDADE_CRONOGRAMA_ID = "cobrancaAcaoAtividadeCronograma.id";

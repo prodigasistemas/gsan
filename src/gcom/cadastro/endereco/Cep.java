@@ -14,83 +14,18 @@ public class Cep extends ObjetoGcom {
 	
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * identifier field
-     */
     private Integer cepId;
-
-    /**
-     * nullable persistent field
-     */
     private Integer codigo;
-
-    /**
-     * nullable persistent field
-     */
     private String sigla;
-    
-    /**
-     * nullable persistent field
-     */
     private String descricaoIntervaloNumeracao;
-
-    /**
-     * nullable persistent field
-     */
     private String municipio;
-
-    /**
-     * nullable persistent field
-     */
     private String bairro;
-
-    /**
-     * nullable persistent field
-     */
     private String logradouro;
-    
-    /**
-     * nullable persistent field
-     */
     private String descricaoTipoLogradouro;
-
-    /**
-     * nullable persistent field
-     */
     private Short indicadorUso;
-
-    /**
-     * nullable persistent field
-     */
     private Date ultimaAlteracao;
-
-    /**
-     * persistent field
-     */
     private gcom.cadastro.endereco.CepTipo cepTipo;
     
-    /**
-     * full constructor
-     * 
-     * @param codigo
-     *            Descrição do parâmetro
-     * @param sigla
-     *            Descrição do parâmetro
-     * @param municipio
-     *            Descrição do parâmetro
-     * @param bairro
-     *            Descrição do parâmetro
-     * @param logradouro
-     *            Descrição do parâmetro
-     * @param descricaoTipoLogradouro
-     *            Descrição do parâmetro
-     * @param indicadorUso
-     *            Descrição do parâmetro
-     * @param ultimaAlteracao
-     *            Descrição do parâmetro
-     * @param cepTipo
-     *            Descrição do parâmetro
-     */
     public Cep(Integer codigo, String sigla, String municipio, String bairro,
             String logradouro, String descricaoTipoLogradouro,
             Short indicadorUso, Date ultimaAlteracao,

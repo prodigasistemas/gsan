@@ -11,6 +11,10 @@ public interface ConstantesSistema {
 
 	String COLECAO_UNIDADES_PROCESSAMENTO_BATCH = "ColecaoBatch";
 	
+	public static final String NOME_AGENCIA_REGULADORA = "AMAE";
+	public static final String NUMERO_AGENCIA_REGULADORA = "91-984647478";
+	public static final String EMAIL_AGENCIA_REGULADORA = "ouvidoria.amae@gmail.com";
+	
 	Short SET_ZERO = new Short("0");
 	Short ZERO = new Short("0");
 	
@@ -18,6 +22,9 @@ public interface ConstantesSistema {
 
 	Integer INVALIDO_ID = -1;
 
+	Short INDICADOR_CURTO_PRAZO = new Short("0");
+	Short INDICADOR_LONGO_PRAZO = new Short("1");
+	
 	int NUMERO_NAO_INFORMADO = -1;
 	int NUMERO_MAXIMO_REGISTROS_MANUTENCAO = 50;
 	int NUMERO_MAXIMO_CONSUMO_MINIMO_FIXADO = 100;
@@ -724,4 +731,8 @@ public interface ConstantesSistema {
 	
 	String OITO_DIGITOS = "0";
 	String NOVE_DIGITOS = "1";
+	
+	int TIPO_NEGOCIACAO_PARCELAMENTO = 1;
+	int TIPO_NEGOCIACAO_EXTRATO = 2;
+	int TIPO_NEGOCIACAO_GUIA = 3;
 }

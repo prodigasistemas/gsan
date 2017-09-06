@@ -33,11 +33,9 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
-import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
-import gcom.faturamento.conta.IConta;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -63,7 +61,6 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
@@ -1130,8 +1127,6 @@ public interface IRepositorioFaturamento {
 
 	public Integer pesquisarImovelDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException;
 
-	public void atualizarDebitoCreditoSituacaoAtualDoDebitoACobrar(Integer idImovel) throws ErroRepositorioException;
-
 	public Object[] obterArrecadacaoFormaPagamentoContasMenorData(Conta conta) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
@@ -1187,8 +1182,6 @@ public interface IRepositorioFaturamento {
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDataRevisaoConta(Collection idsConta) throws ErroRepositorioException;
-
-	public void atualizarDebitoCreditoSituacaoAtualDoCreditoARealizar(Integer idImovel) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterIdsContasImovel(Integer idImovel) throws ErroRepositorioException;
@@ -1622,7 +1615,7 @@ public interface IRepositorioFaturamento {
 			int idSituacaoAtual, int idSituacaoAnterior, int idFinanciamentoTipo)
 			throws ErroRepositorioException;
 
-	public ResumoFaturamento acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
+	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException;
@@ -1896,16 +1889,6 @@ public interface IRepositorioFaturamento {
 			int anoMesReferenciaFaturamento, Integer idLocalidade)
 			throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarQuantidadeContas(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ErroRepositorioException;
-
-	public Collection<Integer> pesquisarImoveisInformarContasEmCobranca(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper,
-			Integer numeroPagina, boolean percentualInformado)
-			throws ErroRepositorioException;
-
 	public Boolean verificarGrupoFaturamentoComandado(int anoMesReferenciaFaturamento, int idGrupoFaturamento) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
@@ -2148,13 +2131,9 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarContasEmitirCOSANPA(Integer idTipoConta,
-			Integer idEmpresa, Integer numeroPaginas, Integer anoMesReferencia,
-			Integer idFaturamentoGrupo) throws ErroRepositorioException;
+	public Collection pesquisarContasEmitirCOSANPA(Integer numeroPaginas, Integer anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 
-	public Collection<Object[]> pesquisarRelatorioJurosMultasDebitosCancelados(
-			FiltrarRelatorioJurosMultasDebitosCanceladosHelper filtro)
-			throws ErroRepositorioException;
+	public Collection<Object[]> pesquisarRelatorioJurosMultasDebitosCancelados( FiltrarRelatorioJurosMultasDebitosCanceladosHelper filtro) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizado(
@@ -2639,10 +2618,6 @@ public interface IRepositorioFaturamento {
 
 	public BigDecimal pesquisarValorCreditosARealizar(Integer idImovel, Integer anoMesCredito) throws ErroRepositorioException;
 
-	public Collection<Object[]> pesquisarQuantidadeContasAgrupandoPorImovel(
-			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper)
-			throws ErroRepositorioException;
-
 	public void alterarLeituristaMovimentoRoteiroEmpresa(Integer idRota,
 			Integer anoMes, Integer idLeituristaNovo)
 			throws ErroRepositorioException;
@@ -3003,22 +2978,29 @@ public interface IRepositorioFaturamento {
 	
 	public Collection<IClienteConta> pesquisarClienteContaHistorico(Integer idConta) throws ErroRepositorioException;
 	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraPrevista(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarDataLeituraAnterior(Integer idGrupo, Integer anoMes) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioReceitasAFaturarValorAFaturarPorGrupo(Integer idGrupo, Integer anoMesReferencia) throws ErroRepositorioException;
 
 	public int pesquisarMaiorAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo) throws ErroRepositorioException;
 	
 	public boolean verificarAnoMesReferenciaCronogramaGrupoFaturamentoMensal(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 	
 	public Fatura pesquisarFaturaDeConta(Integer idConta) throws ErroRepositorioException;
@@ -3027,7 +3009,8 @@ public interface IRepositorioFaturamento {
 	
 	public FaturamentoAtividadeCronograma pesquisarFaturamentoAtividadeCronograma(Integer faturamentoGrupoId, Integer faturamentoAtividadeId,
 			Integer anoMesReferencia) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContasParaRelatorioAgenciaReguladora(Integer anoMes, Integer idMunicipio) throws ErroRepositorioException;
 	
 	public BigDecimal acumularValorAguaPorSituacaoContaEReferenciaContabil(int anoMesReferencia,int idLocalidade, int idSituacaoAtual, int idSituacaoAnterior, boolean aPartirNovembro) throws ErroRepositorioException;
@@ -3045,4 +3028,23 @@ public interface IRepositorioFaturamento {
 	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturarPorCategoria(Integer anoMes, Integer idCategoria) throws ErroRepositorioException;
 	
 	public Collection<ReceitasAFaturarResumo> obterDadosRelatorioSinteticoReceitasAFaturar(Integer anoMes) throws ErroRepositorioException;
+	
+	public Object[] pesquisarValorLongoECurtoPrazoCreditoARealizarConcedidoPorOrigemCredito(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditosOrigem, int idSituacaoAtual,
+			int idSituacaoAnterior) throws ErroRepositorioException;
+	
+	public BigDecimal acumularValorTransferenciaCreditoParcelamentoLongoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacao) throws ErroRepositorioException;
+	
+	public ResumoFaturamento acumularValorCategoriaCreditoRealizadoCategoriaPorOrigensCreditoComBaixaContabilNaoPreenchida(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			Integer[] idsCreditoOrigem, Integer idSituacaoAtual)
+			throws ErroRepositorioException;
+	
+	public Integer obterQuantidadeContasAnterioresVencidasENaoPagas(Integer idImovel, Date dataVencimento) throws ErroRepositorioException;
+
+	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException;
+	
+	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException;
 }

@@ -1,7 +1,6 @@
 package gcom.util.validacao;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -20,12 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import sun.misc.BASE64Decoder;
-
-
-
-
 
 /**
  * 
@@ -172,7 +165,8 @@ public class AssinaturaDSA {
 	        Element no = (Element)listaNos.item(0);
             NodeList textFNList = no.getChildNodes();
             String chave = ((Node)textFNList.item(0)).getNodeValue().trim();
-            byte[] chaveDecodificada = new BASE64Decoder().decodeBuffer(new ByteArrayInputStream(chave.getBytes("UTF-8")));
+           
+            byte[] chaveDecodificada = Base64.decodeBase64(chave.getBytes("UTF-8"));
            
             
             retorno = new BigInteger(1,chaveDecodificada);

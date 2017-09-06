@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa" table="cobranca.neg_conta_cobranca_empresa">
+		<id name="id" type="java.lang.Integer" column="ncce_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_neg_conta_cobranca_empresa</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ncce_tmultimaalteracao" not-null="true" length="8"/>
+
+		<!-- Associations -->
+		<many-to-one name="negociacao" class="gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa" not-null="true">
+			<column name="ncem_id"/>
+		</many-to-one>
+
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>

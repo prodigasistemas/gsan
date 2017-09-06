@@ -38,9 +38,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ConcluirEfetuarParcelamentoDebitosAction.class);
+	
 	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse httpServletResponse) {
 
@@ -108,6 +111,8 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			throw new ActionServletException("atencao.campo_selecionado.obrigatorio", null, "'Considerar Créditos a Realizar?'");
 		}
 
+		logger.info("Concluir parcelamento do imóvel " + codigoImovel);
+		
 		// ABA 3 - Verifica se foi escolhido alguma opção de parcelamento
 		Collection<OpcoesParcelamentoHelper> colecaoOpcoesParcelamento = (Collection<OpcoesParcelamentoHelper>) sessao.getAttribute("colecaoOpcoesParcelamento");
 
@@ -173,6 +178,21 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		if (form.get("valorCreditoARealizar") != null && !form.get("valorCreditoARealizar").equals("")) {
 			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditoARealizar")));
 		}
+		
+		BigDecimal valorCreditosAnterioresCurtoPrazo = BigDecimal.ZERO;
+		if (form.get("valorCreditosAnterioresCurtoPrazo") != null && !form.get("valorCreditosAnterioresCurtoPrazo").equals("")) {
+			valorCreditosAnterioresCurtoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditosAnterioresCurtoPrazo")));
+		}
+		
+		BigDecimal valorCreditosAnterioresLongoPrazo = BigDecimal.ZERO;
+		if (form.get("valorCreditosAnterioresLongoPrazo") != null && !form.get("valorCreditosAnterioresLongoPrazo").equals("")) {
+			valorCreditosAnterioresLongoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditosAnterioresLongoPrazo")));
+		}
+		
+		BigDecimal valorTotalCreditosAnteriores = BigDecimal.ZERO;
+		if (form.get("valorTotalCreditosAnteriores") != null && !form.get("valorTotalCreditosAnteriores").equals("")) {
+			valorTotalCreditosAnteriores = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorTotalCreditosAnteriores")));
+		}
 
 		BigDecimal valorAtualizacaoMonetaria = BigDecimal.ZERO;
 		if (form.get("valorAtualizacaoMonetaria") != null && !form.get("valorAtualizacaoMonetaria").equals("")) {
@@ -235,6 +255,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			percentualDescontoInatividadeLigacaoAgua = Util.formatarMoedaRealparaBigDecimal((String) (form.get("percentualDescontoInatividadeLigacaoAgua")));
 		}
 
+		logger.info("Imóvel: " + codigoImovel + " | valorAcrescimosImpontualidade: " + form.get("valorAcrescimosImpontualidade"));
 		BigDecimal valorAcrescimosImpontualidade = BigDecimal.ZERO;
 		if (form.get("valorAcrescimosImpontualidade") != null && !form.get("valorAcrescimosImpontualidade").equals("")) {
 			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorAcrescimosImpontualidade")));
@@ -410,7 +431,10 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				cpfClienteParcelamentoDigitado, 
 				descontoSancoesRDEspecial,
 				descontoTarifaSocialRDEspecial, 
-				colecaoContasEmAntiguidade);
+				colecaoContasEmAntiguidade, 
+				valorCreditosAnterioresCurtoPrazo,
+				valorCreditosAnterioresLongoPrazo, 
+				valorTotalCreditosAnteriores);
 
 		Integer idParcelamento = fachada.concluirParcelamentoDebitos(helper, usuarioLogado);
 		

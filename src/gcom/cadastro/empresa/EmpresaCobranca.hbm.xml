@@ -18,7 +18,7 @@
 		</many-to-one>
 		<property name="dataInicioContrato" type="java.sql.Date" column="emco_dtiniciocontrato" length="4"/>
 		<property name="dataFinalContrato" type="java.sql.Date" column="emco_dtfinalcontrato" length="4"/>
-		<property name="percentualContratoCobranca" type="java.math.BigDecimal" column="emco_pcpagamentodevido" length="5"/>
+		<property name="percentualContratoCobranca" type="java.math.BigDecimal" column="emco_pcpagamentodevido" length="6"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="emco_tmultimaalteracao" length="8"/>
 	</class>
 </hibernate-mapping>

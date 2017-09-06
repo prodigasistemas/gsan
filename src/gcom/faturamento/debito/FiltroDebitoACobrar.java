@@ -59,7 +59,7 @@ public class FiltroDebitoACobrar extends Filtro implements Serializable {
 	/**
 	 * 
 	 */
-	public final static String DEBITO_CREDITO_SITUACAO =  "debitoCreditoSituacaoAtual";
+	public final static String DEBITO_CREDITO_SITUACAO_ATUAL =  "debitoCreditoSituacaoAtual";
 
 	
 	public final static String REFERENCIA_DEBITO = "anoMesReferenciaDebito";

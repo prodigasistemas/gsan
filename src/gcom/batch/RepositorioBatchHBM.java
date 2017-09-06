@@ -35,9 +35,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -52,7 +50,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	}
 
 	public static IRepositorioBatch getInstancia() {
-
 		if (instancia == null) {
 			instancia = new RepositorioBatchHBM();
 		}
@@ -120,10 +117,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 							FuncionalidadeSituacao.CONCLUIDA).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -153,10 +148,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 					ProcessoSituacao.CONCLUIDO_COM_ERRO).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -164,7 +157,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	@SuppressWarnings({ "unchecked"})
+	@SuppressWarnings({ "unchecked", "rawtypes"})
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasProntasParaEncerramento()
 	throws ErroRepositorioException {
 		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
@@ -173,19 +166,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		String consulta;
 			 	
 		try {
-//			consulta = "select distinct func.id from FuncionalidadeIniciada as func "
-//					+ "inner join func.unidadesIniciadas as iniciada "
-//					+ "inner join fetch func.processoFuncionalidade as procFunc "
-//					+ "inner join fetch procFunc.funcionalidade "
-//					+ "where iniciada.id is not null and "
-//					//+ "func.funcionalidadeSituacao.id <> :situacaoFuncionalidadeConcluida "
-//					+ "func.funcionalidadeSituacao.id = :situacaoFuncionalidadeEmProcessamento "
-//					+ "and func.id not in ("
-//					+ "select distinct func.id from FuncionalidadeIniciada as func2 "
-//					+ "inner join func2.unidadesIniciadas as iniciada "
-//					+ "inner join iniciada.unidadeSituacao as situacao "
-//					+ "where situacao.id <> :situacaoConcluida and and func2.id = func.id)";
-		
 			consulta = "select distinct func.fuin_id as idFuncionalidade "
 					+ " from batch.funcionalidade_iniciada func "
 					+ " inner join batch.unidade_iniciada iniciada on iniciada.fuin_id = func.fuin_id "
@@ -202,7 +182,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 					.addScalar("idFuncionalidade", Hibernate.INTEGER)
 					.setInteger("situacaoConcluida", UnidadeSituacao.CONCLUIDA)
 					.setInteger("situacaoFuncionalidadeConcluida",FuncionalidadeSituacao.CONCLUIDA)
-					//.setInteger("situacaoFuncionalidadeEmProcessamento",FuncionalidadeSituacao.EM_PROCESSAMENTO)
 					.list();
 			
 			Iterator iter = ids.iterator();
@@ -264,10 +243,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -277,42 +254,33 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 
 	@SuppressWarnings("unchecked")
-	public Collection<Object[]> pesquisarFuncionaldadesIniciadasProntasExecucao()
-			throws ErroRepositorioException {
+	public Collection<Object[]> pesquisarFuncionaldadesIniciadasProntasExecucao() throws ErroRepositorioException {
 		Collection<Object[]> retorno = null;
-
 		Session session = HibernateUtil.getSession();
-		String consulta;
 
 		try {
+			String consulta = "SELECT func, func.processoFuncionalidade.sequencialExecucao "
+					+ "FROM FuncionalidadeIniciada func "
+					+ "INNER JOIN FETCH func.processoIniciado as procIniciado "
+					+ "INNER JOIN FETCH procIniciado.usuario usur "
+					+ "INNER JOIN procIniciado.processoSituacao as procSituacao "
+					+ "LEFT JOIN procIniciado.processoIniciadoPrecedente as procPrecedente "
+					+ "LEFT JOIN procPrecedente.processoSituacao as procPrecedenteSituacao "
+					+ "LEFT JOIN func.unidadesIniciadas as unidIniciada "
+					+ "WHERE unidIniciada is null "
+					+ "and func.funcionalidadeSituacao <> :emProcessamento "
+					+ "and (procSituacao.id = :emEspera or procSituacao.id = :emProcessamento) "
+					+ "and (procPrecedente is null or procPrecedenteSituacao.id = :situacaoProcessoConcluido) "
+					+ "order by procIniciado.dataHoraInicio, func.processoFuncionalidade.sequencialExecucao";
 
-			consulta = "select func, func.processoFuncionalidade.sequencialExecucao "
-					+ "from FuncionalidadeIniciada func "
-					+ "inner join fetch func.processoIniciado as procIniciado "
-					+ "inner join procIniciado.processoSituacao as procSituacao "
-					+ "left join procIniciado.processoIniciadoPrecedente as procPrecedente "
-					+ "left join procPrecedente.processoSituacao as procPrecedenteSituacao "
-					+ "left join func.unidadesIniciadas as unidIniciada "
-					+ "where unidIniciada is null and func.funcionalidadeSituacao <> :emProcessamento and (procSituacao.id = :emEspera or procSituacao.id = :emProcessamento) "
-					+ "and (procPrecedente is null or procPrecedenteSituacao.id = :situacaoProcessoConcluido) order by func.processoFuncionalidade.sequencialExecucao";
-
-			retorno = session.createQuery(consulta).setInteger("emEspera",
-					ProcessoSituacao.EM_ESPERA).setInteger("emProcessamento",
-					ProcessoSituacao.EM_PROCESSAMENTO).setInteger(
-					"situacaoProcessoConcluido", ProcessoSituacao.CONCLUIDO)
-					.setInteger("emProcessamento",
-							FuncionalidadeSituacao.EM_PROCESSAMENTO).list();
-
-			// AGENDADO -- NAO EH PARA EXECUTAR
-			// EM ESPERA -- PRONTO PARA EXECUCAO
-			// .setInteger("agendado",ProcessoSituacao.AGENDADO)
-			// query - or procSituacao.id = :agendado)
-
+			retorno = session.createQuery(consulta)
+					.setInteger("emEspera", ProcessoSituacao.EM_ESPERA)
+					.setInteger("emProcessamento", ProcessoSituacao.EM_PROCESSAMENTO)
+					.setInteger("situacaoProcessoConcluido", ProcessoSituacao.CONCLUIDO)
+					.list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -343,10 +311,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 					"idProcessoIniciado", idProcessoIniciado).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -373,10 +339,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 							UnidadeSituacao.CONCLUIDA_COM_ERRO).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -385,42 +349,36 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void inserirColecaoObjetoParaBatch(Collection<? extends Object> colecaoObjetos)
-			throws ErroRepositorioException {
-		// obtém uma instância com o hibernate
+	public void inserirColecaoObjetoParaBatch(Collection<? extends Object> colecaoObjetos) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Iterator iteratorObjetos = colecaoObjetos.iterator();
 
 		Object objetoParaInserir = null;
-		
+
 		try {
-			
+
 			while (iteratorObjetos.hasNext()) {
-				
+
 				objetoParaInserir = iteratorObjetos.next();
-			
+
 				session.save(objetoParaInserir);
-				
+
 				session.flush();
 				session.clear();
 			}
-			
-		} 
-		catch (HibernateException e) {
-			
+
+		} catch (HibernateException e) {
 			if (objetoParaInserir != null && (objetoParaInserir instanceof ConsumoHistorico)) {
-				
+
 				System.out.println("CONSISTIR ID MATRICULA ERRO = " + ((ConsumoHistorico) objetoParaInserir).getImovel().getId());
 			}
-			
-			// levanta a exceção para a próxima camada
+
 			e.printStackTrace();
-			
+
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			session.flush();
 			session.clear();
-			// fecha a sessão com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -1885,7 +1843,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		} catch (Exception e) {
 			
@@ -2043,9 +2000,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	public Object inserirObjetoParaBatch(Object objeto)
-			throws ErroRepositorioException {
-		// obtém uma instância com o hibernate
+	public Object inserirObjetoParaBatch(Object objeto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Object retorno = null;
 
@@ -2056,10 +2011,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 			return retorno;
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -2149,5 +2102,24 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			HibernateUtil.closeSession(session);
 		}
 	}
-	
+
+	public Short pesquisarQuantidadeBatchPorUsuario(int idUsuario) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT count(*) as quantidade FROM batch.processo_iniciado ")
+					.append("WHERE prst_id = :situacao AND usur_id = :idUsuario");
+			
+			return (Short) session.createSQLQuery(consulta.toString())
+					.addScalar("quantidade", Hibernate.SHORT)
+					.setInteger("situacao", ProcessoSituacao.EM_PROCESSAMENTO)
+					.setInteger("idUsuario", idUsuario)
+					.uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro ao consultar quantidade de processo por situacao");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

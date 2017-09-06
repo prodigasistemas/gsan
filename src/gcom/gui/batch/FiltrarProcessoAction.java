@@ -8,6 +8,7 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.Intervalo;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.text.ParseException;
@@ -99,34 +100,29 @@ public class FiltrarProcessoAction extends GcomAction {
 			horaComandoFinal = "23:59:59";
 		}
 
-		FiltroProcessoIniciado filtroProcessoIniciado = 
-			new FiltroProcessoIniciado(FiltroProcessoIniciado.DATA_HORA_AGENDAMENTO_DESC);
+		FiltroProcessoIniciado filtro = new FiltroProcessoIniciado(FiltroProcessoIniciado.DATA_HORA_AGENDAMENTO_DESC);
+		filtro.adicionarParametro(new ParametroNulo(FiltroProcessoIniciado.NOME_ARQUIVO_PROCESSO));
 		
 		//CRC-1466
 		if(usuarioId != null && !usuarioId.trim().equals("")){
-			filtroProcessoIniciado.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.USUARIO_ID, usuarioId));
+			filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.USUARIO_ID, usuarioId));
 		}
 
 		if (!checarCampoVazioNulo(filtrarProcessoActionForm.getIdProcesso())) {
 			
-			int idProcesso = 
-				Integer.parseInt(filtrarProcessoActionForm.getIdProcesso());
+			int idProcesso = Integer.parseInt(filtrarProcessoActionForm.getIdProcesso());
 
 			if (idProcesso != ConstantesSistema.NUMERO_NAO_INFORMADO) {
-				filtroProcessoIniciado.adicionarParametro(
-					new ParametroSimples(
-						FiltroProcessoIniciado.ID_PROCESSO, idProcesso));
+				filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.ID_PROCESSO, idProcesso));
 			}
 		}
 		
 		if (!checarCampoVazioNulo(filtrarProcessoActionForm.getIdSituacaoProcesso())) {
 			
-			int idSituacaoProcesso = 
-				Integer.parseInt(filtrarProcessoActionForm.getIdSituacaoProcesso());
+			int idSituacaoProcesso = Integer.parseInt(filtrarProcessoActionForm.getIdSituacaoProcesso());
 
 			if (idSituacaoProcesso != ConstantesSistema.NUMERO_NAO_INFORMADO) {
-				filtroProcessoIniciado.adicionarParametro(
-					new ParametroSimples(FiltroProcessoIniciado.PROCESSO_SITUACAO_ID,idSituacaoProcesso));
+				filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.PROCESSO_SITUACAO_ID,idSituacaoProcesso));
 			}
 		}
 
@@ -138,7 +134,7 @@ public class FiltrarProcessoAction extends GcomAction {
 				dataAgendamentoFinal = dataAgendamentoInicial;
 			}
 
-			filtroProcessoIniciado.adicionarParametro(
+			filtro.adicionarParametro(
 				new Intervalo(FiltroProcessoIniciado.DATA_HORA_AGENDAMENTO,
 					converterDataHora(dataAgendamentoInicial,horaAgendamentoInicial), 
 					converterDataHora(dataAgendamentoFinal, horaAgendamentoFinal)));
@@ -150,7 +146,7 @@ public class FiltrarProcessoAction extends GcomAction {
 				dataPeriodoInicioFinal = dataPeriodoInicioInicial;
 			}
 
-			filtroProcessoIniciado.adicionarParametro(
+			filtro.adicionarParametro(
 				new Intervalo(FiltroProcessoIniciado.DATA_HORA_INICIO,
 					converterDataHora(dataPeriodoInicioInicial,horaPeriodoInicioInicial), 
 					converterDataHora(dataPeriodoInicioFinal, horaPeriodoInicioFinal)));
@@ -162,7 +158,7 @@ public class FiltrarProcessoAction extends GcomAction {
 				dataConclusaoFinal = dataConclusaoInicial;
 			}
 			
-			filtroProcessoIniciado.adicionarParametro(
+			filtro.adicionarParametro(
 				new Intervalo(FiltroProcessoIniciado.DATA_HORA_TERMINO,
 					converterDataHora(dataConclusaoInicial,horaConclusaoInicial), 
 					converterDataHora(dataConclusaoFinal, horaConclusaoFinal)));
@@ -174,56 +170,38 @@ public class FiltrarProcessoAction extends GcomAction {
 				dataComandoFinal = dataComandoInicial;
 			}
 
-			filtroProcessoIniciado.adicionarParametro(
+			filtro.adicionarParametro(
 				new Intervalo(FiltroProcessoIniciado.DATA_HORA_COMANDO,
 					converterDataHora(dataComandoInicial, horaComandoInicial),
 					converterDataHora(dataComandoFinal, horaComandoFinal)));
 
 		}
 
-		filtroProcessoIniciado.adicionarCaminhoParaCarregamentoEntidade("processo");
-		filtroProcessoIniciado.adicionarCaminhoParaCarregamentoEntidade("usuario");
-		filtroProcessoIniciado.adicionarCaminhoParaCarregamentoEntidade("processoSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processoSituacao");
 
-		Map resultado = 
-			controlarPaginacao(httpServletRequest, 
-				retorno,
-				filtroProcessoIniciado, 
-				ProcessoIniciado.class.getName());
+		Map resultado = controlarPaginacao(httpServletRequest, retorno, filtro,	ProcessoIniciado.class.getName());
 		
-		Collection<ProcessoIniciado> colecaoProcessosIniciados = 
-			(Collection) resultado.get("colecaoRetorno");
+		Collection<ProcessoIniciado> colecaoProcessosIniciados = (Collection) resultado.get("colecaoRetorno");
 		
 		/*
 		 *Caso a pesquisa não retorne resultado é lançada mensagem informando que 
 		 *a pesquisa não retorna nenhum resultado 
 		 */
 		if ( colecaoProcessosIniciados != null && colecaoProcessosIniciados.isEmpty() ) {
-			
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
-		
 		}else{
-		
 			retorno = (ActionForward) resultado.get("destinoActionForward");
 
 			httpServletRequest.setAttribute("colecaoProcessosIniciados",colecaoProcessosIniciados);
-
-			httpServletRequest.setAttribute("mesAnoReferencia", 
-					Util.formatarAnoMesParaMesAno(fachada.pesquisarParametrosDoSistema().getAnoMesFaturamento()));
+			httpServletRequest.setAttribute("mesAnoReferencia", Util.formatarAnoMesParaMesAno(fachada.pesquisarParametrosDoSistema().getAnoMesFaturamento()));
 			httpServletRequest.setAttribute("dataCorrente", new Date());
 
 			return retorno;
 		}
 	}
 
-	/**
-	 * Função que verifica se o campo é vazio ou se está nulo
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/07/2006
-	 * 
-	 * @return
-	 */
 	private boolean checarCampoVazioNulo(String campo) {
 		boolean retorno = false;
 		if (campo == null || 
@@ -237,16 +215,6 @@ public class FiltrarProcessoAction extends GcomAction {
 
 	}
 
-	/**
-	 * Converte a data e a hora informada pelo usuário para um Date
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/07/2006
-	 * 
-	 * @param data
-	 * @param hora
-	 * @return
-	 */
 	private Date converterDataHora(String data, String hora) {
 		
 		SimpleDateFormat formatoDataHora = new SimpleDateFormat("dd/MM/yyyy k:mm:ss");

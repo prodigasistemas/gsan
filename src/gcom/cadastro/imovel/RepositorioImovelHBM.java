@@ -19075,6 +19075,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		      .append(" INNER JOIN FETCH imov.imovelContaEnvio icte ")
 		      .append(" LEFT JOIN FETCH hih.hidrometro")
 		      .append(" LEFT JOIN FETCH imov.funcionario ")
+		      .append(" LEFT JOIN FETCH imov.imovelCondominio imovelCondominio")
 		      .append(" WHERE  imov.id = :idImovel");
 			
 			imovel = (Imovel) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();

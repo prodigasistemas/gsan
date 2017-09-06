@@ -1,51 +1,11 @@
 package gcom.atendimentopublico.ordemservico;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.jboss.logging.Logger;
-
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
-import gcom.atendimentopublico.ControladorAtendimentoPublicoLocalHome;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocal;
-import gcom.atendimentopublico.ligacaoesgoto.ControladorLigacaoEsgotoLocalHome;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -80,8 +40,6 @@ import gcom.atendimentopublico.ordemservico.bean.SituacaoEncontradaHelper;
 import gcom.atendimentopublico.ordemservico.bean.TxtOsInspecaoAnormalidadeHelper;
 import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
 import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
@@ -91,25 +49,15 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.Tramite;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.Processo;
 import gcom.batch.UnidadeProcessamento;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.empresa.Empresa;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.funcionario.FiltroFuncionario;
 import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.Imovel;
@@ -128,8 +76,6 @@ import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.projeto.FiltroProjeto;
 import gcom.cadastro.projeto.Projeto;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cadastro.unidade.ControladorUnidadeLocal;
-import gcom.cadastro.unidade.ControladorUnidadeLocalHome;
 import gcom.cadastro.unidade.FiltroUnidadeOrganizacional;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaAcaoOrdemServicoNaoAceitas;
@@ -139,8 +85,6 @@ import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoFisc;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaSituacao;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.FiltroCobrancaAcaoOrdemServicoNaoAceitas;
 import gcom.cobranca.FiltroCobrancaDocumento;
 import gcom.cobranca.FiltroMotivoNaoAceitacaoEncerramentoOS;
@@ -150,8 +94,6 @@ import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.DadosPesquisaCobrancaDocumentoHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
@@ -181,8 +123,6 @@ import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHe
 import gcom.integracao.FiltroServicoTerceiroAcompanhamentoServico;
 import gcom.integracao.ServicoTerceiroAcompanhamentoServico;
 import gcom.interceptor.RegistradorOperacao;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
@@ -198,38 +138,24 @@ import gcom.relatorio.atendimentopublico.bean.ImovelEmissaoOrdensSeletivasHelper
 import gcom.relatorio.atendimentopublico.bean.RelatorioOSFiscalizacaoHelper;
 import gcom.relatorio.atendimentopublico.ordemservico.FiltrarBoletimCustoPavimentoHelper;
 import gcom.relatorio.atendimentopublico.ordemservico.RelatorioBoletimCustoPavimentoHelper;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.PermissaoEspecial;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocal;
-import gcom.seguranca.acesso.usuario.ControladorUsuarioLocalHome;
 import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.spcserasa.ControladorSpcSerasaLocal;
-import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.util.ConstantesAplicacao;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
 import gcom.util.HibernateUtil;
 import gcom.util.RepositorioUtilHBM;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ServicosEmail;
@@ -238,6 +164,39 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.Intervalo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
 public class ControladorOrdemServicoSEJB extends ControladorComum{
 	private static final long serialVersionUID = -9200009057620946040L;
@@ -2887,6 +2846,8 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 			osNaBase = (OrdemServico) colecaoOS.iterator().next();
 
+			validarEncerramentoOsImovelEmCampo(osNaBase);
+			
 			if (osNaBase.getUltimaAlteracao().after(ultimaAlteracao)) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
@@ -3193,38 +3154,34 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			}
 		}
 
-		// fim controle transação
-
 		if (codigoRetornoVistoriaOs == null || codigoRetornoVistoriaOs.equals("")) {
 			osNaBase.setCodigoRetornoVistoria(null);
 		} else {
 			osNaBase.setCodigoRetornoVistoria(new Short(codigoRetornoVistoriaOs));
 		}
 
-		// atualizar o objeto da base
-		// seta o código da situação como 2
 		osNaBase.setSituacao(new Short("2"));
-		// seta a data de encerramento recebida
 		osNaBase.setDataEncerramento(dataEncerramento);
-		// seta o parecer de encerramento
+
 		if (parecerEncerramento != null && !parecerEncerramento.equals("")) {
 			osNaBase.setDescricaoParecerEncerramento(parecerEncerramento);
 		} else {
 			osNaBase.setDescricaoParecerEncerramento(null);
 		}
-		// seta o pavimento
+
 		if (pavimento != null && !pavimento.equals("")) {
 			osNaBase.setAreaPavimento(Util.formatarMoedaRealparaBigDecimal(pavimento));
 		} else {
 			osNaBase.setAreaPavimento(null);
 		}
-		// pesquisa os parametros tabela serviço tipo
+
 		Short indAtualizarComercial = null;
 		Short indIncluirDebito = null;
 		Integer idDebitoTipo = null;
 		Object[] parmsServTipo = null;
 		Integer idImovel = null;
 		BigDecimal valorServico = null;
+		
 		try {
 			parmsServTipo = repositorioOrdemServico.recuperarParametrosServicoTipo(numeroOS);
 		} catch (ErroRepositorioException e) {
@@ -3281,34 +3238,15 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		osNaBase.setUltimaAlteracao(new Date());
 		if (integracaoComercialHelper != null && integracaoComercialHelper.getOrdemServico() != null) {
 			integracaoComercialHelper.getOrdemServico().setUltimaAlteracao(new Date());
-
-			// ******************************************************************
-			// Alterado por: Ivan Sergio
-			// Data: 12/02/2009
-			// CRC1222 - Seta a data de encerramento que sera utilizada no
-			// efetuar
-			// instalacao de hidrometro
-			// ******************************************************************
 			integracaoComercialHelper.getOrdemServico().setDataEncerramento(dataEncerramento);
-			// ******************************************************************
 		}
 
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ORDEM_SERVICO_ENCERRAR, osNaBase.getId(), osNaBase.getId(),
 				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
 		registradorOperacao.registrarOperacao(osNaBase);
-		// ------------ REGISTRAR TRANSAÇÃO---------------------------
 
 		getControladorUtil().atualizar(osNaBase);
 
-		// Alterado por Yara Taciane - 29/05/08, por conta do [UC457 - Encerrar
-		// Ordem de Serviço]
-		// 4.2. Caso o indicador de conserto do pavimento de RUA esteja indicado
-		// como sim, sistema deverá inserir
-		// a tabela ORDEM_SERVICO_PAVIMENTO, com ORSE_ID da tabela que está
-		// sendo encerrada.
-		// Analista: Fabíola Araújo.
 		if (osNaBase != null && osNaBase.getServicoTipo() != null && osNaBase.getServicoTipo().getId() != null) {
 
 			FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
@@ -3331,90 +3269,48 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			verificarSituacaoFaturamento(usuarioLogado, osNaBase);
 		}
 
-		// Alterado por Francisco - 22/05/08, por conta do [UC478 - Gerar Resumo
-		// de Ações de cobrança]
-		// O encerramento da OS atualiza o documento de cobranca correspondente
-		// Analista: Ana Breda
 		getControladorCobranca().atualizarCobrancaDocumentoAposEncerrarOS(osNaBase);
 
-		// inseri a tabela ordem serviço unidade
 		OrdemServicoUnidade ordemServicoUnidade = new OrdemServicoUnidade();
-		// id do usuário logado
+
 		if (usuarioLogado.getId() != null && !usuarioLogado.getId().equals("")) {
-			// unidade do usuário que está logado
 			if (usuarioLogado.getUnidadeOrganizacional() != null && !usuarioLogado.getUnidadeOrganizacional().equals("")
 					&& usuarioLogado.getUnidadeOrganizacional().getId() != null && !usuarioLogado.getUnidadeOrganizacional().getId().equals("")) {
 				UnidadeOrganizacional unidadeOrganizacional = new UnidadeOrganizacional();
 				unidadeOrganizacional.setId(usuarioLogado.getUnidadeOrganizacional().getId());
-				// seta a unidade organizacional na ordem serviço unidade
 				ordemServicoUnidade.setUnidadeOrganizacional(unidadeOrganizacional);
 			}
-			// seta o usuário na ordem serviço unidade
-			ordemServicoUnidade.setUsuario(usuarioLogado);
 
+			ordemServicoUnidade.setUsuario(usuarioLogado);
 		}
-		// inseri as ordem de serviço na ordem serviço unidade
+
 		if (numeroOS != null && !numeroOS.equals("")) {
 			OrdemServico ordemServico = new OrdemServico();
 			ordemServico.setId(numeroOS);
 			ordemServicoUnidade.setOrdemServico(ordemServico);
 		}
-		// seta o id do atendimento relação tipo
+
 		AtendimentoRelacaoTipo atendimentoRelacaoTipo = new AtendimentoRelacaoTipo();
 		atendimentoRelacaoTipo.setId(AtendimentoRelacaoTipo.ENCERRAR);
 		ordemServicoUnidade.setAtendimentoRelacaoTipo(atendimentoRelacaoTipo);
-
-		// seta a ultima alteração com a data atual
 		ordemServicoUnidade.setUltimaAlteracao(new Date());
 
-		// inseri a ordem de serviço unidade
 		getControladorUtil().inserir(ordemServicoUnidade);
 
-		// Verifica se a data de encerramento vinda como parametro do método
-		// é diferente de nulo
 		if (dataEncerramento != null && !dataEncerramento.equals("")) {
-			// [SB0004] - Verificar/Excluir/Atualizar Programação da Ordem
-			// de Serviço
 			verificarExcluirAtualizarProgramacaoOS(numeroOS, dataEncerramento);
 		}
 
-		// caso exista a ordem de serviço fiscalização então gera a os
-		// Fiscalização
-		// Comentado por Raphael Rossiter em 28/02/2007
-		/*
-		 * if (osFiscalizacao != null && !osFiscalizacao.equals("")) { // seta a
-		 * situação para 2 pois já foi atualizado como encerrado na // base essa
-		 * os osFiscalizacao.getOsReferencia().setSituacao(new Short("2"));
-		 * gerarOrdemServico(osFiscalizacao, usuarioLogado); }
-		 */
-
 		if (osFiscalizacao != null && osFiscalizacao.getOsReferencia() != null) {
-			// seta a situação para 2 pois já foi atualizado como encerrado na
-			// base essa os
 			osFiscalizacao.getOsReferencia().setSituacao(new Short("2"));
 			gerarOrdemServico(osFiscalizacao, usuarioLogado, null);
 		}
 
-		// RM93 - adicionado por Vivianne Sousa 30/01/2011 - analista:Rosana
-		// Carvalho
 		if (ordemServicoBoletim != null) {
 			getControladorUtil().inserir(ordemServicoBoletim);
 		}
 
-		/*
-		 * Colocado por Raphael Rossiter em 27/04/2007
-		 * 
-		 * Caso o serviço associado à ordem de serviço tenha indicativo que é
-		 * para gerar débito a cobrar automaticamente.
-		 * 
-		 * Serviço associado não atualiza o sistema comercial
-		 * 
-		 * Valor do serviço maior que zero
-		 * 
-		 * Tipo do débito diferente de zero
-		 */
 		if (indIncluirDebito != null && indAtualizarComercial != null) {
-
 			if (indIncluirDebito.shortValue() == ConstantesSistema.SIM.shortValue()
 					&& indAtualizarComercial.shortValue() == ServicoTipo.INDICADOR_ATUALIZA_COMERCIAL_NAO
 					&& (idDebitoTipo != null && idDebitoTipo.intValue() != ConstantesSistema.ZERO.intValue())) {
@@ -3423,7 +3319,6 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 				if (valorServico.compareTo(new BigDecimal("0.00")) == 0) {
 
-					// Metodo que verifica o tipo de medição
 					boolean hidrometroExistente = false;
 					try {
 						hidrometroExistente = repositorioMicromedicao.verificaExistenciaHidrometro(idImovel);
@@ -3438,40 +3333,33 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						valorServico = getControladorAtendimentoPublico().obterValorDebito(idServicoTipo, idImovel, new Short("2"));
 					}
 				}
-				// Alterado por Rafael Corrêa 05/11/2008
-				FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-				filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.DEBITO_TIPO_ID, idDebitoTipo));
-				filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.EMISSAO_GUIA_PAGAMENTO, osNaBase.getDataGeracao()));
-				filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.IMOVEL_ID, idImovel));
 
-				Collection<GuiaPagamento> colecaoGuiasPagamento = getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
-
-				if (colecaoGuiasPagamento == null || colecaoGuiasPagamento.isEmpty()) {
-					// [UC0475] - Gerar Débito Ordem de Serviço
-					if (valorServico.compareTo(BigDecimal.ZERO) == 1) {
-						this.gerarDebitoOrdemServico(numeroOS, idDebitoTipo, valorServico, 1, "100", usuarioLogado);
+				if (idImovel != null && idDebitoTipo != null && osNaBase.getDataGeracao() != null) {
+					FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.DEBITO_TIPO_ID, idDebitoTipo));
+					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.EMISSAO_GUIA_PAGAMENTO, osNaBase.getDataGeracao()));
+					filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.IMOVEL_ID, idImovel));
+					
+					Collection<GuiaPagamento> colecaoGuiasPagamento = getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
+					
+					if (colecaoGuiasPagamento == null || colecaoGuiasPagamento.isEmpty()) {
+						if (valorServico.compareTo(BigDecimal.ZERO) == 1) {
+							this.gerarDebitoOrdemServico(numeroOS, idDebitoTipo, valorServico, 1, "100", usuarioLogado);
+						}
 					}
 				}
+
 			}
 		}
 
-		/*
-		 * INTEGRAÇÃO COMERCIAL
-		 * 
-		 * Autor: Raphael Rossiter Data: 25/04/2007
-		 */
 		if (tipoServicoOSId != null) {
 			int idServicoTipoInt = Util.converterStringParaInteger(tipoServicoOSId);
-
-			this.integracaoComercial(idServicoTipoInt, integracaoComercialHelper, usuarioLogado);
+			integracaoComercial(idServicoTipoInt, integracaoComercialHelper, usuarioLogado);
 		}
 
-		// RM777 - adicionado por Vivianne Sousa 03/06/2011 - analista:Claudio
-		// Lira
 		if (indicadorServicoAceito != null && indicadorServicoAceito.equals(ConstantesSistema.NAO)) {
 			rejeitarOrdemServico(numeroOS, usuarioLogado);
 		}
-
 	}
 
 	private void rejeitarOrdemServico(Integer numeroOS, Usuario usuarioLogado) throws ControladorException {
@@ -3501,7 +3389,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		}
 	}
 
-	private void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException {
+	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException {
 		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
 
 		filtroServicoTipo.adicionarParametro(new ParametroSimples(FiltroServicoTipo.INDICADOR_PERMITE_ALTERACAO_IMOVEL_EM_CAMPO, ConstantesSistema.NAO));

@@ -107,14 +107,11 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
-/**
- * Controlador Financeiro PADRÃO
- * 
- * @author Raphael Rossiter
- * @date 26/06/2007
- */
 public class ControladorFinanceiro implements SessionBean {
+	
+	private static Logger logger = Logger.getLogger(ControladorFinanceiro.class);
 	
 	protected static final long serialVersionUID = 1L;
 	SessionContext sessionContext;
@@ -124,12 +121,6 @@ public class ControladorFinanceiro implements SessionBean {
 	protected IRepositorioFaturamento repositorioFaturamento = null;
 	protected IRepositorioArrecadacao repositorioArrecadacao = null;
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
 
 		repositorioFinanceiro = RepositorioFinanceiroHBM.getInstancia();
@@ -139,44 +130,22 @@ public class ControladorFinanceiro implements SessionBean {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
-	/**
-	 * Retorna o valor de controladorArrecadacao
-	 * 
-	 * @return O valor de controladorCliente
-	 */
 	protected ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -185,8 +154,6 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorArrecadacaoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -197,17 +164,10 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -216,8 +176,6 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorUtilLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -226,20 +184,12 @@ public class ControladorFinanceiro implements SessionBean {
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 	
-    /**
-     * Retorna o valor de controladorEndereco
-     * 
-     * @return O valor de controladorEndereco
-     */
     private ControladorEnderecoLocal getControladorEndereco() {
 
         ControladorEnderecoLocalHome localHome = null;
         ControladorEnderecoLocal local = null;
-
-        // pega a instância do ServiceLocator.
 
         ServiceLocator locator = null;
 
@@ -248,8 +198,6 @@ public class ControladorFinanceiro implements SessionBean {
 
             localHome = (ControladorEnderecoLocalHome) locator
                     .getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-            // guarda a referencia de um objeto capaz de fazer chamadas à
-            // objetos remotamente
             local = localHome.create();
 
             return local;
@@ -264,8 +212,6 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -273,8 +219,6 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorFaturamentoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -285,13 +229,6 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -312,11 +249,6 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	protected ControladorLocalidadeLocal getControladorLocalidade() {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
@@ -341,11 +273,6 @@ public class ControladorFinanceiro implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
 	protected ControladorImovelLocal getControladorImovel() {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
@@ -375,8 +302,6 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorBatchLocalHome localHome = null;
 		ControladorBatchLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -384,8 +309,6 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorBatchLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -408,6 +331,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void gerarLancamentosContabeisFaturamento(
 		Integer anoMesReferenciaFaturamento, 
 		Integer idLocalidade, 
@@ -587,6 +511,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void inserirLancamentoContabilItemFaturamento(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -5192,6 +5117,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param indicadorCreditoDebito
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItems(LancamentoContabil lancamentoContabil, 
 			Collection<AcumularValoresHelper> colecaoAcumularValoresPorLancamentoItemContabil, 
 			Short indicadorDebitoCredito) throws ControladorException {
@@ -5250,6 +5176,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param indicadorDebitoCredito
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItemsCategorias(LancamentoContabil lancamentoContabil, 
 			Short numeroRazao, Integer numeroConta, Collection<AcumularValoresHelper> 
 			colecaoAcumularValoresPorLancamentoItemContabilCategoria, 
@@ -5339,6 +5266,7 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	
+	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemAcumulandoItemEspecifico(LancamentoContabil lancamentoContabil, 
 			Short numeroRazao, Integer numeroConta, Collection<AcumularValoresHelper> 
 			colecaoAcumularValoresPorLancamentoItemContabil, LancamentoItem lancamentoItem, 
@@ -5424,6 +5352,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param anoMesArrecadacao
 	 * @throws ControladorException 
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void gerarLancamentoContabeisArrecadacao(Integer anoMesReferenciaArrecadacao, Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 		
 		
@@ -5595,6 +5524,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection pesquisarGerarIntegracaoContabilidade(String idLancamentoOrigem, String anoMes) throws ControladorException{
 		
 		Collection colecaoObjetoGerar = null;
@@ -5711,6 +5641,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param data
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("unchecked")
 	public void gerarIntegracaoContabilidade(
 			String idLancamentoOrigem, String anoMes, String data) throws ControladorException {
 	       
@@ -5969,6 +5900,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void apagarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada)	throws ControladorException {
 		
 		System.out.println("Localidade " + idLocalidade);
@@ -6043,6 +5975,7 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */		
+@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada)	throws ControladorException {
 		
 		int idUnidadeIniciada = 0;
@@ -6255,6 +6188,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Collection<GerarResumoDevedoresDuvidososHelper> acumularResumoDevedoresDuvidosos(int anoMesReferenciaContabil, 
 			Integer idLocalidade, Integer idQuadra, Integer idParametrosDevedoresDuvidosos)	throws ControladorException {
 	    
@@ -6632,6 +6566,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void inserirLancamentoContabilItemArrecadacao(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -6953,6 +6888,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		 * @param data
 		 * @throws ControladorException
 		 */
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public void gerarIntegracaoContabilidadeCaern(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
 			
 			/*
@@ -6977,7 +6913,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			 */
 			Collection<Object[]> colecaoDadosGerarIntegracao = null;
 
-			colecaoDadosGerarIntegracao = this.pesquisarGerarIntegracaoContabilidade/*Caern*/(idLancamentoOrigem, anoMes);
+			colecaoDadosGerarIntegracao = this.pesquisarGerarIntegracaoContabilidade(idLancamentoOrigem, anoMes);
 			
 			/** definição das variáveis */
 			StringBuilder gerarIntegracaoTxt = new StringBuilder();
@@ -7173,94 +7109,70 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @param idLocalidade
      * @throws ControladorException
      */
-    public void gerarContasAReceberContabil(Integer idLocalidade,
-            int idFuncionalidadeIniciada) throws ControladorException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void gerarContasAReceberContabil(Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 
-        System.out.println("LOCALIDADE " + idLocalidade);
-        int idUnidadeIniciada = 0;
+    	logger.info("LOCALIDADE " + idLocalidade);
 
-        // -------------------------
-        //
-        // Registrar o início do processamento da Unidade de
-        // Processamento
-        // do Batch
-        //
-        // -------------------------
-        idUnidadeIniciada = getControladorBatch()
-                .iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-                        UnidadeProcessamento.LOCALIDADE, idLocalidade);
+    	int idUnidadeIniciada = 0;
 
-        try {
-        
-        	SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
-        	if (!sistemaParametro.getAnoMesArrecadacao().equals(sistemaParametro.getAnoMesFaturamento())) {
-            	throw new ControladorException("atencao.arrecadacao_ou_faturamento_nao_encerrados");
-        	}
+		try {
 
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-            int anoMesAnteriorFaturamento = Util.subtrairMesDoAnoMes(sistemaParametro.getAnoMesFaturamento(), 1);
-            int anoMesArrecadacao = sistemaParametro.getAnoMesArrecadacao(); 
-            	
-            Collection colecaoContasAReceberContabil = new ArrayList();
+			if (!sistemaParametro.getAnoMesArrecadacao().equals(sistemaParametro.getAnoMesFaturamento())) {
+				throw new ControladorException("atencao.arrecadacao_ou_faturamento_nao_encerrados");
+			}
 
-            // item 2
-            // exclui os dados do saldo de contas a receber contábil do mês de
-            // referência do faturamento já encerrado
-            repositorioFinanceiro.removerContasAReceberContabil(anoMesAnteriorFaturamento, idLocalidade);
+			int anoMesAnteriorFaturamento = Util.subtrairMesDoAnoMes(sistemaParametro.getAnoMesFaturamento(), 1);
+			int anoMesArrecadacao = sistemaParametro.getAnoMesArrecadacao();
 
-            // Valores de Água e Esgoto
-            adicionarContaAReceberContabilAguaEsgotoImpostos(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			Collection colecaoContasAReceberContabil = new ArrayList();
 
-            // Débitos Cobrados
-            adicionarContaAReceberContabilDebitosCobrados(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// exclui os dados do saldo de contas a receber contábil do mês de referência do faturamento já encerrado
+			repositorioFinanceiro.removerContasAReceberContabil(anoMesAnteriorFaturamento, idLocalidade);
 
-            // Guias de Pagamento
-            adicionarContaAReceberContabilGuiasPagamento(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Valores de Água e Esgoto
+			adicionarContaAReceberContabilAguaEsgotoImpostos(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Créditos Realizados
-            adicionarContaAReceberContabilCreditosRealizados(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Débitos Cobrados
+			adicionarContaAReceberContabilDebitosCobrados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Débitos a Cobrar
-            adicionarContaAReceberContabilDebitosACobrar(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Guias de Pagamento
+			adicionarContaAReceberContabilGuiasPagamento(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            // Créditos a Realizar
-            adicionarContaAReceberContabilCreditosARealizar(idLocalidade,
-                    anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
+			// Créditos Realizados
+			adicionarContaAReceberContabilCreditosRealizados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            //adicionado por Vivianne Sousa 14/08/2009 - Aryed Lins
-            adicionarContaAReceberContabilValoresContabilizadosComoPerdas(
-                    idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
-            
-            //adicionado por Vivianne Sousa 17/08/2009 - Aryed Lins
-            adicionarContaAReceberContabilRecebimentosNaoIdentificados(
-                    idLocalidade, anoMesAnteriorFaturamento,
-                    anoMesArrecadacao, colecaoContasAReceberContabil);
+			// Débitos a Cobrar
+			adicionarContaAReceberContabilDebitosACobrar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            if (colecaoContasAReceberContabil != null
-                    && !colecaoContasAReceberContabil.isEmpty()) {
-                getControladorBatch().inserirColecaoObjetoParaBatch(
-                        colecaoContasAReceberContabil);
-            }
+			// Créditos a Realizar
+			adicionarContaAReceberContabilCreditosARealizar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-                    idUnidadeIniciada, false);
+			// adicionado por Vivianne Sousa 14/08/2009 - Aryed Lins
+			adicionarContaAReceberContabilValoresContabilizadosComoPerdas(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-            System.out
-                    .println("fim da geração " + "Localidade " + idLocalidade);
+			// adicionado por Vivianne Sousa 17/08/2009 - Aryed Lins
+			adicionarContaAReceberContabilRecebimentosNaoIdentificados(idLocalidade, anoMesAnteriorFaturamento, anoMesArrecadacao,
+					colecaoContasAReceberContabil);
 
-        } catch (Exception e) {
+			if (colecaoContasAReceberContabil != null && !colecaoContasAReceberContabil.isEmpty()) {
+				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoContasAReceberContabil);
+			}
 
-            getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-                    idUnidadeIniciada, true);
-            throw new EJBException(e);
-        }
-    }
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+			System.out.println("fim da geração " + "Localidade " + idLocalidade);
+
+		} catch (Exception e) {
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+	}
 
     /**
      * [UC0714] Gerar Contas a Receber Contábil
@@ -7347,7 +7259,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilAguaEsgotoImpostos(Integer idLocalidade,
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void adicionarContaAReceberContabilAguaEsgotoImpostos(Integer idLocalidade,
             int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7471,7 +7384,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @date 08/11/2007
 	 * 
 	 */
-    private void adicionarContaAReceberContabilDebitosCobrados(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilDebitosCobrados(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7575,7 +7489,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilGuiasPagamento(
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void adicionarContaAReceberContabilGuiasPagamento(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -7674,334 +7589,104 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * [UC0714] Gerar Contas a Receber Contábil
      *
      * Adiciona os dados de créditos realizados
-     *
-     * @author Rafael Corrêa
-     * @date 08/11/2007
-     *
      */
-    private void adicionarContaAReceberContabilCreditosRealizados(
-            Integer idLocalidade, int anoMesAnteriorFaturamento,
-            Collection colecaoContasAReceberContabil)
-            throws ErroRepositorioException {
-
-        // Pagamento em duplicidade ou excesso
-        Collection colecaoDadosCreditosRealizadosPagamentoExcesso = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosPagamentoExcesso != null
-                && !colecaoDadosCreditosRealizadosPagamentoExcesso.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosPagamentoExcessoIterator = colecaoDadosCreditosRealizadosPagamentoExcesso
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosPagamentoExcessoIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosPagamentoExcesso = (Object[]) colecaoDadosCreditosRealizadosPagamentoExcessoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosPagamentoExcesso[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosPagamentoExcesso[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
-                            50, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosPagamentoExcesso = null;
-
-        }
-
-        // Descontos concedidos no parcelamento
-        Collection colecaoDadosCreditosRealizadosDescontoParcelamento = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
-                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
-
-        if (colecaoDadosCreditosRealizadosDescontoParcelamento != null
-                && !colecaoDadosCreditosRealizadosDescontoParcelamento
-                        .isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = colecaoDadosCreditosRealizadosDescontoParcelamento
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoParcelamentoIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoParcelamento = (Object[]) colecaoDadosCreditosRealizadosDescontoParcelamentoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento,
-                            idGerenciaRegionalConta,
-                            idUnidadeNegocioConta,
-                            idLocalidadeConta,
-                            idCategoriaConta,
-                            valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            100,
-                            LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-                            60, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoParcelamento = null;
-
-        }
-        
-     // Descontos concedidos no parcelamento
-        Collection creditosDescontoParcelamentoFaixaConta = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(
-                        anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA);
-        System.out.println("------> " + creditosDescontoParcelamentoFaixaConta.size());
-        if (creditosDescontoParcelamentoFaixaConta != null && !creditosDescontoParcelamentoFaixaConta.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoParcelamentoIterator = creditosDescontoParcelamentoFaixaConta.iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoParcelamento = (Object[]) colecaoDadosCreditosRealizadosDescontoParcelamentoIterator.next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoParcelamento[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoParcelamento[4];
-                System.out.println("Valor: " + valorCategoria);
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento,
-                            idGerenciaRegionalConta,
-                            idUnidadeNegocioConta,
-                            idLocalidadeConta,
-                            idCategoriaConta,
-                            valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            100,
-                            LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
-                            65, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            creditosDescontoParcelamentoFaixaConta = null;
-
-        }
-
-        // Descontos condicionais
-        Collection colecaoDadosCreditosRealizadosDescontoCondicional = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDescontoCondicional != null
-                && !colecaoDadosCreditosRealizadosDescontoCondicional.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoCondicionalIterator = colecaoDadosCreditosRealizadosDescontoCondicional
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoCondicionalIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoCondicional = (Object[]) colecaoDadosCreditosRealizadosDescontoCondicionalIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoCondicional[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoCondicional[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoCondicional[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoCondicional[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoCondicional[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.DESCONTOS_CONDICIONAIS, 70, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoCondicional = null;
-
-        }
-
-        // Descontos incondicionais
-        Collection colecaoDadosCreditosRealizadosDescontoIncondicional = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDescontoIncondicional != null
-                && !colecaoDadosCreditosRealizadosDescontoIncondicional
-                        .isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDescontoIncondicionalIterator = colecaoDadosCreditosRealizadosDescontoIncondicional
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDescontoIncondicionalIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosDescontoIncondicional = (Object[]) colecaoDadosCreditosRealizadosDescontoIncondicionalIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDescontoIncondicional[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDescontoIncondicional[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 80, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDescontoIncondicional = null;
-
-        }
-
-        // Ajustes para Zerar a Conta
-        Collection colecaoDadosCreditosRealizadosAjusteZerarConta = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosAjusteZerarConta != null
-                && !colecaoDadosCreditosRealizadosAjusteZerarConta.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosAjusteZerarContaIterator = colecaoDadosCreditosRealizadosAjusteZerarConta
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosAjusteZerarContaIterator
-                    .hasNext()) {
-
-                Object[] dadosCreditosRealizadosAjusteZerarConta = (Object[]) colecaoDadosCreditosRealizadosAjusteZerarContaIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosAjusteZerarConta[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosAjusteZerarConta[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosAjusteZerarConta = null;
-
-        }
-
-        // Devoluções
-        Collection colecaoDadosCreditosRealizadosDevolucao = repositorioFinanceiro
-                .pesquisarDadosCreditosRealizadosCategoriaDevolucao(
-                        anoMesAnteriorFaturamento, idLocalidade);
-
-        if (colecaoDadosCreditosRealizadosDevolucao != null
-                && !colecaoDadosCreditosRealizadosDevolucao.isEmpty()) {
-
-            Iterator colecaoDadosCreditosRealizadosDevolucaoIterator = colecaoDadosCreditosRealizadosDevolucao
-                    .iterator();
-
-            while (colecaoDadosCreditosRealizadosDevolucaoIterator.hasNext()) {
-
-                Object[] dadosCreditosRealizadosDevolucao = (Object[]) colecaoDadosCreditosRealizadosDevolucaoIterator
-                        .next();
-
-                Integer idGerenciaRegionalConta = (Integer) dadosCreditosRealizadosDevolucao[0];
-                Integer idUnidadeNegocioConta = (Integer) dadosCreditosRealizadosDevolucao[1];
-                Integer idLocalidadeConta = (Integer) dadosCreditosRealizadosDevolucao[2];
-                Integer idCategoriaConta = (Integer) dadosCreditosRealizadosDevolucao[3];
-
-                BigDecimal valorCategoria = (BigDecimal) dadosCreditosRealizadosDevolucao[4];
-
-                if (valorCategoria != null
-                        && valorCategoria.compareTo(new BigDecimal("0.00")) > 0) {
-
-                    // Cria o objeto com os valores passados
-                    ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
-                            anoMesAnteriorFaturamento, idGerenciaRegionalConta,
-                            idUnidadeNegocioConta, idLocalidadeConta,
-                            idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
-                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95, null);
-
-                    colecaoContasAReceberContabil.add(contaAReceberContabil);
-                }
-
-            }
-
-            colecaoDadosCreditosRealizadosDevolucao = null;
-
-        }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void adicionarContaAReceberContabilCreditosRealizados(Integer idLocalidade, int anoMesAnteriorFaturamento, Collection colecaoContasAReceberContabil) throws ErroRepositorioException {
+    	// Pagamento em duplicidade ou excesso
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO, 50);
+
+		// Descontos concedidos no parcelamento
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, 60);
+		
+		// Descontos concedidos no parcelamento Faixa Conta
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA, 65);
+
+		// Descontos condicionais
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CONDICIONAIS, 70);
+
+		// Descontos incondicionais
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_INCONDICIONAIS, 80);
+
+		// Ajustes para Zerar a Conta
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90);
+
+		// Devoluções
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDevolucao(anoMesAnteriorFaturamento, idLocalidade), 
+				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95);
+		
+		// Descontos concedidos no parcelamento Creditos Anteriores Curto e Long Prazo
+		Collection colecaoCurtoELongo = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
+		colecaoCurtoELongo.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO));
+		
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoCurtoELongo, anoMesAnteriorFaturamento, 
+				LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES, 100);
+		
+		// Descontos concedidos na Recuperacao de crédito 
+		Collection colecaoRecuperacao = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+		colecaoRecuperacao.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA));
+		
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoRecuperacao, anoMesAnteriorFaturamento, 
+					LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.RECUPERACAO_CREDITO, 99);
+	}
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void distribuirCreditosRelizadosContaAReceberContabil(
+    		Collection colecaoContasAReceberContabil,
+    		Collection colecaoDados,
+    		int anoMesAnteriorFaturamento,
+            Integer idLancamentoTipo, 
+            int sequenciaLancamentoTipo,
+            Integer idLancamentoItem, 
+            int sequenciaLancamentoItem) {
+    	
+    	if (colecaoDados != null && !colecaoDados.isEmpty()) {
+			Iterator iterator = colecaoDados.iterator();
+
+			while (iterator.hasNext()) {
+				Object[] dados = (Object[]) iterator.next();
+				Integer idGerenciaRegional = (Integer) dados[0];
+				Integer idUnidadeNegocio = (Integer) dados[1];
+				Integer idLocalidade = (Integer) dados[2];
+				Integer idCategoria = (Integer) dados[3];
+				BigDecimal valor = (BigDecimal) dados[4];
+
+				if (valor != null && valor.doubleValue() > 0) {
+					ContaAReceberContabil contaAReceberContabil = criarContaAReceberContabil(
+							anoMesAnteriorFaturamento, 
+							idGerenciaRegional, 
+							idUnidadeNegocio, 
+							idLocalidade, 
+							idCategoria, 
+							valor.multiply(new BigDecimal("-1")), 
+							idLancamentoTipo, 
+							sequenciaLancamentoTipo, 
+							idLancamentoItem, 
+							sequenciaLancamentoItem, 
+							null);
+
+					colecaoContasAReceberContabil.add(contaAReceberContabil);
+				}
+			}
+		}
     }
-
+    
     /**
      * [UC0714] Gerar Contas a Receber Contábil
      *
@@ -8011,7 +7696,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007
      *
      */
-    private void adicionarContaAReceberContabilDebitosACobrar(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilDebitosACobrar(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
@@ -8538,80 +8224,128 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @date 08/11/2007, 30/12/2010
      *
      */
-    private void adicionarContaAReceberContabilCreditosARealizar(
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void adicionarContaAReceberContabilCreditosARealizar(
             Integer idLocalidade, int anoMesAnteriorFaturamento,
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
 
-    	Collection contasCreditosARealizarDescontoParcelamento = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-				LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-				500, 70, 600, 60);
-
-    	if (contasCreditosARealizarDescontoParcelamento != null && !contasCreditosARealizarDescontoParcelamento.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasCreditosARealizarDescontoParcelamento);
-		}
+    	Collection contasDescontoParcelamento = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+    			CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+    			LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+    			500, 70, 600, 60);
     	
-        //DESCONTOS INCONDICIONAIS
-		Collection contasContabeisDescontosIncondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.DESCONTOS_INCONDICIONAIS, 
-				400,LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null); 
-				//obterContaContabilCreditoARealizarDescontosIncondicionais(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisDescontosIncondicionais != null && !contasContabeisDescontosIncondicionais.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisDescontosIncondicionais);
-		}
-		
-		//CONTAS PAGAS EM DUPLICIDADE EXCESSO
-		Collection contasContabeisContasDuplicidade = obterContaContabilCreditoARealizarDuplicidade(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisContasDuplicidade != null && !contasContabeisContasDuplicidade.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisContasDuplicidade);
-		}
-		
-		
-		//DESCONTOS CONDICIONAIS
-		Collection contasContabeisDescontosCondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE, 
-				400,LancamentoItem.DESCONTOS_CONDICIONAIS, 35, null);
-		//obterContaContabilCreditoARealizarDescontosCondicionais(idLocalidade, anoMesAnteriorFaturamento);
-		
-		
-		if (contasContabeisDescontosCondicionais != null && !contasContabeisDescontosCondicionais.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisDescontosCondicionais);
-		}
-		
-		//AJUSTES PARA ZERAR CONTA
-		Collection contasContabeisAjustesParaZerarConta = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
-				CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, 
-				400, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
-		//obterContaContabilCreditoARealizarAjustesParaZerarConta(idLocalidade, anoMesAnteriorFaturamento);
-		
-		if (contasContabeisAjustesParaZerarConta != null && !contasContabeisAjustesParaZerarConta.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisAjustesParaZerarConta);
-		}
-		
-		// RECUPERACAO DE CRÉDITO 
-		Collection contasContabeisRecuperacoCredito = obterContaContabilCreditoARealizarRecperacaoCredito(anoMesAnteriorFaturamento, idLocalidade);
-		
-		if (contasContabeisRecuperacoCredito != null && !contasContabeisRecuperacoCredito.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasContabeisRecuperacoCredito);
-		}
-		
-		//PARCELAMENTO CONTA FAIXA
-		Collection contasCreditosARealizarDescontoParcelamentoFaixaConta = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+    	if (contasDescontoParcelamento != null && !contasDescontoParcelamento.isEmpty()) {
+    		colecaoContasAReceberContabil.addAll(contasDescontoParcelamento);
+    	}
+    	
+		Collection contasDescontoParcelamentoFaixaConta = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
 				CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
 				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA,
 				700, 10, 800, 20);
 
-    	if (contasCreditosARealizarDescontoParcelamentoFaixaConta != null && !contasCreditosARealizarDescontoParcelamentoFaixaConta.isEmpty()) {
-			colecaoContasAReceberContabil.addAll(contasCreditosARealizarDescontoParcelamentoFaixaConta);
+    	if (contasDescontoParcelamentoFaixaConta != null && !contasDescontoParcelamentoFaixaConta.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoParcelamentoFaixaConta);
 		}
 
+    	Collection contasDescontoCreditosAnterioresCurtoPrazo = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO,
+				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_CURTO_PRAZO,
+				900, 10,1000, 20);
+
+    	if (contasDescontoCreditosAnterioresCurtoPrazo != null && !contasDescontoCreditosAnterioresCurtoPrazo.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoCreditosAnterioresCurtoPrazo);
+		}
+
+    	Collection contasDescontoCreditosAnterioresLongoPrazo = obterContaContabilCreditoARealizarCurtoELongoPrazo(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO,
+				LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_CREDITOS_ANTERIORES_LONGO_PRAZO,
+				1100, 10,1200, 20);
+
+    	if (contasDescontoCreditosAnterioresLongoPrazo != null && !contasDescontoCreditosAnterioresLongoPrazo.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontoCreditosAnterioresLongoPrazo);
+		}
+    	
+    	//CONTAS PAGAS EM DUPLICIDADE EXCESSO
+    	Collection contasDuplicidade = obterContaContabilCreditoARealizarDuplicidade(idLocalidade, anoMesAnteriorFaturamento);
+    	
+    	if (contasDuplicidade != null && !contasDuplicidade.isEmpty()) {
+    		colecaoContasAReceberContabil.addAll(contasDuplicidade);
+    	}
+    	    	
+        //DESCONTOS INCONDICIONAIS
+		Collection contasDescontosIncondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.DESCONTOS_INCONDICIONAIS, 
+				400,LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null); 
+		
+		if (contasDescontosIncondicionais != null && !contasDescontosIncondicionais.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontosIncondicionais);
+		}
+		
+		//DESCONTOS CONDICIONAIS
+		Collection contasDescontosCondicionais = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE, 
+				400,LancamentoItem.DESCONTOS_CONDICIONAIS, 35, null);
+		
+		if (contasDescontosCondicionais != null && !contasDescontosCondicionais.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasDescontosCondicionais);
+		}
+		
+		//AJUSTES PARA ZERAR CONTA
+		Collection contasAjustesParaZerarConta = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+				CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, 
+				400, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
+		
+		if (contasAjustesParaZerarConta != null && !contasAjustesParaZerarConta.isEmpty()) {
+			colecaoContasAReceberContabil.addAll(contasAjustesParaZerarConta);
+		}
+		
+    	Collection contasDevolucaoJuros = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+    	        CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO, 
+    	        400, LancamentoItem.DEVOLUCAO_JUROS_PARCELAMENTO, 80, null);
+    	    
+	    if (contasDevolucaoJuros != null && !contasDevolucaoJuros.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasDevolucaoJuros);
+	    }
+	    
+	    
+	    Collection contasContabeisDevolucaoAgua = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.DEVOLUCAO_TARIFA_AGUA, 
+	        400, LancamentoItem.DEVOLUCAO_TARIFA_AGUA, 90, null);
+	    
+	    if (contasContabeisDevolucaoAgua != null && !contasContabeisDevolucaoAgua.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoAgua);
+	    }
+	    
+	    
+	    Collection contasContabeisDevolucaoEsgoto = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO, 
+	        400, LancamentoItem.DEVOLUCAO_TARIFA_ESGOTO, 100, null);
+	    
+	    if (contasContabeisDevolucaoEsgoto != null && !contasContabeisDevolucaoEsgoto.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisDevolucaoEsgoto);
+	    }
+	    
+	    
+	    Collection contasContabeisServicosIndiretos = obterContaContabilCreditoARealizar(anoMesAnteriorFaturamento, idLocalidade, 
+	        CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 
+	        400, LancamentoItem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE, 110, null);
+	    
+	    if (contasContabeisServicosIndiretos != null && !contasContabeisServicosIndiretos.isEmpty()) {
+	      colecaoContasAReceberContabil.addAll(contasContabeisServicosIndiretos);
+	    }
+	    
+	    // RECUPERACAO DE CRÉDITO 
+ 		Collection contasRecuperacoCredito = obterContaContabilCreditoARealizarRecperacaoCredito(anoMesAnteriorFaturamento, idLocalidade);
+ 		
+ 		if (contasRecuperacoCredito != null && !contasRecuperacoCredito.isEmpty()) {
+ 			colecaoContasAReceberContabil.addAll(contasRecuperacoCredito);
+ 		}
 		
 	}
 
-    private Collection obterContaContabilCreditoARealizarCurtoELongoPrazo(Integer anoMesAnteriorFaturamento, Integer idLocalidade,
+    @SuppressWarnings("rawtypes")
+	private Collection obterContaContabilCreditoARealizarCurtoELongoPrazo(Integer anoMesAnteriorFaturamento, Integer idLocalidade,
     		Integer idCreditoOrigem, Integer idLancamentoItem, 
     		int sequenciaLancamentoTipoCurtoPrazo, int sequenciaLancamentoItemCurtoPrazo,
             int sequenciaLancamentoTipoLongoPrazo, int sequenciaLancamentoItemLongoPrazo) throws ErroRepositorioException {
@@ -8730,6 +8464,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         return colecaoContas;
 
     }
+    
 	private Collection obterContaContabilCreditoARealizarValoresCobradosIndevidamente(Integer idLocalidade, int anoMesAnteriorFaturamento) throws ErroRepositorioException {
 		
 		Collection contasContabeis = new ArrayList();
@@ -8917,14 +8652,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     	}
     	colecaotemporaria.clear();
     	
-    	colecaotemporaria = obterContaContabilCreditoARealizarPorOrigemCredito(anoMesAnteriorFaturamento, idLocalidade, 
-    			creditoOrigem, sequenciaLancamentoTipo, idLancamentoItem, sequenciaLancamentoItem, idLancamentoItemContabil);
-    	
-    	if (colecaotemporaria != null & !colecaotemporaria.isEmpty()) {
-    		colecaoContasAReceberContabil.addAll(colecaotemporaria);
-    	}
-    	colecaotemporaria.clear();
-    	
     	return colecaoContasAReceberContabil;
     }
     
@@ -8966,6 +8693,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return colecaoContasAReceberContabil;
     }
     
+	@SuppressWarnings("unchecked")
 	private Collection obterContaAReceberContabilResidual(int anoMesAnteriorFaturamento, 
 			Collection<Object[]> colecaoValorResidual, int sequenciaLancamentoTipo,
             Integer idLancamentoItem, int sequenciaLancamentoItem,
@@ -9004,6 +8732,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return colecaoContasAReceberContabil;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection obterContaAReceberContabilCreditoARealizar(int anoMesAnteriorFaturamento,
 			Collection colecaoCreditosARealizar,
 			Collection<Object[]> colecaoCreditosARealizarValorResidual,
@@ -9082,6 +8811,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param idLocalidade
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("unchecked")
 	public void gerarValorVolumesConsumidosNaoFaturados(Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException {
 
 		System.out.println("LOCALIDADE " + idLocalidade);
@@ -9211,6 +8941,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @date 08/11/2007, 08/06/2008
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	private void adicionarValorVolumesConsumidosNaoFaturadosAguaEsgoto(
 			Integer idLocalidade,
 			int anoMesFaturamento,
@@ -9323,6 +9054,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param idFuncionalidadeIniciada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void gerarLancamentosContabeisDevedoresDuvidosos(Integer anoMesReferenciaContabil, Integer idLocalidade, int idFuncionalidadeIniciada) throws ControladorException{
 		
 		
@@ -9489,6 +9221,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @param colecaoDadosResumoPorTipoLancamento
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void inserirLancamentoContabilItemDevedoresDuvidosos(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
@@ -12730,188 +12463,107 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
           
       }
       
-      
-    /**
-     * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
-     *
-     * @author Raphael Rossiter
-     * @date 22/02/2010
-     *
-     * @param anoMesArrecadacao
-     * @param idFuncionalidadeIniciada
-     * @throws ControladorException
-     */
-    public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, 
-    	int idFuncionalidadeIniciada) throws ControladorException {
+	public void gerarLancamentosContabeisAvisosBancarios(Integer anoMesArrecadacao, int idFuncionalidadeIniciada) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-    	int idUnidadeIniciada = 0;
+		try {
 
-    	idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-    	idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
-    	  
-    	try{
-    		  
-    		/*
-    		 * O sistema seleciona, a partir da tabela AVISO_BANCARIO com ano/mês de referência da arrecadação 
-    		 * (AVBC_AMREFERENCIAARRECADACAO) menor ou igual ao ano/mês da arrecadação recebido e com 
-    		 * valor contabilizado (AVBC_VLCONTABILIZADO) diferente do valor realizado (AVBC_VLREALIZADO)  
-    		 * e com valor realizado maior que zero ordenando pelo arrecadador (ARRC_ID) e pela data 
-    		 * de realização (AVBC_DTREALIZADA);
-    		 */
-    		Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(
-    		anoMesArrecadacao);
-    		
-    		
-    		if (colecaoAvisosBancarios != null && !colecaoAvisosBancarios.isEmpty()){
-    			
-    			/*
-    			 * O sistema gera os lançamentos contábeis na tabela LANCAMENTO_CONTABIL para o mês e ano 
-    			 * da arrecadação (LCNB_AMLANCAMENTO) e  origem com o valor correspondente a aviso 
-    			 * bancário (LCOR_ID)
-    			 */
-    			LancamentoContabil lancamentoContabil = 
-    			this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao);
-    			
-    			Iterator iterator = colecaoAvisosBancarios.iterator();
-    			
-    			while (iterator.hasNext()){
-    				
-    				AvisoBancario avisoBancario = (AvisoBancario) iterator.next();
-    				
-    				/*
-    				 * O sistema determina o valor a ser contabilizado, que será o valor realizado 
-    				 * (AVBC_VLREALIZADO) menos o valor contabilizado (AVBC_VLCONTABILIZADO);
-    				 */
-    				BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado()
-    				.subtract(avisoBancario.getValorContabilizado());
-    				
-    				/*
-    				 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com o valor a ser 
-    				 * contabilizado positivo OU
-    				 * 
-    				 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com valor a ser 
-    				 * contabilizado negativo:
-    				 */
-    				if ((avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) &&
-    					valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0) ||
-    					(avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) &&
-            			valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0)){
-    					
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
-    					 * (CNCT_NMCONTA) correspondente a BANCO
-    					 * 
-    					 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID 
-    					 * igual a CTBC_ID da tabela AVISO_BANCARIO)
-    					 */
-    					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
-    					AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(), 
-    					avisoBancario.getContaBancaria().getNumeroContaContabil());
-    					
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
-    					 * (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
-    					 * 
-    					 * CÓDIGO TERCEIRO = NULL
-    					 */
-    					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
-    					AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(), 
-    					null);
-    				}
-    				
-    				/*
-    				 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com o valor a ser 
-    				 * contabilizado positivo OU
-    				 * 
-    				 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com valor a ser 
-    				 * contabilizado negativo
-    				 */
-    				else{
-    					
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
-    					 * (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
-    					 * 
-    					 * CÓDIGO TERCEIRO = NULL
-    					 */
-    					ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
-    					AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(),
-    					null);
-    					
-    					/*
-    					 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta 
-    					 * (CNCT_NMCONTA) correspondente a BANCO
-    					 * 
-    					 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID 
-    					 * igual a CTBC_ID da tabela AVISO_BANCARIO)
-    					 */
-    					ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
-    					
-    					this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, 
-    					AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(), 
-    					avisoBancario.getContaBancaria().getNumeroContaContabil());
-    				}
-    				
-    				
-    				/*
-    				 * O sistema atualiza a tabela AVISO_BANCARIO somando o valor a ser contabilizado 
-    				 * (considerando o sinal) no valor contabilizado (AVBC_VLCONTABILIZADO);
-    				 */
-    				BigDecimal valorContabilizado = avisoBancario.getValorContabilizado()
-    				.add(valorASerContabilizado);
-    				
-    				this.atualizarValorContabilizado(avisoBancario.getId(), valorContabilizado);
-    			}
-    		}
-    		
-    		
-    		//ENCERRANDO A UNIDADE INICIADA
-    		getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
-    	}
-    	catch (Exception ex) {
-
-    		/*
-			 * Este catch serve para interceptar qualquer exceção que o processo batch venha a lançar e 
-			 * garantir que a unidade de processamento do batch será atualizada com o erro ocorrido.
+			/*
+			 * Seleciona, a partir da tabela AVISO_BANCARIO com ano/mês de referência da arrecadação (AVBC_AMREFERENCIAARRECADACAO) menor ou igual ao ano/mês da
+			 * arrecadação recebido e com valor contabilizado (AVBC_VLCONTABILIZADO) diferente do valor realizado (AVBC_VLREALIZADO) e com valor realizado maior
+			 * que zero ordenando pelo arrecadador (ARRC_ID) e pela data de realização (AVBC_DTREALIZADA)
 			 */
+			Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesArrecadacao);
+
+			if (colecaoAvisosBancarios != null && !colecaoAvisosBancarios.isEmpty()) {
+
+				// Gera os lançamentos contábeis na tabela LANCAMENTO_CONTABIL para o mês e ano da arrecadação (LCNB_AMLANCAMENTO) e origem com o valor correspondente a aviso bancário (LCOR_ID)
+				LancamentoContabil lancamentoContabil = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao);
+
+				Iterator iterator = colecaoAvisosBancarios.iterator();
+
+				while (iterator.hasNext()) {
+
+					AvisoBancario avisoBancario = (AvisoBancario) iterator.next();
+
+					BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado().subtract(avisoBancario.getValorContabilizado());
+
+					/*
+					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com o valor a ser contabilizado positivo
+					 * OU
+					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com valor a ser contabilizado negativo:
+					 */
+					if ((avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0)
+							|| (avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0)) {
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela AVISO_BANCARIO)
+						 */
+						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(),
+								avisoBancario.getContaBancaria().getNumeroContaContabil());
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * CÓDIGO TERCEIRO = NULL
+						 */
+						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(),
+								null);
+					}
+
+					/*
+					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com o valor a ser contabilizado positivo
+					 * OU
+					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com valor a ser contabilizado negativo
+					 */
+					else {
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * CÓDIGO TERCEIRO = NULL
+						 */
+						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(), null);
+
+						/*
+						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela  AVISO_BANCARIO)
+						 */
+						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
+
+						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_CREDITO, avisoBancario, contaContabilCredito, valorASerContabilizado.abs(),
+								avisoBancario.getContaBancaria().getNumeroContaContabil());
+					}
+
+					BigDecimal valorContabilizado = avisoBancario.getValorContabilizado().add(valorASerContabilizado);
+					this.atualizarValorContabilizado(avisoBancario.getId(), valorContabilizado);
+				}
+			}
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
-    	}
-    }
-    
-    
-    /**
-     * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários
-     *
-     * @author Raphael Rossiter
-     * @date 22/02/2010
-     *
-     * @param anoMesReferenciaArrecadacao
-     * @return Collection
-     * @throws ControladorException
-     */
-    protected Collection pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) 
+		}
+	}
+
+	protected List<AvisoBancario> pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) 
     	throws ControladorException {
 		
-		Collection retorno = null;
+    	List<AvisoBancario> retorno = null;
 		
 		try {
-			
-			retorno = repositorioFinanceiro.pesquisarAvisosBancariosParaGerarLancamentosContabeis(
-			anoMesReferenciaArrecadacao);
+			retorno = repositorioFinanceiro.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesReferenciaArrecadacao);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
-		
 		return retorno;
 	}
     
@@ -12926,8 +12578,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      * @return LancamentoContabil
      * @throws ControladorException
      */
-    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao) 
-	throws ControladorException {
+    protected LancamentoContabil gerarLancamentoContabilParaAvisoBancario(Integer anoMesReferenciaArrecadacao) throws ControladorException {
     	
     	LancamentoContabil lancamentoContabil = new LancamentoContabil();
     	
@@ -12964,97 +12615,62 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     /**
      * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
-     *
-     * @author Raphael Rossiter
-     * @date 22/02/2010
-     *
-     * @param anoMesReferenciaArrecadacao
-     * @param lancamentoContabil
-     * @param indicadorCreditoDebito
-     * @param avisoBancario
-     * @param contaContabil
-     * @param valorLancamento
-     * @param codigoTerceiro
-     * @return LancamentoContabilItem
-     * @throws ControladorException
      */
-    protected LancamentoContabilItem gerarLancamentoContabilItem(Integer anoMesReferenciaArrecadacao,
-    		LancamentoContabil lancamentoContabil, Short indicadorCreditoDebito,
-    		AvisoBancario avisoBancario, ContaContabil contaContabil, 
-    		BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
-    	
-    	LancamentoContabilItem lancamentoContabilItem = new LancamentoContabilItem();
-    	
-    	//LANCAMENTO CONTABIL
-    	lancamentoContabilItem.setLancamentoContabil(lancamentoContabil);
-    	
-    	//INDICADOR DEBITO/CREDITO = 2
-    	lancamentoContabilItem.setIndicadorDebitoCredito(indicadorCreditoDebito);
-    	
-    	//VALOR DO LANÇAMENTO
-    	lancamentoContabilItem.setValorLancamento(valorLancamento);
-    	
-    	//CONTA CONTABIL
-    	lancamentoContabilItem.setContaContabil(contaContabil);
-    	
-    	/*
-    	 * DESCRIÇÃO HISTÓRICO = Descrição da forma de arrecadação (ARFM_DSARRECADACAOFORMA da tabela ARRECADACAO_FORMA 
-    	 * com ARFM_ID da tabela AVISO_BANCARIO) concatenado com a data de realização do aviso 
-    	 * bancário (AVBC_DTREALIZADA) no formato DD/MM/AAAA e com a data de lançamento do aviso 
-    	 * bancário (AVBC_DTLANCAMENTO) no formato DD/MM/AAAA. Separar os campos com ponto e vírgula.
-    	 */
-    	String descricaoArrecadacaoForma = "";
-    	
-    	if (avisoBancario.getDataRealizada() != null){
-    		
-    		descricaoArrecadacaoForma = descricaoArrecadacaoForma +
-    		Util.formatarData(avisoBancario.getDataRealizada()) + ";";
-    	}
+    protected LancamentoContabilItem gerarLancamentoContabilItem(Integer anoMesReferenciaArrecadacao, LancamentoContabil lancamentoContabil, Short indicadorCreditoDebito,
+    		AvisoBancario avisoBancario, ContaContabil contaContabil, BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
 
-    	descricaoArrecadacaoForma = descricaoArrecadacaoForma + 
-    	Util.formatarData(avisoBancario.getDataLancamento());
-    	
-    	if (avisoBancario.getArrecadacaoForma() != null){
-    		
-    		descricaoArrecadacaoForma = descricaoArrecadacaoForma + ";" + 
-    		Util.completaString(avisoBancario.getArrecadacaoForma().getDescricao(), 38);
-    	}
-    	
-    	
-    	lancamentoContabilItem.setDescricaoHistorico(descricaoArrecadacaoForma);
-    	
-    	//CÓDIGO TERCEIRO = 
-    	lancamentoContabilItem.setCodigoTerceiro(codigoTerceiro);
-    	
-    	/*
-    	 * Caso o ano/mês de referência da arrecadação recebido seja igual ao ano/mês da data de realização do 
-    	 * aviso bancário (AVBC_DTREALIZADA), atribuir a data de realização do aviso bancário;
-    	 * 
-    	 * Caso contrário atribuir a data do último dia do ano/mês de referência da arrecadação recebido. 
-    	 */
-    	if (avisoBancario.getDataRealizada() != null &&
-    		anoMesReferenciaArrecadacao.equals(Util.getAnoMesComoInteger(avisoBancario.getDataRealizada()))){
-    		
-    		lancamentoContabilItem.setDataLancamento(avisoBancario.getDataRealizada());
-    	}
-    	else{
-    		
-    		Date dataLancamento = Util.obterUltimaDataMes(Util.obterMes(anoMesReferenciaArrecadacao),
-    		Util.obterAno(anoMesReferenciaArrecadacao));
-    		
-    		lancamentoContabilItem.setDataLancamento(dataLancamento);
-    	}
-    	
-    	//ÚLTIMA ALTERAÇÃO
-    	lancamentoContabilItem.setUltimaAlteracao(new Date());
-    	
-    	//INSERINDO O LANÇAMENTO CONTÁBIL ÍTEM
-    	Integer idLancamentoContabilItem = (Integer) this.getControladorUtil().inserir(lancamentoContabilItem);
-    	lancamentoContabilItem.setId(idLancamentoContabilItem);
-    	
-    	return lancamentoContabilItem;
-    }
-    
+		LancamentoContabilItem lancamentoContabilItem = new LancamentoContabilItem();
+		lancamentoContabilItem.setLancamentoContabil(lancamentoContabil);
+		lancamentoContabilItem.setIndicadorDebitoCredito(indicadorCreditoDebito);
+		lancamentoContabilItem.setValorLancamento(valorLancamento);
+		lancamentoContabilItem.setContaContabil(contaContabil);
+
+		/*
+		 * DESCRIÇÃO HISTÓRICO = Descrição da forma de arrecadação
+		 * (ARFM_DSARRECADACAOFORMA da tabela ARRECADACAO_FORMA com ARFM_ID da
+		 * tabela AVISO_BANCARIO) concatenado com a data de realização do aviso
+		 * bancário (AVBC_DTREALIZADA) no formato DD/MM/AAAA e com a data de
+		 * lançamento do aviso bancário (AVBC_DTLANCAMENTO) no formato
+		 * DD/MM/AAAA. Separar os campos com ponto e vírgula.
+		 */
+		String descricaoArrecadacaoForma = "";
+		if (avisoBancario.getDataRealizada() != null) {
+			descricaoArrecadacaoForma = descricaoArrecadacaoForma + Util.formatarData(avisoBancario.getDataRealizada()) + ";";
+		}
+
+		descricaoArrecadacaoForma = descricaoArrecadacaoForma + Util.formatarData(avisoBancario.getDataLancamento());
+
+		if (avisoBancario.getArrecadacaoForma() != null) {
+			descricaoArrecadacaoForma = descricaoArrecadacaoForma + ";" + Util.completaString(avisoBancario.getArrecadacaoForma().getDescricao(), 38);
+		}
+
+		lancamentoContabilItem.setDescricaoHistorico(descricaoArrecadacaoForma);
+		lancamentoContabilItem.setCodigoTerceiro(codigoTerceiro);
+
+		/*
+		 * Caso o ano/mês de referência da arrecadação recebido seja igual ao
+		 * ano/mês da data de realização do aviso bancário (AVBC_DTREALIZADA),
+		 * atribuir a data de realização do aviso bancário;
+		 * 
+		 * Caso contrário atribuir a data do último dia do ano/mês de referência
+		 * da arrecadação recebido.
+		 */
+		if (avisoBancario.getDataRealizada() != null && anoMesReferenciaArrecadacao.equals(Util.getAnoMesComoInteger(avisoBancario.getDataRealizada()))) {
+			lancamentoContabilItem.setDataLancamento(avisoBancario.getDataRealizada());
+		} else {
+
+			Date dataLancamento = Util.obterUltimaDataMes(Util.obterMes(anoMesReferenciaArrecadacao), Util.obterAno(anoMesReferenciaArrecadacao));
+
+			lancamentoContabilItem.setDataLancamento(dataLancamento);
+		}
+
+		lancamentoContabilItem.setUltimaAlteracao(new Date());
+
+		Integer idLancamentoContabilItem = (Integer) this.getControladorUtil().inserir(lancamentoContabilItem);
+		lancamentoContabilItem.setId(idLancamentoContabilItem);
+
+		return lancamentoContabilItem;
+	}
     
     /**
 	 * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
@@ -16065,6 +15681,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection pesquisarOutrasReceitasResumoPagamentoConta(Date dataInicial, Date dataFinal)
 		throws ControladorException{
 		

@@ -1,40 +1,38 @@
 package gcom.arrecadacao;
 
 import gcom.cadastro.imovel.Imovel;
+import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.DocumentoTipo;
+import gcom.faturamento.GuiaPagamentoGeral;
+import gcom.faturamento.conta.ContaGeral;
+import gcom.faturamento.conta.Fatura;
 import gcom.interceptor.ObjetoGcom;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-/** @author Hibernate CodeGenerator */
 public class ArrecadadorMovimentoItem extends ObjetoGcom {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String conteudoRegistro;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private String descricaoOcorrencia;
-
-    /** nullable persistent field */
     private Short indicadorAceitacao;
+    private BigDecimal valorDocumento;
 
-    /** persistent field */
-    private gcom.arrecadacao.ArrecadadorMovimento arrecadadorMovimento;
-
-    /** persistent field */
-    private gcom.arrecadacao.RegistroCodigo registroCodigo;
-    
+    private ArrecadadorMovimento arrecadadorMovimento;
+    private RegistroCodigo registroCodigo;
     private Imovel imovel;
+
+    private ContaGeral contaGeral;
+    private GuiaPagamentoGeral guiaPagamentoGeral;
+    private CobrancaDocumento cobrancaDocumento;
+    private Fatura fatura;
     
     
     public final static Short INDICADOR_ACEITO = 1;
@@ -43,7 +41,6 @@ public class ArrecadadorMovimentoItem extends ObjetoGcom {
     public final static Short INDICADOR_NAO_ACEITO = 2;
     public final static String DESCRICAO_INDICADOR_NAO_ACEITO = "NÃO ACEITO";
 
-    /** full constructor */
     public ArrecadadorMovimentoItem(String conteudoRegistro, Date ultimaAlteracao, String descricaoOcorrencia, Short indicadorAceitacao, gcom.arrecadacao.ArrecadadorMovimento arrecadadorMovimento, gcom.arrecadacao.RegistroCodigo registroCodigo) {
         this.conteudoRegistro = conteudoRegistro;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -53,11 +50,9 @@ public class ArrecadadorMovimentoItem extends ObjetoGcom {
         this.registroCodigo = registroCodigo;
     }
 
-    /** default constructor */
     public ArrecadadorMovimentoItem() {
     }
 
-    /** minimal constructor */
     public ArrecadadorMovimentoItem(gcom.arrecadacao.ArrecadadorMovimento arrecadadorMovimento, gcom.arrecadacao.RegistroCodigo registroCodigo) {
         this.arrecadadorMovimento = arrecadadorMovimento;
         this.registroCodigo = registroCodigo;
@@ -126,12 +121,66 @@ public class ArrecadadorMovimentoItem extends ObjetoGcom {
 	public void setImovel(Imovel imovel) {
 		this.imovel = imovel;
 	}
+	
+	public BigDecimal getValorDocumento() {
+		return valorDocumento;
+	}
+
+	public void setValorDocumento(BigDecimal valorDocumento) {
+		this.valorDocumento = valorDocumento;
+	}
+
+	public ContaGeral getContaGeral() {
+		return contaGeral;
+	}
+
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
+	}
+
+	public GuiaPagamentoGeral getGuiaPagamentoGeral() {
+		return guiaPagamentoGeral;
+	}
+
+	public void setGuiaPagamentoGeral(GuiaPagamentoGeral guiaPagamentoGeral) {
+		this.guiaPagamentoGeral = guiaPagamentoGeral;
+	}
+
+	public CobrancaDocumento getCobrancaDocumento() {
+		return cobrancaDocumento;
+	}
+
+	public void setCobrancaDocumento(CobrancaDocumento cobrancaDocumento) {
+		this.cobrancaDocumento = cobrancaDocumento;
+	}
+
+	public Fatura getFatura() {
+		return fatura;
+	}
+
+	public void setFatura(Fatura fatura) {
+		this.fatura = fatura;
+	}
 
 	public String toString() {
         return new ToStringBuilder(this)
             .append("id", getId())
             .toString();
     }
+	
+	public void preencherDocumento(Integer tipoDocumento, Integer idDocumento) {
+		if (tipoDocumento != null) {
+			if (tipoDocumento.intValue() == DocumentoTipo.CONTA) {
+				this.contaGeral = new ContaGeral(idDocumento);
+			} else if (tipoDocumento.intValue() == DocumentoTipo.GUIA_PAGAMENTO) {
+				this.guiaPagamentoGeral = new GuiaPagamentoGeral(idDocumento);
+			} else if (tipoDocumento.intValue() == DocumentoTipo.DOCUMENTO_COBRANCA) {
+				this.cobrancaDocumento = new CobrancaDocumento(idDocumento);
+			} else if (tipoDocumento.intValue() == DocumentoTipo.FATURA_CLIENTE) {
+				this.fatura = new Fatura(idDocumento);
+			}
+		}
+	}
     
 	public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];

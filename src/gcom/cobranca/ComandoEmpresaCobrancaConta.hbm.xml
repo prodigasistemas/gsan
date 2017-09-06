@@ -1,44 +1,40 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-		Created by the Middlegen Hibernate plugin
-		
-		http://boss.bekk.no/boss/middlegen/
-		http://hibernate.sourceforge.net/
-	-->
+
 	<class name="gcom.cobranca.ComandoEmpresaCobrancaConta" table="cobranca.cmd_empr_cobr_conta">
 		<id name="id" type="java.lang.Integer" column="cecc_id">
 			<generator class="sequence">
-				<param name="sequence">
-					cobranca.seq_cmd_empr_cobr_conta</param>
+				<param name="sequence">cobranca.seq_cmd_empr_cobr_conta</param>
 			</generator>
 		</id>
-		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="cecc_cdsetorcomercialinicial" length="4"/>
-		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="cecc_cdsetorcomercialfinal" length="4"/>
-		<property name="valorMinimoConta" type="java.math.BigDecimal" column="cecc_vlminimoconta" length="11"/>
-		<property name="valorMaximoConta" type="java.math.BigDecimal" column="cecc_vlmaximoconta" length="11"/>
-		<property name="referenciaContaInicial" type="java.lang.Integer" column="cecc_amreferenciacontainicial" length="4"/>
-		<property name="referenciaContaFinal" type="java.lang.Integer" column="cecc_amreferenciacontafinal" length="4"/>
-		<property name="dataVencimentoContaInicial" type="java.sql.Date" column="cecc_dtvencimentocontainicial" length="4"/>
-		<property name="dataVencimentoContaFinal" type="java.sql.Date" column="cecc_dtvencimentocontafinal" length="4"/>
-		<property name="dataExecucao" type="java.sql.Date" column="cecc_dtexecucao" length="4"/>
-		<property name="indicadorResidencial" type="java.lang.Integer" column="cecc_icresidencial" length="4"/>
-		<property name="indicadorComercial" type="java.lang.Integer" column="cecc_iccomercial" length="4"/>
-		<property name="indicadorIndustrial" type="java.lang.Integer" column="cecc_icindustrial" length="4"/>
-		<property name="indicadorPublico" type="java.lang.Integer" column="cecc_icpublico" length="4"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cecc_tmultimaalteracao" length="8"/>
-		<property name="numeroQuadraInicial" type="java.lang.Integer" column="cecc_nnquadrainicial"/>
-		<property name="numeroQuadraFinal" type="java.lang.Integer" column="cecc_nnquadrafinal"/>
-		<property name="dataInicioCiclo" type="java.sql.Date" column="cecc_dtiniciociclo" length="4"/>
-		<property name="dataFimCiclo" type="java.sql.Date" column="cecc_dtfimciclo" length="4"/>
-		<property name="dataEncerramento" type="java.sql.Date" column="cecc_dtencerramento" length="4"/>
-		<property name="indicadorGeracaoTxt" type="java.lang.Integer" column="cecc_icgeracaotxt" length="4"/>
 		
-		<property name="qtdContasInicial" type="java.lang.Integer" column="CECC_QTDCONTASINICIAL" length="4"/>
-		<property name="qtdContasFinal" type="java.lang.Integer" column="CECC_QTDCONTASFINAL" length="4"/>
-		<property name="qtdDiasVencimento" type="java.lang.Integer" column="CECC_QTDDIASVENCIMENTO" length="4"/>
-		
+		<property name="codigoSetorComercialInicial" 	type="java.lang.Integer" 	column="cecc_cdsetorcomercialinicial" 	length="4"/>
+		<property name="codigoSetorComercialFinal" 		type="java.lang.Integer" 	column="cecc_cdsetorcomercialfinal" 	length="4"/>
+		<property name="valorMinimoConta" 				type="java.math.BigDecimal" column="cecc_vlminimoconta" 			length="11"/>
+		<property name="valorMaximoConta" 				type="java.math.BigDecimal" column="cecc_vlmaximoconta" 			length="11"/>
+		<property name="referenciaContaInicial" 		type="java.lang.Integer" 	column="cecc_amreferenciacontainicial" 	length="4"/>
+		<property name="referenciaContaFinal" 			type="java.lang.Integer" 	column="cecc_amreferenciacontafinal" 	length="4"/>
+		<property name="dataVencimentoContaInicial"		type="java.sql.Date" 		column="cecc_dtvencimentocontainicial" 	length="4"/>
+		<property name="dataVencimentoContaFinal" 		type="java.sql.Date" 		column="cecc_dtvencimentocontafinal" 	length="4"/>
+		<property name="dataExecucao" 					type="java.sql.Date" 		column="cecc_dtexecucao" 				length="4"/>
+		<property name="indicadorResidencial" 			type="java.lang.Integer" 	column="cecc_icresidencial" 			length="4"/>
+		<property name="indicadorComercial" 			type="java.lang.Integer" 	column="cecc_iccomercial" 				length="4"/>
+		<property name="indicadorIndustrial" 			type="java.lang.Integer" 	column="cecc_icindustrial" 				length="4"/>
+		<property name="indicadorPublico" 				type="java.lang.Integer" 	column="cecc_icpublico" 				length="4"/>
+		<property name="ultimaAlteracao" 				type="java.sql.Timestamp" 	column="cecc_tmultimaalteracao" 		length="8"/>
+		<property name="numeroQuadraInicial" 			type="java.lang.Integer" 	column="cecc_nnquadrainicial"/>
+		<property name="numeroQuadraFinal" 				type="java.lang.Integer" 	column="cecc_nnquadrafinal"/>
+		<property name="dataInicioCiclo" 				type="java.sql.Date" 		column="cecc_dtiniciociclo" 			length="4"/>
+		<property name="dataFimCiclo" 					type="java.sql.Date" 		column="cecc_dtfimciclo" 				length="4"/>
+		<property name="dataEncerramento" 				type="java.sql.Date" 		column="cecc_dtencerramento" 			length="4"/>
+		<property name="indicadorGeracaoTxt" 			type="java.lang.Integer" 	column="cecc_icgeracaotxt" 				length="4"/>
+		<property name="qtdContasInicial" 				type="java.lang.Integer" 	column="cecc_qtdcontasinicial" 			length="4"/>
+		<property name="qtdContasFinal" 				type="java.lang.Integer" 	column="cecc_qtdcontasfinal" 			length="4"/>
+		<property name="qtdDiasVencimento" 				type="java.lang.Integer" 	column="cecc_qtddiasvencimento" 		length="4"/>
+		<property name="indicadorCobrancaTelemarketing" type="java.lang.Short" 		column="cecc_iccobrancatelemarketing" 	length="1" not-null="true" />
+		<property name="qtdMaximaClientes" 				type="java.lang.Integer" 	column="cecc_qtdmaximaclientes" 		length="9"/>
+		<property name="indicadorGerarComDebitoPreterito" type="java.lang.Short" 	column="cecc_icdebitopreterito" 	    length="1" />
 
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>
@@ -55,31 +51,11 @@
 		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente">
 			<column name="clie_id"/>
 		</many-to-one>
-		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio">
-			<column name="uneg_id"/>
-		</many-to-one>
-		<many-to-one name="quadraInicial" class="gcom.cadastro.localidade.Quadra">
-			<column name="qdra_idinicial"/>
-		</many-to-one>
-		<many-to-one name="quadraFinal" class="gcom.cadastro.localidade.Quadra">
-			<column name="qdra_idfinal"/>
-		</many-to-one>
-		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional">
-			<column name="greg_id"/>
-		</many-to-one>
-		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil">
-			<column name="iper_id"/>
-		</many-to-one>
 		<many-to-one name="cobrancaSituacao" class="gcom.cobranca.CobrancaSituacao">
 			<column name="cbst_id"/>
 		</many-to-one>
 		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo">
 			<column name="svtp_id"/>
 		</many-to-one>
-		
-		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
-			<column name="last_id"/>
-		</many-to-one>
-		
 	</class>
 </hibernate-mapping>

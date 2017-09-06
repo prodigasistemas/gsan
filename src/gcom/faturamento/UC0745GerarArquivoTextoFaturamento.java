@@ -46,6 +46,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoCobrado;
+import gcom.financeiro.FinanciamentoTipo;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -1348,7 +1349,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// TIPO DO REGISTRO
 		arquivoTextoRegistroTipo01.append("01");
 
-		System.out.println("Montando arquivo do imóvel " + imovel.getId());
 		// MATRÍCULA DO IMÓVEL
 		arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(9, imovel.getId().toString()));
 
@@ -2310,6 +2310,9 @@ public class UC0745GerarArquivoTextoFaturamento {
 											(arrayDebitoCobrado[3] != null ? arrayDebitoCobrado[3]
 													: "")
 													+ "", 6));
+					
+					// Como a consulta eh de parcelamentos, o debito nao deve ser incluido no calculo de impostos no IS.
+			          arquivoTextoRegistroTipo04.append(ConstantesSistema.NAO);
 
 					arquivoTextoRegistroTipo04.append(System
 							.getProperty("line.separator"));
@@ -2552,9 +2555,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoRegistroTipo04.append(Util.completaString("", 6));
 			}
-
-			arquivoTextoRegistroTipo04.append(System
-					.getProperty("line.separator"));
+			
 		} else {
 
 			if (anoMesAcumulado == null || anoMesAcumulado.equals("")) {
@@ -2600,10 +2601,21 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoRegistroTipo04.append(Util.completaString("", 6));
 			}
 
-			arquivoTextoRegistroTipo04.append(System
-					.getProperty("line.separator"));
-
 		}
+		
+		int financiamentoTipo = debitoCobrado.getDebitoTipo().getFinanciamentoTipo().getId();
+	    if (financiamentoTipo == FinanciamentoTipo.JUROS_PARCELAMENTO 
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_AGUA
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_ESGOTO
+	    	|| financiamentoTipo == FinanciamentoTipo.PARCELAMENTO_SERVICO) {
+	      arquivoTextoRegistroTipo04.append(ConstantesSistema.NAO);
+	    } else {
+	      arquivoTextoRegistroTipo04.append(ConstantesSistema.SIM);
+	    }
+	    
+
+	    arquivoTextoRegistroTipo04.append(System
+	        .getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipo04;
 	}
@@ -5429,6 +5441,10 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// } else {
 		// arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(2,""));
 		// }
+		
+		// INFORMACOES DE IMPOSTOS PARA DEMONSTRACAO NA CONTA
+		arquivoTextoRegistroTipo11.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(sistemaParametro.getDescricaoAliquotaImposto(), 30));
+		arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(14, Util.formatarBigDecimalComPonto(sistemaParametro.getValorAliquotaImposto())));
 
 		return arquivoTextoRegistroTipo11;
 	}

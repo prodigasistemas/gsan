@@ -17,65 +17,38 @@
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="amit_tmultimaalteracao" length="8"/>
 		<property name="descricaoOcorrencia" type="java.lang.String" column="amit_dsocorrencia" length="70"/>
 		<property name="indicadorAceitacao" type="java.lang.Short" column="amit_icaceitacao" length="2"/>
+		<property name="valorDocumento" type="java.math.BigDecimal" column="amit_vldocumento" length="15"/>
+		
 		<!-- Associations -->
-		<!-- bi-directional many-to-one association to ArrecadadorMovimento -->
 		<many-to-one name="arrecadadorMovimento" class="gcom.arrecadacao.ArrecadadorMovimento" not-null="true">
 			<column name="armv_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to RegistroCodigo -->
+		
 		<many-to-one name="registroCodigo" class="gcom.arrecadacao.RegistroCodigo" not-null="true">
 			<column name="rgcd_id"/>
 		</many-to-one>
+		
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
 			<column name="imov_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to PagamentoHistorico -->
-		<!--
-    <set
-        name="pagamentoHistoricos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="amit_id" />
-        </key>
-        <one-to-many 
-            class="gcom.PagamentoHistorico"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to Pagamento -->
-		<!--
-    <set
-        name="pagamentosByAmitId"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="amit_id" />
-        </key>
-        <one-to-many 
-            class="gcom.Pagamento"
-        />
-    </set>
-    -->
-		<!-- bi-directional one-to-many association to Pagamento -->
-		<!--
-    <set
-        name="pagamentosByAmitId"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="amit_id" />
-        </key>
-        <one-to-many 
-            class="gcom.Pagamento"
-        />
-    </set>
-	-->
+		
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+			<column name="cnta_id"/>
+		</many-to-one>
+
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+
+		<many-to-one name="fatura" class="gcom.faturamento.conta.Fatura" not-null="false">
+			<column name="fatu_id"/>
+		</many-to-one>
+
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
+			<column name="cbdo_id"/>
+		</many-to-one>
+		
+		
+		
 	</class>
 </hibernate-mapping>

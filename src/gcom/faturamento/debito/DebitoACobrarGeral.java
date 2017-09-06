@@ -13,27 +13,17 @@ public class DebitoACobrarGeral extends ObjetoTransacao {
 	public final static Short INDICADOR_POSSUI_HISTORICO = new Short("1");
 	public final static Short INDICADOR_NAO_POSSUI_HISTORICO = new Short("2");	
 	
-    /** identifier field */
     private Integer id;
-    
-    /** persistent field */
     private short indicadorHistorico;
-    
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private DebitoACobrarHistorico debitoACobrarHistorico;
-
-    /** nullable persistent field */
     private DebitoACobrar debitoACobrar;
     
-    /**
-     * Description of the Field
-     */
-    
-    /** default constructor */
     public DebitoACobrarGeral() {
+    }
+    
+    public DebitoACobrarGeral(DebitoACobrar debitoACobrar) {
+    	this.debitoACobrar = debitoACobrar; 
     }
     
     public String[] retornaCamposChavePrimaria(){
@@ -53,7 +43,6 @@ public class DebitoACobrarGeral extends ObjetoTransacao {
 		return filtroDebitoACobrarGeral; 
 	}
     
-    /** full constructor */
     public DebitoACobrarGeral(short indicadorHistorico, Date ultimaAlteracao,DebitoACobrarHistorico debitoACobrarHistorico,DebitoACobrar debitoACobrar) {
         this.indicadorHistorico = indicadorHistorico;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -61,7 +50,6 @@ public class DebitoACobrarGeral extends ObjetoTransacao {
         this.debitoACobrar = debitoACobrar;
     }
     
-    /** minimal constructor */
     public DebitoACobrarGeral(short indicadorHistorico) {
     	this.indicadorHistorico = indicadorHistorico;
     }

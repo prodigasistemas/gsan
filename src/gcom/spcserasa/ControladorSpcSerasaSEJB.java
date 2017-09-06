@@ -8535,7 +8535,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
 			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
 					negativadorMovimento.getNegativacaoComando().getId()));
-			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.ID_CLIENTE, cliente.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.CLIENTE_ID, cliente.getId()));
 
 			NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(
 					filtro, NegativacaoImoveis.class.getName()));
@@ -13807,7 +13807,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
 					negativadorMovimento.getNegativacaoComando().getId()));
 			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO, new Integer(2)));
-			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.ID_CLIENTE, cliente.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.CLIENTE_ID, cliente.getId()));
 
 			Collection negativacaoImoveis = RepositorioUtilHBM.getInstancia().pesquisar(filtro, NegativacaoImoveis.class.getName());
 

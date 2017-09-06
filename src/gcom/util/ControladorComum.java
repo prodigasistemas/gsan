@@ -1,12 +1,5 @@
 package gcom.util;
 
-import java.rmi.RemoteException;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
@@ -43,12 +36,16 @@ import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocal;
 import gcom.faturamento.controladores.ControladorAnaliseGeracaoContaLocalHome;
 import gcom.faturamento.controladores.ControladorDebitoACobrarLocal;
 import gcom.faturamento.controladores.ControladorDebitoACobrarLocalHome;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.financeiro.ControladorFinanceiroLocal;
 import gcom.financeiro.ControladorFinanceiroLocalHome;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -65,6 +62,13 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
 import gcom.spcserasa.ControladorSpcSerasaLocal;
 import gcom.spcserasa.ControladorSpcSerasaLocalHome;
+
+import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
 
 public abstract class ControladorComum implements SessionBean{
     private static final long serialVersionUID = -1018845073095941124L;
@@ -584,5 +588,38 @@ public abstract class ControladorComum implements SessionBean{
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-	}	
+	}
+	
+	protected ControladorRetificarContaLocal getControladorRetificarConta() {
+		try {
+			ServiceLocator locator = ServiceLocator.getInstancia();
+
+			ControladorRetificarContaLocalHome localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+
+			ControladorRetificarContaLocal local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
+        try {
+            ServiceLocator locator = ServiceLocator.getInstancia();
+
+            ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
+
+            ControladorCobrancaPorResultadoLocal local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+	
 }

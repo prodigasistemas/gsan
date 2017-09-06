@@ -76,7 +76,6 @@
 		<pathelement location="${Axis2.home}/axis2-adb-1.5.1.jar" />
 		<pathelement location="${Axis2.home}/axis2-kernel-1.5.1.jar" />
 		<pathelement location="${BarCode.home}/codigo-barra.jar" />
-		<pathelement location="${GsanRelatorios.home}/gsan-relatorios-cliente.jar" />
 		<pathelement location="${Hibernate.home}/hibernate3.jar" />
 		<pathelement location="${JasperReports.home}/barbecue-1.1.jar" />
 		<pathelement location="${JasperReports.home}/ireport.jar" />
@@ -100,6 +99,9 @@
 		<pathelement location="${Mockito.home}/mockito-all-1.10.19.jar" />
 		<pathelement location="${Properties.home}/properties" />
 		<pathelement location="/reports" />
+		<pathelement location="${GsanRelatorios.home}/gson-2.2.4.jar" />
+		<pathelement location="${GsanRelatorios.home}/jersey-client-1.18.1.jar" />
+		<pathelement location="${GsanRelatorios.home}/jersey-core-1.18.1.jar" />
 	</path>
 
 	<target name="alterarDataVersao" depends="init">

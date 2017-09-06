@@ -13,6 +13,7 @@ import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
@@ -34,9 +35,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.jboss.logging.Logger;
 
 public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ExibirEfetuarParcelamentoDebitosProcesso3Action.class);
+	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -78,6 +82,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		String valorDebitoACobrarParcelamentoImovel =( (String)form.get("valorDebitoACobrarParcelamentoImovel"));
 		String indicadorDividaAtiva = (String) form.get("indicadorDividaAtiva");
 		
+		logger.info("Parcelamento do imóvel " + codigoImovel);
+		
 		BigDecimal valorDebitoACobrarParcelamentoImovelBigDecimal = new BigDecimal("0.00");
 		
 		String bloqueiaIntervaloParcelamento = (String) sessao.getAttribute("bloqueiaIntervaloParcelamento");
@@ -113,6 +119,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 		}
 		
 		BigDecimal valorCreditoARealizar = new BigDecimal("0.00");
+		
+		BigDecimal valorTotalCreditosAnterioresCurtoPrazo = new BigDecimal("0.00");
+		BigDecimal valorTotalCreditosAnterioresLongoPrazo = new BigDecimal("0.00");
+		BigDecimal valorTotalCreditosAnteriores = new BigDecimal("0.00");
 		
 		// Valor Entrada Informado
 		BigDecimal valorEntradaInformado = null;
@@ -176,9 +186,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				valorDebitoTotalAtualizado = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorDebitoTotalAtualizado"));
 				
 			}
-			
 			valorAcrescimosImpontualidade = Util.formatarMoedaRealparaBigDecimal((String) form.get("valorAcrescimosImpontualidade"));
 			valorCreditoARealizar = Util.formatarMoedaRealparaBigDecimal((String)  form.get("valorCreditoARealizar"));
+			logger.info("L191 colecaoContaValores - ImóveL:" + codigoImovel + " | valorAcrescimosImpontualidade: " + valorAcrescimosImpontualidade);
 
 		} 
 		else {
@@ -310,13 +320,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 						valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
 						
 						if (parcelamentoDescontoAntiguidadeMaior.getContaMotivoRevisao() != null){
-							
 							//CONTA ENTRARÁ EM REVISÃO
 							contaValoresHelper.setRevisao(1);
-							
 						}
-					}
-					else{
+					} else {
 						
 						valorTotalContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalContas = valorTotalContas.add(contaValoresHelper.getValorTotalConta());
@@ -410,13 +417,18 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			// Acrescimos por Impotualidade
 			BigDecimal retornoSoma = new BigDecimal("0.00");
 			if( indicadorAcrescimosImpotualidade.equals("1") ){
+				
 				retornoSoma.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
 				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeGuias);
+				
+				logger.info("L425 ImóveL:" + codigoImovel + " | indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade + " | valorAcrescimosImpontualidade: " + retornoSoma);
+				logger.info("L426 	ImóveL:" + codigoImovel + " | valorTotalAcrescimoImpontualidadeContas: " + valorTotalAcrescimoImpontualidadeContas + " , valorTotalAcrescimoImpontualidadeGuias: " + valorTotalAcrescimoImpontualidadeGuias);
 
 				form.set("valorAcrescimosImpontualidade", Util.formatarMoedaReal(retornoSoma));
 				sessao.setAttribute("valorAcrescimosImpontualidade", retornoSoma);
 			}else{
+				logger.info("L431 ImóveL:" + codigoImovel + " | indicadorAcrescimosImpotualidade: " + indicadorAcrescimosImpotualidade + " | valorAcrescimosImpontualidade: 0.00 ");
 				form.set("valorAcrescimosImpontualidade", "0,00");
 				sessao.setAttribute("valorAcrescimosImpontualidade", new BigDecimal("0.00"));
 			}
@@ -429,6 +441,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			valorTotalAcrescimoImpontualidade = retornoSoma;
 			valorAcrescimosImpontualidade = valorTotalAcrescimoImpontualidade;
 
+			final int indiceCurtoPrazo = 0;
+			final int indiceLongoPrazo = 1;
+			
 			// Debitos A Cobrar
 			if( indicadorDebitosACobrar.equals("1") ){
 				//[FS0022]-Verificar existência de juros sobre imóvel
@@ -437,9 +452,6 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 				
 				if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 					Iterator debitoACobrarValores = colecaoDebitoACobrar.iterator();
-	
-					final int indiceCurtoPrazo = 0;
-					final int indiceLongoPrazo = 1;
 	
 					while (debitoACobrarValores.hasNext()) {
 						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
@@ -458,7 +470,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 								// [SB0001] Obter Valores de Curto e Longo Prazo
 								valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 		
-								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(
+								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(
 								debitoACobrar.getNumeroPrestacaoDebito(),debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),valorRestanteACobrar);
 								valorTotalRestanteServicosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 								valorTotalRestanteServicosACobrarCurtoPrazo = valorTotalRestanteServicosACobrarCurtoPrazo.add(valoresDeCurtoELongoPrazo[indiceCurtoPrazo]);
@@ -474,7 +486,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 								// [SB0001] Obter Valores de Curto e Longo Prazo
 								valorRestanteACobrar = debitoACobrar.getValorTotalComBonus();
 		
-								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorACobrarDeCurtoELongoPrazo(
+								BigDecimal[] valoresDeCurtoELongoPrazo = fachada.obterValorCurtoELongoPrazo(
 								debitoACobrar.getNumeroPrestacaoDebito(),debitoACobrar.getNumeroPrestacaoCobradasMaisBonus(),valorRestanteACobrar);
 								
 								valorTotalRestanteParcelamentosACobrarCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
@@ -483,11 +495,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 								valorTotalRestanteParcelamentosACobrarLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 								valorTotalRestanteParcelamentosACobrarLongoPrazo = valorTotalRestanteParcelamentosACobrarLongoPrazo.add(valoresDeCurtoELongoPrazo[indiceLongoPrazo]);
 							}
-		
-							
 						}
-						
-						
 					}
 	
 					if(!debitosRemovidos.isEmpty())
@@ -532,8 +540,23 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 							creditosRemovidos.add(creditoARealizar);
 							continue;
 						}
-						valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-						valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
+						
+						if (isCreditoDeParcelamento(creditoARealizar)) {
+							BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
+									creditoARealizar.getNumeroPrestacaoCredito(), 
+									creditoARealizar.getNumeroPrestacaoRealizada(), 
+									creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
+							
+							valorTotalCreditosAnterioresCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorTotalCreditosAnterioresCurtoPrazo = valorTotalCreditosAnterioresCurtoPrazo.add(valores[indiceCurtoPrazo]);
+							
+							valorTotalCreditosAnterioresLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorTotalCreditosAnterioresLongoPrazo = valorTotalCreditosAnterioresLongoPrazo.add(valores[indiceLongoPrazo]);
+							
+						} else {
+							valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+							valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
+						}
 					}
 					
 					if(!creditosRemovidos.isEmpty())
@@ -936,5 +959,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso3Action extends GcomAction 
 			}
 		}
 		return valorTotalImpostos;
+	}
+	
+	private boolean isCreditoDeParcelamento(CreditoARealizar creditoARealizar) {
+		return creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+			&& creditoARealizar.getParcelamento() != null;
 	}
 }

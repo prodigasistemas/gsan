@@ -46,7 +46,7 @@ function validaDataSemMensagem(campo){
 			mes = barras[1];
 			ano = barras[2];
             
-			resultado = (!isNaN(dia) && (dia > 0) && (dia < 32)) && (!isNaN(mes) && (mes > 0) && (mes < 13)) && (!isNaN(ano) && (ano.length == 4) && (ano <= anoAtual && ano >= 1900));
+			resultado = (!isNaN(dia) && (dia > 0) && (dia < 32)) && (!isNaN(mes) && (mes > 0) && (mes < 13)) && (!isNaN(ano) && (ano.length == 4) && ano >= 1900);
             
 			if (!resultado){
 				
@@ -4275,3 +4275,39 @@ function comparaDataComDataAtual(data1, operador ){
     		campo.value = valor.replace(",", "");
 		}
     }
+    
+    function formataValorDecimalTresCasas(campo,tammax){
+		var valorAuxiliar = "";
+		digitosValidos = "0123456789" ;
+			
+		valor = campo.value;
+				
+		//retira digitos terao numericos
+	 	for (i=0;i<valor.length;i++){
+	 		if(digitosValidos.indexOf(valor.charAt(i))>=0) {
+	 			valorAuxiliar += valor.charAt(i);
+	 		}
+	 	}
+	
+		//verifica tamanho (tamanho maximo vindo do metodo)
+		if(tammax > 0 && tammax < valorAuxiliar.length){
+			valorAuxiliar = valorAuxiliar.substring(0,tammax);
+		}
+		
+		//retira zeros desnecessarios ao inicio do numero
+		while (valorAuxiliar.length > 5 && valorAuxiliar.charAt(0) == "0"){
+			valorAuxiliar = valorAuxiliar.substring(1);
+		}
+		
+		valor = valorAuxiliar;
+		digitosNumericos = valor.length;
+			
+		//insere pontos decimais
+		for(i = 1;i<=(digitosNumericos/4);i++) {
+			valor = valor.substring(0,digitosNumericos + 1 - 4*i) +
+				(i==1?',':'.') +
+				valor.substring(digitosNumericos + 1 - 4*i);
+		}
+		
+		campo.value = valor;
+	}

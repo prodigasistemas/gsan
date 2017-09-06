@@ -9,95 +9,96 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class NegativacaoImoveis implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
-    private Integer id;
+	private Integer id;
 
-    private Date ultimaAlteracao;
+	private Date ultimaAlteracao;
 
-    private short indicadorExcluido;
+	private short indicadorExcluido;
 
-    private Date dataExclusao;
-    
-    private Date dataConfirmacao;
+	private Date dataExclusao;
 
-    private Imovel imovel;
+	private Date dataConfirmacao;
 
-    private NegativacaoComando negativacaoComando;
-    
-    private Cliente cliente;
+	private Imovel imovel;
 
-    public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Date dataExclusao, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
-        this.id = id;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.indicadorExcluido = indicadorExcluido;
-        this.dataExclusao = dataExclusao;
-        this.imovel = imovel;
-        this.negativacaoComando = negativacaoComando;
-    }
+	private NegativacaoComando negativacaoComando;
 
-    public NegativacaoImoveis() {}
+	private Cliente cliente;
 
-    public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
-        this.id = id;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.indicadorExcluido = indicadorExcluido;
-        this.imovel = imovel;
-        this.negativacaoComando = negativacaoComando;
-    }
+	public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Date dataExclusao, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
+		this.id = id;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.indicadorExcluido = indicadorExcluido;
+		this.dataExclusao = dataExclusao;
+		this.imovel = imovel;
+		this.negativacaoComando = negativacaoComando;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public NegativacaoImoveis() {
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
+		this.id = id;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.indicadorExcluido = indicadorExcluido;
+		this.imovel = imovel;
+		this.negativacaoComando = negativacaoComando;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public short getIndicadorExcluido() {
-        return this.indicadorExcluido;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public void setIndicadorExcluido(short indicadorExcluido) {
-        this.indicadorExcluido = indicadorExcluido;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public Date getDataExclusao() {
-        return this.dataExclusao;
-    }
+	public short getIndicadorExcluido() {
+		return this.indicadorExcluido;
+	}
 
-    public void setDataExclusao(Date dataExclusao) {
-        this.dataExclusao = dataExclusao;
-    }
+	public void setIndicadorExcluido(short indicadorExcluido) {
+		this.indicadorExcluido = indicadorExcluido;
+	}
 
-    public Imovel getImovel() {
-        return this.imovel;
-    }
+	public Date getDataExclusao() {
+		return this.dataExclusao;
+	}
 
-    public void setImovel(Imovel imovel) {
-        this.imovel = imovel;
-    }
+	public void setDataExclusao(Date dataExclusao) {
+		this.dataExclusao = dataExclusao;
+	}
 
-    public gcom.cobranca.NegativacaoComando getNegativacaoComando() {
-        return this.negativacaoComando;
-    }
+	public Imovel getImovel() {
+		return this.imovel;
+	}
 
-    public void setNegativacaoComando(gcom.cobranca.NegativacaoComando negativacaoComando) {
-        this.negativacaoComando = negativacaoComando;
-    }
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", getId()).toString();
-    }
+	public gcom.cobranca.NegativacaoComando getNegativacaoComando() {
+		return this.negativacaoComando;
+	}
+
+	public void setNegativacaoComando(gcom.cobranca.NegativacaoComando negativacaoComando) {
+		this.negativacaoComando = negativacaoComando;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 
 	public Date getDataConfirmacao() {
 		return dataConfirmacao;

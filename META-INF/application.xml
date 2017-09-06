@@ -880,6 +880,18 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorRetificarContaGCOM.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCobrancaPorResultadoGCOM.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarNegociacaoContasCobrancaEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

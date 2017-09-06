@@ -23,8 +23,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class DebitoACobrar extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
@@ -32,119 +30,80 @@ public class DebitoACobrar extends ObjetoTransacao {
 	public static final int ATRIBUTOS_DEBITO_A_COBRAR_INSERIR = 70; //Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR;
 	public static final int ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR = 71; //Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR;
 	public static final int ATRIBUTOS_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO = 1522; //OPERACAO_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO
-    /** identifier field */
-    private Integer id;
 
-    /** persistent field */
+	private Integer id;
     private Date geracaoDebito;
-
-    /** nullable persistent field */
     private Integer anoMesReferenciaDebito;
-
-    /** nullable persistent field */
     private Integer anoMesCobrancaDebito;
 
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private BigDecimal valorDebito;
 
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,
     		ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR, LigacaoAgua.ATRIBUTOS_EFETUAR_LIGACAO})
     private short numeroPrestacaoDebito;
 
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private short numeroPrestacaoCobradas;
 
-    /** nullable persistent field */
     private Integer codigoSetorComercial;
-
-    /** nullable persistent field */
     private Integer numeroQuadra;
-
-    /** nullable persistent field */
     private Short numeroLote;
-
-    /** nullable persistent field */
     private Short numeroSubLote;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private Integer anoMesReferenciaContabil;
 
-    /** nullable persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private BigDecimal percentualTaxaJurosFinanciamento;
     
     private Short numeroParcelaBonus;
-
-    /** persistent field */
     private Imovel imovel;
-
-    /** persistent field */
     private DocumentoTipo documentoTipo;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.PARCELAMENTO,funcionalidade={ATRIBUTOS_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO})
     private Parcelamento parcelamento;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.FINANCIAMENTO_TIPO,
     		funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private FinanciamentoTipo financiamentoTipo;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.ORDEM_SERVICO,
     		funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})    
     private OrdemServico ordemServico;
 
-    /** persistent field */
     private Quadra quadra;
 
-    /** persistent field */
     private Localidade localidade;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.DEBITO_TIPO,
     		funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private gcom.faturamento.debito.DebitoTipo debitoTipo;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.REGISTRO_ATENDIMENTO,
     		funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_INSERIR,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})        
     private RegistroAtendimento registroAtendimento;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.LANCAMENTO_ITEM_CONTABIL,
     		funcionalidade={ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private LancamentoItemContabil lancamentoItemContabil;
 
-    /** persistent field */
-    private gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
+    private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
 
-    /** persistent field */
-    @ControleAlteracao(value=FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO,
+    @ControleAlteracao(value=FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL,
     		funcionalidade={ATRIBUTOS_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO,ATRIBUTOS_DEBITO_A_COBRAR_CANCELAR})
     private gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual;
 
-    /** persistent field */
     private ParcelamentoGrupo parcelamentoGrupo;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroDebitoACobrar.COBRANCA_FORMA,
     		funcionalidade={ATRIBUTOS_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO})
     private CobrancaForma cobrancaForma;
     
-    /** persistent field */
     private Usuario usuario;
 
-    /** persistent field */
-    private Set debitoACobrarCategorias;
+    @SuppressWarnings("rawtypes")
+	private Set debitoACobrarCategorias;
     
-    /** este campo foi criado só para o [UC 0155], e não está mapeado */
     private BigDecimal valorDebitoPorCategoria;
     
     private DebitoACobrarGeral debitoACobrarGeralOrigem;
@@ -197,8 +156,8 @@ public class DebitoACobrar extends ObjetoTransacao {
 		return filtroDebitoACobrar; 
 	}
     
-    /** full constructor */
-    public DebitoACobrar(Date geracaoDebito, Integer anoMesReferenciaDebito, Integer anoMesCobrancaDebito, BigDecimal valorDebito, short numeroPrestacaoDebito, short numeroPrestacaoCobradas, Integer codigoSetorComercial, Integer numeroQuadra, Short numeroLote, Short numeroSubLote, Date ultimaAlteracao, Integer anoMesReferenciaContabil, BigDecimal percentualTaxaJurosFinanciamento, Imovel imovel, DocumentoTipo documentoTipo, Parcelamento parcelamento, FinanciamentoTipo financiamentoTipo, OrdemServico ordemServico, Quadra quadra, Localidade localidade, gcom.faturamento.debito.DebitoTipo debitoTipo, RegistroAtendimento registroAtendimento, LancamentoItemContabil lancamentoItemContabil, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual, ParcelamentoGrupo parcelamentoGrupo, CobrancaForma cobrancaForma, Usuario usuario, Set debitoACobrarCategorias) {
+	@SuppressWarnings("rawtypes")
+	public DebitoACobrar(Date geracaoDebito, Integer anoMesReferenciaDebito, Integer anoMesCobrancaDebito, BigDecimal valorDebito, short numeroPrestacaoDebito, short numeroPrestacaoCobradas, Integer codigoSetorComercial, Integer numeroQuadra, Short numeroLote, Short numeroSubLote, Date ultimaAlteracao, Integer anoMesReferenciaContabil, BigDecimal percentualTaxaJurosFinanciamento, Imovel imovel, DocumentoTipo documentoTipo, Parcelamento parcelamento, FinanciamentoTipo financiamentoTipo, OrdemServico ordemServico, Quadra quadra, Localidade localidade, gcom.faturamento.debito.DebitoTipo debitoTipo, RegistroAtendimento registroAtendimento, LancamentoItemContabil lancamentoItemContabil, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual, ParcelamentoGrupo parcelamentoGrupo, CobrancaForma cobrancaForma, Usuario usuario, Set debitoACobrarCategorias) {
         this.geracaoDebito = geracaoDebito;
         this.anoMesReferenciaDebito = anoMesReferenciaDebito;
         this.anoMesCobrancaDebito = anoMesCobrancaDebito;
@@ -230,11 +189,10 @@ public class DebitoACobrar extends ObjetoTransacao {
         this.debitoACobrarCategorias = debitoACobrarCategorias;
     }
 
-    /** default constructor */
     public DebitoACobrar() {
     }
 
-    /** minimal constructor */
+    @SuppressWarnings("rawtypes")
     public DebitoACobrar(Date geracaoDebito, BigDecimal valorDebito, short numeroPrestacaoDebito, short numeroPrestacaoCobradas, Imovel imovel, DocumentoTipo documentoTipo, Parcelamento parcelamento, FinanciamentoTipo financiamentoTipo, OrdemServico ordemServico, Quadra quadra, Localidade localidade, gcom.faturamento.debito.DebitoTipo debitoTipo, RegistroAtendimento registroAtendimento, LancamentoItemContabil lancamentoItemContabil, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior, gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual, ParcelamentoGrupo parcelamentoGrupo, CobrancaForma cobrancaForma, Set debitoACobrarCategorias) {
         this.geracaoDebito = geracaoDebito;
         this.valorDebito = valorDebito;
@@ -466,19 +424,19 @@ public class DebitoACobrar extends ObjetoTransacao {
         this.lancamentoItemContabil = lancamentoItemContabil;
     }
 
-    public gcom.faturamento.debito.DebitoCreditoSituacao getDebitoCreditoSituacaoAnterior() {
+    public DebitoCreditoSituacao getDebitoCreditoSituacaoAnterior() {
         return this.debitoCreditoSituacaoAnterior;
     }
 
-    public void setDebitoCreditoSituacaoAnterior(gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
+    public void setDebitoCreditoSituacaoAnterior(DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
         this.debitoCreditoSituacaoAnterior = debitoCreditoSituacaoAnterior;
     }
 
-    public gcom.faturamento.debito.DebitoCreditoSituacao getDebitoCreditoSituacaoAtual() {
+    public DebitoCreditoSituacao getDebitoCreditoSituacaoAtual() {
         return this.debitoCreditoSituacaoAtual;
     }
 
-    public void setDebitoCreditoSituacaoAtual(gcom.faturamento.debito.DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
+    public void setDebitoCreditoSituacaoAtual(DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
         this.debitoCreditoSituacaoAtual = debitoCreditoSituacaoAtual;
     }
 
@@ -498,10 +456,12 @@ public class DebitoACobrar extends ObjetoTransacao {
         this.cobrancaForma = cobrancaForma;
     }
 
+    @SuppressWarnings("rawtypes")
     public Set getDebitoACobrarCategorias() {
         return this.debitoACobrarCategorias;
     }
 
+    @SuppressWarnings("rawtypes")
     public void setDebitoACobrarCategorias(Set debitoACobrarCategorias) {
         this.debitoACobrarCategorias = debitoACobrarCategorias;
     }
@@ -510,9 +470,6 @@ public class DebitoACobrar extends ObjetoTransacao {
 		return "DebitoACobrar [id=" + id + "]";
 	}
 
-	/**
-     * @author Vivianne Sousa
-    */
     public BigDecimal getValorTotal(){
     	 		
  		BigDecimal retornoDivisao = new BigDecimal("0.00");
@@ -537,29 +494,6 @@ public class DebitoACobrar extends ObjetoTransacao {
  		this.valorDebitoPorCategoria = valorDebitoPorCategoria;
  	}
  	
-// 	/**
-// 	 * Realiza o calculo do valor restante a ser pago do débito 
-// 	 * 
-// 	 * @author Pedro Alexandre
-// 	 * @created 7 de Março de 2006
-// 	 */
-// 	public BigDecimal getValorRestanteCobrado(){
-// 		
-// 		BigDecimal retorno = new BigDecimal("0.00");
-// 		
-// 		BigDecimal valorDebito = getValorDebito();
-// 		BigDecimal numeroPrestacaoDebito = new BigDecimal(getNumeroPrestacaoDebito());
-// 		BigDecimal numeroPrestacaoCobradas = new BigDecimal(getNumeroPrestacaoCobradas());
-// 		numeroPrestacaoDebito = numeroPrestacaoDebito.setScale(2);
-// 		
-// 		retorno =  Util.dividirArredondando(valorDebito,numeroPrestacaoDebito);
-// 		retorno = retorno.multiply(numeroPrestacaoCobradas);
-// 		retorno = valorDebito.subtract(retorno);
-// 		
-//// 		retorno = valorDebito.subtract(((valorDebito.divide(numeroPrestacaoDebito)).multiply(numeroPrestacaoCobradas)));
-// 		 		
-// 		return retorno;
-// 	}
  	public String getFormatarAnoMesCobrancaDebito() {
  		
  		String anoMesFormatado = "";
@@ -603,12 +537,6 @@ public class DebitoACobrar extends ObjetoTransacao {
 		return anoMesFormatado.toString();
 	}
 	
-	/**
- 	 * Realiza o calculo de quantas parcelas falta para cobrar  
- 	 * 
- 	 * @author Fernanda Paiva
- 	 * @created 7 de Abril de 2006
- 	*/
  	public short getParcelasRestante(){
  		
  	   short retorno = Short.parseShort(""+
@@ -617,16 +545,10 @@ public class DebitoACobrar extends ObjetoTransacao {
  		return retorno;
  	}
 
-	/**
-	 * @return Retorna o campo debitoACobrarGeral.
-	 */
 	public DebitoACobrarGeral getDebitoACobrarGeral() {
 		return debitoACobrarGeral;
 	}
 
-	/**
-	 * @param debitoACobrarGeral O debitoACobrarGeral a ser setado.
-	 */
 	public void setDebitoACobrarGeral(DebitoACobrarGeral debitoACobrarGeral) {
 		this.debitoACobrarGeral = debitoACobrarGeral;
 	}

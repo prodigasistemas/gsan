@@ -83,16 +83,7 @@ public class RetificarConjuntoContaAction extends GcomAction {
         
         try{
         	dataVencimentoConta = formatoData.parse(retificarConjuntoContaActionForm.getVencimentoConta());
-        	
-        	// -------------------------------------------------------------------------------------------
-			// Alterado por :  Hugo Leonardo - data : 19/08/2010 
-			// Analista :  Aryed Lins.
-        	// [FS0007] - Validar data de vencimento.		
-			// -------------------------------------------------------------------------------------------
-    				
-			// if(sistemaParametro.getIndicadorCalculaVencimento() == 1){
-	        	
-	        // Calendar data1985 = new GregorianCalendar(1985, 1, 1);
+        	    					        	
 	        // Caso data corrente seja posterior a data corrente mais a quantidade de dias parametro.
 			Date dataCorrente = new Date();	
 			
@@ -103,10 +94,6 @@ public class RetificarConjuntoContaAction extends GcomAction {
         	}
 			
 			Date dataCorrenteComDias = Util.adicionarNumeroDiasDeUmaData(dataCorrente, diasAdicionais.intValue());
-			// Date dataUltimoDiaMes = Util.obterUltimaDataMes(Util.getMes(dataCorrente), Util.getAno(dataCorrente));
-		    // if(Util.compararData(dataVencimentoConta, data1985.getTime()) == -1){
-			//		throw new ActionServletException("atencao.data_vencimento_menor_1985");
-			// }
 				
 			// E o usuário não tenha permissão especial.	
 			boolean temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao = 
@@ -126,13 +113,6 @@ public class RetificarConjuntoContaAction extends GcomAction {
 				throw new ActionServletException("atencao.data_vencimento_menor_1985");
 			}
 				
-			// if(!temPermissaoParaRetificarDataVencimentoAlemPrazoPadrao && 
-			//		Util.compararData(dataVencimentoConta, dataUltimoDiaMes) == 1){
-			//						
-			//		dataVencimentoConta = dataUltimoDiaMes;
-			// }
-			// }
-			// -------------------------------------------------------------------------------------------
         } catch (ParseException ex) {
         	dataVencimentoConta = null;
         }

@@ -111,8 +111,16 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 
 	private BigDecimal descontoTarifaSocialRDEspecial;
 
+	private BigDecimal valorCreditosAnterioresCurtoPrazo;
+	
+	private BigDecimal valorCreditosAnterioresLongoPrazo;
+	
+	private BigDecimal valorTotalCreditosAnteriores;
+	
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoContasEmAntiguidade;
 
+	@SuppressWarnings("rawtypes")
 	public ConcluirParcelamentoDebitosHelper(Collection<ContaValoresHelper> colecaoContaValores, Collection<GuiaPagamentoValoresHelper> colecaoGuiaPagamentoValores,
 			Collection<DebitoACobrar> colecaoDebitoACobrar, Collection<CreditoARealizar> colecaoCreditoARealizar, String indicadorRestabelecimento, String indicadorContasRevisao,
 			String indicadorGuiasPagamento, String indicadorAcrescimosImpotualidade, String indicadorDebitosACobrar, String indicadorCreditoARealizar, String indicadorDividaAtiva, Imovel imovel,
@@ -123,7 +131,8 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 			BigDecimal valorAcrescimosImpontualidade, BigDecimal valorDebitoACobrarServicoLongoPrazo, BigDecimal valorDebitoACobrarServicoCurtoPrazo,
 			BigDecimal valorDebitoACobrarParcelamentoLongoPrazo, BigDecimal valorDebitoACobrarParcelamentoCurtoPrazo, Short numeroPrestacoes, BigDecimal valorPrestacao, BigDecimal valorEntradaMinima,
 			BigDecimal taxaJuros, String indicadorConfirmacaoParcelamento, Cliente cliente, Usuario usuarioLogado, String cpfClienteParcelamentoDigitado, BigDecimal descontoSancoesRDEspecial,
-			BigDecimal descontoTarifaSocialRDEspecial, Collection colecaoContasEmAntiguidade) {
+			BigDecimal descontoTarifaSocialRDEspecial, Collection colecaoContasEmAntiguidade, BigDecimal valorCreditosAnterioresCurtoPrazo, BigDecimal valorCreditosAnterioresLongoPrazo, 
+			BigDecimal valorTotalCreditosAnteriores) {
 		
 		super();
 
@@ -176,6 +185,9 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		this.descontoSancoesRDEspecial = descontoSancoesRDEspecial;
 		this.descontoTarifaSocialRDEspecial = descontoTarifaSocialRDEspecial;
 		this.colecaoContasEmAntiguidade = colecaoContasEmAntiguidade;
+		this.valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo;
+		this.valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo;
+		this.valorTotalCreditosAnteriores = valorTotalCreditosAnteriores;
 	}
 
 	public Cliente getCliente() {
@@ -570,4 +582,27 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 		this.indicadorDividaAtiva = indicadorDividaAtiva;
 	}
 
+	public BigDecimal getValorCreditosAnterioresCurtoPrazo() {
+		return valorCreditosAnterioresCurtoPrazo;
+	}
+
+	public void setValorCreditosAnterioresCurtoPrazo(BigDecimal valorCreditosAnterioresCurtoPrazo) {
+		this.valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo;
+	}
+
+	public BigDecimal getValorCreditosAnterioresLongoPrazo() {
+		return valorCreditosAnterioresLongoPrazo;
+	}
+
+	public void setValorCreditosAnterioresLongoPrazo(BigDecimal valorCreditosAnterioresLongoPrazo) {
+		this.valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo;
+	}
+
+	public BigDecimal getValorTotalCreditosAnteriores() {
+		return valorTotalCreditosAnteriores;
+	}
+
+	public void setValorTotalCreditosAnteriores(BigDecimal valorTotalCreditosAnteriores) {
+		this.valorTotalCreditosAnteriores = valorTotalCreditosAnteriores;
+	}
 }

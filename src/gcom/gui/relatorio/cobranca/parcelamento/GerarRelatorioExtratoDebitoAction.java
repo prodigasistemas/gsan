@@ -1,5 +1,20 @@
 package gcom.gui.relatorio.cobranca.parcelamento;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -27,26 +42,12 @@ import gcom.relatorio.cobranca.parcelamento.ExtratoDebitoRelatorioHelper;
 import gcom.relatorio.cobranca.parcelamento.RelatorioExtratoDebito;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.DynaActionForm;
 
 @SuppressWarnings("unchecked")
 public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTarefaRelatorio {
@@ -250,12 +251,12 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		relatorioExtratoDebito.addParametro("nossoNumero", nossoNumero.toString());
 
 		Date dataVencimentoMais75 = Util.adicionarNumeroDiasDeUmaData(new Date(), 75);
-		String fatorVencimento = fachada.obterFatorVencimento(dataVencimentoMais75);
+		String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais75);
 
-		String especificacaoCodigoBarra = fachada.obterEspecificacaoCodigoBarraFichaCompensacao(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+		String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 				documentoCobranca.getValorDocumento(), nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
 
-		String representacaoNumericaCodigoBarraFichaCompensacao = fachada.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+		String representacaoNumericaCodigoBarraFichaCompensacao = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarraSemDigito", especificacaoCodigoBarra);
 		relatorioExtratoDebito.addParametro("representacaoNumericaCodBarra", representacaoNumericaCodigoBarraFichaCompensacao);

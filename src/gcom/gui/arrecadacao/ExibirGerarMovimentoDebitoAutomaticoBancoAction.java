@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
  */
 public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction {
 
+	@SuppressWarnings("rawtypes")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
@@ -90,6 +91,7 @@ public class ExibirGerarMovimentoDebitoAutomaticoBancoAction extends GcomAction 
 		return retorno;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection obterGruposSelecionados(String faturamentoGrupoStringBuffer, Integer anoMesReferencia) {
 
 		Collection retorno = null;

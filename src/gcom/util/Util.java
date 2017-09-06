@@ -1,5 +1,11 @@
 package gcom.util;
 
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
+import gcom.util.email.ServicosEmail;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -9,8 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -43,6 +48,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -50,12 +56,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
-
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import sun.management.ManagementFactory;
 
 public class Util {
 
@@ -82,28 +82,14 @@ public class Util {
 
 	/**
 	 * Método que retorn o ano mes como Integer
-	 * 
-	 * @author thiago toscano
-	 * @date 05/04/2006
-	 * 
-	 * @param date
-	 * @return
 	 */
-
 	public static int getAnoMesComoInt(Date date) {
 		return getAnoMesComoInteger(date).intValue();
 	}
 
 	/**
 	 * Método que retorn o ano mes como Integer
-	 * 
-	 * @author thiago toscano
-	 * @date 05/04/2006
-	 * 
-	 * @param date
-	 * @return
 	 */
-
 	public static Integer getAnoMesComoInteger(Date date) {
 		int mes = getMes(date);
 		String sMes = mes + "";
@@ -115,9 +101,8 @@ public class Util {
 		return new Integer(ano + "" + sMes);
 	}
 
-	/*
-	 * Formatação para numeração de RA manual Autor: Raphael Rossiter Data:
-	 * 07/11/2006
+	/**
+	 * Formatação para numeração de RA manual
 	 */
 	public static String formatarNumeracaoRAManual(Integer numeracao) {
 
@@ -147,9 +132,8 @@ public class Util {
 		return retorno;
 	}
 
-	/*
-	 * Obter apenas o valor da numeração Autor: Raphael Rossiter Data:
-	 * 07/11/2006
+	/**
+	 * Obter apenas o valor da numeração
 	 */
 	public static Integer obterNumeracaoRAManual(String numeracao) {
 
@@ -166,27 +150,12 @@ public class Util {
 
 	/**
 	 * Método que retorn o ano mes como string
-	 * 
-	 * @author thiago toscano
-	 * @date 05/04/2006
-	 * 
-	 * @param date
-	 * @return
 	 */
 	public static String getAnoMesComoString(Date date) {
 		return getAnoMesComoInteger(date).toString();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param colecao
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
-
 	public static Object retonarObjetoDeColecao(Collection<? extends Object> colecao) {
-
 		Object retorno = null;
 
 		if (colecao != null && !colecao.isEmpty()) {
@@ -201,15 +170,7 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param colecao
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static Object[] retonarObjetoDeColecaoArray(Collection colecao) {
-
 		Object[] retorno = null;
 
 		if (colecao != null && !colecao.isEmpty()) {
@@ -224,15 +185,6 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param value1
-	 *            Description of the Parameter
-	 * @param value2
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
 	public static Integer somaInteiros(Integer value1, Integer value2) {
 		int v1 = 0;
 		int v2 = 0;
@@ -246,15 +198,6 @@ public class Util {
 		return new Integer(v1 + v2);
 	}
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param value1
-	 *            Description of the Parameter
-	 * @param value2
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
 	public static BigDecimal somaBigDecimal(BigDecimal value1, BigDecimal value2) {
 
 		BigDecimal v1 = BigDecimal.ZERO;
@@ -269,15 +212,6 @@ public class Util {
 		return v1.add(v2);
 	}
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param value1
-	 *            Description of the Parameter
-	 * @param value2
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
 	public static BigDecimal subtrairBigDecimal(BigDecimal value1, BigDecimal value2) {
 
 		BigDecimal v1 = BigDecimal.ZERO;
@@ -324,11 +258,7 @@ public class Util {
 
 	/**
 	 * Subtrai a data no formato AAAAMM Exemplo 200508 retorna 200507
-	 * 
-	 * Author: Sávio Luiz Data: 20/01/2006
-	 * 
-	 * @param data
-	 *            com a barra
+
 	 * @return Uma data no formato yyyyMM (sem a barra)
 	 */
 	public static int subtrairMesDoAnoMes(int anoMes, int qtdMeses) {
@@ -358,7 +288,6 @@ public class Util {
 
 	
 	public static String formatarMesAnoParaAnoMes(String data) {
-
 		String mes = data.substring(0, 2);
 		String ano = data.substring(2, 6);
 
@@ -371,9 +300,6 @@ public class Util {
 
 		if (mesAnoString.length() > 4) {
 
-			// modificado por sávio,pois se a data for 012006 ele tira o 0
-			// quando é
-			// passado para int e ai dá estouro.
 			if (mesAnoString.length() == 5) {
 				mesAnoString = "0" + mesAnoString;
 			}
@@ -387,7 +313,6 @@ public class Util {
 	}
 
 	public static Integer formatarMesAnoComBarraParaAnoMes(String mesAno) {
-
 		String mes = mesAno.substring(0, 2);
 		String ano = mesAno.substring(3, 7);
 
@@ -395,14 +320,9 @@ public class Util {
 	}
 
 	/**
-	 * Author: Raphael Rossiter Data: 20/01/2006
-	 * 
-	 * @param data
-	 *            com a barra
 	 * @return Uma data no formato yyyyMM (sem a barra)
 	 */
 	public static String formatarMesAnoParaAnoMesSemBarra(String data) {
-
 		String mes = data.substring(0, 2);
 		String ano = data.substring(3, 7);
 
@@ -438,11 +358,10 @@ public class Util {
 	}
 
 	/**
-	 * Formata o anomes para o mesano sem barra e o no só com os 2 ultimos
-	 * digitos EX.: entrada: 200702 saída:0207 Autor:Sávio Luiz
+	 * Formata o anomes para o mesano sem barra e o no só com os 2 ultimos digitos 
+	 * Ex: Entrada: 200702 Saída: 0207
 	 */
 	public static String formatarAnoMesParaMesAnoCom2Digitos(int anoMes) {
-
 		String anoMesFormatado = "";
 		String anoMesRecebido = "" + anoMes;
 		if (anoMesRecebido.length() < 6) {
@@ -456,7 +375,6 @@ public class Util {
 	}
 
 	public static String formatarAnoMesParaMesAno(String anoMes) {
-
 		String anoMesFormatado = "";
 		String anoMesRecebido = "" + anoMes;
 		if (anoMesRecebido.length() < 6) {
@@ -468,9 +386,38 @@ public class Util {
 		}
 		return anoMesFormatado;
 	}
+	
+	public static Date formatarDDMMAAAAParaDate(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("/");
+			
+		String dia = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String ano = arrayDia[2]; 
 
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
+	public static String formatarYYYYMMDDTracoParaDDMMAAAABarra(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("-");
+			
+		String ano = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String dia = arrayDia[2]; 
+
+		StringBuilder dataFormatada = new StringBuilder();
+		
+		dataFormatada.append(dia).append("/").append(mes).append("/").append(ano);
+		
+		return dataFormatada.toString();
+	}
+	
 	public static int somarData(int data) {
-
 		String dataFormatacao = "" + data;
 
 		int ano = new Integer(dataFormatacao.substring(0, 4)).intValue();
@@ -494,13 +441,6 @@ public class Util {
 		return new Integer(anoMes).intValue();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param parametro
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static String formatarResultado(String parametro) {
 		if (parametro != null && !parametro.trim().equals("")) {
 			if (parametro.equals("null")) {
@@ -514,14 +454,7 @@ public class Util {
 	}
 
 	/**
-	 * Adiciona zeros a esqueda do número informado tamamho máximo campo 6
-	 * Número 16 retorna 000016
-	 * 
-	 * @param tamanhoMaximoCampo
-	 *            Descrição do parâmetro
-	 * @param numero
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
+	 * Adiciona zeros a esqueda do número informado tamamho máximo campo 6 Número 16 retorna 000016
 	 */
 	public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, String numero) {
 		String zeros = "";
@@ -532,15 +465,11 @@ public class Util {
 			for (int a = 0; a < (tamanhoMaximoCampo - numero.length()); a++) {
 				zeros = zeros.concat("0");
 			}
-			// concatena os zeros ao numero
-			// caso o numero seja diferente de nulo
 			retorno = zeros.concat(numero);
 		} else {
 			for (int a = 0; a < tamanhoMaximoCampo; a++) {
 				zeros = zeros.concat("0");
 			}
-			// retorna os zeros
-			// caso o numero seja nulo
 			retorno = zeros;
 		}
 
@@ -566,18 +495,10 @@ public class Util {
 	public static Date converterStringParaHoraMinuto(String horaMinuto) {
 		Date retorno = null;
 
-		// Obtém a hora
 		String hora = horaMinuto.substring(0, 2);
-		// Obtém os minutos
 		String minuto = horaMinuto.substring(3, 5);
-
-		// obtém a data mínima do mês selecionado
 		Calendar data = Calendar.getInstance();
-
-		// Seta como data atual
 		data.setTime(new Date());
-
-		// Seta a hora
 		data.set(Calendar.HOUR_OF_DAY, new Integer(hora).intValue());
 		data.set(Calendar.MINUTE, new Integer(minuto).intValue());
 		data.set(Calendar.SECOND, 0);
@@ -589,14 +510,8 @@ public class Util {
 	}
 
 	/**
-	 * Método que converte uma hora passa em Date onde contém apenas a hora
-	 * informada EX: 11:30:52
-	 * 
-	 * 
-	 * @param horaMinutoSegundo
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @author fernanda paiva
+	 * Método que converte uma hora passa em Date onde contém apenas a hora informada
+	 * EX: 11:30:52
 	 */
 	public static Date converterStringParaHoraMinutoSegundo(String horaMinutoSegundo) {
 
@@ -615,17 +530,7 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param n
-	 *            Descrição do parâmetro
-	 * @param d
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static int dividirArredondarResultado(int n, int d) {
-
 		int retorno = 0;
 
 		BigDecimal numerador = new BigDecimal(n);
@@ -640,15 +545,6 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param n
-	 *            Descrição do parâmetro
-	 * @param d
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static int dividirArredondarResultadoCima(int n, int d) {
 
 		int retorno = 0;
@@ -665,29 +561,13 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param numero
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static int arredondar(BigDecimal numero) {
-
 		numero = numero.setScale(0, BigDecimal.ROUND_HALF_UP);
 
 		return numero.intValue();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param anoMes
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static int obterMes(int anoMes) {
-
 		String dataFormatacao = "" + anoMes;
 
 		int mes = new Integer(dataFormatacao.substring(4, 6)).intValue();
@@ -695,13 +575,6 @@ public class Util {
 		return mes;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param anoMes
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static int obterAno(int anoMes) {
 
 		String dataFormatacao = "" + anoMes;
@@ -727,13 +600,6 @@ public class Util {
 
 	/**
 	 * Converte a data passada em string
-	 * 
-	 * @author: Thiago Toscano, Thiago Toscano
-	 * @date: 20/03/2006, 20/03/2006
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
 	 */
 	public static String formatarData(Date data) {
 		String retorno = "";
@@ -749,7 +615,6 @@ public class Util {
 				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			}
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1 + "/");
 			} else {
@@ -764,13 +629,6 @@ public class Util {
 
 	/**
 	 * Converte a data passada em string retorna AAAAMMDD
-	 * 
-	 * @author: Sávio Luiz
-	 * @date: 09/04/2007
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
 	 */
 	public static String formatarDataSemBarra(Date data) {
 		String retorno = "";
@@ -782,7 +640,6 @@ public class Util {
 
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
 			} else {
@@ -807,13 +664,6 @@ public class Util {
 	
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
-	 * 
-	 * @author: Sávio Luiz
-	 * @date: 09/04/2007
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
 	 */
 	public static String formatarDataSemBarraDDMMAAAA(Date data) {
 		String retorno = "";
@@ -829,7 +679,6 @@ public class Util {
 				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
 			}
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
 			} else {
@@ -845,13 +694,6 @@ public class Util {
 
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
-	 * 
-	 * @author: Sávio Luiz
-	 * @date: 09/04/2007
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
 	 */
 	public static String formatarDataComTracoAAAAMMDD(Date data) {
 		String retorno = "";
@@ -864,7 +706,6 @@ public class Util {
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
 			dataBD.append("-");
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
 			} else {
@@ -881,16 +722,46 @@ public class Util {
 		}
 		return retorno;
 	}
+	
+	public static String formatarDataComBarraDDMMAAAA(Date data) {
+		String retorno = "";
+		if (data != null) { // 1
+			Calendar dataCalendar = new GregorianCalendar();
+			StringBuffer dataBD = new StringBuffer();
+
+			dataCalendar.setTime(data);
+			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
+			} else {
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
+			}
+
+			dataBD.append("/");
+
+			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
+			} else {
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
+			}
+			
+			dataBD.append("/");
+			dataBD.append(dataCalendar.get(Calendar.YEAR));
+
+			retorno = dataBD.toString();
+		}
+		return retorno;
+	}
+	
+	public static void main (String [] args) {
+		Date data = Util.formatarDDMMAAAAParaDate("01/07/2017");
+		
+		System.out.println(data);
+		
+		System.out.println(Util.formatarDataComBarraDDMMAAAA(data));
+	}
 
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
-	 * 
-	 * @author: Thiago Toscano
-	 * @date: 13/02/2008
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
 	 */
 	public static String formatarDataAAAAMMDD(Date data) {
 		String retorno = "";
@@ -901,15 +772,13 @@ public class Util {
 			dataCalendar.setTime(data);
 
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
-			// dataBD.append("-");
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
 			} else {
 				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
 			}
-			// dataBD.append("-");
+			
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
 			} else {
@@ -922,50 +791,26 @@ public class Util {
 	}
 
 	/**
-	 * Monta um data inicial com hora,minuto e segundo zerados para pesquisa no
-	 * banco
-	 * 
-	 * @author: Rafael Pinto
-	 * @date: 19/10/2006
-	 * 
-	 * @param Date
-	 * 
-	 * @return dataInicial
+	 * Monta um data inicial com hora,minuto e segundo zerados para pesquisa no banco
 	 */
 	public static Date formatarDataInicial(Date dataInicial) {
-
 		Calendar calendario = GregorianCalendar.getInstance();
-
 		calendario.setTime(dataInicial);
-
 		calendario.set(Calendar.HOUR_OF_DAY, 0);
 		calendario.set(Calendar.MINUTE, 0);
 		calendario.set(Calendar.SECOND, 0);
-
 		return calendario.getTime();
 	}
 
 	/**
-	 * Monta um data inicial com hora,minuto e segundo zerados para pesquisa no
-	 * banco
-	 * 
-	 * @author: Rafael Pinto
-	 * @date: 19/10/2006
-	 * 
-	 * @param Date
-	 * 
-	 * @return dataInicial
+	 * Monta um data inicial com hora,minuto e segundo zerados para pesquisa no banco
 	 */
 	public static Date formatarDataFinal(Date dataFinal) {
-
 		Calendar calendario = Calendar.getInstance();
-
 		calendario.setTime(dataFinal);
-
 		calendario.set(Calendar.HOUR_OF_DAY, 23);
 		calendario.set(Calendar.MINUTE, 59);
 		calendario.set(Calendar.SECOND, 59);
-
 		return calendario.getTime();
 	}
 
@@ -990,11 +835,7 @@ public class Util {
 	/**
 	 * Converte a data passada para o formato "DD/MM/YYYY"
 	 * 
-	 * @author: Rafael Pinto
-	 * @date: 22/01/2008
-	 * 
-	 * @param String
-	 *            data no formato "YYYYMMDD"
+	 * @param String data no formato "YYYYMMDD"
 	 * @return String data no formato "DD/MM/YYYY"
 	 */
 	public static String converterDataSemBarraParaDataComBarra(String data) {
@@ -1009,13 +850,6 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static String formatarDataComHora(Date data) {
 		StringBuffer dataBD = new StringBuffer();
 
@@ -1030,7 +864,6 @@ public class Util {
 				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			}
 
-			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1 + "/");
 			} else {
@@ -1067,13 +900,6 @@ public class Util {
 		return dataBD.toString();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static String formatarDataHHMMSS(Date data) {
 		StringBuffer dataBD = new StringBuffer();
 
@@ -1106,13 +932,6 @@ public class Util {
 		return dataBD.toString();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static String formatarDataHHMM(Date data) {
 		StringBuffer dataBD = new StringBuffer();
 
@@ -1138,13 +957,7 @@ public class Util {
 	}
 
 	/**
-	 * Compara dois objetos no formato anoMesReferencia de acordo com o sinal
-	 * logico passado.
-	 * 
-	 * @param anoMesReferencia1
-	 * @param anoMesReferencia2
-	 * @param sinal
-	 * @return um boleano
+	 * Compara dois objetos no formato anoMesReferencia de acordo com o sinal logico passado.
 	 */
 	public static boolean compararAnoMesReferencia(Integer anoMesReferencia1, Integer anoMesReferencia2, String sinal) {
 		boolean retorno = true;
@@ -1182,13 +995,7 @@ public class Util {
 	}
 
 	/**
-	 * Compara dois objetos no formato anoMesReferencia de acordo com o sinal
-	 * logico passado.
-	 * 
-	 * @param anoMesReferencia1
-	 * @param anoMesReferencia2
-	 * @param sinal
-	 * @return um boleano
+	 * Compara dois objetos no formato anoMesReferencia de acordo com o sinal logico passado.
 	 */
 	public static boolean compararAnoMesReferencia(String anoMesReferencia1, String anoMesReferencia2, String sinal) {
 		boolean retorno = true;
@@ -1226,13 +1033,7 @@ public class Util {
 	}
 
 	/**
-	 * Compara dois objetos no formato HH:MM de acordo com o sinal logico
-	 * passado.
-	 * 
-	 * @param horaMinuto1
-	 * @param horaMinuto2
-	 * @param sinal
-	 * @return um boleano
+	 * Compara dois objetos no formato HH:MM de acordo com o sinal logico passado.
 	 */
 	public static boolean compararHoraMinuto(String horaMinuto1, String horaMinuto2, String sinal) {
 
@@ -1268,13 +1069,6 @@ public class Util {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param data
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public static String formatarHoraSemData(Date data) {
 		StringBuffer dataBD = new StringBuffer("");
 
@@ -1346,14 +1140,7 @@ public class Util {
 	}
 
 	/**
-	 * Obter Dígito Verificador Módulo CAERN Author : Rafael Francisco Pinto
-	 * Data : 13/04/2007
-	 * 
-	 * Calcula o dígito verificador do código de barras no módulo caern
-	 * 
-	 * @param numero
-	 *            Número do código de barra para calcular o dígito veficador
-	 * @return digito verificador do módulo caern
+	 * Obter Dígito Verificador Módulo CAERN
 	 */
 	public static Integer obterDigitoVerificadorModuloCAERN(String numero) {
 
@@ -1366,10 +1153,6 @@ public class Util {
 		Integer resultado = digitoCalculo / 11;
 		Integer restoDigito = digitoCalculo - (resultado * 11);
 
-		/*
-		 * Colocado por Raphael Rossiter em 03/04/2007 (Analista: Eduardo
-		 * Borges) Caso o dígito seja igual a 10 o retorno será zero
-		 */
 		if (restoDigito > 9) {
 			restoDigito = 0;
 		}
@@ -1378,86 +1161,44 @@ public class Util {
 	}
 
 	/**
-	 * [UC0261] - Obter Dígito Verificador Módulo 11 Author : Pedro Alexandre
-	 * Data : 15/02/2006
-	 * 
-	 * Calcula o dígito verificador do código de barras no módulo 11(onze)
-	 * 
-	 * @param numero
-	 *            Número do código de barra no formato long para calcular o
-	 *            dígito veficador
-	 * @return digito verificador do módulo 11(onze)
+	 * [UC0261] - Obter Dígito Verificador Módulo 11
 	 */
 	public static Integer obterDigitoVerificadorModulo11(Long numero) {
-
-		// converte o número recebido para uma string
 		String entradaString = String.valueOf(numero);
 
-		// inicia o sequêncial de multiplicação para 2(dois)
 		int sequencia = 2;
-
-		// cria as variáveis que serão utilizadas no calculo
-		int digito, contAuxiliar;
-
-		// variável que vai armazenar a soma da múltiplicação de cada dígito
+		int digito, contAuxiliar = 1;
 		int somaDigitosProduto = 0;
 
-		// contador auxiliar
-		contAuxiliar = 1;
-
-		// laço para calcular a soma da múltiplicação de cada dígito
 		for (int i = 0; i < entradaString.length(); i++) {
-
-			// recupera o dígito da string
 			digito = new Integer(entradaString.substring(entradaString.length() - contAuxiliar, entradaString.length() - i)).intValue();
 
-			// multiplica o digito pelo sequência e acumula o resultado
 			somaDigitosProduto = somaDigitosProduto + (digito * sequencia);
 
-			// se osequência for igual a 9(nove)
 			if (sequencia == 9) {
-				// a sequência volta para 2(dois)
 				sequencia = 2;
 			} else {
-				// incrementa a sequência mais 1
 				++sequencia;
 			}
 
-			// incrementa o contador auxiliar
 			contAuxiliar++;
 		}
 
-		// calcula o resto da divisão
 		int resto = (somaDigitosProduto % 11);
-
-		// variável que vai armazenar o dígito verificador
 		int dac;
 
-		// se o resto for 0(zero) ou 1(1)
 		if (resto == 0 || resto == 1) {
-			// o dígito verificador vai ser 0(zero)
 			dac = 0;
 		} else if (resto == 10) {
-			// o dígito verificador vai ser 1(um)
 			dac = 1;
 		} else {
-			// o dígito verificador vai ser a diferença
 			dac = 11 - resto;
 		}
-		// retorna o dígito verificador calculado
 		return new Integer(dac);
 	}
 
 	/**
-	 * [UC0261] - Obter Dígito Verificador Módulo 11 Author : Pedro Alexandre
-	 * Data : 15/02/2006
-	 * 
-	 * Calcula o dígito verificador do código de barras no módulo 11(onze)
-	 * 
-	 * @param numero
-	 *            Número do código de barra no formato string para calcular o
-	 *            dígito veficador
-	 * @return digito verificador do módulo 11(onze)
+	 * [UC0261] - Obter Dígito Verificador Módulo 11
 	 */
 	public static Integer obterDigitoVerificadorModulo11(String numero) {
 
@@ -1482,30 +1223,6 @@ public class Util {
 			dv = 11 - resto;
 		}
 		return dv;
-		/*
-		 * // converte o número recebido para uma string String entradaString =
-		 * numero; // inicia o sequêncial de multiplicação para 2(dois) int
-		 * sequencia = 2; // cria as variáveis que serão utilizadas no calculo
-		 * int digito, contAuxiliar; // variável que vai armazenar a soma da
-		 * múltiplicação de cada dígito int somaDigitosProduto = 0; // contador
-		 * auxiliar contAuxiliar = 1; // laço para calcular a soma da
-		 * múltiplicação de cada dígito for (int i = 0; i <
-		 * entradaString.length(); i++) { // recupera o dígito da string digito
-		 * = new Integer(entradaString.substring(entradaString.length() -
-		 * contAuxiliar, entradaString.length() - i)).intValue(); // multiplica
-		 * o digito pelo sequência e acumula o resultado somaDigitosProduto =
-		 * somaDigitosProduto + (digito * sequencia); // se osequência for igual
-		 * a 9(nove) if (sequencia == 9) { // a sequência volta para 2(dois)
-		 * sequencia = 2; } else { // incrementa a sequência mais 1 ++sequencia;
-		 * } // incrementa o contador auxiliar contAuxiliar++; } // calcula o
-		 * resto da divisão int resto = (somaDigitosProduto % 11); // variável
-		 * que vai armazenar o dígito verificador int dac; // se o resto for
-		 * 0(zero) ou 1(1) if (resto == 0 || resto == 1) { // o dígito
-		 * verificador vai ser 0(zero) dac = 0; } else if (resto == 10) { // o
-		 * dígito verificador vai ser 1(um) dac = 1; } else { // o dígito
-		 * verificador vai ser a diferença dac = 11 - resto; } // retorna o
-		 * dígito verificador calculado return new Integer(dac);
-		 */
 	}
 
 	/**
@@ -1514,13 +1231,7 @@ public class Util {
 	 * 
 	 * 354654564,12 = 354654564.12 354.654.564,12 = 354654564.12 35465456412 =
 	 * 35465456412.00 354654564.12 = 354654564.12 354654564,12 = 354654564.12
-	 * 
-	 * @param data
-	 * @autor Sávio Luiz, Thiago Toscano
-	 * @date 15/02/2006, 18/03/2006
-	 * @return
 	 */
-
 	public static BigDecimal formatarMoedaRealparaBigDecimal(String valor) {
 		BigDecimal bigDecimalFormatado = new BigDecimal("0");
 
@@ -1568,13 +1279,7 @@ public class Util {
 	 * 
 	 * 354654564,12 = 354654564.12 354.654.564,12 = 354654564.12 35465456412 =
 	 * 354654564.12 354654564.12 = 354654564.12 354654564,12 = 354654564.12
-	 * 
-	 * @param data
-	 * @autor Thiago Toscano
-	 * @date 15/02/2006, 18/03/2006
-	 * @return
 	 */
-
 	public static BigDecimal formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(String valor) {
 		BigDecimal bigDecimalFormatado = null;
 
@@ -1606,13 +1311,7 @@ public class Util {
 
 	/**
 	 * Método que recebe uma e verifica se a string só tem numeros.
-	 * 
-	 * @param data
-	 * @autor Sávio Luiz
-	 * @date 20/05/2005
-	 * @return
 	 */
-
 	public static Integer recuperaAnoMesDaData(Date data) {
 
 		int ano = Util.getAno(data);
@@ -1629,13 +1328,7 @@ public class Util {
 	}
 
 	/**
-	 * Método que recebe uma data com string no formato dd/MM/yyyy e converte
-	 * para o objeto Date.
-	 * 
-	 * @param data
-	 * @autor Thiago Toscano
-	 * @date 20/05/2005
-	 * @return
+	 * Método que recebe uma data com string no formato dd/MM/yyyy e converte para o objeto Date.
 	 */
 	public static Date converteStringParaDate(String data) {
 		Date retorno = null;
@@ -1658,13 +1351,7 @@ public class Util {
 	}
 
 	/**
-	 * Método que recebe uma data com hora com string no formato dd/MM/yyyy
-	 * HH:mm:ss e converte para o objeto Date.
-	 * 
-	 * @param data
-	 * @autor Rafael Santos
-	 * @date 06/04/2006
-	 * @return
+	 * Método que recebe uma data com hora com string no formato dd/MM/yyyy HH:mm:ss e converte para o objeto Date.
 	 */
 	public static Date converteStringParaDateHora(String data) {
 		Date retorno = null;
@@ -1687,22 +1374,11 @@ public class Util {
 	}
 
 	/**
-	 * Método que recebe um int e formata para a data de referência no
-	 * formato(mm/aaaa).
-	 * 
-	 * @param numero
-	 *            inteiro
-	 * @autor Pedro Alexandre
-	 * @date 06/01/2006
-	 * @return uma string contendo a referência formatada
+	 * Método que recebe um int e formata para a data de referência no formato(mm/aaaa).
 	 */
 	public static String formatarMesAnoReferencia(int anoMes) {
-		// converte o valor do tipo int(primitivo em um objeto String)
 		String referenciaEmString = (new Integer(anoMes)).toString();
 
-		// devolve a data de referência formatada com o mês na frente seguido
-		// pelo ano
-		// separados por uma "/"
 		if (referenciaEmString.length() == 6) {
 			return referenciaEmString.substring(4, 6) + "/" + referenciaEmString.substring(0, 4);
 		} else {
@@ -1712,26 +1388,14 @@ public class Util {
 	}
 
 	/**
-	 * Método que recebe uma String e tira os ultimos X caracteres da mesma.
-	 * Onde X é o valor informado como parametro.
-	 * 
-	 * @autor Rhawi Dantas
-	 * @date 07/01/2006
+	 * Método que recebe uma String e tira os ultimos X caracteres da mesma. Onde X é o valor informado como parametro.
 	 */
 	public static String removerUltimosCaracteres(String hql, int valor) {
 		return hql.substring(0, hql.length() - valor);
 	}
 
 	/**
-	 * Comparar duas datas e retornar a diferença de meses entre elas Author:
-	 * Rafael Santos Data: 07/01/20069
-	 * 
-	 * @param dataInicial
-	 *            Data Inicial
-	 * @param dataFinal
-	 *            Data Final
-	 * 
-	 * @return int
+	 * Comparar duas datas e retornar a diferença de meses entre elas
 	 */
 	public static int dataDiff(Date dataInicial, Date dataFinal) {
 		int quantidadeMeses = 0;
@@ -1745,7 +1409,6 @@ public class Util {
 		tempoInicial.setTime(dataInicial);
 		tempoFinal.setTime(dataFinal);
 
-		// Verifica a ordem de inicio das datas
 		if (dataInicial.compareTo(dataFinal) < 0) {
 			tempoBase.setTime(dataFinal);
 			tempoCorrente.setTime(dataInicial);
@@ -1756,7 +1419,6 @@ public class Util {
 
 		}
 
-		// Acumular o Mes
 		while (tempoCorrente.get(GregorianCalendar.YEAR) < tempoBase.get(GregorianCalendar.YEAR)
 				|| tempoCorrente.get(GregorianCalendar.MONTH) < tempoBase.get(GregorianCalendar.MONTH)) {
 
@@ -1769,8 +1431,7 @@ public class Util {
 	}
 
 	/**
-	 * Author: Sávio Luiz Data: 16/01/2006 Valida o ano mes de referencia
-	 * retornando true se a data for inválida e false se a data for válida
+	 * Valida o ano mes de referencia retornando true se a data for inválida e false se a data for válida
 	 * 
 	 */
 	public static boolean validarAnoMes(String anoMesReferencia) {
@@ -1796,14 +1457,7 @@ public class Util {
 	}
 
 	/**
-	 * Author: Sávio Luiz Data: 16/01/2006 Valida o ano mes de referencia
-	 * retornando true se a data for inválida e false se a data for válida
-	 * 
-	 * @param dividendo
-	 *            Valor do Dividendo
-	 * @param divisor
-	 *            Valor do Dividor
-	 * @return O Valor divido, caso necessário arredondado
+	 * Valida o ano mes de referencia retornando true se a data for inválida e false se a data for válida
 	 */
 	public static boolean validarAnoMesSemBarra(String anoMesReferencia) {
 		boolean anoMesInvalido = false;
@@ -1811,11 +1465,9 @@ public class Util {
 		if (anoMesReferencia.length() == 6) {
 
 			String mes = anoMesReferencia.substring(4, 6);
-			// String ano = anoMesReferencia.substring(0, 4);
 
 			try {
 				int mesInt = Integer.parseInt(mes);
-				// int anoInt = Integer.parseInt(ano);
 
 				if (mesInt > 12) {
 					anoMesInvalido = true;
@@ -1831,11 +1483,7 @@ public class Util {
 	}
 
 	/**
-	 * Valida o mês/ano de referência sem a barra retornando true se a data for
-	 * inválida e false se a data for válida
-	 * 
-	 * Author: Rafael Corrêa Data: 15/07/2009
-	 * 
+	 * Valida o mês/ano de referência sem a barra retornando true se a data for inválida e false se a data for válida
 	 */
 	public static boolean validarMesAnoSemBarra(String mesAnoReferencia) {
 		boolean mesAnoValido = true;
@@ -1873,11 +1521,9 @@ public class Util {
 
 		if (mesAnoReferencia.length() == 7) {
 			String mes = mesAnoReferencia.substring(0, 2);
-			// String ano = mesAnoReferencia.substring(3, 7);
 
 			try {
 				int mesInt = Integer.parseInt(mes);
-				// int anoInt = Integer.parseInt(ano);
 
 				if (mesInt > 12) {
 					mesAnoValido = false;
@@ -3383,8 +3029,8 @@ public class Util {
 	
 	public static BigDecimal calcularPercentual(BigDecimal valor, double percentual){
 	    valor = (valor == null) ? BigDecimal.ZERO : valor;
-	    
-	    return valor.multiply(new BigDecimal((percentual/100)));
+	    valor = valor.multiply(new BigDecimal((percentual/100)));
+	    return valor.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	/**
@@ -5715,16 +5361,18 @@ public class Util {
 	 * @return string
 	 */
 	public static String retornaPercentualUsadoDeMemoriaJVM() {
+		Runtime runtime = Runtime.getRuntime();
+		
+		long max  = runtime.maxMemory();
+		long free = runtime.freeMemory();
+		long used = max - free;
 
-		MemoryMXBean memorymxbean = ManagementFactory.getMemoryMXBean();
-		MemoryUsage heap_usage = memorymxbean.getHeapMemoryUsage();
 		NumberFormat format = NumberFormat.getInstance();
 
 		// Retorna o percentual da memoria usada
-		String percentualMemoriaUsada = format.format(((heap_usage.getUsed() * 100) / heap_usage.getMax()));
+		String percentualMemoriaUsada = format.format(((used * 100) / max));
 
 		return percentualMemoriaUsada;
-
 	}
 
 	/**

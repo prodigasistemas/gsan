@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 	
@@ -46,7 +45,10 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
 	private Short indicadoCobrancaMulta;
 	private Short numeroPrestacaoDebito;
+	
+	@SuppressWarnings("rawtypes")
 	private Set clientesGuiaPagamento;
+	
 	private GuiaPagamentoGeral guiaPagamentoGeral;
 	private Integer numeroGuia;
 	private Integer anoGuia;
@@ -331,8 +333,7 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 		return this.lancamentoItemContabil;
 	}
 
-	public void setLancamentoItemContabil(
-			LancamentoItemContabil lancamentoItemContabil) {
+	public void setLancamentoItemContabil(LancamentoItemContabil lancamentoItemContabil) {
 		this.lancamentoItemContabil = lancamentoItemContabil;
 	}
 
@@ -340,8 +341,7 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 		return this.debitoCreditoSituacaoAtual;
 	}
 
-	public void setDebitoCreditoSituacaoAtual(
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
+	public void setDebitoCreditoSituacaoAtual(DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
 		this.debitoCreditoSituacaoAtual = debitoCreditoSituacaoAtual;
 	}
 
@@ -349,15 +349,16 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 		return this.debitoCreditoSituacaoAnterior;
 	}
 
-	public void setDebitoCreditoSituacaoAnterior(
-			DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
+	public void setDebitoCreditoSituacaoAnterior(DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
 		this.debitoCreditoSituacaoAnterior = debitoCreditoSituacaoAnterior;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClientesGuiaPagamento() {
 		return clientesGuiaPagamento;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClientesGuiaPagamento(Set clientesGuiaPagamento) {
 		this.clientesGuiaPagamento = clientesGuiaPagamento;
 	}
@@ -404,32 +405,6 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 
 	public void setNumeroPrestacaoTotal(Short numeroPrestacaoTotal) {
 		this.numeroPrestacaoTotal = numeroPrestacaoTotal;
-	}
-    
-    public String getPrestacaoFormatada(){
-        String prestacaoFormatada = "";
-        
-        if(getNumeroPrestacaoDebito() != null &&
-                getNumeroPrestacaoTotal() != null){
-            prestacaoFormatada = prestacaoFormatada + getNumeroPrestacaoDebito() + " / " + getNumeroPrestacaoTotal();
-        }
-        
-        return  prestacaoFormatada ;
-    }
-	
-	public String[] retornarAtributosInformacoesOperacaoEfetuada(){
-		String []atributos = {
-				"debitoTipo.descricao"
-				, "valorDebito"
-				};
-			return atributos;		
-	}
-	
-	public String[] retornarLabelsInformacoesOperacaoEfetuada(){
-		String []labels = {"Tipo Debito"
-				, "Valor"
-				};
-			return labels;		
 	}
 
 	public Integer getAnoGuia() {
@@ -480,6 +455,40 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 		this.observacao = observacao;
 	}
 
+	public String getNumeroGuiaFatura() {
+		return numeroGuiaFatura;
+	}
+
+	public void setNumeroGuiaFatura(String numeroGuiaFatura) {
+		this.numeroGuiaFatura = numeroGuiaFatura;
+	}
+	
+	public String getPrestacaoFormatada(){
+        String prestacaoFormatada = "";
+        
+        if(getNumeroPrestacaoDebito() != null &&
+                getNumeroPrestacaoTotal() != null){
+            prestacaoFormatada = prestacaoFormatada + getNumeroPrestacaoDebito() + " / " + getNumeroPrestacaoTotal();
+        }
+        
+        return  prestacaoFormatada ;
+    }
+	
+	public String[] retornarAtributosInformacoesOperacaoEfetuada(){
+		String []atributos = {
+				"debitoTipo.descricao"
+				, "valorDebito"
+				};
+			return atributos;		
+	}
+	
+	public String[] retornarLabelsInformacoesOperacaoEfetuada(){
+		String []labels = {"Tipo Debito"
+				, "Valor"
+				};
+			return labels;		
+	}
+	
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -493,14 +502,6 @@ public class GuiaPagamento extends ObjetoTransacao implements IGuiaPagamento {
 		return (this.getId().equals(castOther.getId()));
 	}
 
-	public String getNumeroGuiaFatura() {
-		return numeroGuiaFatura;
-	}
-
-	public void setNumeroGuiaFatura(String numeroGuiaFatura) {
-		this.numeroGuiaFatura = numeroGuiaFatura;
-	}
-	
 	public String getFormatarAnoMesReferenciaGuia() {
 
 		String anoMesRecebido = "" + this.getAnoGuia();

@@ -19,7 +19,6 @@ public class DocumentoTipo extends ObjetoTransacao {
 	private Short indicadorAgregador;
 	private Date ultimaAlteracao;
 
-
 	//constantes
 	public final static Integer CONTA = new Integer("1");
 	public final static Integer ENTRADA_DE_PARCELAMENTO = new Integer("2");

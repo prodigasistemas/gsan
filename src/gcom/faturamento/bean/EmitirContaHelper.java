@@ -7,18 +7,14 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-/**
- * [UC ] 
- * @author Vivianne Sousa
- * @date 28/06/2007
- */
 public class EmitirContaHelper implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	public final static BigDecimal VALOR_LIMITE_FICHA_COMPENSACAO = new BigDecimal("1000");
-	
+
 	private Integer idConta;
-	
+
 	private Integer idCliente;
 	private String nomeCliente;
 	private String cpf;
@@ -54,9 +50,7 @@ public class EmitirContaHelper implements Serializable {
 	private Integer idFaturamentoGrupo;
 	private Integer idEmpresa;
 	private BigDecimal percentualEsgotoConta;
-	
 	private BigDecimal valorConta;
-	
 	private String enderecoImovel;
 	private String inscricaoImovel;
 	private String idClienteResponsavel;
@@ -94,7 +88,6 @@ public class EmitirContaHelper implements Serializable {
 	private Integer numeroSequencialRota;
 	private Integer idImovelContaEnvio;
 	private String consumoMedio;
-	
 	private String categoriaImovel;
 	private String descricaoAnormalidadeConsumo;
 	private String descricaoTipoConsumo;
@@ -108,16 +101,12 @@ public class EmitirContaHelper implements Serializable {
 	private Integer idFuncionario;
 	private String nomeFuncionario;
 	private Integer contaTipo;
-	
 	private Integer numeroQuadraEntrega;
 	private Integer idRotaEntrega;
 	private Integer numeroSequencialRotaEntrega;
 
-	
-	//---------------------------------------------------------
-	//utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER)
-	//Vivianne Sousa
-	//20/08/2007
+	// ---------------------------------------------------------
+	// Utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER)
 	private String msgConta;
 	private String msgLinha1Conta;
 	private String msgLinha2Conta;
@@ -161,6 +150,22 @@ public class EmitirContaHelper implements Serializable {
 	private String descricaoAbreviadaLeituraAnormalidade;
 	private String dataPagamentoConta;
 	private Short clienteComFaturaAgrupada;
+
+	private Integer quantidadeImoveisMicro;
+	private Integer somaConsumosImoveisMicro;
+	private Integer consumoMacro;
+	private BigDecimal valorTotalASerrateado;
+	
+	private boolean informarImpostos;
+	
+	private String descricaoImpostosEAliquotas;
+	private BigDecimal percentualImpostosEAliquotas;
+	private BigDecimal valorBaseCalculoImpostos;
+	private BigDecimal valorImpostosEAliquotas;
+	
+	private String agenciaReguladora;
+	private String telefoneAgenciaReguladora;
+	private String emailAgenciaReguladora;
 	
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -174,8 +179,7 @@ public class EmitirContaHelper implements Serializable {
 		return descricaoAbreviadaLeituraAnormalidade;
 	}
 
-	public void setDescricaoAbreviadaLeituraAnormalidade(
-			String descricaoAbreviadaLeituraAnormalidade) {
+	public void setDescricaoAbreviadaLeituraAnormalidade(String descricaoAbreviadaLeituraAnormalidade) {
 		this.descricaoAbreviadaLeituraAnormalidade = descricaoAbreviadaLeituraAnormalidade;
 	}
 
@@ -271,8 +275,7 @@ public class EmitirContaHelper implements Serializable {
 		return valorExigidoColiformesTermotolerantes;
 	}
 
-	public void setValorExigidoColiformesTermotolerantes(
-			String valorExigidoColiformesTermotolerantes) {
+	public void setValorExigidoColiformesTermotolerantes(String valorExigidoColiformesTermotolerantes) {
 		this.valorExigidoColiformesTermotolerantes = valorExigidoColiformesTermotolerantes;
 	}
 
@@ -312,8 +315,7 @@ public class EmitirContaHelper implements Serializable {
 		return valorConformeColiformesTotais;
 	}
 
-	public void setValorConformeColiformesTotais(
-			String valorConformeColiformesTotais) {
+	public void setValorConformeColiformesTotais(String valorConformeColiformesTotais) {
 		this.valorConformeColiformesTotais = valorConformeColiformesTotais;
 	}
 
@@ -321,634 +323,360 @@ public class EmitirContaHelper implements Serializable {
 		return valorConformeColiformesTermotolerantes;
 	}
 
-	public void setValorConformeColiformesTermotolerantes(
-			String valorConformeColiformesTermotolerantes) {
+	public void setValorConformeColiformesTermotolerantes(String valorConformeColiformesTermotolerantes) {
 		this.valorConformeColiformesTermotolerantes = valorConformeColiformesTermotolerantes;
 	}
 
 	private String enderecoLinha2;
-	private String enderecoLinha3; 
+	private String enderecoLinha3;
 	private String datasVencimento;
-	//---------------------------------------------------------
+	// ---------------------------------------------------------
 
-	//---------------------------------------------------------
-	//utilizado quando for boleto bancario
-	//Vivianne Sousa 19/09/2008
+	// ---------------------------------------------------------
+	// utilizado quando for boleto bancario
 	private String nossoNumero;
-	//---------------------------------------------------------
-	
+	// ---------------------------------------------------------
+
 	private Integer codigoDebitoAutomatico;
-	
-	//---------------------------------------------------------
-	//Utilizado para pesquisar mensagem de quitação
-	//Hugo Amorim 28/06/2010
+
+	// ---------------------------------------------------------
+	// Utilizado para pesquisar mensagem de quitação
 	private Integer anoMesFaturamentoGrupo;
-	//---------------------------------------------------------
-	
-	
+
+	// ---------------------------------------------------------
+
 	public EmitirContaHelper() {
 	}
-	
+
 	public EmitirContaHelper(Integer idImovel, Integer amReferencia) {
 		this.idImovel = idImovel;
 		this.amReferencia = amReferencia;
 	}
-	
-	//utilizado no Emitir Segunda Via de Conta Compesa
-	//repositorioFaturamento.pesquisarConta
-	//Vivianne Sousa
-	public EmitirContaHelper(
-			Integer idConta, 
-			String nomeCliente,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel, 
-			Integer codDebitoAutomatico,
-			Integer anoMesFaturamentoGrupo,
-			BigDecimal valorRateioAgua,
-			BigDecimal valorRateioEsgoto){
-		
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.idImovelContaEnvio = idImovelContaEnvio;
-		this.nomeImovel = nomeImovel;
-		this.codigoDebitoAutomatico = codDebitoAutomatico;
-		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
-		this.valorRateioAgua = valorRateioAgua;
-		this.valorRateioEsgoto = valorRateioEsgoto;
-	}
-	
-	//utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
-	//repositorioFaturamento.pesquisarContaERota
-	//Vivianne Sousa
-	public EmitirContaHelper(Integer idConta, 
-			String nomeCliente,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta, 
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto,
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel,
-			Integer idLocalidade,
-			Integer idGerenciaRegional,
-			String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao,
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			BigDecimal percentualEsgotoConta,
-			Short codigoRota,
-			Integer numeroSequencialRota,
-			String numeroHidrometro,
-			Integer debitoCreditoSituacaoAtualConta,
-			String nomeImovel) {
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.codigoRota = codigoRota;
-		this.numeroSequencialRota = numeroSequencialRota;
-		this.numeroHidrometro = numeroHidrometro;
-		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
-		this.nomeImovel = nomeImovel;
-	}
-	
-	//utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
-	//repositorioFaturamento.pesquisarContaERota 
-	//foi adcionado cpf,cnpj
-	//Arthur
-	public EmitirContaHelper(Integer idConta, 
-			String nomeCliente,
-			String cpf,
-			String cnpj,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta, 
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto,
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel,
-			Integer idLocalidade,
-			Integer idGerenciaRegional,
-			String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao,
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			BigDecimal percentualEsgotoConta,
-			Short codigoRota,
-			Integer numeroSequencialRota,
-			String numeroHidrometro,
-			Integer debitoCreditoSituacaoAtualConta,
-			String nomeImovel) {
-		
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.cpf = cpf;
-		this.cnpj= cnpj;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.codigoRota = codigoRota;
-		this.numeroSequencialRota = numeroSequencialRota;
-		this.numeroHidrometro = numeroHidrometro;
-		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
-		this.nomeImovel = nomeImovel;
-	}
-		
-	
-	//repositorioFaturamento.pesquisarContasDebitoAutomatico
-	//repositorioFaturamento.pesquisarContasNormais
-	public EmitirContaHelper(Integer idConta,
-			String nomeCliente,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua,
-			Integer consumoEsgoto,
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos,
-			BigDecimal valorImpostos,
-			Date dataValidadeConta,
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional,
-			String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo,
-			Integer idEmpresa,
-			String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			BigDecimal percentualEsgotoConta) {
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-	}
-	
-	//utilizado no Emitir Segunda Via de Conta Compesa
-	//repositorioFaturamento.pesquisarConta
-	//Arthur Carvalho
-	public EmitirContaHelper(
-			Integer idConta, 
-			String nomeCliente,
-			String cpf,
-			String cnpj,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel){
-		
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.cpf = cpf;
-		this.cnpj = cnpj;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.idImovelContaEnvio = idImovelContaEnvio;
-		this.nomeImovel = nomeImovel;
-	
-	}
-	
-	//utilizado no Emitir Segunda Via de Conta Compesa
-	//repositorioFaturamento.pesquisarConta
-	//Arthur Carvalho
-	public EmitirContaHelper(
-			Integer idConta, 
-			String nomeCliente,
-			String cpf,
-			String cnpj,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel,
-			Integer codDebitoAutomatico,
-			int referencia,
-			BigDecimal valorRateioAgua,
-			BigDecimal valorRateioEsgoto){
-		
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.cpf = cpf;
-		this.cnpj = cnpj;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.idImovelContaEnvio = idImovelContaEnvio;
-		this.nomeImovel = nomeImovel;
-		this.codigoDebitoAutomatico = codDebitoAutomatico;
-		this.valorRateioAgua = valorRateioAgua;
-		this.valorRateioEsgoto = valorRateioEsgoto;
-	
-	}
-	//utilizado no Emitir Segunda Via de Conta Compesa
-	//repositorioFaturamento.pesquisarConta
-	//
-	//Autor: Hugo Amorim
-	//Informação: Inclusão do numero do debito automatico
-	//Data: 15/03/2010
-	public EmitirContaHelper(
-			Integer idConta, 
-			String nomeCliente,
-			String cpf,
-			String cnpj,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel,
-			Integer codDebitoAutomatico,
-			Integer anoMesFaturamentoGrupo){		
-		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
-		this.idConta = idConta;
-		this.nomeCliente = nomeCliente;
-		this.cpf = cpf;
-		this.cnpj = cnpj;
-		this.dataVencimentoConta = dataVencimentoConta;
-		this.amReferencia = amReferencia;
-		this.digitoVerificadorConta = digitoVerificadorConta;
-		this.codigoSetorComercialConta = codigoSetorComercialConta;
-		this.idQuadraConta = idQuadraConta;
-		this.loteConta = loteConta;
-		this.subLoteConta = subLoteConta;
-		this.consumoAgua = consumoAgua;
-		this.consumoEsgoto = consumoEsgoto;
-		this.valorAgua = valorAgua;
-		this.valorEsgoto = valorEsgoto;
-		this.debitos = debitos;
-		this.valorCreditos = valorCreditos;
-		this.valorImpostos = valorImpostos;
-		this.dataValidadeConta = dataValidadeConta;
-		this.idImovel = idImovel;
-		this.idLocalidade = idLocalidade;
-		this.idGerenciaRegional = idGerenciaRegional;
-		this.nomeGerenciaRegional = nomeGerenciaRegional;
-		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
-		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
-		this.idImovelPerfil = idImovelPerfil;
-		this.idSetorComercial = idSetorComercial;
-		this.idFaturamentoGrupo = idFaturamentoGrupo;
-		this.idEmpresa = idEmpresa;
-		this.descricaoLocalidade = descricaoLocalidade;
-		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
-		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
-		this.percentualEsgotoConta = percentualEsgotoConta;
-		this.idImovelContaEnvio = idImovelContaEnvio;
-		this.nomeImovel = nomeImovel;
-		this.codigoDebitoAutomatico = codDebitoAutomatico;
-	}
-	
 
-	/*
-	 * Autor: Anderson Italo
-	 * Descrição: Dados da conta historico p emitir a 2ª via [UC0482]Emitir 2ª
-	 * Via de Conta.(utilizado no repositorioFaturamento.pesquisarContaHistorico(Integer idConta)).
-	 * Data: 04/05/2010*/
-	public EmitirContaHelper(
-			Integer idContaHistorico, 
-			String nomeCliente,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel,
-			Integer codDebitoAutomatico,
-			Integer anoMesFaturamentoGrupo){
+	// utilizado no Emitir Segunda Via de Conta Compesa
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
+			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
+			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico,
+			Integer anoMesFaturamentoGrupo, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto) {
+
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.idImovelContaEnvio = idImovelContaEnvio;
+		this.nomeImovel = nomeImovel;
+		this.codigoDebitoAutomatico = codDebitoAutomatico;
+		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
+		this.valorRateioAgua = valorRateioAgua;
+		this.valorRateioEsgoto = valorRateioEsgoto;
+	}
+
+	// utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
+			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
+			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota, String numeroHidrometro,
+			Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.codigoRota = codigoRota;
+		this.numeroSequencialRota = numeroSequencialRota;
+		this.numeroHidrometro = numeroHidrometro;
+		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
+		this.nomeImovel = nomeImovel;
+	}
+
+	// utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
+	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
+			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota,
+			String numeroHidrometro, Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
+
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.cpf = cpf;
+		this.cnpj = cnpj;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.codigoRota = codigoRota;
+		this.numeroSequencialRota = numeroSequencialRota;
+		this.numeroHidrometro = numeroHidrometro;
+		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
+		this.nomeImovel = nomeImovel;
+	}
+
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
+			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
+			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta) {
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+	}
+
+	// utilizado no Emitir Segunda Via de Conta Compesa
+	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
+			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel) {
+
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.cpf = cpf;
+		this.cnpj = cnpj;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.idImovelContaEnvio = idImovelContaEnvio;
+		this.nomeImovel = nomeImovel;
+
+	}
+
+	// utilizado no Emitir Segunda Via de Conta Compesa
+	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
+			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
+			Integer codDebitoAutomatico, int referencia, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto) {
+
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.cpf = cpf;
+		this.cnpj = cnpj;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.idImovelContaEnvio = idImovelContaEnvio;
+		this.nomeImovel = nomeImovel;
+		this.codigoDebitoAutomatico = codDebitoAutomatico;
+		this.valorRateioAgua = valorRateioAgua;
+		this.valorRateioEsgoto = valorRateioEsgoto;
+
+	}
+
+	// utilizado no Emitir Segunda Via de Conta Compesa
+	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
+			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
+			Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
+		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
+		this.idConta = idConta;
+		this.nomeCliente = nomeCliente;
+		this.cpf = cpf;
+		this.cnpj = cnpj;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.amReferencia = amReferencia;
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.codigoSetorComercialConta = codigoSetorComercialConta;
+		this.idQuadraConta = idQuadraConta;
+		this.loteConta = loteConta;
+		this.subLoteConta = subLoteConta;
+		this.consumoAgua = consumoAgua;
+		this.consumoEsgoto = consumoEsgoto;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.valorImpostos = valorImpostos;
+		this.dataValidadeConta = dataValidadeConta;
+		this.idImovel = idImovel;
+		this.idLocalidade = idLocalidade;
+		this.idGerenciaRegional = idGerenciaRegional;
+		this.nomeGerenciaRegional = nomeGerenciaRegional;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.idSetorComercial = idSetorComercial;
+		this.idFaturamentoGrupo = idFaturamentoGrupo;
+		this.idEmpresa = idEmpresa;
+		this.descricaoLocalidade = descricaoLocalidade;
+		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
+		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
+		this.percentualEsgotoConta = percentualEsgotoConta;
+		this.idImovelContaEnvio = idImovelContaEnvio;
+		this.nomeImovel = nomeImovel;
+		this.codigoDebitoAutomatico = codDebitoAutomatico;
+	}
+
+	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
+			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
+			Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.idConta = idContaHistorico;
 		this.nomeCliente = nomeCliente;
@@ -985,50 +713,13 @@ public class EmitirContaHelper implements Serializable {
 		this.nomeImovel = nomeImovel;
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 	}
-	
-	
-	/**
-	 * Autor: Matheus Cruz
-	 * Descrição: Adicao dos valores de rateio de agua e esgoto na 2ª via da conta historico
-	 * Data: 26/11/2014*/
-	public EmitirContaHelper(
-			Integer idContaHistorico, 
-			String nomeCliente,
-			Date dataVencimentoConta,
-			int amReferencia,
-			short digitoVerificadorConta,
-			Integer codigoSetorComercialConta,
-			Integer idQuadraConta, 
-			Short loteConta, 
-			Short subLoteConta,
-			Integer consumoAgua, 
-			Integer consumoEsgoto, 
-			BigDecimal valorAgua,
-			BigDecimal valorEsgoto, 
-			BigDecimal debitos,
-			BigDecimal valorCreditos, 
-			BigDecimal valorImpostos,
-			Date dataValidadeConta, 
-			BigDecimal valorRateioAgua,
-			BigDecimal valorRateioEsgoto,
-			Integer idImovel, 
-			Integer idLocalidade,
-			Integer idGerenciaRegional, 
-			String nomeGerenciaRegional, 
-			Integer idLigacaoAguaSituacao, 
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil, 
-			Integer idSetorComercial,
-			Integer idFaturamentoGrupo, 
-			Integer idEmpresa,
-			String descricaoLocalidade, 
-			String descricaoLigacaoAguaSituacao,
-			String descricaoLigacaoEsgotoSituacao,
-			Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta,
-			String nomeImovel,
-			Integer codDebitoAutomatico,
-			Integer anoMesFaturamentoGrupo){
+
+	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
+			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto, Integer idImovel, Integer idLocalidade,
+			Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial,
+			Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio,
+			BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.idConta = idContaHistorico;
 		this.nomeCliente = nomeCliente;
@@ -1067,7 +758,7 @@ public class EmitirContaHelper implements Serializable {
 		this.nomeImovel = nomeImovel;
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 	}
-	
+
 	public Integer getIdOrigem() {
 		return idOrigem;
 	}
@@ -1312,8 +1003,7 @@ public class EmitirContaHelper implements Serializable {
 		return descricaoLigacaoAguaSituacao;
 	}
 
-	public void setDescricaoLigacaoAguaSituacao(
-			String descricaoLigacaoAguaSituacao) {
+	public void setDescricaoLigacaoAguaSituacao(String descricaoLigacaoAguaSituacao) {
 		this.descricaoLigacaoAguaSituacao = descricaoLigacaoAguaSituacao;
 	}
 
@@ -1321,8 +1011,7 @@ public class EmitirContaHelper implements Serializable {
 		return descricaoLigacaoEsgotoSituacao;
 	}
 
-	public void setDescricaoLigacaoEsgotoSituacao(
-			String descricaoLigacaoEsgotoSituacao) {
+	public void setDescricaoLigacaoEsgotoSituacao(String descricaoLigacaoEsgotoSituacao) {
 		this.descricaoLigacaoEsgotoSituacao = descricaoLigacaoEsgotoSituacao;
 	}
 
@@ -1334,27 +1023,12 @@ public class EmitirContaHelper implements Serializable {
 		this.percentualEsgotoConta = percentualEsgotoConta;
 	}
 
-	
-	public String getMatriculaImovelFormatada(){
-		
-		String matriculaImovelFormatada = Util.adicionarZerosEsquedaNumero(9, 
-				"" + getIdImovel());
-		matriculaImovelFormatada = matriculaImovelFormatada.substring(0, 8)
-				+ "." + matriculaImovelFormatada.substring(8, 9);
-		return matriculaImovelFormatada;
+	public String getFatura() {
+		String mesAnoReferencia = Util.formatarAnoMesParaMesAno(getAmReferencia());
+		String digitoVerificador = "" + getDigitoVerificadorConta();
+		return mesAnoReferencia + "-" + digitoVerificador;
 	}
 
-	
-	public String getFatura(){
-		//Mês/Ano referência da conta digito verificador
-		String mesAnoReferencia = Util
-				.formatarAnoMesParaMesAno(getAmReferencia());
-		//Dígito verificador da conta
-		String digitoVerificador = "" + getDigitoVerificadorConta();
-		String fatura = mesAnoReferencia + "-"+ digitoVerificador;
-		return fatura;
-	}
-	
 	public String getEnderecoImovel() {
 		return enderecoImovel;
 	}
@@ -1519,8 +1193,7 @@ public class EmitirContaHelper implements Serializable {
 		return colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	}
 
-	public void setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(
-			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper) {
+	public void setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper) {
 		this.colecaoContaLinhasDescricaoServicosTarifasTotalHelper = colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	}
 
@@ -1576,8 +1249,7 @@ public class EmitirContaHelper implements Serializable {
 		return representacaoNumericaCodBarraFormatada;
 	}
 
-	public void setRepresentacaoNumericaCodBarraFormatada(
-			String representacaoNumericaCodBarraFormatada) {
+	public void setRepresentacaoNumericaCodBarraFormatada(String representacaoNumericaCodBarraFormatada) {
 		this.representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarraFormatada;
 	}
 
@@ -1585,8 +1257,7 @@ public class EmitirContaHelper implements Serializable {
 		return representacaoNumericaCodBarraSemDigito;
 	}
 
-	public void setRepresentacaoNumericaCodBarraSemDigito(
-			String representacaoNumericaCodBarraSemDigito) {
+	public void setRepresentacaoNumericaCodBarraSemDigito(String representacaoNumericaCodBarraSemDigito) {
 		this.representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarraSemDigito;
 	}
 
@@ -1653,19 +1324,18 @@ public class EmitirContaHelper implements Serializable {
 	public void setNumeroSequencialRota(Integer numeroSequencialRota) {
 		this.numeroSequencialRota = numeroSequencialRota;
 	}
-	
-	
+
 	public String getRotaEntrega() {
 		String rotaEntrega = "";
-		
-		if (getCodigoRota()!= null){
-			rotaEntrega = Util.adicionarZerosEsquedaNumero(2,getCodigoRota().toString());
+
+		if (getCodigoRota() != null) {
+			rotaEntrega = Util.adicionarZerosEsquedaNumero(2, getCodigoRota().toString());
 		}
-			
-		if (getNumeroSequencialRota()!= null){
-			rotaEntrega = rotaEntrega + "." + Util.adicionarZerosEsquedaNumero(4,getNumeroSequencialRota().toString());
+
+		if (getNumeroSequencialRota() != null) {
+			rotaEntrega = rotaEntrega + "." + Util.adicionarZerosEsquedaNumero(4, getNumeroSequencialRota().toString());
 		}
-		
+
 		return rotaEntrega;
 	}
 
@@ -1676,66 +1346,49 @@ public class EmitirContaHelper implements Serializable {
 	public void setIdImovelContaEnvio(Integer idImovelContaEnvio) {
 		this.idImovelContaEnvio = idImovelContaEnvio;
 	}
+
 	public String getNomeImovel() {
 		return nomeImovel;
 	}
+
 	public void setNomeImovel(String nomeImovel) {
 		this.nomeImovel = nomeImovel;
 	}
-	
-	//utilizado no tipo de conta 2
-//	public String getDatasVencimento(){
-//		String datasVencimento = "";
-//		
-//		Integer mesAnoReferencia = getAmReferencia();
-//		mesAnoReferencia = Util.somaUmMesAnoMesReferencia(mesAnoReferencia);
-//		
-//		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(mesAnoReferencia);
-//		
-//		datasVencimento = "04/" + mesAnoFormatado;
-//		datasVencimento = datasVencimento + " - " + "05/" + mesAnoFormatado;
-//		datasVencimento = datasVencimento + " - " + "08/" + mesAnoFormatado;
-//		datasVencimento = datasVencimento + " - " + "10/" + mesAnoFormatado;
-//		datasVencimento = datasVencimento + " - " + "12/" + mesAnoFormatado;
-//		datasVencimento = datasVencimento + " -" + "15/" + mesAnoFormatado;
-//		
-//		return datasVencimento;
-//	}
+
 	public String getConsumoMedio() {
 		return consumoMedio;
 	}
+
 	public void setConsumoMedio(String consumoMedio) {
 		this.consumoMedio = consumoMedio;
 	}
-	
-	public String get1DataVencimento(){
-		String dataVencimento = "";
+
+	public String get1DataVencimento() {
 		Integer mesAnoReferencia = getAmReferencia();
 		mesAnoReferencia = Util.somaUmMesAnoMesReferencia(mesAnoReferencia);
-		
+
 		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(mesAnoReferencia);
-		
-		dataVencimento = "04/" + mesAnoFormatado;
-		
-		return dataVencimento;
+
+		return "04/" + mesAnoFormatado;
 	}
-	
-	
+
 	public String getNumeroHidrometro() {
-		
-		if(numeroHidrometro != null){
+
+		if (numeroHidrometro != null) {
 			return numeroHidrometro;
-		}else{
+		} else {
 			return "";
 		}
-		
 	}
+
 	public void setNumeroHidrometro(String numeroHidrometro) {
 		this.numeroHidrometro = numeroHidrometro;
 	}
+
 	public String getCategoriaImovel() {
 		return categoriaImovel;
 	}
+
 	public void setCategoriaImovel(String categoriaImovel) {
 		this.categoriaImovel = categoriaImovel;
 	}
@@ -1752,8 +1405,7 @@ public class EmitirContaHelper implements Serializable {
 		return debitoCreditoSituacaoAtualConta;
 	}
 
-	public void setDebitoCreditoSituacaoAtualConta(
-			Integer debitoCreditoSituacaoAtualConta) {
+	public void setDebitoCreditoSituacaoAtualConta(Integer debitoCreditoSituacaoAtualConta) {
 		this.debitoCreditoSituacaoAtualConta = debitoCreditoSituacaoAtualConta;
 	}
 
@@ -2044,14 +1696,6 @@ public class EmitirContaHelper implements Serializable {
 	public void setCodigoDebitoAutomatico(Integer codigoDebitoAutomatico) {
 		this.codigoDebitoAutomatico = codigoDebitoAutomatico;
 	}
-	
-	public String getCodigoDebitoAutomaticoFormatado() {
-		String codigoDebitoAutomaticoFormatado = Util.adicionarZerosEsquedaNumero(9, 
-				"" + getCodigoDebitoAutomatico());
-		codigoDebitoAutomaticoFormatado = codigoDebitoAutomaticoFormatado.substring(0, 8)
-				+ "." + codigoDebitoAutomaticoFormatado.substring(8, 9);
-		return codigoDebitoAutomaticoFormatado;
-	}
 
 	public Integer getAnoMesFaturamentoGrupo() {
 		return anoMesFaturamentoGrupo;
@@ -2068,7 +1712,7 @@ public class EmitirContaHelper implements Serializable {
 	public void setNumeroNitrato(String numeroNitrato) {
 		this.numeroNitrato = numeroNitrato;
 	}
-	
+
 	public String getDataPagamentoConta() {
 		return dataPagamentoConta;
 	}
@@ -2100,7 +1744,7 @@ public class EmitirContaHelper implements Serializable {
 	public void setNumeroQuadraEntrega(Integer numeroQuadraEntrega) {
 		this.numeroQuadraEntrega = numeroQuadraEntrega;
 	}
-	
+
 	public String getValorTotalConta() {
 		BigDecimal valorTotalConta = new BigDecimal("0.00");
 
@@ -2111,7 +1755,7 @@ public class EmitirContaHelper implements Serializable {
 		if (this.getValorEsgoto() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
-		
+
 		if (this.getValorRateioAgua() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
 		}
@@ -2127,7 +1771,7 @@ public class EmitirContaHelper implements Serializable {
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
-		
+
 		if (this.getValorImpostos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImpostos());
 		}
@@ -2135,7 +1779,99 @@ public class EmitirContaHelper implements Serializable {
 		return valorTotalConta.toString();
 	}
 
-	
-	
-	
+	public Integer getQuantidadeImoveisMicro() {
+		return quantidadeImoveisMicro;
+	}
+
+	public void setQuantidadeImoveisMicro(Integer quantidadeImoveisMicro) {
+		this.quantidadeImoveisMicro = quantidadeImoveisMicro;
+	}
+
+	public Integer getSomaConsumosImoveisMicro() {
+		return somaConsumosImoveisMicro;
+	}
+
+	public void setSomaConsumosImoveisMicro(Integer somaConsumosImoveisMicro) {
+		this.somaConsumosImoveisMicro = somaConsumosImoveisMicro;
+	}
+
+	public BigDecimal getValorTotalASerrateado() {
+		return valorTotalASerrateado;
+	}
+
+	public void setValorTotalASerrateado(BigDecimal valorTotalASerrateado) {
+		this.valorTotalASerrateado = valorTotalASerrateado;
+	}
+
+	public Integer getConsumoMacro() {
+		return consumoMacro;
+	}
+
+	public void setConsumoMacro(Integer consumoMacro) {
+		this.consumoMacro = consumoMacro;
+	}
+
+	public String getDescricaoImpostosEAliquotas() {
+		return descricaoImpostosEAliquotas;
+	}
+
+	public void setDescricaoImpostosEAliquotas(String descricaoImpostosEAliquotas) {
+		this.descricaoImpostosEAliquotas = descricaoImpostosEAliquotas;
+	}
+
+	public BigDecimal getPercentualImpostosEAliquotas() {
+		return percentualImpostosEAliquotas;
+	}
+
+	public void setPercentualImpostosEAliquotas(BigDecimal percentualImpostosEAliquotas) {
+		this.percentualImpostosEAliquotas = percentualImpostosEAliquotas;
+	}
+
+	public BigDecimal getValorBaseCalculoImpostos() {
+		return valorBaseCalculoImpostos;
+	}
+
+	public void setValorBaseCalculoImpostos(BigDecimal valorBaseCalculoImpostos) {
+		this.valorBaseCalculoImpostos = valorBaseCalculoImpostos;
+	}
+
+	public BigDecimal getValorImpostosEAliquotas() {
+		return valorImpostosEAliquotas;
+	}
+
+	public void setValorImpostosEAliquotas(BigDecimal valorImpostosEAliquotas) {
+		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
+	}
+
+	public boolean isInformarImpostos() {
+		return informarImpostos;
+	}
+
+	public void setInformarImpostos(boolean informarImpostos) {
+		this.informarImpostos = informarImpostos;
+	}
+
+	public String getAgenciaReguladora() {
+		return agenciaReguladora;
+	}
+
+	public void setAgenciaReguladora(String agenciaReguladora) {
+		this.agenciaReguladora = agenciaReguladora;
+	}
+
+	public String getTelefoneAgenciaReguladora() {
+		return telefoneAgenciaReguladora;
+	}
+
+	public void setTelefoneAgenciaReguladora(String telefoneAgenciaReguladora) {
+		this.telefoneAgenciaReguladora = telefoneAgenciaReguladora;
+	}
+
+	public String getEmailAgenciaReguladora() {
+		return emailAgenciaReguladora;
+	}
+
+	public void setEmailAgenciaReguladora(String emailAgenciaReguladora) {
+		this.emailAgenciaReguladora = emailAgenciaReguladora;
+	}
 }

@@ -1,5 +1,6 @@
 package gcom.financeiro;
 
+import gcom.arrecadacao.aviso.AvisoBancario;
 import gcom.cadastro.localidade.Localidade;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.relatorio.financeiro.RelatorioVolumesConsumidosNaoFaturadosBean;
@@ -151,16 +152,13 @@ public interface IRepositorioFinanceiro {
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaPagamentoExcesso(int anoMesReferenciaContabil, Integer idLocalidade) 
 			throws ErroRepositorioException;
 	
-	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoParcelamento(int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
+	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(int anoMesReferenciaContabil, Integer idLocalidade, Integer idCreditoOrigem)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoCondicional(int anoMesReferenciaContabil, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDescontoIncondicional(int anoMesReferenciaContabil, Integer idLocalidade)
-			throws ErroRepositorioException;
-	
-	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaAjusteZerarConta(int anoMesReferenciaContabil, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
 	public Collection<Object[]> pesquisarDadosCreditosRealizadosCategoriaDevolucao(int anoMesReferenciaContabil, Integer idLocalidade)
@@ -335,8 +333,7 @@ public interface IRepositorioFinanceiro {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGerarIntegracaoContabilidadeCOSANPA(String idLancamentoOrigem, String anoMes) throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	public List<AvisoBancario> pesquisarAvisosBancariosParaGerarLancamentosContabeis(Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
 	
 	public ContaContabil pesquisarContaContabilPorNomeConta(String nomeConta)  throws ErroRepositorioException;
 	

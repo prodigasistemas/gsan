@@ -4,6 +4,7 @@ import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.MovimentoCartaoRejeita;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -15,21 +16,22 @@ public class PagamentoHelperCodigoBarras implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public PagamentoHelperCodigoBarras() {
-	}
 
 	private String indicadorAceitacaoRegistro;
-
 	private String descricaoOcorrencia;
-
-	private Collection colecaoPagamentos;
-	
 	private Collection<Devolucao> colecaoDevolucao;
+	private Integer tipoDocumento;
+	private Integer idDocumento;
+	private BigDecimal valorDocumento;
 	
+	private Collection colecaoPagamentos;
 	private Collection<ProcessarPagamentoParcialContaHelper> colecaoProcessarPagamentoParcialContaHelper;
-	
+
 	//CARTÃO DE CRÉDITO
 	private MovimentoCartaoRejeita movimentoCartaoRejeita;
+	
+	public PagamentoHelperCodigoBarras() {
+	}
 
 	public Collection<ProcessarPagamentoParcialContaHelper> getColecaoProcessarPagamentoParcialContaHelper() {
 		return colecaoProcessarPagamentoParcialContaHelper;
@@ -79,5 +81,29 @@ public class PagamentoHelperCodigoBarras implements Serializable {
 	public void setMovimentoCartaoRejeita(
 			MovimentoCartaoRejeita movimentoCartaoRejeita) {
 		this.movimentoCartaoRejeita = movimentoCartaoRejeita;
+	}
+
+	public Integer getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(Integer tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public Integer getIdDocumento() {
+		return idDocumento;
+	}
+
+	public void setIdDocumento(Integer idDocumento) {
+		this.idDocumento = idDocumento;
+	}
+
+	public BigDecimal getValorDocumento() {
+		return valorDocumento;
+	}
+
+	public void setValorDocumento(BigDecimal valorDocumento) {
+		this.valorDocumento = valorDocumento;
 	}
 }

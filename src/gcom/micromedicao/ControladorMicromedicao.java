@@ -2683,187 +2683,6 @@ public class ControladorMicromedicao extends ControladorComum {
 		return consumoHistorico;
 	}
 
-	/**
-	 * Consultar histórico de medição individualizada
-	 * 
-	 * [UC0179] Consultar Histórico de Medição Individualizada
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 29/01/2008
-	 * 
-	 * @param imovel
-	 * @param ligacaoTipo
-	 * @param anoMesReferencia
-	 * @return
-	 * @throws ControladorException
-	 */
-	public ConsumoHistorico obterConsumoHistoricoCompleto(Imovel imovel,
-			LigacaoTipo ligacaoTipo, int anoMesReferencia)
-			throws ControladorException {
-
-		ConsumoHistorico consumoHistorico = null;
-
-		Collection colecaoConsumoHistoricoArray = null;
-
-		try {
-			colecaoConsumoHistoricoArray = repositorioMicromedicao
-					.pesquisarConsumoHistorico(imovel, ligacaoTipo,
-							anoMesReferencia);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (colecaoConsumoHistoricoArray != null
-				&& !colecaoConsumoHistoricoArray.isEmpty()) {
-
-			Object[] consumoHistoricoArray = (Object[]) Util
-					.retonarObjetoDeColecaoArray(colecaoConsumoHistoricoArray);
-
-			consumoHistorico = new ConsumoHistorico();
-
-			// Seta o id do histórico
-			if (consumoHistoricoArray[0] != null) {
-				consumoHistorico.setId((Integer) consumoHistoricoArray[0]);
-			}
-
-			// Seta o id do imóvel
-			if (consumoHistoricoArray[1] != null) {
-				imovel.setId(imovel.getId());
-			}
-
-			// Seta o tipo de ligação
-			if (consumoHistoricoArray[2] != null) {
-				consumoHistorico.setLigacaoTipo(ligacaoTipo);
-			}
-
-			// Seta o ano mes de referência
-			if (consumoHistoricoArray[3] != null) {
-				consumoHistorico.setReferenciaFaturamento(anoMesReferencia);
-			}
-
-			// Seta o indicador de alteração dos últimos consumos
-			if (consumoHistoricoArray[4] != null) {
-				consumoHistorico
-						.setIndicadorAlteracaoUltimosConsumos(new Short("2"));
-			}
-
-			// Seta o indicador de ajuste
-			if (consumoHistoricoArray[5] != null) {
-				consumoHistorico
-						.setIndicadorAjuste((Short) consumoHistoricoArray[5]);
-			}
-
-			// Seta o consumo a ser cobrado no mês
-			if (consumoHistoricoArray[6] != null) {
-				consumoHistorico
-						.setNumeroConsumoFaturadoMes((Integer) consumoHistoricoArray[6]);
-			}
-
-			// Seta o consumo rateio
-			if (consumoHistoricoArray[7] != null) {
-				consumoHistorico
-						.setConsumoRateio((Integer) consumoHistoricoArray[7]);
-			}
-
-			// Seta o consumo histórico condomínio
-			if (consumoHistoricoArray[8] != null) {
-				ConsumoHistorico consumoHistoricoCondominio = new ConsumoHistorico();
-				consumoHistoricoCondominio
-						.setId((Integer) consumoHistoricoArray[8]);
-				consumoHistorico
-						.setConsumoHistoricoCondominio(consumoHistoricoCondominio);
-			}
-
-			// Seta o indicador imóvel condomínio
-			if (consumoHistoricoArray[9] != null) {
-				consumoHistorico
-						.setIndicadorImovelCondominio((Short) consumoHistoricoArray[9]);
-			}
-
-			// Seta o consumo médio
-			if (consumoHistoricoArray[10] != null) {
-				consumoHistorico
-						.setConsumoMedio((Integer) consumoHistoricoArray[10]);
-			}
-
-			// Seta o consumo mínimo de água
-			if (consumoHistoricoArray[11] != null) {
-				consumoHistorico
-						.setConsumoMinimo((Integer) consumoHistoricoArray[11]);
-			}
-
-			// Seta o percentual de coleta
-			if (consumoHistoricoArray[12] != null) {
-				consumoHistorico
-						.setPercentualColeta((BigDecimal) consumoHistoricoArray[12]);
-			}
-
-			// Seta a última alteração
-			if (consumoHistoricoArray[13] != null) {
-				consumoHistorico
-						.setUltimaAlteracao((Date) consumoHistoricoArray[13]);
-			}
-
-			// Seta o rateio tipo
-			if (consumoHistoricoArray[14] != null) {
-				RateioTipo rateioTipo = new RateioTipo();
-
-				rateioTipo.setId((Integer) consumoHistoricoArray[14]);
-				consumoHistorico.setRateioTipo(rateioTipo);
-			}
-
-			// Seta o consumo tipo
-			if (consumoHistoricoArray[15] != null) {
-				ConsumoTipo consumoTipo = new ConsumoTipo();
-
-				consumoTipo.setId((Integer) consumoHistoricoArray[15]);
-				consumoHistorico.setConsumoTipo(consumoTipo);
-			}
-
-			// Seta a anormalidade de consumo
-			if (consumoHistoricoArray[16] != null) {
-				ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-				consumoAnormalidade.setId((Integer) consumoHistoricoArray[16]);
-				consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
-			}
-
-			// Seta o poço tipo
-			if (consumoHistoricoArray[17] != null) {
-				PocoTipo pocoTipo = new PocoTipo();
-				pocoTipo.setId((Integer) consumoHistoricoArray[17]);
-				consumoHistorico.setPocoTipo(pocoTipo);
-			}
-
-			// Seta o faturamento situação tipo
-			if (consumoHistoricoArray[18] != null) {
-				FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
-				faturamentoSituacaoTipo
-						.setId((Integer) consumoHistoricoArray[18]);
-				consumoHistorico
-						.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-			}
-
-			// Seta o faturamento situação tipo
-			if (consumoHistoricoArray[19] != null) {
-				consumoHistorico
-						.setIndicadorFaturamento((Short) consumoHistoricoArray[19]);
-			}
-
-			// Seta o consumo do imóvel
-			if (consumoHistoricoArray[20] != null) {
-				consumoHistorico
-						.setConsumoImovelVinculadosCondominio((Integer) consumoHistoricoArray[20]);
-			}
-		}
-
-		return consumoHistorico;
-	}
-
-	/**
-	 * [UC0101] - Consistir Leituras e Calcular Consumos [FS0003] - Verificar
-	 * Existência do Histórico de Medição
-	 */
 	protected MedicaoHistorico verificarExistenciaHistoricoMedicao(FaturamentoGrupo faturamentoGrupo, MedicaoHistorico medicaoHistorico, Imovel imovel,
 			MedicaoTipo medicaoTipo, SistemaParametro sistemaParametro) throws ControladorException {
 
@@ -14468,16 +14287,9 @@ public class ControladorMicromedicao extends ControladorComum {
 		 */
 		int consumoAguaSerRateado = -consumoAguaImoveisVinculados;
 		if (consumoLigacaoAguaImovelCondominio != null) {
-			consumoAguaSerRateado = consumoAguaSerRateado
-					+ consumoLigacaoAguaImovelCondominio;
+			consumoAguaSerRateado = consumoAguaSerRateado + consumoLigacaoAguaImovelCondominio;
 		}
 
-		/**
-		 *  Pamela Gatinho - 23/04/2012
-		 * 
-		 * Alteração para não definir rateio com valor negativo. Ou seja, se for
-		 * negativo, não haverá rateio.
-		 */
 		if (consumoAguaSerRateado < 0) {
 			consumoAguaSerRateado = 0;
 		}
@@ -14503,7 +14315,7 @@ public class ControladorMicromedicao extends ControladorComum {
 					idConsumoHistoricoLigacaoAgua, consumoAguaSerRateado,
 					consumoAguaImoveisVinculados, idPocoImovelCondominio,
 					consumoMinimoLigacao, consumoLigacaoAguaImovelCondominio,
-					imovelCondominio, existeImovelVinculadoRateioAreaComum);
+					existeImovelVinculadoRateioAreaComum);
 		}
 	}
 
@@ -14526,18 +14338,15 @@ public class ControladorMicromedicao extends ControladorComum {
 	 * @throws ErroRepositorioException
 	 * @throws ControladorException
 	 */
-	protected void determinarRateioAguaParaMedido(
+	private void determinarRateioAguaParaMedido(
 			Collection<Imovel> imoveisVinculados, Integer anoMesFaturamento,
 			SistemaParametro sistemaParametro,
 			int quantidadeEconomiasAguasMedidas,
 			Integer idConsumoHistoricoLigacaoAgua, int consumoAguaSerRateada,
 			int consumoAguaImoveisVinculados, Integer idPocoImovelCondominio,
 			Integer consumoMinimoLigacao,
-			Integer consumoLigacaoAguaImovelCondominio, Imovel imovelCondomio,
-			boolean existeImovelVinculadoRateioAreaComum)
+			Integer consumoLigacaoAguaImovelCondominio, boolean existeImovelVinculadoRateioAreaComum)
 			throws ErroRepositorioException, ControladorException {
-		// [SF0004] - Determinar Rateio de Água para Medido
-
 		/*
 		 * Item 4.1 O consumo de água a ser rateado por economia vai ser igual
 		 * ao consumo de água a ser rateado dividido pela quantidade de
@@ -14554,10 +14363,8 @@ public class ControladorMicromedicao extends ControladorComum {
 		 * consumo de água a ser rateado por economia vai ser igual ao negativo
 		 * do decremento máximo de consumo por economia.
 		 */
-		if (consumoAguaSerRateadaPorEconomia < (sistemaParametro
-				.getDecrementoMaximoConsumoRateio() * -1)) {
-			consumoAguaSerRateadaPorEconomia = (sistemaParametro
-					.getDecrementoMaximoConsumoRateio() * -1);
+		if (consumoAguaSerRateadaPorEconomia < (sistemaParametro.getDecrementoMaximoConsumoRateio() * -1)) {
+			consumoAguaSerRateadaPorEconomia = (sistemaParametro.getDecrementoMaximoConsumoRateio() * -1);
 		}
 
 		/*
@@ -14566,10 +14373,8 @@ public class ControladorMicromedicao extends ControladorComum {
 		 * consumo de água a ser rateado por economia vai ser igual ao negativo
 		 * do incremento máximo de consumo por economia.
 		 */
-		if (consumoAguaSerRateadaPorEconomia > sistemaParametro
-				.getIncrementoMaximoConsumoRateio()) {
-			consumoAguaSerRateadaPorEconomia = sistemaParametro
-					.getIncrementoMaximoConsumoRateio();
+		if (consumoAguaSerRateadaPorEconomia > sistemaParametro.getIncrementoMaximoConsumoRateio()) {
+			consumoAguaSerRateadaPorEconomia = sistemaParametro.getIncrementoMaximoConsumoRateio();
 		}
 
 		// RM3221 - adicionado por Vivianne Sousa - 16/08/2011 -
@@ -14585,8 +14390,7 @@ public class ControladorMicromedicao extends ControladorComum {
 		} else {
 
 			// Cria o iterator de imóveis vinculados
-			Iterator<Imovel> iteratorImoveisVinculados = imoveisVinculados
-					.iterator();
+			Iterator<Imovel> iteratorImoveisVinculados = imoveisVinculados.iterator();
 
 			/*
 			 * Item 4.4 Para cada imóvel vinculado ao imóvel condomínio que seja
@@ -14602,37 +14406,25 @@ public class ControladorMicromedicao extends ControladorComum {
 				 * vinculado.
 				 */
 				if (imovelVinculado.getLigacaoAguaSituacao() != null
-						&& (LigacaoAguaSituacao.FATURAMENTO_ATIVO
-								.equals(imovelVinculado
-										.getLigacaoAguaSituacao()
-										.getIndicadorFaturamentoSituacao()))) {
+						&& (LigacaoAguaSituacao.FATURAMENTO_ATIVO.equals(imovelVinculado.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()))) {
 
 					// Recupera o consumo histórico do imóvel vinculado para ser
 					// atualizado
 					ConsumoHistorico consumoHistorico = this.repositorioMicromedicao
-							.obterConsumoHistoricoImovel(
-									imovelVinculado.getId(), anoMesFaturamento,
-									LigacaoTipo.LIGACAO_AGUA);
+							.obterConsumoHistoricoImovel(imovelVinculado.getId(), anoMesFaturamento, LigacaoTipo.LIGACAO_AGUA);
 
 					/*
 					 * Caso o indicador de faturamento seja 1 atualiza os dados
 					 * do consumo histórico do imóvel vinculado.
 					 */
-					if (consumoHistorico
-							.getIndicadorFaturamento()
-							.toString()
-							.equals(ConstantesSistema.INDICADOR_USO_ATIVO
-									.toString())) {
+					if (consumoHistorico.getIndicadorFaturamento().toString().equals(ConstantesSistema.INDICADOR_USO_ATIVO.toString())) {
 
 						/*
 						 * Item 4.4.1 Calcula o consumo rateio, que vai ser
 						 * igual ao consumo de água a ser rateado por economia
 						 * vezes a quantidade de economias do imóvel.
 						 */
-						Integer consumoRateio = new Integer(
-								(int) consumoAguaSerRateadaPorEconomia
-										* imovelVinculado
-												.getQuantidadeEconomias());
+						Integer consumoRateio = new Integer((int) consumoAguaSerRateadaPorEconomia * imovelVinculado.getQuantidadeEconomias());
 						consumoHistorico.setConsumoRateio(consumoRateio);
 
 						/*
@@ -14642,16 +14434,9 @@ public class ControladorMicromedicao extends ControladorComum {
 						 */
 						if (consumoHistorico.getNumeroConsumoFaturadoMes() != null
 								&& consumoHistorico.getConsumoRateio() != null
-								&& consumoHistorico
-										.getNumeroConsumoFaturadoMes()
-										.intValue() < (consumoHistorico
-										.getConsumoRateio().intValue() * -1)) {
+								&& consumoHistorico.getNumeroConsumoFaturadoMes().intValue() < (consumoHistorico.getConsumoRateio().intValue() * -1)) {
 
-							consumoHistorico.setConsumoRateio(new Integer(
-									consumoHistorico
-											.getNumeroConsumoFaturadoMes()
-											.intValue()
-											* -1));
+							consumoHistorico.setConsumoRateio(new Integer(consumoHistorico.getNumeroConsumoFaturadoMes().intValue()	* -1));
 						}
 
 						/*
@@ -14660,20 +14445,14 @@ public class ControladorMicromedicao extends ControladorComum {
 						 * ser igual a ele mais o consumo de rateio.
 						 */
 						// Atualiza os dados do consumo histórico
-						Integer numeroConsumoFaturadoMesAtual = consumoHistorico
-								.getNumeroConsumoFaturadoMes();
+						Integer numeroConsumoFaturadoMesAtual = consumoHistorico.getNumeroConsumoFaturadoMes();
 						Integer numeroConsumoFaturadoMes = 0;
 						if (numeroConsumoFaturadoMesAtual != null) {
 							numeroConsumoFaturadoMes = numeroConsumoFaturadoMesAtual;
 						}
-//						if (consumoHistorico.getConsumoRateio() != null) {
-//							numeroConsumoFaturadoMes = numeroConsumoFaturadoMes
-//									+ consumoHistorico.getConsumoRateio();
-//						}
 
 						// Obter quantidade de economias do imóvel condominio
-						Short quantidadeEconomiasImovel = imovelVinculado
-								.getQuantidadeEconomias();
+						Short quantidadeEconomiasImovel = imovelVinculado.getQuantidadeEconomias();
 
 						/**
 						 * caso a quantidade de economias seja nulo atribuir o
@@ -14690,26 +14469,19 @@ public class ControladorMicromedicao extends ControladorComum {
 						 * consumos mínimos calculados no passo 2.2.5 do fluxo
 						 * principal.
 						 */
-						if ((idPocoImovelCondominio != null && idPocoImovelCondominio
-								.intValue() != 0)
-								&& (consumoLigacaoAguaImovelCondominio != null && (consumoLigacaoAguaImovelCondominio
-										.intValue() < consumoMinimoLigacao
-										.intValue()))) {
-							numeroConsumoFaturadoMes = (consumoLigacaoAguaImovelCondominio / quantidadeEconomiasAguasMedidas)
-									* quantidadeEconomiasImovel;
+						if ((idPocoImovelCondominio != null && idPocoImovelCondominio.intValue() != 0) && 
+							(consumoLigacaoAguaImovelCondominio != null && (consumoLigacaoAguaImovelCondominio.intValue() < consumoMinimoLigacao.intValue()))
+						   ) {
+							numeroConsumoFaturadoMes = (consumoLigacaoAguaImovelCondominio / quantidadeEconomiasAguasMedidas) * quantidadeEconomiasImovel;
 						}
 
 						// Atualiza os dados do consumo histórico
-						consumoHistorico
-								.setConsumoImovelVinculadosCondominio(numeroConsumoFaturadoMesAtual);
-						consumoHistorico
-								.setNumeroConsumoFaturadoMes(numeroConsumoFaturadoMes);
+						consumoHistorico.setConsumoImovelVinculadosCondominio(numeroConsumoFaturadoMesAtual);
+						consumoHistorico.setNumeroConsumoFaturadoMes(numeroConsumoFaturadoMes);
 						// Item 4.4.4
-						consumoHistorico
-								.setConsumoImovelCondominio(idConsumoHistoricoLigacaoAgua);
+						consumoHistorico.setConsumoImovelCondominio(idConsumoHistoricoLigacaoAgua);
 						consumoHistorico.setUltimaAlteracao(new Date());
-						this.getControladorBatch().atualizarObjetoParaBatch(
-								consumoHistorico);
+						this.getControladorBatch().atualizarObjetoParaBatch(consumoHistorico);
 					}
 				}
 			}
@@ -32302,88 +32074,46 @@ public class ControladorMicromedicao extends ControladorComum {
 		return retorno;
 	}
 
-	/**
-	 * Método que efetua o Rateio do consumo, recebendo apenas um imovel, sendo
-	 * esse o imovel condominio. Esse metodo foi criado para atender a impressão
-	 * simultânea de conta
-	 * 
-	 * [UC0103] - Efetuar Rateio de Consumo
-	 * 
-	 * @author Bruno Barros
-	 * @date 29/12/2009
-	 * 
-	 * @param Imovel
-	 *            imovelCondominio Imovel condominio a ser processado
-	 */
-	public void efetuarRateioDeConsumo(Integer idImovelCondominio,
-			Integer anoMesFaturamento) throws ControladorException {
-
-		Collection colImoveisCondominio = this
-				.pesquisarImovelCondominio(idImovelCondominio);
+	public void efetuarRateioDeConsumo(Integer idImovelCondominio, Integer anoMesFaturamento) throws ControladorException {
+		Collection colImoveisCondominio = this.pesquisarImovelCondominio(idImovelCondominio);
 
 		try {
 			efetuarRateioDeConsumo(colImoveisCondominio, anoMesFaturamento);
 		} catch (Exception e) {
-			// sessionContext.setRollbackOnly();
 			throw new EJBException(e);
 		}
 	}
 
-	/**
-	 * Metodo criado para unificar todo o processamento do calculo do rateio.
-	 * Com isso, unificamos o código comum, facilitando a manutenção.
-	 * 
-	 * @author Bruno Barros
-	 * @date 29/12/2009
-	 * 
-	 * @param colImoveisCondominio
-	 *            coleção com todos os imoveis a serem processados
-	 * @param anoMesFaturamento
-	 *            Ano e mês de faturamento a serem processados
-	 * 
-	 */
-	private void efetuarRateioDeConsumo(Collection colImoveisCondominio,
-			Integer anoMesFaturamento) throws ControladorException,
-			ErroRepositorioException {
-		/*
-		 * Caso a pesquisa retorne algum imóvel correspondente a condminio
-		 * rateia o consumo para os imoveis vinculados a ele.
-		 */
-		if (colImoveisCondominio != null && !colImoveisCondominio.isEmpty()) {
-			// Recupera os parâmetros do sistema
-			SistemaParametro sistemaParametro = this.getControladorUtil()
-					.pesquisarParametrosDoSistema();
-			boolean existeImovelVinculadoRateioAreaComum = false;
-			// Cria o iterator para os imóveis condominio encontrados
-			Iterator iteratorImoveisCondominio = colImoveisCondominio
-					.iterator();
 
-			// Laço para ratear o consumo para os imóveis vinulados aos
-			// imóveis condominio
+	private void efetuarRateioDeConsumo(Collection colImoveisCondominio, Integer anoMesFaturamento) throws ControladorException, ErroRepositorioException {
+		if (colImoveisCondominio != null && !colImoveisCondominio.isEmpty()) {
+			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
+			boolean existeImovelVinculadoRateioAreaComum = false;
+
+			Iterator iteratorImoveisCondominio = colImoveisCondominio.iterator();
+
 			while (iteratorImoveisCondominio.hasNext()) {
-				// Recupera os dados do imovl condominio
-				Object[] imovelCondominioDados = (Object[]) iteratorImoveisCondominio
-						.next();
+				Object[] imovelCondominioDados = (Object[]) iteratorImoveisCondominio.next();
 
 				// Seta os dados no imóvel condominio
-				Integer idImovelCondominio = (Integer) imovelCondominioDados[0];
-				Integer idSituacaoLigacaoAgua = (Integer) imovelCondominioDados[1];
+				Integer idImovelCondominio      = (Integer) imovelCondominioDados[0];
+				Integer idSituacaoLigacaoAgua   = (Integer) imovelCondominioDados[1];
 				Integer idSituacaoLigacaoEsgoto = (Integer) imovelCondominioDados[2];
-				Short indFatSitLigacaoAgua = (Short) imovelCondominioDados[3];
-				Short indFatSitLigacaoEsgoto = (Short) imovelCondominioDados[4];
+				Short indFatSitLigacaoAgua      = (Short) imovelCondominioDados[3];
+				Short indFatSitLigacaoEsgoto    = (Short) imovelCondominioDados[4];
+				
 				LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
 				ligacaoAguaSituacao.setId(idSituacaoLigacaoAgua);
-				ligacaoAguaSituacao
-						.setIndicadorFaturamentoSituacao(indFatSitLigacaoAgua);
+				ligacaoAguaSituacao.setIndicadorFaturamentoSituacao(indFatSitLigacaoAgua);
+				
 				LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
 				ligacaoEsgotoSituacao.setId(idSituacaoLigacaoEsgoto);
-				ligacaoEsgotoSituacao
-						.setIndicadorFaturamentoSituacao(indFatSitLigacaoEsgoto);
+				ligacaoEsgotoSituacao.setIndicadorFaturamentoSituacao(indFatSitLigacaoEsgoto);
+				
 				Imovel imovelCondominio = new Imovel();
 				imovelCondominio.setId(idImovelCondominio);
 				imovelCondominio.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-				imovelCondominio
-						.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
+				imovelCondominio.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 
 				// Cria as variáveis que vai armazenas as quantidades de
 				// economia e consumo
@@ -32403,8 +32133,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				 */
 
 				Collection imoveisVinculados = new ArrayList();
-				Collection imoveisVinculadosArrayObject = this.repositorioMicromedicao
-						.getImovelVinculadosImovelCondominio(idImovelCondominio);
+				Collection imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 
 				/*
 				 * Item 2.4 Caso o tipo de rateio corresponda a rateio não
@@ -32414,10 +32143,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				 */
 				RateioTipo rateioTipoLigacaoAgua = null;
 				try {
-
-					rateioTipoLigacaoAgua = this.repositorioMicromedicao
-							.obterDadosRateioTipoParaLigacaoAgua(imovelCondominio);
-
+					rateioTipoLigacaoAgua = this.repositorioMicromedicao.obterDadosRateioTipoParaLigacaoAgua(imovelCondominio);
 				} catch (ErroRepositorioException e) {
 					e.printStackTrace();
 					throw new ControladorException("erro.sistema", e);
@@ -32425,25 +32151,17 @@ public class ControladorMicromedicao extends ControladorComum {
 
 				// RM3221 - adicionado por Vivianne Sousa - 17/08/2011 -
 				// analista:Claudio Lira
-				if (rateioTipoLigacaoAgua != null
-						&& rateioTipoLigacaoAgua.getId().equals(
-								RateioTipo.RATEIO_AREA_COMUM)) {
+				if (rateioTipoLigacaoAgua != null && rateioTipoLigacaoAgua.getId().equals(RateioTipo.RATEIO_AREA_COMUM)) {
 					existeImovelVinculadoRateioAreaComum = true;
 				}
 
-				if (imoveisVinculadosArrayObject != null
-						&& !imoveisVinculadosArrayObject.isEmpty()) {
-					// Cria o iterator para os imóveis vinculados
-					Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject
-							.iterator();
+				if (imoveisVinculadosArrayObject != null && !imoveisVinculadosArrayObject.isEmpty()) {
+					Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject.iterator();
 
-					// Laço para ratear o consumo do imóvel condominio entre
-					// os imoveis vinculados
 					while (iteratorImoveisVinculados.hasNext()) {
 
 						// Recupera os dados do imóvel vinculado
-						Object[] dadosImovelVinculado = (Object[]) iteratorImoveisVinculados
-								.next();
+						Object[] dadosImovelVinculado = (Object[]) iteratorImoveisVinculados.next();
 						Integer idImovelVinculado = (Integer) dadosImovelVinculado[0];
 
 						// Obtem quantidade de economias
@@ -32461,53 +32179,39 @@ public class ControladorMicromedicao extends ControladorComum {
 						if (dadosImovelVinculado[7] != null) {
 							idHidrometroInstalacaoHistorico = (Integer) dadosImovelVinculado[7];
 							hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
-							hidrometroInstalacaoHistorico
-									.setId(idHidrometroInstalacaoHistorico);
-
+							hidrometroInstalacaoHistorico.setId(idHidrometroInstalacaoHistorico);
 						}
 
 						Integer idLigacaoAgua = (Integer) dadosImovelVinculado[6];
 						LigacaoAgua ligacaoAgua = new LigacaoAgua();
 						ligacaoAgua.setId(idLigacaoAgua);
-						ligacaoAgua
-								.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+						ligacaoAgua.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
 
 						// Monta imóvel vinculado e seta os dados no objeto
 						ConsumoTarifa consumoTarifa = new ConsumoTarifa();
 						consumoTarifa.setId(idConsumoTarifa);
 
 						LigacaoAguaSituacao ligacaoAguaSituacaoImovelVinculado = new LigacaoAguaSituacao();
-						ligacaoAguaSituacaoImovelVinculado
-								.setId(idSituacaoLigacaoAguaImovelVinculado);
-						ligacaoAguaSituacaoImovelVinculado
-								.setIndicadorFaturamentoSituacao(indFatSitLigacaoAguaImovelVinculado);
+						ligacaoAguaSituacaoImovelVinculado.setId(idSituacaoLigacaoAguaImovelVinculado);
+						ligacaoAguaSituacaoImovelVinculado.setIndicadorFaturamentoSituacao(indFatSitLigacaoAguaImovelVinculado);
 
 						LigacaoEsgotoSituacao ligacaoEsgotoSituacaoImovelVinculado = new LigacaoEsgotoSituacao();
-						ligacaoEsgotoSituacaoImovelVinculado
-								.setId(idSituacaoLigacaoEsgotoImovelVinculado);
-						ligacaoEsgotoSituacaoImovelVinculado
-								.setIndicadorFaturamentoSituacao(indFatSitLigacaoEsgotoImovelVinculado);
+						ligacaoEsgotoSituacaoImovelVinculado.setId(idSituacaoLigacaoEsgotoImovelVinculado);
+						ligacaoEsgotoSituacaoImovelVinculado.setIndicadorFaturamentoSituacao(indFatSitLigacaoEsgotoImovelVinculado);
 						HidrometroInstalacaoHistorico medicaoPoco = new HidrometroInstalacaoHistorico();
 						medicaoPoco.setId(idMedicaoPoco);
 
 						Imovel imovelVinculado = new Imovel();
 						imovelVinculado.setId(idImovelVinculado);
 						imovelVinculado.setLigacaoAgua(ligacaoAgua);
-						imovelVinculado
-								.setLigacaoAguaSituacao(ligacaoAguaSituacaoImovelVinculado);
-						imovelVinculado
-								.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacaoImovelVinculado);
-						imovelVinculado
-								.setHidrometroInstalacaoHistorico(medicaoPoco);
+						imovelVinculado.setLigacaoAguaSituacao(ligacaoAguaSituacaoImovelVinculado);
+						imovelVinculado.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacaoImovelVinculado);
+						imovelVinculado.setHidrometroInstalacaoHistorico(medicaoPoco);
 						imovelVinculado.setConsumoTarifa(consumoTarifa);
-						imovelVinculado
-								.setQuantidadeEconomias(quantidadeEconomia);
+						imovelVinculado.setQuantidadeEconomias(quantidadeEconomia);
 
-						// RM3221 - adicionado por Vivianne Sousa - 15/08/2011 -
-						// analista:Claudio Lira
 						if (dadosImovelVinculado[10] != null) {
-							imovelVinculado
-									.setIndicadorImovelAreaComum((Short) dadosImovelVinculado[10]);
+							imovelVinculado.setIndicadorImovelAreaComum((Short) dadosImovelVinculado[10]);
 						}
 
 						// Caso a quantidade de economia seja nula seta o
@@ -32518,32 +32222,20 @@ public class ControladorMicromedicao extends ControladorComum {
 
 						// Recupera os dados do consumo da ligação de água do
 						// imóvel
-						Object[] dadosConsumoLigacaoAguaImovel = (Object[]) this.repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovel(
-										imovelVinculado.getId(),
-										anoMesFaturamento,
-										LigacaoTipo.LIGACAO_AGUA);
+						Object[] dadosConsumoLigacaoAguaImovel = (Object[]) this.repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovel(
+										imovelVinculado.getId(), anoMesFaturamento, LigacaoTipo.LIGACAO_AGUA);
 
 						// Recupera os dados do consumo da ligação de esgoto do
 						// imóvel
-						Object[] dadosConsumoLigacaoEsgotoImovel = (Object[]) this.repositorioMicromedicao
-								.obterConsumoLigacaoAguaOuEsgotoDoImovel(
-										imovelVinculado.getId(),
-										anoMesFaturamento,
-										LigacaoTipo.LIGACAO_ESGOTO);
+						Object[] dadosConsumoLigacaoEsgotoImovel = (Object[]) this.repositorioMicromedicao.obterConsumoLigacaoAguaOuEsgotoDoImovel(
+										imovelVinculado.getId(), anoMesFaturamento, LigacaoTipo.LIGACAO_ESGOTO);
 
 						// VERIFICANDO SE EXISTE CONSUMO GERADO PARA O IMOVEL
 						// VINCULADO
-						if (dadosConsumoLigacaoAguaImovel != null
-								|| dadosConsumoLigacaoEsgotoImovel != null) {
+						if (dadosConsumoLigacaoAguaImovel != null || dadosConsumoLigacaoEsgotoImovel != null) {
 
-							// 2.2.2 - Caso o imóvel seja ligado de ou cortado
-							// de água
 							if (imovelVinculado.getLigacaoAguaSituacao() != null
-									&& (LigacaoAguaSituacao.FATURAMENTO_ATIVO
-											.equals(imovelVinculado
-													.getLigacaoAguaSituacao()
-													.getIndicadorFaturamentoSituacao()))) {
+									&& (LigacaoAguaSituacao.FATURAMENTO_ATIVO.equals(imovelVinculado.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()))) {
 								/*
 								 * Item 2.2.2.1 Caso o imóvel seja medido na
 								 * ligação de água (hidi_id preenchido na tabela
@@ -32553,24 +32245,17 @@ public class ControladorMicromedicao extends ControladorComum {
 								 * contrário acumula na quantidade de economias
 								 * de água não medidas.
 								 */
-								if (imovelVinculado.getLigacaoAgua()
-										.getHidrometroInstalacaoHistorico() != null
-										&& imovelVinculado
-												.getLigacaoAgua()
-												.getHidrometroInstalacaoHistorico()
-												.getId() != null) {
-									quantidadeEconomiasAguasMedidas = quantidadeEconomiasAguasMedidas
-											+ quantidadeEconomia.intValue();
+								if (imovelVinculado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
+										&& imovelVinculado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null) {
+									quantidadeEconomiasAguasMedidas    += quantidadeEconomia.intValue();
 								} else {
-									quantidadeEconomiasAguasNaoMedidas = quantidadeEconomiasAguasNaoMedidas
-											+ quantidadeEconomia.intValue();
+									quantidadeEconomiasAguasNaoMedidas += quantidadeEconomia.intValue();
 								}
 
 								// Alterado por Leonardo Vieira 03/12
 								Integer consumoLigacaoAguaImovel = null;
 
-								if (dadosConsumoLigacaoAguaImovel != null
-										&& dadosConsumoLigacaoAguaImovel[1] != null) {
+								if (dadosConsumoLigacaoAguaImovel != null && dadosConsumoLigacaoAguaImovel[1] != null) {
 									consumoLigacaoAguaImovel = (Integer) dadosConsumoLigacaoAguaImovel[1];
 								}
 
@@ -32581,18 +32266,13 @@ public class ControladorMicromedicao extends ControladorComum {
 								 * vinculados caso exista.
 								 */
 								if (consumoLigacaoAguaImovel != null) {
-									consumoAguaImoveisVinculados = consumoAguaImoveisVinculados
-											+ consumoLigacaoAguaImovel
-													.intValue();
+									consumoAguaImoveisVinculados += consumoLigacaoAguaImovel.intValue();
 								}
 							}
 
 							// 2.2.3 - Caso o imóvel seja ligado de esgoto
 							if (imovelVinculado.getLigacaoEsgotoSituacao() != null
-									&& LigacaoEsgotoSituacao.FATURAMENTO_ATIVO
-											.equals(imovelVinculado
-													.getLigacaoEsgotoSituacao()
-													.getIndicadorFaturamentoSituacao())) {
+									&& LigacaoEsgotoSituacao.FATURAMENTO_ATIVO.equals(imovelVinculado.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao())) {
 
 								/*
 								 * Caso o tipo de rateio corresponda a rateio
@@ -32601,78 +32281,39 @@ public class ControladorMicromedicao extends ControladorComum {
 								 * LAGU_ID=IMOV_ID do imóvel condominio e com
 								 * HIDI_DTRETIRADAHIDROMETRO igual a nulo):
 								 */
-								if (rateioTipoLigacaoAgua != null
-										&& rateioTipoLigacaoAgua
-												.getId()
-												.equals(RateioTipo.RATEIO_NAO_MEDIDO_AGUA)) {
+								if (rateioTipoLigacaoAgua != null && rateioTipoLigacaoAgua.getId().equals(RateioTipo.RATEIO_NAO_MEDIDO_AGUA)) {
 
-									if (imovelVinculado.getLigacaoAgua()
-											.getHidrometroInstalacaoHistorico() != null
-											&& imovelVinculado
-													.getLigacaoAgua()
-													.getHidrometroInstalacaoHistorico()
-													.getId() != null) {
+									if (imovelVinculado.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null
+											&& imovelVinculado.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null) {
 
-										quantidadeEconomiasEsgotoMedidas = quantidadeEconomiasEsgotoMedidas
-												+ quantidadeEconomia.intValue();
+										quantidadeEconomiasEsgotoMedidas += quantidadeEconomia.intValue();
 									} else {
-										quantidadeEconomiasEsgotoNaoMedidas = quantidadeEconomiasEsgotoNaoMedidas
-												+ quantidadeEconomia.intValue();
+										quantidadeEconomiasEsgotoNaoMedidas += quantidadeEconomia.intValue();
 									}
 								} else {
+									if (imovelVinculado.getHidrometroInstalacaoHistorico() != null
+											&& imovelVinculado.getHidrometroInstalacaoHistorico().getId() != null) {
 
-									/*
-									 * Item 2.2.3.1 Caso seja medido de
-									 * poço(hidi_id prenchido na tabela imovel),
-									 * acumula a quantidade de economias do
-									 * imóvel na quantidade de economias de
-									 * esgoto medidas. Caso contrário acumula na
-									 * quantidade de economias de esgoto não
-									 * medidas.
-									 */
-									if (imovelVinculado
-											.getHidrometroInstalacaoHistorico() != null
-											&& imovelVinculado
-													.getHidrometroInstalacaoHistorico()
-													.getId() != null) {
-
-										quantidadeEconomiasEsgotoMedidas = quantidadeEconomiasEsgotoMedidas
-												+ quantidadeEconomia.intValue();
+										quantidadeEconomiasEsgotoMedidas += quantidadeEconomia.intValue();
 									} else {
-										quantidadeEconomiasEsgotoNaoMedidas = quantidadeEconomiasEsgotoNaoMedidas
-												+ quantidadeEconomia.intValue();
+										quantidadeEconomiasEsgotoNaoMedidas += quantidadeEconomia.intValue();
 									}
 								}
 
 								Integer consumoLigacaoEsgotoImovel = null;
 
-								if (dadosConsumoLigacaoEsgotoImovel != null
-										&& dadosConsumoLigacaoEsgotoImovel[1] != null) {
+								if (dadosConsumoLigacaoEsgotoImovel != null	&& dadosConsumoLigacaoEsgotoImovel[1] != null) {
 									consumoLigacaoEsgotoImovel = (Integer) dadosConsumoLigacaoEsgotoImovel[1];
 								}
 
-								/*
-								 * Item 2.2.3.2 Acumula o consumo da ligaçaõ de
-								 * esgoto do imóvel para o mês de faturamento
-								 * corrente no consumo de esgoto dos imóveis
-								 * vinculados caso exista.
-								 */
 								if (consumoLigacaoEsgotoImovel != null) {
-									consumoEsgotoImoveisVinculados = consumoEsgotoImoveisVinculados
-											+ consumoLigacaoEsgotoImovel
-													.intValue();
+									consumoEsgotoImoveisVinculados += consumoLigacaoEsgotoImovel.intValue();
 								}
 							}
 
-							// [UC0105 - Obter Consumo Mínimo da Ligação]
-							int consumoMinimoLigacaoImovelVinculado = this
-									.obterConsumoMinimoLigacao(imovelVinculado,
-											null);
+							int consumoMinimoLigacaoImovelVinculado = this.obterConsumoMinimoLigacao(imovelVinculado, null);
 
-							// 2.2.5 - Acumula o consumo mínimo da ligação na
-							// soma dos consumos mínimos
-							consumoMinimoLigacao = consumoMinimoLigacao
-									+ consumoMinimoLigacaoImovelVinculado;
+							consumoMinimoLigacao += consumoMinimoLigacaoImovelVinculado;
 
 							imoveisVinculados.add(imovelVinculado);
 
@@ -32726,61 +32367,21 @@ public class ControladorMicromedicao extends ControladorComum {
 		}
 	}
 
-	/**
-	 * Método que retorna os dados necessários para o rateio de um imovel
-	 * condominio
-	 * 
-	 * [UC0103] Efetuar Rateio de Consumo
-	 * 
-	 * @author Bruno Barros
-	 * @date 29/12/2009
-	 * 
-	 * @param idImovel
-	 *            id do imovel condominio a ser rateado
-	 * @return Imoveis
-	 */
-	public Collection pesquisarImovelCondominio(Integer idImovel)
-			throws ControladorException {
-
-		Collection colecaoImoveis = null;
-
+	public Collection pesquisarImovelCondominio(Integer idImovel) throws ControladorException {
 		try {
-			colecaoImoveis = repositorioMicromedicao
-					.pesquisarImovelCondominio(idImovel);
+			return repositorioMicromedicao.pesquisarImovelCondominio(idImovel);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-
-		return colecaoImoveis;
 	}
 
-	/**
-	 * 
-	 * Buscar Rota a partir da Matrícula de um Imóvel e anoMesFaturamentoGrupo.
-	 * 
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 03/02/2010
-	 * 
-	 * @param dados
-	 * 
-	 * @throws ControladorException
-	 */
-	public Rota buscarRotaPorMatriculaImovel(Integer imovel,
-			Integer anoMesFaturamentoGrupo) throws ControladorException {
-
-		Rota rota = null;
-
+	public Rota buscarRotaPorMatriculaImovel(Integer imovel, Integer anoMesFaturamentoGrupo) throws ControladorException {
 		try {
-			rota = repositorioMicromedicao.buscarRotaPorMatriculaImovel(imovel,
-					anoMesFaturamentoGrupo);
+			return repositorioMicromedicao.buscarRotaPorMatriculaImovel(imovel,	anoMesFaturamentoGrupo);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
-
-		return rota;
-
 	}
 
 	/**
@@ -39972,61 +39573,54 @@ public class ControladorMicromedicao extends ControladorComum {
             }
 
             consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
-        } catch (ErroRepositorioException e) {
-            e.printStackTrace();
-        }
+        } catch (ControladorException e) {
+			e.printStackTrace();
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
 
-        System.out.println("Consumo a ser rateado: " + consumoASerRateado);
         return consumoASerRateado;
     }
 	
-	/**
-	 * 
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que calcula a soma do consumo de todos os micros, de acordo
-	 * com o tipo de ligacao informada
-	 * 
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @param ligacaoTipo
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	private int obterConsumoLigacaoImoveisVinculados(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) 
-		throws ErroRepositorioException {
+	public int obterConsumoLigacaoImoveisVinculados(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) throws ControladorException {
 		
 		int consumoImoveisVinculados = 0;
 		
-		Collection imoveisVinculadosArrayObject = this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+		Collection imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 		
 		Iterator imoveisVinculadosIterator = imoveisVinculadosArrayObject.iterator();
 		
 		while (imoveisVinculadosIterator.hasNext()) {
 			
-			Object[] dadosImovelVinculado = (Object[]) imoveisVinculadosIterator.next();
-			
-			// Obtem o objeto imovel
-			Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
-			
-			Integer consumoLigacaoImovel = null;
-			
-			Object[] dadosConsumoLigacaoImovel = (Object[]) this.repositorioMicromedicao
-				.obterConsumoLigacaoAguaOuEsgotoDoImovel(imovelVinculado.getId(), anoMesFaturamento, ligacaoTipo);
-			
-			// Verifica se possui faturamento ativo para agua ou esgoto
-			if ( (ligacaoTipo.equals(LigacaoTipo.LIGACAO_AGUA) && getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado))
-				|| (ligacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)&& getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado))) {
-
-				// Recupera o consumo do imovel
-				if (dadosConsumoLigacaoImovel != null && dadosConsumoLigacaoImovel[1] != null) {
-					consumoLigacaoImovel = (Integer) dadosConsumoLigacaoImovel[1];
-				}
-				// Soma o consumo de todos os imóveis
-				if (consumoLigacaoImovel != null) {
-					consumoImoveisVinculados = consumoImoveisVinculados + consumoLigacaoImovel.intValue();
-				}
-			} 
+			try {
+				Object[] dadosImovelVinculado = (Object[]) imoveisVinculadosIterator.next();
+				
+				// Obtem o objeto imovel
+				Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
+				
+				Integer consumoLigacaoImovel = null;
+				
+				Object[] dadosConsumoLigacaoImovel;
+					dadosConsumoLigacaoImovel = (Object[]) this.repositorioMicromedicao
+						.obterConsumoLigacaoAguaOuEsgotoDoImovel(imovelVinculado.getId(), anoMesFaturamento, ligacaoTipo);
+				
+				
+				// Verifica se possui faturamento ativo para agua ou esgoto
+				if ( (ligacaoTipo.equals(LigacaoTipo.LIGACAO_AGUA) && getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado))
+					|| (ligacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)&& getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado))) {
+	
+					// Recupera o consumo do imovel
+					if (dadosConsumoLigacaoImovel != null && dadosConsumoLigacaoImovel[1] != null) {
+						consumoLigacaoImovel = (Integer) dadosConsumoLigacaoImovel[1];
+					}
+					// Soma o consumo de todos os imóveis
+					if (consumoLigacaoImovel != null) {
+						consumoImoveisVinculados = consumoImoveisVinculados + consumoLigacaoImovel.intValue();
+					}
+				} 
+			} catch (ErroRepositorioException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return consumoImoveisVinculados;
@@ -40092,7 +39686,7 @@ public class ControladorMicromedicao extends ControladorComum {
 			
 			
 			Collection imoveisVinculadosArrayObject;
-			imoveisVinculadosArrayObject = this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+			imoveisVinculadosArrayObject = this.obterImoveisVinculadosDoCondominio(idImovelCondominio);
 		
 			Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject.iterator();
 			
@@ -40104,7 +39698,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
 			}
 		
-		} catch (ErroRepositorioException e) {
+		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
 		
@@ -40498,14 +40092,14 @@ public class ControladorMicromedicao extends ControladorComum {
 		Integer id = (Integer) getControladorUtil().inserir(movimento);
 		movimento.setId(id);
 		
-		//FiltroMovimentoContaPrefaturada filtro = new FiltroMovimentoContaPrefaturada();
-		//filtro.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ID, id));
-		
-		//colecaoMovimentos = getControladorUtil().pesquisar(filtro, MovimentoContaPrefaturada.class.getName());
-	
-//		movimento = getControladorFaturamento().obterMovimentoImovel(imovel.getId(), rota.getFaturamentoGrupo().getAnoMesReferencia(), movimento.getMedicaoTipo().getId());
-//		colecaoMovimentos.add(movimento);
-//		
-//		getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colecaoMovimentos, true, true);
 	}
+	
+	public Collection<Imovel> obterImoveisVinculadosDoCondominio(Integer idImovelCondominio) throws ControladorException{
+		try {
+			return this.repositorioMicromedicao.getImovelVinculadosImovelCondominio(idImovelCondominio);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 }

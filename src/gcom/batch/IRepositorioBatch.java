@@ -19,7 +19,6 @@ import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoCobradoCategoria;
 import gcom.micromedicao.Rota;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
@@ -138,4 +137,6 @@ public interface IRepositorioBatch {
 	public FaturamentoAtividadeCronograma pesquisarProcessoIniciadoParaGrupo(Integer idGrupo, Integer referencia, Integer idAtividadeFaturamento) throws ErroRepositorioException;
 	
 	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ErroRepositorioException;
+	
+	public Short pesquisarQuantidadeBatchPorUsuario(int idUsuario) throws ErroRepositorioException;
 }

@@ -1305,78 +1305,50 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @param ordemServico,veioEncerrarOS
 	 */
 	public void validarExibirReligacaoAgua(OrdemServico ordemServico,
-			boolean veioEncerrarOS) throws ControladorException {
+ boolean veioEncerrarOS) throws ControladorException {
 
 		/*
 		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
 		 * operação EFETUAR RELIGAÇÃO LIGAÇÃO DE ÁGUA, não será necessário
 		 * realizar as validações abaixo.
-		 * 
-		 * Autor: Raphael Rossiter Data: 26/04/2007
-		 * 
 		 */
-		Integer idOperacao = this.getControladorOrdemServico()
-				.pesquisarServicoTipoOperacao(
-						ordemServico.getServicoTipo().getId());
+		Integer idOperacao = this.getControladorOrdemServico().pesquisarServicoTipoOperacao(ordemServico.getServicoTipo().getId());
 
-		if (idOperacao == null
-				|| idOperacao.intValue() != Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT) {
+		if (idOperacao == null || idOperacao.intValue() != Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT) {
 
-			// [FS0001] Validar Ordem de Servico
 			// Caso 2
 			if (ordemServico.getServicoTipo().getId().intValue() != ServicoTipo.TIPO_RELIGACAO_AGUA) {
-				throw new ControladorException(
-						"atencao.servico_associado_religacao_agua_invalida");
+				throw new ControladorException("atencao.servico_associado_religacao_agua_invalida");
 			}
 		}
 
-		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
-		 * Rossiter Data: 26/04/2007
-		 * 
-		 * ===============================================================================
-		 */
-
 		// Caso 3
-//		this.getControladorOrdemServico().validaOrdemServico(ordemServico,veioEncerrarOS);
-		this.getControladorOrdemServico().validaOrdemServicoDiasAditivoPrazo(ordemServico,veioEncerrarOS);
-		
+		this.getControladorOrdemServico().validaOrdemServicoDiasAditivoPrazo(ordemServico, veioEncerrarOS);
+
 		// Caso 4
 		if (ordemServico.getRegistroAtendimento().getImovel() == null) {
-			throw new ControladorException(
-					"atencao.ordem_servico_ra_imovel_invalida", null, ""
-							+ ordemServico.getRegistroAtendimento().getId());
+			throw new ControladorException("atencao.ordem_servico_ra_imovel_invalida", null, "" + ordemServico.getRegistroAtendimento().getId());
 		}
 
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Verificar Situação do Imovel.
-		if (imovel.getIndicadorExclusao() != null
-				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
+		if (imovel.getIndicadorExclusao() != null && imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
-			throw new ControladorException(
-					"atencao.atualizar_imovel_situacao_invalida", null, imovel
-							.getId().toString());
+			throw new ControladorException("atencao.atualizar_imovel_situacao_invalida", null, imovel.getId().toString());
 		}
 
 		if (imovel.getLigacaoAgua() == null) {
-			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligação de Água");
+			throw new ControladorException("atencao.naocadastrado", null, "Ligação de Água");
 		}
 
 		// [FS0003] Verificar a situação de Água
-		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.CORTADO
-				.intValue()) {
+		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.CORTADO.intValue()) {
 
-			throw new ControladorException(
-					"atencao.situacao_ligacao_agua_invalida", null, ""
-							+ imovel.getId(), "Cortado");
+			throw new ControladorException("atencao.situacao_ligacao_agua_invalida", null, "" + imovel.getId(), "Cortado");
 
 		}
-
-		/*
-		 * ===================================================================================
-		 */
+		
+		this.getControladorOrdemServico().validarEncerramentoOsImovelEmCampo(ordemServico);
 	}
 
 	/**

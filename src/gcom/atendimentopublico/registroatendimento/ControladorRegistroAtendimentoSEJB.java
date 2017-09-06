@@ -112,6 +112,8 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
+import gcom.faturamento.controladores.ControladorRetificarContaLocal;
+import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -533,6 +535,28 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	 * 
 	 * @return O valor de controladorFaturamento
 	 */
+	private ControladorRetificarContaLocal getControladorRetificarConta() {
+		ControladorRetificarContaLocalHome localHome = null;
+		ControladorRetificarContaLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		
 		ControladorFaturamentoLocalHome localHome = null;
@@ -555,6 +579,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
+	
 	
 	private ControladorAtendimentoPublicoLocal getControladorAtendimentoPublico() {
 		ControladorAtendimentoPublicoLocalHome localHome = null;
@@ -15230,7 +15255,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			
 			Collection colecaoDebitoCobrado = getControladorFaturamento().obterDebitosCobradosConta(conta);
 			
-			Conta contaParaRetificacao =  getControladorFaturamento().pesquisarContaRetificacao(conta.getId());
+			Conta contaParaRetificacao =  getControladorRetificarConta().pesquisarContaRetificacao(conta.getId());
 			
 			Collection colecaoCreditoRealizado = getControladorFaturamento().obterCreditosRealizadosConta(conta);
 	
@@ -15284,7 +15309,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			ContaMotivoRetificacao contaMotivoRetificacao = new ContaMotivoRetificacao();
 			contaMotivoRetificacao.setId(ContaMotivoRetificacao.DEVOLUCAO_PAGAMENTO_CREDITADO_EM_CONTA);
 			
-			idConta = getControladorFaturamento().retificarConta(
+			idConta = getControladorRetificarConta().retificarConta(
 					new Integer(contaParaRetificacao.getReferencia()),
 					contaParaRetificacao, 
 					contaParaRetificacao.getImovel(), 
@@ -15302,7 +15327,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 					null, 
 					usuarioLogado, 
 					contaParaRetificacao.getConsumoTarifa().getId().toString(),
-					false,null,null,false, null,null,null,null,null);
+					false,null,null,false, null,null,null,null,null, null);
 		
 
 		} catch (Exception e) {

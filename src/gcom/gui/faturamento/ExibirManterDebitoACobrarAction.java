@@ -187,7 +187,7 @@ public class ExibirManterDebitoACobrarAction extends GcomAction {
 				filtroDebitoACobrar
 						.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_TIPO);
 				filtroDebitoACobrar
-						.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO);
+						.adicionarCaminhoParaCarregamentoEntidade(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL);
 
 				Collection<DebitoACobrar> colecaoDebitoACobrar = fachada
 						.pesquisar(filtroDebitoACobrar, DebitoACobrar.class

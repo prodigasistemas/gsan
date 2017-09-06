@@ -1,4 +1,4 @@
-package gcom.batch.cobranca;
+package gcom.batch.cobranca.cobrancaporresultado;
 
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
@@ -36,14 +36,12 @@ public class TarefaBatchAtualizarPagamentosContasCobranca extends TarefaBatch {
 		return null;
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	public Object executar() throws TarefaException {
-		Collection colecaoIdsLocalidade = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
-		
-		Integer anoMesArrecadacaoSistemaParametro = (Integer) getParametro("anoMesArrecadacaoSistemaParametro");
-		
+		Collection<Integer> colecaoIdsLocalidade = (Collection<Integer>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Integer anoMesArrecadacao = (Integer) getParametro("anoMesArrecadacao");
 
-		Iterator iterator = colecaoIdsLocalidade.iterator();
+		Iterator<Integer> iterator = colecaoIdsLocalidade.iterator();
 
 		while (iterator.hasNext()) {
 
@@ -51,18 +49,15 @@ public class TarefaBatchAtualizarPagamentosContasCobranca extends TarefaBatch {
 
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA,
-					new Object[]{idLocalidade,anoMesArrecadacaoSistemaParametro,
-							this.getIdFuncionalidadeIniciada()});
+					new Object[]{this.getIdFuncionalidadeIniciada(), idLocalidade, anoMesArrecadacao});
 
 		}
 
 		return null;
 	}
 
-	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("AtualizarPagamentosContasCobrancaBatch",
-				this);
+		AgendadorTarefas.agendarTarefa("AtualizarPagamentosContasCobrancaBatch", this);
 
 	}
 }

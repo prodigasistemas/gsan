@@ -3,10 +3,12 @@ package gcom.faturamento;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
-import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.geografico.FiltroMunicipio;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -15,6 +17,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadraFace;
+import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -69,6 +72,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
@@ -103,6 +107,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		int qtdImovelArquivoImpressaoTermica = 0;
 		int qtdContasLocalidade = 0;
 
+		List<Integer> idsCondominios = new ArrayList<Integer>();
+		
 		try {
 			SistemaParametro sistemaParametro = null;
 
@@ -149,8 +155,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice, faturamentoGrupo);
 				
-				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
-						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
+				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 				
 				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
@@ -176,9 +181,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							StringBuilder contaTxt = new StringBuilder();
 
 							if (emitirContaHelper != null) {
+								
 								Localidade localidade = obterLocalidade(emitirContaHelper);
 								Imovel imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-
+								
 								contaTxt.append(Util.completaString(obterNumeroNota(emitirContaHelper), 16));
 								contaTxt.append(Util.completaString(Util.formatarData(new Date()), 10));
 								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(), 120));
@@ -414,7 +420,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								}
 
-								if (emitirContaHelper.getIdConta().equals(new Integer("65264622"))) {
+								if (emitirContaHelper.getIdConta().equals(new Integer("80926132"))) {
 									System.out.println("Conta!!");
 								}
 								String diasConsumo = obterDiasConsumo(parmsMedicaoHistorico, dataLeituraAnterior, dataLeituraAtual);
@@ -513,6 +519,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								contaTxt = preencherDadosRateioAguaEsgoto(emitirContaHelper, contaTxt);
 								
+								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
+								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
+								
+								
 								if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
 										&& municipioEntrega.equals(municipioImovel)) {
 
@@ -534,7 +544,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}
 									qtdContasLocalidade++;
 									stringFormatadaImpressaoTermica.add(obterDadosImpressaoTermica(qtdContasLocalidade, sistemaParametro, 
-											emitirContaHelper, qualidade, localidadeArquivo));
+											emitirContaHelper, qualidade, localidadeArquivo, idsCondominios));
 
 								} else {
 									contasTxtLista.append(contaTxt.toString());
@@ -613,16 +623,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
-	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade,
-			SistemaParametro sistemaParametro,
-			EmitirContaHelper emitirContaHelper, String[] qualidade,
-			String localidadeArquivo) {
+	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade, SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, 
+			String[] qualidade, String localidadeArquivo, List<Integer> idsCondominios) {
+		
 		ImpressaoContaImpressoraTermica impressaoContaImpressoraTermica;
 		Object[] impressaoTermica = new Object[2];
-		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento,
-				repositorioClienteImovel, sessionContext);
-		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper,
-				sistemaParametro, qualidade, qtdContasLocalidade);
+		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento, repositorioClienteImovel, sessionContext);
+		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper, sistemaParametro, qualidade,
+												qtdContasLocalidade, idsCondominios);
 		impressaoTermica[1] = localidadeArquivo;
 		return impressaoTermica;
 	}
@@ -1473,7 +1481,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
 			
-			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(contaTipo, idEmpresa, numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
+			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
 			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 
 			Date novaDataVencimento = repositorioFaturamento.obterDataVencimentoContasFaturarGrupo(faturamentoGrupo);
@@ -3039,7 +3047,40 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1)));
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
-
+			
+			Integer esferaPoder = null;
+			try {
+				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(idContaEP);
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
+			// Nao exibe demonstrativo de impostos para imoveis publicos federais
+			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
+				emitirContaHelper.setInformarImpostos(true);
+				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
+				emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+				emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+				emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+				emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+			}
+			
+			
+			Object[] contatoAgenciaReguladora = null;
+			try {
+				contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
+				if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+					emitirContaHelper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
+					emitirContaHelper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
+					emitirContaHelper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 
 			if (cobrarTaxaEmissaoConta) {
@@ -3503,4 +3544,47 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return colecaoDebitosACobrarCategorias;
 	}
 	
+	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException {
+		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID, emitirContaHelper.getIdSetorComercial()));
+		
+		SetorComercial setorComercial = (SetorComercial) getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName()).iterator().next();
+		
+		FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
+		filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, setorComercial.getMunicipio().getId()));
+		
+		Municipio municipio = (Municipio) getControladorUtil().pesquisar(filtroMunicipio, Municipio.class.getName()).iterator().next();
+		
+		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
+	}
+
+	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
+		
+		if (dadosAliquotasImpostos.length > 0) {
+			contaTxt.append(Util.completaString("Tributos", 15));
+			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[0], 21), 21));
+			contaTxt.append(Util.completaString("(%)", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
+			contaTxt.append(Util.completaString("Base de cálculo", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaString("Valor (R$)", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
+		}
+		
+		return contaTxt;
+	}
+	
+	private StringBuilder preencherContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
+		Object[] contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
+		if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+			contaTxt.append(Util.completaString("Ag. reguladora", 14));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[0], 10));
+			contaTxt.append(Util.completaString("Telefone", 10));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[1], 15));
+			contaTxt.append(Util.completaString("Email", 5));
+			contaTxt.append(Util.completaString((String) contatoAgenciaReguladora[2], 30));
+		}
+		return contaTxt;
+	}
 }

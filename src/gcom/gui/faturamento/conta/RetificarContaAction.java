@@ -404,9 +404,13 @@ public class RetificarContaAction extends GcomAction {
         BigDecimal valorTotalConta = new BigDecimal("0");
         
         //Setar valor do rateio  atualizado
-        if(contaAtual.getValorRateioAgua()!=null){
-           valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
-        }
+		if (contaAtual.getValorRateioAgua() != null) {
+			valorTotalAgua = valorTotalAgua.add(contaAtual.getValorRateioAgua());
+		}
+
+		if (contaAtual.getValorRateioEsgoto() != null) {
+			valorTotalEsgoto = valorTotalEsgoto.add(contaAtual.getValorRateioEsgoto());
+		}
         
         valorTotalConta = valorTotalConta.add(valorTotalAgua);
         valorTotalConta = valorTotalConta.add(valorTotalDebitosConta);
@@ -597,6 +601,8 @@ public class RetificarContaAction extends GcomAction {
 		     conta.setValorFaturadoAguaCategoria(valorTotalConta);  	 
 		}*/
 		
+		Integer consumoMedidoProporcional = obterConsumoMedidoProporcional(leituraAtual, leituraAnterior, retificarContaActionForm, 
+				colecaoCategoriaOUSubcategoriaInicial, idConsumoTarifa, usuarioLogado);
         idConta =  
         	this.getFachada().retificarConta(new Integer(mesAnoContaJSP), 
         		contaAtual,
@@ -618,7 +624,7 @@ public class RetificarContaAction extends GcomAction {
         		atualizarMediaConsumoHistorico,
         		leituraAnterior,leituraAtual,true,
         		retornoUrlBotaoVoltar,leituraAnteriorPoco,
-        		leituraAtualPoco,volumePoco,percentualColeta);
+        		leituraAtualPoco,volumePoco,percentualColeta, consumoMedidoProporcional);
 				
 		montarPaginaSucesso(httpServletRequest, 
 				"Conta " + Util.formatarAnoMesParaMesAno(new Integer(mesAnoContaJSP).intValue()) + 
@@ -630,6 +636,38 @@ public class RetificarContaAction extends GcomAction {
 		return retorno;
     }
     
+    private Integer obterConsumoMedidoProporcional(Integer leituraAtual,Integer leituraAnterior, RetificarContaActionForm form, 
+    		Collection colecaoCategoriaOUSubcategoria, Integer idConsumoTarifa, Usuario usuarioLogado) {
+    	Integer consumoMedidoProporcional = new Integer("0");
+
+    	if (leituraAtual != null && leituraAnterior != null) {
+    		Integer consumoAguaMedido = leituraAtual - leituraAnterior;
+    		
+    		Collection<CalcularValoresAguaEsgotoHelper> valoresConta = 
+    				this.getFachada().calcularValoresConta(
+    						form.getMesAnoConta(), 
+    						form.getIdImovel(),
+    						new Integer(form.getSituacaoAguaConta()), 
+    						new Integer(form.getSituacaoEsgotoConta()),
+    						colecaoCategoriaOUSubcategoria, 
+    						consumoAguaMedido.toString(), 
+    						form.getConsumoEsgoto(),
+    						form.getPercentualEsgoto(), 
+    						idConsumoTarifa, 
+    						usuarioLogado);
+    		
+    		if (valoresConta != null && !valoresConta.isEmpty()) {
+    			
+    			for (CalcularValoresAguaEsgotoHelper item : valoresConta) {
+    				if (item.getConsumoFaturadoAguaCategoria() != null) {
+    					consumoMedidoProporcional = consumoMedidoProporcional + item.getConsumoFaturadoAguaCategoria();
+    				}
+    			}
+    		}
+    	}
+		
+    	return consumoMedidoProporcional; 
+    }
 	
 	/*[SB0012] – Determinar competência de retificação de consumo
 	 * Vivianne Sousa - 16/02/2011

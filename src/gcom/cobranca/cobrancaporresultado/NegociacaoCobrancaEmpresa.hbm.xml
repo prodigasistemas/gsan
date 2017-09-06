@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa" table="cobranca.negociacao_cobranca_empresa">
+		<id name="id" type="java.lang.Integer" column="ncem_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negociacao_cobranca_empresa</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ncem_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataVencimento" type="java.sql.Timestamp" column="ncem_dtvencimento" length="8"/>
+
+		<!-- Associations -->
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="false">
+			<column name="parc_id"/>
+		</many-to-one>
+
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
+			<column name="cbdo_id"/>
+		</many-to-one>
+
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+
+		<many-to-one name="Empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>
