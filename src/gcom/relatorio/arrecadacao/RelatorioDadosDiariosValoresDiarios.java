@@ -205,13 +205,18 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 			Collection<FiltrarDadosDiariosArrecadacaoHelper> colecaoDadosDiarios) {
 		
 		Collection<RelatorioDadosDiariosValoresDiariosBean> colecaoBean = new ArrayList<RelatorioDadosDiariosValoresDiariosBean>();
+		int cont = 0;
 
 		if (colecaoDadosDiarios != null && !colecaoDadosDiarios.isEmpty()){
 			Iterator iterator = colecaoDadosDiarios.iterator();
 
 			BigDecimal valorDia = new BigDecimal("0.00");
+			BigDecimal valorTotalMes = new BigDecimal("0.00");
+			Date dataAnterior = null;
 			
 			while (iterator.hasNext()) {
+				boolean mudouDia = false;
+				boolean mudouMes = false;
 				FiltrarDadosDiariosArrecadacaoHelper itemHelper = (FiltrarDadosDiariosArrecadacaoHelper) iterator.next();
 				RelatorioDadosDiariosValoresDiariosBean bean = new RelatorioDadosDiariosValoresDiariosBean();
 
@@ -248,6 +253,7 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 					bean.setNomeArrecadacaoForma(nomeArrecadacaoForma);
 				}
 				bean.setValor(Util.formatarMoedaReal(valorTotal));
+				
 
 				Date data = (Date) itemHelper.getItemAgrupado();
 				String quantidadeDocumentos = Util.agruparNumeroEmMilhares(itemHelper.getQuantidadeDocumentos());
@@ -257,6 +263,12 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 				BigDecimal valorDevolucoes = itemHelper.getValorDevolucoes();
 				BigDecimal valorArrecadado = itemHelper.getValorArrecadacao();
 				BigDecimal valorArrecadadoLiquido = itemHelper.getValorArrecadacaoLiquida();
+				
+				if (dataAnterior != null && data.compareTo(dataAnterior) != 0) {
+					mudouDia = true;
+					
+				}
+				
 				
 				bean.setData(Util.formatarData(data));
 				
@@ -272,6 +284,11 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 					bean.setQuantPag("");
 				}
 				
+				if (itemHelper.getArrecadador() != null && !itemHelper.getArrecadador().isEmpty()) {
+					bean.setArrecadador(itemHelper.getArrecadador());
+				}
+				
+				
 				bean.setDebitos(Util.formatarMoedaReal(valorArrecadadoBruto));
 				bean.setDescontos(Util.formatarMoedaReal(valorDescontos));
 				bean.setValorArrecadado(Util.formatarMoedaReal(valorArrecadado));
@@ -281,19 +298,59 @@ public class RelatorioDadosDiariosValoresDiarios extends TarefaRelatorio {
 				BigDecimal percentualMultiplicacao = itemHelper.getValorDebitos().multiply(new BigDecimal("100.00"));
 				BigDecimal percentual = percentualMultiplicacao.divide(
 						valorTotal,2,BigDecimal.ROUND_HALF_UP);
-				valorDia = itemHelper.getValorArrecadacaoLiquida().add(valorDia);
+				if (mudouDia) {
+					valorDia = itemHelper.getValorArrecadacaoLiquida();
+				} else {
+					valorDia = itemHelper.getValorArrecadacaoLiquida().add(valorDia);
+				}
+				if (cont == 0) {
+					valorTotalMes = itemHelper.getValorArrecadacaoLiquida();
+				} else {
+					valorTotalMes = valorTotalMes.add(itemHelper.getValorArrecadacaoLiquida());
+				}
 				BigDecimal percentualMultiplicacaoDoDia = valorDia.multiply(new BigDecimal("100.00"));
 				BigDecimal percentualDoDia = percentualMultiplicacaoDoDia.divide(
 						valorTotal,2,BigDecimal.ROUND_HALF_UP);
 				
+				cont++;
+				if (cont == getQuantidadeRegistrosData(data, colecaoDadosDiarios)) {
+					mudouMes = true;
+					cont = 0;
+				}
+				
 				bean.setPercentual(Util.formatarMoedaReal(percentual));
 				bean.setValorAteDia(Util.formatarMoedaReal(valorDia));
 				bean.setPercentualDoDia(Util.formatarMoedaReal(percentualDoDia));
+				bean.setValorTotalMes(Util.formatarMoedaReal(valorTotalMes));
+				bean.setMudouMes(mudouMes || !iterator.hasNext());
 				
+				
+				
+				
+				
+				dataAnterior = new Date(data.getTime());
 				colecaoBean.add(bean);
 			}
 		}
 		
 		return colecaoBean;
+	}
+	
+	public int getQuantidadeRegistrosData(Date data, Collection colecaoDadosDiarios) {
+		Iterator iterator = colecaoDadosDiarios.iterator();
+		int cont = 0;
+		
+		while (iterator.hasNext()) {
+			FiltrarDadosDiariosArrecadacaoHelper itemHelper = (FiltrarDadosDiariosArrecadacaoHelper) iterator.next();
+			Date dataColecao = (Date) itemHelper.getItemAgrupado();
+			
+			int mesColecao = Util.getAnoMesComoInt(dataColecao);
+			int mesAtual    = Util.getAnoMesComoInt(data);
+			
+			if (mesColecao == mesAtual) {
+				cont++;
+			}
+		}
+		return cont;
 	}
 }

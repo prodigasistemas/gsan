@@ -62,6 +62,12 @@ public class RelatorioDadosDiariosValoresDiariosBean implements RelatorioBean {
 	
 	private String percentualDoDia;
 	
+	private String arrecadador;
+	
+	private String valorTotalMes;
+	
+	private Boolean mudouMes;
+	
 	public RelatorioDadosDiariosValoresDiariosBean() {
 		super();
 	}
@@ -293,6 +299,30 @@ public class RelatorioDadosDiariosValoresDiariosBean implements RelatorioBean {
 
 	public void setValorAteDia(String valorAteDia) {
 		this.valorAteDia = valorAteDia;
+	}
+
+	public String getArrecadador() {
+		return arrecadador;
+	}
+
+	public void setArrecadador(String arrecadador) {
+		this.arrecadador = arrecadador;
+	}
+
+	public String getValorTotalMes() {
+		return valorTotalMes;
+	}
+
+	public void setValorTotalMes(String valorTotalMes) {
+		this.valorTotalMes = valorTotalMes;
+	}
+
+	public Boolean getMudouMes() {
+		return mudouMes;
+	}
+
+	public void setMudouMes(Boolean mudouMes) {
+		this.mudouMes = mudouMes;
 	}
 
 }

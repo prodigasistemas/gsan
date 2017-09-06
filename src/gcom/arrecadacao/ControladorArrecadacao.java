@@ -28841,6 +28841,10 @@ public class ControladorArrecadacao implements SessionBean {
 						helper.setValorArrecadacaoLiquida(helper.getValorDebitos()
 							.subtract(helper.getValorDescontos()).subtract(helper.getValorDevolucoes()));
 						
+						if (filtro.isAgruparPorArrecadador()) {
+							helper.setArrecadador((String) dadosConsulta[6]);
+						}
+						
 						valorTotal = valorTotal.add(helper.getValorArrecadacaoLiquida());
 						
 						/**
