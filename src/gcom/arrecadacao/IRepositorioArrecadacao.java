@@ -1314,4 +1314,6 @@ public interface IRepositorioArrecadacao {
 	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
+	
+	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException ;
 }

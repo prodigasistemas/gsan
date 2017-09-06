@@ -4600,9 +4600,12 @@ public class ControladorArrecadacao implements SessionBean {
 			if (idGuiaPagamento != null) {
 				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
 				
+				GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral(idGuiaPagamento);
+				
 				GuiaPagamento guiaPagamento = new GuiaPagamento();
 				guiaPagamento.setId(idGuiaPagamento);
-				pagamento.setGuiaPagamento(guiaPagamento);
+				guiaPagamento.setGuiaPagamentoGeral(guiaGeral);
+				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 
 			} else {
 				pagamento.setGuiaPagamento(null);
@@ -33823,62 +33826,61 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @param colecaoGuiasPagamento
 	 * @throws ControladorException
 	 */
-//	public void transferirGuiaPagamentoParaHistorico(Collection<GuiaPagamento> colecaoGuiasPagamento)throws ControladorException {
-//
-//		try {
-//			GuiaPagamentoHistorico guiaPagamentoHistoricoTemp = null;
-//
-//			Collection colecaoGuiasPagamentoRemover = new ArrayList();
-//
-//			if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
-//
-//				colecaoGuiasPagamentoRemover.addAll(colecaoGuiasPagamento);
-//				int cont = 0;
-//				for (GuiaPagamento guiaPagamento : colecaoGuiasPagamento) {
-//					cont++;
-//
-//					Integer idGuiaPagamento = guiaPagamento.getId();
-//
-//					guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
-//					guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
-//					guiaPagamentoHistoricoTemp.setAnoMesReferenciaContabil(guiaPagamento.getAnoMesReferenciaContabil());
-//					guiaPagamentoHistoricoTemp.setCliente(guiaPagamento.getCliente());
-//					guiaPagamentoHistoricoTemp.setDataEmissao(guiaPagamento.getDataEmissao());
-//					guiaPagamentoHistoricoTemp.setDataVencimento(guiaPagamento.getDataVencimento());
-//					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdanterior(guiaPagamento.getDebitoCreditoSituacaoAnterior());
-//					guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdatual(guiaPagamento.getDebitoCreditoSituacaoAtual());
-//					guiaPagamentoHistoricoTemp.setDebitoTipo(guiaPagamento.getDebitoTipo());
-//					guiaPagamentoHistoricoTemp.setDocumentoTipo(guiaPagamento.getDocumentoTipo());
-//					guiaPagamentoHistoricoTemp.setFinanciamentoTipo(guiaPagamento.getFinanciamentoTipo());
-//					guiaPagamentoHistoricoTemp.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
-//					guiaPagamentoHistoricoTemp.setImovel(guiaPagamento.getImovel());
-//					guiaPagamentoHistoricoTemp.setIndicadorMulta(guiaPagamento.getIndicadoCobrancaMulta());
-//					guiaPagamentoHistoricoTemp.setLancamentoItemContabil(guiaPagamento.getLancamentoItemContabil());
-//					guiaPagamentoHistoricoTemp.setLocalidade(guiaPagamento.getLocalidade());
-//					guiaPagamentoHistoricoTemp.setOrdemServico(guiaPagamento.getOrdemServico());
-//					guiaPagamentoHistoricoTemp.setParcelamento(guiaPagamento.getParcelamento());
-//					guiaPagamentoHistoricoTemp.setRegistroAtendimento(guiaPagamento.getRegistroAtendimento());
-//					guiaPagamentoHistoricoTemp.setUltimaAlteracao(new Date());
-//					guiaPagamentoHistoricoTemp.setValorDebito(guiaPagamento.getValorDebito());
-//					guiaPagamentoHistoricoTemp.setObservacao(guiaPagamento.getObservacao());
-//					guiaPagamentoHistoricoTemp.setIndicadorEmitirObservacao(guiaPagamento.getIndicadorEmitirObservacao());
-//					guiaPagamentoHistoricoTemp.setNumeroGuiaFatura(guiaPagamento.getNumeroGuiaFatura());
-//
-//					getControladorUtil().inserir(guiaPagamentoHistoricoTemp);
-//					enviarGuiaPagamentoCategoriaParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
-//					enviarClienteGuiaPagamentoParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
-//				}
-//			}
-//
-//			getControladorBatch().removerColecaoGuiaPagamentoParaBatch(colecaoGuiasPagamentoRemover);
-//			colecaoGuiasPagamentoRemover = null;
-//			colecaoGuiasPagamento = null;
-//
-//		} catch (Exception ex) {
-//			throw new ControladorException("erro.sistema", ex);
-//		}
-//	}
+	public void transferirGuiaPagamentoParaHistorico(Collection<GuiaPagamento> colecaoGuiasPagamento)throws ControladorException {
 
+	    try {
+	      GuiaPagamentoHistorico guiaPagamentoHistoricoTemp = null;
+
+	      Collection colecaoGuiasPagamentoRemover = new ArrayList();
+
+	      if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
+
+	        colecaoGuiasPagamentoRemover.addAll(colecaoGuiasPagamento);
+	        int cont = 0;
+	        for (GuiaPagamento guiaPagamento : colecaoGuiasPagamento) {
+	          cont++;
+
+	          Integer idGuiaPagamento = guiaPagamento.getId();
+
+	          guiaPagamentoHistoricoTemp = new GuiaPagamentoHistorico();
+	          guiaPagamentoHistoricoTemp.setId(idGuiaPagamento);
+	          guiaPagamentoHistoricoTemp.setAnoMesReferenciaContabil(guiaPagamento.getAnoMesReferenciaContabil());
+	          guiaPagamentoHistoricoTemp.setCliente(guiaPagamento.getCliente());
+	          guiaPagamentoHistoricoTemp.setDataEmissao(guiaPagamento.getDataEmissao());
+	          guiaPagamentoHistoricoTemp.setDataVencimento(guiaPagamento.getDataVencimento());
+	          guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdanterior(guiaPagamento.getDebitoCreditoSituacaoAnterior());
+	          guiaPagamentoHistoricoTemp.setDebitoCreditoSituacaoByDcstIdatual(guiaPagamento.getDebitoCreditoSituacaoAtual());
+	          guiaPagamentoHistoricoTemp.setDebitoTipo(guiaPagamento.getDebitoTipo());
+	          guiaPagamentoHistoricoTemp.setDocumentoTipo(guiaPagamento.getDocumentoTipo());
+	          guiaPagamentoHistoricoTemp.setFinanciamentoTipo(guiaPagamento.getFinanciamentoTipo());
+	          guiaPagamentoHistoricoTemp.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
+	          guiaPagamentoHistoricoTemp.setImovel(guiaPagamento.getImovel());
+	          guiaPagamentoHistoricoTemp.setIndicadorMulta(guiaPagamento.getIndicadoCobrancaMulta());
+	          guiaPagamentoHistoricoTemp.setLancamentoItemContabil(guiaPagamento.getLancamentoItemContabil());
+	          guiaPagamentoHistoricoTemp.setLocalidade(guiaPagamento.getLocalidade());
+	          guiaPagamentoHistoricoTemp.setOrdemServico(guiaPagamento.getOrdemServico());
+	          guiaPagamentoHistoricoTemp.setParcelamento(guiaPagamento.getParcelamento());
+	          guiaPagamentoHistoricoTemp.setRegistroAtendimento(guiaPagamento.getRegistroAtendimento());
+	          guiaPagamentoHistoricoTemp.setUltimaAlteracao(new Date());
+	          guiaPagamentoHistoricoTemp.setValorDebito(guiaPagamento.getValorDebito());
+	          guiaPagamentoHistoricoTemp.setObservacao(guiaPagamento.getObservacao());
+	          guiaPagamentoHistoricoTemp.setIndicadorEmitirObservacao(guiaPagamento.getIndicadorEmitirObservacao());
+	          guiaPagamentoHistoricoTemp.setNumeroGuiaFatura(guiaPagamento.getNumeroGuiaFatura());
+
+	          getControladorUtil().inserir(guiaPagamentoHistoricoTemp);
+	          enviarGuiaPagamentoCategoriaParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
+	          enviarClienteGuiaPagamentoParaHistorico(guiaPagamentoHistoricoTemp, idGuiaPagamento);
+	        }
+	      }
+
+	      getControladorBatch().removerColecaoGuiaPagamentoParaBatch(colecaoGuiasPagamentoRemover);
+	      colecaoGuiasPagamentoRemover = null;
+	      colecaoGuiasPagamento = null;
+
+	    } catch (Exception ex) {
+	      throw new ControladorException("erro.sistema", ex);
+	    }
+	  }
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
 	 * 
