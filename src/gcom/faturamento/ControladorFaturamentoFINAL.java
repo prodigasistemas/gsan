@@ -44887,7 +44887,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						descricaoServicosTarifas3 = " CONSUMO DE ÁGUA";
 						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
-						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua();
+						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua() == null ? new BigDecimal(0) : emitirContaHelper.getValorRateioAgua();
 						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
