@@ -4,7 +4,6 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class CancelarParcelamentoHelper {
 
@@ -52,7 +51,7 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getSaldoDevedorTotal() {
-		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos());
+		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos()).add(getTotalCancelamentoDescontoFaixa());
 	}
 
 	public BigDecimal getTotalCancelamentoDescontos() {
@@ -64,7 +63,7 @@ public class CancelarParcelamentoHelper {
 	}
 	
 	public BigDecimal getSaldoDevedorContas() {
-		return getValorContasSemEntrada().subtract(getTotalContasCobradas()).add(valorDescontoFaixa);
+		return getValorContasSemEntrada().subtract(getTotalContasCobradas());
 	}
 
 	public BigDecimal getSaldoDevedorAcrescimos() {
