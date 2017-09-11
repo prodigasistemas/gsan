@@ -1,8 +1,13 @@
 package gcom.relatorio.arrecadacao.pagamento;
 
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.batch.Relatorio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.relatorio.ConstantesRelatorios;
@@ -15,6 +20,7 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
@@ -37,6 +43,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		super(null, "");
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Collection<RelatorioEmitirGuiaPagamentoBean> inicializarBeanRelatorio(Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio) {
 
 		Collection<RelatorioEmitirGuiaPagamentoDetailBean> colecaoDetail = new ArrayList<RelatorioEmitirGuiaPagamentoDetailBean>();
@@ -47,7 +54,8 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 		colecaoDetail.clear();
 
 		while (iterator.hasNext()) {
-
+			boolean ehParcelamento = false;
+			
 			GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
 
 			String descricaoServicosTarifas = "";
@@ -70,17 +78,20 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 					valor = Util.formatarMoedaReal(guiaPagamentoItem.getValorDebito());
 
-					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor);
+					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, ehParcelamento);
 
 					colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 				}
 			} else {
+				ehParcelamento = true;
+				
 				descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
 
 				valor = Util.formatarMoedaReal(helper.getValorDebito());
 
-				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor);
+				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, ehParcelamento);
 
+				preencherInformacoesParcelamento(relatorioEmitirGuiaPagamentoDetailBean, helper.getIdGuiaPagamento());
 				colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 			}
 
@@ -130,7 +141,7 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 			RelatorioEmitirGuiaPagamentoBean bean = new RelatorioEmitirGuiaPagamentoBean(colecaoDetail, matricula, nomeCliente, dataVencimento, inscricao, enderecoImovel, enderecoClienteResponsavel,
 					representacaoNumericaCodBarraFormatada, representacaoNumericaCodBarraSemDigito, dataValidade, valorTotal, idGuiaPagamento, observacao, cpfCnpjCliente, idImovel, nossoNumero,
-					sacadoParte01, sacadoParte02, subRelatorio, colecaoDetail);
+					sacadoParte01, sacadoParte02, subRelatorio, colecaoDetail, obterMensagemParcelamento(ehParcelamento), ehParcelamento);
 
 			colecaoDetail.clear();
 
@@ -140,7 +151,34 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 		return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private Parcelamento obterParcelamentoGuia(String idGuiaPagamento) {
+		FiltroGuiaPagamento filtro = new FiltroGuiaPagamento();
+		
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
 
+		Collection<GuiaPagamento> guias = Fachada.getInstancia().pesquisar(filtro, GuiaPagamento.class.getName());
+		GuiaPagamento guia = guias.iterator().next();
+		
+		if (guia.getParcelamento() != null)
+			return guia.getParcelamento();
+		else
+			return null;
+	}
+	
+	private void preencherInformacoesParcelamento(RelatorioEmitirGuiaPagamentoDetailBean relatorio, String idGuiaPagamento) {
+		Parcelamento parcelamento = obterParcelamentoGuia(idGuiaPagamento);
+		
+		Integer[] periodoDebitos = Fachada.getInstancia().obterPeriodoContasParceladas(parcelamento.getId());
+		
+		Short diaVencimento = Fachada.getInstancia().obterDiaVencimentoConta(parcelamento.getImovel().getId());
+		if (parcelamento != null)
+			relatorio.preencherDadosParcelamento(parcelamento, periodoDebitos, diaVencimento);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public Object executar() throws TarefaException {
 
 		// ------------------------------------
@@ -226,5 +264,22 @@ public class RelatorioEmitirGuiaPagamento extends TarefaRelatorio {
 
 	public void agendarTarefaBatch() {
 		AgendadorTarefas.agendarTarefa("RelatorioEmitirGuiaPagamento", this);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private String obterMensagemParcelamento(boolean ehParcelamento) {
+		if (ehParcelamento) {
+			
+			FiltroMensagemParcelamentoBoleto filtro = new FiltroMensagemParcelamentoBoleto();
+			filtro.adicionarParametro(new ParametroNulo(FiltroMensagemParcelamentoBoleto.FIM_VIGENCIA));
+	
+			Collection mensagens = Fachada.getInstancia().pesquisar(filtro, MensagemParcelamentoBoleto.class.getName());
+			Iterator itMensagem = mensagens.iterator();
+			
+			MensagemParcelamentoBoleto mensagem = (MensagemParcelamentoBoleto) itMensagem.next();
+		
+			return mensagem.getMensagem();
+		}else
+			return "";
 	}
 }

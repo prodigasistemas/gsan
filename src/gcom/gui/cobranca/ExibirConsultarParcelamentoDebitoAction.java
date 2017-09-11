@@ -80,6 +80,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 		String codigoParcelamento = httpServletRequest.getParameter("codigoParcelamento");
 		sessao.setAttribute("idParcelamento", codigoParcelamento);
 		
+		boolean geraBoletoBB = false;
+		String linkBoletoBB = null;
+		
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
 			
 			//Alterado por Raphael Rossiter em 24/01/2007
@@ -290,7 +293,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 												.intValue() == DebitoCreditoSituacao.INCLUIDA.intValue())) {
 									
 									idsContaEP.add(conta.getId());
-									
 								}
 							}
 							
@@ -298,6 +300,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 		        		
 		        		
 		        	}
+		            
+		            geraBoletoBB = true;
+					linkBoletoBB = this.obterLinkBoletoBB(parcelamento);
 		        }
 			}
 		}
@@ -356,6 +361,17 @@ public class ExibirConsultarParcelamentoDebitoAction extends
 			 }
 		 }
 		 
+		 if (geraBoletoBB) {
+			 httpServletRequest.setAttribute("linkBoletoBB", linkBoletoBB);
+		 }
+		 
 		return retorno;
+	}
+	
+	public String obterLinkBoletoBB(Parcelamento parcelamento) {
+		// Segunda Via
+		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), false);
+		
+		return linkBoletoBB;
 	}
 }
