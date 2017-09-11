@@ -61,24 +61,21 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		boolean exibirBotaoCancelamentoParcelamento = false;
 
 		SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
-		
-<<<<<<< HEAD
+
 		if (acao != null && acao.equals("cancelar")) {
 			cancelarParcelamento(sessao, Integer.parseInt(codigoParcelamento), sistemaParametro);
 		}
 
-=======
 		boolean geraBoletoBB = false;
 		String linkBoletoBB = null;
-		
->>>>>>> master
+
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
 			Collection<ClienteImovel> clienteImovel = pesquisarImovel(codigoImovel);
 			verificarImovel(request, form, clienteImovel);
 			setarDadosClienteImovel(request, form, codigoImovel, clienteImovel);
 
 			Collection<Parcelamento> colecaoParcelamento = pesquisarParcelamento(codigoParcelamento);
-			
+
 			if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
 				request.setAttribute("colecaoParcelamento", colecaoParcelamento);
 
@@ -93,15 +90,16 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 					Integer anoMesEfetivacaoParcelamento = Util.getAnoMesComoInteger(parcelamento.getParcelamento());
 
 					if (anoMesEfetivacaoParcelamento.compareTo(sistemaParametro.getAnoMesArrecadacao()) >= 0
-							&& parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.NORMAL.intValue() 
-							&& numeroPrestacaoCobradas == 0 
-							&& !itensHistoricoParcelamento) {
+							&& parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.NORMAL.intValue() && numeroPrestacaoCobradas == 0 && !itensHistoricoParcelamento) {
 
 						pesquisarMotivosDesfazerParcelamento(request);
 						verificarContas(sessao, idsContaEP, codigoImovel, codigoParcelamento);
 					}
-					
+
 					exibirBotaoCancelamentoParcelamento = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento()) && isParcelamentoNormal(parcelamento);
+
+					geraBoletoBB = true;
+					linkBoletoBB = this.obterLinkBoletoBB(parcelamento);
 				}
 			}
 		}
@@ -110,9 +108,20 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		verificarPagamentoCartaoDeCredito(sessao, request, codigoParcelamento);
 		verificarPermissaoCancelarParcelamento(request, sessao, exibirBotaoCancelamentoParcelamento);
 
+		if (geraBoletoBB) {
+			request.setAttribute("linkBoletoBB", linkBoletoBB);
+		}
+
 		return retorno;
 	}
 
+	private String obterLinkBoletoBB(Parcelamento parcelamento) {
+		// Segunda Via
+		String linkBoletoBB = getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), false);
+		
+		return linkBoletoBB;
+	}
+	
 	private void setarDadosParcelamento(ParcelamentoDebitoActionForm form, Parcelamento parcelamento) {
 		if (parcelamento.getCliente() != null && parcelamento.getCliente().getNome() != null) {
 			form.setNomeClienteResponsavel(parcelamento.getCliente().getNome());
@@ -208,94 +217,10 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			form.setNomeCliente(cliente.getNome());
 			form.setImovelPerfil(imovel.getImovelPerfil() != null ? imovel.getImovelPerfil().getDescricao() : null);
 			
-<<<<<<< HEAD
 			if (cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica() == 1) {
 				form.setCpfCnpj(cliente.getCpfFormatado());
 			} else {
 				form.setCpfCnpj(cliente.getCnpjFormatado());
-=======
-				Iterator iteratorParcelamento = colecaoParcelamento.iterator();
-				while (iteratorParcelamento.hasNext()) {
-		        	
-		        	Parcelamento parcelamento = (Parcelamento) iteratorParcelamento.next();
-		        	
-		        	if (parcelamento.getCliente()!= null && parcelamento.getCliente().getNome() != null){
-		        		parcelamentoDebitoActionForm.setNomeClienteResponsavel(parcelamento.getCliente().getNome());
-		        	}
-		        	
-		        	if(parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.DESFEITO.intValue()){
-		    			parcelamentoDebitoActionForm.setDataParcelamentoDesfeito(Util.formatarDataComHora(parcelamento.getUltimaAlteracao()));
-		    		}else{
-		    			parcelamentoDebitoActionForm.setDataParcelamentoDesfeito("");
-		    		}
-		        	
-		        	// Retorna o único objeto da tabela sistemaParametro
-		            sistemaParametro = fachada.pesquisarParametrosDoSistema();
-		            
-		            //pesquisa para descobrir o numero de prestações cobradas
-		            FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
-		            filtroDebitoACobrar.adicionarParametro(new ParametroSimples(
-		            		FiltroDebitoACobrar.PARCELAMENTO_ID, codigoParcelamento));
-		            
-		            Collection<DebitoACobrar> colecaoDebitoACobrar = fachada.pesquisar(filtroDebitoACobrar, DebitoACobrar.class.getName() );
-		            short numeroPrestacaoCobradas = 0;
-		            
-		            if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()){
-		            	numeroPrestacaoCobradas = colecaoDebitoACobrar.iterator().next().getNumeroPrestacaoCobradas();
-		            }
-		            
-		            boolean itensHistoricoParcelamento = fachada.verificarItensParcelamentoNoHistorico(new Integer(codigoImovel),new Integer(codigoParcelamento) );
-		            Integer anoMesEfetivacaoParcelamento = Util.getAnoMesComoInteger(parcelamento.getParcelamento());
-		            
-		            if((anoMesEfetivacaoParcelamento.compareTo(new Integer(sistemaParametro.getAnoMesArrecadacao())) >= 0) 
-		        		&& parcelamento.getParcelamentoSituacao().getId().intValue() == ParcelamentoSituacao.NORMAL.intValue()
-		        		&& numeroPrestacaoCobradas == 0 && !itensHistoricoParcelamento) {
-		        		
-		        		FiltroParcelamentoMotivoDesfazer filtroParcelamentoMotivoDesfazer = new FiltroParcelamentoMotivoDesfazer();
-		        		Collection<ParcelamentoMotivoDesfazer> collectionParcelamentoMotivoDesfazer = fachada.pesquisar(filtroParcelamentoMotivoDesfazer, ParcelamentoMotivoDesfazer.class.getName() );
-		        		 
-		        		httpServletRequest.setAttribute("collectionParcelamentoMotivoDesfazer", collectionParcelamentoMotivoDesfazer);
-		     
-		        		// Verifica se a entrada do parcelamento tenha sido através de contas marcadas como EP
-		        		FiltroConta filtroConta = new FiltroConta();
-		        		filtroConta.adicionarParametro(new ParametroSimples(
-								FiltroConta.IMOVEL_ID, codigoImovel));
-
-						filtroConta.adicionarParametro(new ParametroSimples(
-								FiltroConta.PARCELAMENTO_ID,codigoParcelamento));
-
-						Collection colecaoConta2 = fachada.pesquisar(filtroConta, Conta.class.getName());
-
-						if (colecaoConta2 != null && !colecaoConta2.isEmpty()) {
-
-							Iterator iteratorConta = colecaoConta2.iterator();
-
-							while (iteratorConta.hasNext()) {
-
-								Conta conta = null;
-
-								conta = (Conta) iteratorConta.next();
-
-								if ((conta.getDebitoCreditoSituacaoAtual().getId()
-										.intValue() == DebitoCreditoSituacao.NORMAL.intValue())
-										|| (conta.getDebitoCreditoSituacaoAtual().getId()
-												.intValue() == DebitoCreditoSituacao.RETIFICADA.intValue())
-										|| (conta.getDebitoCreditoSituacaoAtual().getId()
-												.intValue() == DebitoCreditoSituacao.INCLUIDA.intValue())) {
-									
-									idsContaEP.add(conta.getId());
-								}
-							}
-							
-						}
-		        		
-		        		
-		        	}
-		            
-		            geraBoletoBB = true;
-					linkBoletoBB = this.obterLinkBoletoBB(parcelamento);
-		        }
->>>>>>> master
 			}
 			
 			form.setParcelamento(imovel.getNumeroParcelamento() != null ? imovel.getNumeroParcelamento().toString() : null);
@@ -333,7 +258,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		filtro.adicionarCaminhoParaCarregamentoEntidade("cobrancaForma");
 		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
 
-<<<<<<< HEAD
 		return getFachada().pesquisar(filtro, Parcelamento.class.getName());
 	}
 
@@ -401,44 +325,5 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		CancelarParcelamentoHelper helper = getFachada().pesquisarParcelamentoParaCancelar(codigoParcelamento);
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 		getFachada().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
-=======
-			Collection<ParcelamentoPagamentoCartaoCredito> colecaoParcelamento = fachada.pesquisar(filtroParcelamento, ParcelamentoPagamentoCartaoCredito.class.getName() );
-			
-			ParcelamentoPagamentoCartaoCredito parc = (ParcelamentoPagamentoCartaoCredito) Util.retonarObjetoDeColecao(colecaoParcelamento);
-		 
-		 if(parc!=null){
-			 if(parc.getNumeroCartaoCredito()!=null && !parc.getNumeroCartaoCredito().equals("")){
-				 sessao.setAttribute("parcelamentoCartaCredito",codigoParcelamento);
-				 sessao.setAttribute("buttonCartaoCredito","true");
-			 }
-		 }
-		 
-		 /*
-		  * Caso o parcelamento tenha dados de cartão de crédito não confirmados pela operadora (PACC_ICONFIRMADOOPERADORA da tabela 
-		  * PARCELAMENTO_PAGAMENTO_CARTAO_CREDITO com PARC_ID = PARC_ID do parcelamento selecionado com valor igual 2 (Não))
-		  */
-		 if (codigoParcelamento != null && !codigoParcelamento.equals("")){
-			 
-			 boolean habilitarBotaoDesfazer = fachada.parcelamentoPagamentoCartaoCreditoJaConfirmado(Integer.valueOf(codigoParcelamento));
-			 
-			 if (!habilitarBotaoDesfazer){
-				 
-				 httpServletRequest.setAttribute("habilitarBotaoDesfazer", "SIM");
-			 }
-		 }
-		 
-		 if (geraBoletoBB) {
-			 httpServletRequest.setAttribute("linkBoletoBB", linkBoletoBB);
-		 }
-		 
-		return retorno;
->>>>>>> master
-	}
-	
-	public String obterLinkBoletoBB(Parcelamento parcelamento) {
-		// Segunda Via
-		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), false);
-		
-		return linkBoletoBB;
 	}
 }
