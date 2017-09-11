@@ -117,7 +117,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 
 	private String obterLinkBoletoBB(Parcelamento parcelamento) {
 		// Segunda Via
-		String linkBoletoBB = getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getValorEntrada(), false);
+		String linkBoletoBB = getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 		
 		return linkBoletoBB;
 	}
