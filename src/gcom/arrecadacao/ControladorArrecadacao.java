@@ -51354,24 +51354,30 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
-		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, matricula));
-		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
-		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
-		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
-		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_TIPO);
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
+//		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+//		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, matricula));
+//		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+//		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+//		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
+//		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_TIPO);
+		
+		FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 		
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
 		
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		String refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
-		ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroClienteImovel, ClienteImovel.class.getName()));
-		boolean isClientePF = clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+//		ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroClienteImovel, ClienteImovel.class.getName()));
+//		boolean isClientePF = clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
+		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
 		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
 
-		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(clienteImovel.getCliente().getId());
+		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(cliente.getId());
 		String enderecoCliente = dadosEndereco[0] + ", " + dadosEndereco[3];
 		String municipio = dadosEndereco[1];
 		String unidadeFederacao = dadosEndereco[2];
@@ -51381,13 +51387,13 @@ public class ControladorArrecadacao implements SessionBean {
 		linkBancoBrasil.append("https://mpag.bb.com.br/site/mpag/");
 		linkBancoBrasil.append("?idConv=315828");
 		linkBancoBrasil.append("&refTran="+refTran);
-		linkBancoBrasil.append("&cpfCnpj="+(isClientePF ? clienteImovel.getCliente().getCpf() : clienteImovel.getCliente().getCnpj()));
-		linkBancoBrasil.append("&nome="+clienteImovel.getCliente().getNome());
+		linkBancoBrasil.append("&cpfCnpj="+(isClientePF ? cliente.getCpf() : cliente.getCnpj()));
+		linkBancoBrasil.append("&nome="+ cliente.getNome());
 		linkBancoBrasil.append("&endereco="+enderecoCliente);
 		linkBancoBrasil.append("&uf="+unidadeFederacao);
 		linkBancoBrasil.append("&cep="+cep);
 		linkBancoBrasil.append("&cidade="+municipio);
-		linkBancoBrasil.append("&indicadorPessoa="+clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica());
+		linkBancoBrasil.append("&indicadorPessoa="+ cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica());
 		linkBancoBrasil.append("&tpDuplicata=DS"); 
 		linkBancoBrasil.append("&tpPagamento="+ (primeiraVia ? "2" : "21")); // 2 - Boleto, 21 - Segunda via Boleto
 		linkBancoBrasil.append("&valor="+valorFormatado);
