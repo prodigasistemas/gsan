@@ -15833,4 +15833,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		return retorno;
     }
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException {
+		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+
+		if (imovel.getDiaVencimento() != null) {
+			return imovel.getDiaVencimento();
+		} else {
+			FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+			
+			return grupo.getDiaVencimento();
+		}
+	}
 }

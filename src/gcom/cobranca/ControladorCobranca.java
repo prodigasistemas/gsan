@@ -62202,4 +62202,12 @@ public class ControladorCobranca extends ControladorComum {
 
 		 return ((CobrancaParametro) parametros.iterator().next()).getValor();
 	}
+	
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

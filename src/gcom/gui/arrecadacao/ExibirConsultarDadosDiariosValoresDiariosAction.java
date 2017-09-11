@@ -355,7 +355,8 @@ public class ExibirConsultarDadosDiariosValoresDiariosAction extends GcomAction 
 			} else {
 				sessao.removeAttribute("nomeArrecadacaoForma");
 			}
-				
+			
+			filtro.setAgruparPorArrecadador(true);
 			
 			Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> 
 			 mapDadosDiariosAnoMes = fachada.filtrarDadosDiariosArrecadacao(
