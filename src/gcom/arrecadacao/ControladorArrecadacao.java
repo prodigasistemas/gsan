@@ -102,10 +102,8 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
-import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
@@ -310,13 +308,6 @@ import javax.mail.SendFailedException;
 
 import org.apache.log4j.Logger;
 
-
-/**
- * Controlador Arrecadacao PADRÃO
- * 
- * @author Raphael Rossiter
- * @date 30/04/2007
- */
 public class ControladorArrecadacao implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -349,15 +340,7 @@ public class ControladorArrecadacao implements SessionBean {
 	
 	private static Logger logger = Logger.getLogger(ControladorArrecadacao.class);
 
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-
 		repositorioCliente = RepositorioClienteHBM.getInstancia();
 		repositorioLocalidade = RepositorioLocalidadeHBM.getInstancia();
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
@@ -371,54 +354,26 @@ public class ControladorArrecadacao implements SessionBean {
 		repositorioAtendimentoPublico = RepositorioAtendimentoPublicoHBM.getInstancia();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	protected ControladorAcessoLocal getControladorAcesso() {
 		ControladorAcessoLocalHome localHome = null;
 		ControladorAcessoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAcessoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -429,26 +384,16 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	protected ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -459,13 +404,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
 	protected ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -473,8 +411,7 @@ public class ControladorArrecadacao implements SessionBean {
 		ServiceLocator locator = null;
 		try {
 			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
 
 			local = localHome.create();
 
@@ -486,26 +423,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -516,26 +442,14 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	protected ControladorLocalidadeLocal getControladorLocalidade() {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLocalidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorLocalidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -546,29 +460,14 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Author: Sávio Luiz Data: 04/01/2006
-	 * 
-	 * Retorna o valor do Controlador de Cobranca
-	 * 
-	 * @return O valor de controladorCobrancaLocal
-	 */
 	protected ControladorCobrancaLocal getControladorCobranca() {
-
 		ControladorCobrancaLocalHome localHome = null;
 		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -580,96 +479,49 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 
-	/**
-	 * Author: Vivianne Sousa Data: 1804/03/2006
-	 * 
-	 * Retorna o valor do Controlador Util
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	protected ControladorUtilLocal getControladorUtil() {
-
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de imóvel
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 19/04/2006
-	 * 
-	 * @return
-	 */
 	protected ControladorImovelLocal getControladorImovel() {
-
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	protected ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -683,15 +535,12 @@ public class ControladorArrecadacao implements SessionBean {
 	private ControladorRetificarContaLocal getControladorRetificarConta() {
 		ControladorRetificarContaLocalHome localHome = null;
 		ControladorRetificarContaLocal local = null;
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -702,11 +551,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
 	protected ControladorEnderecoLocal getControladorEndereco() {
 
 		ControladorEnderecoLocalHome localHome = null;
@@ -717,8 +561,7 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
+			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
 
 			local = localHome.create();
 
@@ -730,32 +573,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de imóvel
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 01/08/2007
-	 * 
-	 * @return
-	 */
 	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
 		ControladorPermissaoEspecialLocalHome localHome = null;
 		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorPermissaoEspecialLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -764,32 +590,16 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de contrato parcelamento
-	 * 
-	 * @author Mariana Victor
-	 * @date 04/08/2011
-	 * 
-	 * @return
-	 */
 	protected ControladorContratoParcelamentoLocal getControladorContratoParcelamento() {
 		ControladorContratoParcelamentoLocalHome localHome = null;
 		ControladorContratoParcelamentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorContratoParcelamentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorContratoParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -51359,13 +51169,6 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
-//		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
-//		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, matricula));
-//		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
-//		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
-//		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
-//		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_TIPO);
-		
 		FiltroCliente filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
@@ -51375,8 +51178,6 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		String refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
-//		ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroClienteImovel, ClienteImovel.class.getName()));
-//		boolean isClientePF = clienteImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
 		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
 		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
@@ -51387,28 +51188,27 @@ public class ControladorArrecadacao implements SessionBean {
 		String unidadeFederacao = dadosEndereco[2];
 		String cep = dadosEndereco[4];
 		
-		StringBuilder linkBancoBrasil = new StringBuilder();
-		linkBancoBrasil.append("https://mpag.bb.com.br/site/mpag/");
-		linkBancoBrasil.append("?idConv=315828");
-		linkBancoBrasil.append("&refTran="+refTran);
-		linkBancoBrasil.append("&cpfCnpj="+(isClientePF ? cliente.getCpf() : cliente.getCnpj()));
-		linkBancoBrasil.append("&nome="+ cliente.getNome());
-		linkBancoBrasil.append("&endereco="+enderecoCliente);
-		linkBancoBrasil.append("&uf="+unidadeFederacao);
-		linkBancoBrasil.append("&cep="+cep);
-		linkBancoBrasil.append("&cidade="+municipio);
-		linkBancoBrasil.append("&indicadorPessoa="+ cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica());
-		linkBancoBrasil.append("&tpDuplicata=DS"); 
-		linkBancoBrasil.append("&tpPagamento="+ (primeiraVia ? "2" : "21")); // 2 - Boleto, 21 - Segunda via Boleto
-		linkBancoBrasil.append("&valor="+valorFormatado);
-		linkBancoBrasil.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
-		linkBancoBrasil.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
-		linkBancoBrasil.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId()));
+		StringBuilder link = new StringBuilder();
+		link.append("https://mpag.bb.com.br/site/mpag/");
+		link.append("?idConv=315828");
+		link.append("&refTran="+refTran);
+		link.append("&cpfCnpj="+(isClientePF ? cliente.getCpf() : cliente.getCnpj()));
+		link.append("&nome="+ cliente.getNome());
+		link.append("&endereco="+enderecoCliente);
+		link.append("&uf="+unidadeFederacao);
+		link.append("&cep="+cep);
+		link.append("&cidade="+municipio);
+		link.append("&indicadorPessoa="+ cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica());
+		link.append("&tpDuplicata=DS"); 
+		link.append("&tpPagamento="+ (primeiraVia ? "2" : "21")); // 2 - Boleto, 21 - Segunda via Boleto
+		link.append("&valor="+valorFormatado);
+		link.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
+		link.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
+		link.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId()));
 		
-		return linkBancoBrasil.toString();
+		return link.toString();
 	}
-	
-	
+
 	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento) {
 		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
 
@@ -51442,20 +51242,3 @@ public class ControladorArrecadacao implements SessionBean {
 		return mensagem.getMensagem();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
