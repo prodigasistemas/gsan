@@ -819,9 +819,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentosCobrancaDeGuias(Pagamento pagamento) throws ControladorException {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 
-		if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getParcelamento() != null) {
+		if (pagamento.getGuiaPagamento() != null && pagamento.getGuiaPagamento().getGuiaPagamento().getParcelamento() != null) {
 			
-			pagamentosEmpresa.addAll(verificarItensParcelamentos(pagamento.getGuiaPagamento().getParcelamento(), pagamento.getGuiaPagamento(), null, 
+			pagamentosEmpresa.addAll(verificarItensParcelamentos(pagamento.getGuiaPagamento().getGuiaPagamento().getParcelamento(), pagamento.getGuiaPagamento().getGuiaPagamento(), null, 
 					pagamento, null, pagamento.getAnoMesReferenciaArrecadacao()));
 		}
 		return pagamentosEmpresa;
