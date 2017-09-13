@@ -102,8 +102,10 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
@@ -160,7 +162,9 @@ import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
 import gcom.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoHelper;
+import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
@@ -51168,7 +51172,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException, ErroRepositorioException {
 		FiltroCliente filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
@@ -51204,17 +51208,27 @@ public class ControladorArrecadacao implements SessionBean {
 		link.append("&valor="+valorFormatado);
 		link.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
 		link.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
-		link.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId()));
+		link.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId(), idParcelamento, clienteResponsavelParcelamento));
 		
 		return link.toString();
 	}
 
-	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento) {
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento, Cliente clienteResponsavelParcelamento) throws ErroRepositorioException {
 		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
 
 	    Iterator iterator = dadosRelatorio.iterator();
 	    String descricaoServicosTarifas = null;
 	    String valor = null;
+	    
+	    FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+	    filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
+	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+
+	    // Periodo do debito
+	    Integer[] periodoParcelamento = repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
+	    int inicioParcelamento = periodoParcelamento[0];
+	    int fimParcelamento    = periodoParcelamento[1];
 
 	    while (iterator.hasNext()) {
 	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
@@ -51223,11 +51237,58 @@ public class ControladorArrecadacao implements SessionBean {
 	        
 	    }
 	    
-	    String mensagemParcelamento = descricaoServicosTarifas + "     R$ " + valor;
-	    mensagemParcelamento += "<br>";
-	    mensagemParcelamento += "     " + obterMensagemParcelamento();
+	    FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 	    
-		return mensagemParcelamento;
+	    FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL, parcelamento.getImovel().getId()));
+		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE_TIPO);
+		
+		Cliente pagador = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
+		ClienteImovel beneficiario = (ClienteImovel) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroClienteImovel, ClienteImovel.class.getName()));
+	    
+		boolean isPagadorPF = pagador.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+		boolean isBeneficiarioPF = beneficiario.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+		
+		String documentoPagador = "";
+		String documentoBeneficiario = "";
+		
+		if (isPagadorPF) {
+			documentoPagador = Util.formatarCpf(pagador.getCpf());
+		} else {
+			documentoPagador = Util.formatarCnpj(pagador.getCnpj());
+		}
+		
+		if (isBeneficiarioPF) {
+			documentoBeneficiario = Util.formatarCpf(beneficiario.getCliente().getCpf());
+		} else {
+			documentoBeneficiario = Util.formatarCnpj(beneficiario.getCliente().getCnpj());
+		}
+		
+	    StringBuilder mensagemParcelamento = new StringBuilder(); 
+	    mensagemParcelamento.append(descricaoServicosTarifas + "     R$ " + valor);
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     " + obterMensagemParcelamento());
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Matricula: " + parcelamento.getImovel().getId() + String.format("     Periodo do debito: %s - %s", Util.formatarAnoMesParaMesAno(inicioParcelamento),Util.formatarAnoMesParaMesAno(fimParcelamento))); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor atualizado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado()) + "     Valor negociado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado()));
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor entrada: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada()) + "     Valor parcela: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao())); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Quantidade de parcelas: " + parcelamento.getNumeroPrestacoes()); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append(String.format("     Pagador: %s - %s", pagador.getNome(), documentoPagador)); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append(String.format("     Beneficiario: %s - %s", beneficiario.getCliente().getNome(), documentoBeneficiario)); 
+	    
+	    
+	    
+		return mensagemParcelamento.toString();
 	}
 	
 	private String obterMensagemParcelamento() {
