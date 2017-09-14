@@ -1,11 +1,11 @@
 package gcom.arrecadacao;
 
-import java.util.Date;
-
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
+
+import java.util.Date;
 
 @ControleAlteracao()
 public class BoletoInfo extends ObjetoTransacao {
@@ -30,10 +30,13 @@ public class BoletoInfo extends ObjetoTransacao {
 	private Date ultimaAlteracao;
 	private GuiaPagamento guiaPagamento;
 	
-	public BoletoInfo(String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
+	public BoletoInfo() {}
+	
+	public BoletoInfo(Integer id, String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
 			String indicadorPessoa, String tpDuplicata, String tpPagamento, String valor, String dtVencimento, String urlRetorno, String mensagemLoja,
 			String linkBoleto, GuiaPagamento guiaPagamento) {
 		super();
+		this.id = id;
 		this.idConv = idConv;
 		this.refTran = refTran;
 		this.cpfCnpj = cpfCnpj;
@@ -51,6 +54,7 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.mensagemLoja = mensagemLoja;
 		this.linkBoleto = linkBoleto;
 		this.guiaPagamento = guiaPagamento;
+		this.ultimaAlteracao = new Date();
 	}
 
 	@Override

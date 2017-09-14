@@ -8,29 +8,27 @@
     http://www.hibernate.org/
 -->
 	<class name="gcom.arrecadacao.BoletoInfo" table="arrecadacao.boleto_info">
-		<id name="id" type="java.lang.Integer" column="boin_id">
-			<generator class="sequence">
-				<param name="sequence">arrecadacao.seq_boleto_info</param>
-			</generator>
+		<id name="id" type="java.lang.Integer" column="gpag_id">
+			<generator class="assigned"/>
 		</id>
 		
 		<property name="idConv" type="java.lang.String" column="boin_idconv" not-null="true" length="6"/>
 		<property name="refTran" type="java.lang.String" column="boin_reftran" not-null="true" length="17"/>
 		<property name="cpfCnpj" type="java.lang.String" column="boin_cpfcnpj" not-null="true" length="14"/>
-		<property name="nome" type="java.lang.String" column="boin_nome" not-null="true" length="60"/>
-		<property name="endereco" type="java.lang.String" column="boin_endereco" not-null="true" length="60"/>
+		<property name="nome" type="java.lang.String" column="boin_nome" not-null="true" length="300"/>
+		<property name="endereco" type="java.lang.String" column="boin_endereco" not-null="true" length="300"/>
 		<property name="uf" type="java.lang.String" column="boin_uf" not-null="true" length="2"/>
 		<property name="cep" type="java.lang.String" column="boin_cep" not-null="true" length="8"/>
-		<property name="cidade" type="java.lang.String" column="boin_cidade" not-null="true" length="18"/>
+		<property name="cidade" type="java.lang.String" column="boin_cidade" not-null="true" length="50"/>
 		<property name="indicadorPessoa" type="java.lang.String" column="boin_indicadorpessoa" not-null="true" length="1"/>
 		<property name="tpDuplicata" type="java.lang.String" column="boin_tpduplicata" not-null="true" length="2"/>
 		<property name="tpPagamento" type="java.lang.String" column="boin_tppagamento" not-null="true" length="2"/>
 		<property name="valor" type="java.lang.String" column="boin_valor" not-null="true" length="15"/>
 		<property name="dtVencimento" type="java.lang.String" column="boin_dtvencimento" not-null="true" length="8"/>
-		<property name="urlRetorno" type="java.lang.String" column="boin_urlretorno" not-null="true" length="60"/>
-		<property name="mensagemLoja" type="java.lang.String" column="boin_mensagemloja" not-null="true" length="1082"/>
+		<property name="urlRetorno" type="java.lang.String" column="boin_urlretorno" not-null="true" length="1000"/>
+		<property name="mensagemLoja" type="java.lang.String" column="boin_mensagemloja" not-null="true" length="-1"/>
 		<property name="linkBoleto" type="java.lang.String" column="boin_linkboleto" not-null="true" length="-1"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="boin_ultimaalteracao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="boin_tmultimaalteracao" length="8"/>
 		
 		<one-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento" outer-join="auto" constrained="true"/>
 		

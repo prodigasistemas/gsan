@@ -51176,7 +51176,14 @@ public class ControladorArrecadacao implements SessionBean {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
 		
+		FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+		
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		boolean foiGerado = true;
+		
+		String tpPagamento = (primeiraVia ? "2" : "21");
 		
 		if (!primeiraVia) {
 			FiltroBancoInfo filtro = new FiltroBancoInfo();
@@ -51188,13 +51195,14 @@ public class ControladorArrecadacao implements SessionBean {
 			//, ou seja, 
 			// para boletos que foram gerados e nao foram salvos no bd
 			if (boletoInfo != null) {
-				return boletoInfo.getLinkBoleto();
+				String linkBoleto = boletoInfo.getLinkBoleto().toString();
+				// Alterar tipo de pagamento para segunda via
+				linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+				return linkBoleto;
+			} else {
+				foiGerado = false;
 			}
 		}
-		
-		FiltroCliente filtroCliente = new FiltroCliente();
-		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
-		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 		
 		
 		String idConv = "315828";
@@ -51202,26 +51210,43 @@ public class ControladorArrecadacao implements SessionBean {
 		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
 		String documentoCliente = (isClientePF ? cliente.getCpf() : cliente.getCnpj());
-		String nomeCliente = cliente.getNome();
+		String nomeCliente = Util.truncarString(cliente.getNome(), 60);
 		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(cliente.getId());
-		String enderecoCliente = dadosEndereco[0] + ", " + dadosEndereco[3];
+		String enderecoCliente = Util.truncarString(dadosEndereco[0] + ", " + dadosEndereco[3], 60);
 		String unidadeFederacao = dadosEndereco[2];
 		String cep = dadosEndereco[4];
-		String municipio = dadosEndereco[1];
+		String municipio = Util.truncarString(dadosEndereco[1], 18);
 		String indicadorPessoa = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().toString();
 		String tpDuplicata = "DS";
-		String tpPagamento = (primeiraVia ? "2" : "21");
 		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
 		String dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
 		String urlRetorno = String.format("exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento);
 		String mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), idParcelamento);
+		
+		String link = formatarLinkBB(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, municipio, indicadorPessoa, 
+									tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja);
+		
+		if (primeiraVia || !foiGerado) {
+			BoletoInfo boletoInfo = new BoletoInfo(guiaPagamento.getId(), idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
+							municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
+							link, guiaPagamento);
+			
+			Fachada.getInstancia().inserir(boletoInfo);
+		}
+		
+		return link;
+	}
+	
+	public String formatarLinkBB(String idConv, String refTran, String documentoCliente, String nomeCliente, String enderecoCliente, String unidadeFederacao,
+			String cep, String municipio, String indicadorPessoa, String tpDuplicata, String tpPagamento, String valorFormatado, String dataVencimento, 
+			String urlRetorno, String mensagemLoja) {
 		
 		StringBuilder link = new StringBuilder();
 		link.append("https://mpag.bb.com.br/site/mpag/");
 		link.append("?idConv=" + idConv);
 		link.append("&refTran="+refTran);
 		link.append("&cpfCnpj="+ documentoCliente);
-		link.append("&nome="+ cliente.getNome());
+		link.append("&nome="+ nomeCliente);
 		link.append("&endereco="+enderecoCliente);
 		link.append("&uf="+unidadeFederacao);
 		link.append("&cep="+cep);
@@ -51233,14 +51258,6 @@ public class ControladorArrecadacao implements SessionBean {
 		link.append("&dtVenc="+dataVencimento);
 		link.append("&urlRetorno="+urlRetorno);
 		link.append("&msgLoja=" + mensagemLoja);
-		
-		if (primeiraVia) {
-			BoletoInfo boletoInfo = new BoletoInfo(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
-							municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
-							link.toString(), guiaPagamento);
-			
-			Fachada.getInstancia().inserir(boletoInfo);
-		}
 		
 		return link.toString();
 	}
