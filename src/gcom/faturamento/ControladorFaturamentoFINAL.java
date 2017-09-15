@@ -44887,7 +44887,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						descricaoServicosTarifas3 = " CONSUMO DE ÁGUA";
 						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
-						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua();
+						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua() == null ? new BigDecimal(0) : emitirContaHelper.getValorRateioAgua();
 						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
@@ -55143,7 +55143,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// é o numero do convênio fornecido pelo Banco
 		// número fixo e não pode ser alterado
-		nossoNumero.append("2502792");
+//		nossoNumero.append("2502792");
+		nossoNumero.append("2860143"); // Convenio do Banco do Brasil
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
 		// emitido

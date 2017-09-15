@@ -5,7 +5,8 @@ public enum FormatoData {
     MES_ANO              ("MM/yyyy"),
     ANO_MES              ("yyyyMM"),
     AMERICANO            ("yyyyMMdd"),
-    AMERICANO_COM_TRACO  ("yyyy-MM-dd");
+    AMERICANO_COM_TRACO  ("yyyy-MM-dd"),
+    DIA_MES_ANO_SEM_BARRA("ddMMyyyy");
     
     String formato;
     

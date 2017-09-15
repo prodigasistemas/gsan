@@ -2002,4 +2002,6 @@ public interface IRepositorioCobranca {
 	public void atualizarPagamentosCobrancaPorEmpresaGerados(List<Integer> idsPagamentos) throws ErroRepositorioException;
 
 	public Date obterDataVencimentoEntradaParcelamento(Integer idParcelamento) throws ErroRepositorioException;
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ErroRepositorioException;
 }

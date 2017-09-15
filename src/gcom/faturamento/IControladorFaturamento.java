@@ -1256,4 +1256,6 @@ public interface IControladorFaturamento {
 	
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException;
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException;
 }

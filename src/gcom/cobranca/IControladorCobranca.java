@@ -1086,5 +1086,9 @@ public interface IControladorCobranca {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) throws ControladorException;
 	
+
 	public Date obterDataVencimentoEntradaParcelamento(Integer idParcelamento) throws ControladorException;
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException;
+
 }
