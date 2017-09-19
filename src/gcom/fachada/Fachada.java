@@ -40119,9 +40119,9 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) {
 		try {
-			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel);
+			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel, percentualInformado);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

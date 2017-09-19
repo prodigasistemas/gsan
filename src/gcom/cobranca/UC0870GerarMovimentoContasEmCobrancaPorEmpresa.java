@@ -145,12 +145,8 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 				anoMesArrecadacaoInicio = Util.recuperaAnoMesDaData(comando.getDataInicioCiclo());
 				anoMesArrecadacaoFim = Util.recuperaAnoMesDaData(comando.getDataFimCiclo());
 			} 
-			
-			
 
 			EmpresaCobranca empresaCobranca = filtrarEmpresaCobranca(comando);
-
-			Collection<Integer> idsImoveis = null;
 
 			Collection<Integer> idsImoveisAtualizar = new ArrayList<Integer>();
 			Collection<CobrancaSituacaoHistorico> colecaoCobrancaSituacaoHistorico = new ArrayList<CobrancaSituacaoHistorico>();
@@ -173,7 +169,7 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 				agruparPorImovel = false;
 			}
 			
-			idsImoveis = getControladorCobrancaPorResultado().pesquisarImoveis(helper, agruparPorImovel, empresaCobranca.isPercentualInformado());
+			Collection<Integer> idsImoveis = getControladorCobrancaPorResultado().pesquisarImoveis(helper, agruparPorImovel, empresaCobranca.isPercentualInformado(), sistemaParametros.getAnoMesFaturamento());
 
 			if (idsImoveis != null && !idsImoveis.isEmpty()) {
 				System.out.println("Cobrança por Resultado - Quantidade de Imóveis do Comando " + comando.getId() + ": " + idsImoveis.size());

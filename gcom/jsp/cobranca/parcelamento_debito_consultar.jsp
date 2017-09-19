@@ -715,13 +715,13 @@ function voltar(){
 									</logic:present>
 									<logic:empty name="idsContaEP">
 										<logic:present name="btImprimirGuiaPagamentoEntrada">
-											<!-- input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
 											onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
 								
-											style="width:170px"/-->
-											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-											onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
 											style="width:170px"/>
+											<!-- input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+											onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
+											style="width:170px"/-->
 										</logic:present>
 									</logic:empty>
 									<logic:notEmpty name="idsContaEP">
