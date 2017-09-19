@@ -652,13 +652,7 @@
 							
 							<td align="right">
 								<logic:present name="guiaPagamento" scope="request">
-									<logic:present name="linkBoletoBB">
-										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'" style="width:200px"/>
-									</logic:present>
-									
-									<logic:notPresent name="linkBoletoBB">
-										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" onclick="gerarGuia();" style="width:200px" />
-									</logic:notPresent>
+									<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" onclick="gerarGuia();" style="width:200px" />
 								</logic:present>
 								
 								<input name="Button" type="button" class="bottonRightCol" value="Fechar" onClick="javascript:window.close();">

@@ -5,7 +5,6 @@ import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
-import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.ActionServletException;
@@ -43,7 +42,6 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		} else {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
-			gerarLinkBoletoBB(sessao, request, guia.getParcelamento());
 		}
 
 		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
@@ -51,15 +49,6 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		}
 
 		return retorno;
-	}
-
-	private void gerarLinkBoletoBB(HttpSession sessao, HttpServletRequest request, Parcelamento parcelamento) {
-		if (parcelamento != null) {
-			String link = getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
-			request.setAttribute("linkBoletoBB", link);
-		} else {
-			sessao.removeAttribute("linkBoletoBB");
-		}
 	}
 	
 	@SuppressWarnings("unchecked")
