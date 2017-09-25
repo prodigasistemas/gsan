@@ -21212,15 +21212,15 @@ public class ControladorArrecadacao implements SessionBean {
 							 * 0(zero) Esta pesquisa já retorna o valor que
 							 * falta ser cobrado
 							 */
-							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar = repositorioArrecadacao
+							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento = repositorioArrecadacao
 									.acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(idLocalidade, anoMesReferenciaArrecadacao,
-											idLancamentoItemContabil, idCategoria);
+											idLancamentoItemContabil, idCategoria, false);
 
-							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar != null
-									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar.doubleValue() > 0.00) {
+							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento != null
+									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento.doubleValue() > 0.00) {
 
 								valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
-										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar);
+										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento);
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
 
@@ -21228,11 +21228,44 @@ public class ControladorArrecadacao implements SessionBean {
 								//lancamentoTipoTemp.setId(LancamentoTipo.DEBITOS_A_COBRAR);
 								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosDebitosACobrar(localidade, categoria,
-										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar,
+										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento,
 										lancamentoItemTemp, lancamentoItemContabil, new Short("1900"), sequencialImpressao);
 								
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 							}
+							
+							
+							/*
+							 * Seqüêncial de Tipo de Lançamento 1950 Para os
+							 * pagamento classificados de débitos a cobrar
+							 * acumula o valor que falta ser cobrado por
+							 * categoria dodébito a cobrar e gera o resumo da
+							 * arrecadação caso o valor acumulado seja maior que
+							 * 0(zero) Esta pesquisa já retorna o valor que
+							 * falta ser cobrado
+							 */
+							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento = repositorioArrecadacao
+									.acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(idLocalidade, anoMesReferenciaArrecadacao,
+											idLancamentoItemContabil, idCategoria, true);
+
+							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento != null
+									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento.doubleValue() > 0.00) {
+
+								valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
+										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento);
+
+								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL_2);
+
+								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
+								//lancamentoTipoTemp.setId(LancamentoTipo.DEBITOS_A_COBRAR);
+								
+								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosDebitosACobrar(localidade, categoria,
+										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento,
+										lancamentoItemTemp, lancamentoItemContabil, new Short("1950"), sequencialImpressao);
+								
+								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+							}
+							
 
 							/*
 							 * Seqüêncial de Tipo de Lançamento 2700 Para as
