@@ -31965,7 +31965,7 @@ public class ControladorArrecadacao implements SessionBean {
 				debitoTipoAnterior = null;
 				GuiaPagamento guiaPagamentoAnterior = null;
 				GuiaPagamentoGeral guiaPagamentoGeral = null;
-				GuiaPagamento guiaPagamento= null;
+				GuiaPagamento guiaPagamento= new GuiaPagamento();
 				
 				colecaoConjuntoPagamentos = new ArrayList();
 
