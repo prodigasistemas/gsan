@@ -7257,7 +7257,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 			String intervalo = (new Integer(faixaInicial.intValue() + i)).toString();
 
-			hidrometro.setNumero(fixo + intervalo);
+			hidrometro.setNumero(fixo + Util.adicionarZerosEsquedaNumero(6, intervalo));
 
 			try {
 				repositorioUtil.inserir(hidrometro);
