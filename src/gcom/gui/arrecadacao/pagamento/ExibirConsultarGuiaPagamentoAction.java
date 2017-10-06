@@ -1,18 +1,20 @@
 package gcom.gui.arrecadacao.pagamento;
 
-import java.util.Collection;
-
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
-import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
+import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
+
+import java.math.BigDecimal;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,164 +26,120 @@ import org.apache.struts.action.ActionMapping;
 
 public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = actionMapping.findForward("exibirConsultarGuiaPagamento");
+		HttpSession sessao = request.getSession(false);
 
-		ActionForward retorno = actionMapping
-				.findForward("exibirConsultarGuiaPagamento");
-
-		HttpSession sessao = httpServletRequest.getSession(false);
-
-		// Recebe o id da guia de pagamento para fazer a consulta
-		String guiaPagamentoId = httpServletRequest
-				.getParameter("guiaPagamentoId");
-		
-		String guiaPagamentoHistoricoId = httpServletRequest
-		.getParameter("guiaPagamentoHistoricoId");
-
-		// Se chegar na funcionalidade sem o parâmetro indica situação de erro
-		if ((guiaPagamentoId == null || guiaPagamentoId.trim().equals(""))
-				&& (guiaPagamentoHistoricoId == null || guiaPagamentoHistoricoId.trim().equals(""))) {
+		String guiaId = request.getParameter("guiaPagamentoId");
+		String guiaHistoricoId = request.getParameter("guiaPagamentoHistoricoId");
+		if ((guiaId == null || guiaId.trim().equals("")) && (guiaHistoricoId == null || guiaHistoricoId.trim().equals(""))) {
 			throw new ActionServletException("erro.sistema");
-
-		}
-
-		if (guiaPagamentoHistoricoId != null){
-			// GUIA PAGAMENTO HISTORICO
-			
-			FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
-			filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(
-					FiltroGuiaPagamentoHistorico.ID, guiaPagamentoHistoricoId));
-
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("localidade");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoByDcstIdatual");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-
-			// Para a exibição do endereço do imóvel
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("origem.guiaPagamento.imovel");
-			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("usuario");
-
-			Fachada fachada = Fachada.getInstancia();
-			
-			GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico)Util.retonarObjetoDeColecao
-				(fachada.pesquisar(filtroGuiaPagamentoHistorico,GuiaPagamentoHistorico.class.getName()));
-
-			// Envia o objeto consultado para a página
-			httpServletRequest.setAttribute("guiaPagamentoHistorico", guiaPagamentoHistorico);
-			
-			sessao.removeAttribute("colecaoGuiaDebitoTipoConsulta");
-			
-			FiltroGuiaPagamentoItem filtroGuiaPagamentoItem = new FiltroGuiaPagamentoItem();
-			filtroGuiaPagamentoItem.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoItem.GUIA_PAGAMENTO_GERAL_ID, guiaPagamentoHistorico.getId()));
-			filtroGuiaPagamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-			filtroGuiaPagamentoItem.setCampoOrderBy(new String[]{"guiaPagamentoGeral","debitoTipo"});
-			Collection<GuiaPagamentoItem> colecaoGuiaPagamentoItem = fachada.pesquisar(filtroGuiaPagamentoItem, GuiaPagamentoItem.class.getName());
-			
-			
-			if(colecaoGuiaPagamentoItem.isEmpty()){
-				GuiaPagamentoItem guiaPagamentoItem = new GuiaPagamentoItem();
-				guiaPagamentoItem.setDebitoTipo(guiaPagamentoHistorico.getDebitoTipo());
-				guiaPagamentoItem.setValorDebito(guiaPagamentoHistorico.getValorDebito());
-				colecaoGuiaPagamentoItem.add(guiaPagamentoItem);
-			}
-			sessao.setAttribute("colecaoGuiaDebitoTipoConsulta", colecaoGuiaPagamentoItem);
-			
-			
-		}else{	
-			
-			// GUIA PAGAMENTO
-			
-//			 Consulta do GuiaPagamento
-			FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-			filtroGuiaPagamento.adicionarParametro(new ParametroSimples(
-					FiltroGuiaPagamento.ID, guiaPagamentoId));
-
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
-
-			// Para a exibição do endereço do imóvel
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("origem.guiaPagamento.imovel");
-			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("usuario");
-
-			Fachada fachada = Fachada.getInstancia();
-			
-			GuiaPagamento guiaPagamento = (GuiaPagamento)Util.retonarObjetoDeColecao
-				(fachada.pesquisar(filtroGuiaPagamento,GuiaPagamento.class.getName()));
-
-			// Envia o objeto consultado para a página
-			httpServletRequest.setAttribute("guiaPagamento", guiaPagamento);
-			
-			sessao.removeAttribute("colecaoGuiaDebitoTipoConsulta");
-			
-			FiltroGuiaPagamentoItem filtroGuiaPagamentoItem = new FiltroGuiaPagamentoItem();
-			filtroGuiaPagamentoItem.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoItem.GUIA_PAGAMENTO_GERAL_ID, guiaPagamento.getId()));
-			filtroGuiaPagamentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-			filtroGuiaPagamentoItem.setCampoOrderBy(new String[]{"guiaPagamentoGeral","debitoTipo"});
-			
-			
-			Collection<GuiaPagamentoItem> colecaoGuiaPagamentoItem = fachada.pesquisar(filtroGuiaPagamentoItem, GuiaPagamentoItem.class.getName());
-			
-			if(colecaoGuiaPagamentoItem.isEmpty()){
-				GuiaPagamentoItem guiaPagamentoItem = new GuiaPagamentoItem();
-				guiaPagamentoItem.setDebitoTipo(guiaPagamento.getDebitoTipo());
-				guiaPagamentoItem.setValorDebito(guiaPagamento.getValorDebito());
-				colecaoGuiaPagamentoItem.add(guiaPagamentoItem);
-			}
-			sessao.setAttribute("colecaoGuiaDebitoTipoConsulta", colecaoGuiaPagamentoItem);
-			
-			
 		}
 		
-		
-		
-		
-		
+		if (guiaHistoricoId != null) {
+			GuiaPagamentoHistorico guia = pesquisarGuiaHistorico(request, sessao, guiaHistoricoId);
+			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
+		} else {
+			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
+			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
+		}
 
-		// envia uma flag que será verificado no cliente_resultado_pesquisa.jsp
-		// para saber se irá usar o enviar dados ou o enviar dados parametros
-		if (httpServletRequest
-				.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
-			sessao
-					.setAttribute(
-							"caminhoRetornoTelaConsultaGuiaPagamento",
-							httpServletRequest
-									.getParameter("caminhoRetornoTelaConsultaGuiaPagamento"));
+		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
+			sessao.setAttribute("caminhoRetornoTelaConsultaGuiaPagamento", request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento"));
 		}
 
 		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void pesquisarItens(HttpSession sessao, Integer id, DebitoTipo debitoTipo, BigDecimal valor) {
+		FiltroGuiaPagamentoItem filtro = new FiltroGuiaPagamentoItem();
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoItem.GUIA_PAGAMENTO_GERAL_ID, id));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+		filtro.setCampoOrderBy(new String[] { "guiaPagamentoGeral", "debitoTipo" });
+
+		Collection<GuiaPagamentoItem> colecao = getFachada().pesquisar(filtro, GuiaPagamentoItem.class.getName());
+
+		if (colecao.isEmpty()) {
+			GuiaPagamentoItem item = new GuiaPagamentoItem();
+			item.setDebitoTipo(debitoTipo);
+			item.setValorDebito(valor);
+			colecao.add(item);
+		}
+		
+		sessao.setAttribute("colecaoGuiaDebitoTipoConsulta", colecao);
+	}
+
+	@SuppressWarnings("unchecked")
+	private GuiaPagamento pesquisarGuia(HttpServletRequest request, HttpSession sessao, String id) {
+		Filtro filtro = new FiltroGuiaPagamento();
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, id));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("origem.guiaPagamento.imovel");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento.imovel");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento.cliente");
+
+		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, GuiaPagamento.class.getName()));
+
+		request.setAttribute("guiaPagamento", guia);
+		sessao.removeAttribute("colecaoGuiaDebitoTipoConsulta");
+		return guia;
+	}
+
+	@SuppressWarnings("unchecked")
+	private GuiaPagamentoHistorico pesquisarGuiaHistorico(HttpServletRequest request, HttpSession sessao, String id) {
+		Filtro filtro = new FiltroGuiaPagamentoHistorico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID, id));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoByDcstIdatual");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("origem.guiaPagamento.imovel");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento.imovel");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamento.cliente");
+
+		GuiaPagamentoHistorico guia = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, GuiaPagamentoHistorico.class.getName()));
+
+		request.setAttribute("guiaPagamentoHistorico", guia);
+		sessao.removeAttribute("colecaoGuiaDebitoTipoConsulta");
+
+		return guia;
 	}
 }

@@ -80,7 +80,7 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 					agruparPorImovel = false;
 				}
 
-				Collection<Object[]> colecaoDados = (Collection<Object[]>) getFachada().pesquisarQuantidadeContas(helper, agruparPorImovel);
+				List<Object[]> colecaoDados = getFachada().pesquisarQuantidadeContas(helper, agruparPorImovel, contrato.isPercentualInformado());
 
 				if (agruparPorImovel) {
 					selecionarContasAgrupandoPorImovel(request, helper, colecaoDados, contrato);
@@ -110,16 +110,16 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 			for (Iterator<Object[]> iterator = colecaoDados.iterator(); iterator.hasNext();) {
 				Object[] dados = (Object[]) iterator.next();
 
-				qtdContas += (Integer) dados[0];
-				qtdClientes += (Integer) dados[1];
-				valorTotalDivida = valorTotalDivida.add((BigDecimal) dados[2]);
+				qtdClientes += 1;
+				valorTotalDivida = valorTotalDivida.add((BigDecimal) dados[1]);
+				qtdContas += (Integer) dados[2];
 			}
 
 			form.setQtdContas(qtdContas.toString());
 			form.setQtdClientes(qtdClientes.toString());
 			form.setValorTotalDivida(Util.formatarMoedaReal(valorTotalDivida));
 		} else {
-			limparTotais();
+			throw new ActionServletException("atencao.colecao_vazia");
 		}
 	}
 
@@ -241,7 +241,7 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 			}
 
 		} else {
-			limparCampos(request);
+			throw new ActionServletException("atencao.colecao_vazia");
 		}
 	}
 

@@ -30,9 +30,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 	public final static Integer LIG_FORA_DE_USO = new Integer(5);
 	public final static Integer TAMPONADO = new Integer(6);
 
-	public final static String SITUACAO_LIGADO_FORA_DE_USO = new String("LIGADO FORA DE USO");
-	public final static String SITUACAO_LIGADO = new String("LIGADO");
-
 	public final static Integer SITUACAO_TAMPONADO = new Integer(1);
 	public final static Integer SITUACAO_DESATIVACAO = new Integer(2);
 	public final static Integer SITUACAO_RESTABELECIMENTO = new Integer(3);
@@ -46,6 +43,8 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
     public final static Short INDICADOR_EXISTENCIA_LIGACAO_SIM = new Short("1");
     public final static Short INDICADOR_EXISTENCIA_LIGACAO_NAO = new Short("2");
 
+    public final static short INDICADOR_REDE_ESGOTO_SIM = 2;
+    
 	public LigacaoEsgotoSituacao(String descricao, Short indicadorUso,
 			Date ultimaAlteracao, Short indicadorFaturamentoSituacao, Integer volumeMinimoFaturamento) {
 		this.descricao = descricao;

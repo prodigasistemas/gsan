@@ -5993,7 +5993,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao,
 			Integer idLancamentoItemContabil, 
-			Integer idCategoria)
+			Integer idCategoria,
+			boolean incluirFinanciamentos)
 			throws ErroRepositorioException {
 
 		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
@@ -6028,7 +6029,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 										   "and pgmt.loca_id= :idLocalidade  " +
 										   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
 										   "and (pgmt.dbac_id is not null) " +
-					   ")) " ;
+					   ")) ";
+					   
+			
+			if (incluirFinanciamentos) {
+				consulta += "and dbac.fntp_id != :idFinanciamentoNormal";
+			} else {
+				consulta += "and dbac.fntp_id = :idFinanciamentoNormal";
+			}
 
 			retorno = (BigDecimal) session.createSQLQuery(consulta)
 					.addScalar("col_0",Hibernate.BIG_DECIMAL)
@@ -6038,6 +6046,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
 					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setInteger("idFinanciamentoNormal",FinanciamentoTipo.SERVICO_NORMAL)
 					.setMaxResults(1)
 					.uniqueResult();
 

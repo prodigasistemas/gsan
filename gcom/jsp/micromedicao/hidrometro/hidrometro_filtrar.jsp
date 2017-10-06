@@ -335,9 +335,9 @@ function limparForm(){
 				</tr>
 				<tr>
 					<td><strong>Faixa:</strong></td>
-					<td><html:text maxlength="6" property="faixaInicial" size="6"
-						tabindex="13" onkeypress="return isCampoNumerico(event);" /> <html:text maxlength="6" property="faixaFinal"
-						size="6" tabindex="14" onkeypress="return isCampoNumerico(event);" /></td>
+					<td>
+						<html:text maxlength="7" property="faixaInicial" size="7" tabindex="13" onkeypress="return isCampoNumerico(event);" /> 
+						<html:text maxlength="7" property="faixaFinal" size="7" tabindex="14" onkeypress="return isCampoNumerico(event);" /></td>
 				</tr>
 				
 				<tr>

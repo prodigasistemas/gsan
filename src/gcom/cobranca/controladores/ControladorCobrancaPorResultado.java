@@ -98,11 +98,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
 
-	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) throws ControladorException {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException {
 		try {
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
-			return repositorio.pesquisarQuantidadeContas(helper, agrupadoPorImovel, sistemaParametro.getAnoMesFaturamento());
+			return repositorio.pesquisarQuantidadeContas(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -131,11 +131,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 	}
 	
-	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException {
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException {
 		try {
-			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-			
-			return repositorio.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
+			return repositorio.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, anoMesFaturamento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

@@ -409,7 +409,7 @@
 															Hidr&ocirc;metro:<font color="#FF0000">*</font></strong></td>
 
 															<td width="58%"><html:text property="numeroHidrometro"
-																size="13" maxlength="10"
+																size="13" maxlength="11"
 																onkeypress="validaEnterString(event, 'exibirEfetuarInstalacaoHidrometroAction.do', 'numeroHidrometro','Número do Hidrômetro');" />
 															<a
 																href="javascript:pesquisarHidrometro()">

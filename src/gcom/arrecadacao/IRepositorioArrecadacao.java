@@ -251,7 +251,7 @@ public interface IRepositorioArrecadacao {
 			Integer anoMesReferenciaArrecadacao, Integer idLancamentoItemContabil, Integer idCategoria) throws ErroRepositorioException;
 
 	public BigDecimal acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
-			Integer idLancamentoItemContabil, Integer idCategoria) throws ErroRepositorioException;
+			Integer idLancamentoItemContabil, Integer idCategoria, boolean incluirFinanciamentos) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDevolucoesClassificadasSituacaoAtualDevolucaoClassificada(Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
@@ -1310,4 +1310,5 @@ public interface IRepositorioArrecadacao {
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
+	
 }

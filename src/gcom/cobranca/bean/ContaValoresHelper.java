@@ -7,8 +7,12 @@ import gcom.util.Util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ContaValoresHelper implements Serializable {
+import org.jboss.logging.Logger;
 
+public class ContaValoresHelper implements Serializable {
+	
+	private static Logger logger = Logger.getLogger(ContaValoresHelper.class);
+	
 	private static final long serialVersionUID = 1L;
 
 	private Conta conta;
@@ -195,22 +199,25 @@ public class ContaValoresHelper implements Serializable {
 	}
 
 	public BigDecimal getValorTotalContaValoresParcelamento() {
-		BigDecimal retorno = new BigDecimal("0.00");
+	    BigDecimal retorno = new BigDecimal("0.00");
 
-		if (this.getValorMulta() != null) {
-			retorno = retorno.add(this.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-		}
+	    logger.info("      [" + getConta().getId() + "] 00.1 multa:" + this.getValorMulta());
+	    if (this.getValorMulta() != null) {
+	      retorno = retorno.add(this.getValorMulta().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+	    }
 
-		if (this.getValorJurosMora() != null) {
-			retorno = retorno.add(this.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-		}
+	    logger.info("      [" + getConta().getId() + "] 00.2 juros:" + this.getValorJurosMora());
+	    if (this.getValorJurosMora() != null) {
+	      retorno = retorno.add(this.getValorJurosMora().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+	    }
 
-		if (this.getValorAtualizacaoMonetaria() != null) {
-			retorno = retorno.add(this.getValorAtualizacaoMonetaria().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
-		}
+	    logger.info("      [" + getConta().getId() + "] 00.3 atualizacao:" + this.getValorAtualizacaoMonetaria());
+	    if (this.getValorAtualizacaoMonetaria() != null) {
+	      retorno = retorno.add(this.getValorAtualizacaoMonetaria().setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO));
+	    }
 
-		return retorno.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-	}
+	    return retorno.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+	  }
 
 	public boolean equals(Object other) {
 		if ((this == other)) {
