@@ -47,6 +47,8 @@ public class FiltroConsultarDadosDiariosArrecadacao {
 	
 	private boolean isRelatorioValoresDiariosAnalitico;
 	
+	private boolean agruparPorArrecadador;
+	
 
 	public GROUP_BY getAgrupamento() {
 		return agrupamento;
@@ -202,7 +204,16 @@ public class FiltroConsultarDadosDiariosArrecadacao {
 		filtro.setIdsSituacaoLigacaoEsgoto(getIdsSituacaoLigacaoEsgoto());
 		filtro.setIdUnidadeNegocio(getIdUnidadeNegocio());
 		filtro.setRelatorioValoresDiariosAnalitico(isRelatorioValoresDiariosAnalitico());
+		filtro.setAgruparPorArrecadador(isAgruparPorArrecadador());
 		return filtro;
+	}
+
+	public boolean isAgruparPorArrecadador() {
+		return agruparPorArrecadador;
+	}
+
+	public void setAgruparPorArrecadador(boolean agruparPorArrecadador) {
+		this.agruparPorArrecadador = agruparPorArrecadador;
 	}
 	
 }

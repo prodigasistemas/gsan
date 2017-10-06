@@ -56,12 +56,24 @@
 	<field name="getSacadoParte01" class="java.lang.String"/>
 	<field name="getSacadoParte02" class="java.lang.String"/>
 	<field name="getArrayJRDetailSub" class="java.lang.Object"/>
+	<field name="getMensagemParcelamento" class="java.lang.String"/>
+	<field name="exibirDetalhesParcelamento" class="java.lang.Boolean"/>
+	<field name="exibirSemDetalhesParcelamento" class="java.lang.Boolean"/>
 
 
 		<group  name="Geral" isStartNewPage="true" >
 			<groupExpression><![CDATA[$F{getIdGuiaPagamento}]]></groupExpression>
 			<groupHeader>
 			<band height="450"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="418"
+						y="18"
+						width="0"
+						height="366"
+						key="line-13"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 				<rectangle radius="5" >
 					<reportElement
 						x="2"
@@ -114,15 +126,17 @@
 				<subreport  isUsingCache="true">
 					<reportElement
 						x="4"
-						y="20"
+						y="23"
 						width="527"
 						height="362"
-						key="subreport-1"/>
+						key="subreport-1">
+							<printWhenExpression><![CDATA[($F{exibirDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
 					<subreportParameter  name="arrayJRDetail">
 						<subreportParameterExpression><![CDATA[$F{getArrayJRDetail}]]></subreportParameterExpression>
 					</subreportParameter>
 					<dataSourceExpression><![CDATA[$F{getArrayJRDetail}]]></dataSourceExpression>
-					<subreportExpression  class="java.lang.String"><![CDATA["relatorioEmitirGuiaPagamentoDetail.jasper"]]></subreportExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioEmitirGuiaPagamentoDetailParcelamento.jasper"]]></subreportExpression>
 				</subreport>
 				<rectangle radius="5" >
 					<reportElement
@@ -213,15 +227,6 @@
 						width="534"
 						height="0"
 						key="line-19"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="418"
-						y="18"
-						width="0"
-						height="366"
-						key="line-13"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<staticText>
@@ -318,6 +323,34 @@
 					</textElement>
 				<text><![CDATA[Emitido por:]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="331"
+						width="527"
+						height="51"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getMensagemParcelamento}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="4"
+						y="23"
+						width="527"
+						height="362"
+						key="subreport-6">
+							<printWhenExpression><![CDATA[($F{exibirSemDetalhesParcelamento})]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="arrayJRDetail">
+						<subreportParameterExpression><![CDATA[$F{getArrayJRDetail}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[$F{getArrayJRDetail}]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioEmitirGuiaPagamentoDetail.jasper"]]></subreportExpression>
+				</subreport>
 			</band>
 			</groupHeader>
 			<groupFooter>

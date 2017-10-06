@@ -1261,4 +1261,6 @@ public interface IControladorFaturamento {
 	
 	@SuppressWarnings("rawtypes")
 	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoriaOuSubcategoria) throws ControladorException;
+
+	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException;
 }

@@ -9,19 +9,16 @@
 <%@page isELIgnored="false"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
+
 <head>
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<<<<<<< HEAD
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
-<%--<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="ParcelamentoDebitoActionForm"/>--%>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="ParcelamentoDebitoActionForm"/>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript">
 
 function voltar(){
@@ -34,14 +31,9 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 		window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento='+parcelamentoId+'&codigoImovel='+imovelId;
 	}
 }
-</script>
-=======
-<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="ParcelamentoDebitoActionForm"/>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 
->>>>>>> 9692aa8ac2ea3499994a7a7dd906716d8c7e0304
+</script>
+
 </head>
 
 <logic:notPresent name="codigoImovel">
@@ -728,9 +720,12 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 									</logic:present>
 									<logic:empty name="idsContaEP">
 										<logic:present name="btImprimirGuiaPagamentoEntrada">
-											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+											<!-- input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
 											onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
 								
+											style="width:170px"/-->
+											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+											onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
 											style="width:170px"/>
 										</logic:present>
 									</logic:empty>

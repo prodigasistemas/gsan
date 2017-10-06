@@ -46,6 +46,8 @@ public class FiltrarDadosDiariosArrecadacaoHelper {
 	
 	private Date dataPagamento;
 	
+	private String arrecadador;
+	
 	
 	public String getTipoProcessamento() {
 		return tipoProcessamento;
@@ -236,6 +238,14 @@ public class FiltrarDadosDiariosArrecadacaoHelper {
 
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
+	}
+
+	public String getArrecadador() {
+		return arrecadador;
+	}
+
+	public void setArrecadador(String arrecadador) {
+		this.arrecadador = arrecadador;
 	}
 
 }
