@@ -29264,7 +29264,8 @@ public class ControladorArrecadacao implements SessionBean {
 				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
 						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
 						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
-						&& guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
+						&& !guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
+						//){
 					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
 					
 					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
@@ -29284,7 +29285,7 @@ public class ControladorArrecadacao implements SessionBean {
 					representacaoNumericaCodBarraFormatada = 
 					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
 
-					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
+					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
 				} else {
 					// [UC0229] - Obter Representação Numérica do Código de
 					// Barras
@@ -29342,17 +29343,14 @@ public class ControladorArrecadacao implements SessionBean {
 						+ representacaoNumericaCodBarra.substring(24, 35)
 						+ representacaoNumericaCodBarra.substring(36, 47);
 
-					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
+					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
 				}
 				
-				guiaPagamentoRelatorioHelper
-						.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
+				guiaPagamentoRelatorioHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				guiaPagamentoRelatorioHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 
-				guiaPagamentoRelatorioHelper
-						.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
-
-				colecaoGuiaPagamentoRelatorioHelper
-						.add(guiaPagamentoRelatorioHelper);
+				colecaoGuiaPagamentoRelatorioHelper.add(guiaPagamentoRelatorioHelper);
 			}
 		}
 
