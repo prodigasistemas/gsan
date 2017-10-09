@@ -1146,7 +1146,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " LEFT JOIN FETCH pagamento.contaGeral contaGeral "
 					+ " LEFT JOIN FETCH contaGeral.conta conta "
 					+ " LEFT JOIN FETCH contaGeral.contaHistorico contaHistorico "
-					+ " LEFT JOIN FETCH pagamento.guiaPagamento gpag "
+					+ " LEFT JOIN FETCH pagamento.guiaPagamento gpagGeral "
+					+ " LEFT JOIN FETCH gpagGeral.guiaPagamento gpag "
 					+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
 					+ " LEFT JOIN FETCH pagamento.debitoACobrarGeral dbcbGeral "
 					+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
@@ -10394,7 +10395,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " INNER JOIN FETCH pagamento.documentoTipo doctoTp "
 					+ " LEFT JOIN FETCH pagamento.contaGeral contaGeral "
 					+ " LEFT JOIN FETCH contaGeral.conta conta "
-					+ " LEFT JOIN FETCH pagamento.guiaPagamento gpag "
+					+ " LEFT JOIN FETCH pagamento.guiaPagamento gpagGeral "
+					+ " LEFT JOIN FETCH gpagGeral.guiaPagamento gpag "
 					+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
 					+ " LEFT JOIN FETCH pagamento.debitoACobrarGeral dbcbGeral "
 					+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
@@ -10411,7 +10413,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setFirstResult(10 * numeroPagina).setMaxResults(10).list();
 
 		} catch (HibernateException e) {
-
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -13462,13 +13464,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			hql = " select distinct pagamentoHistorico "
 					+ " from gcom.arrecadacao.pagamento.PagamentoHistorico pagamentoHistorico "
 					+ " LEFT JOIN FETCH pagamentoHistorico.avisoBancario avbc "
-					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamento gpag "
+					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamentoGeral gpagGeral "
+					+ " LEFT JOIN FETCH gpagGeral.guiaPagamentoHistorico gpag "
 					+ " LEFT JOIN FETCH avbc.arrecadador arrec "
 					+ " LEFT JOIN FETCH arrec.cliente clie"
 					+ " LEFT JOIN FETCH pagamentoHistorico.documentoTipo doctoTp "
 					+ " LEFT JOIN FETCH pagamentoHistorico.contaGeral contaGeral "
 					+ " LEFT JOIN FETCH contaGeral.contaHistorico contaHistorico "
-					+ " LEFT JOIN FETCH pagamentoHistorico.guiaPagamentoHistorico gpag "
 					+ " LEFT JOIN FETCH gpag.debitoTipo dbtpGpag "
 					+ " LEFT JOIN FETCH pagamentoHistorico.debitoACobrarGeral dbcbGeral "
 					+ " LEFT JOIN FETCH dbcbGeral.debitoACobrar dbcb "
