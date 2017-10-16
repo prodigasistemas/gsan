@@ -29261,90 +29261,89 @@ public class ControladorArrecadacao implements SessionBean {
 				String representacaoNumericaCodBarraSemDigito = "";
 				String representacaoNumericaCodBarraFormatada = "";
 				
-				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
-						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
-						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
-						&& !guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
-						//){
-					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
-					
-					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-							DocumentoTipo.GUIA_PAGAMENTO.toString(),guiaPagamentoRelatorioHelper.getIdGuiaPagamento().toString()) ;
-					String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
-					
-					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
-					
-					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
-					
-					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
-					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
-					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
-						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
-					                                
-					representacaoNumericaCodBarraFormatada = 
-					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+//				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
+//						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
+//						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
+//						&& !guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
+//						//){
+//					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
+//					
+//					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
+//							DocumentoTipo.GUIA_PAGAMENTO.toString(),guiaPagamentoRelatorioHelper.getIdGuiaPagamento().toString()) ;
+//					String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
+//					
+//					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
+//					
+//					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
+//					
+//					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+//					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
+//					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
+//					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
+//						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
+//					                                
+//					representacaoNumericaCodBarraFormatada = 
+//					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+//
+//					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
+//				} else {
+//					// [UC0229] - Obter Representação Numérica do Código de Barras
+//					representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(tipoPagamento, 
+//							guiaPagamentoRelatorioHelper.getValorDebito(),
+//							guiaPagamentoRelatorioHelper.getIdLocalidade(),
+//							guiaPagamentoRelatorioHelper.getIdImovel() == null ? null : guiaPagamentoRelatorioHelper.getIdImovel(),
+//							null,
+//							null,
+//							guiaPagamentoRelatorioHelper.getIdTipoDebito(),
+//							anoEmissaoGuia,
+//							null,
+//							null,
+//							guiaPagamentoRelatorioHelper.getIdCliente() == null ? null : guiaPagamentoRelatorioHelper.getIdCliente(),
+//							null, guiaPagamentoRelatorioHelper.getIdGuiaPagamento());
+//
+//					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-" 
+//							+ representacaoNumericaCodBarra.substring(11, 12) + " "
+//							+ representacaoNumericaCodBarra.substring(12, 23) + "-" 
+//							+ representacaoNumericaCodBarra.substring(23, 24) + " " 
+//							+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+//							+ representacaoNumericaCodBarra.substring(35, 36) + " " 
+//							+ representacaoNumericaCodBarra.substring(36, 47) + "-" 
+//							+ representacaoNumericaCodBarra.substring(47, 48);
+//
+//					representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11) 
+//							+ representacaoNumericaCodBarra.substring(12, 23)
+//							+ representacaoNumericaCodBarra.substring(24, 35) 
+//							+ representacaoNumericaCodBarra.substring(36, 47);
+//
+//					// guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
+//				}
+				
+				representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(tipoPagamento, 
+						guiaPagamentoRelatorioHelper.getValorDebito(),
+						guiaPagamentoRelatorioHelper.getIdLocalidade(),
+						guiaPagamentoRelatorioHelper.getIdImovel() == null ? null : guiaPagamentoRelatorioHelper.getIdImovel(),
+						null,
+						null,
+						guiaPagamentoRelatorioHelper.getIdTipoDebito(),
+						anoEmissaoGuia,
+						null,
+						null,
+						guiaPagamentoRelatorioHelper.getIdCliente() == null ? null : guiaPagamentoRelatorioHelper.getIdCliente(),
+						null, guiaPagamentoRelatorioHelper.getIdGuiaPagamento());
 
-					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
-				} else {
-					// [UC0229] - Obter Representação Numérica do Código de
-					// Barras
-					representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(
-							tipoPagamento, // tipo
-							// de
-							// pagamento
-							guiaPagamentoRelatorioHelper.getValorDebito(), // valor
-							// do
-							// código de
-							// barras
-							guiaPagamentoRelatorioHelper.getIdLocalidade(), // código
-							// da
-							// localidade
-							guiaPagamentoRelatorioHelper.getIdImovel() == null ? null
-									: guiaPagamentoRelatorioHelper.getIdImovel(), // matrícula
-							// do imóvel
-							null, // mês e ano de referência
-							null, // digito verificador da referência
-							guiaPagamentoRelatorioHelper.getIdTipoDebito(), // código
-							// do
-							// tipo do
-							// débito
-							anoEmissaoGuia, // ano da emissão da guia
-							null, // sequencial do documento de
-							// cobrança
-							null, // código do tipo de documento
-							guiaPagamentoRelatorioHelper.getIdCliente() == null ? null
-									: guiaPagamentoRelatorioHelper.getIdCliente(), // código
-							// do
-							// cliente
-							null,
-							guiaPagamentoRelatorioHelper.getIdGuiaPagamento()); // sequencial da fatura do cliente
-	
-					// Formata a representação númerica do código de barras
-					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
-							.substring(0, 11)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(11, 12)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(12, 23)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(23, 24)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(24, 35)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(35, 36)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(36, 47)
-							+ "-" + representacaoNumericaCodBarra.substring(47, 48);
-					
-					representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra
-						.substring(0, 11)
+				representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-" 
+						+ representacaoNumericaCodBarra.substring(11, 12) + " "
+						+ representacaoNumericaCodBarra.substring(12, 23) + "-" 
+						+ representacaoNumericaCodBarra.substring(23, 24) + " " 
+						+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+						+ representacaoNumericaCodBarra.substring(35, 36) + " " 
+						+ representacaoNumericaCodBarra.substring(36, 47) + "-" 
+						+ representacaoNumericaCodBarra.substring(47, 48);
+
+				representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11) 
 						+ representacaoNumericaCodBarra.substring(12, 23)
-						+ representacaoNumericaCodBarra.substring(24, 35)
+						+ representacaoNumericaCodBarra.substring(24, 35) 
 						+ representacaoNumericaCodBarra.substring(36, 47);
-
-					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
-				}
 				
 				guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
 				guiaPagamentoRelatorioHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
