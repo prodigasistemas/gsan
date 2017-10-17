@@ -16,7 +16,9 @@ public class FiltroImovel extends Filtro implements Serializable {
 	}
 
 	public final static String ID = "id";
+	
 	public final static String LOCALIDADE_ID = "localidade.id";
+	
 	public final static String LOCALIDADE = "localidade";
 
 	public final static String SETOR_COMERCIAL_ID = "setorComercial.id";
@@ -91,8 +93,14 @@ public class FiltroImovel extends Filtro implements Serializable {
 
 	public final static String QUADRA_ROTA_CODIGO = "quadra.rota.codigo";
 
+	public final static String HIDROMETRO_INSTALACAO_HISTORICO = "hidrometroInstalacaoHistorico";
+
 	public final static String HIDROMETRO_INSTALACAO_HISTORICO_ID = "hidrometroInstalacaoHistorico.id";
 
+	public final static String HIDROMETRO_POCO = "hidrometroInstalacaoHistorico.hidrometro";
+	
+	public final static String HIDROMETRO_PROTECAO_POCO = "hidrometroInstalacaoHistorico.hidrometroProtecao";
+	
 	public final static String IMOVEL_CONDOMINIO_ID = "imovelCondominio.id";
 
 	public final static String IMOVEL_CONDOMINIO = "imovelCondominio";
@@ -209,6 +217,8 @@ public class FiltroImovel extends Filtro implements Serializable {
 	public final static String LIGACAO_AGUA_HIDROMETRO_INSTALACAO_HISTORICO = "ligacaoAgua.hidrometroInstalacaoHistorico";
 
 	public final static String LIGACAO_AGUA_HIDROMETRO_INSTALACAO_HISTORICO_HIDROMETRO = "ligacaoAgua.hidrometroInstalacaoHistorico.hidrometro";
+	
+	public final static String LIGACAO_AGUA_HIDROMETRO_INSTALACAO_HISTORICO_HIDROMETRO_PROTECAO = "ligacaoAgua.hidrometroInstalacaoHistorico.hidrometroProtecao";
 
 	public final static String ANORMALIDADE_INFORMADA = "leituraAnormalidade";
 
