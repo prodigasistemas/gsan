@@ -102,8 +102,10 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
@@ -160,7 +162,9 @@ import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
 import gcom.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoHelper;
+import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
@@ -51199,53 +51203,112 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException {
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException, ErroRepositorioException {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
+		
 		FiltroCliente filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 		
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
-		
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		boolean foiGerado = true;
+		
+		String tpPagamento = (primeiraVia ? "2" : "21");
+		
+		if (!primeiraVia) {
+			FiltroBancoInfo filtro = new FiltroBancoInfo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.GUIA_PAGAMENTO_ID, guiaPagamento.getId()));
+			
+			BoletoInfo boletoInfo = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
+			
+			// Para boletos ja gerados antes da modificacao para gravacao na base de dados
+			//, ou seja, 
+			// para boletos que foram gerados e nao foram salvos no bd
+			if (boletoInfo != null) {
+				String linkBoleto = boletoInfo.getLinkBoleto().toString();
+				// Alterar tipo de pagamento para segunda via
+				linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+				return linkBoleto;
+			} else {
+				foiGerado = false;
+			}
+		}
+		
+		
+		String idConv = "315828";
 		String refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
 		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
-		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
-
+		String documentoCliente = (isClientePF ? cliente.getCpf() : cliente.getCnpj());
+		String nomeCliente = Util.truncarString(cliente.getNome(), 60);
 		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(cliente.getId());
-		String enderecoCliente = dadosEndereco[0] + ", " + dadosEndereco[3];
-		String municipio = dadosEndereco[1];
+		String enderecoCliente = Util.truncarString(dadosEndereco[0] + ", " + dadosEndereco[3], 60);
 		String unidadeFederacao = dadosEndereco[2];
 		String cep = dadosEndereco[4];
+		String municipio = Util.truncarString(dadosEndereco[1], 18);
+		String indicadorPessoa = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().toString();
+		String tpDuplicata = "DS";
+		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
+		String dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
+		String urlRetorno = String.format("exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento);
+		String mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), idParcelamento);
+		
+		String link = formatarLinkBB(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, municipio, indicadorPessoa, 
+									tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja);
+		
+		if (primeiraVia || !foiGerado) {
+			BoletoInfo boletoInfo = new BoletoInfo(guiaPagamento.getId(), idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
+							municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
+							link, guiaPagamento);
+			
+			Fachada.getInstancia().inserir(boletoInfo);
+		}
+		
+		return link;
+	}
+	
+	public String formatarLinkBB(String idConv, String refTran, String documentoCliente, String nomeCliente, String enderecoCliente, String unidadeFederacao,
+			String cep, String municipio, String indicadorPessoa, String tpDuplicata, String tpPagamento, String valorFormatado, String dataVencimento, 
+			String urlRetorno, String mensagemLoja) {
 		
 		StringBuilder link = new StringBuilder();
 		link.append("https://mpag.bb.com.br/site/mpag/");
-		link.append("?idConv=315828");
+		link.append("?idConv=" + idConv);
 		link.append("&refTran="+refTran);
-		link.append("&cpfCnpj="+(isClientePF ? cliente.getCpf() : cliente.getCnpj()));
-		link.append("&nome="+ cliente.getNome());
+		link.append("&cpfCnpj="+ documentoCliente);
+		link.append("&nome="+ nomeCliente);
 		link.append("&endereco="+enderecoCliente);
 		link.append("&uf="+unidadeFederacao);
 		link.append("&cep="+cep);
 		link.append("&cidade="+municipio);
-		link.append("&indicadorPessoa="+ cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica());
-		link.append("&tpDuplicata=DS"); 
-		link.append("&tpPagamento="+ (primeiraVia ? "2" : "21")); // 2 - Boleto, 21 - Segunda via Boleto
+		link.append("&indicadorPessoa="+ indicadorPessoa);
+		link.append("&tpDuplicata=" + tpDuplicata); 
+		link.append("&tpPagamento="+ tpPagamento); // 2 - Boleto, 21 - Segunda via Boleto
 		link.append("&valor="+valorFormatado);
-		link.append("&dtVenc="+Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA));
-		link.append(String.format("&urlRetorno=exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento));
-		link.append("&msgLoja=" + obterMensagemEntradaParcelamento(guiaPagamento.getId()));
+		link.append("&dtVenc="+dataVencimento);
+		link.append("&urlRetorno="+urlRetorno);
+		link.append("&msgLoja=" + mensagemLoja);
 		
 		return link.toString();
 	}
 
-	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento) {
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) throws ErroRepositorioException {
 		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
 
 	    Iterator iterator = dadosRelatorio.iterator();
 	    String descricaoServicosTarifas = null;
 	    String valor = null;
+	    
+	    FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+	    filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
+	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+
+	    // Periodo do debito
+	    Integer[] periodoParcelamento = repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
+	    int inicioParcelamento = periodoParcelamento[0];
+	    int fimParcelamento    = periodoParcelamento[1];
 
 	    while (iterator.hasNext()) {
 	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
@@ -51254,11 +51317,23 @@ public class ControladorArrecadacao implements SessionBean {
 	        
 	    }
 	    
-	    String mensagemParcelamento = descricaoServicosTarifas + "     R$ " + valor;
-	    mensagemParcelamento += "<br>";
-	    mensagemParcelamento += "     " + obterMensagemParcelamento();
+	    StringBuilder mensagemParcelamento = new StringBuilder(); 
+	    mensagemParcelamento.append(descricaoServicosTarifas + "     R$ " + valor);
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append(" " + obterMensagemParcelamento());
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Matricula: " + parcelamento.getImovel().getId() + String.format("     Periodo do debito: %s - %s", Util.formatarAnoMesParaMesAno(inicioParcelamento),Util.formatarAnoMesParaMesAno(fimParcelamento))); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor atualizado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado()) + "     Valor negociado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado()));
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor entrada: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada()) + "     Valor parcela: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao())); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Quantidade de parcelas: " + parcelamento.getNumeroPrestacoes()); 
+	    mensagemParcelamento.append("<br>");
 	    
-		return mensagemParcelamento;
+	    
+	    
+		return mensagemParcelamento.toString();
 	}
 	
 	private String obterMensagemParcelamento() {
