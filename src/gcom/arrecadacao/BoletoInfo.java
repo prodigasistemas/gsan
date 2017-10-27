@@ -3,6 +3,7 @@ package gcom.arrecadacao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 
 import java.util.Date;
@@ -29,12 +30,14 @@ public class BoletoInfo extends ObjetoTransacao {
 	private String linkBoleto;
 	private Date ultimaAlteracao;
 	private GuiaPagamento guiaPagamento;
+	private Short indicadoGeradoPeloGsan;
+	private Short indicadoRegistradoNoBanco;
 	
 	public BoletoInfo() {}
 	
 	public BoletoInfo(Integer id, String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
 			String indicadorPessoa, String tpDuplicata, String tpPagamento, String valor, String dtVencimento, String urlRetorno, String mensagemLoja,
-			String linkBoleto, GuiaPagamento guiaPagamento) {
+			String linkBoleto, GuiaPagamento guiaPagamento, Short indicadoRegistradoNoBanco) {
 		super();
 		this.id = id;
 		this.idConv = idConv;
@@ -55,6 +58,8 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.linkBoleto = linkBoleto;
 		this.guiaPagamento = guiaPagamento;
 		this.ultimaAlteracao = new Date();
+		this.indicadoGeradoPeloGsan = indicadoGeradoPeloGsan;
+		this.indicadoRegistradoNoBanco = ConstantesSistema.NAO;
 	}
 
 	@Override
@@ -288,5 +293,23 @@ public class BoletoInfo extends ObjetoTransacao {
 	public void setGuiaPagamento(GuiaPagamento guiaPagamento) {
 		this.guiaPagamento = guiaPagamento;
 	}
+
+	public Short getIndicadoGeradoPeloGsan() {
+		return indicadoGeradoPeloGsan;
+	}
+
+	public void setIndicadoGeradoPeloGsan(Short indicadoGeradoPeloGsan) {
+		this.indicadoGeradoPeloGsan = indicadoGeradoPeloGsan;
+	}
+
+	public Short getIndicadoRegistradoNoBanco() {
+		return indicadoRegistradoNoBanco;
+	}
+
+	public void setIndicadoRegistradoNoBanco(Short indicadoRegistradoNoBanco) {
+		this.indicadoRegistradoNoBanco = indicadoRegistradoNoBanco;
+	}
+
+	
 
 }

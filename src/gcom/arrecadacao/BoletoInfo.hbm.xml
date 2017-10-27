@@ -29,6 +29,8 @@
 		<property name="mensagemLoja" type="java.lang.String" column="boin_mensagemloja" not-null="true" length="-1"/>
 		<property name="linkBoleto" type="java.lang.String" column="boin_linkboleto" not-null="true" length="-1"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="boin_tmultimaalteracao" length="8"/>
+		<property name="indicadoGeradoPeloGsan" type="java.lang.Short" column="boin_icgeradogsan" length="1"/>
+		<property name="indicadoRegistradoNoBanco" type="java.lang.Short" column="boin_icregistradobanco" length="1"/>
 		
 		<one-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento" outer-join="auto" constrained="true"/>
 		
