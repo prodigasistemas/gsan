@@ -215,5 +215,61 @@ public class ZipUtil {
 		
 		return comprimido;
 	}
+	
+	public static void criarZip(InputStream in, String nomeArquivo, String caminho) {
+		try {
+			byte[] buffer = new byte[1024];
+	        
+			File pasta = new File(caminho);
+			if (!pasta.exists()) {
+				pasta.mkdir();
+			}
+			OutputStream out = new FileOutputStream(new File(pasta.getAbsolutePath() + "/" + nomeArquivo));
+			
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+			
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void criarZip(File arquivo, String caminho) {
+		try {
+			byte[] buffer = new byte[1024];
+	        
+			File pasta = new File(caminho);
+			if (!pasta.exists()) {
+				pasta.mkdir();
+			}
+			
+			FileOutputStream fos = new FileOutputStream(pasta.getAbsolutePath() + "/" + arquivo.getName());
+			ZipOutputStream zip = new ZipOutputStream(fos);
+
+			escrever(buffer, arquivo, zip);
+
+			zip.closeEntry();
+			zip.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void escrever(byte[] buffer, File file, ZipOutputStream zip) throws IOException {
+		if (file.exists()) {
+			ZipEntry ze = new ZipEntry(file.getName());
+			zip.putNextEntry(ze);
+			FileInputStream in = new FileInputStream(file);
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				zip.write(buffer, 0, len);
+			}
+			in.close();
+		}
+	}
 
 }

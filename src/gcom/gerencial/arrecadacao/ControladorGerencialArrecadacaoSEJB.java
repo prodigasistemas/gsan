@@ -3,9 +3,11 @@ package gcom.gerencial.arrecadacao;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.gerencial.arrecadacao.bean.ResumoArrecadacaoAguaEsgotoHelper;
 import gcom.gerencial.arrecadacao.bean.ResumoArrecadacaoAguaEsgotoPorAnoHelper;
@@ -308,6 +310,14 @@ public class ControladorGerencialArrecadacaoSEJB implements SessionBean {
 					if (idImovel != null) {
 						// Pesquisamos a esfera de poder do cliente responsavel
 						helper.setIdEsferaPoder(repositorioGerencialCadastro.pesquisarEsferaPoderClienteResponsavelImovel(idImovel));
+						if ( helper.getIdEsferaPoder().equals( 0 ) ){
+							Imovel imovel = new Imovel();
+							imovel.setId(idImovel);
+							Cliente clienteTemp = this.getControladorImovel().consultarClienteUsuarioImovel( imovel );
+							if ( clienteTemp != null ){
+							  helper.setIdEsferaPoder( clienteTemp.getClienteTipo().getEsferaPoder().getId() );
+							}
+						}
 						// Pesquisamos o tipo de cliente responsavel do imovel
 						helper.setIdTipoCliente(repositorioGerencialCadastro.pesquisarTipoClienteClienteResponsavelImovel(idImovel));
 

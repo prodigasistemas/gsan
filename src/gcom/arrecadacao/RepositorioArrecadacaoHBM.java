@@ -5993,7 +5993,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao,
 			Integer idLancamentoItemContabil, 
-			Integer idCategoria)
+			Integer idCategoria,
+			boolean incluirFinanciamentos)
 			throws ErroRepositorioException {
 
 		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
@@ -6028,7 +6029,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 										   "and pgmt.loca_id= :idLocalidade  " +
 										   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
 										   "and (pgmt.dbac_id is not null) " +
-					   ")) " ;
+					   ")) ";
+					   
+			
+			if (incluirFinanciamentos) {
+				consulta += "and dbac.fntp_id != :idFinanciamentoNormal";
+			} else {
+				consulta += "and dbac.fntp_id = :idFinanciamentoNormal";
+			}
 
 			retorno = (BigDecimal) session.createSQLQuery(consulta)
 					.addScalar("col_0",Hibernate.BIG_DECIMAL)
@@ -6038,6 +6046,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("anoMesReferenciaArrecadacao",anoMesReferenciaArrecadacao)
 					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
 					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setInteger("idFinanciamentoNormal",FinanciamentoTipo.SERVICO_NORMAL)
 					.setMaxResults(1)
 					.uniqueResult();
 
@@ -11854,7 +11863,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		
 		Session session = HibernateUtil.getSession();
 		
-		String 	SQLGeral = null;
+		String 	SQLGeral = "SELECT ";
 		String	SQLConsultaADD = "SELECT ";
 		String 	SQLConsultaADD_FROM = " FROM arrecadacao.arrec_dados_diarios ad ";
 		String	SQLConsultaDDD1 = "SELECT ";
@@ -11862,6 +11871,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		Type tipo= null;
 		String campoGroupByADD = null;
 		String campoGroupByDDD = null;
+		
 		switch (filtro.getAgrupamento()) {
 		case ANO_MES:
 			
@@ -11972,6 +11982,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			"  sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos, " +
 			"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes ";
 		
+		if (filtro.isAgruparPorArrecadador()) {
+			SQLConsultaADD += " ,c.clie_nmcliente as arrecadador "; 
+			SQLConsultaDDD1 += " ,c.clie_nmcliente as arrecadador2 "; 
+		}
+		
 		// adicionando as tabelas para os joins
 		if (filtro.getAgrupamento().equals(FiltroConsultarDadosDiariosArrecadacao.GROUP_BY.ELO)
 				|| (filtro.getIdElo() != null && !filtro.getIdElo().equals(""))){
@@ -11982,6 +11997,16 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// acrescentando a parte from
 		SQLConsultaADD += SQLConsultaADD_FROM;
 		SQLConsultaDDD1 += SQLConsultaDDD1_FROM;
+		
+		if (filtro.isAgruparPorArrecadador()) {
+			SQLConsultaADD += 
+					" INNER JOIN arrecadacao.arrecadador ar on ar.arrc_id = ad.arrc_id "
+				   +" INNER JOIN cadastro.cliente c on c.clie_id = ar.clie_id ";
+			
+			SQLConsultaDDD1 += 
+					" INNER JOIN arrecadacao.arrecadador ar on ar.arrc_id = dd.arrc_id "
+				   +" INNER JOIN cadastro.cliente c on c.clie_id = ar.clie_id ";
+		}
 		
 		// metodo gera as condicoes de acordo com os valores preenchidos no filtro
 		SQLConsultaADD += montarWhereFiltrarDadosDiariosArrecadacao(filtro, "ad");
@@ -12000,23 +12025,44 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		SQLConsultaADD += " group by " + campoGroupByADD;
 		SQLConsultaDDD1 += " group by " + campoGroupByDDD;
 		
-		SQLGeral = "SELECT coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) " +
-				"+ COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, (COALESCE(ARDD.qtdPagamentos,0) + " +
-				"COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos, " +
-				"COALESCE(ARDD.debitos, 0) as debitos, COALESCE(DDD1.valorDescontos, 0) as descontos, " +
-				"COALESCE(DDD1.valorDevolucoes, 0) as devolucoes from (" + SQLConsultaADD + ") ARDD " +
-				" full join (" + SQLConsultaDDD1 + ") DDD1 on (ARDD.itemADD = DDD1.itemDDD) " +
-				" order by campoAgrupador "; 
+		if (filtro.isAgruparPorArrecadador()) {
+			SQLConsultaADD += " , c.clie_nmcliente";
+			SQLConsultaDDD1 += " , c.clie_nmcliente";
+			SQLGeral += " coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, "
+					+ "sum(COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, "
+					+ "sum(COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos, " 
+					+ "sum(COALESCE(ARDD.debitos, 0)) as debitos, "
+					+ "sum(COALESCE(DDD1.valorDescontos, 0)) as descontos, " 
+					+ "sum(COALESCE(DDD1.valorDevolucoes, 0)) as devolucoes, "
+					+ "ardd.arrecadador as arrecadador "
+					+ "from (" + SQLConsultaADD + ") ARDD " +
+					" full join (" + SQLConsultaDDD1 + ") DDD1 on (ARDD.itemADD = DDD1.itemDDD and ARDD.arrecadador = DDD1.arrecadador2) " +
+					" group by arrecadador, campoAgrupador " +
+					" order by campoAgrupador ";
+		} else {
+			SQLGeral += " coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) " +
+					"+ COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, (COALESCE(ARDD.qtdPagamentos,0) + " +
+					"COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos, " +
+					"COALESCE(ARDD.debitos, 0) as debitos, COALESCE(DDD1.valorDescontos, 0) as descontos, " +
+					"COALESCE(DDD1.valorDevolucoes, 0) as devolucoes from (" + SQLConsultaADD + ") ARDD " +
+					" full join (" + SQLConsultaDDD1 + ") DDD1 on (ARDD.itemADD = DDD1.itemDDD) " +
+					" order by campoAgrupador ";
+		}
+		 
 
 		try {
-			retorno = session.createSQLQuery(SQLGeral)
-				.addScalar("campoAgrupador", tipo)
-				.addScalar("qtdDocumentos", Hibernate.INTEGER)
-				.addScalar("qtdPagamentos", Hibernate.INTEGER)
-				.addScalar("debitos", Hibernate.BIG_DECIMAL)
-				.addScalar("descontos", Hibernate.BIG_DECIMAL)
-				.addScalar("devolucoes", Hibernate.BIG_DECIMAL)
-				.list();
+			SQLQuery consulta = session.createSQLQuery(SQLGeral)
+					.addScalar("campoAgrupador", tipo)
+					.addScalar("qtdDocumentos", Hibernate.INTEGER)
+					.addScalar("qtdPagamentos", Hibernate.INTEGER)
+					.addScalar("debitos", Hibernate.BIG_DECIMAL)
+					.addScalar("descontos", Hibernate.BIG_DECIMAL)
+					.addScalar("devolucoes", Hibernate.BIG_DECIMAL);
+			if (filtro.isAgruparPorArrecadador()) {
+				consulta.addScalar("arrecadador", Hibernate.STRING);
+			}
+			
+			retorno = consulta.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

@@ -2846,6 +2846,8 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 			osNaBase = (OrdemServico) colecaoOS.iterator().next();
 
+			validarEncerramentoOsImovelEmCampo(osNaBase);
+			
 			if (osNaBase.getUltimaAlteracao().after(ultimaAlteracao)) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
@@ -3387,7 +3389,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		}
 	}
 
-	private void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException {
+	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException {
 		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
 
 		filtroServicoTipo.adicionarParametro(new ParametroSimples(FiltroServicoTipo.INDICADOR_PERMITE_ALTERACAO_IMOVEL_EM_CAMPO, ConstantesSistema.NAO));

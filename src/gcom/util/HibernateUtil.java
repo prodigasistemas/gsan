@@ -359,6 +359,7 @@ import gcom.cobranca.CobrancaDocumentoItemHistorico;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaGrupo;
 import gcom.cobranca.CobrancaGrupoCronogramaMes;
+import gcom.cobranca.CobrancaParametro;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.CobrancaSituacaoComando;
 import gcom.cobranca.CobrancaSituacaoHistorico;
@@ -441,6 +442,7 @@ import gcom.cobranca.parcelamento.ParcelamentoQuantidadePrestacao;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.cobranca.parcelamento.ParcelamentoTipo;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.faturamento.ConsumoFaixaCategoria;
 import gcom.faturamento.ConsumoFaixaLigacao;
 import gcom.faturamento.ConsumoMinimoParametro;
@@ -1158,6 +1160,8 @@ public class HibernateUtil {
 					.addClass(CapacidHidrComandoOSS.class)
 					.addClass(NegociacaoCobrancaEmpresa.class)
 					.addClass(NegociacaoContaCobrancaEmpresa.class)
+					.addClass(CobrancaParametro.class)
+					.addClass(MensagemParcelamentoBoleto.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //

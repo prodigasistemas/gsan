@@ -758,6 +758,7 @@
 			path="/jsp/util/apresentacao_erros.jsp" />
 		<forward name="telaPrincipal" path="/telaPrincipal.do" />
 		<forward name="telaSucesso" path="/jsp/util/sucesso.jsp" />
+		<forward name="telaSucessoConcluirParcelamento" path="/jsp/cobranca/parcelamento/sucesso_concluir_parcelamento.jsp" />
 		<forward name="telaSucessoPopup"
 			path="/jsp/util/sucesso_popup.jsp" />
 		<forward name="telaAtencao" path="/jsp/util/atencao.jsp" />
@@ -3109,7 +3110,7 @@
 			type="gcom.gui.relatorio.arrecadacao.pagamento.GerarRelatorioEmitirGuiaPagamentoAction"
 			validate="true" scope="session"
 			path="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento" />
-
+			
 		<!-- Início [UC0171] Consultar Histórico de Instalação de Hidrômetro-->
 		<action name="ConsultarHistoricoInstalacaoHidrometroActionForm"
 			type="gcom.gui.micromedicao.hidrometro.ExibirConsultarHistoricoInstalacaoHidrometroInformarAction"

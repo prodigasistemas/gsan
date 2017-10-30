@@ -12,6 +12,7 @@ import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.NegociacaoOpcoesParcelamentoHelper;
 import gcom.cobranca.bean.OpcoesParcelamentoHelper;
+import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.fachada.Fachada;
@@ -470,6 +471,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				idGuiaPagamento = "" + guiaPagamento.getId();
 
 				if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
+//					retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
 					montarPaginaSucesso(request,
 							"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
 							"Efetuar outro Parcelamento de Débitos",
@@ -478,6 +480,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 							"Imprimir Termo", 
 							"Imprimir Guia Pagto Entrada",
 							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
+//							obterLinkBoletoBB(idParcelamento));
 				}
 
 			} else if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
@@ -506,5 +509,17 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				throw new ActionServletException("atencao.valor.entrada.menor.possivel");
 			}
 		}
+	}
+	
+	public String obterLinkBoletoBB(Integer idParcelamento) {
+		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+		filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+		filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		
+		Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+		// Primeira via
+		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), true);
+		
+		return linkBoletoBB;
 	}
 }

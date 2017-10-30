@@ -27,6 +27,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_GEOGRAFICO_SEJB = "";
 	public static String CONTROLADOR_FATURAMENTO_SEJB = "";
 	public static String CONTROLADOR_TARIFA_SOCIAL_SEJB = "";
+	public static String CONTROLADOR_PARCELAMENTO = "";
 
 	public static String QUEUE_CONTROLADOR_FATURAMENTO_MDB = "";
 	public static String QUEUE_CONTROLADOR_ARRECADACAO_MDB = "";
@@ -144,6 +145,7 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES_MDB = "";
 	public static String BATCH_GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES_MDB = "";
 	public static String BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_MDB = "";
+	public static String BATCH_CANCELAR_PARCELAMENTOS_MDB = "";
 	public static String BATCH_GERAR_HISTORICO_CONTA_MDB = "";
 	public static String BATCH_GERAR_RESUMO_INSTALACOES_HIDROMETROS_MDB = "";
 	public static String BATCH_GERAR_RESUMO_LEITURA_ANORMALIDADE_MDB = "";
@@ -299,6 +301,7 @@ public class ConstantesJNDI {
 			CONTROLADOR_ANALISE_GERACAO_CONTA = propriedades.getProperty("ControladorAnaliseGeracaoConta");
 			CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");
 			CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB = propriedades.getProperty("ControladorCobrancaPorResultado");
+			CONTROLADOR_PARCELAMENTO = propriedades.getProperty("ControladorParcelamento");
 
 			CONTROLADOR_USUARIO_SEJB = propriedades.getProperty("ControladorUsuario");
 			CONTROLADOR_GERENCIAL_CADASTRO_SEJB = propriedades.getProperty("ControladorGerencialCadastro");
@@ -373,6 +376,7 @@ public class ConstantesJNDI {
 			BATCH_GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES_MDB = propriedades.getProperty("QueueBatchGerarHistoricoParaEncerrarArrecadacaoMesMDB");
 			BATCH_GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES_MDB = propriedades.getProperty("QueueBatchGerarHistoricoParaEncerrarFaturamentoMesMDB");
 			BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_MDB = propriedades.getProperty("QueueBatchDesfazerParcelamentoPorEntradaNaoPagaMDB");
+			BATCH_CANCELAR_PARCELAMENTOS_MDB = propriedades.getProperty("QueueBatchCancelarParcelamentosMDB");
 			BATCH_GERAR_HISTORICO_CONTA_MDB = propriedades.getProperty("QueueBatchGerarHistoricoContaMDB");
 			BATCH_GERAR_RESUMO_INSTALACOES_HIDROMETROS_MDB = propriedades.getProperty("QueueBatchGerarResumoInstalacoesHidrometrosMDB");
 			BATCH_GERAR_RESUMO_LEITURA_ANORMALIDADE_MDB = propriedades.getProperty("QueueBatchGerarResumoLeituraAnormalidadeMDB");

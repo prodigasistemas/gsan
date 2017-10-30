@@ -1049,7 +1049,7 @@ public class RelatorioDocumentosParcelamentoPortal extends TarefaRelatorio {
 							.getValorDebito());
 
 					relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(
-							descricaoServicosTarifas, valor);
+							descricaoServicosTarifas, valor, false);
 
 					colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 				}
@@ -1057,7 +1057,7 @@ public class RelatorioDocumentosParcelamentoPortal extends TarefaRelatorio {
 				descricaoServicosTarifas = guiaPagamentoRelatorioHelper
 				.getDescTipoDebito() + "     " +  guiaPagamentoRelatorioHelper.getPrestacaoFormatada();
 				valor = Util.formatarMoedaReal(guiaPagamentoRelatorioHelper.getValorDebito());
-				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor);
+				relatorioEmitirGuiaPagamentoDetailBean = new RelatorioEmitirGuiaPagamentoDetailBean(descricaoServicosTarifas, valor, false);
 				colecaoDetail.add(relatorioEmitirGuiaPagamentoDetailBean);
 			}
 

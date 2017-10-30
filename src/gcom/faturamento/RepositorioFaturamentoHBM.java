@@ -34111,8 +34111,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * juros de parcelamento e a diferença de prestações maior que 11(onze)
 	 */
 	public BigDecimal acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
-			int anoMesReferencia, int idLocalidade, int idCategoria,
-			int idFinanciamentoTipo, int idSituacaoAtual, int idSituacaoAnterior)
+			int anoMesReferencia, int idLocalidade, int idCategoria, int idSituacaoAtual, int idSituacaoAnterior)
 			throws ErroRepositorioException {
 
 		BigDecimal retorno = null;
@@ -34135,7 +34134,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) "
 					+ "  and dccg.catg_id= :idCategoria  "
-					+ " and dbcb.fntp_id in ( :idFinanciamentoTipo, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
+					+ " and dbcb.fntp_id in ( :jurosParcelamento, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) "
 					+ "  and (dbcb.dbcb_nnprestacao - dbcb.dbcb_nnprestacaodebito) > 11 ";
 
 			 retorno = (BigDecimal) session.createSQLQuery(consulta)
@@ -34145,7 +34144,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("idCategoria", idCategoria)
 					.setInteger("idSituacaoAtual", idSituacaoAtual)
 					.setInteger("idSituacaoAnterior", idSituacaoAnterior)
-					.setInteger("idFinanciamentoTipo", idFinanciamentoTipo)
+					.setInteger("jurosParcelamento", FinanciamentoTipo.JUROS_PARCELAMENTO)
 					.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
 					.setInteger("parcelamentoEsgoto",FinanciamentoTipo.PARCELAMENTO_ESGOTO)
 					.setInteger("parcelamentoServico",FinanciamentoTipo.PARCELAMENTO_SERVICO)
@@ -59865,6 +59864,48 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
+	public BigDecimal obterValorDebitoCobradoPorTipoFinanciamentoAgrupandoELancamentoItemContabil(
+			int anoMesReferencia, int idLocalidade, int idCategoria,
+			int idSituacaoAtual, int idSituacaoAnterior, int idTipoFinanciamento, int idLancamentoItemContabil)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append(" select sum(dccg.dccg_vlcategoria) as valor ")
+	          .append(" from faturamento.debito_cobrado_categoria dccg ")
+	          .append(" inner join faturamento.debito_cobrado dbcb on dccg.dbcb_id=dbcb.dbcb_id ")
+	          .append(" inner join faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id ")
+	          .append(" inner join financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id ")
+	          .append("  where  ")
+	          .append(" cnta.cnta_amreferenciaconta= :anoMesReferencia ")
+	          .append(" and cnta.loca_id= :idLocalidade ")
+	          .append(" and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
+	          .append(" and dccg.catg_id= :idCategoria ")
+	          .append(" and dbcb.fntp_id= :idTipoFinanciamento ")
+	          .append(" and lict.lict_id = :idLancamentoItem ");
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
+							.addScalar("valor", Hibernate.BIG_DECIMAL)
+							.setInteger("anoMesReferencia", anoMesReferencia)
+							.setInteger("idLocalidade", idLocalidade)
+							.setInteger("idCategoria", idCategoria)
+							.setInteger("idSituacaoAtual", idSituacaoAtual)
+							.setInteger("idSituacaoAnterior", idSituacaoAnterior)
+							.setInteger("idTipoFinanciamento", idTipoFinanciamento)
+							.setInteger("idLancamentoItem", idLancamentoItemContabil).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter cliente conta de uma conta");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+
 	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException {
 		Integer retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -59906,10 +59947,67 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		
 		return retorno;
 	}
 	
+	public BigDecimal obterValorDebitoCobradoParcelamentoCanceladoTransferidoParaCurtoPrazo(
+			int anoMesReferencia, int idLocalidade, int idCategoria) throws ErroRepositorioException {
+		
+		BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+		StringBuilder parcelasCobradas = new StringBuilder();
+
+		try {
+			parcelasCobradas.append("(select sum(qtd_parcelas) - 1 ")
+							.append(" from ( ")
+							.append("     select count(*) as qtd_parcelas ")
+							.append("     from faturamento.debito_a_cobrar cobrar ")
+							.append("     left join faturamento.debito_cobrado_historico cobradoH on cobradoH.dbac_id = cobrar.dbac_id ")
+							.append("     where cobrar.dbac_id = dacb.dbac_id ")
+							.append("     UNION ")
+							.append("     select count(*) as qtd_parcelas ")
+							.append("     from faturamento.debito_a_cobrar cobrar ")
+							.append("     left join faturamento.debito_cobrado cobrado on cobrado.dbac_id = cobrar.dbac_id ")
+							.append("     where cobrar.dbac_id = dacb.dbac_id) x) ");
+			
+			
+			consulta.append(" select sum(lp) as valor from ( ")
+					.append("      select trunc((sum(dccg.dccg_vlcategoria) - (12 * trunc(( dbac_vldebito / dbac_nnprestacaodebito),2))),2) as lp ")
+					.append("      from  faturamento.debito_cobrado_categoria dccg  ")
+					.append("      inner join  faturamento.debito_cobrado  dbcb on dccg.dbcb_id=dbcb.dbcb_id  ")
+					.append("      inner join  faturamento.debito_a_cobrar dacb on dacb.dbac_id = dbcb.dbac_id ")
+					.append("      inner join  cobranca.parcelamento p on p.parc_id = dacb.parc_id ")
+					.append("      inner join  financeiro.lancamento_item_contabil lict on dbcb.lict_id=lict.lict_id  ")
+					.append("      inner join  faturamento.conta cnta on dbcb.cnta_id=cnta.cnta_id  ")
+					.append(" 		where cnta.cnta_amreferenciaconta= :anoMesReferencia ")
+					.append(" 		and cnta.loca_id= :idLocalidade ")
+					.append(" 		and (cnta.dcst_idatual= :idSituacaoAtual or cnta.dcst_idanterior= :idSituacaoAnterior) ")
+					.append(" 		and dccg.catg_id= :idCategoria ")
+					.append(" 		and dbcb.fntp_id in ( :jurosParcelamento, :parcelamentoAgua, :parcelamentoEsgoto, :parcelamentoServico) ")
+					.append("      and ( (dbcb.dbcb_nnprestacao - ").append(parcelasCobradas.toString()).append(") > 12) ")
+					.append("      group by dbac_vldebito, dbac_nnprestacaodebito) as x ");
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta.toString())
+							.addScalar("valor", Hibernate.BIG_DECIMAL)
+							.setInteger("anoMesReferencia", anoMesReferencia)
+							.setInteger("idLocalidade", idLocalidade)
+							.setInteger("idCategoria", idCategoria)
+							.setInteger("idSituacaoAtual", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("idSituacaoAnterior", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("jurosParcelamento", FinanciamentoTipo.JUROS_PARCELAMENTO)
+							.setInteger("parcelamentoAgua",FinanciamentoTipo.PARCELAMENTO_AGUA)
+							.setInteger("parcelamentoEsgoto",FinanciamentoTipo.PARCELAMENTO_ESGOTO)
+							.setInteger("parcelamentoServico",FinanciamentoTipo.PARCELAMENTO_SERVICO).uniqueResult();;
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+		
 	
 	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException {
 		Object[] retorno = null;
@@ -59931,7 +60029,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		
 		return retorno;
 	}
+			
 }

@@ -226,7 +226,7 @@ function limparAnoFabricacao(){
 					<td width="30%"><strong>N&uacute;mero do Hidr&ocirc;metro:<font
 						color="#FF0000">*</font></strong></td>
 					<td width="70%"><html:text property="numeroHidrometro" size="10"
-						maxlength="10" tabindex="1" onkeyup= "javascript:limparAnoFabricacao();"
+						maxlength="11" tabindex="1" onkeyup= "javascript:limparAnoFabricacao();"
 					onblur="javascript:validarAnoFabricacao();"/></td>
 
 				</tr>

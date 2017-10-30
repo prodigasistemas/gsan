@@ -29,21 +29,20 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * 
- * @author gcom	
- */
 @ControleAlteracao()
 public class Conta extends ObjetoTransacao implements IConta {
 	private static final long serialVersionUID = 1L;
 
-	public static final int ATRIBUTOS_RETIFICAR_CONTA = 261; //Operacao.OPERACAO_CONTA_RETIFICAR;
-	public static final int ATRIBUTOS_RETIFICAR_CONTA_CANCELAR = 230;//Operacao.OPERACAO_CANCELAR_CONTA;
-	public static final int ATRIBUTOS_RETIFICAR_CONTA_REVISAO = 56; //Operacao.OPERACAO_COLOCAR_CONTA_REVISAO
-	public static final int ATRIBUTOS_RETIFICAR_CONTA_ALTERAR_VENCIMENTO = 412; // Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA
-	public static final int ATRIBUTOS_DESFAZER_CONTA_CANCELAR = 361; // Operacao.OPERACAO_CANCELAMENTO_RETIFICACAO_CONTA_DESFAZER
-	public static final int ATRIBUTOS_RETIFICAR_CONTA_RETIRAR_REVISAO = 57; // Operacao.OPERACAO_RETIRAR_CONTA_REVISAO
-	public static final int ATRIBUTOS_INSERIR_CONTA = 53; //OPERACAO_INSERIR_CONTA = new Integer(53);
+	public static final int ATRIBUTOS_RETIFICAR_CONTA = 261;
+	public static final int ATRIBUTOS_RETIFICAR_CONTA_CANCELAR = 230;
+	public static final int ATRIBUTOS_RETIFICAR_CONTA_REVISAO = 56;
+	public static final int ATRIBUTOS_RETIFICAR_CONTA_ALTERAR_VENCIMENTO = 412;
+	public static final int ATRIBUTOS_DESFAZER_CONTA_CANCELAR = 361;
+	public static final int ATRIBUTOS_RETIFICAR_CONTA_RETIRAR_REVISAO = 57;
+	public static final int ATRIBUTOS_INSERIR_CONTA = 53;
+	
+	public static final Short INDICADOR_ALTERACAO_VENCIMENTO_ATIVO = new Short("1");
+	public static final Short INDICADOR_DEBITO_CONTA_SIM = new Short("1");
 		
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
@@ -53,14 +52,8 @@ public class Conta extends ObjetoTransacao implements IConta {
 	private Short subLote;
 	private Integer codigoSetorComercial;
 	private Integer quadra;
-
-	/** persistent field */
 	private short digitoVerificadorConta;
-
-	/** persistent field */
 	private short indicadorCobrancaMulta;
-
-	/** nullable persistent field */
 	private Short indicadorAlteracaoVencimento;
 	private Integer consumoRateioAgua;
 	private Integer consumoRateioEsgoto;
@@ -177,9 +170,8 @@ public class Conta extends ObjetoTransacao implements IConta {
 	@SuppressWarnings("rawtypes")
 	private Set debitoAutomaticoMovimento;
 	
-	public static final Short INDICADOR_ALTERACAO_VENCIMENTO_ATIVO = new Short("1");
-	public static final Short INDICADOR_DEBITO_CONTA_SIM = new Short("1");
-
+	public Conta() {}
+	
 	@SuppressWarnings("rawtypes")
 	public Conta(
 			Integer referenciaContabil,
@@ -215,7 +207,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 			DocumentoTipo documentoTipo,
 			ContaBancaria contaBancaria,
 			FaturamentoTipo faturamentoTipo,
-			
 			RegistroAtendimento registroAtendimento,
 			Imovel imovel,
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
@@ -266,7 +257,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.documentoTipo = documentoTipo;
 		this.contaBancaria = contaBancaria;
 		this.faturamentoTipo = faturamentoTipo;
-		
 		this.registroAtendimento = registroAtendimento;
 		this.imovel = imovel;
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
@@ -285,17 +275,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.contaCategorias = contaCategorias;
 		this.debitoCobrados = debitoCobrados;
 		this.creditoRealizados = creditoRealizados;
-		
 		this.parcelamento = parcelamento;
 		this.dataVencimentoOriginal = dataVencimentoOriginal;
 		this.valorImposto = valorImposto;
 		this.numeroRetificacoes = numeroRetificacoes;
 	}
 
-	public Conta() {
-	}
-	
 	public Conta(Integer id) {
+		super();
 		this.id = id;
 	}
 
@@ -312,7 +299,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 			DocumentoTipo documentoTipo,
 			ContaBancaria contaBancaria,
 			FaturamentoTipo faturamentoTipo,
-			
 			RegistroAtendimento registroAtendimento,
 			Imovel imovel,
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
@@ -340,7 +326,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.documentoTipo = documentoTipo;
 		this.contaBancaria = contaBancaria;
 		this.faturamentoTipo = faturamentoTipo;
-		
 		this.registroAtendimento = registroAtendimento;
 		this.imovel = imovel;
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
@@ -359,12 +344,25 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.contaCategorias = contaCategorias;
 		this.debitoCobrados = debitoCobrados;
 		this.creditoRealizados = creditoRealizados;
-		
 	}
 	
-	public Conta(Integer id, Integer referencia, Date dataVencimentoConta, BigDecimal valorAgua, BigDecimal valorEsgoto,
-			BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImposto, Integer consumoAgua, Integer consumoEsgoto,
-			Date dataValidadeConta, Date dataRevisao, Integer referenciaContabil, Imovel imovel, Integer referenciaBaixaContabil) {
+	public Conta(
+			Integer id, 
+			Integer referencia, 
+			Date dataVencimentoConta, 
+			BigDecimal valorAgua, 
+			BigDecimal valorEsgoto,
+			BigDecimal debitos, 
+			BigDecimal valorCreditos, 
+			BigDecimal valorImposto, 
+			Integer consumoAgua, 
+			Integer consumoEsgoto,
+			Date dataValidadeConta, 
+			Date dataRevisao, 
+			Integer referenciaContabil, 
+			Imovel imovel, 
+			Integer referenciaBaixaContabil) {
+		super();
 		
 		this.id = id;
 		this.referencia = referencia;
@@ -391,6 +389,70 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.valorImposto = valorImpostos;
 	}
 
+	public Conta(ContaGeral contaGeral,
+			Integer referencia,
+			Integer referenciaContabil,
+			Short indicadorAlteracaoVencimento,
+			DebitoCreditoSituacao debitoCreditoSituacaoAtual,
+			Imovel imovel,
+			Short digitoVerificadorConta,
+			Short indicadorCobrancaMulta,
+			Date dataVencimentoConta,
+			Date dataVencimentoOriginal,
+			Date dataValidadeConta,
+			Date dataInclusao,
+			Date dataEmissao,
+			ContaMotivoInclusao contaMotivoInclusao,
+			Short indicadorDebitoConta,
+			Integer numeroRetificacoes,
+			FaturamentoGrupo faturamentoGrupo,
+			Integer numeroAlteracoesVencimento,
+			Usuario usuario,
+			BigDecimal valorAgua,
+			BigDecimal valorEsgoto,
+			BigDecimal debitos,
+			BigDecimal valorCreditos) {
+		super();
+		
+		this.id = contaGeral.getId();
+		this.contaGeral = contaGeral;
+		this.referencia = referencia;
+		this.referenciaContabil = referenciaContabil;
+		this.indicadorAlteracaoVencimento = indicadorAlteracaoVencimento;
+		this.debitoCreditoSituacaoAtual = debitoCreditoSituacaoAtual;
+		this.imovel = imovel;
+		this.ligacaoAguaSituacao = imovel.getLigacaoAguaSituacao();
+		this.ligacaoEsgotoSituacao = imovel.getLigacaoEsgotoSituacao();
+		this.localidade = imovel.getLocalidade();
+		this.quadraConta = imovel.getQuadra();
+		this.lote = imovel.getLote();
+		this.subLote = imovel.getSubLote();
+		this.codigoSetorComercial = imovel.getSetorComercial().getCodigo();
+		this.quadra = imovel.getQuadra().getNumeroQuadra();
+		this.rota = imovel.obterRota();
+		this.consumoTarifa = imovel.getConsumoTarifa();
+		this.imovelPerfil = imovel.getImovelPerfil();
+		this.digitoVerificadorConta = digitoVerificadorConta;
+		this.indicadorCobrancaMulta = indicadorCobrancaMulta;
+		this.dataVencimentoConta = dataVencimentoConta;
+		this.dataVencimentoOriginal = dataVencimentoOriginal;
+		this.dataValidadeConta = dataValidadeConta;
+		this.dataInclusao = dataInclusao;
+		this.dataEmissao = dataEmissao;
+		this.contaMotivoInclusao = contaMotivoInclusao;
+		this.indicadorDebitoConta = indicadorDebitoConta;
+		this.numeroRetificacoes = numeroRetificacoes;
+		this.faturamentoGrupo = faturamentoGrupo;
+		this.numeroAlteracoesVencimento = numeroAlteracoesVencimento;
+		this.percentualEsgoto = imovel.getLigacaoEsgoto() != null ? imovel.getLigacaoEsgoto().getPercentual() : BigDecimal.ZERO;
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.debitos = debitos;
+		this.valorCreditos = valorCreditos;
+		this.usuario = usuario;
+		this.ultimaAlteracao = new Date();
+	}
+	
 	public Integer getId() {
 		return this.id;
 	}
@@ -410,7 +472,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public int getReferencia() {
 		return this.referencia;
 	}
-	
+
 	public Integer getAnoMesReferenciaConta() {
 		return this.referencia;
 	}
@@ -631,8 +693,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.contaMotivoCancelamento;
 	}
 
-	public void setContaMotivoCancelamento(
-			gcom.faturamento.conta.ContaMotivoCancelamento contaMotivoCancelamento) {
+	public void setContaMotivoCancelamento(gcom.faturamento.conta.ContaMotivoCancelamento contaMotivoCancelamento) {
 		this.contaMotivoCancelamento = contaMotivoCancelamento;
 	}
 
@@ -640,8 +701,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.contaMotivoInclusao;
 	}
 
-	public void setContaMotivoInclusao(
-			gcom.faturamento.conta.ContaMotivoInclusao contaMotivoInclusao) {
+	public void setContaMotivoInclusao(gcom.faturamento.conta.ContaMotivoInclusao contaMotivoInclusao) {
 		this.contaMotivoInclusao = contaMotivoInclusao;
 	}
 
@@ -689,8 +749,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.ligacaoEsgotoSituacao;
 	}
 
-	public void setLigacaoEsgotoSituacao(
-			LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
+	public void setLigacaoEsgotoSituacao(LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
 	}
 
@@ -730,8 +789,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.motivoNaoEntregaDocumento;
 	}
 
-	public void setMotivoNaoEntregaDocumento(
-			gcom.faturamento.conta.MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
+	public void setMotivoNaoEntregaDocumento(gcom.faturamento.conta.MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
 		this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
 	}
 
@@ -755,8 +813,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.contaMotivoRevisao;
 	}
 
-	public void setContaMotivoRevisao(
-			gcom.faturamento.conta.ContaMotivoRevisao contaMotivoRevisao) {
+	public void setContaMotivoRevisao(gcom.faturamento.conta.ContaMotivoRevisao contaMotivoRevisao) {
 		this.contaMotivoRevisao = contaMotivoRevisao;
 	}
 
@@ -764,8 +821,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.contaMotivoRetificacao;
 	}
 
-	public void setContaMotivoRetificacao(
-			gcom.faturamento.conta.ContaMotivoRetificacao contaMotivoRetificacao) {
+	public void setContaMotivoRetificacao(gcom.faturamento.conta.ContaMotivoRetificacao contaMotivoRetificacao) {
 		this.contaMotivoRetificacao = contaMotivoRetificacao;
 	}
 
@@ -773,8 +829,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.debitoCreditoSituacaoAtual;
 	}
 
-	public void setDebitoCreditoSituacaoAtual(
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
+	public void setDebitoCreditoSituacaoAtual(DebitoCreditoSituacao debitoCreditoSituacaoAtual) {
 		this.debitoCreditoSituacaoAtual = debitoCreditoSituacaoAtual;
 	}
 
@@ -782,8 +837,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.debitoCreditoSituacaoAnterior;
 	}
 
-	public void setDebitoCreditoSituacaoAnterior(
-			DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
+	public void setDebitoCreditoSituacaoAnterior(DebitoCreditoSituacao debitoCreditoSituacaoAnterior) {
 		this.debitoCreditoSituacaoAnterior = debitoCreditoSituacaoAnterior;
 	}
 
@@ -882,7 +936,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 
 		return valorTotalConta;
 	}
-	
+
 	public BigDecimal getValorTotalContaComRateioBigDecimal() {
 		BigDecimal valorTotalConta = new BigDecimal("0.00");
 
@@ -909,16 +963,16 @@ public class Conta extends ObjetoTransacao implements IConta {
 		if (this.getValorRateioAgua() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
 		}
-		
+
 		if (this.getValorRateioEsgoto() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
 		}
-		
+
 		return valorTotalConta;
 	}
-	
+
 	public BigDecimal getValorTotal() {
-		return getValorTotalContaBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP);	
+		return getValorTotalContaBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	public BigDecimal getValorTotalContaSemImposto() {
@@ -942,7 +996,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 
 		return valorTotalConta.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
-	
+
 	public String getFormatarAnoMesParaMesAno() {
 
 		String anoMesRecebido = "" + this.getReferencia();
@@ -962,15 +1016,15 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public void setClienteContas(Set clienteContas) {
 		this.clienteContas = clienteContas;
 	}
-	
+
 	public ContaGeral getContaGeral() {
-        return this.contaGeral;
-    }
-	 
-	 public void setContaGeral(ContaGeral contaGeral) {
-        this.contaGeral = contaGeral;
-    }
-	 
+		return this.contaGeral;
+	}
+
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
+	}
+
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -982,40 +1036,38 @@ public class Conta extends ObjetoTransacao implements IConta {
 
 		return (this.getId().equals(castOther.getId()));
 	}
-	
-	public String[] retornaCamposChavePrimaria(){
+
+	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
 	}
-	
-	public Filtro retornaFiltro(){
-		FiltroConta filtroConta = new FiltroConta();
-		
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_CANCELAMENTO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_INCLUSAO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.DOCUMENTO_TIPO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_BANCARIA);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.FATURAMENTO_TIPO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.REGISTRO_ATENDIMENTO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LIGACAO_AGUA_SITUACAO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LIGACAO_ESGOTO_SITUACAO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.IMOVEL);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONSUMO_TARIFA);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.IMOVEL_PERFIL);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LOCALIDADE);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.MOTIVO_NAO_ENTREGA_DOCUMENTO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_REVISAO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_RETIFICACAO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_GERAL);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.PARCELAMENTO);
-		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.USUARIO);
-		
-		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID, this.getId()));
-		
-		return filtroConta; 
+
+	public Filtro retornaFiltro() {
+		FiltroConta filtro = new FiltroConta();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_CANCELAMENTO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_INCLUSAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.DOCUMENTO_TIPO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_BANCARIA);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.FATURAMENTO_TIPO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.REGISTRO_ATENDIMENTO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LIGACAO_AGUA_SITUACAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LIGACAO_ESGOTO_SITUACAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.IMOVEL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONSUMO_TARIFA);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.IMOVEL_PERFIL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.LOCALIDADE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.MOTIVO_NAO_ENTREGA_DOCUMENTO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_REVISAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_MOTIVO_RETIFICACAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_GERAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.PARCELAMENTO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.USUARIO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroConta.ID, this.getId()));
+
+		return filtro;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public Set getContaImpostosDeduzidos() {
 		return contaImpostosDeduzidos;
@@ -1041,42 +1093,42 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public Set getDebitoAutomaticoMovimento() {
 		return debitoAutomaticoMovimento;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public void setDebitoAutomaticoMovimento(Set debitoAutomaticoMovimento) {
 		this.debitoAutomaticoMovimento = debitoAutomaticoMovimento;
 	}
-	
-	public String[] retornarAtributosInformacoesOperacaoEfetuada(){
-		String []atributos = { "referenciaFormatada" , "localidade.descricao" };
-		return atributos;		
+
+	public String[] retornarAtributosInformacoesOperacaoEfetuada() {
+		String[] atributos = { "referenciaFormatada", "localidade.descricao" };
+		return atributos;
 	}
-	
-	public String[] retornarLabelsInformacoesOperacaoEfetuada(){
-		String []labels = {"Referencia" , "Localidade" };
-		return labels;		
+
+	public String[] retornarLabelsInformacoesOperacaoEfetuada() {
+		String[] labels = { "Referencia", "Localidade" };
+		return labels;
 	}
-	
-	public String getReferenciaFormatada(){
+
+	public String getReferenciaFormatada() {
 		return Util.formatarAnoMesParaMesAno(this.referencia);
 	}
-	
-	public void initializeLazy(){
+
+	public void initializeLazy() {
 		initilizarCollectionLazy(this.getContaCategorias());
 		initilizarCollectionLazy(this.getDebitoCobrados());
-		initilizarCollectionLazy(getCreditoRealizados());		
+		initilizarCollectionLazy(getCreditoRealizados());
 
-		if (debitoCreditoSituacaoAtual != null){
+		if (debitoCreditoSituacaoAtual != null) {
 			debitoCreditoSituacaoAtual.initializeLazy();
 		}
-		if (debitoCreditoSituacaoAnterior != null){
+		if (debitoCreditoSituacaoAnterior != null) {
 			debitoCreditoSituacaoAnterior.initializeLazy();
-		}		
+		}
 	}
 
 	public Integer getNumeroRetificacoes() {
@@ -1206,15 +1258,15 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public void setValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
 		this.valorRateioEsgoto = valorRateioEsgoto;
 	}
-	
-	public void setValorDebitos(BigDecimal valor){
+
+	public void setValorDebitos(BigDecimal valor) {
 		debitos = valor;
 	}
-	
-	public BigDecimal getValorDebitos(){
+
+	public BigDecimal getValorDebitos() {
 		return debitos;
 	}
-	
+
 	public Short getIndicadorFaturamentoConcluido() {
 		return indicadorFaturamentoConcluido;
 	}
@@ -1223,7 +1275,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.indicadorFaturamentoConcluido = indicadorFaturamentoCompleto;
 	}
 
-	public Conta buildConta(Conta conta){
+	public Conta buildConta(Conta conta) {
 		conta.setCodigoSetorComercial(this.getCodigoSetorComercial());
 		conta.setQuadra(this.getQuadra());
 		conta.setDigitoVerificadorConta(this.getDigitoVerificadorConta());
@@ -1231,71 +1283,71 @@ public class Conta extends ObjetoTransacao implements IConta {
 		conta.setQuadraConta(this.getQuadraConta());
 		return conta;
 	}
-	
+
 	public boolean isContaRetificada() {
 		return this.debitoCreditoSituacaoAtual.getId().intValue() == DebitoCreditoSituacao.RETIFICADA.intValue();
 	}
-	
-    public void atribuiValorRateioAgua(BigDecimal valorRateioAgua) {
-        if (valorRateioAgua != null) {
-            this.valorRateioAgua = valorRateioAgua;
-            this.valorAgua       = this.valorAgua.add(valorRateioAgua);
-        } else {
-            this.valorRateioAgua = BigDecimal.ZERO;
-        }        
-    }
 
-    public void atribuiValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
-        if (valorRateioEsgoto != null){
-            this.valorRateioEsgoto = valorRateioEsgoto;
-            this.valorEsgoto       = this.valorEsgoto.add(valorRateioEsgoto);
-        }else{
-            this.valorRateioEsgoto = BigDecimal.ZERO;
-        }        
-    }
+	public void atribuiValorRateioAgua(BigDecimal valorRateioAgua) {
+		if (valorRateioAgua != null) {
+			this.valorRateioAgua = valorRateioAgua;
+			this.valorAgua = this.valorAgua.add(valorRateioAgua);
+		} else {
+			this.valorRateioAgua = BigDecimal.ZERO;
+		}
+	}
 
-    public void atribuirConsumoRateioEsgoto(Integer consumoRateioEsgoto) {
-        if (consumoRateioEsgoto != null) {
-            this.consumoRateioEsgoto = consumoRateioEsgoto;
-        }else {
-            this.consumoRateioEsgoto = new Integer("0");
-        }
-        
-    }
+	public void atribuiValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
+		if (valorRateioEsgoto != null) {
+			this.valorRateioEsgoto = valorRateioEsgoto;
+			this.valorEsgoto = this.valorEsgoto.add(valorRateioEsgoto);
+		} else {
+			this.valorRateioEsgoto = BigDecimal.ZERO;
+		}
+	}
 
-    public void atribuirConsumoRateioAgua(Integer consumoRateioAgua) {
-        if (consumoRateioAgua != null) {
-            this.consumoRateioAgua = consumoRateioAgua;
-        }else {
-            this.consumoRateioAgua = new Integer("0");
-        }        
-    }
+	public void atribuirConsumoRateioEsgoto(Integer consumoRateioEsgoto) {
+		if (consumoRateioEsgoto != null) {
+			this.consumoRateioEsgoto = consumoRateioEsgoto;
+		} else {
+			this.consumoRateioEsgoto = new Integer("0");
+		}
 
-    public void atribuirConsumoAgua(String consumoAgua) {
-        try {
-            this.setConsumoAgua(Integer.parseInt(consumoAgua));
-        } catch (Exception e) {
-            this.setConsumoAgua(0);
-        }
-    }
+	}
 
-    public void atribuirConsumoEsgoto(String consumoEsgoto) {
-        try {
-            this.setConsumoEsgoto(Integer.parseInt(consumoEsgoto));
-        } catch (Exception e) {
-            this.setConsumoEsgoto(0);
-        }
-    }
+	public void atribuirConsumoRateioAgua(Integer consumoRateioAgua) {
+		if (consumoRateioAgua != null) {
+			this.consumoRateioAgua = consumoRateioAgua;
+		} else {
+			this.consumoRateioAgua = new Integer("0");
+		}
+	}
 
-    public void incrementaNumeroRetificacoes() {
-        this.numeroRetificacoes = this.numeroRetificacoes != null ? this.numeroRetificacoes + 1 : 1;
-    }
+	public void atribuirConsumoAgua(String consumoAgua) {
+		try {
+			this.setConsumoAgua(Integer.parseInt(consumoAgua));
+		} catch (Exception e) {
+			this.setConsumoAgua(0);
+		}
+	}
 
-    public void atribuiPercentualEsgoto(String percentualEsgoto) {
-        try{
-            this.percentualEsgoto = Util.formatarMoedaRealparaBigDecimal(percentualEsgoto);
-        }catch(Exception e){
-            this.percentualEsgoto = BigDecimal.ZERO;
-        }
-    }	
+	public void atribuirConsumoEsgoto(String consumoEsgoto) {
+		try {
+			this.setConsumoEsgoto(Integer.parseInt(consumoEsgoto));
+		} catch (Exception e) {
+			this.setConsumoEsgoto(0);
+		}
+	}
+
+	public void incrementaNumeroRetificacoes() {
+		this.numeroRetificacoes = this.numeroRetificacoes != null ? this.numeroRetificacoes + 1 : 1;
+	}
+
+	public void atribuiPercentualEsgoto(String percentualEsgoto) {
+		try {
+			this.percentualEsgoto = Util.formatarMoedaRealparaBigDecimal(percentualEsgoto);
+		} catch (Exception e) {
+			this.percentualEsgoto = BigDecimal.ZERO;
+		}
+	}
 }

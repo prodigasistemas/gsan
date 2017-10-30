@@ -289,6 +289,7 @@ import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
@@ -330,6 +331,8 @@ import gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamentoHelper;
 import gcom.cobranca.contratoparcelamento.QuantidadePrestacoes;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
+import gcom.cobranca.controladores.ControladorParcelamentoLocal;
+import gcom.cobranca.controladores.ControladorParcelamentoLocalHome;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -681,6 +684,27 @@ public class Fachada {
 		return instancia;
 	}
 
+	private ControladorParcelamentoLocal getControladorParcelamento() {
+		ControladorParcelamentoLocalHome localHome = null;
+		ControladorParcelamentoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PARCELAMENTO);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
 	private ControladorTabelaAuxiliarLocal getControladorTabelaAuxiliar() {
 		ControladorTabelaAuxiliarLocalHome localHome = null;
 		ControladorTabelaAuxiliarLocal local = null;
@@ -40119,9 +40143,61 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) {
 		try {
-			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel);
+			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel, percentualInformado);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
+		try {
+			return getControladorParcelamento().pesquisarParcelamentoParaCancelar(idParcelamento);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuarioLogado, SistemaParametro sistemaParametro) {
+		try {
+			getControladorParcelamento().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public String getCobrancaParametro(String parametro) {
+		try {
+			return this.getControladorCobranca().getCobrancaParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+
+	public String obterCaminhoDownloadArquivos(String modulo) {
+		return this.getControladorUtil().getCaminhoDownloadArquivos(modulo);
+	}	
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) {
+		try {
+			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, clienteResponsavelParcelamento, valor, primeiraVia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) {
+		try {
+			return this.getControladorCobranca().obterPeriodoContasParceladas(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) {
+		try {
+			return this.getControladorFaturamento().obterDiaVencimentoConta(idImovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
