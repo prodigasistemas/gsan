@@ -27,7 +27,7 @@
 		<property name="dtVencimento" type="java.lang.String" column="boin_dtvencimento" not-null="true" length="8"/>
 		<property name="urlRetorno" type="java.lang.String" column="boin_urlretorno" not-null="true" length="1000"/>
 		<property name="mensagemLoja" type="java.lang.String" column="boin_mensagemloja" not-null="true" length="-1"/>
-		<property name="linkBoleto" type="java.lang.String" column="boin_linkboleto" not-null="true" length="-1"/>
+		<property name="linkBoleto" type="java.lang.String" column="boin_linkboleto" length="-1"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="boin_tmultimaalteracao" length="8"/>
 		<property name="indicadoGeradoPeloGsan" type="java.lang.Short" column="boin_icgeradogsan" length="1"/>
 		<property name="indicadoRegistradoNoBanco" type="java.lang.Short" column="boin_icregistradobanco" length="1"/>

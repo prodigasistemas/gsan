@@ -2649,8 +2649,8 @@ public class ControladorArrecadacao implements SessionBean {
 											 * Tratativa para linhas com valores zerados que apenas informam que o 
 											 * boleto foi registrado na instituicao financeira
 											 */
-											if (pagamentoHelperCodigoBarras.getValorDocumento().equals(BigDecimal.ZERO)) {
-												this.confirmarRegistroBoleto(registroTipo7, idImovelPagamento);
+											this.confirmarRegistroBoleto(registroTipo7, idImovelPagamento);
+											if (pagamentoHelperCodigoBarras.getValorDocumento().compareTo(BigDecimal.ZERO) == 0) {
 												continue;
 											}
 
@@ -51379,13 +51379,17 @@ public class ControladorArrecadacao implements SessionBean {
 				GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 				Parcelamento parcelamento = guiaPagamento.getParcelamento();
 				Cliente clienteResponsavelParcelamento = parcelamento.getCliente();
+				BigDecimal valor = (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) == 0) ? parcelamento.getValorEntrada() : registroTipo7.getValorRecebidoFormatado();
 				
 				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, parcelamento.getId(), clienteResponsavelParcelamento, 
 						registroTipo7.getValorRecebidoFormatado(), true, guiaPagamento, ConstantesSistema.NAO);
-			
+				
 			} else {
+				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
+					boleto.setValor(registroTipo7.getValorRecebidoFormatado().toString());
+				}
 				boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
-				getControladorUtil().atualizar(boleto);
+				repositorioUtil.atualizar(boleto);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

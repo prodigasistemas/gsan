@@ -37,7 +37,7 @@ public class BoletoInfo extends ObjetoTransacao {
 	
 	public BoletoInfo(Integer id, String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
 			String indicadorPessoa, String tpDuplicata, String tpPagamento, String valor, String dtVencimento, String urlRetorno, String mensagemLoja,
-			String linkBoleto, GuiaPagamento guiaPagamento, Short indicadoRegistradoNoBanco) {
+			String linkBoleto, GuiaPagamento guiaPagamento, Short indicadoGeradoPeloGsan) {
 		super();
 		this.id = id;
 		this.idConv = idConv;
