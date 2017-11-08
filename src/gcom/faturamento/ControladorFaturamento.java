@@ -761,7 +761,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            			logger.info(" 5 - Credito a Realizar: Imovel: " + (credito.getImovel() != null ? credito.getImovel().getId() : "NULL") 
 													+ " | Créditos: " + (credito.getValorCredito() != null ? credito.getValorCredito() : "NULL" )
 													+ " | Residual Concedido no Mês: " + (credito.getValorResidualConcedidoMes() != null ? credito.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
+													+ " | Residual do Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
 					            			
 					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
