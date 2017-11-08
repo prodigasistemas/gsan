@@ -3028,7 +3028,6 @@ public class ControladorCobranca extends ControladorComum {
 			String dataFormatada = formater.format(dataPrescricao);
 
 			this.repositorioCobranca.prescreverDebitosDeImoveis(anoMesFaturamento, dataFormatada, usuario);
-
 			this.repositorioCobranca.prescreverDebitosDeImoveisContasInlcuidas(anoMesFaturamento, dataFormatada, usuario);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);

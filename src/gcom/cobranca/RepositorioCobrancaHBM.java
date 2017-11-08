@@ -21817,37 +21817,26 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			 */
 			// Atualiza Contas
 
-			System.out.println("************Iniciando Processo de Prescrição de Débitos com data inferior a " + dataFormatada
-					+ "****************");
-			update = " update faturamento.conta c " + " set 	dcst_idatual = " + DebitoCreditoSituacao.DEBITO_PRESCRITO + ","
-					+ "       usur_id = " + usuario.intValue() + ", " + " 		dcst_idanterior = NULL, " + " 		cnta_dtcancelamento = now(), "
-					+ " 		cmcn_id = " + ContaMotivoCancelamento.DEBITO_PRESCRITO + "," + "       cnta_amreferenciacontabil = "
-					+ anoMesFaturamento.intValue() + ", " + "       cnta_tmultimaalteracao = now() "
-					+ " where c.cnta_dtvencimentoconta < '" + dataFormatada + "'" + " and   c.cnta_amreferenciacontabil < "
-					+ anoMesFaturamento.intValue()
-
-					/**
-					 * Retirada da situação de incluída do método,
-					 * pois a mesma causava problemas por causa da restrição da
-					 * chave xak1_conta
-					 */
+			System.out.println("************Iniciando Processo de Prescrição de Débitos com data inferior a " + dataFormatada+ "****************");
+			
+			update = " update faturamento.conta c " 
+					+ " set 	dcst_idatual = " + DebitoCreditoSituacao.DEBITO_PRESCRITO + ","
+					+ "         usur_id = " + usuario.intValue() + ", " 
+					+ " 		dcst_idanterior = NULL, " 
+					+ " 		cnta_dtcancelamento = now(), "
+					+ " 		cmcn_id = " + ContaMotivoCancelamento.DEBITO_PRESCRITO + "," 
+					+ "         cnta_amreferenciacontabil = " + anoMesFaturamento.intValue() + ", " 
+					+ "         cnta_tmultimaalteracao = now() "
+					+ " where c.cnta_dtvencimentoconta < '" + dataFormatada + "'" 
+					+ " and   c.cnta_amreferenciacontabil < " + anoMesFaturamento.intValue()
 					+ " and   c.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + ", " + DebitoCreditoSituacao.RETIFICADA + ")"
-
-					/**
-					 * Alterações para não pegar histórico de
-					 * conta mas sim o cliente atual do imóvel
-					 * 
-					 * @date 31/07/2012
-					 * @author Wellington Rocha
-					 */
-					+ " and not exists (select cnta.cnta_id " + " 				  from faturamento.conta as cnta "
-					+ "                 inner join cadastro.cliente_imovel as clim "
-					+ "                   on (clim.imov_id = cnta.imov_id and clim_dtrelacaofim is null) "
+					+ " and not exists (select cnta.cnta_id from faturamento.conta as cnta "
+					+ "                 inner join cadastro.cliente_imovel as clim on (clim.imov_id = cnta.imov_id and clim_dtrelacaofim is null) "
 					+ "                 inner join cadastro.cliente as clie on clim.clie_id = clie.clie_id "
 					+ "                 inner join cadastro.cliente_tipo as cltp on cltp.cltp_id = clie.cltp_id "
-					+ "                 where c.cnta_id = cnta.cnta_id " + " 				  and cltp.epod_id in ( " + EsferaPoder.ESTADUAL + ", "
-					+ EsferaPoder.FEDERAL + ", " + EsferaPoder.MUNICIPAL + "))" + " and not exists (select cnta_id "
-					+ "                 from arrecadacao.pagamento as pgmt " + "                 where c.cnta_id = pgmt.cnta_id ) ";
+					+ "                 where c.cnta_id = cnta.cnta_id "
+					+ "						and cltp.epod_id in ( " + EsferaPoder.ESTADUAL + ", " + EsferaPoder.FEDERAL + ", " + EsferaPoder.MUNICIPAL + "))" 
+					+ " 					and not exists (select cnta_id from arrecadacao.pagamento as pgmt where c.cnta_id = pgmt.cnta_id ) ";
 
 			st = jdbcCon.prepareStatement(update);
 
