@@ -1310,5 +1310,6 @@ public interface IRepositorioArrecadacao {
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
-	
+
+	public void gerarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 }

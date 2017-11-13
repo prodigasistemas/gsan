@@ -195,6 +195,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 
 	public static final int CANCELAR_PARCELAMENTOS = 16040;
 
+	public static final int GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = 16041;
+	
 	private Integer id;
 
 	private String descricao;

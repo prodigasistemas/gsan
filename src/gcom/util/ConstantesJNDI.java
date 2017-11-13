@@ -271,6 +271,7 @@ public class ConstantesJNDI {
 	public static String BATCH_ATUALIZACAO_CADASTRAL = "";
 	public static String BATCH_GERAR_DADOS_RECEITAS_A_FATURAR__RESUMO_MDB = "";
 	public static String BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = "";
+	public static String BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = "";
 
 	static {
 		inicializarPropriedades();

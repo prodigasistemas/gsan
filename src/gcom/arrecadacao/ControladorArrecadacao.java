@@ -51271,4 +51271,19 @@ public class ControladorArrecadacao implements SessionBean {
 
 		return mensagem.getMensagem();
 	}
+	
+	public void gerarDadosPagamentosNaoClassificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException {
+		int idUnidadeIniciada = 0;
+
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+
+		try {
+			repositorioArrecadacao.gerarDadosPagamentosNaoClassificados(referenciaArrecadacao);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (ErroRepositorioException ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }
