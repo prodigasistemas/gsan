@@ -2645,6 +2645,13 @@ public class ControladorArrecadacao implements SessionBean {
 												}
 											}
 											
+											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(linhaRegistro, arrecadadorMovimento.getId(),
+													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelPagamento, pagamentoHelperCodigoBarras.getTipoDocumento(),
+													pagamentoHelperCodigoBarras.getIdDocumento(), pagamentoHelperCodigoBarras.getValorDocumento());
+
+											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+											
 											/**
 											 * Tratativa para linhas com valores zerados que apenas informam que o 
 											 * boleto foi registrado na instituicao financeira
@@ -2653,13 +2660,6 @@ public class ControladorArrecadacao implements SessionBean {
 											if (pagamentoHelperCodigoBarras.getValorDocumento().compareTo(BigDecimal.ZERO) == 0) {
 												continue;
 											}
-
-											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(linhaRegistro, arrecadadorMovimento.getId(),
-													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelPagamento, pagamentoHelperCodigoBarras.getTipoDocumento(),
-													pagamentoHelperCodigoBarras.getIdDocumento(), pagamentoHelperCodigoBarras.getValorDocumento());
-
-											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
 
 											if (avisoBancario != null && avisoBancario.getValorArrecadacaoCalculado().compareTo(BigDecimal.ZERO) == 0) {
 
