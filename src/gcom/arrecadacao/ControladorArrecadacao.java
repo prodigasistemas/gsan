@@ -51353,6 +51353,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	private String obterMensagemParcelamento() {
+		
 		FiltroMensagemParcelamentoBoleto filtro = new FiltroMensagemParcelamentoBoleto();
 		filtro.adicionarParametro(new ParametroNulo(FiltroMensagemParcelamentoBoleto.FIM_VIGENCIA));
 
