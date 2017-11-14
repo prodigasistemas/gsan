@@ -571,6 +571,8 @@ public class ConstantesJNDI {
 			BATCH_ATUALIZACAO_CADASTRAL = propriedades.getProperty("QueueBatchAtualizacaoCadastralMDB");
 			BATCH_GERAR_DADOS_RECEITAS_A_FATURAR__RESUMO_MDB = propriedades.getProperty("QueueBatchGerarDadosReceitasAFaturarResumoMDB");
 			BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarNegociacaoContasCobrancaEmpresaMDB");
+			BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = propriedades.getProperty("QueueBatchGerarDadosPagamentosNaoClassificadosMDB");
+
 			stream.close();
 
 		} catch (Exception ex) {

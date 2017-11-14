@@ -15,6 +15,12 @@ public class TarefaBatchGerarDadosPagamentosNaoClassificados extends TarefaBatch
 	public TarefaBatchGerarDadosPagamentosNaoClassificados(Usuario usuario, int idFuncionalidadeIniciada) {
 		super(usuario, idFuncionalidadeIniciada);
 	}
+	
+	@Deprecated
+	public TarefaBatchGerarDadosPagamentosNaoClassificados() {
+		super(null, 0);
+	}
+	
 
 	@Override
 	protected Collection<Object> pesquisarTodasUnidadeProcessamentoBatch() {
