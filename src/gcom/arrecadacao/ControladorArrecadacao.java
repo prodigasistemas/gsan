@@ -102,10 +102,8 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
-import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
@@ -51215,6 +51213,9 @@ public class ControladorArrecadacao implements SessionBean {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
 		
+		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
 		
 		BoletoInfo boletoInfo = null;
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
@@ -51241,7 +51242,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 
 		if (primeiraVia || !foiGerado) {
-			boletoInfo = registrarBoleto(matricula, idParcelamento, clienteResponsavelParcelamento, valor, primeiraVia, guiaPagamento, ConstantesSistema.SIM);
+			boletoInfo = registrarBoleto(matricula, clienteResponsavelParcelamento, valor, primeiraVia, parcelamento, ConstantesSistema.SIM);
 		}
 		
 		String link = formatarLinkBB(boletoInfo);
@@ -51252,14 +51253,30 @@ public class ControladorArrecadacao implements SessionBean {
 		return link;
 	}
 	
-	public BoletoInfo registrarBoleto(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, 
-			boolean primeiraVia, GuiaPagamento guiaPagamento, Short indicadoGeradoPeloGsan) throws ControladorException, ErroRepositorioException {
+	public BoletoInfo registrarBoleto(Integer matricula, Cliente clienteResponsavelParcelamento, BigDecimal valor, 
+			boolean primeiraVia, Parcelamento parcelamento, Short indicadoGeradoPeloGsan) throws ControladorException, ErroRepositorioException {
 		FiltroCliente filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 		
+		GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(parcelamento);
+		GuiaPagamentoHistorico guiaPagamentoHistorico = pesquisarGuiaPagamentoHistoricoParcelamento(parcelamento);
+		String refTran = null;
+		String dataVencimento = null;
+		String mensagemLoja = null;
+		
+		if (guiaPagamento != null) {
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
+			dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
+			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), parcelamento.getId());
+		} else {
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamentoHistorico.getId().toString()).toString();
+			dataVencimento = Util.formatarData(guiaPagamentoHistorico.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
+//			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamentoHistorico.getId(), idParcelamento);
+		}
+		
 		String idConv = "315828";
-		String refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
+		
 		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
 		String documentoCliente = (isClientePF ? cliente.getCpf() : cliente.getCnpj());
@@ -51272,14 +51289,14 @@ public class ControladorArrecadacao implements SessionBean {
 		String indicadorPessoa = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().toString();
 		String tpDuplicata = "DS";
 		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
-		String dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
-		String urlRetorno = String.format("exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, idParcelamento);
-		String mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), idParcelamento);
+		String urlRetorno = String.format("exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, parcelamento.getId());
+		
 		String tpPagamento = (primeiraVia) ? "2" : "21"; 
 		
-		BoletoInfo boletoInfo = new BoletoInfo(guiaPagamento.getId(), idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
+		BoletoInfo boletoInfo = new BoletoInfo(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
 				municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
-				null, guiaPagamento, indicadoGeradoPeloGsan);
+				null, parcelamento, indicadoGeradoPeloGsan);
+		boletoInfo.setParcelamento(parcelamento);
 
 		Fachada.getInstancia().inserir(boletoInfo);
 		
@@ -51381,8 +51398,8 @@ public class ControladorArrecadacao implements SessionBean {
 				Cliente clienteResponsavelParcelamento = parcelamento.getCliente();
 				BigDecimal valor = (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) == 0) ? parcelamento.getValorEntrada() : registroTipo7.getValorRecebidoFormatado();
 				
-				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, parcelamento.getId(), clienteResponsavelParcelamento, 
-						registroTipo7.getValorRecebidoFormatado(), true, guiaPagamento, ConstantesSistema.NAO);
+				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, clienteResponsavelParcelamento, 
+						registroTipo7.getValorRecebidoFormatado(), true, parcelamento, ConstantesSistema.NAO);
 				
 			} else {
 				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
@@ -51394,5 +51411,23 @@ public class ControladorArrecadacao implements SessionBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		
+		return guiaPagamento;
+	}
+	
+	private GuiaPagamentoHistorico pesquisarGuiaPagamentoHistoricoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
+		filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName()));
+		
+		return guiaPagamentoHistorico;
 	}
 }

@@ -48,4 +48,6 @@ public class FiltroGuiaPagamentoHistorico extends Filtro implements Serializable
 	public final static String EMISSAO_GUIA_PAGAMENTO = "dataEmissao";
 	
 	public final static String LOCALIDADE = "localidade";
+	
+	public final static String PARCELAMENTO_ID = "parcelamento.id";
 }

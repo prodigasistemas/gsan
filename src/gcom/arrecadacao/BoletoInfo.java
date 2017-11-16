@@ -1,6 +1,6 @@
 package gcom.arrecadacao;
 
-import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.ConstantesSistema;
@@ -29,17 +29,16 @@ public class BoletoInfo extends ObjetoTransacao {
 	private String mensagemLoja; 
 	private String linkBoleto;
 	private Date ultimaAlteracao;
-	private GuiaPagamento guiaPagamento;
+	private Parcelamento parcelamento;
 	private Short indicadoGeradoPeloGsan;
 	private Short indicadoRegistradoNoBanco;
 	
 	public BoletoInfo() {}
 	
-	public BoletoInfo(Integer id, String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
+	public BoletoInfo(String idConv, String refTran, String cpfCnpj, String nome, String endereco, String uf, String cep, String cidade,
 			String indicadorPessoa, String tpDuplicata, String tpPagamento, String valor, String dtVencimento, String urlRetorno, String mensagemLoja,
-			String linkBoleto, GuiaPagamento guiaPagamento, Short indicadoGeradoPeloGsan) {
+			String linkBoleto, Parcelamento parcelamento, Short indicadoGeradoPeloGsan) {
 		super();
-		this.id = id;
 		this.idConv = idConv;
 		this.refTran = refTran;
 		this.cpfCnpj = cpfCnpj;
@@ -56,7 +55,7 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.urlRetorno = urlRetorno;
 		this.mensagemLoja = mensagemLoja;
 		this.linkBoleto = linkBoleto;
-		this.guiaPagamento = guiaPagamento;
+		this.parcelamento = parcelamento;
 		this.ultimaAlteracao = new Date();
 		this.indicadoGeradoPeloGsan = indicadoGeradoPeloGsan;
 		this.indicadoRegistradoNoBanco = ConstantesSistema.NAO;
@@ -286,14 +285,6 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.linkBoleto = linkBoleto;
 	}
 
-	public GuiaPagamento getGuiaPagamento() {
-		return guiaPagamento;
-	}
-
-	public void setGuiaPagamento(GuiaPagamento guiaPagamento) {
-		this.guiaPagamento = guiaPagamento;
-	}
-
 	public Short getIndicadoGeradoPeloGsan() {
 		return indicadoGeradoPeloGsan;
 	}
@@ -310,6 +301,13 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.indicadoRegistradoNoBanco = indicadoRegistradoNoBanco;
 	}
 
+	public Parcelamento getParcelamento() {
+		return parcelamento;
+	}
+
+	public void setParcelamento(Parcelamento parcelamento) {
+		this.parcelamento = parcelamento;
+	}
 	
 
 }
