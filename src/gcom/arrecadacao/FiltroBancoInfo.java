@@ -17,6 +17,6 @@ public class FiltroBancoInfo extends Filtro implements Serializable {
 
     public final static String ID = "id";
     
-    public final static String GUIA_PAGAMENTO_ID = "guiaPagamento.id"; 
+    public final static String PARCELAMENTO_ID = "parcelamento.id"; 
     
 }

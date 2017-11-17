@@ -51210,21 +51210,17 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException, ErroRepositorioException {
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
-		
 		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
 	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
 	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
 		
 		BoletoInfo boletoInfo = null;
-		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		boolean foiGerado = true;
 		String tpPagamento = (primeiraVia ? "2" : "21");
 		
 		if (!primeiraVia) {
 			FiltroBancoInfo filtro = new FiltroBancoInfo();
-			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.GUIA_PAGAMENTO_ID, guiaPagamento.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, parcelamento.getId()));
 			
 			boletoInfo = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
 			
@@ -51296,7 +51292,6 @@ public class ControladorArrecadacao implements SessionBean {
 		BoletoInfo boletoInfo = new BoletoInfo(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
 				municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
 				null, parcelamento, indicadoGeradoPeloGsan);
-		boletoInfo.setParcelamento(parcelamento);
 
 		Fachada.getInstancia().inserir(boletoInfo);
 		
@@ -51385,16 +51380,17 @@ public class ControladorArrecadacao implements SessionBean {
 	private void confirmarRegistroBoleto(RegistroFichaCompensacaoTipo7Helper registroTipo7, Integer matriculaImovel) {
 		try {
 			
+			FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		    filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, registroTipo7.getIdDocumentoEmitido()));
+		    filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		    GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		    Parcelamento parcelamento = guiaPagamento.getParcelamento();
+			
 			FiltroBancoInfo filtro = new FiltroBancoInfo();
-			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.GUIA_PAGAMENTO_ID, registroTipo7.getIdDocumentoEmitido()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, guiaPagamento.getParcelamento().getId()));
 			BoletoInfo boleto = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
 			
 			if (boleto == null) {
-				FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-				filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, registroTipo7.getIdDocumentoEmitido()));
-				filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-				GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-				Parcelamento parcelamento = guiaPagamento.getParcelamento();
 				Cliente clienteResponsavelParcelamento = parcelamento.getCliente();
 				BigDecimal valor = (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) == 0) ? parcelamento.getValorEntrada() : registroTipo7.getValorRecebidoFormatado();
 				
