@@ -6438,7 +6438,7 @@ public class ControladorCobranca extends ControladorComum {
 
 				}
 
-				repositorioCobranca.removerBoletoInfo(guiaPagamento.getId());
+				repositorioCobranca.removerBoletoInfo(codigoParcelamento);
 				repositorioCobranca.removerClienteGuiaPagamentoDoParcelamento(guiaPagamento.getId());
 				repositorioCobranca.removerGuiaPagamentoCobrancaDoParcelamento(guiaPagamento.getId());
 				repositorioCobranca.removerGuiaPagamentoDoParcelamento(codigoImovel, codigoParcelamento);

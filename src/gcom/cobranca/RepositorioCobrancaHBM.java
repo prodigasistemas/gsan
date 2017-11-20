@@ -27059,16 +27059,16 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		return retorno;
 	}
 	
-	public void removerBoletoInfo(Integer idGuiaPagamento) throws ErroRepositorioException {
+	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		String delete;
 
 		try {
-			delete = "delete gcom.arrecadacao.BoletoInfo where guiaPagamento.id = :idGuiaPagamento ";
+			delete = "delete gcom.arrecadacao.BoletoInfo where parcelamento.id = :idParcelamento ";
 
-			session.createQuery(delete).setInteger("idGuiaPagamento", idGuiaPagamento.intValue()).executeUpdate();
+			session.createQuery(delete).setInteger("idParcelamento", idParcelamento.intValue()).executeUpdate();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

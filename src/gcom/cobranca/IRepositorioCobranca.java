@@ -2005,5 +2005,5 @@ public interface IRepositorioCobranca {
 
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ErroRepositorioException;
 	
-	public void removerBoletoInfo(Integer idGuiaPagamento) throws ErroRepositorioException;
+	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException;
 }
