@@ -1312,4 +1312,6 @@ public interface IRepositorioArrecadacao {
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
 
 	public void gerarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
+	
+	public void deletarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 }

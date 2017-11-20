@@ -305,6 +305,7 @@ public class ServiceLocator {
 			messageProducer.send(message);
 
 		} catch (NamingException e) {
+			e.printStackTrace();
 			throw new ServiceLocatorException(e, e.getMessage());
 		} catch (JMSException e) {
 			throw new ServiceLocatorException(e, e.getMessage());

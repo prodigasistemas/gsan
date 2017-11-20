@@ -21,6 +21,13 @@ public class BatchGerarDadosPagamentosNaoClassificadosMDB implements MessageDriv
 
 	private static final long serialVersionUID = 6776254621003404089L;
 
+	public BatchGerarDadosPagamentosNaoClassificadosMDB() {
+		super();
+	}
+	
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
+	}
+	
 	@Override
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
@@ -62,12 +69,10 @@ public class BatchGerarDadosPagamentosNaoClassificadosMDB implements MessageDriv
         }
     }
 
-	@Override
-	public void ejbRemove() throws EJBException {
+	public void ejbCreate() {
 	}
 
-	@Override
-	public void setMessageDrivenContext(MessageDrivenContext arg0) throws EJBException {
+	public void ejbRemove() throws EJBException {
 	}
 
 }

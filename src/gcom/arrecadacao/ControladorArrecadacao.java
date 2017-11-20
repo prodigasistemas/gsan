@@ -51278,6 +51278,7 @@ public class ControladorArrecadacao implements SessionBean {
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
 
 		try {
+			repositorioArrecadacao.deletarDadosPagamentosNaoClassificados(referenciaArrecadacao);
 			repositorioArrecadacao.gerarDadosPagamentosNaoClassificados(referenciaArrecadacao);
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);

@@ -32127,32 +32127,32 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 			stmt = con.createStatement();
 
-			consulta.append(" insert into arrecadacao.dados_pag_nao_class values ( ")
-					.append(" select nextvalue('" + sequence + "') pgmt_amreferenciaarrecadacao, p.dotp_id,  ")
+			consulta.append(" insert into arrecadacao.dados_pag_nao_class ( ")
+					.append(" select " + sequence + ", pgmt_amreferenciaarrecadacao, p.dotp_id,  ")
 					.append("              p.dotp_idagregador, pgmt_vlpagamento,   ")
-					.append("              case when p.dotp_id = 1 then (cnta_vlagua+cnta_vlesgoto+cnta_vldebitos-cnta_vlcreditos-cnta_vlimpostos)                       -- conta  ")
-					.append("                   when p.dotp_id = 7 then (coalesce(gpag_vldebito,0.00))                                                                   -- guia pagamento ")
-					.append("                   when p.dotp_id = 6 then (dbac_vldebito - trunc((dbac_vldebito / dbac_nnprestacaodebito),2) * dbac_nnprestacaocobradas)   -- debito a cobrar                        ")
-					.append("                   when p.dotp_id = 2 then (coalesce(gpag_vldebito,0.00))                                                                   -- entrada parcelamento ")
-					.append("                   when p.dotp_id = 3 then (cbdo_vldocumento)                                                                               -- documento cobranca ")
-					.append("                   when p.dotp_id = 5 then (fatu_vldebito)                                                                                  -- fatura ")
+					.append("              case when p.dotp_id = 1 then (coalesce((cnta_vlagua+cnta_vlesgoto+cnta_vldebitos-cnta_vlcreditos-cnta_vlimpostos),0.00)) ") // -- conta  
+					.append("                   when p.dotp_id = 7 then (coalesce(gpag_vldebito,0.00))") // -- guia pagamento 
+					.append("                   when p.dotp_id = 6 then (coalesce((dbac_vldebito - trunc((dbac_vldebito / dbac_nnprestacaodebito),2) * dbac_nnprestacaocobradas),0.00)) ") // -- debito a cobrar
+					.append("                   when p.dotp_id = 2 then (coalesce(gpag_vldebito,0.00)) ") // -- entrada parcelamento
+					.append("                   when p.dotp_id = 3 then (coalesce((cbdo_vldocumento),0.00)) ") // -- documento cobranca
+					.append("                   when p.dotp_id = 5 then (coalesce((fatu_vldebito),0.00)) ") // -- fatura
 					.append("              end, ")
-					.append("              case when c.dcst_idatual = 1 then '1' else '2' end as conta_ret,  ")
+					.append("              case when c.dcst_idatual = 1 then 1 else 2 end as conta_ret,  ")
 					.append("              pgmt_dtpagamento as dat_pagmt, p.imov_id as imov, p.clie_id as cliente,  ")
 					.append("              case when p.dotp_id = 1 then pgmt_amreferenciapagamento ")
-					.append("                   when p.dotp_id = 7 then Cast (SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int)    -- guia pagamento ")
-					.append("                   when p.dotp_id = 6 then Cast(SUBSTR (CAST (cbdo_tmemissao as Varchar),1,4)|| SUBSTR (CAST (cbdo_tmemissao as Varchar),6,2) as int)    -- debito a cobrar                        ")
-					.append("                   when p.dotp_id = 2 then Cast(SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int)    -- entrada parcelamento ")
-					.append("                   when p.dotp_id = 3 then pgmt_amreferenciapagamento -- documento cobranca ")
-					.append("                   when p.dotp_id = 5 then pgmt_amreferenciapagamento -- fatura ")
-					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id ")
+					.append("                   when p.dotp_id = 7 then Cast (SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int) ") // guia pagamento
+					.append("                   when p.dotp_id = 6 then Cast(SUBSTR (CAST (cbdo_tmemissao as Varchar),1,4)|| SUBSTR (CAST (cbdo_tmemissao as Varchar),6,2) as int) ") //  debito a cobrar
+					.append("                   when p.dotp_id = 2 then Cast(SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int) ") //  entrada parcelamento
+					.append("                   when p.dotp_id = 3 then pgmt_amreferenciapagamento  ") // documento cobranca
+					.append("                   when p.dotp_id = 5 then pgmt_amreferenciapagamento ") //  fatura
+					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id, p.pgst_idatual, now()    ")
 					.append("       from arrecadacao.aviso_bancario av, arrecadacao.arrecadador a,arrecadacao.pagamento p ")
 					.append("       left outer join faturamento.conta c on (p.cnta_id  = c.cnta_id) ")
 					.append("       left outer join faturamento.guia_pagamento g on (p.gpag_id  = g.gpag_id) ")
 					.append("       left outer join faturamento.debito_a_cobrar d on (p.dbac_id  = d.dbac_id) ")
 					.append("       left outer join cobranca.cobranca_documento cd on (p.cbdo_id  = cd.cbdo_id) ")
 					.append("       left outer join faturamento.fatura f on (p.fatu_id  = f.fatu_id)  ")
-					.append("       where p.pgst_idatual in (" + PagamentoSituacao.VALOR_NAO_CONFERE + ") ----- Vlr nao confere ")
+					.append("       where p.pgst_idatual in (" + PagamentoSituacao.VALOR_NAO_CONFERE + ", " + PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE + ", " + PagamentoSituacao.DOCUMENTO_INEXISTENTE + ")  ")
 					.append("       and pgmt_amreferenciaarrecadacao = " + referenciaArrecadacao)
 					.append("       and p.avbc_id = av.avbc_id ")
 					.append("       and av.arrc_id = a.arrc_id )");
@@ -32161,7 +32161,25 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			stmt.executeUpdate(consulta.toString());
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no SQL");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public void deletarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			String consulta = "delete DadosPagamentosNaoClassificados dados where dados.referenciaArrecadacao = :referenciaArrecadacao ";
+
+			session.createQuery(consulta).setInteger("referenciaArrecadacao", referenciaArrecadacao).executeUpdate();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

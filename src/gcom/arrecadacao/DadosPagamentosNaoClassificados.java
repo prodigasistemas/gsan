@@ -18,6 +18,7 @@ public class DadosPagamentosNaoClassificados {
 	private BigDecimal valorDocumento;
 	private boolean indicadorContaRetificada;
 	private Date dataPagamento;
+	private Date ultimaAlteracao;
 	
 	private DocumentoTipo documentoTipo;
 	private DocumentoTipo documentoAgregador;
@@ -69,6 +70,12 @@ public class DadosPagamentosNaoClassificados {
 	}
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
+	}
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 	public DocumentoTipo getDocumentoTipo() {
 		return documentoTipo;
