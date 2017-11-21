@@ -1632,15 +1632,6 @@ public class Fachada {
 		}
 	}
 
-	public void inserirImovel(Imovel imovel) {
-		try {
-			this.getControladorUtil().inserir(imovel);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
 	public Integer inserirImovelDoacaoRetorno(ImovelDoacao imovelDoacao, Usuario usuarioLogado) {
 		try {
 			return this.getControladorImovel().inserirImovelDoacaoRetorno(imovelDoacao, usuarioLogado);
@@ -40198,6 +40189,14 @@ public class Fachada {
 	public Short obterDiaVencimentoConta(Integer idImovel) {
 		try {
 			return this.getControladorFaturamento().obterDiaVencimentoConta(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public ConsumoTarifa obterConsumoTarifaPadrao(Integer idLocalidade) {
+		try {
+			return this.getControladorLocalidade().obterConsumoTarifaPadrao(idLocalidade);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
