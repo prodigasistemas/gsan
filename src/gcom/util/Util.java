@@ -4,7 +4,6 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import gcom.util.email.ServicosEmail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -15,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -48,7 +46,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -752,14 +749,6 @@ public class Util {
 		return retorno;
 	}
 	
-	public static void main (String [] args) {
-		Date data = Util.formatarDDMMAAAAParaDate("01/07/2017");
-		
-		System.out.println(data);
-		
-		System.out.println(Util.formatarDataComBarraDDMMAAAA(data));
-	}
-
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
 	 */
@@ -3838,6 +3827,34 @@ public class Util {
 		retorno = calendar.getTime();
 
 		return retorno;
+	}
+	
+	public static Date gerarDataPrimeiroDiaApartirAnoMesRefencia(Integer anoMesReferencia) {
+
+		Date retorno = null;
+
+		String dataFormatacao = "" + anoMesReferencia;
+
+		Integer ano = new Integer(dataFormatacao.substring(0, 4));
+
+		Integer mes = new Integer(dataFormatacao.substring(4, 6));
+
+		Calendar calendar = new GregorianCalendar();
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+
+		calendar.set(Calendar.MONTH, (mes - 1));
+		calendar.set(Calendar.YEAR, ano);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+		retorno = calendar.getTime();
+
+		return retorno;
+	}
+	
+	public static void main (String [] args) {
+		System.out.println(Util.gerarDataPrimeiroDiaApartirAnoMesRefencia(201712));
 	}
 
 	/**

@@ -33,7 +33,6 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.DocumentoTipo;
-import gcom.cobranca.MotivoNaoGeracaoDocCobranca;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.fachada.Fachada;
@@ -32169,19 +32168,42 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	public void deletarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException {
-
 		Session session = HibernateUtil.getSession();
-
 		try {
-
 			String consulta = "delete DadosPagamentosNaoClassificados dados where dados.referenciaArrecadacao = :referenciaArrecadacao ";
 
 			session.createQuery(consulta).setInteger("referenciaArrecadacao", referenciaArrecadacao).executeUpdate();
-
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public Collection<ArrecadadorMovimentoItem> pesquisarItensNaoIdentificados(Date dataPesquisa) throws ErroRepositorioException {
+
+		Collection retorno = new ArrayList();
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select item from ArrecadadorMovimentoItem item ")
+					.append(" inner join fetch item.arrecadadorMovimento movimento ")
+					.append(" where item.ultimaAlteracao > :dataPesquisa ")
+					.append(" and item.indicadorAceitacao = :indicadorAceitacao ")
+					.append(" and item.registroCodigo = :codigo ");
+
+			retorno = session.createSQLQuery(consulta.toString())
+				.setDate("dataPesquisa",dataPesquisa)
+				.setShort("indicadorAceitacao", ConstantesSistema.NAO)
+				.setInteger("codigo", RegistroCodigo.CODIGO_SETE)
+				.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
 }
