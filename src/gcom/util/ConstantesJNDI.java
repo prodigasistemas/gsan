@@ -28,6 +28,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_FATURAMENTO_SEJB = "";
 	public static String CONTROLADOR_TARIFA_SOCIAL_SEJB = "";
 	public static String CONTROLADOR_PARCELAMENTO = "";
+	public static String CONTROLADOR_LOJA_VIRTUAL = "";
 
 	public static String QUEUE_CONTROLADOR_FATURAMENTO_MDB = "";
 	public static String QUEUE_CONTROLADOR_ARRECADACAO_MDB = "";
@@ -302,7 +303,8 @@ public class ConstantesJNDI {
 			CONTROLADOR_ATUALIZACAO_CADASTRO = propriedades.getProperty("ControladorAtualizacaoCadastro");
 			CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB = propriedades.getProperty("ControladorCobrancaPorResultado");
 			CONTROLADOR_PARCELAMENTO = propriedades.getProperty("ControladorParcelamento");
-
+			CONTROLADOR_LOJA_VIRTUAL = propriedades.getProperty("ControladorLojaVirtual");
+			
 			CONTROLADOR_USUARIO_SEJB = propriedades.getProperty("ControladorUsuario");
 			CONTROLADOR_GERENCIAL_CADASTRO_SEJB = propriedades.getProperty("ControladorGerencialCadastro");
 			CONTROLADOR_GERENCIAL_COBRANCA_SEJB = propriedades.getProperty("ControladorGerencialCobranca");

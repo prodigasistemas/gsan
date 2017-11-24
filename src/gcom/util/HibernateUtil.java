@@ -198,6 +198,7 @@ import gcom.cadastro.EmailClienteAlterado;
 import gcom.cadastro.EmpresaContratoCadastro;
 import gcom.cadastro.EmpresaContratoCadastroAtributo;
 import gcom.cadastro.EnvioEmail;
+import gcom.cadastro.LojaAtendimento;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.VersaoMobile;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
@@ -1088,6 +1089,7 @@ public class HibernateUtil {
 					.addClass(ClienteRetorno.class)
 					.addClass(ClienteEnderecoRetorno.class)
 					.addClass(ClienteImovelRetorno.class)
+					.addClass(LojaAtendimento.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //

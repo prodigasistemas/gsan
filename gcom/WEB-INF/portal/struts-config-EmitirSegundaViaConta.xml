@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
 <struts-config>
-	
 	<form-beans>
 		<form-bean name="EmitirSegundaViaContaActionForm"
 			type="gcom.gui.portal.EmitirSegundaViaContaActionForm" />
 	</form-beans>
-	
-	<!--******************* PÁGINAS GLOBAIS *******************-->
+
 	<global-forwards />
 	<action-mappings>
 
-		<action name="EmitirSegundaViaContaActionForm"
-			type="gcom.gui.portal.EmitirSegundaViaContaAction"
-			validate="false" scope="session"
-			path="/emitirSegundaViaContaAction">
-			<forward name="emitirSegundaViaContaAction"
-				path="/jsp/portal/emitir_segunda_via_conta.jsp"/>
-			<forward name="servicosPortalCompesaAction"
-				path="/jsp/portal/servicos.jsp"/>
-			<forward name="matriculaSemDebito"
-				path="/jsp/portal/servicos.jsp"/>
-			<forward name="erroSistemaPortal"
-				path="/jsp/portal/emitir_segunda_via_conta.jsp"/>
+		<action name="EmitirSegundaViaContaActionForm" 
+		    type="gcom.gui.portal.EmitirSegundaViaContaAction"
+			validate="false" 
+			scope="session" 
+			path="/segunda-via-conta">
+			
+			<forward name="segunda-via-conta" path="/jsp/portal/emitir_segunda_via_conta.jsp" />
+			<forward name="acessar-portal" path="/acessar-portal.do" redirect="true"/>
 		</action>
+		
 	</action-mappings>
 
-	<message-resources null="false"
-		parameter="gcom.properties.application" />
+	<message-resources null="false" parameter="gcom.properties.application" />
 </struts-config>
 

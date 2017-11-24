@@ -18,7 +18,7 @@
 				name="exibirInserirCadastroEmailClientePortalAction"
 				path="/jsp/portal/cadastro_email_cliente_portal_inserir.jsp" />
 			<!-- <forward name="voltarParaServicos"
-				path="/exibirServicosPortalCompesaAction.do?method=servicos" />
+				path="/portal.do?method=servicos" />
 			-->
 		</action>
 

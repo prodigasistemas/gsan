@@ -29,13 +29,13 @@
 	<body>
 		<logic:present scope="request" name="voltarInformacoes">
 			<div id="voltar-informacoes" class="serv-int btn-voltar-informacoes" >
-				<a href="exibirInformacoesPortalCompesaAction.do" title="Voltar Para o Menu de Informações">
+				<a href="exibirInformacoesPortalAction.do" title="Voltar Para o Menu de Informações">
 		   			<img src="/gsan/imagens/portal/general/btn-voltar-informacoes.gif" alt="Voltar Para o Menu de Informações" />
 				</a>
 			</div>
 		</logic:present>
 		<div id="barra-informacoes">
-			<a href="exibirServicosPortalCompesaAction.do?menu=sim" title="Sair"><img src="/gsan/imagens/portal/general/btn-sair.png" alt="Sair" style="float: right;" /></a>
+			<a href="portal.do?menu=sim" title="Sair"><img src="/gsan/imagens/portal/general/btn-sair.png" alt="Sair" style="float: right;" /></a>
 		</div>
 		
 		<!-- Botão download Adobe Reader - Start -->

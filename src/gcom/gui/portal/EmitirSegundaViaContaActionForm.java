@@ -17,7 +17,7 @@ public class EmitirSegundaViaContaActionForm extends ValidatorActionForm {
 	private String matricula;
 
 	private String nomeUsuario;
-	
+
 	public String getCpfCnpjSolicitante() {
 		return cpfCnpjSolicitante;
 	}

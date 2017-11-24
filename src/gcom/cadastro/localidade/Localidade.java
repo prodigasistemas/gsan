@@ -134,6 +134,11 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity {
 		this.logradouroBairro = logradouroBairro;
 	}
 
+	public Localidade(String descricao) {
+		super();
+		this.descricao = descricao;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
