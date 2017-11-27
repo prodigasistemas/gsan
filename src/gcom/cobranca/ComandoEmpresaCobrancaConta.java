@@ -79,12 +79,15 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 	private Integer qtdDiasVencimento;
 
 	private Short indicadorCobrancaTelemarketing;
-	
+
 	private Integer qtdMaximaClientes;
-	
+
 	private Short indicadorGerarComDebitoPreterito;
 
-	public ComandoEmpresaCobrancaConta() {}
+	private Short indicadorPossuiCpfCnpj;
+
+	public ComandoEmpresaCobrancaConta() {
+	}
 
 	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = { "id" };
@@ -369,5 +372,13 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setIndicadorGerarComDebitoPreterito(Short indicadorGerarComDebitoPreterito) {
 		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
+	}
+
+	public Short getIndicadorPossuiCpfCnpj() {
+		return indicadorPossuiCpfCnpj;
+	}
+
+	public void setIndicadorPossuiCpfCnpj(Short indicadorPossuiCpfCnpj) {
+		this.indicadorPossuiCpfCnpj = indicadorPossuiCpfCnpj;
 	}
 }

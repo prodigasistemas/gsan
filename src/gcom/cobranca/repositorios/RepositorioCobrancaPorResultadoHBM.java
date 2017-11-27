@@ -213,7 +213,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append(" INNER JOIN cadastro.cliente_conta clienteConta ON clienteConta.cnta_id = conta.cnta_id AND clienteConta.crtp_id = 2 ");
 		}
 		
-		if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
+		if (comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
 			consulta.append(" INNER JOIN cadastro.cliente_conta cc ON cc.cnta_id = conta.cnta_id AND cc.clct_icnomeconta = 1 ");
 		}
 		
@@ -221,9 +221,14 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				.append(" LEFT JOIN faturamento.conta_categoria contaCategoria on conta.cnta_id = contaCategoria.cnta_id ")
 				.append(" LEFT JOIN cobranca.empresa_cobranca_conta empresaCobrancaConta on empresaCobrancaConta.imov_id = imovel.imov_id ");
 		
+		consulta.append(" INNER JOIN cadastro.cliente_imovel clienteImovel ON imovel.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND clienteImovel.crtp_id <> 1 ");
+		
+		if (comando.getIndicadorPossuiCpfCnpj().equals(ConstantesSistema.SIM)) {
+			consulta.append(" INNER JOIN cadastro.cliente cliente ON cliente.clie_id = clienteImovel.clie_id ");
+		}
+		
 		if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
-			consulta.append(" INNER JOIN cadastro.cliente_imovel clienteImovel ON imovel.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND clienteImovel.crtp_id <> 1 ")
-					.append(" INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null ");
+			consulta.append(" INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null ");
 		}
 		
 		if (comando.getLocalidadeInicial() != null
@@ -318,6 +323,10 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		String valorConta = "coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)";
 		if (comando.getValorMinimoConta() != null) {
 			consulta.append(" AND " + valorConta + " BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
+		}
+		
+		if (comando.getIndicadorPossuiCpfCnpj().equals(ConstantesSistema.SIM)) {
+			consulta.append(" AND (cliente.clie_nncpf IS NOT NULL OR cliente.clie_nncnpj IS NOT NULL) ");
 		}
 		
 		return consulta.toString();

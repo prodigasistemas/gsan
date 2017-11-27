@@ -277,6 +277,7 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 			form.setQuantidadeDiasVencimento("25");
 			form.setIndicadorCobrancaTelemarketing("1");
 			form.setIndicadorGerarComDebitoPreterito("1");
+			form.setIndicadorPossuiCpfCnpj("1");
 
 			FiltroUnidadeNegocio filtroUnidadeNegocio = new FiltroUnidadeNegocio();
 			filtroUnidadeNegocio.setCampoOrderBy(FiltroUnidadeNegocio.NOME);
@@ -661,6 +662,10 @@ public class ExibirInformarContasEmCobrancaAction extends GcomAction {
 		
 		if (form.getIndicadorGerarComDebitoPreterito() != null && !form.getIndicadorGerarComDebitoPreterito().trim().equals("")) {
 			comando.setIndicadorGerarComDebitoPreterito(new Short(form.getIndicadorGerarComDebitoPreterito()));
+		}
+		
+		if (form.getIndicadorPossuiCpfCnpj() != null && !form.getIndicadorPossuiCpfCnpj().trim().equals("")) {
+			comando.setIndicadorPossuiCpfCnpj(new Short(form.getIndicadorPossuiCpfCnpj()));
 		}
 
 		if (algumParametroInformado) {
