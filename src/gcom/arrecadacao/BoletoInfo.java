@@ -32,6 +32,8 @@ public class BoletoInfo extends ObjetoTransacao {
 	private Parcelamento parcelamento;
 	private Short indicadoGeradoPeloGsan;
 	private Short indicadoRegistradoNoBanco;
+	private Date dataRegistroBanco;
+	private Date dataCriacao;
 	
 	public BoletoInfo() {}
 	
@@ -59,6 +61,7 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.ultimaAlteracao = new Date();
 		this.indicadoGeradoPeloGsan = indicadoGeradoPeloGsan;
 		this.indicadoRegistradoNoBanco = ConstantesSistema.NAO;
+		this.dataCriacao = new Date();
 	}
 
 	@Override
@@ -307,6 +310,22 @@ public class BoletoInfo extends ObjetoTransacao {
 
 	public void setParcelamento(Parcelamento parcelamento) {
 		this.parcelamento = parcelamento;
+	}
+
+	public Date getDataRegistroBanco() {
+		return dataRegistroBanco;
+	}
+
+	public void setDataRegistroBanco(Date dataRegistroBanco) {
+		this.dataRegistroBanco = dataRegistroBanco;
+	}
+
+	public Date getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 	
 

@@ -51397,14 +51397,19 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, clienteResponsavelParcelamento, 
 						registroTipo7.getValorRecebidoFormatado(), true, parcelamento, ConstantesSistema.NAO);
-				
+				boletoInfo.setDataRegistroBanco(new Date());
+				repositorioUtil.atualizar(boletoInfo);
 			} else {
 				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
 					boleto.setValor(registroTipo7.getValorRecebidoFormatado().toString());
 				}
 				boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
+				if (boleto.getDataRegistroBanco() == null) {
+					boleto.setDataRegistroBanco(new Date());
+				}
 				repositorioUtil.atualizar(boleto);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
