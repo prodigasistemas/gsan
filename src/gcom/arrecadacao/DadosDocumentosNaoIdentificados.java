@@ -12,11 +12,12 @@ public class DadosDocumentosNaoIdentificados {
 	private Integer id;
 	private Integer referenciaArrecadacao;
 	private BigDecimal valorDocumento;
-	private Date dataPagamento;
+	private Date dataDocumento;
 	private Date ultimaAlteracao;
 	
 	private AvisoBancario avisoBancario;
 	private Arrecadador arrecadador;
+	private ArrecadadorMovimentoItem item;
 	
 	public DadosDocumentosNaoIdentificados(){
 	}
@@ -39,11 +40,11 @@ public class DadosDocumentosNaoIdentificados {
 	public void setValorDocumento(BigDecimal valorDocumento) {
 		this.valorDocumento = valorDocumento;
 	}
-	public Date getDataPagamento() {
-		return dataPagamento;
+	public Date getDataDocumento() {
+		return dataDocumento;
 	}
-	public void setDataPagamento(Date dataPagamento) {
-		this.dataPagamento = dataPagamento;
+	public void setDataDocumento(Date dataDocumento) {
+		this.dataDocumento= dataDocumento;
 	}
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
@@ -64,9 +65,17 @@ public class DadosDocumentosNaoIdentificados {
 		this.arrecadador = arrecadador;
 	}
 	
+	public ArrecadadorMovimentoItem getItem() {
+		return item;
+	}
+
+	public void setItem(ArrecadadorMovimentoItem item) {
+		this.item = item;
+	}
+
 	public void setDadosCodigoBarras(RegistroHelperCodigoG codigoBarras){
-		this.referenciaArrecadacao = Util.recuperaAnoMesDaData(Util.converteStringParaDateAmericana(codigoBarras.getDataPagamento()));
+		this.referenciaArrecadacao = Util.recuperaAnoMesDaData(Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento()));
 		this.valorDocumento = new BigDecimal(codigoBarras.getValorRecebido());
-		this.dataPagamento = Util.converteStringParaDateAmericana(codigoBarras.getDataPagamento());
+		this.dataDocumento = Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento());
 	}
 }

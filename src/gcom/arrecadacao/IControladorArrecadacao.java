@@ -807,4 +807,7 @@ public interface IControladorArrecadacao {
 	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException;
 	
 	public void gerarDadosPagamentosNaoClassificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
+	
+	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
+	
 }

@@ -197,6 +197,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 
 	public static final int GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = 16041;
 	
+	public static final int GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = 16042;
+	
 	private Integer id;
 
 	private String descricao;

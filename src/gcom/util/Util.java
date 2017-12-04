@@ -290,7 +290,21 @@ public class Util {
 
 		return ano + mes;
 	}
+	
+	public static Date formatarYYYYMMDDParaData(String data) {
+		String ano = data.substring(0, 4);
+		String mes = data.substring(4, 6);
+		String dia = data.substring(6, 8);
 
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
 	public static int formatarMesAnoParaAnoMes(int mesAno) {
 
 		String mesAnoString = "" + mesAno;
@@ -3853,10 +3867,6 @@ public class Util {
 		return retorno;
 	}
 	
-	public static void main (String [] args) {
-		System.out.println(Util.gerarDataPrimeiroDiaApartirAnoMesRefencia(201712));
-	}
-
 	/**
 	 * Gera uma data a partir do ano/mês de referência setando o primeiro dia do
 	 * mês.

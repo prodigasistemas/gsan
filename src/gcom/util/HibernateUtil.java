@@ -11,6 +11,7 @@ import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
+import gcom.arrecadacao.DadosDocumentosNaoIdentificados;
 import gcom.arrecadacao.DadosPagamentosNaoClassificados;
 import gcom.arrecadacao.DeducaoTipo;
 import gcom.arrecadacao.Devolucao;
@@ -1382,6 +1383,7 @@ public class HibernateUtil {
 					.addClass(ArrecadacaoDadosDiariosAuxiliar.class)
 					.addClass(BoletimInformacoesGerenciais.class)
 					.addClass(DadosPagamentosNaoClassificados.class)
+					.addClass(DadosDocumentosNaoIdentificados.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.operacional //

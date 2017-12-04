@@ -27,7 +27,7 @@ public class DadosPagamentosNaoClassificados {
 	private AvisoBancario avisoBancario;
 	private Arrecadador arrecadador;
 	private PagamentoSituacao pagamentoSituacao;
-	
+	private ArrecadadorMovimentoItem item;
 	
 	public Integer getId() {
 		return id;
@@ -119,5 +119,10 @@ public class DadosPagamentosNaoClassificados {
 	public void setPagamentoSituacao(PagamentoSituacao pagamentoSituacao) {
 		this.pagamentoSituacao = pagamentoSituacao;
 	}
-	
+	public ArrecadadorMovimentoItem getItem() {
+		return item;
+	}
+	public void setItem(ArrecadadorMovimentoItem item) {
+		this.item = item;
+	}
 }

@@ -793,6 +793,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 			consulta = "SELECT avbc " + "FROM AvisoBancario avbc "
 					+ "INNER JOIN avbc.arrecadadorMovimento armv "
+					+ "INNER JOIN avbc.arrecadacaoForma arrecadacaoForma "
 					+ "WHERE armv.id = :idArrecadadorMovimento ";
 
 			retorno = session.createQuery(consulta).setInteger(
@@ -32144,7 +32145,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("                   when p.dotp_id = 2 then Cast(SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int) ") //  entrada parcelamento
 					.append("                   when p.dotp_id = 3 then pgmt_amreferenciapagamento  ") // documento cobranca
 					.append("                   when p.dotp_id = 5 then pgmt_amreferenciapagamento ") //  fatura
-					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id, p.pgst_idatual, now()    ")
+					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id, p.pgst_idatual, now(), p.amit_id    ")
 					.append("       from arrecadacao.aviso_bancario av, arrecadacao.arrecadador a,arrecadacao.pagamento p ")
 					.append("       left outer join faturamento.conta c on (p.cnta_id  = c.cnta_id) ")
 					.append("       left outer join faturamento.guia_pagamento g on (p.gpag_id  = g.gpag_id) ")
@@ -32152,7 +32153,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("       left outer join cobranca.cobranca_documento cd on (p.cbdo_id  = cd.cbdo_id) ")
 					.append("       left outer join faturamento.fatura f on (p.fatu_id  = f.fatu_id)  ")
 					.append("       where p.pgst_idatual in (" + PagamentoSituacao.VALOR_NAO_CONFERE + ", " + PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE + ", " + PagamentoSituacao.DOCUMENTO_INEXISTENTE + ")  ")
-					.append("       and pgmt_amreferenciaarrecadacao = " + referenciaArrecadacao)
+					//.append("       and pgmt_amreferenciaarrecadacao = " + referenciaArrecadacao)
 					.append("       and p.avbc_id = av.avbc_id ")
 					.append("       and av.arrc_id = a.arrc_id )");
 
@@ -32182,6 +32183,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	public Collection<ArrecadadorMovimentoItem> pesquisarItensNaoIdentificados(Date dataPesquisa) throws ErroRepositorioException {
 
+		
 		Collection retorno = new ArrayList();
 		Session session = HibernateUtil.getSession();
 		StringBuilder consulta = new StringBuilder();
@@ -32189,11 +32191,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 			consulta.append("select item from ArrecadadorMovimentoItem item ")
 					.append(" inner join fetch item.arrecadadorMovimento movimento ")
-					.append(" where item.ultimaAlteracao > :dataPesquisa ")
-					.append(" and item.indicadorAceitacao = :indicadorAceitacao ")
+					.append(" where item.indicadorAceitacao = :indicadorAceitacao ")
+					.append(" and item.ultimaAlteracao >= :dataPesquisa ")
 					.append(" and item.registroCodigo = :codigo ");
 
-			retorno = session.createSQLQuery(consulta.toString())
+			retorno = session.createQuery(consulta.toString())
 				.setDate("dataPesquisa",dataPesquisa)
 				.setShort("indicadorAceitacao", ConstantesSistema.NAO)
 				.setInteger("codigo", RegistroCodigo.CODIGO_SETE)
@@ -32205,5 +32207,18 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public void deletarDadosDocumentosNaoIdentificados(Integer referenciaArrecadacao) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "delete DadosDocumentosNaoIdentificados dados where dados.referenciaArrecadacao = :referenciaArrecadacao ";
+
+			session.createQuery(consulta).setInteger("referenciaArrecadacao", referenciaArrecadacao).executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }

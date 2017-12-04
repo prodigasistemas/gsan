@@ -53,5 +53,9 @@
 			<column name="pgst_idatual"/>
 		</many-to-one>
 		
+		<many-to-one name="item" class="gcom.arrecadacao.ArrecadadorMovimentoItem" >
+			<column name="amit_id"/>
+		</many-to-one>
+		
 	</class>
 </hibernate-mapping>
