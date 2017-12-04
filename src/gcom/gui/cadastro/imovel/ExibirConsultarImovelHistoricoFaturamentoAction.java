@@ -351,7 +351,6 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		list.addAll(Fachada.getInstancia().obterDebitoACobrarImovel(imovel.getId()));
 		Collections.sort(list, new Comparator<DebitoACobrar>() {
 
-			@Override
 			public int compare(DebitoACobrar o1, DebitoACobrar o2) {
 				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
 			}
@@ -367,7 +366,6 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		list.addAll(Fachada.getInstancia().obterDebitoACobrarHistoricoImovel(imovel.getId()));
 		Collections.sort(list, new Comparator<DebitoACobrarHistorico>() {
 
-			@Override
 			public int compare(DebitoACobrarHistorico o1, DebitoACobrarHistorico o2) {
 				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
 			}
@@ -383,7 +381,6 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		list.addAll(Fachada.getInstancia().obterCreditoARealizarImovel(imovel.getId()));
 		Collections.sort(list, new Comparator<CreditoARealizar>() {
 
-			@Override
 			public int compare(CreditoARealizar o1, CreditoARealizar o2) {
 				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
 			}
@@ -399,7 +396,6 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		list.addAll(Fachada.getInstancia().obterCreditoARealizarHistoricoImovel(imovel.getId()));
 		Collections.sort(list, new Comparator<CreditoARealizarHistorico>() {
 
-			@Override
 			public int compare(CreditoARealizarHistorico o1, CreditoARealizarHistorico o2) {
 				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
 			}

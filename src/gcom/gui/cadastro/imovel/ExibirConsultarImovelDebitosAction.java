@@ -891,7 +891,6 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		list.addAll(colecao);
 		Collections.sort(list, new Comparator<DebitoACobrar>() {
 
-			@Override
 			public int compare(DebitoACobrar o1, DebitoACobrar o2) {
 				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
 			}
@@ -907,7 +906,6 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		list.addAll(colecao);
 		Collections.sort(list, new Comparator<CreditoARealizar>() {
 
-			@Override
 			public int compare(CreditoARealizar o1, CreditoARealizar o2) {
 				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
 			}
