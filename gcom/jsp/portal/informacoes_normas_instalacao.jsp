@@ -88,7 +88,7 @@
 	        <!-- Content - Start -->
 		   	<div id="content">
 		        <%@ include file="/jsp/portal/cabecalhoInformacoes.jsp"%>
-		        <html:form action="/exibirInformacoesPortalCompesaAction" type="gcom.gui.portal.ExibirInformacoesPortalCompesaActionForm">		        		
+		        <html:form action="/exibirInformacoesPortalAction" type="gcom.gui.portal.ExibirInformacoesPortalActionForm">		        		
 		        	<div id="pagina" class="serv-int" style="width:880px;">
 		        		<p>&nbsp;</p>						
 	        			<h3>
@@ -139,24 +139,24 @@
 							<br />
 							<div id="links" style="width: 525px">
 								<logic:present name="arquivoLeiNormaMedicao" scope="request">
-									<a href="exibirInformacoesPortalCompesaAction.do?modo=verLeiIndividualizacao" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
-									<em><bean:write property="descrissaoLeiIndividualizacao" name="ExibirInformacoesPortalCompesaActionForm" /></em>
+									<a href="exibirInformacoesPortalAction.do?modo=verLeiIndividualizacao" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
+									<em><bean:write property="descrissaoLeiIndividualizacao" name="ExibirInformacoesPortalActionForm" /></em>
 									<br />
 									<br />
 									<br />
 								</logic:present>
 								
 								<logic:present name="arquivoNormaCO" scope="request">
-									<a href="exibirInformacoesPortalCompesaAction.do?modo=verNormaCO" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
-									<em><bean:write property="descrissaoNormaCO" name="ExibirInformacoesPortalCompesaActionForm" /></em>
+									<a href="exibirInformacoesPortalAction.do?modo=verNormaCO" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
+									<em><bean:write property="descrissaoNormaCO" name="ExibirInformacoesPortalActionForm" /></em>
 									<br />
 									<br />
 									<br />
 								</logic:present>
 								
 								<logic:present name="arquivoNormaCM" scope="request">
-									<a href="exibirInformacoesPortalCompesaAction.do?modo=verNormaCM" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
-									<em><bean:write property="descrissaoNormaCM" name="ExibirInformacoesPortalCompesaActionForm" /></em>
+									<a href="exibirInformacoesPortalAction.do?modo=verNormaCM" target="_blank"><img src="/gsan/imagens/portal/general/botao_pdf.gif" style="float: left"/></a>
+									<em><bean:write property="descrissaoNormaCM" name="ExibirInformacoesPortalActionForm" /></em>
 								</logic:present>
 							</div>
 							<br />

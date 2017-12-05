@@ -19,7 +19,7 @@
 			<forward name="exibirInserirCadastroContaBrailePortal"
 				path="/jsp/portal/cadastro_conta_braile_portal_inserir.jsp" />
 			<forward name="voltarParaServicos"
-				path="/exibirServicosPortalCompesaAction" />
+				path="/portal" />
 		</action>
 
 		<action name="InserirCadastroContaBrailePortalActionForm"

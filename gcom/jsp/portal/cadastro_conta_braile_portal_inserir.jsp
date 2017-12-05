@@ -54,7 +54,7 @@
 					});
 				
 					$('#voltarServicos').live('click', function(){
-						window.location.href = '/gsan/exibirServicosPortalCompesaAction.do?method=voltarServico';
+						window.location.href = '/gsan/portal.do?method=voltarServico';
 					});
 				});
 			</script>
@@ -70,7 +70,7 @@
 					});
 				
 					$('#voltar').live('click', function(){
-						window.location.href = '/gsan/exibirServicosPortalCompesaAction.do?method=voltarServico';
+						window.location.href = '/gsan/portal.do?method=voltarServico';
 					});
 				});
 			</script>
@@ -468,11 +468,11 @@
 						type="gcom.gui.portal.InserirCadastroContaBrailePortalActionForm"
 						method="post"
 						onsubmit="return validateInserirCadastroContaBrailePortalActionForm(this);">
-						<html:hidden property="matricula" value="${ExibirServicosPortalCompesaActionForm.matricula}" />
-						<html:hidden property="nomeCliente" value="${ExibirServicosPortalCompesaActionForm.nomeUsuario}" />
+						<html:hidden property="matricula" value="${ExibirPortalActionForm.matricula}" />
+						<html:hidden property="nomeCliente" value="${ExibirPortalActionForm.nomeUsuario}" />
 						<html:hidden property="cpfCnpjCliente" value='<bean:write name="cpfCnpj" scope="session" />' />
 						
-						<html:hidden property="confirmarNomeCliente" value="${ExibirServicosPortalCompesaActionForm.nomeUsuario}" />
+						<html:hidden property="confirmarNomeCliente" value="${ExibirPortalActionForm.nomeUsuario}" />
 						<html:hidden property="confirmarCpfCnpjCliente" value='<bean:write name="cpfCnpj" scope="session" />' />
 						<html:hidden property="desabilitaCampos" />
 						

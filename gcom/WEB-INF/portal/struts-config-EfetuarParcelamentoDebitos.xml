@@ -17,7 +17,7 @@
 			<forward name="efetuarParcelamento"
 				path="/jsp/portal/parcelamento_debitos_portal_efetuar.jsp"/>
 			<forward name="voltarParaServicos"
-				path="/exibirServicosPortalCompesaAction.do?method=servicos" />
+				path="/portal.do?method=servicos" />
 			<forward name="matriculaPossuiParcelamentoNaoQuitado"
 				path="/jsp/portal/servicos.jsp"/>
 			<forward name="imovelSemDebitos"

@@ -11944,47 +11944,6 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 	}
 	
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0001] Selecionar Municípios da Região
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @return colecaoDeMunicipios
-	 * @throws ControladorException
-	 */
-	public Collection<Object[]> pesquisarMunicipiosLojaVirtualCompesa() throws ControladorException {
-		try {
-			return repositorioAtendimentoPublico.pesquisarMunicipiosLojaVirtualCompesa();
-		} catch (ErroRepositorioException erx) {
-			erx.printStackTrace();
-			throw new ControladorException("erro.sistema", erx);
-		}
-	}
-	
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0002] Exibir dados da loja
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @param id do municipio
-	 * @return colecaoDeLojas
-	 * @throws ControladorException
-	 */
-	public Collection<Object[]> pesquisarLojasDeAtendimentoLojaVirtualCompesa(Integer idMunicipio) throws ControladorException {
-		try {
-			return repositorioAtendimentoPublico.pesquisarLojasDeAtendimentoLojaVirtualCompesa(idMunicipio);
-		} catch (ErroRepositorioException erx) {
-			erx.printStackTrace();
-			throw new ControladorException("erro.sistema", erx);
-		}
-	}
-	
-	
-	
 	public void ProcessarEncerramentoOSFiscalizacaoDecursoPrazo(Integer idFuncionalidadeIniciada) throws ControladorException{
 		
 				

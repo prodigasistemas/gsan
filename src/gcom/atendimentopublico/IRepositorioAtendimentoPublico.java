@@ -26,55 +26,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Interfe, que disponibiliza os serviços do Repositório Atendimento Público 
- *
- * @author Leandro Cavalcanti
- * @date 10/07/2006
- */
 public interface IRepositorioAtendimentoPublico {
 	
-	/**
-	 * [UC-0355] - Efetuar Corte de Ligaçã de Àgua
-	 * [SB001] Atualizar Hidrometro - (corte de ligação de água)
-	 * Atualizar um os campos lastId,dataUltimaAtualização do imovel na base
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public void atualizarLigacaoAgua(Integer idImovel, Integer idLigacaoAguaSituacao, Integer numeroSeloCorte ) throws ErroRepositorioException;
-	/**
-	 * [UC-0355] - Efetuar Corte de Ligaçã de Àgua
-	 * [SB001] Atualizar Hidrometro - (corte de ligação de água)
-	 * Atualizar os campos hidi_nnleituracorte e hidi_tmultimaalteracao de HidrometroInstalacaoHistorico
-	 *			
-	 *
-	 * @author Leandro Cavalcanti
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
+
 	public void atualizarHidrometroLIgacaoAgua(Integer imovelId,Integer numeroLeituraCorte) throws ErroRepositorioException ;
 		
-	/**
-	 * [UC-0362] - Efetuar Instalação de Hidrômetro
-	 * [SB002] Atualizar Ligação de Água 
-	 * Atualizar os campos hidi_id e lagu_tmultimaalteracao de LigacaoAgua
-	 * 		
-	 * @exception ErroRepositorioExceptions
-	 *                Descrição da exceção
-	 *
-	 * @author Ana Maria
-	 * @date 13/07/2006
-	 *
-	 * @param idLigacaoAgua
-	 * @param idHidrometroInstalacaoHistorico
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarHidrometroInstalacaoHistoricoLigacaoAgua(Integer idLigacaoAgua, Integer idHidrometroInstalacaoHistorico) throws ErroRepositorioException;
 	
 	/**
@@ -1042,31 +999,6 @@ public interface IRepositorioAtendimentoPublico {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<Object[]> pesquisarSolicitacaoTipoLojaVirtual() throws ErroRepositorioException;
-	
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0001] Selecionar Municípios da Região
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @return colecaoDeMunicipios
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<Object[]> pesquisarMunicipiosLojaVirtualCompesa() throws ErroRepositorioException;
-
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0005] Exibir Dados da Loja
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @param id do municipio
-	 * @return colecaoDeLojas
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<Object[]> pesquisarLojasDeAtendimentoLojaVirtualCompesa(Integer idMunicipio) throws ErroRepositorioException;
 	
 	/**
 	 * [UC1178] Gerar Relatório de Acompanhamento dos Boletins de Medição

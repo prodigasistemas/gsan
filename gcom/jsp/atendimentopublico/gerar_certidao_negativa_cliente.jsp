@@ -22,8 +22,8 @@
 	type="text/css">
 <%
 	Boolean semPermissao = (Boolean) session.getAttribute("semPermissao");
-%>	
-	
+%>
+
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 <html:javascript staticJavascript="false"
@@ -39,57 +39,57 @@
 
 		var form = document.forms[0];
 
-		if (tipoConsulta == 'cliente') {      		
+		if (tipoConsulta == 'cliente') {
 	      form.idCliente.value = codigoRegistro;
 		  form.action = 'exibirGerarCertidaoNegativaClienteAction.do?objetoConsulta=1';
 		  form.submit();
 		}
 	}
-	
+
 	function validarForm(){
-		
+
 		var form = document.forms[0];
-		if(validateGerarCertidaoNegativaClienteActionForm(form) && 
+		if(validateGerarCertidaoNegativaClienteActionForm(form) &&
 			validarCampos() ){
-			
+
 			submeterFormPadrao(form);
 		}
 	}
-	
+
 	function validarCampos(){
-		
+
 		var form = document.forms[0];
-		
+
 		if ( form.idCliente.value == null || form.idCliente.value == "" ){
 			alert("Informe o cliente cuja certidão negativa será gerada.");
-			return false;		
-		}		
-		
+			return false;
+		}
+
 		return true;
 	}
-	
+
 	function limparClienteTecla(){
-	
+
 		var form = document.forms[0];
-		
+
 		form.nomeCliente.value = "";
 		form.cpfCnpj.value = "";
 	}
-	
+
 	function limparForm(){
-	
+
 		var form = document.forms[0];
-		
+
 		form.idCliente.value = "";
 		form.nomeCliente.value = "";
 		form.cpfCnpj.value = "";
 	}
-	
+
 	function validaEnterCliente(tecla, caminhoActionReload, nomeCampo) {
 	var form = document.forms[0];
-	
+
 	validaEnterComMensagem(tecla, caminhoActionReload, nomeCampo, "Código do Cliente");
-	
+
 	if(form.idCliente.value.length > 0) {
 		form.tipoRelacao.value = <%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>;
 		form.responsavel[1].checked = true;
@@ -100,7 +100,7 @@
 		form.nomeCliente.value = "";
 		form.cpfCnpj.value = "";
 		form.tipoRelacao.disabled = false;
-		
+
 		<% if (semPermissao == null || !semPermissao.equals(new Boolean(true))) {	%>
 			form.responsavel[0].disabled = false;
 			form.responsavel[2].disabled = false;
@@ -235,10 +235,10 @@
 						style="background-color:#EFEFEF; border:0; color: #000000"
 						size="40" maxlength="40" /> </strong></td>
 				</tr>
-				
-				<tr> 
+
+				<tr>
                 <td><strong>Responsável:</strong></td>
-                <td colspan="6"><span class="style2"><strong> 
+                <td colspan="6"><span class="style2"><strong>
                   <label>
                   <logic:present name="semPermissao" scope="session">
                   <html:radio property="responsavel" value="0" disabled="true" />
@@ -247,17 +247,17 @@
 				  <html:radio property="responsavel" value="0" />
 				  </logic:notPresent>
  				  Indicado na Conta</label>
-                  <label> 
+                  <label>
                    <logic:present name="semPermissao" scope="session">
-                  <html:radio property="responsavel" value="1" disabled="true" /> 
+                  <html:radio property="responsavel" value="1" disabled="true" />
                   </logic:present>
                   <logic:notPresent name="semPermissao" scope="session">
 				  <html:radio property="responsavel" value="1" />
 				  </logic:notPresent>
  				  Atual do Imóvel</label>
                   <label>
-				  <html:radio property="responsavel" value="2" />                 
- 				  Todos</label> 				  
+				  <html:radio property="responsavel" value="2" />
+ 				  Todos</label>
                   </strong></span>
 				</td>
               </tr>

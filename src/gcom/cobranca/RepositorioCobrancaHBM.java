@@ -21830,13 +21830,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " where c.cnta_dtvencimentoconta < '" + dataFormatada + "'" 
 					+ " and   c.cnta_amreferenciacontabil < " + anoMesFaturamento.intValue()
 					+ " and   c.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + ", " + DebitoCreditoSituacao.RETIFICADA + ")"
-					+ " and not exists (select cnta.cnta_id from faturamento.conta as cnta "
-					+ "                 inner join cadastro.cliente_imovel as clim on (clim.imov_id = cnta.imov_id and clim_dtrelacaofim is null) "
-					+ "                 inner join cadastro.cliente as clie on clim.clie_id = clie.clie_id "
-					+ "                 inner join cadastro.cliente_tipo as cltp on cltp.cltp_id = clie.cltp_id "
-					+ "                 where c.cnta_id = cnta.cnta_id "
-					+ "						and cltp.epod_id in ( " + EsferaPoder.ESTADUAL + ", " + EsferaPoder.FEDERAL + ", " + EsferaPoder.MUNICIPAL + "))" 
-					+ " 					and not exists (select cnta_id from arrecadacao.pagamento as pgmt where c.cnta_id = pgmt.cnta_id ) ";
+					+ " and not exists (select cnta_id from arrecadacao.pagamento as pgmt where c.cnta_id = pgmt.cnta_id ) ";
 
 			st = jdbcCon.prepareStatement(update);
 
@@ -21872,29 +21866,17 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			System.out.println("****Iniciando Processo de Prescrição de Débitos de Contas Incluídas com data inferior a " + dataFormatada
 					+ "***");
 			Connection jdbcCon = session.connection();
-			updateContasIncluidas = " update faturamento.conta c " + " set 	dcst_idatual = "
-					+ DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS + "," + "       usur_id = " + usuario.intValue() + ", "
-					+ " 		dcst_idanterior = NULL, " + " 		cnta_dtcancelamento = now(), " + " 		cmcn_id = "
-					+ ContaMotivoCancelamento.DEBITO_PRESCRITO + "," + "       cnta_amreferenciacontabil = " + anoMesFaturamento.intValue()
-					+ ", " + "       cnta_tmultimaalteracao = now() " + " where c.cnta_dtvencimentoconta < '" + dataFormatada + "'"
-					+ " and   c.cnta_amreferenciacontabil < " + anoMesFaturamento.intValue() + " and   c.dcst_idatual = "
-					+ DebitoCreditoSituacao.INCLUIDA
-
-					/**
-					 * Alterações para não pegar histórico de
-					 * conta mas sim o cliente atual do imóvel
-					 * 
-					 * @date 31/07/2012
-					 * @author Wellington Rocha
-					 */
-					+ " and not exists (select cnta.cnta_id " + " 				  from faturamento.conta as cnta "
-					+ "                 inner join cadastro.cliente_imovel as clim "
-					+ "                   on (clim.imov_id = cnta.imov_id and clim_dtrelacaofim is null) "
-					+ "                 inner join cadastro.cliente as clie on clim.clie_id = clie.clie_id "
-					+ "                 inner join cadastro.cliente_tipo as cltp on cltp.cltp_id = clie.cltp_id "
-					+ "                 where c.cnta_id = cnta.cnta_id " + " 				  and cltp.epod_id in ( " + EsferaPoder.ESTADUAL + ", "
-					+ EsferaPoder.FEDERAL + ", " + EsferaPoder.MUNICIPAL + "))" + " and not exists (select cnta_id "
-					+ "                 from arrecadacao.pagamento as pgmt " + "                 where c.cnta_id = pgmt.cnta_id ) ";
+			updateContasIncluidas = " update faturamento.conta c "
+					+ " set 	dcst_idatual = " + DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS 
+					+ ", usur_id = " + usuario.intValue() 
+					+ ", dcst_idanterior = NULL"
+					+ ", cnta_dtcancelamento = now()"
+					+ ", cmcn_id = " + ContaMotivoCancelamento.DEBITO_PRESCRITO + "," + "       cnta_amreferenciacontabil = " + anoMesFaturamento.intValue()
+					+ ", cnta_tmultimaalteracao = now() "
+					+ " where c.cnta_dtvencimentoconta < '" + dataFormatada + "'"
+					+ " and   c.cnta_amreferenciacontabil < " + anoMesFaturamento.intValue() 
+					+ " and   c.dcst_idatual = "+ DebitoCreditoSituacao.INCLUIDA
+					+ " and not exists (select cnta_id from arrecadacao.pagamento as pgmt where c.cnta_id = pgmt.cnta_id ) ";
 
 			stContasIncluidas = jdbcCon.prepareStatement(updateContasIncluidas);
 			stContasIncluidas.executeUpdate();
@@ -27057,5 +27039,22 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	
 		return retorno;
+	}
+	
+	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		String delete;
+
+		try {
+			delete = "delete gcom.arrecadacao.BoletoInfo where parcelamento.id = :idParcelamento ";
+
+			session.createQuery(delete).setInteger("idParcelamento", idParcelamento.intValue()).executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }

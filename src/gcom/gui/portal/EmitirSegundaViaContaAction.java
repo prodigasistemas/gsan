@@ -2,16 +2,13 @@ package gcom.gui.portal;
 
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
-import gcom.fachada.Fachada;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,134 +18,88 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Classe Responsável pela emissão da segunda via da conta no portal da COMPESA
- * 
- * @author Diogo Peixoto
- * @date 17/05/2011
- */
 public class EmitirSegundaViaContaAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-		
-		ActionForward retorno = null;
+	private EmitirSegundaViaContaActionForm form;
 
-		try {
-			EmitirSegundaViaContaActionForm form = (EmitirSegundaViaContaActionForm) actionForm;
-			HttpSession sessao = httpServletRequest.getSession(true);
-			form.setMatricula(String.valueOf((Integer) sessao.getAttribute("matricula")));
-			form.setNomeUsuario((String) sessao.getAttribute("nomeUsuario"));
-			
-			if (form.getMatricula() != null && !form.getMatricula().equals("")) {
-				
-				BigDecimal totalContas = new BigDecimal("0.00");
-				BigDecimal valorTotalAcrescimoImpontualidadeContas = new BigDecimal("0.00");
+	private String matricula;
 
-				Short nDiasVencimentoCobranca = Fachada.getInstancia().pesquisarParametrosDoSistema().getNumeroDiasVencimentoCobranca();
-				Date dataDebito = new Date();
-				Calendar calendar = Calendar.getInstance();
+	private Collection<ContaValoresHelper> contas;
+	private BigDecimal totalContas;
+	private BigDecimal totalDebitos;
+	private BigDecimal totalAcrescimos;
 
-				// Data Atual - Numero de dias vencimento Cobranca
-				calendar.add(Calendar.DAY_OF_MONTH, -nDiasVencimentoCobranca.shortValue());
-				dataDebito = calendar.getTime();
-				form.setData(Util.formatarData(dataDebito));
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("segunda-via-conta");
 
-				// Ano mes Atual.
-				String ano;
-				String mes;
+		HttpSession sessao = request.getSession(true);
+		form = (EmitirSegundaViaContaActionForm) actionForm;
+		resetar(request);
 
-				Date dataCorrente = new Date();
-				String dataCorrenteTexto = Util.formatarData(dataCorrente);
-				ano = dataCorrenteTexto.substring(6, 10);
-				mes = dataCorrenteTexto.substring(3, 5);
+		if (isMatriculaValida(sessao)) {
+			try {
+				ObterDebitoImovelOuClienteHelper helper = (ObterDebitoImovelOuClienteHelper) getFachada().obterDebitoImovelOuCliente(1, matricula, null, null, "000101", "999912",
+						Util.converteStringParaDate("01/01/0001"), Util.converteStringParaDate("31/12/9999"), 1, 1, 1, 1, 1, 1, 1, null);
 
-				String anoMesInicialReferenciaDebito = "198501";
-				String anoMesFinalReferenciaDebito = ano + mes;
-
-				// Date aux1 = dataInicioVencimentoDebito.getTime();
-				Date aux1 = Util.converteStringParaDate("01/01/1985");
-
-				// Date aux2 = dataFimVencimentoDebito.getTime();
-				Date aux2 = Util.converteStringParaDate("31/12/9999");
-
-				String tipoRelacao = "-1";
-
-				ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = (ObterDebitoImovelOuClienteHelper) this
-						.getFachada().obterDebitoImovelOuCliente(1,
-								form.getMatricula(), null,
-								new Short(tipoRelacao),
-								anoMesInicialReferenciaDebito,
-								anoMesFinalReferenciaDebito, aux1, aux2, 1, 1,
-								1, 1, 1, 1, 1, null);
-
-				Collection<ContaValoresHelper> colecaoContasValores = obterDebitoImovelOuClienteHelper.getColecaoContasValores();
-
-				if (colecaoContasValores == null || colecaoContasValores.isEmpty()) {
-					retorno = actionMapping.findForward("matriculaSemDebito");
-					httpServletRequest.setAttribute("imovelSemDebito", true);
-				} else {
-					retorno = actionMapping.findForward("emitirSegundaViaContaAction");
-
-					Iterator<ContaValoresHelper> colecaoContasValoresIterator = colecaoContasValores.iterator();
-					httpServletRequest.setAttribute("voltarServicos", true);
-
-					while (colecaoContasValoresIterator.hasNext()) {
-						ContaValoresHelper contaValoresHelper = (ContaValoresHelper) colecaoContasValoresIterator.next();
-						totalContas = totalContas.add(contaValoresHelper.getValorTotalConta());
-						valorTotalAcrescimoImpontualidadeContas = 
-							valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValores());
-					}
-					form.setValorDebito(Util.formatarMoedaReal(totalContas));
-				}
-
-				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = this.getFachada().obterDebitoImovelOuCliente(
-								1, // Indicador débito imóvel
-								form.getMatricula(), // Matrícula do imóvel
-								null, // Código do cliente
-								null, // Tipo de relação do cliento com o //
-										// imóvel
-								"000101", // Referência inicial do débito
-								"999912", // Referência final do débito
-								Util.converteStringParaDate("01/01/0001"), // Inicio
-																			// Vencimento
-								Util.converteStringParaDate("31/12/9999"), // Final
-																			// Vencimento
-								1, // Indicador pagamento
-								1, // Indicador conta em revisão
-								1, // Indicador débito a cobrar
-								1, // Indicador crédito a realizar
-								1, // Indicador notas promissórias
-								1, // Indicador guias de pagamento
-								1, // Indicador acréscimos por impontualidade
-								null); // Indicador Contas
-
-				Collection<DebitoACobrar> colecaoDebitoACobrar = colecaoDebitoImovel.getColecaoDebitoACobrar();
-				BigDecimal valorTotalDebitoACobrar = new BigDecimal("0.00");
-
-				if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
-					Iterator<DebitoACobrar> debitoACobrarValores = colecaoDebitoACobrar.iterator();
-					while (debitoACobrarValores.hasNext()) {
-						DebitoACobrar debitoACobrar = (DebitoACobrar) debitoACobrarValores.next();
-						valorTotalDebitoACobrar = valorTotalDebitoACobrar.add(debitoACobrar.getValorTotalComBonus());
-					}
-				}
-
-				httpServletRequest.setAttribute("totalContas", totalContas);
-				httpServletRequest.setAttribute("colecaoContasValores", colecaoContasValores);
-				
-				// Acrescimos por Impotualidade
-				BigDecimal retornoSoma = new BigDecimal("0.00");
-
-				retornoSoma = retornoSoma.add(valorTotalAcrescimoImpontualidadeContas);
-				valorTotalDebitoACobrar = valorTotalDebitoACobrar.add(retornoSoma);
-				form.setValorDebitoCobrado(Util.formatarMoedaReal(valorTotalDebitoACobrar));
+				totalizarContas(helper, request);
+				totalizarDebitos(helper);
+			} catch (Exception e) {
+				request.setAttribute("erroSistema", true);
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			retorno = actionMapping.findForward("erroSistemaPortal");
-			httpServletRequest.setAttribute("erroSistema", true);
+
+			setForm();
+		} else {
+			retorno = mapping.findForward("acessar-portal");
+			sessao.setAttribute("action", "segunda-via-conta");
+			sessao.setAttribute("validarCpfCnpj", false);
 		}
-		
+
 		return retorno;
+	}
+
+	private void resetar(HttpServletRequest request) {
+		form.setMatricula(null);
+		form.setData(null);
+		form.setValorDebito(null);
+		form.setValorDebitoCobrado(null);
+		
+		request.removeAttribute("totalContas");
+		request.removeAttribute("contas");
+		request.removeAttribute("erroSistema");
+		
+	}
+
+	private void totalizarDebitos(ObterDebitoImovelOuClienteHelper helper) {
+		Collection<DebitoACobrar> debitos = helper.getColecaoDebitoACobrar();
+		totalDebitos = new BigDecimal("0.00");
+		for (DebitoACobrar debito : debitos) {
+			totalDebitos = totalDebitos.add(debito.getValorTotalComBonus());
+		}
+	}
+
+	private void totalizarContas(ObterDebitoImovelOuClienteHelper helper, HttpServletRequest request) {
+		contas = helper.getColecaoContasValores();
+		totalContas = new BigDecimal("0.00");
+		totalAcrescimos = new BigDecimal("0.00");
+		for (ContaValoresHelper conta : contas) {
+			totalContas = totalContas.add(conta.getValorTotalConta());
+			totalAcrescimos = totalAcrescimos.add(conta.getValorTotalContaValores());
+		}
+
+		request.setAttribute("totalContas", totalContas);
+		request.setAttribute("contas", contas);
+	}
+
+	private boolean isMatriculaValida(HttpSession sessao) {
+		matricula = (String) sessao.getAttribute("matricula");
+		return matricula != null && !matricula.equals("");
+	}
+
+	private void setForm() {
+		form.setMatricula(matricula);
+		form.setData(Util.formatarData(new Date()));
+		form.setValorDebito(Util.formatarMoedaReal(totalContas));
+		form.setValorDebitoCobrado(Util.formatarMoedaReal(totalDebitos.add(totalAcrescimos)));
 	}
 }

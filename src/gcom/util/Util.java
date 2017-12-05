@@ -4786,16 +4786,30 @@ public class Util {
 	 * @author Rômulo Aurélio
 	 */
 	public static String formatarTelefone(String telefone) {
-
 		String telefoneFormatado = "";
-
 		if (telefone != null && !telefone.equals("")) {
-
 			telefoneFormatado = telefone.substring(0, 4) + "-" + telefone.substring(4);
 		}
 
 		return telefoneFormatado;
+	}
+	
+	public static String formatarTelefone(String ddd, String telefone) {
+		String formatado = "";
+		
+		if (ddd != null && ddd.length() == 2) {
+			formatado += "(" + ddd + ") ";
+		}
+		
+		if (telefone != null && !telefone.equals("")) {
+			if (telefone.length() == 9) {
+				formatado += telefone.substring(0, 5) + "-" + telefone.substring(4);
+			} else {
+				formatado += telefone.substring(0, 4) + "-" + telefone.substring(4);
+			}
+		}
 
+		return formatado;
 	}
 
 	/**

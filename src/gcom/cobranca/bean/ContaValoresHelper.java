@@ -272,4 +272,8 @@ public class ContaValoresHelper implements Serializable {
 	public String getValorTotalContaValoresFormatado() {
 		return Util.converterDecimalParaString(this.getValorTotalContaValores());
 	}
+	
+	public String getVencimentoConta() {
+		return Util.formatarData(conta.getDataVencimentoConta());
+	}
 }

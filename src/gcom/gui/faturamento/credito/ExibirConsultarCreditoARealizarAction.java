@@ -34,14 +34,12 @@ import org.apache.struts.action.ActionMapping;
  */
 public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		// cria a variável de retorno e seta o mapeamento para a tela de
 		// consultar Crédito realizado
-		ActionForward retorno = actionMapping
-				.findForward("exibirConsultarCreditoARealizar");
+		ActionForward retorno = actionMapping.findForward("exibirConsultarCreditoARealizar");
 
 		// cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
@@ -79,12 +77,10 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 			FiltroImovel filtroImovel = new FiltroImovel();
 
 			// seta o código do imovel no filtro
-			filtroImovel.adicionarParametro(new ParametroSimples(
-					FiltroImovel.ID, idImovel));
+			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 
 			// pesquisa o imovel na base de dados
-			Collection colecaoImovel = fachada.pesquisar(filtroImovel,
-					Imovel.class.getName());
+			Collection colecaoImovel = fachada.pesquisar(filtroImovel, Imovel.class.getName());
 
 			// se não encontrou nenhum imovel com o código informado
 			if (colecaoImovel == null || colecaoImovel.isEmpty()) {
@@ -93,22 +89,19 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 
 			String enderecoFormatado = "";
 			try {
-				enderecoFormatado = fachada
-						.pesquisarEnderecoFormatado(new Integer(idImovel));
+				enderecoFormatado = fachada.pesquisarEnderecoFormatado(new Integer(idImovel));
 			} catch (NumberFormatException e) {
-				
+
 				e.printStackTrace();
 			} catch (ControladorException e) {
-				
+
 				e.printStackTrace();
 			}
 
-			httpServletRequest.setAttribute("enderecoFormatado",
-					enderecoFormatado);
+			httpServletRequest.setAttribute("enderecoFormatado", enderecoFormatado);
 
 			// recupera o objeto imovel da coleção
-			imovelConsultar = (Imovel) Util
-					.retonarObjetoDeColecao(colecaoImovel);
+			imovelConsultar = (Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
 
 			// seta o objeto conta na sessão
 			sessao.setAttribute("imovelConsultar", imovelConsultar);
@@ -125,68 +118,74 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 
 		/*
 		 * Créditos A Realizar (Carregar coleção)
-		 * ======================================================================
+		 * ================================
+		 * ======================================
 		 */
 		// se não existir a coleção na sessão
 		if (idParcelamento != null && !idParcelamento.equals("")) {
 			FiltroParcelamentoItem filtroParcelamentoItem = new FiltroParcelamentoItem();
 
 			// seta o código do imovel no filtro
-			filtroParcelamentoItem.adicionarParametro(new ParametroSimples(
-					FiltroParcelamentoItem.PARCELAMENTO, idParcelamento));
+			filtroParcelamentoItem.adicionarParametro(new ParametroSimples(FiltroParcelamentoItem.PARCELAMENTO, idParcelamento));
 
-			filtroParcelamentoItem.adicionarParametro(new ParametroNaoNulo(
-					FiltroParcelamentoItem.CREDITO_A_REALIZAR));
+			filtroParcelamentoItem.adicionarParametro(new ParametroNaoNulo(FiltroParcelamentoItem.CREDITO_A_REALIZAR));
 
 			// carrega o debitoACobrar
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoTipo");
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.debitoCreditoSituacaoAtual");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoTipo");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.debitoCreditoSituacaoAtual");
+			
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.creditoTipo");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.debitoCreditoSituacaoAtual");
 			/*
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.geracaoCredito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.anoMesReferenciaCredito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.anoMesCobrancaCredito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.numeroPrestacaoRealizada");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.numeroPrestacaoCredito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.valorCredito");
-			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.valorTotal");
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade(
+			 * "creditoARealizarGeral.creditoARealizar.geracaoCredito");
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade(
+			 * "creditoARealizarGeral.creditoARealizar.anoMesReferenciaCredito"
+			 * );
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade
+			 * ("creditoARealizarGeral.creditoARealizar.anoMesCobrancaCredito");
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade(
+			 * "creditoARealizarGeral.creditoARealizar.numeroPrestacaoRealizada"
+			 * );
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade
+			 * ("creditoARealizarGeral.creditoARealizar.numeroPrestacaoCredito"
+			 * );
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade
+			 * ("creditoARealizarGeral.creditoARealizar.valorCredito");
+			 * filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade(
+			 * "creditoARealizarGeral.creditoARealizar.valorTotal");
 			 */
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar");
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.registroAtendimento");
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.ordemServico");
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoOrigem");
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.usuario");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.registroAtendimento");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.ordemServico");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoOrigem");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.usuario");
+			
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.registroAtendimento");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.ordemServico");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.creditoOrigem");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.usuario");
 
 			// carrega o parcelamento
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-			
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+
 			// carrega o imóvel origem do crédito a realizar
-			filtroParcelamentoItem
-					.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.origem.creditoARealizar.imovel");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.origem.creditoARealizar.imovel");
+			filtroParcelamentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.origem.creditoARealizar.imovel");
 
-			Collection colecaoParcelamentoItem = fachada.pesquisar(
-					filtroParcelamentoItem, ParcelamentoItem.class.getName());
+			Collection colecaoParcelamentoItem = fachada.pesquisar(filtroParcelamentoItem, ParcelamentoItem.class.getName());
 
-			if (colecaoParcelamentoItem == null
-					|| colecaoParcelamentoItem.isEmpty()) {
-				throw new ActionServletException(
-						"atencao.faturamento.credito_a_realizar.inexistente");
+			if (colecaoParcelamentoItem == null || colecaoParcelamentoItem.isEmpty()) {
+				throw new ActionServletException("atencao.faturamento.credito_a_realizar.inexistente");
 			} else {
 				// seta a coleção de débitos cobrados na sessão
-				sessao.setAttribute("colecaoParcelamentoItem",
-						colecaoParcelamentoItem);
+				sessao.setAttribute("colecaoParcelamentoItem", colecaoParcelamentoItem);
 			}
-		} else if(idCreditoHistorico != null && !idCreditoHistorico.equals("")){
+		} else if (idCreditoHistorico != null && !idCreditoHistorico.equals("")) {
 			// CREDITO A COBRAR HISTORICO
-			
-			//cria o filtro de créditos a realizar historico
+
+			// cria o filtro de créditos a realizar historico
 			FiltroCreditoARealizarHistorico filtroCreditoARealizarHistorico = new FiltroCreditoARealizarHistorico();
 
 			filtroCreditoARealizarHistorico.adicionarCaminhoParaCarregamentoEntidade("creditoTipo");
@@ -198,24 +197,22 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 			filtroCreditoARealizarHistorico.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
 
 			filtroCreditoARealizarHistorico.adicionarCaminhoParaCarregamentoEntidade("creditoOrigem");
-			
+
 			filtroCreditoARealizarHistorico.adicionarCaminhoParaCarregamentoEntidade("usuario");
-			
+
 			// carrega o imóvel origem do crédito a realizar historico
 			filtroCreditoARealizarHistorico.adicionarCaminhoParaCarregamentoEntidade("origem.creditoARealizarHistorico.imovel");
 
 			if (idImovel != null) {
-				filtroCreditoARealizarHistorico.adicionarParametro(new ParametroSimples(
-						FiltroCreditoARealizarHistorico.IMOVEL_ID, idImovel));
+				filtroCreditoARealizarHistorico.adicionarParametro(new ParametroSimples(FiltroCreditoARealizarHistorico.IMOVEL_ID, idImovel));
 			}
 
 			// seta o código do credito no filtro
-			filtroCreditoARealizarHistorico.adicionarParametro(new ParametroSimples(
-					FiltroCreditoARealizarHistorico.ID, idCreditoHistorico));
+			filtroCreditoARealizarHistorico.adicionarParametro(new ParametroSimples(FiltroCreditoARealizarHistorico.ID, idCreditoHistorico));
 
 			// pesquisa a coleção de créditos a realizar historico
-			Collection<CreditoARealizar> colecaoCreditoARealizarHistorico = fachada
-					.pesquisar(filtroCreditoARealizarHistorico, CreditoARealizarHistorico.class.getName());
+			Collection<CreditoARealizar> colecaoCreditoARealizarHistorico = fachada.pesquisar(filtroCreditoARealizarHistorico,
+					CreditoARealizarHistorico.class.getName());
 
 			if (colecaoCreditoARealizarHistorico == null || colecaoCreditoARealizarHistorico.isEmpty()) {
 				throw new ActionServletException("atencao.faturamento.credito_a_realizar.inexistente");
@@ -223,71 +220,51 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 				// seta a coleção de créditos a realizar historico na sessão
 				sessao.setAttribute("colecaoCreditoARealizarHistorico", colecaoCreditoARealizarHistorico);
 			}
-			
-			
+
 		} else {
 			// cria o filtro de créditos a realizar
 			FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("creditoTipo");
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("creditoTipo");
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("ordemServico");
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("registroAtendimento");
 
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("creditoOrigem");
-			
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("usuario");
-			
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("creditoOrigem");
+
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("usuario");
+
 			// carrega o imóvel origem do crédito a realizar
-			filtroCreditoARealizar
-					.adicionarCaminhoParaCarregamentoEntidade("origem.creditoARealizar.imovel");
+			filtroCreditoARealizar.adicionarCaminhoParaCarregamentoEntidade("origem.creditoARealizar.imovel");
 
 			if (idImovel != null) {
-				filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
-						FiltroCreditoARealizar.IMOVEL_ID, idImovel));
+				filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, idImovel));
 			}
 
 			if (idCredito != null) {
 				// seta o código do credito no filtro
-				filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
-						FiltroCreditoARealizar.ID, idCredito));
+				filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCredito));
 			}
 
 			// pesquisa a coleção de créditos a realizar
-			Collection<CreditoARealizar> colecaoCreditoARealizar = fachada
-					.pesquisar(filtroCreditoARealizar, CreditoARealizar.class
-							.getName());
+			Collection<CreditoARealizar> colecaoCreditoARealizar = fachada.pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
 
-			if (colecaoCreditoARealizar == null
-					|| colecaoCreditoARealizar.isEmpty()) {
-				throw new ActionServletException(
-						"atencao.faturamento.credito_a_realizar.inexistente");
+			if (colecaoCreditoARealizar == null || colecaoCreditoARealizar.isEmpty()) {
+				throw new ActionServletException("atencao.faturamento.credito_a_realizar.inexistente");
 			} else {
 				// seta a coleção de créditos a realizar na sessão
-				sessao.setAttribute("colecaoCreditoARealizar",
-						colecaoCreditoARealizar);
+				sessao.setAttribute("colecaoCreditoARealizar", colecaoCreditoARealizar);
 			}
 		}
 		// ====================================================================
 
 		// envia uma flag que será verificado no cliente_resultado_pesquisa.jsp
 		// para saber se irá usar o enviar dados ou o enviar dados parametros
-		if (httpServletRequest
-				.getParameter("caminhoRetornoTelaConsultaCreditoARealizar") != null) {
-			sessao
-					.setAttribute(
-							"caminhoRetornoTelaConsultaCreditoARealizar",
-							httpServletRequest
-									.getParameter("caminhoRetornoTelaConsultaCreditoARealizar"));
+		if (httpServletRequest.getParameter("caminhoRetornoTelaConsultaCreditoARealizar") != null) {
+			sessao.setAttribute("caminhoRetornoTelaConsultaCreditoARealizar", httpServletRequest.getParameter("caminhoRetornoTelaConsultaCreditoARealizar"));
 		}
 
 		// retorna o mapeamento contido na variável retorno

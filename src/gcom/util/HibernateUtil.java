@@ -9,6 +9,7 @@ import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
+import gcom.arrecadacao.BoletoInfo;
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
 import gcom.arrecadacao.DadosDocumentosNaoIdentificados;
@@ -199,6 +200,7 @@ import gcom.cadastro.EmailClienteAlterado;
 import gcom.cadastro.EmpresaContratoCadastro;
 import gcom.cadastro.EmpresaContratoCadastroAtributo;
 import gcom.cadastro.EnvioEmail;
+import gcom.cadastro.LojaAtendimento;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.VersaoMobile;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
@@ -1089,6 +1091,7 @@ public class HibernateUtil {
 					.addClass(ClienteRetorno.class)
 					.addClass(ClienteEnderecoRetorno.class)
 					.addClass(ClienteImovelRetorno.class)
+					.addClass(LojaAtendimento.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //
@@ -1384,6 +1387,7 @@ public class HibernateUtil {
 					.addClass(BoletimInformacoesGerenciais.class)
 					.addClass(DadosPagamentosNaoClassificados.class)
 					.addClass(DadosDocumentosNaoIdentificados.class)
+					.addClass(BoletoInfo.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.operacional //

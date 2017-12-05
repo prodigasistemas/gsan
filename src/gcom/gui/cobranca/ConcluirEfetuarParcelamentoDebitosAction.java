@@ -471,7 +471,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				idGuiaPagamento = "" + guiaPagamento.getId();
 
 				if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
-//					retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
+					retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
 					montarPaginaSucesso(request,
 							"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.", 
 							"Efetuar outro Parcelamento de Débitos",
@@ -479,8 +479,8 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 							"gerarRelatorioParcelamentoAction.do", 
 							"Imprimir Termo", 
 							"Imprimir Guia Pagto Entrada",
-							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
-//							obterLinkBoletoBB(idParcelamento));
+//							"gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento);
+							obterLinkBoletoBB(idParcelamento));
 				}
 
 			} else if (retorno.getName().equalsIgnoreCase("telaSucesso")) {

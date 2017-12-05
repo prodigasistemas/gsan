@@ -186,7 +186,7 @@
 					});
 					
 					$('#voltar').click(function(){
-						window.location.href = '/gsan/exibirServicosPortalCompesaAction.do?method=voltarServico';
+						window.location.href = '/gsan/portal.do?method=voltarServico';
 					});
 				});
 			</script>
@@ -258,7 +258,7 @@
 						type="gcom.gui.portal.InserirSolicitacaoServicosPortalActionForm" method="post"
 						onsubmit="return validarForm();">
 						
-						<html:hidden property="matricula" value="${ExibirServicosPortalCompesaActionForm.matricula}" />
+						<html:hidden property="matricula" value="${ExibirPortalActionForm.matricula}" />
 						
 						<fieldset>
 	                    	<legend>Solicita&ccedil;&atilde;o de servi&ccedil;os</legend>

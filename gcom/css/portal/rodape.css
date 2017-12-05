@@ -1,0 +1,97 @@
+footer {
+	/*position: absolute;
+	bottom: 0;
+	width: 100%;*/
+	background-color: #fff;
+	color: #333;
+}
+
+footer, .page-wrap:after {
+  height: 230px; 
+}
+
+footer .footer-copyright {
+	background-color: #ddd;
+	color: #333;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+footer .row {
+	margin-bottom: 20px;
+}
+
+footer .footer-copyright p {
+	margin: 10px;
+}
+
+footer ul {
+	list-style-type: none;
+	padding-left: 0;
+	line-height: 1.7;
+	text-align: center;
+}
+
+footer h2 {
+	font-size: 18px;
+	font-weight: bold;
+	margin-top: 30px;
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+footer h3 {
+	font-size: 15px;
+	font-weight: 300;
+	padding-top: 7px;
+	text-align: justify;
+}
+
+footer h5 {
+	font-size: 18px;
+	font-weight: bold;
+	margin-top: 30px;
+	text-align: center;
+}
+
+footer a {
+	font-size: 15px;
+	color: #333;
+	text-decoration: none;
+}
+
+footer a:hover, footer a:focus {
+	text-decoration: none;
+	color: #004284;
+}
+
+footer .social-networks {
+	text-align: right;
+	padding-top: 30px;
+	padding-bottom: 16px;
+}
+
+footer .social-networks a {
+	font-size: 32px;
+	padding: 10px;
+	transition: 0.2s;
+}
+
+footer .social-networks a:hover {
+	text-decoration: none;
+}
+
+footer .facebook:hover {
+	color: #4267b2;
+}
+
+footer .twitter:hover {
+	color: #1da1f2;
+}
+
+@media screen and (max-width: 767px) {
+	footer {
+		text-align: center;
+	}
+}

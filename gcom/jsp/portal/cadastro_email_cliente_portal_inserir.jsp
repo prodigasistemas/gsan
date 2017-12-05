@@ -107,7 +107,7 @@
 					});
 					
 					$('#voltar').click(function(){
-						window.location.href = '/gsan/exibirServicosPortalCompesaAction.do?method=voltarServico';
+						window.location.href = '/gsan/portal.do?method=voltarServico';
 					});
 				});
 			</script>
@@ -144,7 +144,7 @@
 				});
 				
 				$('#emailConfirmado').click(function(){
-					window.location = '/gsan/exibirServicosPortalCompesaAction.do';
+					window.location = '/gsan/portal.do';
 				});
 				
 				enviarConfirmacao();
@@ -485,8 +485,8 @@
 						type="gcom.gui.portal.InserirCadastroEmailClientePortalActionForm" method="post"
 						onsubmit="return validateInserirCadastroEmailClientePortalActionForm(this);">
 
-						<html:hidden property="matricula" value="${ExibirServicosPortalCompesaActionForm.matricula}" />
-						<html:hidden property="nomeCliente" value="${ExibirServicosPortalCompesaActionForm.nomeUsuario}" />
+						<html:hidden property="matricula" value="${ExibirPortalActionForm.matricula}" />
+						<html:hidden property="nomeCliente" value="${ExibirPortalActionForm.nomeUsuario}" />
 						<html:hidden property="cpfCnpjCliente" value="${cpfCnpj}" />
 						
 						<input type="hidden" id="enviarConfirmacao" name="enviarConfirmacao" value="sim" />

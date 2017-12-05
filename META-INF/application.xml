@@ -896,6 +896,10 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorLojaVirtualGCOM.jar</ejb>
+	</module>
+	
+	<module>
 		<ejb>BatchGerarNegociacaoContasCobrancaEmpresaMDB.jar</ejb>
 	</module>
 	
