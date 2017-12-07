@@ -54865,7 +54865,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
-		if (sistemaParametro.getIndicadorGeracaoBoletoBB() == ConstantesSistema.SIM) {
+		if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
 			nossoNumero.append("2860143"); // Convenio do Banco do Brasil
 		} else {
 			// é o numero do convênio fornecido pelo Banco

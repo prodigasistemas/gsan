@@ -473,7 +473,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
 					
 					String boleto = null;
-					if (sistemaParametro.getIndicadorGeracaoBoletoBB() == ConstantesSistema.SIM) {
+					if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
 						retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
 						boleto = obterLinkBoletoBB(idParcelamento); 
 					} else {
