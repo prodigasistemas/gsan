@@ -25,6 +25,7 @@ import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
@@ -59,7 +60,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		sessao.setAttribute("idParcelamento", idParcelamento);
 
 		SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
-
+		
 		cancelarParcelamento(sessao, request, Integer.parseInt(idParcelamento), sistemaParametro);
 
 		Parcelamento parcelamento = null;
@@ -105,6 +106,8 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
 			}
 		}
+		
+		request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
 
 		return retorno;
 	}
