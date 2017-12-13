@@ -25,7 +25,7 @@
 <body onload="setarFoco('${requestScope.matricula}');">
 	<%@ include file="/jsp/portal/cabecalho.jsp"%>
 	
-	<%@ include file="/jsp/portal/acesso-barra.jsp"%>
+<%-- 	<%@ include file="/jsp/portal/acesso-barra.jsp"%> --%>
 	
 	<div class="page-wrap">
 		<div class="container pagina">

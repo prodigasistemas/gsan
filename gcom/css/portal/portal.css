@@ -313,3 +313,7 @@ body {
 .links-ouvidoria a:active {
     text-decoration: none;
 }
+
+.btn-segunda-via {
+	margin-left: 5px;
+}
