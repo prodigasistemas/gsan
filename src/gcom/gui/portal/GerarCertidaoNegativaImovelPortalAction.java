@@ -4,10 +4,11 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.gui.atendimentopublico.GerarCertidaoNegativaActionForm;
 import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
 import gcom.relatorio.atendimentopublico.RelatorioCertidaoNegativa;
-import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
@@ -15,7 +16,10 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,63 +32,110 @@ import org.apache.struts.action.ActionMapping;
 
 public class GerarCertidaoNegativaImovelPortalAction extends ExibidorProcessamentoTarefaRelatorio {
 
+	private GerarCertidaoNegativaActionForm form;
+	private ActionErrors errors;
+
+	private Imovel imovel;
+	private SistemaParametro sistemaParametro;
+
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
-		ActionForward retorno = mapping.findForward("emitirCertidaoNegativa");
+		this.form = (GerarCertidaoNegativaActionForm) actionForm;
+		this.errors = new ActionErrors();
+		this.sistemaParametro = getFachada().pesquisarParametrosDoSistema();
 
-		GerarCertidaoNegativaActionForm form = (GerarCertidaoNegativaActionForm) actionForm;
-		ActionErrors errors = form.validate(mapping, request);
-
-		Imovel imovel = null;
-		if (form.getIdImovel() != null && !form.getIdImovel().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			if ("".equals(form.getIdImovel())) {
-				errors.add("idImovel", new ActionError("atencao.pesquisa_inexistente", "Matrícula"));
+		if (form.getIdImovel() != null) {
+			if (form.getIdImovel().equals("")) {
+				adicionarErro(new ActionError("errors.portal.obrigatorio", "a Matrícula do Imóvel"));
 			} else {
 				imovel = new Imovel();
 				try {
-					Integer matriculaExistente = getFachada().verificarExistenciaImovel(Integer.valueOf(form.getIdImovel()));
-					if (matriculaExistente != 1) {
-						errors.add("idImovel", new ActionError("atencao.imovel.inexistente"));
-					}
-					imovel.setId(Integer.valueOf(form.getIdImovel()));
-
-					Collection<ClienteImovel> colecaoClienteImovel = pesquisarClienteImovel(imovel);
-					if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
-						ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(colecaoClienteImovel);
-
-						if (clienteImovel.getCliente().getClienteTipo().getEsferaPoder().getIndicadorPermiteCertidaoNegativaDebitosParaImovel().equals(ConstantesSistema.NAO)) {
-							errors.add("idImovel", new ActionError("atencao.esfera_poder_responsavel_nao_permite_geracao_certidao_negativa"));
-						}
+					if (getFachada().verificarExistenciaImovel(Integer.valueOf(form.getIdImovel())) != 1) {
+						adicionarErro(new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
+					} else {
+						imovel.setId(Integer.valueOf(form.getIdImovel()));
+						verificarEsferaPoder();
+						verificarDebitosImovel();
 					}
 				} catch (NumberFormatException nfe) {
-					errors.add("idImovel", new ActionError("atencao.imovel.inexistente"));
+					adicionarErro(new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
 				}
 			}
 		}
 
+		form.setIdImovel(null);
+
 		if (!errors.isEmpty()) {
 			saveErrors(request, errors);
+			request.setAttribute("erro-certidao-imovel", true);
 			return mapping.findForward("exibir");
+		} else {
+			request.removeAttribute("erro-certidao-imovel");
 		}
 
-		String tipoRelatorio = request.getParameter("tipoRelatorio");
-		Usuario usuarioLogado = this.getUsuarioLogado(request);
+		return processar(mapping, request, response);
+	}
 
-		TarefaRelatorio relatorio = new RelatorioCertidaoNegativa(usuarioLogado);
+	private void verificarDebitosImovel() {
+		ObterDebitoImovelOuClienteHelper debitos = getFachada().obterDebitoImovelOuCliente(1, imovel.getId().toString(), null, null, 
+				"190001", "299901", Util.criarData(1, 1, 1900), getDataFimVencimento(), 1, 1, 1, 1, 1, 1, 1, true);
 
-		relatorio.addParametro("imovel", imovel);
-		relatorio.addParametro("usuarioLogado", usuarioLogado);
-
-		if (tipoRelatorio == null) {
-			tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
+		if (indicadorEfeitoPositivo()) {
+			if (debitos != null) {
+				if (possuiContas(debitos) || possuiGuias(debitos) || possuiDebitos(debitos)) {
+					adicionarErro(new ActionError("errors.portal.possui_debitos", "Imóvel"));
+				}
+			}
 		}
-		relatorio.addParametro("tipoFormatoRelatorio", Integer.parseInt(tipoRelatorio));
-		retorno = processarExibicaoRelatorio(relatorio, tipoRelatorio, request, response, mapping);
+	}
 
-		return retorno;
+	private boolean indicadorEfeitoPositivo() {
+		return sistemaParametro.getIndicadorCertidaoNegativaEfeitoPositivo() == ConstantesSistema.NAO;
+	}
+
+	private boolean possuiDebitos(ObterDebitoImovelOuClienteHelper debitos) {
+		return indicadorDebitoACobrarValido() && debitos.getColecaoDebitoACobrar() != null && !debitos.getColecaoDebitoACobrar().isEmpty();
+	}
+
+	private boolean indicadorDebitoACobrarValido() {
+		return sistemaParametro.getIndicadorDebitoACobrarValidoCertidaoNegativa().equals(ConstantesSistema.SIM);
+	}
+
+	private boolean possuiGuias(ObterDebitoImovelOuClienteHelper debitos) {
+		return debitos.getColecaoGuiasPagamentoValores() != null && !debitos.getColecaoGuiasPagamentoValores().isEmpty();
+	}
+
+	private boolean possuiContas(ObterDebitoImovelOuClienteHelper debitos) {
+		return debitos.getColecaoContasValores() != null && !debitos.getColecaoContasValores().isEmpty();
+	}
+
+	private Date getDataFimVencimento() {
+		Calendar dataFimVencimentoDebito = new GregorianCalendar();
+		dataFimVencimentoDebito.add(Calendar.DATE, -sistemaParametro.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos());
+		return dataFimVencimentoDebito.getTime();
+	}
+
+	private ActionForward processar(ActionMapping mapping, HttpServletRequest request, HttpServletResponse response) {
+		TarefaRelatorio dados = new RelatorioCertidaoNegativa(getUsuarioLogado(request));
+		dados.addParametro("imovel", imovel);
+		dados.addParametro("usuarioLogado", getUsuarioLogado(request));
+		dados.addParametro("tipoFormatoRelatorio", TarefaRelatorio.TIPO_PDF);
+
+		return processarExibicaoRelatorio(dados, String.valueOf(TarefaRelatorio.TIPO_PDF), request, response, mapping);
+	}
+
+	private void verificarEsferaPoder() {
+		Collection<ClienteImovel> colecaoClienteImovel = pesquisarClienteImovel();
+		if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
+			ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(colecaoClienteImovel);
+
+			if (clienteImovel.getCliente().getClienteTipo().getEsferaPoder().getIndicadorPermiteCertidaoNegativaDebitosParaImovel().equals(ConstantesSistema.NAO)) {
+				adicionarErro(new ActionError("atencao.esfera_poder_responsavel_nao_permite_geracao_certidao_negativa"));
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private Collection<ClienteImovel> pesquisarClienteImovel(Imovel imovel) {
+	private Collection<ClienteImovel> pesquisarClienteImovel() {
 		Filtro filtro = new FiltroClienteImovel();
 		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, imovel.getId()));
 		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.RESPONSAVEL));
@@ -92,5 +143,10 @@ public class GerarCertidaoNegativaImovelPortalAction extends ExibidorProcessamen
 		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo.esferaPoder");
 
 		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
+	}
+
+	private void adicionarErro(ActionError erro) {
+		if (errors.isEmpty())
+			errors.add("erro-certidao-imovel", erro);
 	}
 }

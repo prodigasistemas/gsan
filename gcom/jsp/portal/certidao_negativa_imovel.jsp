@@ -51,13 +51,16 @@
 						type="gcom.gui.atendimentopublico.GerarCertidaoNegativaActionForm" 
 						method="post">
 						
+						<logic:notEmpty name="erro-certidao-imovel" scope="request">
+							<div class="row">
+								<div class="alert alert-danger">
+									<html:errors property="erro-certidao-imovel" />
+								</div>
+							</div>
+						</logic:notEmpty>
 						<div class="row">
-							<input name="idImovel" id="idImovel" type="number" maxlength="7" class="form-control col-sm-3" placeholder="Informe a matrícula">
-							<span class="form-alert form-alert-right col-sm-3"><html:errors property="idImovel" /></span>
-						</div>
-						<br>
-						<div class="row">
-							<input type="submit" value="Gerar" class="btn btn-primary">
+							<html:text property="idImovel" size="9" maxlength="9" onkeypress="return isCampoNumerico(event);" styleClass="form-control col-sm-2" />
+							<input type="submit" value="Gerar" class="btn btn-primary btn-consulta">
 						</div>
 					</html:form>
 				</div>

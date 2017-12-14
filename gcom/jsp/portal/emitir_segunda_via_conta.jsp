@@ -54,7 +54,7 @@
 						</logic:notEmpty>
 						<div class="row">
 							<html:text property="matricula" size="9" maxlength="9" onkeypress="return isCampoNumerico(event);" styleClass="form-control col-sm-2" />
-							<input type="submit" value="Consultar" class="btn btn-primary btn-segunda-via">
+							<input type="submit" value="Consultar" class="btn btn-primary btn-consulta">
 						</div>
 						<br>
 						<br>

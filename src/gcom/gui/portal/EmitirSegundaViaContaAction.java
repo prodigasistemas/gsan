@@ -87,7 +87,7 @@ public class EmitirSegundaViaContaAction extends GcomAction {
 
 	private void validarMatricula() {
 		if (naoContemErro("erro-segunda-via") && getFachada().verificarExistenciaImovel(Integer.valueOf(form.getMatricula())) != 1) {
-			errors.add("erro-segunda-via", new ActionError("errors.portal.invalida", "Matrícula"));
+			errors.add("erro-segunda-via", new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
 		}
 	}
 
