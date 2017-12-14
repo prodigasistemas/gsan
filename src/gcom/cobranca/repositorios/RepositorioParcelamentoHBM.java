@@ -6,6 +6,7 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
+import gcom.faturamento.debito.DebitoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -41,7 +42,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			String where = "WHERE p.parc_id = :idParcelamento ";
 			String groupBy = "GROUP BY p.parc_id, p.imov_id ";
 			StringBuilder consulta = new StringBuilder();
-			consulta.append(montarRaizConsulta(where, groupBy));
+			consulta.append(montarRaizConsulta(where, groupBy, true));
 			
 			Query query = criarQuery(session, consulta.toString());
 			Object[] dados = (Object[]) query.setInteger("idParcelamento", idParcelamento).uniqueResult();
@@ -76,7 +77,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			
 			String groupBy = "GROUP BY p.parc_id, p.imov_id HAVING count(distinct c.cnta_id) >= :qtdContas ";
 			
-			String consulta = montarRaizConsulta(where.toString(), groupBy);
+			String consulta = montarRaizConsulta(where.toString(), groupBy, false);
 			
 			Query query = criarQuery(session, consulta.toString());
 			List<Object[]> lista = query.setDate("dataAtual", new Date())
@@ -101,7 +102,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return helper;
 	}
 	
-	private String montarRaizConsulta(String where, String groupBy) {
+	private String montarRaizConsulta(String where, String groupBy, boolean isChamadaBotao) {
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT distinct p.parc_id as idParcelamento, ")
 			  .append("       p.imov_id as idImovel, ")
@@ -115,8 +116,13 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			 // .append("FROM cobranca.parcelamento p ");
 		
 		StringBuilder join = new StringBuilder();
-		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
-			.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		if (isChamadaBotao) {
+			join.append("LEFT JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ");
+			join.append("LEFT JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		} else {
+			join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ");
+			join.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		}
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)
@@ -225,6 +231,41 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		}
 		
 		return debitoACobrar;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> pesquisarDebitoACobrarCurtoELongoPrazo(Integer idParcelamento) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		List<Object[]> retorno = null;
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT dac.dbtp_id debitoTipo, (dac.dbac_vldebito/dbac_nnprestacaodebito)*(dbac_nnprestacaodebito-dbac_nnprestacaocobradas) valorRestante FROM faturamento.debito_a_cobrar dac ")
+					.append("INNER JOIN faturamento.debito_tipo dt ON dt.dbtp_id = dac.dbtp_id ")
+					.append("WHERE parc_id = :idParcelamento ")
+					.append("AND dac.dbtp_id IN (:debitoTipoCurtoPrazo,:debitoTipoLongoPrazo) ")
+					.append("UNION ALL ")
+					.append("SELECT dch.dbtp_id, (dch.dahi_vldebito/dahi_nnprestacaodebito)*(dahi_nnprestacaodebito-dahi_nnprestacaocobradas) valorRestante FROM faturamento.deb_a_cobrar_hist dch ")
+					.append("INNER JOIN faturamento.debito_tipo dt ON dt.dbtp_id = dch.dbtp_id ")
+					.append("WHERE parc_id = :idParcelamento ")
+					.append("AND dch.dbtp_id IN (:debitoTipoCurtoPrazo,:debitoTipoLongoPrazo) ");
+			
+			retorno = session.createSQLQuery(consulta.toString())
+					.addScalar("debitoTipo", Hibernate.INTEGER)
+					.addScalar("valorRestante", Hibernate.BIG_DECIMAL)
+					.setInteger("idParcelamento", idParcelamento)
+					.setInteger("debitoTipoCurtoPrazo", DebitoTipo.REPARCELAMENTOS_CURTO_PRAZO)
+					.setInteger("debitoTipoLongoPrazo", DebitoTipo.REPARCELAMENTOS_LONGO_PRAZO)
+					.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+		
 	}
 }
 

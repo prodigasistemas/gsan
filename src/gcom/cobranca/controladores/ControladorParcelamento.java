@@ -189,6 +189,7 @@ public class ControladorParcelamento extends ControladorComum {
 		
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario, false);
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontoFaixa(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_FAIXA, usuario, false);
+		inserirDebitoACobrarCurtoELongoPrazo(helper, conta, usuario);
 		gerarNovosAcrescimos(helper, conta, usuario);
 	}
 
@@ -305,4 +306,27 @@ public class ControladorParcelamento extends ControladorComum {
 		Collection<DebitoTipo> colecao = this.getControladorUtil().pesquisar(filtro, DebitoTipo.class.getName());
 		return (DebitoTipo) Util.retonarObjetoDeColecao(colecao);
 	}
+	
+	public void inserirDebitoACobrarCurtoELongoPrazo(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario)  throws ControladorException {
+		try {
+			List<Object[]> valoresCurtoELongoPrazo = repositorio.pesquisarDebitoACobrarCurtoELongoPrazo(helper.getParcelamento().getId());
+			
+			for (Object[] valores : valoresCurtoELongoPrazo) {
+				BigDecimal valorRestante = (BigDecimal) valores[1];
+				valorRestante.setScale(2, BigDecimal.ROUND_DOWN);
+				
+				inserirDebitoACobrar(valorRestante, helper, conta, ((Integer)valores[0]), usuario, false);
+			}
+		} catch (Exception e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("Erro ao inserir novo Debito a Cobrar", e);
+		}
+	}
+	
 }
+
+
+
+
+
+

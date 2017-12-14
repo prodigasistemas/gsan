@@ -20,7 +20,7 @@ public class CancelarParcelamentoHelper {
 	private BigDecimal valorDescontoAcrescimos;
 
 	private BigDecimal valorDescontoFaixa;
-
+	
 	private short numeroPrestacoes;
 
 	private short numeroPrestacoesCobradas;
