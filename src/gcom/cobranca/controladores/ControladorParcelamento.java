@@ -315,7 +315,8 @@ public class ControladorParcelamento extends ControladorComum {
 				BigDecimal valorRestante = (BigDecimal) valores[1];
 				valorRestante.setScale(2, BigDecimal.ROUND_DOWN);
 				
-				inserirDebitoACobrar(valorRestante, helper, conta, ((Integer)valores[0]), usuario, false);
+//				inserirDebitoACobrar(valorRestante, helper, conta, ((Integer)valores[0]), usuario, false);
+				atualizarDebitoACobrar(valorRestante, helper.getParcelamento().getId(), conta, ((Integer) valores[0]));
 			}
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
