@@ -106,8 +106,17 @@ public class ControladorParcelamento extends ControladorComum {
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);
-			debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
-			debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+			
+			if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
+				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+			} else {
+				debito.setDebitoCreditoSituacaoAnterior(null);
+				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+			}
+			
+			debito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
 			debito.setUltimaAlteracao(new Date());
 			
 			getControladorUtil().atualizar(debito);
@@ -122,10 +131,19 @@ public class ControladorParcelamento extends ControladorComum {
 			Filtro filtro = new FiltroCreditoARealizar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
 			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.getName());
-
+			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+			
 			for (CreditoARealizar credito : colecao) {
-				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
-				credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				
+				if (credito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
+					credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				} else {
+					credito.setDebitoCreditoSituacaoAnterior(null);
+					credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				}
+				
+				credito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
 				credito.setUltimaAlteracao(new Date());
 
 				getControladorUtil().atualizar(credito);
@@ -315,7 +333,6 @@ public class ControladorParcelamento extends ControladorComum {
 				BigDecimal valorRestante = (BigDecimal) valores[1];
 				valorRestante.setScale(2, BigDecimal.ROUND_DOWN);
 				
-//				inserirDebitoACobrar(valorRestante, helper, conta, ((Integer)valores[0]), usuario, false);
 				atualizarDebitoACobrar(valorRestante, helper.getParcelamento().getId(), conta, ((Integer) valores[0]));
 			}
 		} catch (Exception e) {
@@ -325,9 +342,3 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 	
 }
-
-
-
-
-
-
