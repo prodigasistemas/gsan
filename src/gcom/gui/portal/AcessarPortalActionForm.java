@@ -34,11 +34,11 @@ public class AcessarPortalActionForm extends ActionForm {
 		ActionErrors errors = new ActionErrors();
 
 		if (matricula == null || matricula.trim().equals("")) {
-			errors.add("matricula", new ActionError("errors.portal.obrigatorio", "Matrícula"));
+			errors.add("matricula", new ActionError("errors.portal.obrigatorio", "a Matrícula do Imóvel"));
 		}
 
 		if (validarCpfCnpj && (cpfCnpj == null || cpfCnpj.trim().equals(""))) {
-			errors.add("cpfCnpj", new ActionError("errors.portal.obrigatorio", "CPF/CNPJ"));
+			errors.add("cpfCnpj", new ActionError("errors.portal.obrigatorio", "o CPF/CNPJ"));
 		}
 
 		return errors;

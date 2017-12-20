@@ -720,13 +720,17 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 									</logic:present>
 									<logic:empty name="idsContaEP">
 										<logic:present name="btImprimirGuiaPagamentoEntrada">
-											<!-- input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-											onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
-								
-											style="width:170px"/-->
-											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-											onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
-											style="width:170px"/>
+											
+											<logic:equal name="geracaoBoletoBB" value="1" scope="request">
+												<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+													onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
+													style="width:170px"/>											
+											</logic:equal>
+											<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
+												<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+													onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
+													style="width:170px" />
+											</logic:notEqual>
 										</logic:present>
 									</logic:empty>
 									<logic:notEmpty name="idsContaEP">

@@ -49,6 +49,8 @@ public class UnidadeProcessamento implements Serializable {
 	public static final int QUADRA = 20;
 
 	public static final int FATURAMENTO_GRUPO = 21;
+	
+	public static final int REFERENCIA = 22;
 
 	private Integer id;
 

@@ -20,10 +20,10 @@
 
 </head>
 
-<body>
+<body onload="setarFoco('${requestScope.idCliente}');">
 	<%@ include file="/jsp/portal/cabecalho.jsp"%>
 
-	<%@ include file="/jsp/portal/acesso-barra.jsp"%>
+<%-- 	<%@ include file="/jsp/portal/acesso-barra.jsp"%> --%>
 
 	<div class="page-wrap">
 		<div class="container pagina">
@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="pagina-conteudo">
-				<p>Informe o <b>Código do Cliente</b>:</p>
+				<p>Informe o código de cadastro do <b>Cliente</b>:</p>
 				
 				<div class="container">
 					<html:form action="/gerarCertidaoNegativaClientePortalAction.do"
@@ -47,13 +47,16 @@
 						type="gcom.gui.atendimentopublico.GerarCertidaoNegativaClienteActionForm" 
 						method="post">
 			
+						<logic:notEmpty name="erro-certidao-cliente" scope="request">
+							<div class="row">
+								<div class="alert alert-danger">
+									<html:errors property="erro-certidao-cliente" />
+								</div>
+							</div>
+						</logic:notEmpty>
 						<div class="row">
-							<input name="idCliente" id="idCliente" type="number" maxlength="7" class="form-control col-sm-3" placeholder="Informe o código do cliente">
-							<span class="form-alert form-alert-right col-sm-3"><html:errors property="idCliente" /></span>
-						</div>
-						<br>
-						<div class="row">
-							<input type="submit" value="Gerar" class="btn btn-primary">
+							<html:text property="idCliente" size="9" maxlength="9" onkeypress="return isCampoNumerico(event);" styleClass="form-control col-sm-2" />
+							<input type="submit" value="Gerar" class="btn btn-primary btn-consulta">
 						</div>
 					</html:form>
 				</div>

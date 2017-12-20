@@ -12,7 +12,11 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,11 +126,11 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		sessao.setAttribute("colecaoContaImovel", Fachada.getInstancia().consultarContasImovel(imovel.getId()));
 		sessao.setAttribute("colecaoContaHistoricoImovel", Fachada.getInstancia().consultarContasHistoricosImovel(imovel.getId()));
 
-		sessao.setAttribute("colecaoDebitoACobrarImovel", Fachada.getInstancia().obterDebitoACobrarImovel(imovel.getId())); 
-		sessao.setAttribute("colecaoDebitoACobrarHistoricoImovel", Fachada.getInstancia().obterDebitoACobrarHistoricoImovel(imovel.getId())); 
+		sessao.setAttribute("colecaoDebitoACobrarImovel", obterListaDebitoACobrarOrdenadaPorReferencia(imovel)); 
+		sessao.setAttribute("colecaoDebitoACobrarHistoricoImovel", obterListaDebitoACobrarHistoricoOrdenadaPorReferencia(imovel)); 
 
-		sessao.setAttribute("colecaoCreditoARealizarImovel", Fachada.getInstancia().obterCreditoARealizarImovel(imovel.getId())); 
-		sessao.setAttribute("colecaoCreditoARealizarHistoricoImovel", Fachada.getInstancia().obterCreditoARealizarHistoricoImovel(imovel.getId())); 
+		sessao.setAttribute("colecaoCreditoARealizarImovel", obterListaCreditoARealizarOrdenadaPorReferencia(imovel)); 
+		sessao.setAttribute("colecaoCreditoARealizarHistoricoImovel", obterListaCreditoARealizarHistoricoOrdenadaPorReferencia(imovel)); 
 
 		sessao.setAttribute("colecaoGuiaPagamentoImovel", Fachada.getInstancia().obterGuiaPagamentoImovel(imovel.getId())); 
 		sessao.setAttribute("colecaoGuiaPagamentoHistoricoImovel", Fachada.getInstancia().obterGuiaPagamentoHistoricoImovel(imovel.getId())); 
@@ -338,6 +342,66 @@ public class ExibirConsultarImovelHistoricoFaturamentoAction extends GcomAction 
 		}
 
 		return false;
+	}
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaDebitoACobrarOrdenadaPorReferencia(Imovel imovel) {
+		
+		List list = new ArrayList();
+		list.addAll(Fachada.getInstancia().obterDebitoACobrarImovel(imovel.getId()));
+		Collections.sort(list, new Comparator<DebitoACobrar>() {
+
+			public int compare(DebitoACobrar o1, DebitoACobrar o2) {
+				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
+			}
+		});
+		
+		return list;
+	}
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaDebitoACobrarHistoricoOrdenadaPorReferencia(Imovel imovel) {
+		
+		List list = new ArrayList();
+		list.addAll(Fachada.getInstancia().obterDebitoACobrarHistoricoImovel(imovel.getId()));
+		Collections.sort(list, new Comparator<DebitoACobrarHistorico>() {
+
+			public int compare(DebitoACobrarHistorico o1, DebitoACobrarHistorico o2) {
+				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
+			}
+		});
+		
+		return list;
+	}
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaCreditoARealizarOrdenadaPorReferencia(Imovel imovel) {
+		
+		List list = new ArrayList();
+		list.addAll(Fachada.getInstancia().obterCreditoARealizarImovel(imovel.getId()));
+		Collections.sort(list, new Comparator<CreditoARealizar>() {
+
+			public int compare(CreditoARealizar o1, CreditoARealizar o2) {
+				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
+			}
+		});
+		
+		return list;
+	}
+
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaCreditoARealizarHistoricoOrdenadaPorReferencia(Imovel imovel) {
+		
+		List list = new ArrayList();
+		list.addAll(Fachada.getInstancia().obterCreditoARealizarHistoricoImovel(imovel.getId()));
+		Collections.sort(list, new Comparator<CreditoARealizarHistorico>() {
+
+			public int compare(CreditoARealizarHistorico o1, CreditoARealizarHistorico o2) {
+				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
+			}
+		});
+		
+		return list;
 	}
 
 }

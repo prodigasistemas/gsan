@@ -904,6 +904,14 @@
 	</module>
 	
 	<module>
+		<ejb>BatchGerarDadosPagamentosNaoClassificadosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosDocumentosNaoIdentificadosMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

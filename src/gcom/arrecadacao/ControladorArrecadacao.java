@@ -9426,7 +9426,7 @@ public class ControladorArrecadacao implements SessionBean {
 				avisoBancarioHelper = new AvisoBancarioHelper();
 
 				avisoBancarioHelper.setIdAvisoBancario(avisoBancario.getId());
-
+				
 				if (avisoBancario.getDataLancamento() != null) {
 					avisoBancarioHelper.setDataLancamento(avisoBancario
 							.getDataLancamento());
@@ -51378,6 +51378,89 @@ public class ControladorArrecadacao implements SessionBean {
 		return mensagem.getMensagem();
 	}
 	
+	public void gerarDadosPagamentosNaoClassificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+
+		try {
+			repositorioArrecadacao.deletarDadosPagamentosNaoClassificados(referenciaArrecadacao);
+			repositorioArrecadacao.gerarDadosPagamentosNaoClassificados(referenciaArrecadacao);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (ErroRepositorioException ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+		
+		Collection<ArrecadadorMovimentoItem> itens;
+		try {
+			
+			System.out.println("1");
+			repositorioArrecadacao.deletarDadosDocumentosNaoIdentificados(referenciaArrecadacao);
+			System.out.println("1 - ok");
+			
+			System.out.println("2");
+			itens = repositorioArrecadacao.pesquisarItensNaoIdentificados(Util.gerarDataPrimeiroDiaApartirAnoMesRefencia(referenciaArrecadacao));
+			System.out.println("2 - ok");
+			
+			System.out.println("3 - qtd: " + itens.size());
+			for (ArrecadadorMovimentoItem item : itens) {
+				System.out.println("3 - " + item.getId());
+				RegistroHelperCodigoG registro = (RegistroHelperCodigoG) this.distribuirdadosRegistroMovimentoArrecadador(item.getConteudoRegistro(), null);
+				
+				AvisoBancario aviso = obterAvisoBancarioDeDocumentoNaoIdentificado(item, registro.getCodigoFormaArrecadacao());
+				
+				DadosDocumentosNaoIdentificados doc = new DadosDocumentosNaoIdentificados();
+				doc.setDadosCodigoBarras(registro);
+				doc.setAvisoBancario(aviso);
+				doc.setArrecadador(aviso.getArrecadador());
+				doc.setUltimaAlteracao(new Date());
+				doc.setItem(item);
+				System.out.println("3 - " + item.getId() + " - inserindo");
+				getControladorUtil().inserir(doc);
+				System.out.println("3 - " + item.getId() + " - ok");
+			}
+			System.out.println("3 - ok");
+			
+			System.out.println("4");
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			System.out.println("4 - ok ");
+			
+		} catch (ErroRepositorioException ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	private AvisoBancario obterAvisoBancarioDeDocumentoNaoIdentificado(ArrecadadorMovimentoItem item, String idFormaArrecadacao) throws ControladorException {
+		AvisoBancario avisoFinal = null;
+		
+		Collection<AvisoBancario> avisos = obterAvisosBancariosPorArrecadadorMovimento(item.getArrecadadorMovimento());
+		
+		Iterator<AvisoBancario> itAviso = avisos.iterator();
+		while (itAviso.hasNext()) {
+			
+			AvisoBancario aviso = itAviso.next();
+			
+			if (idFormaArrecadacao != null && idFormaArrecadacao != "" && aviso.getArrecadacaoForma().getId().equals(new Integer(idFormaArrecadacao))) {
+				avisoFinal = aviso;
+				break;
+			}
+		}
+		return avisoFinal;
+	}
+	
+	public Collection<AvisoBancario> obterAvisosBancariosPorArrecadadorMovimento(ArrecadadorMovimento arrecadadorMovimento) throws ControladorException {
+		try {
+			return repositorioArrecadacao.obterAvisosBancariosPorArrecadadorMovimento(arrecadadorMovimento);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
 	private void confirmarRegistroBoleto(RegistroFichaCompensacaoTipo7Helper registroTipo7, Integer matriculaImovel) {
 		try {
 			
@@ -51397,14 +51480,19 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, clienteResponsavelParcelamento, 
 						registroTipo7.getValorRecebidoFormatado(), true, parcelamento, ConstantesSistema.NAO);
-				
+				boletoInfo.setDataRegistroBanco(new Date());
+				repositorioUtil.atualizar(boletoInfo);
 			} else {
 				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
 					boleto.setValor(registroTipo7.getValorRecebidoFormatado().toString());
 				}
 				boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
+				if (boleto.getDataRegistroBanco() == null) {
+					boleto.setDataRegistroBanco(new Date());
+				}
 				repositorioUtil.atualizar(boleto);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51428,3 +51516,5 @@ public class ControladorArrecadacao implements SessionBean {
 		return guiaPagamentoHistorico;
 	}
 }
+
+

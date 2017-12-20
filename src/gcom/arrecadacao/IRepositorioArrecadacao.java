@@ -1310,5 +1310,12 @@ public interface IRepositorioArrecadacao {
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
+
+	public void gerarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 	
+	public void deletarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
+	
+	public Collection<ArrecadadorMovimentoItem> pesquisarItensNaoIdentificados(Date dataPesquisa) throws ErroRepositorioException;
+	
+	public void deletarDadosDocumentosNaoIdentificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 }

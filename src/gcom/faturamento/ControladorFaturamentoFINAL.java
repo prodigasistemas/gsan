@@ -54862,11 +54862,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String idDocumentoTipo, String idDocumentoEmitido)
 			throws ControladorException {
 		StringBuilder nossoNumero = new StringBuilder();
-
-		// é o numero do convênio fornecido pelo Banco
-		// número fixo e não pode ser alterado
-//		nossoNumero.append("2502792");
-		nossoNumero.append("2860143"); // Convenio do Banco do Brasil
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		
+		if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
+			nossoNumero.append("2860143"); // Convenio do Banco do Brasil
+		} else {
+			// é o numero do convênio fornecido pelo Banco
+			// número fixo e não pode ser alterado
+			nossoNumero.append("2502792");
+		}
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
 		// emitido

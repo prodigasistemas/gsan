@@ -672,6 +672,9 @@
 		<property name="valorAliquotaImposto"
 			column="parm_vlaliquotaimposto" type="java.math.BigDecimal"
 			length="13" />
+			
+		<property name="indicadorGeracaoBoletoBB"
+			column="parm_icgeracaoboletobb" type="java.lang.Short" length="1" />
 
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Logradouro -->

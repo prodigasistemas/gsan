@@ -33,6 +33,8 @@
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="boin_tmultimaalteracao" length="8"/>
 		<property name="indicadoGeradoPeloGsan" type="java.lang.Short" column="boin_icgeradogsan" length="1"/>
 		<property name="indicadoRegistradoNoBanco" type="java.lang.Short" column="boin_icregistradobanco" length="1"/>
+		<property name="dataRegistroBanco" type="java.sql.Timestamp" column="boin_dtregistrobanco" length="8"/>
+        <property name="dataCriacao" type="java.sql.Timestamp" column="boin_dtcriacao" length="8"/>
 		
 		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="false">
 			<column name="parc_id"/>

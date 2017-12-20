@@ -16,6 +16,8 @@ import gcom.batch.arrecadacao.TarefaBatchCancelarGuiasPagamentoNaoPagas;
 import gcom.batch.arrecadacao.TarefaBatchClassificarPagamentosDevolucoes;
 import gcom.batch.arrecadacao.TarefaBatchEncerrarArrecadacaoMes;
 import gcom.batch.arrecadacao.TarefaBatchGerarDadosDiariosArrecadacao;
+import gcom.batch.arrecadacao.TarefaBatchGerarDadosDocumentosNaoIdentificados;
+import gcom.batch.arrecadacao.TarefaBatchGerarDadosPagamentosNaoClassificados;
 import gcom.batch.arrecadacao.TarefaBatchGerarDadosRelatorioBIG;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoConta;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes;
@@ -2567,6 +2569,35 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 							break;
 						}
+						
+						case Funcionalidade.GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS: {
+
+							TarefaBatchGerarDadosPagamentosNaoClassificados batch = new TarefaBatchGerarDadosPagamentosNaoClassificados(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							
+							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+							
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+							
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+							
+							break;
+						}
+						case Funcionalidade.GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS: {
+
+							System.out.println("Inserindo processo ");
+							TarefaBatchGerarDadosDocumentosNaoIdentificados batch = new TarefaBatchGerarDadosDocumentosNaoIdentificados(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							
+							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+							
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+							
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+							
+							break;
+						}	
+							
 						default:
 					}
 				} catch (IOException e) {

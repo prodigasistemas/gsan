@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.DadosDocumentosNaoIdentificados" table="arrecadacao.dados_docs_nao_ident">
+		
+		<id name="id" type="java.lang.Integer" column="ddni_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_dados_docs_nao_ident</param>
+			</generator>
+		</id>
+		
+		<property name="referenciaArrecadacao" type="java.lang.Integer" column="ddni_amreferenciaarrecadacao" not-null="true" length="4"/>
+		<property name="valorDocumento" type="java.math.BigDecimal" column="ddni_vldocumento" length="15"/>
+		<property name="dataDocumento" type="java.sql.Date" column="ddni_datadocumento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ddni_tmultimaalteracao" length="8"/>
+		
+		
+		<!-- Associations -->
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
+			<column name="avbc_id"/>
+		</many-to-one>
+
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		
+		<many-to-one name="item" class="gcom.arrecadacao.ArrecadadorMovimentoItem" not-null="true">
+			<column name="amit_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

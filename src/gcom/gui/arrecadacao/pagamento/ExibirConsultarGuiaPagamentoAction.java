@@ -5,6 +5,7 @@ import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.debito.DebitoTipo;
@@ -31,6 +32,8 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		ActionForward retorno = actionMapping.findForward("exibirConsultarGuiaPagamento");
 		HttpSession sessao = request.getSession(false);
 
+		SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
+		
 		String guiaId = request.getParameter("guiaPagamentoId");
 		String guiaHistoricoId = request.getParameter("guiaPagamentoHistoricoId");
 		if ((guiaId == null || guiaId.trim().equals("")) && (guiaHistoricoId == null || guiaHistoricoId.trim().equals(""))) {
@@ -43,6 +46,7 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		} else {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
+			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
 			request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
 		}
 

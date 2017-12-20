@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.DadosPagamentosNaoClassificados" table="arrecadacao.dados_pag_nao_class">
+		
+		<id name="id" type="java.lang.Integer" column="dpnc_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_dados_pag_nao_class</param>
+			</generator>
+		</id>
+		
+		<property name="referenciaArrecadacao" type="java.lang.Integer" column="dpnc_amreferenciaarrecadacao" not-null="true" length="4"/>
+		<property name="referenciaDocumento" type="java.lang.Integer" column="dpnc_amreferenciadocumento" not-null="true" length="4"/>
+		<property name="valorPagamento" type="java.math.BigDecimal" column="dpnc_vlpagamento" length="15"/>
+		<property name="valorDocumento" type="java.math.BigDecimal" column="dpnc_vldocumento" length="15"/>
+		<property name="indicadorContaRetificada" type="short" column="dpnc_iccontaretificada" not-null="true" length="2"/>
+		<property name="dataPagamento" type="java.sql.Date" column="dpnc_datapagamento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dpnc_tmultimaalteracao" length="8"/>
+		
+		
+		<!-- Associations -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		
+		<many-to-one name="documentoAgregador" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_idagregador"/>
+		</many-to-one>
+		
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
+			<column name="avbc_id"/>
+		</many-to-one>
+
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		
+		<many-to-one name="pagamentoSituacao" class="gcom.arrecadacao.pagamento.PagamentoSituacao">
+			<column name="pgst_idatual"/>
+		</many-to-one>
+		
+		<many-to-one name="item" class="gcom.arrecadacao.ArrecadadorMovimentoItem" >
+			<column name="amit_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>
