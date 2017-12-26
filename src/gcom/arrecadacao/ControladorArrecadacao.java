@@ -51485,11 +51485,16 @@ public class ControladorArrecadacao implements SessionBean {
 			} else {
 				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
 					boleto.setValor(registroTipo7.getValorRecebidoFormatado().toString());
+				} else {
+					if (boleto.getDataRegistroBanco() == null) {
+						boleto.setDataRegistroBanco(new Date());
+						boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
+					} else {
+						boleto.setDataExclusaoBanco(new Date());
+						boleto.setIndicadoExcluidoBanco(ConstantesSistema.SIM);
+					}
 				}
-				boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
-				if (boleto.getDataRegistroBanco() == null) {
-					boleto.setDataRegistroBanco(new Date());
-				}
+				
 				repositorioUtil.atualizar(boleto);
 			}
 			
