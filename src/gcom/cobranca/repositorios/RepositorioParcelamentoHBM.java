@@ -42,7 +42,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			String where = "WHERE p.parc_id = :idParcelamento ";
 			String groupBy = "GROUP BY p.parc_id, p.imov_id ";
 			StringBuilder consulta = new StringBuilder();
-			consulta.append(montarRaizConsulta(where, groupBy, true));
+			consulta.append(montarRaizConsulta(where, groupBy));
 			
 			Query query = criarQuery(session, consulta.toString());
 			Object[] dados = (Object[]) query.setInteger("idParcelamento", idParcelamento).uniqueResult();
@@ -77,7 +77,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			
 			String groupBy = "GROUP BY p.parc_id, p.imov_id HAVING count(distinct c.cnta_id) >= :qtdContas ";
 			
-			String consulta = montarRaizConsulta(where.toString(), groupBy, false);
+			String consulta = montarRaizConsulta(where.toString(), groupBy);
 			
 			Query query = criarQuery(session, consulta.toString());
 			List<Object[]> lista = query.setDate("dataAtual", new Date())
@@ -102,7 +102,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return helper;
 	}
 	
-	private String montarRaizConsulta(String where, String groupBy, boolean isChamadaBotao) {
+	private String montarRaizConsulta(String where, String groupBy) {
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT distinct p.parc_id as idParcelamento, ")
 			  .append("       p.imov_id as idImovel, ")
@@ -116,13 +116,8 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 			 // .append("FROM cobranca.parcelamento p ");
 		
 		StringBuilder join = new StringBuilder();
-		if (isChamadaBotao) {
-			join.append("LEFT JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ");
-			join.append("LEFT JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
-		} else {
-			join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ");
-			join.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
-		}
+		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
+			.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)
