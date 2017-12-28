@@ -944,7 +944,13 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				if (pagamento.getAvisoBancario() != null) {
 					pagamentoEmpresa.setIdArrecadador(pagamento.getAvisoBancario().getArrecadador().getId());
 				}
+				
+				if (pagamento.getValorDesconto() != null) {
+					pagamentoEmpresa.setValorDesconto(pagamento.getValorDesconto());
+				}
+				
 				pagamentosEmpresa.add(pagamentoEmpresa);
+				
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
