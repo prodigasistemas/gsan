@@ -97,5 +97,15 @@ public class CancelarParcelamentoHelper {
 	public BigDecimal getParcelaDescontoFaixa() {
 		return valorDescontoFaixa.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
+
+	public short getNumeroPrestacoes() {
+		return numeroPrestacoes;
+	}
+
+	public short getNumeroPrestacoesCobradas() {
+		return numeroPrestacoesCobradas;
+	}
+	
+	
 	
 }

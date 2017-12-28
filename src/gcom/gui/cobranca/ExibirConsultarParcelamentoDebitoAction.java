@@ -301,8 +301,10 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	private void verificarPermissaoCancelarParcelamento(HttpServletRequest request, HttpSession sessao, Parcelamento parcelamento) {
 		boolean possuiPermissaoCancelarParcelamento = getFachada().verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO, (Usuario) sessao.getAttribute("usuarioLogado"));
 		boolean isParcelamentoRealizadoNoGsan = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento()) && isParcelamentoNormal(parcelamento);
+		CancelarParcelamentoHelper cancelarParcelamentoHelper = getFachada().pesquisarParcelamentoParaCancelar(parcelamento.getId());
+		boolean isParcelamentoConcluido = cancelarParcelamentoHelper.getNumeroPrestacoes() == cancelarParcelamentoHelper.getNumeroPrestacoesCobradas();
 
-		boolean exibirBotao = possuiPermissaoCancelarParcelamento && isParcelamentoRealizadoNoGsan;
+		boolean exibirBotao = possuiPermissaoCancelarParcelamento && isParcelamentoRealizadoNoGsan && !isParcelamentoConcluido;
 
 		request.setAttribute("possuiPermissaoCancelarParcelamento", exibirBotao);
 	}
