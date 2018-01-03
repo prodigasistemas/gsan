@@ -24146,7 +24146,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
 	        
 			if (historico != null && !historico.isEmpty()) {
-				System.out.println("Qtd historico: " + historico.size());
 				retorno.addAll(historico);
 			}
 
@@ -31956,7 +31955,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
 		            .append("dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
 		            .append("dac.dahi_nnparcelabonus as numParcelaBonus, ")
-		            .append("round(((pg.pgmt_vlpagamento * devol_total) / valor_total),2)  as valorDesconto, ")
+		            .append("round(((pg.pghi_vlpagamento * devol_total) / valor_total),2)  as valorDesconto ")
 		            .append("FROM arrecadacao.pagamento_historico pg ")
 		            .append("INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
 		            .append("LEFT JOIN valor v on pg.cbdo_id = v.cbdo_id ")
@@ -31968,8 +31967,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
 		            .append("where pg.loca_id = :idLocalidade ")
 		            .append("and pg.pgst_idatual = :pagamentoClassificado ")
-		            .append("and pg.pghi_dtpagamento BETWEEN '2017-08-01' and '2017-09-01' ")
+		            .append("and pg.pghi_dtpagamento BETWEEN '2017-08-11' and '2017-09-01' ")
+//		            .append(" and pg.imov_id = 300845 ")
 //		            .append("and pg.pghi_amreferenciaarrecadacao in (:referencia5, :referencia6, :referencia7, :referencia8) ")
+		            .append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
+		            .append("and ( (pg.cnta_id IS NOT NULL AND pg.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta) ) OR (pg.cnta_id IS NULL )) ")
 		            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
             
             colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
@@ -32006,14 +32008,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                         .setMaxResults(quantidadeRegistros)
                         .list();
             
-      
-            System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
             if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
                   System.out.println(colecaoDadosPagamentos.size());
                   retorno = new ArrayList();
                   for(Object[] dadosPagamento : colecaoDadosPagamentos){
-                        
-                        System.out.println("dadosPgamento: " + (dadosPagamento != null));
                         
                         if(dadosPagamento != null){
                               Pagamento pagamento = new Pagamento();
