@@ -31968,10 +31968,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("where pg.loca_id = :idLocalidade ")
 		            .append("and pg.pgst_idatual = :pagamentoClassificado ")
 		            .append("and pg.pghi_dtpagamento BETWEEN '2017-08-11' and '2017-09-01' ")
-//		            .append(" and pg.imov_id = 300845 ")
+//		            .append(" and pg.imov_id = 2375494 ")
 //		            .append("and pg.pghi_amreferenciaarrecadacao in (:referencia5, :referencia6, :referencia7, :referencia8) ")
 		            .append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
-		            .append("and ( (pg.cnta_id IS NOT NULL AND pg.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta) ) OR (pg.cnta_id IS NULL )) ")
+//		            .append("and ( (pg.cnta_id IS NOT NULL AND pg.cnta_id in (select cnta_id from cobranca.empresa_cobranca_conta) ) OR (pg.cnta_id IS NULL )) ")
 		            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
             
             colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())

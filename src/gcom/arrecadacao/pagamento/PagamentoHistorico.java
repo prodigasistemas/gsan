@@ -21,85 +21,34 @@ public class PagamentoHistorico implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private BigDecimal valorPagamento;
-
-    /** persistent field */
     private BigDecimal valorExcedente;
-    
-    /** persistent field */
     private Integer anoMesReferenciaPagamento;
-
-    /** persistent field */
     private Date dataPagamento;
-
-    /** persistent field */
     private Integer anoMesReferenciaArrecadacao;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** nullable persistent field */
     private Integer codigoAgente;
-
-    /** persistent field */
     private ArrecadacaoForma arrecadacaoForma;
-
-    /** persistent field */
     private Imovel imovel;
-
-    /** persistent field */
     private DocumentoTipo documentoTipo;
-
-    /** persistent field */
     private ContaGeral contaGeral;
-
-    /** persistent field */
     private Localidade localidade;
-    
-    /** persistent field */
 	private Short indicadorExpurgado;
-
-    /** persistent field */
-    private gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual;
-
-    /** persistent field */
-    private gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior;
-
-    /** persistent field */
+    private PagamentoSituacao pagamentoSituacaoAtual;
+    private PagamentoSituacao pagamentoSituacaoAnterior;
     private ArrecadadorMovimentoItem arrecadadorMovimentoItem;
-
-    /** persistent field */
-    private gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento;
-    
-	/** persistent field */
+    private GuiaPagamento guiaPagamento;
 	private DebitoACobrarGeral debitoACobrarGeral;
-    
-
-    /** persistent field */
     private AvisoBancario avisoBancario;
-
-    /** persistent field */
     private DebitoTipo debitoTipo;
-
-    /** persistent field */
     private Cliente cliente;
-    
-    /** persistent field */
     private CobrancaDocumento cobrancaDocumentoAgregador;
-    
-    /** persistent field */
     private DocumentoTipo documentoTipoAgregador;
-    
-    /** persistent field */
     private Fatura fatura;
-    
-    /** nullable persistent field */
     private Date dataHoraProcessamento;
     
+    private GuiaPagamentoHistorico guiaPagamentoHistorico;
 
 	public final static Short INDICADOR_EXPURGADO_SIM = new Short("1");
 	public final static Short INDICADOR_EXPURGADO_NAO = new Short("2");
@@ -504,6 +453,14 @@ public class PagamentoHistorico implements Serializable {
 
 	public void setFatura(Fatura fatura) {
 		this.fatura = fatura;
+	}
+
+	public GuiaPagamentoHistorico getGuiaPagamentoHistorico() {
+		return guiaPagamentoHistorico;
+	}
+
+	public void setGuiaPagamentoHistorico(GuiaPagamentoHistorico guiaPagamentoHistorico) {
+		this.guiaPagamentoHistorico = guiaPagamentoHistorico;
 	}
 
    

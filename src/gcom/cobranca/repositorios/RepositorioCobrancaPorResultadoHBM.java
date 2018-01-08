@@ -433,7 +433,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					+ "ecco_vloriginalconta as valorConta, " // 3
 					+ "eccp_ampagamento as anoMesReferenciaPagamento, "// 4
 					+ "sum(case when  (ccp.dbtp_id not in ( 43, 80, 91, 94, 100 ) or ccp.dbtp_id is null) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorPrincipal, " // 5
+					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) - coalesce(ccp.eccp_vldesconto,0) as valorPrincipal, " // 5
 					+ "sum(case when   ccp.dbtp_id     in ( 43,  80, 91, 94, 100 ) "
 					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorEncargos, " // 6
 					+ "cc.ecco_pcempresaconta as percentualEmpresa, " // 7
@@ -466,7 +466,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				consulta += "where eccp_dtpagamento = " + helper.getDataPagamentoInicial() + " ";
 			}
 
-			consulta += "group by im.imov_id, clie_nmcliente, cnta.cnta_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, cc.ecco_pcempresaconta, lc.loca_id, lc.loca_nmlocalidade, gr.greg_id, gr.greg_nmregional, un.uneg_id, un.uneg_nmunidadenegocio, rt.rota_cdrota, eccp_ictipopagamento, eccp_nnparcelaatual,eccp_nntotalparcelas ";
+			consulta += "group by im.imov_id, clie_nmcliente, cnta.cnta_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, cc.ecco_pcempresaconta, lc.loca_id, lc.loca_nmlocalidade, gr.greg_id, gr.greg_nmregional, un.uneg_id, un.uneg_nmunidadenegocio, rt.rota_cdrota, eccp_ictipopagamento, eccp_nnparcelaatual,eccp_nntotalparcelas, ccp.eccp_vldesconto ";
 
 			consulta = consulta
 					+ "UNION "
@@ -476,7 +476,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					+ "ecco_vloriginalconta as valorConta, " // 3
 					+ "eccp_ampagamento as anoMesReferenciaPagamento, "// 4
 					+ "sum(case when  (ccp.dbtp_id not in ( 43, 80, 91, 94, 100 ) or ccp.dbtp_id is null) "
-					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorPrincipal, " // 5
+					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) - coalesce(ccp.eccp_vldesconto,0) as valorPrincipal, " // 5
 					+ "sum(case when   ccp.dbtp_id     in ( 43,  80, 91, 94, 100 ) "
 					+ "then ( coalesce(eccp_vlpagamentomes,0))  end) as valorEncargos, " // 6
 					+ "cc.ecco_pcempresaconta as percentualEmpresa, " // 7
@@ -518,7 +518,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				consulta += "and uneg.uneg_id = " + helper.getUnidadeNegocio();
 			}
 
-			consulta += "group by im.imov_id, clie_nmcliente, cnhi.cnhi_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, cc.ecco_pcempresaconta, lc.loca_id, lc.loca_nmlocalidade, gr.greg_id, gr.greg_nmregional, un.uneg_id, un.uneg_nmunidadenegocio, rt.rota_cdrota, eccp_ictipopagamento, eccp_nnparcelaatual,eccp_nntotalparcelas ";
+			consulta += "group by im.imov_id, clie_nmcliente, cnhi.cnhi_amreferenciaconta, ecco_vloriginalconta, eccp_ampagamento, cc.ecco_pcempresaconta, lc.loca_id, lc.loca_nmlocalidade, gr.greg_id, gr.greg_nmregional, un.uneg_id, un.uneg_nmunidadenegocio, rt.rota_cdrota, eccp_ictipopagamento, eccp_nnparcelaatual,eccp_nntotalparcelas, ccp.eccp_vldesconto ";
 
 			if (helper.getOpcaoTotalizacao().equalsIgnoreCase("estadoGerencia")) {
 				consulta += " order by idGerenciaRegional, idUnidadeNegocio, idLocalidade, idImovel, anoMesConta ";
@@ -534,6 +534,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				consulta += " order by idGerenciaRegional, idUnidadeNegocio, idLocalidade, idImovel, anoMesConta ";
 			} else if (helper.getOpcaoTotalizacao().equalsIgnoreCase("unidadeNegocio")) {
 				consulta += " order by idUnidadeNegocio, idLocalidade, idImovel, anoMesConta ";
+			} else {
+				consulta += " order by idImovel, anoMesConta ";
 			}
 
 			retorno = session.createSQLQuery(consulta)

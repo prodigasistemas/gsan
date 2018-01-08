@@ -291,7 +291,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="343"
+						x="344"
 						y="8"
 						width="65"
 						height="9"

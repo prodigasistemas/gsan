@@ -770,14 +770,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa = new ArrayList<EmpresaCobrancaContaPagamentos>();
 		
 		if (pagamento.getContaGeral() != null) {
-
 			if (isContaEmCobranca(pagamento)) {
 				pagamentosEmpresa.addAll(criaColecaoEmpresaContaCobrancaPagamento(pagamento.getContaGeral().getId(), pagamento.getValorPagamento(),
 						pagamento, null, null, false, null, ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA, null));
-			
 			} else {
 				List<DebitoCobrado> debitosCobrados = obterDebitosDePagamentoDeParcelamento(pagamento);
-
 				for (DebitoCobrado debitoCobrado : debitosCobrados) {
 					Parcelamento parcelamento =  null;
 							
@@ -810,7 +807,6 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			pagamentosEmpresa.addAll(verificarItensParcelamentos(pagamento.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento(), null,
 					pagamento.getDebitoACobrarGeral().getDebitoACobrar(), pagamento, null, pagamento.getAnoMesReferenciaArrecadacao()));
 		}
-		
 		return pagamentosEmpresa;
 	}
 
@@ -924,7 +920,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				pagamentoEmpresa.setEmpresaCobrancaConta(empresaCobrancaConta);
 				pagamentoEmpresa.setAnoMesPagamentoArrecadacao(pagamento.getAnoMesReferenciaArrecadacao());
 				pagamentoEmpresa.setValorPagamentoMes(valorPagamentoMes);
-				pagamentoEmpresa.setIndicadorTipoPagamento(indicadorTipoPagamento);
+				pagamentoEmpresa.setIndicadorTipoPagamento(obterPagamentoTipoDoPagamento(debitoTipo));
 				pagamentoEmpresa.setNumeroParcelaAtual(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacaoDebito()) : new Integer("0"));
 				pagamentoEmpresa.setNumeroTotalParcelas(debitoCobrado != null ? new Integer(debitoCobrado.getNumeroPrestacao()) : new Integer("0"));
 				pagamentoEmpresa.setUltimaAlteracao(new Date());
@@ -957,6 +953,16 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			throw new EJBException(ex);
 		}
 		return pagamentosEmpresa;
+	}
+	
+	private Short obterPagamentoTipoDoPagamento(DebitoTipo debitoTipo) {
+		if (debitoTipo == null) {
+			return ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA;
+		} else if (debitoTipo.getId().intValue() == DebitoTipo.ENTRADA_PARCELAMENTO.intValue()) {
+			return ConstantesSistema.INDICADOR_PAGAMENTO_ENTRADA_PARCELAMENTO;
+		} else {
+			return ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO;
+		}
 	}
 	
 	private Collection<EmpresaCobrancaContaPagamentos> verificarItensParcelamentos(Parcelamento parcelamento, GuiaPagamento guiaPagamento, DebitoACobrar debitoACobrar,
@@ -1281,8 +1287,10 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 						bean.setIndicadorTipoPagamento(indicadorTipoPagamento.toString());
 						if (indicadorTipoPagamento.intValue() == ConstantesSistema.INDICADOR_PAGAMENTO_A_VISTA.intValue()) {
 							bean.setTipoPagamento("À Vista");
-						} else {
+						} else if (indicadorTipoPagamento.intValue() == ConstantesSistema.INDICADOR_PAGAMENTO_PARCELADO.intValue()) {
 							bean.setTipoPagamento("Parcelado");
+						} else {
+							bean.setTipoPagamento("Entrada");
 						}
 					}
 
