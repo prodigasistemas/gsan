@@ -302,9 +302,14 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		boolean possuiPermissaoCancelarParcelamento = getFachada().verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO, (Usuario) sessao.getAttribute("usuarioLogado"));
 		boolean isParcelamentoRealizadoNoGsan = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento()) && isParcelamentoNormal(parcelamento);
 		CancelarParcelamentoHelper cancelarParcelamentoHelper = getFachada().pesquisarParcelamentoParaCancelar(parcelamento.getId());
-		boolean isParcelamentoConcluido = cancelarParcelamentoHelper.getNumeroPrestacoes() == cancelarParcelamentoHelper.getNumeroPrestacoesCobradas();
+		boolean isParcelamentoConcluido = false;
+		boolean houvePagamentoParcelamento = cancelarParcelamentoHelper != null;
+		
+		if (cancelarParcelamentoHelper != null) {
+			isParcelamentoConcluido = cancelarParcelamentoHelper.getNumeroPrestacoes() == cancelarParcelamentoHelper.getNumeroPrestacoesCobradas();
+		}
 
-		boolean exibirBotao = possuiPermissaoCancelarParcelamento && isParcelamentoRealizadoNoGsan && !isParcelamentoConcluido;
+		boolean exibirBotao = possuiPermissaoCancelarParcelamento && isParcelamentoRealizadoNoGsan && !isParcelamentoConcluido && houvePagamentoParcelamento;
 
 		request.setAttribute("possuiPermissaoCancelarParcelamento", exibirBotao);
 	}
