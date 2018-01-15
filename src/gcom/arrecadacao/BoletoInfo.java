@@ -34,6 +34,8 @@ public class BoletoInfo extends ObjetoTransacao {
 	private Short indicadoRegistradoNoBanco;
 	private Date dataRegistroBanco;
 	private Date dataCriacao;
+	private Short indicadoExcluidoBanco;
+	private Date dataExclusaoBanco;
 	
 	public BoletoInfo() {}
 	
@@ -61,6 +63,7 @@ public class BoletoInfo extends ObjetoTransacao {
 		this.ultimaAlteracao = new Date();
 		this.indicadoGeradoPeloGsan = indicadoGeradoPeloGsan;
 		this.indicadoRegistradoNoBanco = ConstantesSistema.NAO;
+		this.indicadoExcluidoBanco = ConstantesSistema.NAO;
 		this.dataCriacao = new Date();
 	}
 
@@ -326,6 +329,22 @@ public class BoletoInfo extends ObjetoTransacao {
 
 	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+
+	public Short getIndicadoExcluidoBanco() {
+		return indicadoExcluidoBanco;
+	}
+
+	public void setIndicadoExcluidoBanco(Short indicadoExcluidoBanco) {
+		this.indicadoExcluidoBanco = indicadoExcluidoBanco;
+	}
+
+	public Date getDataExclusaoBanco() {
+		return dataExclusaoBanco;
+	}
+
+	public void setDataExclusaoBanco(Date dataExclusaoBanco) {
+		this.dataExclusaoBanco = dataExclusaoBanco;
 	}
 	
 
