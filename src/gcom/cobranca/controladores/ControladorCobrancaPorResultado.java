@@ -29,6 +29,7 @@ import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.cobranca.EmpresaCobrancaContaPagamentos;
 import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
+import gcom.cobranca.FiltroEmpresaCobrancaContaPagamentos;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
 import gcom.cobranca.NegativacaoImoveis;
@@ -649,12 +650,15 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	public void atualizarPagamentosContasCobranca(int idFuncionalidadeIniciada, Integer idLocalidade, Integer anoMesArrecadacao) throws ControladorException {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
+		Map<String, EmpresaCobrancaContaPagamentos> mapPagamentos = new HashMap<String, EmpresaCobrancaContaPagamentos>();
 		try {
 			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
 
 			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
-				getControladorUtil().inserir(pagamento);
-				atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
+				if (!isPagamentoDuplicado(pagamento, mapPagamentos)) {
+					getControladorUtil().inserir(pagamento);
+					atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
+				}
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -663,6 +667,32 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 		}
 	}
+	
+	private boolean isPagamentoDuplicado(EmpresaCobrancaContaPagamentos pagamento, Map<String, EmpresaCobrancaContaPagamentos> mapPagamentos) {
+		if (mapPagamentos.containsKey(obterHashPagamento(pagamento))) {
+			return true;
+		} else {
+			mapPagamentos.put(obterHashPagamento(pagamento),pagamento);
+			return false;
+		}
+	}
+	
+	private String obterHashPagamento(EmpresaCobrancaContaPagamentos pagamento) {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append(pagamento.getIdImovel()) 
+				.append(pagamento.getEmpresaCobrancaConta().getId()) 
+				.append(pagamento.getValorPagamentoMes())
+				.append(pagamento.getAnoMesReferenciaPagamento()) 
+				.append(pagamento.getNumeroParcelaAtual());
+		
+		if (pagamento.getDebitoTipo() != null)
+			builder.append(pagamento.getDebitoTipo().getId());
+		
+		return builder.toString(); 
+	}
+	
+	
 
 	private void atualizarSituacaoCobranca(Integer idImovel, Integer idComando) throws ErroRepositorioException {
 		if (repositorio.isContasPagas(idImovel, idComando)) {
