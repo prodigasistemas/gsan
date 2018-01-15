@@ -18,7 +18,7 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 	private DebitoTipo debitoTipo;
 	private Date ultimaAlteracao;
 	private BigDecimal valorPagamentoMes;
-	private Integer anoMesReferenciaPagamento; 
+	private Integer anoMesReferenciaPagamento;
 	private Date dataPagamento;
 	private Integer idImovel;
 	private Integer idArrecadador;
@@ -27,13 +27,18 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 	private Integer numeroTotalParcelas;
 	private Short indicadorGeracaoArquivo;
 	private Integer idPagamento;
-	
+	private BigDecimal valorDesconto;
 
-	public EmpresaCobrancaContaPagamentos(Integer id, EmpresaCobrancaConta empresaCobrancaConta, Integer anoMesPagamentoArrecadacao,
-			DebitoTipo debitoTipo,
-			Date ultimaAlteracao,BigDecimal valorPagamentoMes, Integer idPagamento) {
+	public EmpresaCobrancaContaPagamentos(
+			Integer id, 
+			EmpresaCobrancaConta empresaCobrancaConta, 
+			Integer anoMesPagamentoArrecadacao, 
+			DebitoTipo debitoTipo, 
+			Date ultimaAlteracao, 
+			BigDecimal valorPagamentoMes,
+			Integer idPagamento) {
 		super();
-		
+
 		this.id = id;
 		this.empresaCobrancaConta = empresaCobrancaConta;
 		this.anoMesPagamentoArrecadacao = anoMesPagamentoArrecadacao;
@@ -54,25 +59,19 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		FiltroEmpresaCobrancaContaPagamentos filtroEmpresaCobrancaContaPagamentos = new FiltroEmpresaCobrancaContaPagamentos();
-
-		filtroEmpresaCobrancaContaPagamentos.adicionarParametro(new ParametroSimples(
-				FiltroEmpresaCobrancaContaPagamentos.ID, this.getId()));
-		return null;
+		Filtro filtro = new FiltroEmpresaCobrancaContaPagamentos();
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaContaPagamentos.ID, this.getId()));
+		return filtro;
 	}
-	/**
-	 * @return Retorna o campo id.
-	 */
+
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id O id a ser setado.
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	@Override
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
@@ -82,8 +81,6 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-
-
 
 	public Integer getAnoMesPagamentoArrecadacao() {
 		return anoMesPagamentoArrecadacao;
@@ -108,7 +105,6 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 	public void setEmpresaCobrancaConta(EmpresaCobrancaConta empresaCobrancaConta) {
 		this.empresaCobrancaConta = empresaCobrancaConta;
 	}
-
 
 	public BigDecimal getValorPagamentoMes() {
 		return valorPagamentoMes;
@@ -188,5 +184,13 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 
 	public void setIdPagamento(Integer idPagamento) {
 		this.idPagamento = idPagamento;
+	}
+
+	public BigDecimal getValorDesconto() {
+		return valorDesconto;
+	}
+
+	public void setValorDesconto(BigDecimal valorDesconto) {
+		this.valorDesconto = valorDesconto;
 	}
 }

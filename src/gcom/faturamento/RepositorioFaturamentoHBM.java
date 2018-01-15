@@ -39802,6 +39802,52 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	
+	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoHistoricoDeParcelamento(
+			Integer idConta, Collection idsFinanciamentoTipo)
+			throws ErroRepositorioException {
+
+		Collection<Object[]> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "SELECT dbcb.debitoTipo.id,"// 0
+					+ "parc.id,"// 1
+					+ "parc.valorDebitoAtualizado,"// 2
+					+ "dbcb.valorPrestacao, "// 3
+					+ "dbcb.numeroPrestacaoDebito, "// 4
+					+ "dbcb.numeroPrestacao, "// 5
+					+ "parc.valorConta "// 6
+					+ "FROM DebitoCobradoHistorico dbcb "
+					+ "INNER JOIN dbcb.contaHistorico conta "
+					+ "INNER JOIN dbcb.financiamentoTipo fntp "
+					+ "LEFT JOIN dbcb.debitoACobrarGeral dacg "
+					+ "LEFT JOIN dacg.debitoACobrar dac "
+					+ "LEFT JOIN dac.parcelamento parc "
+					+ "WHERE conta.id = :idConta ";
+			if (idsFinanciamentoTipo != null && !idsFinanciamentoTipo.isEmpty()) {
+				consulta = consulta + "AND fntp.id IN(:idsFinanciamentoTipo) ";
+
+				retorno = session.createQuery(consulta).setInteger("idConta",
+						idConta).setParameterList("idsFinanciamentoTipo",
+						idsFinanciamentoTipo).list();
+			} else {
+				retorno = session.createQuery(consulta).setInteger("idConta",
+						idConta).list();
+			}
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 
 	/**
 	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa

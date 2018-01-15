@@ -23962,78 +23962,92 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros)
 			throws ErroRepositorioException {
 		Collection<Pagamento> retorno = new ArrayList();
+		Session session = HibernateUtil.getSession();
 		
 		Collection<Object[]> colecaoDadosPagamentos = null;
-
-		Session session = HibernateUtil.getSession();
 		StringBuilder consulta = new StringBuilder();
 		
 		try {
 			
-			consulta.append("SELECT pg.pgmt_id as idPagamento, ")
-			.append(" pg.pgmt_vlpagamento as valorPagamento,")
-			.append(" cnt.cnta_id as idConta, ")
-			.append(" gp.gpag_id as idGuia,")
-			.append(" pgp.parc_id as idParcelamentoGuia,")
-			.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia,")
-			.append(" gp.gpag_vldebito as valorGuia,")
-			.append(" dtgp.dbtp_id as debitoTipoGuia,")
-			.append(" dac.dbac_id as idDebito,")
-			.append(" pdac.parc_id as idParcelamentoDebito, ")
-			.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito,")
-			.append(" dac.dbac_vldebito as valorDebito, ")
-			.append(" dac.dbtp_id as deitoTipoDebito, ")
-			.append(" pg.pgmt_amreferenciapagamento as referenciaPagamento,")
-			.append(" pg.pgmt_dtpagamento as dataPagamento,")
-			.append(" pg.imov_id as imovel,")
-			.append(" ab.arrc_id as arrecadador, ")
-			.append(" pgp.parc_vlconta as valorParcelamentoConta, ")
-			.append(" pdac.parc_vlconta as valorParcelamentoContaDebito, ")
-			.append(" dac.dbac_nnprestacaodebito as numPrestacaoDebito, ")
-			.append(" dac.dbac_nnprestacaocobradas as numPrestacoesCobradas, ")
-			.append(" dac.dbac_nnparcelabonus as numParcelaBonus")
-			.append(" FROM arrecadacao.pagamento pg")
-			.append(" LEFT JOIN faturamento.conta cnt on cnt.cnta_id = pg.cnta_id")
-			.append(" LEFT JOIN faturamento.guia_pagamento gp on gp.gpag_id = pg.gpag_id")
-			.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id")
-			.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id")
-			.append(" LEFT JOIN faturamento.debito_a_cobrar dac on dac.dbac_id = pg.dbac_id")
-			.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id")
-			.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id")
-			.append(" where pg.loca_id = :idLocalidade")
-			.append(" and pg.pgst_idatual = :pagamentoClassificado ")
-			.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia ")
-			.append(" and pg.pgmt_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null)");
-			
-			colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
-					.addScalar("idPagamento", Hibernate.INTEGER)
-					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
-					.addScalar("idConta", Hibernate.INTEGER)
-					.addScalar("idGuia", Hibernate.INTEGER)
-					.addScalar("idParcelamentoGuia", Hibernate.INTEGER)
-					.addScalar("valorParcelamentoGuia", Hibernate.BIG_DECIMAL)
-					.addScalar("valorGuia", Hibernate.BIG_DECIMAL)
-					.addScalar("debitoTipoGuia", Hibernate.INTEGER)
-					.addScalar("idDebito", Hibernate.INTEGER)
-					.addScalar("idParcelamentoDebito", Hibernate.INTEGER)
-					.addScalar("valorParcelamentoDebito", Hibernate.BIG_DECIMAL)
-					.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
-					.addScalar("deitoTipoDebito", Hibernate.INTEGER)
-					.addScalar("referenciaPagamento", Hibernate.INTEGER)
-					.addScalar("dataPagamento", Hibernate.DATE)
-					.addScalar("imovel", Hibernate.INTEGER)
-					.addScalar("arrecadador", Hibernate.INTEGER)
-					.addScalar("valorParcelamentoConta", Hibernate.BIG_DECIMAL)
-					.addScalar("valorParcelamentoContaDebito", Hibernate.BIG_DECIMAL)
-					.addScalar("numPrestacaoDebito", Hibernate.SHORT)
-					.addScalar("numPrestacoesCobradas", Hibernate.SHORT)
-					.addScalar("numParcelaBonus", Hibernate.SHORT)
-			        .setInteger("idLocalidade",idLocalidade)
-			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-			        .setInteger("referencia", referencia)
-					.setFirstResult(numeroPaginas)
-					.setMaxResults(quantidadeRegistros)
-					.list();
+//			consulta.append(" with valor as (select imov_id,cbdo_id, sum(valor_total) as valor_total , sum(devol_total) as devol_total from ( ")
+//					.append(" select pg.imov_id ,pg.cbdo_id, sum(pgmt_vlpagamento) as valor_total, 0 as devol_total ")
+//					.append(" FROM arrecadacao.pagamento pg ")
+//					.append(" where pg.cbdo_id in (select cbdo_id from arrecadacao.devolucao d) ")
+//					.append(" group by pg.imov_id ,pg.cbdo_id ")
+//					.append(" union all ")
+//					.append(" select d.imov_id ,d.cbdo_id, 0 as valor_total, sum (devl_vldevolucao) as devol_total ")
+//					.append(" FROM arrecadacao.devolucao d ")
+//					.append(" where d.cbdo_id in (select cbdo_id from arrecadacao.pagamento pg ) ")
+//					.append(" group by d.imov_id ,d.cbdo_id ) as x ")
+//					.append(" group by imov_id ,cbdo_id) ")
+//
+//					.append(" SELECT pg.pgmt_id as idPagamento, ")
+//					.append(" pg.pgmt_vlpagamento as valorPagamento, ")
+//					.append(" cnt.cnta_id as idConta, ")
+//					.append(" gp.gpag_id as idGuia, ")
+//					.append(" pgp.parc_id as idParcelamentoGuia, ")
+//					.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
+//					.append(" gp.gphi_vldebito as valorGuia, ")
+//					.append(" dtgp.dbtp_id as debitoTipoGuia, ")
+//					.append(" dac.dbac_id as idDebito, ")
+//					.append(" pdac.parc_id as idParcelamentoDebito, ")
+//					.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
+//					.append(" dac.dahi_vldebito as valorDebito, ")
+//					.append(" dac.dbtp_id as deitoTipoDebito, ")
+//					.append(" pg.pgmt_amreferenciapagamento as referenciaPagamento, ")
+//					.append(" pg.pgmt_dtpagamento as dataPagamento, ")
+//					.append(" pg.imov_id as imovel, ")
+//					.append(" ab.arrc_id as arrecadador, ")
+//					.append(" pgp.parc_vlconta as valorParcelamentoConta, ")
+//					.append(" pdac.parc_vlconta as valorParcelamentoContaDebito,   ")
+//					.append(" dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
+//					.append(" dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
+//					.append(" dac.dahi_nnparcelabonus as numParcelaBonus, ")
+//					.append(" round(((pg.pgmt_vlpagamento * devol_total) / valor_total),2)  as valorDesconto ")
+//					.append(" FROM arrecadacao.pagamento pg ")
+//					.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
+//					.append(" LEFT JOIN valor v on pg.cbdo_id = v.cbdo_id ")
+//					.append(" LEFT JOIN faturamento.conta cnt on cnt.cnta_id = pg.cnta_id ")
+//					.append(" LEFT JOIN faturamento.guia_pagamento gp on gp.gpag_id = pg.gpag_id ")
+//					.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id ")
+//					.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")
+//					.append(" LEFT JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = pg.dbac_id ")
+//					.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
+//					.append(" where pg.loca_id = :idLocalidade ")
+//					.append(" and pg.pgst_idatual = :pagamentoClassificado ")
+//					.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia")
+//					.append(" and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
+//					.append(" and pg.pgmt_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
+//
+//			colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
+//					.addScalar("idPagamento", Hibernate.INTEGER)
+//					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+//					.addScalar("idConta", Hibernate.INTEGER)
+//					.addScalar("idGuia", Hibernate.INTEGER)
+//					.addScalar("idParcelamentoGuia", Hibernate.INTEGER)
+//					.addScalar("valorParcelamentoGuia", Hibernate.BIG_DECIMAL)
+//					.addScalar("valorGuia", Hibernate.BIG_DECIMAL)
+//					.addScalar("debitoTipoGuia", Hibernate.INTEGER)
+//					.addScalar("idDebito", Hibernate.INTEGER)
+//					.addScalar("idParcelamentoDebito", Hibernate.INTEGER)
+//					.addScalar("valorParcelamentoDebito", Hibernate.BIG_DECIMAL)
+//					.addScalar("valorDebito", Hibernate.BIG_DECIMAL)
+//					.addScalar("deitoTipoDebito", Hibernate.INTEGER)
+//					.addScalar("referenciaPagamento", Hibernate.INTEGER)
+//					.addScalar("dataPagamento", Hibernate.DATE)
+//					.addScalar("imovel", Hibernate.INTEGER)
+//					.addScalar("arrecadador", Hibernate.INTEGER)
+//					.addScalar("valorParcelamentoConta", Hibernate.BIG_DECIMAL)
+//					.addScalar("valorParcelamentoContaDebito", Hibernate.BIG_DECIMAL)
+//					.addScalar("numPrestacaoDebito", Hibernate.SHORT)
+//					.addScalar("numPrestacoesCobradas", Hibernate.SHORT)
+//					.addScalar("numParcelaBonus", Hibernate.SHORT)
+//			        .setInteger("idLocalidade",idLocalidade)
+//			        .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+//			        .setInteger("referencia", referencia)
+//					.setFirstResult(numeroPaginas)
+//					.setMaxResults(quantidadeRegistros)
+//					.list();
 			
 			if (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) {
 				for (Object[] dadosPagamento : colecaoDadosPagamentos) {
@@ -24140,14 +24154,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						retorno.add(pagamento);
 					}
 				}
-				
-				System.out.println("Qtd pagamentos: " + retorno.size());
 			}
 			
 	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
 	        
 			if (historico != null && !historico.isEmpty()) {
-				System.out.println("Qtd historico: " + historico.size());
 				retorno.addAll(historico);
 			}
 
@@ -31923,40 +31934,56 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
       
       try {
             
-            consulta.append("SELECT pg.pghi_id as idPagamento, ")
-            .append("pg.pghi_vlpagamento as valorPagamento, ")
-            .append("cnt.cnta_id as idConta, ")
-            .append("gp.gpag_id as idGuia, ")
-            .append("pgp.parc_id as idParcelamentoGuia, ")
-            .append("pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
-            .append("gp.gphi_vldebito as valorGuia, ")
-            .append("dtgp.dbtp_id as debitoTipoGuia, ")
-            .append("dac.dbac_id as idDebito, ")
-            .append("pdac.parc_id as idParcelamentoDebito, ")
-            .append("pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
-            .append("dac.dahi_vldebito as valorDebito, ")
-            .append("dac.dbtp_id as deitoTipoDebito, ")
-            .append("pg.pghi_amreferenciapagamento as referenciaPagamento, ")
-            .append("pg.pghi_dtpagamento as dataPagamento, ")
-            .append("pg.imov_id as imovel, ")
-            .append("ab.arrc_id as arrecadador, ")
-            .append("pgp.parc_vlconta as valorParcelamentoConta, ")
-            .append("pdac.parc_vlconta as valorParcelamentoContaDebito,   ")
-            .append("dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
-            .append("dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
-            .append("dac.dahi_nnparcelabonus as numParcelaBonus ")
-            .append("FROM arrecadacao.pagamento_historico pg ")
-            .append("LEFT JOIN faturamento.conta_historico cnt on cnt.cnta_id = pg.cnta_id ")
-            .append("LEFT JOIN faturamento.guia_pagamento_historico gp on gp.gpag_id = pg.gpag_id ")
-            .append("LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id ")
-            .append("LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")
-            .append("LEFT JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = pg.dbac_id ")
-            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
-            .append("INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
-            .append("where pg.loca_id = :idLocalidade ")
-            .append("and pg.pgst_idatual = :pagamentoClassificado ")
-            .append("and pg.pghi_amreferenciaarrecadacao in (:referencia5, :referencia6, :referencia7, :referencia8) ")
-            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ");
+            consulta.append("with valor as (select imov_id,cbdo_id, sum(valor_total) as valor_total , sum(devol_total) as devol_total from ( ")
+		            .append("select pg.imov_id ,pg.cbdo_id, sum(pghi_vlpagamento) as valor_total, 0 as devol_total ")
+		            .append("FROM arrecadacao.pagamento_historico pg ")
+		            .append("where pg.cbdo_id in (select cbdo_id from arrecadacao.devolucao_historico d) ")
+		            .append("group by pg.imov_id ,pg.cbdo_id ")
+		            .append("union all ")
+		            .append("select d.imov_id ,d.cbdo_id, 0 as valor_total, sum (dehi_vldevolucao) as devol_total ")
+		            .append("FROM arrecadacao.devolucao_historico d ")
+		            .append("where d.cbdo_id in (select cbdo_id from arrecadacao.pagamento_historico pg ) ")
+		            .append("group by d.imov_id ,d.cbdo_id ) as x ")
+		            .append("group by imov_id ,cbdo_id) ")
+		            
+		            .append("SELECT pg.pghi_id as idPagamento, ")
+		            .append("pg.pghi_vlpagamento as valorPagamento, ")
+		            .append("cnt.cnta_id as idConta, ")
+		            .append("gp.gpag_id as idGuia, ")
+		            .append("pgp.parc_id as idParcelamentoGuia, ")
+		            .append("pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
+		            .append("gp.gphi_vldebito as valorGuia, ")
+		            .append("dtgp.dbtp_id as debitoTipoGuia, ")
+		            .append("dac.dbac_id as idDebito, ")
+		            .append("pdac.parc_id as idParcelamentoDebito, ")
+		            .append("pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
+		            .append("dac.dahi_vldebito as valorDebito, ")
+		            .append("dac.dbtp_id as deitoTipoDebito, ")
+		            .append("pg.pghi_amreferenciapagamento as referenciaPagamento, ")
+		            .append("pg.pghi_dtpagamento as dataPagamento, ")
+		            .append("pg.imov_id as imovel, ")
+		            .append("ab.arrc_id as arrecadador, ")
+		            .append("pgp.parc_vlconta as valorParcelamentoConta, ")
+		            .append("pdac.parc_vlconta as valorParcelamentoContaDebito,   ")
+		            .append("dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
+		            .append("dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
+		            .append("dac.dahi_nnparcelabonus as numParcelaBonus, ")
+		            .append("round(((pg.pghi_vlpagamento * devol_total) / valor_total),2)  as valorDesconto ")
+		            .append("FROM arrecadacao.pagamento_historico pg ")
+		            .append("INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
+		            .append("LEFT JOIN valor v on pg.cbdo_id = v.cbdo_id ")
+		            .append("LEFT JOIN faturamento.conta_historico cnt on cnt.cnta_id = pg.cnta_id ")
+		            .append("LEFT JOIN faturamento.guia_pagamento_historico gp on gp.gpag_id = pg.gpag_id ")
+		            .append("LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id ")
+		            .append("LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")
+		            .append("LEFT JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = pg.dbac_id ")
+		            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
+		            .append("where pg.loca_id = :idLocalidade ")
+		            .append("and pg.pgst_idatual = :pagamentoClassificado ")
+		            .append("and pg.pghi_dtpagamento BETWEEN '2017-09-02' and '2017-10-31' ")
+		            .append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
+		            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ")
+		            .append("order by pg.pghi_id");
             
             colecaoDadosPagamentos = session.createSQLQuery(consulta.toString())
                         .addScalar("idPagamento", Hibernate.INTEGER)
@@ -31981,24 +32008,20 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                         .addScalar("numPrestacaoDebito", Hibernate.SHORT)
                         .addScalar("numPrestacoesCobradas", Hibernate.SHORT)
                         .addScalar("numParcelaBonus", Hibernate.SHORT)
+                        .addScalar("valorDesconto", Hibernate.BIG_DECIMAL)
                         .setInteger("idLocalidade",idLocalidade)
                         .setInteger("pagamentoClassificado", PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-                        .setInteger("referencia5", 201705)
-                        .setInteger("referencia6", 201706)
-                        .setInteger("referencia7", 201707)
-                        .setInteger("referencia8", 201708)
+//                        .setInteger("referencia5", 201705)
+//                        .setInteger("referencia6", 201706)
+//                        .setInteger("referencia7", 201707)
+//                        .setInteger("referencia8", 201708)
                         .setFirstResult(numeroPaginas)
                         .setMaxResults(quantidadeRegistros)
                         .list();
             
-      
-            System.out.println("Nulo: " + (colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()) );
             if(colecaoDadosPagamentos != null && !colecaoDadosPagamentos.isEmpty()){
-                  System.out.println(colecaoDadosPagamentos.size());
                   retorno = new ArrayList();
                   for(Object[] dadosPagamento : colecaoDadosPagamentos){
-                        
-                        System.out.println("dadosPgamento: " + (dadosPagamento != null));
                         
                         if(dadosPagamento != null){
                               Pagamento pagamento = new Pagamento();
@@ -32098,6 +32121,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                                     AvisoBancario avisoBancario = new AvisoBancario();
                                     avisoBancario.setArrecadador(arrecadador);
                                     pagamento.setAvisoBancario(avisoBancario);
+                              }
+                              
+                              if(dadosPagamento[22] != null) {
+                            	  pagamento.setValorDesconto((BigDecimal) dadosPagamento[22]);
                               }
                               
                               retorno.add(pagamento);
