@@ -51335,9 +51335,18 @@ public class ControladorArrecadacao implements SessionBean {
 	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
 
 	    // Periodo do debito
+	    int inicioParcelamento = 0;
+	    int fimParcelamento = 0;
+	   
 	    Integer[] periodoParcelamento = repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
-	    int inicioParcelamento = periodoParcelamento[0];
-	    int fimParcelamento    = periodoParcelamento[1];
+	    if (periodoParcelamento != null && periodoParcelamento[0] != null) {
+	    	inicioParcelamento = periodoParcelamento[0];
+	    	fimParcelamento    = periodoParcelamento[1];
+	    } else {
+	    	periodoParcelamento = repositorioCobranca.obterPeriodoDebitosParcelados(idParcelamento);
+	    	inicioParcelamento = periodoParcelamento[0];
+	    	fimParcelamento    = periodoParcelamento[1];
+	    }
 
 	    while (iterator.hasNext()) {
 	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();

@@ -27041,6 +27041,35 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		return retorno;
 	}
 	
+	public Integer[] obterPeriodoDebitosParcelados(Integer idParcelamento) throws ErroRepositorioException {
+		Integer[] retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+	
+		try {
+			consulta.append("select min(debitoACobrar.anoMesReferenciaDebito) as menorReferencia, max(debitoACobrar.anoMesReferenciaDebito) as maiorReferencia")
+					.append(" from ParcelamentoItem item ")
+					.append(" inner join item.debitoACobrarGeral debitoGeral ")
+					.append(" inner join debitoGeral.debitoACobrar debitoACobrar ")
+					.append(" where item.parcelamento.id = :idParcelamento ");
+	
+		Object[] referencias = (Object[]) session.createQuery(consulta.toString())
+					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+	
+		retorno = new Integer[2];
+		
+		retorno[0] = (Integer)referencias[0];
+		retorno[1] = (Integer)referencias[1];
+		
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	
+		return retorno;
+	}
+	
 	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
