@@ -51407,17 +51407,11 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection<ArrecadadorMovimentoItem> itens;
 		try {
 			
-			System.out.println("1");
 			repositorioArrecadacao.deletarDadosDocumentosNaoIdentificados(referenciaArrecadacao);
-			System.out.println("1 - ok");
 			
-			System.out.println("2");
 			itens = repositorioArrecadacao.pesquisarItensNaoIdentificados(Util.gerarDataPrimeiroDiaApartirAnoMesRefencia(referenciaArrecadacao));
-			System.out.println("2 - ok");
 			
-			System.out.println("3 - qtd: " + itens.size());
 			for (ArrecadadorMovimentoItem item : itens) {
-				System.out.println("3 - " + item.getId());
 				RegistroHelperCodigoG registro = (RegistroHelperCodigoG) this.distribuirdadosRegistroMovimentoArrecadador(item.getConteudoRegistro(), null);
 				
 				AvisoBancario aviso = obterAvisoBancarioDeDocumentoNaoIdentificado(item, registro.getCodigoFormaArrecadacao());
@@ -51428,15 +51422,10 @@ public class ControladorArrecadacao implements SessionBean {
 				doc.setArrecadador(aviso.getArrecadador());
 				doc.setUltimaAlteracao(new Date());
 				doc.setItem(item);
-				System.out.println("3 - " + item.getId() + " - inserindo");
 				getControladorUtil().inserir(doc);
-				System.out.println("3 - " + item.getId() + " - ok");
 			}
-			System.out.println("3 - ok");
 			
-			System.out.println("4");
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-			System.out.println("4 - ok ");
 			
 		} catch (ErroRepositorioException ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);

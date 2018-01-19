@@ -75,7 +75,7 @@ public class DadosDocumentosNaoIdentificados {
 
 	public void setDadosCodigoBarras(RegistroHelperCodigoG codigoBarras){
 		this.referenciaArrecadacao = Util.recuperaAnoMesDaData(Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento()));
-		this.valorDocumento = new BigDecimal(codigoBarras.getValorRecebido());
+		this.valorDocumento = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(codigoBarras.getValorRecebido());
 		this.dataDocumento = Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento());
 	}
 }
