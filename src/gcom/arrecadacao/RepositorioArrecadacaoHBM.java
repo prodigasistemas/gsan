@@ -24155,8 +24155,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					}
 				}
 			}
-			
-//	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
+//	        Collection<Pagamento> historico = obterPagamentosHISTORICOClassificadosNaoRegistradosCobrancaPorEmpresa(idLocalidade, referencia, numeroPaginas, quantidadeRegistros); 
 //	        
 //			if (historico != null && !historico.isEmpty()) {
 //				retorno.addAll(historico);
@@ -31980,7 +31979,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
 		            .append("where pg.loca_id = :idLocalidade ")
 		            .append("and pg.pgst_idatual = :pagamentoClassificado ")
-		            .append("and pg.pghi_dtpagamento BETWEEN '2017-09-02' and '2017-10-31' ")
+		            .append("and pg.pghi_dtpagamento BETWEEN '2017-11-01' and '2018-01-22' ")
 		            .append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
 		            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ")
 		            .append("order by pg.pghi_id");
@@ -32179,7 +32178,16 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("       left outer join faturamento.debito_a_cobrar d on (p.dbac_id  = d.dbac_id) ")
 					.append("       left outer join cobranca.cobranca_documento cd on (p.cbdo_id  = cd.cbdo_id) ")
 					.append("       left outer join faturamento.fatura f on (p.fatu_id  = f.fatu_id)  ")
-					.append("       where p.pgst_idatual in (" + PagamentoSituacao.VALOR_NAO_CONFERE + ", " + PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE + ", " + PagamentoSituacao.DOCUMENTO_INEXISTENTE + ")  ")
+					.append("       where p.pgst_idatual in (" + PagamentoSituacao.VALOR_NAO_CONFERE + ", ") 
+					.append(		PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE + ", ")
+					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE + ", ")
+					.append(       	PagamentoSituacao.VALOR_EM_EXCESSO + ", " )
+					.append(		PagamentoSituacao.VALOR_A_BAIXAR + ", ")
+					.append(		PagamentoSituacao.MOVIMENTO_ABERTO + ", ")
+					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_DEBITO_PRESCRITO + ", ")
+					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA + ", ")
+					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA + ", ")
+					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO + ") ")
 					//.append("       and pgmt_amreferenciaarrecadacao = " + referenciaArrecadacao)
 					.append("       and p.avbc_id = av.avbc_id ")
 					.append("       and av.arrc_id = a.arrc_id )");
