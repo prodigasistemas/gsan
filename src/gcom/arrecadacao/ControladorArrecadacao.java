@@ -51429,10 +51429,13 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				DadosDocumentosNaoIdentificados doc = new DadosDocumentosNaoIdentificados();
 				doc.setDadosCodigoBarras(registro);
-				doc.setAvisoBancario(aviso);
-				doc.setArrecadador(aviso.getArrecadador());
 				doc.setUltimaAlteracao(new Date());
 				doc.setItem(item);
+				
+				if (aviso != null) {
+					doc.setAvisoBancario(aviso);
+					doc.setArrecadador(aviso.getArrecadador());
+				}
 				getControladorUtil().inserir(doc);
 			}
 			

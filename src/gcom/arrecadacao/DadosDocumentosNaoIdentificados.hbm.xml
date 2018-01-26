@@ -22,11 +22,11 @@
 		
 		
 		<!-- Associations -->
-		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" >
 			<column name="avbc_id"/>
 		</many-to-one>
 
-		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" >
 			<column name="arrc_id"/>
 		</many-to-one>
 		
