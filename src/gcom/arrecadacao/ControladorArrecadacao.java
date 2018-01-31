@@ -38876,6 +38876,9 @@ public class ControladorArrecadacao implements SessionBean {
 		if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()) {
 			indicadorAceitacaoRegistro = "2";
 			descricaoOcorrencia = "TIPO DE DOCUMENTO INVÁLIDO";
+			
+			pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 		} else {
 
 			if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.CONTA)) {
