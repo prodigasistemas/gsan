@@ -10,7 +10,6 @@ import gcom.batch.auxiliarbatch.CobrancaDocumentoControleGeracao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.ConsultarTransferenciasDebitoHelper;
 import gcom.cobranca.bean.DadosConsultaNegativacaoHelper;
 import gcom.cobranca.bean.DadosPesquisaCobrancaDocumentoHelper;
@@ -559,9 +558,6 @@ public interface IRepositorioCobranca {
 	public Collection<Object[]> consultarGuiasDePagamentoTransferidas(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) throws ErroRepositorioException;
 
 	public Collection<Object[]> consultarCreditosARealizarTransferidos(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) throws ErroRepositorioException;
-
-	public Collection<Object[]> pesquisarContasInformarContasEmCobranca(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<Integer> idsImoveis, SistemaParametro sistemaParametro)
-			throws ErroRepositorioException;
 
 	public Collection<Object[]> obterNomeCPFTestemunhas(Integer unidadeUsuario) throws ErroRepositorioException;
 
@@ -1744,17 +1740,6 @@ public interface IRepositorioCobranca {
 	 * @throws ControladorException
 	 * */
 	public Collection<BigDecimal> pesquisarValorContaouContaHistorico(Integer idImovel, Integer referencia) throws ErroRepositorioException;
-
-	/**
-	 * [UC0870] Gerar Movimento de Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas associadas ao imóvel
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 13/04/2011
-	 */
-	public Integer pesquisarQuantidadeContasEmCobrancaPorImovel(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Integer idImovel, SistemaParametro sistemaParametro)
-			throws ErroRepositorioException;
 
 	/**
 	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -

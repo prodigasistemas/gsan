@@ -6,6 +6,8 @@ import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -378,5 +380,60 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setIndicadorPossuiCpfCnpj(Short indicadorPossuiCpfCnpj) {
 		this.indicadorPossuiCpfCnpj = indicadorPossuiCpfCnpj;
+	}
+	
+	public boolean isQuantidadeContasValida(int qtd, int qtdMenorFaixa) {
+		if (qtdContasInicial != null) {
+			return qtd >= qtdContasInicial && qtd <= qtdContasFinal;
+		} else if (qtdMenorFaixa > 0) {
+			return qtd >= qtdMenorFaixa;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isValorValido(double valor) {
+		if (valorMinimoConta != null) {
+			return valor >= valorMinimoConta.doubleValue() && valor <= valorMaximoConta.doubleValue();
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isReferenciaValida(Integer referencia) {
+		if (referenciaContaInicial != null) {
+			return referencia >= referenciaContaInicial && referencia <= referenciaContaFinal;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isVencimentoValido(Date vencimento) {
+		if (dataVencimentoContaInicial != null) {
+			return  vencimento.before(dataVencimentoContaInicial) || vencimento.after(dataVencimentoContaFinal);
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isDiasVencimentoValido(Date vencimento) {
+		Date vencimentoLimite = Util.subtrairNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
+		if (qtdDiasVencimento != null) {
+			return vencimento.before(vencimentoLimite);
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isIndicadorCpfCnpjValido(boolean possuiCpfCnpj) {
+		if (indicadorPossuiCpfCnpj.equals(ConstantesSistema.SIM)) {
+			return possuiCpfCnpj;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isQtdMaximaInformada() {
+		return qtdMaximaClientes != null && qtdMaximaClientes > 0;
 	}
 }

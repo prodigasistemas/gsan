@@ -13,11 +13,13 @@ import java.util.List;
 
 public interface IControladorCobrancaPorResultado {
 
-	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException;
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException;
+	
+	public List<Object[]> pesquisarContas(Integer idImovel, ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException;
 
 	public void gerarMovimentoContas(ComandoEmpresaCobrancaConta comando, int idFuncionalidadeIniciada) throws ControladorException;
 
-	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException;
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException;
 
 	public void gerarArquivoContas(Collection<Integer> comandos, Integer idEmpresa, int idFuncionalidadeIniciada) throws ControladorException;
 

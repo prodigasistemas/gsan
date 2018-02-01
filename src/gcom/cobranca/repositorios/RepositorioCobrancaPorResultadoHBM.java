@@ -1,5 +1,6 @@
 package gcom.cobranca.repositorios;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cobranca.CobrancaSituacaoTipo;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
@@ -36,32 +37,6 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return instancia;
 	}
 
-	private Integer pesquisarMenorFaixa(Integer idEmpresa) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		Integer retorno = null;
-
-		try {
-			StringBuilder consulta = new StringBuilder();
-			consulta.append("SELECT eccf.emcf_nncontasmin as numeroMinimo ") 
-					.append("FROM cadastro.empr_contrato_cobranca ecco ")
-					.append("INNER JOIN cadastro.empr_cobr_faixa eccf ON ecco.emco_id = eccf.emco_id ")
-					.append("WHERE ecco.empr_id = :idEmpresa ")
-					.append("ORDER BY eccf.emcf_nncontasmin ");
-
-			retorno = (Integer) session.createSQLQuery(consulta.toString())
-					.addScalar("numeroMinimo", Hibernate.INTEGER)
-					.setInteger("idEmpresa", idEmpresa)
-					.setMaxResults(1)
-					.uniqueResult();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
 	private StringBuilder montarCondicaoCategorias(ComandoEmpresaCobrancaConta comando) {
 		StringBuilder consulta = new StringBuilder();
 		StringBuilder categorias = new StringBuilder(); 
@@ -96,69 +71,40 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return consulta;
 	}
 	
-	private StringBuilder montarConsulta(ComandoEmpresaCobrancaContaHelper helper, boolean agruparPorImovel, boolean percentualInformado, Integer referenciaAtual, String campos) {
-		ComandoEmpresaCobrancaConta comando = helper.getComando();
-		
-		Integer quantidadeMenorFaixa = null;
-		if (!percentualInformado) {
-			try {
-				quantidadeMenorFaixa = pesquisarMenorFaixa(comando.getEmpresa().getId());
-			} catch (ErroRepositorioException e) {
-				e.printStackTrace();
-			}
-		}
-		
+	private StringBuilder montarConsulta(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer referenciaAtual) {
 		StringBuilder consulta = new StringBuilder();
-		consulta.append("SELECT " + campos)
-				.append("FROM (")
-				.append("SELECT conta.imov_id AS idImovel, ")
+		consulta.append("SELECT conta.imov_id AS idImovel, ")
+				.append("       conta.cnta_id AS idConta, ")
 				.append(" 		coalesce(conta.cnta_vlagua, 0) + ")
 				.append(" 		coalesce(conta.cnta_vlesgoto, 0) + ")
 				.append(" 		coalesce(conta.cnta_vldebitos, 0) - ")
 				.append(" 		coalesce(conta.cnta_vlcreditos, 0) - ")
 				.append(" 		coalesce(conta.cnta_vlimpostos, 0) AS valorConta, ")
-				.append("		count(conta.imov_id) OVER(PARTITION BY conta.imov_id) AS qtdContas, ")
-				.append("       cnta_amreferenciaconta AS referencia ")
+				.append("       cnta_amreferenciaconta AS referencia, ")
+				.append("       cnta_dtvencimentoconta AS vencimento ")
 				.append("FROM faturamento.conta conta ")
-				.append(montarJoins(helper, agruparPorImovel, referenciaAtual))
-				.append(") AS contas ")
-				.append("WHERE 1=1 ");
+				.append(montarJoins(helper, referenciaAtual))
+				.append("WHERE 1=1 ")
+				.append(montarCondicionais(helper, referenciaAtual))
+				.append("ORDER BY idImovel ");
 		
-		if (comando.getQtdContasInicial() != null) {
-			consulta.append(" AND qtdContas BETWEEN " + comando.getQtdContasInicial() + " AND " + comando.getQtdContasFinal());
-		} else if (quantidadeMenorFaixa != null) {
-			consulta.append(" AND qtdContas >= " + quantidadeMenorFaixa);
-		}
-		
-		if (comando.getReferenciaContaInicial() != null) {
-			consulta.append(" AND contas.referencia BETWEEN " + comando.getReferenciaContaInicial() + " AND " + comando.getReferenciaContaFinal());
-		}
-		
-		consulta.append(" GROUP BY idImovel, qtdContas ").append("ORDER BY idImovel ");
-		
-		if (comando.getQtdMaximaClientes() != null && comando.getQtdMaximaClientes() > 0) {
-			consulta.append(" LIMIT " + comando.getQtdMaximaClientes());
-		}
-
 		return consulta;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agruparPorImovel, boolean percentualInformado, Integer referenciaAtual) throws ErroRepositorioException {
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer referenciaAtual) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		List<Integer> retorno = new ArrayList<Integer>();
+		List<Integer>  imoveis = new ArrayList<Integer>();
 
 		try {
-			StringBuilder consulta = montarConsulta(helper, agruparPorImovel, percentualInformado, referenciaAtual, "idImovel ");
-			List<Integer> imoveis = session.createSQLQuery(consulta.toString()).addScalar("idImovel", Hibernate.INTEGER).list();
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT idImovel FROM ( ")
+					.append(montarConsulta(helper, percentualInformado, referenciaAtual))
+					.append(") AS imoveis ")
+					.append("GROUP BY idImovel");
 			
-			for (int i = 0; i < imoveis.size(); i++) {
-				Integer idImovel = imoveis.get(i);
-				
-				if (!isImovelEmCobranca(idImovel)) {
-					retorno.add(idImovel);
-				}
-			}
+			imoveis = session.createSQLQuery(consulta.toString()).addScalar("idImovel", Hibernate.INTEGER).list();
+			
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -166,44 +112,41 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			HibernateUtil.closeSession(session);
 		}
 
-		return retorno;
+		return imoveis;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agruparPorImovel,
-			boolean percentualInformado, Integer referenciaAtual) throws ErroRepositorioException {
-		
+	public List<Object[]> pesquisarContas(Integer idImovel, ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer referenciaAtual) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		List<Object[]> retorno = new ArrayList<Object[]>();
+		List<Object[]> contas = new ArrayList<Object[]>();
 
 		try {
-			String campos = "idImovel, sum(valorConta) AS valorTotalDebitos, qtdContas ";
-			StringBuilder consulta = montarConsulta(helper, agruparPorImovel, percentualInformado, referenciaAtual, campos);
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT idConta, valorConta, referencia, vencimento ")
+					.append("FROM ( ")
+					.append(montarConsulta(helper, percentualInformado, referenciaAtual))
+					.append(") AS imoveis ")
+					.append("WHERE idImovel = :idImovel ")
+					.append("GROUP BY idConta, valorConta, referencia, vencimento ")
+					.append("ORDER BY referencia");
 			
-			List<Object[]> imoveis = session.createSQLQuery(consulta.toString())
-					.addScalar("idImovel", Hibernate.INTEGER)
-					.addScalar("valorTotalDebitos", Hibernate.BIG_DECIMAL)
-					.addScalar("qtdContas", Hibernate.INTEGER)
+			contas = session.createSQLQuery(consulta.toString())
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("valorConta", Hibernate.BIG_DECIMAL)
+					.addScalar("referencia", Hibernate.INTEGER)
+					.addScalar("vencimento", Hibernate.DATE)
+					.setInteger("idImovel", idImovel)
 					.list();
-			
-			for (int i = 0; i < imoveis.size(); i++) {
-				Object[] dados = imoveis.get(i);
-				Integer idImovel = (Integer) dados[0];
-				
-				if (!isImovelEmCobranca(idImovel)) {
-					retorno.add(dados);
-				}
-			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
-		return retorno;
+		return contas;
 	}
 	
-	private StringBuilder montarJoins(ComandoEmpresaCobrancaContaHelper helper, boolean agruparPorImovel, Integer referenciaAtual) {
+	private StringBuilder montarJoins(ComandoEmpresaCobrancaContaHelper helper, Integer referenciaAtual) {
 		ComandoEmpresaCobrancaConta comando = helper.getComando();
 		
 		StringBuilder consulta = new StringBuilder(); 
@@ -223,10 +166,6 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		
 		consulta.append(" INNER JOIN cadastro.cliente_imovel clienteImovel ON imovel.imov_id = clienteImovel.imov_id AND clim_dtrelacaofim is null AND clim_icnomeconta = 1 AND clienteImovel.crtp_id <> 1 ");
 		
-		if (comando.getIndicadorPossuiCpfCnpj().equals(ConstantesSistema.SIM)) {
-			consulta.append(" INNER JOIN cadastro.cliente cliente ON cliente.clie_id = clienteImovel.clie_id ");
-		}
-		
 		if (comando.getIndicadorCobrancaTelemarketing().equals(ConstantesSistema.SIM)) {
 			consulta.append(" INNER JOIN cadastro.cliente_fone clienteFone ON clienteImovel.clie_id = clienteFone.clie_id AND cfon_icfonepadrao = 1 AND cfon_cdddd is not null AND cfon_nnfone is not null ");
 		}
@@ -238,30 +177,14 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append(" INNER JOIN cadastro.localidade loca on loca.loca_id = imovel.loca_id ");
 		}
 		
-		consulta.append(" WHERE ")
-				.append(montarCondicionais(helper, agruparPorImovel, referenciaAtual))
-				.append(" ORDER BY idImovel ");
-		
 		return consulta;
 	}
 	
-	private String montarCondicionais(ComandoEmpresaCobrancaContaHelper helper, boolean agruparPorImovel, Integer referenciaAtual) {
+	private String montarCondicionais(ComandoEmpresaCobrancaContaHelper helper, Integer referenciaAtual) {
 		StringBuilder consulta = new StringBuilder();
 
-		if (agruparPorImovel) {
-			consulta.append("(empresaCobrancaConta.ecco_id IS NULL or cecc.cecc_dtencerramento IS NOT NULL) ")
-					.append("(imovel.cbst_id IS NULL or cobrancaSituacao.cbst_icnaocobranca <> 1) ")
-					.append("AND conta.cmrv_id IS NULL and conta.cnta_dtrevisao IS NULL AND ")
-					.append("NOT EXISTS (SELECT pagamento.pgmt_id FROM arrecadacao.pagamento pagamento WHERE pagamento.cnta_id = conta.cnta_id) AND ")
-					.append("NOT EXISTS (SELECT empresaCobrancaConta.imov_id ")
-					.append("            FROM cobranca.empresa_cobranca_conta empresaCobrancaConta ")
-					.append("            INNER JOIN cobranca.cmd_empr_cobr_conta cecc ON empresaCobrancaConta.cecc_id = cecc.cecc_id ")
-					.append("            WHERE empresaCobrancaConta.imov_id = imovel.imov_id AND cecc.cecc_dtencerramento IS NULL) AND ");
-		} else {
-			consulta.append("empresaCobrancaConta.ecco_id IS NULL ");
-		}
-
-		consulta.append("AND conta.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.INCLUIDA + "," + DebitoCreditoSituacao.RETIFICADA + ") ")
+		consulta.append("AND empresaCobrancaConta.ecco_id IS NULL ")
+				.append("AND conta.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + "," + DebitoCreditoSituacao.INCLUIDA + ") ")
 				.append("AND conta.cmrv_id IS NULL AND conta.cnta_dtrevisao IS NULL ");
 
 		ComandoEmpresaCobrancaConta comando = helper.getComando();
@@ -302,14 +225,16 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append("AND conta.cnta_nnquadra BETWEEN " + comando.getNumeroQuadraInicial() + " AND " + comando.getNumeroQuadraFinal() + " ");
 		}
 
-		if (comando.getDataVencimentoContaInicial() != null) {
-			consulta.append("AND conta.cnta_dtvencimentoconta BETWEEN to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaInicial()) + "','YYYY-MM-DD') ")
-					.append("and to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD') ");
-		}
-
-		if (comando.getQtdDiasVencimento() != null) {
-			consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + " ','YYYY-MM-DD') ");
-		}
+//		if (comando.getDataVencimentoContaInicial() != null) {
+//			consulta.append("AND conta.cnta_dtvencimentoconta BETWEEN to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaInicial()) + "','YYYY-MM-DD') ")
+//					.append("and to_date('" + Util.formatarDataComTracoAAAAMMDD(comando.getDataVencimentoContaFinal()) + "','YYYY-MM-DD') ");
+//		}
+//
+//		if (comando.getQtdDiasVencimento() != null) {
+//			consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(Util.subtrairNumeroDiasDeUmaData(new Date(), comando.getQtdDiasVencimento())) + " ','YYYY-MM-DD') ");
+//		}
+		
+		consulta.append("AND conta.cnta_dtvencimentoconta < to_date('" + Util.formatarDataComTracoAAAAMMDD(new Date()) + "','YYYY-MM-DD') ");
 		
 		if (comando.getIndicadorGerarComDebitoPreterito() != null && comando.getIndicadorGerarComDebitoPreterito().equals(ConstantesSistema.NAO.shortValue())) {
 			consulta.append("AND cc.clie_id in (select ci.clie_id from cadastro.cliente_imovel ci where conta.imov_id = ci.imov_id and ci.crtp_id = 2 and ci.clim_dtrelacaofim IS NULL) ");
@@ -320,14 +245,10 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		consulta.append("AND conta.imov_id NOT IN (").append(montarCondicaoSituacaoEspecialCobranca(referenciaAtual)).append(") ");
 		consulta.append(montarCondicaoCategorias(comando));
 		
-		String valorConta = "coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)";
-		if (comando.getValorMinimoConta() != null) {
-			consulta.append(" AND " + valorConta + " BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
-		}
-		
-		if (comando.getIndicadorPossuiCpfCnpj().equals(ConstantesSistema.SIM)) {
-			consulta.append(" AND (cliente.clie_nncpf IS NOT NULL OR cliente.clie_nncnpj IS NOT NULL) ");
-		}
+//		String valorConta = "coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)";
+//		if (comando.getValorMinimoConta() != null) {
+//			consulta.append(" AND " + valorConta + " BETWEEN " + comando.getValorMinimoConta() + " AND " + comando.getValorMaximoConta() + " ");
+//		}
 		
 		return consulta.toString();
 	}
@@ -655,7 +576,33 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return retorno;
 	}
 	
-	private boolean isImovelEmCobranca(Integer idImovel) throws ErroRepositorioException {
+	public Integer pesquisarMenorFaixa(Integer idEmpresa) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		int qtd = 0;
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT eccf.emcf_nncontasmin as numeroMinimo ") 
+					.append("FROM cadastro.empr_contrato_cobranca ecco ")
+					.append("INNER JOIN cadastro.empr_cobr_faixa eccf ON ecco.emco_id = eccf.emco_id ")
+					.append("WHERE ecco.empr_id = :idEmpresa ")
+					.append("ORDER BY eccf.emcf_nncontasmin ");
+
+			qtd = (Integer) session.createSQLQuery(consulta.toString())
+					.addScalar("numeroMinimo", Hibernate.INTEGER)
+					.setInteger("idEmpresa", idEmpresa)
+					.setMaxResults(1)
+					.uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return qtd;
+	}
+	
+	public boolean isImovelEmCobranca(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		boolean retorno = false;
 
@@ -685,6 +632,35 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return retorno;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public boolean isClienteComCpfOuCnpj(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		boolean retorno = false;
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT c.* FROM cadastro.cliente c ")
+					.append("INNER JOIN cadastro.cliente_imovel ci ON ci.clie_id = c.clie_id ")
+					.append("WHERE imov_id = :idImovel ")
+					.append("AND clim_dtrelacaofim is null ")
+					.append("AND clim_icnomeconta = 1 ")
+					.append("AND crtp_id <> 1 ")
+					.append("AND (c.clie_nncpf IS NOT NULL OR c.clie_nncnpj IS NOT NULL) ");
+			
+			List<Cliente> clientes = session.createSQLQuery(consulta.toString()).addEntity(Cliente.class).setInteger("idImovel", idImovel).list();
+			
+			if (clientes != null && !clientes.isEmpty()) {
+				retorno = true;
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosConsultaComando(Integer idComando) throws ErroRepositorioException {
 
@@ -794,15 +770,12 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					.append(" where comando.id in (:ids) ")
 					.append(" and comando.dataExecucao is null");
 			
-			retorno = session.createQuery(consulta.toString())
-					.setParameterList("ids", comandos).list();
+			retorno = session.createQuery(consulta.toString()).setParameterList("ids", comandos).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-
 		return retorno;
-	
 	}
 }

@@ -9,6 +9,8 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.empresa.EmpresaCobranca;
+import gcom.cadastro.empresa.FiltroEmpresaCobranca;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.Categoria;
@@ -81,6 +83,7 @@ import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
+import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -115,14 +118,101 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
 
-	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) throws ControladorException {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException {
 		try {
-			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+			List<Object[]> retorno = new ArrayList<Object[]>();
+			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+			ComandoEmpresaCobrancaConta comando = helper.getComando();
 			
-			return repositorio.pesquisarQuantidadeContas(helper, agrupadoPorImovel, percentualInformado, sistemaParametro.getAnoMesFaturamento());
+			List<Integer> imoveis = pesquisarImoveis(helper, percentualInformado, anoMesFaturamento);
+			
+			for (Integer idImovel : imoveis) {
+				List<Object[]> contas = repositorio.pesquisarContas(idImovel, helper, percentualInformado, anoMesFaturamento);
+				
+				int qtdContas = 0;
+				BigDecimal valorTotal = new BigDecimal(0.0);
+				boolean adicionar = true;
+				
+				if (isImovelValido(comando, idImovel, contas.size(), percentualInformado)) {
+					for (Object[] conta : contas) {
+						if (isContaValida(comando, conta)) {
+							qtdContas++;
+							valorTotal = valorTotal.add((BigDecimal) conta[1]);
+						} else {
+							adicionar = false;
+							break;
+						}
+					}
+
+					if (adicionar) {
+						Object[] dados = new Object[3];
+						dados[0] = idImovel;
+						dados[1] = valorTotal;
+						dados[2] = qtdContas;
+
+						retorno.add(dados);
+					}
+					
+					if (comando.isQtdMaximaInformada() && retorno.size() == comando.getQtdMaximaClientes()) {
+						break;
+					}
+				}
+				
+			}
+			
+			return retorno;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+
+	public List<Object[]> pesquisarContas(Integer idImovel, ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) throws ControladorException {
+		try {
+			List<Object[]> retorno = new ArrayList<Object[]>();
+			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+			ComandoEmpresaCobrancaConta comando = helper.getComando();
+			
+			List<Object[]> contas = repositorio.pesquisarContas(idImovel, helper, percentualInformado, anoMesFaturamento);
+
+			if (isImovelValido(comando, idImovel, contas.size(), percentualInformado)) {
+				boolean adicionar = true;
+				for (Object[] conta : contas) {
+					if (!isContaValida(comando, conta)) {
+						adicionar = false;
+						break;
+					}
+				}
+
+				if (adicionar) {
+					retorno.addAll(contas);
+				}
+			}
+			
+			return retorno;
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	private boolean isContaValida(ComandoEmpresaCobrancaConta comando, Object[] conta) {
+		return comando.isValorValido(((BigDecimal) conta[1]).doubleValue()) 
+				&& comando.isReferenciaValida((Integer) conta[2]) 
+				&& comando.isVencimentoValido((Date) conta[3]) 
+				&& comando.isDiasVencimentoValido((Date) conta[3]);
+	}
+	
+	private boolean isImovelValido(ComandoEmpresaCobrancaConta comando, Integer idImovel, int qtdContas, boolean percentualInformado) throws ErroRepositorioException {
+		return !repositorio.isImovelEmCobranca(idImovel) 
+				&& comando.isQuantidadeContasValida(qtdContas, pesquisarQtdMenorFaixa(percentualInformado, comando.getEmpresa()))
+				&& comando.isIndicadorCpfCnpjValido(repositorio.isClienteComCpfOuCnpj(idImovel));
+	}
+
+	private Integer pesquisarQtdMenorFaixa(boolean percentualInformado, Empresa empresa) throws ErroRepositorioException {
+		int qtdMenorFaixa = 0;
+		if (!percentualInformado && empresa != null) {
+			qtdMenorFaixa = repositorio.pesquisarMenorFaixa(empresa.getId());
+		}
+		return qtdMenorFaixa;
 	}
 	
 	public void gerarMovimentoContas(ComandoEmpresaCobrancaConta comando, int idFuncionalidadeIniciada) throws ControladorException {
@@ -148,9 +238,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		}
 	}
 	
-	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException {
+	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException {
 		try {
-			return repositorio.pesquisarImoveis(helper, agrupadoPorImovel, percentualInformado, anoMesFaturamento);
+			return repositorio.pesquisarImoveis(helper, percentualInformado, anoMesFaturamento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -1429,7 +1519,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		int qtdClientes = 0;
 		BigDecimal valorTotal = new BigDecimal(0.00);
 		
-		List<Object[]> lista = pesquisarQuantidadeContas(helper, false, false);
+		EmpresaCobranca empresa = filtrarEmpresaCobranca(helper.getComando());
+		
+		List<Object[]> lista = pesquisarQuantidadeContas(helper, empresa.isPercentualInformado());
 		if (lista != null && !lista.isEmpty()) {
 			for (Iterator<Object[]> iterator = lista.iterator(); iterator.hasNext();) {
 				Object[] dados = (Object[]) iterator.next();
@@ -1627,6 +1719,22 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			return (Collection) repositorio.obterComandosParaIniciar(comandos);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private EmpresaCobranca filtrarEmpresaCobranca(ComandoEmpresaCobrancaConta comando) throws ControladorException {
+		Filtro filtro = new FiltroEmpresaCobranca();
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
+		filtro.adicionarParametro(new MaiorQue(FiltroEmpresaCobranca.DATA_FIM_CONTRATO, new Date()));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroEmpresaCobranca.EMPRESA);
+
+		Collection<EmpresaCobranca> colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtro, EmpresaCobranca.class.getName());
+
+		if (colecaoEmpresaCobranca != null && !colecaoEmpresaCobranca.isEmpty()) {
+			return (EmpresaCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
+		} else {
+			return null;
 		}
 	}
 }
