@@ -32171,7 +32171,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append("                   when p.dotp_id = 2 then Cast(SUBSTR (CAST (gpag_dtemissao as Varchar),1,4)|| SUBSTR (CAST (gpag_dtemissao as Varchar),6,2) as int) ") //  entrada parcelamento
 					.append("                   when p.dotp_id = 3 then pgmt_amreferenciapagamento  ") // documento cobranca
 					.append("                   when p.dotp_id = 5 then pgmt_amreferenciapagamento ") //  fatura
-					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id, p.pgst_idatual, now(), p.amit_id    ")
+					.append("              end as Refer_Docmt, av.avbc_id as Aviso, av.arrc_id, p.pgst_idatual, now(), p.amit_id, " + referenciaArrecadacao)
 					.append("       from arrecadacao.aviso_bancario av, arrecadacao.arrecadador a,arrecadacao.pagamento p ")
 					.append("       left outer join faturamento.conta c on (p.cnta_id  = c.cnta_id) ")
 					.append("       left outer join faturamento.guia_pagamento g on (p.gpag_id  = g.gpag_id) ")
@@ -32188,7 +32188,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA + ", ")
 					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA + ", ")
 					.append(		PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO + ") ")
-					//.append("       and pgmt_amreferenciaarrecadacao = " + referenciaArrecadacao)
 					.append("       and p.avbc_id = av.avbc_id ")
 					.append("       and av.arrc_id = a.arrc_id )");
 
@@ -32227,7 +32226,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta.append("select item from ArrecadadorMovimentoItem item ")
 					.append(" inner join fetch item.arrecadadorMovimento movimento ")
 					.append(" where item.indicadorAceitacao = :indicadorAceitacao ")
-					.append(" and item.ultimaAlteracao >= :dataPesquisa ")
 					.append(" and item.registroCodigo = :codigo ");
 
 			retorno = session.createQuery(consulta.toString())

@@ -51434,6 +51434,7 @@ public class ControladorArrecadacao implements SessionBean {
 				doc.setDadosCodigoBarras(registro);
 				doc.setUltimaAlteracao(new Date());
 				doc.setItem(item);
+				doc.setReferenciaFechamento(referenciaArrecadacao);
 				
 				if (aviso != null) {
 					doc.setAvisoBancario(aviso);

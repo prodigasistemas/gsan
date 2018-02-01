@@ -14,6 +14,7 @@ public class DadosPagamentosNaoClassificados {
 	private Integer id;
 	private Integer referenciaArrecadacao;
 	private Integer referenciaDocumento;
+	private Integer referenciaFechamento;
 	private BigDecimal valorPagamento;
 	private BigDecimal valorDocumento;
 	private boolean indicadorContaRetificada;
@@ -124,5 +125,11 @@ public class DadosPagamentosNaoClassificados {
 	}
 	public void setItem(ArrecadadorMovimentoItem item) {
 		this.item = item;
+	}
+	public Integer getReferenciaFechamento() {
+		return referenciaFechamento;
+	}
+	public void setReferenciaFechamento(Integer referenciaFechamento) {
+		this.referenciaFechamento = referenciaFechamento;
 	}
 }
