@@ -20,139 +20,72 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	private static final long serialVersionUID = 1L;
 
 	private Integer idComandoEmpresaCobrancaConta;
-
 	private Integer idEmpresa;
-
 	private String nomeEmpresa;
-
 	private Integer codigoSetorComercialInicial;
-
 	private Integer codigoSetorComercialFinal;
-
 	private BigDecimal valorMinimoConta;
-
 	private BigDecimal valorMaximoConta;
-
 	private Integer referenciaContaInicial;
-
 	private Integer referenciaContaFinal;
-
 	private Date dataVencimentoContaInicial;
-
 	private Date dataVencimentoContaFinal;
-
 	private Date dataExecucao;
-
 	private Integer idImovel;
-
 	private Integer idCliente;
-
 	private String nomeCliente;
-
 	private Integer idLocalidadeInicial;
-
 	private Integer idLocalidadeFinal;
-
 	private Integer idUnidadeNegocio;
-
 	private String nomeUnidadeNegocio;
-
 	private Date ultimaAlteracao;
-
 	private Integer qtdeTotalContasCobranca;
-
 	private BigDecimal valorTotalContasCobranca;
-
 	private Integer qtdeContasCriterioComando;
-
 	private BigDecimal valorContasCriterioComando;
-
 	private Integer idCobrancaConta;
-
 	private Integer idFaturamentoGrupo;
-
 	private Integer idLocalidade;
-
 	private String nomeLocalidade;
-
 	private Short codigoRota;
-
 	private Integer numeroSequencialRota;
-
 	private String nomeClienteConta;
-
 	private String nomeLogradouro;
-
 	private String numeroImovel;
-
 	private String complementoEndereco;
-
 	private Integer codigoCep;
-
 	private String nomeBairro;
-
 	private String telefone;
-
 	private String cpf;
-
 	private String cnpj;
-
 	private String rg;
-
 	private Integer anoMesReferencia;
-
 	private Date dataVencimento;
-
 	private BigDecimal valorLigacaoAgua;
-
 	private BigDecimal valorLigacaoEsgoto;
-
 	private BigDecimal valorServicos;
-
 	private BigDecimal valorCreditos;
-
 	private BigDecimal valorFatura;
-
 	private Integer anoControle;
-
 	private Integer controle;
-
 	private Integer codigoSetorComercial;
-
 	private Integer numeroQuadra;
-
 	private Short numeroLote;
-
 	private Short numeroSublote;
-
 	private Integer idClienteTipo;
-
 	private Conta conta;
-
 	private String nomeAbreviadoCliente;
-
 	private String tipoLogradouro;
-
 	private Integer idGerenciaRegional;
-
 	private String nomeGerenciaRegional;
-
 	private Integer quantidadeContas;
-
 	private Short codigoLayoutTxt;
-
 	private List<Conta> colecaoConta;
-
 	private Integer idOrdemServico;
-
 	private String nomeMunicipio;
-
 	private String ligacaoAguaSituacao;
-
 	private String ligacaoEsgotoSituacao;
-
 	private String fonteAbastecimento;
-
 	private boolean imovelHidrometrado;
 	
 	private Short qtdEconomiasR1;
@@ -211,10 +144,27 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 	public GerarArquivoTextoContasCobrancaEmpresaHelper() {
 	}
 
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
-			Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(
+			Integer idComandoEmpresaCobrancaConta, 
+			Integer idEmpresa, 
+			String nomeEmpresa, 
+			Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal, 
+			BigDecimal valorMinimoConta, 
+			BigDecimal valorMaximoConta, 
+			Integer referenciaContaInicial, 
+			Integer referenciaContaFinal, 
+			Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal,
+			Date dataExecucao,
+			Integer idImovel,
+			Integer idCliente, 
+			String nomeCliente,
+			Integer idLocalidadeInicial,
+			Integer idLocalidadeFinal,
+			Integer qtdeTotalContasCobranca,
+			BigDecimal valorTotalContasCobranca,
+			Date ultimaAlteracao) {
 		super();
 
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
@@ -239,11 +189,29 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
-			Integer qtdeTotalContasCobranca, BigDecimal valorTotalContasCobranca, Integer qtdeContasCriterioComando,
-			BigDecimal valorContasCriterioComando, Date ultimaAlteracao) {
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(
+			Integer idComandoEmpresaCobrancaConta,
+			Integer idEmpresa, 
+			String nomeEmpresa,
+			Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal, 
+			BigDecimal valorMinimoConta,
+			BigDecimal valorMaximoConta, 
+			Integer referenciaContaInicial, 
+			Integer referenciaContaFinal, 
+			Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal, 
+			Date dataExecucao,
+			Integer idImovel,
+			Integer idCliente,
+			String nomeCliente,
+			Integer idLocalidadeInicial, 
+			Integer idLocalidadeFinal,
+			Integer qtdeTotalContasCobranca, 
+			BigDecimal valorTotalContasCobranca, 
+			Integer qtdeContasCriterioComando,
+			BigDecimal valorContasCriterioComando, 
+			Date ultimaAlteracao) {
 		super();
 
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
@@ -270,9 +238,24 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements Serializabl
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	public GerarArquivoTextoContasCobrancaEmpresaHelper(Integer idComandoEmpresaCobrancaConta, Integer idEmpresa, String nomeEmpresa, Integer codigoSetorComercialInicial,
-			Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial,
-			Date dataVencimentoContaFinal, Date dataExecucao, Integer idImovel, Integer idCliente, String nomeCliente, Integer idLocalidadeInicial, Integer idLocalidadeFinal,
+	public GerarArquivoTextoContasCobrancaEmpresaHelper(
+			Integer idComandoEmpresaCobrancaConta,
+			Integer idEmpresa, 
+			String nomeEmpresa,
+			Integer codigoSetorComercialInicial,
+			Integer codigoSetorComercialFinal,
+			BigDecimal valorMinimoConta,
+			BigDecimal valorMaximoConta, 
+			Integer referenciaContaInicial, 
+			Integer referenciaContaFinal, 
+			Date dataVencimentoContaInicial,
+			Date dataVencimentoContaFinal, 
+			Date dataExecucao, 
+			Integer idImovel,
+			Integer idCliente,
+			String nomeCliente, 
+			Integer idLocalidadeInicial,
+			Integer idLocalidadeFinal,
 			Date ultimaAlteracao) {
 		super();
 

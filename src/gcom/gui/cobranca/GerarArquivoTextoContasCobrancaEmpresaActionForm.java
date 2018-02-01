@@ -1,97 +1,57 @@
 package gcom.gui.cobranca;
 
-import org.apache.struts.action.ActionForm;
+import javax.servlet.http.HttpServletRequest;
 
-/**
- * [UC0896] Gerar Arquivo Texto das Contas em Cobrança por Empresa
- * 
- * @author Rômulo Aurélio
- * @since 29/10/2008
- */
-public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends
-		ActionForm {
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+
+public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
 
 	private String idEmpresa;
-
 	private String nomeEmpresa;
-
 	private String periodoComandoInicial;
-
 	private String periodoComandoFinal;
-
 	private String dataExecucaoComando;
-
 	private String periodoReferenciaContasInicial;
-
 	private String periodoReferenciaContasFinal;
-
 	private String periodoVencimentoContasInicial;
-
 	private String periodoVencimentoContasFinal;
-
 	private String intervaloValorContasInicial;
-
 	private String intervaloValorContasFinal;
-	
 	private String qtdContasInicial;
-	
 	private String qtdContasFinal;
-	
 	private String qtdDeDiasVencimento;
-
 	private String idImovel;
-
 	private String idCliente;
-
 	private String nomeCliente;
-
 	private String idUnidadeNegocio;
-
 	private String nomeUnidadeNegocio;
-	
 	private String idLigacaoAguaSituacao;
-
 	private String nomeLigacaoAguaSituacao;
-
 	private String intervaloLocalizacaoInicial;
-
 	private String intervaloLocalizacaoFinal;
-
 	private String intervaloSetorComercialInicial;
-	
 	private String intervaloSetorComercialFinal;
-
 	private String intervaloRotasInicial;
-
 	private String numeroSequencialRotaInicial;
-
 	private String intervaloRotasFinal;
-
 	private String numeroSequencialRotaFinal;
-
 	private String qtdeTotalContasCobranca;
-
 	private String valorTotalContasCobranca;
-
 	private String qtdeContasCriterioComando;
-
 	private String valorContasCriterioComando;
-	
 	private Integer[] idRegistros;
-	
 	private String idImovelPerfil;
-	
 	private String dsImovelPerfil;
-	
 	private String idGerenciaRegional;
-	
 	private String nomeGerenciaRegional;
-	
 	private String intervaloQuadraInicial;
-	
 	private String intervaloQuadraFinal;
+	private String qtdContas;
+	private String qtdClientes;
+	private String valorTotal;
 
 	public String getDataExecucaoComando() {
 		return dataExecucaoComando;
@@ -169,8 +129,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends
 		return intervaloSetorComercialInicial;
 	}
 
-	public void setIntervaloSetorComercialInicial(
-			String intervaloSetorComercialInicial) {
+	public void setIntervaloSetorComercialInicial(String intervaloSetorComercialInicial) {
 		this.intervaloSetorComercialInicial = intervaloSetorComercialInicial;
 	}
 
@@ -258,8 +217,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends
 		return periodoReferenciaContasInicial;
 	}
 
-	public void setPeriodoReferenciaContasInicial(
-			String periodoReferenciaContasInicial) {
+	public void setPeriodoReferenciaContasInicial(String periodoReferenciaContasInicial) {
 		this.periodoReferenciaContasInicial = periodoReferenciaContasInicial;
 	}
 
@@ -275,8 +233,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends
 		return periodoVencimentoContasInicial;
 	}
 
-	public void setPeriodoVencimentoContasInicial(
-			String periodoVencimentoContasInicial) {
+	public void setPeriodoVencimentoContasInicial(String periodoVencimentoContasInicial) {
 		this.periodoVencimentoContasInicial = periodoVencimentoContasInicial;
 	}
 
@@ -416,4 +373,74 @@ public class GerarArquivoTextoContasCobrancaEmpresaActionForm extends
 		this.nomeLigacaoAguaSituacao = nomeLigacaoAguaSituacao;
 	}
 
+	public String getQtdContas() {
+		return qtdContas;
+	}
+
+	public void setQtdContas(String qtdContas) {
+		this.qtdContas = qtdContas;
+	}
+
+	public String getQtdClientes() {
+		return qtdClientes;
+	}
+
+	public void setQtdClientes(String qtdClientes) {
+		this.qtdClientes = qtdClientes;
+	}
+
+	public String getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(String valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		this.idEmpresa = null;
+		this.nomeEmpresa = null;
+		this.periodoComandoInicial = null;
+		this.periodoComandoFinal = null;
+		this.dataExecucaoComando = null;
+		this.periodoReferenciaContasInicial = null;
+		this.periodoReferenciaContasFinal = null;
+		this.periodoVencimentoContasInicial = null;
+		this.periodoVencimentoContasFinal = null;
+		this.intervaloValorContasInicial = null;
+		this.intervaloValorContasFinal = null;
+		this.qtdContasInicial = null;
+		this.qtdContasFinal = null;
+		this.qtdDeDiasVencimento = null;
+		this.idImovel = null;
+		this.idCliente = null;
+		this.nomeCliente = null;
+		this.idUnidadeNegocio = null;
+		this.nomeUnidadeNegocio = null;
+		this.idLigacaoAguaSituacao = null;
+		this.nomeLigacaoAguaSituacao = null;
+		this.intervaloLocalizacaoInicial = null;
+		this.intervaloLocalizacaoFinal = null;
+		this.intervaloSetorComercialInicial = null;
+		this.intervaloSetorComercialFinal = null;
+		this.intervaloRotasInicial = null;
+		this.numeroSequencialRotaInicial = null;
+		this.intervaloRotasFinal = null;
+		this.numeroSequencialRotaFinal = null;
+		this.qtdeTotalContasCobranca = null;
+		this.valorTotalContasCobranca = null;
+		this.qtdeContasCriterioComando = null;
+		this.valorContasCriterioComando = null;
+		this.idRegistros = null;
+		this.idImovelPerfil = null;
+		this.dsImovelPerfil = null;
+		this.idGerenciaRegional = null;
+		this.nomeGerenciaRegional = null;
+		this.intervaloQuadraInicial = null;
+		this.intervaloQuadraFinal = null;
+		this.qtdContas = null;
+		this.qtdClientes = null;
+		this.valorTotal = null;
+	}
 }

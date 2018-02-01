@@ -1,12 +1,5 @@
 package gcom.util;
 
-/**
- * Esta interface serve para definir os servicos que rodarão pelo mecanismo de
- * batch no controlador MDB correspondente
- * 
- * @author Rodrigo Silveira 05/12/2005
- * 
- */
 public interface MetodosBatch {
 	int ENDERECO_INSERIR_CEP_IMPORTADOS = 1;
 	int CONSISTIR_LEITURAS_CALCULAR_CONSUMOS = 2;
@@ -23,10 +16,10 @@ public interface MetodosBatch {
 	int CANCELAR_CONJUNTO_CONTA = 13;
 	int CANCELAR_CONJUNTO_CONTA_CLIENTE = 14;
 	int CANCELAR_CONJUNTO_CONTA_POR_GRUPO_FATURAMENTO = 15;
-	int RETIFICAR_CONJUNTO_CONTA_POR_GRUPO_FATURAMENTO  = 16;
+	int RETIFICAR_CONJUNTO_CONTA_POR_GRUPO_FATURAMENTO = 16;
 	int RETIFICAR_CONJUNTO_CONTA_COLECAO = 17;
 	int ATUALIZAR_LEITURA_ANORMALIDADE_CELULAR_CASO_SISTEMA = 18;
 	int INSERIR_DEBITOS_PARA_CONTAS_VALOR_DIFERENTE = 19;
 	int GERAR_BOLETIM_MEDICAO = 20;
-	
+	int INFORMAR_CONTAS_COBRANCA_EMPRESA = 21;
 }

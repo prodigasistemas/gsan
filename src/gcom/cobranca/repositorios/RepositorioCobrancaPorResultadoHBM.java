@@ -684,4 +684,125 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		
 		return retorno;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosConsultaComando(Integer idComando) throws ErroRepositorioException {
+
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select "
+					+ "empre.empr_nmempresa as empresa, "// 0
+					+ "cecc.cecc_dtexecucao as dataExecucao, "// 1
+					+ "cecc.cecc_amreferenciacontainicial as dataContaInicial, "// 2
+					+ "cecc.cecc_amreferenciacontafinal as dataContaFinal, "// 3
+					+ "cecc.cecc_dtvencimentocontainicial as vencimentoIncial, "// 4
+					+ "cecc.cecc_dtvencimentocontainicial as vencimentoFinal, "// 5
+					+ "cecc_vlminimoconta as vlMinino, "// 6
+					+ "cecc_vlmaximoconta as vlMaximo, "// 7
+					+ "imov_id as imovel, "// 8
+					+ "cli.clie_nmcliente as cliente, "// 9
+					+ "loca_idinicial as locaIncial, "// 10
+					+ "loca_idfinal as locaFinal, "// 11
+					+ "cecc_cdsetorcomercialinicial as setorInicial, "// 12
+					+ "cecc_cdsetorcomercialfinal as setorFinal, "// 13
+					+ "cecc_nnquadrainicial as idQuadraInicial, "// 14
+					+ "cecc_nnquadrafinal as idQuadraFinal, "// 15
+					+ "cecc_qtdcontas as qtdContas, "// 16
+					+ "cecc_qtdclientes as qtdClientes, "// 17
+					+ "cecc_vltotal as valorTotal "// 18
+					+ "from cobranca.cmd_empr_cobr_conta cecc " 
+					+ "inner join cadastro.empresa empre on cecc.empr_id = empre.empr_id "
+					+ "left join cadastro.cliente cli on cli.clie_id = cecc.clie_id "
+					+ "where cecc.cecc_id = :idComando ";
+
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("empresa", Hibernate.STRING)
+					.addScalar("dataExecucao", Hibernate.DATE)
+					.addScalar("dataContaInicial", Hibernate.INTEGER)
+					.addScalar("dataContaFinal", Hibernate.INTEGER)
+					.addScalar("vencimentoIncial", Hibernate.DATE)
+					.addScalar("vencimentoFinal", Hibernate.DATE)
+					.addScalar("vlMinino", Hibernate.BIG_DECIMAL)
+					.addScalar("vlMaximo", Hibernate.BIG_DECIMAL)
+					.addScalar("imovel", Hibernate.INTEGER)
+					.addScalar("cliente", Hibernate.STRING)
+					.addScalar("locaIncial", Hibernate.INTEGER)
+					.addScalar("locaFinal", Hibernate.INTEGER)
+					.addScalar("setorInicial", Hibernate.INTEGER)
+					.addScalar("setorFinal", Hibernate.INTEGER)
+					.addScalar("idQuadraInicial", Hibernate.INTEGER)
+					.addScalar("idQuadraFinal", Hibernate.INTEGER)
+					.addScalar("qtdContas", Hibernate.INTEGER)
+					.addScalar("qtdClientes", Hibernate.INTEGER)
+					.addScalar("valorTotal", Hibernate.BIG_DECIMAL)
+					.setInteger("idComando", idComando).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ComandoEmpresaCobrancaConta> pesquisarDadosComando(Integer idEmpresa, Date comandoInicial,
+			Date comandoFinal, int numeroIndice, int quantidadeRegistros) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		List<ComandoEmpresaCobrancaConta> comandos = null;
+
+		try {
+			String consulta = "SELECT comando "
+					+ "FROM ComandoEmpresaCobrancaConta comando "
+					+ "INNER JOIN comando.empresa empresa "
+					+ "WHERE comando.empresa.id = :idEmpresa ";
+
+			if (comandoInicial != null && comandoFinal != null) {
+				consulta += " and comando.dataExecucao between to_date('"
+						+ Util.formatarDataComTracoAAAAMMDD(comandoInicial) + "','YYYY-MM-DD') and to_date('"
+						+ Util.formatarDataComTracoAAAAMMDD(comandoFinal) + "','YYYY-MM-DD') ";
+			}
+			
+			consulta += "ORDER BY comando.id desc";
+
+			comandos = session.createQuery(consulta)
+					.setInteger("idEmpresa", idEmpresa)
+					.setMaxResults(quantidadeRegistros)
+					.setFirstResult(numeroIndice * quantidadeRegistros).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return comandos;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Collection obterComandosParaIniciar(Integer[] comandos) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Collection retorno = null;
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select comando from ComandoEmpresaCobrancaConta comando")
+					.append(" where comando.id in (:ids) ")
+					.append(" and comando.dataExecucao is null");
+			
+			retorno = session.createQuery(consulta.toString())
+					.setParameterList("ids", comandos).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	
+	}
 }

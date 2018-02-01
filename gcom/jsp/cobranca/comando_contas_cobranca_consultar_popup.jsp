@@ -380,34 +380,26 @@ function verificaPesquisa(flag){
 						style="background-color:#EFEFEF; border:0; font-color: #000000" />
 					</td>
 				</tr>
+				
+				<tr><td colspan="2"><hr></td></tr>
+				
 				<tr>
-					<td width="35%"><strong>Quantidade Total de Contas Selecionadas
-					para Cobrança:</strong></td>
-					<td colspan="3"><html:text property="qtdeTotalContasCobranca"
+					<td width="35%"><strong>Quantidade Total de Clientes Selecionados:</strong></td>
+					<td colspan="3"><html:text property="qtdClientes"
 						size="8" maxlength="8" readonly="true"
 						style="background-color:#EFEFEF; border:0; font-color: #000000" />
 					</td>
 				</tr>
 				<tr>
-					<td width="35%"><strong>Valor Total de Contas Selecionadas para
-					Cobrança:</strong></td>
-					<td colspan="3"><html:text property="valorTotalContasCobranca"
-						size="12" maxlength="12" readonly="true"
-						style="background-color:#EFEFEF; border:0; font-color: #000000; text-align:right" />
-					</td>
-				</tr>
-				<tr>
-					<td width="35%"><strong>Quantidade Total de Contas Selecionadas
-					pelos Critérios de Comando:</strong></td>
-					<td colspan="3"><html:text property="qtdeContasCriterioComando"
+					<td width="35%"><strong>Quantidade Total de Contas Selecionadas:</strong></td>
+					<td colspan="3"><html:text property="qtdContas"
 						size="8" maxlength="8" readonly="true"
 						style="background-color:#EFEFEF; border:0; font-color: #000000" />
 					</td>
 				</tr>
 				<tr>
-					<td width="35%"><strong>Valor Total de Contas Selecionadas pelos
-					Critérios de Comando:</strong></td>
-					<td colspan="3"><html:text property="valorContasCriterioComando"
+					<td width="35%"><strong>Valor Total de Contas Selecionadas:</strong></td>
+					<td colspan="3"><html:text property="valorTotal"
 						size="12" maxlength="12" readonly="true"
 						style="background-color:#EFEFEF; border:0; font-color: #000000; text-align:right" />
 					</td>

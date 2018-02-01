@@ -188,7 +188,10 @@
 	<module>
 		<ejb>ControladorBatchMicromedicaoGCOM.jar</ejb>
 	</module>
-
+	<module>
+		<ejb>ControladorBatchCobrancaGCOM.jar</ejb>
+	</module>
+	
 	<module>
 		<ejb>ControladorFaturamentoCAER.jar</ejb>
 	</module>

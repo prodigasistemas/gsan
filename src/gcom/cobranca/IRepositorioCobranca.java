@@ -582,10 +582,6 @@ public interface IRepositorioCobranca {
 	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobranca(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
 			throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
-			throws ErroRepositorioException;
-
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaCount(Integer idEmpresa, Date comandoInicial, Date comandoFinal) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
@@ -710,16 +706,7 @@ public interface IRepositorioCobranca {
 	@SuppressWarnings("rawtypes")
 	public List consultarColecaoCicloMetaGrupoRelatorio(Integer idCicloMeta) throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarValorTotalCobranca(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarValorTotalCobrancaCriterio(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
-
 	public IndicesAcrescimosImpontualidade pesquisarMenorIgualIndiceAcrescimoImpontualidade(int anoMesReferenciaDebito) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosPopup(Integer idComando) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
 	public List filtrarCobrancaDocumento(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;

@@ -17,76 +17,50 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-
 	private Integer codigoSetorComercialInicial;
-
 	private Integer codigoSetorComercialFinal;
-
 	private BigDecimal valorMinimoConta;
-
 	private BigDecimal valorMaximoConta;
-
 	private Integer referenciaContaInicial;
-
 	private Integer referenciaContaFinal;
-
 	private Date dataVencimentoContaInicial;
-
 	private Date dataVencimentoContaFinal;
-
 	private Date dataExecucao;
-
 	private Integer indicadorResidencial;
-
 	private Integer indicadorComercial;
-
 	private Integer indicadorIndustrial;
-
 	private Integer indicadorPublico;
-
 	private Imovel imovel;
-
 	private Cliente cliente;
-
 	private Localidade localidadeInicial;
-
 	private Localidade localidadeFinal;
-
 	private Empresa empresa;
-
 	private Date ultimaAlteracao;
-
 	private Integer numeroQuadraInicial;
-
 	private Integer numeroQuadraFinal;
-
 	private Date dataInicioCiclo;
-
 	private Date dataFimCiclo;
-
 	private Date dataEncerramento;
-
 	private Integer indicadorGeracaoTxt;
-
 	private CobrancaSituacao cobrancaSituacao;
-
 	private ServicoTipo servicoTipo;
-
 	private Integer qtdContasInicial;
-
 	private Integer qtdContasFinal;
-
 	private Integer qtdDiasVencimento;
-
 	private Short indicadorCobrancaTelemarketing;
-
 	private Integer qtdMaximaClientes;
-
 	private Short indicadorGerarComDebitoPreterito;
-
+	private Integer quantidadeContas;
+	private Integer quantidadeClientes;
+	private BigDecimal valorTotal;
 	private Short indicadorPossuiCpfCnpj;
 
 	public ComandoEmpresaCobrancaConta() {
+	}
+
+	public ComandoEmpresaCobrancaConta(Integer id) {
+		super();
+		this.id = id;
 	}
 
 	public String[] retornaCamposChavePrimaria() {
@@ -374,6 +348,30 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
 	}
 
+	public Integer getQuantidadeContas() {
+		return quantidadeContas;
+	}
+
+	public void setQuantidadeContas(Integer quantidadeContas) {
+		this.quantidadeContas = quantidadeContas;
+	}
+
+	public Integer getQuantidadeClientes() {
+		return quantidadeClientes;
+	}
+
+	public void setQuantidadeClientes(Integer quantidadeClientes) {
+		this.quantidadeClientes = quantidadeClientes;
+	}
+
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	
 	public Short getIndicadorPossuiCpfCnpj() {
 		return indicadorPossuiCpfCnpj;
 	}

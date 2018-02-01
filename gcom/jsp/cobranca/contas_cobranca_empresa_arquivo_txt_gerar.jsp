@@ -6,8 +6,7 @@
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
-<%@page
-	import="gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper"%>
+<%@page import="gcom.cobranca.ComandoEmpresaCobrancaConta"%>
 <%@page import="gcom.util.Util" isELIgnored="false"%>
 
 <%@ page import="gcom.util.ConstantesSistema"%>
@@ -20,20 +19,14 @@
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<html:javascript staticJavascript="false"
-	formName="GerarArquivoTextoContasCobrancaEmpresaActionForm" />
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<html:javascript staticJavascript="false" formName="GerarArquivoTextoContasCobrancaEmpresaActionForm" />
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
 
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>Calendario.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
-<SCRIPT LANGUAGE="JavaScript"><!--
+<SCRIPT LANGUAGE="JavaScript">
 
 	
 	function limparEmpresa() {
@@ -126,7 +119,7 @@
 	}
 }
 	
---></script>
+</script>
 
 </head>
 
@@ -200,7 +193,7 @@
 					empresa, informe os dados abaixo:</td>
 				</tr>
 				<tr>
-					<td width="30%"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
+					<td width="20%"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
 					<td><html:text maxlength="9" property="idEmpresa" size="9"
 						tabindex="14" 
 						onkeypress="validaEnterComMensagem(event, 'exibirGerarArquivoTextoContasCobrancaEmpresaAction.do', 'idEmpresa', 'Empresa');" />
@@ -221,7 +214,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><strong>Período de Execução do Comando:</strong></td>
+					<td width="20%"><strong>Período de Execução:</strong></td>
 					<td><strong> <html:text maxlength="10"
 						property="periodoComandoInicial" size="10" tabindex="10"
 						onkeyup="mascaraData(this, event);  replicarCampo(document.forms[0].periodoComandoFinal, document.forms[0].periodoComandoInicial);limparPeriodo();" />
@@ -261,16 +254,29 @@
 						<td>
 						<table width="100%" bgcolor="#99CCFF" border="0">
 							<tr bordercolor="#000000">
-								<td width="8%" bgcolor="#90c7fc" align="center" rowspan="2"><strong><a
-									href="javascript:facilitador(this);">Todos</a></strong></td>
-								<td width="10%" bordercolor="#000000" bgcolor="#90c7fc"
-									align="center" rowspan="2">
-								<div align="center"><strong>Comando</strong></div>
+								<td width="8%" bgcolor="#90c7fc" align="center" rowspan="2">
+									<strong><a href="javascript:facilitador(this);">Todos</a></strong>
 								</td>
-								<td width="12%" bgcolor="#90c7fc" align="center" rowspan="2"><strong>Data
-								de Execução</strong></td>
 								
-				
+								<td width="12%" bordercolor="#000000" bgcolor="#90c7fc" align="center" rowspan="2">
+									<div align="center"><strong>Comando</strong></div>
+								</td>
+								
+								<td width="18%" bgcolor="#90c7fc" align="center" rowspan="2">
+									<strong>Qtd de Clientes</strong>
+								</td>
+								
+								<td width="18%" bgcolor="#90c7fc" align="center" rowspan="2">
+									<strong>Qtd de Contas</strong>
+								</td>
+								
+								<td width="23%" bgcolor="#90c7fc" align="center" rowspan="2">
+									<strong>Valor Total</strong>
+								</td>
+								
+								<td width="21%" bgcolor="#90c7fc" align="center" rowspan="2">
+									<strong>Data de Execução</strong>
+								</td>
 						</table>
 						</td>
 					</tr>
@@ -282,13 +288,13 @@
 								maxPageItems="10" items="${sessionScope.totalRegistros}">
 								<pg:param name="pg" />
 								<pg:param name="q" />
-								<logic:present
-									name="colecaoGerarArquivoTextoContasCobrancaEmpresaHelper">
+								
+								<logic:present name="comandos">
 									<%int cont = 0;%>
 									<logic:iterate
-										name="colecaoGerarArquivoTextoContasCobrancaEmpresaHelper"
-										id="gerarArquivoTextoContasCobrancaEmpresaHelper"
-										type="GerarArquivoTextoContasCobrancaEmpresaHelper"
+										name="comandos"
+										id="comando"
+										type="ComandoEmpresaCobrancaConta"
 										scope="session">
 										<pg:item>
 											<%cont = cont + 1;
@@ -298,29 +304,42 @@
 											</tr>
 											<tr bgcolor="#FFFFFF">
 												<%}%>
+												
 												<td width="8%">
-												<div align="center"><input type="checkbox"
-													name="idRegistros"
-													value="${gerarArquivoTextoContasCobrancaEmpresaHelper.idComandoEmpresaCobrancaConta}" />
-												</div>
+													<div align="center">
+														<input type="checkbox" name="idRegistros" value="${comando.id}" />
+													</div>
 												</td>
 
-												<td align="center" width="10%"><a
-													href="javascript:abrirPopup('exibirConsultarContasComandoCobrancaPopupAction.do?pesquisa=nao&idComandoEmpresaCobrancaConta=<%= gerarArquivoTextoContasCobrancaEmpresaHelper
-													.getIdComandoEmpresaCobrancaConta()%>', 475, 600);">
-												<%=gerarArquivoTextoContasCobrancaEmpresaHelper
-															.getIdComandoEmpresaCobrancaConta()%> </a></td>
-
-												<td align="center" width="12%"><logic:present
-													name="gerarArquivoTextoContasCobrancaEmpresaHelper"
-													property="dataExecucao">
-													<%=Util
-																.formatarData(gerarArquivoTextoContasCobrancaEmpresaHelper
-																		.getDataExecucao())%>
-												</logic:present> <logic:notPresent
-													name="<%=Util.formatarData(gerarArquivoTextoContasCobrancaEmpresaHelper.getDataExecucao())%>">&nbsp;</logic:notPresent>
+												<td align="center" width="12%">
+													<a href="javascript:abrirPopup('exibirConsultarContasComandoCobrancaPopupAction.do?pesquisa=nao&idComandoEmpresaCobrancaConta=<%= comando.getId()%>', 475, 600);">
+														<%=comando.getId()%> 
+													</a>
 												</td>
 												
+												<td align="center" width="18%">
+													<logic:present name="comando" property="quantidadeClientes">
+														<%=comando.getQuantidadeClientes()%>
+													</logic:present>
+												</td>
+												
+												<td align="center" width="18%">
+													<logic:present name="comando" property="quantidadeContas">
+														<%=comando.getQuantidadeContas()%>
+													</logic:present>
+												</td>
+												
+												<td align="center" width="23%">
+													<logic:present name="comando" property="valorTotal">
+														<%=Util.formatarMoedaReal(comando.getValorTotal())%>
+													</logic:present>
+												</td>
+												
+												<td align="center" width="21%">
+													<logic:present name="comando" property="dataExecucao">
+														<%=Util.formatarData(comando.getDataExecucao())%>
+													</logic:present>
+												</td>
 
 											</tr>
 										</pg:item>
@@ -366,7 +385,9 @@
 				</table>
 
 			</table>
+	</table>
 
-			<%@ include file="/jsp/util/rodape.jsp"%> </html:form>
+			<%@ include file="/jsp/util/rodape.jsp"%>
+</html:form>
 </body>
 </html:html>
