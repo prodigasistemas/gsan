@@ -23987,7 +23987,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" gp.gpag_id as idGuia, ")
 					.append(" pgp.parc_id as idParcelamentoGuia, ")
 					.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
-					.append(" gp.gphi_vldebito as valorGuia, ")
+					.append(" gp.gpag_vldebito as valorGuia, ")
 					.append(" dtgp.dbtp_id as debitoTipoGuia, ")
 					.append(" dac.dbac_id as idDebito, ")
 					.append(" pdac.parc_id as idParcelamentoDebito, ")
@@ -31979,8 +31979,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
 		            .append("where pg.loca_id = :idLocalidade ")
 		            .append("and pg.pgst_idatual = :pagamentoClassificado ")
-		            .append("and pg.pghi_dtpagamento BETWEEN '2017-11-01' and '2018-01-22' ")
-		            .append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
+		            .append("and pg.pghi_dtpagamento BETWEEN '2017-09-02' and '2017-10-31' ")
+		            //.append("and pg.imov_id IN (select imov_id from cobranca.empresa_cobranca_conta) ")
+		            .append(" and pg.imov_id IN (3580059, 4053419, 4084462, 4160738, 4207785, 4307950, 4335619, 4363485, 5892813, 6666752, 7881045, 7941838, 7942389, 7963840, 1812009, 1825658, 2061601, 2282267, 2330873, 2354756, 2395754, 2520109, 2541807, 2670194, 2851377, 2864797, 2870177, 2930374, 2950154, 2963558, 2964856, 3127494, 3314561, 3580059)  ")
 		            .append("and pg.pghi_id NOT IN ( select eccp.pgmt_id from cobranca.empr_cobr_conta_pagto eccp where eccp.pgmt_id is not null ) ")
 		            .append("order by pg.pghi_id");
             
