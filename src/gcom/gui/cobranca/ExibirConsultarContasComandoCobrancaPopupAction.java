@@ -24,10 +24,11 @@ import org.apache.struts.action.ActionMapping;
 
 public class ExibirConsultarContasComandoCobrancaPopupAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
-		ActionForward retorno = actionMapping.findForward("exibirConsultarContasComandoCobrancaPopupAction");
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("exibirConsultarContasComandoCobrancaPopupAction");
 
 		GerarArquivoTextoContasCobrancaEmpresaActionForm form = (GerarArquivoTextoContasCobrancaEmpresaActionForm) actionForm;
+		form.reset(mapping, request);
 
 		HttpSession sessao = request.getSession(false);
 
@@ -35,14 +36,14 @@ public class ExibirConsultarContasComandoCobrancaPopupAction extends GcomAction 
 
 		boolean entrou = false;
 
-		Integer idComando = Integer.valueOf(request.getParameter("idComandoEmpresaCobrancaConta"));
+		Integer id = Integer.valueOf(request.getParameter("idComandoEmpresaCobrancaConta"));
 
 		Date dataIncial = (Date) sessao.getAttribute("dataInicial");
 		Date dataFinal = (Date) sessao.getAttribute("dataFinal");
 
 		if (pesquisar != null && pesquisar.equals("sim") && !entrou) {
 
-			Object[] dados = getFachada().pesquisarDadosPopupExtensaoComando(new Integer(idComando), dataIncial, dataFinal);
+			Object[] dados = getFachada().pesquisarDadosConsultaComando(new Integer(id), dataIncial, dataFinal);
 
 			if (dados[0] != null) form.setNomeEmpresa(dados[0].toString());
 			if (dados[1] != null) form.setDataExecucaoComando(Util.formatarData((Date) dados[1]));
@@ -64,12 +65,12 @@ public class ExibirConsultarContasComandoCobrancaPopupAction extends GcomAction 
 			if (dados[15] != null && !dados[15].equals("") && ((Integer) dados[15]).compareTo(0) != 0) {
 				form.setIntervaloQuadraFinal(dados[15].toString());
 			}
-			if (dados[16] != null) form.setQtdeTotalContasCobranca(dados[16].toString());
-			if (dados[17] != null) form.setValorTotalContasCobranca(Util.formatarMoedaReal(new BigDecimal(dados[17].toString())));
-			if (dados[18] != null) form.setQtdeContasCriterioComando(dados[18].toString());
-			if (dados[19] != null) form.setValorContasCriterioComando(Util.formatarMoedaReal(new BigDecimal(dados[19].toString())));
-
-			Object[] dadosQtdContas = getFachada().pesquisarDadosQtdContasEDiasVencidos(new Integer(idComando));
+			
+			if (dados[16] != null) form.setQtdContas(dados[16].toString());
+			if (dados[17] != null) form.setQtdClientes(dados[17].toString());
+			if (dados[18] != null) form.setValorTotal(Util.formatarMoedaReal(new BigDecimal(dados[18].toString())));
+			
+			Object[] dadosQtdContas = getFachada().pesquisarDadosQtdContasEDiasVencidos(new Integer(id));
 			if (dadosQtdContas[0] != null && dadosQtdContas[1] != null) {
 				form.setQtdContasInicial(dadosQtdContas[0].toString());
 				form.setQtdContasFinal(dadosQtdContas[1].toString());
@@ -79,17 +80,17 @@ public class ExibirConsultarContasComandoCobrancaPopupAction extends GcomAction 
 				form.setQtdDeDiasVencimento(dadosQtdContas[2].toString());
 			}
 
-			pesquisarUnidades(sessao, idComando);
-			pesquisarGerencias(sessao, idComando);
-			pesquisarLigacoesAgua(sessao, idComando);
-			pesquisarPerfis(sessao, idComando);
+			pesquisarUnidades(sessao, id);
+			pesquisarGerencias(sessao, id);
+			pesquisarLigacoesAgua(sessao, id);
+			pesquisarPerfis(sessao, id);
 
 			entrou = true;
 		}
 		
 		if (pesquisar != null && pesquisar.equals("nao")) {
 			request.setAttribute("pesquisa", "nao");
-			request.setAttribute("idComandoEmpresaCobrancaConta", idComando);
+			request.setAttribute("idComandoEmpresaCobrancaConta", id);
 		}
 		
 		return retorno;

@@ -36,6 +36,9 @@
 		<property name="qtdMaximaClientes" 				 	type="java.lang.Integer" 	column="cecc_qtdmaximaclientes" 		length="9"/>
 		<property name="indicadorGerarComDebitoPreterito" 	type="java.lang.Short" 		column="cecc_icdebitopreterito" 	    length="1" />
 		<property name="indicadorPossuiCpfCnpj" 			type="java.lang.Short" 		column="cecc_icpossuicpfcnpj" 	    	length="1" />
+		<property name="quantidadeContas" 					type="java.lang.Integer" 	column="cecc_qtdcontas"/>
+		<property name="quantidadeClientes" 				type="java.lang.Integer" 	column="cecc_qtdclientes"/>
+		<property name="valorTotal" 						type="java.math.BigDecimal" column="cecc_vltotal" 					length="11"/>
 
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>

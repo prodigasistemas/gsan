@@ -33,6 +33,7 @@ public class ConstantesJNDI {
 	public static String QUEUE_CONTROLADOR_FATURAMENTO_MDB = "";
 	public static String QUEUE_CONTROLADOR_ARRECADACAO_MDB = "";
 	public static String QUEUE_CONTROLADOR_MICROMEDICAO_MDB = "";
+	public static String QUEUE_CONTROLADOR_COBRANCA_MDB = "";
 	public static String CONTROLADOR_ARRECADACAO_SEJB = "";
 	public static String CONTROLADOR_ACESSO_SEJB = "";
 	public static String CONTROLADOR_TRANSACAO_SEJB = "";
@@ -332,6 +333,7 @@ public class ConstantesJNDI {
 			QUEUE_CONTROLADOR_FATURAMENTO_MDB = propriedades.getProperty("QueueControladorFaturamento");
 			QUEUE_CONTROLADOR_ARRECADACAO_MDB = propriedades.getProperty("QueueControladorArrecadacao");
 			QUEUE_CONTROLADOR_MICROMEDICAO_MDB = propriedades.getProperty("QueueControladorMicromedicao");
+			QUEUE_CONTROLADOR_COBRANCA_MDB = propriedades.getProperty("QueueControladorCobranca");
 			CONTROLADOR_ARRECADACAO_SEJB = propriedades.getProperty("ControladorArrecadacao");
 			CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB = propriedades.getProperty("ControladorGerencialMicromedicao");
 			CONTROLADOR_GERENCIAL_ARRECADACAO_SEJB = propriedades.getProperty("ControladorGerencialArrecadacao");

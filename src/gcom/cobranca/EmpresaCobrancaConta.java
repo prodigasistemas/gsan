@@ -26,18 +26,27 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 	private ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao;
 	private Imovel imovel;
 	private OrdemServico ordemServico;
-	
+	private Integer referencia;
+	private Date dataEnvio;
+	private Date dataRetirada;
+
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_SIM = new Short("1");
 	public final static Short INDICADOR_VALIDO_PAGAMENTO_NAO = new Short("2");
 
 	public EmpresaCobrancaConta() {
 	}
-	
-	public EmpresaCobrancaConta(Integer id, Empresa empresa, ContaGeral contaGeral,
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, BigDecimal valorOriginalConta, 
-			BigDecimal percentualEmpresaConta, Short indicadorPagamentoValido, Date ultimaAlteracao) {
+
+	public EmpresaCobrancaConta(
+			Integer id, 
+			Empresa empresa, 
+			ContaGeral contaGeral, 
+			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, 
+			BigDecimal valorOriginalConta, 
+			BigDecimal percentualEmpresaConta,
+			Short indicadorPagamentoValido, 
+			Date ultimaAlteracao) {
 		super();
-		
+
 		this.id = id;
 		this.empresa = empresa;
 		this.contaGeral = contaGeral;
@@ -57,77 +66,46 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 	public Filtro retornaFiltro() {
 		FiltroEmpresaCobrancaConta filtroEmpresaCobrancaConta = new FiltroEmpresaCobrancaConta();
 
-		filtroEmpresaCobrancaConta.adicionarParametro(new ParametroSimples(
-				FiltroEmpresaCobrancaConta.ID, this.getId()));
+		filtroEmpresaCobrancaConta.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaConta.ID, this.getId()));
 		return filtroEmpresaCobrancaConta;
 	}
 
-	/**
-	 * @return Retorna o campo contaGeral.
-	 */
 	public ContaGeral getContaGeral() {
 		return contaGeral;
 	}
 
-	/**
-	 * @param contaGeral O contaGeral a ser setado.
-	 */
 	public void setContaGeral(ContaGeral contaGeral) {
 		this.contaGeral = contaGeral;
 	}
 
-	/**
-	 * @return Retorna o campo empresa.
-	 */
 	public Empresa getEmpresa() {
 		return empresa;
 	}
 
-	/**
-	 * @param empresa O empresa a ser setado.
-	 */
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
 
-	/**
-	 * @return Retorna o campo id.
-	 */
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id O id a ser setado.
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return Retorna o campo percentualEmpresaConta.
-	 */
 	public BigDecimal getPercentualEmpresaConta() {
 		return percentualEmpresaConta;
 	}
 
-	/**
-	 * @param percentualEmpresaConta O percentualEmpresaConta a ser setado.
-	 */
 	public void setPercentualEmpresaConta(BigDecimal percentualEmpresaConta) {
 		this.percentualEmpresaConta = percentualEmpresaConta;
 	}
 
-	/**
-	 * @return Retorna o campo valorOriginalConta.
-	 */
 	public BigDecimal getValorOriginalConta() {
 		return valorOriginalConta;
 	}
 
-	/**
-	 * @param valorOriginalConta O valorOriginalConta a ser setado.
-	 */
 	public void setValorOriginalConta(BigDecimal valorOriginalConta) {
 		this.valorOriginalConta = valorOriginalConta;
 	}
@@ -142,31 +120,18 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/**
-	 * @return Retorna o campo comandoEmpresaCobrancaConta.
-	 */
 	public ComandoEmpresaCobrancaConta getComandoEmpresaCobrancaConta() {
 		return comandoEmpresaCobrancaConta;
 	}
 
-	/**
-	 * @param comandoEmpresaCobrancaConta O comandoEmpresaCobrancaConta a ser setado.
-	 */
-	public void setComandoEmpresaCobrancaConta(
-			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
+	public void setComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
 		this.comandoEmpresaCobrancaConta = comandoEmpresaCobrancaConta;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorPagamentoValido.
-	 */
 	public Short getIndicadorPagamentoValido() {
 		return indicadorPagamentoValido;
 	}
 
-	/**
-	 * @param indicadorPagamentoValido O indicadorPagamentoValido a ser setado.
-	 */
 	public void setIndicadorPagamentoValido(Short indicadorPagamentoValido) {
 		this.indicadorPagamentoValido = indicadorPagamentoValido;
 	}
@@ -175,8 +140,7 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 		return comandoEmpresaCobrancaContaExtensao;
 	}
 
-	public void setComandoEmpresaCobrancaContaExtensao(
-			ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao) {
+	public void setComandoEmpresaCobrancaContaExtensao(ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao) {
 		this.comandoEmpresaCobrancaContaExtensao = comandoEmpresaCobrancaContaExtensao;
 	}
 
@@ -196,4 +160,27 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 		this.ordemServico = ordemServico;
 	}
 
+	public Integer getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(Integer referencia) {
+		this.referencia = referencia;
+	}
+
+	public Date getDataEnvio() {
+		return dataEnvio;
+	}
+
+	public void setDataEnvio(Date dataEnvio) {
+		this.dataEnvio = dataEnvio;
+	}
+
+	public Date getDataRetirada() {
+		return dataRetirada;
+	}
+
+	public void setDataRetirada(Date dataRetirada) {
+		this.dataRetirada = dataRetirada;
+	}
 }
