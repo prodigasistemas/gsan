@@ -51461,7 +51461,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			AvisoBancario aviso = itAviso.next();
 			
-			if (idFormaArrecadacao != null && idFormaArrecadacao != "" && aviso.getArrecadacaoForma().getId().equals(new Integer(idFormaArrecadacao))) {
+			if (idFormaArrecadacao != null && !idFormaArrecadacao.isEmpty()  && aviso.getArrecadacaoForma().getId().equals(new Integer(idFormaArrecadacao))) {
 				avisoFinal = aviso;
 				break;
 			}
