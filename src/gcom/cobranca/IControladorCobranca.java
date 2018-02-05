@@ -1092,4 +1092,6 @@ public interface IControladorCobranca {
 	public String getCobrancaParametro(String parametro) throws ControladorException;
 
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException;
+	
+	public void desfazerParcelamentosPorEntradaNaoPagaSemAnoMesReferencia(int idFuncionalidadeIniciada) throws ControladorException;
 }

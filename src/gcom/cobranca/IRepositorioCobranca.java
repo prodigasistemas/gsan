@@ -2008,4 +2008,6 @@ public interface IRepositorioCobranca {
 	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException;
 	
 	public Integer[] obterPeriodoDebitosParcelados(Integer idParcelamento) throws ErroRepositorioException;
+	
+	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao) throws ErroRepositorioException;
 }

@@ -274,6 +274,7 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = "";
 	public static String BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = "";
 	public static String BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = "";
+	public static String BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = "";
 
 	static {
 		inicializarPropriedades();
@@ -576,6 +577,7 @@ public class ConstantesJNDI {
 			BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarNegociacaoContasCobrancaEmpresaMDB");
 			BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = propriedades.getProperty("QueueBatchGerarDadosPagamentosNaoClassificadosMDB");
 			BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = propriedades.getProperty("QueueBatchGerarDadosDocumentosNaoIdentificadosMDB");
+			BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = propriedades.getProperty("QueueBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferenciaMDB");
 
 			stream.close();
 
