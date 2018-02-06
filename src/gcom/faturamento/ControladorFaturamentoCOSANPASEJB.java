@@ -43,6 +43,8 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
+import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -131,7 +133,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				}
 			}
 
-			StringBuilder contasTxtLista = null;
 			Map<Integer, Integer> mapAtualizaSequencial = null;
 
 			boolean flagTerminou = false;
@@ -142,7 +143,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			Collection<EmitirContaHelper> colecaoConta = null;
 			int cont = 1;
 
-			contasTxtLista = new StringBuilder();
+			StringBuilder contasTxtLista = new StringBuilder();
+			StringBuilder contasTxtAltoConsumo = new StringBuilder();
 
 			while (!flagTerminou) {
 				mapAtualizaSequencial = new HashMap();
@@ -323,6 +325,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 										if (parmsConsumoHistorico[6] != null) {
 											mensagemContaAnormalidade = (String) parmsConsumoHistorico[6];
+										}
+										
+										if (parmsConsumoHistorico[7] != null) {
+											emitirContaHelper.setIdConsumoAnormalidade((Integer) parmsConsumoHistorico[7]);
 										}
 									}
 								}
@@ -523,8 +529,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
 								
 								
-								if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
-										&& municipioEntrega.equals(municipioImovel)) {
+								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
 									String localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte" + qntArquivoLocalidadeImpressaoTermica;
 									if (!colecaoLocalidadesArquivo.contains(localidadeArquivo)) {
@@ -547,8 +552,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 											emitirContaHelper, qualidade, localidadeArquivo, idsCondominios));
 
 								} else {
-									contasTxtLista.append(contaTxt.toString());
-									contasTxtLista.append(System.getProperty("line.separator"));
+									
+									if (isAltoConsumo(emitirContaHelper)) {
+										contasTxtAltoConsumo.append(contaTxt.toString());
+										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
+										
+										getControladorUtil().inserir(new ComunicadoAltoConsumo(emitirContaHelper.getIdImovel(), anoMesReferenciaFaturamento));
+									} else {
+										contasTxtLista.append(contaTxt.toString());
+										contasTxtLista.append(System.getProperty("line.separator"));
+									}
 									mapAtualizaSequencial.put(emitirContaHelper.getIdConta(), sequencialImpressao);
 									cont++;
 								}
@@ -600,9 +613,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			String mesReferencia = "_REF" + Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferenciaFaturamentoSemAntecipacao);
 
 			String nomeZip = "CONTA" + idGrupoFaturamento + mesReferencia;
+			String nomeZipAltoConsumo = "CONTA_ALTO_CONSUMO" + idGrupoFaturamento + mesReferencia ;
 			String nomeArquivoImpressaoFormatada = "ArquivoImpressaoTermica" + idGrupoFaturamento + mesReferencia;
 
 			formatarArquivoContas(contasTxtLista, nomeZip);
+			formatarArquivoContas(contasTxtAltoConsumo, nomeZipAltoConsumo);
 			formatarArquivoImpressoraTermica(stringFormatadaImpressaoTermica, colecaoLocalidadesArquivo, nomeArquivoImpressaoFormatada);
 
 			tipoConta++;
@@ -621,6 +636,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
+	}
+
+	private boolean isAltoConsumo(EmitirContaHelper helper) {
+		return helper.getIdConsumoAnormalidade() != null 
+				&& (helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ALTO_CONSUMO.intValue()
+				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO.intValue()
+				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA.intValue()
+				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.HIDROMETRO_SUBSTITUIDO_NAO_INFORMADO.intValue()); 
+	}
+
+	private boolean isEmitirImpressaoTermica(Imovel imovelEmitido, String municipioEntrega, String municipioImovel) {
+		return imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
+				&& municipioEntrega.equals(municipioImovel);
 	}
 
 	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade, SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, 

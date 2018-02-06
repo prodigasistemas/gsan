@@ -680,6 +680,7 @@ import gcom.micromedicao.TelemetriaLog;
 import gcom.micromedicao.TelemetriaMov;
 import gcom.micromedicao.TelemetriaMovReg;
 import gcom.micromedicao.TelemetriaRetMot;
+import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoAnormalidadeAcao;
 import gcom.micromedicao.consumo.ConsumoHistorico;
@@ -1335,6 +1336,7 @@ public class HibernateUtil {
 					.addClass(ConsumoAnormalidadeAcao.class)
 					.addClass(RotaAtualizacaoSeq.class)
 					.addClass(ReleituraMobile.class)
+					.addClass(ComunicadoAltoConsumo.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.financeiro //

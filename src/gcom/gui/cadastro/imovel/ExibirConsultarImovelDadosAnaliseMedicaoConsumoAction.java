@@ -6,10 +6,13 @@ import gcom.cadastro.imovel.bean.ImovelMicromedicao;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.gui.GcomAction;
+import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
+import gcom.micromedicao.consumo.FiltroComunicadoAltoConsumo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -69,6 +72,8 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 	        	
 				sessao.setAttribute("imovelDadosAnaliseMedicaoConsumo", imovel);
 				sessao.setAttribute("idImovelPrincipalAba", imovel.getId().toString());
+				
+				preencherComunicadosAltoConsumo(imovel.getId(), sessao);
 				
 				consultarImovelActionForm
 						.setIdImovelAnaliseMedicaoConsumo(imovel.getId().toString());
@@ -1789,6 +1794,20 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 				retorno = 1;
 			}			
 			return retorno;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void preencherComunicadosAltoConsumo(Integer idImovel, HttpSession sessao) {
+		sessao.setAttribute("comunicados", null);
+		
+		FiltroComunicadoAltoConsumo filtro = new FiltroComunicadoAltoConsumo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoAltoConsumo.IMOVEL_ID, idImovel));
+
+		Collection<ComunicadoAltoConsumo> comunicados = getFachada().pesquisar(filtro, ComunicadoAltoConsumo.class.getName());
+
+		if (comunicados.size() > 0) {
+			sessao.setAttribute("comunicados", comunicados);
 		}
 	}
 }

@@ -2038,7 +2038,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	}
 	
 	public boolean isImovelCondominio() {
-
+		System.out.println(this.id + " indicador: " + this.getIndicadorImovelCondominio() + " imovel condomini null " + this.getImovelCondominio() != null);
 		if (this.getIndicadorImovelCondominio().shortValue() == ConstantesSistema.NAO
 				&& this.getImovelCondominio() != null) {
 			return true;
