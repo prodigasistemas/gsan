@@ -226,7 +226,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 
 			comando.setDataExecucao(new Date());
 			comando.setUltimaAlteracao(new Date());
-
+			this.montarDatasCiclo(comando);
+			
 			getControladorUtil().atualizar(comando);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -237,6 +238,16 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			throw new EJBException(e);
 		}
 	}
+	
+	private void montarDatasCiclo(ComandoEmpresaCobrancaConta comando) {
+		
+		if (comando.getDataInicioCiclo() == null) {
+			comando.setDataInicioCiclo(new Date());
+			comando.setDataFimCiclo(Util.adicionarNumeroDiasDeUmaData(comando.getDataInicioCiclo(), 90));
+		}
+		
+	}
+	
 	
 	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer anoMesFaturamento) throws ControladorException {
 		try {
@@ -928,9 +939,16 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 
 	private Boolean isContaEmCobranca(Pagamento pagamento) throws ErroRepositorioException {
-		EmpresaCobrancaConta empresaCobrancaConta = repositorio.pesquisarEmpresaCobrancaConta(pagamento.getContaGeral().getId());
+		EmpresaCobrancaConta contaCobranca = repositorio.pesquisarEmpresaCobrancaConta(pagamento.getContaGeral().getId());
 		
-		if (empresaCobrancaConta != null) return true;
+		if (contaCobranca != null && isContaPrazoCobranca(pagamento, contaCobranca.getComandoEmpresaCobrancaConta())) 
+			return true;
+		else return false;
+	}
+	
+	private boolean isContaPrazoCobranca(Pagamento pagamento, ComandoEmpresaCobrancaConta comando) {
+		if (pagamento.getDataPagamento().before(comando.getDataFimCiclo()))
+			return true;
 		else return false;
 	}
 
