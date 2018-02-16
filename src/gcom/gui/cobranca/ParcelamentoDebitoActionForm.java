@@ -3,36 +3,42 @@ package gcom.gui.cobranca;
 import org.apache.struts.action.ActionForm;
 
 public class ParcelamentoDebitoActionForm extends ActionForm {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private String codigoImovel;
-	
+
 	private String nomeCliente;
-	
+
 	private String inscricao;
-	
+
 	private String situacaoAgua;
-	
+
 	private String situacaoEsgoto;
-	
+
 	private String parcelamento;
-	
+
 	private String reparcelamento;
-	
+
 	private String reparcelamentoConsecutivo;
-	
+
 	private String cpf;
-	
+
 	private String cnpj;
-	
+
 	private String cpfCnpj;
-	
+
 	private String parcelamentoMotivoDesfazer;
-	
+
 	private String imovelPerfil;
-	
+
 	private String nomeClienteResponsavel;
-	
+
 	private String dataParcelamentoDesfeito;
+
+	private String parcelamentoMotivoCancelamento;
+	
+	private String situacao;
 	
 	public String getCnpj() {
 		return cnpj;
@@ -153,6 +159,20 @@ public class ParcelamentoDebitoActionForm extends ActionForm {
 	public void setDataParcelamentoDesfeito(String dataParcelamentoDesfeito) {
 		this.dataParcelamentoDesfeito = dataParcelamentoDesfeito;
 	}
-	
-	
+
+	public String getParcelamentoMotivoCancelamento() {
+		return parcelamentoMotivoCancelamento;
+	}
+
+	public void setParcelamentoMotivoCancelamento(String parcelamentoMotivoCancelamento) {
+		this.parcelamentoMotivoCancelamento = parcelamentoMotivoCancelamento;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
+	}
 }

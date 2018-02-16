@@ -3,114 +3,126 @@
 <hibernate-mapping>
 	
 	<class name="gcom.cobranca.parcelamento.Parcelamento" table="cobranca.parcelamento">
+	    
 		<id name="id" type="java.lang.Integer" column="parc_id">
 			<generator class="sequence">
 				<param name="sequence">cobranca.seq_parcelamento</param>
 			</generator>
 		</id>
-		<property name="parcelamento" type="java.sql.Timestamp" column="parc_tmparcelamento" length="8"/>
-		<property name="anoMesReferenciaFaturamento" type="java.lang.Integer" column="parc_amreferenciafaturamento" length="4"/>
-		<property name="valorConta" type="java.math.BigDecimal" column="parc_vlconta" length="13"/>
-		<property name="valorServicosACobrar" type="java.math.BigDecimal" column="parc_vlservicosacobrar" length="13"/>
-		<property name="valorAtualizacaoMonetaria" type="java.math.BigDecimal" column="parc_vlatualizacaomonetaria" length="13"/>
-		<property name="valorJurosMora" type="java.math.BigDecimal" column="parc_vljurosmora" length="13"/>
-		<property name="valorMulta" type="java.math.BigDecimal" column="parc_vlmulta" length="13"/>
-		<property name="valorDebitoAtualizado" type="java.math.BigDecimal" column="parc_vldebitoatualizado" length="13"/>
-		<property name="valorDescontoFaixaReferenciaConta" type="java.math.BigDecimal" column="parc_vldescontofaixa" length="13"/>
-		<property name="valorDescontoAcrescimos" type="java.math.BigDecimal" column="parc_vldescontoacrescimos" length="13"/>
-		<property name="valorEntrada" type="java.math.BigDecimal" column="parc_vlentrada" length="13"/>
-		<property name="valorJurosParcelamento" type="java.math.BigDecimal" column="parc_vljurosparcelamento" length="13"/>
-		<property name="numeroPrestacoes" type="java.lang.Short" column="parc_nnprestacoes" length="2"/>
-		<property name="valorPrestacao" type="java.math.BigDecimal" column="parc_vlprestacao" length="13"/>
-		<property name="valorDescontoAntiguidade" type="java.math.BigDecimal" column="parc_vldescontoantiguidade" length="13"/>
-		<property name="indicadorDebitoACobrar" type="java.lang.Short" column="parc_icdebitoacobrar" length="2"/>
-		<property name="valorDescontoInatividade" type="java.math.BigDecimal" column="parc_vldescontoinatividade" length="13"/>
-		<property name="percentualDescontoAcrescimos" type="java.math.BigDecimal" column="parc_pcdescontoacrescimos" length="5"/>
-		<property name="indicadorAcrescimosImpontualdade" type="java.lang.Short" column="parc_icacrescimosimpontualdade" length="2"/>
-		<property name="valorGuiaPapagamento" type="java.math.BigDecimal" column="parc_vlguiapapagamento" length="13"/>
-		<property name="percentualDescontoAntiguidade" type="java.math.BigDecimal" column="parc_pcdescontoantiguidade" length="5"/>
-		<property name="percentualDescontoInatividade" type="java.math.BigDecimal" column="parc_pcdescontoinatividade" length="5"/>
-		<property name="codigoSetorComercial" type="java.lang.Integer" column="parc_cdsetorcomercial" length="4"/>
-		<property name="numeroQuadra" type="java.lang.Integer" column="parc_nnquadra" length="4"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="parc_tmultimaalteracao" length="8"/>
-		<property name="valorCreditoARealizar" type="java.math.BigDecimal" column="parc_vlcreditoarealizar" length="13"/>
-		<property name="valorParcelamentosACobrar" type="java.math.BigDecimal" column="parc_vlparcelamentosacobrar" length="13"/>
-		<property name="indicadorRestabelecimento" type="java.lang.Short" column="parc_icrestabelecimento" length="2"/>
-		<property name="indicadorContasRevisao" type="java.lang.Short" column="parc_iccontasrevisao" length="2"/>
-		<property name="indicadorGuiasPagamento" type="java.lang.Short" column="parc_icguiaspagamento" length="2"/>
-		<property name="indicadorCreditoARealizar" type="java.lang.Short" column="parc_iccreditoarealizar" length="2"/>
-		<property name="taxaJuros" type="java.math.BigDecimal" column="parc_txjuros" length="5"/>
-		<property name="indicadorConfirmacaoParcelamento" type="java.lang.Short" column="parc_icconfirmacao" length="2"/>
-		<property name="valorDescontoSancao" type="java.math.BigDecimal" column="parc_vldescontosancao" length="13"/>
-		<property name="valorDescontoTarifaSocial" type="java.math.BigDecimal" column="parc_vldescontotarsoc" length="13"/>
-		<property name="numeroParcelasPagasConsecutivas" type="java.lang.Short" column="parc_nnparcelaspagasconsecs" length="2"/>
-		<!-- Associations -->
-		<!-- bi-directional many-to-one association to ParcelamentoTipo -->
+		
+		<property name="parcelamento" 						type="java.sql.Timestamp" 	column="parc_tmparcelamento" 			length="8"/>
+		<property name="anoMesReferenciaFaturamento" 		type="java.lang.Integer" 	column="parc_amreferenciafaturamento" 	length="4"/>
+		<property name="valorConta" 						type="java.math.BigDecimal" column="parc_vlconta" 					length="13"/>
+		<property name="valorServicosACobrar" 				type="java.math.BigDecimal" column="parc_vlservicosacobrar" 		length="13"/>
+		<property name="valorAtualizacaoMonetaria" 			type="java.math.BigDecimal" column="parc_vlatualizacaomonetaria" 	length="13"/>
+		<property name="valorJurosMora" 					type="java.math.BigDecimal" column="parc_vljurosmora" 				length="13"/>
+		<property name="valorMulta" 						type="java.math.BigDecimal" column="parc_vlmulta" 					length="13"/>
+		<property name="valorDebitoAtualizado" 				type="java.math.BigDecimal" column="parc_vldebitoatualizado" 		length="13"/>
+		<property name="valorDescontoFaixaReferenciaConta" 	type="java.math.BigDecimal" column="parc_vldescontofaixa" 			length="13"/>
+		<property name="valorDescontoAcrescimos" 			type="java.math.BigDecimal" column="parc_vldescontoacrescimos" 		length="13"/>
+		<property name="valorEntrada" 						type="java.math.BigDecimal" column="parc_vlentrada" 				length="13"/>
+		<property name="valorJurosParcelamento" 			type="java.math.BigDecimal" column="parc_vljurosparcelamento" 		length="13"/>
+		<property name="numeroPrestacoes" 					type="java.lang.Short" 		column="parc_nnprestacoes" 				length="2"/>
+		<property name="valorPrestacao" 					type="java.math.BigDecimal" column="parc_vlprestacao" 				length="13"/>
+		<property name="valorDescontoAntiguidade" 			type="java.math.BigDecimal" column="parc_vldescontoantiguidade" 	length="13"/>
+		<property name="indicadorDebitoACobrar" 			type="java.lang.Short" 		column="parc_icdebitoacobrar" 			length="2"/>
+		<property name="valorDescontoInatividade" 			type="java.math.BigDecimal" column="parc_vldescontoinatividade" 	length="13"/>
+		<property name="percentualDescontoAcrescimos" 		type="java.math.BigDecimal" column="parc_pcdescontoacrescimos" 		length="5"/>
+		<property name="indicadorAcrescimosImpontualdade" 	type="java.lang.Short" 		column="parc_icacrescimosimpontualdade" length="2"/>
+		<property name="valorGuiaPapagamento" 				type="java.math.BigDecimal" column="parc_vlguiapapagamento" 		length="13"/>
+		<property name="percentualDescontoAntiguidade" 		type="java.math.BigDecimal" column="parc_pcdescontoantiguidade" 	length="5"/>
+		<property name="percentualDescontoInatividade" 		type="java.math.BigDecimal" column="parc_pcdescontoinatividade" 	length="5"/>
+		<property name="codigoSetorComercial" 				type="java.lang.Integer" 	column="parc_cdsetorcomercial" 			length="4"/>
+		<property name="numeroQuadra" 						type="java.lang.Integer" 	column="parc_nnquadra" 					length="4"/>
+		<property name="ultimaAlteracao" 					type="java.sql.Timestamp" 	column="parc_tmultimaalteracao" 		length="8"/>
+		<property name="valorCreditoARealizar" 				type="java.math.BigDecimal" column="parc_vlcreditoarealizar" 		length="13"/>
+		<property name="valorParcelamentosACobrar" 			type="java.math.BigDecimal" column="parc_vlparcelamentosacobrar" 	length="13"/>
+		<property name="indicadorRestabelecimento" 			type="java.lang.Short" 		column="parc_icrestabelecimento" 		length="2"/>
+		<property name="indicadorContasRevisao" 			type="java.lang.Short" 		column="parc_iccontasrevisao" 			length="2"/>
+		<property name="indicadorGuiasPagamento" 			type="java.lang.Short" 		column="parc_icguiaspagamento" 			length="2"/>
+		<property name="indicadorCreditoARealizar" 			type="java.lang.Short" 		column="parc_iccreditoarealizar" 		length="2"/>
+		<property name="taxaJuros" 							type="java.math.BigDecimal" column="parc_txjuros" 					length="5"/>
+		<property name="indicadorConfirmacaoParcelamento" 	type="java.lang.Short" 		column="parc_icconfirmacao" 			length="2"/>
+		<property name="valorDescontoSancao" 				type="java.math.BigDecimal" column="parc_vldescontosancao" 			length="13"/>
+		<property name="valorDescontoTarifaSocial" 			type="java.math.BigDecimal" column="parc_vldescontotarsoc" 			length="13"/>
+		<property name="numeroParcelasPagasConsecutivas" 	type="java.lang.Short" 		column="parc_nnparcelaspagasconsecs" 	length="2"/>
+		<property name="dataCancelamento" 					type="java.sql.Timestamp" 	column="parc_tmcancelamento" 			length="8"/>
+		
 		<many-to-one name="parcelamentoTipo" class="gcom.cobranca.parcelamento.ParcelamentoTipo" not-null="true">
 			<column name="pctp_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ParcelamentoSituacao -->
+		
 		<many-to-one name="parcelamentoSituacao" class="gcom.cobranca.parcelamento.ParcelamentoSituacao" not-null="true">
 			<column name="pcst_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		
 		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
 			<column name="rgat_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Imovel -->
+		
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
 			<column name="imov_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		
 		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
 			<column name="lest_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ParcelamentoPerfil -->
+		
 		<many-to-one name="parcelamentoPerfil" class="gcom.cobranca.parcelamento.ParcelamentoPerfil" not-null="true">
 			<column name="pcpf_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		
 		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
 			<column name="iper_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to CobrancaForma -->
+		
 		<many-to-one name="cobrancaForma" class="gcom.cobranca.CobrancaForma" not-null="true">
 			<column name="cbfm_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Quadra -->
+		
 		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
 			<column name="qdra_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Localidade -->
+		
 		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
 			<column name="loca_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ParcelamentoMotivoDesfazer -->
+		
 		<many-to-one name="parcelamentoMotivoDesfazer" class="gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer" not-null="true">
 			<column name="pmdz_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		
 		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Funcionario -->
+		
 		<many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario">
 			<column name="func_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Cliente -->
+		
 		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
 			<column name="clie_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Usuario -->
+		
 		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario">
 			<column name="usur_id"/>
 		</many-to-one>
+		
 		<many-to-one name="usuarioDesfez" class="gcom.seguranca.acesso.usuario.Usuario">
 			<column name="usur_iddesfaz"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to ResolucaoDiretoria -->
+		
 		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.ResolucaoDiretoria">
 			<column name="rdir_id"/>
 		</many-to-one>
+		
+		<many-to-one name="usuarioCancelamento" class="gcom.seguranca.acesso.usuario.Usuario">
+			<column name="usur_idcancelamento"/>
+		</many-to-one>
+		
+		<many-to-one name="motivoCancelamento" class="gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento">
+			<column name="pmca_id"/>
+		</many-to-one>
+		
 	</class>
 </hibernate-mapping>

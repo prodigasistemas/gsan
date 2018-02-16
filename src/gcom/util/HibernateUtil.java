@@ -439,6 +439,7 @@ import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaDesconto;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
+import gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -1466,7 +1467,7 @@ public class HibernateUtil {
 					.addClass(SolicitacaoAcessoGrupo.class).addClass(SolicitacaoAcesso.class).addClass(NegativacaoCriterioSituacaoEspecialCobranca.class)
 					.addClass(NegativacaoCriterioSituacaoCobranca.class).addClass(TarifaSocialCarta.class).addClass(TarifaSocialCartaDebito.class)
 					.addClass(TarifaSocialComandoCarta.class).addClass(TarifaSocialMotivoCarta.class)
-					.addClass(SegurancaParametro.class)
+					.addClass(SegurancaParametro.class).addClass(ParcelamentoMotivoCancelamento.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.atendimentopublico.portal //
