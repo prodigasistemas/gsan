@@ -322,7 +322,8 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
             return retorno;
         } catch (ActionServletException ex) {
         	throw ex;
-		} catch (Exception ex) {			
+		} catch (Exception ex) {	
+			ex.printStackTrace();
 			throw new ActionServletException("erro.atualizacao.nao_concluida");
 		}     
     }

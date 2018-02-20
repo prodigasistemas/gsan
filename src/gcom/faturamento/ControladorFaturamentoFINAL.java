@@ -1333,6 +1333,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
+								if ((imovel.getId().intValue() == 7107323)
+										|| (imovel.getId().intValue() == 7732821)
+										|| (imovel.getId().intValue() == 7732813)
+										|| (imovel.getId().intValue() == 7732414)) {
+									break;
+								}
 								// FATURAMENTO ATUAL
 								// --------------------------------------------------------------------------------
 								this.faturarImovel(
@@ -4996,7 +5002,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// Calcula o consumo por economia (consumo faturado / quantidade total
 		// de economias).
-
+		System.out.println("quantTotalEconomia: " + quantTotalEconomia);
 		// Pega o menor valor da divisão para o consumo de água ser o menor
 		// multiplo das economias
 		// Roberta Costa - 27/07/2006
@@ -5004,16 +5010,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoPorEconomia = consumoFaturado.intValue()
 					/ quantTotalEconomia;
 		}
-
+		System.out.println("consumoFaturado: " + consumoFaturado);
+		System.out.println("consumoPorEconomia: " + consumoPorEconomia);
 		// Cálculo do Excesso do Imóvel = Consumo faturado - Consumo Minimo do
 		// imovel
 		int calculoExcessoImovel = consumoFaturado.intValue()
 				- consumoMinimoImovel.intValue();
-
+		System.out.println("calculoExcessoImovel: " + calculoExcessoImovel);
 		// Cálculo do Excesso por economia = Consumo Excedente / quantidade
 		// total de economias do imóvel
 		int calculoExcessoEconomia = calculoExcessoImovel / quantTotalEconomia;
-
+		System.out.println("calculoExcessoEconomia: " + calculoExcessoEconomia);
 		// --------------------------------------------------------------------------
 		// Seleciona as tarifas de consumo por categoria
 		// (CONSUMO_TARIFA_CATEGORIA).
@@ -5325,7 +5332,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				vlFaturadoCategoriaOuSubcategoria = vlEconomiaCategoriaOuSubcategoria
 						.multiply(new BigDecimal("" + qtdEconomias));
 			}
-
+			System.out.println("vlFaturadoCategoriaOuSubcategoria: " + vlFaturadoCategoriaOuSubcategoria);
 			/*
 			 * Calcula o consumo faturado na categoria = consumo por economia da
 			 * categoria * quantidade de economias da categoria
@@ -5430,7 +5437,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		}
-
+		System.out.println("quantTotalEconomia: " + quantTotalEconomia);
 		// Calcula o consumo por economia (consumo faturado / quantidade total
 		// de economias).
 
@@ -5441,7 +5448,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoPorEconomia = consumoFaturado.intValue()
 					/ quantTotalEconomia;
 		}
-
+		System.out.println("consumoFaturado: " + consumoFaturado);
+		System.out.println("consumoPorEconomia: " + consumoPorEconomia);
 		// --------------------------------------------------------------------------
 		// Seleciona as tarifas de consumo por categoria
 		// (CONSUMO_TARIFA_CATEGORIA).
@@ -5770,12 +5778,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoRetorno = new ArrayList();
 
+		System.out.println("dataLeituraAnterior: " + dataLeituraAnterior);
+		System.out.println("dataLeituraAtual: " + dataLeituraAtual);
 		dataLeituraAnterior = Util.formatarDataSemHora(dataLeituraAnterior);
 		dataLeituraAtual = Util.formatarDataSemHora(dataLeituraAtual);
 
 		// 1 - Calcula a quantidade de dias entre as leituras = data de leitura atual - data de leitura anterior
 		long qtdDiasLeitura = IoUtil.diferencaEntreDatas(dataLeituraAnterior, dataLeituraAtual);
-		
+		System.out.println("qtdDiasLeitura: " + qtdDiasLeitura);
 		// soma 1 dia para contar o dia inicial da leitura
 		qtdDiasLeitura += 1;
 
@@ -5857,7 +5867,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// data da vigência final - data da vigência inicial + 1 dia
 			dataVigenciaInicial = Util.formatarDataSemHora(dataVigenciaInicial);
 			dataVigenciaFinal = Util.formatarDataSemHora(dataVigenciaFinal);
-
+			System.out.println("dataVigenciaInicial: " + dataVigenciaInicial);
+			System.out.println("dataVigenciaFinal: " + dataVigenciaFinal);
 			long qtdDiasVigenciaDentroPeriodo = IoUtil.diferencaEntreDatas(dataVigenciaInicial, dataVigenciaFinal);
 
 			if (colecaoConsumoTarifaVigenciaListIt.hasNext()) {
