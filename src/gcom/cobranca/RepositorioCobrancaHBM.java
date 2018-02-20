@@ -27087,32 +27087,35 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	}
 	
-	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao) throws ErroRepositorioException {
+	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao, int numeroIncial, int numeroFinal) throws ErroRepositorioException {
 
-		Collection retorno = null;
+	    Collection retorno = null;
 
-		Session session = HibernateUtil.getSession();
-		String consulta;
+	    Session session = HibernateUtil.getSession();
+	    String consulta;
 
-		try {
+	    try {
 
-			consulta = "SELECT distinct parc.id, parc.parcelamento, imov.id  " + "FROM DebitoACobrar dbac "
-					+ "INNER JOIN dbac.parcelamento parc " + "INNER JOIN parc.imovel imov "
-					+ "WHERE parc.parcelamentoSituacao = :parcelamentoSituacao "
-					+ "AND (parc.valorEntrada IS NOT NULL AND parc.valorEntrada > 0) " + "AND dbac.numeroPrestacaoCobradas = 0 "
-					+ "AND dbac.debitoCreditoSituacaoAtual = :normal ";
+	      consulta = "SELECT distinct parc.id, parc.parcelamento, imov.id  " + "FROM DebitoACobrar dbac "
+	          + "INNER JOIN dbac.parcelamento parc " + "INNER JOIN parc.imovel imov "
+	          + "WHERE parc.parcelamentoSituacao = :parcelamentoSituacao "
+	          + "AND (parc.valorEntrada IS NOT NULL AND parc.valorEntrada > 0) " + "AND dbac.numeroPrestacaoCobradas = 0 "
+	          + "AND dbac.debitoCreditoSituacaoAtual = :normal ";
 
-			retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
-					.setInteger("normal", DebitoCreditoSituacao.NORMAL).list();
+	      retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
+	          .setInteger("normal", DebitoCreditoSituacao.NORMAL)
+	          .setFirstResult(numeroIncial)
+	          .setMaxResults(numeroFinal)
+	          .list();
 
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
+	    } catch (HibernateException e) {
+	      // levanta a exceção para a próxima camada
+	      throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	      // fecha a sessão
+	      HibernateUtil.closeSession(session);
+	    }
 
-		return retorno;
-	}
+	    return retorno;
+	  }
 }
