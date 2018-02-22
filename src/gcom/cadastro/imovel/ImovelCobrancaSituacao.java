@@ -23,7 +23,7 @@ public class ImovelCobrancaSituacao extends ObjetoTransacao {
 
 	private Date ultimaAlteracao;
 
-	private gcom.cadastro.imovel.Imovel imovel;
+	private Imovel imovel;
 
 	private CobrancaSituacao cobrancaSituacao;
 
