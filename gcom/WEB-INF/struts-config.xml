@@ -3066,6 +3066,16 @@
 			<forward name="consultarParcelamentoDebito"
 				path="/jsp/cobranca/parcelamento_debito_consultar.jsp" />
 		</action>
+		
+		<action name="ParcelamentoDebitoActionForm"
+			type="gcom.gui.cobranca.CancelarParcelamentoAction"
+			validate="true"
+			scope="request"
+			path="/cancelarParcelamentoAction">
+			
+			<forward name="consultarParcelamentoDebito" path="/jsp/cobranca/parcelamento_debito_consultar.jsp" />
+		</action>
+		
 		<action name="ParcelamentoDebitoActionForm"
 			type="gcom.gui.cobranca.ExibirParcelamentoContasParceladasPopupAction"
 			validate="false" scope="session"
