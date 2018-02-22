@@ -106,7 +106,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="344"
+						x="345"
 						y="31"
 						width="65"
 						height="9"
@@ -198,7 +198,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="344"
+						x="345"
 						y="12"
 						width="65"
 						height="9"
@@ -291,7 +291,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="345"
+						x="346"
 						y="8"
 						width="65"
 						height="9"
