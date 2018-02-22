@@ -2,80 +2,65 @@ package gcom.cobranca.parcelamento;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ParcelamentoMotivoDesfazer implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
-    private Integer id;
+	private Integer id;
 
-    /** nullable persistent field */
-    private String descricaoParcelamentoMotivoDesfazer;
+	private String descricaoParcelamentoMotivoDesfazer;
 
-    /** nullable persistent field */
-    private Short indicadorUso;
+	private Short indicadorUso;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-    
-//  --CONSTANTES
-    /**
-     * Description of the Field
-     */
-    public final static Integer ENTRADA_NAO_PAGA = new Integer(4);
-    
+	private Date ultimaAlteracao;
 
-    /** full constructor */
-    public ParcelamentoMotivoDesfazer(String descricaoParcelamentoMotivoDesfazer, Short indicadorUso, Date ultimaAlteracao) {
-        this.descricaoParcelamentoMotivoDesfazer = descricaoParcelamentoMotivoDesfazer;
-        this.indicadorUso = indicadorUso;
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public final static Integer ENTRADA_NAO_PAGA = new Integer(4);
 
-    /** default constructor */
-    public ParcelamentoMotivoDesfazer() {
-    }
+	public ParcelamentoMotivoDesfazer(String descricaoParcelamentoMotivoDesfazer, Short indicadorUso, Date ultimaAlteracao) {
+		this.descricaoParcelamentoMotivoDesfazer = descricaoParcelamentoMotivoDesfazer;
+		this.indicadorUso = indicadorUso;
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public ParcelamentoMotivoDesfazer() {
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public String getDescricaoParcelamentoMotivoDesfazer() {
-        return this.descricaoParcelamentoMotivoDesfazer;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setDescricaoParcelamentoMotivoDesfazer(String descricaoParcelamentoMotivoDesfazer) {
-        this.descricaoParcelamentoMotivoDesfazer = descricaoParcelamentoMotivoDesfazer;
-    }
+	public String getDescricaoParcelamentoMotivoDesfazer() {
+		return this.descricaoParcelamentoMotivoDesfazer;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public void setDescricaoParcelamentoMotivoDesfazer(String descricaoParcelamentoMotivoDesfazer) {
+		this.descricaoParcelamentoMotivoDesfazer = descricaoParcelamentoMotivoDesfazer;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 }
