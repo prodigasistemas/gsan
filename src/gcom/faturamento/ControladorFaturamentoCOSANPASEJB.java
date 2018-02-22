@@ -553,7 +553,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								} else {
 									
-									if (isAltoConsumo(emitirContaHelper)) {
+									if (isAltoConsumo(emitirContaHelper) && !isImovelEmsituacaoEspecialFaturamento(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia())) {
 										contasTxtAltoConsumo.append(contaTxt.toString());
 										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
 										

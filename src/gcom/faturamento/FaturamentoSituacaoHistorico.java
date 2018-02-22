@@ -11,81 +11,50 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
 	private static final long serialVersionUID = 1L;
 	public static final int ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO = 435; //Operacao.OPERACAO_INFORMAR_SITUACAO_ESPECIAL_COBRANCA
 	public static final int ATRIBUTOS_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO = 477; //Operacao.OPERACAO_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO
-	/** identifier field */
 
     private Integer id;
 
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private Integer anoMesFaturamentoSituacaoInicio;
 
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private Integer anoMesFaturamentoSituacaoFim;
 
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroFaturamentoSituacaoHistorico.FATURAMENTO_MOTIVO,funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private gcom.faturamento.FaturamentoSituacaoMotivo faturamentoSituacaoMotivo;
 
-    /** persistent field */
     private Imovel imovel;
 
-    /** persistent field */
     @ControleAlteracao(value=FiltroFaturamentoSituacaoHistorico.FATURAMENTO_TIPO,funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private gcom.faturamento.FaturamentoSituacaoTipo faturamentoSituacaoTipo;
     
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private Integer anoMesFaturamentoRetirada;
     
-    /** nullable persistent field */
     private Usuario usuario;
-    
-    /** persistent field */
     private Integer numeroConsumoAguaMedido;
-    
-    /** persistent field */
     private Integer numeroConsumoAguaNaoMedido;
-    
-    /** persistent field */
     private Integer numeroVolumeEsgotoMedido;
-    
-    /** persistent field */
     private Integer numeroVolumeEsgotoNaoMedido;
-    
-    /** persistent field */
     private Date dataInclusao;
     
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private String observacaoInforma;
     
-    /** persistent field */
     @ControleAlteracao(funcionalidade={ATRIBUTOS_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO})
     private String observacaoRetira;
     
-    /** nullable persistent field */
     private Usuario usuarioInforma;
-    
-    /** nullable persistent field */
     private Usuario usuarioRetira;
-    
-    /** nullable persistent field */
-    private gcom.faturamento.FaturamentoSituacaoComando faturamentoSituacaoComandoInforma;
-    
-    /** nullable persistent field */
-    private gcom.faturamento.FaturamentoSituacaoComando faturamentoSituacaoComandoRetirada;
-    
-    
+    private FaturamentoSituacaoComando faturamentoSituacaoComandoInforma;
+    private FaturamentoSituacaoComando faturamentoSituacaoComandoRetirada;
 
     public FaturamentoSituacaoComando getFaturamentoSituacaoComandoInforma() {
 		return faturamentoSituacaoComandoInforma;
@@ -106,8 +75,8 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
 
 	/** full constructor */
     public FaturamentoSituacaoHistorico(Integer anoMesFaturamentoSituacaoInicio, Integer anoMesFaturamentoSituacaoFim, 
-    		Date ultimaAlteracao, gcom.faturamento.FaturamentoSituacaoMotivo faturamentoSituacaoMotivo, Imovel imovel, 
-    		gcom.faturamento.FaturamentoSituacaoTipo faturamentoSituacaoTipo, Integer anoMesFaturamentoRetirada,
+    		Date ultimaAlteracao, FaturamentoSituacaoMotivo faturamentoSituacaoMotivo, Imovel imovel, 
+    		FaturamentoSituacaoTipo faturamentoSituacaoTipo, Integer anoMesFaturamentoRetirada,
     		Usuario usuario) {
         this.anoMesFaturamentoSituacaoInicio = anoMesFaturamentoSituacaoInicio;
         this.anoMesFaturamentoSituacaoFim = anoMesFaturamentoSituacaoFim;
@@ -125,8 +94,8 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
 
     /** minimal constructor */
     public FaturamentoSituacaoHistorico(Integer anoMesFaturamentoSituacaoInicio, Integer anoMesFaturamentoSituacaoFim, 
-    		gcom.faturamento.FaturamentoSituacaoMotivo faturamentoSituacaoMotivo, Imovel imovel, 
-    		gcom.faturamento.FaturamentoSituacaoTipo faturamentoSituacaoTipo, Integer anoMesFaturamentoRetirada,
+    		FaturamentoSituacaoMotivo faturamentoSituacaoMotivo, Imovel imovel, 
+    		FaturamentoSituacaoTipo faturamentoSituacaoTipo, Integer anoMesFaturamentoRetirada,
     		Usuario usuario) {
         this.anoMesFaturamentoSituacaoInicio = anoMesFaturamentoSituacaoInicio;
         this.anoMesFaturamentoSituacaoFim = anoMesFaturamentoSituacaoFim;
@@ -174,11 +143,11 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
 		this.dataInclusao = dataInclusao;
 	}
 
-	public gcom.faturamento.FaturamentoSituacaoMotivo getFaturamentoSituacaoMotivo() {
+	public FaturamentoSituacaoMotivo getFaturamentoSituacaoMotivo() {
         return this.faturamentoSituacaoMotivo;
     }
 
-    public void setFaturamentoSituacaoMotivo(gcom.faturamento.FaturamentoSituacaoMotivo faturamentoSituacaoMotivo) {
+    public void setFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo faturamentoSituacaoMotivo) {
         this.faturamentoSituacaoMotivo = faturamentoSituacaoMotivo;
     }
 
@@ -190,52 +159,34 @@ public class FaturamentoSituacaoHistorico extends ObjetoTransacao{
         this.imovel = imovel;
     }
 
-    public gcom.faturamento.FaturamentoSituacaoTipo getFaturamentoSituacaoTipo() {
+    public FaturamentoSituacaoTipo getFaturamentoSituacaoTipo() {
         return this.faturamentoSituacaoTipo;
     }
 
-    public void setFaturamentoSituacaoTipo(gcom.faturamento.FaturamentoSituacaoTipo faturamentoSituacaoTipo) {
+    public void setFaturamentoSituacaoTipo(FaturamentoSituacaoTipo faturamentoSituacaoTipo) {
         this.faturamentoSituacaoTipo = faturamentoSituacaoTipo;
     }
 
-	/**
-	 * @return Retorna o campo anoMesFaturamentoRetirada.
-	 */
 	public Integer getAnoMesFaturamentoRetirada() {
 		return anoMesFaturamentoRetirada;
 	}
 
-	/**
-	 * @param anoMesFaturamentoRetirada O anoMesFaturamentoRetirada a ser setado.
-	 */
 	public void setAnoMesFaturamentoRetirada(Integer anoMesFaturamentoRetirada) {
 		this.anoMesFaturamentoRetirada = anoMesFaturamentoRetirada;
 	}
 
-	/**
-	 * @return Retorna o campo anoMesFaturamentoSituacaoFim.
-	 */
 	public Integer getAnoMesFaturamentoSituacaoFim() {
 		return anoMesFaturamentoSituacaoFim;
 	}
 
-	/**
-	 * @param anoMesFaturamentoSituacaoFim O anoMesFaturamentoSituacaoFim a ser setado.
-	 */
 	public void setAnoMesFaturamentoSituacaoFim(Integer anoMesFaturamentoSituacaoFim) {
 		this.anoMesFaturamentoSituacaoFim = anoMesFaturamentoSituacaoFim;
 	}
 
-	/**
-	 * @return Retorna o campo anoMesFaturamentoSituacaoInicio.
-	 */
 	public Integer getAnoMesFaturamentoSituacaoInicio() {
 		return anoMesFaturamentoSituacaoInicio;
 	}
 
-	/**
-	 * @param anoMesFaturamentoSituacaoInicio O anoMesFaturamentoSituacaoInicio a ser setado.
-	 */
 	public void setAnoMesFaturamentoSituacaoInicio(
 			Integer anoMesFaturamentoSituacaoInicio) {
 		this.anoMesFaturamentoSituacaoInicio = anoMesFaturamentoSituacaoInicio;

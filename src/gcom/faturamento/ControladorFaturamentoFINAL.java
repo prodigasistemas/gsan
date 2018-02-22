@@ -64010,6 +64010,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return retorno;
 
 	}
+	
+	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException {
+		Collection<FaturamentoSituacaoHistorico> situacoes = pesquisarSituacaoEspecialFaturamentoVigente(idImovel, anoMesReferencia);
+		
+		return situacoes != null && situacoes.size() > 0; 
+	}
 
 	/**
 	 * [UC0857] - Gerar Relatório de Arrecadação das Multas de Autos de Infração
