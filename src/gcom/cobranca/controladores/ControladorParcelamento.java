@@ -334,6 +334,7 @@ public class ControladorParcelamento extends ControladorComum {
 				valorRestante.setScale(2, BigDecimal.ROUND_DOWN);
 				
 				atualizarDebitoACobrar(valorRestante, helper.getParcelamento().getId(), conta, ((Integer) valores[0]));
+				atualizarValorDebitosConta(conta, valorRestante);
 			}
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
