@@ -10413,7 +10413,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setFirstResult(10 * numeroPagina).setMaxResults(10).list();
 
 		} catch (HibernateException e) {
-			e.printStackTrace();
+
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -18515,11 +18515,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		            .append("inner join pgmt.localidade loca ")
 		            .append("where ((loca.id= :idLocalidade) and ")
 		            .append("(pgmt.pagamentoSituacaoAtual.id = :situacaoClassificado) ")
-		            .append("and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao))")
+		            .append("and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao))")
 		            .append(" or ((pgmt.pagamentoSituacaoAtual.id = :situacaoValorABaixar) ")
 		            .append("and (pgmt.valorExcedente > 0) and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao)) ")
 		            .append(" or ( (pgmt.pagamentoSituacaoAtual.id = :situacaoDuplicidadeExcessoDevolvido) ")
-		            .append(" and (pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao) ) ")
+		            .append(" and (pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao) ) ")
 		            .append(" or (pgmt.pagamentoSituacaoAtual.id in (:classificadoRecuperacaoCreditoDuplicidade , :classificadoRecuperacaoCreditoCancelado)) ")
 		            .append(" order by pgmt.id");
 
@@ -20065,7 +20065,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = "select dbac from DebitoACobrar dbac "
 					+ "inner join dbac.localidade loca "
 					+ "where dbac.id in "
-                    + "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao < :anoMesReferenciaArrecadacao "
+                    + "(select distinct pgmt.debitoACobrarGeral.id from Pagamento pgmt where pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
                     + "and (pgmt.pagamentoSituacaoAtual.id = "
 					+ PagamentoSituacao.PAGAMENTO_CLASSIFICADO
 					+ " or pgmt.pagamentoSituacaoAtual.id = "
