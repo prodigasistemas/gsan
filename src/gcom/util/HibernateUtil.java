@@ -9,8 +9,11 @@ import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
+import gcom.arrecadacao.BoletoInfo;
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
+import gcom.arrecadacao.DadosDocumentosNaoIdentificados;
+import gcom.arrecadacao.DadosPagamentosNaoClassificados;
 import gcom.arrecadacao.DeducaoTipo;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.DevolucaoDadosDiarios;
@@ -197,6 +200,7 @@ import gcom.cadastro.EmailClienteAlterado;
 import gcom.cadastro.EmpresaContratoCadastro;
 import gcom.cadastro.EmpresaContratoCadastroAtributo;
 import gcom.cadastro.EnvioEmail;
+import gcom.cadastro.LojaAtendimento;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.VersaoMobile;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
@@ -359,6 +363,7 @@ import gcom.cobranca.CobrancaDocumentoItemHistorico;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaGrupo;
 import gcom.cobranca.CobrancaGrupoCronogramaMes;
+import gcom.cobranca.CobrancaParametro;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.CobrancaSituacaoComando;
 import gcom.cobranca.CobrancaSituacaoHistorico;
@@ -434,6 +439,7 @@ import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaDesconto;
 import gcom.cobranca.parcelamento.ParcelamentoFaixaValor;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
+import gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -441,6 +447,7 @@ import gcom.cobranca.parcelamento.ParcelamentoQuantidadePrestacao;
 import gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.cobranca.parcelamento.ParcelamentoTipo;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.faturamento.ConsumoFaixaCategoria;
 import gcom.faturamento.ConsumoFaixaLigacao;
 import gcom.faturamento.ConsumoMinimoParametro;
@@ -674,6 +681,7 @@ import gcom.micromedicao.TelemetriaLog;
 import gcom.micromedicao.TelemetriaMov;
 import gcom.micromedicao.TelemetriaMovReg;
 import gcom.micromedicao.TelemetriaRetMot;
+import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoAnormalidadeAcao;
 import gcom.micromedicao.consumo.ConsumoHistorico;
@@ -1085,6 +1093,7 @@ public class HibernateUtil {
 					.addClass(ClienteRetorno.class)
 					.addClass(ClienteEnderecoRetorno.class)
 					.addClass(ClienteImovelRetorno.class)
+					.addClass(LojaAtendimento.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //
@@ -1158,6 +1167,8 @@ public class HibernateUtil {
 					.addClass(CapacidHidrComandoOSS.class)
 					.addClass(NegociacaoCobrancaEmpresa.class)
 					.addClass(NegociacaoContaCobrancaEmpresa.class)
+					.addClass(CobrancaParametro.class)
+					.addClass(MensagemParcelamentoBoleto.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //
@@ -1326,6 +1337,7 @@ public class HibernateUtil {
 					.addClass(ConsumoAnormalidadeAcao.class)
 					.addClass(RotaAtualizacaoSeq.class)
 					.addClass(ReleituraMobile.class)
+					.addClass(ComunicadoAltoConsumo.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.financeiro //
@@ -1376,6 +1388,9 @@ public class HibernateUtil {
 					.addClass(DevolucaoDadosDiariosAuxiliar.class)
 					.addClass(ArrecadacaoDadosDiariosAuxiliar.class)
 					.addClass(BoletimInformacoesGerenciais.class)
+					.addClass(DadosPagamentosNaoClassificados.class)
+					.addClass(DadosDocumentosNaoIdentificados.class)
+					.addClass(BoletoInfo.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.operacional //
@@ -1452,7 +1467,7 @@ public class HibernateUtil {
 					.addClass(SolicitacaoAcessoGrupo.class).addClass(SolicitacaoAcesso.class).addClass(NegativacaoCriterioSituacaoEspecialCobranca.class)
 					.addClass(NegativacaoCriterioSituacaoCobranca.class).addClass(TarifaSocialCarta.class).addClass(TarifaSocialCartaDebito.class)
 					.addClass(TarifaSocialComandoCarta.class).addClass(TarifaSocialMotivoCarta.class)
-					.addClass(SegurancaParametro.class)
+					.addClass(SegurancaParametro.class).addClass(ParcelamentoMotivoCancelamento.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.atendimentopublico.portal //

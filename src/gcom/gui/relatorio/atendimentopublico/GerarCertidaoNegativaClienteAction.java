@@ -94,8 +94,7 @@ public class GerarCertidaoNegativaClienteAction extends ExibidorProcessamentoTar
 						Cliente.class.getName());
 
 				if (colecaoClientes != null && !colecaoClientes.isEmpty()) {
-					throw new ActionServletException(
-							"atencao.existe_cliente_superior");
+					throw new ActionServletException("atencao.existe_cliente_superior");
 				}
 
 			}

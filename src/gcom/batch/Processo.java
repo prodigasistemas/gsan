@@ -100,7 +100,7 @@ public class Processo extends ObjetoGcom {
     public static final int RELATORIO_ANALISE_CONSUMO = 146;
     public static final int ATUALIZAR_DIFERENCA_ACUMULADA_NO_MES = 147;
     public static final int RELATORIO_IMOVEIS_FATURAS_ATRASO_DESCRITAS_LOCALIZACAO = 148;
-    public static final int GERAR_RELATORIO_DADOS_LEITURA = 149;
+    public static final int GERAR_RELATORIO_DADOS_LEITURA = 149;	
     public static final int GERAR_RELATORIO_FATURAS_AGRUPADAS = 150;
     public static final int GERAR_RELATORIO_ROTAS_ONLINE_POR_EMPRESA = 155;
     public static final int GERAR_ARQUIVO_TEXTO_CONTAS_COBRANCA_EMPRESA = 156;

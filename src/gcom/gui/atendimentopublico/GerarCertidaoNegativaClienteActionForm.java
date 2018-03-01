@@ -1,13 +1,1 @@
-package gcom.gui.atendimentopublico;
-
-
-import org.apache.struts.validator.ValidatorActionForm;
-
-/** * [UC0864] Gerar Certidao Negativa por Cliente *  * @author Rafael Corrêa * * @date 22/09/2008 */
-
-public class GerarCertidaoNegativaClienteActionForm extends ValidatorActionForm {
-	private static final long serialVersionUID = 1L;
-	private String idCliente;
-	private String cpfCnpj;
-	private String nomeCliente;		private String responsavel;	public String getResponsavel() {		return responsavel;	}	public void setResponsavel(String responsavel) {		this.responsavel = responsavel;	}	/**	 * @return Retorna o campo cpfCnpj.	 */	public String getCpfCnpj() {		return cpfCnpj;	}	/**	 * @param cpfCnpj O cpfCnpj a ser setado.	 */	public void setCpfCnpj(String cpfCnpj) {		this.cpfCnpj = cpfCnpj;	}	/**	 * @return Retorna o campo idCliente.	 */	public String getIdCliente() {		return idCliente;	}	/**	 * @param idCliente O idCliente a ser setado.	 */	public void setIdCliente(String idCliente) {		this.idCliente = idCliente;	}	/**	 * @return Retorna o campo nomeCliente.	 */	public String getNomeCliente() {		return nomeCliente;	}	/**	 * @param nomeCliente O nomeCliente a ser setado.	 */	public void setNomeCliente(String nomeCliente) {		this.nomeCliente = nomeCliente;	}
-}
+package gcom.gui.atendimentopublico;import org.apache.struts.action.ActionError;import org.apache.struts.action.ActionErrors;import org.apache.struts.validator.ValidatorActionForm;public class GerarCertidaoNegativaClienteActionForm extends ValidatorActionForm {	private static final long serialVersionUID = 1L;	private String idCliente;	private String cpfCnpj;	private String nomeCliente;	private String responsavel;	public String getResponsavel() {		return responsavel;	}	public void setResponsavel(String responsavel) {		this.responsavel = responsavel;	}	public String getCpfCnpj() {		return cpfCnpj;	}	public void setCpfCnpj(String cpfCnpj) {		this.cpfCnpj = cpfCnpj;	}	public String getIdCliente() {		return idCliente;	}	public void setIdCliente(String idCliente) {		this.idCliente = idCliente;	}	public String getNomeCliente() {		return nomeCliente;	}	public void setNomeCliente(String nomeCliente) {		this.nomeCliente = nomeCliente;	}	public ActionErrors validate() {		ActionErrors errors = new ActionErrors();		if (idCliente == null || idCliente.trim().equals("")) {			errors.add("erro-certidao-cliente", new ActionError("errors.portal.obrigatorio", "o Código do Cliente"));		}		return errors;	}}

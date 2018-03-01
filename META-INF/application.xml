@@ -188,7 +188,10 @@
 	<module>
 		<ejb>ControladorBatchMicromedicaoGCOM.jar</ejb>
 	</module>
-
+	<module>
+		<ejb>ControladorBatchCobrancaGCOM.jar</ejb>
+	</module>
+	
 	<module>
 		<ejb>ControladorFaturamentoCAER.jar</ejb>
 	</module>
@@ -270,6 +273,10 @@
 		<ejb>BatchDesfazerParcelamentoPorEntradaNaoPagaMDB.jar</ejb>
 	</module>
 
+		<module>
+		<ejb>BatchCancelarParcelamentosMDB.jar</ejb>
+	</module>
+	
 	<module>
 		<ejb>BatchGerarHistoricoContaMDB.jar</ejb>
 	</module>
@@ -888,7 +895,23 @@
 	</module>
 	
 	<module>
+		<ejb>ControladorParcelamentoGCOM.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorLojaVirtualGCOM.jar</ejb>
+	</module>
+	
+	<module>
 		<ejb>BatchGerarNegociacaoContasCobrancaEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosPagamentosNaoClassificadosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosDocumentosNaoIdentificadosMDB.jar</ejb>
 	</module>
 	
 	<module>

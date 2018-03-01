@@ -101,6 +101,8 @@ public class Pagamento extends ObjetoTransacao {
 	private CobrancaDocumento cobrancaDocumento;
 	private DocumentoTipo documentoTipoAgregador;
 	private PagamentoCartaoDebito pagamentoCartaoDebito;
+	
+	private BigDecimal valorDesconto; 
 
 	public final static Short INDICADOR_EXPURGADO_SIM = new Short("1");
 	public final static Short INDICADOR_EXPURGADO_NAO = new Short("2");
@@ -534,5 +536,12 @@ public class Pagamento extends ObjetoTransacao {
 	public boolean isPagamentoClassificado() {
 		return this.pagamentoSituacaoAtual.getId().intValue() == PagamentoSituacao.PAGAMENTO_CLASSIFICADO.intValue();
 	}
-	
+
+	public BigDecimal getValorDesconto() {
+		return valorDesconto;
+	}
+
+	public void setValorDesconto(BigDecimal valorDesconto) {
+		this.valorDesconto = valorDesconto;
+	}
 }

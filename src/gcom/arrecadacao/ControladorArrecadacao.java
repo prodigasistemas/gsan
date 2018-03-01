@@ -160,9 +160,13 @@ import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
 import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
 import gcom.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoHelper;
+import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
+import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
+import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.fachada.Fachada;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
@@ -258,9 +262,9 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.FormatoData;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
-import gcom.util.ParametroNaoInformadoException;
 import gcom.util.RepositorioUtilHBM;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -307,13 +311,6 @@ import javax.mail.SendFailedException;
 
 import org.apache.log4j.Logger;
 
-
-/**
- * Controlador Arrecadacao PADRÃO
- * 
- * @author Raphael Rossiter
- * @date 30/04/2007
- */
 public class ControladorArrecadacao implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -346,15 +343,7 @@ public class ControladorArrecadacao implements SessionBean {
 	
 	private static Logger logger = Logger.getLogger(ControladorArrecadacao.class);
 
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-
 		repositorioCliente = RepositorioClienteHBM.getInstancia();
 		repositorioLocalidade = RepositorioLocalidadeHBM.getInstancia();
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
@@ -368,54 +357,26 @@ public class ControladorArrecadacao implements SessionBean {
 		repositorioAtendimentoPublico = RepositorioAtendimentoPublicoHBM.getInstancia();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	protected ControladorAcessoLocal getControladorAcesso() {
 		ControladorAcessoLocalHome localHome = null;
 		ControladorAcessoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAcessoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -426,26 +387,16 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	protected ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -456,13 +407,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
 	protected ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -470,8 +414,7 @@ public class ControladorArrecadacao implements SessionBean {
 		ServiceLocator locator = null;
 		try {
 			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
 
 			local = localHome.create();
 
@@ -483,26 +426,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -513,26 +445,14 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	protected ControladorLocalidadeLocal getControladorLocalidade() {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorLocalidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorLocalidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -543,29 +463,14 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Author: Sávio Luiz Data: 04/01/2006
-	 * 
-	 * Retorna o valor do Controlador de Cobranca
-	 * 
-	 * @return O valor de controladorCobrancaLocal
-	 */
 	protected ControladorCobrancaLocal getControladorCobranca() {
-
 		ControladorCobrancaLocalHome localHome = null;
 		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -577,96 +482,49 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 
-	/**
-	 * Author: Vivianne Sousa Data: 1804/03/2006
-	 * 
-	 * Retorna o valor do Controlador Util
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	protected ControladorUtilLocal getControladorUtil() {
-
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de imóvel
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 19/04/2006
-	 * 
-	 * @return
-	 */
 	protected ControladorImovelLocal getControladorImovel() {
-
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorImovelLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	protected ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -680,15 +538,12 @@ public class ControladorArrecadacao implements SessionBean {
 	private ControladorRetificarContaLocal getControladorRetificarConta() {
 		ControladorRetificarContaLocalHome localHome = null;
 		ControladorRetificarContaLocal local = null;
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -699,11 +554,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
 	protected ControladorEnderecoLocal getControladorEndereco() {
 
 		ControladorEnderecoLocalHome localHome = null;
@@ -714,8 +564,7 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
+			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
 
 			local = localHome.create();
 
@@ -727,32 +576,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de imóvel
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 01/08/2007
-	 * 
-	 * @return
-	 */
 	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
 		ControladorPermissaoEspecialLocalHome localHome = null;
 		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorPermissaoEspecialLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -761,32 +593,16 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	/**
-	 * 
-	 * Cria uma instância do controlador de contrato parcelamento
-	 * 
-	 * @author Mariana Victor
-	 * @date 04/08/2011
-	 * 
-	 * @return
-	 */
 	protected ControladorContratoParcelamentoLocal getControladorContratoParcelamento() {
 		ControladorContratoParcelamentoLocalHome localHome = null;
 		ControladorContratoParcelamentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
-
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorContratoParcelamentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorContratoParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -2827,6 +2643,15 @@ public class ControladorArrecadacao implements SessionBean {
 													idImovelPagamento = pagamento.getImovel().getId();
 												}
 											}
+											
+											/**
+											 * Tratativa para linhas com valores zerados que apenas informam que o 
+											 * boleto foi registrado na instituicao financeira
+											 */
+											this.confirmarRegistroBoleto(registroTipo7, idImovelPagamento);
+											if (pagamentoHelperCodigoBarras.getValorDocumento().compareTo(BigDecimal.ZERO) == 0) {
+												continue;
+											}
 
 											Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(linhaRegistro, arrecadadorMovimento.getId(),
 													descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelPagamento, pagamentoHelperCodigoBarras.getTipoDocumento(),
@@ -2834,6 +2659,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
 											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
+											
 
 											if (avisoBancario != null && avisoBancario.getValorArrecadacaoCalculado().compareTo(BigDecimal.ZERO) == 0) {
 
@@ -9579,7 +9405,7 @@ public class ControladorArrecadacao implements SessionBean {
 				avisoBancarioHelper = new AvisoBancarioHelper();
 
 				avisoBancarioHelper.setIdAvisoBancario(avisoBancario.getId());
-
+				
 				if (avisoBancario.getDataLancamento() != null) {
 					avisoBancarioHelper.setDataLancamento(avisoBancario
 							.getDataLancamento());
@@ -21299,15 +21125,15 @@ public class ControladorArrecadacao implements SessionBean {
 							 * 0(zero) Esta pesquisa já retorna o valor que
 							 * falta ser cobrado
 							 */
-							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar = repositorioArrecadacao
+							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento = repositorioArrecadacao
 									.acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(idLocalidade, anoMesReferenciaArrecadacao,
-											idLancamentoItemContabil, idCategoria);
+											idLancamentoItemContabil, idCategoria, false);
 
-							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar != null
-									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar.doubleValue() > 0.00) {
+							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento != null
+									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento.doubleValue() > 0.00) {
 
 								valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
-										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar);
+										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento);
 
 								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
 
@@ -21315,11 +21141,44 @@ public class ControladorArrecadacao implements SessionBean {
 								//lancamentoTipoTemp.setId(LancamentoTipo.DEBITOS_A_COBRAR);
 								
 								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosDebitosACobrar(localidade, categoria,
-										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar,
+										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento,
 										lancamentoItemTemp, lancamentoItemContabil, new Short("1900"), sequencialImpressao);
 								
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 							}
+							
+							
+							/*
+							 * Seqüêncial de Tipo de Lançamento 1950 Para os
+							 * pagamento classificados de débitos a cobrar
+							 * acumula o valor que falta ser cobrado por
+							 * categoria dodébito a cobrar e gera o resumo da
+							 * arrecadação caso o valor acumulado seja maior que
+							 * 0(zero) Esta pesquisa já retorna o valor que
+							 * falta ser cobrado
+							 */
+							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento = repositorioArrecadacao
+									.acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(idLocalidade, anoMesReferenciaArrecadacao,
+											idLancamentoItemContabil, idCategoria, true);
+
+							if (somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento != null
+									&& somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento.doubleValue() > 0.00) {
+
+								valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
+										.add(somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento);
+
+								lancamentoItemTemp = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL_2);
+
+								//recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
+								//lancamentoTipoTemp.setId(LancamentoTipo.DEBITOS_A_COBRAR);
+								
+								resumoArrecadacaoTemp = ResumoArrecadacaoBuilder.buildResumoRecebimentosClassificadosDebitosACobrar(localidade, categoria,
+										anoMesReferenciaArrecadacao, somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento,
+										lancamentoItemTemp, lancamentoItemContabil, new Short("1950"), sequencialImpressao);
+								
+								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+							}
+							
 
 							/*
 							 * Seqüêncial de Tipo de Lançamento 2700 Para as
@@ -28696,6 +28555,10 @@ public class ControladorArrecadacao implements SessionBean {
 						helper.setValorArrecadacaoLiquida(helper.getValorDebitos()
 							.subtract(helper.getValorDescontos()).subtract(helper.getValorDevolucoes()));
 						
+						if (filtro.isAgruparPorArrecadador()) {
+							helper.setArrecadador((String) dadosConsulta[6]);
+						}
+						
 						valorTotal = valorTotal.add(helper.getValorArrecadacaoLiquida());
 						
 						/**
@@ -29265,98 +29128,95 @@ public class ControladorArrecadacao implements SessionBean {
 				String representacaoNumericaCodBarraSemDigito = "";
 				String representacaoNumericaCodBarraFormatada = "";
 				
-				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
-						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
-						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
-						&& guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
-					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
-					
-					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-							DocumentoTipo.GUIA_PAGAMENTO.toString(),guiaPagamentoRelatorioHelper.getIdGuiaPagamento().toString()) ;
-					String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
-					
-					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
-					
-					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
-					
-					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
-					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
-					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
-						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
-					                                
-					representacaoNumericaCodBarraFormatada = 
-					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
-
-					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
-				} else {
-					// [UC0229] - Obter Representação Numérica do Código de
-					// Barras
-					representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(
-							tipoPagamento, // tipo
-							// de
-							// pagamento
-							guiaPagamentoRelatorioHelper.getValorDebito(), // valor
-							// do
-							// código de
-							// barras
-							guiaPagamentoRelatorioHelper.getIdLocalidade(), // código
-							// da
-							// localidade
-							guiaPagamentoRelatorioHelper.getIdImovel() == null ? null
-									: guiaPagamentoRelatorioHelper.getIdImovel(), // matrícula
-							// do imóvel
-							null, // mês e ano de referência
-							null, // digito verificador da referência
-							guiaPagamentoRelatorioHelper.getIdTipoDebito(), // código
-							// do
-							// tipo do
-							// débito
-							anoEmissaoGuia, // ano da emissão da guia
-							null, // sequencial do documento de
-							// cobrança
-							null, // código do tipo de documento
-							guiaPagamentoRelatorioHelper.getIdCliente() == null ? null
-									: guiaPagamentoRelatorioHelper.getIdCliente(), // código
-							// do
-							// cliente
-							null,
-							guiaPagamentoRelatorioHelper.getIdGuiaPagamento()); // sequencial da fatura do cliente
-	
-					// Formata a representação númerica do código de barras
-					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
-							.substring(0, 11)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(11, 12)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(12, 23)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(23, 24)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(24, 35)
-							+ "-"
-							+ representacaoNumericaCodBarra.substring(35, 36)
-							+ " "
-							+ representacaoNumericaCodBarra.substring(36, 47)
-							+ "-" + representacaoNumericaCodBarra.substring(47, 48);
-					
-					representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra
-						.substring(0, 11)
-						+ representacaoNumericaCodBarra.substring(12, 23)
-						+ representacaoNumericaCodBarra.substring(24, 35)
-						+ representacaoNumericaCodBarra.substring(36, 47);
-
-					guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
-				}
+//				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
+//						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
+//						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
+//						&& !guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
+//						//){
+//					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
+//					
+//					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
+//							DocumentoTipo.GUIA_PAGAMENTO.toString(),guiaPagamentoRelatorioHelper.getIdGuiaPagamento().toString()) ;
+//					String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
+//					
+//					guiaPagamentoRelatorioHelper.setNossoNumero(nossoNumero.toString());
+//					
+//					String fatorVencimento = CodigoBarras.obterFatorVencimento(guiaPagamentoRelatorioHelper.getDataVencimento());
+//					
+//					representacaoNumericaCodBarraSemDigito = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+//					    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
+//					    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
+//					    guiaPagamentoRelatorioHelper.getValorDebito(), nossoNumeroSemDV.toString(),
+//						ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
+//					                                
+//					representacaoNumericaCodBarraFormatada = 
+//					CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(representacaoNumericaCodBarraSemDigito);
+//
+//					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
+//				} else {
+//					// [UC0229] - Obter Representação Numérica do Código de Barras
+//					representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(tipoPagamento, 
+//							guiaPagamentoRelatorioHelper.getValorDebito(),
+//							guiaPagamentoRelatorioHelper.getIdLocalidade(),
+//							guiaPagamentoRelatorioHelper.getIdImovel() == null ? null : guiaPagamentoRelatorioHelper.getIdImovel(),
+//							null,
+//							null,
+//							guiaPagamentoRelatorioHelper.getIdTipoDebito(),
+//							anoEmissaoGuia,
+//							null,
+//							null,
+//							guiaPagamentoRelatorioHelper.getIdCliente() == null ? null : guiaPagamentoRelatorioHelper.getIdCliente(),
+//							null, guiaPagamentoRelatorioHelper.getIdGuiaPagamento());
+//
+//					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-" 
+//							+ representacaoNumericaCodBarra.substring(11, 12) + " "
+//							+ representacaoNumericaCodBarra.substring(12, 23) + "-" 
+//							+ representacaoNumericaCodBarra.substring(23, 24) + " " 
+//							+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+//							+ representacaoNumericaCodBarra.substring(35, 36) + " " 
+//							+ representacaoNumericaCodBarra.substring(36, 47) + "-" 
+//							+ representacaoNumericaCodBarra.substring(47, 48);
+//
+//					representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11) 
+//							+ representacaoNumericaCodBarra.substring(12, 23)
+//							+ representacaoNumericaCodBarra.substring(24, 35) 
+//							+ representacaoNumericaCodBarra.substring(36, 47);
+//
+//					// guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
+//				}
 				
-				guiaPagamentoRelatorioHelper
-						.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(tipoPagamento, 
+						guiaPagamentoRelatorioHelper.getValorDebito(),
+						guiaPagamentoRelatorioHelper.getIdLocalidade(),
+						guiaPagamentoRelatorioHelper.getIdImovel() == null ? null : guiaPagamentoRelatorioHelper.getIdImovel(),
+						null,
+						null,
+						guiaPagamentoRelatorioHelper.getIdTipoDebito(),
+						anoEmissaoGuia,
+						null,
+						null,
+						guiaPagamentoRelatorioHelper.getIdCliente() == null ? null : guiaPagamentoRelatorioHelper.getIdCliente(),
+						null, guiaPagamentoRelatorioHelper.getIdGuiaPagamento());
 
-				guiaPagamentoRelatorioHelper
-						.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+				representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-" 
+						+ representacaoNumericaCodBarra.substring(11, 12) + " "
+						+ representacaoNumericaCodBarra.substring(12, 23) + "-" 
+						+ representacaoNumericaCodBarra.substring(23, 24) + " " 
+						+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+						+ representacaoNumericaCodBarra.substring(35, 36) + " " 
+						+ representacaoNumericaCodBarra.substring(36, 47) + "-" 
+						+ representacaoNumericaCodBarra.substring(47, 48);
 
-				colecaoGuiaPagamentoRelatorioHelper
-						.add(guiaPagamentoRelatorioHelper);
+				representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11) 
+						+ representacaoNumericaCodBarra.substring(12, 23)
+						+ representacaoNumericaCodBarra.substring(24, 35) 
+						+ representacaoNumericaCodBarra.substring(36, 47);
+				
+				guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoEmissaoPadrao.jasper");
+				guiaPagamentoRelatorioHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				guiaPagamentoRelatorioHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+
+				colecaoGuiaPagamentoRelatorioHelper.add(guiaPagamentoRelatorioHelper);
 			}
 		}
 
@@ -38708,6 +38568,9 @@ public class ControladorArrecadacao implements SessionBean {
 		if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()) {
 			indicadorAceitacaoRegistro = "2";
 			descricaoOcorrencia = "TIPO DE DOCUMENTO INVÁLIDO";
+			
+			pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
+			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 		} else {
 
 			if (registroTipo7.getTipoDocumentoInteger().equals(DocumentoTipo.CONTA)) {
@@ -50722,6 +50585,9 @@ public class ControladorArrecadacao implements SessionBean {
 			} else {
 				repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
 			}
+			
+			logger.info(String.format("		   						RECUPERACAO CREDITO 2.8: Depois de atualizar indicador classificado recuperacao credito "
+					+ "| Usuario: %s", usuarioLogado.getLogin()));
 		} catch(Exception e) {
 			throw new ControladorException("Erro ao recuperar credito", e);
 		}
@@ -50731,6 +50597,8 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection<Pagamento> pagamentosAtualizados = new ArrayList<Pagamento>();
 		
 		for (Pagamento pagamento : pagamentos) {
+			logger.info(String.format("						RECUPERACAO CREDITO 2.7: Antes de atualizar indicador classificado recuperacao credito "
+					+ "| Imovel: %s", pagamento.getImovel().getId()));
 			pagamento.setIndicadorClassificadoRecuperacaoCredito(ConstantesSistema.SIM);
 			pagamentosAtualizados.add(pagamento);
 		}
@@ -50767,6 +50635,10 @@ public class ControladorArrecadacao implements SessionBean {
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();	
 
 		for (Pagamento pagamento : pagamentos){
+			
+			if (pagamento.getIndicadorClassificadoRecuperacaoCredito() == ConstantesSistema.SIM)
+				continue;
+			
 			Imovel imovel = getControladorImovel().pesquisarImovel(pagamento.getImovel().getId());
 
 			CreditoARealizar credito = new CreditoARealizar();
@@ -50793,7 +50665,9 @@ public class ControladorArrecadacao implements SessionBean {
 			credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 			credito.setUsuario(usuarioLogado);
 			
+			logger.info(String.format("					RECUPERACAO CREDITO 2.5: Antes de salvar credito a realizar | Imovel: %s | Pagamento: %s | Usuario: %s", pagamento.getImovel().getId(), pagamento.getId(), usuarioLogado.getLogin()));
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
+			logger.info(String.format("					RECUPERACAO CREDITO 2.6: Antes de salvar credito a realizar | Imovel: %s | Pagamento: %s | Usuario: %s", pagamento.getImovel().getId(), pagamento.getId(), usuarioLogado.getLogin()));
 		}
 	}
 	
@@ -50939,4 +50813,319 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 
 	}
+
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException, ErroRepositorioException {
+		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+		
+		BoletoInfo boletoInfo = null;
+		boolean foiGerado = true;
+		String tpPagamento = (primeiraVia ? "2" : "21");
+		
+		if (!primeiraVia) {
+			FiltroBancoInfo filtro = new FiltroBancoInfo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, parcelamento.getId()));
+			
+			boletoInfo = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
+			
+			// Para boletos ja gerados antes da modificacao para gravacao na base de dados
+			//, ou seja, 
+			// para boletos que foram gerados e nao foram salvos no bd
+			if (boletoInfo != null) {
+				String linkBoleto = boletoInfo.getLinkBoleto().toString();
+				// Alterar tipo de pagamento para segunda via
+				linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+				return linkBoleto;
+			} else {
+				foiGerado = false;
+			}
+		}
+
+		if (primeiraVia || !foiGerado) {
+			boletoInfo = registrarBoleto(matricula, clienteResponsavelParcelamento, valor, primeiraVia, parcelamento, ConstantesSistema.SIM);
+		}
+		
+		String link = formatarLinkBB(boletoInfo);
+		
+		boletoInfo.setLinkBoleto(link);
+		getControladorUtil().atualizar(boletoInfo);
+		
+		return link;
+	}
+	
+	public BoletoInfo registrarBoleto(Integer matricula, Cliente clienteResponsavelParcelamento, BigDecimal valor, 
+			boolean primeiraVia, Parcelamento parcelamento, Short indicadoGeradoPeloGsan) throws ControladorException, ErroRepositorioException {
+		FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, clienteResponsavelParcelamento.getId()));
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+		
+		GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(parcelamento);
+		GuiaPagamentoHistorico guiaPagamentoHistorico = pesquisarGuiaPagamentoHistoricoParcelamento(parcelamento);
+		String refTran = null;
+		String dataVencimento = null;
+		String mensagemLoja = null;
+		
+		if (guiaPagamento != null) {
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
+			dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
+			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), parcelamento.getId());
+		} else {
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamentoHistorico.getId().toString()).toString();
+			dataVencimento = Util.formatarData(guiaPagamentoHistorico.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
+//			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamentoHistorico.getId(), idParcelamento);
+		}
+		
+		String idConv = "315828";
+		
+		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
+		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
+		String documentoCliente = (isClientePF ? cliente.getCpf() : cliente.getCnpj());
+		String nomeCliente = Util.truncarString(cliente.getNome(), 60);
+		String[] dadosEndereco = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDividido(cliente.getId());
+		String enderecoCliente = Util.truncarString(dadosEndereco[0] + ", " + dadosEndereco[3], 60);
+		String unidadeFederacao = dadosEndereco[2];
+		String cep = dadosEndereco[4];
+		String municipio = Util.truncarString(dadosEndereco[1], 18);
+		String indicadorPessoa = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().toString();
+		String tpDuplicata = "DS";
+		String valorFormatado = valor.toString().replace(".", "").replace(",", "");
+		String urlRetorno = String.format("exibirConsultarParcelamentoDebitoAction.do?codigoImovel=%d&codigoParcelamento=%d", matricula, parcelamento.getId());
+		
+		String tpPagamento = (primeiraVia) ? "2" : "21"; 
+		
+		BoletoInfo boletoInfo = new BoletoInfo(idConv, refTran, documentoCliente, nomeCliente, enderecoCliente, unidadeFederacao, cep, 
+				municipio, indicadorPessoa, tpDuplicata, tpPagamento, valorFormatado, dataVencimento, urlRetorno, mensagemLoja, 
+				null, parcelamento, indicadoGeradoPeloGsan);
+
+		Fachada.getInstancia().inserir(boletoInfo);
+		
+		return boletoInfo;
+	}
+	
+	public String formatarLinkBB(BoletoInfo boletoInfo) {
+		
+		StringBuilder link = new StringBuilder();
+		link.append("https://mpag.bb.com.br/site/mpag/");
+		link.append("?idConv=" + boletoInfo.getIdConv());
+		link.append("&refTran="+ boletoInfo.getRefTran());
+		link.append("&cpfCnpj="+ boletoInfo.getCpfCnpj());
+		link.append("&nome="+ boletoInfo.getNome());
+		link.append("&endereco="+ boletoInfo.getEndereco());
+		link.append("&uf="+ boletoInfo.getUf());
+		link.append("&cep="+ boletoInfo.getCep());
+		link.append("&cidade="+ boletoInfo.getCidade());
+		link.append("&indicadorPessoa="+ boletoInfo.getIndicadorPessoa());
+		link.append("&tpDuplicata=" + boletoInfo.getTpDuplicata()); 
+		link.append("&tpPagamento="+ boletoInfo.getTpPagamento()); // 2 - Boleto, 21 - Segunda via Boleto
+		link.append("&valor="+ boletoInfo.getValor());
+		link.append("&dtVenc="+ boletoInfo.getDtVencimento());
+		link.append("&urlRetorno="+ boletoInfo.getUrlRetorno());
+		link.append("&msgLoja=" + boletoInfo.getMensagemLoja());
+		
+		return link.toString();
+	}
+
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) throws ErroRepositorioException {
+		Collection<GuiaPagamentoRelatorioHelper> dadosRelatorio = Fachada.getInstancia().pesquisarGuiaPagamentoRelatorio(new String[] { idGuiaPagamento + "" });
+
+	    Iterator iterator = dadosRelatorio.iterator();
+	    String descricaoServicosTarifas = null;
+	    String valor = null;
+	    
+	    FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+	    filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+	    filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
+	    Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+
+	    // Periodo do debito
+	    int inicioParcelamento = 0;
+	    int fimParcelamento = 0;
+	   
+	    Integer[] periodoParcelamento = repositorioCobranca.obterPeriodoContasParceladas(idParcelamento);
+	    if (periodoParcelamento != null && periodoParcelamento[0] != null) {
+	    	inicioParcelamento = periodoParcelamento[0];
+	    	fimParcelamento    = periodoParcelamento[1];
+	    } else {
+	    	periodoParcelamento = repositorioCobranca.obterPeriodoDebitosParcelados(idParcelamento);
+	    	inicioParcelamento = periodoParcelamento[0];
+	    	fimParcelamento    = periodoParcelamento[1];
+	    }
+
+	    while (iterator.hasNext()) {
+	    	GuiaPagamentoRelatorioHelper helper = (GuiaPagamentoRelatorioHelper) iterator.next();
+	    	descricaoServicosTarifas = helper.getDescTipoDebito() + "     " + helper.getPrestacaoFormatada();
+	        valor = Util.formatarMoedaReal(helper.getValorDebito());
+	        
+	    }
+	    
+	    StringBuilder mensagemParcelamento = new StringBuilder(); 
+	    mensagemParcelamento.append(descricaoServicosTarifas + "     R$ " + valor);
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append(" " + obterMensagemParcelamento());
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Matricula: " + parcelamento.getImovel().getId() + String.format("     Periodo do debito: %s - %s", Util.formatarAnoMesParaMesAno(inicioParcelamento),Util.formatarAnoMesParaMesAno(fimParcelamento))); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor atualizado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado()) + "     Valor negociado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado()));
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Valor entrada: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada()) + "     Valor parcela: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao())); 
+	    mensagemParcelamento.append("<br>");
+	    mensagemParcelamento.append("     Quantidade de parcelas: " + parcelamento.getNumeroPrestacoes()); 
+	    mensagemParcelamento.append("<br>");
+	    
+	    
+	    
+		return mensagemParcelamento.toString();
+	}
+	
+	private String obterMensagemParcelamento() {
+		
+		FiltroMensagemParcelamentoBoleto filtro = new FiltroMensagemParcelamentoBoleto();
+		filtro.adicionarParametro(new ParametroNulo(FiltroMensagemParcelamentoBoleto.FIM_VIGENCIA));
+
+		Collection mensagens = Fachada.getInstancia().pesquisar(filtro, MensagemParcelamentoBoleto.class.getName());
+		Iterator itMensagem = mensagens.iterator();
+
+		MensagemParcelamentoBoleto mensagem = (MensagemParcelamentoBoleto) itMensagem.next();
+
+		return mensagem.getMensagem();
+	}
+	
+	public void gerarDadosPagamentosNaoClassificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+
+		try {
+			repositorioArrecadacao.deletarDadosPagamentosNaoClassificados(referenciaArrecadacao);
+			repositorioArrecadacao.gerarDadosPagamentosNaoClassificados(referenciaArrecadacao);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (ErroRepositorioException ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException {
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+		
+		Collection<ArrecadadorMovimentoItem> itens;
+		try {
+			
+			repositorioArrecadacao.deletarDadosDocumentosNaoIdentificados(referenciaArrecadacao);
+			
+			itens = repositorioArrecadacao.pesquisarItensNaoIdentificados(Util.gerarDataPrimeiroDiaApartirAnoMesRefencia(referenciaArrecadacao));
+			
+			for (ArrecadadorMovimentoItem item : itens) {
+				RegistroHelperCodigoG registro = (RegistroHelperCodigoG) this.distribuirdadosRegistroMovimentoArrecadador(item.getConteudoRegistro(), null);
+				
+				AvisoBancario aviso = obterAvisoBancarioDeDocumentoNaoIdentificado(item, registro.getCodigoFormaArrecadacao());
+				
+				DadosDocumentosNaoIdentificados doc = new DadosDocumentosNaoIdentificados();
+				doc.setDadosCodigoBarras(registro);
+				doc.setUltimaAlteracao(new Date());
+				doc.setItem(item);
+				doc.setReferenciaFechamento(referenciaArrecadacao);
+				
+				if (aviso != null) {
+					doc.setAvisoBancario(aviso);
+					doc.setArrecadador(aviso.getArrecadador());
+				}
+				getControladorUtil().inserir(doc);
+			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			
+		} catch (ErroRepositorioException ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	private AvisoBancario obterAvisoBancarioDeDocumentoNaoIdentificado(ArrecadadorMovimentoItem item, String idFormaArrecadacao) throws ControladorException {
+		AvisoBancario avisoFinal = null;
+		
+		Collection<AvisoBancario> avisos = obterAvisosBancariosPorArrecadadorMovimento(item.getArrecadadorMovimento());
+		
+		Iterator<AvisoBancario> itAviso = avisos.iterator();
+		while (itAviso.hasNext()) {
+			
+			AvisoBancario aviso = itAviso.next();
+			
+			if (idFormaArrecadacao != null && !idFormaArrecadacao.isEmpty()  && aviso.getArrecadacaoForma().getId().equals(new Integer(idFormaArrecadacao))) {
+				avisoFinal = aviso;
+				break;
+			}
+		}
+		return avisoFinal;
+	}
+	
+	public Collection<AvisoBancario> obterAvisosBancariosPorArrecadadorMovimento(ArrecadadorMovimento arrecadadorMovimento) throws ControladorException {
+		try {
+			return repositorioArrecadacao.obterAvisosBancariosPorArrecadadorMovimento(arrecadadorMovimento);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	private void confirmarRegistroBoleto(RegistroFichaCompensacaoTipo7Helper registroTipo7, Integer matriculaImovel) {
+		try {
+			
+			FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		    filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, registroTipo7.getIdDocumentoEmitido()));
+		    filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		    GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		    Parcelamento parcelamento = guiaPagamento.getParcelamento();
+			
+			FiltroBancoInfo filtro = new FiltroBancoInfo();
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, guiaPagamento.getParcelamento().getId()));
+			BoletoInfo boleto = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
+			
+			if (boleto == null) {
+				Cliente clienteResponsavelParcelamento = parcelamento.getCliente();
+				BigDecimal valor = (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) == 0) ? parcelamento.getValorEntrada() : registroTipo7.getValorRecebidoFormatado();
+				
+				BoletoInfo boletoInfo = registrarBoleto(matriculaImovel, clienteResponsavelParcelamento, 
+						registroTipo7.getValorRecebidoFormatado(), true, parcelamento, ConstantesSistema.NAO);
+				boletoInfo.setDataRegistroBanco(new Date());
+				repositorioUtil.atualizar(boletoInfo);
+			} else {
+				if (registroTipo7.getValorRecebidoFormatado().compareTo(BigDecimal.ZERO) != 0) {
+					boleto.setValor(registroTipo7.getValorRecebidoFormatado().toString());
+				} else {
+					if (boleto.getDataRegistroBanco() == null) {
+						boleto.setDataRegistroBanco(new Date());
+						boleto.setIndicadoRegistradoNoBanco(ConstantesSistema.SIM);
+					} else {
+						boleto.setDataExclusaoBanco(new Date());
+						boleto.setIndicadoExcluidoBanco(ConstantesSistema.SIM);
+					}
+				}
+				
+				repositorioUtil.atualizar(boleto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		
+		return guiaPagamento;
+	}
+	
+	private GuiaPagamentoHistorico pesquisarGuiaPagamentoHistoricoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
+		filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName()));
+		
+		return guiaPagamentoHistorico;
+	}
 }
+
+

@@ -5,8 +5,6 @@ import gcom.atendimentopublico.bean.DadosLigacoesBoletimCadastroHelper;
 import gcom.atendimentopublico.bean.EfetuarLigacaoAguaComInstalacaoHidrometroSemRAHelper;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.bean.UnidadesFilhasHelper;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocal;
-import gcom.atendimentopublico.ligacaoagua.ControladorLigacaoAguaLocalHome;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.FiltroCorteTipo;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
@@ -24,8 +22,6 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.Atividade;
 import gcom.atendimentopublico.ordemservico.BoletimOsConcluida;
-import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
-import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.ordemservico.FiltroAtividade;
 import gcom.atendimentopublico.ordemservico.FiltroMaterial;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
@@ -72,8 +68,6 @@ import gcom.atendimentopublico.registroatendimento.FiltroLocalidadeEspecificacao
 import gcom.atendimentopublico.registroatendimento.LocalidadeEspecificacaoUnidade;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.VisualizacaoRegistroAtendimentoUrgencia;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -83,14 +77,10 @@ import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.endereco.Cep;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.AreaConstruidaFaixa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.FiltroCategoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelPerfil;
@@ -102,11 +92,10 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSuprimido;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.localidade.ControladorLocalidadeLocal;
-import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
 import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
+import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.localidade.bean.IntegracaoQuadraFaceHelper;
@@ -117,15 +106,11 @@ import gcom.cadastro.unidade.FiltroUnidadeOrganizacional;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaAcaoAtividadeComandoFiscalizacaoSituacao;
 import gcom.cobranca.CobrancaBoletimMedicao;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.FiltroCobrancaBoletimMedicao;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.autoinfracao.AutoInfracaoSituacao;
 import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.autoinfracao.AutosInfracaoDebitoACobrar;
@@ -139,8 +124,6 @@ import gcom.gui.atendimentopublico.registroatendimento.FiltrarAcompanhamentoRegi
 import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioAcompanhamentoBoletimMedicaoHelper;
 import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioOSSituacaoHelper;
 import gcom.interceptor.RegistradorOperacao;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.hidrometro.FiltroHidrometro;
 import gcom.micromedicao.hidrometro.FiltroHidrometroCapacidade;
@@ -164,8 +147,6 @@ import gcom.relatorio.atendimentopublico.RelatorioOSSituacaoBean;
 import gcom.relatorio.atendimentopublico.RelatorioOSSituacaoHelper;
 import gcom.relatorio.atendimentopublico.ordemservico.FiltrarRelatorioReligacaoClientesInadiplentesHelper;
 import gcom.relatorio.atendimentopublico.ordemservico.RelatorioReligacaoClientesInadiplentesHelper;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.FiltroOperacao;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
@@ -175,20 +156,12 @@ import gcom.seguranca.acesso.usuario.RepositorioUsuarioHBM;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.IRepositorioUtil;
 import gcom.util.RepositorioUtilHBM;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.filtro.Filtro;
@@ -223,8 +196,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
 
 public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
@@ -2534,110 +2505,53 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
-	 * 
-	 * Permite Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto .
-	 * 
-	 * [FS0001]- Validar Ordem de Serviço. [FS0002] Verificar Situação do
-	 * Imovel. [FS0003]- Validar Situação da Ligação de Esgoto do Imóvel.
-	 * [FS0007]- Validar Situação da Ligação de Água do Imóvel. [FS0004 -
-	 * Validar Volume Mínimo Fixado.
-	 * 
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @date 18/07/2006
-	 * 
-	 * @param ordemServicoId
-	 * @param imovel
-	 * @param dataMudanca
-	 * @param volumeMinimoFixado
-	 * @param novaSituacaoEsgoto
-	 * @throws ControladorException
 	 */
-	public String validarMudancaSituacaoFaturamentoLigacaoesgotoExibir(
-			OrdemServico ordemServico, boolean veioEncerrarOS)
-			throws ControladorException {
+	public String validarMudancaSituacaoFaturamentoLigacaoesgotoExibir(OrdemServico os, boolean encerrar) throws ControladorException {
+		String retorno = "";
 
-		String retorno = null;
-
-		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
-		 * Rossiter Data: 26/04/2007
-		 * 
-		 * ===============================================================================
-		 */
-
-		// [FS0001]- Validar Ordem de Serviço
-		if (ordemServico == null || ordemServico.equals("")) {
+		if (os == null || os.equals("")) {
 			throw new ControladorException("atencao.ordem_nao_existente", null);
 		}
 
-		// [FS0001] Continuação
-		this.getControladorOrdemServico().validaOrdemServico(ordemServico,
-				veioEncerrarOS);
+		getControladorOrdemServico().validaOrdemServico(os, encerrar);
 
-		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
-		// Caso 4
-		if (ordemServico.getRegistroAtendimento().getImovel() == null) {
-			throw new ControladorException(
-					"atencao.ordem_servico_ra_imovel_invalida", null, ""
-							+ ordemServico.getRegistroAtendimento().getId());
+		Imovel imovel = os.getRegistroAtendimento().getImovel();
+		if (os.getRegistroAtendimento().getImovel() == null) {
+			throw new ControladorException("atencao.ordem_servico_ra_imovel_invalida", null, "" + os.getRegistroAtendimento().getId());
 		}
 
-		// [FS0002] Verificar Situação do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
-			throw new ControladorException("atencao.situacao.imovel.invalida",
-					null, imovel.getId() + "");
+			throw new ControladorException("atencao.situacao.imovel.invalida", null, imovel.getId() + "");
 		}
 
-		// Validar Tipo de Serviço.
-		if (ordemServico != null) {
-			if (ordemServico.getServicoTipo().getId() != null) {
-				// Tipo de Serviço.
-				Integer tipoServico = ordemServico.getServicoTipo().getId();
-				if (tipoServico.intValue() == ServicoTipo.TIPO_TAMPONAMENTO_LIGACAO_ESGOTO) {
-					// [FS0007]- Validar Situação da Ligação de Água do Imóvel
-					this.validarSituacaoAguaImovel(imovel, tipoServico);
-					// [FS0003]- Validar Situação da Ligação de Esgoto do Imóvel
-					this.validarSituacaoEsgotoImovel(imovel, tipoServico);
+		if (os != null && os.getServicoTipo().getId() != null) {
+			Integer tipoServico = os.getServicoTipo().getId();
+			if (tipoServico.intValue() == ServicoTipo.TIPO_TAMPONAMENTO_LIGACAO_ESGOTO) {
+				validarSituacaoAguaImovel(imovel, tipoServico);
+				validarSituacaoEsgotoImovel(imovel, tipoServico);
 
-					return new String("TAMPONADO");
+				retorno = "TAMPONADO";
+			} else if (tipoServico.intValue() == ServicoTipo.TIPO_DESATIVACAO_LIGACAO_ESGOTO) {
+				validarSituacaoAguaImovel(imovel, tipoServico);
+				validarSituacaoEsgotoImovel(imovel, tipoServico);
 
-				} else if (tipoServico.intValue() == ServicoTipo.TIPO_DESATIVACAO_LIGACAO_ESGOTO) {
-					// [FS0007]- Validar Situação da Ligação de Água do Imóvel
-					this.validarSituacaoAguaImovel(imovel, tipoServico);
-					// [FS0003]- Validar Situação da Ligação de Esgoto do Imóvel
-					this.validarSituacaoEsgotoImovel(imovel, tipoServico);
-					return new String("LIGADO FORA DE USO");
-				} else if (tipoServico.intValue() == ServicoTipo.TIPO_RESTABELECIMENTO_LIGACAO_ESGOTO
-						|| tipoServico.intValue() == ServicoTipo.TIPO_REATIVACAO_LIGACAO_ESGOTO) {
-					// [FS0004 - Validar Volume Mínimo Fixado]
-					this.validarSituacaoEsgotoImovel(imovel, tipoServico);
-
-					return new String("LIGADO");
+				QuadraFace face = os.getImovel().getQuadraFace();
+				if (face.getIndicadorRedeEsgoto().shortValue() == LigacaoEsgotoSituacao.INDICADOR_REDE_ESGOTO_SIM) {
+					retorno = "FACTIVEL";
 				} else {
+					retorno = "POTENCIAL";
+				}
+			} else if (tipoServico.intValue() == ServicoTipo.TIPO_RESTABELECIMENTO_LIGACAO_ESGOTO || tipoServico.intValue() == ServicoTipo.TIPO_REATIVACAO_LIGACAO_ESGOTO) {
+				validarSituacaoEsgotoImovel(imovel, tipoServico);
 
-					/*
-					 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja
-					 * associado a operação EFETUAR MUDANCA SITUACAO FATURAMENTO
-					 * LIGACAO ESGOTO, não será necessário realizar as
-					 * validações abaixo.
-					 * 
-					 * Autor: Raphael Rossiter Data: 26/04/2007
-					 * 
-					 */
-					Integer idOperacao = this.getControladorOrdemServico()
-							.pesquisarServicoTipoOperacao(
-									ordemServico.getServicoTipo().getId());
-
-					if (idOperacao == null
-							|| idOperacao.intValue() != Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO_INT) {
-
-						sessionContext.setRollbackOnly();
-						throw new ControladorException(
-								"atencao.servico_associado_atualizar_ligacao_esgoto_invalida");
-					} else {
-						return new String("");
-					}
+				retorno = "LIGADO";
+			} else {
+				Integer idOperacao = this.getControladorOrdemServico().pesquisarServicoTipoOperacao(os.getServicoTipo().getId());
+				if (idOperacao == null || idOperacao.intValue() != Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO_INT) {
+					sessionContext.setRollbackOnly();
+					throw new ControladorException("atencao.servico_associado_atualizar_ligacao_esgoto_invalida");
+				} else {
+					retorno = "";
 				}
 			}
 		}
@@ -2648,193 +2562,92 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	/**
 	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
 	 * 
-	 * Permite Atualizar Ligação de Esgoto do Imóvel.
-	 * 
-	 * [FS0006]-Atualizar Ligação de Esgoto do Imóvel
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @date 18/07/2006
-	 * 
-	 * @param ordemServico
-	 * @param volumeMinimoFixado
-	 * 
-	 * @throws ControladorException
-	 */
-	/*
-	 * private void validarMudancaSituacaoFaturamentoLigacaoesgotoEfetuar(
-	 * OrdemServico ordemServico) throws ControladorException {
-	 * 
-	 * Imovel imovel = ordemServico.getRegistroAtendimento().getImovel(); //
-	 * Validar Tipo de Serviço. if (ordemServico != null) { if
-	 * (ordemServico.getServicoTipo().getId() != null) { // Tipo de Serviço.
-	 * Integer tipoServico = ordemServico.getServicoTipo().getId(); if
-	 * (tipoServico.intValue() == ServicoTipo.TIPO_TAMPONAMENTO_LIGACAO_ESGOTO) {
-	 * 
-	 * LigacaoEsgotoSituacao ligacaoEsgotoimovel = new LigacaoEsgotoSituacao();
-	 * ligacaoEsgotoimovel.setId(LigacaoEsgotoSituacao.TAMPONADO);
-	 * imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoimovel);
-	 * imovel.setUltimaAlteracao(new Date()); // 4.2.1.3 Caso usuário confirme a
-	 * efetivação getControladorImovel()
-	 * .atualizarImovelExecucaoOrdemServicoLigacaoEsgoto( imovel,
-	 * ligacaoEsgotoimovel); } else if (tipoServico.intValue() ==
-	 * ServicoTipo.TIPO_DESATIVACAO_LIGACAO_ESGOTO) {
-	 * 
-	 * LigacaoEsgotoSituacao ligacaoEsgotoimovel = new LigacaoEsgotoSituacao();
-	 * ligacaoEsgotoimovel .setId(LigacaoEsgotoSituacao.LIG_FORA_DE_USO);
-	 * imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoimovel);
-	 * imovel.setUltimaAlteracao(new Date()); // 4.2.1.3 Caso usuário confirme a
-	 * efetivação getControladorImovel()
-	 * .atualizarImovelExecucaoOrdemServicoLigacaoEsgoto( imovel,
-	 * ligacaoEsgotoimovel); } else if (tipoServico.intValue() ==
-	 * ServicoTipo.TIPO_RESTABELECIMENTO_LIGACAO_ESGOTO) { // [FS0006]-Atualizar
-	 * Ligação de Esgoto do Imóvel LigacaoEsgotoSituacao ligacaoEsgotoimovel =
-	 * new LigacaoEsgotoSituacao();
-	 * ligacaoEsgotoimovel.setId(LigacaoEsgotoSituacao.LIGADO);
-	 * imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoimovel);
-	 * imovel.setUltimaAlteracao(new Date()); // 4.2.1.3 Caso usuário confirme a
-	 * efetivação getControladorImovel()
-	 * .atualizarImovelExecucaoOrdemServicoLigacaoEsgoto( imovel,
-	 * ligacaoEsgotoimovel); } else if (tipoServico.intValue() ==
-	 * ServicoTipo.TIPO_REATIVACAO_LIGACAO_ESGOTO) { // [FS0006]-Atualizar
-	 * Ligação de Esgoto do Imóvel LigacaoEsgotoSituacao ligacaoEsgotoimovel =
-	 * new LigacaoEsgotoSituacao();
-	 * ligacaoEsgotoimovel.setId(LigacaoEsgotoSituacao.LIGADO);
-	 * imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoimovel);
-	 * imovel.setUltimaAlteracao(new Date()); // 4.2.1.3 Caso usuário confirme a
-	 * efetivação getControladorImovel()
-	 * .atualizarImovelExecucaoOrdemServicoLigacaoEsgoto( imovel,
-	 * ligacaoEsgotoimovel); } } } }
-	 */
-
-	/**
-	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
-	 * 
-	 * Permite Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto .
-	 * 
 	 * [FS0001]- Validar Ordem de Serviço [FS0002] Verificar Situação do Imovel
 	 * [FS0002] Verificar Situação do Imovel [FS0003]- Validar Situação da
 	 * Ligação de Esgoto do Imóvel
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @date 18/07/2006
-	 * 
-	 * @param ordemServicoId
-	 * @param imovel
-	 * @param dataMudanca
-	 * @param volumeMinimoFixado
-	 * @param novaSituacaoEsgoto
-	 * @throws ControladorException
 	 */
-	public void efetuarMudancaSituacaoFaturamentoLiagacaoEsgoto(
-			IntegracaoComercialHelper integracaoComercialHelper)
-			throws ControladorException {
+	public void efetuarMudancaSituacaoFaturamentoLiagacaoEsgoto(IntegracaoComercialHelper helper) throws ControladorException {
+		OrdemServico os = helper.getOrdemServico();
+		LigacaoEsgoto ligacaoEsgoto = helper.getLigacaoEsgoto();
 
-		// item 4.2.1 nova Situação do Esgoto igual Tamponamento da Ligação de
-		// Esgoto
-		/* Sistema deve atualizar a situação de esgoto do Imóvel para tamponado */
-
-		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
-		LigacaoEsgoto ligacaoEsgoto = integracaoComercialHelper
-				.getLigacaoEsgoto();
-
-		// Controle de concorrencia
 		FiltroLigacaoEsgoto filtroLigacaoEsgoto = new FiltroLigacaoEsgoto();
-		filtroLigacaoEsgoto.adicionarParametro(new ParametroSimples(
-				FiltroLigacaoEsgoto.ID, ligacaoEsgoto.getId()));
-		Collection colecaoEsgotoBase = getControladorUtil().pesquisar(
-				filtroLigacaoEsgoto, LigacaoEsgoto.class.getName());
+		filtroLigacaoEsgoto.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgoto.ID, ligacaoEsgoto.getId()));
+		Collection colecaoEsgotoBase = getControladorUtil().pesquisar(filtroLigacaoEsgoto, LigacaoEsgoto.class.getName());
 
 		if (!colecaoEsgotoBase.isEmpty()) {
-			LigacaoEsgoto ligacaoEsgotoBase = (LigacaoEsgoto) Util
-					.retonarObjetoDeColecao(colecaoEsgotoBase);
+			LigacaoEsgoto ligacaoEsgotoBase = (LigacaoEsgoto) Util.retonarObjetoDeColecao(colecaoEsgotoBase);
 
-			if (ligacaoEsgotoBase.getUltimaAlteracao().after(
-					ligacaoEsgoto.getUltimaAlteracao())) {
+			if (ligacaoEsgotoBase.getUltimaAlteracao().after(ligacaoEsgoto.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 		}
 
 		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				ordemServico.getRegistroAtendimento().getImovel().getId()));
-		Collection colecaoImovelBase = getControladorUtil().pesquisar(
-				filtroImovel, Imovel.class.getName());
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, os.getRegistroAtendimento().getImovel().getId()));
+		Collection colecaoImovelBase = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 		if (!colecaoImovelBase.isEmpty()) {
-			Imovel imovelBase = (Imovel) Util
-					.retonarObjetoDeColecao(colecaoImovelBase);
+			Imovel imovelBase = (Imovel) Util.retonarObjetoDeColecao(colecaoImovelBase);
 
-			if (imovelBase.getUltimaAlteracao().after(
-					ordemServico.getRegistroAtendimento().getImovel()
-							.getUltimaAlteracao())) {
+			if (imovelBase.getUltimaAlteracao().after(os.getRegistroAtendimento().getImovel().getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 		}
 
-		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
-
-		switch (ordemServico.getServicoTipo().getId()) {
+		Imovel imovel = os.getRegistroAtendimento().getImovel();
+		LigacaoEsgotoSituacao ligacao = new LigacaoEsgotoSituacao();
+		
+		switch (os.getServicoTipo().getId()) {
 		case ServicoTipo.TIPO_TAMPONAMENTO_LIGACAO_ESGOTO:
-			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.TAMPONADO);
+			ligacao.setId(LigacaoEsgotoSituacao.TAMPONADO);
 			break;
 
 		case ServicoTipo.TIPO_DESATIVACAO_LIGACAO_ESGOTO:
-			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIG_FORA_DE_USO);
+			QuadraFace face = os.getImovel().getQuadraFace();
+			if (face.getIndicadorRedeEsgoto().shortValue() == LigacaoEsgotoSituacao.INDICADOR_REDE_ESGOTO_SIM) {
+				ligacao.setId(LigacaoEsgotoSituacao.FACTIVEL);
+			} else {
+				ligacao.setId(LigacaoEsgotoSituacao.POTENCIAL);
+			}
 			break;
 
 		case ServicoTipo.TIPO_RESTABELECIMENTO_LIGACAO_ESGOTO:
-			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
+			ligacao.setId(LigacaoEsgotoSituacao.LIGADO);
 			break;
 
 		case ServicoTipo.TIPO_REATIVACAO_LIGACAO_ESGOTO:
-			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
+			ligacao.setId(LigacaoEsgotoSituacao.LIGADO);
 			break;
 		}
 
-		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
-		imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
+		imovel.setLigacaoEsgotoSituacao(ligacao);
 
 		/*
 		 * [UC0107] Registrar Transação
-		 * 
 		 */
 
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO,
-				ligacaoEsgoto.getId(), ligacaoEsgoto.getId(),
-				new UsuarioAcaoUsuarioHelper(integracaoComercialHelper
-						.getUsuarioLogado(),
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO, ligacaoEsgoto.getId(), ligacaoEsgoto.getId(),
+				new UsuarioAcaoUsuarioHelper(helper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		// regitrando operacao
-		registradorOperacao.registrarOperacao(ordemServico);
+		registradorOperacao.registrarOperacao(os);
 		registradorOperacao.registrarOperacao(imovel);
 		getControladorTransacao().registrarTransacao(imovel);
 		// [UC0107] -Fim- Registrar Transação
 
-		getControladorImovel()
-				.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel,
-						ligacaoEsgotoSituacao);
+		getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel, ligacao);
 
-		ordemServico.setUltimaAlteracao(new Date());
+		os.setUltimaAlteracao(new Date());
 
-		if (!integracaoComercialHelper.isVeioEncerrarOS()) {
-			this.getControladorOrdemServico()
-					.verificarOrdemServicoControleConcorrencia(ordemServico);
+		if (!helper.isVeioEncerrarOS()) {
+			this.getControladorOrdemServico().verificarOrdemServicoControleConcorrencia(os);
 
-			getControladorOrdemServico().atualizaOSGeral(ordemServico);
+			getControladorOrdemServico().atualizaOSGeral(os);
 		}
 
-		if (ordemServico.getServicoTipo().getDebitoTipo() != null
-				&& ordemServico.getServicoNaoCobrancaMotivo() == null) {
-			getControladorOrdemServico().gerarDebitoOrdemServico(
-					ordemServico.getId(),
-					ordemServico.getServicoTipo().getDebitoTipo().getId(),
-					ordemServico.getValorAtual(),
-					new Integer(integracaoComercialHelper.getQtdParcelas())
-							.intValue(),
-					ordemServico.getPercentualCobranca().toString(),
-					integracaoComercialHelper.getUsuarioLogado());
+		if (os.getServicoTipo().getDebitoTipo() != null && os.getServicoNaoCobrancaMotivo() == null) {
+			getControladorOrdemServico().gerarDebitoOrdemServico(os.getId(), os.getServicoTipo().getDebitoTipo().getId(), os.getValorAtual(),
+					new Integer(helper.getQtdParcelas()).intValue(), os.getPercentualCobranca().toString(), helper.getUsuarioLogado());
 		}
 
 	}
@@ -12130,47 +11943,6 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", erx);
 		}
 	}
-	
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0001] Selecionar Municípios da Região
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @return colecaoDeMunicipios
-	 * @throws ControladorException
-	 */
-	public Collection<Object[]> pesquisarMunicipiosLojaVirtualCompesa() throws ControladorException {
-		try {
-			return repositorioAtendimentoPublico.pesquisarMunicipiosLojaVirtualCompesa();
-		} catch (ErroRepositorioException erx) {
-			erx.printStackTrace();
-			throw new ControladorException("erro.sistema", erx);
-		}
-	}
-	
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0002] Exibir dados da loja
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @param id do municipio
-	 * @return colecaoDeLojas
-	 * @throws ControladorException
-	 */
-	public Collection<Object[]> pesquisarLojasDeAtendimentoLojaVirtualCompesa(Integer idMunicipio) throws ControladorException {
-		try {
-			return repositorioAtendimentoPublico.pesquisarLojasDeAtendimentoLojaVirtualCompesa(idMunicipio);
-		} catch (ErroRepositorioException erx) {
-			erx.printStackTrace();
-			throw new ControladorException("erro.sistema", erx);
-		}
-	}
-	
-	
 	
 	public void ProcessarEncerramentoOSFiscalizacaoDecursoPrazo(Integer idFuncionalidadeIniciada) throws ControladorException{
 		

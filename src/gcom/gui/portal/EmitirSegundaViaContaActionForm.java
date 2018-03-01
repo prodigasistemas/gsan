@@ -1,38 +1,22 @@
 package gcom.gui.portal;
 
-import org.apache.struts.validator.ValidatorActionForm;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
 
-public class EmitirSegundaViaContaActionForm extends ValidatorActionForm {
+public class EmitirSegundaViaContaActionForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
-
-	private String cpfCnpjSolicitante;
-
-	private String valorDebito;
-
-	private String data;
-
-	private String valorDebitoCobrado;
 
 	private String matricula;
 
 	private String nomeUsuario;
-	
-	public String getCpfCnpjSolicitante() {
-		return cpfCnpjSolicitante;
-	}
 
-	public void setCpfCnpjSolicitante(String cpfCnpjSolicitante) {
-		this.cpfCnpjSolicitante = cpfCnpjSolicitante;
-	}
+	private String endereco;
 
-	public String getData() {
-		return data;
-	}
+	private String quantidadeContas;
 
-	public void setData(String data) {
-		this.data = data;
-	}
+	private String valorTotalContas;
 
 	public String getMatricula() {
 		return matricula;
@@ -50,19 +34,37 @@ public class EmitirSegundaViaContaActionForm extends ValidatorActionForm {
 		this.nomeUsuario = nomeUsuario;
 	}
 
-	public String getValorDebito() {
-		return valorDebito;
+	public String getEndereco() {
+		return endereco;
 	}
 
-	public void setValorDebito(String valorDebito) {
-		this.valorDebito = valorDebito;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
-	public String getValorDebitoCobrado() {
-		return valorDebitoCobrado;
+	public String getQuantidadeContas() {
+		return quantidadeContas;
 	}
 
-	public void setValorDebitoCobrado(String valorDebitoCobrado) {
-		this.valorDebitoCobrado = valorDebitoCobrado;
+	public void setQuantidadeContas(String quantidadeContas) {
+		this.quantidadeContas = quantidadeContas;
+	}
+
+	public String getValorTotalContas() {
+		return valorTotalContas;
+	}
+
+	public void setValorTotalContas(String valorTotalContas) {
+		this.valorTotalContas = valorTotalContas;
+	}
+
+	public ActionErrors validate() {
+		ActionErrors errors = new ActionErrors();
+
+		if (matricula == null || matricula.trim().equals("")) {
+			errors.add("erro-segunda-via", new ActionError("errors.portal.obrigatorio", "a Matrícula do Imóvel"));
+		}
+
+		return errors;
 	}
 }

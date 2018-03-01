@@ -245,7 +245,7 @@ public class FiltrarImovelAction extends GcomAction {
 		private void setCodigoCliente(String valor, FiltroClienteImovel filtro){
 			this.codigoCliente = valor;
 			if(codigoCliente != null && !codigoCliente.equals("")){
-				filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, new Short(codigoCliente)));
+				filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, new Integer(codigoCliente)));
 			}
 		}
 		

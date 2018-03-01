@@ -802,4 +802,13 @@ public interface IControladorArrecadacao {
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ControladorException;
 	
 	public Collection<Pagamento> obterPagamentosClassificadosNaoRegistradosCobrancaPorEmpresa(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException;
+
+	//public Collection<Pagamento> pesquisarPagamentosClassificados(Integer idLocalidade, Integer referencia, int numeroPaginas, int quantidadeRegistros) throws ControladorException;
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException;
+	
+	public void gerarDadosPagamentosNaoClassificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
+	
+	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
+	
 }

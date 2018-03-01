@@ -49,6 +49,7 @@ public class PagamentoHistorico implements Serializable {
     private Fatura fatura;
     private Date dataHoraProcessamento;
     
+    private GuiaPagamentoHistorico guiaPagamentoHistorico;
 
 	public final static Short INDICADOR_EXPURGADO_SIM = new Short("1");
 	public final static Short INDICADOR_EXPURGADO_NAO = new Short("2");
@@ -383,5 +384,13 @@ public class PagamentoHistorico implements Serializable {
 
 	public void setFatura(Fatura fatura) {
 		this.fatura = fatura;
+	}
+
+	public GuiaPagamentoHistorico getGuiaPagamentoHistorico() {
+		return guiaPagamentoHistorico;
+	}
+
+	public void setGuiaPagamentoHistorico(GuiaPagamentoHistorico guiaPagamentoHistorico) {
+		this.guiaPagamentoHistorico = guiaPagamentoHistorico;
 	}
 }

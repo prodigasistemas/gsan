@@ -201,6 +201,8 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	public static final int ALTERAR_CLIENTE_INATIVO = 111;
 	
 	public static final int MANTER_CLIENTE_SEM_CPF_CNPJ = 112;
+	
+	public static final int CANCELAR_PARCELAMENTO = 201;
 
     
 	/** identifier field */

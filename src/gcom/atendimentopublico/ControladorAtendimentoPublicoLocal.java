@@ -1831,31 +1831,6 @@ public interface ControladorAtendimentoPublicoLocal extends
 	  */
 	public Collection<Object[]> pesquisarSolicitacaoTipoLojaVirtual() throws ControladorException;
 
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0001] Selecionar Municípios da Região
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @return colecaoDeMunicipios
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<Object[]> pesquisarMunicipiosLojaVirtualCompesa() throws ControladorException;
-
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual
-	 * [SB0005] Exibir Dados da Loja
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @param id do bairro
-	 * @return colecaoDeLojas
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<Object[]> pesquisarLojasDeAtendimentoLojaVirtualCompesa(Integer idMunicipio) throws ControladorException;
-	
 	public void ProcessarEncerramentoOSFiscalizacaoDecursoPrazo(Integer idFuncionalidadeIniciada) throws ControladorException;
 	
 	/**

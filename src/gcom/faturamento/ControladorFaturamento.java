@@ -761,7 +761,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            			logger.info(" 5 - Credito a Realizar: Imovel: " + (credito.getImovel() != null ? credito.getImovel().getId() : "NULL") 
 													+ " | Créditos: " + (credito.getValorCredito() != null ? credito.getValorCredito() : "NULL" )
 													+ " | Residual Concedido no Mês: " + (credito.getValorResidualConcedidoMes() != null ? credito.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
+													+ " | Residual do Mês Anterior: " + (credito.getValorResidualMesAnterior() != null ? credito.getValorResidualMesAnterior() : "NULL"));
 					            			
 					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
@@ -15760,7 +15760,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException {
 		try {
-			return repositorioFaturamento.pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(idConta, idsFinanciamentoTipo);
+			Collection<Object[]> debitosCobrados =  repositorioFaturamento.pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(idConta, idsFinanciamentoTipo);
+			
+//			if (debitosCobradosHistorico != null && !debitosCobradosHistorico.isEmpty())
+//				debitosCobrados.addAll(debitosCobradosHistorico);
+				
+			return debitosCobrados;
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -15833,4 +15838,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		return retorno;
     }
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException {
+		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+
+		if (imovel.getDiaVencimento() != null) {
+			return imovel.getDiaVencimento();
+		} else {
+			FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+			
+			return grupo.getDiaVencimento();
+		}
+	}
 }

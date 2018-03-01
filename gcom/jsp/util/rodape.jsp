@@ -7,17 +7,16 @@
     	<td>
       	<table width="100%" cellpadding="2" class="footer">
         	<tr>
-          		<td  align="left"> 
-	          		<logic:present scope="application" name="versaoDataBase"> 
+          		<td  align="left">
+	          		<logic:present scope="application" name="versaoDataBase">
 					Banco: ${applicationScope.versaoDataBase}
-					</logic:present>  
-					<logic:notPresent scope="application" name="versaoDataBase"> 
+					</logic:present>
+					<logic:notPresent scope="application" name="versaoDataBase">
 					PMSS
 					</logic:notPresent>
 				</td>
 				
-          		<td align="right">Vers&atilde;o: ${gsan.versao} (Batch) 13/06/2017 - 15:47:08 </td>
-
+          		<td align="right">Vers&atilde;o: ${gsan.versao} (Batch) 22/02/2018 - 15:46:41 </td>
         	</tr>
       	</table>
 		</td>

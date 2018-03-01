@@ -1,15 +1,11 @@
 package gcom.gui.cobranca;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 
 public class InformarContasEmCobrancaActionForm extends ActionForm {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private String idEmpresa;
 
 	private String nomeEmpresa;
@@ -97,16 +93,14 @@ public class InformarContasEmCobrancaActionForm extends ActionForm {
 	private String quantidadeContasFinal;
 
 	private String quantidadeDiasVencimento;
-	
+
 	private String indicadorCobrancaTelemarketing;
-	
+
 	private String quantidadeMaximaClientes;
-	
+
 	private String indicadorGerarComDebitoPreterito;
 
-	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
-		return null;
-	}
+	private String indicadorPossuiCpfCnpj;
 
 	public String getIdEmpresa() {
 		return idEmpresa;
@@ -482,5 +476,13 @@ public class InformarContasEmCobrancaActionForm extends ActionForm {
 
 	public void setIndicadorGerarComDebitoPreterito(String indicadorGerarComDebitoPreterito) {
 		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
+	}
+
+	public String getIndicadorPossuiCpfCnpj() {
+		return indicadorPossuiCpfCnpj;
+	}
+
+	public void setIndicadorPossuiCpfCnpj(String indicadorPossuiCpfCnpj) {
+		this.indicadorPossuiCpfCnpj = indicadorPossuiCpfCnpj;
 	}
 }

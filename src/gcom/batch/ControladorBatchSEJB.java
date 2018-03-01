@@ -15,6 +15,8 @@ import gcom.batch.arrecadacao.TarefaBatchCancelarGuiasPagamentoNaoPagas;
 import gcom.batch.arrecadacao.TarefaBatchClassificarPagamentosDevolucoes;
 import gcom.batch.arrecadacao.TarefaBatchEncerrarArrecadacaoMes;
 import gcom.batch.arrecadacao.TarefaBatchGerarDadosDiariosArrecadacao;
+import gcom.batch.arrecadacao.TarefaBatchGerarDadosDocumentosNaoIdentificados;
+import gcom.batch.arrecadacao.TarefaBatchGerarDadosPagamentosNaoClassificados;
 import gcom.batch.arrecadacao.TarefaBatchGerarDadosRelatorioBIG;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoConta;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes;
@@ -43,6 +45,7 @@ import gcom.batch.cadastro.TarefaBatchProcessarComandoGerado;
 import gcom.batch.cadastro.TarefaBatchRetirarImovelTarifaSocial;
 import gcom.batch.cadastro.TarefaBatchSuspenderImovelEmProgramaEspecial;
 import gcom.batch.cobranca.TarefaBatchAtualizarComandoAtividadeAcaoCobranca;
+import gcom.batch.cobranca.TarefaBatchCancelarParcelamentos;
 import gcom.batch.cobranca.TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVista;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasDeFinalDeAno;
@@ -241,6 +244,7 @@ import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -274,7 +278,7 @@ import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
-public class ControladorBatchSEJB implements SessionBean {
+public class ControladorBatchSEJB extends ControladorComum  implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 
@@ -1371,6 +1375,15 @@ public class ControladorBatchSEJB implements SessionBean {
 							getControladorUtil().atualizar(funcionalidadeIniciada);
 	
 							break;
+							
+						case Funcionalidade.CANCELAR_PARCELAMENTOS:
+							TarefaBatchCancelarParcelamentos dadosCancelarParcelamentos = new TarefaBatchCancelarParcelamentos(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							dadosCancelarParcelamentos.addParametro("usuario", processoIniciado.getUsuario());
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosCancelarParcelamentos));
+	
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+	
+							break;
 	
 						case Funcionalidade.GERAR_RESUMO_INSTALACOES_HIDROMETROS:
 	
@@ -1787,53 +1800,6 @@ public class ControladorBatchSEJB implements SessionBean {
 					            getControladorUtil().atualizar(funcionalidadeIniciada);
 
 					            break;
-	
-						case Funcionalidade.GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
-	
-							TarefaBatchGerarMovimentoContasCobrancaPorEmpresa gerarMovimentoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoContasCobrancaPorEmpresa(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroComandoEmpresaCobrancaConta filtroComandoEmpresaCobrancaConta = new FiltroComandoEmpresaCobrancaConta();
-							filtroComandoEmpresaCobrancaConta.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaConta.DATA_EXECUCAO));
-	
-							Collection colecaoComandoEmpresaCobrancaConta = getControladorUtil().pesquisar(filtroComandoEmpresaCobrancaConta,
-									ComandoEmpresaCobrancaConta.class.getName());
-	
-							Collection colecaoComandoEmpresaCobrancaContaParaBatch = new ArrayList();
-	
-							if (colecaoComandoEmpresaCobrancaConta != null && !colecaoComandoEmpresaCobrancaConta.isEmpty()) {
-								Iterator iteratorComandos = colecaoComandoEmpresaCobrancaConta.iterator();
-	
-								while (iteratorComandos.hasNext()) {
-									ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) iteratorComandos.next();
-	
-									FiltroEmpresaCobranca filtroEmpresaCobranca = new FiltroEmpresaCobranca();
-									filtroEmpresaCobranca.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
-									filtroEmpresaCobranca.adicionarParametro(new MaiorQue(FiltroEmpresaCobranca.DATA_FIM_CONTRATO, new Date()));
-
-									Collection colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtroEmpresaCobranca, EmpresaCobranca.class.getName());
-	
-									if (colecaoEmpresaCobranca != null && !colecaoEmpresaCobranca.isEmpty()) {
-	
-										EmpresaCobranca empresaCobranca = (EmpresaCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
-	
-										if ((empresaCobranca.getPercentualContratoCobranca() != null && empresaCobranca.getPercentualContratoCobranca().compareTo(
-												BigDecimal.ZERO) > 0)
-												|| (comando.getDataEncerramento() == null)) {
-	
-											colecaoComandoEmpresaCobrancaContaParaBatch.add(comando);
-										}
-									}
-								}
-							}
-	
-							gerarMovimentoContasCobrancaPorEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoComandoEmpresaCobrancaContaParaBatch);
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoContasCobrancaPorEmpresa));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
 	
 						case Funcionalidade.GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA:
 	
@@ -2557,6 +2523,35 @@ public class ControladorBatchSEJB implements SessionBean {
 	
 							break;
 						}
+						
+						case Funcionalidade.GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS: {
+
+							TarefaBatchGerarDadosPagamentosNaoClassificados batch = new TarefaBatchGerarDadosPagamentosNaoClassificados(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							
+							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+							
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+							
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+							
+							break;
+						}
+						case Funcionalidade.GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS: {
+
+							System.out.println("Inserindo processo ");
+							TarefaBatchGerarDadosDocumentosNaoIdentificados batch = new TarefaBatchGerarDadosDocumentosNaoIdentificados(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+							
+							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+							
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+							
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+							
+							break;
+						}	
+							
 						default:
 					}
 				} catch (IOException e) {
@@ -3507,27 +3502,6 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 	}
 
-	private ControladorUtilLocal getControladorUtil() {
-
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
 	public void verificarProcessosIniciados() throws ControladorException {
 		try {
 			Collection<FuncionalidadeIniciada> funcionalidadesParaExecucao = verificarFuncionalidadesIniciadasProntasParaExecucao();
@@ -4213,85 +4187,6 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 	}
 
-	private ControladorArrecadacaoLocal getControladorArrecadacao() {
-		ControladorArrecadacaoLocalHome localHome = null;
-		ControladorArrecadacaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorArrecadacaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorCobrancaLocal getControladorCobranca() {
-
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorOrdemServicoLocal getControladorOrdemServico() {
-		ControladorOrdemServicoLocalHome localHome = null;
-		ControladorOrdemServicoLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorOrdemServicoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ORDEM_SERVICO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
 	@SuppressWarnings("rawtypes")
 	public void marcarProcessosInterrompidos() throws ControladorException {
 		FiltroProcessoIniciado filtroProcessoIniciado = new FiltroProcessoIniciado();
@@ -4333,101 +4228,6 @@ public class ControladorBatchSEJB implements SessionBean {
 
 	}
 
-	private ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorLocalidadeLocal getControladorLocalidade() {
-		ControladorLocalidadeLocalHome localHome = null;
-		ControladorLocalidadeLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLocalidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorGerencialMicromedicaoLocal getControladorGerencialMicromedicao() {
-
-		ControladorGerencialMicromedicaoLocalHome localHome = null;
-		ControladorGerencialMicromedicaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorGerencialMicromedicaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	private ControladorFinanceiroLocal getControladorFinanceiro() {
-		ControladorFinanceiroLocalHome localHome = null;
-		ControladorFinanceiroLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorFinanceiroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FINANCEIRO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
 
 	public Object inserirObjetoParaBatchGerencial(Object objeto) throws ControladorException {
 		try {
@@ -4820,25 +4620,6 @@ public class ControladorBatchSEJB implements SessionBean {
 		}
 	}
 
-	private ControladorIntegracaoLocal getControladorIntegracao() {
-		ControladorIntegracaoLocalHome localHome = null;
-		ControladorIntegracaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorIntegracaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_INTEGRACAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
 	public void removerColecaoCreditoARealizarParaBatch(Collection<CreditoARealizar> colecaoCreditoARealizar) throws ControladorException {
 		try {
 			if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
@@ -4856,25 +4637,6 @@ public class ControladorBatchSEJB implements SessionBean {
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
-		}
-	}
-
-	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
-		ControladorSpcSerasaLocalHome localHome = null;
-		ControladorSpcSerasaLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
 		}
 	}
 
@@ -5359,7 +5121,7 @@ public class ControladorBatchSEJB implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @param usuario
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Integer inserirProcessoIniciadoContasCobranca(Collection ids, Integer idEmpresa, Usuario usuario) throws ControladorException {
 
 		Integer codigoProcessoIniciadoGerado = null;
@@ -5401,6 +5163,7 @@ public class ControladorBatchSEJB implements SessionBean {
 				ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
 				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
 
+				
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
 				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
@@ -5408,17 +5171,71 @@ public class ControladorBatchSEJB implements SessionBean {
 				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
 				funcionalidadeIniciada.setId((Integer) getControladorUtil().inserir(funcionalidadeIniciada));
 
-				TarefaBatchGerarArquivoTextoContasCobrancaEmpresa tarefaBatchGerarArquivoTextoContasCobrancaEmpresa = new TarefaBatchGerarArquivoTextoContasCobrancaEmpresa(
-						processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+				switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
 
-				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idsRegistros", ids);
-				tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idEmpresa", idEmpresa);
+				case Funcionalidade.GERAR_ARQ_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
 
-				funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoContasCobrancaEmpresa));
+					TarefaBatchGerarArquivoTextoContasCobrancaEmpresa tarefaBatchGerarArquivoTextoContasCobrancaEmpresa = new TarefaBatchGerarArquivoTextoContasCobrancaEmpresa(
+							processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+					
+					tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idsRegistros", ids);
+					tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idEmpresa", idEmpresa);
+					
+					funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoContasCobrancaEmpresa));
+					
+					getControladorUtil().atualizar(funcionalidadeIniciada);
 
-				getControladorUtil().atualizar(funcionalidadeIniciada);
+					break;
+					
+				case Funcionalidade.GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
+					
+					TarefaBatchGerarMovimentoContasCobrancaPorEmpresa gerarMovimentoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoContasCobrancaPorEmpresa(
+							processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-				break;
+					FiltroComandoEmpresaCobrancaConta filtroComandoEmpresaCobrancaConta = new FiltroComandoEmpresaCobrancaConta();
+					filtroComandoEmpresaCobrancaConta.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaConta.DATA_EXECUCAO));
+
+					Collection colecaoComandoEmpresaCobrancaConta = getControladorCobrancaPorResultado().obterComandosParaIniciar(idsRegistros);
+							
+					Collection colecaoComandoEmpresaCobrancaContaParaBatch = new ArrayList();
+
+					if (colecaoComandoEmpresaCobrancaConta != null && !colecaoComandoEmpresaCobrancaConta.isEmpty()) {
+						Iterator iteratorComandos = colecaoComandoEmpresaCobrancaConta.iterator();
+
+						while (iteratorComandos.hasNext()) {
+							ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) iteratorComandos.next();
+
+							FiltroEmpresaCobranca filtroEmpresaCobranca = new FiltroEmpresaCobranca();
+							filtroEmpresaCobranca.adicionarParametro(new ParametroSimples(FiltroEmpresaCobranca.EMPRESA_ID, comando.getEmpresa().getId()));
+							filtroEmpresaCobranca.adicionarParametro(new MaiorQue(FiltroEmpresaCobranca.DATA_FIM_CONTRATO, new Date()));
+
+							Collection colecaoEmpresaCobranca = getControladorUtil().pesquisar(filtroEmpresaCobranca, EmpresaCobranca.class.getName());
+
+							if (colecaoEmpresaCobranca != null && !colecaoEmpresaCobranca.isEmpty()) {
+
+								EmpresaCobranca empresaCobranca = (EmpresaCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
+
+								if ((empresaCobranca.getPercentualContratoCobranca() != null && empresaCobranca.getPercentualContratoCobranca().compareTo(
+										BigDecimal.ZERO) > 0)
+										|| (comando.getDataEncerramento() == null)) {
+
+									colecaoComandoEmpresaCobrancaContaParaBatch.add(comando);
+								}
+							}
+						}
+					}
+
+					gerarMovimentoContasCobrancaPorEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+							colecaoComandoEmpresaCobrancaContaParaBatch);
+					funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoContasCobrancaPorEmpresa));
+
+					getControladorUtil().atualizar(funcionalidadeIniciada);
+
+					break;
+					
+					
+				default:
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

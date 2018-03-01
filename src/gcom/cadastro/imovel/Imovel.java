@@ -2038,7 +2038,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	}
 	
 	public boolean isImovelCondominio() {
-
+		System.out.println(this.id + " indicador: " + this.getIndicadorImovelCondominio() + " imovel condomini null " + this.getImovelCondominio() != null);
 		if (this.getIndicadorImovelCondominio().shortValue() == ConstantesSistema.NAO
 				&& this.getImovelCondominio() != null) {
 			return true;
@@ -2538,5 +2538,16 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	
 	public boolean isImovelHidrometrado() {
 		return hidrometroInstalacaoHistorico != null || (ligacaoAgua != null && ligacaoAgua.getHidrometroInstalacaoHistorico() != null);
+	}
+	
+	public Rota obterRota() {
+		Rota rota = new Rota();
+		if (this.rotaAlternativa != null) {
+			rota = this.rotaAlternativa;
+
+		} else {
+			rota = this.quadra.getRota();
+		}
+		return rota;
 	}
 }

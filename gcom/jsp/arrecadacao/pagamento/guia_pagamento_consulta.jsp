@@ -646,20 +646,25 @@
 						<tr>
 							<td height="24">
 								<logic:present name="caminhoRetornoTelaConsultaGuiaPagamento">
-									<input type="button" class="bottonRightCol" value="Voltar"
-										style="width: 70px;" onclick="javascript:history.back();" />
+									<input type="button" class="bottonRightCol" value="Voltar" style="width: 70px;" onclick="javascript:history.back();" />
 								</logic:present>
 							</td>
+							
 							<td align="right">
-							
-							<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" 
-							onclick="gerarGuia();"
-							style="width:200px"
-							/>
-							
-							<input name="Button" type="button"
-								class="bottonRightCol" value="Fechar"
-								onClick="javascript:window.close();"></td>
+								<logic:present name="guiaPagamento" scope="request">
+								
+									<logic:equal name="geracaoBoletoBB" value="1" scope="request">
+										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" 
+												onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'" style="width:200px"/>
+									</logic:equal>
+									<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
+										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" onclick="gerarGuia();" style="width:200px" />
+									</logic:notEqual>
+									
+								</logic:present>
+								
+								<input name="Button" type="button" class="bottonRightCol" value="Fechar" onClick="javascript:window.close();">
+							</td>
 						</tr>
 					</table>
 				</td>

@@ -2,6 +2,7 @@ package gcom.cadastro.localidade;
 
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -67,6 +68,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @exception ErroRepositorioException
 	 *                Erro no hibernate
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<Localidade> pesquisarLocalidadePorGerenciaRegional(
 			int idGerenciaRegional) throws ErroRepositorioException {
 		// cria a variável que vai armazenar a coleção pesquisada
@@ -139,6 +141,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @return Um integer que representa o id da localidade
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarTodosIdLocalidade()throws ErroRepositorioException {
 		Collection retorno = null;
 
@@ -208,6 +211,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @exception ErroRepositorioException
 	 *                Erro no hibernate
 	 */
+    @SuppressWarnings("rawtypes")
 	public Object[] pesquisarObjetoLocalidadeRelatorio(
 			Integer idLocalidade) throws ErroRepositorioException {
 		// cria a variável que vai armazenar a coleção pesquisada
@@ -437,6 +441,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 *
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEloPolo() throws ErroRepositorioException {
 		
 		Collection retorno = null;
@@ -576,7 +581,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @date 25/02/2008
 	 * 
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLocalidadesMunicipio(Integer idMunicipio) throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -613,6 +618,8 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public Collection<Integer> pesquisarIdsLocalidadesImoveis()throws ErroRepositorioException {
 		
 		Collection<Integer> retorno = null;
@@ -750,6 +757,7 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarIdsLocalidades() throws ErroRepositorioException {
 		Collection retorno = null;
 
@@ -769,6 +777,25 @@ public class RepositorioLocalidadeHBM implements IRepositorioLocalidade {
 
 		return retorno;
 		
+	}
+	
+	public ConsumoTarifa obterConsumoTarifaPadrao(Integer idLocalidade) throws ErroRepositorioException {
+		ConsumoTarifa retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "SELECT consumoTarifa FROM Localidade loc where loc.id = :idLocalidade";
+
+			retorno = (ConsumoTarifa) session.createQuery(consulta)
+											.setInteger("idLocalidade", idLocalidade.intValue())
+											.setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
 
 }

@@ -21,16 +21,16 @@
 	<body>
 		<div id="barra-servicos">
 			<h2>Serviços</h2>
-		    <h3>Bem-vindo(a) ${ExibirServicosPortalCompesaActionForm.nomeUsuario}</h3>
-		    <h4><label style="font-size: 13px;">Matrícula: </label><span id="matricula">${ExibirServicosPortalCompesaActionForm.matricula}</span></h4>
-		    <a href="exibirServicosPortalCompesaAction.do?menu=sim" title="Sair"><img src="/gsan/imagens/portal/general/btn-sair.png" alt="Sair" /></a>
+		    <h3>Bem-vindo(a) ${ExibirPortalActionForm.nomeUsuario}</h3>
+		    <h4><label style="font-size: 13px;">Matrícula: </label><span id="matricula">${ExibirPortalActionForm.matricula}</span></h4>
+		    <a href="portal.do?menu=sim" title="Sair"><img src="/gsan/imagens/portal/general/btn-sair.png" alt="Sair" /></a>
 		</div>
 		<!-- Botão download Adobe Reader - Start -->
 		<a href="http://get.adobe.com/br/reader/" title="Faça o download do Adobe Reader" class="adobe-reader" target="_blank"><img src="/gsan/imagens/portal/general/adobe-reader.gif" alt="Download do Adobe Reader" /></a>
 		<!-- Botão download Adobe Reader - End -->
 		<logic:present scope="request" name="voltarServicos">
 			<div id="seg-via-conta" class="serv-int" style="margin: 0px;">
-				<a href="exibirServicosPortalCompesaAction.do?method=voltarServico" title="Voltar e selecionar outro serviço" class="btn-voltar-servicos">
+				<a href="portal.do?method=voltarServico" title="Voltar e selecionar outro serviço" class="btn-voltar-servicos">
 			    	<img src="/gsan/imagens/portal/general/btn-voltar-servicos.gif" alt="Voltar e selecionar outro serviço" />
 			    </a>
 			</div>

@@ -51,6 +51,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
+
 import gcom.seguranca.acesso.Funcionalidade;
 
 /**
@@ -101,12 +102,10 @@ public class InserirImovelAction extends GcomAction {
 		String perfilImovel = (String) inserirImovelActionForm.get("perfilImovel");
 		String poco = (String) inserirImovelActionForm.get("poco");
 		String idLigacaoEsgotoEsgotamento = (String) inserirImovelActionForm.get("idLigacaoEsgotoEsgotamento");
-
 		String tipoHabitacao = (String) inserirImovelActionForm.get("imovelTipoHabitacao");
 		String tipoPropriedade = (String) inserirImovelActionForm.get("imovelTipoPropriedade");
 		String tipoConstrucao = (String) inserirImovelActionForm.get("imovelTipoConstrucao");
 		String tipoCobertura = (String) inserirImovelActionForm.get("imovelTipoCobertura");
-		
 		String pontoUtilizaco = (String) inserirImovelActionForm.get("numeroPontos");
 		String numeroMoradores = (String) inserirImovelActionForm.get("numeroMoradores");
 		String numeroIptu = (String) inserirImovelActionForm.get("numeroIptu");
@@ -115,8 +114,6 @@ public class InserirImovelAction extends GcomAction {
 		String cordenadasX = (String) inserirImovelActionForm.get("cordenadasUtmX");
 		String cordenadasY = (String) inserirImovelActionForm.get("cordenadasUtmY");
 		String extratoResponsavel = (String) inserirImovelActionForm.get("extratoResponsavel");
-		// String nomeContaForm = (String) inserirImovelActionForm
-		// .get("tipoOcupacao");
 		String tipoDespejo = (String) inserirImovelActionForm.get("tipoDespejo");
 		String idImovelPrincipal = (String) inserirImovelActionForm.get("idImovel");
 		String sequencialRota = (String) inserirImovelActionForm.get("sequencialRota");
@@ -128,6 +125,7 @@ public class InserirImovelAction extends GcomAction {
 		String dataVisitaComercialInformada  = (String) inserirImovelActionForm.get("dataVisitaComercial");
 		String numeroQuadraEntrega = (String) inserirImovelActionForm.get("numeroQuadraEntrega");
 		
+		
 		String informacoesComplementares = (String) inserirImovelActionForm.get("informacoesComplementares");
 		
 		String indicadorNivelInstalacaoEsgoto = (String) inserirImovelActionForm.get("indicadorNivelInstalacaoEsgoto");
@@ -135,6 +133,7 @@ public class InserirImovelAction extends GcomAction {
 		// Obtém a instância da Fachada
 		Fachada fachada = Fachada.getInstancia();
 		
+		ConsumoTarifa ct = fachada.obterConsumoTarifaPadrao(new Integer(idLocalidade));
 		Imovel imovel = new Imovel();
 		
 		// ABA LOCALIDADE
@@ -163,13 +162,7 @@ public class InserirImovelAction extends GcomAction {
 		
 		// ABA ENDERECO
 		Collection colecaoEnderecos = (Collection) sessao.getAttribute("colecaoEnderecos");
-		//**********************************************************************
-		// Autor: Ivan Sergio
-		// Data: 23/07/2009
-		// CRC2103
-		// Guarda o endereco do Imovel para o caso em que o Inserir/Manter
-		// cliente é invocado pelo Inserir/Manter Imovel como PopUp
-		//**********************************************************************
+
 		if (sessao.getAttribute("POPUP") != null) {
 			if (sessao.getAttribute("POPUP").equals("true")) {
 				if (colecaoEnderecos != null && !colecaoEnderecos.isEmpty()) {
@@ -185,7 +178,6 @@ public class InserirImovelAction extends GcomAction {
 				}
 			}
 		}
-		//**********************************************************************
 		
 		ImovelAbaEnderecoHelper helperEndereco = new ImovelAbaEnderecoHelper();
 		helperEndereco.setImovelEnderecos(colecaoEnderecos);
@@ -197,44 +189,10 @@ public class InserirImovelAction extends GcomAction {
 		
 		Imovel imovelEndereco = (Imovel) Util.retonarObjetoDeColecao(colecaoEnderecos);
 		
-		Logradouro logradouro = null;
-		if (imovelEndereco.getLogradouroCep() != null && 
-			imovelEndereco.getLogradouroCep().getLogradouro() != null && 
-			!imovelEndereco.getLogradouroCep().getLogradouro().equals("")) {
-			Integer idLogradouro = imovelEndereco.getLogradouroCep().getLogradouro().getId();
-			logradouro = new Logradouro();
-			logradouro.setId(idLogradouro);
-		} else {
-			// ALTERAÇÃO FEITTA PARA FUNCIONAMENTO DA APLICAÇÃO, APAGAR
-			// A CONDIÇÃO DO "SE NÃO",
-			// ALTERAÇÃO DO VALOR DO LOGRADOURO ESTA SENDO ANALIZADA POR ARYED,
-			// ANA E LEO NARDO NO DIA 16/03/2006
-			logradouro = new Logradouro();
-			logradouro.setId(new Integer("0"));
-		}
-		
-		LogradouroCep logradouroCep = null;
-		if (imovelEndereco.getLogradouroCep() != null && 
-			imovelEndereco.getLogradouroCep().getCep() != null) {
-			Integer cep = imovelEndereco.getLogradouroCep().getCep().getCepId();
-			Cep cepObj = new Cep();
-			cepObj.setCepId(cep);
-			logradouroCep = fachada.pesquisarAssociacaoLogradouroCep(cepObj.getCepId(), logradouro.getId());
-		}
-		
-		EnderecoReferencia enderecoReferencia = null;
-		if (imovelEndereco.getEnderecoReferencia() != null) {
-			Integer idEnderecoReferencia = imovelEndereco.getEnderecoReferencia().getId();
-			if (idEnderecoReferencia != null && !idEnderecoReferencia.toString().trim().equals("")) {
-				enderecoReferencia = new EnderecoReferencia();
-				enderecoReferencia.setId(idEnderecoReferencia);
-			}
-		}
-		
 		imovel.setNumeroImovel(imovelEndereco.getNumeroImovel());
 		imovel.setComplementoEndereco(imovelEndereco.getComplementoEndereco());
-		imovel.setLogradouroCep(logradouroCep);
-		imovel.setEnderecoReferencia(enderecoReferencia);
+		imovel.setLogradouroCep(obterLogradouroCep(fachada, imovelEndereco));
+		imovel.setEnderecoReferencia(obterEnderecoReferencia(imovelEndereco));
 		imovel.setLogradouroBairro(imovelEndereco.getLogradouroBairro());
 		imovel.setPerimetroInicial(imovelEndereco.getPerimetroInicial());
 		imovel.setPerimetroFinal(imovelEndereco.getPerimetroFinal());
@@ -260,25 +218,9 @@ public class InserirImovelAction extends GcomAction {
 		helperCaracteristica.setIdLigacaoEsgotoSituacao(situacaoLigacaoEsgoto);
 		helperCaracteristica.setIdLigacaoEsgotoEsgotamento(idLigacaoEsgotoEsgotamento);
 		helperCaracteristica.setIdImovelPerfil(perfilImovel);
-	
-		
-		
-		//*************************************************
-		// Autor: Ivan Sergio
-		// Data: 23/04/2009
-		// CRC1657
-		//*************************************************
-		// [FS0023] - Verificar Setor e Quadra
-		//*************************************************
 		helperCaracteristica.setIdSetorComercial(idSetorComercial);
 		helperCaracteristica.setIdQuadra(idQuadra);
-		//*************************************************
-		
-		// Autor: Nathalia santos
-		// Data: 13/07/2011
-		// RR201106690
 		helperCaracteristica.setIdNivelInstalacaoEsgoto(indicadorNivelInstalacaoEsgoto);
-		//*************************************************
 		
 		ImovelAbaCaracteristicasRetornoHelper resultadoAbaCaracteristicas = 
 			fachada.validarImovelAbaCaracteristicas(helperCaracteristica);
@@ -391,39 +333,26 @@ public class InserirImovelAction extends GcomAction {
 		}
 		
 		if (numeroQuadraEntrega != null && !numeroQuadraEntrega.equals("")){
-			
 			imovel.setNumeroQuadraEntrega(new Integer(numeroQuadraEntrega));
 		}
 		
 		if(informacoesComplementares != null && !informacoesComplementares.equals("")){
 			imovel.setInformacoesComplementares(informacoesComplementares);
 		}
+		
 		imovel.setNumeroPontosUtilizacao(naoVazio(pontoUtilizaco) ? new Short(pontoUtilizaco) : null);
 		imovel.setNumeroMorador(naoVazio(numeroMoradores) ? new Short(numeroMoradores) : null);
 		imovel.setNumeroIptu(naoVazio(numeroIptu) ? Util.formatarIPTU(numeroIptu) : null);
 		imovel.setNumeroCelpe(naoVazio(numeroContratoCelpe) ? new Long(numeroContratoCelpe) : null);
 		imovel.setCoordenadaX(naoVazio(cordenadasX) ? new String(cordenadasX.replace(',','.')) : null);
 		imovel.setCoordenadaY(naoVazio(cordenadasY) ? new String(cordenadasY.replace(',','.')) : null);
-		if (Util.verificarIdNaoVazio(idImovelPrincipal)) {
-			Imovel imovelPrincipal = new Imovel();
-			imovelPrincipal.setId(new Integer(idImovelPrincipal));
-			imovel.setImovelPrincipal(imovelPrincipal);
-		}
-		if (Util.verificarIdNaoVazio(idFuncionario)) {
-			Funcionario funcionario = new Funcionario();
-			funcionario.setId(new Integer(idFuncionario));
-			imovel.setFuncionario(funcionario);
-		}
+		imovel.setImovelPrincipal(obterImovelPrincipal(idImovelPrincipal));
+		imovel.setFuncionario(obterFuncionario(idFuncionario));
+		imovel.setDataVisitaComercial(obterDataVisitaComercial(dataVisitaComercialInformada));
+		
 		if (Util.verificarIdNaoVazio(numeroMedidorEnergia)) {
-			
 			imovel.setNumeroMedidorEnergia(numeroMedidorEnergia);
 		}
-		if (dataVisitaComercialInformada !=null && !dataVisitaComercialInformada.equals("")) {
-			
-			Date dataVisitaComercial = Util.converteStringParaDate(dataVisitaComercialInformada);
-			imovel.setDataVisitaComercial(dataVisitaComercial);
-		}
-		
 		
 		// OUTROS
 		imovel.setUltimaAlteracao(new Date());
@@ -431,28 +360,9 @@ public class InserirImovelAction extends GcomAction {
 		imovel.setIndicadorImovelCondominio(ConstantesSistema.INDICADOR_USO_DESATIVO);
 		imovel.setIndicadorDebitoConta(ConstantesSistema.INDICADOR_USO_DESATIVO);
 		imovel.setIndicadorEmissaoExtratoFaturamento(naoVazio(extratoResponsavel) ? new Short(extratoResponsavel) : ConstantesSistema.NAO);
-		
-		ConsumoTarifa consumoTarifa = new ConsumoTarifa();
-		consumoTarifa.setId(ConsumoTarifa.CONSUMO_NORMAL);
-		imovel.setConsumoTarifa(consumoTarifa);
-		
-		short quantidadeEconomias = 0;
-		Iterator iteratorSubcategorias = subcategorias.iterator();
-		while (iteratorSubcategorias.hasNext()) {
-			ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) iteratorSubcategorias.next();
-			quantidadeEconomias += imovelSubcategoria.getQuantidadeEconomias();
-		}
-		imovel.setQuantidadeEconomias(quantidadeEconomias);
-		
-		ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
-		if (Util.verificarIdNaoVazio(imovelContaEnvioForm)) {
-			imovelContaEnvio = new ImovelContaEnvio();
-			imovelContaEnvio.setId(new Integer(imovelContaEnvioForm));
-		} else {
-			imovelContaEnvio = new ImovelContaEnvio();
-			imovelContaEnvio.setId(new Integer(2));
-		}
-		imovel.setImovelContaEnvio(imovelContaEnvio);
+		imovel.setConsumoTarifa(fachada.obterConsumoTarifaPadrao(imovel.getLocalidade().getId()));
+		imovel.setQuantidadeEconomias(obterQtdEconomias(subcategorias));
+		imovel.setImovelContaEnvio(obterImovelContaEnvio(imovelContaEnvioForm));
 		
 		if (imovel.getIndicadorEmissaoExtratoFaturamento() != null){
 			if (imovel.getIndicadorEmissaoExtratoFaturamento().equals(new Short("0"))){
@@ -463,15 +373,8 @@ public class InserirImovelAction extends GcomAction {
 		}
 		
 		imovel.setIndicadorImovelAreaComum(ConstantesSistema.NAO);
-		
-		//CRC2258 solicitacao do analista Adriano Brito
-		//data alteracao: 13/07/2009
 		imovel.setIndicadorVencimentoMesSeguinte(new Short("2"));
-		//fim da alteracao
 		
-		// CRC3184 
-		// Desenvolvedor:Hugo Amorim Analista:Rosana
-		// Data: 15/12/2009
 		if(imovel.getImovelPerfil()!=null){
 		boolean achou = false;	
 			if(imovel.getImovelPerfil().getSubcategoria()!=null){
@@ -501,52 +404,21 @@ public class InserirImovelAction extends GcomAction {
 			}
 		}	
 		
-		
-		
-		//Fim da Alteração CRC3184
-
-
-		//**********************************************************************
-		// Autor: Rodrigo Cabral
-		// Data: 13/09/2011
-		// Inserir a Principal Categoria e SubCategoria do Imovel
-		//**********************************************************************
-		
 		Categoria principalCategoria = fachada.obterPrincipalCategoria(subcategorias);
-		
 		if (principalCategoria != null){
-			
 			imovel.setCategoriaPrincipalId(principalCategoria.getId());
-			
-
-			ImovelSubcategoria principalSubCategoria = 
-				fachada.obterPrincipalSubcategoria(principalCategoria.getId(), subcategorias);
-	
+			ImovelSubcategoria principalSubCategoria =fachada.obterPrincipalSubcategoria(principalCategoria.getId(), subcategorias);
 			imovel.setSubCategoriaPrincipalId(principalSubCategoria.getComp_id().getSubcategoria().getId());
 		}
 		
-		
-		/**
-		 * alterado por pedro alexandre dia 17/11/2006 Recupera o usuário logado
-		 * para passar no metódo de inserir imóvel para verificar se o usuário
-		 * tem abrangência para inserir o imóvel na localidade informada.
-		 */
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute(Usuario.USUARIO_LOGADO);
 	
-		//Colocado por Raphael Rossiter em 19/08/2008 - Analista: Rosana Carvalho
 		InserirImovelHelper inserirImovelHelper = new InserirImovelHelper(imovel, subcategorias, ramosAtividades, colecaoEnderecos,
 		clientes, ligacaoEsgotoEsgotamento, usuarioLogado);
 		
 		Integer id = fachada.inserirImovelRetorno(inserirImovelHelper);
 		
-		//**********************************************************************
-		// Autor: Ivan Sergio
-		// Data: 24/07/2009
-		// CRC2103 - [FS0026] - Verificar existencia de operacao inserir/manter
-		// cliente pendente de atualizacao do imovel.
-		//**********************************************************************
 		fachada.verificarAtualizarOperacaoPendente(id, clientes, usuarioLogado.getId());
-		//**********************************************************************
 
 		sessao.removeAttribute("colecaoImovelSubCategorias");
 		sessao.removeAttribute("imovelClientesNovos");
@@ -561,6 +433,93 @@ public class InserirImovelAction extends GcomAction {
 						+ id);
 
 		return retorno;
+	}
+
+	private EnderecoReferencia obterEnderecoReferencia(Imovel imovelEndereco) {
+		EnderecoReferencia enderecoReferencia = null;
+		if (imovelEndereco.getEnderecoReferencia() != null) {
+			Integer idEnderecoReferencia = imovelEndereco.getEnderecoReferencia().getId();
+			if (idEnderecoReferencia != null && !idEnderecoReferencia.toString().trim().equals("")) {
+				enderecoReferencia = new EnderecoReferencia();
+				enderecoReferencia.setId(idEnderecoReferencia);
+			}
+		}
+		return enderecoReferencia;
+	}
+
+	private LogradouroCep obterLogradouroCep(Fachada fachada, Imovel imovelEndereco) {
+		Logradouro logradouro = null;
+		if (imovelEndereco.getLogradouroCep() != null && 
+			imovelEndereco.getLogradouroCep().getLogradouro() != null && 
+			!imovelEndereco.getLogradouroCep().getLogradouro().equals("")) {
+			Integer idLogradouro = imovelEndereco.getLogradouroCep().getLogradouro().getId();
+			logradouro = new Logradouro();
+			logradouro.setId(idLogradouro);
+		} else {
+			logradouro = new Logradouro();
+			logradouro.setId(new Integer("0"));
+		}
+		
+		LogradouroCep logradouroCep = null;
+		if (imovelEndereco.getLogradouroCep() != null && 
+			imovelEndereco.getLogradouroCep().getCep() != null) {
+			Integer cep = imovelEndereco.getLogradouroCep().getCep().getCepId();
+			Cep cepObj = new Cep();
+			cepObj.setCepId(cep);
+			logradouroCep = fachada.pesquisarAssociacaoLogradouroCep(cepObj.getCepId(), logradouro.getId());
+		}
+		return logradouroCep;
+	}
+
+	private Date obterDataVisitaComercial(String dataVisitaComercialInformada) {
+		Date dataVisitaComercial = null;
+		
+		if (dataVisitaComercialInformada !=null && !dataVisitaComercialInformada.equals("")) {
+			dataVisitaComercial = Util.converteStringParaDate(dataVisitaComercialInformada);
+		}
+		return dataVisitaComercial;
+	}
+
+	private Funcionario obterFuncionario(String idFuncionario) {
+		Funcionario funcionario = null;
+		
+		if (Util.verificarIdNaoVazio(idFuncionario)) {
+			funcionario = new Funcionario();
+			funcionario.setId(new Integer(idFuncionario));
+		}
+		return funcionario;
+	}
+
+	private Imovel obterImovelPrincipal(String idImovelPrincipal) {
+		Imovel imovelPrincipal = null;
+		if (Util.verificarIdNaoVazio(idImovelPrincipal)) {
+			imovelPrincipal = new Imovel();
+			imovelPrincipal.setId(new Integer(idImovelPrincipal));
+		}
+		return imovelPrincipal;
+	}
+
+	private ImovelContaEnvio obterImovelContaEnvio(String imovelContaEnvioForm) {
+		ImovelContaEnvio imovelContaEnvio = new ImovelContaEnvio();
+		if (Util.verificarIdNaoVazio(imovelContaEnvioForm)) {
+			imovelContaEnvio = new ImovelContaEnvio();
+			imovelContaEnvio.setId(new Integer(imovelContaEnvioForm));
+		} else {
+			imovelContaEnvio = new ImovelContaEnvio();
+			imovelContaEnvio.setId(new Integer(2));
+		}
+		return imovelContaEnvio;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private short obterQtdEconomias(Collection subcategorias) {
+		short quantidadeEconomias = 0;
+		Iterator iteratorSubcategorias = subcategorias.iterator();
+		while (iteratorSubcategorias.hasNext()) {
+			ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) iteratorSubcategorias.next();
+			quantidadeEconomias += imovelSubcategoria.getQuantidadeEconomias();
+		}
+		return quantidadeEconomias;
 	}
 	
 	private boolean naoVazio(String valor) {

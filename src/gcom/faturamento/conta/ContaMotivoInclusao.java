@@ -8,21 +8,21 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class ContaMotivoInclusao extends ObjetoTransacao {
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
+
 	public final static Integer NAO_INFORMADO = new Integer(0);
 	public final static Integer TRASFERENCIA_DE_DEBITO = new Integer(41);
 	public final static Integer RECUPERACAO_DE_CREDITO = new Integer(46);
-	
+	public final static Integer CANCELAMENTO_DE_PARCELAMENTO = new Integer(47);
+
 	private Integer id;
 	private String descricaoMotivoInclusaoConta;
 	private Short indicadorUso;
 	private Date ultimaAlteracao;
 
-	public ContaMotivoInclusao(String descricaoMotivoInclusaoConta,
-			Short indicadorUso, Date ultimaAlteracao) {
+	public ContaMotivoInclusao(String descricaoMotivoInclusaoConta, Short indicadorUso, Date ultimaAlteracao) {
 		this.descricaoMotivoInclusaoConta = descricaoMotivoInclusaoConta;
 		this.indicadorUso = indicadorUso;
 		this.ultimaAlteracao = ultimaAlteracao;
@@ -30,7 +30,7 @@ public class ContaMotivoInclusao extends ObjetoTransacao {
 
 	public ContaMotivoInclusao() {
 	}
-	
+
 	public ContaMotivoInclusao(Integer id) {
 		this.id = id;
 	}
@@ -47,8 +47,7 @@ public class ContaMotivoInclusao extends ObjetoTransacao {
 		return this.descricaoMotivoInclusaoConta;
 	}
 
-	public void setDescricaoMotivoInclusaoConta(
-			String descricaoMotivoInclusaoConta) {
+	public void setDescricaoMotivoInclusaoConta(String descricaoMotivoInclusaoConta) {
 		this.descricaoMotivoInclusaoConta = descricaoMotivoInclusaoConta;
 	}
 
@@ -71,8 +70,8 @@ public class ContaMotivoInclusao extends ObjetoTransacao {
 	public String toString() {
 		return new ToStringBuilder(this).append("cmicId", getId()).toString();
 	}
-	
-	public String[] retornaCamposChavePrimaria(){
+
+	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
@@ -81,16 +80,13 @@ public class ContaMotivoInclusao extends ObjetoTransacao {
 	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = new FiltroContaMotivoInclusao();
-		
-		filtro.adicionarParametro(
-				new ParametroSimples(FiltroContaMotivoInclusao.ID, this.id));
-		
-		return filtro; 
+		filtro.adicionarParametro(new ParametroSimples(FiltroContaMotivoInclusao.ID, this.id));
+
+		return filtro;
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricaoMotivoInclusaoConta();
 	}
-
 }

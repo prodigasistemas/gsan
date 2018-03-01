@@ -251,7 +251,7 @@ public interface IRepositorioArrecadacao {
 			Integer anoMesReferenciaArrecadacao, Integer idLancamentoItemContabil, Integer idCategoria) throws ErroRepositorioException;
 
 	public BigDecimal acumularValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrar(Integer idLocalidade, Integer anoMesReferenciaArrecadacao,
-			Integer idLancamentoItemContabil, Integer idCategoria) throws ErroRepositorioException;
+			Integer idLancamentoItemContabil, Integer idCategoria, boolean incluirFinanciamentos) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDevolucoesClassificadasSituacaoAtualDevolucaoClassificada(Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
@@ -1316,4 +1316,12 @@ public interface IRepositorioArrecadacao {
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
 	
 	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException ;
+
+	public void gerarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
+	
+	public void deletarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
+	
+	public Collection<ArrecadadorMovimentoItem> pesquisarItensNaoIdentificados(Date dataPesquisa) throws ErroRepositorioException;
+	
+	public void deletarDadosDocumentosNaoIdentificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 }

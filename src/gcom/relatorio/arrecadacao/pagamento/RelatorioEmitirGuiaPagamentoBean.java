@@ -30,6 +30,10 @@ public class RelatorioEmitirGuiaPagamentoBean implements RelatorioBean {
 	private String observacao;
 	private String cpfCnpjCliente;
 	
+	private String mensagemParcelamento;
+	private Boolean exibirDetalhesParcelamento;
+	private Boolean exibirSemDetalhesParcelamento;
+	
 	/* Ficha de Compensação */
 	private String idImovel;
 	private String nossoNumero;
@@ -99,7 +103,9 @@ public class RelatorioEmitirGuiaPagamentoBean implements RelatorioBean {
 											 String sacadoParte01,
 											 String sacadoParte02,
 											 String subRelatorio,
-											 Collection colecaoDetailSub) {
+											 Collection colecaoDetailSub,
+											 String mensagemParcelamento, 
+											 Boolean ehParcelamento) {
 		
 		this.arrayRelatorioEmitirGuiaPagamentoDetailBean = new ArrayList();
 		this.arrayRelatorioEmitirGuiaPagamentoDetailBean.addAll(colecaoDetail);
@@ -124,6 +130,9 @@ public class RelatorioEmitirGuiaPagamentoBean implements RelatorioBean {
 		this.sacadoParte01 = sacadoParte01;
 		this.sacadoParte02 = sacadoParte02;
 		this.subRelatorio = subRelatorio;
+		this.mensagemParcelamento = mensagemParcelamento;
+		this.exibirDetalhesParcelamento = ehParcelamento;
+		this.exibirSemDetalhesParcelamento = !ehParcelamento;
 
 		this.arrayRelatorioEmitirGuiaPagamentoDetailBean = new ArrayList();
 		this.arrayRelatorioEmitirGuiaPagamentoDetailBean.addAll(colecaoDetailSub);
@@ -266,6 +275,30 @@ public class RelatorioEmitirGuiaPagamentoBean implements RelatorioBean {
 
 	public void setEnderecoImovelSacado(String enderecoImovelSacado) {
 		this.enderecoImovelSacado = enderecoImovelSacado;
+	}
+
+	public String getMensagemParcelamento() {
+		return mensagemParcelamento;
+	}
+
+	public void setMensagemParcelamento(String mensagemParcelamento) {
+		this.mensagemParcelamento = mensagemParcelamento;
+	}
+
+	public Boolean getExibirDetalhesParcelamento() {
+		return exibirDetalhesParcelamento;
+	}
+
+	public void setExibirDetalhesParcelamento(Boolean exibirDetalhesParcelamento) {
+		this.exibirDetalhesParcelamento = exibirDetalhesParcelamento;
+	}
+
+	public Boolean getExibirSemDetalhesParcelamento() {
+		return exibirSemDetalhesParcelamento;
+	}
+
+	public void setExibirSemDetalhesParcelamento(Boolean exibirSemDetalhesParcelamento) {
+		this.exibirSemDetalhesParcelamento = exibirSemDetalhesParcelamento;
 	}
 
 	public String getIdImovel() {

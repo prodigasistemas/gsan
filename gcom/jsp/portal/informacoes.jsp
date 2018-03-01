@@ -34,8 +34,8 @@
 	
 	<body>
 		<div id="container"> 
-		   <html:form action="/exibirInformacoesPortalCompesaAction.do" method="post" 
-				name="ExibirInformacoesPortalCompesaActionForm" type="gcom.gui.portal.ExibirInformacoesPortalCompesaActionForm" >
+		   <html:form action="/exibirInformacoesPortalAction.do" method="post" 
+				name="ExibirInformacoesPortalActionForm" type="gcom.gui.portal.ExibirInformacoesPortalActionForm" >
 		    	<%@ include file="/jsp/portal/cabecalho.jsp"%>
 		        
 		        <!-- Content - Start -->
@@ -43,7 +43,7 @@
 		            <%@ include file="/jsp/portal/cabecalhoInformacoes.jsp"%>`
 		            <ul id="lista-informacoes">
 		            	<li>
-		            		<a href="exibirInformacoesPortalCompesaAction.do?method=negociacaoDebitos">
+		            		<a href="exibirInformacoesPortalAction.do?method=negociacaoDebitos">
 								<span>Negociação de débito</span>
 							</a>
 							<div class="info-serv" style="text-align:justify;display:block;">
@@ -67,7 +67,7 @@
 		                    </div>
 		                </li>
 		            	<li>
-		            		<a href="exibirInformacoesPortalCompesaAction.do?method=tarifaSocial">
+		            		<a href="exibirInformacoesPortalAction.do?method=tarifaSocial">
 								<span>Tarifa social</span>
 							</a>
 							<div class="info-serv" style="text-align:justify;display:block;">
@@ -79,7 +79,7 @@
 		                    </div>
 		                </li>
 		            	<li>
-		            		<a href="exibirInformacoesPortalCompesaAction.do?method=normas">
+		            		<a href="exibirInformacoesPortalAction.do?method=normas">
 								<span>Normas de instalação</span>
 							</a>
 							<div class="info-serv" style="text-align:justify;display:block;">

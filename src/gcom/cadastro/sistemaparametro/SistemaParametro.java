@@ -497,6 +497,8 @@ public class SistemaParametro extends ObjetoTransacao {
 	private String descricaoAliquotaImposto;
 
 	private BigDecimal valorAliquotaImposto;
+	
+	private Short indicadorGeracaoBoletoBB;
 
 	public Short getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() {
 		return numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
@@ -2552,5 +2554,13 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public void setValorAliquotaImposto(BigDecimal valorAliquotaImposto) {
 		this.valorAliquotaImposto = valorAliquotaImposto;
+	}
+
+	public Short getIndicadorGeracaoBoletoBB() {
+		return indicadorGeracaoBoletoBB;
+	}
+
+	public void setIndicadorGeracaoBoletoBB(Short indicadorGeracaoBoletoBB) {
+		this.indicadorGeracaoBoletoBB = indicadorGeracaoBoletoBB;
 	}
 }

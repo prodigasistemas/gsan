@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="gcom.cadastro.LojaAtendimento" table="cadastro.loja_atendimento">
+		<id name="id" type="java.lang.Integer" column="loja_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="nome" type="java.lang.String" column="loja_nome" length="30" />
+		<property name="localidade" type="java.lang.String" column="loja_localidade" length="30" />
+		<property name="endereco" type="java.lang.String" column="loja_endereco" length="100" />
+		<property name="ddd" type="java.lang.String" column="loja_ddd" length="2" />
+		<property name="telefone" type="java.lang.String" column="loja_telefone" length="9" />
+		<property name="horario" type="java.lang.String" column="loja_horario" length="30" />
+		<property name="coordenadas" type="java.lang.String" column="loja_coordenadas" length="50" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="loja_tmultimaalteracao" not-null="true" />
+	</class>
+</hibernate-mapping>

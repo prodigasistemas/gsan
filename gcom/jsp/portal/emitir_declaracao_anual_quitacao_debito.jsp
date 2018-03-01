@@ -47,7 +47,7 @@
 				
 				$('#btnPesquisar').click(function(){
 					$('form')
-						.attr('action', 'exibirServicosPortalCompesaAction.do?method=declaracaoAnual')
+						.attr('action', 'portal.do?method=declaracaoAnual')
 						.submit();
 				});
 				
@@ -93,7 +93,7 @@
 
 	            	<html:form action="/emitir2viaDeclaracaoAnualQuitacaoDebitosAction.do" name="Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm"
 	type="gcom.gui.faturamento.Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm" method="post">
-						<html:text property="matriculaImovel" style="display:none;" value="${ExibirServicosPortalCompesaActionForm.matricula}" />
+						<html:text property="matriculaImovel" style="display:none;" value="${ExibirPortalActionForm.matricula}" />
 	                	<fieldset>
 	                    	<legend>Selecione o Ano de Refer&ecirc;ncia:</legend>
 	                    	

@@ -98,9 +98,9 @@ public class Parcelamento extends ObjetoTransacao {
 
 	private Short numeroParcelasPagasConsecutivas;
 
-	private gcom.cobranca.parcelamento.ParcelamentoTipo parcelamentoTipo;
+	private ParcelamentoTipo parcelamentoTipo;
 
-	private gcom.cobranca.parcelamento.ParcelamentoSituacao parcelamentoSituacao;
+	private ParcelamentoSituacao parcelamentoSituacao;
 
 	private RegistroAtendimento registroAtendimento;
 
@@ -108,7 +108,7 @@ public class Parcelamento extends ObjetoTransacao {
 
 	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
 
-	private gcom.cobranca.parcelamento.ParcelamentoPerfil parcelamentoPerfil;
+	private ParcelamentoPerfil parcelamentoPerfil;
 
 	private ImovelPerfil imovelPerfil;
 
@@ -135,6 +135,12 @@ public class Parcelamento extends ObjetoTransacao {
 	private ResolucaoDiretoria resolucaoDiretoria;
 
 	private BigDecimal valorDescontoTarifaSocial;
+	
+	private Usuario usuarioCancelamento;
+	
+	private Date dataCancelamento;
+	
+	private ParcelamentoMotivoCancelamento motivoCancelamento;
 
 	public Parcelamento(Date parcelamento, Integer anoMesReferenciaFaturamento, BigDecimal valorConta, BigDecimal valorServicosACobrar, BigDecimal valorAtualizacaoMonetaria,
 			BigDecimal valorJurosMora, BigDecimal valorMulta, BigDecimal valorDebitoAtualizado, BigDecimal valorDescontoFaixaReferenciaConta, BigDecimal valorDescontoAcrescimos,
@@ -142,8 +148,8 @@ public class Parcelamento extends ObjetoTransacao {
 			BigDecimal valorDescontoInatividade, BigDecimal percentualDescontoAcrescimos, Short indicadorAcrescimosImpontualdade, BigDecimal valorGuiaPapagamento,
 			BigDecimal percentualDescontoAntiguidade, BigDecimal percentualDescontoInatividade, Integer codigoSetorComercial, Integer numeroQuadra, Date ultimaAlteracao,
 			BigDecimal valorCreditoARealizar, BigDecimal valorParcelamentosACobrar, Short indicadorRestabelecimento, Short indicadorContasRevisao, Short indicadorGuiasPagamento,
-			Short indicadorCreditoARealizar, BigDecimal taxaJuros, gcom.cobranca.parcelamento.ParcelamentoTipo parcelamentoTipo, gcom.cobranca.parcelamento.ParcelamentoSituacao parcelamentoSituacao,
-			RegistroAtendimento registroAtendimento, Imovel imovel, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, gcom.cobranca.parcelamento.ParcelamentoPerfil parcelamentoPerfil,
+			Short indicadorCreditoARealizar, BigDecimal taxaJuros, ParcelamentoTipo parcelamentoTipo, ParcelamentoSituacao parcelamentoSituacao,
+			RegistroAtendimento registroAtendimento, Imovel imovel, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, ParcelamentoPerfil parcelamentoPerfil,
 			ImovelPerfil imovelPerfil, CobrancaForma cobrancaForma, Quadra quadra, Localidade localidade, ParcelamentoMotivoDesfazer parcelamentoMotivoDesfazer,
 			LigacaoAguaSituacao ligacaoAguaSituacao, Funcionario funcionario, Short indicadorConfirmacaoParcelamento, Cliente cliente, Usuario usuario, ResolucaoDiretoria resolucaoDiretoria,
 			BigDecimal valorDescontoSancao) {
@@ -202,8 +208,8 @@ public class Parcelamento extends ObjetoTransacao {
 	public Parcelamento() {
 	}
 
-	public Parcelamento(gcom.cobranca.parcelamento.ParcelamentoTipo parcelamentoTipo, gcom.cobranca.parcelamento.ParcelamentoSituacao parcelamentoSituacao, RegistroAtendimento registroAtendimento,
-			Imovel imovel, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, gcom.cobranca.parcelamento.ParcelamentoPerfil parcelamentoPerfil, ImovelPerfil imovelPerfil, CobrancaForma cobrancaForma,
+	public Parcelamento(ParcelamentoTipo parcelamentoTipo, ParcelamentoSituacao parcelamentoSituacao, RegistroAtendimento registroAtendimento,
+			Imovel imovel, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, ParcelamentoPerfil parcelamentoPerfil, ImovelPerfil imovelPerfil, CobrancaForma cobrancaForma,
 			Quadra quadra, Localidade localidade, ParcelamentoMotivoDesfazer parcelamentoMotivoDesfazer, LigacaoAguaSituacao ligacaoAguaSituacao, Funcionario funcionario,
 			Short indicadorConfirmacaoParcelamento) {
 		this.parcelamentoTipo = parcelamentoTipo;
@@ -485,19 +491,19 @@ public class Parcelamento extends ObjetoTransacao {
 		this.taxaJuros = taxaJuros;
 	}
 
-	public gcom.cobranca.parcelamento.ParcelamentoTipo getParcelamentoTipo() {
+	public ParcelamentoTipo getParcelamentoTipo() {
 		return this.parcelamentoTipo;
 	}
 
-	public void setParcelamentoTipo(gcom.cobranca.parcelamento.ParcelamentoTipo parcelamentoTipo) {
+	public void setParcelamentoTipo(ParcelamentoTipo parcelamentoTipo) {
 		this.parcelamentoTipo = parcelamentoTipo;
 	}
 
-	public gcom.cobranca.parcelamento.ParcelamentoSituacao getParcelamentoSituacao() {
+	public ParcelamentoSituacao getParcelamentoSituacao() {
 		return this.parcelamentoSituacao;
 	}
 
-	public void setParcelamentoSituacao(gcom.cobranca.parcelamento.ParcelamentoSituacao parcelamentoSituacao) {
+	public void setParcelamentoSituacao(ParcelamentoSituacao parcelamentoSituacao) {
 		this.parcelamentoSituacao = parcelamentoSituacao;
 	}
 
@@ -525,11 +531,11 @@ public class Parcelamento extends ObjetoTransacao {
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
 	}
 
-	public gcom.cobranca.parcelamento.ParcelamentoPerfil getParcelamentoPerfil() {
+	public ParcelamentoPerfil getParcelamentoPerfil() {
 		return this.parcelamentoPerfil;
 	}
 
-	public void setParcelamentoPerfil(gcom.cobranca.parcelamento.ParcelamentoPerfil parcelamentoPerfil) {
+	public void setParcelamentoPerfil(ParcelamentoPerfil parcelamentoPerfil) {
 		this.parcelamentoPerfil = parcelamentoPerfil;
 	}
 
@@ -697,6 +703,30 @@ public class Parcelamento extends ObjetoTransacao {
 
 	public void setUsuarioDesfez(Usuario usuarioDesfez) {
 		this.usuarioDesfez = usuarioDesfez;
+	}
+
+	public Usuario getUsuarioCancelamento() {
+		return usuarioCancelamento;
+	}
+
+	public void setUsuarioCancelamento(Usuario usuarioCancelamento) {
+		this.usuarioCancelamento = usuarioCancelamento;
+	}
+
+	public Date getDataCancelamento() {
+		return dataCancelamento;
+	}
+
+	public void setDataCancelamento(Date dataCancelamento) {
+		this.dataCancelamento = dataCancelamento;
+	}
+
+	public ParcelamentoMotivoCancelamento getMotivoCancelamento() {
+		return motivoCancelamento;
+	}
+
+	public void setMotivoCancelamento(ParcelamentoMotivoCancelamento motivoCancelamento) {
+		this.motivoCancelamento = motivoCancelamento;
 	}
 
 	@Override

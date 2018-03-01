@@ -677,6 +677,7 @@ public interface ConstantesSistema {
     Short INDICADOR_PAGAMENTO_A_VISTA = new Short("1");
 //  Indicador de Tipo de Pagamento parcelado
     Short INDICADOR_PAGAMENTO_PARCELADO = new Short("2");
+    Short INDICADOR_PAGAMENTO_ENTRADA_PARCELAMENTO = new Short("3");
     
     String CONTENT_TYPE_JPEG = "image/jpeg";
     String EXTENSAO_JPG = "JPG";
@@ -735,4 +736,6 @@ public interface ConstantesSistema {
 	int TIPO_NEGOCIACAO_PARCELAMENTO = 1;
 	int TIPO_NEGOCIACAO_EXTRATO = 2;
 	int TIPO_NEGOCIACAO_GUIA = 3;
+	
+	int QTD_CONTAS_CANCELAMENTO_PARCELAMENTO = 3;
 }

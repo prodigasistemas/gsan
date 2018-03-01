@@ -289,6 +289,7 @@ import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
@@ -330,6 +331,8 @@ import gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamentoHelper;
 import gcom.cobranca.contratoparcelamento.QuantidadePrestacoes;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
+import gcom.cobranca.controladores.ControladorParcelamentoLocal;
+import gcom.cobranca.controladores.ControladorParcelamentoLocalHome;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
@@ -435,6 +438,7 @@ import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.portal.ConsultarEstruturaTarifariaPortalHelper;
+import gcom.gui.portal.LojaAtendimentoHelper;
 import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioAcompanhamentoBoletimMedicaoHelper;
 import gcom.gui.relatorio.atendimentopublico.FiltrarRelatorioOSSituacaoHelper;
 import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
@@ -489,6 +493,8 @@ import gcom.operacional.DistritoOperacional;
 import gcom.operacional.DivisaoEsgoto;
 import gcom.operacional.FonteCaptacao;
 import gcom.operacional.SistemaEsgoto;
+import gcom.portal.ControladorLojaVirtualLocal;
+import gcom.portal.ControladorLojaVirtualLocalHome;
 import gcom.relatorio.RelatorioEmitirOrdemServicoSeletivaAnaliticoSubrelatorioBean;
 import gcom.relatorio.arrecadacao.GuiaDevolucaoRelatorioHelper;
 import gcom.relatorio.arrecadacao.RelatorioAnaliseArrecadacaoBean;
@@ -681,6 +687,27 @@ public class Fachada {
 		return instancia;
 	}
 
+	private ControladorParcelamentoLocal getControladorParcelamento() {
+		ControladorParcelamentoLocalHome localHome = null;
+		ControladorParcelamentoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PARCELAMENTO);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
 	private ControladorTabelaAuxiliarLocal getControladorTabelaAuxiliar() {
 		ControladorTabelaAuxiliarLocalHome localHome = null;
 		ControladorTabelaAuxiliarLocal local = null;
@@ -1399,6 +1426,17 @@ public class Fachada {
 			throw new SistemaException(e);
 		}
 	}
+	
+	private ControladorLojaVirtualLocal getControladorLojaVirtual() {
+		try {
+			ControladorLojaVirtualLocalHome localHome = (ControladorLojaVirtualLocalHome) ServiceLocator.getInstancia().getLocalHome(ConstantesJNDI.CONTROLADOR_LOJA_VIRTUAL);
+			return localHome.create();
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
 
 	public void inserirTabelaAuxiliar(TabelaAuxiliarAbstrata tabelaAuxiliarAbstrata) {
 
@@ -1606,15 +1644,6 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
-	}
-
-	public void inserirImovel(Imovel imovel) {
-		try {
-			this.getControladorUtil().inserir(imovel);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
 	}
 
 	public Integer inserirImovelDoacaoRetorno(ImovelDoacao imovelDoacao, Usuario usuarioLogado) {
@@ -27013,25 +27042,6 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir um ComandoEmpresaCobrancaConta
-	 * 
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * @author Rafael Corrêa
-	 * @param usuarioLogado
-	 * @date 28/10/2008
-	 * 
-	 */
-	public Integer inserirComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Usuario usuarioLogado) {
-		try {
-			return this.getControladorCobranca().inserirComandoEmpresaCobrancaConta(comandoEmpresaCobrancaConta, usuarioLogado);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
-	/**
 	 * Permite inserir um Perfil da Ligacao de Esgoto
 	 * 
 	 * [UC0217] Inserir Perfil da Ligacao de Esgoto
@@ -27383,18 +27393,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0869] Gerar Arquivo Texto de Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 29/10/2008
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int pagina) {
+	public List<ComandoEmpresaCobrancaConta> pesquisarDadosComandoCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int pagina) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, pagina);
+			return getControladorCobrancaPorResultado().pesquisarDadosComando(idEmpresa, comandoInicial, comandoFinal, pagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -27633,17 +27634,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0214] Efetuar Parcelamento de Débitos
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 29/09/2008
-	 * 
-	 * @param parcelamentoPerfil
-	 * @param conta
-	 * @return Collection<ParcelamentoDescontoAntiguidade>
-	 * @throws ControladorException
-	 */
 	public Collection<ParcelamentoDescontoAntiguidade> obterParcelamentoDescontoAntiguidadeParaConta(ParcelamentoPerfil parcelamentoPerfil, Conta conta) {
 		try {
 
@@ -27653,15 +27643,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisar existência de imóvel economia
-	 * 
-	 * @author Ana Maria
-	 * @date 05/12/2008
-	 * 
-	 * @return Boolean
-	 * @throws ErroRepositorioException
-	 */
 	public Boolean pesquisarExistenciaImovelEconomia(Integer idImovel, Integer idSubcategoria) {
 		try {
 			return this.getControladorImovel().pesquisarExistenciaImovelEconomia(idImovel, idSubcategoria);
@@ -27670,17 +27651,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa a coleção de clientes do imóvel para negativação sem o cliente
-	 * empresa do sistema parâmetro
-	 * 
-	 * @author Ana Maria
-	 * @date 17/12/2008
-	 * @param idImovel
-	 * @return Collection
-	 * @exception ErroRepositorioException
-	 * 
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteImovelParaNegativacao(Integer idImovel) {
 		try {
@@ -28125,7 +28095,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, numeroIndice);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, numeroIndice);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -29139,15 +29109,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
-	 * Pesquisa dados do popup
-	 * 
-	 * @author Hugo Amorim
-	 */
-	public Object[] pesquisarDadosPopupExtensaoComando(Integer idComando, Date dateInicial, Date dateFinal) {
+	public Object[] pesquisarDadosConsultaComando(Integer idComando, Date dateInicial, Date dateFinal) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosPopupExtensaoComando(idComando, dateInicial, dateFinal);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosConsultaComando(idComando, dateInicial, dateFinal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -38415,15 +38379,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [MA2011061010]
-	 * 
-	 * @param faixaInicial
-	 *            Descricao do para Descricao do parametro
-	 * @return Description of the Return Value
-	 * @exception ControladorException
-	 *                Description of the Exception
-	 */
 	public Integer pesquisarNumeroHidrometroMovimentacaoPorFaixaCount(String fixo, String faixaInicial, String faixaFinal) {
 		try {
 			return this.getControladorMicromedicao().pesquisarNumeroHidrometroMovimentacaoPorFaixaCount(fixo, faixaInicial, faixaFinal);
@@ -38432,55 +38387,22 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual [SB0001] Selecionar
-	 * Municípios da Região
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @return colecaoDeMunicipios
-	 */
-	public Collection<Object[]> pesquisarMunicipiosLojaVirtualCompesa() {
+	public List<Localidade> pesquisarLocalidadesLojaVirtual() {
 		try {
-			return this.getControladorAtendimentoPublico().pesquisarMunicipiosLojaVirtualCompesa();
+			return getControladorLojaVirtual().pesquisarLocalidades();
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
-	/**
-	 * [UC1196] Exibir Lojas de Atendimento na Loja Virtual [SB0005] Exibir
-	 * Dados da Loja
-	 * 
-	 * @author Magno Gouveia
-	 * @date 14/07/2011
-	 * 
-	 * @param id
-	 *            do municipio
-	 * @return colecaoDeLojas
-	 */
-	public Collection<Object[]> pesquisarLojasDeAtendimentoLojaVirtualCompesa(Integer idMunicipio) {
+	public List<LojaAtendimentoHelper> pesquisarLojasAtendimento(String localidade) {
 		try {
-			return this.getControladorAtendimentoPublico().pesquisarLojasDeAtendimentoLojaVirtualCompesa(idMunicipio);
+			return getControladorLojaVirtual().pesquisarLojasAtendimento(localidade);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
-	/**
-	 * [MA2011061010]
-	 * 
-	 * pesquisa uma colecao de HidrometroMovimentacao
-	 * 
-	 * @param faixaInicial
-	 *            Descricao do parametro
-	 * @param faixaFinal
-	 *            Descricao do parametro
-	 * @return Description of the Return Value
-	 * @exception ErroRepositorioException
-	 *                Description of the Exception
-	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNumeroHidrometroMovimentacaoPorFaixaPaginacao(String faixaInicial, String faixaFinal, Integer numeroPagina) {
 		try {
@@ -40119,11 +40041,92 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel) {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) {
 		try {
-			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel);
+			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, percentualInformado);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
+	}
+	
+	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) {
+		try {
+			return getControladorParcelamento().pesquisarParcelamentoParaCancelar(idParcelamento);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuarioLogado, SistemaParametro sistemaParametro) {
+		try {
+			getControladorParcelamento().cancelarParcelamento(helper, usuarioLogado, sistemaParametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public String getCobrancaParametro(String parametro) {
+		try {
+			return this.getControladorCobranca().getCobrancaParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+
+	public String obterCaminhoDownloadArquivos(String modulo) {
+		return this.getControladorUtil().getCaminhoDownloadArquivos(modulo);
+	}	
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) {
+		try {
+			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, clienteResponsavelParcelamento, valor, primeiraVia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
+	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) {
+		try {
+			return this.getControladorCobranca().obterPeriodoContasParceladas(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Short obterDiaVencimentoConta(Integer idImovel) {
+		try {
+			return this.getControladorFaturamento().obterDiaVencimentoConta(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean isCpfCnpjCadastrado(String matricula, String cpfCnpj) {
+		try {
+			return getControladorLojaVirtual().isCpfCnpjCadastrado(matricula, cpfCnpj);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public ConsumoTarifa obterConsumoTarifaPadrao(Integer idLocalidade) {
+		try {
+			return this.getControladorLocalidade().obterConsumoTarifaPadrao(idLocalidade);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public int retirarSituacaoCobranca(BufferedReader buffer, Usuario usuario) {
+		try {
+			return getControladorCobrancaPorResultado().retirarSituacaoCobranca(buffer, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection gerarComandoCobrancaEmpresa(ComandoEmpresaCobrancaContaHelper helper) {
+		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
+		return null;
 	}
 }

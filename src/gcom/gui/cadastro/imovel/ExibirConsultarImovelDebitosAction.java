@@ -36,7 +36,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -627,11 +630,11 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 						sessao.setAttribute("valorImposto", Util.formatarMoedaReal(valorImposto));
 						
 						// Manda a colecao e o valor total de DebitoACobrar pelo request
-						sessao.setAttribute("colecaoDebitoACobrar",colecaoDebitoACobrar);
+						sessao.setAttribute("colecaoDebitoACobrar", obterListaDebitoACobrarOrdenadaPorReferencia(colecaoDebitoACobrar));
 						sessao.setAttribute("valorDebitoACobrar", Util.formatarMoedaReal(valorDebitoACobrar));
 
 						// Manda a colecao e o valor total de CreditoARealizar pelo request
-						sessao.setAttribute("colecaoCreditoARealizar",colecaoCreditoARealizar);
+						sessao.setAttribute("colecaoCreditoARealizar",obterListaCreditoARealizarOrdenadaPorReferencia(colecaoCreditoARealizar));
 						sessao.setAttribute("valorCreditoARealizar", Util.formatarMoedaReal(valorCreditoARealizar));
 						sessao.setAttribute("valorCreditoARealizarSemDescontosParcelamento",Util.formatarMoedaReal(valorCreditoARealizarSemDescontosParcelamento));
 
@@ -880,5 +883,36 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		//retorna o mapeamento contido na variável retorno
 		return retorno;
 	}
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaDebitoACobrarOrdenadaPorReferencia(Collection colecao) {
+		
+		List list = new ArrayList();
+		list.addAll(colecao);
+		Collections.sort(list, new Comparator<DebitoACobrar>() {
+
+			public int compare(DebitoACobrar o1, DebitoACobrar o2) {
+				return o2.getAnoMesCobrancaDebito().compareTo(o1.getAnoMesCobrancaDebito());
+			}
+		});
+		
+		return list;
+	}
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private Collection obterListaCreditoARealizarOrdenadaPorReferencia(Collection colecao) {
+		
+		List list = new ArrayList();
+		list.addAll(colecao);
+		Collections.sort(list, new Comparator<CreditoARealizar>() {
+
+			public int compare(CreditoARealizar o1, CreditoARealizar o2) {
+				return o2.getAnoMesCobrancaCredito().compareTo(o1.getAnoMesCobrancaCredito());
+			}
+		});
+		
+		return list;
+	}
+
 
 }

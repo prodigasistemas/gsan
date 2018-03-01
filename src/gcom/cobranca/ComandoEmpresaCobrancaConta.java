@@ -6,6 +6,8 @@ import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -17,74 +19,51 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-
 	private Integer codigoSetorComercialInicial;
-
 	private Integer codigoSetorComercialFinal;
-
 	private BigDecimal valorMinimoConta;
-
 	private BigDecimal valorMaximoConta;
-
 	private Integer referenciaContaInicial;
-
 	private Integer referenciaContaFinal;
-
 	private Date dataVencimentoContaInicial;
-
 	private Date dataVencimentoContaFinal;
-
 	private Date dataExecucao;
-
 	private Integer indicadorResidencial;
-
 	private Integer indicadorComercial;
-
 	private Integer indicadorIndustrial;
-
 	private Integer indicadorPublico;
-
 	private Imovel imovel;
-
 	private Cliente cliente;
-
 	private Localidade localidadeInicial;
-
 	private Localidade localidadeFinal;
-
 	private Empresa empresa;
-
 	private Date ultimaAlteracao;
-
 	private Integer numeroQuadraInicial;
-
 	private Integer numeroQuadraFinal;
-
 	private Date dataInicioCiclo;
-
 	private Date dataFimCiclo;
-
 	private Date dataEncerramento;
-
 	private Integer indicadorGeracaoTxt;
-
 	private CobrancaSituacao cobrancaSituacao;
-
 	private ServicoTipo servicoTipo;
-
 	private Integer qtdContasInicial;
-
 	private Integer qtdContasFinal;
-
 	private Integer qtdDiasVencimento;
-
 	private Short indicadorCobrancaTelemarketing;
-	
 	private Integer qtdMaximaClientes;
-	
 	private Short indicadorGerarComDebitoPreterito;
+	private Integer quantidadeContas;
+	private Integer quantidadeClientes;
+	private BigDecimal valorTotal;
+	private Short indicadorPossuiCpfCnpj;
 
-	public ComandoEmpresaCobrancaConta() {}
+	public ComandoEmpresaCobrancaConta() {
+	}
+
+	public ComandoEmpresaCobrancaConta(Integer id) {
+		super();
+		this.id = id;
+	}
 
 	public String[] retornaCamposChavePrimaria() {
 		String[] retorno = { "id" };
@@ -369,5 +348,92 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public void setIndicadorGerarComDebitoPreterito(Short indicadorGerarComDebitoPreterito) {
 		this.indicadorGerarComDebitoPreterito = indicadorGerarComDebitoPreterito;
+	}
+
+	public Integer getQuantidadeContas() {
+		return quantidadeContas;
+	}
+
+	public void setQuantidadeContas(Integer quantidadeContas) {
+		this.quantidadeContas = quantidadeContas;
+	}
+
+	public Integer getQuantidadeClientes() {
+		return quantidadeClientes;
+	}
+
+	public void setQuantidadeClientes(Integer quantidadeClientes) {
+		this.quantidadeClientes = quantidadeClientes;
+	}
+
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	
+	public Short getIndicadorPossuiCpfCnpj() {
+		return indicadorPossuiCpfCnpj;
+	}
+
+	public void setIndicadorPossuiCpfCnpj(Short indicadorPossuiCpfCnpj) {
+		this.indicadorPossuiCpfCnpj = indicadorPossuiCpfCnpj;
+	}
+	
+	public boolean isQuantidadeContasValida(int qtd, int qtdMenorFaixa) {
+		if (qtdContasInicial != null) {
+			return qtd >= qtdContasInicial && qtd <= qtdContasFinal;
+		} else if (qtdMenorFaixa > 0) {
+			return qtd >= qtdMenorFaixa;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isValorValido(double valor) {
+		if (valorMinimoConta != null) {
+			return valor >= valorMinimoConta.doubleValue() && valor <= valorMaximoConta.doubleValue();
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isReferenciaValida(Integer referencia) {
+		if (referenciaContaInicial != null) {
+			return referencia >= referenciaContaInicial && referencia <= referenciaContaFinal;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isVencimentoValido(Date vencimento) {
+		if (dataVencimentoContaInicial != null) {
+			return  vencimento.before(dataVencimentoContaInicial) || vencimento.after(dataVencimentoContaFinal);
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isDiasVencimentoValido(Date vencimento) {
+		Date vencimentoLimite = Util.subtrairNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
+		if (qtdDiasVencimento != null) {
+			return vencimento.before(vencimentoLimite);
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isIndicadorCpfCnpjValido(boolean possuiCpfCnpj) {
+		if (indicadorPossuiCpfCnpj.equals(ConstantesSistema.SIM)) {
+			return possuiCpfCnpj;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isQtdMaximaInformada() {
+		return qtdMaximaClientes != null && qtdMaximaClientes > 0;
 	}
 }

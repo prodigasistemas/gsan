@@ -11,10 +11,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class LancamentoItemContabil extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-	
+
 	public final static Integer LIGACOES_AGUA = new Integer(1);
 	public final static Integer ACRESCIMOS_POR_IMPONTUALIDADE = new Integer(2);
-	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(2);
 	public final static Integer RELIGACOES_E_SANCOES = new Integer(3);
 	public final static Integer AFERICAO_DE_HIDROMETROS = new Integer(4);
 	public final static Integer EXTENSOES_REDE_AGUA = new Integer(5);
@@ -24,6 +23,11 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	public final static Integer OUTROS_SERVICOS_ESGOTO = new Integer(9);
 	public final static Integer TARIFA_DE_AGUA = new Integer(10);
 	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
+	public final static Integer CANCELAMENTO_DE_PARCELAMENTO = new Integer(12);
+	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(13);
+	
+	public final static Integer CANCELAMENTO_DESCONTOS_ACRESCIMOS_PARCELAMENTO = new Integer(14);
+	public final static Integer CANCELAMENTO_DESCONTOS_FAIXA_PARCELAMENTO = new Integer(15);
 
 	private Integer id;
 	private String descricao;
@@ -33,8 +37,7 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	private Short indicadorUso;
 	private LancamentoItem lancamentoItem;
 
-	public LancamentoItemContabil(String descricao, String descricaoAbreviada,
-			Short sequenciaImpressao, Date ultimaAlteracao, Short indicadorUso,
+	public LancamentoItemContabil(String descricao, String descricaoAbreviada, Short sequenciaImpressao, Date ultimaAlteracao, Short indicadorUso,
 			gcom.financeiro.lancamento.LancamentoItem lancamentoItem) {
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
@@ -56,10 +59,8 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 		this.id = id;
 		this.sequenciaImpressao = sequenciaImpressao;
 	}
-	
-	public LancamentoItemContabil(String descricao, String descricaoAbreviada,
-			gcom.financeiro.lancamento.LancamentoItem lancamentoItem,
-			ContaContabil contaContabil) {
+
+	public LancamentoItemContabil(String descricao, String descricaoAbreviada, gcom.financeiro.lancamento.LancamentoItem lancamentoItem, ContaContabil contaContabil) {
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
 		this.lancamentoItem = lancamentoItem;
@@ -110,8 +111,7 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 		return this.lancamentoItem;
 	}
 
-	public void setLancamentoItem(
-			gcom.financeiro.lancamento.LancamentoItem lancamentoItem) {
+	public void setLancamentoItem(gcom.financeiro.lancamento.LancamentoItem lancamentoItem) {
 		this.lancamentoItem = lancamentoItem;
 	}
 
@@ -132,23 +132,21 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 	public void setIndicadorUso(Short indicadorUso) {
 		this.indicadorUso = indicadorUso;
 	}
-	
 
-	public Filtro retornaFiltro(){
+	public Filtro retornaFiltro() {
 		FiltroLancamentoItemContabil filtro = new FiltroLancamentoItemContabil();
-		filtro. adicionarParametro(
-				new ParametroSimples(FiltroLancamentoItemContabil.ID, this.getId()));		
+		filtro.adicionarParametro(new ParametroSimples(FiltroLancamentoItemContabil.ID, this.getId()));
 		return filtro;
 	}
 
 	@Override
 	public void initializeLazy() {
 		retornaCamposChavePrimaria();
-		if (lancamentoItem !=null){
+		if (lancamentoItem != null) {
 			getLancamentoItem();
 		}
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricao();

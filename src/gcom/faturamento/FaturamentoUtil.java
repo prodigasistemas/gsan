@@ -50,16 +50,20 @@ public class FaturamentoUtil {
             
             if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
                 valorCredito = creditoARealizar.calculaCreditoOuResiduo();
+                logger.info("      DURANTE 1 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
             }
-
+            logger.info("      DURANTE 2 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
+            
             if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
                 creditoARealizar.incrementaPrestacoesRealizadas();
                 creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
                 creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+                logger.info("      DURANTE 3 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
             }
             
             if (!preFaturamento) {
                 valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
+                logger.info("      DURANTE 4 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
             }
 
             if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
@@ -69,11 +73,14 @@ public class FaturamentoUtil {
                 valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
 
                 valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+                
+                logger.info("      DURANTE 5 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
 
             } else {
 
                 if (!preFaturamento) {
                     creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+                    logger.info("      DURANTE 6 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
                 }
             }
 

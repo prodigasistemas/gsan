@@ -688,4 +688,8 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	public Class getClasseHistorico() {
 		return ClienteHistorico.class;
 	}
+	
+	public boolean cpfCnpjValido(String cpfCnpj) {
+		return cpfCnpj.equals(this.cpf) || cpfCnpj.equals(this.cnpj);
+	}
 }

@@ -244,8 +244,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 							}
 
 							// Para cálculo do Acrescimo de Impontualidade
-							valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-							valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
+							 logger.info("[" + codigoImovel + "] 0.1 - valorTotalAcrescimoImpontualidadeContas ANTES: " + valorTotalAcrescimoImpontualidadeContas);
+				             valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
+				             valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
+				             logger.info("[" + codigoImovel + "] 0.1 - valorTotalAcrescimoImpontualidadeContas DEPOIS: " + valorTotalAcrescimoImpontualidadeContas);
 							
 							if (parcelamentoDescontoAntiguidadeMaior.getContaMotivoRevisao() != null){
 								contaValoresHelper.setRevisao(1);
@@ -269,8 +271,10 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 							}
 
 							// Para cálculo do Acrescimo de Impontualidade
+							logger.info("[" + codigoImovel + "] 0.2 - valorTotalAcrescimoImpontualidadeContas ANTES: " + valorTotalAcrescimoImpontualidadeContas);
 							valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 							valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
+							logger.info("[" + codigoImovel + "] 0.2 - valorTotalAcrescimoImpontualidadeContas DEPOIS: " + valorTotalAcrescimoImpontualidadeContas);
 						}
 					}
 					
@@ -752,7 +756,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 	}
 	
 	private boolean isCreditoDeParcelamento(CreditoARealizar creditoARealizar) {
-		return creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+		return ( creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA)
 			&& creditoARealizar.getParcelamento() != null;
 	}
 }

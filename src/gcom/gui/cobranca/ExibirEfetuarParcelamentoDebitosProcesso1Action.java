@@ -96,6 +96,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					throw new ActionServletException("atencao.debito.ja.parcelado.mes.faturamento.corrente");
 				}
 
+				logger.info("[" + codigoImovel + "] obterDebitosImovelOuCliente()");
 				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = obterDebitosImovelOuCliente(fachada, codigoImovel);
 
 				validarExistenciaDebitosImovel(codigoImovel, colecaoDebitoImovel);
@@ -169,6 +170,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 									Parcelamento.TIPO_ARREDONDAMENTO));
 						}
 
+						logger.info("[" + codigoImovel + "] chamando método contaValoresHelper.getValorTotalContaValoresParcelamento");
 						valorTotalAcrescimoImpontualidadeContas.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
 						valorTotalAcrescimoImpontualidadeContas = valorTotalAcrescimoImpontualidadeContas.add(contaValoresHelper
 								.getValorTotalContaValoresParcelamento());
@@ -414,7 +416,8 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 	}
 
 	private boolean isCreditoDeParcelamento(CreditoARealizar creditoARealizar) {
-		return creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+		return ( creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
+				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA)
 			&& creditoARealizar.getParcelamento() != null;
 	}
 

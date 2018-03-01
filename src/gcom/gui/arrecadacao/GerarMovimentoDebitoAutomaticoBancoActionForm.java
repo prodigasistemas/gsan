@@ -40,6 +40,8 @@ public class GerarMovimentoDebitoAutomaticoBancoActionForm extends
 	private String[] idsCodigosBancos;
 	
 	private Date dataAtual;
+	
+	private String indicadorGruposFaturados;
 
 	public String getCodigoBancoMovimento() {
 		return codigoBancoMovimento;
@@ -156,4 +158,13 @@ public class GerarMovimentoDebitoAutomaticoBancoActionForm extends
 		this.idGrupoFaturamentoSelecionados = idGrupoFaturamentoSelecionados;
 	}
 
+	public String getIndicadorGruposFaturados() {
+		return indicadorGruposFaturados;
+	}
+
+	public void setIndicadorGruposFaturados(String indicadorGruposFaturados) {
+		this.indicadorGruposFaturados = indicadorGruposFaturados;
+	}
+	
+	
 }

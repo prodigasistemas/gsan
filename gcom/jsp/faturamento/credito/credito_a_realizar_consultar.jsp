@@ -470,12 +470,19 @@ function fechar(){
 								<td colspan="2" align="right">
 								<div align="left"><logic:notEmpty name="parcelamentoItem"
 									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.creditoTipo">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.creditoTipo.descricao"
-											size="30" maxlength="30" readonly="true"
-											style="background-color:#EFEFEF; border:0" />
+									<logic:notEmpty name="parcelamentoItem">
+										<logic:present name="creditoARealizarGeral.creditoARealizar">
+										    <html:text name="parcelamentoItem"
+										      property="creditoARealizarGeral.creditoARealizar.creditoTipo.descricao"
+										      size="30" maxlength="30" readonly="true"
+										      style="background-color:#EFEFEF; border:0" />
+										</logic:present>
+										<logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+										    <html:text name="parcelamentoItem"
+										      property="creditoARealizarGeral.creditoARealizarHistorico.creditoTipo.descricao"
+										      size="30" maxlength="30" readonly="true"
+										      style="background-color:#EFEFEF; border:0" />
+										</logic:notPresent>
 									</logic:notEmpty>
 								</logic:notEmpty></div>
 								</td>
@@ -485,194 +492,317 @@ function fechar(){
 								<td colspan="2" align="right">
 								<div align="left"><logic:notEmpty name="parcelamentoItem"
 									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.debitoCreditoSituacaoAtual">
-										<html:text name="parcelamentoItem"
+									<logic:notEmpty name="parcelamentoItem">
+										<logic:present name="creditoARealizarGeral.creditoARealizar">
+											<html:text name="parcelamentoItem"
 											property="creditoARealizarGeral.creditoARealizar.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao"
 											size="30" maxlength="30" readonly="true"
 											style="background-color:#EFEFEF; border:0" />
-									</logic:notEmpty>
-								</logic:notEmpty></div>
-								</td>
-							</tr>
-							<tr>
-								<td width="183" height="25"><strong>Usuário:</strong></td>
-								<td colspan="3">
-									<logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
-										<html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario.nomeUsuario" 
-												   size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-									</logic:present>		
-									<logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
-										<input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-									</logic:notPresent>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>Data e Hora de Gera&ccedil;&atilde;o do Crédito:</strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.geracaoCredito">
-										<input type="text" size="10" maxlength="10" readonly="true"
-											style="background-color:#EFEFEF; border:0"
-											value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" formatKey="date.format" />">
-										&nbsp; <input type="text" size="8" maxlength="8"
-											readonly="true" style="background-color:#EFEFEF; border:0"
-											value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" formatKey="hour.format" />">
-									</logic:notEmpty>
-								</logic:notEmpty>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>M&ecirc;s e Ano de Refer&ecirc;ncia do Crédito:</strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.anoMesReferenciaCredito">
-										<input type="text" size="7" maxlength="7" readonly="true"
-											style="background-color:#EFEFEF; border:0"
-											value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesReferenciaCredito())%>">
-									</logic:notEmpty>
-								</logic:notEmpty>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>M&ecirc;s e Ano da Cobran&ccedil;a do Crédito:</strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.anoMesCobrancaCredito">
-										<input type="text" size="7" maxlength="7" readonly="true"
-											style="background-color:#EFEFEF; border:0"
-											value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesCobrancaCredito())%>">
-									</logic:notEmpty>
-								</logic:notEmpty>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>N&uacute;mero de Presta&ccedil;&otilde;es
-								Creditadas:<strong></strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoRealizada">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoRealizada"
-											size="7" maxlength="7" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;" />
-									</logic:notEmpty>
-								</logic:notEmpty></div>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>N&uacute;mero Total de Presta&ccedil;&otilde;es:<strong><font
-									color="#FF0000"> </font></strong></strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus"
-											size="7" maxlength="7" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;" />
-									</logic:notEmpty>
-								</logic:notEmpty></div>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>Valor Total do Crédito:<strong></strong></strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.valorCredito">
-										<input type="text" size="17" maxlength="17" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;"
-											value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito())%>">
-									</logic:notEmpty>
-								</logic:notEmpty></div>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>Valor Restante a Ser Creditado:<strong></strong></strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.valorTotalComBonus">
-										<input type="text" size="17" maxlength="17" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;"
-											value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorTotalComBonus())%>">
-									</logic:notEmpty>
-								</logic:notEmpty></div>
-								</td>
-							</tr>
-							<tr>
-								<td><strong>Registro de Atendimento:<strong><font
-									color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
-								<td colspan="2" align="left"><logic:notEmpty
-									name="parcelamentoItem" property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.registroAtendimento">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.registroAtendimento.id"
-											size="9" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;" />
-									</logic:notEmpty>
-								</logic:notEmpty> &nbsp;</td>
-							</tr>
-							<tr>
-								<td><strong>Ordem de Servi&ccedil;o:<strong><font
-									color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
-								<td colspan="2" align="left"><logic:notEmpty
-									name="parcelamentoItem" property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.ordemServico">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.ordemServico.id"
-											size="9" readonly="true"
-											style="background-color:#EFEFEF; border:0; text-align: right;" />
-									</logic:notEmpty>
-								</logic:notEmpty> &nbsp;</td>
-							</tr>
-							<tr>
-								<td><strong>Origem do Crédito:<font color="#FF0000"></font></strong></td>
-								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem"
-										property="creditoARealizarGeral.creditoARealizar.creditoOrigem">
-										<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.creditoOrigem.descricaoCreditoOrigem"
-											size="45" maxlength="45" readonly="true"
+										</logic:present>
+										<logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+											<html:text name="parcelamentoItem"
+											property="creditoARealizarGeral.creditoARealizarHistorico.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao"
+											size="30" maxlength="30" readonly="true"
 											style="background-color:#EFEFEF; border:0" />
+										</logic:notPresent>
 									</logic:notEmpty>
 								</logic:notEmpty></div>
 								</td>
 							</tr>
-							
 							<tr>
-								<td><strong>Matrícula do Imóvel Origem:</strong></td>
-								<td colspan="2">
-									
-									<logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
-										<html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem.creditoARealizar.imovel.id"
-										size="12" maxlength="10" readonly="true"
-										style="background-color:#EFEFEF; border:0" />
-									</logic:present>
-									
-									<logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
-										<input type="text" name="imovelOrigem" size="12" maxlength="10"
-										readonly="true" style="background-color:#EFEFEF; border:0" />
-									</logic:notPresent>
-									
-								</td>
+							  <td width="183" height="25"><strong>Usuário:</strong></td>
+							  <td colspan="3">
+							    <logic:present name="creditoARealizarGeral.creditoARealizar">
+							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
+							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario.nomeUsuario" 
+							               size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:present>    
+							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
+							        <input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:notPresent>
+							    </logic:present>
+							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario">
+							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario.nomeUsuario" 
+							               size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:present>    
+							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario">
+							        <input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:notPresent>
+							    </logic:notPresent>
+							  </td>
 							</tr>
+							<tr>
+							  <td><strong>Data e Hora de Gera&ccedil;&atilde;o do Crédito:</strong></td>
+							  <td colspan="2" align="right">
+							  <div align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							    <logic:present name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.geracaoCredito">
+							        <input type="text" size="10" maxlength="10" readonly="true"
+							          style="background-color:#EFEFEF; border:0" 
+							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" 
+							          formatKey="date.format" />">
+							        &nbsp; <input type="text" size="8" maxlength="8"
+							          readonly="true" style="background-color:#EFEFEF; border:0"
+							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" formatKey="hour.format" />">
+							      </logic:notEmpty>
+							    </logic:present>
+							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar">
+							        <input type="text" size="10" maxlength="10" readonly="true"
+							          style="background-color:#EFEFEF; border:0" 
+							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar" 
+							          formatKey="date.format" />">
+							        &nbsp; <input type="text" size="8" maxlength="8"
+							          readonly="true" style="background-color:#EFEFEF; border:0"
+							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar" formatKey="hour.format" />">
+							      </logic:notEmpty>
+							    </logic:notPresent>
+							  </logic:notEmpty>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>M&ecirc;s e Ano de Refer&ecirc;ncia do Crédito:</strong></td>
+							  <td colspan="2" align="right">
+							  <div align="left">
+							    <logic:present name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.anoMesReferenciaCredito">
+							          <input type="text" size="7" maxlength="7" readonly="true"
+							            style="background-color:#EFEFEF; border:0"
+							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesReferenciaCredito())%>">
+							        </logic:notEmpty>
+							      </logic:notEmpty>
+							    </logic:present>
+							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.anoMesReferenciaCredito">
+							          <input type="text" size="7" maxlength="7" readonly="true"
+							            style="background-color:#EFEFEF; border:0"
+							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesReferenciaCredito())%>">
+							        </logic:notEmpty>
+							      </logic:notEmpty>
+							    </logic:notPresent>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>M&ecirc;s e Ano da Cobran&ccedil;a do Crédito:</strong></td>
+							  <td colspan="2" align="right">
+							  <div align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							      <logic:present name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.anoMesCobrancaCredito">
+							          <input type="text" size="7" maxlength="7" readonly="true"
+							            style="background-color:#EFEFEF; border:0"
+							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesCobrancaCredito())%>">
+							        </logic:notEmpty>
+							      </logic:present>
+							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.anoMesCobrancaCredito">
+							          <input type="text" size="7" maxlength="7" readonly="true"
+							            style="background-color:#EFEFEF; border:0"
+							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesCobrancaCredito())%>">
+							        </logic:notEmpty>
+							      </logic:notPresent>
+							  </logic:notEmpty>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>N&uacute;mero de Presta&ccedil;&otilde;es
+							  Creditadas:<strong></strong></td>
+							  <td colspan="2" align="right">
+							    <div align="left">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:present name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.prestacaoRealizadas">
+							            <html:text name="parcelamentoItem"
+							              property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas"
+							              size="7" maxlength="7" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;" />
+							          </logic:notEmpty>
+							        </logic:present>
+							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas">
+							            <html:text name="parcelamentoItem"
+							              property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas"
+							              size="7" maxlength="7" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;" />
+							          </logic:notEmpty>
+							        </logic:notPresent>
+							      </logic:notEmpty>
+							    </div>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>N&uacute;mero Total de Presta&ccedil;&otilde;es:<strong><font
+							    color="#FF0000"> </font></strong></strong></td>
+							  <td colspan="2" align="right">
+							  <div align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:present name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus">
+							            <html:text name="parcelamentoItem"
+							              property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus"
+							              size="7" maxlength="7" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;" />
+							          </logic:notEmpty>
+							        </logic:present>
+							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.numeroPrestacaoCreditoMenosBonus">
+							            <html:text name="parcelamentoItem"
+							              property="creditoARealizarGeral.creditoARealizarHistorico.numeroPrestacaoCreditoMenosBonus"
+							              size="7" maxlength="7" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;" />
+							          </logic:notEmpty>
+							        </logic:notPresent>
+							    </logic:notEmpty>
+							  </div>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>Valor Total do Crédito:<strong></strong></strong></td>
+							  <td colspan="2" align="right">
+							    <div align="left">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:present name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.valorCredito">
+							            <input type="text" size="17" maxlength="17" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;"
+							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito())%>">
+							          </logic:notEmpty>
+							        </logic:present>
+							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.valorCredito">
+							            <input type="text" size="17" maxlength="17" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;"
+							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getValorCredito())%>">
+							          </logic:notEmpty>
+							        </logic:notPresent>
+							      </logic:notEmpty>
+							    </div>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>Valor Restante a Ser Creditado:<strong></strong></strong></td>
+							  <td colspan="2" align="right">
+							    <div align="left">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							        <logic:present name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.valorTotalComBonus">
+							            <input type="text" size="17" maxlength="17" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;"
+							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorTotalComBonus())%>">
+							          </logic:notEmpty>
+							        </logic:present>
+							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.valorTotalComBonus">
+							            <input type="text" size="17" maxlength="17" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;"
+							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getValorTotalComBonus())%>">
+							          </logic:notEmpty>
+							        </logic:notPresent>
+							      </logic:notEmpty>
+							    </div>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>Registro de Atendimento:<strong><font
+							    color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
+							  <td colspan="2" align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							      <logic:present name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.registroAtendimento">
+							          <html:text name="parcelamentoItem"
+							            property="creditoARealizarGeral.creditoARealizar.registroAtendimento.id"
+							            size="9" readonly="true"
+							            style="background-color:#EFEFEF; border:0; text-align: right;" />
+							        </logic:notEmpty>
+							      </logic:present>
+							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.registroAtendimento">
+							          <html:text name="parcelamentoItem"
+							            property="creditoARealizarGeral.creditoARealizarHistorico.registroAtendimento.id"
+							            size="9" readonly="true"
+							            style="background-color:#EFEFEF; border:0; text-align: right;" />
+							        </logic:notEmpty>      
+							      </logic:notPresent>
+							  </logic:notEmpty> &nbsp;</td>
+							</tr>
+							<tr>
+							  <td><strong>Ordem de Servi&ccedil;o:<strong><font
+							    color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
+							  <td colspan="2" align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							      <logic:present name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.ordemServico">
+							          <html:text name="parcelamentoItem"
+							            property="creditoARealizarGeral.creditoARealizar.ordemServico.id"
+							            size="9" readonly="true"
+							            style="background-color:#EFEFEF; border:0; text-align: right;" />
+							        </logic:notEmpty>      
+							      </logic:present>
+							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.ordemServico">
+							            <html:text name="parcelamentoItem"
+							              property="creditoARealizarGeral.creditoARealizarHistorico.ordemServico.id"
+							              size="9" readonly="true"
+							              style="background-color:#EFEFEF; border:0; text-align: right;" />
+							          </logic:notEmpty>      
+							      </logic:notPresent>
+							  </logic:notEmpty> &nbsp;</td>
+							</tr>
+							<tr>
+							  <td><strong>Origem do Crédito:<font color="#FF0000"></font></strong></td>
+							  <td colspan="2" align="right">
+							  <div align="left">
+							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+							    <logic:present name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.creditoOrigem">
+							        <html:text name="parcelamentoItem"
+							          property="creditoARealizarGeral.creditoARealizar.creditoOrigem.descricaoCreditoOrigem"
+							          size="45" maxlength="45" readonly="true"
+							          style="background-color:#EFEFEF; border:0" />
+							      </logic:notEmpty>
+							    </logic:present>
+							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.creditoOrigem">
+							          <html:text name="parcelamentoItem"
+							            property="creditoARealizarGeral.creditoARealizarHistorico.creditoOrigem.descricaoCreditoOrigem"
+							            size="45" maxlength="45" readonly="true"
+							            style="background-color:#EFEFEF; border:0" />
+							      </logic:notEmpty>
+							    </logic:notPresent>  
+							  </logic:notEmpty></div>
+							  </td>
+							</tr>
+							<tr>
+							  <td><strong>Matrícula do Imóvel Origem:</strong></td>
+							  <td colspan="2">
+							    <logic:present name="creditoARealizarGeral.creditoARealizar">
+							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
+							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem.creditoARealizar.imovel.id"
+							        size="12" maxlength="10" readonly="true"
+							        style="background-color:#EFEFEF; border:0" />
+							      </logic:present>
+							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
+							        <input type="text" name="imovelOrigem" size="12" maxlength="10"
+							        readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:notPresent>
+							    </logic:present>
+							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
+							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.origem">
+							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem.creditoARealizarHistorico.imovel.id"
+							        size="12" maxlength="10" readonly="true"
+							        style="background-color:#EFEFEF; border:0" />
+							      </logic:present>
+							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.origem">
+							        <input type="text" name="imovelOrigem" size="12" maxlength="10"
+							        readonly="true" style="background-color:#EFEFEF; border:0" />
+							      </logic:notPresent>
+							    </logic:notPresent>
+							  </td>
+							</tr>						
 					</table>
 					<table width="100%" border="0">
 						<tr>

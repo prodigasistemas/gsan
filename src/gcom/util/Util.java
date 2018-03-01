@@ -4,7 +4,6 @@ import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import gcom.util.email.ServicosEmail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -15,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -48,7 +46,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -293,7 +290,21 @@ public class Util {
 
 		return ano + mes;
 	}
+	
+	public static Date formatarYYYYMMDDParaData(String data) {
+		String ano = data.substring(0, 4);
+		String mes = data.substring(4, 6);
+		String dia = data.substring(6, 8);
 
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
 	public static int formatarMesAnoParaAnoMes(int mesAno) {
 
 		String mesAnoString = "" + mesAno;
@@ -752,14 +763,6 @@ public class Util {
 		return retorno;
 	}
 	
-	public static void main (String [] args) {
-		Date data = Util.formatarDDMMAAAAParaDate("01/07/2017");
-		
-		System.out.println(data);
-		
-		System.out.println(Util.formatarDataComBarraDDMMAAAA(data));
-	}
-
 	/**
 	 * Converte a data passada em string retorna DDMMAAAA
 	 */
@@ -1845,6 +1848,10 @@ public class Util {
 			return "";
 		}
 
+	}
+	
+	public static String formatarMoedaRealComCifrao(BigDecimal valor) {
+		return "R$ " + Util.formatarMoedaReal(valor);
 	}
 
 	public static String formatarMoedaReal4Casas(BigDecimal valor) {
@@ -3835,7 +3842,31 @@ public class Util {
 
 		return retorno;
 	}
+	
+	public static Date gerarDataPrimeiroDiaApartirAnoMesRefencia(Integer anoMesReferencia) {
 
+		Date retorno = null;
+
+		String dataFormatacao = "" + anoMesReferencia;
+
+		Integer ano = new Integer(dataFormatacao.substring(0, 4));
+
+		Integer mes = new Integer(dataFormatacao.substring(4, 6));
+
+		Calendar calendar = new GregorianCalendar();
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+
+		calendar.set(Calendar.MONTH, (mes - 1));
+		calendar.set(Calendar.YEAR, ano);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+		retorno = calendar.getTime();
+
+		return retorno;
+	}
+	
 	/**
 	 * Gera uma data a partir do ano/mês de referência setando o primeiro dia do
 	 * mês.
@@ -4755,16 +4786,30 @@ public class Util {
 	 * @author Rômulo Aurélio
 	 */
 	public static String formatarTelefone(String telefone) {
-
 		String telefoneFormatado = "";
-
 		if (telefone != null && !telefone.equals("")) {
-
 			telefoneFormatado = telefone.substring(0, 4) + "-" + telefone.substring(4);
 		}
 
 		return telefoneFormatado;
+	}
+	
+	public static String formatarTelefone(String ddd, String telefone) {
+		String formatado = "";
+		
+		if (ddd != null && ddd.length() == 2) {
+			formatado += "(" + ddd + ") ";
+		}
+		
+		if (telefone != null && !telefone.equals("")) {
+			if (telefone.length() == 9) {
+				formatado += telefone.substring(0, 5) + "-" + telefone.substring(4);
+			} else {
+				formatado += telefone.substring(0, 4) + "-" + telefone.substring(4);
+			}
+		}
 
+		return formatado;
 	}
 
 	/**

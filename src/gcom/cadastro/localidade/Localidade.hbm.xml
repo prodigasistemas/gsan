@@ -27,51 +27,56 @@
 		<property name="indicadorBloqueio" type="java.lang.Short" column="loca_icbloqueio" length="2"/>
 		<property name="indicadorLocalidadeSede" type="java.lang.Short" column="loca_icsede" length="2"/>
 		<property name="codigoCentroCustoEsgoto" type="java.lang.String" column="loca_cdcentrocustoesgoto" length="10"/>
+
 		
 		<!-- associations -->
-		<!-- bi-directional many-to-one association to LocalidadePorte -->
+
 		<many-to-one name="localidadePorte" class="gcom.cadastro.localidade.LocalidadePorte" not-null="true">
 			<column name="lpor_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to Localidade -->
+
 		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
 			<column name="loca_cdelo"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to GerenciaRegional -->
+
 		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
 			<column name="greg_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to EnderecoReferencia -->
+
 		<many-to-one name="enderecoReferencia" class="gcom.cadastro.endereco.EnderecoReferencia" not-null="true">
 			<column name="edrf_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LocalidadeClasse -->
+
 		<many-to-one name="localidadeClasse" class="gcom.cadastro.localidade.LocalidadeClasse" not-null="true">
 			<column name="lcla_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LogradouroBairro -->
+
 		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="false">
 			<column name="lgbr_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LogradouroCep -->
+
 		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="false">
 			<column name="lgcp_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to unidadeNegocio -->
+
 		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
 			<column name="uneg_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to cliente -->
+
 		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
 			<column name="clie_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to hidrometroLocalArmazenagem -->
+
 		<many-to-one name="hidrometroLocalArmazenagem" class="gcom.micromedicao.hidrometro.HidrometroLocalArmazenagem" not-null="true">
 			<column name="hila_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to municipioPrincipal -->
+		
 		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="false">
 			<column name="muni_idprincipal"/>
+		</many-to-one>
+		
+		<many-to-one name="consumoTarifa" class="gcom.faturamento.consumotarifa.ConsumoTarifa" not-null="true">
+			<column name="cstf_id"/>
 		</many-to-one>
 
 	</class>

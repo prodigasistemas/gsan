@@ -1,15 +1,17 @@
 package gcom.gui.cobranca;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
@@ -23,205 +25,140 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- */
-public class ExibirConsultarListaParcelamentoDebitoAction extends
-		GcomAction {
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param actionMapping
-	 *            Descrição do parâmetro
-	 * @param actionForm
-	 *            Descrição do parâmetro
-	 * @param httpServletRequest
-	 *            Descrição do parâmetro
-	 * @param httpServletResponse
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+public class ExibirConsultarListaParcelamentoDebitoAction extends GcomAction {
 
-		// Seta a ação de retorno
-		ActionForward retorno = actionMapping
-				.findForward("consultarListaParcelamentoDebito");
-		
-		// Mudar isso quando tiver esquema de segurança
-		//HttpSession sessao = httpServletRequest.getSession(false);
+	private ParcelamentoDebitoActionForm form;
 
-		ParcelamentoDebitoActionForm parcelamentoDebitoActionForm = (ParcelamentoDebitoActionForm) actionForm;
-		
-		// Obtém a facahda
-		Fachada fachada = Fachada.getInstancia();
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		this.form = (ParcelamentoDebitoActionForm) actionForm;
 
-		// Pega os codigos que o usuario digitou para a pesquisa direta de imovel
-		String codigoImovel = httpServletRequest.getParameter("codigoImovel");
-		
+		String codigoImovel = request.getParameter("codigoImovel");
+
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
-			
-			// Pesquisa o imovel na base
-			FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+			Collection<ClienteImovel> clienteImovel = pesquisarClienteImovel(codigoImovel);
 
-			filtroClienteImovel.adicionarParametro(new ParametroSimples(
-					FiltroClienteImovel.IMOVEL_ID, codigoImovel));
-			
-			filtroClienteImovel.adicionarParametro(new ParametroSimples(
-					FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
-			
-			filtroClienteImovel.adicionarParametro(new ParametroNulo( FiltroClienteImovel.DATA_FIM_RELACAO));
+			resetar(request, clienteImovel);
 
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
-			
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro");
-			
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-			
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-		
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.imovelPerfil");
-				
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
-
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
-			
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("cliente");
-
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
-
-			filtroClienteImovel
-					.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
-
-			Collection<ClienteImovel> imovelPesquisado = fachada.pesquisar(
-					filtroClienteImovel, ClienteImovel.class.getName());
-
-			// Se nenhum imovel for encontrado a mensagem é enviada para a página
-			if (imovelPesquisado != null && imovelPesquisado.isEmpty()) {
-				httpServletRequest.setAttribute("enderecoFormatado","".toUpperCase());
-				parcelamentoDebitoActionForm.setNomeCliente("");
-				parcelamentoDebitoActionForm.setCpfCnpj("");
-				parcelamentoDebitoActionForm.setSituacaoAgua("");
-				parcelamentoDebitoActionForm.setSituacaoEsgoto("");
-				httpServletRequest.setAttribute("corImovel","exception");
-				parcelamentoDebitoActionForm.setInscricao(ConstantesSistema.CODIGO_IMOVEL_INEXISTENTE);
-            }
-			// obtem o imovel pesquisado
-			if (imovelPesquisado != null && !imovelPesquisado.isEmpty()) {
-				
-				ClienteImovel dadosImovel = (ClienteImovel) ((List) imovelPesquisado).get(0);
-				
-				//O endereço foi encontrado
-				if (dadosImovel.getImovel().getId() != null) 
-				{
-					parcelamentoDebitoActionForm.setCodigoImovel(""
-							+ dadosImovel.getImovel().getId());
-				}
-				if (dadosImovel.getImovel().getInscricaoFormatada() != null) 
-				{
-					parcelamentoDebitoActionForm.setInscricao(""
-							+ dadosImovel.getImovel().getInscricaoFormatada());
-				}
-				if (dadosImovel.getImovel().getLigacaoAguaSituacao() != null) 
-				{
-					parcelamentoDebitoActionForm.setSituacaoAgua(""
-							+ dadosImovel.getImovel().getLigacaoAguaSituacao().getDescricao());
-				}
-				if (dadosImovel.getImovel().getLigacaoEsgotoSituacao() != null) 
-				{
-					parcelamentoDebitoActionForm.setSituacaoEsgoto(""
-							+ dadosImovel.getImovel().getLigacaoEsgotoSituacao().getDescricao());
-				}
-				if (dadosImovel.getCliente().getNome() != null) 
-				{
-					parcelamentoDebitoActionForm.setNomeCliente(""
-							+ dadosImovel.getCliente().getNome());
-				}
-				if (dadosImovel.getImovel().getImovelPerfil() != null) 
-				{
-					parcelamentoDebitoActionForm.setImovelPerfil(""
-							+ dadosImovel.getImovel().getImovelPerfil().getDescricao());
-				}
-				if (dadosImovel.getCliente().getClienteTipo().getIndicadorPessoaFisicaJuridica() == 1 ){
-					if (dadosImovel.getCliente().getCpfFormatado() != null) 
-					{
-						parcelamentoDebitoActionForm.setCpfCnpj(""
-								+ dadosImovel.getCliente().getCpfFormatado());
-					}
-				}
-				else
-				{
-					if (dadosImovel.getCliente().getCnpjFormatado() != null) 
-					{
-						parcelamentoDebitoActionForm.setCpfCnpj(""
-								+ dadosImovel.getCliente().getCnpjFormatado());
-					}
-				}
-				if (dadosImovel.getImovel().getNumeroParcelamento() != null) 
-				{
-					parcelamentoDebitoActionForm.setParcelamento(""
-							+ dadosImovel.getImovel().getNumeroParcelamento());
-				}
-				if (dadosImovel.getImovel().getNumeroReparcelamento() != null) 
-				{
-					parcelamentoDebitoActionForm.setReparcelamento(""
-							+ dadosImovel.getImovel().getNumeroReparcelamento());
-				}
-				if (dadosImovel.getImovel().getNumeroReparcelamentoConsecutivos() != null) 
-				{
-					parcelamentoDebitoActionForm.setReparcelamentoConsecutivo(""
-							+ dadosImovel.getImovel().getNumeroReparcelamentoConsecutivos());
-				}
-				// Manda a colecao pelo request
-				httpServletRequest.setAttribute("imovelPesquisado",
-						imovelPesquisado);
-				String enderecoFormatado = "";
-				try {
-					enderecoFormatado = fachada.pesquisarEnderecoFormatado(new Integer(codigoImovel));
-				} catch (NumberFormatException e) {
-					
-					e.printStackTrace();
-				} catch (ControladorException e) {
-					
-					e.printStackTrace();
-				}
-				
-				httpServletRequest.setAttribute("enderecoFormatado",enderecoFormatado);
-				FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
-
-				filtroParcelamento.adicionarParametro(new ParametroSimples(
-							FiltroParcelamento.IMOVEL_ID, codigoImovel));
-
-				filtroParcelamento
-						.adicionarCaminhoParaCarregamentoEntidade("parcelamentoSituacao");
-
-				Collection<Parcelamento> colecaoParcelamento = fachada.pesquisar(filtroParcelamento, Parcelamento.class.getName() );
-				
-				if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) 
-				{
-					httpServletRequest.setAttribute("colecaoParcelamento", colecaoParcelamento);
-				}
-				else
-				{
-					if (colecaoParcelamento == null || colecaoParcelamento.isEmpty()){
-						throw new ActionServletException("atencao.parcelamento.inexistente");
-		        	}
-				}
+			if (clienteImovel != null && !clienteImovel.isEmpty()) {
+				setarForm(clienteImovel);
+				request.setAttribute("imovelPesquisado", clienteImovel);
+				request.setAttribute("enderecoFormatado", pesquisarEndereco(codigoImovel));
+				pesquisarParcelamentos(request, codigoImovel);
 			}
 		}
-		//httpServletRequest.setAttribute("ParcelamentoDebitoActionForm",parcelamentoDebitoActionForm);
-		return retorno;
+
+		return mapping.findForward("consultarListaParcelamentoDebito");
+	}
+
+	private void setarForm(Collection<ClienteImovel> clienteImovel) {
+		ClienteImovel dados = (ClienteImovel) ((List<ClienteImovel>) clienteImovel).get(0);
+		Imovel imovel = dados.getImovel();
+		Cliente cliente = dados.getCliente();
+
+		if (imovel.getId() != null) {
+			form.setCodigoImovel(imovel.getId().toString());
+		}
+
+		if (imovel.getInscricaoFormatada() != null) {
+			form.setInscricao(imovel.getInscricaoFormatada());
+		}
+
+		if (imovel.getLigacaoAguaSituacao() != null) {
+			form.setSituacaoAgua(imovel.getLigacaoAguaSituacao().getDescricao());
+		}
+
+		if (imovel.getLigacaoEsgotoSituacao() != null) {
+			form.setSituacaoEsgoto(imovel.getLigacaoEsgotoSituacao().getDescricao());
+		}
+
+		if (cliente.getNome() != null) {
+			form.setNomeCliente(cliente.getNome());
+		}
+
+		if (imovel.getImovelPerfil() != null) {
+			form.setImovelPerfil(imovel.getImovelPerfil().getDescricao());
+		}
+
+		if (cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica() == 1) {
+			if (cliente.getCpfFormatado() != null) {
+				form.setCpfCnpj(cliente.getCpfFormatado());
+			}
+		} else {
+			if (cliente.getCnpjFormatado() != null) {
+				form.setCpfCnpj(cliente.getCnpjFormatado());
+			}
+		}
+
+		if (imovel.getNumeroParcelamento() != null) {
+			form.setParcelamento(imovel.getNumeroParcelamento().toString());
+		}
+
+		if (imovel.getNumeroReparcelamento() != null) {
+			form.setReparcelamento(imovel.getNumeroReparcelamento().toString());
+		}
+
+		if (imovel.getNumeroReparcelamentoConsecutivos() != null) {
+			form.setReparcelamentoConsecutivo(imovel.getNumeroReparcelamentoConsecutivos().toString());
+		}
+	}
+
+	private String pesquisarEndereco(String codigoImovel) {
+		String enderecoFormatado = "";
+		try {
+			enderecoFormatado = getFachada().pesquisarEnderecoFormatado(new Integer(codigoImovel));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		return enderecoFormatado;
+	}
+
+	private void resetar(HttpServletRequest request, Collection<ClienteImovel> clienteImovel) {
+		if (clienteImovel != null && clienteImovel.isEmpty()) {
+			request.setAttribute("enderecoFormatado", "");
+			form.setNomeCliente("");
+			form.setCpfCnpj("");
+			form.setSituacaoAgua("");
+			form.setSituacaoEsgoto("");
+			request.setAttribute("corImovel", "exception");
+			form.setInscricao(ConstantesSistema.CODIGO_IMOVEL_INEXISTENTE);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void pesquisarParcelamentos(HttpServletRequest request, String codigoImovel) {
+		Filtro filtro = new FiltroParcelamento("parcelamento");
+		filtro.adicionarParametro(new ParametroSimples(FiltroParcelamento.IMOVEL_ID, codigoImovel));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("parcelamentoSituacao");
+
+		Collection<Parcelamento> parcelamentos = getFachada().pesquisar(filtro, Parcelamento.class.getName());
+		if (parcelamentos != null && !parcelamentos.isEmpty()) {
+			request.setAttribute("colecaoParcelamento", parcelamentos);
+		} else {
+			if (parcelamentos == null || parcelamentos.isEmpty()) {
+				throw new ActionServletException("atencao.parcelamento.inexistente");
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<ClienteImovel> pesquisarClienteImovel(String codigoImovel) {
+		Filtro filtro = new FiltroClienteImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, codigoImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+		filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.imovelPerfil");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("cliente.clienteTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
+
+		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
 	}
 }
