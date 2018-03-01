@@ -272,6 +272,10 @@
 	<module>
 		<ejb>BatchDesfazerParcelamentoPorEntradaNaoPagaMDB.jar</ejb>
 	</module>
+	
+	<module>
+		<ejb>BatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferenciaMDB.jar</ejb>
+	</module>
 
 		<module>
 		<ejb>BatchCancelarParcelamentosMDB.jar</ejb>

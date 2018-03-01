@@ -48,6 +48,7 @@ import gcom.batch.cadastro.TarefaBatchSuspenderImovelEmProgramaEspecial;
 import gcom.batch.cobranca.TarefaBatchAtualizarComandoAtividadeAcaoCobranca;
 import gcom.batch.cobranca.TarefaBatchCancelarParcelamentos;
 import gcom.batch.cobranca.TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga;
+import gcom.batch.cobranca.TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVista;
 import gcom.batch.cobranca.TarefaBatchEmitirCartasDeFinalDeAno;
 import gcom.batch.cobranca.TarefaBatchEmitirDocumentoCobranca;
@@ -2551,6 +2552,16 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 							
 							break;
 						}	
+						
+						case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA: 
+							TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia batch = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+	
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+	
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+	
+							break;
 							
 						default:
 					}
