@@ -77,6 +77,14 @@
 				path="/jsp/cadastro/imovel/imovel_consultar_parcelamento_debito_popup.jsp" />
 		</action>
 
+		<!-- PopUp de Comunicado de alto consumo -->		
+		<action name="ComunicadoAltoConsumoActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirComunicadoAltoConsumoPopupAction"
+			scope="request" path="/exibirComunicadoAltoConsumoPopupAction">
+			<forward name="exibirComunicadoAltoConsumoPopup"
+				path="/jsp/cadastro/imovel/imovel_comunicado_alto_consumo_popup.jsp" />
+		</action>
+
 		<action 
 			type="gcom.gui.cadastro.imovel.CancelarConsultarImovelAction"
 			validate="false"

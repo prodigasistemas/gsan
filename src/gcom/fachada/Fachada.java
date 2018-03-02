@@ -40117,6 +40117,14 @@ public class Fachada {
 		}
 	}
 	
+	public int retirarSituacaoCobranca(BufferedReader buffer, Usuario usuario) {
+		try {
+			return getControladorCobrancaPorResultado().retirarSituacaoCobranca(buffer, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	public Collection gerarComandoCobrancaEmpresa(ComandoEmpresaCobrancaContaHelper helper) {
 		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
 		return null;

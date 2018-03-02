@@ -41,6 +41,7 @@ import gcom.cobranca.EmpresaCobrancaContaPagamentos;
 import gcom.cobranca.ExtensaoComandoContasCobrancaEmpresaHelper;
 import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaConta;
+import gcom.cobranca.FiltroEmpresaCobrancaConta;
 import gcom.cobranca.GerarArquivoTextoContasCobrancaEmpresaHelper;
 import gcom.cobranca.GerarExtensaoComandoContasCobrancaEmpresaHelper;
 import gcom.cobranca.IRepositorioCobranca;
@@ -88,6 +89,8 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -814,8 +817,10 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	private void atualizarSituacaoCobranca(Integer idImovel, Integer idComando) throws ErroRepositorioException {
 		if (repositorio.isContasPagas(idImovel, idComando)) {
 			try {
-				atualizarImovelCobrancaSituacao(idImovel);
-				atualizarCobrancaSituacaoHistorico(idImovel);
+				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+				
+				atualizarImovelCobrancaSituacao(idImovel, new Date());
+				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
 			} catch (ControladorException e) {
 				e.printStackTrace();
 			}
@@ -823,7 +828,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void atualizarImovelCobrancaSituacao(Integer idImovel) throws ControladorException {
+	private void atualizarImovelCobrancaSituacao(Integer idImovel, Date dataRetirada) throws ControladorException {
 		Filtro filtro = new FiltroImovelCobrancaSituacao();
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel));
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID_COBRANCA_SITUACAO, CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA));
@@ -839,7 +844,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void atualizarCobrancaSituacaoHistorico(Integer idImovel) throws ControladorException {
+	private void atualizarCobrancaSituacaoHistorico(Integer idImovel, Integer anoMesRetirada, String observacaoRetirada, Date dataFim, Usuario usuario) throws ControladorException {
 		Filtro filtro = new FiltroCobrancaSituacaoHistorico();
 		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
 		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA));
@@ -847,11 +852,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
 		if (colecao != null && !colecao.isEmpty()) {
-			SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
-			
 			CobrancaSituacaoHistorico situacao = (CobrancaSituacaoHistorico) Util.retonarObjetoDeColecao(colecao);
-			situacao.setAnoMesCobrancaRetirada(parametros.getAnoMesFaturamento());
-			situacao.setObservacaoRetira("TODAS AS CONTAS FORAM PAGAS");
+			situacao.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
+			situacao.setObservacaoRetira(observacaoRetirada);
+			situacao.setUsuarioRetira(usuario);
+			situacao.setDataFimSituacao(new Date());
 			situacao.setUltimaAlteracao(new Date());
 			getControladorUtil().atualizar(situacao);
 		}
@@ -1519,6 +1524,32 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		return retorno;
 	}
 	
+	public int retirarSituacaoCobranca(BufferedReader buffer, Usuario usuario) throws ControladorException {
+		try {
+			int total = 0;
+			String linha = buffer.readLine();
+			while (linha != null && !linha.isEmpty()) {
+				String[] dados = linha.split(";");
+				Integer idImovel = Integer.parseInt(dados[0]);
+				Date data = Util.converteStringParaDate(dados[1]);
+				String motivo = dados[2].toUpperCase();
+				
+				atualizarImovelCobrancaSituacao(idImovel, data);
+				atualizarCobrancaSituacaoHistorico(idImovel, Util.formataAnoMes(data), "RETIRADA MANUAL - " + motivo, data, usuario);
+				retirarCobrancaConta(idImovel);
+				
+				total++;
+				linha = buffer.readLine();
+			}
+			
+			buffer.close();
+			
+			return total;
+		} catch (IOException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
 	public void gerarComando(ComandoEmpresaCobrancaContaHelper helper) throws ControladorException {
 		Integer id = inserirComandoEmpresaCobrancaConta(helper.getComando(), helper.getUsuario());
 		
@@ -1753,6 +1784,29 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			return (EmpresaCobranca) Util.retonarObjetoDeColecao(colecaoEmpresaCobranca);
 		} else {
 			return null;
+		}
+	}
+	
+	private void retirarCobrancaConta(Integer idImovel) throws ControladorException {
+		List<EmpresaCobrancaConta> contas = pesquisarContasEmCobranca(idImovel);
+		
+		for (EmpresaCobrancaConta conta : contas) {
+			conta.setDataRetirada(new Date());
+			conta.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(conta);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<EmpresaCobrancaConta> pesquisarContasEmCobranca(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroEmpresaCobrancaConta("id");
+		filtro.adicionarParametro(new ParametroSimples(FiltroEmpresaCobrancaConta.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroNulo(FiltroEmpresaCobrancaConta.DATA_RETIRADA));
+		
+		try {
+			return (List<EmpresaCobrancaConta>) getControladorUtil().pesquisar(filtro, EmpresaCobrancaConta.class.getName());
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.sistema", e);
 		}
 	}
 }

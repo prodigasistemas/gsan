@@ -26,9 +26,9 @@ function voltar(){
 }
  
 
-function cancelarParcelamento(parcelamentoId, imovelId) {
-	if (confirm('Confirmar cancelamento do parcelamento do imóvel ' + imovelId + '?')) {
-		window.location.href='exibirConsultarParcelamentoDebitoAction.do?acao=cancelar&codigoParcelamento='+parcelamentoId+'&codigoImovel='+imovelId;
+function cancelarParcelamento(codigoParcelamento, codigoImovel, motivo) {
+	if (confirm('Confirmar cancelamento do parcelamento do imóvel ' + codigoImovel + '?')) {
+		window.location.href='cancelarParcelamentoAction.do?codigoParcelamento='+codigoParcelamento+'&codigoImovel='+codigoImovel+'&motivo='+motivo;
 	}
 }
 
@@ -100,7 +100,6 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 		</table>
 		<p>&nbsp;</p>
 		
-			<!-- Início do Corpo - Fernanda Paiva  07/02/2006  -->
 			<table width="100%" border="0">
 				<tr>
 					<td colspan="3">
@@ -161,6 +160,15 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 										property="imovelPerfil" size="35" readonly="true"
 										style="background-color:#EFEFEF; border:0" /></td>
 								</tr>
+								
+								<tr><td>&nbsp;</td></tr>
+								
+								<tr>
+									<td height="10"><strong>Situação do Parcelamento:</strong></td>
+									<td><html:text name="ParcelamentoDebitoActionForm" property="situacao" size="35" readonly="true" style="background-color:#EFEFEF; border:0"/></td>
+								</tr>
+								
+								<tr><td>&nbsp;</td></tr>
 							</table>
 							</td>
 						</tr>
@@ -249,9 +257,8 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 					<td colspan="3">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr bordercolor="#90c7fc">
-							<td align="center" bgcolor="#90c7fc"><strong>Data do Parcelamento</strong></td>
-							<td align="center" bgcolor="#90c7fc"><strong>Hora do Parcelamento</strong></td>
-							<td align="center" bgcolor="#90c7fc"><strong>Data que foi desfeito o Parcelamento</strong></td>
+							<td width="50%" align="center" bgcolor="#90c7fc"><strong>Data e Hora do Parcelamento</strong></td>
+							<td width="50%" align="center" bgcolor="#90c7fc"><strong>Data que foi Desfeito o Parcelamento</strong></td>
 						</tr>
 						<%String cor = "#cbe5fe";%>	
 						<logic:present name="colecaoParcelamento">
@@ -263,9 +270,8 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 							cor = "#FFFFFF";%>
 						<tr bgcolor="#FFFFFF">
 							<%}%>
-							<td align="center"><bean:write name="parcelamento" property="parcelamento" formatKey="date.format"/></td>
-							<td align="center"><bean:write name="parcelamento" property="parcelamento" formatKey="hour.format"/></td>
-							<td align="center"><bean:write name="ParcelamentoDebitoActionForm" property="dataParcelamentoDesfeito" scope="request" /> </td>
+							<td width="50%" align="center"><bean:write name="parcelamento" property="parcelamento" formatKey="date.format"/> - <bean:write name="parcelamento" property="parcelamento" formatKey="hour.format"/></td>
+							<td width="50%" align="center"><bean:write name="ParcelamentoDebitoActionForm" property="dataParcelamentoDesfeito" scope="request" /> </td>
 						</tr>
 						</logic:iterate>
 						</logic:present>
@@ -463,10 +469,10 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 					<td colspan="3">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr bordercolor="#90c7fc">
-							<td align="center" bgcolor="#90c7fc"><strong>Valor Negociado</strong></td>
-							<td align="center" bgcolor="#90c7fc"><strong>Forma de Cobrança</strong></td>
-							<td align="center" bgcolor="#90c7fc"><strong>Usuário que Efetuou</strong></td>
-							<td align="center" bgcolor="#90c7fc"><strong>Usuário que Desfez</strong></td>							
+							<td width="15%" align="center" bgcolor="#90c7fc"><strong>Valor Negociado</strong></td>
+							<td width="25%" align="center" bgcolor="#90c7fc"><strong>Forma de Cobrança</strong></td>
+							<td width="30%" align="center" bgcolor="#90c7fc"><strong>Usuário que Efetuou</strong></td>
+							<td width="30%" align="center" bgcolor="#90c7fc"><strong>Usuário que Desfez</strong></td>							
 						</tr>
 						<% cor = "#cbe5fe";%>	
 						<logic:present name="colecaoParcelamento">
@@ -478,17 +484,16 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 								cor = "#FFFFFF";%>
 							<tr bgcolor="#FFFFFF">
 								<%}%>
-							<td align="right">
-							<logic:present name="parcelamento" property="valorNegociado">
-								<bean:write name="parcelamento" property="valorNegociado" formatKey="money.format"/>
-							</logic:present>	
-							<logic:notPresent name="parcelamento" property="valorNegociado">
-								&nbsp;
-							</logic:notPresent>	
-							</td>
-							<td align="left"><bean:write name="parcelamento" property="cobrancaForma.descricao" /></td>
 							
-							<td align="left" width="20%">
+							<td width="10%" align="center">
+								<logic:present name="parcelamento" property="valorNegociado">
+									<bean:write name="parcelamento" property="valorNegociado" formatKey="money.format"/>
+								</logic:present>	
+							</td>
+							
+							<td width="30%" align="center"><bean:write name="parcelamento" property="cobrancaForma.descricao" /></td>
+							
+							<td width="30%" align="center">
 								<logic:present name="parcelamento" property="usuario">
 									<logic:present name="parcelamento" property="usuario.nomeUsuario">
 										<bean:write name="parcelamento" property="usuario.nomeUsuario" />
@@ -501,9 +506,9 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 										</logic:present>	
 									</logic:present>
 								</logic:notPresent>
-								&nbsp;
 							</td>
-							<td align="left" width="20%">
+							
+							<td width="30%" align="center">
 								<logic:present name="parcelamento" property="usuarioDesfez">
 									<logic:present name="parcelamento" property="usuarioDesfez.nomeUsuario">
 										<bean:write name="parcelamento" property="usuarioDesfez.nomeUsuario" />
@@ -516,7 +521,6 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 										</logic:present>	
 									</logic:present>
 								</logic:notPresent>
-								&nbsp;
 							</td>
 							
 						</tr>
@@ -634,32 +638,32 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 								cor = "#FFFFFF";%>
 							<tr bgcolor="#FFFFFF">
 								<%}%>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorRestabelecimento" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorRestabelecimento" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorRestabelecimento">NÃO</logic:empty>
 							</td>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorContasRevisao" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorContasRevisao" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorContasRevisao">NÃO</logic:empty>
 							</td>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorGuiasPagamento" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorGuiasPagamento" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorGuiasPagamento">NÃO</logic:empty>
 							</td>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorAcrescimosImpontualdade" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorAcrescimosImpontualdade" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorAcrescimosImpontualdade">NÃO</logic:empty>
 							</td>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorDebitoACobrar" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorDebitoACobrar" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorDebitoACobrar">NÃO</logic:empty>
 							</td>
-							<td align="left">
+							<td align="center">
 								<logic:equal name="parcelamento" property="indicadorCreditoARealizar" value="1">SIM</logic:equal>
 								<logic:equal name="parcelamento" property="indicadorCreditoARealizar" value="2">NÃO</logic:equal>
 								<logic:empty name="parcelamento" property="indicadorCreditoARealizar">NÃO</logic:empty>
@@ -670,6 +674,42 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 					</table>
 					</td>
 				</tr>
+				
+				<logic:equal name="isParcelamentoCancelado" value="true">
+					<tr>
+						<td colspan="3" height="10"></td>
+					</tr>
+					
+					<tr>
+						<td colspan="3">
+						<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+							<tr>
+								<td><strong>Dados de Cancelamento:</strong></td>
+							</tr>
+						</table>
+						<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+							<tr bordercolor="#90c7fc">
+								<td align="center" width="22%" bgcolor="#90c7fc" ><strong>Data e Hora</strong></td>
+								<td align="center" width="39%" bgcolor="#90c7fc" ><strong>Usuário que Cancelou</strong></td>
+								<td align="center" width="39%" bgcolor="#90c7fc" ><strong>Motivo de Cancelamento</strong></td>
+							</tr>
+							
+							<tr bordercolor="#90c7fc">
+								<td align="center" width="22%" bgcolor="#FFFFFF">
+									<bean:write name="parcelamento" property="dataCancelamento" formatKey="date.format"/> - <bean:write name="parcelamento" property="dataCancelamento" formatKey="hour.format"/>
+								</td>
+								<td align="center" width="39%" bgcolor="#FFFFFF">
+									<bean:write name="parcelamento" property="usuarioCancelamento.nomeUsuario" />
+								</td>
+								<td align="center" width="39%" bgcolor="#FFFFFF">
+									<bean:write	name="parcelamento" property="motivoCancelamento.descricao" />
+								</td>
+							</tr>
+						</table>
+						</td>
+					</tr>
+				</logic:equal>
+				
 				<tr>
 					<td colspan="3" height="10"></td>
 				</tr>
@@ -708,11 +748,6 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 							<td colspan="3" align="right">
 									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
 									
-									<logic:equal name="possuiPermissaoCancelarParcelamento" value="true">				      				
-										<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar parcelamento" onClick="cancelarParcelamento(${parcelamento.id},${parcelamento.imovel.id})">
-									</logic:equal>
-									
-									 
 									<logic:present name="buttonCartaoCredito" scope="session">
 										<input type="button" name="" value="Consultar Dados Cartão Crédito" class="bottonRightCol" 
 											onclick="abrirPopup('consultarDadosParcelamentoCartaoCreditoAction.do?carregamentoInicial=ok',210,775);"/>			
@@ -741,6 +776,29 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 									
 							</td>
 						</tr>
+						
+						<logic:equal name="permiteCancelar" value="true">
+							<tr><td colspan="3"><hr></td></tr>
+							
+							<tr>
+								<logic:present name="colecaoMotivoCancelamento">
+									<td width="30%" align="right"><strong>Motivo do Cancelamento: </strong></td>
+									
+									<td width="45%" align="right">
+										<html:select property="parcelamentoMotivoCancelamento" style="width: 280px;">
+											<html:options collection="colecaoMotivoCancelamento" labelProperty="descricao" property="id"/>
+										</html:select>
+									</td>
+								</logic:present>
+								
+								<td width="25%" align="right">
+									<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar Parcelamento" 
+										onclick="cancelarParcelamento(${parcelamento.id},${parcelamento.imovel.id},parcelamentoMotivoCancelamento.value);">
+								</td>
+								
+							</tr>
+						</logic:equal>
+						
 					</table>
 					</td>
 				</tr>
@@ -751,7 +809,6 @@ function cancelarParcelamento(parcelamentoId, imovelId) {
 					<td colspan="3" align="left"><strong><font color="#FF0000">*</font></strong>
 					Campos obrigat&oacute;rios</td>
 				</tr>
-				<!-- Fim do Corpo - Fernanda Paiva 07/02/2006  -->
 			</table>
 			<p>&nbsp;</p>
 		</td>

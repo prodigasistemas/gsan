@@ -70,6 +70,7 @@ public class EmitirContaHelper implements Serializable {
 	private String consumoEconomia;
 	private String codigoAuxiliarString;
 	private String mensagemConsumoString;
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	private String valorContaString;
 	private String primeiraParte;
@@ -104,6 +105,7 @@ public class EmitirContaHelper implements Serializable {
 	private Integer numeroQuadraEntrega;
 	private Integer idRotaEntrega;
 	private Integer numeroSequencialRotaEntrega;
+	private Integer idConsumoAnormalidade;
 
 	// ---------------------------------------------------------
 	// Utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER)
@@ -1189,10 +1191,12 @@ public class EmitirContaHelper implements Serializable {
 		this.dataValidade = dataValidade;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoContaLinhasDescricaoServicosTarifasTotalHelper() {
 		return colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper) {
 		this.colecaoContaLinhasDescricaoServicosTarifasTotalHelper = colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	}
@@ -1873,5 +1877,13 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setEmailAgenciaReguladora(String emailAgenciaReguladora) {
 		this.emailAgenciaReguladora = emailAgenciaReguladora;
+	}
+
+	public Integer getIdConsumoAnormalidade() {
+		return idConsumoAnormalidade;
+	}
+
+	public void setIdConsumoAnormalidade(Integer idConsumoAnormalidade) {
+		this.idConsumoAnormalidade = idConsumoAnormalidade;
 	}
 }

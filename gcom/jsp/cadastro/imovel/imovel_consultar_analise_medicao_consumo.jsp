@@ -138,6 +138,12 @@ function pesquisarImovel() {
 	}
 }
 
+function exibirListaComunidadosAltoConsumo() {
+	var form = document.forms[0];
+	
+	abrirPopup('exibirComunicadoAltoConsumoPopupAction.do?imovelID='+ form.idImovelAnaliseMedicaoConsumo.value, 400, 400)
+}
+
 -->
 </script>
 </head>
@@ -1358,6 +1364,25 @@ function pesquisarImovel() {
 					</td>
 				</tr>
 
+				<!--  HISTORICO DO COMUNICADO DE ALTO CONSUMO -->
+				<logic:present name="comunicados" scope="session">
+				<tr>
+					<td>
+					<table width="100%" border="0" bgcolor="#99CCFF">
+						<tr bgcolor="#99CCFF">
+							<td align="center">
+								<span class="style2"> 
+									<a href="javascript:exibirListaComunidadosAltoConsumo();">
+										<b>Histórico de Geração do Comunicado de Alto Consumo</b> 
+									</a> 
+								</span>
+							</td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+				</logic:present>
+				
 				<tr>
 					<td colspan="6">&nbsp;</td>
 				</tr>

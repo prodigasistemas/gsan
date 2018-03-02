@@ -32230,7 +32230,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" and item.registroCodigo = :codigo ");
 
 			retorno = session.createQuery(consulta.toString())
-				.setDate("dataPesquisa",dataPesquisa)
 				.setShort("indicadorAceitacao", ConstantesSistema.NAO)
 				.setInteger("codigo", RegistroCodigo.CODIGO_SETE)
 				.list();

@@ -1351,7 +1351,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										colecaoResumoFaturamento, imovel,
 										faturamentoGrupo);
 								// --------------------------------------------------------------------------------
-
 							}// FIM DO LOOP DE IMOVEIS
 
 						}// FIM DO LOOP DE IMOVEIS
@@ -60820,6 +60819,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		try {
+			System.out.println("----> " + imovel.getId());
 			if (!preFaturamento && imovel.isImovelCondominio()) {
 				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				
@@ -61110,8 +61110,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		if ((colecaoCategorias != null && !colecaoCategorias.isEmpty())
-				&& (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper
-						.isEmpty())) {
+				&& ( (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper.isEmpty())) ) {
 
 			ContaCategoria contaCategoria = null;
 			ContaCategoriaPK contaCategoriaPK = null;
@@ -61253,6 +61252,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// GERAR CONTA CATEGORIA COM VALORES ZERADOS
 			helper = this.gerarContaCategoriaValoresZeradosPorCategoria(conta,
 					colecaoCategorias);
+			
+			if (valoresAguaEsgotoRateioPorEconomia != null ) {
+
+				ContaCategoria contaCategoria = (ContaCategoria) helper.getColecaoContaCategoria().iterator().next();
+				if (valoresAguaEsgotoRateioPorEconomia[0] != null) {
+					contaCategoria.setValorAgua(valoresAguaEsgotoRateioPorEconomia[0]);
+				}
+				
+				if (valoresAguaEsgotoRateioPorEconomia[1] != null ) {
+					contaCategoria.setValorEsgoto(valoresAguaEsgotoRateioPorEconomia[1]);
+				}
+			}
+			
 		}
 
 		return helper;
@@ -63997,6 +64009,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		return retorno;
 
+	}
+	
+	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException {
+		Collection<FaturamentoSituacaoHistorico> situacoes = pesquisarSituacaoEspecialFaturamentoVigente(idImovel, anoMesReferencia);
+		
+		return situacoes != null && situacoes.size() > 0; 
 	}
 
 	/**

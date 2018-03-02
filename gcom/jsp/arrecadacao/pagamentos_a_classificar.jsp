@@ -26,6 +26,17 @@
 				form.action = 'classificarPagamentosAction.do?devolver=1';
 		  		form.submit();
 			}
+			
+			function facilitador(objeto){
+				if (objeto.value == "0"){
+					objeto.value = "1";
+					marcarTodos();
+				}
+				else{
+					objeto.value = "0";
+					desmarcarTodos();
+				}
+			}
 		</script>
 		
 	</head>

@@ -38,10 +38,10 @@
 			<column name="oper_idoperacaopesquisa"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to Funcionalidade -->
-		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="false">
 			<column name="tbco_id"/>
 		</many-to-one>
-		<many-to-one name="argumentoPesquisa" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+		<many-to-one name="argumentoPesquisa" class="gcom.seguranca.transacao.TabelaColuna" not-null="false">
 			<column name="tbco_idargumento"/>
 		</many-to-one>
 		<!-- bi-directional one-to-many association to OperacaoEfetuada -->

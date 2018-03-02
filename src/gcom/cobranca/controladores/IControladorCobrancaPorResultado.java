@@ -7,6 +7,7 @@ import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 
+import java.io.BufferedReader;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,8 @@ public interface IControladorCobrancaPorResultado {
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarRelatorioPagamentosContasCobrancaEmpresa(RelatorioPagamentosContasCobrancaEmpresaHelper helper) throws ControladorException;
+
+	public int retirarSituacaoCobranca(BufferedReader buffer, Usuario usuario) throws ControladorException;
 
 	public void gerarComando(ComandoEmpresaCobrancaContaHelper helper) throws ControladorException;
 
