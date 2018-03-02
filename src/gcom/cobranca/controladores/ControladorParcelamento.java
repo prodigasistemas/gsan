@@ -285,7 +285,7 @@ public class ControladorParcelamento extends ControladorComum {
 					helper.getParcelamento().getAnoMesReferenciaFaturamento(),
 					helper.getParcelamento().getParcelamento(), 
 					new Date(), 
-					helper.getSaldoDevedorTotal(), 
+					conta.getValorDebitos(), 
 					BigDecimal.ZERO, 
 					conta.getIndicadorCobrancaMulta(), 
 					sistemaParametro.getAnoMesArrecadacao().toString(),
