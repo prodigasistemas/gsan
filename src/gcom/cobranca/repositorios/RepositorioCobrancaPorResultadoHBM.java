@@ -778,4 +778,84 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		}
 		return retorno;
 	}
+	
+	/**
+	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * 
+	 * Pesquisa os dados dos comandos
+	 * 
+	 * @author: Mariana Victor
+	 * @date: 04/05/2011
+	 */
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(Integer idEmpresa, Date cicloInicial, Date cicloFinal,
+			int numeroIndice, int quantidadeRegistros) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		Collection retorno = null;
+		String consulta = null;
+
+		try {
+			consulta = "select new gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper("
+					+ " comando.id," // 1
+					+ " comando.empresa.id," // 2
+					+ " comando.empresa.descricao," // 3
+					+ " comando.dataInicioCiclo," // 4
+					+ " comando.dataFimCiclo," // 5
+					+ " comando.dataExecucao," // 6
+					+ " comando.dataEncerramento," // 7
+					+ " comando.imovel.id," // 8
+					+ " comando.cliente.id," // 9
+					+ " comando.cliente.nome," // 10
+					//+ " comando.gerenciaRegional.id," // 11
+					//+ " comando.gerenciaRegional.nome," // 12
+					//+ " comando.unidadeNegocio.id," // 13
+					//+ " comando.unidadeNegocio.nome," // 14
+					+ " comando.localidadeInicial.id," // 15
+					//+ " comando.localidadeInicial.descricao," // 16
+					+ " comando.localidadeFinal.id," // 17
+					//+ " comando.localidadeFinal.descricao," // 18
+					+ " comando.codigoSetorComercialInicial," // 19
+					+ " comando.codigoSetorComercialFinal," // 20
+					+ " comando.numeroQuadraInicial," // 21
+					+ " comando.numeroQuadraFinal," // 22
+					+ "	comando.referenciaContaInicial," // 23
+					+ "	comando.referenciaContaFinal," // 24
+					+ " comando.dataVencimentoContaInicial," // 25
+					+ "	comando.dataVencimentoContaFinal," // 26
+					+ "	comando.valorMinimoConta," // 27
+					+ " comando.valorMaximoConta) " // 28
+					+ "from ComandoEmpresaCobrancaConta comando "
+					+ "left join comando.cliente cliente "
+					+ "left join comando.localidadeInicial localidadeInicial "
+					+ "left join comando.localidadeFinal localidadeFinal "
+					//+ "left join comando.unidadeNegocio unidadeNegocio "
+					+ "left join comando.gerenciaRegional gerenciaRegional "
+					+ "inner join comando.empresa empresa "
+					+ "where comando.empresa.id = :idEmpresa ";
+
+			if (cicloInicial != null && cicloFinal != null) {
+
+				consulta = consulta + " and " + "  comando.dataInicioCiclo between to_date('"
+						+ Util.formatarDataComTracoAAAAMMDD(cicloInicial) + "','YYYY-MM-DD') and to_date('"
+						+ Util.formatarDataComTracoAAAAMMDD(cicloFinal) + "','YYYY-MM-DD') ";
+
+			}
+
+			consulta = consulta + "ORDER BY comando.id ";
+
+			retorno = session.createQuery(consulta).setInteger("idEmpresa", idEmpresa).setMaxResults(quantidadeRegistros)
+					.setFirstResult(numeroIndice * quantidadeRegistros).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

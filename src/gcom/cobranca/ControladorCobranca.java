@@ -61113,37 +61113,6 @@ public class ControladorCobranca extends ControladorComum {
 	/**
 	 * [UC1167] Consultar Comandos de Cobrança por Empresa
 	 * 
-	 * Pesquisa os dados dos comandos
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 04/05/2011
-	 */
-	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa,
-			Date cicloInicial, Date cicloFinal, int pagina) throws ControladorException {
-
-		Collection<ConsultarComandosContasCobrancaEmpresaHelper> colecaoConsultarComandosContasCobrancaEmpresaHelper = null;
-
-		try {
-
-			// Variáveis para a paginação da pesquisa
-			// ========================================================================
-			final int quantidadeRegistros = 10;
-			// ========================================================================
-
-			colecaoConsultarComandosContasCobrancaEmpresaHelper = (Collection) repositorioCobranca
-					.pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(idEmpresa, cicloInicial, cicloFinal, pagina,
-							quantidadeRegistros);
-
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return colecaoConsultarComandosContasCobrancaEmpresaHelper;
-	}
-
-	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
-	 * 
 	 * Pesquisa os dados de um comando para exibir no popup
 	 * 
 	 * @author: Mariana Victor

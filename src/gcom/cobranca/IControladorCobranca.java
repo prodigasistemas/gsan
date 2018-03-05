@@ -39,7 +39,6 @@ import gcom.cobranca.bean.ParcelamentoRelatorioHelper;
 import gcom.cobranca.bean.PesquisarQtdeRotasSemCriteriosParaAcoesCobranca;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.cobranca.bean.TransferenciasDebitoHelper;
-import gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
@@ -1019,9 +1018,6 @@ public interface IControladorCobranca {
 	public ContratoParcelamento pesquisarContratoParcelamento(String numeroParcelamento) throws ControladorException;
 
 	public void verificarPossibilidadeCancelamentoContratoParcelamento(ContratoParcelamento contratoParcelamento) throws ControladorException;
-
-	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial,
-			Date comandoFinal, int pagina) throws ControladorException;
 
 	public Object[] pesquisarDadosPopupExtensaoComandoCobranca(Integer idComando, Date dateInicial, Date dateFinal) throws ControladorException;
 

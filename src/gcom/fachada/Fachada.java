@@ -36744,7 +36744,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int pagina) {
 		try {
-			return this.getControladorCobranca().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
+			return this.getControladorCobrancaPorResultado().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

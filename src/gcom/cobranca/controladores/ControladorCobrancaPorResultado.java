@@ -53,6 +53,7 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaB
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoPagamentoContasCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoParagentosCobancaEmpresaBuilder;
+import gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.parcelamento.Parcelamento;
@@ -1790,5 +1791,34 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		} catch (ControladorException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+	
+	/**
+	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * 
+	 * Pesquisa os dados dos comandos
+	 * 
+	 * @author: Mariana Victor
+	 * @date: 04/05/2011
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa,
+			Date cicloInicial, Date cicloFinal, int pagina) throws ControladorException {
+
+		Collection<ConsultarComandosContasCobrancaEmpresaHelper> colecaoConsultarComandosContasCobrancaEmpresaHelper = null;
+
+		try {
+
+			final int quantidadeRegistros = 10;
+
+			colecaoConsultarComandosContasCobrancaEmpresaHelper = (Collection) repositorio
+					.pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(idEmpresa, cicloInicial, cicloFinal, pagina,
+							quantidadeRegistros);
+
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return colecaoConsultarComandosContasCobrancaEmpresaHelper;
 	}
 }
