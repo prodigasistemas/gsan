@@ -31,6 +31,7 @@ import gcom.cadastro.tarifasocial.TarifaSocialCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
 import gcom.cobranca.CobrancaSituacao;
+import gcom.cobranca.CobrancaSituacaoTipo;
 import gcom.cobranca.bean.EmitirDocumentoCobrancaBoletimCadastroHelper;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.fachada.Fachada;
@@ -30209,47 +30210,54 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * @author Mariana Victor
 	 * @created 10/05/2011
 	 */
-	public void retirarSituacaoCobrancaImovel(Integer idImovel, Integer idCobrancaSituacao)
+	public void retirarCobrancaImovelCobrancaPorEmpresa(Integer idImovel, Integer idCobrancaSituacao, Usuario usuario)
 		throws ErroRepositorioException {
 
-		String consulta = "";
+		StringBuilder consulta = new StringBuilder();
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-				consulta = "update gcom.cadastro.imovel.Imovel set "
-
-						+ "cbst_id = null, imov_tmultimaalteracao = :ultimaAlteracao " 
-						
-						+ "where imov_id = :idImovel ";
-
-				session.createQuery(consulta).
-				   setTimestamp("ultimaAlteracao",new Date()).
-				   setInteger("idImovel",idImovel).
-				   executeUpdate();
-				
-				
-				consulta =  " update gcom.cadastro.imovel.ImovelCobrancaSituacao "
-					+ " set iscb_dtretiradacobranca = :data" 
-					+ " where imov_id = :imovel and cbst_id = :idCobrancaSituacao " 
-					+ " and iscb_dtretiradacobranca is null ";
-				
-				session.createQuery(consulta)
+			consulta.append(" update Imovel set cbst_id = null, imov_tmultimaalteracao = :ultimaAlteracao where imov_id = :idImovel ");
+	
+			session.createQuery(consulta.toString())
+			   		.setTimestamp("ultimaAlteracao",new Date())
+			   		.setInteger("idImovel",idImovel)
+			   		.executeUpdate();
+			
+			consulta = new StringBuilder();
+			consulta.append(" update ImovelCobrancaSituacao  set iscb_dtretiradacobranca = :data , iscb_tmultimaalteracao = :ultimaAlteracao ") 
+					.append(" where imov_id = :imovel and cbst_id = :idCobrancaSituacao and iscb_dtretiradacobranca is null ");
+			
+			session.createQuery(consulta.toString())
+					.setTimestamp("ultimaAlteracao",new Date())
 					.setDate("data", new Date())
 					.setInteger("imovel", idImovel)
 					.setInteger("idCobrancaSituacao", idCobrancaSituacao)
 					.executeUpdate();
-
-
+	
+			consulta = new StringBuilder();
+			consulta.append(" update CobrancaSituacaoHistorico ")
+				.append(" set cbsh_amcobrancaretirada = :retirada , cbsh_tmultimaalteracao = :ultimaAlteracao, ")
+				.append(" usur_idretira = :idUsuario, cbsh_dsobservacaoretira = :observacao ")
+				.append(" where imov_id = :imovel and cbsp_id = :idCobrancaSituacaoTipo and cbsh_amcobrancaretirada is null ");
+		
+			session.createQuery(consulta.toString())
+					.setTimestamp("ultimaAlteracao",new Date())
+					.setInteger("retirada", Util.formataAnoMes(new Date()))
+					.setInteger("imovel", idImovel)
+					.setInteger("idUsuario", usuario.getId())
+					.setInteger("idCobrancaSituacaoTipo", CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA)
+					.setString("observacao", "FIM DO CICLO DE COBRANÇA POR EMPRESA.")
+					.executeUpdate();
+			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-
 	}
-
 
 	/**
 	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado

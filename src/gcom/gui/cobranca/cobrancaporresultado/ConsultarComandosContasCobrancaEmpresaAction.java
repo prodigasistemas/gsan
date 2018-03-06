@@ -1,6 +1,7 @@
 package gcom.gui.cobranca.cobrancaporresultado;
 
 import gcom.batch.Processo;
+import gcom.batch.ProcessoTipo;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaConta;
 import gcom.fachada.Fachada;
@@ -40,7 +41,7 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 	 * @return
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws IOException  {
@@ -67,10 +68,8 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 		
 		Collection colecao = fachada.pesquisar(filtro, ComandoEmpresaCobrancaConta.class.getName());
 
-		if (colecao == null 
-				|| colecao.isEmpty()) {
-			throw new ActionServletException("atencao.pesquisa_inexistente", 
-					null, "Comandos de Contas em Cobrança");
+		if (colecao == null  || colecao.isEmpty()) {
+			throw new ActionServletException("atencao.pesquisa_inexistente", null, "Comandos de Contas em Cobrança");
 		} 
 		
 		ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) Util.retonarObjetoDeColecao(colecao);
@@ -79,10 +78,8 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 				&& httpServletRequest.getParameter("confirmado").equalsIgnoreCase("ok")) {
 
 			Map parametros = new HashMap();
-			parametros.put("idEmpresa", idEmpresa);
-			parametros.put("idRegistro", idRegistro);
-			parametros.put("idCobrancaSituacao", 
-					comando.getCobrancaSituacao().getId());
+			parametros.put("comando", comando);
+			parametros.put("idCobrancaSituacao", comando.getCobrancaSituacao().getId());
 			
 			fachada.inserirProcessoIniciadoParametrosLivres(parametros, 
 	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA, usuarioLogado);
@@ -110,8 +107,8 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 			Map parametros = new HashMap();
 			parametros.put("idEmpresa", idEmpresa);
 			parametros.put("idRegistro", idRegistro);
-			parametros.put("idCobrancaSituacao", 
-					comando.getCobrancaSituacao().getId());
+			parametros.put("idCobrancaSituacao", comando.getCobrancaSituacao().getId());
+			parametros.put("motivoEncerramento", ComandoEmpresaCobrancaConta.MOTIVO_ENCERRAMENTO_CANCELAMENTO_COBRANCA);
 			
 			fachada.inserirProcessoIniciadoParametrosLivres(parametros, 
 	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA, usuarioLogado);

@@ -25048,40 +25048,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	}
 
 	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 * 
-	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
-	 * determinado comando
-	 * 
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 * @throws ErroRepositorioException
-	 * 
-	 */
-	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando)
-			throws ErroRepositorioException {
-
-		Collection<Object[]> retorno = null;
-		Session session = HibernateUtil.getSession();
-		String consulta;
-
-		try {
-			consulta = " SELECT emprCobConta.imov_id AS idImovel, " + "  emprCobConta.orse_id AS idOS "
-					+ " FROM cobranca.empresa_cobranca_conta emprCobConta " + " WHERE emprCobConta.cecc_id = :idComando "
-					+ " group by emprCobConta.imov_id, emprCobConta.orse_id " + " order by emprCobConta.imov_id ";
-
-			retorno = session.createSQLQuery(consulta).addScalar("idImovel", Hibernate.INTEGER).addScalar("idOS", Hibernate.INTEGER)
-					.setInteger("idComando", idComando).setFirstResult(quantidadeInicio).setMaxResults(1000).list();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		return retorno;
-	}
-
-	/**
 	 * 
 	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
 	 * 

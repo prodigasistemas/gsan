@@ -1853,19 +1853,6 @@ public interface IRepositorioCobranca {
 	 */
 	public void atualizarIndicadorGeracaoTxt(Collection idsComandos) throws ErroRepositorioException;
 
-	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 *
-	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
-	 * determinado comando
-	 *
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 * @throws ErroRepositorioException
-	 * 
-	 */
-	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando) throws ErroRepositorioException;
-
 	public void atualizarDataEncerramentoComando(Integer idComando) throws ErroRepositorioException;
 
 	public Collection<Integer> pesquisarIdsImoveis(MovimentarOrdemServicoGerarOSHelper helper) throws ErroRepositorioException;

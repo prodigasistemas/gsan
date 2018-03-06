@@ -57,6 +57,9 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 	private BigDecimal valorTotal;
 	private Short indicadorPossuiCpfCnpj;
 
+	public static Integer MOTIVO_ENCERRAMENTO_PRAZO_VENCIDO =  1;
+	public static Integer MOTIVO_ENCERRAMENTO_CANCELAMENTO_COBRANCA =  2;
+	
 	public ComandoEmpresaCobrancaConta() {
 	}
 

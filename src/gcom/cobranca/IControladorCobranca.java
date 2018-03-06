@@ -1024,9 +1024,6 @@ public interface IControladorCobranca {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarValorTotalCobrancaComandoEmpresaPorImovel(Integer idComando) throws ControladorException;
 
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, String idEmpresa, Usuario usuarioLogado, Integer idComando,
-			Integer idCobrancaSituacao) throws ControladorException;
-
 	public void movimentarOrdemServicoEncerrarOS(MovimentarOrdemServicoEncerrarOSHelper helper, Usuario usuarioLogado) throws ControladorException;
 
 	public Collection<Integer> pesquisarIdsImoveis(MovimentarOrdemServicoGerarOSHelper helper) throws ControladorException;

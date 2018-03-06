@@ -831,7 +831,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					+ "left join comando.localidadeInicial localidadeInicial "
 					+ "left join comando.localidadeFinal localidadeFinal "
 					//+ "left join comando.unidadeNegocio unidadeNegocio "
-					+ "left join comando.gerenciaRegional gerenciaRegional "
+					//+ "left join comando.gerenciaRegional gerenciaRegional "
 					+ "inner join comando.empresa empresa "
 					+ "where comando.empresa.id = :idEmpresa ";
 
@@ -856,6 +856,65 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+	
+	/**
+	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
+	 * 
+	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
+	 * determinado comando
+	 * 
+	 * @author Mariana Victor
+	 * @created 09/05/2011
+	 * @throws ErroRepositorioException
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando)
+			throws ErroRepositorioException {
+
+		Collection<Object[]> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = " SELECT emprCobConta.imov_id AS idImovel, " + "  emprCobConta.orse_id AS idOS "
+					+ " FROM cobranca.empresa_cobranca_conta emprCobConta " + " WHERE emprCobConta.cecc_id = :idComando "
+					+ " group by emprCobConta.imov_id, emprCobConta.orse_id " + " order by emprCobConta.imov_id ";
+
+			retorno = session.createSQLQuery(consulta).addScalar("idImovel", Hibernate.INTEGER).addScalar("idOS", Hibernate.INTEGER)
+					.setInteger("idComando", idComando).setFirstResult(quantidadeInicio).setMaxResults(1000).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ErroRepositorioException {
+
+		List<ComandoEmpresaCobrancaConta> retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append(" SELECT comando FROM ComandoEmpresaCobrancaConta comando ")
+					.append(" where comando.dataFimCiclo is not null ")
+					.append(" and comando.dataFimCiclo < :dataAtual ")
+					.append(" and comando.dataEncerramento is null ");
+
+			retorno = (List<ComandoEmpresaCobrancaConta>) session.createQuery(consulta.toString())
+								.setDate("dataAtual", Util.formatarDataSemHora(new Date())).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
 }
