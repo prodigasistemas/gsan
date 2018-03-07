@@ -61,6 +61,7 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.repositorios.IRepositorioCobrancaPorResultadoHBM;
 import gcom.cobranca.repositorios.RepositorioCobrancaPorResultadoHBM;
+import gcom.faturamento.FaturamentoAtivCronRota;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
@@ -1831,13 +1832,13 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
-			Integer idComando, Integer idCobrancaSituacao) throws ControladorException {
+			ComandoEmpresaCobrancaConta comando, Integer idCobrancaSituacao) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
 		try {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-					UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, idComando);
+					UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId());
 
 			boolean flagFimPesquisa = false;
 			final int quantidadeImoveis = 1000;
@@ -1848,40 +1849,40 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			System.out.println("***************************************");
 
 			while (!flagFimPesquisa) {
-				Collection dadosEmpresaCobConta = this.repositorio.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio, idComando);
-
+				Collection dadosEmpresaCobConta = this.repositorio.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio, comando.getId());
+				
 				if (dadosEmpresaCobConta != null && !dadosEmpresaCobConta.isEmpty()) {
-
+					
 					Iterator iterDadosEmpresaCobConta = dadosEmpresaCobConta.iterator();
-
+					
 					if (dadosEmpresaCobConta.size() < quantidadeImoveis) {
 						flagFimPesquisa = true;
 					} else {
 						quantidadeInicio = quantidadeInicio + 1000;
 					}
-
+					
 					System.out.println("***************************************");
 					System.out.println("QUANTIDADE: " + dadosEmpresaCobConta.size());
 					System.out.println("***************************************");
-
+					
 					while (iterDadosEmpresaCobConta.hasNext()) {
 						Object[] dados = (Object[]) iterDadosEmpresaCobConta.next();
-
+						
 						if (dados != null) {
-
+							
 							if (dados[0] != null) {
 								Integer idImovel = (Integer) dados[0];
-
+								
 								this.getControladorImovel().retirarCobrancaImovelCobrancaPorEmpresa(idImovel, idCobrancaSituacao,  usuarioLogado);
 							}
-
+							
 							if (dados[1] != null) {
 								Integer idOrdemServico = (Integer) dados[1];
-
+								
 								Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
-
+								
 								Date dataAtual = new Date();
-
+								
 								// encerrar a ordem de serviço, com o motivo correspodente a decurso de prazo
 								this.getControladorOrdemServico().encerrarOSSemExecucao(idOrdemServico, dataAtual, usuarioLogado,
 										idMotivoEncerramento.toString(), dataAtual, null, null, null, null, null, null);
@@ -1892,9 +1893,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 					flagFimPesquisa = true;
 				}
 			}
-
-			this.repositorioCobranca.atualizarDataEncerramentoComando(idComando);
-
+			
+			this.repositorioCobranca.atualizarDataEncerramentoComando(comando.getId());
+				
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			System.out.println("******* FIM **********");
 		} catch (Exception ex) {

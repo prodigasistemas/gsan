@@ -4917,22 +4917,16 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						TarefaBatchEncerrarComandosDeCobrancaPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaPorEmpresa(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						String idEmpresa = (String) parametros.get("idEmpresa");
 						ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) parametros.get("comando");
 						Integer idCobrancaSituacao = (Integer) parametros.get("idCobrancaSituacao");
-						Integer motivoEncerramento = (Integer) parametros.get("motivoEncerramento");
 
 						Collection<ComandoEmpresaCobrancaConta> comandos = new ArrayList();
 						comandos.add(comando);
 
-						dadosEncerrarComandos.addParametro("idEmpresa", idEmpresa);
 						dadosEncerrarComandos.addParametro("usuario", usuario);
 						dadosEncerrarComandos.addParametro("comandos", comandos);
 						dadosEncerrarComandos.addParametro("idCobrancaSituacao", idCobrancaSituacao);
-						dadosEncerrarComandos.addParametro("motivoEncerramento", motivoEncerramento);
-
-
-						dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, comandos);
+						dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, obterIdsComandos(comandos));
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
 
@@ -4986,6 +4980,16 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 			throw e;
 		}
 		return codigoProcessoIniciadoGerado;
+	}
+	
+	private List<Integer> obterIdsComandos(Collection<ComandoEmpresaCobrancaConta> comandos) {
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		for (ComandoEmpresaCobrancaConta comando: comandos) {
+			ids.add(comando.getId());
+		}
+		
+		return ids;
 	}
 
 	/**

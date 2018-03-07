@@ -105,10 +105,8 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 			}
 			
 			Map parametros = new HashMap();
-			parametros.put("idEmpresa", idEmpresa);
-			parametros.put("idRegistro", idRegistro);
+			parametros.put("comando", comando);
 			parametros.put("idCobrancaSituacao", comando.getCobrancaSituacao().getId());
-			parametros.put("motivoEncerramento", ComandoEmpresaCobrancaConta.MOTIVO_ENCERRAMENTO_CANCELAMENTO_COBRANCA);
 			
 			fachada.inserirProcessoIniciadoParametrosLivres(parametros, 
 	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA, usuarioLogado);

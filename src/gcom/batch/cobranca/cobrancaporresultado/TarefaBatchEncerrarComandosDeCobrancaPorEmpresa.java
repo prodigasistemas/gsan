@@ -45,7 +45,7 @@ public class TarefaBatchEncerrarComandosDeCobrancaPorEmpresa extends TarefaBatch
 					new Object[] {
 					this.getIdFuncionalidadeIniciada(),
 					usuario,
-					comando.getId(),
+					comando,
 					idCobrancaSituacao});
 		}
 

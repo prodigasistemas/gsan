@@ -55,7 +55,7 @@ public interface IControladorCobrancaPorResultado {
 	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial,
 			Date comandoFinal, int pagina) throws ControladorException;
 	
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, Integer idComando,
+	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, ComandoEmpresaCobrancaConta comando,
 			Integer idCobrancaSituacao) throws ControladorException;
 	
 	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ControladorException;
