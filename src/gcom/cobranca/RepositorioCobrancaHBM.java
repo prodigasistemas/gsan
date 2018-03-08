@@ -612,8 +612,11 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "select sum(p.valorPagamento), min(p.dataPagamento) " + "from Pagamento p "
-					+ "inner join p.guiaPagamento guiaPagamento " + "where guiaPagamento.id = :id " + "group by guiaPagamento.id";
+			consulta = "select sum(p.valorPagamento), min(p.dataPagamento) from Pagamento p "
+					+ "inner join p.guiaPagamento guiaPagamentoGeral "
+					+ "inner join guiaPagamentoGeral.guiaPagamento guiaPagamento "
+					+ "where guiaPagamento.id = :id " 
+					+ "group by guiaPagamento.id";
 
 			retorno = session.createQuery(consulta).setInteger("id", new Integer(idGuiaPagamento)).list();
 
@@ -7891,12 +7894,16 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta = "SELECT MIN(pgmt.dataPagamento) " + "FROM Pagamento pgmt " + "INNER JOIN pgmt.guiaPagamento gpag "
+			consulta = "SELECT MIN(pgmt.dataPagamento) FROM Pagamento pgmt " 
+					+ "INNER JOIN pgmt.guiaPagamento gpagGeral "
+					+ "INNER JOIN gpagGeral.guiaPagamento gpag "
 					+ "INNER JOIN gpag.imovel imov " + "WHERE gpag.id = :idGuiaPagamento ";
 
 			data1 = (Date) session.createQuery(consulta).setInteger("idGuiaPagamento", idGuiaPagamento).uniqueResult();
 
-			consulta = "SELECT MIN(pgmt.dataPagamento) " + "FROM Pagamento pgmt " + "INNER JOIN pgmt.guiaPagamento gpag "
+			consulta = "SELECT MIN(pgmt.dataPagamento) FROM Pagamento pgmt " 
+					+ "INNER JOIN pgmt.guiaPagamento gpagGeral "
+					+ "INNER JOIN gpagGeral.guiaPagamento gpag "
 					+ "INNER JOIN gpag.imovel imov " + "WHERE pgmt.imovel.id= :idImovel and pgmt.debitoTipo.id = :idDebitoTipo";
 
 			data2 = (Date) session.createQuery(consulta).setInteger("idImovel", idImovel).setInteger("idDebitoTipo", idDebitoTipo)
@@ -19793,8 +19800,11 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		String consulta;
 
 		try {
-			consulta = "SELECT gpag " + "FROM GuiaPagamento gpag " + "INNER JOIN FETCH gpag.cliente clie "
-					+ "INNER JOIN FETCH gpag.debitoTipo dbtp " + "INNER JOIN FETCH gpag.localidade loca "
+			consulta = "SELECT gpag FROM GuiaPagamento gpag " 
+					+ "INNER JOIN FETCH gpag.cliente clie "
+					+ "INNER JOIN FETCH gpag.debitoTipo dbtp " 
+					+ "INNER JOIN FETCH gpag.localidade loca "
+					+ "INNER JOIN FETCH gpag.guiaPagamentoGeral ggeral "
 					+ "WHERE clie.id = :idCliente AND gpag.dataVencimento = :dataVencimento";
 
 			retorno = (GuiaPagamento) session.createQuery(consulta).setInteger("idCliente", idCliente)
@@ -26668,4 +26678,36 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao, int numeroIncial, int numeroFinal) throws ErroRepositorioException {
+
+	    Collection retorno = null;
+
+	    Session session = HibernateUtil.getSession();
+	    String consulta;
+
+	    try {
+
+	      consulta = "SELECT distinct parc.id, parc.parcelamento, imov.id  " + "FROM DebitoACobrar dbac "
+	          + "INNER JOIN dbac.parcelamento parc " + "INNER JOIN parc.imovel imov "
+	          + "WHERE parc.parcelamentoSituacao = :parcelamentoSituacao "
+	          + "AND (parc.valorEntrada IS NOT NULL AND parc.valorEntrada > 0) " + "AND dbac.numeroPrestacaoCobradas = 0 "
+	          + "AND dbac.debitoCreditoSituacaoAtual = :normal ";
+
+	      retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
+	          .setInteger("normal", DebitoCreditoSituacao.NORMAL)
+	          .setFirstResult(numeroIncial)
+	          .setMaxResults(numeroFinal)
+	          .list();
+
+	    } catch (HibernateException e) {
+	      // levanta a exceção para a próxima camada
+	      throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	      // fecha a sessão
+	      HibernateUtil.closeSession(session);
+	    }
+
+	    return retorno;
+	  }
 }

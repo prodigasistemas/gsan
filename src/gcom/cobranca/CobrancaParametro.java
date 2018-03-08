@@ -11,7 +11,8 @@ public class CobrancaParametro implements Serializable {
 	private String valor;
 
 	public enum NOME_PARAMETRO_COBRANCA {
-		DATA_INICIO_PARCELAMENTO_GSAN;
+		DATA_INICIO_PARCELAMENTO_GSAN,
+		QUANTIDADE_DIAS_VENCIMENTO_GUIA;
 	}
 
 	public Integer getId() {

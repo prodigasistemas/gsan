@@ -1208,52 +1208,47 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
 	 */
 	private GuiaPagamento verificarExistenciaGuiaPagamento(String idImovel, String idCliente, String idGuiaPagamento){
 	 	
-			//Cria a variável que vai armazenar a guiade pagamento pesquisada
 		 	GuiaPagamento guiaPagamentoDigitada = null;
 		 	
-		 	//Cria uma instância da fachada
 		 	Fachada fachada = Fachada.getInstancia();
 		 	
-		 	//Cria o filtro da guia para pesquisar
 			FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 			FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
 			
-			//Caso o usuário tenha informado o imóvel, seta o código do imóvel no filtro da guia 
 			if(idImovel != null && !idImovel.trim().equalsIgnoreCase("")){
 			  filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.IMOVEL_ID,idImovel));
-			  filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.IMOVEL_ID,idImovel));
+			  filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 			  
-			  //Caso o usuário tenha informado o cliente, seta o código do cliente no filtro da guia
+			  filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.IMOVEL_ID,idImovel));
+			  filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+
 			}else if(Util.verificarNaoVazio(idCliente)){
 			  filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.CLIENTE_ID,idCliente));
-			  filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.CLIENTE_ID,idCliente));
+			  filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 			  
-			  //Caso não tenha informado nem o imóvel e nem o cliente, levanta uma exceção para o usuário
-			  //indicando que o imóvel ou o cliente tem de ser informados
+			  filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.CLIENTE_ID,idCliente));
+			  filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 			}else{
 			  throw new ActionServletException("atencao.naoinformado", null, "Imóvel ou Cliente");
 			}
 			
-			//Seta o códigoda guia no filtro e indica quais objetos para carregar no retorno da pesquisa
 			filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID,idGuiaPagamento));
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
 			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
-			
-			//Pesquisa a guia de pagamento no sistema
+
+			filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+
 			Collection colecaoGuiaPagamento = fachada.pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 			
-			//Caso não exista guia de pagamento cadastrada no sistema, levanta uma exceção para o
-			//usuário indicando que a guia de apagamento não está cadastrada
-			//Caso contrário recupera a guia de pagamento pesquisada
 			if(colecaoGuiaPagamento != null && !colecaoGuiaPagamento.isEmpty()){
-			  // throw new ActionServletException("atencao.naocadastrado",null, "Guia de Pagamento");
 				guiaPagamentoDigitada = (GuiaPagamento)Util.retonarObjetoDeColecao(colecaoGuiaPagamento);
 			}
 			else{
-				
 				filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID,idGuiaPagamento));
+				
 				filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
 				filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("localidade");
+				filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 				
 				colecaoGuiaPagamento = fachada.pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName());
 				
@@ -1271,10 +1266,9 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
 					guiaPagamentoDigitada.setImovel(guiaPagamentoHistorico.getImovel());
 					guiaPagamentoDigitada.setCliente(guiaPagamentoHistorico.getCliente());
 					guiaPagamentoDigitada.setValorDebito(guiaPagamentoHistorico.getValorDebito());
+					guiaPagamentoDigitada.setGuiaPagamentoGeral(guiaPagamentoHistorico.getGuiaPagamentoGeral());
 				}
 			}
-		 	
-			//Retorna a guia de pagamento pesquisada ou um objeto vazio se a guia não existir 
 		 	return guiaPagamentoDigitada;
 		 }
 	
@@ -1941,7 +1935,7 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
     			pagamento.setPagamentoSituacaoAnterior(null);
     			pagamento.setDebitoTipo(debitoTipo);	
     			pagamento.setContaGeral(null);
-    			pagamento.setGuiaPagamento(guiaPagamento);
+    			pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
     			pagamento.setDebitoACobrarGeral(null);
     			pagamento.setLocalidade(localidade);
     			pagamento.setDocumentoTipo(documentoTipo);
@@ -2269,7 +2263,8 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		Collection colecaoGuiaPagamento = fachada.pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 
 		// Caso exista a guia de pagamento para o imóvel ou o cliente informado
@@ -2289,7 +2284,8 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("localidade");
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("imovel");
 			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("cliente");
-
+			filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral");
+			
 			colecaoGuiaPagamento = fachada.pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName());
 			
 			if (colecaoGuiaPagamento == null || colecaoGuiaPagamento.isEmpty()) {
@@ -2307,6 +2303,7 @@ public class ExibirInserirPagamentosTipoInclusaoManualAction extends GcomAction 
 				guiaPagamentoDigitada.setImovel(guiaPagamentoHistorico.getImovel());
 				guiaPagamentoDigitada.setCliente(guiaPagamentoHistorico.getCliente());
 				guiaPagamentoDigitada.setValorDebito(guiaPagamentoHistorico.getValorDebito());
+				guiaPagamentoDigitada.setGuiaPagamentoGeral(guiaPagamentoHistorico.getGuiaPagamentoGeral());
 				
 			}
 		}

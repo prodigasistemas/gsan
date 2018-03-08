@@ -467,7 +467,7 @@ public class ControladorArrecadacaoJUAZEIROSEJB extends ControladorArrecadacao i
 			
 			if (guiaPagamento != null) {
 				pagamento.setDebitoTipo(guiaPagamento.getDebitoTipo());
-				pagamento.setGuiaPagamento(guiaPagamento);
+				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 				pagamento.setLocalidade(guiaPagamento.getLocalidade());
 				pagamento.setImovel(guiaPagamento.getImovel());
 			}

@@ -149,6 +149,7 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		return guia;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String obterLinkBoletoBB(Integer guiaPagamentoId) {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
@@ -159,4 +160,5 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
+	
 }

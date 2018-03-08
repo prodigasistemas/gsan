@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.DocumentoTipo;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.debito.DebitoACobrarGeral;
@@ -59,7 +60,7 @@ public class Pagamento extends ObjetoTransacao {
 
 	@ControleAlteracao(value=FiltroPagamento.GUIA_PAGAMENTO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
-	private gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento;
+	private GuiaPagamentoGeral guiaPagamento;
 
 	@ControleAlteracao(value=FiltroPagamento.DOCUMENTO_TIPO,
 			funcionalidade={ATRIBUTOS_INSERIR_PAGAMENTO, ATRIBUTOS_INSERIR_PAGAMENTO_CONTRATO_PARCELAMENTO})
@@ -117,9 +118,9 @@ public class Pagamento extends ObjetoTransacao {
 			ContaGeral contaGeral,
 			Localidade localidade,
 			DebitoTipo debitoTipo,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior,
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento,
+			PagamentoSituacao pagamentoSituacaoAtual,
+			PagamentoSituacao pagamentoSituacaoAnterior,
+			GuiaPagamentoGeral guiaPagamento,
 			DocumentoTipo documentoTipo, AvisoBancario avisoBancario,
 			Imovel imovel, ArrecadadorMovimentoItem arrecadadorMovimentoItem,
 			ArrecadacaoForma arrecadacaoForma, BigDecimal valorPagamento,
@@ -156,9 +157,9 @@ public class Pagamento extends ObjetoTransacao {
 			ContaGeral contaGeral,
 			Localidade localidade,
 			DebitoTipo debitoTipo,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual,
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior,
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento,
+			PagamentoSituacao pagamentoSituacaoAtual,
+			PagamentoSituacao pagamentoSituacaoAnterior,
+			GuiaPagamentoGeral guiaPagamento,
 			DocumentoTipo documentoTipo, AvisoBancario avisoBancario,
 			Imovel imovel, ArrecadadorMovimentoItem arrecadadorMovimentoItem,
 			ArrecadacaoForma arrecadacaoForma, BigDecimal valorPagamento,
@@ -267,26 +268,23 @@ public class Pagamento extends ObjetoTransacao {
 		return this.pagamentoSituacaoAtual;
 	}
 
-	public void setPagamentoSituacaoAtual(
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAtual) {
+	public void setPagamentoSituacaoAtual(PagamentoSituacao pagamentoSituacaoAtual) {
 		this.pagamentoSituacaoAtual = pagamentoSituacaoAtual;
 	}
 
-	public gcom.arrecadacao.pagamento.PagamentoSituacao getPagamentoSituacaoAnterior() {
+	public PagamentoSituacao getPagamentoSituacaoAnterior() {
 		return this.pagamentoSituacaoAnterior;
 	}
 
-	public void setPagamentoSituacaoAnterior(
-			gcom.arrecadacao.pagamento.PagamentoSituacao pagamentoSituacaoAnterior) {
+	public void setPagamentoSituacaoAnterior(PagamentoSituacao pagamentoSituacaoAnterior) {
 		this.pagamentoSituacaoAnterior = pagamentoSituacaoAnterior;
 	}
 
-	public gcom.arrecadacao.pagamento.GuiaPagamento getGuiaPagamento() {
+	public GuiaPagamentoGeral getGuiaPagamento() {
 		return this.guiaPagamento;
 	}
 
-	public void setGuiaPagamento(
-			gcom.arrecadacao.pagamento.GuiaPagamento guiaPagamento) {
+	public void setGuiaPagamento(GuiaPagamentoGeral guiaPagamento) {
 		this.guiaPagamento = guiaPagamento;
 	}
 
@@ -318,8 +316,7 @@ public class Pagamento extends ObjetoTransacao {
 		return this.arrecadadorMovimentoItem;
 	}
 
-	public void setArrecadadorMovimentoItem(
-			ArrecadadorMovimentoItem arrecadadorMovimentoItem) {
+	public void setArrecadadorMovimentoItem(ArrecadadorMovimentoItem arrecadadorMovimentoItem) {
 		this.arrecadadorMovimentoItem = arrecadadorMovimentoItem;
 	}
 
