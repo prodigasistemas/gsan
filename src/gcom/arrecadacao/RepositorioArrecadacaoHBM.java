@@ -24070,10 +24070,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setContaGeral(conta);
 						}
 						if (dadosPagamento[3] != null) {
+							GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
+							guiaGeral.setId((Integer)dadosPagamento[3]);
+							
 							GuiaPagamento guia = new GuiaPagamento();
 							guia.setId((Integer)dadosPagamento[3]);
-							guia.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer)dadosPagamento[3]));
-							
+							guia.setGuiaPagamentoGeral(guiaGeral);
+
 							if(dadosPagamento[4] != null){
 								Parcelamento parcelamento = new Parcelamento();
 								parcelamento.setId((Integer) dadosPagamento[4]);
@@ -24093,8 +24096,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								debitoTipo.setId((Integer) dadosPagamento[7]);
 								guia.setDebitoTipo(debitoTipo);
 							}
+							guiaGeral.setGuiaPagamento(guia);
 							
-							pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
+							pagamento.setGuiaPagamento(guiaGeral);
 							
 						}
 						if (dadosPagamento[8] != null) {
