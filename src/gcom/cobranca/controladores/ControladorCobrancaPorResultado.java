@@ -811,6 +811,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			try {
 				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
 				
+				atualizarSituacaoCobrancaImovel(idImovel);
 				atualizarImovelCobrancaSituacao(idImovel, new Date());
 				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
 			} catch (ControladorException e) {
@@ -834,6 +835,22 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			getControladorUtil().atualizar(situacao);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void atualizarSituacaoCobrancaImovel(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
+		
+		Collection<Imovel> colecao = getControladorUtil().pesquisar(filtro, Imovel.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
+			imovel.setCobrancaSituacao(null);
+			imovel.setCobrancaSituacaoTipo(null);
+			imovel.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(imovel);
+		}
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private void atualizarCobrancaSituacaoHistorico(Integer idImovel, Integer anoMesRetirada, String observacaoRetirada, Date dataFim, Usuario usuario) throws ControladorException {
