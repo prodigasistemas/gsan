@@ -1332,12 +1332,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
-								if ((imovel.getId().intValue() == 7107323)
-										|| (imovel.getId().intValue() == 7732821)
-										|| (imovel.getId().intValue() == 7732813)
-										|| (imovel.getId().intValue() == 7732414)) {
-									break;
-								}
 								// FATURAMENTO ATUAL
 								// --------------------------------------------------------------------------------
 								this.faturarImovel(
