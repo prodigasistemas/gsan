@@ -549,14 +549,14 @@ face: Verdana, Arial, Helvetica, sans-serif;
 											<td width="10%" align="center">${pagamento.imovel.id}&nbsp;</td>
 											<td width="10%" align="center">${pagamento.cliente.id}&nbsp;</td>
 											<td width="15%" align="center"><logic:notEmpty
-												name="pagamento" property="guiaPagamento">
+												name="pagamento" property="guiaPagamento.guiaPagamento">
 												<logic:notEmpty name="pagamento"
-													property="guiaPagamento.debitoTipo">
+													property="guiaPagamento.guiaPagamento.debitoTipo">
 													<logic:present name="pagamento"
 														property="debitoTipo.descricao">
 														<a
-															href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getId() %>')"><font
-															color="#ff0000">${pagamento.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
+															href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getGuiaPagamento().getId() %>')"><font
+															color="#ff0000">${pagamento.guiaPagamento.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
 														</logic:present>
 												</logic:notEmpty>
 											</logic:notEmpty> <logic:empty name="pagamento"
@@ -571,11 +571,11 @@ face: Verdana, Arial, Helvetica, sans-serif;
 
 											<%--valor da guia de pagamento --%>
 											<td width="10%" align="right"><logic:notEmpty
-												name="pagamento" property="guiaPagamento">
+												name="pagamento" property="guiaPagamento.guiaPagamento">
 												<logic:notEmpty name="pagamento"
-													property="guiaPagamento.valorDebito">
+													property="guiaPagamento.guiaPagamento.valorDebito">
 													<bean:write name="pagamento"
-														property="guiaPagamento.valorDebito"
+														property="guiaPagamento.guiaPagamento.valorDebito"
 														formatKey="money.format" />&nbsp;
 													</logic:notEmpty>
 											</logic:notEmpty></td>
@@ -623,27 +623,25 @@ face: Verdana, Arial, Helvetica, sans-serif;
 											<td width="10%" align="center"><font color="#ff0000">
 											${pagamentoHistorico.cliente.id} </font> &nbsp;</td>
 
-											<td width="15%" align="center"><logic:notEmpty
-												name="pagamentoHistorico" property="guiaPagamento">
-												<a
-													href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')">${pagamentoHistorico.guiaPagamento.debitoTipo.descricao}</a>&nbsp;
-														</logic:notEmpty><logic:empty name="pagamentoHistorico"
-												property="guiaPagamento">${pagamentoHistorico.debitoTipo.descricao} </logic:empty>
+											<td width="15%" align="center">
+												<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral">
+													<a
+														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getGuiaPagamento().getId() %>')">${pagamentoHistorico.guiaPagamentoGeral.guiaPagamento.debitoTipo.descricao}</a>&nbsp;
+												</logic:notEmpty>
+												<logic:empty name="pagamentoHistorico" property="guiaPagamentoGeral">${pagamentoHistorico.debitoTipo.descricao} </logic:empty>
 											</td>
 
 
 
-											<td width="10%" align="right"><logic:notEmpty
-												name="pagamentoHistorico" property="guiaPagamento">
-												<logic:notEmpty name="pagamentoHistorico"
-													property="guiaPagamento.valorDebito">
-													<font color="#ff0000"> <bean:write
-														name="pagamentoHistorico"
-														property="guiaPagamento.valorDebito"
-														formatKey="money.format" /> </font>	
-																&nbsp;
+											<td width="10%" align="right">
+												<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral">
+													<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral.guiaPagamento.valorDebito">
+														<font color="#ff0000"> 
+															<bean:write name="pagamentoHistorico" property="guiaPagamento.valorDebito" formatKey="money.format" /> 
+														</font> &nbsp;
 													</logic:notEmpty>
-											</logic:notEmpty></td>
+												</logic:notEmpty>
+											</td>
 
 											<td width="10%" align="right"><font color="#ff0000"> <bean:write
 												name="pagamentoHistorico" property="valorPagamento"
@@ -766,30 +764,33 @@ face: Verdana, Arial, Helvetica, sans-serif;
 																		</logic:notPresent></td>
 													<td width="10%" align="center"><font color="#ff0000">
 													${pagamentoHistorico.cliente.id} </font> &nbsp;</td>
-													<td width="15%" align="center"><logic:notEmpty
-														name="pagamentoHistorico" property="guiaPagamento">
-														<logic:notEmpty name="pagamentoHistorico"
-															property="guiaPagamento.debitoTipo">
-															<a
-																href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')"><font
-																color="#ff0000">${pagamentoHistorico.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
-																	</logic:notEmpty>
-													</logic:notEmpty><logic:empty name="pagamentoHistorico"
-														property="guiaPagamento">${pagamentoHistorico.debitoTipo.descricao}</logic:empty></td>
+													<td width="15%" align="center">
+														<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral">
+															<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral.guiaPagamento.debitoTipo">
+																<a
+																	href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getGuiaPagamento().getId() %>')"><font
+																	color="#ff0000">${pagamentoHistorico.guiaPagamentoGeral.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
+															</logic:notEmpty>
+														</logic:notEmpty>
+														
+														<logic:empty name="pagamentoHistorico" property="guiaPagamentoGeral">${pagamentoHistorico.debitoTipo.descricao}</logic:empty>
+													</td>
 
-													<td width="10%" align="right"><font color="#ff0000"> <bean:write
-														name="pagamentoHistorico" property="valorPagamento"
-														formatKey="money.format" /> </font></td>
-													<td width="10%" align="right"><logic:notEmpty
-														name="pagamentoHistorico" property="guiaPagamento">
-														<logic:notEmpty name="pagamentoHistorico"
-															property="guiaPagamento.valorDebito">
-															<font color="#ff0000"> <bean:write
-																name="pagamentoHistorico"
-																property="guiaPagamento.valorDebito"
-																formatKey="money.format" /> </font>	&nbsp;
-																				</logic:notEmpty>
-													</logic:notEmpty> &nbsp;</td>
+													<td width="10%" align="right">
+														<font color="#ff0000"> 
+															<bean:write name="pagamentoHistorico" property="valorPagamento" formatKey="money.format" /> 
+														</font>
+													</td>
+													
+													<td width="10%" align="right">
+														<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral">
+															<logic:notEmpty name="pagamentoHistorico" property="guiaPagamentoGeral.guiaPagamento.valorDebito">
+																<font color="#ff0000"> 
+																	<bean:write name="pagamentoHistorico" property="guiaPagamentoGeral.guiaPagamento.valorDebito" formatKey="money.format" /> 
+																</font>	&nbsp;
+															</logic:notEmpty>
+														</logic:notEmpty> &nbsp;
+													</td>
 													
 													<td width="10.9%"> 
 														<a style="color: #FF0000;"
