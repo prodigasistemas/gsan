@@ -61,7 +61,6 @@ import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoItem;
 import gcom.cobranca.repositorios.IRepositorioCobrancaPorResultadoHBM;
 import gcom.cobranca.repositorios.RepositorioCobrancaPorResultadoHBM;
-import gcom.faturamento.FaturamentoAtivCronRota;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
@@ -1103,7 +1102,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				}
 				
 				if (pagamento.getValorDesconto() != null) {
-					pagamentoEmpresa.setValorDesconto(pagamento.getValorDesconto());
+					pagamentoEmpresa.setValorDesconto(this.calcularValorDesconto(pagamento, valorConta));
 				}
 				
 				pagamentosEmpresa.add(pagamentoEmpresa);
@@ -1114,6 +1113,14 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			throw new EJBException(ex);
 		}
 		return pagamentosEmpresa;
+	}
+	
+	private BigDecimal calcularValorDesconto(Pagamento pagamento, BigDecimal valorConta) {
+		BigDecimal desconto = new BigDecimal(0);
+		
+		if (pagamento.getValorDesconto() != null)
+			desconto = (valorConta.multiply(pagamento.getValorDesconto())).divide(pagamento.getValorPagamento());
+		return desconto;
 	}
 	
 	private Short obterPagamentoTipoDoPagamento(DebitoTipo debitoTipo) {
