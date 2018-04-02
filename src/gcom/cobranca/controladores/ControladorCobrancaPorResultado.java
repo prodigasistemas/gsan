@@ -1102,7 +1102,9 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				}
 				
 				if (pagamento.getValorDesconto() != null) {
-					pagamentoEmpresa.setValorDesconto(this.calcularValorDesconto(pagamento, valorConta));
+					//pagamentoEmpresa.setValorDesconto(this.calcularValorDesconto(pagamento, valorConta));
+					System.out.println("Pagamento: " + pagamento.getId() + ": desconto original: " + pagamento.getValorDesconto() + " | desconto proporcional: " + this.calcularValorDesconto(pagamento, valorConta));
+					pagamentoEmpresa.setValorDesconto(pagamento.getValorDesconto());
 				}
 				
 				pagamentosEmpresa.add(pagamentoEmpresa);

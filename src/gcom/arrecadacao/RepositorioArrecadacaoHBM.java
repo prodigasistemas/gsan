@@ -23995,7 +23995,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" dtgp.dbtp_id as debitoTipoGuia, ")
 					.append(" case when dac.dbac_id is not null then dac.dbac_id ")
 					.append("      when dbac.dbac_id is not null then dbac.dbac_id  ")
-					.append(" end as idDebito ")
+					.append(" end as idDebito, ")
 					.append(" pdac.parc_id as idParcelamentoDebito, ")
 					.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
 					.append(" dac.dahi_vldebito as valorDebito, ")
@@ -24010,7 +24010,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
 					.append(" dac.dahi_nnparcelabonus as numParcelaBonus, ")
 					.append(" round(((pg.pgmt_vlpagamento * devol_total) / valor_total),2)  as valorDesconto, ")
-					.append(" dac.dbac_id as idDebitoHistorico, ")
+					.append(" dac.dbac_id as idDebitoHistorico ")
 					.append(" FROM arrecadacao.pagamento pg ")
 					.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
 					.append(" LEFT JOIN valor v on pg.cbdo_id = v.cbdo_id ")
@@ -24074,9 +24074,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setContaGeral(conta);
 						}
 						if (dadosPagamento[3] != null) {
+							GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral((Integer)dadosPagamento[3]);
+							
 							GuiaPagamento guia = new GuiaPagamento();
 							guia.setId((Integer)dadosPagamento[3]);
-							guia.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer)dadosPagamento[3]));
 							
 							if(dadosPagamento[4] != null){
 								Parcelamento parcelamento = new Parcelamento();
@@ -24098,7 +24099,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								guia.setDebitoTipo(debitoTipo);
 							}
 							
-							pagamento.setGuiaPagamento(guia.getGuiaPagamentoGeral());
+							guiaGeral.setGuiaPagamento(guia);
+							pagamento.setGuiaPagamento(guiaGeral);
 							
 						}
 						if (dadosPagamento[8] != null) {
