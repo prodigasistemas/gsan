@@ -29729,13 +29729,13 @@ public class ControladorArrecadacao implements SessionBean {
 						pagamentoHistorico.setId((Integer) dadosPagamento[0]);
 					}
 
-					GuiaPagamentoGeral guiaGeral = null;
-					GuiaPagamentoHistorico guiaPagamento = null;
+					GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
+					GuiaPagamentoHistorico guiaPagamento = new GuiaPagamentoHistorico();
 
 					// Id da Guia de Pagamento
 					if (dadosPagamento[1] != null) {
-						guiaGeral = new GuiaPagamentoGeral((Integer) dadosPagamento[1]);
-						guiaPagamento = new GuiaPagamentoHistorico((Integer) dadosPagamento[1]);
+						guiaGeral.setId((Integer) dadosPagamento[1]);
+						guiaPagamento.setId((Integer) dadosPagamento[1]);
 					}
 
 					// Id do Cliente
