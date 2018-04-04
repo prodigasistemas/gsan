@@ -60,9 +60,10 @@
 			<column name="amit_id"/>
 		</many-to-one>
 		<!-- bi-directional many-to-one association to GuiaPagamento -->
-		<many-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento" not-null="false">
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
 			<column name="gpag_id"/>
 		</many-to-one>
+		
 		<!-- bi-directional many-to-one association to AvisoBancario -->
 		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="false">
 			<column name="avbc_id"/>

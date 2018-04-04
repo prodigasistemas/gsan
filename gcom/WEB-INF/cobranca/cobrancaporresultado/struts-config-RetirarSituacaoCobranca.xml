@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RetirarSituacaoCobrancaActionForm" type="gcom.gui.cobranca.cobrancaporresultado.RetirarSituacaoCobrancaActionForm" />
+	</form-beans>
+
+	<global-forwards />
+	<action-mappings>
+
+		<action
+		    name="RetirarSituacaoCobrancaActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirRetirarSituacaoCobrancaAction"
+			scope="request"
+			path="/exibirRetirarSituacaoCobrancaAction">
+
+			<forward name="exibirRetirarSituacaoCobrancaAction" path="/jsp/cobranca/cobrancaporresultado/retirar_situacao_cobranca.jsp" />
+		</action>
+
+		<action name="RetirarSituacaoCobrancaActionForm"
+		    type="gcom.gui.cobranca.cobrancaporresultado.RetirarSituacaoCobrancaAction" 
+		    validate="false"
+		    path="/retirarSituacaoCobrancaAction">
+		</action>
+	</action-mappings>
+</struts-config>

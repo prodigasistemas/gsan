@@ -16,17 +16,18 @@
 		</id>
 		
 		<property name="referenciaArrecadacao" type="java.lang.Integer" column="ddni_amreferenciaarrecadacao" not-null="true" length="4"/>
+		<property name="referenciaFechamento" type="java.lang.Integer" column="ddni_amreferenciafechamento" not-null="true" length="4"/>
 		<property name="valorDocumento" type="java.math.BigDecimal" column="ddni_vldocumento" length="15"/>
 		<property name="dataDocumento" type="java.sql.Date" column="ddni_datadocumento" length="4"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ddni_tmultimaalteracao" length="8"/>
 		
 		
 		<!-- Associations -->
-		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" >
 			<column name="avbc_id"/>
 		</many-to-one>
 
-		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" >
 			<column name="arrc_id"/>
 		</many-to-one>
 		

@@ -564,6 +564,7 @@ public class ExibirAtualizarPagamentosAction extends GcomAction {
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("contaGeral");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
+			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento.guiaPagamento");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico");
@@ -700,14 +701,11 @@ public class ExibirAtualizarPagamentosAction extends GcomAction {
 				if (pagamento.getGuiaPagamento() != null) {
 					manterPagamentoActionForm.setIdGuiaPagamento(""
 							+ pagamento.getGuiaPagamento().getId());
-					if (pagamento.getGuiaPagamento().getDebitoTipo() != null) {
-						manterPagamentoActionForm.setDescricaoGuiaPagamento(""
-								+ pagamento.getGuiaPagamento().getDebitoTipo()
-										.getDescricao());
+					if (pagamento.getGuiaPagamento().getGuiaPagamento().getDebitoTipo() != null) {
+						manterPagamentoActionForm.setDescricaoGuiaPagamento(""+ pagamento.getGuiaPagamento().getGuiaPagamento().getDebitoTipo().getDescricao());
 					}
 					manterPagamentoActionForm.setValorGuiaPagamento(""
-							+ Util.formatarMoedaReal(pagamento
-									.getGuiaPagamento().getValorDebito()));
+							+ Util.formatarMoedaReal(pagamento.getGuiaPagamento().getGuiaPagamento().getValorDebito()));
 				}
 
 				// Seta no form os dados do débito a cobrar

@@ -1046,18 +1046,15 @@ public class ExibirAtualizarGuiaDevolucaoAction extends GcomAction {
 		}
 
 		// Pesquisa a guia de pagamento de acordo com os parâmetros no filtro
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(
-				FiltroGuiaPagamento.ID, idGuiaPagamento));
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
 
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
-		filtroGuiaPagamento
-				.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
-
-		Collection colecaoGuiaPagamento = fachada.pesquisar(
-				filtroGuiaPagamento, GuiaPagamento.class.getName());
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
+		Collection colecaoGuiaPagamento = fachada.pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 
 		// Caso exista a guia de pagamento para o imóvel ou o cliente informado
 		// cadastrado no sistema

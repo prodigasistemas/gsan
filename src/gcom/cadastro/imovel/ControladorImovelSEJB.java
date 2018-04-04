@@ -15718,11 +15718,11 @@ public class ControladorImovelSEJB extends ControladorComum {
 	 * @author Mariana Victor
 	 * @created 10/05/2011
 	 */
-	public void retirarSituacaoCobrancaImovel(Integer idImovel, Integer idCobrancaSituacao) 
+	public void retirarCobrancaImovelCobrancaPorEmpresa(Integer idImovel, Integer idCobrancaSituacao, Usuario usuario) 
 		throws ControladorException {
 		
 		try {
-			repositorioImovel.retirarSituacaoCobrancaImovel(idImovel, idCobrancaSituacao);
+			repositorioImovel.retirarCobrancaImovelCobrancaPorEmpresa(idImovel, idCobrancaSituacao, usuario);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();

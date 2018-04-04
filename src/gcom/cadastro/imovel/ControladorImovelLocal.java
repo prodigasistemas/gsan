@@ -714,7 +714,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	public Integer pesquisarAnoMesExclusaoTarifaSocialImovel(Integer idImovel) throws ControladorException;
 
-	public void retirarSituacaoCobrancaImovel(Integer idImovel, Integer idCobrancaSituacao) throws ControladorException;
+	public void retirarCobrancaImovelCobrancaPorEmpresa(Integer idImovel, Integer idCobrancaSituacao, Usuario usuario) throws ControladorException;
 
 	public Collection<Integer[]> pesquisarIdsImoveis(String[] idsOrdemServico) throws ControladorException;
 

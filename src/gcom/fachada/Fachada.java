@@ -27042,25 +27042,6 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir um ComandoEmpresaCobrancaConta
-	 * 
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * @author Rafael Corrêa
-	 * @param usuarioLogado
-	 * @date 28/10/2008
-	 * 
-	 */
-	public Integer inserirComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Usuario usuarioLogado) {
-		try {
-			return this.getControladorCobranca().inserirComandoEmpresaCobrancaConta(comandoEmpresaCobrancaConta, usuarioLogado);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
-	/**
 	 * Permite inserir um Perfil da Ligacao de Esgoto
 	 * 
 	 * [UC0217] Inserir Perfil da Ligacao de Esgoto
@@ -27412,18 +27393,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0869] Gerar Arquivo Texto de Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 29/10/2008
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int pagina) {
+	public List<ComandoEmpresaCobrancaConta> pesquisarDadosComandoCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int pagina) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, pagina);
+			return getControladorCobrancaPorResultado().pesquisarDadosComando(idEmpresa, comandoInicial, comandoFinal, pagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -28123,7 +28095,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, numeroIndice);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(idEmpresa, comandoInicial, comandoFinal, numeroIndice);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -29137,15 +29109,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
-	 * Pesquisa dados do popup
-	 * 
-	 * @author Hugo Amorim
-	 */
-	public Object[] pesquisarDadosPopupExtensaoComando(Integer idComando, Date dateInicial, Date dateFinal) {
+	public Object[] pesquisarDadosConsultaComando(Integer idComando, Date dateInicial, Date dateFinal) {
 		try {
-			return this.getControladorCobranca().pesquisarDadosPopupExtensaoComando(idComando, dateInicial, dateFinal);
+			return this.getControladorCobrancaPorResultado().pesquisarDadosConsultaComando(idComando, dateInicial, dateFinal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -36778,7 +36744,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int pagina) {
 		try {
-			return this.getControladorCobranca().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
+			return this.getControladorCobrancaPorResultado().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40075,9 +40041,9 @@ public class Fachada {
 		}
 	}
 	
-	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean agrupadoPorImovel, boolean percentualInformado) {
+	public List<Object[]> pesquisarQuantidadeContas(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado) {
 		try {
-			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, agrupadoPorImovel, percentualInformado);
+			return this.getControladorCobrancaPorResultado().pesquisarQuantidadeContas(helper, percentualInformado);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40149,5 +40115,18 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
+	}
+	
+	public int retirarSituacaoCobranca(BufferedReader buffer, Usuario usuario) {
+		try {
+			return getControladorCobrancaPorResultado().retirarSituacaoCobranca(buffer, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection gerarComandoCobrancaEmpresa(ComandoEmpresaCobrancaContaHelper helper) {
+		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
+		return null;
 	}
 }

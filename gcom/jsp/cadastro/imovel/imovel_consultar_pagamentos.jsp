@@ -756,8 +756,8 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												</td>
 												<td width="11%" align="right">
 													<logic:notEmpty name="pagamento" property="guiaPagamento">
-														<logic:notEmpty name="pagamento" property="guiaPagamento.valorDebito">
-															<bean:write name="pagamento" property="guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
+														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito">
+															<bean:write name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
 														</logic:notEmpty>
 													</logic:notEmpty>
 												</td>
@@ -808,23 +808,23 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												<td width="12%" align="center">
 												${pagamento.cliente.id}&nbsp;</td>
 												<td width="11%" align="center"><logic:notEmpty
-													name="pagamentoHistorico" property="guiaPagamento">
+													name="pagamentoHistorico" property="guiaPagamentoGeral">
 													<a
-														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')"><font
+														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoHistoricoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getId() %>')"><font
 														color="#ff0000">${pagamentoHistorico.debitoTipo.descricao}</font></a>&nbsp;
 														</logic:notEmpty>
 												<logic:notPresent
-													name="pagamento" property="guiaPagamento">
+													name="pagamento" property="guiaPagamentoGeral">
 												<font color="#ff0000">	${pagamentoHistorico.debitoTipo.descricao}</font>													
 												</logic:notPresent>																	
 														</td>
 												<td width="11%" align="right"><logic:notEmpty
-													name="pagamentoHistorico" property="guiaPagamento">
+													name="pagamentoHistorico" property="guiaPagamentoGeral">
 													<logic:notEmpty name="pagamentoHistorico"
-														property="guiaPagamento.valorDebito">
+														property="guiaPagamentoGeral.guiaPagamentoHistorico.valorDebito">
 														<font color="#ff0000"> <bean:write
 															name="pagamentoHistorico"
-															property="guiaPagamento.valorDebito"
+															property="guiaPagamentoGeral.guiaPagamentoHistorico.valorDebito"
 															formatKey="money.format" /> </font>
 																	&nbsp;
 													</logic:notEmpty>
@@ -945,9 +945,9 @@ face: Verdana, Arial, Helvetica, sans-serif;
 														<td width="12%" align="center">
 														${pagamento.cliente.id}&nbsp;</td>
 														<td width="11%" align="center"><logic:notEmpty
-															name="pagamentoHistorico" property="guiaPagamento">
+															name="pagamentoHistorico" property="guiaPagamentoGeral">
 															<a
-																href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')"><font
+																href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoHistoricoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getId() %>')"><font
 																color="#ff0000">${pagamentoHistorico.debitoTipo.descricao}</font></a>&nbsp;
 														</logic:notEmpty>
 																										<logic:notPresent
@@ -956,9 +956,9 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												</logic:notPresent>			
 														</td>
 														<td width="11%" align="right"><logic:notEmpty
-															name="pagamentoHistorico" property="guiaPagamento">
+															name="pagamentoHistorico" property="guiaPagamentoGeral">
 															<logic:notEmpty name="pagamentoHistorico"
-																property="guiaPagamento.valorDebito">
+																property="guiaPagamentoGeral.guiaPagamentoHistorico.valorDebito">
 																<font color="#ff0000"> <bean:write
 																	name="pagamentoHistorico"
 																	property="guiaPagamento.valorDebito"

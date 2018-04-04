@@ -2,6 +2,7 @@ package gcom.cobranca.bean;
 
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento;
 
 import java.math.BigDecimal;
 
@@ -24,6 +25,8 @@ public class CancelarParcelamentoHelper {
 	private short numeroPrestacoes;
 
 	private short numeroPrestacoesCobradas;
+	
+	private ParcelamentoMotivoCancelamento motivo;
 
 	public CancelarParcelamentoHelper() {
 		super();
@@ -106,6 +109,12 @@ public class CancelarParcelamentoHelper {
 		return numeroPrestacoesCobradas;
 	}
 	
-	
-	
+	public ParcelamentoMotivoCancelamento getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(ParcelamentoMotivoCancelamento motivo) {
+		this.motivo = motivo;
+	}
+
 }

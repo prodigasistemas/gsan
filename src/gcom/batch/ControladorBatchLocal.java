@@ -3,7 +3,6 @@ package gcom.batch;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
-import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
@@ -86,7 +85,7 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 
 	public void removerColecaoDebitoACobrarCategoriaParaBatch(Collection<DebitoACobrarCategoria> colecaoDebitoACobrarCategoria) throws ControladorException;
 
-	public void removerColecaoPagamentoParaBatch(Collection<Pagamento> colecaoPagamento) throws ControladorException;
+	public void removerColecaoPagamentoParaBatch(Collection<Integer> pagamentos) throws ControladorException;
 
 	public void removerColecaoDevolucaoParaBatch(Collection<Devolucao> colecaoDevolucao) throws ControladorException;
 

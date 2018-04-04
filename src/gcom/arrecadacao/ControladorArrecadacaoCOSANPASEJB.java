@@ -20,6 +20,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.DocumentoTipo;
 import gcom.fachada.Fachada;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.Fatura;
@@ -490,27 +491,13 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 
 		if (descricaoOcorrencia.equals("OK")) {
 
-			// GERAÇÃO DO PAGAMENTO
 			Pagamento pagamento = new Pagamento();
 			pagamento.setAnoMesReferenciaPagamento(null);
 
-			/*
-			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
-			 * data de debito
-			 */
 			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
-
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
-
 			} else {
-
-				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
-				 * parametro
-				 */
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
-						.getAnoMesArrecadacao());
+				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
 			}
 
 			pagamento.setValorPagamento(valorPagamento);
@@ -518,10 +505,8 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 			pagamento.setPagamentoSituacaoAtual(null);
 			pagamento.setPagamentoSituacaoAnterior(null);
 			pagamento.setDebitoTipo(guiaPagamento.getDebitoTipo());
-
 			pagamento.setContaGeral(null);
-			
-			pagamento.setGuiaPagamento(guiaPagamento);
+			pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 			pagamento.setLocalidade(guiaPagamento.getLocalidade());
 			
 			DocumentoTipo documentoTipo = new DocumentoTipo();
@@ -962,19 +947,10 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 								
 							if (idGuiaPagamento != null) {
 									
-								GuiaPagamento guiaPagamento = new GuiaPagamento();
-								guiaPagamento.setId(idGuiaPagamento);
-								pagamento.setGuiaPagamento(guiaPagamento);
+								pagamento.setGuiaPagamento(new GuiaPagamentoGeral(idGuiaPagamento));
 									
-								/*
-								 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
-								 * OBJ: Inserir o pagamento com a localidade da própria guia e não
-								 * com a localidade do documento de cobrança
-								 */
 								try {
-									idLocalidade = repositorioLocalidade
-					                .pesquisarIdLocalidadePorGuiaPagamento(idGuiaPagamento);
-
+									idLocalidade = repositorioLocalidade.pesquisarIdLocalidadePorGuiaPagamento(idGuiaPagamento);
 					            } catch (ErroRepositorioException e) {
 					                    throw new ControladorException("erro.sistema", e);
 					            }

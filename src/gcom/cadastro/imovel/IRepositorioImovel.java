@@ -2929,7 +2929,7 @@ public interface IRepositorioImovel {
 	 * @author Mariana Victor
 	 * @created 10/05/2011
 	 */
-	public void retirarSituacaoCobrancaImovel(Integer idImovel, Integer idCobrancaSituacao)
+	public void retirarCobrancaImovelCobrancaPorEmpresa(Integer idImovel, Integer idCobrancaSituacao, Usuario usuario)
 		throws ErroRepositorioException;
 
 	/**

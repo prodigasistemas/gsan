@@ -1,5 +1,6 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
+import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -7,6 +8,7 @@ import gcom.util.ConstantesJNDI;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * [UC1168] Encerrar Comandos de Cobrança por Empresa
@@ -30,29 +32,33 @@ public class TarefaBatchEncerrarComandosDeCobrancaPorEmpresa extends TarefaBatch
 		super(null, 0);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object executar() throws TarefaException {
 
-		String idEmpresa = (String) getParametro("idEmpresa");
-		Integer idRegistro = (Integer) getParametro("idRegistro");
+		List<ComandoEmpresaCobrancaConta> comandos = (List<ComandoEmpresaCobrancaConta>) getParametro("comandos");
 		Usuario usuario = (Usuario) getParametro("usuario");
 		Integer idCobrancaSituacao = (Integer) getParametro("idCobrancaSituacao");
 		
-		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA,
+		for (ComandoEmpresaCobrancaConta comando : comandos) {
+			
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA,
 					new Object[] {
-								this.getIdFuncionalidadeIniciada(),
-								idEmpresa,
-								usuario,
-								idRegistro,
-								idCobrancaSituacao});
+					this.getIdFuncionalidadeIniciada(),
+					usuario,
+					comando,
+					idCobrancaSituacao});
+		}
 
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Collection pesquisarTodasUnidadeProcessamentoBatch() {
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Collection pesquisarTodasUnidadeProcessamentoReinicioBatch() {
 

@@ -17,6 +17,7 @@
 		
 		<property name="referenciaArrecadacao" type="java.lang.Integer" column="dpnc_amreferenciaarrecadacao" not-null="true" length="4"/>
 		<property name="referenciaDocumento" type="java.lang.Integer" column="dpnc_amreferenciadocumento" not-null="true" length="4"/>
+		<property name="referenciaFechamento" type="java.lang.Integer" column="dpnc_amreferenciafechamento" not-null="true" length="4"/>
 		<property name="valorPagamento" type="java.math.BigDecimal" column="dpnc_vlpagamento" length="15"/>
 		<property name="valorDocumento" type="java.math.BigDecimal" column="dpnc_vldocumento" length="15"/>
 		<property name="indicadorContaRetificada" type="short" column="dpnc_iccontaretificada" not-null="true" length="2"/>

@@ -345,56 +345,30 @@ public class AtualizarPagamentosAction extends GcomAction {
 			GuiaPagamento guiaPagamento = null;
 			if (idGuiaPagamento != null && !idGuiaPagamento.trim().equals("")) {
 
-				// [FS0022] - Verificar existência da guia de pagamento
-				guiaPagamento = 
-					this.getFachada().pesquisarGuiaPagamentoDigitada(
-						idImovel, 
-						idCliente, 
-						idGuiaPagamento);
+				guiaPagamento = this.getFachada().pesquisarGuiaPagamentoDigitada(idImovel, idCliente, idGuiaPagamento);
 
-				// Caso exista guia de pagamento, seta o tipo de débito da
-				// guia de pagamento
-				// para o tipo de débito do pagamento que vai ser inserido
 				debitoTipo = guiaPagamento.getDebitoTipo();
 
-				// [FS0010] - Verificar localidade da guia de pagamento
 				this.getFachada().verificarLocalidadeGuiaPagamento(guiaPagamento,idLocalidade);
 			}
 
 			// Caso o tipo de débito tenha sido informado
 			if (idTipoDebito != null && !idTipoDebito.trim().equals("")) {
 
-				// [FS0020] - Verificar existência do tipo de débito
-				debitoTipo = 
-					this.getFachada().pesquisarTipoDebitoDigitado(
-						new Integer(idTipoDebito));
+				debitoTipo = this.getFachada().pesquisarTipoDebitoDigitado(new Integer(idTipoDebito));
 
-				// [FS0009] - Verificar existência de guia de pagamento com
-				// o tipo de débito informado
 				if (idImovel != null && !idImovel.trim().equalsIgnoreCase("")) {
 					
-					guiaPagamento = 
-						this.getFachada().verificarExistenciaGuiaPagamentoComTipoDebito(
-							debitoTipo, 
-							idImovel, 
-							null);
+					guiaPagamento = this.getFachada().verificarExistenciaGuiaPagamentoComTipoDebito(debitoTipo, idImovel, null);
 				}
 
 				if (idCliente != null && !idCliente.trim().equalsIgnoreCase("")) {
 					
-					guiaPagamento = 
-						this.getFachada().verificarExistenciaGuiaPagamentoComTipoDebito(
-							debitoTipo, 
-							null, 
-							idCliente);
+					guiaPagamento = this.getFachada().verificarExistenciaGuiaPagamentoComTipoDebito(debitoTipo, null, idCliente);
 				}
 
-				// Caso não exista nenhuma guia de pagamento com o tipo de
-				// débito informado
 				if (guiaPagamento == null) {
 					
-					// Caso o usuário não tenha passado pela página de
-					// confirmação do wizard
 					if (confirmado == null || !confirmado.trim().equalsIgnoreCase("ok")) {
 
 						// Monta a página de confirmação para perguntar se o
@@ -436,7 +410,7 @@ public class AtualizarPagamentosAction extends GcomAction {
 			pagamentoAtualizacao.setPagamentoSituacaoAnterior(situacaoPagamentoAnterior);
 			pagamentoAtualizacao.setDebitoTipo(debitoTipo);
 			pagamentoAtualizacao.setContaGeral(null);
-			pagamentoAtualizacao.setGuiaPagamento(guiaPagamento);
+			pagamentoAtualizacao.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 			pagamentoAtualizacao.setDebitoACobrarGeral(null);
 			pagamentoAtualizacao.setLocalidade(localidade);
 			pagamentoAtualizacao.setDocumentoTipo(documentoTipo);

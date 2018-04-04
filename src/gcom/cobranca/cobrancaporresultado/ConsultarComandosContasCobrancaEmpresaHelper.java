@@ -84,14 +84,14 @@ public class ConsultarComandosContasCobrancaEmpresaHelper implements
 			Integer idImovel, //8
 			Integer idCliente, //9
 			String nomeCliente, //10
-			Integer idGerenciaRegional, //11
-			String nomeGerenciaRegional, //12
-			Integer idUnidadeNegocio, //13
-			String nomeUnidadeNegocio, //14
+			//Integer idGerenciaRegional, //11
+			//String nomeGerenciaRegional, //12
+			//Integer idUnidadeNegocio, //13
+			//String nomeUnidadeNegocio, //14
 			Integer idLocalidadeInicial, //15
-			String descricaoLocalidadeInicial, //16
+			//String descricaoLocalidadeInicial, //16
 			Integer idLocalidadeFinal, //17
-			String descricaoLocalidadeFinal, //18
+			//String descricaoLocalidadeFinal, //18
 			Integer codigoSetorComercialInicial, //19
 			Integer codigoSetorComercialFinal, //20
 			Integer numeroQuadraInicial, //21

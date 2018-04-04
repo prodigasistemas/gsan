@@ -1891,6 +1891,10 @@ public interface IRepositorioFaturamento {
 
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoHistoricoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ErroRepositorioException;
+	
 
 	public Object[] pesquisarFaturaItemDeConta(Integer idConta) throws ErroRepositorioException;
 

@@ -211,17 +211,6 @@
 		}
 	}
 	
-	function pesquisarQuantidadeContas() {
-		var form = document.forms[0];
-		
-		if(validarLocalidade() && validarSetorComercial() && validarEmpresa() && validarQuantidadeDiasVencimento() && validarQuantidadeDeContas() && validarValorContas()){
-		
-			form.action = 'exibirInformarContasEmCobrancaAction.do?pesquisarQtdContas=sim';
-	    	
-	    	botaoAvancarTelaEspera('exibirInformarContasEmCobrancaAction.do?pesquisarQtdContas=sim');
-	    }
-	}
-	
 	function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
 
     	var form = document.forms[0];
@@ -642,49 +631,52 @@
 	function validaForm() {
 		var form =  document.forms[0];
 		var submeterForm = true;
-		
-		if(form.idEmpresa.value != null && form.idEmpresa.value != '') {
-			if (form.colecaoInformada.value != null && form.colecaoInformada.value != '') {
-				if (form.dataInicioCiclo.value == null || form.dataInicioCiclo.value == ''){
+
+		if(validarLocalidade() && validarSetorComercial() && validarEmpresa() && validarQuantidadeDiasVencimento() && validarQuantidadeDeContas() && validarValorContas()){
+			if(form.idEmpresa.value != null && form.idEmpresa.value != '') {
+				if (form.colecaoInformada.value != null && form.colecaoInformada.value != '') {
+					if (form.dataInicioCiclo.value == null || form.dataInicioCiclo.value == ''){
+							submeterForm = false;
+							alert('Informe a Data Início do Ciclo');
+					} else if (form.quantidadeDiasCiclo.value == null || form.quantidadeDiasCiclo.value == '') {
+							submeterForm = false;
+							alert('Informe a Quantidade de Dias do Ciclo');
+					} else if (form.idServicoTipo.value == null || form.idServicoTipo.value == '') {
+							submeterForm = false;
+							alert('Informe o Tipo de Serviço');
+					} else if (!verificaData(form.dataInicioCiclo)){
 						submeterForm = false;
-						alert('Informe a Data Início do Ciclo');
-				} else if (form.quantidadeDiasCiclo.value == null || form.quantidadeDiasCiclo.value == '') {
+					} else if (comparaDataComDataAtual(form.dataInicioCiclo.value, "<")) {
 						submeterForm = false;
-						alert('Informe a Quantidade de Dias do Ciclo');
-				} else if (form.idServicoTipo.value == null || form.idServicoTipo.value == '') {
+						alert('Data Início do Ciclo deve ser maior ou igual a data corrente.');
+					} else if (!validarCampoNumericoComMensagem(form.quantidadeDiasCiclo, "Quantidade de Dias do Ciclo")) {
 						submeterForm = false;
-						alert('Informe o Tipo de Serviço');
-				} else if (!verificaData(form.dataInicioCiclo)){
-					submeterForm = false;
-				} else if (comparaDataComDataAtual(form.dataInicioCiclo.value, "<")) {
-					submeterForm = false;
-					alert('Data Início do Ciclo deve ser maior ou igual a data corrente.');
-				} else if (!validarCampoNumericoComMensagem(form.quantidadeDiasCiclo, "Quantidade de Dias do Ciclo")) {
-					submeterForm = false;
+					}
+				} else if (form.dataInicioCiclo.value != null && form.dataInicioCiclo.value != '') {
+					if (!verificaData(form.dataInicioCiclo)){
+						submeterForm = false;
+					} else if (comparaDataComDataAtual(form.dataInicioCiclo.value, "<")) {
+						submeterForm = false;
+						alert('Data Início do Ciclo deve ser maior ou igual a data corrente.');
+					} else if (form.quantidadeDiasCiclo.value != null && form.quantidadeDiasCiclo.value != ''
+							&& validarCampoNumericoComMensagem(form.quantidadeDiasCiclo, "Quantidade de Dias do Ciclo")) {
+						submeterForm = true;
+					}
 				}
-			} else if (form.dataInicioCiclo.value != null && form.dataInicioCiclo.value != '') {
-				if (!verificaData(form.dataInicioCiclo)){
-					submeterForm = false;
-				} else if (comparaDataComDataAtual(form.dataInicioCiclo.value, "<")) {
-					submeterForm = false;
-					alert('Data Início do Ciclo deve ser maior ou igual a data corrente.');
-				} else if (form.quantidadeDiasCiclo.value != null && form.quantidadeDiasCiclo.value != ''
-						&& validarCampoNumericoComMensagem(form.quantidadeDiasCiclo, "Quantidade de Dias do Ciclo")) {
-					submeterForm = true;
-				}
+				
+			}else{
+				submeterForm = false;
+				alert('Informe Empresa');
 			}
-			
-		}else{
-			submeterForm = false;
-			alert('Informe Empresa');
-		}	
-		
-		if (submeterForm) {
-			if (validateInformarContasEmCobrancaActionForm(form) && validarInformacaoSetorComercial()){
-					form.action = 'informarContasEmCobrancaAction.do';
-					submeterFormPadrao(form);
+				
+			if (submeterForm) {
+				if (validateInformarContasEmCobrancaActionForm(form) && validarInformacaoSetorComercial()){
+						form.action = 'informarContasEmCobrancaAction.do';
+						submeterFormPadrao(form);
+				}
 			}
 		}
+		
 	}
 	
 	function validarEmpresa(){
@@ -1171,7 +1163,7 @@
 				<tr><td><strong> </strong></td><td><strong> </strong></td></tr>
 				
 				<tr>
-					<td width="30%"><strong>Incluir débitos pretéritos:</strong></td>
+					<td width="30%"><strong>Incluir Débitos Pretéritos:</strong></td>
 					<td colspan="6">
 						<span class="style2">
 							<strong>
@@ -1181,104 +1173,27 @@
                   		</span>
 					</td>
 				</tr>
-				
-				<tr>
-					<td colspan="2" align="right"><input type="button"
-						name="selecionar" class="bottonRightCol" value="Selecionar"
-						onClick="javascript:pesquisarQuantidadeContas();" /></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-					<hr>
-					</td>
-				</tr>
-			</table>
-				<logic:present name="colecaoQuantidadeContas" scope="session">
-			<table width="100%" >
-					<tr>
-						<td bgcolor="#90c7fc" bordercolor="#90c7fc"></td>
-						<td bgcolor="#90c7fc" bordercolor="#90c7fc" align="center" colspan="<bean:write name='tamanho' scope='session'/>"><strong>Quantidade de Faturas em Aberto:</strong></td>
-						
-					</tr>
-					
-					<tr>
-						<td align="center" bgcolor="#99CCFF"><strong></strong></td>
-						<logic:iterate name="colecaoFaixa" id="faixa"
-							type="String">
-								
-								<td align="center"  bgcolor="#99CCFF">
-									<strong><bean:write name="faixa" /></strong>
-								</td>
-								
-						</logic:iterate>
-					</tr>
-					
-					<tr>
-						<td  align="center" bgcolor="#99CCFF"><strong>Quantidade de Contas:</strong></td>
-						<logic:iterate name="colecaoQtdeContas" id="quantidadeContas"
-							type="Integer">
-							
-								<td align="center" bgcolor="#FFFFFF">
-									<strong><bean:write name="quantidadeContas" /></strong>
-								</td>
-							
-						</logic:iterate>
-					</tr>
-					
-					<tr>
-						<td  align="center" bgcolor="#99CCFF"><strong>Quantidade de Clientes:</strong></td>
-						<logic:iterate name="colecaoQtdeClientes" id="quantidadeClientes"
-							type="Integer">
-							
-								<td align="center"  bgcolor="#cbe5fe">
-									<strong><bean:write name="quantidadeClientes" /></strong>
-								</td>
-							
-						</logic:iterate>
-					</tr>
-					
-					<tr>
-						<td  align="center" bgcolor="#99CCFF"><strong>Valor Total da Dívida:</strong></td>
-						<logic:iterate name="colecaoValorTotalDivida" id="valorTotalDivida"
-							type="BigDecimal">
-							
-								<td align="center"  bgcolor="#FFFFFF">
-									<strong><bean:write name="valorTotalDivida" formatKey="money.format"/></strong>
-								</td>
-							
-						</logic:iterate>
-					</tr>
 
-				</table>
-				</logic:present>
-				<table width="100%" border="0">
-				
-				<logic:notPresent name="colecaoQuantidadeContas" scope="session">
-					<tr>
-						<td><strong>Quantidade de Contas:</strong></td>
-						<td><html:text property="qtdContas" size="10" maxlength="10"
-							readonly="true"
-							style="background-color:#EFEFEF; border:0; color: #000000" /></td>
-					</tr>
-					<tr>
-						<td><strong>Quantidade de Clientes:</strong></td>
-						<td><html:text property="qtdClientes" size="10" maxlength="10"
-							readonly="true"
-							style="background-color:#EFEFEF; border:0; color: #000000" /></td>
-					</tr>
-					<tr>
-						<td><strong>Valor Total da Dívida:</strong></td>
-						<td><html:text property="valorTotalDivida" size="15" maxlength="15"
-							readonly="true"
-							style="background-color:#EFEFEF; border:0; color: #000000" /></td>
-					</tr>
-				</logic:notPresent>
+				<tr>
+					<td width="30%"><strong>Incluir somente Clientes com CPF/CNPJ:</strong></td>
+					<td colspan="6">
+						<span class="style2">
+							<strong>
+								<label><html:radio property="indicadorPossuiCpfCnpj" value="1"/>Sim</label>
+ 				  				<label><html:radio property="indicadorPossuiCpfCnpj" value="2"/>Não</label>
+                  			</strong>
+                  		</span>
+					</td>
+				</tr>
 				
 				<tr>
 					<td colspan="2">
 					<hr>
 					</td>
 				</tr>
+
+			</table>
+			<table width="100%" border="0">
 				<logic:present name="habilitaCamposCiclo">
 					<tr>
 						<td><strong>Data Início do Ciclo:</strong></td>
@@ -1372,8 +1287,8 @@
 				<tr>
 					<td colspan="2" align="right"><input type="button"
 						name="gerarDadosCobranca" class="bottonRightCol"
-						value="Gerar Dados Cobrança"
-						onClick="javascript:validaForm();" /></td>
+						value="Gerar Comando Cobrança"
+						onClick="javascript:validaForm();"/></td>
 				</tr>
 				<tr>
 					<td><strong> <font color="#FF0000"></font></strong></td>

@@ -11,6 +11,7 @@ public class DadosDocumentosNaoIdentificados {
 
 	private Integer id;
 	private Integer referenciaArrecadacao;
+	private Integer referenciaFechamento;
 	private BigDecimal valorDocumento;
 	private Date dataDocumento;
 	private Date ultimaAlteracao;
@@ -75,7 +76,15 @@ public class DadosDocumentosNaoIdentificados {
 
 	public void setDadosCodigoBarras(RegistroHelperCodigoG codigoBarras){
 		this.referenciaArrecadacao = Util.recuperaAnoMesDaData(Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento()));
-		this.valorDocumento = new BigDecimal(codigoBarras.getValorRecebido());
+		this.valorDocumento = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(codigoBarras.getValorRecebido());
 		this.dataDocumento = Util.formatarYYYYMMDDParaData(codigoBarras.getDataPagamento());
+	}
+
+	public Integer getReferenciaFechamento() {
+		return referenciaFechamento;
+	}
+
+	public void setReferenciaFechamento(Integer referenciaFechamento) {
+		this.referenciaFechamento = referenciaFechamento;
 	}
 }

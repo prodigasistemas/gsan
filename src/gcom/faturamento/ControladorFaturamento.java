@@ -15760,7 +15760,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	@SuppressWarnings("rawtypes")
 	public Collection<Object[]> pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(Integer idConta, Collection idsFinanciamentoTipo) throws ControladorException {
 		try {
-			return repositorioFaturamento.pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(idConta, idsFinanciamentoTipo);
+			Collection<Object[]> debitosCobrados =  repositorioFaturamento.pesquisaridDebitoTipoDoDebitoCobradoDeParcelamento(idConta, idsFinanciamentoTipo);
+			
+//			if (debitosCobradosHistorico != null && !debitosCobradosHistorico.isEmpty())
+//				debitosCobrados.addAll(debitosCobradosHistorico);
+				
+			return debitosCobrados;
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema", e);
 		}

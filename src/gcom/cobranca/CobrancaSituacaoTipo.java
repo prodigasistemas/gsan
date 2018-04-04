@@ -10,30 +10,17 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class CobrancaSituacaoTipo extends ObjetoTransacao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
 	private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private Short indicadorInformarDataFinal;
-    
     private Short indicadorEmitirDocumentoCobranca;
     
-    
-    //Indicador usado para a empresa Terceirizada da CAEMA
     public final static Integer COBRANCA_EMPRESA_TERCEIRIZADA = new Integer(1);
     public final static Integer PARALISAR_ACOES_DE_COBRANÇA = new Integer(5);
     public final static Integer PARALISAR_ARRASTO = new Integer(6);

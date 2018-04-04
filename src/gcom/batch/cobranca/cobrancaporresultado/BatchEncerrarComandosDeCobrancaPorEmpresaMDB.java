@@ -1,13 +1,16 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
+import gcom.cobranca.ComandoEmpresaCobrancaConta;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
+import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
+
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -18,12 +21,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-/**
- * [UC1168] Encerrar Comandos de Cobrança por Empresa
- * 
- * @author Mariana Victor
- * @created 09/05/2011
- */
 public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDrivenBean,
 		MessageListener {
 	
@@ -42,18 +39,18 @@ public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDriv
 
 	}
 
-    public void onMessage(Message message) {
+    @SuppressWarnings("unchecked")
+	public void onMessage(Message message) {
         if (message instanceof ObjectMessage) {
 
             ObjectMessage objectMessage = (ObjectMessage) message;
             try {
             	
-            	this.getControladorCobranca().encerrarComandosCobrancaPorEmpresa(
+            	this.getControladorCobrancaPorResultado().encerrarComandosCobrancaPorEmpresa(
             			(Integer) ((Object[]) objectMessage.getObject())[0],
-            			(String) ((Object[]) objectMessage.getObject())[1],
-            			(Usuario) ((Object[]) objectMessage.getObject())[2],
-            			(Integer) ((Object[]) objectMessage.getObject())[3],
-            			(Integer) ((Object[]) objectMessage.getObject())[4]);
+            			(Usuario) ((Object[]) objectMessage.getObject())[1],
+            			(ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[2],
+            			(Integer) ((Object[]) objectMessage.getObject())[3]);
 
             } catch (JMSException e) {
                 System.out.println("Erro no MDB");
@@ -66,28 +63,17 @@ public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDriv
 
     }
 
-    
-    /**
-     * Retorna o valor do Controlador de Cobranca
-	 * 
-	 * @return O valor de controladorCobrancaLocal
-	 */
-	private ControladorCobrancaLocal getControladorCobranca() {
+	private ControladorCobrancaPorResultadoLocal getControladorCobrancaPorResultado() {
 
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
+		ControladorCobrancaPorResultadoLocalHome localHome = null;
+		ControladorCobrancaPorResultadoLocal local = null;
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -99,15 +85,6 @@ public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDriv
 
 	}
 
-    
-
-    /**
-     * Default create method
-     * 
-     * @throws CreateException
-     */
     public void ejbCreate() {
-
     }
-
 }

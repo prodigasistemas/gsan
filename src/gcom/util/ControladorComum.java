@@ -50,6 +50,10 @@ import gcom.faturamento.controladores.ControladorRetificarContaLocal;
 import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.financeiro.ControladorFinanceiroLocal;
 import gcom.financeiro.ControladorFinanceiroLocalHome;
+import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocal;
+import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
+import gcom.integracao.ControladorIntegracaoLocal;
+import gcom.integracao.ControladorIntegracaoLocalHome;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocal;
@@ -458,7 +462,7 @@ public abstract class ControladorComum implements SessionBean {
         try {
             ServiceLocator locator = ServiceLocator.getInstancia();
 
-            ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
+            ControladorCobrancaPorResultadoLocalHome localHome = (ControladorCobrancaPorResultadoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_POR_RESULTADO_SEJB);
 
             ControladorCobrancaPorResultadoLocal local = localHome.create();
 
@@ -468,6 +472,46 @@ public abstract class ControladorComum implements SessionBean {
         } catch (ServiceLocatorException e) {
             throw new SistemaException(e);
         }
+    }
+	
+	protected ControladorIntegracaoLocal getControladorIntegracao() {
+        ControladorIntegracaoLocalHome localHome = null;
+        ControladorIntegracaoLocal local = null;
+
+        ServiceLocator locator = null;
+
+        try {
+            locator = ServiceLocator.getInstancia();
+            localHome = (ControladorIntegracaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_INTEGRACAO_SEJB);
+            local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+    }
+	
+	protected ControladorGerencialMicromedicaoLocal getControladorGerencialMicromedicao() {
+
+        ControladorGerencialMicromedicaoLocalHome localHome = null;
+        ControladorGerencialMicromedicaoLocal local = null;
+
+        ServiceLocator locator = null;
+
+        try {
+            locator = ServiceLocator.getInstancia();
+            localHome = (ControladorGerencialMicromedicaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB);
+            local = localHome.create();
+
+            return local;
+        } catch (CreateException e) {
+            throw new SistemaException(e);
+        } catch (ServiceLocatorException e) {
+            throw new SistemaException(e);
+        }
+
     }
 	
 }

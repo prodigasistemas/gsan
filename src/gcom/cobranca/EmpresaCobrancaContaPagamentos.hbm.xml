@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-		Created by the Middlegen Hibernate plugin
-		
-		http://boss.bekk.no/boss/middlegen/
-		http://hibernate.sourceforge.net/
-	-->
+
 	<class name="gcom.cobranca.EmpresaCobrancaContaPagamentos" table="cobranca.empr_cobr_conta_pagto">
 		<id name="id" type="java.lang.Integer" column="eccp_id">
 			<generator class="sequence">
@@ -14,12 +9,14 @@
 					cobranca.seq_empr_cobr_conta_pagto</param>
 			</generator>
 		</id>
+		
 		<many-to-one name="empresaCobrancaConta" class="gcom.cobranca.EmpresaCobrancaConta" not-null="true">
 			<column name="ecco_id"/>
 		</many-to-one>
 		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo">
 			<column name="dbtp_id"/>
 		</many-to-one>
+		
 		<property name="valorPagamentoMes" type="java.math.BigDecimal" column="eccp_vlpagamentomes" length="13"/>
 		<property name="anoMesPagamentoArrecadacao" type="java.lang.Integer" column="eccp_ampagamento" length="4" not-null="true"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eccp_tmultimaalteracao" length="8"/>
@@ -32,6 +29,7 @@
 		<property name="numeroTotalParcelas" type="java.lang.Integer" column="eccp_nntotalparcelas" length="4" not-null="false"/>
 		<property name="indicadorGeracaoArquivo" type="java.lang.Short" column="eccp_icgeracaoarquivo" length="4" not-null="false"/>
 		<property name="idPagamento" type="java.lang.Integer" column="pgmt_id" length="9" not-null="true"/>
+		<property name="valorDesconto" type="java.math.BigDecimal" column="eccp_vldesconto" length="13"/>
 		
 	</class>
 </hibernate-mapping>
