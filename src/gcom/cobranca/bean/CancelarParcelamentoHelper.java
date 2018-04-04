@@ -101,6 +101,14 @@ public class CancelarParcelamentoHelper {
 		return valorDescontoFaixa.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 
+	public short getNumeroPrestacoes() {
+		return numeroPrestacoes;
+	}
+
+	public short getNumeroPrestacoesCobradas() {
+		return numeroPrestacoesCobradas;
+	}
+	
 	public ParcelamentoMotivoCancelamento getMotivo() {
 		return motivo;
 	}
@@ -108,4 +116,5 @@ public class CancelarParcelamentoHelper {
 	public void setMotivo(ParcelamentoMotivoCancelamento motivo) {
 		this.motivo = motivo;
 	}
+
 }

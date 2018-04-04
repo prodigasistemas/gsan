@@ -39,13 +39,15 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		CancelarParcelamentoHelper retorno = null;
 		
 		try {
-			String where = "WHERE p.parc_id = :idParcelamento ";
+			String where = "WHERE p.parc_id = :idParcelamento AND dac.dbtp_id != :jurosParcelamento ";
 			String groupBy = "GROUP BY p.parc_id, p.imov_id ";
 			StringBuilder consulta = new StringBuilder();
 			consulta.append(montarRaizConsulta(where, groupBy));
 			
 			Query query = criarQuery(session, consulta.toString());
-			Object[] dados = (Object[]) query.setInteger("idParcelamento", idParcelamento).uniqueResult();
+			Object[] dados = (Object[]) query.setInteger("idParcelamento", idParcelamento)
+											 .setInteger("jurosParcelamento", DebitoTipo.JUROS_SOBRE_PARCELAMENTO)
+											 .uniqueResult();
 			
 			if (dados != null && dados.length > 0){
 				Parcelamento parcelamento = pesquisarPorId((Integer) dados[0]);

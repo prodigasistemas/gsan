@@ -9,6 +9,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaParametro;
+import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoMotivoCancelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoMotivoDesfazer;
@@ -315,9 +316,22 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 
 	private void verificarPermissaoCancelarParcelamento(HttpServletRequest request, HttpSession sessao, Parcelamento parcelamento) {
 		boolean possuiPermissaoCancelarParcelamento = getFachada().verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO, (Usuario) sessao.getAttribute("usuarioLogado"));
+
+		CancelarParcelamentoHelper cancelarParcelamentoHelper = getFachada().pesquisarParcelamentoParaCancelar(parcelamento.getId());
+
+		boolean houvePagamentoParcelamento = cancelarParcelamentoHelper != null;
 		boolean isParcelamentoRealizadoNoGsan = isParcelamentoRealizadoNoGsan(parcelamento.getParcelamento());
 
-		boolean permiteCancelar = possuiPermissaoCancelarParcelamento && isParcelamentoRealizadoNoGsan && verificarSituacao(parcelamento, ParcelamentoSituacao.NORMAL);
+		boolean isParcelamentoConcluido = false;
+		if (cancelarParcelamentoHelper != null) {
+			isParcelamentoConcluido = cancelarParcelamentoHelper.getNumeroPrestacoes() == cancelarParcelamentoHelper.getNumeroPrestacoesCobradas();
+		}
+
+		boolean permiteCancelar = possuiPermissaoCancelarParcelamento 
+								&& isParcelamentoRealizadoNoGsan 
+								&& verificarSituacao(parcelamento, ParcelamentoSituacao.NORMAL)
+								&& !isParcelamentoConcluido 
+								&& houvePagamentoParcelamento;
 
 		request.setAttribute("permiteCancelar", permiteCancelar);
 	}
