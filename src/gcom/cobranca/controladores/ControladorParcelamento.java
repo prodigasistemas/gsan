@@ -218,11 +218,13 @@ public class ControladorParcelamento extends ControladorComum {
 	private void atualizarDebitoACobrar(BigDecimal valor, Integer idParcelamento, Conta conta, Integer idDebitoTipo) throws ControladorException {
 		try {
 			DebitoACobrar debitoACobrar = repositorio.pesquisarDebitoACobrar(idParcelamento, idDebitoTipo);
-			inserirDebitoCobrado(conta, debitoACobrar, valor);
-			
-			debitoACobrar.setNumeroPrestacaoCobradas(debitoACobrar.getNumeroPrestacaoDebito());
-			debitoACobrar.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(debitoACobrar);
+			if (debitoACobrar != null) {
+				inserirDebitoCobrado(conta, debitoACobrar, valor);
+				
+				debitoACobrar.setNumeroPrestacaoCobradas(debitoACobrar.getNumeroPrestacaoDebito());
+				debitoACobrar.setUltimaAlteracao(new Date());
+				getControladorUtil().atualizar(debitoACobrar);
+			}
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao atualizar Debito a Cobrar", e);
