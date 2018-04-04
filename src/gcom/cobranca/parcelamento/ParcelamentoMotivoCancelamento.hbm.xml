@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento" table="cobranca.parcel_motivo_cancelamento">
+		
+		<id name="id" type="java.lang.Integer" column="pmca_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cobranca.seq_parcel_motivo_cancelamento</param>
+			</generator>
+		</id>
+		
+		<property name="descricao" 			type="java.lang.String" 	column="pmca_descricao" 			length="30"/>
+		<property name="indicadorUso" 		type="java.lang.Short" 		column="pmca_icuso" 				length="2" />
+		<property name="ultimaAlteracao" 	type="java.sql.Timestamp" 	column="pmca_tmultimaalteracao" 	length="8" />
+		
+	</class>
+</hibernate-mapping>

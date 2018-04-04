@@ -99,6 +99,7 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	public static final int GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL = 1152;
 	public static final int ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA = 1154;
 	public static final int GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA = 1158;
+	public static final int GERAR_ARQ_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA = 1159;
 	public static final int RETIFICAR_CONJUNTO_CONTA = 1160;
 	public static final int GERAR_RESUMO_REFATURAMENTO_OLAP = 1164;
 	public static final int ATUALIZAR_NUMERO_EXECUCAO_RESUMO_NEGATIVACAO = 1168;
@@ -198,6 +199,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	public static final int GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = 16041;
 	
 	public static final int GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = 16042;
+	
+	public static final int DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA = 16044;
 	
 	private Integer id;
 

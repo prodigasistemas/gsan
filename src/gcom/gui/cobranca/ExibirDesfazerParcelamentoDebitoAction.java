@@ -10,46 +10,22 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Desfazer Parcelamento Débito
- * 
- * @author Fernanda Karla
- * @since 11/01/2006
- */
 public class ExibirDesfazerParcelamentoDebitoAction extends GcomAction {
-	/**
-	 * Description of the Method
-	 * 
-	 * @param actionMapping
-	 *            Description of the Parameter
-	 * @param actionForm
-	 *            Description of the Parameter
-	 * @param httpServletRequest
-	 *            Description of the Parameter
-	 * @param httpServletResponse
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("telaSucesso");
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping.findForward("telaSucesso");
+		String codigo = request.getParameter("codigoParcelamento").trim();
+		String motivo = request.getParameter("motivo").trim();
 
+		Usuario usuario = getUsuarioLogado(request);
 
-		String codigo = httpServletRequest.getParameter("codigoParcelamento").trim();
-		String motivo = httpServletRequest.getParameter("motivo").trim();
-		
-		Usuario usuario = this.getUsuarioLogado(httpServletRequest);
-		
-		this.getFachada().desfazerParcelamentosDebito(motivo, new Integer(codigo),usuario);
+		getFachada().desfazerParcelamentosDebito(motivo, new Integer(codigo), usuario);
 
-		// Monta a página de sucesso
-		montarPaginaSucesso(httpServletRequest, "Parcelamento de Débitos desfeito com sucesso.",
-			"Realizar outra manutenção de Parcelamento de Débitos",
-			"exibirConsultarListaParcelamentoDebitoAction.do?menu=sim");
-		
+		montarPaginaSucesso(request, "Parcelamento de Débitos desfeito com sucesso.", 
+				"Realizar outra manutenção de Parcelamento de Débitos", 
+				"exibirConsultarListaParcelamentoDebitoAction.do?menu=sim");
+
 		return retorno;
 	}
 }

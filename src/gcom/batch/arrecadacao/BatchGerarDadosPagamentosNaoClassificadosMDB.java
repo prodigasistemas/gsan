@@ -28,7 +28,6 @@ public class BatchGerarDadosPagamentosNaoClassificadosMDB implements MessageDriv
 	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {
 	}
 	
-	@Override
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
 

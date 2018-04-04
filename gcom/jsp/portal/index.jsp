@@ -21,7 +21,7 @@
 <body>
 	<%@ include file="/jsp/portal/cabecalho.jsp"%>
 	
-	<%@ include file="/jsp/portal/acesso-barra.jsp"%>
+<%-- 	<%@ include file="/jsp/portal/acesso-barra.jsp"%> --%>
 
 	<logic:notPresent name="matricula" scope="session">
 		<section class="header text-center">
@@ -37,7 +37,7 @@
 				<div class="col-md-3">
 					<a href="#">
 						<div class="panel-modulo">
-							<a href="segunda-via-conta.do">
+							<a href="segunda-via-conta.do?action=resetar">
 								<div class="panel-link">
 									<i class="fa fa-barcode fa-3x" aria-hidden="true"></i>
 									<h3>2ª Via de Conta</h3>

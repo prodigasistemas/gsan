@@ -1,5 +1,7 @@
 package gcom.cobranca;
 
+import gcom.seguranca.acesso.usuario.Usuario;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,6 +18,8 @@ public class ComandoEmpresaCobrancaContaHelper implements Serializable {
 	private List<Integer> idsImovelPerfil;
 
 	private List<Integer> idsLigacaoAguaSituacao;
+
+	private Usuario usuario;
 
 	public ComandoEmpresaCobrancaContaHelper() {
 	}
@@ -58,5 +62,13 @@ public class ComandoEmpresaCobrancaContaHelper implements Serializable {
 
 	public void setIdsLigacaoAguaSituacao(List<Integer> idsLigacaoAguaSituacao) {
 		this.idsLigacaoAguaSituacao = idsLigacaoAguaSituacao;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

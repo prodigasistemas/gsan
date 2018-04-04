@@ -33,6 +33,7 @@ public class ConstantesJNDI {
 	public static String QUEUE_CONTROLADOR_FATURAMENTO_MDB = "";
 	public static String QUEUE_CONTROLADOR_ARRECADACAO_MDB = "";
 	public static String QUEUE_CONTROLADOR_MICROMEDICAO_MDB = "";
+	public static String QUEUE_CONTROLADOR_COBRANCA_MDB = "";
 	public static String CONTROLADOR_ARRECADACAO_SEJB = "";
 	public static String CONTROLADOR_ACESSO_SEJB = "";
 	public static String CONTROLADOR_TRANSACAO_SEJB = "";
@@ -274,6 +275,7 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = "";
 	public static String BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = "";
 	public static String BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = "";
+	public static String BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = "";
 
 	static {
 		inicializarPropriedades();
@@ -332,6 +334,7 @@ public class ConstantesJNDI {
 			QUEUE_CONTROLADOR_FATURAMENTO_MDB = propriedades.getProperty("QueueControladorFaturamento");
 			QUEUE_CONTROLADOR_ARRECADACAO_MDB = propriedades.getProperty("QueueControladorArrecadacao");
 			QUEUE_CONTROLADOR_MICROMEDICAO_MDB = propriedades.getProperty("QueueControladorMicromedicao");
+			QUEUE_CONTROLADOR_COBRANCA_MDB = propriedades.getProperty("QueueControladorCobranca");
 			CONTROLADOR_ARRECADACAO_SEJB = propriedades.getProperty("ControladorArrecadacao");
 			CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB = propriedades.getProperty("ControladorGerencialMicromedicao");
 			CONTROLADOR_GERENCIAL_ARRECADACAO_SEJB = propriedades.getProperty("ControladorGerencialArrecadacao");
@@ -576,6 +579,7 @@ public class ConstantesJNDI {
 			BATCH_GERAR_NEGOCIACAO_CONTAS_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchGerarNegociacaoContasCobrancaEmpresaMDB");
 			BATCH_GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS = propriedades.getProperty("QueueBatchGerarDadosPagamentosNaoClassificadosMDB");
 			BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = propriedades.getProperty("QueueBatchGerarDadosDocumentosNaoIdentificadosMDB");
+			BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = propriedades.getProperty("QueueBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferenciaMDB");
 
 			stream.close();
 

@@ -332,7 +332,7 @@ function limparForm(){
 							<td align="right"><bean:write name="parcelamento" property="valorEntrada"  format="0.00"/></td>
 							<td align="right"><bean:write name="parcelamento" property="numeroPrestacoes"/></td>
 							<td align="right"><bean:write name="parcelamento" property="valorPrestacao"  format="0.00"/></td>
-							<td align="left"><bean:write name="parcelamento" property="parcelamentoSituacao.descricaoAbreviada" /></td>
+							<td align="center"><bean:write name="parcelamento" property="parcelamentoSituacao.descricaoAbreviada" /></td>
 						</tr>
 						</logic:iterate>
 					</logic:present>
@@ -340,10 +340,6 @@ function limparForm(){
 				</td>
 			</tr>
 			<tr>
-			<%-- <td align="right" colspan="3">
-				<input type="button" name="Button" class="bottonRightCol" value="Consultar" onClick="validarForm(document.forms[0]);" />
-				<input name="Button" type="button" class="bottonRightCol" value="Fechar" onClick="javascript:fechar();">
-			</td>--%>
 			<td colspan="3">
 			&nbsp;
 			</td>

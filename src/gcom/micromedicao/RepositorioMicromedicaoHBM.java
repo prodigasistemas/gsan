@@ -5100,7 +5100,8 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "consAnormalidade.descricaoAbreviada, "// 3
 					+ "consAnormalidade.descricao, "// 4
 					+ "ch.consumoRateio, " // 5
-					+ "consAnormalidade.mensagemConta "// 6
+					+ "consAnormalidade.mensagemConta, "// 6
+					+ "consAnormalidade.id " // 7
 					+ "from ConsumoHistorico ch "
 					+ "inner join ch.imovel imovel "
 					+ "inner join ch.ligacaoTipo lt "

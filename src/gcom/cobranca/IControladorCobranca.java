@@ -39,7 +39,6 @@ import gcom.cobranca.bean.ParcelamentoRelatorioHelper;
 import gcom.cobranca.bean.PesquisarQtdeRotasSemCriteriosParaAcoesCobranca;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.cobranca.bean.TransferenciasDebitoHelper;
-import gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade;
@@ -708,16 +707,10 @@ public interface IControladorCobranca {
 
 	public void incluirDebitoACobrarEntradaParcelamentoNaoPaga(int idFuncionalidadeIniciada) throws ControladorException;
 
-	public Integer inserirComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Usuario usuarioLogado)
-			throws ControladorException;
-
 	public Date obterDataValidadeDocumentoCobranca(CobrancaDocumento cobrancaDocumento, Usuario usuario, Date maiorDataVencimentoContas)
 			throws ControladorException;
 
 	public Collection<ResolucaoDiretoria> pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial() throws ControladorException;
-
-	public Collection<GerarArquivoTextoContasCobrancaEmpresaHelper> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa,
-			Date comandoInicial, Date comandoFinal, int pagina) throws ControladorException;
 
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaCount(Integer idEmpresa, Date comandoInicial, Date comandoFinal)
 			throws ControladorException;
@@ -732,9 +725,6 @@ public interface IControladorCobranca {
 
 	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando)
 			throws ControladorException;
-
-	public Collection<GerarExtensaoComandoContasCobrancaEmpresaHelper> pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(Integer idEmpresa,
-			Date comandoInicial, Date comandoFinal, int numeroIndice) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public void inserirExtensaoComandoContasCobrancaEmpresa(ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao,
@@ -790,8 +780,6 @@ public interface IControladorCobranca {
 
 	@SuppressWarnings("rawtypes")
 	public List consultarColecaoCicloMetaGrupoRelatorio(CicloMeta cicloMeta) throws ControladorException;
-
-	public Object[] pesquisarDadosPopupExtensaoComando(Integer idComando, Date dateInicial, Date dateFinal) throws ControladorException;
 
 	public List<RelatorioContaBean> pesquisarDadosContaRelatorio(Integer anoMes, Integer idFaturamentoGrupo, Integer idLocalidadeInicial,
 			Integer idLocalidadeFinal, Integer codigoSetorComercialInicial, Integer codigoSetorComercialFinal, Short codigoRotaInicial, Short codigoRotaFinal,
@@ -1031,16 +1019,10 @@ public interface IControladorCobranca {
 
 	public void verificarPossibilidadeCancelamentoContratoParcelamento(ContratoParcelamento contratoParcelamento) throws ControladorException;
 
-	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial,
-			Date comandoFinal, int pagina) throws ControladorException;
-
 	public Object[] pesquisarDadosPopupExtensaoComandoCobranca(Integer idComando, Date dateInicial, Date dateFinal) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarValorTotalCobrancaComandoEmpresaPorImovel(Integer idComando) throws ControladorException;
-
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, String idEmpresa, Usuario usuarioLogado, Integer idComando,
-			Integer idCobrancaSituacao) throws ControladorException;
 
 	public void movimentarOrdemServicoEncerrarOS(MovimentarOrdemServicoEncerrarOSHelper helper, Usuario usuarioLogado) throws ControladorException;
 
@@ -1092,4 +1074,6 @@ public interface IControladorCobranca {
 	public String getCobrancaParametro(String parametro) throws ControladorException;
 
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException;
+	
+	public void desfazerParcelamentosPorEntradaNaoPagaSemAnoMesReferencia(int idFuncionalidadeIniciada) throws ControladorException;
 }

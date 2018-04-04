@@ -91,6 +91,9 @@ public class ControladorParcelamento extends ControladorComum {
 		
 		Parcelamento parcelamento = helper.getParcelamento();
 		parcelamento.setParcelamentoSituacao(new ParcelamentoSituacao(ParcelamentoSituacao.CANCELADO));
+		parcelamento.setUsuarioCancelamento(usuario);
+		parcelamento.setDataCancelamento(new Date());
+		parcelamento.setMotivoCancelamento(helper.getMotivo());
 		parcelamento.setUltimaAlteracao(new Date());
 		getControladorUtil().atualizar(parcelamento);
 		

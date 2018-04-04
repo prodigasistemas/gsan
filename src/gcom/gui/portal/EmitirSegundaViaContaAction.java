@@ -2,18 +2,18 @@ package gcom.gui.portal;
 
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
-import gcom.faturamento.debito.DebitoACobrar;
 import gcom.gui.GcomAction;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -21,85 +21,101 @@ import org.apache.struts.action.ActionMapping;
 public class EmitirSegundaViaContaAction extends GcomAction {
 
 	private EmitirSegundaViaContaActionForm form;
-
-	private String matricula;
+	private HttpServletRequest request;
+	private ActionErrors errors;
 
 	private Collection<ContaValoresHelper> contas;
-	private BigDecimal totalContas;
-	private BigDecimal totalDebitos;
-	private BigDecimal totalAcrescimos;
+	private int quantidadeContas;
+	private BigDecimal valorTotalContas;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = mapping.findForward("segunda-via-conta");
-
-		HttpSession sessao = request.getSession(true);
-		form = (EmitirSegundaViaContaActionForm) actionForm;
-		resetar(request);
-
-		if (isMatriculaValida(sessao)) {
-			try {
-				ObterDebitoImovelOuClienteHelper helper = (ObterDebitoImovelOuClienteHelper) getFachada().obterDebitoImovelOuCliente(1, matricula, null, null, "000101", "999912",
-						Util.converteStringParaDate("01/01/0001"), Util.converteStringParaDate("31/12/9999"), 1, 1, 1, 1, 1, 1, 1, null);
-
-				totalizarContas(helper, request);
-				totalizarDebitos(helper);
-			} catch (Exception e) {
-				request.setAttribute("erroSistema", true);
-				e.printStackTrace();
-			}
-
-			setForm();
+		this.form = (EmitirSegundaViaContaActionForm) actionForm;
+		this.request = request;
+		
+		if (isResetar()) {
+			resetar();
 		} else {
-			retorno = mapping.findForward("acessar-portal");
-			sessao.setAttribute("action", "segunda-via-conta");
-			sessao.setAttribute("validarCpfCnpj", false);
+			validar();
+			
+			if (errors.isEmpty()) {
+				try {
+					ObterDebitoImovelOuClienteHelper helper = (ObterDebitoImovelOuClienteHelper) getFachada().obterDebitoImovelOuCliente(1, form.getMatricula(), null, null, "000101", "999912",
+							Util.converteStringParaDate("01/01/0001"), Util.converteStringParaDate("31/12/9999"), 1, 1, 1, 1, 1, 1, 1, null);
+					
+					totalizarContas(helper);
+					setForm();
+					request.removeAttribute("erro-segunda-via");
+				} catch (Exception e) {
+					e.printStackTrace();
+					errors.add("erro-segunda-via", new ActionError("errors.portal.erro_inesperado"));
+					salvarErros();
+					return retorno;
+				}
+			} else {
+				resetar();
+			}
 		}
 
 		return retorno;
 	}
 
-	private void resetar(HttpServletRequest request) {
+	private boolean isResetar() {
+		String action = (String) request.getParameter("action");
+		return action != null && action.equals("resetar");
+	}
+
+	private void salvarErros() {
+		if (!errors.isEmpty()) {
+			saveErrors(request, errors);
+			request.setAttribute("erro-segunda-via", true);
+		} else {
+			request.removeAttribute("erro-segunda-via");
+		}
+	}
+
+	private void validar() {
+		errors = form.validate();
+		validarMatricula();
+		saveErrors(request, errors);
+		request.setAttribute("erro-segunda-via", true);
+	}
+
+	private boolean naoContemErro(String campo) {
+		return !errors.get(campo).hasNext();
+	}
+
+	private void validarMatricula() {
+		if (naoContemErro("erro-segunda-via") && getFachada().verificarExistenciaImovel(Integer.valueOf(form.getMatricula())) != 1) {
+			errors.add("erro-segunda-via", new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
+		}
+	}
+
+	private void resetar() {
 		form.setMatricula(null);
-		form.setData(null);
-		form.setValorDebito(null);
-		form.setValorDebitoCobrado(null);
-		
-		request.removeAttribute("totalContas");
+		form.setNomeUsuario(null);
+		form.setEndereco(null);
+		form.setQuantidadeContas(null);
+		form.setValorTotalContas(null);
 		request.removeAttribute("contas");
-		request.removeAttribute("erroSistema");
-		
 	}
 
-	private void totalizarDebitos(ObterDebitoImovelOuClienteHelper helper) {
-		Collection<DebitoACobrar> debitos = helper.getColecaoDebitoACobrar();
-		totalDebitos = new BigDecimal("0.00");
-		for (DebitoACobrar debito : debitos) {
-			totalDebitos = totalDebitos.add(debito.getValorTotalComBonus());
-		}
-	}
-
-	private void totalizarContas(ObterDebitoImovelOuClienteHelper helper, HttpServletRequest request) {
+	private void totalizarContas(ObterDebitoImovelOuClienteHelper helper) {
 		contas = helper.getColecaoContasValores();
-		totalContas = new BigDecimal("0.00");
-		totalAcrescimos = new BigDecimal("0.00");
+		quantidadeContas = 0;
+		valorTotalContas = new BigDecimal("0.00");
 		for (ContaValoresHelper conta : contas) {
-			totalContas = totalContas.add(conta.getValorTotalConta());
-			totalAcrescimos = totalAcrescimos.add(conta.getValorTotalContaValores());
+			valorTotalContas = valorTotalContas.add(conta.getValorTotalConta());
+			quantidadeContas++;
 		}
-
-		request.setAttribute("totalContas", totalContas);
+		
 		request.setAttribute("contas", contas);
 	}
 
-	private boolean isMatriculaValida(HttpSession sessao) {
-		matricula = (String) sessao.getAttribute("matricula");
-		return matricula != null && !matricula.equals("");
-	}
-
-	private void setForm() {
-		form.setMatricula(matricula);
-		form.setData(Util.formatarData(new Date()));
-		form.setValorDebito(Util.formatarMoedaReal(totalContas));
-		form.setValorDebitoCobrado(Util.formatarMoedaReal(totalDebitos.add(totalAcrescimos)));
+	private void setForm() throws NumberFormatException, ControladorException {
+		form.setNomeUsuario(getFachada().consultarClienteUsuarioImovel(Integer.valueOf(form.getMatricula())));
+		form.setEndereco(getFachada().pesquisarEnderecoFormatado(Integer.valueOf(form.getMatricula())));
+		form.setQuantidadeContas(String.valueOf(quantidadeContas));
+		form.setValorTotalContas(Util.formatarMoedaReal(valorTotalContas));
 	}
 }

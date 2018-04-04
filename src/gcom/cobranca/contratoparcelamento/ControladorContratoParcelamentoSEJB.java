@@ -2444,16 +2444,18 @@ public class ControladorContratoParcelamentoSEJB implements SessionBean {
 		DebitoTipo debitoTipo = new DebitoTipo();
 		debitoTipo.setId(idDebitoTipo);
 		
-		GuiaPagamento guiaPagamento = new GuiaPagamento();
-		guiaPagamento.setId(contratoParcelamentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getId());
+		GuiaPagamento guiaPagamento = new GuiaPagamento(contratoParcelamentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getId());
+		GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral(contratoParcelamentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getId());
 		
+		guiaGeral.setGuiaPagamento(guiaPagamento);
+
 		Pagamento pagamento = new Pagamento();
 		
 		pagamento.setAnoMesReferenciaArrecadacao(anoMes);
 		pagamento.setValorPagamento(valorPagamento);
 		pagamento.setDataPagamento(dataPagamento);
 		pagamento.setDebitoTipo(debitoTipo);
-		pagamento.setGuiaPagamento(guiaPagamento);
+		pagamento.setGuiaPagamento(guiaGeral);
 		pagamento.setLocalidade(contratoParcelamentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getLocalidade());
 		pagamento.setDocumentoTipo(contratoParcelamentoItem.getDocumentoTipo());
 		pagamento.setAvisoBancario(avisoBancario);

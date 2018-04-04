@@ -10,7 +10,6 @@ import gcom.batch.auxiliarbatch.CobrancaDocumentoControleGeracao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.ConsultarTransferenciasDebitoHelper;
 import gcom.cobranca.bean.DadosConsultaNegativacaoHelper;
 import gcom.cobranca.bean.DadosPesquisaCobrancaDocumentoHelper;
@@ -560,9 +559,6 @@ public interface IRepositorioCobranca {
 
 	public Collection<Object[]> consultarCreditosARealizarTransferidos(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) throws ErroRepositorioException;
 
-	public Collection<Object[]> pesquisarContasInformarContasEmCobranca(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Collection<Integer> idsImoveis, SistemaParametro sistemaParametro)
-			throws ErroRepositorioException;
-
 	public Collection<Object[]> obterNomeCPFTestemunhas(Integer unidadeUsuario) throws ErroRepositorioException;
 
 	public void cancelarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;
@@ -582,10 +578,6 @@ public interface IRepositorioCobranca {
 	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobranca(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
 			throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice, int quantidadeRegistros)
-			throws ErroRepositorioException;
-
 	public Integer pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaCount(Integer idEmpresa, Date comandoInicial, Date comandoFinal) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
@@ -710,16 +702,7 @@ public interface IRepositorioCobranca {
 	@SuppressWarnings("rawtypes")
 	public List consultarColecaoCicloMetaGrupoRelatorio(Integer idCicloMeta) throws ErroRepositorioException;
 	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarValorTotalCobranca(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarValorTotalCobrancaCriterio(Integer idComando, Date dateInicial, Date dateFinal) throws ErroRepositorioException;
-
 	public IndicesAcrescimosImpontualidade pesquisarMenorIgualIndiceAcrescimoImpontualidade(int anoMesReferenciaDebito) throws ErroRepositorioException;
-	
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosPopup(Integer idComando) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
 	public List filtrarCobrancaDocumento(FiltrarDocumentoCobrancaHelper filtro) throws ErroRepositorioException;
@@ -1759,17 +1742,6 @@ public interface IRepositorioCobranca {
 	public Collection<BigDecimal> pesquisarValorContaouContaHistorico(Integer idImovel, Integer referencia) throws ErroRepositorioException;
 
 	/**
-	 * [UC0870] Gerar Movimento de Contas em Cobrança por Empresa
-	 * 
-	 * Pesquisa a quantidade de contas associadas ao imóvel
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 13/04/2011
-	 */
-	public Integer pesquisarQuantidadeContasEmCobrancaPorImovel(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Integer idImovel, SistemaParametro sistemaParametro)
-			throws ErroRepositorioException;
-
-	/**
 	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
 	 * Pesquisa dados do popup
 	 * 
@@ -1837,17 +1809,6 @@ public interface IRepositorioCobranca {
 	/**
 	 * [UC1167] Consultar Comandos de Cobrança por Empresa
 	 * 
-	 * Pesquisa os dados dos comandos
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 04/05/2011
-	 */
-	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int numeroIndice, int quantidadeRegistros)
-			throws ErroRepositorioException;
-
-	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
-	 * 
 	 * Pesquisa os dados de um comando para exibir no popup
 	 * 
 	 * @author: Mariana Victor
@@ -1891,19 +1852,6 @@ public interface IRepositorioCobranca {
 	 * @return void
 	 */
 	public void atualizarIndicadorGeracaoTxt(Collection idsComandos) throws ErroRepositorioException;
-
-	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 *
-	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
-	 * determinado comando
-	 *
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 * @throws ErroRepositorioException
-	 * 
-	 */
-	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando) throws ErroRepositorioException;
 
 	public void atualizarDataEncerramentoComando(Integer idComando) throws ErroRepositorioException;
 
@@ -2006,4 +1954,8 @@ public interface IRepositorioCobranca {
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ErroRepositorioException;
 	
 	public void removerBoletoInfo(Integer idParcelamento) throws ErroRepositorioException;
+	
+	public Integer[] obterPeriodoDebitosParcelados(Integer idParcelamento) throws ErroRepositorioException;
+	
+	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao, int numeroInicial, int numeroFinal) throws ErroRepositorioException;
 }

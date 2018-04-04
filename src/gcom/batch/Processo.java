@@ -100,7 +100,7 @@ public class Processo extends ObjetoGcom {
     public static final int RELATORIO_ANALISE_CONSUMO = 146;
     public static final int ATUALIZAR_DIFERENCA_ACUMULADA_NO_MES = 147;
     public static final int RELATORIO_IMOVEIS_FATURAS_ATRASO_DESCRITAS_LOCALIZACAO = 148;
-    public static final int GERAR_RELATORIO_DADOS_LEITURA = 149;
+    public static final int GERAR_RELATORIO_DADOS_LEITURA = 149;	
     public static final int GERAR_RELATORIO_FATURAS_AGRUPADAS = 150;
     public static final int GERAR_RELATORIO_ROTAS_ONLINE_POR_EMPRESA = 155;
     public static final int GERAR_ARQUIVO_TEXTO_CONTAS_COBRANCA_EMPRESA = 156;
@@ -159,7 +159,7 @@ public class Processo extends ObjetoGcom {
 	public static final int PROCESSAR_CARTA_TARIFA_SOCIAL_SIMULAR = 251;
 	public static final int GERAR_RELATORIO_ACOMPANHAMENTO_CLIENTES_NEGATIVADOS_SINTETICO = 252;
 	public static final int RETIRAR_IMOVEL_TARIFA_SOCIAL = 253;
-	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = 255;
+	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = 506;
 	public static final int GERAR_TXT_OS_INSPECAO_ANORMALIDADE = 258;
 	public static final int PROCESSAR_ARQUIVO_TXT_ENCERRAMENTO_OS_COBRANCA = 257;
 	public static final int GERAR_RELATORIO_IMOVEIS_COM_DOACOES = 260;

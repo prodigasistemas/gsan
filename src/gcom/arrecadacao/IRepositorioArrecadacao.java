@@ -779,8 +779,7 @@ public interface IRepositorioArrecadacao {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoPorAvisoBancario(Integer idAvisoBancario) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;
+	public GuiaPagamento pesquisarGuiaPagamento(Integer idGuiaPagamento) throws ErroRepositorioException;
 
 	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, LogradouroBairro logradouroBairroNovo) throws ErroRepositorioException;
 
@@ -829,8 +828,8 @@ public interface IRepositorioArrecadacao {
 	public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoDoacoes(
 			Integer idLocalidade, Integer anoMesReferenciaArrecadacao, Integer idCategoria, Integer idLancamentoItemContabil) throws ErroRepositorioException;
 
-	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(
-			Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException;
+//	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(
+//			Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException;
 
 	public Collection<Pagamento> pesquisarPagamentosClassificadosOuValorExcedenteBaixado(Integer anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
@@ -1081,7 +1080,8 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarPagamentoEntidadesBeneficentesSintetico(String anoMesInicial, String anoMesFinal, String idEntidadeBeneficente,
 			String idGerenciaRegional, String idUnidadeNegocio, String idLocalidade, int opcaoTotalizacao) throws ErroRepositorioException;
 
-	public Pagamento pesquisarPagamentoParaEncerrarArrecadacao(Integer idPagamento) throws ErroRepositorioException;
+	public PagamentoHistorico obterPagamentoHistoricoDePagamentoParaEncerrarArrecadacao(Integer idPagamento)
+		      throws ErroRepositorioException;
 
 	public int pesquisarPagamentoEntidadesBeneficentesAnaliticoCount(String anoMesInicial, String anoMesFinal, String idEntidadeBeneficente,
 			String idGerenciaRegional, String idUnidadeNegocio, String idLocalidade, int opcaoTotalizacao) throws ErroRepositorioException;
@@ -1308,8 +1308,14 @@ public interface IRepositorioArrecadacao {
 	public List<ResumoCreditosAvisosBancariosDTO> pesquisarResumoCreditosAvisosBancarios(Date data) throws ErroRepositorioException;
 
 	public Object[] pesquisarPagamentoInconformeImovel(String idImovel) throws ErroRepositorioException;
+	
+	public PagamentoHistorico pesquisarPagamentoHistorico(Integer idPagamento) throws ErroRepositorioException;
+	
+	public Integer pesquisarIdGuiaPagamento(Integer idPagamento) throws ErroRepositorioException;
 
 	public List<ArrecadadorMovimentoItemDTO> obterItensPorAviso(Integer idAvisoBancario) throws ErroRepositorioException;
+	
+	public Collection<GuiaPagamento> pesquisarGuiasPagamentoDePagamentosClassificadosGuiasPagamentoEPagamentosAnterioresGuiaPagamentoClassificadosNoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException ;
 
 	public void gerarDadosPagamentosNaoClassificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
 	

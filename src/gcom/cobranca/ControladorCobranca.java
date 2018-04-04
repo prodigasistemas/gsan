@@ -12585,42 +12585,6 @@ public class ControladorCobranca extends ControladorComum {
 	}
 
 	/**
-	 * Permite inserir um ComandoEmpresaCobrancaConta
-	 * 
-	 * [UC0866] Gerar Comando Contas em Cobrança por Empresa
-	 * 
-	 * @author Rafael Corrêa
-	 * @param usuarioLogado
-	 * @date 28/10/2008
-	 * 
-	 */
-	public Integer inserirComandoEmpresaCobrancaConta(ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, Usuario usuarioLogado)
-			throws ControladorException {
-
-		comandoEmpresaCobrancaConta.setUltimaAlteracao(new Date());
-
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_INFORMAR_CONTAS_EM_COBRANCA,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		Operacao operacao = new Operacao();
-		operacao.setId(Operacao.OPERACAO_INFORMAR_CONTAS_EM_COBRANCA);
-
-		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		operacaoEfetuada.setOperacao(operacao);
-
-		comandoEmpresaCobrancaConta.setOperacaoEfetuada(operacaoEfetuada);
-		comandoEmpresaCobrancaConta.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		registradorOperacao.registrarOperacao(comandoEmpresaCobrancaConta);
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
-		Integer id = (Integer) getControladorUtil().inserir(comandoEmpresaCobrancaConta);
-
-		return id;
-
-	}
-
-	/**
 	 * 
 	 * Este caso de uso permite a consulta de documentos de cobrança
 	 * 
@@ -34433,7 +34397,8 @@ public class ControladorCobranca extends ControladorComum {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoOrigem.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -34555,7 +34520,8 @@ public class ControladorCobranca extends ControladorComum {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAtual");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoCreditoSituacaoAnterior");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoOrigem.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -41711,7 +41677,8 @@ public class ControladorCobranca extends ControladorComum {
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo.financiamentoTipo");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
-
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
+		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
@@ -43407,19 +43374,6 @@ public class ControladorCobranca extends ControladorComum {
 	}
 
 	/**
-	 * [UC0869] Gerar Arquivo Texto de Contas em Cobrança por Empresa
-	 */
-	public Collection<GerarArquivoTextoContasCobrancaEmpresaHelper> pesquisarDadosGerarArquivoTextoContasCobrancaEmpresa(Integer idEmpresa,
-			Date comandoInicial, Date comandoFinal, int pagina) throws ControladorException {
-		try {
-			return (Collection) repositorioCobranca.pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(
-					idEmpresa, comandoInicial, comandoFinal, pagina, 10);
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-	}
-
-	/**
 	 * [UC0214] - Efetuar Parcelamento de Débitos
 	 */
 	public Collection<ResolucaoDiretoria> pesquisarResolucaoDiretoriaMaiorDataVigenciaInicioPermissaoEspecial() throws ControladorException {
@@ -43847,168 +43801,6 @@ public class ControladorCobranca extends ControladorComum {
 
 		return colecaoRelatorioPagamentosContasCobrancaEmpresaBean;
 
-	}
-
-	/**
-	 * [UC0879] Gerar Extensao de Comando de Contas em Cobrança por Empresa
-	 * [CRC1109]
-	 * 
-	 * Pesquisa a quantidade de contas
-	 * 
-	 * @author: Rômulo Aurélio
-	 * @date: 02/02/2009
-	 */
-
-	/**
-	 * @param idEmpresa
-	 * @param comandoInicial
-	 * @param comandoFinal
-	 * @return
-	 * @throws ControladorException
-	 */
-	/**
-	 * @param idEmpresa
-	 * @param comandoInicial
-	 * @param comandoFinal
-	 * @return
-	 * @throws ControladorException
-	 */
-	/**
-	 * @param idEmpresa
-	 * @param comandoInicial
-	 * @param comandoFinal
-	 * @return
-	 * @throws ControladorException
-	 */
-	/**
-	 * @param idEmpresa
-	 * @param comandoInicial
-	 * @param comandoFinal
-	 * @return
-	 * @throws ControladorException
-	 */
-	@SuppressWarnings("unused")
-	public Collection<GerarExtensaoComandoContasCobrancaEmpresaHelper> pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresa(
-			Integer idEmpresa, Date comandoInicial, Date comandoFinal, int numeroIndice) throws ControladorException {
-
-		try {
-
-			Collection<GerarExtensaoComandoContasCobrancaEmpresaHelper> colecaoGerarExtensaoComandoContasCobrancaEmpresaHelper = new ArrayList();
-
-			// Variáveis para a paginação da pesquisa
-			// ========================================================================
-			final int quantidadeRegistros = 10;
-			// ========================================================================
-
-			// Colecao de helper com os dados das contas em cobranca por
-			// empresa
-
-			Collection<GerarArquivoTextoContasCobrancaEmpresaHelper> colecaoGerarArquivoTextoContasCobrancaEmpresaHelper = (Collection) repositorioCobranca
-					.pesquisarDadosGerarArquivoTextoContasCobrancaEmpresaParaCobrancaResumido(idEmpresa, comandoInicial, comandoFinal,
-							numeroIndice, quantidadeRegistros);
-
-			if (colecaoGerarArquivoTextoContasCobrancaEmpresaHelper != null
-					&& !colecaoGerarArquivoTextoContasCobrancaEmpresaHelper.isEmpty()) {
-
-				Iterator colecaoGerarArquivoTextoContasCobrancaEmpresaHelperIterator = colecaoGerarArquivoTextoContasCobrancaEmpresaHelper
-						.iterator();
-
-				while (colecaoGerarArquivoTextoContasCobrancaEmpresaHelperIterator.hasNext()) {
-					// helper com os dados das contas em cobranca por
-					// empresa
-					GerarArquivoTextoContasCobrancaEmpresaHelper helperArquivoTextoContasCobrancaEmpresa = (GerarArquivoTextoContasCobrancaEmpresaHelper) colecaoGerarArquivoTextoContasCobrancaEmpresaHelperIterator
-							.next();
-
-					Collection<ExtensaoComandoContasCobrancaEmpresaHelper> colecaoExtensaoComandoContasCobrancaEmpresaHelper = new ArrayList();
-
-					Collection<Object[]> colecaoDadosExtensaoComandoContasCobrancaEmpresa = repositorioCobranca
-							.pesquisarDadosGerarExtensaoComandoContasCobrancaEmpresaParaCobranca(helperArquivoTextoContasCobrancaEmpresa
-									.getIdComandoEmpresaCobrancaConta());
-					// helper com os dados das contas em
-					// cobranca
-					// por empresa e com colecao de helper dos dados da
-					// tabela
-					// ExtensaoComandoContasCobranca
-
-					GerarExtensaoComandoContasCobrancaEmpresaHelper helperGerarExtensaoComandoContasCobrancaEmpresa = new GerarExtensaoComandoContasCobrancaEmpresaHelper();
-
-					if (colecaoDadosExtensaoComandoContasCobrancaEmpresa != null
-							&& !colecaoDadosExtensaoComandoContasCobrancaEmpresa.isEmpty()) {
-						Iterator it = colecaoDadosExtensaoComandoContasCobrancaEmpresa.iterator();
-
-						while (it.hasNext()) {
-
-							ExtensaoComandoContasCobrancaEmpresaHelper helperExtensaoComandoContasCobrancaEmpresa = new ExtensaoComandoContasCobrancaEmpresaHelper();
-
-							// retorno da pesquisa
-							Object[] dados = (Object[]) it.next();
-
-							// Seta os dados da
-							// extensaoComandoContasCobrancaEmpresa no
-							// helper
-							// idImovel
-							if (dados[0] != null) {
-								helperExtensaoComandoContasCobrancaEmpresa.setIdComandoEmpresaCobrancaContaExtensao((Integer) dados[0]);
-							}
-							if (dados[1] != null) {
-								helperExtensaoComandoContasCobrancaEmpresa
-										.setAnoMesInicialContaComandoEmpresaCobrancaContaExtensao((Integer) dados[1]);
-							}
-
-							if (dados[2] != null) {
-								helperExtensaoComandoContasCobrancaEmpresa
-										.setAnoMesFinalContaComandoEmpresaCobrancaContaExtensao((Integer) dados[2]);
-							}
-							if (dados[3] != null) {
-								helperExtensaoComandoContasCobrancaEmpresa
-										.setDataExecucaoComandoEmpresaCobrancaContaExtensao((Date) dados[3]);
-							}
-
-							helperExtensaoComandoContasCobrancaEmpresa.setQtdeContasParaCobranca(new Integer(0));
-
-							BigDecimal valorTotal = new BigDecimal(0.0);
-							helperExtensaoComandoContasCobrancaEmpresa.setValorTotalContasParaCobranca(valorTotal);
-
-							helperGerarExtensaoComandoContasCobrancaEmpresa.setAnoMesInicial(Util.formatarAnoMesParaMesAno(Util
-									.somaUmMesAnoMesReferencia(helperExtensaoComandoContasCobrancaEmpresa
-											.getAnoMesFinalContaComandoEmpresaCobrancaContaExtensao())));
-							colecaoExtensaoComandoContasCobrancaEmpresaHelper.add(helperExtensaoComandoContasCobrancaEmpresa);
-						}
-
-					}
-					// Seta o helperArquivoTextoContasCobrancaEmpresa e a
-					// colecaoExtensaoComandoContasCobrancaEmpresaHelper
-					// para
-					// exibicao na tela
-					helperGerarExtensaoComandoContasCobrancaEmpresa
-							.setGerarArquivoTextoContasCobrancaEmpresaHelper(helperArquivoTextoContasCobrancaEmpresa);
-
-					helperGerarExtensaoComandoContasCobrancaEmpresa
-							.setColecaoExtensaoComandoContasCobrancaEmpresaHelper(colecaoExtensaoComandoContasCobrancaEmpresaHelper);
-
-					// AnoMesInicial
-					SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-					helperGerarExtensaoComandoContasCobrancaEmpresa.setAnoMesFinal(Util.formatarAnoMesParaMesAno(Util.subtrairMesDoAnoMes(
-							sistemaParametro.getAnoMesFaturamento(), 1)));
-
-					// anoMesFinal
-
-					if (helperGerarExtensaoComandoContasCobrancaEmpresa.getAnoMesInicial() == null
-							|| helperGerarExtensaoComandoContasCobrancaEmpresa.getAnoMesInicial().equals("")) {
-						helperGerarExtensaoComandoContasCobrancaEmpresa.setAnoMesInicial(Util.formatarAnoMesParaMesAno(Util
-								.somaUmMesAnoMesReferencia(helperArquivoTextoContasCobrancaEmpresa.getReferenciaContaFinal())));
-					}
-
-					colecaoGerarExtensaoComandoContasCobrancaEmpresaHelper.add(helperGerarExtensaoComandoContasCobrancaEmpresa);
-				}
-
-			}
-
-			return colecaoGerarExtensaoComandoContasCobrancaEmpresaHelper;
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
 	}
 
 	/**
@@ -47631,62 +47423,6 @@ public class ControladorCobranca extends ControladorComum {
 		}
 
 		return colecaoCicloMetaGrupo;
-	}
-
-	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
-	 * Pesquisa dados do popup
-	 * 
-	 * @author Hugo Amorim
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
-	public Object[] pesquisarDadosPopupExtensaoComando(Integer idComando, Date dateInicial, Date dateFinal) throws ControladorException {
-		Object[] retorno = new Object[26];
-		try {
-
-			// Dados do comando empresa cobranca conta obs: retorno[0 a 21]
-			Collection dadosPopup = repositorioCobranca.pesquisarDadosPopup(idComando);
-
-			Iterator iteraDadosPopup = dadosPopup.iterator();
-
-			Object[] array = (Object[]) iteraDadosPopup.next();
-
-			for (int i = 0; i < array.length; i++) {
-				retorno[i] = array[i];
-			}
-			// Dados das Cobranças do Comando
-			Collection dadosCobranca = repositorioCobranca.pesquisarValorTotalCobranca(idComando, dateInicial, dateFinal);
-
-			// Quantidade Total de Contas Selecionadas para Cobrança
-			retorno[16] = dadosCobranca.size();
-			Iterator iteraDadosCobranca = dadosCobranca.iterator();
-			BigDecimal somaCobranca = new BigDecimal("0.0");
-			while (iteraDadosCobranca.hasNext()) {
-				BigDecimal valor = (BigDecimal) iteraDadosCobranca.next();
-				somaCobranca = somaCobranca.add(valor);
-			}
-			retorno[17] = somaCobranca;
-
-			// Dados das Cobranças do Comando
-			Collection dadosCriterio = repositorioCobranca.pesquisarValorTotalCobrancaCriterio(idComando, dateInicial, dateFinal);
-			// Quantidade Total de Contas Selecionadas para Cobrança Criterio
-			retorno[18] = dadosCriterio.size();
-			Iterator iteratorCobrancaCriterio = dadosCriterio.iterator();
-			BigDecimal somaCobrancaCriterio = new BigDecimal("0.0");
-			while (iteratorCobrancaCriterio.hasNext()) {
-				BigDecimal valor = (BigDecimal) iteratorCobrancaCriterio.next();
-				somaCobrancaCriterio = somaCobrancaCriterio.add(valor);
-			}
-			retorno[19] = somaCobrancaCriterio;
-
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return retorno;
-
 	}
 
 	/**
@@ -52699,21 +52435,22 @@ public class ControladorCobranca extends ControladorComum {
 	public Pagamento gerarPagamentoGuiaPagamentoCartaoDebito(GuiaPagamentoGeral guiaPagamentoGeral, AvisoBancario avisoBancario,
 			PagamentoCartaoDebito pagamentoCartaoDebito) throws ControladorException {
 
+		DocumentoTipo documentoTipo = new DocumentoTipo(new Integer(DocumentoTipo.GUIA_PAGAMENTO));
+
 		Pagamento pagamento = new Pagamento();
 
-		// RECUPERANDO OS DADOS DA GUIA DE PAGAMENTO
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("imovel");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamento.GUIA_PAGAMENTO_GERAL);
 
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoGeral.getId()));
 
 		Collection colecaoGuiaPagamento = this.getControladorUtil().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName());
 		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(colecaoGuiaPagamento);
 
-		// Cria o pagamento para a guia de pagamento
 		pagamento.setAnoMesReferenciaPagamento(null);
 		pagamento.setAnoMesReferenciaArrecadacao(avisoBancario.getAnoMesReferenciaArrecadacao());
 		pagamento.setValorPagamento(guiaPagamento.getValorDebito());
@@ -52722,23 +52459,15 @@ public class ControladorCobranca extends ControladorComum {
 		pagamento.setPagamentoSituacaoAnterior(null);
 		pagamento.setDebitoTipo(guiaPagamento.getDebitoTipo());
 		pagamento.setContaGeral(null);
-		pagamento.setGuiaPagamento(guiaPagamento);
+		pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 		pagamento.setDebitoACobrarGeral(null);
 		pagamento.setLocalidade(guiaPagamento.getLocalidade());
-
-		DocumentoTipo documentoTipo = new DocumentoTipo();
-		documentoTipo.setId(new Integer(DocumentoTipo.GUIA_PAGAMENTO));
 		pagamento.setDocumentoTipo(documentoTipo);
 		pagamento.setDocumentoTipoAgregador(documentoTipo);
-
 		pagamento.setAvisoBancario(avisoBancario);
 		pagamento.setImovel(guiaPagamento.getImovel());
 		pagamento.setArrecadadorMovimentoItem(null);
-
-		ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
-		arrecadacaoForma.setId(ArrecadacaoForma.CARTAO_DEBITO);
-		pagamento.setArrecadacaoForma(arrecadacaoForma);
-
+		pagamento.setArrecadacaoForma(new ArrecadacaoForma(ArrecadacaoForma.CARTAO_DEBITO));
 		pagamento.setUltimaAlteracao(new Date());
 		pagamento.setCliente(null);
 		pagamento.setDataProcessamento(new Date());
@@ -61384,37 +61113,6 @@ public class ControladorCobranca extends ControladorComum {
 	/**
 	 * [UC1167] Consultar Comandos de Cobrança por Empresa
 	 * 
-	 * Pesquisa os dados dos comandos
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 04/05/2011
-	 */
-	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa,
-			Date cicloInicial, Date cicloFinal, int pagina) throws ControladorException {
-
-		Collection<ConsultarComandosContasCobrancaEmpresaHelper> colecaoConsultarComandosContasCobrancaEmpresaHelper = null;
-
-		try {
-
-			// Variáveis para a paginação da pesquisa
-			// ========================================================================
-			final int quantidadeRegistros = 10;
-			// ========================================================================
-
-			colecaoConsultarComandosContasCobrancaEmpresaHelper = (Collection) repositorioCobranca
-					.pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(idEmpresa, cicloInicial, cicloFinal, pagina,
-							quantidadeRegistros);
-
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return colecaoConsultarComandosContasCobrancaEmpresaHelper;
-	}
-
-	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
-	 * 
 	 * Pesquisa os dados de um comando para exibir no popup
 	 * 
 	 * @author: Mariana Victor
@@ -61501,98 +61199,6 @@ public class ControladorCobranca extends ControladorComum {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}
-
-	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 * 
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 */
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, String idEmpresa, Usuario usuarioLogado,
-			Integer idComando, Integer idCobrancaSituacao) throws ControladorException {
-
-		int idUnidadeIniciada = 0;
-
-		try {
-			/*
-			 * Registrar o início do processamento da Unidade de Processamento
-			 * do Batch
-			 */
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-					UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, idComando);
-
-			boolean flagFimPesquisa = false;
-			final int quantidadeImoveis = 1000;
-			int quantidadeInicio = 0;
-
-			System.out.println("***************************************");
-			System.out.println("ENCERRAR COMANDOS");
-			System.out.println("***************************************");
-
-			while (!flagFimPesquisa) {
-				Collection dadosEmpresaCobConta = this.repositorioCobranca.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio,
-						idComando);
-
-				if (dadosEmpresaCobConta != null && !dadosEmpresaCobConta.isEmpty()) {
-
-					Iterator iterDadosEmpresaCobConta = dadosEmpresaCobConta.iterator();
-
-					if (dadosEmpresaCobConta.size() < quantidadeImoveis) {
-						flagFimPesquisa = true;
-					} else {
-						quantidadeInicio = quantidadeInicio + 1000;
-					}
-
-					System.out.println("***************************************");
-					System.out.println("QUANTIDADE: " + dadosEmpresaCobConta.size());
-					System.out.println("***************************************");
-
-					while (iterDadosEmpresaCobConta.hasNext()) {
-						Object[] dados = (Object[]) iterDadosEmpresaCobConta.next();
-
-						if (dados != null) {
-
-							if (dados[0] != null) {
-								Integer idImovel = (Integer) dados[0];
-
-								this.getControladorImovel().retirarSituacaoCobrancaImovel(idImovel, idCobrancaSituacao);
-
-							}
-
-							if (dados[1] != null) {
-								Integer idOrdemServico = (Integer) dados[1];
-
-								Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
-
-								Date dataAtual = new Date();
-
-								// encerrar a ordem de serviço, com o motivo
-								// correspodente a decurso de prazo
-								// [UC0457] - Encerrar Ordem de Serviço
-								this.getControladorOrdemServico().encerrarOSSemExecucao(idOrdemServico, dataAtual, usuarioLogado,
-										idMotivoEncerramento.toString(), dataAtual, null, null, null, null, null, null);
-							}
-						}
-
-					}
-
-				} else {
-					flagFimPesquisa = true;
-				}
-
-			}
-
-			this.repositorioCobranca.atualizarDataEncerramentoComando(idComando);
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-			System.out.println("******* FIM **********");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
-			throw new EJBException(ex);
-		}
-
 	}
 
 	/**
@@ -62216,4 +61822,137 @@ public class ControladorCobranca extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	  public void desfazerParcelamentosPorEntradaNaoPagaSemAnoMesReferencia(int idFuncionalidadeIniciada) throws ControladorException {
+
+		    int idUnidadeIniciada = 0;
+
+		    idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+		        UnidadeProcessamento.FUNCIONALIDADE, 0);
+
+		    // cria uma coleção de parcelamentos de débitos efetuados no mês
+		    // corrente
+		    Collection parcelamentosMes = null;
+		    // cria uma coleção de guias de pagamento correspondente a entrada do
+		    // parcelamento
+		    Collection guiaPagamento = null;
+		    // cria uma coleção de pagamentos para a guia de pagamento
+		    // correspondente a entrada do parcelamento
+		    Collection pagamento = null;
+		    // cria uma coleção de pagamentos para a guia de pagamento
+		    // correspondente a entrada do parcelamento
+		    Collection pagamentoConta = null;
+
+		    try {
+		      // pesquisa os parametros do sistem na base
+		      SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+
+		      // recupera o ano/mês corrente de faturamento
+		      int anoMesReferenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
+
+		      int anoMesReferenciaArrecadacaoMenosUm = anoMesReferenciaArrecadacao;
+		      
+		      int numeroInicial = 0;
+		      boolean flagTerminou = false;
+
+		      while (!flagTerminou) {
+		        // recupera todos os parcelamentos no mes atual e que esteja com a
+		        // situacao normal
+		        parcelamentosMes = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
+		        
+		        if (parcelamentosMes.size() < 500) {
+		          flagTerminou = true;
+		        }
+
+		        if (!Util.isVazioOrNulo(parcelamentosMes)) {
+
+		          Iterator parcelamentosMesIterator = parcelamentosMes.iterator();
+
+		          while (parcelamentosMesIterator.hasNext()) {
+
+		            // Obtém os dados do crédito realizado
+		            Object[] dadosParcelamento = (Object[]) parcelamentosMesIterator.next();
+		            Integer numeroParcelamentosMes = (Integer) dadosParcelamento[0];
+		            Integer idImovel = (Integer) dadosParcelamento[2];
+
+		            // recupera todos os parcelamentos no mes atual e que
+		            // esteja com a situacao normal
+
+		            System.out.println(" **** PESQUISAR GUIA POR PARCELAMENTO **** ");
+		            System.out.println(" ------------------------------------------ ");
+
+		            guiaPagamento = repositorioCobranca.pesquisarGuiaPagamentoDoParcelamento(numeroParcelamentosMes.toString());
+
+		            if (guiaPagamento != null && !guiaPagamento.isEmpty()) {
+
+		              Iterator guiaPagamentoIterator = guiaPagamento.iterator();
+
+		              while (guiaPagamentoIterator.hasNext()) {
+
+		                Object[] dadosGuiaPagamento = (Object[]) guiaPagamentoIterator.next();
+
+		                Integer numeroGuiaPagamento = (Integer) dadosGuiaPagamento[0];
+		                
+		                Date dataVencimentoGuia = Util.getData((Date) dadosGuiaPagamento[1]);
+		                Integer diasParaPagamentoGuia = Integer.parseInt(this.getCobrancaParametro(CobrancaParametro.NOME_PARAMETRO_COBRANCA.QUANTIDADE_DIAS_VENCIMENTO_GUIA.toString()));
+		                Date dataLimitePagamentoGuia = Util.adicionarNumeroDiasDeUmaData(dataVencimentoGuia, diasParaPagamentoGuia);
+		                
+
+		                if ((dataLimitePagamentoGuia).compareTo(new Date()) <= 0) {
+
+		                  // retorno da pesquisa
+
+		                  // recupera todos os parcelamentos no mes
+		                  // atual e que esteja com a situacao normal
+
+		                  System.out.println(" **** PESQUISAR PAGAMENTO DA GUIA **** ");
+		                  System.out.println(" ------------------------------------------ ");
+
+		                  pagamento = repositorioCobranca.pesquisarPagamentoParaGuiaPagamentoDoParcelamento(
+		                      numeroGuiaPagamento.toString(), idImovel);
+
+		                  if (pagamento == null || pagamento.isEmpty()) {
+
+		                    System.out.println("");
+		                    System.out.println("");
+
+		                    System.out.println(" ---------------------------------------------- ");
+		                    System.out.println(" **** DESFAZER " + numeroParcelamentosMes + " **** ");
+		                    System.out.println(" ---------------------------------------------- ");
+		                    System.out.println("");
+		                    System.out.println("");
+
+		                    Usuario usuarioBatch = this.getControladorUsuario().pesquisarUsuarioRotinaBatch();
+		                    if (usuarioBatch == null) {
+		                      throw new ControladorException("atencao.usuario_rotina_batch_nao_cadastrado");
+		                    } else {
+		                      this.desfazerParcelamentosDebito(ParcelamentoMotivoDesfazer.ENTRADA_NAO_PAGA.toString(),
+		                          numeroParcelamentosMes, usuarioBatch);
+		                    }
+
+		                  }
+		                }
+		              }
+		            }
+		          }
+		        } else {
+		          flagTerminou = true;
+		        }
+		        
+		        numeroInicial += 500;
+		      }
+
+		      getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+		    } catch (Exception ex) {
+
+		      getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+		      ex.printStackTrace();
+		      sessionContext.setRollbackOnly();
+
+		      throw new EJBException(ex);
+		    }
+
+		  }
+
 }

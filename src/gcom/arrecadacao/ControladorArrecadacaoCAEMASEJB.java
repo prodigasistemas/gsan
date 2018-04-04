@@ -12,6 +12,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.DocumentoTipo;
+import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.debito.DebitoACobrarGeral;
@@ -1075,9 +1076,9 @@ public class ControladorArrecadacaoCAEMASEJB extends ControladorArrecadacao impl
 			// Verifica se o id da guia é diferente de nulo
 			if (dadosGuiaPagamento != null) {
 
-				GuiaPagamento guiaPagamento = new GuiaPagamento();
-				guiaPagamento.setId(dadosGuiaPagamento[0]);
-				pagamento.setGuiaPagamento(guiaPagamento);
+				GuiaPagamento guiaPagamento = new GuiaPagamento(dadosGuiaPagamento[0]);
+				guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(dadosGuiaPagamento[0]));
+				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 				
 				DebitoTipo debitoTipo = new DebitoTipo();
 				debitoTipo.setId(dadosGuiaPagamento[1]);
@@ -1314,9 +1315,9 @@ public class ControladorArrecadacaoCAEMASEJB extends ControladorArrecadacao impl
 			// Verifica se o id da guia é diferente de nulo
 			if (dadosGuiaPagamento != null) {
 
-				GuiaPagamento guiaPagamento = new GuiaPagamento();
-				guiaPagamento.setId(dadosGuiaPagamento[0]);
-				pagamento.setGuiaPagamento(guiaPagamento);
+				GuiaPagamento guiaPagamento = new GuiaPagamento(dadosGuiaPagamento[0]);
+				guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(dadosGuiaPagamento[0]));
+				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 				
 				DebitoTipo debitoTipo = new DebitoTipo();
 				debitoTipo.setId(dadosGuiaPagamento[1]);
@@ -1826,9 +1827,9 @@ public class ControladorArrecadacaoCAEMASEJB extends ControladorArrecadacao impl
 								
 								if (idGuiaPagamento != null) {
 									
-									GuiaPagamento guiaPagamento = new GuiaPagamento();
-									guiaPagamento.setId(idGuiaPagamento);
-									pagamento.setGuiaPagamento(guiaPagamento);
+									GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+									guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+									pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 									
 									/*
 									 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264

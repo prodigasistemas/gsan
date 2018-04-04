@@ -13,22 +13,18 @@ public class GuiaPagamentoGeral implements Serializable {
 	private static final long serialVersionUID = 1L;
 
     private Integer id;
-
     private short indicadorHistorico;
-
     private Date ultimaAlteracao;
-
     private GuiaPagamento guiaPagamento;
-
     private Set cobrancaDocumentoItems;
-
     private Set parcelamentoItems;
-    
     private GuiaPagamentoHistorico guiaPagamentoHistorico;
-    
+
     public final static short INDICADOR_HISTORICO = 1;
     
-    /** full constructor */
+    public GuiaPagamentoGeral() {
+    }
+
     public GuiaPagamentoGeral(Integer id, short indicadorHistorico, Date ultimaAlteracao, GuiaPagamento guiaPagamento, Set cobrancaDocumentoItems, Set parcelamentoItems) {
         this.id = id;
         this.indicadorHistorico = indicadorHistorico;
@@ -38,11 +34,6 @@ public class GuiaPagamentoGeral implements Serializable {
         this.parcelamentoItems = parcelamentoItems;
     }
 
-    /** default constructor */
-    public GuiaPagamentoGeral() {
-    }
-
-    /** minimal constructor */
     public GuiaPagamentoGeral(Integer id, short indicadorHistorico, Date ultimaAlteracao, Set cobrancaDocumentoItems, Set parcelamentoItems) {
         this.id = id;
         this.indicadorHistorico = indicadorHistorico;
