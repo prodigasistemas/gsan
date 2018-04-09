@@ -16,31 +16,15 @@ public class ContratoDemanda extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 	
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private Date dataContratoInicio;
-    
-    /** persistent field */
     private Date dataContratoEncerrado;
-
-    /** persistent field */
     private Date dataContratoFim;
-
-    /** persistent field */
     private String numeroContrato;
-
-    /** persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Imovel imovel;
-    
-    /** persistent field */
     private ContratoMotivoCancelamento contratoMotivoCancelamento;
 
-    /** full constructor */
     public ContratoDemanda(Integer id, Date dataContratoInicio, Date dataContratoEncerrado, Date dataContratoFim, String numeroContrato, Date ultimaAlteracao, Imovel imovel) {
         this.id = id;
         this.dataContratoInicio = dataContratoInicio;
@@ -51,16 +35,11 @@ public class ContratoDemanda extends ObjetoTransacao {
         this.imovel = imovel;
     }
 
-    /** default constructor */
     public ContratoDemanda() {
     }
 
-    
-
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
+        return new ToStringBuilder(this).append("id", getId()).toString();
     }
 
 	public Date getDataContratoFim() {
@@ -138,8 +117,7 @@ public class ContratoDemanda extends ObjetoTransacao {
 		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
 		
 		filtroContratoDemanda. adicionarCaminhoParaCarregamentoEntidade("imovel");
-		filtroContratoDemanda. adicionarParametro(
-				new ParametroSimples(FiltroContratoDemanda.ID, this.getId()));
+		filtroContratoDemanda. adicionarParametro(new ParametroSimples(FiltroContratoDemanda.ID, this.getId()));
 		return filtroContratoDemanda; 
 	} 
 

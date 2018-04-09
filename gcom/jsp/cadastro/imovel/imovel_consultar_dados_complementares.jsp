@@ -88,6 +88,19 @@
 			}
 		}
 
+		function gerarContratoAdesao(){
+		   	var form = document.forms[0];
+
+		   	if (form.idImovelDadosComplementares.value != null && form.matriculaImovelDadosComplementares.value != null && 
+					form.matriculaImovelDadosComplementares.value != "" && form.matriculaImovelDadosComplementares.value != "IMÓVEL INEXISTENTE") {
+			   	form.action = 'gerarRelatorioContratoAdesaoImovelAction.do?matricula='+form.matriculaImovelDadosComplementares.value;
+				form.submit();
+			} else {
+				alert("Para gerar um contrato de adesão, é necessário pesquisar um imóvel.")
+			}
+			
+		}
+
 		</script>
 </head>
 
@@ -1497,7 +1510,12 @@
 							  </div>
 						</td>
 					</tr>
-
+					
+					<tr>
+						<td>
+							<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Contrato Adesão" onClick="gerarContratoAdesao();">
+						</td>
+					</tr>
 					<tr>
 						<td colspan="2">
 							<div align="right">
