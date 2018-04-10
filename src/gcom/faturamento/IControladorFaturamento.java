@@ -1,6 +1,5 @@
 package gcom.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -12,6 +11,7 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelCobrancaSituacao;
@@ -584,7 +584,7 @@ public interface IControladorFaturamento {
 
 	public Date obterDataVencimentoGrupo(Integer idFaturamentoGrupo, Integer anoMesInformado) throws ControladorException;
 
-	public void atualizarContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) throws ControladorException;
+	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDataRevisaoConta(Collection idsConta) throws ControladorException;
@@ -698,7 +698,7 @@ public interface IControladorFaturamento {
 	public Collection<RelatorioProtocoloEntregaFaturaBean> pesquisarDadosRelatorioProtocoloEntregaFatura(Integer anoMesReferencia, Cliente cliente,
 			Collection<Integer> idsClientes) throws ControladorException;
 
-	public Integer inserirContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) throws ControladorException;
+	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException;
 
 	public Collection<FaturamentoSituacaoHistorico> pesquisarSituacaoEspecialFaturamentoVigente(Integer idImovel, Integer anoMesReferencia)
 			throws ControladorException;

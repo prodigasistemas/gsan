@@ -7,7 +7,6 @@ import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
@@ -201,6 +200,7 @@ import gcom.cadastro.geografico.ControladorGeograficoLocalHome;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.EntidadeBeneficente;
@@ -18592,7 +18592,7 @@ public class Fachada {
 	 * 
 	 * @param
 	 */
-	public Integer inserirContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) {
+	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) {
 		try {
 			return this.getControladorFaturamento().inserirContratoDemanda(contratoDemanda, usuarioLogado);
 		} catch (ControladorException ex) {
@@ -18613,7 +18613,7 @@ public class Fachada {
 	 * @date 28/06/2007
 	 * 
 	 */
-	public void atualizarContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) {
+	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) {
 		try {
 			this.getControladorFaturamento().atualizarContratoDemanda(contratoDemanda, usuarioLogado);
 		} catch (ControladorException ex) {

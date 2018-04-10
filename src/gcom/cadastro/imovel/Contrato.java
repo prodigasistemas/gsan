@@ -1,7 +1,6 @@
-package gcom.arrecadacao;
+package gcom.cadastro.imovel;
 
-import gcom.cadastro.imovel.Imovel;
-import gcom.faturamento.FiltroContratoDemanda;
+import gcom.arrecadacao.ContratoMotivoCancelamento;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -10,9 +9,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ContratoDemanda extends ObjetoTransacao {
+public class Contrato  extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,10 +19,12 @@ public class ContratoDemanda extends ObjetoTransacao {
     private Date dataContratoFim;
     private String numeroContrato;
     private Date ultimaAlteracao;
+
     private Imovel imovel;
     private ContratoMotivoCancelamento contratoMotivoCancelamento;
+    private ContratoTipo contratoTipo;
 
-    public ContratoDemanda(Integer id, Date dataContratoInicio, Date dataContratoEncerrado, Date dataContratoFim, String numeroContrato, Date ultimaAlteracao, Imovel imovel) {
+    public Contrato(Integer id, Date dataContratoInicio, Date dataContratoEncerrado, Date dataContratoFim, String numeroContrato, Date ultimaAlteracao, Imovel imovel, ContratoTipo contratoTipo) {
         this.id = id;
         this.dataContratoInicio = dataContratoInicio;
         this.dataContratoEncerrado = dataContratoEncerrado;
@@ -33,9 +32,10 @@ public class ContratoDemanda extends ObjetoTransacao {
         this.numeroContrato = numeroContrato;
         this.ultimaAlteracao = ultimaAlteracao;
         this.imovel = imovel;
+        this.contratoTipo = contratoTipo;
     }
 
-    public ContratoDemanda() {
+    public Contrato() {
     }
 
     public String toString() {
@@ -102,11 +102,18 @@ public class ContratoDemanda extends ObjetoTransacao {
 		return contratoMotivoCancelamento;
 	}
 
-	public void setContratoMotivoCancelamento(
-			ContratoMotivoCancelamento contratoMotivoCancelamento) {
+	public void setContratoMotivoCancelamento(ContratoMotivoCancelamento contratoMotivoCancelamento) {
 		this.contratoMotivoCancelamento = contratoMotivoCancelamento;
 	}
     
+	public ContratoTipo getContratoTipo() {
+		return contratoTipo;
+	}
+
+	public void setContratoTipo(ContratoTipo contratoTipo) {
+		this.contratoTipo = contratoTipo;
+	}
+
 	public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];
 		retorno[0] = "id";
@@ -114,11 +121,11 @@ public class ContratoDemanda extends ObjetoTransacao {
 	}
 	
 	public Filtro retornaFiltro(){
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+		FiltroContrato filtroContrato = new FiltroContrato();
 		
-		filtroContratoDemanda. adicionarCaminhoParaCarregamentoEntidade("imovel");
-		filtroContratoDemanda. adicionarParametro(new ParametroSimples(FiltroContratoDemanda.ID, this.getId()));
-		return filtroContratoDemanda; 
+		filtroContrato. adicionarCaminhoParaCarregamentoEntidade("imovel");
+		filtroContrato. adicionarParametro(new ParametroSimples(FiltroContrato.ID, this.getId()));
+		
+		return filtroContrato; 
 	} 
-
 }

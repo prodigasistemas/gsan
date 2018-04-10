@@ -1,6 +1,5 @@
 	package gcom.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
 import gcom.arrecadacao.IRepositorioArrecadacao;
@@ -58,8 +57,10 @@ import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelCobrancaSituacao;
 import gcom.cadastro.imovel.FiltroSubCategoria;
@@ -38338,48 +38339,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Eduardo Bianchi
 	 * @date 26/01/2007
 	 * 
-	 * @param Distrito
-	 *            Operaciona Descrição do parâmetro
+	 * @param Distrito Operaciona Descrição do parâmetro
 	 */
-	public Integer inserirContratoDemanda(ContratoDemanda contratoDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-				FiltroContratoDemanda.MUMEROCONTRATO, contratoDemanda
-						.getNumeroContrato()));
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.MUMEROCONTRATO, contratoDemanda.getNumeroContrato()));
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.CONTRATO_TIPO, contratoDemanda.getContratoTipo().getId()));
 
-		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
 		Integer idContratoDemanda = null;
 
 		if (colecaoContratoDemanda.isEmpty()) {
-			idContratoDemanda = (Integer) getControladorUtil().inserir(
-					contratoDemanda);
+			idContratoDemanda = (Integer) getControladorUtil().inserir(contratoDemanda);
 		} else {
 			throw new ControladorException("atencao.contrato_demanda_existente");
 		}
-
-		// // ------------ REGISTRAR TRANSAÇÃO----------------------------
-		//
-		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		// Operacao.OPERACAO_DISTRITO_OPERACIONAL_INSERIR,
-		// new UsuarioAcaoUsuarioHelper(usuarioLogado,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		//
-		// Operacao operacao = new Operacao();
-		// operacao.setId(Operacao.OPERACAO_DISTRITO_OPERACIONAL_INSERIR);
-		//
-		// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		// operacaoEfetuada.setOperacao(operacao);
-		//
-		// distritoOperacional.setOperacaoEfetuada(operacaoEfetuada);
-		// distritoOperacional.adicionarUsuario(usuarioLogado,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		// registradorOperacao.registrarOperacao(distritoOperacional);
-		//
-		// // ------------ REGISTRAR TRANSAÇÃO----------------------------
 
 		return idContratoDemanda;
 	}
@@ -38397,57 +38373,43 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @date 28/06/2007
 	 * 
 	 */
-	public void atualizarContratoDemanda(ContratoDemanda contratoDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
 		// [FS0003] - Atualização realizada por outro usuário
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-				FiltroContratoDemanda.ID, contratoDemanda.getId()));
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.ID, contratoDemanda.getId()));
 
-		Collection colecaoContratoDemandaBase = getControladorUtil().pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		Collection colecaoContratoDemandaBase = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
-		if (colecaoContratoDemandaBase == null
-				|| colecaoContratoDemandaBase.isEmpty()) {
+		if (colecaoContratoDemandaBase == null || colecaoContratoDemandaBase.isEmpty()) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
-		ContratoDemanda contratoDemandaBase = (ContratoDemanda) colecaoContratoDemandaBase
-				.iterator().next();
+		Contrato contratoDemandaBase = (Contrato) colecaoContratoDemandaBase.iterator().next();
 
-		if (contratoDemandaBase.getUltimaAlteracao().after(
-				contratoDemanda.getUltimaAlteracao())) {
+		if (contratoDemandaBase.getUltimaAlteracao().after(contratoDemanda.getUltimaAlteracao())) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
 		// [FS0007] - Verificar existência do contrato de demanda
-		if (!contratoDemanda.getNumeroContrato().equals(
-				contratoDemandaBase.getNumeroContrato())) {
+		if (!contratoDemanda.getNumeroContrato().equals(contratoDemandaBase.getNumeroContrato())) {
 			filtroContratoDemanda.limparListaParametros();
-			filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-					FiltroContratoDemanda.MUMEROCONTRATO, contratoDemanda
-							.getNumeroContrato()));
+			filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.MUMEROCONTRATO, contratoDemanda.getNumeroContrato()));
 
-			Collection colecaoContratoDemanda = getControladorUtil().pesquisar(
-					filtroContratoDemanda, ContratoDemanda.class.getName());
+			Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
-			if (colecaoContratoDemanda != null
-					&& !colecaoContratoDemanda.isEmpty()) {
-				throw new ControladorException(
-						"atencao.contrato_demanda.ja_existente");
+			if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
+				throw new ControladorException("atencao.contrato_demanda.ja_existente");
 			}
 		}
 
 		contratoDemanda.setUltimaAlteracao(new Date());
 
 		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR, new UsuarioAcaoUsuarioHelper(
+				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR);
@@ -38456,8 +38418,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		operacaoEfetuada.setOperacao(operacao);
 
 		contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
-		contratoDemanda.adicionarUsuario(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(contratoDemanda);
 		// ------------ REGISTRAR TRANSAÇÃO----------------------------
 
@@ -50253,14 +50214,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param idsContratosDemanda
 	 * @throws ControladorException
 	 */
-	public void removerContratosDemanda(String[] idsContratosDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public void removerContratosDemanda(String[] idsContratosDemanda, Usuario usuarioLogado) throws ControladorException {
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER, new UsuarioAcaoUsuarioHelper(
+				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER);
@@ -50275,25 +50233,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// Cria o filtro de equipe para verificar se a equipe ja foi
 				// removida
-				FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+				FiltroContrato filtroContratoDemanda = new FiltroContrato();
 
-				filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-						FiltroContratoDemanda.ID, idContratoDemanda));
+				filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.ID, idContratoDemanda));
 
-				Collection colecaoContratoDemanda = getControladorUtil()
-						.pesquisar(filtroContratoDemanda,
-								ContratoDemanda.class.getSimpleName());
+				Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getSimpleName());
 
-				if (colecaoContratoDemanda != null
-						&& !colecaoContratoDemanda.isEmpty()) {
+				if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
 
-					ContratoDemanda contratoDemanda = (ContratoDemanda) Util
-							.retonarObjetoDeColecao(colecaoContratoDemanda);
+					Contrato contratoDemanda = (Contrato) Util.retonarObjetoDeColecao(colecaoContratoDemanda);
 
 					// ------------ REGISTRAR TRANSAÇÃO ----------------
 					contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
-					contratoDemanda.adicionarUsuario(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+					contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 					registradorOperacao.registrarOperacao(contratoDemanda);
 					// ------------ REGISTRAR TRANSAÇÃO ----------------
 
@@ -50301,8 +50253,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				} else {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.registro_remocao_nao_existente");
+					throw new ControladorException("atencao.registro_remocao_nao_existente");
 				}
 
 			}
