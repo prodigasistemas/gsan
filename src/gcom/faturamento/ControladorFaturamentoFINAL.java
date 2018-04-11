@@ -1,5 +1,6 @@
 	package gcom.faturamento;
 
+import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
 import gcom.arrecadacao.IRepositorioArrecadacao;
@@ -259,7 +260,6 @@ import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
-import gcom.relatorio.cliente.ReportItemDTO;
 import gcom.relatorio.faturamento.ConsumoTarifaRelatorioHelper;
 import gcom.relatorio.faturamento.FaturamentoLigacoesMedicaoIndividualizadaRelatorioHelper;
 import gcom.relatorio.faturamento.RelatorioAnaliticoFaturamentoHelper;

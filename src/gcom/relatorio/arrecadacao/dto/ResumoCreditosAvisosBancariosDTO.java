@@ -1,7 +1,7 @@
 package gcom.relatorio.arrecadacao.dto;
 
-import gcom.relatorio.cliente.ReportElementType;
-import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.api.relatorio.ReportElementType;
+import gcom.api.relatorio.ReportItemDTO;
 import gcom.util.FormatoData;
 import gcom.util.Util;
 
@@ -24,14 +24,15 @@ public class ResumoCreditosAvisosBancariosDTO implements ReportItemDTO {
 	@ReportElementType(description = "Valor do Pagamento (R$)", align = "right", totalizer = true, type = ReportElementType.TYPE_MONEY)
 	private String valorPagamentoSemDevolucao;
 
-	public ResumoCreditosAvisosBancariosDTO() {}
+	public ResumoCreditosAvisosBancariosDTO() {
+	}
 
 	public ResumoCreditosAvisosBancariosDTO(Date dataPagamentoPrevisto, Date dataRealizada, String descricaoArrecadador, BigDecimal valorPagamento, BigDecimal valorDevolucao) {
 		super();
 		this.dataPagamentoPrevisto = Util.formatarData(dataPagamentoPrevisto, FormatoData.AMERICANO_COM_TRACO);
 		this.dataRealizada = Util.formatarData(dataRealizada, FormatoData.AMERICANO_COM_TRACO);
 		this.descricaoArrecadador = descricaoArrecadador;
-		
+
 		valorDevolucao = valorDevolucao != null ? valorDevolucao : BigDecimal.ZERO;
 		this.valorPagamentoSemDevolucao = (valorPagamento.subtract(valorDevolucao)).toString();
 	}

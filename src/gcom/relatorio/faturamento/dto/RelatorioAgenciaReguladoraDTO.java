@@ -1,7 +1,7 @@
 package gcom.relatorio.faturamento.dto;
 
-import gcom.relatorio.cliente.ReportElementType;
-import gcom.relatorio.cliente.ReportItemDTO;
+import gcom.api.relatorio.ReportElementType;
+import gcom.api.relatorio.ReportItemDTO;
 
 import java.math.BigDecimal;
 

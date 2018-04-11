@@ -1,4 +1,4 @@
-package gcom.relatorio.cliente;
+package gcom.api.relatorio;
 
 import java.io.Serializable;
 

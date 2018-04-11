@@ -31501,7 +31501,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			
 			pagamentos = session.createQuery(consulta)
-				.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
+				.setParameterList("idsPagamentos", idsPagamentos).list();
 			
 			for (Pagamento pagamento: pagamentos) {
 				if (pagamento.getContaGeral() != null) {

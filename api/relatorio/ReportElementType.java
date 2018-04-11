@@ -1,4 +1,4 @@
-package gcom.relatorio.cliente;
+package gcom.api.relatorio;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

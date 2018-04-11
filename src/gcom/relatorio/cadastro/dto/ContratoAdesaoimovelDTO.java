@@ -1,13 +1,7 @@
 package gcom.relatorio.cadastro.dto;
 
-import gcom.relatorio.cliente.ReportElementType;
-import gcom.relatorio.cliente.ReportItemDTO;
+public class ContratoAdesaoimovelDTO {
 
-public class ContratoAdesaoimovelDTO implements ReportItemDTO {
-
-	private static final long serialVersionUID = 8611524049087979246L;
-
-	@ReportElementType()
 	private String conteudo;
 	
 	public ContratoAdesaoimovelDTO() {}
