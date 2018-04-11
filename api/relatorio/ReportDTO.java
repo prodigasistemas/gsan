@@ -1,4 +1,4 @@
-package gcom.relatorio.cliente;
+package gcom.api.relatorio;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ public class ReportDTO implements Serializable {
 
 	private String titulo;
 
-	private FormatoRelatorio formato = FormatoRelatorio.PDF;
+	private ReportFormat formato = ReportFormat.PDF;
 
 	private List<ReportField> cabecalho;
 
@@ -26,7 +26,7 @@ public class ReportDTO implements Serializable {
 		
 	private Boolean omitirTotalGeral;
 
-	public ReportDTO(String titulo, String name, Class dataClass) {
+	public ReportDTO(String titulo, String name, Class<?> dataClass) {
 		this.titulo = titulo;
 		this.name = name;
 		this.cabecalho = new ReportUtil().headerFieldsFromClass(dataClass);
@@ -50,11 +50,11 @@ public class ReportDTO implements Serializable {
 		this.dados.addAll(linhas);
 	}
 
-	public FormatoRelatorio getFormato() {
+	public ReportFormat getFormato() {
 		return formato;
 	}
 
-	public void setFormato(FormatoRelatorio formato) {
+	public void setFormato(ReportFormat formato) {
 		this.formato = formato;
 	}
 

@@ -1,12 +1,17 @@
 package gcom.gui.faturamento;
 
-import java.io.File;
+import gcom.api.GsanRelatorio;
+import gcom.api.relatorio.ReportFormat;
+import gcom.api.relatorio.ReportItemDTO;
+import gcom.gui.ActionServletException;
+import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
+import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,99 +19,47 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
-import gcom.relatorio.RelatorioUtil;
-import gcom.relatorio.cliente.FormatoRelatorio;
-import gcom.relatorio.cliente.ReportItemDTO;
-import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
-import gcom.util.IoUtil;
-
 public class GerarRelatorioAgenciaReguladoraAction extends ExibidorProcessamentoTarefaRelatorio {
 
-  public ActionForward execute(ActionMapping actionMapping,
-      ActionForm actionForm, HttpServletRequest httpServletRequest,
-      HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("exibirGerarRelatorioAgenciaReguladora");
 
-    ActionForward retorno = actionMapping.findForward("exibirGerarRelatorioAgenciaReguladora");
-    
-    GerarRelatorioAgenciaReguladoraActionForm form = (GerarRelatorioAgenciaReguladoraActionForm) actionForm;
-    Integer idAgencia = form.getIdAgenciaReguladora() == 0 ? null : form.getIdAgenciaReguladora();
-    String mesAno = form.getMesAno().replace("/", "");
-    String anoMes = mesAno.substring(2) + mesAno.substring(0,2);
+		GerarRelatorioAgenciaReguladoraActionForm form = (GerarRelatorioAgenciaReguladoraActionForm) actionForm;
+		Integer idAgencia = form.getIdAgenciaReguladora() == 0 ? null : form.getIdAgenciaReguladora();
+		String mesAno = form.getMesAno().replace("/", "");
+		String anoMes = mesAno.substring(2) + mesAno.substring(0, 2);
 
-    Fachada fachada = Fachada.getInstancia();
-    List<RelatorioAgenciaReguladoraDTO> dtos = fachada.pesquisarContasParaRelatorioAgenciaReguladora(Integer.parseInt(anoMes), idAgencia);
+		List<RelatorioAgenciaReguladoraDTO> dtos = getFachada().pesquisarContasParaRelatorioAgenciaReguladora(Integer.parseInt(anoMes), idAgencia);
 
-    if (dtos == null || dtos.isEmpty()) {
-      throw new ActionServletException("atencao.relatorio.vazio");
-    }
-    
-    
-    RelatorioUtil relatorioUtil = null;
-    if (form.getTipoRelatorio() == 1) {
-      relatorioUtil = new RelatorioUtil(
-          "Relatório faturamento para agência reguladora",
-          getNomeRelatorio(anoMes) + ".pdf",
-          RelatorioAgenciaReguladoraDTO.class, 
-          FormatoRelatorio.PDF);
-    } else {
-      relatorioUtil = new RelatorioUtil(
-          "Relatório faturamento para agência reguladora",
-          getNomeRelatorio(anoMes) + ".xls",
-          RelatorioAgenciaReguladoraDTO.class, 
-          FormatoRelatorio.XLS);
-    }
-    relatorioUtil.setOmitirTotalGeral(true);
-    
+		if (dtos == null || dtos.isEmpty()) {
+			throw new ActionServletException("atencao.relatorio.vazio");
+		}
 
-    List<ReportItemDTO> itens = new ArrayList<ReportItemDTO>();
-    itens.addAll(dtos);
+		GsanRelatorio relatorio = null;
+		if (form.getTipoRelatorio() == 1) {
+			relatorio = new GsanRelatorio("Relatório faturamento para agência reguladora", getNomeRelatorio(anoMes) + ".pdf", RelatorioAgenciaReguladoraDTO.class, ReportFormat.PDF);
+		} else {
+			relatorio = new GsanRelatorio("Relatório faturamento para agência reguladora", getNomeRelatorio(anoMes) + ".xls", RelatorioAgenciaReguladoraDTO.class, ReportFormat.XLS);
+		}
+		relatorio.setOmitirTotalGeral(true);
 
-    File relatorio = gerar(relatorioUtil, itens);
-    
-    downloadRelatorio(httpServletResponse, relatorio);
+		List<ReportItemDTO> itens = new ArrayList<ReportItemDTO>();
+		itens.addAll(dtos);
 
-    
-    return retorno;
-  }
-  
-  private File gerar(RelatorioUtil relatorioUtil, List<ReportItemDTO> itens) {
-    File relatorio = null;
-    
-    try {
-      relatorio = relatorioUtil.gerarRelatorio(itens);
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-      throw new ActionServletException("atencao.erro_baixar_relatorio");
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new ActionServletException("atencao.erro_baixar_relatorio");
-    }
-    
-    return relatorio;
-  }
+		try {
+			relatorio.gerar(itens, response);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_relatorio");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_relatorio");
+		}
 
-  private void downloadRelatorio(HttpServletResponse response, File relatorio) {
-    try {
-      response.setContentType(FormatoRelatorio.PDF.getContentType());
-      response.addHeader("Content-Disposition", "attachment; filename=" + relatorio.getName());
+		return retorno;
+	}
 
-      ServletOutputStream sos = response.getOutputStream();
-      sos.write(IoUtil.getBytesFromFile(relatorio));
-      sos.flush();
-      sos.close();
-
-      relatorio.delete();
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new ActionServletException("atencao.erro_baixar_relatorio");
-    }
-  }
-
-
-  private String getNomeRelatorio(String mesAno) {
-    return "relatorio_faturamento_agencia_reguladora" + mesAno;
-  }
+	private String getNomeRelatorio(String mesAno) {
+		return "relatorio_faturamento_agencia_reguladora" + mesAno;
+	}
 }

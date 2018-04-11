@@ -1,12 +1,13 @@
-package gcom.relatorio.cliente;
+package gcom.api;
 
 import java.io.Serializable;
 
-public class ReportJsonReturn implements Serializable{
+public class JsonReturn implements Serializable {
+	
 	private static final long serialVersionUID = 8636380455283643802L;
 
 	private String url;
-	
+
 	private String erro;
 
 	public String getUrl() {
@@ -24,12 +25,12 @@ public class ReportJsonReturn implements Serializable{
 	public void setErro(String erro) {
 		this.erro = erro;
 	}
-	
-	public boolean temErro(){
+
+	public boolean temErro() {
 		return erro != null && erro.length() > 0;
 	}
 
 	public String toString() {
-		return "ReportJsonReturn [url=" + url + ", erro=" + erro + "]";
+		return "JsonReturn [url=" + url + ", erro=" + erro + "]";
 	}
 }

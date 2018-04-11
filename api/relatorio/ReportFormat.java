@@ -1,11 +1,11 @@
-package gcom.relatorio.cliente;
+package gcom.api.relatorio;
 
-public enum FormatoRelatorio {
+public enum ReportFormat {
 	PDF("application/pdf"), XLS("application/vnd.ms-excel");
 	
 	String contentType;
 
-	FormatoRelatorio(String type){
+	ReportFormat(String type){
 		contentType = type;
 	}
 
