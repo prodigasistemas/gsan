@@ -11,105 +11,49 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class CobrancaSituacao extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** nullable persistent field */
     private Short indicadorExigenciaAdvogado;
-    
     private Short indicadorBloqueioParcelamento;
-    
     private Short indicadorBloqueioInclusao;
-    
     private Short indicadorBloqueioRetirada;
-    
     private ContaMotivoRevisao contaMotivoRevisao;
-    
     private Profissao profissao;
-    
     private RamoAtividade ramoAtividade;
-    
     private Short indicadorSelecaoApenasComPermissao;
-    
     private Integer indicadorPrescricaoImoveisParticulares;
-    
     private Integer indicadorNaoIncluirImoveisEmCobrancaResultado;
     
-    /**
-     * Em Cobrança Adminitrativa
-     */
     public final static Integer COBRANCA_ADMINISTRATIVA = new Integer(4);
-    
-    /**
-     * Cheque Devolvido
-     */
     public final static Integer CHEQUE_DEVOLVIDO = new Integer(2);
-
-
-    /**
-     * Cheque Devolvido
-     */
     public final static Integer NEGATIVADO_AUTOMATICAMENTE_NO_SPC = new Integer(11);
-
-    /**
-     * Cheque Devolvido
-     */
     public final static Integer NEGATIVADO_AUTOMATICAMENTE_NA_SERASA = new Integer(12);
-
-    /**
-     * Cheque Devolvido
-     */
     public final static Integer CARTA_ENVIADA_AO_SPC = new Integer(13);
-
-    /**
-     * Cheque Devolvido
-     */
     public final static Integer CARTA_ENVIADA_A_SERASA = new Integer(14);
-    
-    
-   
     public final static Integer EM_ANALISE_PARA_NEGATIVACAO	 = new Integer(15);
-    
-    
-    //Indicador usado para a empresa Terceirizada da CAEMA
     public final static Integer COBRANCA_EMPRESA_TERCEIRIZADA = new Integer(1);
-    
-    //Indicador usado para a empresa Compesa
     public final static Integer EM_COBRANCA_JUDICIAL = new Integer(5);
-    
-
     public final static Integer EM_ANALISE_PARA_NEGATIVACAO_SPC	 = new Integer(16);
     public final static Integer EM_ANALISE_PARA_NEGATIVACAO_SERASA	 = new Integer(17);
 
-    /** full constructor */
+    public CobrancaSituacao() {
+    }
+    
+    public CobrancaSituacao(Integer id) {
+    	this.id = id;
+    }
+
     public CobrancaSituacao(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
-
-    /** default constructor */
-    public CobrancaSituacao() {
-    }
-
-    public CobrancaSituacao(Integer id) {
-		this.id = id;
-	}
 
 	public Integer getId() {
         return this.id;
@@ -188,30 +132,18 @@ public class CobrancaSituacao extends ObjetoTransacao {
         this.indicadorBloqueioParcelamento = indicadorBloqueioParcelamento;
     }
 
-	/**
-	 * @return Retorna o campo indicadorBloqueioInclusao.
-	 */
 	public Short getIndicadorBloqueioInclusao() {
 		return indicadorBloqueioInclusao;
 	}
 
-	/**
-	 * @param indicadorBloqueioInclusao O indicadorBloqueioInclusao a ser setado.
-	 */
 	public void setIndicadorBloqueioInclusao(Short indicadorBloqueioInclusao) {
 		this.indicadorBloqueioInclusao = indicadorBloqueioInclusao;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorBloqueioRetirada.
-	 */
 	public Short getIndicadorBloqueioRetirada() {
 		return indicadorBloqueioRetirada;
 	}
 
-	/**
-	 * @param indicadorBloqueioRetirada O indicadorBloqueioRetirada a ser setado.
-	 */
 	public void setIndicadorBloqueioRetirada(Short indicadorBloqueioRetirada) {
 		this.indicadorBloqueioRetirada = indicadorBloqueioRetirada;
 	}

@@ -167,6 +167,8 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 						listaCobrancaSituacaoHistorico.add(criarCobrancaSituacaoHistorico(idImovel, anoMesArrecadacaoInicio, anoMesArrecadacaoFim));
 						listaImovelCobrancaSituacao.add(criarImovelCobrancaSituacao(idImovel, comando));
 						
+						this.incluirImovelEmCobranca(idImovel, Usuario.USUARIO_BATCH);
+						
 						idOS = gerarOS(servicoTipo, idImovel, idOS);
 						
 						idsImoveisAtualizar.add(idImovel);
@@ -443,5 +445,9 @@ public class UC0870GerarMovimentoContasEmCobrancaPorEmpresa {
 		situacao.setCliente(cliente);
 
 		return situacao;
+	}
+	
+	private void incluirImovelEmCobranca(Integer idImovel, Usuario usuario) throws ControladorException {
+		getControladorImovel().incluirImovelCobranca(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA, CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA, idImovel, usuario);
 	}
 }

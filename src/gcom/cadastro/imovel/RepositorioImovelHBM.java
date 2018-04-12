@@ -30957,5 +30957,43 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return retorno;
 	}
+	
+	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel)
+			throws ErroRepositorioException {
+
+			StringBuilder consulta = new StringBuilder();
+
+			Session session = HibernateUtil.getSession();
+
+			try {
+					consulta.append(" update gcom.cadastro.imovel.Imovel set ")
+							.append(" cbst_id = :idCobrancaSituacao, ")
+							.append(" cbsp_id = :idCobrancaSituacaoTipo, ")
+							.append(" imov_tmultimaalteracao = :ultimaAlteracao  ")
+							.append(" where imov_id = :idImovel ");
+
+					session.createQuery(consulta.toString()).
+					   setInteger("idCobrancaSituacao",idCobrancaSituacao).
+					   setInteger("idCobrancaSituacaoTipo",idCobrancaSituacaoTipo).
+					   setTimestamp("ultimaAlteracao",new Date()).
+					   setInteger("idImovel",idImovel).
+					   executeUpdate();
+
+
+			} catch (HibernateException e) {
+
+				// levanta a exceção para a próxima camada
+
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+			} finally {
+
+				// fecha a sessão
+
+				HibernateUtil.closeSession(session);
+
+			}
+
+		}
 
 }

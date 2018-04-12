@@ -748,4 +748,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ControladorException;
 
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException;
+	
+	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException;
 }
