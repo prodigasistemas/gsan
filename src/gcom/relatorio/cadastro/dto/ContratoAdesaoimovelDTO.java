@@ -3,6 +3,7 @@ package gcom.relatorio.cadastro.dto;
 public class ContratoAdesaoimovelDTO {
 
 	private String conteudo;
+	private String nome;
 	
 	public ContratoAdesaoimovelDTO() {}
 	

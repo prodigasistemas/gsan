@@ -1,22 +1,14 @@
 package gcom.gui.relatorio.cadastro;
 
-import gcom.api.relatorio.ReportItemDTO;
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
+import gcom.api.GsanApi;
 import gcom.gui.GcomAction;
-import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
-import gcom.util.IoUtil;
+import gcom.seguranca.SegurancaParametro;
 import gcom.util.Util;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,19 +25,27 @@ public class GerarRelatorioContratoAdesaoImovelAction extends GcomAction {
 
 		GerarRelatorioContratoAdesaoImovelActionForm form = (GerarRelatorioContratoAdesaoImovelActionForm) actionForm;
 
-		Fachada fachada = Fachada.getInstancia();
-
 		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
 		String nomeRelatorio = "contrato_adesao_"+ form.getIdImovel() + data + ".pdf";
 		
-		//url
-		// gsan-api 
-		// invoke
+		String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_CONTRATO_ADESAO.toString());
+
+		try {
+		
+			GsanApi api = new GsanApi(url);
+			api.invoke(getTextoContrato());
+			api.download(url, nomeRelatorio, response);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
-	private String getTextoContrato() {
-		return new StringBuilder("Contrato de adesão").toString();
+	private ContratoAdesaoimovelDTO getTextoContrato() {
+		return new ContratoAdesaoimovelDTO("Contrato de adesão");
 	}
 	
 }
