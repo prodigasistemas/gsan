@@ -521,6 +521,7 @@ import gcom.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetHelp
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioAcessoSPCBean;
 import gcom.relatorio.cadastro.RelatorioBoletimCadastroIndividualBean;
+import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAtivosNaoMedidosHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisConsumoMedioHelper;
@@ -40129,4 +40130,21 @@ public class Fachada {
 		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
 		return null;
 	}
+	
+	public String obterEnderecoCorrespondenciaCliente(Integer idCliente) {
+		try {
+			return getControladorCliente().obterEnderecoCorrespondencia(idCliente);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) {
+		try {
+			return getControladorImovel().obterContratoAdesao(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 }

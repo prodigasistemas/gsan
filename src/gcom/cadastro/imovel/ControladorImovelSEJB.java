@@ -125,6 +125,7 @@ import gcom.operacional.DivisaoEsgoto;
 import gcom.operacional.SistemaEsgoto;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper;
+import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.Funcionalidade;
@@ -16127,5 +16128,90 @@ public class ControladorImovelSEJB extends ControladorComum {
 			
 			inserirImovelHelper.setImovel(imovel);
 		}
+	}
+	
+	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
+		ContratoAdesaoimovelDTO dto = null;
+		ContratoAdesao contratoDemanda = obterContratoDemandaAtivo(idImovel);
+		
+		if (contratoDemanda != null) {
+			Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
+			
+			if (contratoDemanda.getClienteImovel().getCliente().getId().intValue() != cliente.getId()) {
+				finalizarContatoDemanda(idImovel, cliente);
+				gerarContatoDemanda(idImovel, cliente);
+			} 
+			dto = obterContratoAdesaoImovelDTO(idImovel, contratoDemanda.getClienteImovel().getCliente());
+		}
+		return dto;
+	}
+	
+	private ContratoAdesao obterContratoDemandaAtivo(Integer idImovel) throws ControladorException {
+		FiltroContratoDemanda filtro = new FiltroContratoDemanda();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoDemanda.CONTRATO);
+
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoDemanda.IMOVEL, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoDemanda.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+		filtro.adicionarParametro(new ParametroNulo(FiltroContratoDemanda.DATACONTRATOENCERRAMENTO));
+		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtro, Contrato.class.getName());
+		
+		if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
+			return (ContratoAdesao) colecaoContratoDemanda.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	private ContratoAdesaoimovelDTO obterContratoAdesaoImovelDTO(Integer idImovel, Cliente cliente) throws ControladorException {
+		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
+		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
+		
+		String endereco = getControladorCliente().obterEnderecoCorrespondencia(cliente.getId());
+		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
+	}
+	
+	private void finalizarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
+		ContratoAdesao contratoDemanda = this.obterContratoDemandaAtivo(idImovel);
+		
+		Contrato contrato = contratoDemanda.getContrato();
+		
+		contrato.setDataContratoEncerrado(new Date());
+		contrato.setDataContratoFim(new Date());
+		contrato.setUltimaAlteracao(new Date());
+		
+		getControladorUtil().atualizar(contrato);
+	}
+	
+	private void gerarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
+		Contrato contrato = new Contrato();
+		
+		contrato.setImovel(new Imovel(idImovel));
+		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.DEMANDA));
+		contrato.setDataContratoInicio(new Date());
+		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.DEMANDA));
+		contrato.setUltimaAlteracao(new Date());
+		
+		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);
+		contrato.setId(idContrato);
+		
+		ContratoAdesao contratoDemanda = this.obterContratoDemandaAtivo(idImovel);
+		
+		contratoDemanda.setUltimaAlteracao(new Date());
+		contratoDemanda.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
+		contratoDemanda.setContrato(contrato);
+		
+		getControladorUtil().inserir(contratoDemanda);
+		
+	}
+	
+	private ClienteImovel obterClienteImovel(Integer idImovel, Integer idCliente, Integer idClienteRelacaoTipo) throws ControladorException {
+		FiltroClienteImovel filtro = new FiltroClienteImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, idCliente));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, idClienteRelacaoTipo));
+		
+		Collection colecao = getControladorUtil().pesquisar(filtro, Contrato.class.getName());
+		
+		return (ClienteImovel) colecao.iterator().next();
 	}
 }

@@ -2,6 +2,7 @@ package gcom.cadastro.imovel;
 
 import gcom.arrecadacao.ContratoMotivoCancelamento;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class Contrato  extends ObjetoTransacao {
+public class Contrato extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -128,4 +129,11 @@ public class Contrato  extends ObjetoTransacao {
 		
 		return filtroContrato; 
 	} 
+	
+	public String gerarNumeroContrato(Integer idContratoTipo) {
+		if (idContratoTipo.intValue() == ContratoTipo.DEMANDA)
+			return imovel.getId() + Util.formatarDataAAAAMMDD(new Date());
+		else
+			return id.toString();
+	}
 }
