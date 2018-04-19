@@ -16219,4 +16219,27 @@ public class ControladorImovelSEJB extends ControladorComum {
 		
 		return (ClienteImovel) colecao.iterator().next();
 	}
+
+	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException {
+		try {
+			Imovel imovel = this.pesquisarImovel(idImovel);
+			imovel.setCobrancaSituacaoTipo(new CobrancaSituacaoTipo(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA));
+			imovel.setCobrancaSituacao(new CobrancaSituacao(CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA));
+			
+			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+				    Operacao.OPERACAO_IMOVEL_ATUALIZAR, idImovel, idImovel,
+				    new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+	
+		    registradorOperacao.registrarOperacao(imovel);
+		    getControladorTransacao().registrarTransacao(imovel);
+	
+		    
+			this.repositorioImovel.incluirImovelCobranca(idCobrancaSituacao, idCobrancaSituacaoTipo, idImovel);
+	
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+	}
 }
