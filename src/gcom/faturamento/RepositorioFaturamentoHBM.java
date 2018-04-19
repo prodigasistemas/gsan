@@ -50409,8 +50409,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = " SELECT imov.imov_id AS idImovel "
 					+ " FROM cadastro.imovel imov "
 					+ " INNER JOIN faturamento.consumo_tarifa cstf ON cstf.cstf_id = imov.cstf_id "
-					+ " INNER JOIN cadastro.contrato cttt ON cttt.imov_id = imov.imov_id "
-					+ " AND cttt.cttt_nncontrato IS NOT NULL AND cttt.cttp_id = :idContratoDemanda "
+					+ " INNER JOIN cadastro.contrato cntt ON cntt.imov_id = imov.imov_id "
+					+ " AND cntt.cntt_nncontrato IS NOT NULL AND cntt.cttp_id = :idContratoDemanda "
 					+ " WHERE imov.cstf_id = :idConsumoTarifa AND imov.imov_id <> :idImovel "
 					+ " GROUP BY imov.imov_id ";
 

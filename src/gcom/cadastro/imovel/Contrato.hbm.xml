@@ -10,11 +10,11 @@
 	<class name="gcom.cadastro.imovel.Contrato" table="cadastro.contrato">
 		<id name="id" type="java.lang.Integer" column="cntt_id">
 			<generator class="sequence">
-				<param name="sequence">arrecadacao.seq_contrato</param>
+				<param name="sequence">cadastro.seq_contrato</param>
 			</generator>
 		</id>
 		<property name="dataContratoInicio" type="java.sql.Date" column="cntt_dtcontratoinicio" not-null="true" length="4"/>
-		<property name="dataContratoFim" type="java.sql.Date" column="cntt_dtcontratofim" not-null="true" length="4"/>
+		<property name="dataContratoFim" type="java.sql.Date" column="cntt_dtcontratofim" not-null="false" length="4"/>
 		<property name="numeroContrato" type="java.lang.String" column="cntt_nncontrato" not-null="true" length="10"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cntt_tmultimaalteracao" not-null="true" length="8"/>
 		<property name="dataContratoEncerrado" type="java.sql.Date" column="cntt_dtcontratoencerramento" not-null="false" length="4"/>

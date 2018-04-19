@@ -2,22 +2,23 @@ package gcom.cadastro.imovel;
 
 import gcom.util.filtro.Filtro;
 
-public class FiltroContratoDemanda extends Filtro {
+public class FiltroContratoAdesao extends Filtro {
 
 	private static final long serialVersionUID = 1L;
 
-	public FiltroContratoDemanda(String campoOrderBy) {
+	public FiltroContratoAdesao(String campoOrderBy) {
 		this.campoOrderBy = campoOrderBy;
 	}
 
-	public FiltroContratoDemanda() {
+	public FiltroContratoAdesao() {
 	}
 
 	public final static String ID = "id";
 	public final static String ID_CONTRATO = "contrato.id";
-	public final static String ID_USUARIO = "usuario.id";
+	public final static String ID_CLIENTE = "cliente.id";
 	public final static String CONTRATO = "contrato";
-	public final static String USUARIO = "usuario";
+	public final static String CLIENTE_IMOVEL = "clienteImovel";
+	public final static String CLIENTE = "clienteImovel.cliente";
 	public final static String IMOVEL = "contrato.imovel.id";
 	public final static String DATACONTRATOINICIO = "contrato.dataContratoInicio";
 	public final static String DATACONTRATOFIM = "contrato.dataContratoFim";

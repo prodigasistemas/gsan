@@ -10,7 +10,7 @@
 	<class name="gcom.cadastro.imovel.ContratoAdesao" table="cadastro.contrato_adesao">
 		<id name="id" type="java.lang.Integer" column="ctad_id">
 			<generator class="sequence">
-				<param name="sequence">arrecadacao.seq_contrato_adesao</param>
+				<param name="sequence">cadastro.seq_contrato_adesao</param>
 			</generator>
 		</id>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctad_tmultimaalteracao" not-null="true" length="8"/>
