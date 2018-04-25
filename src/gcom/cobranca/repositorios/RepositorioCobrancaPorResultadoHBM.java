@@ -895,7 +895,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ErroRepositorioException {
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidosPorEmpresa(Integer idEmpresa) throws ErroRepositorioException {
 
 		List<ComandoEmpresaCobrancaConta> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -905,10 +905,12 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			consulta.append(" SELECT comando FROM ComandoEmpresaCobrancaConta comando ")
 					.append(" where comando.dataFimCiclo is not null ")
 					.append(" and comando.dataFimCiclo < :dataAtual ")
-					.append(" and comando.dataEncerramento is null ");
+					.append(" and comando.dataEncerramento is null ")
+					.append(" and comando.empresa.id = :idEmpresa ");
 
 			retorno = (List<ComandoEmpresaCobrancaConta>) session.createQuery(consulta.toString())
-								.setDate("dataAtual", Util.formatarDataSemHora(new Date())).list();
+								.setDate("dataAtual", Util.formatarDataSemHora(new Date()))
+								.setInteger("idEmpresa", idEmpresa).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

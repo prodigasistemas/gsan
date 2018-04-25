@@ -1,6 +1,6 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
-import gcom.cobranca.ComandoEmpresaCobrancaConta;
+import gcom.cadastro.empresa.Empresa;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocal;
 import gcom.cobranca.controladores.ControladorCobrancaPorResultadoLocalHome;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -10,7 +10,7 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -21,12 +21,12 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDrivenBean,
+public class BatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB implements MessageDrivenBean,
 		MessageListener {
 	
 	private static final long serialVersionUID = 1L;
 
-	public BatchEncerrarComandosDeCobrancaPorEmpresaMDB() {
+	public BatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB() {
 		super();
 	}
 
@@ -46,10 +46,10 @@ public class BatchEncerrarComandosDeCobrancaPorEmpresaMDB implements MessageDriv
             ObjectMessage objectMessage = (ObjectMessage) message;
             try {
             	
-            	this.getControladorCobrancaPorResultado().encerrarComandosCobrancaPorEmpresa(
+            	this.getControladorCobrancaPorResultado().encerrarComandosCobrancaResultadoPorEmpresa(
             			(Integer) ((Object[]) objectMessage.getObject())[0],
             			(Usuario) ((Object[]) objectMessage.getObject())[1],
-            			(ComandoEmpresaCobrancaConta) ((Object[]) objectMessage.getObject())[2],
+            			(Collection<Empresa>) ((Object[]) objectMessage.getObject())[2],
             			(Integer) ((Object[]) objectMessage.getObject())[3]);
 
             } catch (JMSException e) {

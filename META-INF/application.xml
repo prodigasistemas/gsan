@@ -823,7 +823,11 @@
 	</module>
 	
 	<module>
-		<ejb>BatchEncerrarComandosDeCobrancaPorEmpresaMDB.jar</ejb>
+		<ejb>BatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEncerrarComandosDeCobrancaResultadoMDB.jar</ejb>
 	</module>
 	
 	<module>

@@ -1850,78 +1850,60 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		return colecaoConsultarComandosContasCobrancaEmpresaHelper;
 	}
 	
-	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 * 
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 */
-	@SuppressWarnings("rawtypes")
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
-			ComandoEmpresaCobrancaConta comando, Integer idCobrancaSituacao) throws ControladorException {
-
-		int idUnidadeIniciada = 0;
+	public void encerrarComandosCobrancaResultadoPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
+			Collection<Empresa> empresas, Integer idCobrancaSituacao) throws ControladorException {
+		
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+					UnidadeProcessamento.EMPRESA, ((Empresa) Util.retonarObjetoDeColecao(empresas)).getId());
 
 		try {
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-					UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId());
-
-			boolean flagFimPesquisa = false;
-			final int quantidadeImoveis = 1000;
-			int quantidadeInicio = 0;
-
-			System.out.println("***************************************");
-			System.out.println("ENCERRAR COMANDOS");
-			System.out.println("***************************************");
-
-			while (!flagFimPesquisa) {
-				Collection dadosEmpresaCobConta = this.repositorio.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio, comando.getId());
+			
+			logger.info("***************************************");
+			logger.info("ENCERRAR COMANDOS POR EMPRESA");
+			logger.info("***************************************");
+			
+			Iterator<Empresa> itEmpresas = empresas.iterator();
+			
+			while (itEmpresas.hasNext()) {
+				Empresa empresa = itEmpresas.next();
 				
-				if (dadosEmpresaCobConta != null && !dadosEmpresaCobConta.isEmpty()) {
-					
-					Iterator iterDadosEmpresaCobConta = dadosEmpresaCobConta.iterator();
-					
-					if (dadosEmpresaCobConta.size() < quantidadeImoveis) {
-						flagFimPesquisa = true;
-					} else {
-						quantidadeInicio = quantidadeInicio + 1000;
-					}
-					
-					System.out.println("***************************************");
-					System.out.println("QUANTIDADE: " + dadosEmpresaCobConta.size());
-					System.out.println("***************************************");
-					
-					while (iterDadosEmpresaCobConta.hasNext()) {
-						Object[] dados = (Object[]) iterDadosEmpresaCobConta.next();
-						
-						if (dados != null) {
-							
-							if (dados[0] != null) {
-								Integer idImovel = (Integer) dados[0];
-								
-								this.getControladorImovel().retirarCobrancaImovelCobrancaPorEmpresa(idImovel, idCobrancaSituacao,  usuarioLogado);
-							}
-							
-							if (dados[1] != null) {
-								Integer idOrdemServico = (Integer) dados[1];
-								
-								Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
-								
-								Date dataAtual = new Date();
-								
-								// encerrar a ordem de serviço, com o motivo correspodente a decurso de prazo
-								this.getControladorOrdemServico().encerrarOSSemExecucao(idOrdemServico, dataAtual, usuarioLogado,
-										idMotivoEncerramento.toString(), dataAtual, null, null, null, null, null, null);
-							}
-						}
-					}
-				} else {
-					flagFimPesquisa = true;
+				List<ComandoEmpresaCobrancaConta> comandos = obterComandosVencidosPorEmpresa(empresa.getId());
+				
+				for (ComandoEmpresaCobrancaConta comando : comandos) {
+					encerrarComandoCobranca(idFuncionalidadeIniciada, usuarioLogado, idCobrancaSituacao, comando);
 				}
 			}
 			
-			this.repositorioCobranca.atualizarDataEncerramentoComando(comando.getId());
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			logger.info("******* FIM **********");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
+		}
+	
+	}
+			
+	
+	public void encerrarComandosCobrancaResultado(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
+			List<ComandoEmpresaCobrancaConta> comandos, Integer idCobrancaSituacao) throws ControladorException {
+
+		int idUnidadeIniciada = 0;
+		
+		if (!comandos.isEmpty()) {
+			getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+					UnidadeProcessamento.ROTA, ((ComandoEmpresaCobrancaConta) Util.retonarObjetoDeColecao(comandos)).getId());
+		}
+
+		try {
+			
+			for (ComandoEmpresaCobrancaConta comando : comandos) {
+				idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+						UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId());
 				
+				encerrarComandoCobranca(idFuncionalidadeIniciada, usuarioLogado, idCobrancaSituacao, comando);
+			}
+			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			System.out.println("******* FIM **********");
 		} catch (Exception ex) {
@@ -1930,12 +1912,69 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			throw new EJBException(ex);
 		}
 	}
+
+	private void encerrarComandoCobranca(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, Integer idCobrancaSituacao, ComandoEmpresaCobrancaConta comando)
+			throws ControladorException, ErroRepositorioException {
+		
+		boolean flagFimPesquisa = false;
+		final int quantidadeImoveis = 1000;
+		int quantidadeInicio = 0;
+		
+		while (!flagFimPesquisa) {
+			Collection dadosEmpresaCobConta = this.repositorio.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio, comando.getId());
+			
+			if (dadosEmpresaCobConta != null && !dadosEmpresaCobConta.isEmpty()) {
+				
+				Iterator iterDadosEmpresaCobConta = dadosEmpresaCobConta.iterator();
+				
+				if (dadosEmpresaCobConta.size() < quantidadeImoveis) {
+					flagFimPesquisa = true;
+				} else {
+					quantidadeInicio = quantidadeInicio + 1000;
+				}
+				
+				System.out.println("***************************************");
+				System.out.println("QUANTIDADE: " + dadosEmpresaCobConta.size());
+				System.out.println("***************************************");
+				
+				while (iterDadosEmpresaCobConta.hasNext()) {
+					Object[] dados = (Object[]) iterDadosEmpresaCobConta.next();
+					
+					if (dados != null) {
+						
+						if (dados[0] != null) {
+							Integer idImovel = (Integer) dados[0];
+							
+							this.getControladorImovel().retirarCobrancaImovelCobrancaPorEmpresa(idImovel, idCobrancaSituacao,  usuarioLogado);
+						}
+						
+						if (dados[1] != null) {
+							Integer idOrdemServico = (Integer) dados[1];
+							
+							Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
+							
+							Date dataAtual = new Date();
+							
+							// encerrar a ordem de serviço, com o motivo correspodente a decurso de prazo
+							this.getControladorOrdemServico().encerrarOSSemExecucao(idOrdemServico, dataAtual, usuarioLogado,
+									idMotivoEncerramento.toString(), dataAtual, null, null, null, null, null, null);
+						}
+					}
+				}
+			} else {
+				flagFimPesquisa = true;
+			}
+		}
+		
+		this.repositorioCobranca.atualizarDataEncerramentoComando(comando.getId());
+		//return idUnidadeIniciada;
+	}
 	
-	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ControladorException {
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidosPorEmpresa(Integer idEmpresa) throws ControladorException {
 		List<ComandoEmpresaCobrancaConta> retorno = new ArrayList<ComandoEmpresaCobrancaConta>();
 
 		try {
-			retorno = repositorio.obterComandosVencidos();
+			retorno = repositorio.obterComandosVencidosPorEmpresa(idEmpresa);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,6 @@
 package gcom.cobranca.controladores;
 
+import gcom.cadastro.empresa.Empresa;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.GerarExtensaoComandoContasCobrancaEmpresaHelper;
@@ -55,8 +56,8 @@ public interface IControladorCobrancaPorResultado {
 	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial,
 			Date comandoFinal, int pagina) throws ControladorException;
 	
-	public void encerrarComandosCobrancaPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, ComandoEmpresaCobrancaConta comando,
+	public void encerrarComandosCobrancaResultado(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, List<ComandoEmpresaCobrancaConta> comandos,
 			Integer idCobrancaSituacao) throws ControladorException;
 	
-	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ControladorException;
-}
+	public void encerrarComandosCobrancaResultadoPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, Collection<Empresa> empresas,
+			Integer idCobrancaSituacao) throws ControladorException;}
