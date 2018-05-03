@@ -70,6 +70,7 @@ import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.AtributoGrupo;
 import gcom.seguranca.IRepositorioSeguranca;
 import gcom.seguranca.RepositorioSegurancaHBM;
+import gcom.seguranca.acesso.ComparatorOperacaoEfetuada;
 import gcom.seguranca.acesso.FiltroOperacao;
 import gcom.seguranca.acesso.FiltroOperacaoTabela;
 import gcom.seguranca.acesso.Operacao;
@@ -472,12 +473,28 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				}
 			}
 
-			return coll;
+ 			//return coll;
+			return ordenarTransacoes(coll);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
+	}
+	
+	private Collection<OperacaoEfetuada> ordenarTransacoes(Collection<OperacaoEfetuada> operacoesEfetuadas) {
+		Collection<OperacaoEfetuada> operacoesOrdenadas = new ArrayList<OperacaoEfetuada>();
+
+		List<OperacaoEfetuada> operacoes = new ArrayList<OperacaoEfetuada>();
+		operacoes.addAll(operacoesEfetuadas);
+		
+		Comparator<OperacaoEfetuada> descescente = Collections.reverseOrder(new ComparatorOperacaoEfetuada());
+		
+		Collections.sort(operacoes, descescente);
+		
+		operacoesOrdenadas.addAll(operacoes);
+		
+		return operacoesOrdenadas; 
 	}
 
 	/**
