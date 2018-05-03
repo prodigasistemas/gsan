@@ -45,6 +45,9 @@ import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
+import gcom.micromedicao.consumo.ConsumoHistorico;
+import gcom.micromedicao.consumo.ConsumoTipo;
+import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -553,7 +556,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								} else {
 									
-									if (isAltoConsumo(emitirContaHelper) && !isImovelEmsituacaoEspecialFaturamento(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia())) {
+									if (isEmitirComunicadoAltoConsumo(emitirContaHelper)) {
 										contasTxtAltoConsumo.append(contaTxt.toString());
 										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
 										
@@ -638,6 +641,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
+	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
+		return isAltoConsumo(helper) 
+				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia());
+			//	&& isImovelLeituraConfirmada(helper)
+			//	&& isImovelAnalisado(helper);
+	}
+	
+	private boolean isImovelLeituraConfirmada(EmitirContaHelper helper) throws ControladorException {
+		ConsumoHistorico historico = getControladorMicromedicao().obterConsumoHistorico(new Imovel(helper.getIdImovel()), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), helper.getAmReferencia());
+		return historico.getConsumoTipo().getId().intValue() != ConsumoTipo.MEDIA_HIDROMETRO;
+	}
+	
+	private boolean isImovelAnalisado(EmitirContaHelper helper) throws ControladorException {
+		MedicaoHistorico medicao = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(helper.getIdImovel(), helper.getAmReferencia());
+		return medicao.getIndicadorAnalisado() == MedicaoHistorico.INDICADOR_ANALISADO_SIM;
+	}
+	
 	private boolean isAltoConsumo(EmitirContaHelper helper) {
 		return helper.getIdConsumoAnormalidade() != null 
 				&& (helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ALTO_CONSUMO.intValue()
@@ -1505,6 +1525,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return consumoMesAnterior;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void alterarVencimentoContasFaturarGrupo(Integer contaTipo, Integer idEmpresa, Integer numeroIndice, FaturamentoGrupo faturamentoGrupo) {
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
@@ -2609,7 +2630,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return debitosACobrarInserir;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<DebitoACobrar> gerarAcrescimosConta(Short indicadorGeracaoMulta, Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
 			Imovel imovel, boolean indicadorEncerrandoArrecadacao) throws ErroRepositorioException, ControladorException {
 		
@@ -2626,7 +2647,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		
 		if (!Util.isVazioOrNulo(colecaoContaImovel)) { 
-			@SuppressWarnings("unchecked")
 			Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(colecaoContaImovel,	referenciaArrecadacao);
 			
 			Short numeroPrestacaoDebito = 1;
@@ -2759,6 +2779,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private Collection obterContasParaGerarAcrescimos(Integer referenciaArrecadacao, Imovel imovel, boolean indicadorEncerrandoArrecadacao) {
 		Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(referenciaArrecadacao);
 
@@ -2845,6 +2866,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return cobrar;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Imovel buildImovelAcrescimoImpontualidade(Iterator imovelPorRotaIterator) {
 		Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
@@ -3535,6 +3557,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return linhasImpostosRetidos;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ControladorException {
 		Collection colecaoQtde = new ArrayList();
 		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
@@ -3562,6 +3585,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<DebitoACobrarCategoria> inserirDebitosACobrarCategoriaBatch(Collection<DebitoACobrar> debitos) throws ControladorException {
 
 		Collection<DebitoACobrarCategoria> colecaoDebitosACobrarCategorias = new ArrayList();

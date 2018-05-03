@@ -43564,7 +43564,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setArrecadadorMovimentoItem(null);
 				pagamento.setArrecadacaoForma(new ArrecadacaoForma(idFormaArrecadacao));
 				pagamento.setCliente(cliente);
-				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+				pagamento.setGuiaPagamento(guiaPagamento != null? guiaPagamento.getGuiaPagamentoGeral() : null);
 				pagamento.setUltimaAlteracao(new Date());
 				pagamento.setFatura(null);
 				pagamento.setCobrancaDocumento(null);
