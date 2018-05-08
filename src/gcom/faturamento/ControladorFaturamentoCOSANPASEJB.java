@@ -643,9 +643,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
 		return isAltoConsumo(helper) 
-				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia());
-			//	&& isImovelLeituraConfirmada(helper)
-			//	&& isImovelAnalisado(helper);
+				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia())
+				&& isImovelLeituraConfirmada(helper)
+				&& isImovelAnalisado(helper);
 	}
 	
 	private boolean isImovelLeituraConfirmada(EmitirContaHelper helper) throws ControladorException {
@@ -655,7 +655,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 	private boolean isImovelAnalisado(EmitirContaHelper helper) throws ControladorException {
 		MedicaoHistorico medicao = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(helper.getIdImovel(), helper.getAmReferencia());
-		return medicao.getIndicadorAnalisado() == MedicaoHistorico.INDICADOR_ANALISADO_SIM;
+		return medicao != null && medicao.isAnalisado();
 	}
 	
 	private boolean isAltoConsumo(EmitirContaHelper helper) {
