@@ -327,4 +327,10 @@ public class CreditoRealizado extends ObjetoTransacao implements ICreditoRealiza
         return retorno;
     }
     
+    public Integer obterIdCreditoARealizar() {
+    	if (getCreditoARealizarGeral() == null)
+    		return null;
+    	return getCreditoARealizarGeral().getId();
+    }
+    
 }
