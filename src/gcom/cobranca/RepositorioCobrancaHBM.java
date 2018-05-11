@@ -26154,7 +26154,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 			
-			//this.aumentarMemoriaPostgres(session);
+			this.aumentarMemoriaPostgres(session);
 			
 			consulta.append(" select distinct documento.* ") 
 					.append(" from cobranca.cobranca_documento_item item  ")
