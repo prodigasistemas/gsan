@@ -44312,88 +44312,77 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(
 			Integer imovelId, Integer idCreditoTipo, BigDecimal valorCredito,
-			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
+			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento,
+			Integer idCreditoARealizar)
 			throws ErroRepositorioException {
 		Collection retorno = null;
-
 		Session session = HibernateUtil.getSession();
-		String consulta = null;
-
-		/**
-		 * Data: 30/01/2011
-		 * 
-		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
-		 * realizado fosse encontrado, com isso o crédito era liberado no IS, mas não era liberado no gsan
-		 * 
-		 * */
+		StringBuilder consulta = null;
 		try {
 
-			consulta = "select "
-					+ "  crar.crar_id as idCreditoARealizar, "
-					+ "  crar.crar_nnprestacaorealizadas as numeroPrestacaoRealizada, "
-					+ "  crar.crar_nnprestacaocredito as numeroPrestacaoCredito, "
-					+ "  crar.crar_vlcredito as valorCredito, "
-					+ "  crar.crar_vlresidualmesanterior as valorResidualMesAnterior, "
-					+ "  crti.crti_id as idCreditoTipo, "
-					+ "  lict.lict_id as idLancamentoItemContabil, "
-					+ "  loca.loca_id as idLocalidade, "
-					+ "  qdra.qdra_id as idQuadra, "
-					+ "  crar.crar_cdsetorcomercial as codigoSetorComercial, "
-					+ "  crar.crar_nnquadra as numeroQuadra, "
-					+ "  crar.crar_nnlote as lote, "
-					+ "  crar.crar_nnsublote as sublote, "
-					+ "  crar.crar_amreferenciacredito as amReferenciaCredito, "
-					+ "  crar.crar_amcobrancacredito as amCobrancaCredito, "
-					+ "  crog.crog_id as idCreditoOrigem, "
-					+ "  crar.crar_nnparcelabonus as numeroParcelaBonus "
-					+ " from "
-					+ "  faturamento.credito_a_realizar crar "
-					+ " inner join faturamento.debito_credito_situacao dcst on crar.dcst_idatual=dcst.dcst_id "
-					+ " inner join cadastro.imovel imov on crar.imov_id=imov.imov_id "
-					+ " inner join faturamento.credito_tipo crti on crar.crti_id=crti.crti_id "
-					+ " inner join financeiro.lancamento_item_contabil lict on crar.lict_id=lict.lict_id "
-					+ " inner join cadastro.localidade loca on crar.loca_id=loca.loca_id "
-					+ " inner join cadastro.quadra qdra on crar.qdra_id=qdra.qdra_id "
-					+ " inner join faturamento.credito_origem crog on crar.crog_id=crog.crog_id "
-					+ " left outer join cobranca.parcelamento parc on crar.parc_id=parc.parc_id "
-					+ " where  imov.imov_id= :imovelId "
-					+ "  and crar.dcst_idatual= :debitoCreditoSituacaoAtualId "
-					//+ "  and (crar.crar_vlcredito + crar_vlresidualmesanterior) = :valorCredito "
-					+ "  and crar.crti_id = :idCreditoTipo "
-					+ "  and crar.crar_amreferenciaprestacao = :anoMesFaturamento "
-					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>1 or (parc.parc_id is not null) "
-					+ "       and crar.crar_nnprestacaorealizadas=1 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ";
+			consulta = new StringBuilder("select ")
+	            .append("  crar.crar_id as idCreditoARealizar, ")
+	            .append("  crar.crar_nnprestacaorealizadas as numeroPrestacaoRealizada, ")
+	            .append("  crar.crar_nnprestacaocredito as numeroPrestacaoCredito, ")
+	            .append("  crar.crar_vlcredito as valorCredito, ")
+	            .append("  crar.crar_vlresidualmesanterior as valorResidualMesAnterior, ")
+	            .append("  crti.crti_id as idCreditoTipo, ")
+	            .append("  lict.lict_id as idLancamentoItemContabil, ")
+	            .append("  loca.loca_id as idLocalidade, ")
+	            .append("  qdra.qdra_id as idQuadra, ")
+	            .append("  crar.crar_cdsetorcomercial as codigoSetorComercial, ")
+	            .append("  crar.crar_nnquadra as numeroQuadra, ")
+	            .append("  crar.crar_nnlote as lote, ")
+	            .append("  crar.crar_nnsublote as sublote, ")
+	            .append("  crar.crar_amreferenciacredito as amReferenciaCredito, ")
+	            .append("  crar.crar_amcobrancacredito as amCobrancaCredito, ")
+	            .append("  crog.crog_id as idCreditoOrigem, ")
+	            .append("  crar.crar_nnparcelabonus as numeroParcelaBonus ")
+	            .append(" from ")
+	            .append("  faturamento.credito_a_realizar crar ")
+	            .append(" inner join faturamento.debito_credito_situacao dcst on crar.dcst_idatual=dcst.dcst_id ")
+	            .append(" inner join cadastro.imovel imov on crar.imov_id=imov.imov_id ")
+	            .append(" inner join faturamento.credito_tipo crti on crar.crti_id=crti.crti_id ")
+	            .append(" inner join financeiro.lancamento_item_contabil lict on crar.lict_id=lict.lict_id ")
+	            .append(" inner join cadastro.localidade loca on crar.loca_id=loca.loca_id ")
+	            .append(" inner join cadastro.quadra qdra on crar.qdra_id=qdra.qdra_id ")
+	            .append(" inner join faturamento.credito_origem crog on crar.crog_id=crog.crog_id ")
+	            .append(" left outer join cobranca.parcelamento parc on crar.parc_id=parc.parc_id ")
+	            .append(" where  imov.imov_id= :imovelId ")
+	            .append("  and crar.dcst_idatual= :debitoCreditoSituacaoAtualId ")
+	            .append("  and crar.crti_id = :idCreditoTipo ")
+	            .append("  and crar.crar_amreferenciaprestacao = :anoMesFaturamento ")
+	            .append("  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>1 or (parc.parc_id is not null) ")
+	            .append("       and crar.crar_nnprestacaorealizadas=1 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ");
+			
+			if (idCreditoARealizar != null)
+				consulta.append(String.format(" and crar.crar_id = %d", idCreditoARealizar));
 
-			retorno = session.createSQLQuery(consulta).addScalar(
-					"idCreditoARealizar", Hibernate.INTEGER).addScalar(
-					"numeroPrestacaoRealizada", Hibernate.SHORT).addScalar(
-					"numeroPrestacaoCredito", Hibernate.SHORT).addScalar(
-					"valorCredito", Hibernate.BIG_DECIMAL).addScalar(
-					"valorResidualMesAnterior", Hibernate.BIG_DECIMAL)
-					.addScalar("idCreditoTipo", Hibernate.INTEGER).addScalar(
-							"idLancamentoItemContabil", Hibernate.INTEGER)
-					.addScalar("idLocalidade", Hibernate.INTEGER).addScalar(
-							"idQuadra", Hibernate.INTEGER).addScalar(
-							"codigoSetorComercial", Hibernate.INTEGER)
-					.addScalar("numeroQuadra", Hibernate.INTEGER).addScalar(
-							"lote", Hibernate.SHORT).addScalar("sublote",
-							Hibernate.SHORT).addScalar("amReferenciaCredito",
-							Hibernate.INTEGER).addScalar("amCobrancaCredito",
-							Hibernate.INTEGER).addScalar("idCreditoOrigem",
-							Hibernate.INTEGER).addScalar("numeroParcelaBonus",
-							Hibernate.SHORT).setInteger("imovelId",
-							imovelId.intValue()).setInteger(
-							"debitoCreditoSituacaoAtualId",
-							debitoCreditoSituacaoAtualId).setInteger(
-							"anoMesFaturamento", anoMesFaturamento)
-					//.setBigDecimal("valorCredito", valorCredito)
+			retorno = session.createSQLQuery(consulta.toString())
+					.addScalar("idCreditoARealizar", Hibernate.INTEGER)
+					.addScalar("numeroPrestacaoRealizada", Hibernate.SHORT)
+					.addScalar("numeroPrestacaoCredito", Hibernate.SHORT)
+					.addScalar("valorCredito", Hibernate.BIG_DECIMAL)
+					.addScalar("valorResidualMesAnterior", Hibernate.BIG_DECIMAL)
+					.addScalar("idCreditoTipo", Hibernate.INTEGER)
+					.addScalar("idLancamentoItemContabil", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("idQuadra", Hibernate.INTEGER)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("lote", Hibernate.SHORT).addScalar("sublote", Hibernate.SHORT)
+					.addScalar("amReferenciaCredito", Hibernate.INTEGER)
+					.addScalar("amCobrancaCredito", Hibernate.INTEGER)
+					.addScalar("idCreditoOrigem", Hibernate.INTEGER)
+					.addScalar("numeroParcelaBonus", Hibernate.SHORT)
+					.setInteger("imovelId", imovelId.intValue())
+					.setInteger("debitoCreditoSituacaoAtualId", debitoCreditoSituacaoAtualId)
+					.setInteger("anoMesFaturamento", anoMesFaturamento)
 					.setInteger("idCreditoTipo", idCreditoTipo).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;

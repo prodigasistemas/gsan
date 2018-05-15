@@ -6,6 +6,7 @@ import gcom.arrecadacao.aviso.AvisoDeducoes;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -26148,10 +26149,13 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		Session session = HibernateUtil.getSession();
 
 		List<CobrancaDocumento> retorno = new ArrayList<CobrancaDocumento>();
-		
+
 		StringBuilder consulta = new StringBuilder();
 
 		try {
+			
+			this.aumentarMemoriaPostgres(session);
+			
 			consulta.append(" select distinct documento.* ") 
 					.append(" from cobranca.cobranca_documento_item item  ")
 					.append(" inner join cobranca.cobranca_documento documento on documento.cbdo_id = item.cbdo_id ")
@@ -26175,6 +26179,16 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	private void aumentarMemoriaPostgres(Session session) throws ErroRepositorioException {
+		Connection con = session.connection();
+		try {
+			con.createStatement().executeUpdate("set local work_mem='100MB';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro ao aumntar memoria da consulta");
+		} 
 	}
 	
 	public List<GuiaPagamentoGeral> obterGuiasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException {
