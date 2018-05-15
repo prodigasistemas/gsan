@@ -693,12 +693,12 @@ face: Verdana, Arial, Helvetica, sans-serif;
 													<td width="15%" align="center"><logic:notEmpty
 														name="pagamento" property="guiaPagamento">
 														<logic:notEmpty name="pagamento"
-															property="guiaPagamento.debitoTipo">
+															property="guiaPagamento.guiaPagamento.debitoTipo">
 															<logic:present name="pagamento"
 																property="debitoTipo.descricao">
 																<a
 																	href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getId() %>')"><font
-																	color="#ff0000">${pagamento.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
+																	color="#ff0000">${pagamento.guiaPagamento.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
 																</logic:present>
 														</logic:notEmpty>
 													</logic:notEmpty> <logic:empty name="pagamento"
@@ -717,9 +717,9 @@ face: Verdana, Arial, Helvetica, sans-serif;
 													<td width="10%" align="right"><logic:notEmpty
 														name="pagamento" property="guiaPagamento">
 														<logic:notEmpty name="pagamento"
-															property="guiaPagamento.valorDebito">
+															property="guiaPagamento.guiaPagamento.valorDebito">
 															<bean:write name="pagamento"
-																property="guiaPagamento.valorDebito"
+																property="guiaPagamento.guiaPagamento.valorDebito"
 																formatKey="money.format" />&nbsp;
 																		</logic:notEmpty>
 													</logic:notEmpty></td>

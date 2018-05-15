@@ -25360,10 +25360,9 @@ public class ControladorArrecadacao implements SessionBean {
 
 					if (guiaPagamento != null) {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
+						guiaGeral.setGuiaPagamento(guiaPagamento);
+						pagamento.setGuiaPagamento(guiaGeral);
 					}
-
-					guiaGeral.setGuiaPagamento(guiaPagamento);
-					pagamento.setGuiaPagamento(guiaGeral);
 
 					DebitoTipo debitoTipoPagamento = null;
 
