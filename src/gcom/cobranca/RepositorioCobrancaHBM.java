@@ -25777,7 +25777,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 			consulta = " SELECT cecc.CECC_QTDCONTASINICIAL AS qtdContasInicial, " 
-					+ "   cecc.CECC_QTDCONTASINICIAL AS qtdContasFinal, "
+					+ "   cecc.cecc_qtdcontasfinal AS qtdContasFinal, "
 					+ "   cecc.CECC_QTDDIASVENCIMENTO AS qtdDiasVencidos "
 					+ " FROM cobranca.cmd_empr_cobr_conta cecc "
 					+ " WHERE cecc.cecc_id = :idComando ";
