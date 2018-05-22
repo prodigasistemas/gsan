@@ -26511,14 +26511,30 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.append(" inner join contaGeral.conta conta ")
 					.append(" where item.parcelamento.id = :idParcelamento ");
 	
-		Object[] referencias = (Object[]) session.createQuery(consulta.toString())
-					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+			Object[] referencias = (Object[]) session.createQuery(consulta.toString())
+						.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
 	
-		retorno = new Integer[2];
-		
-		retorno[0] = (Integer)referencias[0];
-		retorno[1] = (Integer)referencias[1];
-		
+			retorno = new Integer[2];
+
+			if (referencias[0] != null && referencias[1] != null) {
+				retorno[0] = (Integer)referencias[0];
+				retorno[1] = (Integer)referencias[1];
+			} else {
+				consulta = new StringBuilder();
+				
+				consulta.append("select min(contaHistorico.anoMesReferenciaConta) as menorReferencia, max(contaHistorico.anoMesReferenciaConta) as maiorReferencia")
+				.append(" from ParcelamentoItem item ")
+				.append(" inner join item.contaGeral contaGeral ")
+				.append(" inner join contaGeral.contaHistorico contaHistorico ")
+				.append(" where item.parcelamento.id = :idParcelamento ");
+				
+				referencias = (Object[]) session.createQuery(consulta.toString())
+						.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+				
+				retorno[0] = (Integer)referencias[0];
+				retorno[1] = (Integer)referencias[1];
+			}
+
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
